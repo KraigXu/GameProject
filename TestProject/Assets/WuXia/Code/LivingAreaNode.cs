@@ -23,6 +23,8 @@ namespace LivingArea
         public int PersonNumber { get; set; }
         public int LivingAreaMoney { get; set; }
 
+        public int LivingAreaMoneyMax { get; set; }
+
         public BuildingObject[] BuildingObjects;
 
         void Start()

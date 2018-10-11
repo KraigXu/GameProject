@@ -53,6 +53,10 @@ namespace DataAccessObject
         public int BuildingLevel { get; set; }           //等级
         public int PersonNumber { get; set; }           //人口数量
         public int LivingAreaMoney { get; set; }             //生活区金钱
+        public int FoodMax { get; set; }
+        public int FoodValue { get; set; }
+        public int MaterialsMax { get; set; }
+        public int MaterialsValue { get; set; }
         public int StableValue { get; set; }                  //安定值
         public string BuildingInfoJson { get; set; }        // 建筑Json
         
@@ -140,4 +144,17 @@ namespace DataAccessObject
 
     //---------------------------------------------------------------------------->
 
+    //----------------------------------------标准对象
+
+    ///// <summary>
+    ///// 所有对象的父级
+    ///// </summary>
+    //public abstract class ElementBase
+    //{
+        
+    //    public abstract void ElementCalculation();
+
+    //} 
+
+    //-------------------------------end
 }

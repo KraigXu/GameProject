@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using TinyFrameWork;
 using UnityEngine;
 
-
+/// <summary>
+/// LivingArea主视图
+/// </summary>
 public class LivingAreaMainWindow : UIWindowBase
 {
     
@@ -36,9 +38,8 @@ public class LivingAreaMainWindow : UIWindowBase
 
         //resolve Building Data , building图生成
 
-
-
-
+        
+      
         
     }
 

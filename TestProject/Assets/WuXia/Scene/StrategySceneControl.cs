@@ -38,7 +38,6 @@ public class StrategySceneControl : MonoBehaviour {
 
     public MousePointingInfo MousePointingControl;           //鼠标信息控制
 
-
     //----常在UI
     public ExtendedMenuWindow ExtendedMenuControl;
 

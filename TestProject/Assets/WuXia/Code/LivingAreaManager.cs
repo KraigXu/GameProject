@@ -28,16 +28,18 @@ namespace LivingArea
     /// <summary>
     /// 建筑物
     /// </summary>
-    public class BuildingObject
+    public class BuildingObject 
     {
         public string Name { get; set; }       //名称
         public string Description { get; set; }          //说明
         public int TypeId { get; set; }               //类型ID
         public int BuildingLevel { get; set; }      //等级
-        public int DurableMax { get; set; }
+        public int MoneyMax { get; set; }
+        public int MoneyValue { get; set; }           //耐久
+        public int DurableMax { get; set; }     
         public int DurableValue { get; set; }
-        public int HaveId { get; set; } 
-
+        public int HaveId { get; set; }
+        
 
 
         public BuildingObject() { }
@@ -105,6 +107,8 @@ namespace LivingArea
         {
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
         }
+        
+
     }
 
 
