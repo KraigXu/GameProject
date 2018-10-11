@@ -66,6 +66,21 @@ namespace DataAccessObject
         }
     }
 
+
+
+    public class PersonModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int PowerId { get; set; }
+        public string PracticeJson { get; set; }
+        public string TechniqueJson { get; set; }
+
+    }
+
+
+    
   
 
 

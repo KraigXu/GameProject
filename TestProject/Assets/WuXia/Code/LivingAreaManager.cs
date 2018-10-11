@@ -18,6 +18,12 @@ namespace LivingArea
         Cave,    //洞窟
     }
 
+    public enum BuildingType
+    {
+        None,
+
+    }
+
 
     /// <summary>
     /// 建筑物
@@ -28,6 +34,11 @@ namespace LivingArea
         public string Description { get; set; }          //说明
         public int TypeId { get; set; }               //类型ID
         public int BuildingLevel { get; set; }      //等级
+        public int DurableMax { get; set; }
+        public int DurableValue { get; set; }
+        public int HaveId { get; set; } 
+
+
 
         public BuildingObject() { }
 
@@ -49,6 +60,7 @@ namespace LivingArea
         public List<LivingAreaNode> LivingAreas = new List<LivingAreaNode>();
         void Start()
         {
+
             //BuildingObject[] s=new BuildingObject[5];
             //s[0]=new BuildingObject("皇宫","aa",1,9);
             //s[1] = new BuildingObject("衙门", "aa", 1, 2);
@@ -71,17 +83,6 @@ namespace LivingArea
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
         }
 
-        void OnDisable()
-        {
-            UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
-        }
-
-        void OnEnable()
-        {
-           
-        }
-
-
         void Update()
         {
 
@@ -98,8 +99,11 @@ namespace LivingArea
             node.PersonNumber = model.PersonNumber;
             node.LivingAreaMoney = model.LivingAreaMoney;
             node.BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(model.BuildingInfoJson);
-            
+        }
 
+        void OnDestroy()
+        {
+            UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
         }
     }
 

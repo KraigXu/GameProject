@@ -79,6 +79,9 @@ public class StaticValue
     public string NextSceneName = "";
 
 
+    //currentScene
+
+
     //============================Level
 
     public List<int> CommanderTurret;

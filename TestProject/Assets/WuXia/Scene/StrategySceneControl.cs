@@ -12,6 +12,16 @@ public enum ElementTarget
     LivingArea
 }
 
+/// <summary>
+/// 视图状态
+/// </summary>
+public enum ViewStatus
+{
+    CityMainView, 
+    WorldMapView,
+
+}
+
 public class StrategySceneControl : MonoBehaviour {
 
     public static StrategySceneControl Instance
@@ -32,6 +42,10 @@ public class StrategySceneControl : MonoBehaviour {
     //----常在UI
     public ExtendedMenuWindow ExtendedMenuControl;
 
+    //---Info
+    public ViewStatus CurViewStatus; 
+    public LivingAreaNode LivingAreaTarget;
+    
 
     void Awake()
     {
@@ -52,14 +66,36 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointingControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
         MousePointingControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
         MousePointingControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
-
-
    }
+
+
 
     void Update()
     {
 
     }
+
+    #region ViewStatusChange
+
+
+    public void WorldMapViewToCityMainView()
+    {
+        
+        ShowWindowData data=new ShowWindowData();
+        data.contextData=new WindowContextLivingAreaNodeData(LivingAreaTarget);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, data);
+        
+    }
+
+    public void CityMainViewToWorldMapView()
+    {
+        UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaMainWindow);  
+    }
+
+    #endregion
+
+    #region InitModel
+    #endregion 
 
 
     #region MouseEvents

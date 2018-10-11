@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using TinyFrameWork;
 using UnityEngine;
 
+
 public class LivingAreaMainWindow : UIWindowBase
 {
-
+    
     protected override void SetWindowId()
     {
         this.ID = WindowID.LivingAreaMainWindow;
@@ -28,6 +29,16 @@ public class LivingAreaMainWindow : UIWindowBase
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
+        WindowContextLivingAreaNodeData nodeData = (WindowContextLivingAreaNodeData)contextData;
+        if(nodeData==null) return;
+        //resolve LivingArea Data
+
+
+        //resolve Building Data , building图生成
+
+
+
+
         
     }
 
