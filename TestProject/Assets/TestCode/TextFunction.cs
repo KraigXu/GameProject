@@ -22,6 +22,15 @@ public class TextFunction : MonoBehaviour
 
 
         BuildingFeatures buildingFeature = new BuildingFeatures();
+	    buildingFeature.Name = "筵席";
+	    buildingFeature.Description = "请场景内所有人喝酒，花费1000钱";
+
+	    BuildingFeatures building1=new BuildingFeatures();
+	    building1.Name = "修炼";
+	    building1.Description = "话时间修炼";
+	    BuildingFeatures building2 = new BuildingFeatures();
+	    building2.Name = "研习";
+	    building2.Description = "花时间修炼";
 
 
         //for (int i = 0; i < featuresIds; i++)
@@ -29,7 +38,7 @@ public class TextFunction : MonoBehaviour
 
         //}
 
-	    string features = ""; 
+        string features = "1："+buildingFeature.Name+"  2："+ building1.Name+"  3："+ building2.Name; 
 
         log.text = "设施名："+building.Name+"\n"+
             "等级："+building.BuildingLevel+"\n"+

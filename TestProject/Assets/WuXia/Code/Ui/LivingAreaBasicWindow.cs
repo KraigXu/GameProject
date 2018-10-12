@@ -10,16 +10,6 @@ namespace TinyFrameWork
     {
 
         public Transform LivingAreaContent;
-        public Text CityNameText;
-        public Text CityLevelText;
-        
-        public Text CityPowerText;
-        public Text CityHaveText;
-        public Text CityDescriptionText;
-
-        public Text ModenyText;
-        public Text MoneyValueText;
-
         [Header("详细")]
         [SerializeField]
         private Toggle StatusTog;             //状态
@@ -75,13 +65,15 @@ namespace TinyFrameWork
             if(data==null) return;
 
             LivingAreaNode node = data.Node;
-            LivingAreaContent.Find("LivingAreaName").GetComponent<Text>().text = node.LivingAreaName;
-            LivingAreaContent.Find("LivingAreaDescription").GetComponent<Text>().text = node.Description;
-            LivingAreaContent.Find("LivingAreaLevel").GetComponent<Text>().text = node.BuildingLevel.ToString();
+            LivingAreaContent.Find("Name").GetComponent<Text>().text = node.LivingAreaName;
+            LivingAreaContent.Find("Description").GetComponent<Text>().text = node.Description;
+            LivingAreaContent.Find("Level").GetComponent<Text>().text = node.BuildingLevel.ToString();
+            LivingAreaContent.Find("Type").GetComponent<Text>().text = node.TypeId.ToString();
             LivingAreaContent.Find("Power").GetComponent<Text>().text = node.PowerId.ToString();
-            LivingAreaContent.Find("Have").GetComponent<Text>().text = node.HaveId.ToString();
-            LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
-            LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();
+            LivingAreaContent.Find("Renown").GetComponent<Text>().text = node.Renown.ToString();
+            LivingAreaContent.Find("HaveName").GetComponent<Text>().text = node.HaveId.ToString();
+          //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
+           // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
 
         }
 

@@ -59,6 +59,7 @@ public class TimeManager : MonoBehaviour
 	        {
                 TimeAddDay();
 	            curSchedule = 0;
+                
 	        }
 	    }
 	    else if(curStatus==TimeSatus.Stop)

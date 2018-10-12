@@ -76,6 +76,7 @@ public class SQLService
     public void CreateDB()
     {
         Tables.CreateTable_LivingArea(this,true);
+        Tables.CreateTable_AreaType(this,true);
     }
 
 

@@ -19,7 +19,6 @@ public class Demo1 : MonoBehaviour {
 
 	    if (Input.GetMouseButtonDown(1))
 	    {
-	        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaBasicWindow);
 
             charController.enabled = true;
             charController.gravity = false;

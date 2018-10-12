@@ -53,7 +53,10 @@ namespace LivingArea
 
     public class BuildingFeatures
     {
+        public string Name;
+        public string Description;
         
+
     }
 
     /// <summary>
@@ -105,9 +108,9 @@ namespace LivingArea
                 LivingAreas[i].LivingAreaName = model.Name;
                 LivingAreas[i].Description = model.Description;
                 LivingAreas[i].PowerId = model.PowerId;
-                LivingAreas[i].HaveId = model.HaveId;
-                LivingAreas[i].TypeId = model.TypeId;
-                LivingAreas[i].BuildingLevel = model.BuildingLevel;
+               // LivingAreas[i].HaveId = model.HaveId;
+               // LivingAreas[i].TypeId = model.TypeId;
+               // LivingAreas[i].BuildingLevel = model.BuildingLevel;
                 LivingAreas[i].PersonNumber = model.PersonNumber;
                 LivingAreas[i].LivingAreaMoney = model.LivingAreaMoney;
                 LivingAreas[i].BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(model.BuildingInfoJson);

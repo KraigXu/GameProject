@@ -22,22 +22,38 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
-                                       " AreaId INTEGER," +
+                                       " RegionId INTEGER," +
+                                       " PersonNumber INTEGER," +
+                                       " LivingAreaLevel INTEGER," +
+                                       " LivingAreaType INTEGER," +
                                        " PowerId INTEGER," +
-                                       " HaveId INTEGER," +
-                                       " TypeId INTEGER," +
+                                       " ThaneId INTEGER," +
+                                       " DefenseStrength INTEGER," +
+                                       " LivingAreaMoney INTEGER," +
                                        " FoodValue INTEGER," +
                                        " FoodMax INTEGER," +
                                        " MaterialsValue INTEGER," +
                                        " MaterialsMax INTEGER," +
-                                       " BuildingLevel INTEGER," +
-                                       " PersonNumber INTEGER," +
-                                       " LivingAreaMoney INTEGER," +
-                                       " LivingAreaMoneyMax INTEGER,"+
-                                       " PeoplesHeartValue INTEGER,"+
                                        " StableValue INTEGER," +
                                        " BuildingInfoJson TEXT);");
         }
+
+        /// <summary>
+        /// 地域类型
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_AreaType(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " AreaTypeModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT);");
+        }
+
 
 
         /// <summary>
@@ -168,20 +184,21 @@ namespace DataAccessObject
 
     public class LivingAreaModel : BaseModel
     {
-        public int Id { get; set; }                           //编号 
+        public int Id { get; set; }                      //编号 
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
-        public int AreaId { get; set; }                   //地域ID
-        public int PowerId { get; set; }                  //势力ID
-        public int HaveId { get; set; }                    //拥有者ID
-        public int TypeId { get; set; }                    //类型ID
-        public int BuildingLevel { get; set; }           //等级
+        public int RegionId { get; set; }               //所属地域ID;
         public int PersonNumber { get; set; }           //人口数量
+        public int LivingAreaLevel { get; set; }        //生活区等级
+        public int LivingAreaType { get; set; }        //生活区类型
+        public int PowerId { get; set; }                  //势力ID
+        public int ThaneId { get; set; }                 //领主ID
+        public int DefenseStrength { get; set; }        //防守强度
         public int LivingAreaMoney { get; set; }             //生活区金钱
-        public int FoodMax { get; set; }
-        public int FoodValue { get; set; }
-        public int MaterialsMax { get; set; }
-        public int MaterialsValue { get; set; }
+        public int FoodValue { get; set; }                 //粮食
+        public int FoodMax { get; set; }                    //粮食上限
+        public int MaterialsValue { get; set; }             //资材
+        public int MaterialsMax { get; set; }              //资材上限
         public int StableValue { get; set; }                  //安定值
         public string BuildingInfoJson { get; set; }        // 建筑Json
 
@@ -189,11 +206,30 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
                 {
-                    Id, Name, Description, PowerId, HaveId, TypeId, BuildingLevel, PersonNumber, LivingAreaMoney,StableValue,BuildingInfoJson
+                    Id, Name, Description, RegionId,PersonNumber,LivingAreaLevel,LivingAreaType,PowerId,ThaneId,DefenseStrength, LivingAreaMoney, FoodValue, FoodMax, MaterialsValue, StableValue,BuildingInfoJson
+
                 };
             return objects;
         }
     }
+
+    public class AreaTypeModel : BaseModel
+    {
+        public int Id { get; set; }                      //编号 
+        public string Name { get; set; }                //名称
+        public string Description { get; set; }         //说明
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description
+            };
+            return objects;
+        }
+    }
+
+
+
 
 
 

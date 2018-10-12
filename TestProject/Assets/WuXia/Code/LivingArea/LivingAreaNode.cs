@@ -24,6 +24,8 @@ namespace LivingArea
         public int LivingAreaMoney { get; set; }
         public int LivingAreaMoneyMax { get; set; }
 
+        public int Renown;      //声望
+
         public BuildingObject[] BuildingObjects;
 
         public GameObject LivingAreaM;
