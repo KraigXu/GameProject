@@ -140,6 +140,16 @@ public class TimeManager : MonoBehaviour
     /// <param name="target"></param>
     public void AddTimeEvent(int startYear,int startMonth,int startDay,int endYear,int endMonth,int endDay, params object[] target)
     {
+        
+
+
+    }
+
+
+    public void AddTimeEvent(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay,int eventId)
+    {
+
+
 
     }
 

@@ -5045,7 +5045,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1423089523}
   - component: {fileID: 1423089522}
-  - component: {fileID: 1423089524}
   m_Layer: 0
   m_Name: GlobalGameObject
   m_TagString: Untagged
@@ -5083,26 +5082,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1423089524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1423089521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a28ea5c4f81b51a449e2ae91bc948e1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  YearTime: 194
-  Month: 1
-  DayTime: 1
-  curYera: 194
-  curMonth: 1
-  curDay: 1
-  curStatus: 0
-  TimeScalar: 3
-  curSchedule: 0
 --- !u!1 &1819035030
 GameObject:
   m_ObjectHideFlags: 0

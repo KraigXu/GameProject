@@ -8,6 +8,11 @@ namespace DataAccessObject
     //-------------------------------------------------建表语句--------------------------------Start
     public static class Tables
     {
+        /// <summary>
+        /// 生活区表
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
         public static void CreateTable_LivingArea(SQLService service, bool ifNotExists)
         {
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
@@ -27,6 +32,99 @@ namespace DataAccessObject
                                        " StableValue INTEGER,"+
                                        " BuildingInfoJson TEXT);");
         }
+
+        /// <summary>
+        /// 时间事件
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_TimeEvent(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " TimeEventModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT);");
+        }
+
+        /// <summary>
+        /// 人物
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_Character(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " CharacterModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, "+
+                                       " Gender  INTEGER,"+
+                                       " Age INTEGER ,"+
+                                       " AgeMax INTEGER,"+
+                                       " Description TEXT);");
+        }
+
+        public static void CreateTable_Practice(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " CharacterModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Gender  INTEGER," +
+                                       " Age INTEGER ," +
+                                       " AgeMax INTEGER," +
+                                       " Description TEXT);");
+
+        }
+
+        /// <summary>
+        /// 功法，技法
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_Techniques(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " TechniquesModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " MoneyValue INTEGER,"+
+                                       " Level INTEGER,"+
+                                       " Type INTEGER,"+
+                                       " ContentJson TEXT);");
+        }
+
+        /// <summary>
+        /// 书籍
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_Books(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " BookModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Type INTEGER," +
+                                       " Level INTEGER," +
+                                       " ContentJson TEXT);");
+        }
+
+    
     }
 
     //-----------------------------------------建表语句 -----------------------------------End
