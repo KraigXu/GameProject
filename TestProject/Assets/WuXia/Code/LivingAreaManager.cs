@@ -39,8 +39,6 @@ namespace LivingArea
         public int DurableMax { get; set; }     
         public int DurableValue { get; set; }
         public int HaveId { get; set; }
-        
-
 
         public BuildingObject() { }
 
@@ -62,24 +60,7 @@ namespace LivingArea
         public List<LivingAreaNode> LivingAreas = new List<LivingAreaNode>();
         void Start()
         {
-
-            //BuildingObject[] s=new BuildingObject[5];
-            //s[0]=new BuildingObject("皇宫","aa",1,9);
-            //s[1] = new BuildingObject("衙门", "aa", 1, 2);
-            //s[2] = new BuildingObject("市场", "aa", 1, 3);
-            //s[3] = new BuildingObject("民房", "aa", 2, 4);
-            //s[4] = new BuildingObject("酒馆", "aa", 2, 5);
-
-            //Debug.Log(JsonMapper.ToJson(s));
-
-            //return;//---------------------------------
-            //初始化
-            for (int i = 0; i < LivingAreas.Count; i++)
-            {
-                Debug.Log(LivingAreas[i].Id);
-                ConfigLivingAreas( LivingAreas[i],SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id));
-            }
-
+            RefreshLivingAreaData();
             ShowWindowData data = new ShowWindowData();
             data.contextData = new WindowContextLivingAreaData(LivingAreas);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
@@ -90,24 +71,55 @@ namespace LivingArea
 
         }
 
-        private void ConfigLivingAreas(LivingAreaNode node,  LivingAreaModel model)
+        /// <summary>
+        /// 刷新所有生活区信息
+        /// </summary>
+        private void RefreshLivingAreaData()
         {
-            node.LivingAreaName = model.Name;
-            node.Description = model.Description;
-            node.PowerId = model.PowerId;
-            node.HaveId = model.HaveId;
-            node.TypeId = model.TypeId;
-            node.BuildingLevel = model.BuildingLevel;
-            node.PersonNumber = model.PersonNumber;
-            node.LivingAreaMoney = model.LivingAreaMoney;
-            node.BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(model.BuildingInfoJson);
-        }
+            //初始化
+            for (int i = 0; i < LivingAreas.Count; i++)
+            {
+                LivingAreaModel model = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
 
+                LivingAreas[i].LivingAreaName = model.Name;
+                LivingAreas[i].Description = model.Description;
+                LivingAreas[i].PowerId = model.PowerId;
+                LivingAreas[i].HaveId = model.HaveId;
+                LivingAreas[i].TypeId = model.TypeId;
+                LivingAreas[i].BuildingLevel = model.BuildingLevel;
+                LivingAreas[i].PersonNumber = model.PersonNumber;
+                LivingAreas[i].LivingAreaMoney = model.LivingAreaMoney;
+                LivingAreas[i].BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(model.BuildingInfoJson);
+            }
+
+        }
         void OnDestroy()
         {
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
         }
-        
+
+        /// <summary>
+        /// 生活区过一天
+        /// </summary>
+        public void LivingAreaToDay()
+        {
+            
+        }
+
+        /// <summary>
+        /// 生活区过一月
+        /// </summary>
+        public void LivingAreaToMonthy()
+        {
+
+        }
+        /// <summary>
+        /// 生活区过一年
+        /// </summary>
+        public void LivingAreaToYear()
+        {
+
+        }
 
     }
 

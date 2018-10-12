@@ -9,6 +9,10 @@ using UnityEngine.UI;
 /// </summary>
 public class TimeManager : MonoBehaviour
 {
+
+    private static TimeManager _instance;
+    public static TimeManager Instance { get { return _instance; } }
+
     public int YearTime=194;            //年
     public int Month=1;                   //月
     public int DayTime=1;              //日
@@ -24,10 +28,7 @@ public class TimeManager : MonoBehaviour
     public float curSchedule=0;        //当前进度，当进度>=时间标量时则计算为一天  ，时间速率分别为  {正常=时间标量*1,  慢速=时间标量*2,快速=时间标量*0.5}
     public float curSpeedValue=1;
 
-    public Text text1;
-    public Text text2;
-    public Text text3;
-    public Text text4;
+  
     public enum TimeSpeed
     {
         Normal=1,  //正常
@@ -39,6 +40,12 @@ public class TimeManager : MonoBehaviour
     {
         Play,
         Stop,
+    }
+
+    void Awake()
+    {
+        _instance = this;
+
     }
 
 	void Start () {
@@ -59,26 +66,9 @@ public class TimeManager : MonoBehaviour
 	        
 	    }
 
-	    text1.text = curYera.ToString();
-	    text2.text = curMonth.ToString();
-	    text3.text = curDay.ToString();
 
-        if (curMonth == 2 || curMonth == 3 || curMonth == 4)
-        {
-            text4.text = "春";
-        }
-        else if (curMonth == 5 || curMonth == 6 || curMonth == 7)
-        {
-            text4.text = "夏";
-        }
-        else if (curMonth == 8 || curMonth == 9 || curMonth == 10)
-        {
-            text4.text = "秋";
-        }
-        else if (curMonth == 11 || curMonth == 12 || curMonth == 1)
-        {
-            text4.text = "冬";
-        }
+
+
     }
 
     void TimeAddDay()

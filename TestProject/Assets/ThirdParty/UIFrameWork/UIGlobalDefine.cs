@@ -7,7 +7,7 @@ namespace TinyFrameWork
     public enum WindowID
     {
         Invaild = 0,
-
+        StrategyTimeWindow,
         LivingAreaBasicWindow,
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
@@ -119,7 +119,7 @@ namespace TinyFrameWork
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
             {WindowID.Invaild,"UiPrefab/InvaildWindow"},
-
+            {WindowID.StrategyTimeWindow,"UiPrefab/StrategyTimeWindow"},
             {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
             {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingArea/LivingAreaTitleWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingArea/LivingAreaMainWindow"},

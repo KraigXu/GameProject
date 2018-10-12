@@ -65,7 +65,12 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointingControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
         MousePointingControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
         MousePointingControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
-   }
+
+
+        //Ui 初始化
+        UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyTimeWindow);
+
+    }
 
 
 
