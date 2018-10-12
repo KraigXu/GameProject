@@ -78,6 +78,12 @@ public class StaticValue
 
     public string NextSceneName = "";
 
+    /// <summary>
+    /// 记录当前进入的LivingArea，如果没有则为-1
+    /// </summary>
+    public int EnterLivingAreaId = -1;
+
+
 
     //currentScene
 

@@ -26,12 +26,39 @@ namespace DataAccessObject
                                        " PowerId INTEGER," +
                                        " HaveId INTEGER," +
                                        " TypeId INTEGER," +
+                                       " FoodValue INTEGER," +
+                                       " FoodMax INTEGER," +
+                                       " MaterialsValue INTEGER," +
+                                       " MaterialsMax INTEGER," +
                                        " BuildingLevel INTEGER," +
                                        " PersonNumber INTEGER," +
                                        " LivingAreaMoney INTEGER," +
-                                       " StableValue INTEGER,"+
+                                       " LivingAreaMoneyMax INTEGER,"+
+                                       " PeoplesHeartValue INTEGER,"+
+                                       " StableValue INTEGER," +
                                        " BuildingInfoJson TEXT);");
         }
+
+
+        /// <summary>
+        /// 设施功能表
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_BuildingFeatures(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " BuildingFeatureModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " FeaturesEventId INTEGER,"+
+                                       " Remarks TEXT);");
+
+        }
+
 
         /// <summary>
         /// 时间事件
@@ -62,10 +89,10 @@ namespace DataAccessObject
                                        " CharacterModel (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
-                                       " Description TEXT, "+
-                                       " Gender  INTEGER,"+
-                                       " Age INTEGER ,"+
-                                       " AgeMax INTEGER,"+
+                                       " Description TEXT, " +
+                                       " Gender  INTEGER," +
+                                       " Age INTEGER ," +
+                                       " AgeMax INTEGER," +
                                        " Description TEXT);");
         }
 
@@ -99,9 +126,9 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
-                                       " MoneyValue INTEGER,"+
-                                       " Level INTEGER,"+
-                                       " Type INTEGER,"+
+                                       " MoneyValue INTEGER," +
+                                       " Level INTEGER," +
+                                       " Type INTEGER," +
                                        " ContentJson TEXT);");
         }
 
@@ -124,7 +151,7 @@ namespace DataAccessObject
                                        " ContentJson TEXT);");
         }
 
-    
+
     }
 
     //-----------------------------------------建表语句 -----------------------------------End
@@ -157,7 +184,7 @@ namespace DataAccessObject
         public int MaterialsValue { get; set; }
         public int StableValue { get; set; }                  //安定值
         public string BuildingInfoJson { get; set; }        // 建筑Json
-        
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
@@ -182,8 +209,8 @@ namespace DataAccessObject
     }
 
 
-    
-  
+
+
 
 
     //----------------------------------------映射数据库----------------------------------End
@@ -194,12 +221,12 @@ namespace DataAccessObject
     {
         public static T GetModelId<T>(int id) where T : BaseModel
         {
-            Debug.Log(id+">>>");
-            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] {id});
+            Debug.Log(id + ">>>");
+            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] { id });
         }
     }
 
-   
+
     //-------------------------------------------取值----------------------------------------End
 
 
@@ -219,7 +246,7 @@ namespace DataAccessObject
 
         //关卡所需数据
         //public List<TurretDao.TurretModel> UseTurret;  //可用炮塔
-       // public FireMapDao.FireMapModel Map;
+        // public FireMapDao.FireMapModel Map;
 
         //  public Task task;              //功能暂定
         //  public List<SkillDao.SkillModel> UseModels;//当前技术
@@ -249,7 +276,7 @@ namespace DataAccessObject
     ///// </summary>
     //public abstract class ElementBase
     //{
-        
+
     //    public abstract void ElementCalculation();
 
     //} 

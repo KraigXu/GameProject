@@ -33,8 +33,10 @@ public class StrategySceneControl : MonoBehaviour {
     }
     private static StrategySceneControl _instance = null;
 
-    public Camera Main3DCamera;
-    public Camera Main2DCamera;
+    public Camera Main3DCamera;                                                                             //大地图相机
+    public Camera Main2DCamera;                                                                             //UI相机
+    public Camera LivingfAreaCamera;                                                                        //生活区相机
+
 
     public MousePointingInfo MousePointingControl;           //鼠标信息控制
 
