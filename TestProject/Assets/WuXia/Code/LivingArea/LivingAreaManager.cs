@@ -55,8 +55,6 @@ namespace LivingArea
     {
         public string Name;
         public string Description;
-        
-
     }
 
     /// <summary>
@@ -80,15 +78,28 @@ namespace LivingArea
     /// </summary>
     public class LivingAreaManager : MonoBehaviour
     {
-
         public List<LivingAreaNode> LivingAreas = new List<LivingAreaNode>();
+
+
+        void Awake()
+        {
+           
+        }
+
         void Start()
         {
+            BuildingObject[] s = new BuildingObject[3];
+            s[0]=new BuildingObject("酒馆","喝酒",1,3,100,100,1,1,"1,2,3");
+            s[1] = new BuildingObject("市场", "购物", 1, 3, 100, 100, 1, 1, "1,2,3");
+            s[2] = new BuildingObject("马场", "买马", 1, 3, 100, 100, 1, 1, "1,2,3");
+            Debug.Log(JsonMapper.ToJson(s));
+            //
             RefreshLivingAreaData();
             ShowWindowData data = new ShowWindowData();
             data.contextData = new WindowContextLivingAreaData(LivingAreas);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
         }
+
 
         void Update()
         {
@@ -119,48 +130,6 @@ namespace LivingArea
 
         }
 
-        /// <summary>
-        /// 进入LivingArea
-        /// </summary>
-        /// <param name="livingAreaId"></param>
-        public void EnterLivingArea(int livingAreaId)
-        {
-            LivingAreaNode livingArea = null;
-            for (int i = 0; i < LivingAreas.Count; i++)
-            {
-                if (LivingAreas[i].Id == livingAreaId)
-                {
-                    livingArea = LivingAreas[i];
-                    break;
-                }
-            }
-
-            if (livingArea != null)
-            {
-                ShowWindowData showWindowData = new ShowWindowData();
-                showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
-
-                //初始化LivingArea
-                
-
-
-
-
-
-                StaticValue.Instance.EnterLivingAreaId = livingAreaId;
-            }
-            else
-            {
-                Debuger.LogError("没有这个LivingAreaId所对应的内容");
-            }
-
-        }
-
-        public void EnterLivingArea(LivingAreaNode node)
-        {
-            
-        }
 
         void OnDestroy()
         {

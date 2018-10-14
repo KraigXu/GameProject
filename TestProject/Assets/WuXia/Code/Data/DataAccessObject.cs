@@ -53,9 +53,21 @@ namespace DataAccessObject
                                        " Name TEXT," +
                                        " Description TEXT);");
         }
-
-
-
+        /// <summary>
+        /// 势力信息
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_Power(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " PowerModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT);");
+        }
         /// <summary>
         /// 设施功能表
         /// </summary>
@@ -74,8 +86,6 @@ namespace DataAccessObject
                                        " Remarks TEXT);");
 
         }
-
-
         /// <summary>
         /// 时间事件
         /// </summary>
@@ -110,22 +120,6 @@ namespace DataAccessObject
                                        " Age INTEGER ," +
                                        " AgeMax INTEGER," +
                                        " Description TEXT);");
-        }
-
-        public static void CreateTable_Practice(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " CharacterModel (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Gender  INTEGER," +
-                                       " Age INTEGER ," +
-                                       " AgeMax INTEGER," +
-                                       " Description TEXT);");
-
         }
 
         /// <summary>
@@ -166,8 +160,6 @@ namespace DataAccessObject
                                        " Level INTEGER," +
                                        " ContentJson TEXT);");
         }
-
-
     }
 
     //-----------------------------------------建表语句 -----------------------------------End
@@ -227,11 +219,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-
-
-
-
 
     public class PersonModel
     {

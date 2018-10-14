@@ -77,6 +77,12 @@ public class SQLService
     {
         Tables.CreateTable_LivingArea(this,true);
         Tables.CreateTable_AreaType(this,true);
+        //Tables.CreateTable_Power(this,true);
+        //Tables.CreateTable_BuildingFeatures(this,true);
+        //Tables.CreateTable_TimeEvent(this,true);
+        //Tables.CreateTable_Character(this,true);
+        //Tables.CreateTable_Techniques(this, true);
+        //Tables.CreateTable_Books(this,true); //地方,西北
     }
 
 

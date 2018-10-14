@@ -37,6 +37,8 @@ public class StrategySceneControl : MonoBehaviour {
     public Camera Main2DCamera;                                                                             //UI相机
     public Camera LivingfAreaCamera;                                                                        //生活区相机
 
+    //----CamerControl
+    public OverLookCameraController LivingfAreaCameraControl;
 
     public MousePointingInfo MousePointingControl;           //鼠标信息控制
 
@@ -47,10 +49,15 @@ public class StrategySceneControl : MonoBehaviour {
     public ViewStatus CurViewStatus; 
     public LivingAreaNode LivingAreaTarget;
     
+    //---Manager          --m前缀
+    public LivingAreaManager M_LivingArea;
+
+
 
     void Awake()
     {
         _instance = this;
+        Debuger.EnableLog = true;
     }
 
     void Start()
@@ -80,6 +87,59 @@ public class StrategySceneControl : MonoBehaviour {
     {
 
     }
+
+    #region 生活区
+
+    /// <summary>
+    /// 进入生活区
+    /// </summary>
+    public void LivingAreaEnter(LivingAreaNode livingArea)
+    {
+        if (livingArea == null)
+        {
+            Debuger.LogError("进入生活区时，数据为NULL");
+            return;
+        }
+
+        
+        //先对角色的属性进行检测 是否可以进入城市，1，角色位置是否在城市附近，2 角色与城市势力关系 3角色与城市首领关系 4城市的异常状态 
+
+
+        //关闭当前开启的界面 ---
+       
+        UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
+
+
+        ShowWindowData showWindowData = new ShowWindowData();
+        showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+
+        //初始化LivingArea
+
+        StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
+
+
+        //更新相机
+        Renderer[] renderers= livingArea.LivingAreaM.GetComponentsInChildren<Renderer>();
+        if (renderers.Length > 0)
+        {
+            Bounds mapBounds = renderers[0].bounds;
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                mapBounds.Encapsulate(renderers[i].bounds);
+            }
+            LivingfAreaCameraControl.SetBounds(mapBounds);
+            LivingfAreaCameraControl.SetPosition(mapBounds.center);
+        }
+
+        //  M_LivingArea.EnterLivingArea(livingArea);
+
+    }
+
+
+
+    #endregion
+
 
     #region ViewStatusChange
 

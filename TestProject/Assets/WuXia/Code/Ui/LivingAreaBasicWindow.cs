@@ -24,6 +24,8 @@ namespace TinyFrameWork
         [SerializeField]
         private RectTransform AnnualHistoryView;
 
+        private LivingAreaNode _curLivingArea;          //记录当前显示的生活区
+
         protected override void SetWindowId()
         {
             this.ID = WindowID.LivingAreaBasicWindow;
@@ -40,9 +42,24 @@ namespace TinyFrameWork
         }
         public override void InitWindowOnAwake()
         {
+            LivingAreaContent.Find("Enter").GetComponent<Button>().onClick.AddListener(OnEnterLivingArea);
             StatusTog.onValueChanged.AddListener(StatusTogValueChanged);
             BulidingTog.onValueChanged.AddListener(BulidingTogValueChanged);
             AnnualHistoryTog.onValueChanged.AddListener(AnnualHistoryTogValueChanged);
+
+            StatusTog.isOn = true;
+        }
+
+        /// <summary>
+        /// 进入生活区方法 
+        /// </summary>
+        public void OnEnterLivingArea()
+        {
+            if (_curLivingArea != null)
+            {
+                StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
+            }
+
 
         }
 
@@ -63,15 +80,14 @@ namespace TinyFrameWork
         {
             WindowContextLivingAreaNodeData data = (WindowContextLivingAreaNodeData)contextData;
             if(data==null) return;
-
-            LivingAreaNode node = data.Node;
-            LivingAreaContent.Find("Name").GetComponent<Text>().text = node.LivingAreaName;
-            LivingAreaContent.Find("Description").GetComponent<Text>().text = node.Description;
-            LivingAreaContent.Find("Level").GetComponent<Text>().text = node.BuildingLevel.ToString();
-            LivingAreaContent.Find("Type").GetComponent<Text>().text = node.TypeId.ToString();
-            LivingAreaContent.Find("Power").GetComponent<Text>().text = node.PowerId.ToString();
-            LivingAreaContent.Find("Renown").GetComponent<Text>().text = node.Renown.ToString();
-            LivingAreaContent.Find("HaveName").GetComponent<Text>().text = node.HaveId.ToString();
+            _curLivingArea = data.Node;
+            LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.LivingAreaName;
+            LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
+            LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.BuildingLevel.ToString();
+            LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.TypeId.ToString();
+            LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.PowerId.ToString();   //势力
+            LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
+            LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.HaveId.ToString();
           //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
            // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
 
