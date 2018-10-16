@@ -8,8 +8,7 @@ namespace TinyFrameWork
     {
         Invaild = 0,
         StrategyWindow,
-        StrategyMessageWindow,
-        StrategyTimeWindow,
+
         LivingAreaBasicWindow,
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
@@ -124,7 +123,6 @@ namespace TinyFrameWork
         {
             {WindowID.Invaild,"UiPrefab/InvaildWindow"},
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
-            {WindowID.StrategyTimeWindow,"UiPrefab/StrategyTimeWindow"},
             {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
             {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingArea/LivingAreaTitleWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingArea/LivingAreaMainWindow"},

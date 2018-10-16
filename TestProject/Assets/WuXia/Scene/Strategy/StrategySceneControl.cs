@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LivingArea;
 using TinyFrameWork;
 using UnityEngine;
-
+using MapMagicDemo;
 /// <summary>
 /// 这个Target 与Game 中的Target 对应
 /// </summary>
@@ -44,7 +44,6 @@ public class StrategySceneControl : MonoBehaviour {
 
     //----常在UI
     public StrategyWindow StrategyControl;
-    public StrategyMessageWindow StrategyMessageControl;
     public ExtendedMenuWindow ExtendedMenuControl;
 
 
@@ -54,6 +53,10 @@ public class StrategySceneControl : MonoBehaviour {
     
     //---Manager          --m前缀
     public LivingAreaManager M_LivingArea;
+
+    public CharController charController;
+    public CameraController cameraController;
+    public FlybyController demoController;
 
     void Awake()
     {
@@ -81,8 +84,13 @@ public class StrategySceneControl : MonoBehaviour {
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
 
-        //StrategyMessageControl=
-        UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyTimeWindow);
+
+        charController.enabled = true;
+        charController.gravity = false;
+        charController.speed = 50;
+        charController.acceleration = 150;
+        demoController.enabled = false;
+        cameraController.follow = 0;
 
     }
 
@@ -225,7 +233,6 @@ public class StrategySceneControl : MonoBehaviour {
     //显示Message
     public void MessageShow(string[] values)
     {
-        StrategyMessageControl.ShowValue(values);
     }
 
     public void MessageShow(string value)
