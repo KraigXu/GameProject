@@ -28,8 +28,6 @@ public class StrategyTimeWindow : UIWindowBase
     {
 
     }
-
-
     void Update()
     {
 

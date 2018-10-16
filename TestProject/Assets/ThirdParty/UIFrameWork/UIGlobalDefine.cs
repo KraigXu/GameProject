@@ -7,12 +7,16 @@ namespace TinyFrameWork
     public enum WindowID
     {
         Invaild = 0,
+        StrategyWindow,
+        StrategyMessageWindow,
         StrategyTimeWindow,
         LivingAreaBasicWindow,
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
         ExtendedMenuWindow,
-
+        WXCharacterPanelWindow,
+        WXCharacterRelationshipWindow,
+        WXCharacterPrestigeWindow,
     }
 
     public enum UIWindowType
@@ -119,11 +123,15 @@ namespace TinyFrameWork
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
             {WindowID.Invaild,"UiPrefab/InvaildWindow"},
+            {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
             {WindowID.StrategyTimeWindow,"UiPrefab/StrategyTimeWindow"},
             {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
             {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingArea/LivingAreaTitleWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingArea/LivingAreaMainWindow"},
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
+            {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
+            {WindowID.WXCharacterRelationshipWindow,"UiPrefab/WXCharacterRelationshipWindow"},
+            {WindowID.WXCharacterPrestigeWindow,"UiPrefab/WXCharacterPrestigeWindow"},
         };
     }
 }

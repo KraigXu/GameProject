@@ -13,6 +13,7 @@ namespace TinyFrameWork
         protected override void SetWindowId()
         {
             this.ID = WindowID.ExtendedMenuWindow;
+            
         }
 
         protected override void InitWindowCoreData()

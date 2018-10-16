@@ -27,6 +27,9 @@ public class LivingAreaMainWindow : UIWindowBase
 
     public override void InitWindowOnAwake()
     {
+
+
+
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)

@@ -160,6 +160,41 @@ namespace DataAccessObject
                                        " Level INTEGER," +
                                        " ContentJson TEXT);");
         }
+
+        /// <summary>
+        /// 任务
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_Task(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " TaskModel (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Type INTEGER," +
+                                       " Level INTEGER," +
+                                       " ContentJson TEXT);");
+
+        }
+
+
+        public static void CreateTable_Prestige(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeModel ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Type INTEGER," +
+                                       " Level INTEGER," +
+                                       " ContentJson TEXT);");
+
+        }
+
+
     }
 
     //-----------------------------------------建表语句 -----------------------------------End

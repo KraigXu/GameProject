@@ -29,7 +29,7 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
         this.Target = target;
 
         LivingAreaNode node=  target.GetComponent<LivingAreaNode>();
-        _titleText.text = node.LivingAreaName;
+        _titleText.text = node.Name;
 
     }
 }
