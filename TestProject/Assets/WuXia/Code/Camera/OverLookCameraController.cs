@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 using TinyFrameWork;
 using UnityEngine.EventSystems;
-
 public class OverLookCameraController : MonoBehaviour
 {
     public float m_defaultInertia;
@@ -94,6 +93,7 @@ public class OverLookCameraController : MonoBehaviour
         UpdateTransform();
 
         RenderSettings.fogEndDistance = m_camera.farClipPlane;
+
         //for (int i = 0; i < m_terrains.Length; i++)
         //{
         //    m_terrains[i].detailObjectDistance = Mathf.Clamp(m_detailObjectDistance - transform.position.y, 0, m_detailObjectDistance);

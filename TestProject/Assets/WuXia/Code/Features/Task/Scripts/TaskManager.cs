@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System;
+using DataAccessObject;
 
 public class TaskManager : MonoSingletion<TaskManager> {
 
     public Dictionary<string, Task> dictionary = new Dictionary<string,Task>();//id,task
+
+
     public XElement rootElement;
 
     public event EventHandler<TaskEventArgs> getEvent;//接受任务时,更新任务到任务面板等操作

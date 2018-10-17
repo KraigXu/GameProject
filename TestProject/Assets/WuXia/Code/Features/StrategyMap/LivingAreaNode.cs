@@ -14,43 +14,36 @@ namespace LivingArea
     {
 
         public int Id;         //这个Id需要手动输入， 映射到数据库中的Id        
-
-        public LivingAreaModel Model;
-
-        public string Name { get { return Model.Name; } }
-        public string Description { get { return Model.Description; } }
-        public int RegionId { get { return Model.RegionId; } }
-        public int PersonNumber { get { return Model.PersonNumber; } }
-        public int LivingAreaLevel { get { return Model.LivingAreaLevel; } }
-        public int LivingAreaType { get { return Model.LivingAreaType; } }
-        public int PowerId { get { return Model.PowerId; } }
-        public int ThaneId { get { return Model.ThaneId; } }
-        public int DefenseStrength { get { return Model.DefenseStrength; } }
-        public int LivingAreaMoney { get { return Model.LivingAreaMoney; } }
-        public int FoodValue { get { return Model.FoodValue; } }
-        public int FoodMax { get { return Model.FoodMax; } }
-        public int MaterialsValue { get { return Model.MaterialsValue; } }
-        public int MaterialsMax { get { return Model.MaterialsMax; } }
-        public int StableValue { get { return Model.StableValue; } }
-        public string BuildingInfoJson { get { return Model.BuildingInfoJson; } }
-
-        public int Renown;      //声望
-
+        public LivingAreaModel Value;
         public BuildingObject[] BuildingObjects;
-
+        
+        public int Renown;      
+       
         public GameObject LivingAreaM;
+
+        public Renderer LivingAreaRender;
+        public Collider LivingAreaCollider;
+
+        public bool IsOpen =false;  //是否打开
+
+        public LivingAreaState[] Groups;
         void Start()
         {
-            //计算数据
-
         }
-
         void Update()
         {
 
+            if (IsOpen == true)
+            {
+                for (int i = 0; i < Groups.Length; i++)
+                {
+                    Groups[i].UpdateBehaviors(this);
+                }
+            }
+            else
+            {
+                
+            }
         }
-
-
-
     }
 }

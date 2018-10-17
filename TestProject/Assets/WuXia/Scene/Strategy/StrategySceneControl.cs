@@ -58,6 +58,11 @@ public class StrategySceneControl : MonoBehaviour {
     public CameraController cameraController;
     public FlybyController demoController;
 
+    /// <summary>
+    /// 记录当前进入的LivingArea，如果没有则为-1
+    /// </summary>
+    public int EnterLivingAreaId = -1;
+
     void Awake()
     {
         _instance = this;
@@ -79,12 +84,10 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointingControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
         MousePointingControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
-
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
-
-
+        
         charController.enabled = true;
         charController.gravity = false;
         charController.speed = 50;
@@ -92,10 +95,9 @@ public class StrategySceneControl : MonoBehaviour {
         demoController.enabled = false;
         cameraController.follow = 0;
 
+
+
     }
-
-
-
     void Update()
     {
 
@@ -122,7 +124,6 @@ public class StrategySceneControl : MonoBehaviour {
        
         UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
 
-
         ShowWindowData showWindowData = new ShowWindowData();
         showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
@@ -145,6 +146,7 @@ public class StrategySceneControl : MonoBehaviour {
             LivingfAreaCameraControl.SetPosition(mapBounds.center);
         }
         //  M_LivingArea.EnterLivingArea(livingArea);
+        
 
     }
 

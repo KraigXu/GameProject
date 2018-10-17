@@ -266,9 +266,22 @@ namespace DataAccessObject
 
     }
 
-
-
-
+    public class TaskModel : BaseModel
+    {
+        public int Id { get; set; }
+        public string TaskName { get; set; }
+        public string Caption { get; set; }
+        public string TaskConditionsJson { get; set; }
+        public string TaskRewardsJson { get; set; }
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+                {
+                    Id,TaskName,Caption,TaskConditionsJson,TaskRewardsJson
+                };
+            return objects;
+        }
+    }
 
 
     //----------------------------------------映射数据库----------------------------------End

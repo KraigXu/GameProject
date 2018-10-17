@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-
-
 /// <summary>
 /// 鼠标指向信息
 /// </summary>
@@ -38,7 +34,6 @@ public class MousePointingInfo : MonoBehaviour
     void Start()
     {
         _camera = GetComponent<Camera>();//获取场景中摄像机对象的组件接口
-      
     }
 
     void Update()

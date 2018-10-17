@@ -81,6 +81,7 @@ namespace LivingArea
         public List<LivingAreaNode> LivingAreas = new List<LivingAreaNode>();
 
 
+        private Dictionary<int, LivingAreaAction> s = new Dictionary<int, LivingAreaAction>();
         void Awake()
         {
            
@@ -95,6 +96,8 @@ namespace LivingArea
             Debug.Log(JsonMapper.ToJson(s));
             //
             RefreshLivingAreaData();
+            RefreshLivingAreaBehvaior();
+
             ShowWindowData data = new ShowWindowData();
             data.contextData = new WindowContextLivingAreaData(LivingAreas);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
@@ -103,7 +106,7 @@ namespace LivingArea
 
         void Update()
         {
-
+            
         }
 
         /// <summary>
@@ -114,7 +117,8 @@ namespace LivingArea
             //初始化
             for (int i = 0; i < LivingAreas.Count; i++)
             {
-                LivingAreas[i].Model = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
+                LivingAreas[i].Value = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
+                LivingAreas[i].BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
                // LivingAreaModel model = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
                // LivingAreas[i].LivingAreaName = model.Name;
                // LivingAreas[i].Description = model.Description;
@@ -125,35 +129,39 @@ namespace LivingArea
                // LivingAreas[i].PersonNumber = model.PersonNumber;
                // LivingAreas[i].LivingAreaMoney = model.LivingAreaMoney;
                // LivingAreas[i].BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(model.BuildingInfoJson);
-                
             }
-
         }
 
-
+        /// <summary>
+        /// 刷新所有城市信息
+        /// </summary>
+        private void RefreshLivingAreaBehvaior()
+        {
+            for (int i = 0; i < LivingAreas.Count; i++)
+            {
+                LivingAreaState[] groups = new LivingAreaState[3];
+                groups[0] = new LivingAreaState(1, "1", "", 10, null);
+                groups[1] = new LivingAreaState(2, "1", "", 10, null);
+                groups[2] = new LivingAreaState(3, "1", "", 10, null);
+                LivingAreas[i].Groups = groups;
+            }
+        }
         void OnDestroy()
         {
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
         }
 
-        /// <summary>
-        /// 生活区过一天
-        /// </summary>
+
         public void LivingAreaToDay()
         {
             
         }
 
-        /// <summary>
-        /// 生活区过一月
-        /// </summary>
         public void LivingAreaToMonthy()
         {
 
         }
-        /// <summary>
-        /// 生活区过一年
-        /// </summary>
+
         public void LivingAreaToYear()
         {
 

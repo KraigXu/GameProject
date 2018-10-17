@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System;
+using DataAccessObject;
+using LitJson;
 
 public class Task {
 
@@ -40,6 +42,16 @@ public class Task {
             TaskReward tr = new TaskReward(s.Value, int.Parse(d.Current.Value));
             taskRewards.Add(tr);
         }
+    }
+
+    public Task(int taskId)
+    {
+        this.taskID = taskID.ToString();
+        TaskModel model=   SqlData.GetModelId<TaskModel>(taskId);
+        taskName = model.TaskName;
+        caption = model.Caption;
+        taskConditions = JsonMapper.ToObject<List<TaskCondition>>(model.TaskConditionsJson);
+        taskRewards = JsonMapper.ToObject<List<TaskReward>>(model.TaskRewardsJson);
     }
 
     //判断条件是否满足

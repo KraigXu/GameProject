@@ -81,11 +81,11 @@ namespace TinyFrameWork
             WindowContextLivingAreaNodeData data = (WindowContextLivingAreaNodeData)contextData;
             if(data==null) return;
             _curLivingArea = data.Node;
-            LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Name;
-            LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
-            LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.LivingAreaLevel.ToString();
-            LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.LivingAreaType.ToString();
-            LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.PowerId.ToString();   //势力
+            LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Value.Name;
+            LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Value.Description;
+            LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.Value.LivingAreaLevel.ToString();
+            LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Value.LivingAreaType.ToString();
+            LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
             LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
 
             //LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.ToString();
