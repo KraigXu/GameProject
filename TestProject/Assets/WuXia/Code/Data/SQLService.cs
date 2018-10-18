@@ -75,9 +75,10 @@ public class SQLService
 
     public void CreateDB()
     {
-        Tables.CreateTable_LivingArea(this,true);
-        Tables.CreateTable_AreaType(this,true);
-        //Tables.CreateTable_Power(this,true);
+        Tables.CreateTable_LivingArea(this, true);
+        Tables.CreateTable_AreaType(this, true);
+        Tables.CreateTable_Biological(this);
+      //  Tables.CreateTable_Power(this,true);
         //Tables.CreateTable_BuildingFeatures(this,true);
         //Tables.CreateTable_TimeEvent(this,true);
         //Tables.CreateTable_Character(this,true);
@@ -86,12 +87,12 @@ public class SQLService
     }
 
 
-    public long InsertOrReplace(BaseModel baseModel)
+    public long InsertOrReplace(BaseData baseModel)
     {
         return connection.InsertOrReplace(baseModel);
     }
 
-    public void InsertOrReplaceAll<T>(ICollection<T> baseModels) where T : BaseModel
+    public void InsertOrReplaceAll<T>(ICollection<T> baseModels) where T : BaseData
     {
         connection.RunInTransaction(() =>
         {
@@ -102,19 +103,19 @@ public class SQLService
         });
     }
 
-    public void DropTable<T>() where T : BaseModel
+    public void DropTable<T>() where T : BaseData
     {
         var query = string.Format("drop table if exists \"{0}\"", typeof(T).Name);
         connection.ExecuteNonQuery(query);
     }
 
-    public List<T> Query<T>(string query, params object[] args) where T : BaseModel
+    public List<T> Query<T>(string query, params object[] args) where T : BaseData
     {
         var cmd = connection.CreateCommand(query, args);
         return cmd.ExecuteQuery<T>();
     }
 
-    public List<T> QueryAll<T>() where T : BaseModel
+    public List<T> QueryAll<T>() where T : BaseData
     {
         string query = "select * from " + typeof(T).Name.Split('+')[0].ToString();
         return Query<T>(query, new object[] { });
@@ -122,7 +123,7 @@ public class SQLService
 
 
 
-    public T QueryUniqueThrowException<T>(string where, params object[] args) where T : BaseModel
+    public T QueryUniqueThrowException<T>(string where, params object[] args) where T : BaseData
     {
         string query = "select * from " + typeof(T).Name.Split('+')[0].ToString();
         List<T> list = Query<T>(query, args);
@@ -140,7 +141,7 @@ public class SQLService
         }
     }
 
-    public T QueryUnique<T>(string where, params object[] args) where T : BaseModel
+    public T QueryUnique<T>(string where, params object[] args) where T : BaseData
     {
         string query = "select * from " + typeof(T).Name.Split('+')[0]+" where "+where;
         List<T> list = Query<T>(query, args);
@@ -155,13 +156,13 @@ public class SQLService
         }
     }
 
-    public List<T> SimpleQuery<T>(string where, params object[] args) where T : BaseModel
+    public List<T> SimpleQuery<T>(string where, params object[] args) where T : BaseData
     {
         string query = "select * from " + typeof(T).Name.Split('+')[0].ToString() + " where " + where;
         return Query<T>(query, args);
     }
 
-    public int SimpleDelete<T>(string where, params object[] args) where T : BaseModel
+    public int SimpleDelete<T>(string where, params object[] args) where T : BaseData
     {
         string query = "delete from " + typeof(T).Name.Split('+')[0].ToString() + " where " + where;
         var cmd = connection.CreateCommand(query, args);

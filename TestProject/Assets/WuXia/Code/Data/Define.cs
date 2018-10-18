@@ -22,6 +22,8 @@ public class Define : MonoBehaviour
     /// </summary>
     public byte GameStatus = 0;
 
+    public int PlayerId = 1;
+
     public string CurrentSceneName = "";
     public string NextSceneName = "";
 

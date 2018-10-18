@@ -46,12 +46,12 @@ public class Task {
 
     public Task(int taskId)
     {
-        this.taskID = taskID.ToString();
-        TaskModel model=   SqlData.GetModelId<TaskModel>(taskId);
-        taskName = model.TaskName;
-        caption = model.Caption;
-        taskConditions = JsonMapper.ToObject<List<TaskCondition>>(model.TaskConditionsJson);
-        taskRewards = JsonMapper.ToObject<List<TaskReward>>(model.TaskRewardsJson);
+        //this.taskID = taskID.ToString();
+        //TaskModel model=   SqlData.GetModelId<TaskModel>(taskId);
+        //taskName = model.TaskName;
+        //caption = model.Caption;
+        //taskConditions = JsonMapper.ToObject<List<TaskCondition>>(model.TaskConditionsJson);
+        //taskRewards = JsonMapper.ToObject<List<TaskReward>>(model.TaskRewardsJson);
     }
 
     //判断条件是否满足

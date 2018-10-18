@@ -30,7 +30,8 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
             {
                 GameObject item = UGUITools.AddChild(_buffParent.gameObject, buffPrefab);
                 ThumbnailsInfo thumbnails= item.GetComponent<ThumbnailsInfo>();
-                item
+                thumbnails.ThumbnailsImage.overrideSprite = states[i].Icon;
+                thumbnails.ThumbnailsText.text = states[i].Description;
             }
         }
      

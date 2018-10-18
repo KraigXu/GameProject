@@ -215,7 +215,7 @@ namespace MapMagic
 		public static void ToggleDisplayWireframe (this Transform tfm, bool show)
 		{
 			#if UNITY_EDITOR
-			UnityEditor.EditorUtility.SetSelectedWireframeHidden(tfm.GetComponent<Renderer>(), !show);
+            UnityEditor.EditorUtility.SetSelectedRenderState(tfm.GetComponent<Renderer>(), UnityEditor.EditorSelectedRenderState.Hidden);
 			int childCount = tfm.childCount;
 			for (int c=0; c<childCount; c++) tfm.GetChild(c).ToggleDisplayWireframe(show);
 			#endif

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using LivingArea;
 using UnityEngine;
 
-public class LivingAreaState  {
+public class LivingAreaState
+{
 
- public int Id;                                      //编号
+    public int Id;                                      //编号
     public string Name;                            //名称
     public string Description;                   //说明
     public float CoolingTime;                  //冷却

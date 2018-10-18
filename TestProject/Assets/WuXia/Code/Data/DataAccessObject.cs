@@ -18,7 +18,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " LivingAreaModel (" +
+                                       " LivingAreaData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
@@ -48,11 +48,37 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " AreaTypeModel (" +
+                                       " AreaTypeData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT);");
         }
+
+
+        public static void CreateTable_Biological(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " RaceId INTEGER," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " Life INTEGER," +
+                                       " LifeMax INTEGER," +
+                                       " Prestige INTEGER," +
+                                       " TimeAppearance TEXT,"+
+                                       " TimeEnd TEXT,"+
+                                       " IsDebut TEXT,"+
+                                       " Location INTEGER," +
+                                       " LocationType INTEGER," +
+                                       " ArticleJson TEXT," +
+                                       " EquipmentJson TEXT," +
+                                       " LanguageJson TEXT);");
+        }
+
+
         /// <summary>
         /// 势力信息
         /// </summary>
@@ -63,7 +89,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " PowerModel (" +
+                                       " PowerData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT);");
@@ -78,7 +104,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " BuildingFeatureModel (" +
+                                       " BuildingFeatureData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
@@ -96,31 +122,13 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " TimeEventModel (" +
+                                       " TimeEventData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT);");
         }
 
-        /// <summary>
-        /// 人物
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_Character(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " CharacterModel (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Gender  INTEGER," +
-                                       " Age INTEGER ," +
-                                       " AgeMax INTEGER," +
-                                       " Description TEXT);");
-        }
+
 
         /// <summary>
         /// 功法，技法
@@ -132,7 +140,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " TechniquesModel (" +
+                                       " TechniquesData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
@@ -152,7 +160,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " BookModel (" +
+                                       " BookData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
@@ -171,7 +179,7 @@ namespace DataAccessObject
             string constraint = ifNotExists ? "IF NOT EXISTS " : "";
             service.connection.Execute("CREATE TABLE " +
                                        constraint +
-                                       " TaskModel (" +
+                                       " TaskData (" +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
@@ -184,7 +192,7 @@ namespace DataAccessObject
 
         public static void CreateTable_Prestige(SQLService service)
         {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeModel ( " +
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
@@ -194,6 +202,7 @@ namespace DataAccessObject
 
         }
 
+    
 
     }
 
@@ -204,12 +213,12 @@ namespace DataAccessObject
 
     //----------------------------------------映射数据库----------------------------------Start
 
-    public abstract class BaseModel
+    public abstract class BaseData
     {
         public abstract object[] GetValues();
     }
 
-    public class LivingAreaModel : BaseModel
+    public class LivingAreaData : BaseData
     {
         public int Id { get; set; }                      //编号 
         public string Name { get; set; }                //名称
@@ -240,7 +249,7 @@ namespace DataAccessObject
         }
     }
 
-    public class AreaTypeModel : BaseModel
+    public class AreaTypeData : BaseData
     {
         public int Id { get; set; }                      //编号 
         public string Name { get; set; }                //名称
@@ -255,18 +264,71 @@ namespace DataAccessObject
         }
     }
 
-    public class PersonModel
+//service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
+//                                       " Id INTEGER PRIMARY KEY," +
+//                                       " RaceId INTEGER," +
+//                                       " Name TEXT," +
+//                                       " Description TEXT, " +
+//                                       " Sex INTEGER," +
+//                                       " Age INTEGER," +
+//                                       " AgeMax INTEGER," +
+//                                       " Prestige INTEGER," +
+//                                       " ArticleJson TEXT," +
+//                                       " EquipmentJson TEXT," +
+//                                       " LanguageJson TEXT);");
+//        }
+
+//        public static void CreateTable_Race(SQLService service)
+//        {
+//            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RaceData ( " +
+//                                      " Id INTEGER PRIMARY KEY," +
+//                                      " Name TEXT," +
+//                                      " Description TEXT);");
+//        }
+    public class BiologicalData : BaseData
     {
         public int Id { get; set; }
+        public int RaceType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int PowerId { get; set; }
-        public string PracticeJson { get; set; }
-        public string TechniqueJson { get; set; }
+        public int Sex { get; set; }
+        public int Age { get; set; }
+        public int AgeMax { get; set; }
+        public int Life { get; set; }
+        public int LifeMax { get; set; }
+        public int Prestige { get; set; }
+        public DateTime  TimeAppearance { get; set; }
+        public DateTime TimeEnd { get; set; }
+        public int IsDebut { get; set; }
+        public int Location { get; set; }
+        public int LocationType { get; set; }
+        public string ArticleJson { get; set; }
+        public string EquipmentJson { get; set; }
+        public string LanguageJson { get; set; }
 
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+                {
+                    Id,RaceType,Name,Description,Sex,Age,AgeMax,Life,LifeMax,Prestige,TimeAppearance,TimeEnd,IsDebut,Location,LocationType, ArticleJson,EquipmentJson,LanguageJson
+                };
+            return objects;
+        }
     }
 
-    public class TaskModel : BaseModel
+    public class ScenarioData : BaseData
+    {
+        public int Id { get; set; }
+
+        public override object[] GetValues()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+    public class TaskData : BaseData
     {
         public int Id { get; set; }
         public string TaskName { get; set; }
@@ -290,11 +352,21 @@ namespace DataAccessObject
 
     public static class SqlData
     {
-        public static T GetModelId<T>(int id) where T : BaseModel
+        public static T GetDataId<T>(int id) where T : BaseData
         {
-            Debug.Log(id + ">>>");
             return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] { id });
         }
+
+        public static List<T> GetAllDatas<T>() where T : BaseData
+        {
+            return SQLService.GetInstance("TD.db").QueryAll<T>();
+        }
+
+        public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
+        {
+            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where,args);
+        }
+
     }
 
 
@@ -316,23 +388,23 @@ namespace DataAccessObject
         public string[] TurretTypeIds;
 
         //关卡所需数据
-        //public List<TurretDao.TurretModel> UseTurret;  //可用炮塔
-        // public FireMapDao.FireMapModel Map;
+        //public List<TurretDao.TurretData> UseTurret;  //可用炮塔
+        // public FireMapDao.FireMapData Map;
 
         //  public Task task;              //功能暂定
-        //  public List<SkillDao.SkillModel> UseModels;//当前技术
-        //public List<EnemyDao.EnemyModel> UseEnemyModels;  
+        //  public List<SkillDao.SkillData> UseDatas;//当前技术
+        //public List<EnemyDao.EnemyData> UseEnemyDatas;  
         public LevelData() { }
-        //public LevelData(LevelDao.LevelModel model)
+        //public LevelData(LevelDao.LevelData Data)
         //{
-        //    this.LevelId = model.Id;
-        //    this.LevelCode = model.LevelCode;
-        //    this.LevelName = model.LevelName;
-        //    this.Description = model.Description;
-        //    this.DifficultyLevel = model.DifficultyLevel;
-        //    this.LevelInformations = model.LevelInformations;
-        //    this.DifficultyLevel = model.DifficultyLevel;
-        //    this.LevelTurretTypeAuthority = model.LevelTurretTypeAuthority;
+        //    this.LevelId = Data.Id;
+        //    this.LevelCode = Data.LevelCode;
+        //    this.LevelName = Data.LevelName;
+        //    this.Description = Data.Description;
+        //    this.DifficultyLevel = Data.DifficultyLevel;
+        //    this.LevelInformations = Data.LevelInformations;
+        //    this.DifficultyLevel = Data.DifficultyLevel;
+        //    this.LevelTurretTypeAuthority = Data.LevelTurretTypeAuthority;
         //}
     }
 

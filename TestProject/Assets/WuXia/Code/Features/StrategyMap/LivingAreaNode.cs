@@ -14,7 +14,7 @@ namespace LivingArea
     {
 
         public int Id;         //这个Id需要手动输入， 映射到数据库中的Id        
-        public LivingAreaModel Value;
+        public LivingAreaData Value;
         public BuildingObject[] BuildingObjects;
         
         public int Renown;      

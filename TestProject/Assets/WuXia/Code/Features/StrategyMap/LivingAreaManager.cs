@@ -109,6 +109,11 @@ namespace LivingArea
             
         }
 
+        public void InitLivingAreaData()
+        {
+            
+        }
+
         /// <summary>
         /// 刷新所有信息
         /// </summary>
@@ -117,7 +122,7 @@ namespace LivingArea
             //初始化
             for (int i = 0; i < LivingAreas.Count; i++)
             {
-                LivingAreas[i].Value = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
+                LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
                 LivingAreas[i].BuildingObjects = JsonMapper.ToObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
                // LivingAreaModel model = SqlData.GetModelId<LivingAreaModel>(LivingAreas[i].Id);
                // LivingAreas[i].LivingAreaName = model.Name;

@@ -1288,7 +1288,7 @@ namespace SQLite4Unity3d
             return Insert(obj, extra, obj.GetType());
         }
 
-        public long InsertOrReplace(BaseModel obj)
+        public long InsertOrReplace(BaseData obj)
         {
             string extra = "OR REPLACE";
 

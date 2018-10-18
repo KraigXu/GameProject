@@ -46,18 +46,20 @@ public class StrategySceneControl : MonoBehaviour {
     public StrategyWindow StrategyControl;
     public ExtendedMenuWindow ExtendedMenuControl;
 
-
     //---Info
     public ViewStatus CurViewStatus; 
     public LivingAreaNode LivingAreaTarget;
     
     //---Manager          --m前缀
+    public TimeManager M_Time;
+    public BiologicalManager M_Biological;
     public LivingAreaManager M_LivingArea;
 
     public CharController charController;
     public CameraController cameraController;
     public FlybyController demoController;
 
+    //----Player
     /// <summary>
     /// 记录当前进入的LivingArea，如果没有则为-1
     /// </summary>
@@ -84,6 +86,10 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointingControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
         MousePointingControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
+        M_Time.InitTime();
+        M_Biological.InitBiological(M_Time.CurTime);
+        M_LivingArea.InitLivingAreaData();
+
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
@@ -94,8 +100,6 @@ public class StrategySceneControl : MonoBehaviour {
         charController.acceleration = 150;
         demoController.enabled = false;
         cameraController.follow = 0;
-
-
 
     }
     void Update()

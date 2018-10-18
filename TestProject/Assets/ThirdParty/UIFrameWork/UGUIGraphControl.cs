@@ -521,11 +521,11 @@ public class UGUIGraphControl : MonoBehaviour
     /// <param name="call"></param>
     public static void SetButtonListener(GameObject go, UnityAction call)
     {
-        Button _temp = go.GetComponent<Button>();
-        if (_temp == null)
-            _temp = go.AddComponent<Button>();
-        _temp.onClick.RemoveAllListeners();
-        _temp.onClick.AddListener(call);
+        Button temp = go.GetComponent<Button>();
+        if (temp == null)
+            temp = go.AddComponent<Button>();
+        temp.onClick.RemoveAllListeners();
+        temp.onClick.AddListener(call);
     }
 
     /// <summary>
@@ -568,8 +568,8 @@ public class UGUIGraphControl : MonoBehaviour
     /// <returns></returns>
     public static Slider SetObjToSlider(GameObject _slider)
     {
-        Slider _sliderobj = _slider.GetComponent<Slider>();
-        return _sliderobj;
+        Slider sliderobj = _slider.GetComponent<Slider>();
+        return sliderobj;
 
     }
 
@@ -581,9 +581,9 @@ public class UGUIGraphControl : MonoBehaviour
     /// <returns></returns>
     public static Slider SetObjToSliderValue(GameObject _slider, float value)
     {
-        Slider _sliderobj = _slider.GetComponent<Slider>();
-        _sliderobj.value = value;
-        return _sliderobj;
+        Slider sliderobj = _slider.GetComponent<Slider>();
+        sliderobj.value = value;
+        return sliderobj;
 
     }
 
@@ -601,25 +601,17 @@ public class UGUIGraphControl : MonoBehaviour
     /// <summary>
     /// 子对象坐标转换到Canvas的局部坐标
     /// </summary>
-    /// <param name="current"></param>
-    /// <param name="canvas"></param>
+    /// <param name="canvasRect"></param>
+    /// <param name="canvasCamera"></param>
+    /// <param name="target"></param>
     /// <returns></returns>
-    public static Vector2 TransformToCanvasLocalPosition(Transform current, Transform target, GameObject Parent)
+    public static void TransformToCanvasLocalPosition(RectTransform canvasRect,Camera canvasCamera, RectTransform target)
     {
-        //var screenPos = canvas.worldCamera.WorldToScreenPoint(current.transform.position);
-        RectTransform _parentRect = UGUIGraphControl.GetObjectRectTransform(Parent);
-        RectTransform _Targetrect = UGUIGraphControl.GetObjectRectTransform(target.gameObject);
-        RectTransform _currentrect = UGUIGraphControl.GetObjectRectTransform(current.gameObject);
-        Vector2 localPos = _currentrect.anchoredPosition;
-        if (_Targetrect.anchorMax == new Vector2(0, 1f) && _Targetrect.anchorMin == new Vector2(0, 1f))
+        Vector2 pos;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, target.position, canvasCamera, out pos))
         {
-            //左上对其
-
+            Debug.Log(pos);
         }
-        //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), screenPos,
-        //    canvas.worldCamera, out localPos);
-
-
-        return localPos;
+        target.anchoredPosition = pos;
     }
 }

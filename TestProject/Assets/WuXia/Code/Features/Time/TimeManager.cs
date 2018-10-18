@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class TimeManager : MonoBehaviour
     private static TimeManager _instance;
     public static TimeManager Instance { get { return _instance; } }
 
+    public DateTime CurTime;
     public int YearTime=194;            //年
     public int Month=1;                   //月
     public int DayTime=1;              //日
@@ -48,7 +50,12 @@ public class TimeManager : MonoBehaviour
     }
 
 	void Start () {}
-	
+
+    public void InitTime()
+    {
+        
+    }
+
 	void Update () {
 	    if (curStatus == TimeSatus.Play)
 	    {

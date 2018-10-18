@@ -207,16 +207,18 @@ public class UGUITools : MonoBehaviour
     /// 判断字符串是否为数字
     /// </summary>
     /// <param name="str"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
-    static public bool IsNumberCheck(string str)
+    static public bool IsNumberCheck(string str,out int value)
     {
         try
         {
-            int var1 = Convert.ToInt32(str);
+            value = Convert.ToInt32(str);
             return true;
         }
         catch
         {
+            value = -1;
             return false;
         }
 

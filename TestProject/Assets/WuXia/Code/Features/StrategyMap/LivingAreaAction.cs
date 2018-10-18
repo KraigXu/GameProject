@@ -17,3 +17,4 @@ public class LivingAreaAdd : LivingAreaAction
         node.Renown += value;
     }
 }
+
