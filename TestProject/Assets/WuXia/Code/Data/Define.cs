@@ -35,6 +35,7 @@ public class Define : MonoBehaviour
     public GameObject UiTaskItem { get { return Resources.Load<GameObject>("UIPrefab/GenerateItem/TaskItem"); } }
 
     public GameObject UiLivingAreaBuff { get { return Resources.Load<GameObject>("UIPrefab/ThumbnailsInfo"); } }
+    public GameObject UiLivingAreaBuilding { get { return Resources.Load<GameObject>("UIPrefab/LivingArea/LivingAreaBuilding"); } }
 
     //----->按键
     public KeyCode CofirmCode = KeyCode.Mouse0;
@@ -77,6 +78,7 @@ public class Define : MonoBehaviour
     {
         _value = this;
         DontDestroyOnLoad(this);
+      
     }
 	void Start () {}
     //---->  Main

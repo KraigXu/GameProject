@@ -75,15 +75,18 @@ public class SQLService
 
     public void CreateDB()
     {
+        Debuger.Log("SQL Table DataInit Start");
         Tables.CreateTable_LivingArea(this, true);
         Tables.CreateTable_AreaType(this, true);
         Tables.CreateTable_Biological(this);
+        Tables.CreateTable_Dialog(this);
       //  Tables.CreateTable_Power(this,true);
         //Tables.CreateTable_BuildingFeatures(this,true);
         //Tables.CreateTable_TimeEvent(this,true);
         //Tables.CreateTable_Character(this,true);
         //Tables.CreateTable_Techniques(this, true);
         //Tables.CreateTable_Books(this,true); //地方,西北
+        Debuger.Log("SQL Table DataInit End");
     }
 
 

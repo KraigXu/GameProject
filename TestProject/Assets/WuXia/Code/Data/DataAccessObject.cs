@@ -8,6 +8,31 @@ namespace DataAccessObject
     //-------------------------------------------------建表语句--------------------------------Start
     public static class Tables
     {
+
+
+        public static void CreateTable_District(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS DistrictData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " RaceId INTEGER," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " Life INTEGER," +
+                                       " LifeMax INTEGER," +
+                                       " Prestige INTEGER," +
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " IsDebut TEXT," +
+                                       " Location INTEGER," +
+                                       " LocationType INTEGER," +
+                                       " ArticleJson TEXT," +
+                                       " EquipmentJson TEXT," +
+                                       " LanguageJson TEXT);");
+        }
+
         /// <summary>
         /// 生活区表
         /// </summary>
@@ -68,9 +93,9 @@ namespace DataAccessObject
                                        " Life INTEGER," +
                                        " LifeMax INTEGER," +
                                        " Prestige INTEGER," +
-                                       " TimeAppearance TEXT,"+
-                                       " TimeEnd TEXT,"+
-                                       " IsDebut TEXT,"+
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " IsDebut TEXT," +
                                        " Location INTEGER," +
                                        " LocationType INTEGER," +
                                        " ArticleJson TEXT," +
@@ -108,7 +133,7 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
-                                       " FeaturesEventId INTEGER,"+
+                                       " FeaturesEventId INTEGER," +
                                        " Remarks TEXT);");
 
         }
@@ -202,7 +227,17 @@ namespace DataAccessObject
 
         }
 
-    
+        public static void CreateTable_Dialog(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS DialogData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " PlotCoding TEXT," +
+                                       " IndexId INTEGER, " +
+                                       " StatementType INTEGER, " +
+                                       " Content string," +
+                                       " ReplyIndex INTEGER);");
+
+        }
 
     }
 
@@ -264,27 +299,27 @@ namespace DataAccessObject
         }
     }
 
-//service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
-//                                       " Id INTEGER PRIMARY KEY," +
-//                                       " RaceId INTEGER," +
-//                                       " Name TEXT," +
-//                                       " Description TEXT, " +
-//                                       " Sex INTEGER," +
-//                                       " Age INTEGER," +
-//                                       " AgeMax INTEGER," +
-//                                       " Prestige INTEGER," +
-//                                       " ArticleJson TEXT," +
-//                                       " EquipmentJson TEXT," +
-//                                       " LanguageJson TEXT);");
-//        }
+    //service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
+    //                                       " Id INTEGER PRIMARY KEY," +
+    //                                       " RaceId INTEGER," +
+    //                                       " Name TEXT," +
+    //                                       " Description TEXT, " +
+    //                                       " Sex INTEGER," +
+    //                                       " Age INTEGER," +
+    //                                       " AgeMax INTEGER," +
+    //                                       " Prestige INTEGER," +
+    //                                       " ArticleJson TEXT," +
+    //                                       " EquipmentJson TEXT," +
+    //                                       " LanguageJson TEXT);");
+    //        }
 
-//        public static void CreateTable_Race(SQLService service)
-//        {
-//            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RaceData ( " +
-//                                      " Id INTEGER PRIMARY KEY," +
-//                                      " Name TEXT," +
-//                                      " Description TEXT);");
-//        }
+    //        public static void CreateTable_Race(SQLService service)
+    //        {
+    //            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RaceData ( " +
+    //                                      " Id INTEGER PRIMARY KEY," +
+    //                                      " Name TEXT," +
+    //                                      " Description TEXT);");
+    //        }
     public class BiologicalData : BaseData
     {
         public int Id { get; set; }
@@ -297,7 +332,7 @@ namespace DataAccessObject
         public int Life { get; set; }
         public int LifeMax { get; set; }
         public int Prestige { get; set; }
-        public DateTime  TimeAppearance { get; set; }
+        public DateTime TimeAppearance { get; set; }
         public DateTime TimeEnd { get; set; }
         public int IsDebut { get; set; }
         public int Location { get; set; }
@@ -315,6 +350,45 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+    public class DistrictData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int PowerId { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description, PowerId
+            };
+            return objects;
+        }
+    }
+
+    public class DialogData : BaseData
+    {
+        public int Id { get; set; }
+        public string PlotCoding { get; set; }
+        public int IndexId { get; set; }
+        public int StatementType { get; set; }
+        public string Content { get; set; }
+        public int ReplyIndex { get; set; }
+        
+
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+                {
+                    Id,PlotCoding,IndexId,StatementType,Content,ReplyIndex
+                };
+            return objects;
+        }
+    }
+
 
     public class ScenarioData : BaseData
     {
@@ -364,7 +438,7 @@ namespace DataAccessObject
 
         public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
         {
-            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where,args);
+            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
         }
 
     }

@@ -7,8 +7,9 @@ namespace TinyFrameWork
     public enum WindowID
     {
         Invaild = 0,
-        StrategyWindow,
 
+        StrategyWindow,
+        SocialDialogWindow,
         LivingAreaBasicWindow,
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
@@ -123,6 +124,7 @@ namespace TinyFrameWork
         {
             {WindowID.Invaild,"UiPrefab/InvaildWindow"},
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
+            {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
             {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingArea/LivingAreaTitleWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingArea/LivingAreaMainWindow"},

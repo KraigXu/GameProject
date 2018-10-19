@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DataAccessObject;
 using UnityEngine;
 
 /// <summary>
-/// 区
+/// 区节点
 /// </summary>
 public class DistrictNode : MonoBehaviour
 {
 
     public int Id;
     public int DistricName;
+    public DistrictData Value;
 
     public Projector Projector;
     public Transform Model;

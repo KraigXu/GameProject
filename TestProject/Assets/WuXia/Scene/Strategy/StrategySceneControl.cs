@@ -45,6 +45,7 @@ public class StrategySceneControl : MonoBehaviour {
     //----常在UI
     public StrategyWindow StrategyControl;
     public ExtendedMenuWindow ExtendedMenuControl;
+    public SocialDialogWindow SocialDialogControl;
 
     //---Info
     public ViewStatus CurViewStatus; 
@@ -53,7 +54,7 @@ public class StrategySceneControl : MonoBehaviour {
     //---Manager          --m前缀
     public TimeManager M_Time;
     public BiologicalManager M_Biological;
-    public LivingAreaManager M_LivingArea;
+    public StrategyManager M_Strategy;
 
     public CharController charController;
     public CameraController cameraController;
@@ -69,6 +70,7 @@ public class StrategySceneControl : MonoBehaviour {
     {
         _instance = this;
         Debuger.EnableLog = true;
+
     }
 
     void Start()
@@ -88,7 +90,7 @@ public class StrategySceneControl : MonoBehaviour {
 
         M_Time.InitTime();
         M_Biological.InitBiological(M_Time.CurTime);
-        M_LivingArea.InitLivingAreaData();
+        M_Strategy.InitStrategyData();
 
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
