@@ -37,7 +37,8 @@ public class OverLookCameraController : MonoBehaviour
 
     public float m_terrainVisibileHeight = 100;
 
-    public Bounds m_targetLimit=new Bounds(new Vector3(1500,0,1500),new Vector3(3000,100,3000) );
+    public Bounds m_targetLimit;
+   // public Bounds m_targetLimit = new Bounds(new Vector3(1500, 0, 1500), new Vector3(3000, 100, 3000));
 
     public Vector3 m_cameraShake;
 
