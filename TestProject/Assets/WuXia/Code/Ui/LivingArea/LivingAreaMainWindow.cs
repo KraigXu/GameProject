@@ -21,6 +21,7 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private RectTransform _buildingContent;
     private BuildingObject[] _buildings ;
+    private bool _buildingViewStatus = false;
 
     protected override void SetWindowId()
     {
@@ -40,7 +41,9 @@ public class LivingAreaMainWindow : UIWindowBase
 
     public override void InitWindowOnAwake()
     {
-
+        _buildingContent.Find("Exit").GetComponent<Button>().onClick.AddListener(CloseBuiding);
+        Debuger.Log(">>>");
+        _buildingContent.gameObject.SetActive(_buildingViewStatus);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -59,7 +62,7 @@ public class LivingAreaMainWindow : UIWindowBase
             GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
             go.name = _buildings[i].Name;
             RectTransform goRect=   go.GetComponent<RectTransform>();
-            goRect.anchoredPosition=new Vector2(i*20f,i*30);
+            goRect.anchoredPosition =new Vector2(i*20f,i*30);
 
             go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
             go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
@@ -87,13 +90,14 @@ public class LivingAreaMainWindow : UIWindowBase
     private void OpenBuiding(BuildingObject building)
     {
         _buildingContent.gameObject.SetActive(true);
-        
-        
-
-
-
     }
 
+
+    private void CloseBuiding()
+    {
+        _buildingContent.gameObject.SetActive(false);
+
+    }
 
 
     

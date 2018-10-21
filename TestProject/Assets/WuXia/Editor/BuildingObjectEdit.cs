@@ -77,27 +77,7 @@ public class BuildingObjectEdit : EditorWindowBase
         return editorWindow;
     }
 
-    //    [{
-    //    "Name": "市集",
-    //    "Description": "无说明",
-    //    "TypeId": 3,
-    //    "BuildingLevel": 3,
-    //    "DurableValue": 1000,
-    //    "DurableMax": 5000,
-    //    "BuildingStatus": 1,
-    //    "HaveId": 1,
-    //    "BuildingFeaturesIds": "1"
-    //}, {
-    //    "Name": "酒馆",
-    //    "Description": "无说明",
-    //    "TypeId": 1,
-    //    "BuildingLevel": 1,
-    //    "DurableValue": 110,
-    //    "DurableMax": 5000,
-    //    "BuildingStatus": 2,
-    //    "HaveId": 1,
-    //    "BuildingFeaturesIds": "3"
-    //}]
+
 
     private void OnGUI()
     {

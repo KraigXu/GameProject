@@ -49,7 +49,7 @@ public class StrategyWindow : UIWindowBase
     }
     protected override void InitWindowCoreData()
     {
-        windowData.windowType = UIWindowType.BackgroundLayer;
+        windowData.windowType = UIWindowType.ForegroundLayer;
         windowData.showMode = UIWindowShowMode.DoNothing;
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;

@@ -290,7 +290,7 @@ namespace MapMagic
 			script.layout.field = this.position;
 			
 			//unity 5.4 beta
-			if (Event.current.type == EventType.MouseDrag || Event.current.type == EventType.layout) return; 
+			if (Event.current.type == EventType.MouseDrag || Event.current.type == EventType.Layout) return; 
 
 			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Redraw Window");
 
