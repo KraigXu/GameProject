@@ -8,13 +8,17 @@ public class Biological : MonoBehaviour
 
     public BiologicalData Model;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+   
+    
+
+
+    private void Start()
+    {
+
+    }
+
+    private void Update()
+    {
+
+    }
 }

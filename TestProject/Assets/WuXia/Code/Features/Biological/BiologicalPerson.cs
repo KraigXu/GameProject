@@ -5,6 +5,7 @@ using UnityEngine;
 public class BiologicalPerson : Biological
 {
 
+
 	void Start () {
 		
 	}

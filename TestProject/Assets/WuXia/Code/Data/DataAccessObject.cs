@@ -323,11 +323,22 @@ namespace DataAccessObject
     public class BiologicalData : BaseData
     {
         public int Id { get; set; }
-        public int RaceType { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int RaceType { get; set; }
         public int Sex { get; set; }
         public int Age { get; set; }
+
+        public int Property1 { get; set; }
+        public int Property2 { get; set; }
+        public int Property3 { get; set; }
+        public int Property4 { get; set; }
+        public int Property5 { get; set; }
+
+        public int RaceId { get; set; }
+        public int RaceRangeId { get; set; }
+        
+       
         public int AgeMax { get; set; }
         public int Life { get; set; }
         public int LifeMax { get; set; }

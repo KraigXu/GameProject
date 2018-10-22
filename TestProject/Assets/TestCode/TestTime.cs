@@ -19,3 +19,9 @@ public class TestTime : MonoBehaviour
 		
 	}
 }
+
+
+public static class TestD
+{
+
+}
