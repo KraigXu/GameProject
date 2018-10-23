@@ -87,4 +87,12 @@ public class Define : MonoBehaviour
         NextSceneName = nextScene;
          SceneManager.LoadScene(LoadingSceneName);
     }
+
+
+    //----> Algorithm
+    public Vector2 s()
+    {
+        return new Vector2();
+    }
+
 }

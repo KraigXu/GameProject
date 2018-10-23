@@ -70,7 +70,6 @@ public class SQLService
 
         if (createTable)
             CreateDB();
-
     }
 
     public void CreateDB()

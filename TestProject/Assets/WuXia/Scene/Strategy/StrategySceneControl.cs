@@ -156,6 +156,8 @@ public class StrategySceneControl : MonoBehaviour {
 
     }
 
+    
+
 
 
     #endregion
@@ -247,7 +249,5 @@ public class StrategySceneControl : MonoBehaviour {
     {
         
     }
-
-
     #endregion
 }
