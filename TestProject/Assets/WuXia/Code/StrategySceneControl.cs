@@ -40,7 +40,7 @@ public class StrategySceneControl : MonoBehaviour {
     //----CamerControl
     public OverLookCameraController LivingfAreaCameraControl;
 
-    public MousePointingInfo MousePointingControl;           //鼠标信息控制
+    public MousePointingInfo MousePointing;           //鼠标信息控制
 
     //----常在UI
     public StrategyWindow StrategyControl;
@@ -56,6 +56,7 @@ public class StrategySceneControl : MonoBehaviour {
     public BiologicalManager M_Biological;
     public StrategyManager M_Strategy;
 
+   
     public CharController charController;
     public CameraController cameraController;
     public FlybyController demoController;
@@ -65,6 +66,7 @@ public class StrategySceneControl : MonoBehaviour {
     /// 记录当前进入的LivingArea，如果没有则为-1
     /// </summary>
     public int EnterLivingAreaId = -1;
+    public PlayerControl CurPlayercControl;
 
     void Awake()
     {
@@ -76,17 +78,17 @@ public class StrategySceneControl : MonoBehaviour {
     void Start()
     {
 
-        MousePointingControl.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
-        MousePointingControl.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
-        MousePointingControl.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
-        MousePointingControl.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
-        MousePointingControl.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
+        MousePointing.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
+        MousePointing.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
+        MousePointing.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
+        MousePointing.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
+        MousePointing.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
 
-        MousePointingControl.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
-        MousePointingControl.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
-        MousePointingControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
-        MousePointingControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
-        MousePointingControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
+        MousePointing.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
+        MousePointing.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
+        MousePointing.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
+        MousePointing.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
+        MousePointing.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
         M_Time.InitTime();
         M_Biological.InitBiological(M_Time.CurTime);
