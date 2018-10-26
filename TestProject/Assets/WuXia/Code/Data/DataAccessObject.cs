@@ -9,7 +9,10 @@ namespace DataAccessObject
     public static class Tables
     {
 
-
+        /// <summary>
+        /// 区
+        /// </summary>
+        /// <param name="service"></param>
         public static void CreateTable_District(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS DistrictData ( " +
@@ -79,7 +82,10 @@ namespace DataAccessObject
                                        " Description TEXT);");
         }
 
-
+        /// <summary>
+        /// 生物属性
+        /// </summary>
+        /// <param name="service"></param>
         public static void CreateTable_Biological(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
@@ -156,7 +162,7 @@ namespace DataAccessObject
 
 
         /// <summary>
-        /// 功法，技法
+        /// 技法
         /// </summary>
         /// <param name="service"></param>
         /// <param name="ifNotExists"></param>
@@ -174,6 +180,9 @@ namespace DataAccessObject
                                        " Type INTEGER," +
                                        " ContentJson TEXT);");
         }
+
+        
+
 
         /// <summary>
         /// 书籍
@@ -214,7 +223,10 @@ namespace DataAccessObject
 
         }
 
-
+        /// <summary>
+        /// 声望
+        /// </summary>
+        /// <param name="service"></param>
         public static void CreateTable_Prestige(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
@@ -227,6 +239,10 @@ namespace DataAccessObject
 
         }
 
+        /// <summary>
+        /// 对话
+        /// </summary>
+        /// <param name="service"></param>
         public static void CreateTable_Dialog(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS DialogData ( " +
@@ -237,6 +253,61 @@ namespace DataAccessObject
                                        " Content string," +
                                        " ReplyIndex INTEGER);");
 
+        }
+
+        /// <summary>
+        /// 小知识
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Tips(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS TipsData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " TipsType TEXT,"+
+                                       " Content TEXT," +
+                                       " ContentTitle TEXT);");
+        }
+
+        /// <summary>
+        /// 功法
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Gongfa(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS GongfaData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " ContentTitle TEXT);");
+        }
+        /// <summary>
+        /// 心法
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Xinfa(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS XinfaData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " XinfaType TEXT,"+
+
+                                       " ContentTitle TEXT);");
+        }
+
+        /// <summary>
+        /// 关系
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Relation(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " XinfaType TEXT," +
+
+                                       " ContentTitle TEXT);");
         }
 
     }
@@ -412,7 +483,6 @@ namespace DataAccessObject
     }
 
 
-
     public class TaskData : BaseData
     {
         public int Id { get; set; }
@@ -430,6 +500,22 @@ namespace DataAccessObject
         }
     }
 
+    public class TipsData : BaseData
+    {
+        public int Id { get; set; }
+        public string TipsType { get; set; }
+        public string ContentTitle { get; set; }
+        public string Content { get; set; }
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,TipsType,ContentTitle,Content
+            };
+            return objects;
+        }
+    }
+
 
     //----------------------------------------映射数据库----------------------------------End
 
@@ -439,17 +525,17 @@ namespace DataAccessObject
     {
         public static T GetDataId<T>(int id) where T : BaseData
         {
-            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] { id });
+            return SQLService.GetInstance("Data.db").QueryUnique<T>(" Id=?", new object[] { id });
         }
 
         public static List<T> GetAllDatas<T>() where T : BaseData
         {
-            return SQLService.GetInstance("TD.db").QueryAll<T>();
+            return SQLService.GetInstance("Data.db").QueryAll<T>();
         }
 
         public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
         {
-            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
+            return SQLService.GetInstance("Data.db").SimpleQuery<T>(where, args);
         }
 
     }

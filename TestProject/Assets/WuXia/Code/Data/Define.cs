@@ -10,12 +10,30 @@ using UnityEngine.SceneManagement;
 public class Define : MonoBehaviour
 {
     private static Define _value;
-    public static Define Value{get { return _value; }}
+
+    public static Define Value
+    {
+        get
+        {
+            if (_value == null)
+            {
+                GameObject go = GameObject.Find("Define");
+                if (go == null)
+                {
+                    go=new GameObject("Define");
+                    _value=go.AddComponent<Define>();
+                }
+            }
+            return _value;
+        }
+    }
 
     public readonly string TaskSceneName = "Start";
     public readonly string FightingSceneName = "Demo";
     public readonly string ManagerSceneName = "Manager";
     public readonly string LoadingSceneName = "Loading";
+
+
 
     /// <summary>
     /// 当前游戏状态             -1:发生错误  0:正常界面 1正常战略 2正常战役
@@ -63,16 +81,6 @@ public class Define : MonoBehaviour
     public KeyCode SkillSlot6 = KeyCode.Alpha6;
     public KeyCode SkillSlot7 = KeyCode.Alpha7;
     public KeyCode SkillSlot8 = KeyCode.Alpha8;
-
-    /// <summary>
-    /// Tips  加载界面上的小知识
-    /// </summary>
-    public string[] Tips = new[]
-    {
-        "A ::::::",
-        "B ::::::",
-        "C ::::::"
-    };
 
     void Awake()
     {

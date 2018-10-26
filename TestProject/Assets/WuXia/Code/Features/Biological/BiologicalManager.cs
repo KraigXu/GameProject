@@ -8,7 +8,8 @@ public class BiologicalManager : MonoBehaviour
 {
     public List<Biological> BiologicalArray = new List<Biological>();  //所有
     public List<Biological> BiologicalDebutArray = new List<Biological>();
-    public PlayerElement Player;
+    public PlayerControl PlayerCon;
+
     [SerializeField]
     private GameObject _biologicalGoPrefab;
 
@@ -25,7 +26,6 @@ public class BiologicalManager : MonoBehaviour
     {
 
     }
-
     /// <summary>
     /// 初始化
     /// </summary>
@@ -42,6 +42,19 @@ public class BiologicalManager : MonoBehaviour
             {
                 case RaceType.Human:
                     biological = go.AddComponent<BiologicalPerson>();
+                    biological.BiologicalId = biologicalModels[i].Id;
+                    biological.Name = biologicalModels[i].Name;
+                    biological.Description = biologicalModels[i].Description;
+                    biological.RaceType = RaceType.Human;
+                    biological.Sex = (SexType)biologicalModels[i].Sex;
+                    biological.Age = biologicalModels[i].Age;
+                    biological.AgeMax = biologicalModels[i].AgeMax;
+                    biological.TimeAppearance = biologicalModels[i].TimeAppearance;
+                    biological.TimeEnd = biologicalModels[i].TimeEnd;
+                    biological.Prestige = biologicalModels[i].Prestige;
+
+                    //----Human
+
                     break;
                 case RaceType.Ghost:
                     break;
@@ -53,7 +66,7 @@ public class BiologicalManager : MonoBehaviour
 
             if (Define.Value.PlayerId == biologicalModels[i].Id)
             {
-                Player = go.AddComponent<PlayerElement>();
+                PlayerCon = go.AddComponent<PlayerControl>();
             }
             else
             {
@@ -76,7 +89,33 @@ public class BiologicalManager : MonoBehaviour
         return null;
     }
 
-    
+
+    //-----------------------Behaviour
+
+    public void CalculationProperty(Biological biological)
+    {
+        if (biological.Model != null)
+        {
+            switch ((RaceType)biological.Model.RaceType)
+            {
+                case RaceType.Human:
+                    //biological.Blood=biological.Model.
+                    break;
+                case RaceType.Elf:
+                    break;
+                case RaceType.Ghost:
+                    break;  
+            }
+        }
+        else
+        {
+            Debuger.LogError("Model Is NULL");
+        }
+
+    }
+
 
     
+
+
 }

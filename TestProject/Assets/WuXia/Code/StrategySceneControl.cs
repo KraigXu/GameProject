@@ -108,10 +108,9 @@ public class StrategySceneControl : MonoBehaviour {
     }
     void Update()
     {
-
     }
 
-    #region 生活区
+    #region LivingArea
 
     /// <summary>
     /// 进入生活区
@@ -163,7 +162,6 @@ public class StrategySceneControl : MonoBehaviour {
 
 
     #endregion
-
 
     #region ViewStatusChange
 

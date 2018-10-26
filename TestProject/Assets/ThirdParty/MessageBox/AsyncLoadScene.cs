@@ -30,16 +30,21 @@ public class AsyncLoadScene : MonoBehaviour {
 
     IEnumerator AsyncLoading()
     {
+        if (string.IsNullOrEmpty(Define.Value.NextSceneName))
+        {
+            yield return null ;
+        }
+
         operation = SceneManager.LoadSceneAsync(Define.Value.NextSceneName);
         //阻止当加载完成自动切换
         operation.allowSceneActivation = false;
-
         yield return operation;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(operation==null)return;
         targetValue = operation.progress;
 
         if (operation.progress >= 0.9f)

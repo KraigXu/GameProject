@@ -6,7 +6,9 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PlayerControl : MonoBehaviour
-{
+{    
+    public Biological _Biological;
+
     public LayerMask RayLayerId;
     public Camera CurCamera;
     public GameObject TargetGo;

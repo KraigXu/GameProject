@@ -5,7 +5,7 @@ using SQLite4Unity3d;
 using System.IO;
 using DataAccessObject;
 using System;
-public class SQLService 
+public class SQLService
 {
     public SQLiteConnection connection;
     private static SQLService sqlService;
@@ -32,7 +32,7 @@ public class SQLService
 
     public static void CloseDB()
     {
-        if (sqlService!= null)
+        if (sqlService != null)
         {
             sqlService.connection.Close();
             sqlService = null;
@@ -69,7 +69,10 @@ public class SQLService
         connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
 
         if (createTable)
+        {
             CreateDB();
+        }
+
     }
 
     public void CreateDB()
@@ -79,7 +82,8 @@ public class SQLService
         Tables.CreateTable_AreaType(this, true);
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_Dialog(this);
-      //  Tables.CreateTable_Power(this,true);
+        Tables.CreateTable_Tips(this);
+        //  Tables.CreateTable_Power(this,true);
         //Tables.CreateTable_BuildingFeatures(this,true);
         //Tables.CreateTable_TimeEvent(this,true);
         //Tables.CreateTable_Character(this,true);
@@ -145,7 +149,7 @@ public class SQLService
 
     public T QueryUnique<T>(string where, params object[] args) where T : BaseData
     {
-        string query = "select * from " + typeof(T).Name.Split('+')[0]+" where "+where;
+        string query = "select * from " + typeof(T).Name.Split('+')[0] + " where " + where;
         List<T> list = Query<T>(query, args);
 
         if (list.Count > 0)
