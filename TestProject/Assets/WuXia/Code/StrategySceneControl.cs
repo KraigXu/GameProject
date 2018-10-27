@@ -250,4 +250,13 @@ public class StrategySceneControl : MonoBehaviour {
         
     }
     #endregion
+
+
+    #region UiOpen
+
+    public void OpenWXCharacterPanelWidow()
+    {
+        UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
+    }
+    #endregion
 }

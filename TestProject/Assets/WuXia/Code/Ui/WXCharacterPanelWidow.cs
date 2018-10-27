@@ -34,21 +34,20 @@ public class WXCharacterPanelWidow : UIWindowBase
 
     protected override void InitWindowCoreData()
     {
-        windowData.windowType = UIWindowType.BackgroundLayer;
+        windowData.windowType = UIWindowType.ForegroundLayer;
         windowData.showMode = UIWindowShowMode.DoNothing;
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
         windowData.animationType = UIWindowAnimationType.None;
-        windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
     }
 
     public override void InitWindowOnAwake()
     {
-        CharacterTog.onValueChanged.AddListener(CharacterTogMain);
-        LogTog.onValueChanged.AddListener(LogTogMain);
-        SkillTog.onValueChanged.AddListener(SkillTogMain);
-        TechniqueTog.onValueChanged.AddListener(TechniqueTogMain);
+        //CharacterTog.onValueChanged.AddListener(CharacterTogMain);
+        //LogTog.onValueChanged.AddListener(LogTogMain);
+        //SkillTog.onValueChanged.AddListener(SkillTogMain);
+        //TechniqueTog.onValueChanged.AddListener(TechniqueTogMain);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)

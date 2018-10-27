@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +31,56 @@ public class TimeManager : MonoBehaviour
     public float curSchedule=0;        //当前进度，当进度>=时间标量时则计算为一天  ，时间速率分别为  {正常=时间标量*1,  慢速=时间标量*2,快速=时间标量*0.5}
     public float curSpeedValue=1;
 
-  
+    public bool IsResetTime = true;
+
+    public StringBuilder curYerastr ;
+    public StringBuilder curMonthstr;
+    public StringBuilder curDaystr  ;
+    public StringBuilder curHourstr;
+    ///// <summary>
+    ///// 时间实体
+    ///// </summary>
+    //public class TimeEntity
+    //{
+    //    public 
+
+    //}
+
+    public int GetYear
+    {
+        get { return CurTime.Year; }
+    }
+
+    public int GetMonth
+    {
+        get { return CurTime.Month; }
+    }
+    public int GetDay
+    {
+        get { return CurTime.Day; }
+    }
+
+    public int GetHour
+    {
+        get { return CurTime.Hour; }
+    }
+
+    //public string GetShiChen
+    //{
+    //    get
+    //    {
+    //        return;
+
+
+    //        子时 丑时  寅时 卯时  辰时 巳时
+    //        23:00 - 00:59 01:00 - 02:59 03:00 - 04:59 05:00 - 06:59 07:00 - 08:59 09:00 - 10:59
+    //        午时 未时  申时 酉时  戊时 亥时
+    //        11:00 - 12:59 13:00 - 14:59 15:00 - 16:59 17:00 - 18:59 19:00 - 20:59 21:00 - 22:59
+
+    //    }
+    //}
+
+
     public enum TimeSpeed
     {
         Normal=1,  //正常
@@ -49,7 +99,27 @@ public class TimeManager : MonoBehaviour
         _instance = this;
     }
 
-	void Start () {}
+    void Start()
+    {
+        if (IsResetTime)  //重置为当前系统时间 转化为古代时间
+        {
+            CurTime =DateTime.Now;
+            curYerastr=new StringBuilder(CurTime.Day+'年');
+            curMonthstr=new StringBuilder(CurTime.Month+'月');
+            curDaystr = new StringBuilder(CurTime.Day + '日');
+
+            //curYerastr =
+            //    curMonthstr
+            //curDaystr =
+            //    curHourstr
+
+        }
+        else            //取得剧本时间
+        {
+
+        }
+
+    }
 
     public void InitTime()
     {

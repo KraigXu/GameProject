@@ -24,7 +24,7 @@ public class StrategyWindow : UIWindowBase
     [SerializeField]
     private Text _playerSW;
 
-   [Header("Time")]
+    [Header("Time")]
     [SerializeField]
     private Text _year;
     [SerializeField]
@@ -33,6 +33,8 @@ public class StrategyWindow : UIWindowBase
     private Text _day;
     [SerializeField]
     private  Text _season;
+    [SerializeField]
+    private  Text _shiChen;
 
     [Header("MiMap")]
     public Text text6;
@@ -42,6 +44,19 @@ public class StrategyWindow : UIWindowBase
     private RectTransform _messageContent;
     [SerializeField]
     private Text _messageText;
+
+
+    [Header("Buttom")]
+    [SerializeField]
+    private Button _characterInformationBtn;
+    [SerializeField]
+    private Button _wugongBtn;
+    [SerializeField]
+    private Button _technologyBtn;
+    [SerializeField]
+    private Button _logBtn;
+    [SerializeField]
+    private Button _mapBtn;
 
     protected override void SetWindowId()
     {
@@ -59,7 +74,11 @@ public class StrategyWindow : UIWindowBase
     }
     public override void InitWindowOnAwake()
     {
-
+        _characterInformationBtn.onClick.AddListener(CharacterInformationClick);
+        _wugongBtn.onClick.AddListener(WugongClick);
+        _technologyBtn.onClick.AddListener(TechnologyClick);
+        _logBtn.onClick.AddListener(LogClick);
+        _mapBtn.onClick.AddListener(MapClcik);
     }
 
 
@@ -67,11 +86,14 @@ public class StrategyWindow : UIWindowBase
     {
         UpdateTime();
     }
+
+    //----日期
     private void UpdateTime()
     {
         _year.text = TimeManager.Instance.curYera.ToString();
         _month.text = TimeManager.Instance.curMonth.ToString();
         _day.text = TimeManager.Instance.curDay.ToString();
+
 
         if (TimeManager.Instance.curMonth == 2 || TimeManager.Instance.curMonth == 3 || TimeManager.Instance.curMonth == 4)
         {
@@ -98,4 +120,28 @@ public class StrategyWindow : UIWindowBase
     }
 
 
+
+    //----------Bttom
+
+    private void CharacterInformationClick()
+    {
+        StrategySceneControl.Instance.OpenWXCharacterPanelWidow();
+    }
+
+    private void WugongClick()
+    {
+
+    }
+    private void TechnologyClick()
+    {
+
+    }
+    private void LogClick()
+    {
+
+    }
+    private void MapClcik()
+    {
+        
+    }
 }
