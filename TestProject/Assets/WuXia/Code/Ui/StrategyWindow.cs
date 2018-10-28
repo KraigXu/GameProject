@@ -112,8 +112,6 @@ public class StrategyWindow : UIWindowBase
             _season.text = "冬";
         }
     }
-
-
     public void ShowMessage(string message)
     {
         

@@ -223,6 +223,10 @@ public class StrategySceneControl : MonoBehaviour {
     public void Mouse0Click_LivingAreaMain(Transform tf, Vector3 point)
     {
         Debug.Log(tf.name + ">>Mouse0Click");
+        M_Strategy.SelectLivingAreasModel(tf.GetComponent<LivingAreaNode>());
+
+
+
     }
     public void Mouse1Click_LivingAreaMain(Transform tf, Vector3 point)
     {

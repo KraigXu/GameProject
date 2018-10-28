@@ -83,6 +83,8 @@ public class SQLService
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_Dialog(this);
         Tables.CreateTable_Tips(this);
+        Tables.CreateTable_Mark(this);
+        Tables.CreateTable_Techniques(this);
         //  Tables.CreateTable_Power(this,true);
         //Tables.CreateTable_BuildingFeatures(this,true);
         //Tables.CreateTable_TimeEvent(this,true);

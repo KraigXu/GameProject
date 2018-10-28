@@ -163,22 +163,19 @@ namespace DataAccessObject
 
         /// <summary>
         /// 技法
+        /// 所有技法均无等级限制 仅为经验的控制  最大经验999  效果为 主参数/（最大经验/1000）
         /// </summary>
         /// <param name="service"></param>
         /// <param name="ifNotExists"></param>
-        public static void CreateTable_Techniques(SQLService service, bool ifNotExists)
+        public static void CreateTable_Techniques(SQLService service )
         {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " TechniquesData (" +
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS TechniquesData ( " +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
+                                       " MarkIds TEXT,"+
                                        " Description TEXT, " +
-                                       " MoneyValue INTEGER," +
-                                       " Level INTEGER," +
-                                       " Type INTEGER," +
-                                       " ContentJson TEXT);");
+                                       " TechniquesValue INTEGER," +
+                                       " Effect TEXT);");
         }
 
         
@@ -308,6 +305,19 @@ namespace DataAccessObject
                                        " XinfaType TEXT," +
 
                                        " ContentTitle TEXT);");
+        }
+
+        /// <summary>
+        /// 词缀
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Mark(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS MarkData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " MarkGroup TEXT);");
         }
 
     }
@@ -517,6 +527,8 @@ namespace DataAccessObject
     }
 
 
+
+
     //----------------------------------------映射数据库----------------------------------End
 
     //-----------------------------------------取值--------------------------------------Start
@@ -525,17 +537,17 @@ namespace DataAccessObject
     {
         public static T GetDataId<T>(int id) where T : BaseData
         {
-            return SQLService.GetInstance("Data.db").QueryUnique<T>(" Id=?", new object[] { id });
+            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] { id });
         }
 
         public static List<T> GetAllDatas<T>() where T : BaseData
         {
-            return SQLService.GetInstance("Data.db").QueryAll<T>();
+            return SQLService.GetInstance("TD.db").QueryAll<T>();
         }
 
         public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
         {
-            return SQLService.GetInstance("Data.db").SimpleQuery<T>(where, args);
+            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
         }
 
     }

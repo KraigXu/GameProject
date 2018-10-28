@@ -49,9 +49,6 @@ namespace LivingArea
         }
     }
 
-
-
-
     public class BuildingFeatures
     {
         public string Name;
@@ -80,6 +77,11 @@ namespace LivingArea
     {
         public List<LivingAreaNode> LivingAreas;
         public List<DistrictNode> Districts;
+
+        [SerializeField]
+        private Transform _livingAreasSelect;
+
+
 
         void Awake()
         {
@@ -125,6 +127,19 @@ namespace LivingArea
             ShowWindowData data = new ShowWindowData();
             data.contextData = new WindowContextLivingAreaData(LivingAreas);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
+        }
+
+
+
+        /// <summary>
+        /// 选中城市模型
+        /// </summary>
+        public void SelectLivingAreasModel(LivingAreaNode node)
+        {
+            //获取城市坐标
+            _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
+
+
         }
 
     }
