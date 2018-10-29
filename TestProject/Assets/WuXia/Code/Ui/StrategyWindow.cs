@@ -93,7 +93,7 @@ public class StrategyWindow : UIWindowBase
         _year.text = TimeManager.Instance.curYera.ToString();
         _month.text = TimeManager.Instance.curMonth.ToString();
         _day.text = TimeManager.Instance.curDay.ToString();
-
+        _shiChen.text = TimeManager.Instance.curGd;
 
         if (TimeManager.Instance.curMonth == 2 || TimeManager.Instance.curMonth == 3 || TimeManager.Instance.curMonth == 4)
         {

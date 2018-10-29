@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - LivingArea
+  - Terrain
   layers:
   - Default
   - TransparentFX

@@ -42,7 +42,6 @@ public class StrategySceneControl : MonoBehaviour {
 
     //----CamerControl
     public OverLookCameraController LivingfAreaCameraControl;
-
     public MousePointingInfo MousePointing;           //鼠标信息控制
 
     //----常在UI
@@ -58,11 +57,6 @@ public class StrategySceneControl : MonoBehaviour {
     public TimeManager M_Time;
     public BiologicalManager M_Biological;
     public StrategyManager M_Strategy;
-
-   
-    public CharController charController;
-    public CameraController cameraController;
-    public FlybyController demoController;
 
     //----Player
     /// <summary>
@@ -116,13 +110,12 @@ public class StrategySceneControl : MonoBehaviour {
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
-        
-        charController.enabled = true;
-        charController.gravity = false;
-        charController.speed = 50;
-        charController.acceleration = 150;
-        demoController.enabled = false;
-        cameraController.follow = 0;
+
+        MousePointing.enabled = true;
+        MousePointing.gravity = false;
+        MousePointing.speed = 50;
+        MousePointing.acceleration = 150;
+        MousePointing.follow = 0;
 
     }
     void Update()
@@ -274,9 +267,10 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void Mouse1Click_Terrain(Transform tf, Vector3 point)
     {
+        Debuger.Log(">>>>>>>Terrain");
         CurMouseEffect.transform.position = point;
         CurPlayercControl.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
-        NavMeshAgent agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
+        NavMeshAgent agent = CurPlayercControl.GetComponent<NavMeshAgent>();
         LineRenderer moveLine = gameObject.GetComponent<LineRenderer>();
         if (moveLine == null)
         {
