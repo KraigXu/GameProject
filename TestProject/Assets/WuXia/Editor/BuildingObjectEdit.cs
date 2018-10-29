@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using LitJson;
 using UnityEditor;
 using UnityEngine;
 using LivingArea;
+using Newtonsoft.Json;
+
 public class BuildingObjectEdit : EditorWindowBase
 {
     private static Vector2 minResolution = new Vector2(1200, 1000);
@@ -135,7 +136,7 @@ public class BuildingObjectEdit : EditorWindowBase
 
         if (GUILayout.Button("确认(转换JSON)",GUILayout.Width(300)))
         {
-            json = JsonMapper.ToJson(_buildings);
+            json = JsonConvert.SerializeObject(_buildings);
             Debug.Log(json); 
         }
 

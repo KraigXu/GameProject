@@ -106,6 +106,7 @@ namespace DataAccessObject
                                        " LocationType INTEGER," +
                                        " ArticleJson TEXT," +
                                        " EquipmentJson TEXT," +
+                                       " Compatibility INTEGER,"+
                                        " LanguageJson TEXT);");
         }
 

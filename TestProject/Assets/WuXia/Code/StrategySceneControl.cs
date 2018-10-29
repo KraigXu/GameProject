@@ -4,6 +4,9 @@ using LivingArea;
 using TinyFrameWork;
 using UnityEngine;
 using MapMagicDemo;
+using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.AI;
+
 /// <summary>
 /// 这个Target 与Game 中的Target 对应
 /// </summary>
@@ -67,6 +70,9 @@ public class StrategySceneControl : MonoBehaviour {
     /// </summary>
     public int EnterLivingAreaId = -1;
     public PlayerControl CurPlayercControl;
+    public GameObject CurMouseEffect;
+
+    
 
     void Awake()
     {
@@ -90,7 +96,20 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointing.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
         MousePointing.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
-        M_Time.InitTime();
+        MousePointing.MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
+        MousePointing.MouseExitEvents.Add("Terrain", MouseExit_Terrain);
+        MousePointing.MouseOverEvents.Add("Terrain", MouseOver_Terrain);
+        MousePointing.Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
+        MousePointing.Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
+
+        MousePointing.MouseEnterEvents.Add("Biological", MouseEnter_Biological);
+        MousePointing.MouseExitEvents.Add("Biological", MouseExit_Biological);
+        MousePointing.MouseOverEvents.Add("Biological", MouseOver_Biological);
+        MousePointing.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
+        MousePointing.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
+
+        
+
         M_Biological.InitBiological(M_Time.CurTime);
         M_Strategy.InitStrategyData();
 
@@ -224,9 +243,6 @@ public class StrategySceneControl : MonoBehaviour {
     {
         Debug.Log(tf.name + ">>Mouse0Click");
         M_Strategy.SelectLivingAreasModel(tf.GetComponent<LivingAreaNode>());
-
-
-
     }
     public void Mouse1Click_LivingAreaMain(Transform tf, Vector3 point)
     {
@@ -235,13 +251,76 @@ public class StrategySceneControl : MonoBehaviour {
         ShowWindowData showMenuData=new ShowWindowData();
         showMenuData.contextData=new WindowContextExtendedMenu(tf.GetComponent<LivingAreaNode>(),point);
         UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, showMenuData);
+    }
+
+    public void MouseEnter_Terrain(Transform tf)
+    {
+    }
+
+    public void MouseExit_Terrain(Transform tf)
+    {
 
     }
 
+    public void MouseOver_Terrain(Transform tf)
+    {
 
+    }
 
-    #endregion 
-    
+    public void Mouse0Click_Terrain(Transform tf, Vector3 point)
+    {
+        CurMouseEffect.transform.position = point;
+    }
+
+    public void Mouse1Click_Terrain(Transform tf, Vector3 point)
+    {
+        CurMouseEffect.transform.position = point;
+        CurPlayercControl.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
+        NavMeshAgent agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
+        LineRenderer moveLine = gameObject.GetComponent<LineRenderer>();
+        if (moveLine == null)
+        {
+            moveLine = gameObject.AddComponent<LineRenderer>();
+        }
+
+        //设置路径的点，
+        //路径  导航。
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(point, path);
+        //线性渲染设置拐点的个数。数组类型的。
+        moveLine.positionCount = path.corners.Length;
+        //线性渲染的拐点位置，数组类型，
+        agent.SetDestination(point);
+        moveLine.SetPositions(path.corners);
+    }
+
+    public void MouseEnter_Biological(Transform tf)
+    {
+
+    }
+
+    public void MouseExit_Biological(Transform tf)
+    {
+      
+    }
+
+    public void MouseOver_Biological(Transform tf)
+    {
+      
+    }
+
+    public void Mouse0Click_Biological(Transform tf, Vector3 point)
+    {
+
+    }
+
+    public void Mouse1Click_Biological(Transform tf, Vector3 point)
+    {
+
+    }
+
+    #endregion
+
     #region Message
 
     //显示Message

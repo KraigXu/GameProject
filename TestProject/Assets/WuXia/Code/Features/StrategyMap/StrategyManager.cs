@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
-using LitJson;
+using Newtonsoft.Json;
 using TinyFrameWork;
 using UnityEngine;
 
@@ -115,7 +115,7 @@ namespace LivingArea
             for (int i = 0; i < LivingAreas.Count; i++)
             {
                 LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
-                LivingAreas[i].BuildingObjects =JsonMapper.ToObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
+                LivingAreas[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
 
                 LivingAreaState[] groups = new LivingAreaState[3];
                 groups[0] = new LivingAreaState(1, "1", "", 10, null);
@@ -128,9 +128,6 @@ namespace LivingArea
             data.contextData = new WindowContextLivingAreaData(LivingAreas);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
         }
-
-
-
         /// <summary>
         /// 选中城市模型
         /// </summary>

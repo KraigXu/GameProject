@@ -45,6 +45,7 @@ public class PlayerControl : MonoBehaviour
 
     void LateUpdate()
     {
+        return;
         _ray = CurCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(_ray, out _hit, RayLayerId))
         {

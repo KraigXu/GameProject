@@ -2,38 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// 鼠标指向信息
 /// </summary>
 public class MousePointingInfo : MonoBehaviour
 {
-
     public delegate void OnMousePointing(Transform tf);
-
     public delegate void OnMousePointingPoint(Transform tf, Vector3 point);
-
-    public Camera _camera;
-
     /// <summary>
     /// 当标识的鼠标进入时
     /// </summary>
     public Dictionary<string, OnMousePointing> MouseEnterEvents = new Dictionary<string, OnMousePointing>();
-
     public Dictionary<string, OnMousePointing> MouseExitEvents = new Dictionary<string, OnMousePointing>();
-
     public Dictionary<string, OnMousePointing> MouseOverEvents = new Dictionary<string, OnMousePointing>();
-
     public Dictionary<string, OnMousePointingPoint> Mouse0ClickEvents = new Dictionary<string, OnMousePointingPoint>();
-
     public Dictionary<string, OnMousePointingPoint> Mouse1ClickEvents = new Dictionary<string, OnMousePointingPoint>();
 
     public Transform _curlastContact;  //当前鼠标之前指向到的物体
-
     public Transform _clickTf;        //点击时效果坐标
-
-
-    public Camera cam;
+    public Camera _camera;
     public Transform hero;
 
     public bool movable;
@@ -82,16 +71,19 @@ public class MousePointingInfo : MonoBehaviour
 
     void Start()
     {
-        //_camera = GetComponent<Camera>();//获取场景中摄像机对象的组件接口
-
-        if (cam == null) cam = Camera.main;
-        //if (hero==null) hero = ((CharController)FindObjectOfType(typeof(CharController))).transform;
-        pivot = cam.transform.position;
+        if (_camera == null)
+        {
+            _camera = Camera.main;
+        }
+        pivot = _camera.transform.position;
     }
 
 
     void LateUpdate()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
         RaycastHit hit;    //声明一个碰撞的点
         if (Physics.Raycast(ray, out hit))
@@ -188,17 +180,17 @@ public class MousePointingInfo : MonoBehaviour
         //following move dir
         if (follow > 0.000001f)
         {
-            Vector3 moveVector = cam.transform.position - oldPos;
+            Vector3 moveVector = _camera.transform.position - oldPos;
             float moveRotationY = moveVector.Angle();
             float delta = Mathf.DeltaAngle(rotationY, moveRotationY);
 
             if (Mathf.Abs(delta) > follow * Time.deltaTime) rotationY += (delta > 0 ? 1 : -1) * follow * Time.deltaTime;
             else rotationY = moveRotationY;
         }
-        oldPos = cam.transform.position;
+        oldPos = _camera.transform.position;
 
-        cam.transform.localEulerAngles = new Vector3(rotationX, rotationY, 0); //note that this is never smoothed
-        cam.transform.position = pivot;
+        _camera.transform.localEulerAngles = new Vector3(rotationX, rotationY, 0); //note that this is never smoothed
+        _camera.transform.position = pivot;
     }
 
 
