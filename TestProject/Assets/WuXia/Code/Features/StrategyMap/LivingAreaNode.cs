@@ -13,7 +13,7 @@ namespace LivingArea
     public class LivingAreaNode : MonoBehaviour
     {
 
-        public int Id;         //这个Id需要手动输入， 映射到数据库中的Id        
+        public int Id;         //这个Id需要手动输入， 映射到数据库中的Id   
         public LivingAreaData Value;
         public BuildingObject[] BuildingObjects;
         
@@ -42,7 +42,6 @@ namespace LivingArea
             }
             else
             {
-                
             }
         }
     }

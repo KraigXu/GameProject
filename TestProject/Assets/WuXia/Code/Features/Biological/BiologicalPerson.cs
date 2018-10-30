@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BiologicalPerson : Biological
 {
-
     public int Property1 { get; set; }
     public int Property2 { get; set; }
     public int Property3 { get; set; }
@@ -17,4 +16,16 @@ public class BiologicalPerson : Biological
 	void Update () {
 		
 	}
+
+    public void OnTriggerEnter()
+    {
+
+    }
+
+    public void OnTriggerExit()
+    {
+
+    }
+
+
 }

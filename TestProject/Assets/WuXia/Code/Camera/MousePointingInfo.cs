@@ -68,7 +68,6 @@ public class MousePointingInfo : MonoBehaviour
     public static readonly int[] searchDirVert = { 1, -1, 0, 0, 1, 1, -1, -1 };
     public static readonly int[] searchDirHor = { 0, 0, 1, -1, -1, 1, 1, -1 };
 
-
     void Start()
     {
         if (_camera == null)

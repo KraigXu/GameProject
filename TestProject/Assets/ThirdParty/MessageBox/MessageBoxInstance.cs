@@ -6,39 +6,33 @@ using UnityEngine;
 /// </summary>
 public class MessageBoxInstance
 {
+    public delegate void MessageBoxSelect(bool flag);
 
-    public LoadingControl _curLoadingObject = null;
-
-    private static MessageBoxInstance instance;
-    private GameObject _Canvas = null;
-    private GameObject WaringMassageResObject = null;
-    private GameObject curWaringMassageInstantiationObject = null;
-    private GameObject LoadingResObject = null;
-    private GameObject CacheBoxPrefab;
-    private GameObject _currentCacheBox;
-    private int _LoadingObjectReferenceCount = 0;
-    
-
-    private MessageBoxInstance()
-    {
-        this.WaringMassageResObject = (Resources.Load("UIPrefab/MessageBoxPrefab/MessageBox") as GameObject);
-        this.LoadingResObject = (Resources.Load("UIPrefab/MessageBoxPrefab/LoadingObject") as GameObject);
-        this.CacheBoxPrefab = (Resources.Load("UIPrefab/MessageBoxPrefab/CacheBox") as GameObject);
-        _Canvas = GameObject.Find("Canvas");
-    }
-
+    private static MessageBoxInstance _instance;
     public static MessageBoxInstance Instance
     {
         get
         {
-            if (instance == null)
-            {
-                instance=new MessageBoxInstance();
-            }
-            return instance;
+            if (_instance == null)
+                _instance = new MessageBoxInstance();
+            return _instance;
         }
-
     }
+
+   // private LoadingControl
+    private static MessageBoxInstance instance;
+    public LoadingControl _curLoadingObject = null;
+    
+    private GameObject WaringMassageResObject = null;
+    private GameObject curWaringMassageInstantiationObject = null;
+    private GameObject LoadingResObject = null;
+    private GameObject CacheBoxPrefab;
+
+    private GameObject _canvas = null;
+    private GameObject _waringMessageBox;
+
+    private GameObject _currentCacheBox;
+    private int _LoadingObjectReferenceCount = 0;
 
     public bool IsInstanceLoadingBox
     {
@@ -48,6 +42,26 @@ public class MessageBoxInstance
         }
     }
 
+    private MessageBoxInstance()
+    {
+        _waringMessageBox = Resources.Load("UIPrefab/MessageBoxPrefab/MessageBox") as GameObject;
+        this.WaringMassageResObject = (Resources.Load("UIPrefab/MessageBoxPrefab/MessageBox") as GameObject);
+        this.LoadingResObject = (Resources.Load("UIPrefab/MessageBoxPrefab/LoadingObject") as GameObject);
+        this.CacheBoxPrefab = (Resources.Load("UIPrefab/MessageBoxPrefab/CacheBox") as GameObject);
+        _canvas = GameObject.Find("Canvas");
+    }
+
+    public void MessageBoxShow(string content, MessageBoxType type, MessageBoxSelect selectMain)
+    {
+        GameObject messageBox= UGUITools.AddChild(_waringMessageBox, _canvas);
+        RectTransform rect = messageBox.GetComponent<RectTransform>();
+        rect.offsetMax=Vector2.zero;
+        rect.offsetMin=Vector2.zero;
+
+        MessageBoxEventsUI eventsUi = messageBox.GetComponent<MessageBoxEventsUI>();
+        eventsUi.transform.position=Vector3.zero;
+        eventsUi.mMessageBoxType = type;
+    }
 
     /// <summary>
     /// 显示消息框
@@ -63,7 +77,7 @@ public class MessageBoxInstance
                 this.WaringMassageResObject = (Resources.Load("UIPrefab/MessageBoxPrefab/MessageBox") as GameObject);
             }
 
-            this.curWaringMassageInstantiationObject = UGUITools.AddChild(WaringMassageResObject,_Canvas );
+            this.curWaringMassageInstantiationObject = UGUITools.AddChild(WaringMassageResObject,_canvas );
             RectTransform component = this.curWaringMassageInstantiationObject.GetComponent<RectTransform>();
             component.offsetMax = Vector2.zero;
             component.offsetMin = Vector2.zero;
@@ -88,7 +102,7 @@ public class MessageBoxInstance
     {
         if (this._curLoadingObject == null)
         {
-            GameObject go = UGUITools.AddChild(_Canvas,LoadingResObject );
+            GameObject go = UGUITools.AddChild(_canvas,LoadingResObject );
             SetRectTransformAnchoredAndOffset(go, Vector2.zero, Vector2.zero, Vector2.zero);
             _curLoadingObject = go.GetComponent<LoadingControl>();
         }
@@ -128,7 +142,7 @@ public class MessageBoxInstance
     {
         if (_currentCacheBox == null)
         {
-            _currentCacheBox= UGUITools.AddChild(_Canvas, CacheBoxPrefab);
+            _currentCacheBox= UGUITools.AddChild(_canvas, CacheBoxPrefab);
         }
 
     }

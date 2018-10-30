@@ -8,8 +8,9 @@ using UnityEngine;
 /// </summary>
 public class DistrictNode : MonoBehaviour
 {
-
     public int Id;
+    public string Name;
+    public string Description;
     public int DistricName;
     public DistrictData Value;
 
@@ -25,4 +26,9 @@ public class DistrictNode : MonoBehaviour
 	void Update () {
 		
 	}
+
+    void LateUpdate()
+    {
+
+    }
 }

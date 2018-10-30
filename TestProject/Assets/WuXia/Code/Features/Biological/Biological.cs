@@ -26,17 +26,18 @@ public class Biological : MonoBehaviour
     public int AttackOutMax;
     public int AttackInMin;
     public int AttackInMax;
-
+    public BiologicalStatus CurStatus;
+    public WhereStatus CurWhereStatus;
+    public int GroupId=-1;                 //队伍ID
     
-   
 
     public int RaceId { get; set; }
     public int RaceRangeId { get; set; }
-    
+    public int PowerId { get; set; }
     public int Life { get; set; }
     public int LifeMax { get; set; }
     public int Prestige { get; set; }
-        public int IsDebut { get; set; }
+   public int IsDebut { get; set; }
     public int Location { get; set; }
     public int LocationType { get; set; }
     public string ArticleJson { get; set; }

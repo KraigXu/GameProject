@@ -69,7 +69,6 @@ namespace LivingArea
         UnderConstruction,
         Damage
     }
-
     /// <summary>
     /// Strategy管理器，负责生成和操作livingAa的逻辑
     /// </summary>
@@ -77,56 +76,36 @@ namespace LivingArea
     {
         public List<LivingAreaNode> LivingAreas;
         public List<DistrictNode> Districts;
+        public bool IsInitOver = false;
 
         [SerializeField]
         private Transform _livingAreasSelect;
 
-
-
-        void Awake()
-        {
-        }
-        void Start()
-        {
-            
-        }
-
-
-        void Update()
-        {
-            
-        }
-
-        void OnDestroy()
-        {
-            UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
-        }
-
         public void InitStrategyData()
         {
-
             //初始化DistrictNode
             for (int i = 0; i < Districts.Count; i++)
             {
-                Districts[i].Value = SqlData.GetDataId<DistrictData>(Districts[i].Id);
-            }
+                DistrictData data = SqlData.GetDataId<DistrictData>(Districts[i].Id);
+                Districts[i].Name = data.Name;
+                Districts[i].Description = data.Description;
 
+            }
             //初始化LivingAreas
             for (int i = 0; i < LivingAreas.Count; i++)
             {
                 LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
                 LivingAreas[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
-
+                
+                //？
                 LivingAreaState[] groups = new LivingAreaState[3];
+
                 groups[0] = new LivingAreaState(1, "1", "", 10, null);
                 groups[1] = new LivingAreaState(2, "1", "", 10, null);
                 groups[2] = new LivingAreaState(3, "1", "", 10, null);
                 LivingAreas[i].Groups = groups;
             }
-
-            ShowWindowData data = new ShowWindowData();
-            data.contextData = new WindowContextLivingAreaData(LivingAreas);
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
+            IsInitOver = true;
         }
         /// <summary>
         /// 选中城市模型
@@ -136,8 +115,53 @@ namespace LivingArea
             //获取城市坐标
             _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
 
+        }
+
+        /// <summary>
+        /// 实例,构造这个LivingArea所有信息
+        /// </summary>
+        /// <param name="node"></param>
+        public void InstanceLivingArea(LivingAreaNode node)
+        {
+            
+
+
 
         }
+
+        public void EnterLivingAreas(LivingAreaNode livingAreaNode, Biological biological)
+        {
+            //pow>rece>guanxi
+            if (biological == null)
+            {
+                Debuger.Log("Value 为空");
+                return;
+            }
+            switch (biological.RaceType)
+            {
+                case RaceType.Elf:
+                    
+                    break;
+                case RaceType.Ghost:
+                    break;
+                case RaceType.Human:
+
+                    break;
+            }
+            
+
+            if (livingAreaNode.Value.PowerId == biological.PowerId)
+            {
+
+            }
+            biological.CurWhereStatus = WhereStatus.City;
+        }
+
+        public void EnterLivingAreas(LivingAreaNode livingAreaNode, List<Biological> biologicals)
+        {
+
+        }
+
 
     }
 }

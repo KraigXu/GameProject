@@ -63,7 +63,7 @@ public class StrategySceneControl : MonoBehaviour {
     /// 记录当前进入的LivingArea，如果没有则为-1
     /// </summary>
     public int EnterLivingAreaId = -1;
-    public PlayerControl CurPlayercControl;
+    public Biological CurPlayer;
     public GameObject CurMouseEffect;
 
     
@@ -103,13 +103,18 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointing.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
         
-
         M_Biological.InitBiological(M_Time.CurTime);
         M_Strategy.InitStrategyData();
+
+        CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
 
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
+
+        ShowWindowData data = new ShowWindowData();
+        data.contextData = new WindowContextLivingAreaData(M_Strategy.LivingAreas);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
 
         MousePointing.enabled = true;
         MousePointing.gravity = false;
@@ -120,6 +125,11 @@ public class StrategySceneControl : MonoBehaviour {
     }
     void Update()
     {
+    }
+
+    void OnDestroy()
+    {
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
     }
 
     #region LivingArea
@@ -228,21 +238,45 @@ public class StrategySceneControl : MonoBehaviour {
     {
         Debug.Log(tf.name + ">>MouseExit");
     }
-    public void MouseOver_LivingAreaMain(Transform tf)
+    public void MouseOver_LivingAreaMain(Transform target)
     {
-        Debug.Log(tf.name + ">> MouseOver");
+        Debug.Log(target.name + ">> MouseOver");
     }
-    public void Mouse0Click_LivingAreaMain(Transform tf, Vector3 point)
+    public void Mouse0Click_LivingAreaMain(Transform target, Vector3 point)
     {
-        Debug.Log(tf.name + ">>Mouse0Click");
-        M_Strategy.SelectLivingAreasModel(tf.GetComponent<LivingAreaNode>());
+        Debug.Log(target.name + ">>Mouse0Click");
+        LivingAreaNode node = target.GetComponent<LivingAreaNode>();
+        M_Strategy.SelectLivingAreasModel(node);
+        MessageBoxInstance.Instance.MessageBoxShow("");
+
+        //判断逻辑
+        
+        if (CurPlayer != null)
+        {
+            Debuger.Log("Enter LivingAreas");
+            CurPlayer.transform.position = node.transform.position;
+            M_Strategy.InstanceLivingArea(node);
+
+            ShowWindowData showWindowData=new ShowWindowData();
+            showWindowData.contextData=new WindowContextLivingAreaNodeData(node);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+
+            if (CurPlayer.GroupId == -1)
+            {
+                M_Strategy.EnterLivingAreas(node, CurPlayer);
+            }
+            else
+            {
+                M_Strategy.EnterLivingAreas(node,M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+            }
+        }
     }
-    public void Mouse1Click_LivingAreaMain(Transform tf, Vector3 point)
+    public void Mouse1Click_LivingAreaMain(Transform target, Vector3 point)
     {
-        Debug.Log(tf.name + ">>Mouse1Click");
+        Debug.Log(target.name + ">>Mouse1Click");
 
         ShowWindowData showMenuData=new ShowWindowData();
-        showMenuData.contextData=new WindowContextExtendedMenu(tf.GetComponent<LivingAreaNode>(),point);
+        showMenuData.contextData=new WindowContextExtendedMenu(target.GetComponent<LivingAreaNode>(),point);
         UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, showMenuData);
     }
 
@@ -269,8 +303,8 @@ public class StrategySceneControl : MonoBehaviour {
     {
         Debuger.Log(">>>>>>>Terrain");
         CurMouseEffect.transform.position = point;
-        CurPlayercControl.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
-        NavMeshAgent agent = CurPlayercControl.GetComponent<NavMeshAgent>();
+        CurPlayer.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
+        NavMeshAgent agent = CurPlayer.GetComponent<NavMeshAgent>();
         LineRenderer moveLine = gameObject.GetComponent<LineRenderer>();
         if (moveLine == null)
         {

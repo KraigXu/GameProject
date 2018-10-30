@@ -4,12 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameSystem.AI;
+
+
+
 public class BiologicalManager : MonoBehaviour
 {
     public List<Biological> BiologicalArray = new List<Biological>();  //所有
     public List<Biological> BiologicalDebutArray = new List<Biological>();
-    public PlayerControl PlayerCon;
 
+    public List<BiologicalGroup> BiologicalGroups= new List<BiologicalGroup>();
+    public Dictionary<int, BiologicalGroup> GroupsDic = new Dictionary<int, BiologicalGroup>();
     [SerializeField]
     private GameObject _biologicalGoPrefab;
 
@@ -64,14 +68,15 @@ public class BiologicalManager : MonoBehaviour
             }
             biological.Model = biologicalModels[i];
 
-            if (Define.Value.PlayerId == biologicalModels[i].Id)
-            {
-                PlayerCon = go.AddComponent<PlayerControl>();
-            }
-            else
-            {
-                go.AddComponent<StateController>();
-            }
+
+            //if (Define.Value.PlayerId == biologicalModels[i].Id)
+            //{
+            //    PlayerCon = go.AddComponent<PlayerControl>();
+            //}
+            //else
+            //{
+            //    go.AddComponent<StateController>();
+            //}
 
             BiologicalDebutArray.Add(biological);
         }
@@ -100,6 +105,7 @@ public class BiologicalManager : MonoBehaviour
             {
                 case RaceType.Human:
                     //biological.Blood=biological.Model.
+                    
                     break;
                 case RaceType.Elf:
                     break;
