@@ -106,7 +106,7 @@ public class StrategySceneControl : MonoBehaviour {
         M_Biological.InitBiological(M_Time.CurTime);
         M_Strategy.InitStrategyData();
 
-        CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
+       // CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
 
         //Ui 初始化
         StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
@@ -247,7 +247,7 @@ public class StrategySceneControl : MonoBehaviour {
         Debug.Log(target.name + ">>Mouse0Click");
         LivingAreaNode node = target.GetComponent<LivingAreaNode>();
         M_Strategy.SelectLivingAreasModel(node);
-        MessageBoxInstance.Instance.MessageBoxShow("");
+      //  MessageBoxInstance.Instance.MessageBoxShow("");
 
         //判断逻辑
         

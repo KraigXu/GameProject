@@ -1,13 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DataAccessObject
 {
-
     //-------------------------------------------------建表语句--------------------------------Start
     public static class Tables
     {
+
+        /// <summary>
+        /// 阵营，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Faction(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS FactionData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " Life INTEGER," +
+                                       " LifeMax INTEGER," +
+                                       " Prestige INTEGER," +
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " IsDebut TEXT," +
+                                       " Location INTEGER," +
+                                       " LocationType INTEGER," +
+                                       " ArticleJson TEXT," +
+                                       " EquipmentJson TEXT," +
+                                       " LanguageJson TEXT);");
+        }
+
+        /// <summary>
+        /// 时间事件
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_TimeEvent(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " TimeEventData (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT);");
+        }
+
+
+        /// <summary>
+        /// 关系
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Relation(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " XinfaType TEXT," +
+
+                                       " ContentTitle TEXT);");
+        }
 
         /// <summary>
         /// 区
@@ -37,7 +93,7 @@ namespace DataAccessObject
         }
 
         /// <summary>
-        /// 生活区表
+        /// 生活区表 ，设计上生活区的建筑物种类是固有的 但是通过独立的json数据来变更建筑物数据
         /// </summary>
         /// <param name="service"></param>
         /// <param name="ifNotExists"></param>
@@ -67,20 +123,32 @@ namespace DataAccessObject
         }
 
         /// <summary>
-        /// 地域类型
+        /// 指定的建筑无
         /// </summary>
         /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_AreaType(SQLService service, bool ifNotExists)
+        public static void CreateTable_Building(SQLService service)
         {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " AreaTypeData (" +
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BuildingData ( " +
                                        " Id INTEGER PRIMARY KEY," +
+                                       " RaceId INTEGER," +
                                        " Name TEXT," +
-                                       " Description TEXT);");
+                                       " Description TEXT, " +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " Life INTEGER," +
+                                       " LifeMax INTEGER," +
+                                       " Prestige INTEGER," +
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " IsDebut TEXT," +
+                                       " Location INTEGER," +
+                                       " LocationType INTEGER," +
+                                       " ArticleJson TEXT," +
+                                       " EquipmentJson TEXT," +
+                                       " LanguageJson TEXT);");
         }
+
 
         /// <summary>
         /// 生物属性
@@ -111,56 +179,6 @@ namespace DataAccessObject
         }
 
 
-        /// <summary>
-        /// 势力信息
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_Power(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " PowerData (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT);");
-        }
-        /// <summary>
-        /// 设施功能表
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_BuildingFeatures(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " BuildingFeatureData (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT," +
-                                       " FeaturesEventId INTEGER," +
-                                       " Remarks TEXT);");
-
-        }
-        /// <summary>
-        /// 时间事件
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_TimeEvent(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " TimeEventData (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT);");
-        }
-
-
 
         /// <summary>
         /// 技法
@@ -178,9 +196,6 @@ namespace DataAccessObject
                                        " TechniquesValue INTEGER," +
                                        " Effect TEXT);");
         }
-
-        
-
 
         /// <summary>
         /// 书籍
@@ -293,20 +308,7 @@ namespace DataAccessObject
                                        " ContentTitle TEXT);");
         }
 
-        /// <summary>
-        /// 关系
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Relation(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " XinfaType TEXT," +
 
-                                       " ContentTitle TEXT);");
-        }
 
         /// <summary>
         /// 词缀
@@ -406,43 +408,63 @@ namespace DataAccessObject
     //                                      " Name TEXT," +
     //                                      " Description TEXT);");
     //        }
-    public class BiologicalData : BaseData
+
+    public class RaceData : BaseData
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int RaceType { get; set; }
-        public int Sex { get; set; }
-        public int Age { get; set; }
-
-        public int Property1 { get; set; }
-        public int Property2 { get; set; }
-        public int Property3 { get; set; }
-        public int Property4 { get; set; }
-        public int Property5 { get; set; }
-
         public int RaceId { get; set; }
         public int RaceRangeId { get; set; }
+        public int RaceType { get; set; }
+
+        public override object[] GetValues()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    /// <summary>
+    /// 生物信息
+    /// </summary>
+    public class BiologicalData : BaseData
+    {
+        public int Id { get; set; }                              //ID
+        public string Surname { get; set; }                      //姓
+        public string Name { get; set; }                         //名 
+        public string Title { get; set; }                        //称号
+        public string Description { get; set; }                  //说明
+        public int RaceType { get; set; }                          //种族类型
+        public int Sex { get; set; }                             // 性别
+        public int Age { get; set; }                             // 当前年龄
+        public int AgeMax { get; set; }                          // 最大年龄
+        public int Property1 { get; set; }                       // 主要属性1
+        public int Property2 { get; set; }                       //主要属性2
+        public int Property3 { get; set; }                       //主要属性3
+        public int Property4 { get; set; }                       //主要属性4
+        public int Property5 { get; set; }                       //主要属性5
+        public int Property6 { get; set; }                       //主要属性6
+        public int Prestige { get; set; }                        // 声望
+        public int Influence { get; set; }                       //影响力
+        public int Disposition { get; set; }                     //性格值  -500到500  
+        public DateTime TimeAppearance { get; set; }             //出生时间
+        public DateTime TimeEnd { get; set; }                    //死亡时间
+        public string FeatureIds { get; set; }                   //特征IDs
+        public int IsDebut { get; set; }                         //是否登场
+        public string Location { get; set; }                        //所处地方 地区编号
+        public string LocationType { get; set; }                    //所处类型 
+        public string ArticleJson { get; set; }                  // 物品JSON
+        public string EquipmentJson { get; set; }                // 装备JSON
+        public string LanguageJson { get; set; }                 // 语言JSON
+        public string GongfaJson { get; set; }                   //功法JSON
+        public string JifaJson { get; set; }                     //技法JSON
         
-       
-        public int AgeMax { get; set; }
-        public int Life { get; set; }
-        public int LifeMax { get; set; }
-        public int Prestige { get; set; }
-        public DateTime TimeAppearance { get; set; }
-        public DateTime TimeEnd { get; set; }
-        public int IsDebut { get; set; }
-        public int Location { get; set; }
-        public int LocationType { get; set; }
-        public string ArticleJson { get; set; }
-        public string EquipmentJson { get; set; }
-        public string LanguageJson { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
                 {
-                    Id,RaceType,Name,Description,Sex,Age,AgeMax,Life,LifeMax,Prestige,TimeAppearance,TimeEnd,IsDebut,Location,LocationType, ArticleJson,EquipmentJson,LanguageJson
+                    Id,Surname,Name,Title,Description,RaceType,Sex,Age,AgeMax,Property1,Property2,Property3,Property4,Property5,Property6,
+                    Prestige,Influence,Disposition,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,LocationType, ArticleJson,EquipmentJson,LanguageJson,
+                    GongfaJson,JifaJson
                 };
             return objects;
         }
@@ -486,7 +508,6 @@ namespace DataAccessObject
         }
     }
 
-
     public class ScenarioData : BaseData
     {
         public int Id { get; set; }
@@ -496,8 +517,6 @@ namespace DataAccessObject
             throw new NotImplementedException();
         }
     }
-
-
     public class TaskData : BaseData
     {
         public int Id { get; set; }
@@ -533,7 +552,6 @@ namespace DataAccessObject
 
 
 
-
     //----------------------------------------映射数据库----------------------------------End
 
     //-----------------------------------------取值--------------------------------------Start
@@ -557,60 +575,4 @@ namespace DataAccessObject
 
     }
 
-
-    //-------------------------------------------取值----------------------------------------End
-
-
-
-    [Serializable]
-    public class LevelData
-    {
-        public int LevelId;
-        public string LevelCode; //关卡唯一标识
-        public string LevelName;   //关卡名字
-        public string Description;
-        public string LevelInformations;
-        public int DifficultyLevel;
-        public string LevelTurretTypeAuthority;
-
-        public string[] TurretTypeIds;
-
-        //关卡所需数据
-        //public List<TurretDao.TurretData> UseTurret;  //可用炮塔
-        // public FireMapDao.FireMapData Map;
-
-        //  public Task task;              //功能暂定
-        //  public List<SkillDao.SkillData> UseDatas;//当前技术
-        //public List<EnemyDao.EnemyData> UseEnemyDatas;  
-        public LevelData() { }
-        //public LevelData(LevelDao.LevelData Data)
-        //{
-        //    this.LevelId = Data.Id;
-        //    this.LevelCode = Data.LevelCode;
-        //    this.LevelName = Data.LevelName;
-        //    this.Description = Data.Description;
-        //    this.DifficultyLevel = Data.DifficultyLevel;
-        //    this.LevelInformations = Data.LevelInformations;
-        //    this.DifficultyLevel = Data.DifficultyLevel;
-        //    this.LevelTurretTypeAuthority = Data.LevelTurretTypeAuthority;
-        //}
-    }
-
-
-
-    //---------------------------------------------------------------------------->
-
-    //----------------------------------------标准对象
-
-    ///// <summary>
-    ///// 所有对象的父级
-    ///// </summary>
-    //public abstract class ElementBase
-    //{
-
-    //    public abstract void ElementCalculation();
-
-    //} 
-
-    //-------------------------------end
 }

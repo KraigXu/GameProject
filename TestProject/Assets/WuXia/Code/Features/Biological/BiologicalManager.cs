@@ -1,11 +1,7 @@
 ﻿using System;
 using DataAccessObject;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GameSystem.AI;
-
-
 
 public class BiologicalManager : MonoBehaviour
 {
@@ -56,9 +52,7 @@ public class BiologicalManager : MonoBehaviour
                     biological.TimeAppearance = biologicalModels[i].TimeAppearance;
                     biological.TimeEnd = biologicalModels[i].TimeEnd;
                     biological.Prestige = biologicalModels[i].Prestige;
-
                     //----Human
-
                     break;
                 case RaceType.Ghost:
                     break;

@@ -78,8 +78,11 @@ public class SQLService
     public void CreateDB()
     {
         Debuger.Log("SQL Table DataInit Start");
+        Tables.CreateTable_Faction(this);
+        Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this, true);
-        Tables.CreateTable_AreaType(this, true);
+        Tables.CreateTable_Building(this);
+       // Tables.CreateTable_AreaType(this, true);
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_Dialog(this);
         Tables.CreateTable_Tips(this);
