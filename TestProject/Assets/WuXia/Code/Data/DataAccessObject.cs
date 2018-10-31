@@ -8,6 +8,50 @@ namespace DataAccessObject
     {
 
         /// <summary>
+        /// 区
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_District(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS DistrictData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " GrowingModulus INTEGER," +
+                                       " SecurityModulus INTEGER," +
+                                       " TrafficModulus INTEGER," +
+                                       " LivinfAreasIds TEXT);");
+        }
+        /// <summary>
+        /// 生活区表 ，设计上生活区的建筑物种类是固有的 但是通过独立的json数据来变更建筑物数据
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_LivingArea(SQLService service)
+        {
+            service.connection.Execute("CREATE TABLE IF NOT EXISTS LivingAreaData (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " PersonNumber INTEGER," +
+                                       " Money INTEGER," +
+                                       " MoneyMax INTEGER," +
+                                       " Iron INTEGER," +
+                                       " IronMax INTEGER," +
+                                       " Wood INTEGER," +
+                                       " WoodMax INTEGER," +
+                                       " Food INTEGER," +
+                                       " FoodMax INTEGER," +
+                                       " LivingAreaLevel INTEGER," +
+                                       " LivingAreaMaxLevel INTEGER," +
+                                       " LivingAreaType INTEGER," +
+                                       " DefenseStrength INTEGER," +
+                                       " StableValue INTEGER," +
+                                       " BuildingInfoJson TEXT);");
+        }
+
+
+        /// <summary>
         /// 阵营，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
         /// </summary>
         /// <param name="service"></param>
@@ -65,62 +109,9 @@ namespace DataAccessObject
                                        " ContentTitle TEXT);");
         }
 
-        /// <summary>
-        /// 区
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_District(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS DistrictData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " RaceId INTEGER," +
-                                       " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Sex INTEGER," +
-                                       " Age INTEGER," +
-                                       " AgeMax INTEGER," +
-                                       " Life INTEGER," +
-                                       " LifeMax INTEGER," +
-                                       " Prestige INTEGER," +
-                                       " TimeAppearance TEXT," +
-                                       " TimeEnd TEXT," +
-                                       " IsDebut TEXT," +
-                                       " Location INTEGER," +
-                                       " LocationType INTEGER," +
-                                       " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT," +
-                                       " LanguageJson TEXT);");
-        }
 
-        /// <summary>
-        /// 生活区表 ，设计上生活区的建筑物种类是固有的 但是通过独立的json数据来变更建筑物数据
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_LivingArea(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " LivingAreaData (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT," +
-                                       " RegionId INTEGER," +
-                                       " PersonNumber INTEGER," +
-                                       " LivingAreaLevel INTEGER," +
-                                       " LivingAreaType INTEGER," +
-                                       " PowerId INTEGER," +
-                                       " ThaneId INTEGER," +
-                                       " DefenseStrength INTEGER," +
-                                       " LivingAreaMoney INTEGER," +
-                                       " FoodValue INTEGER," +
-                                       " FoodMax INTEGER," +
-                                       " MaterialsValue INTEGER," +
-                                       " MaterialsMax INTEGER," +
-                                       " StableValue INTEGER," +
-                                       " BuildingInfoJson TEXT);");
-        }
+
+
 
         /// <summary>
         /// 指定的建筑无
@@ -342,6 +333,65 @@ namespace DataAccessObject
     }
 
     /// <summary>
+    /// 省份 
+    /// </summary>
+    public class DistrictData : BaseData
+    {
+        public int Id { get; set; }                          // ID
+        public string Name { get; set; }                     // 名称
+        public string Description { get; set; }              // 说明
+        public int GrowingModulus { get; set; }              // 发展系数
+        public int SecurityModulus { get; set; }             // 安全系数
+        public int TrafficModulus { get; set; }              //交通系数
+        public string LivinfAreasIds { get; set; }           //生活区ID
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description,GrowingModulus,SecurityModulus,TrafficModulus,LivinfAreasIds
+            };
+            return objects;
+        }
+    }
+
+    /// <summary>
+    /// 居住地
+    /// </summary>
+    public class LivingAreaData : BaseData
+    {
+        public int Id { get; set; }                      //编号 
+        public string Name { get; set; }                //名称
+        public string Description { get; set; }         //说明
+        public int PersonNumber { get; set; }           //人口数量
+        public int Money { get; set; }
+        public int MoneyMax { get; set; }
+        public int Iron { get; set; }
+        public int IronMax { get; set; }
+        public int Wood { get; set; }
+        public int WoodMax { get; set; }
+        public int Food { get; set; }
+        public int FoodMax { get; set; }
+        public int LivingAreaLevel { get; set; }            //生活区等级
+        public int LivingAreaMaxLevel { get; set; }        //生活区最大等级
+        public int LivingAreaType { get; set; }             //生活区类型
+        public int DefenseStrength { get; set; }            //防守强度
+        public int StableValue { get; set; }                  //安定值
+        public string BuildingInfoJson { get; set; }        // 建筑Json
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description, PersonNumber,Money,MoneyMax,Iron,IronMax,
+                Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson
+            };
+            return objects;
+        }
+    }
+
+
+    /// <summary>
     /// 势力
     /// </summary>
     public class FactionData : BaseData
@@ -395,52 +445,7 @@ namespace DataAccessObject
 
 
 
-    /// <summary>
-    /// 居住地
-    /// </summary>
-    public class LivingAreaData : BaseData
-    {
-        public int Id { get; set; }                      //编号 
-        public string Name { get; set; }                //名称
-        public string Description { get; set; }         //说明
-        public int RegionId { get; set; }               //所属地域ID;
-        public int PersonNumber { get; set; }           //人口数量
-        public int LivingAreaLevel { get; set; }        //生活区等级
-        public int LivingAreaMaxLevel { get; set; }        //生活区等级
-        public int LivingAreaType { get; set; }        //生活区类型
-        public int DefenseStrength { get; set; }        //防守强度
-        public int LivingAreaMoney { get; set; }             //生活区金钱
-        public int FoodValue { get; set; }                 //粮食
-        public int FoodMax { get; set; }                    //粮食上限
-        public int MaterialsValue { get; set; }             //资材
-        public int MaterialsMax { get; set; }              //资材上限
-        public int StableValue { get; set; }                  //安定值
-        public string BuildingInfoJson { get; set; }        // 建筑Json
-
-        public int Money { get; set; }
-        public int MoneyMax { get; set; }
-        public int Iron { get; set; }
-        public int IronMax { get; set; }
-        public int Wood { get; set; }
-        public int WoodMax { get; set; }
-        public int Food { get; set; }
-       // public int FoodMax { get; set; }
-
-
-
-
-
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-                {
-                    Id, Name, Description, RegionId,PersonNumber,LivingAreaLevel,LivingAreaType,DefenseStrength, LivingAreaMoney, FoodValue, FoodMax, MaterialsValue, StableValue,BuildingInfoJson
-
-                };
-            return objects;
-        }
-    }
-
+    
     public class AreaTypeData : BaseData
     {
         public int Id { get; set; }                      //编号 
@@ -456,29 +461,7 @@ namespace DataAccessObject
         }
     }
 
-    /// <summary>
-    /// 区
-    /// </summary>
-    public class DistrictData : BaseData
-    {
-        public int Id { get; set; }                          //
-        public string Name { get; set; }                     //
-        public string Description { get; set; }              //
-        public int GrowingModulus { get; set; }              //
-        public int SecurityModulus { get; set; }             //
-        public int Traffic { get; set; }
-
-        public string LivinfAreasIds { get; set; }
-
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                Id, Name, Description,GrowingModulus,SecurityModulus,Traffic
-            };
-            return objects;
-        }
-    }
+    
 
 
     public class RaceData : BaseData

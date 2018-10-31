@@ -73,12 +73,67 @@ public class StrategySceneControl : MonoBehaviour {
     {
         _instance = this;
         Debuger.EnableLog = true;
-
     }
 
     void Start()
     {
+        StrategyInit();
+        BiologicalInit();
+        PlayerDataInit();
+        UiInit();
+        OverInit();
+    }
 
+    #region 1：省份区域数据获取
+
+    public void StrategyInit()
+    {
+        M_Strategy.InitStrategyData();
+       
+    }
+    #endregion
+    #region 2:
+
+    public void BiologicalInit()
+    {
+        M_Biological.InitBiological(M_Time.CurTime);
+    }
+    #endregion
+    #region 3:
+    #endregion
+    #region 4:
+    #endregion
+    #region 5:
+    #endregion
+    #region 6:
+    #endregion
+    #region 7:
+    #endregion
+    #region 8:
+    #endregion
+    #region 9:
+
+    public void PlayerDataInit()
+    {
+      //  CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
+    }
+
+    #endregion
+    #region 10:
+
+    public void UiInit()
+    {
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+
+        StrategyControl = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
+    }
+
+    #endregion
+
+    #region 11:over Init
+
+    public void OverInit()
+    {
         MousePointing.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
         MousePointing.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
         MousePointing.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
@@ -103,62 +158,14 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointing.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
         MousePointing.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
-        
-        M_Biological.InitBiological(M_Time.CurTime);
-        M_Strategy.InitStrategyData();
-
-       // CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
-
-        //Ui 初始化
-        StrategyControl= UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-        ExtendedMenuControl=UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow).GetComponent<ExtendedMenuWindow>();
-
-        ShowWindowData data = new ShowWindowData();
-        data.contextData = new WindowContextLivingAreaData(M_Strategy.LivingAreas);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
-
         MousePointing.enabled = true;
         MousePointing.gravity = false;
         MousePointing.speed = 50;
         MousePointing.acceleration = 150;
         MousePointing.follow = 0;
-
-    }
-    void Update()
-    {
-    }
-
-    void OnDestroy()
-    {
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
-    }
-
-    #region 1：数据获取
-
-    public void StartData()
-    {
-
     }
 
 
-    #endregion
-    #region 2:
-    #endregion
-    #region 3:
-    #endregion
-    #region 4:
-    #endregion
-    #region 5:
-    #endregion
-    #region 6:
-    #endregion
-    #region 7:
-    #endregion
-    #region 8:
-    #endregion
-    #region 9:
-    #endregion
-    #region 10:
     #endregion
 
     #region LivingArea
@@ -235,7 +242,6 @@ public class StrategySceneControl : MonoBehaviour {
 
     #region InitModel
     #endregion 
-
 
     #region MouseEvents
     public void MouseEnter_PlayerMain(Transform tf)

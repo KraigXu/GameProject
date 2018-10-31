@@ -32,14 +32,13 @@ namespace LivingArea
         public int StableValue;
         public BuildingObject[] BuildingObjects;
 
-        public LivingAreaData Value;
         public int Renown;      
         public GameObject LivingAreaM;
         public Renderer LivingAreaRender;
         public Collider LivingAreaCollider;
         public bool IsOpen =false;  //是否打开
 
-        public LivingAreaState[] Groups;
+        public LivingAreaState[] Groups=new LivingAreaState[0];
 
         
         void Start()

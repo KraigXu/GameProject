@@ -109,10 +109,10 @@ public class BuildingObjectEdit : EditorWindowBase
             //_buildings[i].TypeId = Int16.Parse(GUILayout.TextField(_buildings[i].TypeId.ToString(), 50, inputstyle));
             _buildings[i].BuildingLevel = Int16.Parse(GUILayout.TextField(_buildings[i].BuildingLevel.ToString(), 50, inputstyle));
             _buildings[i].DurableValue = Int16.Parse(GUILayout.TextField(_buildings[i].DurableValue.ToString(), 50, inputstyle));
-            _buildings[i].DurableMax = Int16.Parse(GUILayout.TextField(_buildings[i].DurableMax.ToString(), 50, inputstyle));
-            _buildings[i].BuildingStatus = Int16.Parse(GUILayout.TextField(_buildings[i].BuildingStatus.ToString(), 50, inputstyle));
-            _buildings[i].HaveId = Int16.Parse(GUILayout.TextField(_buildings[i].HaveId.ToString(), 50, inputstyle));
-            _buildings[i].BuildingFeaturesIds = GUILayout.TextField(_buildings[i].BuildingFeaturesIds, 50, inputstyle);
+            //_buildings[i].DurableMax = Int16.Parse(GUILayout.TextField(_buildings[i].DurableMax.ToString(), 50, inputstyle));
+            //_buildings[i].BuildingStatus = Int16.Parse(GUILayout.TextField(_buildings[i].BuildingStatus.ToString(), 50, inputstyle));
+            //_buildings[i].HaveId = Int16.Parse(GUILayout.TextField(_buildings[i].HaveId.ToString(), 50, inputstyle));
+            //_buildings[i].BuildingFeaturesIds = GUILayout.TextField(_buildings[i].BuildingFeaturesIds, 50, inputstyle);
             GUILayout.EndHorizontal();
         }
 
@@ -126,9 +126,9 @@ public class BuildingObjectEdit : EditorWindowBase
           //  b.TypeId = 0;
             b.BuildingLevel = 0;
             b.DurableValue = 0;
-            b.DurableMax = 0;
-            b.BuildingStatus = 0;
-            b.HaveId = 0;
+            //b.DurableMax = 0;
+            //b.BuildingStatus = 0;
+            //b.HaveId = 0;
             b.BuildingFeaturesIds = "";
             _buildings.Add(b);
         }

@@ -65,7 +65,7 @@ public class LivingAreaMainWindow : UIWindowBase
             goRect.anchoredPosition =new Vector2(i*20f,i*30);
 
             go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
-            go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
+           // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
             go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
             //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
             go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();

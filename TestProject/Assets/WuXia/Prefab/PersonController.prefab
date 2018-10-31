@@ -1168,7 +1168,7 @@ GameObject:
   - component: {fileID: 114494769178672178}
   - component: {fileID: 114635382686567302}
   - component: {fileID: 120066041483646548}
-  - component: {fileID: 114634717064639374}
+  - component: {fileID: 114589121981789490}
   m_Layer: 0
   m_Name: PersonController
   m_TagString: Untagged
@@ -1642,8 +1642,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1897293362575354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 861.7, y: 82.64, z: 614.5}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: 1602.2625, y: 80.433464, z: 615.0138}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 4299105698613278}
   - {fileID: 4318227160659718}
@@ -2501,7 +2501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
---- !u!114 &114634717064639374
+--- !u!114 &114589121981789490
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2509,14 +2509,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1897293362575354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db352af52500d5843ac908ec27d90f29, type: 3}
+  m_Script: {fileID: 11500000, guid: d0aa670c889af3b45a17c74c7d4837ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RayLayerId:
-    serializedVersion: 2
-    m_Bits: 310
-  CurCamera: {fileID: 0}
-  TargetGo: {fileID: 0}
+  BiologicalId: 0
+  Name: 
+  Description: 
+  RaceType: 0
+  Sex: 0
+  Age: 0
+  AgeMax: 0
+  Blood: 0
+  CurBlood: 0
+  Magic: 0
+  CurMagic: 0
+  AttackOutMin: 0
+  AttackOutMax: 0
+  AttackInMin: 0
+  AttackInMax: 0
+  CurStatus: 0
+  CurWhereStatus: 0
+  GroupId: -1
 --- !u!114 &114635382686567302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2535,7 +2548,7 @@ MonoBehaviour:
   m_RunCycleLegOffset: 0.2
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 0.2
+  m_GroundCheckDistance: 1
 --- !u!120 &120066041483646548
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -2640,7 +2653,7 @@ CapsuleCollider:
   m_Radius: 0.3
   m_Height: 1.6
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
 --- !u!137 &137080676319242130
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

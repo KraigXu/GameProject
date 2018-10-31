@@ -77,24 +77,8 @@ public class SQLService
 
     public void CreateDB()
     {
-        Debuger.Log("SQL Table DataInit Start");
-        Tables.CreateTable_Faction(this);
         Tables.CreateTable_District(this);
-        Tables.CreateTable_LivingArea(this, true);
-        Tables.CreateTable_Building(this);
-       // Tables.CreateTable_AreaType(this, true);
-        Tables.CreateTable_Biological(this);
-        Tables.CreateTable_Dialog(this);
-        Tables.CreateTable_Tips(this);
-        Tables.CreateTable_Mark(this);
-        Tables.CreateTable_Techniques(this);
-        //  Tables.CreateTable_Power(this,true);
-        //Tables.CreateTable_BuildingFeatures(this,true);
-        //Tables.CreateTable_TimeEvent(this,true);
-        //Tables.CreateTable_Character(this,true);
-        //Tables.CreateTable_Techniques(this, true);
-        //Tables.CreateTable_Books(this,true); //地方,西北
-        Debuger.Log("SQL Table DataInit End");
+        Tables.CreateTable_LivingArea(this);
     }
 
 
@@ -189,16 +173,4 @@ public class SQLService
             paras.Add("?");
         return string.Join(",", paras.ToArray());
     }
-
-    //    public List<T> Query<T>(string query, params object[] args)
-    //    {
-    //        var cmd = connection.CreateCommand(query, args);
-    //        return cmd.ExecuteQuery<T>();
-    //    }
-    //
-    //    public List<T> SimpleQuery<T>(string where, params object[] args)
-    //    {
-    //        string query = "select * from " + typeof(T).Name.Split('+')[0].ToString() + " where " + where;
-    //        return Query<T>(query, args);
-    //    }
 }

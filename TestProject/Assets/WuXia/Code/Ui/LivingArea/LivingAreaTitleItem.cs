@@ -18,10 +18,8 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
     public void Init(Transform target)
     {
         this.Target = target;
-
         LivingAreaNode node=  target.GetComponent<LivingAreaNode>();
-        _titleText.text = node.Value.Name;
-
+        _titleText.text = node.Name;
         LivingAreaState[] states = node.Groups;
         if (states.Length > 0)
         {

@@ -18,35 +18,58 @@ namespace LivingArea
         Cave,    //洞窟
     }
 
+
+
     /// <summary>
     /// 建筑物
     /// </summary>
     public class BuildingObject 
     {
-        public string Name { get; set; }                                                                  
-        public string Description { get; set; }
-        public int BuildingLevel { get; set; }
-        public int BuildingStatus { get; set; }                                                                                                                          
-        public int DurableValue { get; set; }                                                            
-        public int DurableMax { get; set; }                                                                                                      
-        public int HaveId { get; set; }                                                                     
-        public string BuildingFeaturesIds { get; set; }
-        public string ModelId { get; set; }
-
+        public string Key { get; set; }                         //建筑物key
+        public string Name { get; set; }                       //名称                                           
+        public string Description { get; set; }                 //说明
+        public int BuildingLevel { get; set; }                  //建筑物等级
+        public BuildingStatus Status { get; set; }                 //建筑物状态                      
+        public BuildingType Type { get; set; }                   //建筑物类型    
+        public int DurableValue { get; set; }                   //建筑物耐久  百分比                                                                                                        
+        public int OwnId { get; set; }                          //拥有者Id                                        
+        public string BuildingFeaturesIds { get; set; }         //建筑物特征
+        public string MarkIds { get; set; }                     //建筑物词缀
+        public string ModelPath { get; set; }                   //模型位置
         public BuildingObject() { }
 
-        public BuildingObject(string name, string description, int buildingLevel, int durableValue,int durableMax,  int buildingStatus, int haveId,string buildingFeaturesId,string modelId)
+        public BuildingObject(string key,string name, string description, int buildingLevel, BuildingStatus status, BuildingType type,
+            int durableValue,int ownId,string buildingFeaturesIds,string markIds, string modelPath)
         {
+            this.Key = key;
             this.Name = name;
             this.Description = description;
             this.BuildingLevel = buildingLevel;
+            this.Status = status;
+            this.Type = type;
             this.DurableValue = durableValue;
-            this.DurableMax = durableMax;
-            this.BuildingStatus = buildingStatus;
-            this.HaveId = haveId;
-            this.BuildingFeaturesIds = buildingFeaturesId;
-            this.ModelId = modelId;
+            this.OwnId = ownId;
+            this.BuildingFeaturesIds = buildingFeaturesIds;
+            this.MarkIds = markIds;
+            this.ModelPath = modelPath;
         }
+    }
+
+    //建筑物状态
+    public enum BuildingStatus
+    {
+        None,                   //空地
+        Normal,                 //正常
+        UnderConstruction,     //建筑中
+    }
+    /// <summary>
+    /// 建筑物类型
+    /// </summary>
+    public enum BuildingType
+    {
+        Workout,                //锻炼
+        Rest                   //休息
+
     }
 
     public class BuildingFeatures
@@ -60,15 +83,11 @@ namespace LivingArea
     /// </summary>
     public enum BuildingFeatureType
     {
-        None,                   //空地
+        
+        
     }
 
-    public enum BuildingStatus
-    {
-        Normal,
-        UnderConstruction,
-        Damage
-    }
+
     /// <summary>
     /// Strategy管理器，负责生成和操作livingAa的逻辑
     /// </summary>
@@ -76,7 +95,6 @@ namespace LivingArea
     {
         public List<DistrictNode> Districts;
         public List<LivingAreaNode> LivingAreas;
-
         public Dictionary<int, LivingAreaNode> LivingAreasOwn=new Dictionary<int, LivingAreaNode>();
 
         /// <summary>
@@ -95,7 +113,7 @@ namespace LivingArea
                         Districts[i].Description = districtDatas[j].Description;
                         Districts[i].GrowingModulus = districtDatas[j].GrowingModulus;
                         Districts[i].SecurityModulus = districtDatas[j].SecurityModulus;
-                        Districts[i].Traffic = districtDatas[j].Traffic;
+                        Districts[i].Traffic = districtDatas[j].TrafficModulus;
 
                         string[] livingAreaids = districtDatas[j].LivinfAreasIds.Split(';');
                         for (int k = 0; k < livingAreaids.Length; k++)
@@ -120,7 +138,7 @@ namespace LivingArea
                         LivingAreas[i].CurLevel = livingAreaDatas[j].LivingAreaLevel;
                         LivingAreas[i].MaxLevel = livingAreaDatas[j].LivingAreaMaxLevel;
                         LivingAreas[i].Type =(LivingAreaType)livingAreaDatas[j].LivingAreaType;
-                        LivingAreas[i].Money = livingAreaDatas[j].LivingAreaMoney;
+                        LivingAreas[i].Money = livingAreaDatas[j].Money;
                         LivingAreas[i].MoneyMax = livingAreaDatas[j].MoneyMax;
                         LivingAreas[i].Iron = livingAreaDatas[j].Iron;
                         LivingAreas[i].IronMax = livingAreaDatas[j].IronMax;
@@ -169,8 +187,8 @@ namespace LivingArea
             for (int i = 0; i < LivingAreas.Count; i++)
             {
 
-                LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
-                LivingAreas[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
+                //LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
+                //LivingAreas[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
 
                 //？
                 LivingAreaState[] groups = new LivingAreaState[3];

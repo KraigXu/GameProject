@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using LivingArea;
 using UnityEngine;
 
 namespace TinyFrameWork
 {
     public class LivingAreaTitleWindow : UIWindowBase
     {
-
-        private GameObject _titleItemPrefab;
-        private List<LivingAreaTitleItem> _titleItems;
+        [SerializeField]
+        private List<LivingAreaTitleItem> _titleItems = new List<LivingAreaTitleItem>();
         protected override void SetWindowId()
         {
             this.ID = WindowID.LivingAreaTitleWindow;
@@ -22,35 +22,17 @@ namespace TinyFrameWork
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.Scale;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
-
         public override void InitWindowOnAwake()
         {
-            _titleItemPrefab = Resources.Load<GameObject>("UiPrefab/LivingArea/LivingAreaTitleItem");
-        }
-
-        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
-        {
-            WindowContextLivingAreaData livingAreaData = (WindowContextLivingAreaData)contextData;
-            _titleItems = new List<LivingAreaTitleItem>();
-            for (int i = 0; i < livingAreaData.Nodes.Count; i++)
+            if (StrategySceneControl.Instance.M_Strategy.LivingAreas.Count > 0)
             {
-                LivingAreaTitleItem titleItem = UGUITools.AddChild(gameObject, _titleItemPrefab).GetComponent<LivingAreaTitleItem>();
-                titleItem.Init( livingAreaData.Nodes[i].transform);
-                _titleItems.Add(titleItem);
+                List<LivingAreaNode> nodes = StrategySceneControl.Instance.M_Strategy.LivingAreas;
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    _titleItems[i].Init(nodes[i].transform);
+                }
             }
-
-        }
-
-        private void Start()
-        {
-
-        }
-
-        private void Update()
-        {
-
         }
     }
 }
