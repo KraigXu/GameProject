@@ -72,6 +72,7 @@ public class LivingAreaMainWindow : UIWindowBase
 
             UIEventTriggerListener.Get(go).onClick += AccessBuilding;
             BuildingsGo.Add(go);
+
         }
     }
 

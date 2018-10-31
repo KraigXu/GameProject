@@ -341,6 +341,63 @@ namespace DataAccessObject
         public abstract object[] GetValues();
     }
 
+    /// <summary>
+    /// 势力
+    /// </summary>
+    public class FactionData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int BossId { get; set; }
+        public int Money { get; set; }
+        public int Iron { get; set; }
+        public int Wood { get; set; }
+        public int Food { get; set; }
+        public int Population { get; set; }
+        public int FactionType { get; set; }
+        
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Name,BossId
+            };
+
+            return objects;
+        }
+    }
+
+    /// <summary>
+    /// 势力职位
+    /// </summary>
+    public class FactionPositionData : BaseData
+    {
+        public int Id { get; set; }
+        public int FactionId { get; set; }
+        public override object[] GetValues()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class FactionRelationData: BaseData
+    {
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                
+            };
+
+            return objects;
+        }
+    }
+
+
+
+    /// <summary>
+    /// 居住地
+    /// </summary>
     public class LivingAreaData : BaseData
     {
         public int Id { get; set; }                      //编号 
@@ -349,9 +406,8 @@ namespace DataAccessObject
         public int RegionId { get; set; }               //所属地域ID;
         public int PersonNumber { get; set; }           //人口数量
         public int LivingAreaLevel { get; set; }        //生活区等级
+        public int LivingAreaMaxLevel { get; set; }        //生活区等级
         public int LivingAreaType { get; set; }        //生活区类型
-        public int PowerId { get; set; }                  //势力ID
-        public int ThaneId { get; set; }                 //领主ID
         public int DefenseStrength { get; set; }        //防守强度
         public int LivingAreaMoney { get; set; }             //生活区金钱
         public int FoodValue { get; set; }                 //粮食
@@ -361,11 +417,24 @@ namespace DataAccessObject
         public int StableValue { get; set; }                  //安定值
         public string BuildingInfoJson { get; set; }        // 建筑Json
 
+        public int Money { get; set; }
+        public int MoneyMax { get; set; }
+        public int Iron { get; set; }
+        public int IronMax { get; set; }
+        public int Wood { get; set; }
+        public int WoodMax { get; set; }
+        public int Food { get; set; }
+       // public int FoodMax { get; set; }
+
+
+
+
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
                 {
-                    Id, Name, Description, RegionId,PersonNumber,LivingAreaLevel,LivingAreaType,PowerId,ThaneId,DefenseStrength, LivingAreaMoney, FoodValue, FoodMax, MaterialsValue, StableValue,BuildingInfoJson
+                    Id, Name, Description, RegionId,PersonNumber,LivingAreaLevel,LivingAreaType,DefenseStrength, LivingAreaMoney, FoodValue, FoodMax, MaterialsValue, StableValue,BuildingInfoJson
 
                 };
             return objects;
@@ -387,27 +456,30 @@ namespace DataAccessObject
         }
     }
 
-    //service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
-    //                                       " Id INTEGER PRIMARY KEY," +
-    //                                       " RaceId INTEGER," +
-    //                                       " Name TEXT," +
-    //                                       " Description TEXT, " +
-    //                                       " Sex INTEGER," +
-    //                                       " Age INTEGER," +
-    //                                       " AgeMax INTEGER," +
-    //                                       " Prestige INTEGER," +
-    //                                       " ArticleJson TEXT," +
-    //                                       " EquipmentJson TEXT," +
-    //                                       " LanguageJson TEXT);");
-    //        }
+    /// <summary>
+    /// 区
+    /// </summary>
+    public class DistrictData : BaseData
+    {
+        public int Id { get; set; }                          //
+        public string Name { get; set; }                     //
+        public string Description { get; set; }              //
+        public int GrowingModulus { get; set; }              //
+        public int SecurityModulus { get; set; }             //
+        public int Traffic { get; set; }
 
-    //        public static void CreateTable_Race(SQLService service)
-    //        {
-    //            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RaceData ( " +
-    //                                      " Id INTEGER PRIMARY KEY," +
-    //                                      " Name TEXT," +
-    //                                      " Description TEXT);");
-    //        }
+        public string LivinfAreasIds { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description,GrowingModulus,SecurityModulus,Traffic
+            };
+            return objects;
+        }
+    }
+
 
     public class RaceData : BaseData
     {
@@ -470,22 +542,7 @@ namespace DataAccessObject
         }
     }
 
-    public class DistrictData : BaseData
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int PowerId { get; set; }
 
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                Id, Name, Description, PowerId
-            };
-            return objects;
-        }
-    }
 
     public class DialogData : BaseData
     {

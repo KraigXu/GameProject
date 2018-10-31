@@ -74,48 +74,113 @@ namespace LivingArea
     /// </summary>
     public class StrategyManager : MonoBehaviour
     {
-        public List<LivingAreaNode> LivingAreas;
         public List<DistrictNode> Districts;
-        public bool IsInitOver = false;
+        public List<LivingAreaNode> LivingAreas;
 
-        [SerializeField]
-        private Transform _livingAreasSelect;
+        public Dictionary<int, LivingAreaNode> LivingAreasOwn=new Dictionary<int, LivingAreaNode>();
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public void InitStrategyData()
         {
-            //初始化DistrictNode
+            List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
             for (int i = 0; i < Districts.Count; i++)
             {
-                DistrictData data = SqlData.GetDataId<DistrictData>(Districts[i].Id);
-                Districts[i].Name = data.Name;
-                Districts[i].Description = data.Description;
+                for (int j = 0; j < districtDatas.Count; j++)
+                {
+                    if (Districts[i].Id == districtDatas[j].Id)
+                    {
+                        Districts[i].Name = districtDatas[j].Name;
+                        Districts[i].Description = districtDatas[j].Description;
+                        Districts[i].GrowingModulus = districtDatas[j].GrowingModulus;
+                        Districts[i].SecurityModulus = districtDatas[j].SecurityModulus;
+                        Districts[i].Traffic = districtDatas[j].Traffic;
 
+                        string[] livingAreaids = districtDatas[j].LivinfAreasIds.Split(';');
+                        for (int k = 0; k < livingAreaids.Length; k++)
+                        {
+                            Districts[i].LivingAreaChilds.Add(GetLivingArea(int.Parse(livingAreaids[k])));
+                        }
+                        break;
+                    }
+                }
             }
+
+            List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
+            for (int i = 0; i < LivingAreas.Count; i++)
+            {
+                for (int j = 0; j < livingAreaDatas.Count; j++)
+                {
+                    if (LivingAreas[i].Id == livingAreaDatas[j].Id)
+                    {
+                        LivingAreas[i].Name = livingAreaDatas[j].Name;
+                        LivingAreas[i].Description = livingAreaDatas[j].Description;
+                        LivingAreas[i].PersonNumber = livingAreaDatas[j].PersonNumber;
+                        LivingAreas[i].CurLevel = livingAreaDatas[j].LivingAreaLevel;
+                        LivingAreas[i].MaxLevel = livingAreaDatas[j].LivingAreaMaxLevel;
+                        LivingAreas[i].Type =(LivingAreaType)livingAreaDatas[j].LivingAreaType;
+                        LivingAreas[i].Money = livingAreaDatas[j].LivingAreaMoney;
+                        LivingAreas[i].MoneyMax = livingAreaDatas[j].MoneyMax;
+                        LivingAreas[i].Iron = livingAreaDatas[j].Iron;
+                        LivingAreas[i].IronMax = livingAreaDatas[j].IronMax;
+                        LivingAreas[i].Wood = livingAreaDatas[j].Wood;
+                        LivingAreas[i].WoodMax = livingAreaDatas[j].WoodMax;
+                        LivingAreas[i].Food = livingAreaDatas[j].Food;
+                        LivingAreas[i].FoodMax = livingAreaDatas[j].FoodMax;
+                        LivingAreas[i].DefenseStrength = livingAreaDatas[j].DefenseStrength;
+                        LivingAreas[i].StableValue = livingAreaDatas[j].StableValue;
+                        LivingAreas[i].BuildingObjects= JsonConvert.DeserializeObject<BuildingObject[]>(livingAreaDatas[j].BuildingInfoJson);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取指定ID的LivingArea
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public LivingAreaNode GetLivingArea(int id)
+        {
+            for (int i = 0; i < LivingAreas.Count; i++)
+            {
+                if (LivingAreas[i].Id == id)
+                {
+                    return LivingAreas[i];
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 更新所属
+        /// </summary>
+        public void LivingAreasChangeOwn()
+        {
+
+        }
+
+
+        public void ChangeLivingAreaState()
+        {
             //初始化LivingAreas
             for (int i = 0; i < LivingAreas.Count; i++)
             {
+
                 LivingAreas[i].Value = SqlData.GetDataId<LivingAreaData>(LivingAreas[i].Id);
                 LivingAreas[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(LivingAreas[i].Value.BuildingInfoJson);
-                
+
                 //？
                 LivingAreaState[] groups = new LivingAreaState[3];
-
                 groups[0] = new LivingAreaState(1, "1", "", 10, null);
                 groups[1] = new LivingAreaState(2, "1", "", 10, null);
                 groups[2] = new LivingAreaState(3, "1", "", 10, null);
                 LivingAreas[i].Groups = groups;
             }
-            IsInitOver = true;
         }
-        /// <summary>
-        /// 选中城市模型
-        /// </summary>
-        public void SelectLivingAreasModel(LivingAreaNode node)
-        {
-            //获取城市坐标
-            _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
 
-        }
 
         /// <summary>
         /// 实例,构造这个LivingArea所有信息
@@ -123,9 +188,10 @@ namespace LivingArea
         /// <param name="node"></param>
         public void InstanceLivingArea(LivingAreaNode node)
         {
-            
+        }
 
-
+        public void ChangeLivingAreas()
+        {
 
         }
 
@@ -148,12 +214,9 @@ namespace LivingArea
 
                     break;
             }
-            
-
-            if (livingAreaNode.Value.PowerId == biological.PowerId)
-            {
-
-            }
+            //if (livingAreaNode.Value.PowerId == biological.PowerId)
+            //{
+            //}
             biological.CurWhereStatus = WhereStatus.City;
         }
 
@@ -161,8 +224,6 @@ namespace LivingArea
         {
 
         }
-
-
     }
 }
 

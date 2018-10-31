@@ -8,8 +8,10 @@ public class BiologicalManager : MonoBehaviour
     public List<Biological> BiologicalArray = new List<Biological>();  //所有
     public List<Biological> BiologicalDebutArray = new List<Biological>();
 
-    public List<BiologicalGroup> BiologicalGroups= new List<BiologicalGroup>();
+    public List<BiologicalGroup> BiologicalGroups = new List<BiologicalGroup>();
     public Dictionary<int, BiologicalGroup> GroupsDic = new Dictionary<int, BiologicalGroup>();
+    public Dictionary<BiologicalModelType, GameObject> BiologcalModelPrefab = new Dictionary<BiologicalModelType, GameObject>();
+
     [SerializeField]
     private GameObject _biologicalGoPrefab;
 
@@ -26,6 +28,62 @@ public class BiologicalManager : MonoBehaviour
     {
 
     }
+
+    public GameObject GetBiologicalModel(RaceType raceType, BiologicalModelType type)
+    {
+        GameObject go = null;
+
+        switch (type)
+        {
+            case BiologicalModelType.HumanMen:
+                break;
+            case BiologicalModelType.HumanWoMen:
+                break;
+        }
+        return go;
+    }
+
+    public void InitBiological()
+    {
+        List<BiologicalData> biologicalDatas = SqlData.GetAllDatas<BiologicalData>();
+
+        for (int i = 0; i < biologicalDatas.Count; i++)
+        {
+            switch ((RaceType)biologicalDatas[i].RaceType)
+            {
+                case RaceType.Human:
+                {
+                    GameObject go = null;
+
+                        if (biologicalDatas[i].Sex == 1)
+                        {
+                            go = BiologcalModelPrefab[BiologicalModelType.HumanMen];
+                        }
+                        else if (biologicalDatas[i].Sex == 2)
+                        {
+                            go = BiologcalModelPrefab[BiologicalModelType.HumanWoMen];
+
+                        }
+                        else if (biologicalDatas[i].Sex == 3)
+                        {
+
+                        }
+
+                    }
+                    break;
+                case RaceType.Elf:
+                    break;
+                case RaceType.Ghost:
+                    break;
+            }
+
+        }
+
+
+
+    }
+
+
     /// <summary>
     /// 初始化
     /// </summary>
@@ -33,7 +91,6 @@ public class BiologicalManager : MonoBehaviour
     public void InitBiological(DateTime time)
     {
         List<BiologicalData> biologicalModels = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
-
         for (int i = 0; i < biologicalModels.Count; i++)
         {
             GameObject go = GameObject.Instantiate(_biologicalGoPrefab, transform);
@@ -99,12 +156,12 @@ public class BiologicalManager : MonoBehaviour
             {
                 case RaceType.Human:
                     //biological.Blood=biological.Model.
-                    
+
                     break;
                 case RaceType.Elf:
                     break;
                 case RaceType.Ghost:
-                    break;  
+                    break;
             }
         }
         else
@@ -115,7 +172,7 @@ public class BiologicalManager : MonoBehaviour
     }
 
 
-    
+
 
 
 }

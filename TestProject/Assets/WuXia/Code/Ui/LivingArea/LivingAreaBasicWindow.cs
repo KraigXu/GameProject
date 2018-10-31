@@ -48,6 +48,8 @@ namespace TinyFrameWork
             AnnualHistoryTog.onValueChanged.AddListener(AnnualHistoryTogValueChanged);
 
             StatusTog.isOn = true;
+
+
         }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace TinyFrameWork
             LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Value.Description;
             LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.Value.LivingAreaLevel.ToString();
             LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Value.LivingAreaType.ToString();
-            LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
+           // LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
             LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
 
             //LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.ToString();

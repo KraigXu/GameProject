@@ -57,7 +57,7 @@ public class StrategySceneControl : MonoBehaviour {
     public TimeManager M_Time;
     public BiologicalManager M_Biological;
     public StrategyManager M_Strategy;
-
+    public FactionManager M_Faction;
     //----Player
     /// <summary>
     /// 记录当前进入的LivingArea，如果没有则为-1
@@ -66,7 +66,8 @@ public class StrategySceneControl : MonoBehaviour {
     public Biological CurPlayer;
     public GameObject CurMouseEffect;
 
-    
+    [SerializeField]
+    private Transform _livingAreasSelect;
 
     void Awake()
     {
@@ -131,6 +132,34 @@ public class StrategySceneControl : MonoBehaviour {
     {
         UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
     }
+
+    #region 1：数据获取
+
+    public void StartData()
+    {
+
+    }
+
+
+    #endregion
+    #region 2:
+    #endregion
+    #region 3:
+    #endregion
+    #region 4:
+    #endregion
+    #region 5:
+    #endregion
+    #region 6:
+    #endregion
+    #region 7:
+    #endregion
+    #region 8:
+    #endregion
+    #region 9:
+    #endregion
+    #region 10:
+    #endregion
 
     #region LivingArea
 
@@ -246,11 +275,11 @@ public class StrategySceneControl : MonoBehaviour {
     {
         Debug.Log(target.name + ">>Mouse0Click");
         LivingAreaNode node = target.GetComponent<LivingAreaNode>();
-        M_Strategy.SelectLivingAreasModel(node);
-      //  MessageBoxInstance.Instance.MessageBoxShow("");
+        _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
+        //  MessageBoxInstance.Instance.MessageBoxShow("");
 
         //判断逻辑
-        
+
         if (CurPlayer != null)
         {
             Debuger.Log("Enter LivingAreas");

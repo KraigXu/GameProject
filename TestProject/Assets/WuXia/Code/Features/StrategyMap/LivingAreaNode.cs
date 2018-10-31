@@ -14,19 +14,34 @@ namespace LivingArea
     {
 
         public int Id;         //这个Id需要手动输入， 映射到数据库中的Id   
-        public LivingAreaData Value;
+        public string Name;
+        public string Description;
+        public int PersonNumber;
+        public int CurLevel;
+        public int MaxLevel;
+        public LivingAreaType Type;
+        public int Money;
+        public int MoneyMax;
+        public int Iron;
+        public int IronMax;
+        public int Wood;
+        public int WoodMax;
+        public int Food;
+        public int FoodMax;
+        public int DefenseStrength;
+        public int StableValue;
         public BuildingObject[] BuildingObjects;
-        
-        public int Renown;      
-       
-        public GameObject LivingAreaM;
 
+        public LivingAreaData Value;
+        public int Renown;      
+        public GameObject LivingAreaM;
         public Renderer LivingAreaRender;
         public Collider LivingAreaCollider;
-
         public bool IsOpen =false;  //是否打开
 
         public LivingAreaState[] Groups;
+
+        
         void Start()
         {
         }
