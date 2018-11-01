@@ -143,7 +143,7 @@ public class MousePointingInfo : MonoBehaviour
             _curlastContact = null;
         }
 
-
+        return;
         //locking cursor
         if (lockCursor)
         {
@@ -195,6 +195,7 @@ public class MousePointingInfo : MonoBehaviour
 
     public void Update()
     {
+        return;
         //finding hero
         if (hero == null) hero = transform;
 

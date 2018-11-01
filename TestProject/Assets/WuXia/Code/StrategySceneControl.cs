@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using LivingArea;
 using TinyFrameWork;
@@ -73,6 +74,7 @@ public class StrategySceneControl : MonoBehaviour {
     {
         _instance = this;
         Debuger.EnableLog = true;
+        Debug.Log(DateTime.Now.ToString("u"));
     }
 
     void Start()
@@ -84,53 +86,41 @@ public class StrategySceneControl : MonoBehaviour {
         OverInit();
     }
 
-    #region 1：省份区域数据获取
-
+   
+    /// <summary>
+    /// 1.战略地图数据初始化
+    /// </summary>
     public void StrategyInit()
     {
         M_Strategy.InitStrategyData();
        
     }
-    #endregion
-    #region 2:
 
+    /// <summary>
+    /// 2.人物信息加载
+    /// </summary>
     public void BiologicalInit()
     {
         M_Biological.InitBiological();
     }
-    #endregion
-    #region 3:
-    #endregion
-    #region 4:
-    #endregion
-    #region 5:
-    #endregion
-    #region 6:
-    #endregion
-    #region 7:
-    #endregion
-    #region 8:
-    #endregion
-    #region 9:
 
+    /// <summary>
+    /// 3.获取主角
+    /// </summary>
     public void PlayerDataInit()
     {
-      //  CurPlayer = M_Biological.GetPlayer(Define.Value.PlayerId);  //选择角色
+        CurPlayer = M_Biological.GetBiological(Define.Value.PlayerId);  //选择角色
+        Main3DCamera.SetTarget(CurPlayer.transform);
     }
 
-    #endregion
-    #region 10:
 
     public void UiInit()
     {
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-
         StrategyControl = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
     }
 
-    #endregion
 
-    #region 11:over Init
 
     public void OverInit()
     {
@@ -167,8 +157,6 @@ public class StrategySceneControl : MonoBehaviour {
         Cur3DMainCamera= Camera.main;
     }
 
-
-    #endregion
 
     #region LivingArea
 

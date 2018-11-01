@@ -149,25 +149,38 @@ namespace DataAccessObject
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " RaceId INTEGER," +
+                                       " Surname TEXT," +
                                        " Name TEXT," +
-                                       " Description TEXT, " +
+                                       " AvatarCode TEXT," +
+                                       " ModeCode TEXT," +
+                                       " Title TEXT," +
+                                       " Description TEXT," +
+                                       " RaceType INTEGER," +
                                        " Sex INTEGER," +
                                        " Age INTEGER," +
                                        " AgeMax INTEGER," +
-                                       " Life INTEGER," +
-                                       " LifeMax INTEGER," +
+                                       " Property1 INTEGER," +
+                                       " Property2 INTEGER," +
+                                       " Property3 INTEGER," +
+                                       " Property4 INTEGER," +
+                                       " Property5 INTEGER," +
+                                       " Property6 INTEGER," +
                                        " Prestige INTEGER," +
+                                       " Influence INTEGER," +
+                                       " Disposition INTEGER," +
                                        " TimeAppearance TEXT," +
                                        " TimeEnd TEXT," +
-                                       " IsDebut TEXT," +
-                                       " Location INTEGER," +
+                                       " FeatureIds TEXT," +
+                                       " IsDebut INTEGER," +
+                                       " Location TEXT," +
                                        " LocationType INTEGER," +
                                        " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT," +
-                                       " Compatibility INTEGER,"+
-                                       " LanguageJson TEXT);");
+                                       " EquipmentJson TEXT, " +
+                                       " LanguageJson INTEGER," +
+                                       " GongfaJson INTEGER," +
+                                       " JifaJson TEXT);");
         }
+
 
 
 

@@ -35,7 +35,7 @@ public class BiologicalManager : MonoBehaviour
                 {
                     if (biologicalModels[i].LocationType == 1)
                     {
-                        GameObject biologicalgo = new GameObject(biological.Name);
+                        GameObject biologicalgo = new GameObject(biologicalModels[i].Name);
                         biological = biologicalgo.AddComponent<BiologicalPerson>();
                     }
                     else if (biologicalModels[i].LocationType == 2)
@@ -97,5 +97,18 @@ public class BiologicalManager : MonoBehaviour
         }
     }
 
+
+    public Biological GetBiological(int id)
+    {
+        for (int i = 0; i < BiologicalDebut.Count; i++)
+        {
+            if (BiologicalDebut[i].Id == id)
+            {
+                return BiologicalDebut[i];
+            }
+        }
+
+        return null;
+    }
 
 }

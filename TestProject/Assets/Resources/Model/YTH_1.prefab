@@ -2512,14 +2512,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0aa670c889af3b45a17c74c7d4837ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BiologicalId: 0
+  Id: 0
+  Surname: 
   Name: 
+  AvatarCode: 
+  ModeCode: 
+  Title: 
   Description: 
   RaceType: 0
   Sex: 0
   Age: 0
   AgeMax: 0
-  Avatar: {fileID: 0}
+  Prestige: 0
+  Influence: 0
+  Disposition: 0
+  Property1: 0
+  Property2: 0
+  Property3: 0
+  Property4: 0
+  Property5: 0
+  Property6: 0
+  FeatureIds: 
+  Location: 
+  LocationType: 0
+  ArticleJson: 
+  EquipmentJson: 
+  LanguageJson: 
+  GongfaJson: 
+  JifaJson: 
   Blood: 0
   CurBlood: 0
   Magic: 0
@@ -2531,6 +2551,7 @@ MonoBehaviour:
   CurStatus: 0
   CurWhereStatus: 0
   GroupId: -1
+  Avatar: {fileID: 0}
 --- !u!114 &114635382686567302
 MonoBehaviour:
   m_ObjectHideFlags: 1

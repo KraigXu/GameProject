@@ -42,10 +42,10 @@ public class StrategyMainCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_visibleRangeBounds.size == Vector3.zero)
-        {
-            return;
-        }
+        //if (_visibleRangeBounds.size == Vector3.zero)
+        //{
+        //    return;
+        //}
 
         if (_targetTf != null)
         {
