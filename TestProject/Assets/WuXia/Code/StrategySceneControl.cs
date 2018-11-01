@@ -36,10 +36,10 @@ public class StrategySceneControl : MonoBehaviour {
     }
     private static StrategySceneControl _instance = null;
 
-    public Camera Main3DCamera;                                                                             //大地图相机
-    public Camera Main2DCamera;                                                                             //UI相机
-    public Camera LivingfAreaCamera;                                                                        //生活区相机
-
+    public StrategyMainCamera Main3DCamera;                                                                    //大地图相机                                                                               
+    public Camera Main2DCamera;                                                                                //UI相机
+    public Camera LivingfAreaCamera;                                                                           //生活区相机
+    public Camera Cur3DMainCamera;
     //----CamerControl
     public OverLookCameraController LivingfAreaCameraControl;
     public MousePointingInfo MousePointing;           //鼠标信息控制
@@ -96,7 +96,7 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void BiologicalInit()
     {
-        M_Biological.InitBiological(M_Time.CurTime);
+        M_Biological.InitBiological();
     }
     #endregion
     #region 3:
@@ -163,6 +163,8 @@ public class StrategySceneControl : MonoBehaviour {
         MousePointing.speed = 50;
         MousePointing.acceleration = 150;
         MousePointing.follow = 0;
+
+        Cur3DMainCamera= Camera.main;
     }
 
 

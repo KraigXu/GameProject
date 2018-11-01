@@ -45,6 +45,13 @@ public class Define : MonoBehaviour
     public string CurrentSceneName = "";
     public string NextSceneName = "";
 
+    //public  string AvatarPath = "Atlas/";
+    //public TextAsset AvatarText { get { return Resources.Load<TextAsset>("Text/AvatarCodeMap"); } }
+
+    //public string BiologicalPath = "Model/";
+    //public TextAsset BiologicalText { get { return Resources.Load<TextAsset>("Text/BiologicalModelText"); } }
+
+
     public GameObject GameTurretManager { get { return Resources.Load<GameObject>("Prefab/TurretManager"); } }
     public GameObject GameSkillControl { get { return Resources.Load<GameObject>("Prefab/SkillElement"); } }
     public GameObject UiTurretTypeItem { get { return Resources.Load<GameObject>("UIPrefab/GenerateItem/TurretTypeItem"); } }

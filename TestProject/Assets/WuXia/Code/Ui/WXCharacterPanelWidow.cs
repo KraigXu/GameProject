@@ -66,9 +66,9 @@ public class WXCharacterPanelWidow : UIWindowBase
     /// <param name="propertys"></param>
     public void ChanageCharacterPanel(Biological biological)
     {
-        this.CTName.text = biological.Model.Name;
-        this.CTDescription.text = biological.Model.Description;
-        this.CTRaceType.text = biological.Model.RaceType.ToString();
+      //  this.CTName.text = biological.Model.Name;
+       // this.CTDescription.text = biological.Model.Description;
+       // this.CTRaceType.text = biological.Model.RaceType.ToString();
         this.CTSex.text = "1";
 
     }

@@ -19,7 +19,7 @@ namespace TinyFrameWork
         private Toggle BulidingTog;              //建筑
         [SerializeField]
         private RectTransform BulidingView;
-        [SerializeField] 
+        [SerializeField]
         private Toggle AnnualHistoryTog;              //年历
         [SerializeField]
         private RectTransform AnnualHistoryView;
@@ -81,18 +81,18 @@ namespace TinyFrameWork
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             WindowContextLivingAreaNodeData data = (WindowContextLivingAreaNodeData)contextData;
-            if(data==null) return;
+            if (data == null) return;
             _curLivingArea = data.Node;
             LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Name;
             LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
             LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
             LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();
-           // LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
+            // LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
             LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
 
             //LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.ToString();
-          //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
-           // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
+            //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
+            // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
 
         }
 
@@ -104,7 +104,7 @@ namespace TinyFrameWork
 
         void OnDisable()
         {
-            
+
         }
 
 

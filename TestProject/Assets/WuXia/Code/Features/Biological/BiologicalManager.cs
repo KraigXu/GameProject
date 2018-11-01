@@ -1,23 +1,13 @@
 ﻿using System;
 using DataAccessObject;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class BiologicalManager : MonoBehaviour
 {
-    public List<Biological> BiologicalArray = new List<Biological>();  //所有
-    public List<Biological> BiologicalDebutArray = new List<Biological>();
-
-    public List<BiologicalGroup> BiologicalGroups = new List<BiologicalGroup>();
+    public List<Biological> BiologicalDebut = new List<Biological>();
     public Dictionary<int, BiologicalGroup> GroupsDic = new Dictionary<int, BiologicalGroup>();
-    public Dictionary<BiologicalModelType, GameObject> BiologcalModelPrefab = new Dictionary<BiologicalModelType, GameObject>();
-
-    [SerializeField]
-    private GameObject _biologicalGoPrefab;
-
-    void Awake()
-    {
-    }
 
     void Start()
     {
@@ -29,150 +19,83 @@ public class BiologicalManager : MonoBehaviour
 
     }
 
-    public GameObject GetBiologicalModel(RaceType raceType, BiologicalModelType type)
-    {
-        GameObject go = null;
-
-        switch (type)
-        {
-            case BiologicalModelType.HumanMen:
-                break;
-            case BiologicalModelType.HumanWoMen:
-                break;
-        }
-        return go;
-    }
-
-    public void InitBiological()
-    {
-        List<BiologicalData> biologicalDatas = SqlData.GetAllDatas<BiologicalData>();
-
-        for (int i = 0; i < biologicalDatas.Count; i++)
-        {
-            switch ((RaceType)biologicalDatas[i].RaceType)
-            {
-                case RaceType.Human:
-                {
-                    GameObject go = null;
-
-                        if (biologicalDatas[i].Sex == 1)
-                        {
-                            go = BiologcalModelPrefab[BiologicalModelType.HumanMen];
-                        }
-                        else if (biologicalDatas[i].Sex == 2)
-                        {
-                            go = BiologcalModelPrefab[BiologicalModelType.HumanWoMen];
-
-                        }
-                        else if (biologicalDatas[i].Sex == 3)
-                        {
-
-                        }
-
-                    }
-                    break;
-                case RaceType.Elf:
-                    break;
-                case RaceType.Ghost:
-                    break;
-            }
-
-        }
-
-
-
-    }
-
 
     /// <summary>
     /// 初始化
     /// </summary>
-    /// <param name="time"></param>
-    public void InitBiological(DateTime time)
+    public void InitBiological()
     {
         List<BiologicalData> biologicalModels = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
         for (int i = 0; i < biologicalModels.Count; i++)
         {
-            GameObject go = GameObject.Instantiate(_biologicalGoPrefab, transform);
             Biological biological = null;
-            switch ((RaceType)biologicalModels[i].RaceType)
+            switch ((RaceType) biologicalModels[i].RaceType)
             {
                 case RaceType.Human:
-                    biological = go.AddComponent<BiologicalPerson>();
-                    biological.BiologicalId = biologicalModels[i].Id;
-                    biological.Name = biologicalModels[i].Name;
-                    biological.Description = biologicalModels[i].Description;
-                    biological.RaceType = RaceType.Human;
-                    biological.Sex = (SexType)biologicalModels[i].Sex;
-                    biological.Age = biologicalModels[i].Age;
-                    biological.AgeMax = biologicalModels[i].AgeMax;
-                    biological.TimeAppearance = biologicalModels[i].TimeAppearance;
-                    biological.TimeEnd = biologicalModels[i].TimeEnd;
-                    biological.Prestige = biologicalModels[i].Prestige;
-                    //----Human
-                    break;
-                case RaceType.Ghost:
-                    break;
-                default:
-                    biological = go.AddComponent<Biological>();
-                    break;
-            }
-            biological.Model = biologicalModels[i];
+                {
+                    if (biologicalModels[i].LocationType == 1)
+                    {
+                        GameObject biologicalgo = new GameObject(biological.Name);
+                        biological = biologicalgo.AddComponent<BiologicalPerson>();
+                    }
+                    else if (biologicalModels[i].LocationType == 2)
+                    {
+                        ModelMapData model = SqlData.GetDataWhereOnly<ModelMapData>(" Code=? ",new object[] {biologicalModels[i].ModeCode});
 
+                        GameObject biologicalgo = Instantiate(Resources.Load<GameObject>(model.Path));
+                        biological = biologicalgo.AddComponent<BiologicalPerson>();
+                    }
 
-            //if (Define.Value.PlayerId == biologicalModels[i].Id)
-            //{
-            //    PlayerCon = go.AddComponent<PlayerControl>();
-            //}
-            //else
-            //{
-            //    go.AddComponent<StateController>();
-            //}
+                    if (biological != null)
+                    {
+                        biological.Id = biologicalModels[i].Id;
+                        biological.Surname = biologicalModels[i].Surname;
+                        biological.Name = biologicalModels[i].Name;
+                        biological.AvatarCode = biologicalModels[i].AvatarCode;
+                        biological.ModeCode = biologicalModels[i].ModeCode;
+                        biological.Title = biologicalModels[i].Title;
+                        biological.Description = biologicalModels[i].Description;
+                        biological.Description = biologicalModels[i].Description;
+                        biological.RaceType = RaceType.Human;
+                        biological.Sex = (SexType) biologicalModels[i].Sex;
+                        biological.Age = biologicalModels[i].Age;
+                        biological.AgeMax = biologicalModels[i].AgeMax;
+                        biological.TimeAppearance = biologicalModels[i].TimeAppearance;
+                        biological.TimeEnd = biologicalModels[i].TimeEnd;
+                        biological.Prestige = biologicalModels[i].Prestige;
+                        biological.Influence = biologicalModels[i].Influence;
+                        biological.Disposition = biologicalModels[i].Disposition;
+                        biological.Property1 = biologicalModels[i].Property1;
+                        biological.Property2 = biologicalModels[i].Property2;
+                        biological.Property3 = biologicalModels[i].Property3;
+                        biological.Property4 = biologicalModels[i].Property4;
+                        biological.Property5 = biologicalModels[i].Property5;
+                        biological.Property6 = biologicalModels[i].Property6;
+                        biological.FeatureIds = biologicalModels[i].FeatureIds;
+                        biological.Location = biologicalModels[i].Location;
+                        biological.LocationType = (LocationType)biologicalModels[i].LocationType;
+                        biological.ArticleJson = biologicalModels[i].ArticleJson;
+                        biological.EquipmentJson = biologicalModels[i].EquipmentJson;
+                        biological.LanguageJson = biologicalModels[i].LanguageJson;
+                        biological.GongfaJson = biologicalModels[i].GongfaJson;
+                        biological.JifaJson = biologicalModels[i].JifaJson;
 
-            BiologicalDebutArray.Add(biological);
-        }
-    }
-
-    public Biological GetPlayer(int playerId)
-    {
-        for (int i = 0; i < BiologicalDebutArray.Count; i++)
-        {
-            if (BiologicalDebutArray[i].Model.Id == playerId)
-            {
-                return BiologicalDebutArray[i];
-            }
-        }
-        return null;
-    }
-
-
-    //-----------------------Behaviour
-
-    public void CalculationProperty(Biological biological)
-    {
-        if (biological.Model != null)
-        {
-            switch ((RaceType)biological.Model.RaceType)
-            {
-                case RaceType.Human:
-                    //biological.Blood=biological.Model.
-
+                        BiologicalDebut.Add(biological);
+                    }
+                    else
+                    {
+                        Debuger.LogError("Biological code+" + biological.Id + ">> Error");
+                    }
+                }
                     break;
                 case RaceType.Elf:
-                    break;
-                case RaceType.Ghost:
+                {
+
+                }
                     break;
             }
         }
-        else
-        {
-            Debuger.LogError("Model Is NULL");
-        }
-
     }
-
-
-
 
 
 }

@@ -7,6 +7,4 @@ public enum BiologicalModelType  {
     HumanMen,
     HumanWoMen,
 
-
-
 }

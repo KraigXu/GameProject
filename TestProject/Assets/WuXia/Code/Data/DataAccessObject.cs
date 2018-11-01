@@ -316,6 +316,32 @@ namespace DataAccessObject
 
 
 
+        /// <summary>
+        /// 头像数据
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Avatar(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS AvatarData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type TEXT," +
+                                       " Path TEXT);");
+        }
+
+        /// <summary>
+        /// 模型地图
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_ModelMap(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ModelMapData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type TEXT," +
+                                       " Path TEXT);");
+        }
+
 
 
     }
@@ -461,9 +487,6 @@ namespace DataAccessObject
         }
     }
 
-    
-
-
     public class RaceData : BaseData
     {
         public int RaceId { get; set; }
@@ -485,6 +508,8 @@ namespace DataAccessObject
         public int Id { get; set; }                              //ID
         public string Surname { get; set; }                      //姓
         public string Name { get; set; }                         //名 
+        public string AvatarCode { get; set; }                     //头像ID
+        public string ModeCode { get; set; }                       //模型ID
         public string Title { get; set; }                        //称号
         public string Description { get; set; }                  //说明
         public int RaceType { get; set; }                          //种族类型
@@ -505,7 +530,7 @@ namespace DataAccessObject
         public string FeatureIds { get; set; }                   //特征IDs
         public int IsDebut { get; set; }                         //是否登场
         public string Location { get; set; }                        //所处地方 地区编号
-        public string LocationType { get; set; }                    //所处类型 
+        public int LocationType { get; set; }                    //所处类型 
         public string ArticleJson { get; set; }                  // 物品JSON
         public string EquipmentJson { get; set; }                // 装备JSON
         public string LanguageJson { get; set; }                 // 语言JSON
@@ -517,7 +542,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
                 {
-                    Id,Surname,Name,Title,Description,RaceType,Sex,Age,AgeMax,Property1,Property2,Property3,Property4,Property5,Property6,
+                    Id,Surname,Name,AvatarCode,ModeCode,Title,Description,RaceType,Sex,Age,AgeMax,Property1,Property2,Property3,Property4,Property5,Property6,
                     Prestige,Influence,Disposition,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,LocationType, ArticleJson,EquipmentJson,LanguageJson,
                     GongfaJson,JifaJson
                 };
@@ -525,6 +550,7 @@ namespace DataAccessObject
         }
     }
 
+    
 
 
     public class DialogData : BaseData
@@ -536,8 +562,6 @@ namespace DataAccessObject
         public string Content { get; set; }
         public int ReplyIndex { get; set; }
         
-
-
         public override object[] GetValues()
         {
             object[] objects = new object[]
@@ -547,6 +571,8 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+
 
     public class ScenarioData : BaseData
     {
@@ -590,11 +616,44 @@ namespace DataAccessObject
         }
     }
 
+    public class AvatarData : BaseData
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string Type { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Type,Path
+            };
+            return objects;
+        }
+    }
+
+    public class ModelMapData : BaseData
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string Type { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Type,Path
+            };
+            return objects;
+        }
+    }
 
 
     //----------------------------------------映射数据库----------------------------------End
 
-    //-----------------------------------------取值--------------------------------------Start
+        //-----------------------------------------取值--------------------------------------Start
 
     public static class SqlData
     {
@@ -611,6 +670,11 @@ namespace DataAccessObject
         public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
         {
             return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
+        }
+        
+        public static T GetDataWhereOnly<T>(string where, params object[] args) where T : BaseData
+        {
+            return SQLService.GetInstance("TD.db").QueryUnique<T>(where, args);
         }
 
     }

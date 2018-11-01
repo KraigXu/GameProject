@@ -13,10 +13,10 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
     {
         Wordpos = Target == null ? Wordpos : Target.position;
 
-        if (IsAPointInACamera(StrategySceneControl.Instance.Main3DCamera, Wordpos))
+        if (IsAPointInACamera(StrategySceneControl.Instance.Cur3DMainCamera, Wordpos))
         {
             transform.localScale = Vector3.one;
-            Vector2 tempPos = StrategySceneControl.Instance.Main3DCamera.WorldToScreenPoint(Wordpos);
+            Vector2 tempPos = StrategySceneControl.Instance.Cur3DMainCamera.WorldToScreenPoint(Wordpos);
             //----------非空
             if (StrategySceneControl.Instance.Main2DCamera != null)
             {

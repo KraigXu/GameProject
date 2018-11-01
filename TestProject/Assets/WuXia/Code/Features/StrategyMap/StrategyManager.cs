@@ -224,9 +224,7 @@ namespace LivingArea
             switch (biological.RaceType)
             {
                 case RaceType.Elf:
-                    
-                    break;
-                case RaceType.Ghost:
+                   
                     break;
                 case RaceType.Human:
 
