@@ -43,6 +43,7 @@ namespace LivingArea
         
         void Start()
         {
+            
         }
         void Update()
         {

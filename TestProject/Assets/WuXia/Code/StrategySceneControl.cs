@@ -9,41 +9,29 @@ using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.AI;
 
 /// <summary>
-/// 这个Target 与Game 中的Target 对应
-/// </summary>
-public enum ElementTarget
-{
-    LivingArea
-}
-
-/// <summary>
 /// 视图状态
 /// </summary>
 public enum ViewStatus
 {
-    CityMainView, 
+    CityMainView,
     WorldMapView,
-
 }
 
-public class StrategySceneControl : MonoBehaviour {
+public class StrategySceneControl : MonoBehaviour
+{
+    public static StrategySceneControl Instance { get { return _instance; } }
 
-    public static StrategySceneControl Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
     private static StrategySceneControl _instance = null;
 
-    public StrategyMainCamera Main3DCamera;                                                                    //大地图相机                                                                               
+    public Camera Main3Dcamera;                                                                                //大地图相机
     public Camera Main2DCamera;                                                                                //UI相机
     public Camera LivingfAreaCamera;                                                                           //生活区相机
+    public Camera MapCamera;                                                                                   //地图相机
     public Camera Cur3DMainCamera;
+
     //----CamerControl
     public OverLookCameraController LivingfAreaCameraControl;
-    public MousePointingInfo MousePointing;           //鼠标信息控制
+    public StrategyMainCamera StrategyCameraControl;                                                            //大地图相机控制
 
     //----常在UI
     public StrategyWindow StrategyControl;
@@ -51,9 +39,9 @@ public class StrategySceneControl : MonoBehaviour {
     public SocialDialogWindow SocialDialogControl;
 
     //---Info
-    public ViewStatus CurViewStatus; 
+    public ViewStatus CurViewStatus = ViewStatus.WorldMapView;
     public LivingAreaNode LivingAreaTarget;
-    
+
     //---Manager          --m前缀
     public TimeManager M_Time;
     public BiologicalManager M_Biological;
@@ -74,7 +62,6 @@ public class StrategySceneControl : MonoBehaviour {
     {
         _instance = this;
         Debuger.EnableLog = true;
-        Debug.Log(DateTime.Now.ToString("u"));
     }
 
     void Start()
@@ -86,14 +73,14 @@ public class StrategySceneControl : MonoBehaviour {
         OverInit();
     }
 
-   
+
     /// <summary>
     /// 1.战略地图数据初始化
     /// </summary>
     public void StrategyInit()
     {
         M_Strategy.InitStrategyData();
-       
+
     }
 
     /// <summary>
@@ -110,7 +97,7 @@ public class StrategySceneControl : MonoBehaviour {
     public void PlayerDataInit()
     {
         CurPlayer = M_Biological.GetBiological(Define.Value.PlayerId);  //选择角色
-        Main3DCamera.SetTarget(CurPlayer.transform);
+        //Main3DCamera.SetTarget(CurPlayer.transform);
     }
 
 
@@ -124,38 +111,36 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void OverInit()
     {
-        MousePointing.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
-        MousePointing.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
-        MousePointing.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
-        MousePointing.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
-        MousePointing.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
+        StrategyCameraControl.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
+        StrategyCameraControl.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
+        StrategyCameraControl.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
+        StrategyCameraControl.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
+        StrategyCameraControl.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
 
-        MousePointing.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
-        MousePointing.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
-        MousePointing.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
-        MousePointing.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
-        MousePointing.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
+        StrategyCameraControl.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
+        StrategyCameraControl.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
+        StrategyCameraControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
+        StrategyCameraControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
+        StrategyCameraControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
-        MousePointing.MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
-        MousePointing.MouseExitEvents.Add("Terrain", MouseExit_Terrain);
-        MousePointing.MouseOverEvents.Add("Terrain", MouseOver_Terrain);
-        MousePointing.Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
-        MousePointing.Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
+        StrategyCameraControl.MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
+        StrategyCameraControl.MouseExitEvents.Add("Terrain", MouseExit_Terrain);
+        StrategyCameraControl.MouseOverEvents.Add("Terrain", MouseOver_Terrain);
+        StrategyCameraControl.Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
+        StrategyCameraControl.Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
 
-        MousePointing.MouseEnterEvents.Add("Biological", MouseEnter_Biological);
-        MousePointing.MouseExitEvents.Add("Biological", MouseExit_Biological);
-        MousePointing.MouseOverEvents.Add("Biological", MouseOver_Biological);
-        MousePointing.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
-        MousePointing.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
+        StrategyCameraControl.MouseEnterEvents.Add("Biological", MouseEnter_Biological);
+        StrategyCameraControl.MouseExitEvents.Add("Biological", MouseExit_Biological);
+        StrategyCameraControl.MouseOverEvents.Add("Biological", MouseOver_Biological);
+        StrategyCameraControl.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
+        StrategyCameraControl.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
-        MousePointing.enabled = true;
-        MousePointing.gravity = false;
-        MousePointing.speed = 50;
-        MousePointing.acceleration = 150;
-        MousePointing.follow = 0;
+        Cur3DMainCamera = Camera.main;
 
-        Cur3DMainCamera= Camera.main;
     }
+
+
+
 
 
     #region LivingArea
@@ -171,12 +156,12 @@ public class StrategySceneControl : MonoBehaviour {
             return;
         }
 
-        
+
         //先对角色的属性进行检测 是否可以进入城市，1，角色位置是否在城市附近，2 角色与城市势力关系 3角色与城市首领关系 4城市的异常状态 
 
 
         //关闭当前开启的界面 ---
-       
+
         UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
 
         ShowWindowData showWindowData = new ShowWindowData();
@@ -185,11 +170,11 @@ public class StrategySceneControl : MonoBehaviour {
 
         //初始化LivingArea
 
-    //    StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
+        //    StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
 
 
         //更新相机
-        Renderer[] renderers= livingArea.LivingAreaM.GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = livingArea.LivingAreaM.GetComponentsInChildren<Renderer>();
         if (renderers.Length > 0)
         {
             Bounds mapBounds = renderers[0].bounds;
@@ -201,11 +186,41 @@ public class StrategySceneControl : MonoBehaviour {
             LivingfAreaCameraControl.SetPosition(mapBounds.center);
         }
         //  M_LivingArea.EnterLivingArea(livingArea);
-        
+
 
     }
 
-    
+    public void ChangeCamera(ViewStatus convertView)
+    {
+        if (CurViewStatus == convertView)
+        {
+            return;
+        }
+        else
+        {
+            if (CurViewStatus == ViewStatus.CityMainView && convertView == ViewStatus.WorldMapView)
+            {
+                Cur3DMainCamera.gameObject.SetActive(false);
+                Cur3DMainCamera = Main3Dcamera;
+                Cur3DMainCamera.gameObject.SetActive(true);
+
+            }
+            else if (CurViewStatus == ViewStatus.WorldMapView && convertView == ViewStatus.CityMainView)
+            {
+                Cur3DMainCamera.gameObject.SetActive(false);
+                Cur3DMainCamera = LivingfAreaCamera;
+                Cur3DMainCamera.gameObject.SetActive(true);
+
+            }
+
+        }
+
+
+
+
+    }
+
+
 
 
 
@@ -216,16 +231,16 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void WorldMapViewToCityMainView()
     {
-        
-        ShowWindowData data=new ShowWindowData();
-        data.contextData=new WindowContextLivingAreaNodeData(LivingAreaTarget);
+
+        ShowWindowData data = new ShowWindowData();
+        data.contextData = new WindowContextLivingAreaNodeData(LivingAreaTarget);
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, data);
-        
+
     }
 
     public void CityMainViewToWorldMapView()
     {
-        UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaMainWindow);  
+        UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaMainWindow);
     }
 
     #endregion
@@ -282,8 +297,8 @@ public class StrategySceneControl : MonoBehaviour {
             CurPlayer.transform.position = node.transform.position;
             M_Strategy.InstanceLivingArea(node);
 
-            ShowWindowData showWindowData=new ShowWindowData();
-            showWindowData.contextData=new WindowContextLivingAreaNodeData(node);
+            ShowWindowData showWindowData = new ShowWindowData();
+            showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
 
             if (CurPlayer.GroupId == -1)
@@ -292,7 +307,7 @@ public class StrategySceneControl : MonoBehaviour {
             }
             else
             {
-                M_Strategy.EnterLivingAreas(node,M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+                M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
             }
         }
     }
@@ -300,8 +315,8 @@ public class StrategySceneControl : MonoBehaviour {
     {
         Debug.Log(target.name + ">>Mouse1Click");
 
-        ShowWindowData showMenuData=new ShowWindowData();
-        showMenuData.contextData=new WindowContextExtendedMenu(target.GetComponent<LivingAreaNode>(),point);
+        ShowWindowData showMenuData = new ShowWindowData();
+        showMenuData.contextData = new WindowContextExtendedMenu(target.GetComponent<LivingAreaNode>(), point);
         UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, showMenuData);
     }
 
@@ -354,12 +369,12 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void MouseExit_Biological(Transform tf)
     {
-      
+
     }
 
     public void MouseOver_Biological(Transform tf)
     {
-      
+
     }
 
     public void Mouse0Click_Biological(Transform tf, Vector3 point)
@@ -383,7 +398,7 @@ public class StrategySceneControl : MonoBehaviour {
 
     public void MessageShow(string value)
     {
-        
+
     }
     #endregion
 

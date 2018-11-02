@@ -45,6 +45,7 @@ public class Define : MonoBehaviour
     public string CurrentSceneName = "";
     public string NextSceneName = "";
 
+
     //public  string AvatarPath = "Atlas/";
     //public TextAsset AvatarText { get { return Resources.Load<TextAsset>("Text/AvatarCodeMap"); } }
 
