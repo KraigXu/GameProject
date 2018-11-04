@@ -9,9 +9,14 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
     public Vector3 Wordpos = Vector3.zero;
     public Vector3 ScencePosVector3;
     public bool IsNeedModelBlockOut = false;
+    public bool IsUseTarget=true;
     protected void LateUpdate()
     {
-        Wordpos = Target == null ? Wordpos : Target.position;
+        if (IsUseTarget == true)
+        {
+            Wordpos = Target == null ? Wordpos : Target.position;
+
+        }
 
         if (IsAPointInACamera(StrategySceneControl.Instance.Cur3DMainCamera, Wordpos))
         {

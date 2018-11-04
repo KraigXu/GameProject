@@ -105,6 +105,7 @@ public class Define : MonoBehaviour
     }
 
 
+
     //----> Algorithm
     public Vector2 s()
     {

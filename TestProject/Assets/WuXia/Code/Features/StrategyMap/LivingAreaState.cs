@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using LivingArea;
 using UnityEngine;
 
 public class LivingAreaState
@@ -25,7 +24,7 @@ public class LivingAreaState
         this.Icon = icon;
     }
 
-    public void UpdateBehaviors(LivingAreaNode controller)
+    public void UpdateBehaviors(Strategy.LivingArea controller)
     {
         DoBehaviors(controller);
     }
@@ -34,7 +33,7 @@ public class LivingAreaState
     /// 顺序执行所有效果
     /// </summary>
     /// <param name="controller"></param>
-    private void DoBehaviors(LivingAreaNode controller)
+    private void DoBehaviors(Strategy.LivingArea controller)
     {
         for (int i = 0; i < behaviors.Length; i++)
         {

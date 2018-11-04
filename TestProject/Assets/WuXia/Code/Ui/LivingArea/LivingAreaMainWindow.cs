@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using LivingArea;
+using Strategy;
 using TinyFrameWork;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public class LivingAreaMainWindow : UIWindowBase
     [Header("LivingArea")]
     [SerializeField]
     private Text _name;
-    private LivingAreaNode _currentLivingArea;
+    private LivingArea _currentLivingArea;
 
 
     [Header("Building")]

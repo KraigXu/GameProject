@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using LivingArea;
+using Strategy;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +18,7 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
     public void Init(Transform target)
     {
         this.Target = target;
-        LivingAreaNode node=  target.GetComponent<LivingAreaNode>();
+        LivingArea node=  target.GetComponent<LivingArea>();
         _titleText.text = node.Name;
         LivingAreaState[] states = node.Groups;
         if (states.Length > 0)
@@ -33,6 +33,15 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
             }
         }
      
+
+    }
+
+    public void Init(string name,Vector3 point)
+    {
+        IsUseTarget = false;
+        _titleText.text = name;
+        Wordpos = point;
+
 
     }
 }

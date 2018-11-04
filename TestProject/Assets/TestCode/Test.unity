@@ -1361,10 +1361,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedData:
     Id: 0
+    Name: 
+    Description: 
     FactionId: 0
     GrowingModulus: 0
     SecurityModulus: 0
     Traffic: 0
+    LivingAreaChilds: []
+    Projector: {fileID: 0}
+    Material: {fileID: 0}
 --- !u!114 &1784406643
 MonoBehaviour:
   m_ObjectHideFlags: 0

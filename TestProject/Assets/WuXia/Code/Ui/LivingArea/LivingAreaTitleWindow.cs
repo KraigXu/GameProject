@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using Strategy;
+using System.Collections;
 using System.Collections.Generic;
-using LivingArea;
 using UnityEngine;
 
 namespace TinyFrameWork
@@ -23,15 +23,20 @@ namespace TinyFrameWork
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.Scale;
         }
-        public override void InitWindowOnAwake()
+        public override void InitWindowOnAwake(){}
+
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
-            if (StrategySceneControl.Instance.M_Strategy.LivingAreas.Count > 0)
+            if (contextData != null)
             {
-                List<LivingAreaNode> nodes = StrategySceneControl.Instance.M_Strategy.LivingAreas;
-                for (int i = 0; i < nodes.Count; i++)
+                WindowContextLivingAreaData data = contextData as WindowContextLivingAreaData;
+                string[] names = data.Names;
+                Vector3[] point = data.Points;
+                for (int i = 0; i < names.Length; i++)
                 {
-                    _titleItems[i].Init(nodes[i].transform);
+                    _titleItems[i].Init(names[i], point[i]);
                 }
+                
             }
         }
     }

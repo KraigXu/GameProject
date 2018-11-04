@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using LivingArea;
-using TinyFrameWork;
+﻿using TinyFrameWork;
 using UnityEngine;
 using MapMagicDemo;
+using Strategy;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.AI;
 
@@ -40,12 +37,11 @@ public class StrategySceneControl : MonoBehaviour
 
     //---Info
     public ViewStatus CurViewStatus = ViewStatus.WorldMapView;
-    public LivingAreaNode LivingAreaTarget;
+    public LivingArea LivingAreaTarget;
 
     //---Manager          --m前缀
     public TimeManager M_Time;
     public BiologicalManager M_Biological;
-    public StrategyManager M_Strategy;
     public FactionManager M_Faction;
     //----Player
     /// <summary>
@@ -79,7 +75,7 @@ public class StrategySceneControl : MonoBehaviour
     /// </summary>
     public void StrategyInit()
     {
-        M_Strategy.InitStrategyData();
+      //  M_Strategy.InitStrategyData();
 
     }
 
@@ -97,13 +93,13 @@ public class StrategySceneControl : MonoBehaviour
     public void PlayerDataInit()
     {
         CurPlayer = M_Biological.GetBiological(Define.Value.PlayerId);  //选择角色
-        //Main3DCamera.SetTarget(CurPlayer.transform);
+        CurPlayer.transform.position=new Vector3(1620.703f, 80.7618f, 629.1682f);
     }
 
 
     public void UiInit()
     {
-        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
         StrategyControl = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
     }
 
@@ -135,6 +131,7 @@ public class StrategySceneControl : MonoBehaviour
         StrategyCameraControl.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
         StrategyCameraControl.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
+        StrategyCameraControl.SetTarget(CurPlayer.transform);
         Cur3DMainCamera = Camera.main;
 
     }
@@ -148,7 +145,7 @@ public class StrategySceneControl : MonoBehaviour
     /// <summary>
     /// 进入生活区
     /// </summary>
-    public void LivingAreaEnter(LivingAreaNode livingArea)
+    public void LivingAreaEnter(LivingArea livingArea)
     {
         if (livingArea == null)
         {
@@ -285,7 +282,7 @@ public class StrategySceneControl : MonoBehaviour
     public void Mouse0Click_LivingAreaMain(Transform target, Vector3 point)
     {
         Debug.Log(target.name + ">>Mouse0Click");
-        LivingAreaNode node = target.GetComponent<LivingAreaNode>();
+        LivingArea node = target.GetComponent<LivingArea>();
         _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
         //  MessageBoxInstance.Instance.MessageBoxShow("");
 
@@ -295,7 +292,7 @@ public class StrategySceneControl : MonoBehaviour
         {
             Debuger.Log("Enter LivingAreas");
             CurPlayer.transform.position = node.transform.position;
-            M_Strategy.InstanceLivingArea(node);
+           // M_Strategy.InstanceLivingArea(node);
 
             ShowWindowData showWindowData = new ShowWindowData();
             showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
@@ -303,11 +300,11 @@ public class StrategySceneControl : MonoBehaviour
 
             if (CurPlayer.GroupId == -1)
             {
-                M_Strategy.EnterLivingAreas(node, CurPlayer);
+              //  M_Strategy.EnterLivingAreas(node, CurPlayer);
             }
             else
             {
-                M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+              //  M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
             }
         }
     }
@@ -316,7 +313,7 @@ public class StrategySceneControl : MonoBehaviour
         Debug.Log(target.name + ">>Mouse1Click");
 
         ShowWindowData showMenuData = new ShowWindowData();
-        showMenuData.contextData = new WindowContextExtendedMenu(target.GetComponent<LivingAreaNode>(), point);
+        showMenuData.contextData = new WindowContextExtendedMenu(target.GetComponent<LivingArea>(), point);
         UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, showMenuData);
     }
 

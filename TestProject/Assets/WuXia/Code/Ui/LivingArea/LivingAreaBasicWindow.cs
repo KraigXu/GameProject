@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using LivingArea;
+using Strategy;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +24,7 @@ namespace TinyFrameWork
         [SerializeField]
         private RectTransform AnnualHistoryView;
 
-        private LivingAreaNode _curLivingArea;          //记录当前显示的生活区
+        private LivingArea _curLivingArea;          //记录当前显示的生活区
 
         protected override void SetWindowId()
         {

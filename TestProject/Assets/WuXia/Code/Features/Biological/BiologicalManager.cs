@@ -44,10 +44,12 @@ public class BiologicalManager : MonoBehaviour
 
                         GameObject biologicalgo = Instantiate(Resources.Load<GameObject>(model.Path));
                         biological = biologicalgo.AddComponent<BiologicalPerson>();
+                        
                     }
 
                     if (biological != null)
                     {
+                        biological.gameObject.name = biologicalModels[i].Name;
                         biological.Id = biologicalModels[i].Id;
                         biological.Surname = biologicalModels[i].Surname;
                         biological.Name = biologicalModels[i].Name;

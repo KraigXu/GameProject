@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using LivingArea;
 using System.Collections.Generic;
 
 public class ShowWindowData
@@ -28,18 +26,20 @@ public class BaseWindowContextData
 
 public class WindowContextLivingAreaData : BaseWindowContextData
 {
-    public List<LivingAreaNode> Nodes;
-    public WindowContextLivingAreaData(List<LivingAreaNode> nodes)
+    public string[] Names;
+    public Vector3[] Points;
+    public WindowContextLivingAreaData(string[] names,Vector3[] points)
     {
-        this.Nodes = nodes;
+        this.Names = names;
+        this.Points = points;
     }
 }
 
 public class WindowContextLivingAreaNodeData : BaseWindowContextData
 {
-    public LivingAreaNode Node;
+    public Strategy.LivingArea Node;
 
-    public WindowContextLivingAreaNodeData(LivingAreaNode node)
+    public WindowContextLivingAreaNodeData(Strategy.LivingArea node)
     {
         this.Node = node;
     }
@@ -48,10 +48,10 @@ public class WindowContextLivingAreaNodeData : BaseWindowContextData
 
 public class WindowContextExtendedMenu : BaseWindowContextData
 {
-    public LivingAreaNode LivingAreaNodeCom;
+    public Strategy.LivingArea LivingAreaNodeCom;
     public Vector3 Point;
 
-    public WindowContextExtendedMenu(LivingAreaNode node, Vector3 point)
+    public WindowContextExtendedMenu(Strategy.LivingArea node, Vector3 point)
     {
         this.LivingAreaNodeCom = node;
         this.Point = point;
