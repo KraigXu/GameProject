@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Strategy
+namespace WX
 {
     public class District : MonoBehaviour
     {
@@ -14,7 +14,7 @@ namespace Strategy
         public int GrowingModulus;
         public int SecurityModulus;
         public int Traffic;
-       public List<LivingArea> LivingAreaChilds;
+        public List<LivingArea> LivingAreaChilds;
         public Projector Projector;
         public Transform Model;
         public Material Material;

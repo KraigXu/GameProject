@@ -1,7 +1,7 @@
 ﻿using TinyFrameWork;
 using UnityEngine;
 using MapMagicDemo;
-using Strategy;
+using WX;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.AI;
 
@@ -40,9 +40,8 @@ public class StrategySceneControl : MonoBehaviour
     public LivingArea LivingAreaTarget;
 
     //---Manager          --m前缀
-    public TimeManager M_Time;
-    public BiologicalManager M_Biological;
-    public FactionManager M_Faction;
+   // public TimeManager M_Time;
+
     //----Player
     /// <summary>
     /// 记录当前进入的LivingArea，如果没有则为-1
@@ -63,7 +62,6 @@ public class StrategySceneControl : MonoBehaviour
     void Start()
     {
         StrategyInit();
-        BiologicalInit();
         PlayerDataInit();
         UiInit();
         OverInit();
@@ -79,20 +77,13 @@ public class StrategySceneControl : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// 2.人物信息加载
-    /// </summary>
-    public void BiologicalInit()
-    {
-        M_Biological.InitBiological();
-    }
 
     /// <summary>
     /// 3.获取主角
     /// </summary>
     public void PlayerDataInit()
     {
-        CurPlayer = M_Biological.GetBiological(Define.Value.PlayerId);  //选择角色
+      //  CurPlayer = M_Biological.GetBiological(Define.Value.PlayerId);  //选择角色
         CurPlayer.transform.position=new Vector3(1620.703f, 80.7618f, 629.1682f);
     }
 
@@ -140,9 +131,7 @@ public class StrategySceneControl : MonoBehaviour
 
 
 
-    #region LivingArea
 
-    /// <summary>
     /// 进入生活区
     /// </summary>
     public void LivingAreaEnter(LivingArea livingArea)
@@ -221,10 +210,6 @@ public class StrategySceneControl : MonoBehaviour
 
 
 
-    #endregion
-
-    #region ViewStatusChange
-
 
     public void WorldMapViewToCityMainView()
     {
@@ -240,10 +225,8 @@ public class StrategySceneControl : MonoBehaviour
         UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaMainWindow);
     }
 
-    #endregion
 
-    #region InitModel
-    #endregion 
+
 
     #region MouseEvents
     public void MouseEnter_PlayerMain(Transform tf)
@@ -386,7 +369,6 @@ public class StrategySceneControl : MonoBehaviour
 
     #endregion
 
-    #region Message
 
     //显示Message
     public void MessageShow(string[] values)
@@ -397,14 +379,13 @@ public class StrategySceneControl : MonoBehaviour
     {
 
     }
-    #endregion
 
 
-    #region UiOpen
+
 
     public void OpenWXCharacterPanelWidow()
     {
         UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
     }
-    #endregion
+
 }

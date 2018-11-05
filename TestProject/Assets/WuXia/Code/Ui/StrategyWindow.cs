@@ -84,34 +84,9 @@ public class StrategyWindow : UIWindowBase
 
     void Update()
     {
-        UpdateTime();
+        //UpdateTime();
     }
 
-    //----日期
-    private void UpdateTime()
-    {
-        _year.text = TimeManager.Instance.curYera.ToString();
-        _month.text = TimeManager.Instance.curMonth.ToString();
-        _day.text = TimeManager.Instance.curDay.ToString();
-        _shiChen.text = TimeManager.Instance.curGd;
-
-        if (TimeManager.Instance.curMonth == 2 || TimeManager.Instance.curMonth == 3 || TimeManager.Instance.curMonth == 4)
-        {
-            _season.text = "春";
-        }
-        else if (TimeManager.Instance.curMonth == 5 || TimeManager.Instance.curMonth == 6 || TimeManager.Instance.curMonth == 7)
-        {
-            _season.text = "夏";
-        }
-        else if (TimeManager.Instance.curMonth == 8 || TimeManager.Instance.curMonth == 9 || TimeManager.Instance.curMonth == 10)
-        {
-            _season.text = "秋";
-        }
-        else if (TimeManager.Instance.curMonth == 11 || TimeManager.Instance.curMonth == 12 || TimeManager.Instance.curMonth == 1)
-        {
-            _season.text = "冬";
-        }
-    }
     public void ShowMessage(string message)
     {
         

@@ -24,7 +24,7 @@ public class LivingAreaState
         this.Icon = icon;
     }
 
-    public void UpdateBehaviors(Strategy.LivingArea controller)
+    public void UpdateBehaviors(WX.LivingArea controller)
     {
         DoBehaviors(controller);
     }
@@ -33,7 +33,7 @@ public class LivingAreaState
     /// 顺序执行所有效果
     /// </summary>
     /// <param name="controller"></param>
-    private void DoBehaviors(Strategy.LivingArea controller)
+    private void DoBehaviors(WX.LivingArea controller)
     {
         for (int i = 0; i < behaviors.Length; i++)
         {

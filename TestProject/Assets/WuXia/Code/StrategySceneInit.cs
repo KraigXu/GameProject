@@ -1,12 +1,11 @@
-﻿using s;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine.SceneManagement;
 
-namespace Strategy
+namespace WX
 {
     public sealed class StrategySceneInit
     {
@@ -22,7 +21,7 @@ namespace Strategy
         public static MeshInstanceRenderer EnemyShotLook;
         public static MeshInstanceRenderer EnemyLook;
 
-       // public static TwoStickSettings Settings;
+        public static DemoSetting Settings;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
@@ -34,7 +33,7 @@ namespace Strategy
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District), typeof(LivingArea));
             // Create player archetype
-            //PlayerArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health));
+            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rotation), typeof(PlayerInput));
 
             //// Create an archetype for "shot spawn request" entities
             //ShotSpawnArchetype = entityManager.CreateArchetype(typeof(ShotSpawnData));
@@ -45,7 +44,7 @@ namespace Strategy
             //    typeof(Position), typeof(Rotation),
             //    typeof(MoveSpeed), typeof(MoveForward));
         }
-                // Begin a new game.
+        // Begin a new game.
         public static void NewGame()
         {
             // Access the ECS entity manager
@@ -58,7 +57,7 @@ namespace Strategy
             // We can tweak a few components to make more sense like this.
             entityManager.SetComponentData(player, new Position { Value = new float3(0.0f, 0.0f, 0.0f) });
             entityManager.SetComponentData(player, new Rotation { Value = quaternion.identity });
-          //  entityManager.SetComponentData(player, new Health { Value = Settings.playerInitialHealth });
+            //  entityManager.SetComponentData(player, new Health { Value = Settings.playerInitialHealth });
 
             // Finally we add a shared component which dictates the rendered look
             entityManager.AddSharedComponentData(player, PlayerLook);
@@ -69,12 +68,12 @@ namespace Strategy
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeAfterSceneLoad()
         {
-            //var settingsGO = GameObject.Find("Settings");
-            //if (settingsGO == null)
-            //{
-            //    SceneManager.sceneLoaded += OnSceneLoaded;
-            //    return;
-            //} 
+            var settingsGO = GameObject.Find("Settings");
+            if (settingsGO == null)
+            {
+                SceneManager.sceneLoaded += OnSceneLoaded;
+                return;
+            }
             InitializeWithScene();
         }
 
@@ -84,23 +83,32 @@ namespace Strategy
 
         public static void InitializeWithScene()
         {
-            //var settingsGO = GameObject.Find("Settings");
-            //if (settingsGO == null)
-            //{
-            //    SceneManager.sceneLoaded += OnSceneLoaded;
-            //    return;
-            //}
-           // Settings = settingsGO?.GetComponent<TwoStickSettings>();
-          //  if (!Settings)
-          //      return;
+            var settingsGO = GameObject.Find("Settings");
+            if (settingsGO == null)
+            {
+                SceneManager.sceneLoaded += OnSceneLoaded;
+                return;
+            }
+            Settings = settingsGO?.GetComponent<DemoSetting>();
+            if (!Settings)
+                return;
 
             //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
             //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
             //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
             //EnemyLook = GetLookFromPrototype("EnemyRenderPrototype");
             //EnemySpawnSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            StrategySystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-           // PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+
+            //StrategySystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            //LivingAreaBuildingSystem     --暂无开启
+
+            BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+
+            PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
+
             // World.Active.GetOrCreateManager<UpdatePlayerHUD>().SetupGameObjects();
             //World.Active.GetOrCreateManager<StrategySystem>().Update();
 

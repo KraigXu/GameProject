@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Strategy;
+using WX;
 using UnityEngine;
 using UnityEngine.UI;
 

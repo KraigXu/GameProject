@@ -37,9 +37,9 @@ public class WindowContextLivingAreaData : BaseWindowContextData
 
 public class WindowContextLivingAreaNodeData : BaseWindowContextData
 {
-    public Strategy.LivingArea Node;
+    public WX.LivingArea Node;
 
-    public WindowContextLivingAreaNodeData(Strategy.LivingArea node)
+    public WindowContextLivingAreaNodeData(WX.LivingArea node)
     {
         this.Node = node;
     }
@@ -48,10 +48,10 @@ public class WindowContextLivingAreaNodeData : BaseWindowContextData
 
 public class WindowContextExtendedMenu : BaseWindowContextData
 {
-    public Strategy.LivingArea LivingAreaNodeCom;
+    public WX.LivingArea LivingAreaNodeCom;
     public Vector3 Point;
 
-    public WindowContextExtendedMenu(Strategy.LivingArea node, Vector3 point)
+    public WindowContextExtendedMenu(WX.LivingArea node, Vector3 point)
     {
         this.LivingAreaNodeCom = node;
         this.Point = point;

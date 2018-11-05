@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
-using Strategy;
+using WX;
 
 public class BuildingObjectEdit : EditorWindowBase
 {

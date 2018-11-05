@@ -4,7 +4,7 @@ using DataAccessObject;
 using TinyFrameWork;
 using UnityEngine;
 
-namespace Strategy
+namespace WX
 {
 
     /// <summary>
@@ -32,13 +32,13 @@ namespace Strategy
         public int StableValue;
         public BuildingObject[] BuildingObjects;
 
-        public int Renown;      
+        public int Renown;
         public GameObject LivingAreaM;
         public Renderer LivingAreaRender;
         public Collider LivingAreaCollider;
-        public bool IsOpen =false;  //是否打开
+        public bool IsOpen = false;  //是否打开
 
-        public LivingAreaState[] Groups=new LivingAreaState[0];
+        public LivingAreaState[] Groups = new LivingAreaState[0];
 
     }
 }

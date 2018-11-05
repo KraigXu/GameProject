@@ -60,18 +60,18 @@ public class WXCharacterPanelWidow : UIWindowBase
         CharacterPanel.SetActive(flag);
     }
 
-    /// <summary>
-    /// 参数写至面板
-    /// </summary>
-    /// <param name="propertys"></param>
-    public void ChanageCharacterPanel(Biological biological)
-    {
-      //  this.CTName.text = biological.Model.Name;
-       // this.CTDescription.text = biological.Model.Description;
-       // this.CTRaceType.text = biological.Model.RaceType.ToString();
-        this.CTSex.text = "1";
+    ///// <summary>
+    ///// 参数写至面板
+    ///// </summary>
+    ///// <param name="propertys"></param>
+    //public void ChanageCharacterPanel(Biological biological)
+    //{
+    //  //  this.CTName.text = biological.Model.Name;
+    //   // this.CTDescription.text = biological.Model.Description;
+    //   // this.CTRaceType.text = biological.Model.RaceType.ToString();
+    //    this.CTSex.text = "1";
 
-    }
+    //}
 
 
     private void LogTogMain(bool flag)

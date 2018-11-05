@@ -652,6 +652,48 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 284ef173bbfd22c4491bb4290ccd89fc, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1001 &689523539
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211081570981538, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &788253703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,17 +1401,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f3c04174043cc41be34bf47bfa7099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SerializedData:
-    Id: 0
-    Name: 
-    Description: 
-    FactionId: 0
-    GrowingModulus: 0
-    SecurityModulus: 0
-    Traffic: 0
-    LivingAreaChilds: []
-    Projector: {fileID: 0}
-    Material: {fileID: 0}
+  Id: 0
+  Name: 
+  Description: 
+  FactionId: 0
+  GrowingModulus: 0
+  SecurityModulus: 0
+  Traffic: 0
+  LivingAreaChilds: []
+  Projector: {fileID: 0}
+  Model: {fileID: 0}
+  Material: {fileID: 0}
 --- !u!114 &1784406643
 MonoBehaviour:
   m_ObjectHideFlags: 0

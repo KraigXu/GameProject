@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-using Strategy;
+using WX;
 
 
 public class TextFunction : MonoBehaviour
