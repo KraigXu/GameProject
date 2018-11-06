@@ -86,7 +86,6 @@ namespace WX
     public enum BuildingFeatureType
     {
 
-
     }
 
     public class LivingAreaSystem : ComponentSystem

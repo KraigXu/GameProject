@@ -28,8 +28,7 @@ public class StrategySceneControl : MonoBehaviour
 
     //----CamerControl
     public OverLookCameraController LivingfAreaCameraControl;
-    public StrategyMainCamera StrategyCameraControl;                                                            //大地图相机控制
-
+ 
     //----常在UI
     public StrategyWindow StrategyControl;
     public ExtendedMenuWindow ExtendedMenuControl;
@@ -98,31 +97,31 @@ public class StrategySceneControl : MonoBehaviour
 
     public void OverInit()
     {
-        StrategyCameraControl.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
-        StrategyCameraControl.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
-        StrategyCameraControl.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
-        StrategyCameraControl.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
-        StrategyCameraControl.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
+        //StrategyCameraControl.MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
+        //StrategyCameraControl.MouseExitEvents.Add("Player", MouseExit_PlayerMain);
+        //StrategyCameraControl.MouseOverEvents.Add("Player", MouseOver_PlayerMain);
+        //StrategyCameraControl.Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
+        //StrategyCameraControl.Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
 
-        StrategyCameraControl.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
-        StrategyCameraControl.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
-        StrategyCameraControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
-        StrategyCameraControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
-        StrategyCameraControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
+        //StrategyCameraControl.MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
+        //StrategyCameraControl.MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
+        //StrategyCameraControl.MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
+        //StrategyCameraControl.Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
+        //StrategyCameraControl.Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
-        StrategyCameraControl.MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
-        StrategyCameraControl.MouseExitEvents.Add("Terrain", MouseExit_Terrain);
-        StrategyCameraControl.MouseOverEvents.Add("Terrain", MouseOver_Terrain);
-        StrategyCameraControl.Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
-        StrategyCameraControl.Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
+        //StrategyCameraControl.MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
+        //StrategyCameraControl.MouseExitEvents.Add("Terrain", MouseExit_Terrain);
+        //StrategyCameraControl.MouseOverEvents.Add("Terrain", MouseOver_Terrain);
+        //StrategyCameraControl.Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
+        //StrategyCameraControl.Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
 
-        StrategyCameraControl.MouseEnterEvents.Add("Biological", MouseEnter_Biological);
-        StrategyCameraControl.MouseExitEvents.Add("Biological", MouseExit_Biological);
-        StrategyCameraControl.MouseOverEvents.Add("Biological", MouseOver_Biological);
-        StrategyCameraControl.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
-        StrategyCameraControl.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
+        //StrategyCameraControl.MouseEnterEvents.Add("Biological", MouseEnter_Biological);
+        //StrategyCameraControl.MouseExitEvents.Add("Biological", MouseExit_Biological);
+        //StrategyCameraControl.MouseOverEvents.Add("Biological", MouseOver_Biological);
+        //StrategyCameraControl.Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
+        //StrategyCameraControl.Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
-        StrategyCameraControl.SetTarget(CurPlayer.transform);
+        //StrategyCameraControl.SetTarget(CurPlayer.transform);
         Cur3DMainCamera = Camera.main;
 
     }
