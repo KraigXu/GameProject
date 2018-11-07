@@ -630,7 +630,6 @@ namespace SQLite4Unity3d
         /// </returns>
         public int Execute(string query, params object[] args)
         {
-            Debuger.Log(query);
             var cmd = CreateCommand(query, args);
 
             if (TimeExecution)

@@ -59,7 +59,7 @@ namespace TinyFrameWork
         {
             if (_curLivingArea != null)
             {
-                StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
+              //  StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
             }
 
 

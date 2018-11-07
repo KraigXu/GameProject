@@ -124,7 +124,7 @@ namespace TinyFrameWork
                         baseWindow = uiObject.GetComponent<UIWindowBase>();
                         if (baseWindow.ID != id)
                         {
-                            Debuger.LogError(string.Format("<color=cyan>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
+                            Debuger.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
                         // Get the window target root parent
@@ -145,7 +145,7 @@ namespace TinyFrameWork
                         //  baseWindow = UGUITools.AddChild(targetRoot.gameObject, prefab).GetComponent<UIWindowBase>();
                         if (baseWindow.ID != id)
                         {
-                            Debuger.LogError(string.Format("<color=cyan>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
+                            Debuger.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
                         dicAllWindows[id] = baseWindow;
@@ -462,17 +462,17 @@ namespace TinyFrameWork
             if (windowType == UIWindowType.NormalLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UINormalLayerRoot.gameObject, false) + 1, normalWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=cyan>[UIWindowType.Normal] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.Normal] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.ForegroundLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UIForegroundLayerRoot.gameObject) + 1, popUpWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=cyan>[UIWindowType.PopUp] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.PopUp] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.BackgroundLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UIBackgroundLayerRoot.gameObject) + 1, fixedWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=cyan>[UIWindowType.Fixed] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.Fixed] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             if (baseWindow.MinDepth != needDepth)
                 UGUITools.SetTargetMinPanelDepth(baseWindow.gameObject, needDepth);
@@ -519,7 +519,7 @@ namespace TinyFrameWork
             // Show data need force clear the back seq data
             if (baseWindow.windowData.forceClearNavigation || (showData != null && showData.forceClearBackSeqData))
             {
-                Debuger.Log("<color=cyan>## [Enter the start window, reset the backSequenceData for the navigation system.]##</color>");
+                Debuger.Log("<color=#E6E6FA>## [Enter the start window, reset the backSequenceData for the navigation system.]##</color>");
                 ClearBackSequence();
             }
             else
@@ -580,7 +580,7 @@ namespace TinyFrameWork
                     backData.CloseTargetWindow = targetWindow;
                     backData.backShowTargets = navHiddenWindows;
                     backSequence.Push(backData);
-                    Debuger.Log("<color=cyan>### !!!Push new Navigation data!!! ###</color>");
+                    Debuger.Log("<color=#E6E6FA>### !!!Push new Navigation data!!! ###</color>");
                 }
             }
         }
@@ -625,7 +625,7 @@ namespace TinyFrameWork
                     {
                         if (backData.CloseTargetWindow.ID != baseWindow.ID)
                         {
-                            Debuger.Log("<color=cyan>## UICenterMasterManager : clear sequence data ##</color>");
+                            Debuger.Log("<color=#E6E6FA>## UICenterMasterManager : clear sequence data ##</color>");
                             Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.CloseTargetWindow.ID + " != " + baseWindow.ID);
                             ClearBackSequence();
                         }

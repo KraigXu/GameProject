@@ -10,27 +10,29 @@ using UnityEngine.EventSystems;
 
 namespace  WX
 {
+    public enum PlayerType
+    {
+        WatchingWar,
+        ParticipatingWar,
+        Dying
+    }
+
     public class PlayerControlSystem : ComponentSystem
     {
         public Biological CurPlayer;
+        
 
 
-        struct PlayerData
-        {
-
-#pragma warning disable 649
-            public PlayerInput Input;
-#pragma warning restore 649
-        }
         struct PlayerGroup
         {
-            public Player player;
             public PlayerInput playerInput;
             public Biological biological;
         }
 
         public static void SetupComponentData(EntityManager entityManager)
         {
+            //  CurPlayer.transform.position = new Vector3(1620.703f, 80.7618f, 629.1682f);
+           // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         }
 
         /// <summary>
@@ -39,18 +41,18 @@ namespace  WX
         /// <param name="entityManager"></param>
         public static void SetupPlayerView(EntityManager entityManager)
         {
-            DemoSetting demoSetting= GameObject.Find("Setting").GetComponent<DemoSetting>();
-            if (demoSetting.StartType == 0)
-            {
-                GameObject playerGo=GameObject.Find("Biological").transform.Find(demoSetting.PlayerId.ToString()).gameObject;
-                Player player = playerGo.AddComponent<Player>();
-                PlayerInput playerInput= playerGo.AddComponent<PlayerInput>();
-                UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-            }
-            else
-            {
+            //DemoSetting demoSetting= GameObject.Find("Settings").GetComponent<DemoSetting>();
+            //if (demoSetting.StartType == 0)
+            //{
+            //    GameObject playerGo=GameObject.Find("Biological").transform.Find(demoSetting.PlayerId.ToString()).gameObject;
+            //    Player player = playerGo.AddComponent<Player>();
+            //    PlayerInput playerInput= playerGo.AddComponent<PlayerInput>();
+            //    UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
+            //}
+            //else
+            //{
 
-            }
+            //}
         }
 
         protected override void OnCreateManager()
@@ -94,12 +96,13 @@ namespace  WX
 
         protected override void OnUpdate()
         {
-            float dt = Time.deltaTime;
-            foreach (var entity in GetEntities<PlayerGroup>())
-            {
-                CameraCheck();
-                CamerMove(entity.biological.transform);
-            }
+            Debuger.Log("PlYAER");
+            //float dt = Time.deltaTime;
+            //foreach (var entity in GetEntities<PlayerGroup>())
+            //{
+            //    CameraCheck();
+            //    //CamerMove(entity.biological.transform);
+            //}
 
 
         }
@@ -339,25 +342,25 @@ namespace  WX
 
             //判断逻辑
 
-            if (CurPlayer != null)
-            {
-                Debuger.Log("Enter LivingAreas");
-                CurPlayer.transform.position = node.transform.position;
-                // M_Strategy.InstanceLivingArea(node);
+            //if (CurPlayer != null)
+            //{
+            //    Debuger.Log("Enter LivingAreas");
+            //    CurPlayer.transform.position = node.transform.position;
+            //    // M_Strategy.InstanceLivingArea(node);
 
-                ShowWindowData showWindowData = new ShowWindowData();
-                showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+            //    ShowWindowData showWindowData = new ShowWindowData();
+            //    showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
+            //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
 
-                if (CurPlayer.GroupId == -1)
-                {
-                    //  M_Strategy.EnterLivingAreas(node, CurPlayer);
-                }
-                else
-                {
-                    //  M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
-                }
-            }
+            //    if (CurPlayer.GroupId == -1)
+            //    {
+            //        //  M_Strategy.EnterLivingAreas(node, CurPlayer);
+            //    }
+            //    else
+            //    {
+            //        //  M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+            //    }
+            //}
         }
         public void Mouse1Click_LivingAreaMain(Transform target, Vector3 point)
         {
