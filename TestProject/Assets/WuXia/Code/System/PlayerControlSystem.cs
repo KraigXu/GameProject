@@ -29,10 +29,17 @@ namespace  WX
             public Biological biological;
         }
 
+        struct  PlayerData
+        {
+            public readonly int Length;
+            public ComponentDataArray<PlayerInput> Input;
+        }
+        [Inject] private PlayerData m_Players;
+
         public static void SetupComponentData(EntityManager entityManager)
         {
             //  CurPlayer.transform.position = new Vector3(1620.703f, 80.7618f, 629.1682f);
-           // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
+            UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
         }
 
         /// <summary>
@@ -65,7 +72,6 @@ namespace  WX
         protected override void OnStartRunning()
         {
             base.OnStartRunning();
-
 
           MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
           MouseExitEvents.Add("Player", MouseExit_PlayerMain);
@@ -103,10 +109,28 @@ namespace  WX
             //    CameraCheck();
             //    //CamerMove(entity.biological.transform);
             //}
+            float dt = Time.deltaTime;
 
+            for (int i = 0; i < m_Players.Length; ++i)
+            {
+                UpdatePlayerInput(i, dt);
+            }
 
         }
+        private void UpdatePlayerInput(int i, float dt)
+        {
+            PlayerInput pi;
 
+            pi.Move.x = Input.GetAxis("Horizontal");
+            pi.Move.y = 0.0f;
+            pi.Move.z = Input.GetAxis("Vertical");
+            pi.Shoot.x =0;
+            pi.Shoot.y = 0.0f;
+            pi.Shoot.z = 0;
+            pi.FireCooldown = 0;
+
+            m_Players.Input[i] = pi;
+        }
         public delegate void OnMousePointing(Transform tf);
         public delegate void OnMousePointingPoint(Transform tf, Vector3 point);
         /// <summary>

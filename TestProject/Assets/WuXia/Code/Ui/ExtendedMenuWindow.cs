@@ -43,7 +43,7 @@ namespace TinyFrameWork
             if (_info == null) return;
 
             ExtendedMenuContentItem contentItem = _contentMenus.GetComponent<ExtendedMenuContentItem>();
-            contentItem.Wordpos = _info.Point;
+           // contentItem.Wordpos = _info.Point;
             
             _contentMenus.SetActive(true);
         }

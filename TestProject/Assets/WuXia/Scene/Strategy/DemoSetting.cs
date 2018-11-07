@@ -8,7 +8,7 @@ public class DemoSetting : MonoBehaviour
 
     public int StartType;  //开启类型 0是正常 1是观看
 
-
+    public float playerMoveSpeed = 10f;
 
     public GameObject Biological;
 

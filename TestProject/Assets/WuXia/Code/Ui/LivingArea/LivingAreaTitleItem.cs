@@ -17,7 +17,7 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
 
     public void Init(Transform target)
     {
-        this.Target = target;
+       // this.Target = target;
         LivingArea node=  target.GetComponent<LivingArea>();
         _titleText.text = node.Name;
         LivingAreaState[] states = node.Groups;
@@ -36,12 +36,11 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
 
     }
 
-    public void Init(string name,Vector3 point)
+    public void Init(string name, Camera camera3D, Camera camera2D, Vector3 target)
     {
-        IsUseTarget = false;
         _titleText.text = name;
-        Wordpos = point;
-
-
+        base.Init(camera3D, camera2D, target);
     }
+
+    
 }

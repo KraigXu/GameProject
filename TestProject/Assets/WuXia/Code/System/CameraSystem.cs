@@ -11,34 +11,39 @@ namespace WX
 
         struct PlayerData
         {
-            public Player Player;
-            public Position Position;
+            public readonly int Length;
+            public ComponentDataArray<Player> Player;
+            public ComponentDataArray<Position> Position;
         }
 
         struct CamerData
         {
             public PlayerCamera camera;
         }
+        [Inject]
+        private PlayerData _player;
 
-         private PlayerData _player;
-         private CamerData _camera;
+        private CamerData _camera;
 
         protected override void OnUpdate()
         {
-            foreach (var _player in GetEntities<PlayerData>())
+            for (int i = 0; i < _player.Length; i++)
             {
+                var playerPosition = _player.Position[i].Value;
+
                 foreach (var _camera in GetEntities<CamerData>())
                 {
                     float dt = Time.deltaTime;
                     Quaternion newrotation = Quaternion.Euler(60f, 30f, 0);
-                    Vector3 newposition = newrotation * new Vector3(0, 0, -50) + new Vector3(_player.Position.Value.x, _player.Position.Value.y, _player.Position.Value.z);
+                    Vector3 newposition = newrotation * new Vector3(0, 0, -50) + new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
                     _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
                     _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
                 }
+        ;
             }
 
 
-           
+
 
         }
 

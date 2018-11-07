@@ -85,7 +85,6 @@ namespace WX
             //}
         }
 
-
         protected override void OnUpdate()
         {
             if (curStatus == TimeSatus.Play)

@@ -38,11 +38,11 @@ namespace WX
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District), typeof(LivingArea));
-            // Create player archetype
-            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput),typeof(Position),typeof(NavMeshAgent),typeof(Player));
+            // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)
+            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(NavMeshAgent), typeof(Player));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological));
             //BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(Position), typeof(NavMeshAgent));
-           // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
+            // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
             //// Create an archetype for "shot spawn request" entities
             //ShotSpawnArchetype = entityManager.CreateArchetype(typeof(ShotSpawnData));
 
@@ -140,8 +140,8 @@ namespace WX
                     });
 
                     float3 position = new float3(0.0f, 0.0f, -1.0f);
-                    entityManager.SetComponentData(biologicalEntity,new Position{Value = position });
-                   Transform t= entityManager.GetComponentObject<Transform>(biologicalEntity);
+                    entityManager.SetComponentData(biologicalEntity, new Position { Value = position });
+                    Transform t = entityManager.GetComponentObject<Transform>(biologicalEntity);
                     t.position = Vector3.zero;
                     Debug.Log(t.position);
                 }
@@ -185,8 +185,7 @@ namespace WX
             //EnemySpawnSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
 
             //StrategySystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            // DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            // LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            
             //LivingAreaBuildingSystem     --暂无开启
 
             //  BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
@@ -216,6 +215,7 @@ namespace WX
                         }
                     }
                 }
+                DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
 
@@ -233,7 +233,7 @@ namespace WX
                 //{
 
                 //}
-
+                LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
 
@@ -264,10 +264,10 @@ namespace WX
                         YunQi = data[i].Property6
                     });
 
-                   // entityManager.AddSharedComponentData(biologicalEntity,BiologicalLook);
+                    // entityManager.AddSharedComponentData(biologicalEntity,BiologicalLook);
 
-                  //  float3 position = new float3(10f, 10f, 5.1f);
-                  //  entityManager.SetComponentData(biologicalEntity, new Position { Value = position });
+                    //  float3 position = new float3(10f, 10f, 5.1f);
+                    //  entityManager.SetComponentData(biologicalEntity, new Position { Value = position });
                     //Transform t = entityManager.GetComponentData<>()
                     //t.position = Vector3.zero;
                     //Debug.Log(t.position);
@@ -282,7 +282,7 @@ namespace WX
             {
                 Entity player = entityManager.CreateEntity(PlayerArchetype);
                 BiologicalData data = SqlData.GetDataId<BiologicalData>(settings.PlayerId);
-                entityManager.SetComponentData(player,new Biological
+                entityManager.SetComponentData(player, new Biological
                 {
                     BiologicalId = data.Id,
                     RaceId = data.RaceType,
@@ -300,18 +300,20 @@ namespace WX
                     YunQi = data.Property6
                 });
 
-                entityManager.SetComponentData(player,new Position{Value = new float3(1620.703f, 80.7618f, 629.1682f) });
+                entityManager.SetComponentData(player, new Position { Value = new float3(1620.703f, 80.7618f, 629.1682f) });
 
                 // Finally we add a shared component which dictates the rendered look
                 entityManager.AddSharedComponentData(player, PlayerLook);
-              
-                // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+
+                 UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
 
                 //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
 
+           
+            
 
 
 

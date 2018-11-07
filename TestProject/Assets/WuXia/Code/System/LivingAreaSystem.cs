@@ -93,6 +93,9 @@ namespace WX
 
         public bool CurShowUi = false;
 
+        //UI
+        private LivingAreaTitleWindow _livingAreaTitle;
+
         struct LivingAreaGroup
         {
             public LivingArea LivingAreaNode;
@@ -130,21 +133,50 @@ namespace WX
             }
         }
 
+        protected override void OnStartRunning()
+        {
+            base.OnStartRunning();
+            Debug.Log("LivingAreaSystem Start");
+        }
+
+        protected override void OnCreateManager()
+        {
+            base.OnCreateManager();
+            Debug.Log("LivingAreaSystem1");
+        }
+
         protected override void OnUpdate()
         {
+            Debug.Log(">>");
             if ( CurShowUi == false)
             {
+                Debug.Log(">1>");
                 string[] names = new string[GetEntities<LivingAreaGroup>().Length];
                 Vector3[] points = new Vector3[GetEntities<LivingAreaGroup>().Length];
                 int i = 0;
                 foreach (var c in GetEntities<LivingAreaGroup>())
                 {
+                    Debug.Log(">2>");
                     names[i] = c.LivingAreaNode.Name;
                     points[i] = c.LivingAreaNode.transform.position;
+                    i++;
                 }
-                ShowWindowData data = new ShowWindowData();
-                data.contextData = new WindowContextLivingAreaData(names, points);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
+
+
+                if (_livingAreaTitle)
+                {
+                    ShowWindowData data = new ShowWindowData();
+                    data.contextData = new WindowContextLivingAreaData(names, points);
+                    _livingAreaTitle.ShowWindow(data.contextData);
+                }
+                else
+                {
+                    ShowWindowData data = new ShowWindowData();
+                    data.contextData = new WindowContextLivingAreaData(names, points);
+                    _livingAreaTitle=(LivingAreaTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
+                }
+                
+               
                 CurShowUi = true;
             }
         }

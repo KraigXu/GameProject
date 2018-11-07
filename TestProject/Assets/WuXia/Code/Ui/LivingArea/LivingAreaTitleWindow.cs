@@ -34,7 +34,7 @@ namespace TinyFrameWork
                 Vector3[] point = data.Points;
                 for (int i = 0; i < names.Length; i++)
                 {
-                    _titleItems[i].Init(names[i], point[i]);
+                    _titleItems[i].Init(names[i],Camera.main,UICenterMasterManager.Instance._Camera,point[i]);
                 }
                 
             }
