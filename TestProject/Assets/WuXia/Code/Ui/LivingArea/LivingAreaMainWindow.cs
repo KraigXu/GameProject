@@ -56,7 +56,7 @@ public class LivingAreaMainWindow : UIWindowBase
 
         //resolve Building Data , building图生成
         GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
-         _buildings = _currentLivingArea.BuildingObjects;
+        // _buildings = _currentLivingArea.BuildingObjects;
         for (int i = 0; i < _buildings.Length; i++)
         {
             GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);

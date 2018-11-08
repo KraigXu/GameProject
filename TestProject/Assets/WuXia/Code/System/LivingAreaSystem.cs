@@ -5,6 +5,7 @@ using DataAccessObject;
 using Newtonsoft.Json;
 using TinyFrameWork;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace WX
@@ -88,6 +89,20 @@ namespace WX
 
     }
 
+    public class LivingAreaText
+    {
+        public string Name;
+        public string Description;
+
+        public LivingAreaText(string name, string description)
+        {
+            this.Name = name;
+            this.Description = description;
+        }
+    }
+
+    
+
     public class LivingAreaSystem : ComponentSystem
     {
 
@@ -98,39 +113,45 @@ namespace WX
 
         struct LivingAreaGroup
         {
-            public LivingArea LivingAreaNode;
+            public readonly int Length;
+            public ComponentDataArray<LivingArea> LivingAreaNode;
+            public ComponentDataArray<Position> LivingAreaPositon;
         }
+        [Inject]
+        private LivingAreaGroup _livingAreas;
+
+        private Dictionary<int, LivingAreaText> _livingAreaTextDic=new Dictionary<int, LivingAreaText>();
 
         public static void SetupComponentData(EntityManager entityManager)
         {
-            LivingArea[] livingAreaCom = GameObject.Find("StrategyManager").GetComponentsInChildren<LivingArea>();
-            List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
-            for (int i = 0; i < livingAreaCom.Length; i++)
-            {
-                for (int j = 0; j < livingAreaDatas.Count; j++)
-                {
-                    if (livingAreaCom[i].Id == livingAreaDatas[j].Id)
-                    {
-                        livingAreaCom[i].Name = livingAreaDatas[j].Name;
-                        livingAreaCom[i].Description = livingAreaDatas[j].Description;
-                        livingAreaCom[i].PersonNumber = livingAreaDatas[j].PersonNumber;
-                        livingAreaCom[i].CurLevel = livingAreaDatas[j].LivingAreaLevel;
-                        livingAreaCom[i].MaxLevel = livingAreaDatas[j].LivingAreaMaxLevel;
-                        livingAreaCom[i].Type = (LivingAreaType)livingAreaDatas[j].LivingAreaType;
-                        livingAreaCom[i].Money = livingAreaDatas[j].Money;
-                        livingAreaCom[i].MoneyMax = livingAreaDatas[j].MoneyMax;
-                        livingAreaCom[i].Iron = livingAreaDatas[j].Iron;
-                        livingAreaCom[i].IronMax = livingAreaDatas[j].IronMax;
-                        livingAreaCom[i].Wood = livingAreaDatas[j].Wood;
-                        livingAreaCom[i].WoodMax = livingAreaDatas[j].WoodMax;
-                        livingAreaCom[i].Food = livingAreaDatas[j].Food;
-                        livingAreaCom[i].FoodMax = livingAreaDatas[j].FoodMax;
-                        livingAreaCom[i].DefenseStrength = livingAreaDatas[j].DefenseStrength;
-                        livingAreaCom[i].StableValue = livingAreaDatas[j].StableValue;
-                        livingAreaCom[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(livingAreaDatas[j].BuildingInfoJson);
-                    }
-                }
-            }
+            //LivingArea[] livingAreaCom = GameObject.Find("StrategyManager").GetComponentsInChildren<LivingArea>();
+            //List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
+            //for (int i = 0; i < livingAreaCom.Length; i++)
+            //{
+            //    for (int j = 0; j < livingAreaDatas.Count; j++)
+            //    {
+            //        if (livingAreaCom[i].Id == livingAreaDatas[j].Id)
+            //        {
+            //            livingAreaCom[i].Name = livingAreaDatas[j].Name;
+            //            livingAreaCom[i].Description = livingAreaDatas[j].Description;
+            //            livingAreaCom[i].PersonNumber = livingAreaDatas[j].PersonNumber;
+            //            livingAreaCom[i].CurLevel = livingAreaDatas[j].LivingAreaLevel;
+            //            livingAreaCom[i].MaxLevel = livingAreaDatas[j].LivingAreaMaxLevel;
+            //            livingAreaCom[i].Type = (LivingAreaType)livingAreaDatas[j].LivingAreaType;
+            //            livingAreaCom[i].Money = livingAreaDatas[j].Money;
+            //            livingAreaCom[i].MoneyMax = livingAreaDatas[j].MoneyMax;
+            //            livingAreaCom[i].Iron = livingAreaDatas[j].Iron;
+            //            livingAreaCom[i].IronMax = livingAreaDatas[j].IronMax;
+            //            livingAreaCom[i].Wood = livingAreaDatas[j].Wood;
+            //            livingAreaCom[i].WoodMax = livingAreaDatas[j].WoodMax;
+            //            livingAreaCom[i].Food = livingAreaDatas[j].Food;
+            //            livingAreaCom[i].FoodMax = livingAreaDatas[j].FoodMax;
+            //            livingAreaCom[i].DefenseStrength = livingAreaDatas[j].DefenseStrength;
+            //            livingAreaCom[i].StableValue = livingAreaDatas[j].StableValue;
+            //            livingAreaCom[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(livingAreaDatas[j].BuildingInfoJson);
+            //        }
+            //    }
+            //}
         }
 
         protected override void OnStartRunning()
@@ -147,21 +168,34 @@ namespace WX
 
         protected override void OnUpdate()
         {
-            Debug.Log(">>");
-            if ( CurShowUi == false)
-            {
-                Debug.Log(">1>");
-                string[] names = new string[GetEntities<LivingAreaGroup>().Length];
-                Vector3[] points = new Vector3[GetEntities<LivingAreaGroup>().Length];
-                int i = 0;
-                foreach (var c in GetEntities<LivingAreaGroup>())
-                {
-                    Debug.Log(">2>");
-                    names[i] = c.LivingAreaNode.Name;
-                    points[i] = c.LivingAreaNode.transform.position;
-                    i++;
-                }
 
+            for (int i = 0; i < _livingAreas.Length; i++)
+            {
+                var livingArea = _livingAreas.LivingAreaNode[i];
+                if (livingArea.IsInternal == 1)
+                {
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+
+                }
+            }
+
+
+            if (CurShowUi == false)
+            {
+                Debuger.Log(_livingAreas.Length);
+                if (_livingAreaTextDic.Count != _livingAreas.Length)    //需要更新数据
+                {
+                    ChangeText();
+                }
+                string[] names = new string[_livingAreas.Length];
+                Vector3[] points = new Vector3[_livingAreas.Length];
+                for (int i = 0; i < _livingAreas.Length; i++)
+                {
+                    var la = _livingAreas.LivingAreaNode[i];
+                    names[i] = _livingAreaTextDic[la.Id].Name;
+                    points[i]=new Vector3(_livingAreas.LivingAreaPositon[i].Value.x, _livingAreas.LivingAreaPositon[i].Value.y, _livingAreas.LivingAreaPositon[i].Value.z); 
+
+                }
 
                 if (_livingAreaTitle)
                 {
@@ -173,11 +207,22 @@ namespace WX
                 {
                     ShowWindowData data = new ShowWindowData();
                     data.contextData = new WindowContextLivingAreaData(names, points);
-                    _livingAreaTitle=(LivingAreaTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
+                    _livingAreaTitle = (LivingAreaTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
                 }
-                
-               
                 CurShowUi = true;
+            }
+        }
+
+        private void ChangeText()
+        {
+            Debuger.Log("LivingAreaText Change");
+            _livingAreaTextDic.Clear();
+            for (int i = 0; i < _livingAreas.Length; i++)
+            {
+                var la = _livingAreas.LivingAreaNode[i];
+
+                LivingAreaData data = SqlData.GetDataId<LivingAreaData>(la.Id);
+                _livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name,data.Description));
             }
         }
 

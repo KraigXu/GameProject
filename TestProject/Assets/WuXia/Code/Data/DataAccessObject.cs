@@ -419,13 +419,15 @@ namespace DataAccessObject
         public int DefenseStrength { get; set; }            //防守强度
         public int StableValue { get; set; }                  //安定值
         public string BuildingInfoJson { get; set; }        // 建筑Json
-
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public int PositionZ { get; set; }
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
                 Id, Name, Description, PersonNumber,Money,MoneyMax,Iron,IronMax,
-                Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson
+                Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson,PositionX,PositionY,PositionZ
             };
             return objects;
         }

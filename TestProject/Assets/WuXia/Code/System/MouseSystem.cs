@@ -18,12 +18,6 @@ namespace WX
 
         protected override void OnUpdate()
         {
-            //foreach (var m in GetEntities<MouseGroup>())
-            //{
-                
-
-            //}
-
 
         }
 

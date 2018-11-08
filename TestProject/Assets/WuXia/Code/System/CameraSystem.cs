@@ -39,7 +39,6 @@ namespace WX
                     _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
                     _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
                 }
-        ;
             }
 
 

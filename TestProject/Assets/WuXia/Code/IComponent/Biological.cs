@@ -37,8 +37,10 @@ namespace WX
         public int AttackInMax;
 
         public int LocationCode;
+        public int LocationType;
         public int StatusCode;
         public int GruopId;
+
 
 
         //public int Id;

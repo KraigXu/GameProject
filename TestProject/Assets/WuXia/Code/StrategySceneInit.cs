@@ -22,6 +22,7 @@ namespace WX
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
+        public static MeshInstanceRenderer LivingAreaLook;
         public static MeshInstanceRenderer PlayerShotLook;
         public static MeshInstanceRenderer EnemyShotLook;
         public static MeshInstanceRenderer EnemyLook;
@@ -37,7 +38,9 @@ namespace WX
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            DistrictArchetype = entityManager.CreateArchetype(typeof(District), typeof(LivingArea));
+            DistrictArchetype = entityManager.CreateArchetype(typeof(District));
+            LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea),typeof(Position),typeof(Interactable));
+
             // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)
             PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(NavMeshAgent), typeof(Player));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological));
@@ -75,22 +78,22 @@ namespace WX
 
             #region districtInit
             {
-                // Entity district = entityManager.CreateEntity(DistrictArchetype);
-                List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
-                District[] districtCom = GameObject.Find("StrategyManager").GetComponentsInChildren<District>();
-                for (int i = 0; i < districtDatas.Count; i++)
-                {
-                    for (int j = 0; j < districtCom.Length; j++)
-                    {
-                        if (districtDatas[i].Id == districtCom[j].Id)
-                        {
-                            districtCom[j].Name = districtDatas[i].Name;
+                //// Entity district = entityManager.CreateEntity(DistrictArchetype);
+                //List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
+                //District[] districtCom = GameObject.Find("StrategyManager").GetComponentsInChildren<District>();
+                //for (int i = 0; i < districtDatas.Count; i++)
+                //{
+                //    for (int j = 0; j < districtCom.Length; j++)
+                //    {
+                //        if (districtDatas[i].Id == districtCom[j].Id)
+                //        {
+                //            districtCom[j].Name = districtDatas[i].Name;
 
-                            districtDatas.Remove(districtDatas[i]);
-                            continue;
-                        }
-                    }
-                }
+                //            districtDatas.Remove(districtDatas[i]);
+                //            continue;
+                //        }
+                //    }
+                //}
             }
             #endregion
 
@@ -179,13 +182,14 @@ namespace WX
 
             PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
             BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
+            LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
             //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
             //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
             //EnemyLook = GetLookFromPrototype("EnemyRenderPrototype");
             //EnemySpawnSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
 
             //StrategySystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            
+
             //LivingAreaBuildingSystem     --暂无开启
 
             //  BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
@@ -197,42 +201,70 @@ namespace WX
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
+            #region Time
+
+            {
+                WorldTimeSystem.CurWorldTime = settings.curTime;
+            }
+
+            #endregion
+
             #region districtInit
             {
-                // Entity district = entityManager.CreateEntity(DistrictArchetype);
                 List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
-                District[] districtCom = GameObject.Find("StrategyManager").GetComponentsInChildren<District>();
+
                 for (int i = 0; i < districtDatas.Count; i++)
                 {
-                    for (int j = 0; j < districtCom.Length; j++)
-                    {
-                        if (districtDatas[i].Id == districtCom[j].Id)
-                        {
-                            districtCom[j].Name = districtDatas[i].Name;
+                    Entity district = entityManager.CreateEntity(DistrictArchetype);
 
-                            districtDatas.Remove(districtDatas[i]);
-                            continue;
-                        }
-                    }
+                    entityManager.SetComponentData(district,new District
+                    {
+                         DistrictId=districtDatas[i].Id,
+                         FactionId = districtDatas[i].Id,
+                         GrowingModulus = districtDatas[i].GrowingModulus,
+                         SecurityModulus = districtDatas[i].SecurityModulus,
+                         Traffic = districtDatas[i].TrafficModulus
+                    });
                 }
-                DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+                //DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
 
             #region LivingAreaInit
-            {
-                //DemoSetting demoSetting = GameObject.Find("Setting").GetComponent<DemoSetting>();
-                //if (demoSetting.StartType == 0)
-                //{
-                //    GameObject playerGo = GameObject.Find("Biological").transform.Find(demoSetting.PlayerId.ToString()).gameObject;
-                //    Player player = playerGo.AddComponent<Player>();
-                //    PlayerInput playerInput = playerGo.AddComponent<PlayerInput>();
-                //    UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-                //}
-                //else
-                //{
 
-                //}
+            {
+                List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
+                for (int i = 0; i < livingAreaDatas.Count; i++)
+                {
+                    Entity livingArea = entityManager.CreateEntity(LivingAreaArchetype);
+                    entityManager.SetComponentData(livingArea,new LivingArea
+                    {
+                        Id=livingAreaDatas[i].Id,
+                        PersonNumber=livingAreaDatas[i].PersonNumber,
+                        CurLevel= livingAreaDatas[i].LivingAreaLevel,
+                        MaxLevel=livingAreaDatas[i].LivingAreaMaxLevel,
+                        TypeId = livingAreaDatas[i].LivingAreaType,
+                        Money = livingAreaDatas[i].Money,
+                        MoneyMax = livingAreaDatas[i].MoneyMax,
+                        Iron = livingAreaDatas[i].Iron,
+                        IronMax = livingAreaDatas[i].IronMax,
+                        Wood = livingAreaDatas[i].Wood,
+                        WoodMax = livingAreaDatas[i].WoodMax,
+                        Food = livingAreaDatas[i].Food,
+                        FoodMax = livingAreaDatas[i].FoodMax,
+                        DefenseStrength = livingAreaDatas[i].DefenseStrength,
+                        StableValue = livingAreaDatas[i].StableValue,
+                        Renown = livingAreaDatas[i].StableValue
+                    });
+
+                    entityManager.SetComponentData(livingArea,new Position
+                    {
+                        Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+                    });
+
+                    entityManager.AddSharedComponentData(livingArea, LivingAreaLook);
+                }
+
                 LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion

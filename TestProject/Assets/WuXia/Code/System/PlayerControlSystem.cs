@@ -8,7 +8,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace  WX
+namespace WX
 {
     public enum PlayerType
     {
@@ -20,7 +20,7 @@ namespace  WX
     public class PlayerControlSystem : ComponentSystem
     {
         public Biological CurPlayer;
-        
+
 
 
         struct PlayerGroup
@@ -29,10 +29,11 @@ namespace  WX
             public Biological biological;
         }
 
-        struct  PlayerData
+        struct PlayerData
         {
             public readonly int Length;
             public ComponentDataArray<PlayerInput> Input;
+            public ComponentDataArray<Biological> Biological;
         }
         [Inject] private PlayerData m_Players;
 
@@ -73,36 +74,35 @@ namespace  WX
         {
             base.OnStartRunning();
 
-          MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
-          MouseExitEvents.Add("Player", MouseExit_PlayerMain);
-          MouseOverEvents.Add("Player", MouseOver_PlayerMain);
-          Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
-          Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
+            MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
+            MouseExitEvents.Add("Player", MouseExit_PlayerMain);
+            MouseOverEvents.Add("Player", MouseOver_PlayerMain);
+            Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
+            Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
 
-          MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
-          MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
-          MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
-          Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
-          Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
+            MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
+            MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
+            MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
+            Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
+            Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
 
-          MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
-          MouseExitEvents.Add("Terrain", MouseExit_Terrain);
-          MouseOverEvents.Add("Terrain", MouseOver_Terrain);
-          Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
-          Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
+            MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
+            MouseExitEvents.Add("Terrain", MouseExit_Terrain);
+            MouseOverEvents.Add("Terrain", MouseOver_Terrain);
+            Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
+            Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
 
-          MouseEnterEvents.Add("Biological", MouseEnter_Biological);
-          MouseExitEvents.Add("Biological", MouseExit_Biological);
-          MouseOverEvents.Add("Biological", MouseOver_Biological);
-          Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
-          Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
+            MouseEnterEvents.Add("Biological", MouseEnter_Biological);
+            MouseExitEvents.Add("Biological", MouseExit_Biological);
+            MouseOverEvents.Add("Biological", MouseOver_Biological);
+            Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
+            Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
 
         }
 
 
         protected override void OnUpdate()
         {
-            Debuger.Log("PlYAER");
             //float dt = Time.deltaTime;
             //foreach (var entity in GetEntities<PlayerGroup>())
             //{
@@ -113,7 +113,20 @@ namespace  WX
 
             for (int i = 0; i < m_Players.Length; ++i)
             {
-                UpdatePlayerInput(i, dt);
+               
+
+                switch ((LocationType)m_Players.Biological[i].LocationType)
+                {
+                    case LocationType.City:
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+                        break;
+                    case LocationType.Event:
+                        break;
+                    case LocationType.Field:
+                        UpdatePlayerInput(i, dt);
+                        break;
+                }
+
             }
 
         }
@@ -124,7 +137,7 @@ namespace  WX
             pi.Move.x = Input.GetAxis("Horizontal");
             pi.Move.y = 0.0f;
             pi.Move.z = Input.GetAxis("Vertical");
-            pi.Shoot.x =0;
+            pi.Shoot.x = 0;
             pi.Shoot.y = 0.0f;
             pi.Shoot.z = 0;
             pi.FireCooldown = 0;
@@ -228,7 +241,7 @@ namespace  WX
         private void CamerMove(Transform playerTf)
         {
             Vector3 _target = Vector3.zero;
-            Camera _camera=Camera.main;
+            Camera _camera = Camera.main;
             Transform _cameraTf = _camera.GetComponent<Transform>();
             if (playerTf != null)
             {
@@ -361,7 +374,7 @@ namespace  WX
         {
             Debug.Log(target.name + ">>Mouse0Click");
             LivingArea node = target.GetComponent<LivingArea>();
-          //  _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
+            //  _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
             //  MessageBoxInstance.Instance.MessageBoxShow("");
 
             //判断逻辑
@@ -411,15 +424,15 @@ namespace  WX
 
         public void Mouse0Click_Terrain(Transform tf, Vector3 point)
         {
-         //   CurMouseEffect.transform.position = point;
+            //   CurMouseEffect.transform.position = point;
         }
 
         public void Mouse1Click_Terrain(Transform tf, Vector3 point)
         {
             Debuger.Log(">>>>>>>Terrain");
-           // CurMouseEffect.transform.position = point;
-           // CurPlayer.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
-           // NavMeshAgent agent = CurPlayer.GetComponent<NavMeshAgent>();
+            // CurMouseEffect.transform.position = point;
+            // CurPlayer.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
+            // NavMeshAgent agent = CurPlayer.GetComponent<NavMeshAgent>();
             //LineRenderer moveLine = gameObject.GetComponent<LineRenderer>();
             //if (moveLine == null)
             //{

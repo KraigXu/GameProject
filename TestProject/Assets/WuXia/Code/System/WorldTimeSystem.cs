@@ -61,17 +61,19 @@ namespace WX
         public const string Shushi = "戊时";
         public const string Haishi = "亥时";
 
-
+        public static DateTime CurWorldTime;
 
         struct TimeData
         {
-            public WorldTime WorldTimeUI;
+            public WorldTimeUi WorldTimeUI;
         }
+
 
         //public ov
 
         public static void SetupComponentData(EntityManager entityManager)
         {
+
 
             //if (IsResetTime)  //重置为当前系统时间 转化为古代时间
             //{
@@ -85,8 +87,14 @@ namespace WX
             //}
         }
 
+        struct TimeUi
+        {
+            public WorldTimeUi time;
+        }
+
         protected override void OnUpdate()
         {
+            CurTime = StrategySceneInit.Settings.curTime;
             if (curStatus == TimeSatus.Play)
             {
                 curSchedule += (Time.deltaTime * curSpeedValue);
@@ -120,23 +128,21 @@ namespace WX
                     }
 
                 }
-
-                foreach (var time in GetEntities<TimeData>())
-                {
-                    time.WorldTimeUI.Day.text = curDay.ToString();
-                    time.WorldTimeUI.Month.text = curMonth.ToString();
-                    time.WorldTimeUI.Year.text = curYera.ToString();
-                    time.WorldTimeUI.ShiChen.text = curGd;
-                    time.WorldTimeUI.JieQi.text = curJieQi;
-                    time.WorldTimeUI.Season.text = curSeason;
-
-                }
             }
             else if (curStatus == TimeSatus.Stop)
             {
             }
 
-
+            foreach (var v in GetEntities<TimeUi>())
+            {
+                v.time.Year.text = curYera.ToString();
+                v.time.Month.text = curMonth.ToString();
+                v.time.Day.text = curDay.ToString();
+                v.time.ShiChen.text = curGd.ToString();
+               // v.time.JieQi.text = "";
+                v.time.Season.text = curSeason;
+            }
+            StrategySceneInit.Settings.curTime = CurTime;
         }
 
         private string UpdateGuDaiTime()

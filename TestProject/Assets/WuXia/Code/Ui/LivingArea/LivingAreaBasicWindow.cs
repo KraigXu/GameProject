@@ -57,10 +57,10 @@ namespace TinyFrameWork
         /// </summary>
         public void OnEnterLivingArea()
         {
-            if (_curLivingArea != null)
-            {
-              //  StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
-            }
+            //if (_curLivingArea != null)
+            //{
+            //  //  StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
+            //}
 
 
         }
@@ -82,13 +82,13 @@ namespace TinyFrameWork
         {
             WindowContextLivingAreaNodeData data = (WindowContextLivingAreaNodeData)contextData;
             if (data == null) return;
-            _curLivingArea = data.Node;
-            LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Name;
-            LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
-            LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
-            LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();
-            // LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
-            LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
+            //_curLivingArea = data.Node;
+            //LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Name;
+            //LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
+            //LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
+            //LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();
+            //// LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
+            //LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
 
             //LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.ToString();
             //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();

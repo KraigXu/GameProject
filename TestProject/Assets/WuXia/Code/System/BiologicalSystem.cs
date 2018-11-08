@@ -37,10 +37,9 @@ namespace WX
 
     public enum LocationType
     {
+        Field=0,
         City = 1,
-        NotCity = 2,
-        Day = 3,
-
+        Event=3,
     }
 
     public enum WhereStatus

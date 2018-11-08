@@ -19,19 +19,19 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
     {
        // this.Target = target;
         LivingArea node=  target.GetComponent<LivingArea>();
-        _titleText.text = node.Name;
-        LivingAreaState[] states = node.Groups;
-        if (states.Length > 0)
-        {
-            GameObject buffPrefab = Define.Value.UiLivingAreaBuff;
-            for (int i = 0; i < states.Length; i++)
-            {
-                GameObject item = UGUITools.AddChild(_buffParent.gameObject, buffPrefab);
-                ThumbnailsInfo thumbnails= item.GetComponent<ThumbnailsInfo>();
-                thumbnails.ThumbnailsImage.overrideSprite = states[i].Icon;
-                thumbnails.ThumbnailsText.text = states[i].Description;
-            }
-        }
+      //  _titleText.text = node.Name;
+       // LivingAreaState[] states = node.Groups;
+        //if (states.Length > 0)
+        //{
+        //    GameObject buffPrefab = Define.Value.UiLivingAreaBuff;
+        //    for (int i = 0; i < states.Length; i++)
+        //    {
+        //        GameObject item = UGUITools.AddChild(_buffParent.gameObject, buffPrefab);
+        //        ThumbnailsInfo thumbnails= item.GetComponent<ThumbnailsInfo>();
+        //        thumbnails.ThumbnailsImage.overrideSprite = states[i].Icon;
+        //        thumbnails.ThumbnailsText.text = states[i].Description;
+        //    }
+        //}
      
 
     }
