@@ -24,17 +24,6 @@ public class StrategyWindow : UIWindowBase
     [SerializeField]
     private Text _playerSW;
 
-    [Header("Time")]
-    [SerializeField]
-    private Text _year;
-    [SerializeField]
-    private Text _month;
-    [SerializeField]
-    private Text _day;
-    [SerializeField]
-    private  Text _season;
-    [SerializeField]
-    private  Text _shiChen;
 
     [Header("MiMap")]
     public Text text6;

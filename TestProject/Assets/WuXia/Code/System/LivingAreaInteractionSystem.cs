@@ -209,7 +209,7 @@ namespace WX
             {
                 LivingAreas = m_LivibgAreas.LivingArea,
                 LivibfAreaPos = m_LivibgAreas.Position,
-                CollisionRadiusSquared = 3f,
+                CollisionRadiusSquared = 1f,
                 Biological = m_Players.Biological,
                 Positions = m_Players.Position
             }.Schedule(m_Players.Length, 1, inputDeps);

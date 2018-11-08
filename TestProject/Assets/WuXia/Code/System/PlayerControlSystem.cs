@@ -113,17 +113,17 @@ namespace WX
 
             for (int i = 0; i < m_Players.Length; ++i)
             {
-               
 
+                UpdatePlayerInput(i, dt);
                 switch ((LocationType)m_Players.Biological[i].LocationType)
                 {
                     case LocationType.City:
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+                       // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
                         break;
                     case LocationType.Event:
                         break;
                     case LocationType.Field:
-                        UpdatePlayerInput(i, dt);
+                        
                         break;
                 }
 
