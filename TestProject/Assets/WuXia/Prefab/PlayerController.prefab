@@ -894,8 +894,10 @@ GameObject:
   - component: {fileID: 95090834181775044}
   - component: {fileID: 54197315616172792}
   - component: {fileID: 136748409658907056}
-  - component: {fileID: 114160986250563778}
+  - component: {fileID: 195128013547789106}
+  - component: {fileID: 114045091843651986}
   - component: {fileID: 114800265483129540}
+  - component: {fileID: 114889004684757874}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -2389,7 +2391,7 @@ Transform:
   m_GameObject: {fileID: 1710205194362616}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1615.8948, y: 80.58638, z: 618.57104}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4535478507892520}
   - {fileID: 4007197451600278}
@@ -2486,7 +2488,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114160986250563778
+--- !u!114 &114045091843651986
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2494,9 +2496,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1710205194362616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 521b611700410be45810047f0a74e899, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  targetV3: {x: 0, y: 0, z: 0}
 --- !u!114 &114800265483129540
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2516,6 +2520,17 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.3
+--- !u!114 &114889004684757874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1710205194362616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136748409658907056
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -2705,3 +2720,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0009998977, y: 0.007603839, z: 0.00028842688}
     m_Extent: {x: 0.80239844, y: 0.23826995, z: 0.5723474}
   m_DirtyAABB: 0
+--- !u!195 &195128013547789106
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1710205194362616}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1
+  m_Acceleration: 10
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.2
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

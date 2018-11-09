@@ -69,10 +69,10 @@ namespace WX
                         }
                     }
 
-                    var b = Biological[index];
-                    b.LocationType = (int)LocationType.City;
-                    b.LocationCode = livingAreav.Id;
-                    Biological[index] = b;
+                  //  var b = Biological[index];
+                  //  b.LocationType = (int)LocationType.City;
+                  //  b.LocationCode = livingAreav.Id;
+                  //  Biological[index] = b;
                     //MessageBoxInstance.Instance.MessageBoxShow("1");
                    // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
 

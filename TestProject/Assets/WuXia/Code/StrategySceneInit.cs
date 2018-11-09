@@ -8,6 +8,7 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace WX
 {
@@ -41,9 +42,9 @@ namespace WX
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea),typeof(Position),typeof(Interactable));
 
-            // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)
-            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(NavMeshAgent), typeof(Player));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological));
+            // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)[RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))][RequireComponent(typeof(ThirdPersonCharacter))]
+            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(AICharacterControl));
             //BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(Position), typeof(NavMeshAgent));
             // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
             //// Create an archetype for "shot spawn request" entities
@@ -231,12 +232,14 @@ namespace WX
             #endregion
 
             #region LivingAreaInit
-
             {
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
                 for (int i = 0; i < livingAreaDatas.Count; i++)
                 {
-                    Entity livingArea = entityManager.CreateEntity(LivingAreaArchetype);
+                    var go = GameObject.Instantiate(Settings.LivingAreaPrefab,new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),Quaternion.identity);
+
+                    Entity livingArea = go.GetComponent<GameObjectEntity>().Entity;
+                    entityManager.AddComponent(livingArea,ComponentType.Create<LivingArea>());
                     entityManager.SetComponentData(livingArea,new LivingArea
                     {
                         Id=livingAreaDatas[i].Id,
@@ -257,12 +260,13 @@ namespace WX
                         Renown = livingAreaDatas[i].StableValue
                     });
 
-                    entityManager.SetComponentData(livingArea,new Position
-                    {
-                        Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
-                    });
+                    //entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
+                    //entityManager.SetComponentData(livingArea,new Position
+                    //{
+                    //    Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+                    //});
 
-                    entityManager.AddSharedComponentData(livingArea, LivingAreaLook);
+                    //entityManager.AddSharedComponentData(livingArea, LivingAreaLook);
                 }
 
                 LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
@@ -271,13 +275,14 @@ namespace WX
 
             #region BiologicalInit
             {
-                Debuger.Log("BiologicalInit");
-
                 List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    Entity biologicalEntity = entityManager.CreateEntity(BiologicalArchetype);
+                    var go = GameObject.Instantiate(Settings.Biological, new Vector3(1620.703f, 80.7618f, 629.1682f), quaternion.identity);
+                    Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
+
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
                     entityManager.SetComponentData(biologicalEntity, new Biological
                     {
                         BiologicalId = data[i].Id,
@@ -312,8 +317,12 @@ namespace WX
 
             #region Player
             {
-                Entity player = entityManager.CreateEntity(PlayerArchetype);
+
+                var go = GameObject.Instantiate(Settings.PlayerBiological,new Vector3(1620.703f, 80.7618f, 629.1682f),quaternion.identity);
+                var player = go.GetComponent<GameObjectEntity>().Entity;
+
                 BiologicalData data = SqlData.GetDataId<BiologicalData>(settings.PlayerId);
+                entityManager.AddComponent(player,ComponentType.Create<Biological>());
                 entityManager.SetComponentData(player, new Biological
                 {
                     BiologicalId = data.Id,
@@ -332,10 +341,15 @@ namespace WX
                     YunQi = data.Property6
                 });
 
-                entityManager.SetComponentData(player, new Position { Value = new float3(1620.703f, 80.7618f, 629.1682f) });
+                //entityManager.AddComponent(player, ComponentType.Create<Position>());
+                //entityManager.SetComponentData(player, new Position { Value = new float3(1620.703f, 80.7618f, 629.1682f) });
+
+                entityManager.AddComponent(player,ComponentType.Create<PlayerInput>());
+
+                entityManager.AddComponent(player,ComponentType.Create<Player>());
 
                 // Finally we add a shared component which dictates the rendered look
-                entityManager.AddSharedComponentData(player, PlayerLook);
+                //entityManager.AddSharedComponentData(player, PlayerLook);
 
                  UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
 

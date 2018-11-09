@@ -115,7 +115,7 @@ namespace WX
         {
             public readonly int Length;
             public ComponentDataArray<LivingArea> LivingAreaNode;
-            public ComponentDataArray<Position> LivingAreaPositon;
+            public ComponentArray<Transform> LivingAreaPositon;
         }
         [Inject]
         private LivingAreaGroup _livingAreas;
@@ -163,7 +163,6 @@ namespace WX
         protected override void OnCreateManager()
         {
             base.OnCreateManager();
-            Debug.Log("LivingAreaSystem1");
         }
 
         protected override void OnUpdate()
@@ -179,10 +178,8 @@ namespace WX
                 }
             }
 
-
             if (CurShowUi == false)
             {
-                Debuger.Log(_livingAreas.Length);
                 if (_livingAreaTextDic.Count != _livingAreas.Length)    //需要更新数据
                 {
                     ChangeText();
@@ -193,8 +190,7 @@ namespace WX
                 {
                     var la = _livingAreas.LivingAreaNode[i];
                     names[i] = _livingAreaTextDic[la.Id].Name;
-                    points[i]=new Vector3(_livingAreas.LivingAreaPositon[i].Value.x, _livingAreas.LivingAreaPositon[i].Value.y, _livingAreas.LivingAreaPositon[i].Value.z); 
-
+                    points[i] = _livingAreas.LivingAreaPositon[i].position;
                 }
 
                 if (_livingAreaTitle)

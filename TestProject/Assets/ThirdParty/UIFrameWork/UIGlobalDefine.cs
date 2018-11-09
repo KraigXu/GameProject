@@ -17,6 +17,8 @@ namespace TinyFrameWork
         WXCharacterPanelWindow,
         WXCharacterRelationshipWindow,
         WXCharacterPrestigeWindow,
+
+        TipsWindow,
     }
 
     public enum UIWindowType
@@ -132,6 +134,7 @@ namespace TinyFrameWork
             {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.WXCharacterRelationshipWindow,"UiPrefab/WXCharacterRelationshipWindow"},
             {WindowID.WXCharacterPrestigeWindow,"UiPrefab/WXCharacterPrestigeWindow"},
+            {WindowID.TipsWindow,"UiPrefab/TipsWindow" }
         };
     }
 }

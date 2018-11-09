@@ -5130,6 +5130,29 @@ Prefab:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114167890342839918, guid: 4cbf388ac99a1e044a60e9fb387be4e6,
+        type: 2}
+      propertyPath: MainCamera
+      value: 
+      objectReference: {fileID: 322339856}
+    - target: {fileID: 114167890342839918, guid: 4cbf388ac99a1e044a60e9fb387be4e6,
+        type: 2}
+      propertyPath: Biological
+      value: 
+      objectReference: {fileID: 1271197327544774, guid: feaec2dd4768d8249a430336e8256a0a,
+        type: 2}
+    - target: {fileID: 114167890342839918, guid: 4cbf388ac99a1e044a60e9fb387be4e6,
+        type: 2}
+      propertyPath: PlayerBiological
+      value: 
+      objectReference: {fileID: 1710205194362616, guid: 309af17c45929314892b7b2bf3d48d3b,
+        type: 2}
+    - target: {fileID: 114167890342839918, guid: 4cbf388ac99a1e044a60e9fb387be4e6,
+        type: 2}
+      propertyPath: LivingAreaPrefab
+      value: 
+      objectReference: {fileID: 1892701074656342, guid: 7df3066b7c78ebc48bc75a6fb08e1431,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
   m_IsPrefabAsset: 0

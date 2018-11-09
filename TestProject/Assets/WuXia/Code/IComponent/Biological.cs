@@ -41,7 +41,7 @@ namespace WX
         public int StatusCode;
         public int GruopId;
 
-
+        public Vector3 CurTarget;
 
         //public int Id;
         //public string Surname;
@@ -62,7 +62,7 @@ namespace WX
         //public string GongfaJson;
         //public string JifaJson;
 
-       
+
         //public BiologicalStatus CurStatus;
         //public WhereStatus CurWhereStatus;
         //public int GroupId = -1;                

@@ -54,7 +54,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 1
   StartType: 0
+  playerMoveSpeed: 10
   Biological: {fileID: 0}
+  MainCamera: {fileID: 0}
+  UiCamera: {fileID: 0}
 --- !u!114 &114731466343500160
 MonoBehaviour:
   m_ObjectHideFlags: 1

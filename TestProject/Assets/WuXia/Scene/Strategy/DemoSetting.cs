@@ -12,8 +12,13 @@ public class DemoSetting : MonoBehaviour
     public float playerMoveSpeed = 10f;
 
     public GameObject Biological;
+    public GameObject PlayerBiological;
+    public GameObject LivingAreaPrefab;
+
 
     public DateTime curTime = DateTime.Now;
 
+    public Camera MainCamera;
+    public Camera UiCamera;
 
 }

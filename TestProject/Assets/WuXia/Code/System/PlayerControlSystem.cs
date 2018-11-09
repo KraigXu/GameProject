@@ -6,7 +6,9 @@ using WX;
 using TinyFrameWork;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace WX
 {
@@ -20,9 +22,6 @@ namespace WX
     public class PlayerControlSystem : ComponentSystem
     {
         public Biological CurPlayer;
-
-
-
         struct PlayerGroup
         {
             public PlayerInput playerInput;
@@ -34,6 +33,7 @@ namespace WX
             public readonly int Length;
             public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<Biological> Biological;
+            public ComponentArray<AICharacterControl> AiControl;
         }
         [Inject] private PlayerData m_Players;
 
@@ -97,33 +97,89 @@ namespace WX
             MouseOverEvents.Add("Biological", MouseOver_Biological);
             Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
             Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
-
         }
-
-
         protected override void OnUpdate()
         {
-            //float dt = Time.deltaTime;
-            //foreach (var entity in GetEntities<PlayerGroup>())
-            //{
-            //    CameraCheck();
-            //    //CamerMove(entity.biological.transform);
-            //}
-            float dt = Time.deltaTime;
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
 
+            if (StrategySceneInit.Settings == null)
+                return;
+
+            float dt = Time.deltaTime;
             for (int i = 0; i < m_Players.Length; ++i)
             {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
+                RaycastHit hit;    //声明一个碰撞的点
+                Vector3 point=Vector3.zero;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        point = hit.point;
+                       // m_Players.AiControl[i].SetTarget(hit.point);
+                    }
 
-                UpdatePlayerInput(i, dt);
+                    if (Input.GetMouseButtonUp(1))
+                    {
+                    }
+
+                    if (_curlastContact == hit.collider.transform) //表示为同一个物体
+                    {
+                    }
+                    else //表示为不同物体
+                    {
+
+                    }
+                }
+                else
+                {
+                }
+
+
                 switch ((LocationType)m_Players.Biological[i].LocationType)
                 {
                     case LocationType.City:
-                       // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
                         break;
                     case LocationType.Event:
                         break;
                     case LocationType.Field:
-                        
+                        UpdatePlayerInput(i, dt);
+                        if (point != Vector3.zero)
+                        {
+                            m_Players.AiControl[i].SetTarget(point);
+                        }
+
+                        // m_Players.NavMeshAgent[i].SetDestination(move);
+                        //if (move.magnitude > 1f) move.Normalize();
+                        //move = transform.InverseTransformDirection(move);
+                        //CheckGroundStatus();
+                        //move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+                        //m_TurnAmount = Mathf.Atan2(move.x, move.z);
+                        //m_ForwardAmount = move.z;
+
+                        //ApplyExtraTurnRotation();
+
+                        //// control and velocity handling is different when grounded and airborne:
+                        //if (m_IsGrounded)
+                        //{
+                        //    HandleGroundedMovement(crouch, jump);
+                        //}
+                        //else
+                        //{
+                        //    HandleAirborneMovement();
+                        //}
+
+                        //ScaleCapsuleForCrouching(crouch);
+                        //PreventStandingInLowHeadroom();
+
+                        //// send input and other state parameters to the animator
+                        //UpdateAnimator(move);
+
+                        ////_target
+
                         break;
                 }
 
@@ -170,20 +226,46 @@ namespace WX
         public float _zoomSpeed = 500f;
         public float _damping = 3f;
         public bool _isHold = false;
+        public Vector3 _target=Vector3.zero;
 
         private void CameraCheck()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-                return;
+            //if (EventSystem.current.IsPointerOverGameObject())
+            //    return;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
             RaycastHit hit;    //声明一个碰撞的点
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.DrawLine(ray.origin, hit.point, Color.blue);
-                _clickTf.position = hit.point;
+              //  _clickTf.position = hit.point;
+
                 if (Input.GetMouseButtonUp(0))
                 {
+                    _target = hit.point;
+                    //agent.SetDestination()
+
+                    //// CurMouseEffect.transform.position = point;
+                    // CurPlayer.GetComponent<AICharacterControl>().SetTarget(CurMouseEffect.transform);
+                    //NavMeshAgent agent = CurPlayer.GetComponent<NavMeshAgent>();
+                    //LineRenderer moveLine = gameObject.GetComponent<LineRenderer>();
+                    //if (moveLine == null)
+                    //{
+                    //    moveLine = gameObject.AddComponent<LineRenderer>();
+                    //}
+
+                    //设置路径的点，
+                    //路径  导航。
+                    //NavMeshPath path = new NavMeshPath();
+                    //agent.CalculatePath(point, path);
+                    ////线性渲染设置拐点的个数。数组类型的。
+                    //moveLine.positionCount = path.corners.Length;
+                    ////线性渲染的拐点位置，数组类型，
+                    //agent.SetDestination(point);
+                    //moveLine.SetPositions(path.corners);
+
+
+
                     if (Mouse0ClickEvents.ContainsKey(hit.transform.tag))
                     {
                         Mouse0ClickEvents[hit.transform.tag](hit.collider.transform, hit.point);
@@ -220,8 +302,6 @@ namespace WX
                     }
 
                 }
-
-
                 _curlastContact = hit.collider.transform;
             }
             else

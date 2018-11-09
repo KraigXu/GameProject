@@ -13,7 +13,7 @@ namespace WX
         {
             public readonly int Length;
             public ComponentDataArray<Player> Player;
-            public ComponentDataArray<Position> Position;
+            public ComponentArray<Transform> Position;
         }
 
         struct CamerData
@@ -29,7 +29,7 @@ namespace WX
         {
             for (int i = 0; i < _player.Length; i++)
             {
-                var playerPosition = _player.Position[i].Value;
+                var playerPosition = _player.Position[i].position;
 
                 foreach (var _camera in GetEntities<CamerData>())
                 {
