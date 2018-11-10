@@ -8,7 +8,6 @@ namespace  WX
 {
     public class MouseInteractionSystem : ComponentSystem
     {
-
         struct BiologicalData
         {
             public readonly int Length;
@@ -18,29 +17,64 @@ namespace  WX
         [Inject]
         private BiologicalData _biologicalData;
 
+        struct LivingAreaData
+        {
+            public readonly int Length;
+            public ComponentDataArray<LivingArea> LivingArea;
+            public ComponentArray<BoxCollider> Collider;
+        }
+        [Inject]
+        private LivingAreaData _livingAreaData;
+
         private TipsWindow _tipsWindow;
         protected override void OnUpdate()
         {
+            if (_tipsWindow == null)
+            {
+                _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
+            }
+
+            bool flag = false;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
             RaycastHit hit;    //声明一个碰撞的点
             Vector3 point = Vector3.zero;
             if (Physics.Raycast(ray, out hit))
             {
-                for (int i = 0; i < _biologicalData.Length; i++)
+                Debug.DrawLine(ray.origin, hit.point, Color.blue);
+
+                if (Input.GetMouseButtonUp(0))
                 {
-                    Debug.DrawLine(ray.origin, hit.point, Color.blue);
-                    if (_biologicalData.Renderer[i].bounds.Contains(hit.point))
+                    for (int i = 0; i < _livingAreaData.Length; i++)
                     {
-                        if (_tipsWindow == null)
+                        if (_livingAreaData.Collider[i].bounds.Contains(hit.point))
                         {
-                            _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
+                            ExtendedMenuWindow extended=(ExtendedMenuWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow);
+                            extended.SetPoint(hit.point,_livingAreaData.LivingArea[i].Id);
+                            flag = true;
+                            return;
                         }
-                        _tipsWindow.SetTip(hit.point);
-                        Debuger.Log("ZAI ");
                     }
                 }
 
+                for (int i = 0; i < _biologicalData.Length; i++)
+                {
+                    if (_biologicalData.Renderer[i].bounds.Contains(hit.point))
+                    {
+                        _tipsWindow.SetBiologicalTip(hit.point,_biologicalData.Biological[i].BiologicalId);
+                        flag = true;
+                        return;
+                    }
+                }
+
+                
             }
+
+            if (flag == false)
+            {
+                _tipsWindow.Hide();
+            }
+           
         }
     }
 

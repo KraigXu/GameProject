@@ -87,7 +87,9 @@ public class StrategyWindow : UIWindowBase
 
     private void CharacterInformationClick()
     {
-     //   StrategySceneControl.Instance.OpenWXCharacterPanelWidow();
+        UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
+
+        // StrategySceneControl.Instance.OpenWXCharacterPanelWidow();
     }
 
     private void WugongClick()

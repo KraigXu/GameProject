@@ -26,6 +26,9 @@ public class WXCharacterPanelWidow : UIWindowBase
     public Toggle TechniqueTog;
     public GameObject TechniquePanel;
 
+    [SerializeField]
+    private Button _exitBtn;
+
 
     protected override void SetWindowId()
     {
@@ -48,6 +51,7 @@ public class WXCharacterPanelWidow : UIWindowBase
         //LogTog.onValueChanged.AddListener(LogTogMain);
         //SkillTog.onValueChanged.AddListener(SkillTogMain);
         //TechniqueTog.onValueChanged.AddListener(TechniqueTogMain);
+        _exitBtn.onClick.AddListener(Exit);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -89,4 +93,8 @@ public class WXCharacterPanelWidow : UIWindowBase
         TechniquePanel.SetActive(flag);
     }
 
+    private void Exit()
+    {
+        UICenterMasterManager.Instance.CloseWindow(this.ID);
+    }
 }

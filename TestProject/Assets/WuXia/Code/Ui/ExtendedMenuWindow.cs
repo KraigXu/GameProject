@@ -10,12 +10,15 @@ namespace TinyFrameWork
         private GameObject _contentMenus;
 
         private WindowContextExtendedMenu _info;
+        [SerializeField]
+        private BaseCorrespondenceByModelControl _contentUi;
+
+        private int _id;
+
         protected override void SetWindowId()
         {
             this.ID = WindowID.ExtendedMenuWindow;
-            
         }
-
         protected override void InitWindowCoreData()
         {
             windowData.windowType = UIWindowType.BackgroundLayer;
@@ -33,7 +36,7 @@ namespace TinyFrameWork
             _contentMenus.transform.Find("CityIntelligence").GetComponent<Button>().onClick.AddListener(CityIntelligenceButton);
             _contentMenus.transform.Find("PowerIntelligence").GetComponent<Button>().onClick.AddListener(PowerIntelligenceButton);
             _contentMenus.transform.Find("AreaIntelligence").GetComponent<Button>().onClick.AddListener(AreaIntelligenceButton);
-            _contentMenus.SetActive(false);
+            _contentMenus.SetActive(true);
         }
 
 
@@ -42,18 +45,25 @@ namespace TinyFrameWork
              _info = (WindowContextExtendedMenu)contextData;
             if (_info == null) return;
 
-            ExtendedMenuContentItem contentItem = _contentMenus.GetComponent<ExtendedMenuContentItem>();
+          //  ExtendedMenuContentItem contentItem = _contentMenus.GetComponent<ExtendedMenuContentItem>();
            // contentItem.Wordpos = _info.Point;
             
             _contentMenus.SetActive(true);
         }
 
+        public void SetPoint(Vector3 point,int id)
+        {
+            _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera,point);
+            _id = id;
+        }
+
+
         public void CityIntelligenceButton()
         {
-            ShowWindowData data=new ShowWindowData();
-            data.contextData = new WindowContextLivingAreaNodeData(_info.LivingAreaNodeCom);
+            //ShowWindowData data=new ShowWindowData();
+            //data.contextData = new WindowContextLivingAreaNodeData(_info.LivingAreaNodeCom);
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaBasicWindow, data);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaBasicWindow);
 
             DestroyWindow();
         }

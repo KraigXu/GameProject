@@ -59,9 +59,11 @@ namespace TinyFrameWork
         {
             //if (_curLivingArea != null)
             //{
-            //  //  StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
+            //     StrategySceneControl.Instance.LivingAreaEnter(_curLivingArea);
             //}
 
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+            UICenterMasterManager.Instance.CloseWindow(this.ID);
 
         }
 
