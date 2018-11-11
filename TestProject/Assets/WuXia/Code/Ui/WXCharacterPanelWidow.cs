@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TinyFrameWork;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,6 +93,12 @@ public class WXCharacterPanelWidow : UIWindowBase
     private void TechniqueTogMain(bool flag)
     {
         TechniquePanel.SetActive(flag);
+        //if (string.IsNullOrEmpty(value)==false)
+        //{
+
+        //}
+
+
     }
 
     private void Exit()
