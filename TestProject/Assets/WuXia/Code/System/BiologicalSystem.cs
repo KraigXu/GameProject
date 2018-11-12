@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
 using Unity.Entities;
@@ -135,11 +136,37 @@ namespace WX
             //}
         }
 
+        struct BiologicalData
+        {
+            public readonly int Length;
+            public ComponentDataArray<Biological> Biological;
+        }
+        [Inject] private BiologicalData _data;
+
+        struct BiologicalPanel
+        {
+            public readonly int Length;
+            public ComponentArray<BiologicalUi> Ui;
+        }
+
+        [Inject] private BiologicalPanel _panel;
+
         protected override void OnUpdate()
         {
-            
+            //Change Property
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var b = _data.Biological[i];
 
+                b.Jing = Convert.ToInt16(b.Tizhi + (b.Wuxing * 0.3f) + (b.Lidao * 0.5f));
+                b.Qi= Convert.ToInt16(b.Jingshen + (b.Tizhi * 0.5f) + (b.Wuxing * 0.5f));
+                b.Shen = Convert.ToInt16(b.Wuxing + b.Lidao * 0.3);
+                _data.Biological[i] = b;
+            }
 
+            //foreach (var VARIABLE in BiologicalPanel)
+            //{
+            //}
         }
 
         private void spawn()

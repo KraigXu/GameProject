@@ -506,15 +506,29 @@ namespace DataAccessObject
 
     public class RaceData : BaseData
     {
-        public int RaceId { get; set; }
-        public int RaceRangeId { get; set; }
-        public int RaceType { get; set; }
-
+        public int RaceCode { get; set; }
+        public string RaceName { get; set; }
         public override object[] GetValues()
         {
             throw new NotImplementedException();
         }
     }
+    public class SexData : BaseData
+    {
+        public int SexCode { get; set; }
+        public string SexName { get; set; }
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                SexCode,SexName
+            };
+            return objects;
+        }
+    }
+
+   
+
 
 
     /// <summary>
@@ -554,7 +568,7 @@ namespace DataAccessObject
         public string GongfaJson { get; set; }                   //功法JSON
         public string JifaJson { get; set; }                     //技法JSON
         
-
+        public int XiangXing { get; set; }
         public override object[] GetValues()
         {
             object[] objects = new object[]

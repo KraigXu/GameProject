@@ -86,8 +86,6 @@ namespace TinyFrameWork
                     BaseWindowContextData contextData = showData == null ? null : showData.contextData;
                     baseWindow.ReadyToShowWindow(contextData);
                 }
-
-
             }
             return baseWindow;
         }

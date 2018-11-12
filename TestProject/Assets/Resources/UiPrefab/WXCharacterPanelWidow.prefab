@@ -4820,7 +4820,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224822584341209472}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.5575874
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8312,8 +8312,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114352647111188110}
   m_HandleRect: {fileID: 224847481465991680}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9999999
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9621,6 +9621,14 @@ MonoBehaviour:
   TechniqueTog: {fileID: 0}
   TechniquePanel: {fileID: 0}
   _exitBtn: {fileID: 114718534154974400}
+  _tizhitxt: {fileID: 114513901098985534}
+  _lidaotxt: {fileID: 114213427133313122}
+  _jingshentxt: {fileID: 114796431906113614}
+  _lingdongtxt: {fileID: 114679509756575930}
+  _wuxingtxt: {fileID: 114801629962566690}
+  _jingtxt: {fileID: 114537968796952340}
+  _qitxt: {fileID: 114302640455183942}
+  _shentxt: {fileID: 114302640455183942}
 --- !u!114 &114892745492626472
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10231,8 +10239,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114653372357936016}
   m_HandleRect: {fileID: 224269486761103234}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12424,7 +12432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000001442088, y: 0.000032665426}
+  m_AnchoredPosition: {x: -0.000001442088, y: 1.4166632}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224244370747494186
@@ -13673,7 +13681,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000025752113, y: -0.00002887035}
+  m_AnchoredPosition: {x: 0.0000046397686, y: 0.0000015123269}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224489895535703812

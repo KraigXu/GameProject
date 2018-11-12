@@ -31,6 +31,24 @@ public class WXCharacterPanelWidow : UIWindowBase
     [SerializeField]
     private Button _exitBtn;
 
+    [Header("Property")]
+    [SerializeField]
+    private Text _tizhitxt;
+    [SerializeField]
+    private Text _lidaotxt;
+    [SerializeField]
+    private Text _jingshentxt;
+    [SerializeField]
+    private Text _lingdongtxt;
+    [SerializeField]
+    private Text _wuxingtxt;
+
+    [SerializeField]
+    private Text _jingtxt;
+    [SerializeField]
+    private Text _qitxt;
+    [SerializeField]
+    private Text _shentxt;
 
     protected override void SetWindowId()
     {
@@ -44,41 +62,36 @@ public class WXCharacterPanelWidow : UIWindowBase
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
-        windowData.animationType = UIWindowAnimationType.None;
     }
 
     public override void InitWindowOnAwake()
     {
-        //CharacterTog.onValueChanged.AddListener(CharacterTogMain);
-        //LogTog.onValueChanged.AddListener(LogTogMain);
-        //SkillTog.onValueChanged.AddListener(SkillTogMain);
-        //TechniqueTog.onValueChanged.AddListener(TechniqueTogMain);
         _exitBtn.onClick.AddListener(Exit);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
         base.BeforeShowWindow(contextData);
+        if (contextData != null)
+        {
+            BiologicalUiInData data = (BiologicalUiInData)contextData;
+            _tizhitxt.text = data.Tizhi.ToString();
+            _lidaotxt.text = data.Lidao.ToString();
+            _jingshentxt.text = data.Jingshen.ToString();
+            _lingdongtxt.text = data.Lingdong.ToString();
+            _wuxingtxt.text = data.Wuxing.ToString();
+            _jingtxt.text = data.Jing.ToString();
+            _qitxt.text = data.Qi.ToString();
+            _shentxt.text = data.Shen.ToString();
+
+        }
+
     }
 
     private void CharacterTogMain(bool flag)
     {
         CharacterPanel.SetActive(flag);
     }
-
-    ///// <summary>
-    ///// 参数写至面板
-    ///// </summary>
-    ///// <param name="propertys"></param>
-    //public void ChanageCharacterPanel(Biological biological)
-    //{
-    //  //  this.CTName.text = biological.Model.Name;
-    //   // this.CTDescription.text = biological.Model.Description;
-    //   // this.CTRaceType.text = biological.Model.RaceType.ToString();
-    //    this.CTSex.text = "1";
-
-    //}
-
 
     private void LogTogMain(bool flag)
     {
@@ -95,10 +108,7 @@ public class WXCharacterPanelWidow : UIWindowBase
         TechniquePanel.SetActive(flag);
         //if (string.IsNullOrEmpty(value)==false)
         //{
-
         //}
-
-
     }
 
     private void Exit()

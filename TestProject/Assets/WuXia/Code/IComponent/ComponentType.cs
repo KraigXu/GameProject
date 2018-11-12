@@ -48,6 +48,94 @@ namespace WX
         //public Material Material;
     }
 
+    public struct Biological : IComponentData
+    {
+        public int BiologicalId;
+        public int RaceId;
+        public int SexId;
+        public int Age;
+        public int AgeMax;
+        public int Prestige;
+        public int Influence;
+        public int Disposition;
+
+        public int Tizhi;
+        public int Lidao;
+        public int Jingshen;
+        public int Lingdong;
+        public int Wuxing;
+
+        public int Jing;
+        public float RestoreJing;
+        public int Qi;
+        public float RestoreQi;
+        public int Shen;
+        public float RestoreShen;
+
+        public int WaigongMin;
+        public int WaigongMax;
+        public int NeigongMin;
+        public int NeigongMax;
+
+        public int StrategyMoveSpeed;
+        public int FireMoveSpeed;
+        public int ShanBi;
+
+        public int LocationCode;
+        public int LocationType;
+
+       // public int Huti;
+
+        //public int GenGu;
+        //public int LingMin;
+        //public int DongCha;
+        //public int JiYi;
+        //public int WuXing;
+        //public int YunQi;
+
+        ////public DateTime TimeAppearance;
+        ////public DateTime TimeEnd;
+
+        
+        
+        //public int Magic;
+        //public int CurMagic;
+        //public int AttackOutMin;
+        //public int AttackOutMax;
+        //public int AttackInMin;
+        //public int AttackInMax;
+
+       
+        //public int StatusCode;
+        //public int GruopId;
+
+        public Vector3 CurTarget;
+
+        //public int Id;
+        //public string Surname;
+        //public string Name;
+        //public string AvatarCode;
+        //public string ModeCode;
+        //public string Title;
+        //public string Description;
+        //public RaceType RaceType;
+        //public SexType Sex;
+
+        //public string FeatureIds;
+        //public string Location;
+        //public LocationType LocationType;
+        //public string ArticleJson;
+        //public string EquipmentJson;
+        //public string LanguageJson;
+        //public string GongfaJson;
+        //public string JifaJson;
+
+        //public BiologicalStatus CurStatus;
+        //public WhereStatus CurWhereStatus;
+        //public int GroupId = -1;                
+        //public Sprite Avatar;
+    }
+
     public struct LivingArea : IComponentData
     {
 

@@ -77,96 +77,6 @@ namespace WX
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            #region districtInit
-            {
-                //// Entity district = entityManager.CreateEntity(DistrictArchetype);
-                //List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
-                //District[] districtCom = GameObject.Find("StrategyManager").GetComponentsInChildren<District>();
-                //for (int i = 0; i < districtDatas.Count; i++)
-                //{
-                //    for (int j = 0; j < districtCom.Length; j++)
-                //    {
-                //        if (districtDatas[i].Id == districtCom[j].Id)
-                //        {
-                //            districtCom[j].Name = districtDatas[i].Name;
-
-                //            districtDatas.Remove(districtDatas[i]);
-                //            continue;
-                //        }
-                //    }
-                //}
-            }
-            #endregion
-
-            #region LivingAreaInit
-            {
-                //DemoSetting demoSetting = GameObject.Find("Setting").GetComponent<DemoSetting>();
-                //if (demoSetting.StartType == 0)
-                //{
-                //    GameObject playerGo = GameObject.Find("Biological").transform.Find(demoSetting.PlayerId.ToString()).gameObject;
-                //    Player player = playerGo.AddComponent<Player>();
-                //    PlayerInput playerInput = playerGo.AddComponent<PlayerInput>();
-                //    UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-                //}
-                //else
-                //{
-
-                //}
-
-            }
-            #endregion
-
-            #region BiologicalInit
-            {
-                Debuger.Log("BiologicalInit");
-
-                List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
-
-                for (int i = 0; i < data.Count; i++)
-                {
-                    Entity biologicalEntity = entityManager.CreateEntity(BiologicalArchetype);
-                    entityManager.SetComponentData(biologicalEntity, new Biological
-                    {
-                        BiologicalId = data[i].Id,
-                        RaceId = data[i].RaceType,
-                        SexId = data[i].Sex,
-                        Age = data[i].Age,
-                        AgeMax = data[i].AgeMax,
-                        Prestige = data[i].Prestige,
-                        Influence = data[i].Influence,
-                        Disposition = data[i].Disposition,
-                        GenGu = data[i].Property1,
-                        LingMin = data[i].Property2,
-                        DongCha = data[i].Property3,
-                        JiYi = data[i].Property4,
-                        WuXing = data[i].Property5,
-                        YunQi = data[i].Property6
-                    });
-
-                    float3 position = new float3(0.0f, 0.0f, -1.0f);
-                    entityManager.SetComponentData(biologicalEntity, new Position { Value = position });
-                    Transform t = entityManager.GetComponentObject<Transform>(biologicalEntity);
-                    t.position = Vector3.zero;
-                    Debug.Log(t.position);
-                }
-
-                //biologicalEntity.en
-            }
-            #endregion
-
-            #region Player
-            {
-                PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-                Entity player = entityManager.CreateEntity(PlayerArchetype);
-
-                // Finally we add a shared component which dictates the rendered look
-                entityManager.AddSharedComponentData(player, PlayerLook);
-
-
-                PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
-            }
-            #endregion
-
         }
 
         public static void InitializeWithScene()
@@ -293,12 +203,14 @@ namespace WX
                         Prestige = data[i].Prestige,
                         Influence = data[i].Influence,
                         Disposition = data[i].Disposition,
-                        GenGu = data[i].Property1,
-                        LingMin = data[i].Property2,
-                        DongCha = data[i].Property3,
-                        JiYi = data[i].Property4,
-                        WuXing = data[i].Property5,
-                        YunQi = data[i].Property6
+                        Tizhi = data[i].Property1,
+                        Lidao = data[i].Property2,
+                        Jingshen = data[i].Property3,
+                        Lingdong = data[i].Property4,
+                        Wuxing = data[i].Property5,
+                        Jing = data[i].Property6,
+                        Qi = data[i].Property6,
+                        Shen = data[i].Property6
                     });
 
                     // entityManager.AddSharedComponentData(biologicalEntity,BiologicalLook);
@@ -333,12 +245,16 @@ namespace WX
                     Prestige = data.Prestige,
                     Influence = data.Influence,
                     Disposition = data.Disposition,
-                    GenGu = data.Property1,
-                    LingMin = data.Property2,
-                    DongCha = data.Property3,
-                    JiYi = data.Property4,
-                    WuXing = data.Property5,
-                    YunQi = data.Property6
+                    Tizhi = data.Property1,
+                    Lidao = data.Property2,
+                    Jingshen = data.Property3,
+                    Lingdong = data.Property4,
+                    Wuxing = data.Property5,
+                    Jing = data.Property6,
+                    Qi = data.Property6,
+                    Shen = data.Property6,
+                    LocationType = data.LocationType,
+                    LocationCode = data.LocationType
                 });
 
                 //entityManager.AddComponent(player, ComponentType.Create<Position>());
@@ -351,17 +267,13 @@ namespace WX
                 // Finally we add a shared component which dictates the rendered look
                 //entityManager.AddSharedComponentData(player, PlayerLook);
 
-                 UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
-
+                // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+                
+                
                 //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
-
-           
-            
-
-
 
             var sceneSwitcher = GameObject.Find("SceneSwitcher");
             if (sceneSwitcher != null)

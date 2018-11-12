@@ -22,11 +22,7 @@ namespace WX
     public class PlayerControlSystem : ComponentSystem
     {
         public Biological CurPlayer;
-        struct PlayerGroup
-        {
-            public PlayerInput playerInput;
-            public Biological biological;
-        }
+
 
         struct PlayerData
         {
@@ -35,69 +31,12 @@ namespace WX
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<AICharacterControl> AiControl;
         }
-        [Inject] private PlayerData m_Players;
 
-        public static void SetupComponentData(EntityManager entityManager)
-        {
-            //  CurPlayer.transform.position = new Vector3(1620.703f, 80.7618f, 629.1682f);
-            UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-        }
+        [Inject]
+        private PlayerData m_Players;
 
-        /// <summary>
-        /// 显示用户数据
-        /// </summary>
-        /// <param name="entityManager"></param>
-        public static void SetupPlayerView(EntityManager entityManager)
-        {
-            //DemoSetting demoSetting= GameObject.Find("Settings").GetComponent<DemoSetting>();
-            //if (demoSetting.StartType == 0)
-            //{
-            //    GameObject playerGo=GameObject.Find("Biological").transform.Find(demoSetting.PlayerId.ToString()).gameObject;
-            //    Player player = playerGo.AddComponent<Player>();
-            //    PlayerInput playerInput= playerGo.AddComponent<PlayerInput>();
-            //    UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow).GetComponent<StrategyWindow>();
-            //}
-            //else
-            //{
+        private StrategyWindow _strategyWindow;
 
-            //}
-        }
-
-        protected override void OnCreateManager()
-        {
-            Debuger.Log(">>>");
-            //m_MainGroup = GetComponentGroup(typeof(District));
-        }
-
-
-        protected override void OnStartRunning()
-        {
-            base.OnStartRunning();
-
-            MouseEnterEvents.Add("Player", MouseEnter_PlayerMain);
-            MouseExitEvents.Add("Player", MouseExit_PlayerMain);
-            MouseOverEvents.Add("Player", MouseOver_PlayerMain);
-            Mouse0ClickEvents.Add("Player", Mouse0Click_PlayerMain);
-            Mouse1ClickEvents.Add("Player", Mouse1Click_PlayerMain);
-
-            MouseEnterEvents.Add("LivingArea", MouseEnter_LivingAreaMain);
-            MouseExitEvents.Add("LivingArea", MouseExit_LivingAreaMain);
-            MouseOverEvents.Add("LivingArea", MouseOver_LivingAreaMain);
-            Mouse0ClickEvents.Add("LivingArea", Mouse0Click_LivingAreaMain);
-            Mouse1ClickEvents.Add("LivingArea", Mouse1Click_LivingAreaMain);
-
-            MouseEnterEvents.Add("Terrain", MouseEnter_Terrain);
-            MouseExitEvents.Add("Terrain", MouseExit_Terrain);
-            MouseOverEvents.Add("Terrain", MouseOver_Terrain);
-            Mouse0ClickEvents.Add("Terrain", Mouse0Click_Terrain);
-            Mouse1ClickEvents.Add("Terrain", Mouse1Click_Terrain);
-
-            MouseEnterEvents.Add("Biological", MouseEnter_Biological);
-            MouseExitEvents.Add("Biological", MouseExit_Biological);
-            MouseOverEvents.Add("Biological", MouseOver_Biological);
-            Mouse0ClickEvents.Add("Biological", Mouse0Click_Biological);
-            Mouse1ClickEvents.Add("Biological", Mouse1Click_Biological);
-        }
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject())
@@ -120,7 +59,6 @@ namespace WX
                         point = hit.point;
                        // m_Players.AiControl[i].SetTarget(hit.point);
                     }
-
                     if (Input.GetMouseButtonUp(1))
                     {
                     }
@@ -136,8 +74,6 @@ namespace WX
                 else
                 {
                 }
-
-
                 switch ((LocationType)m_Players.Biological[i].LocationType)
                 {
                     case LocationType.City:
@@ -185,7 +121,71 @@ namespace WX
 
             }
 
+
+            if (_strategyWindow == null)
+            {
+                ShowWindowData data = new ShowWindowData();
+                data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent);
+                _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
+            }
+
         }
+        //-----------------------UI
+        private void PlayerInfoUi()
+        {
+
+            if (m_Players.Length == 0)
+            {
+                return;
+            }
+            var biological = m_Players.Biological[0];
+            BiologicalData data = SqlData.GetDataId<BiologicalData>(m_Players.Biological[0].BiologicalId);
+
+            ShowWindowData showWindowData = new ShowWindowData();
+            BiologicalUiInData uidata=new BiologicalUiInData();
+            uidata.Age = biological.Age;
+            uidata.AgeMax = biological.AgeMax;
+            uidata.Tizhi = biological.Tizhi;
+            uidata.Lidao = biological.Lidao;
+            uidata.Jingshen = biological.Jingshen;
+            uidata.Lingdong = biological.Lingdong;
+            uidata.Wuxing = biological.Wuxing;
+            uidata.Jing = biological.Jing;
+            uidata.Qi = biological.Qi;
+            uidata.Shen = biological.Shen;
+
+            uidata.BiologicalName = data.Surname+data.Name;
+            uidata.Race = ComFun.GetRaceType((RaceType)data.RaceType);
+            uidata.Sex = ComFun.GetSex((SexType) data.Sex);
+            uidata.Prestige = ComFun.GetPrestige(data.Prestige);
+            uidata.Influence = data.Influence.ToString();
+            uidata.Disposition = data.Disposition.ToString();
+
+            showWindowData.contextData = uidata;
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);
+
+        }
+
+        private void ShowGFUi()
+        {
+
+        }
+
+        private void TechnologyUi()
+        {
+
+        }
+
+        private void LogEvent()
+        {
+
+        }
+
+        private void MapEvent()
+        {
+
+        }
+
         private void UpdatePlayerInput(int i, float dt)
         {
             PlayerInput pi;
@@ -200,16 +200,6 @@ namespace WX
 
             m_Players.Input[i] = pi;
         }
-        public delegate void OnMousePointing(Transform tf);
-        public delegate void OnMousePointingPoint(Transform tf, Vector3 point);
-        /// <summary>
-        /// 当标识的鼠标进入时
-        /// </summary>
-        public Dictionary<string, OnMousePointing> MouseEnterEvents = new Dictionary<string, OnMousePointing>();
-        public Dictionary<string, OnMousePointing> MouseExitEvents = new Dictionary<string, OnMousePointing>();
-        public Dictionary<string, OnMousePointing> MouseOverEvents = new Dictionary<string, OnMousePointing>();
-        public Dictionary<string, OnMousePointingPoint> Mouse0ClickEvents = new Dictionary<string, OnMousePointingPoint>();
-        public Dictionary<string, OnMousePointingPoint> Mouse1ClickEvents = new Dictionary<string, OnMousePointingPoint>();
 
         public Transform _curlastContact;  //当前鼠标之前指向到的物体
         public Transform _clickTf;        //点击时效果坐标
@@ -266,40 +256,40 @@ namespace WX
 
 
 
-                    if (Mouse0ClickEvents.ContainsKey(hit.transform.tag))
-                    {
-                        Mouse0ClickEvents[hit.transform.tag](hit.collider.transform, hit.point);
-                    }
+                    //if (Mouse0ClickEvents.ContainsKey(hit.transform.tag))
+                    //{
+                    //    Mouse0ClickEvents[hit.transform.tag](hit.collider.transform, hit.point);
+                    //}
                 }
 
                 if (Input.GetMouseButtonUp(1))
                 {
-                    if (Mouse1ClickEvents.ContainsKey(hit.transform.tag))
-                    {
-                        Mouse1ClickEvents[hit.transform.tag](hit.collider.transform, hit.point);
-                    }
+                    //if (Mouse1ClickEvents.ContainsKey(hit.transform.tag))
+                    //{
+                    //    Mouse1ClickEvents[hit.transform.tag](hit.collider.transform, hit.point);
+                    //}
                 }
 
                 if (_curlastContact == hit.collider.transform) //表示为同一个物体
                 {
-                    if (MouseOverEvents.ContainsKey(hit.collider.tag))
-                    {
-                        MouseOverEvents[hit.transform.tag](hit.collider.transform);
-                    }
+                    //if (MouseOverEvents.ContainsKey(hit.collider.tag))
+                    //{
+                    //    MouseOverEvents[hit.transform.tag](hit.collider.transform);
+                    //}
                 }
                 else //表示为不同物体
                 {
-                    if (MouseEnterEvents.ContainsKey(hit.transform.tag))
-                    {
-                        MouseEnterEvents[hit.transform.tag](hit.collider.transform);
-                    }
-                    if (_curlastContact != null)
-                    {
-                        if (MouseExitEvents.ContainsKey(_curlastContact.tag))
-                        {
-                            MouseExitEvents[_curlastContact.tag](_curlastContact);
-                        }
-                    }
+                    //if (MouseEnterEvents.ContainsKey(hit.transform.tag))
+                    //{
+                    //    MouseEnterEvents[hit.transform.tag](hit.collider.transform);
+                    //}
+                    //if (_curlastContact != null)
+                    //{
+                    //    if (MouseExitEvents.ContainsKey(_curlastContact.tag))
+                    //    {
+                    //        MouseExitEvents[_curlastContact.tag](_curlastContact);
+                    //    }
+                    //}
 
                 }
                 _curlastContact = hit.collider.transform;
@@ -308,14 +298,19 @@ namespace WX
             {
                 if (_curlastContact != null)
                 {
-                    if (MouseExitEvents.ContainsKey(_curlastContact.tag))
-                    {
-                        MouseExitEvents[_curlastContact.tag](_curlastContact);
-                    }
+                    //if (MouseExitEvents.ContainsKey(_curlastContact.tag))
+                    //{
+                    //    MouseExitEvents[_curlastContact.tag](_curlastContact);
+                    //}
                 }
                 _curlastContact = null;
             }
 
+        }
+
+        public void ShowPlayerUi()
+        {
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
         }
 
         private void CamerMove(Transform playerTf)
@@ -417,39 +412,7 @@ namespace WX
         }
 
 
-        public void MouseEnter_PlayerMain(Transform tf)
-        {
-            Debug.Log(tf.name + ">>MouseEnter");
-        }
-        public void MouseExit_PlayerMain(Transform tf)
-        {
-            Debug.Log(tf.name + ">>MouseExit");
-        }
-        public void MouseOver_PlayerMain(Transform tf)
-        {
-            Debug.Log(tf.name + ">> MouseOver");
-        }
-        public void Mouse0Click_PlayerMain(Transform tf, Vector3 point)
-        {
-            Debug.Log(tf.name + ">>Mouse0Click");
-        }
-        public void Mouse1Click_PlayerMain(Transform tf, Vector3 point)
-        {
-            Debug.Log(tf.name + ">>Mouse1Click");
-        }
 
-        public void MouseEnter_LivingAreaMain(Transform tf)
-        {
-            Debug.Log(tf.name + ">>MouseEnter");
-        }
-        public void MouseExit_LivingAreaMain(Transform tf)
-        {
-            Debug.Log(tf.name + ">>MouseExit");
-        }
-        public void MouseOver_LivingAreaMain(Transform target)
-        {
-            Debug.Log(target.name + ">> MouseOver");
-        }
         public void Mouse0Click_LivingAreaMain(Transform target, Vector3 point)
         {
             Debug.Log(target.name + ">>Mouse0Click");
@@ -479,6 +442,7 @@ namespace WX
             //    }
             //}
         }
+
         public void Mouse1Click_LivingAreaMain(Transform target, Vector3 point)
         {
             Debug.Log(target.name + ">>Mouse1Click");
@@ -486,25 +450,6 @@ namespace WX
             ShowWindowData showMenuData = new ShowWindowData();
             showMenuData.contextData = new WindowContextExtendedMenu(target.GetComponent<LivingArea>(), point);
             UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, showMenuData);
-        }
-
-        public void MouseEnter_Terrain(Transform tf)
-        {
-        }
-
-        public void MouseExit_Terrain(Transform tf)
-        {
-
-        }
-
-        public void MouseOver_Terrain(Transform tf)
-        {
-
-        }
-
-        public void Mouse0Click_Terrain(Transform tf, Vector3 point)
-        {
-            //   CurMouseEffect.transform.position = point;
         }
 
         public void Mouse1Click_Terrain(Transform tf, Vector3 point)
@@ -530,42 +475,12 @@ namespace WX
             //moveLine.SetPositions(path.corners);
         }
 
-        public void MouseEnter_Biological(Transform tf)
-        {
-
-        }
-
-        public void MouseExit_Biological(Transform tf)
-        {
-
-        }
-
-        public void MouseOver_Biological(Transform tf)
-        {
-
-        }
-
-        public void Mouse0Click_Biological(Transform tf, Vector3 point)
-        {
-
-        }
-
-        public void Mouse1Click_Biological(Transform tf, Vector3 point)
-        {
-
-        }
-
-
-
+     
         //显示Message
         public void MessageShow(string[] values)
         {
         }
 
-        public void MessageShow(string value)
-        {
-
-        }
     }
 
 

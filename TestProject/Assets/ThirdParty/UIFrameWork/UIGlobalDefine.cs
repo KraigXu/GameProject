@@ -7,7 +7,6 @@ namespace TinyFrameWork
     public enum WindowID
     {
         Invaild = 0,
-
         StrategyWindow,
         SocialDialogWindow,
         LivingAreaBasicWindow,
@@ -16,8 +15,6 @@ namespace TinyFrameWork
         ExtendedMenuWindow,
         WXCharacterPanelWindow,
         WXCharacterRelationshipWindow,
-        WXCharacterPrestigeWindow,
-
         TipsWindow,
     }
 
@@ -124,7 +121,6 @@ namespace TinyFrameWork
         // maybe your window assetbundle path
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
-            {WindowID.Invaild,"UiPrefab/InvaildWindow"},
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
@@ -133,7 +129,6 @@ namespace TinyFrameWork
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.WXCharacterRelationshipWindow,"UiPrefab/WXCharacterRelationshipWindow"},
-            {WindowID.WXCharacterPrestigeWindow,"UiPrefab/WXCharacterPrestigeWindow"},
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" }
         };
     }

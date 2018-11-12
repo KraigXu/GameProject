@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿
+using UnityEngine;
+using UnityEngine.Events;
 
 public class ShowWindowData
 {
@@ -23,6 +24,55 @@ public class ShowWindowData
 public class BaseWindowContextData
 {
 }
+
+public class StrategyWindowInData:BaseWindowContextData
+{
+    public UnityAction CharavterEvent;
+    public UnityAction WugongEvent;
+    public UnityAction TechnologyEvent;
+    public UnityAction LogEvent;
+    public UnityAction MapEvent;
+
+    public StrategyWindowInData(UnityAction charavterEvent, UnityAction wugongEvent, UnityAction technologyEvent, UnityAction logEvent,
+        UnityAction mapEvent)
+    {
+        this.CharavterEvent = charavterEvent;
+        this.WugongEvent = wugongEvent;
+        this.TechnologyEvent = technologyEvent;
+        this.LogEvent = logEvent;
+        this.MapEvent = mapEvent;
+    }
+
+}
+
+public class BiologicalUiInData:BaseWindowContextData
+{
+
+    public string BiologicalName;
+    public string Race;
+    public string Sex;
+    public string Prestige;
+    public string Influence;
+    public string Disposition;
+
+    public int Age;
+    public int AgeMax;
+   
+    public int Tizhi;
+    public int Lidao;
+    public int Jingshen;
+    public int Lingdong;
+    public int Wuxing;
+
+    public int Jing;
+    public int Qi;
+    public int Shen;
+
+    public BiologicalUiInData() { }
+
+
+}
+
 
 public class WindowContextLivingAreaData : BaseWindowContextData
 {

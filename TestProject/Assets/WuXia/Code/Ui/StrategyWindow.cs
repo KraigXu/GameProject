@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TinyFrameWork;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
+using WX;
 
 /// <summary>
 /// 主UI
@@ -63,49 +65,33 @@ public class StrategyWindow : UIWindowBase
     }
     public override void InitWindowOnAwake()
     {
-        _characterInformationBtn.onClick.AddListener(CharacterInformationClick);
-        _wugongBtn.onClick.AddListener(WugongClick);
-        _technologyBtn.onClick.AddListener(TechnologyClick);
-        _logBtn.onClick.AddListener(LogClick);
-        _mapBtn.onClick.AddListener(MapClcik);
+
     }
-
-
-    void Update()
+    protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
-        //UpdateTime();
+        base.BeforeShowWindow(contextData);
+        if (contextData != null)
+        {
+           StrategyWindowInData data = (StrategyWindowInData)contextData;
+            _characterInformationBtn.onClick.AddListener(data.CharavterEvent);
+            _wugongBtn.onClick.AddListener(data.WugongEvent);
+            _technologyBtn.onClick.AddListener(data.TechnologyEvent);
+            _logBtn.onClick.AddListener(data.LogEvent);
+            _mapBtn.onClick.AddListener(data.MapEvent);
+        }
     }
 
-    public void ShowMessage(string message)
-    {
-        
-    }
-
-
-
-    //----------Bttom
-
-    private void CharacterInformationClick()
-    {
-        UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
-
-        // StrategySceneControl.Instance.OpenWXCharacterPanelWidow();
-    }
-
-    private void WugongClick()
-    {
-
-    }
-    private void TechnologyClick()
-    {
-
-    }
-    private void LogClick()
-    {
-
-    }
-    private void MapClcik()
-    {
-        
-    }
+    //protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
+    //{
+    //    this.BeforeShowWindow(contextData);
+    //    if (contextData != null)
+    //    {
+    //        StrategyWindowInData data = (StrategyWindowInData)contextData;
+    //        //_characterInformationBtn.onClick.AddListener(data.CharavterEvent);
+    //        //_wugongBtn.onClick.AddListener(data.WugongEvent);
+    //        //_technologyBtn.onClick.AddListener(data.TechnologyEvent);
+    //        //_logBtn.onClick.AddListener(data.LogEvent);
+    //        //_mapBtn.onClick.AddListener(data.MapEvent);
+    //    }
+    //}
 }
