@@ -101,7 +101,7 @@ namespace WX
         }
     }
 
-    
+
 
     public class LivingAreaSystem : ComponentSystem
     {
@@ -120,7 +120,7 @@ namespace WX
         [Inject]
         private LivingAreaGroup _livingAreas;
 
-        private Dictionary<int, LivingAreaText> _livingAreaTextDic=new Dictionary<int, LivingAreaText>();
+        private Dictionary<int, LivingAreaText> _livingAreaTextDic = new Dictionary<int, LivingAreaText>();
 
         public static void SetupComponentData(EntityManager entityManager)
         {
@@ -207,6 +207,8 @@ namespace WX
                 }
                 CurShowUi = true;
             }
+
+
         }
 
         private void ChangeText()
@@ -218,12 +220,30 @@ namespace WX
                 var la = _livingAreas.LivingAreaNode[i];
 
                 LivingAreaData data = SqlData.GetDataId<LivingAreaData>(la.Id);
-                _livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name,data.Description));
+                _livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name, data.Description));
             }
         }
 
 
-       
+        public LivingAreaWindowCD GetUiData(int id)
+        {
+            LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+            for (int i = 0; i < _livingAreas.Length; i++)
+            {
+                if (_livingAreas.LivingAreaNode[i].Id == id)
+                {
+                    livingAreaWindowCd.Id = id;
+
+                    LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
+                    livingAreaWindowCd.LivingAreaName = data.Name;
+                    livingAreaWindowCd.Description = data.Description;
+                    return livingAreaWindowCd; 
+                }
+            }
+            return livingAreaWindowCd;
+        }
+
+
 
         ///// <summary>
         ///// 获取指定ID的LivingArea

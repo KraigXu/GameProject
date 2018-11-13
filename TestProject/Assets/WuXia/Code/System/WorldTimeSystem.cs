@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace WX
 {
@@ -70,30 +71,37 @@ namespace WX
 
 
         //public ov
-
-        public static void SetupComponentData(EntityManager entityManager)
-        {
-
-
-            //if (IsResetTime)  //重置为当前系统时间 转化为古代时间
-            //{
-            //    CurTime = DateTime.Now;
-            //    UpdateGuDaiTime();
-            //}
-            //else            //取得剧本时间
-            //{
-            //    CurTime = new DateTime(1994, 1, 3, 12, 0, 0);
-            //    UpdateGuDaiTime();
-            //}
-        }
-
         struct TimeUi
         {
             public WorldTimeUi time;
         }
 
+        struct PlayerData
+        {
+            public readonly int Length;
+            public ComponentDataArray<PlayerInput> Input;
+            public ComponentArray<AICharacterControl> Aicontrol;
+        }
+
+        [Inject]
+        private PlayerData _playerData;
+
+
         protected override void OnUpdate()
         {
+            //for (int i = 0; i < _playerData.Length; i++)
+            //{
+            //    var aiControl = _playerData.Aicontrol[i];
+            //    if (aiControl.IsMove == true)
+            //    {
+            //        curStatus = TimeSatus.Play;
+            //    }
+            //    else
+            //    {
+            //        curStatus = TimeSatus.Stop;
+            //    }
+            //}
+
             CurTime = StrategySceneInit.Settings.curTime;
             if (curStatus == TimeSatus.Play)
             {
@@ -131,6 +139,7 @@ namespace WX
             }
             else if (curStatus == TimeSatus.Stop)
             {
+                Time.timeScale = 0;
             }
 
             foreach (var v in GetEntities<TimeUi>())
@@ -179,6 +188,12 @@ namespace WX
 
         //===============时间事件
 
+
+        public void Pause()
+        {
+
+        }
+
         /// <summary>
         /// 新增时间
         /// </summary>
@@ -220,6 +235,7 @@ namespace WX
         {
 
         }
+
 
     }
 

@@ -9,11 +9,9 @@ namespace TinyFrameWork
     {
         private GameObject _contentMenus;
 
-        private WindowContextExtendedMenu _info;
+        private ExtendedMenuWindowInData _info;
         [SerializeField]
         private BaseCorrespondenceByModelControl _contentUi;
-
-        private int _id;
 
         protected override void SetWindowId()
         {
@@ -33,55 +31,36 @@ namespace TinyFrameWork
         public override void InitWindowOnAwake()
         {
             _contentMenus = transform.Find("Content").gameObject;
-            _contentMenus.transform.Find("CityIntelligence").GetComponent<Button>().onClick.AddListener(CityIntelligenceButton);
             _contentMenus.transform.Find("PowerIntelligence").GetComponent<Button>().onClick.AddListener(PowerIntelligenceButton);
-            _contentMenus.transform.Find("AreaIntelligence").GetComponent<Button>().onClick.AddListener(AreaIntelligenceButton);
             _contentMenus.SetActive(true);
         }
 
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-             _info = (WindowContextExtendedMenu)contextData;
-            if (_info == null) return;
+            if (contextData == null) return;
 
-          //  ExtendedMenuContentItem contentItem = _contentMenus.GetComponent<ExtendedMenuContentItem>();
-           // contentItem.Wordpos = _info.Point;
-            
+            _info = (ExtendedMenuWindowInData)contextData;
+
+            _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera, _info.Point);
+
+            if (_info.DistrictEvent != null)
+            {
+                _contentMenus.transform.Find("CityIntelligence").GetComponent<Button>().onClick.AddListener(_info.DistrictEvent);
+            }
+
+            if (_info.LivingAreEvent != null)
+            {
+                _contentMenus.transform.Find("AreaIntelligence").GetComponent<Button>().onClick.AddListener(_info.LivingAreEvent);
+            }
+
             _contentMenus.SetActive(true);
-        }
-
-        public void SetPoint(Vector3 point,int id)
-        {
-            _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera,point);
-            _id = id;
-        }
-
-
-        public void CityIntelligenceButton()
-        {
-            //ShowWindowData data=new ShowWindowData();
-            //data.contextData = new WindowContextLivingAreaNodeData(_info.LivingAreaNodeCom);
-
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaBasicWindow);
-
-            DestroyWindow();
         }
 
         public void PowerIntelligenceButton()
         {
             DestroyWindow();
         }
-
-        public void AreaIntelligenceButton()
-        {
-
-           
-            
-            DestroyWindow();
-        }
-
-
     }
 }
 

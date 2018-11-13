@@ -6,29 +6,42 @@ using UnityEngine;
 
 namespace WX
 {
+
+
+
+    /// <summary>
+    /// 3D相机管理
+    /// </summary>
     public class CameraSystem : ComponentSystem
     {
 
         struct PlayerData
         {
             public readonly int Length;
-            public ComponentDataArray<Player> Player;
+            public ComponentDataArray<PlayerInput> Player;
             public ComponentArray<Transform> Position;
+        }
+        [Inject]
+        private PlayerData _player;
+
+        struct LivingAreaData
+        {
+            public readonly int Length;
+
         }
 
         struct CamerData
         {
             public PlayerCamera camera;
         }
-        [Inject]
-        private PlayerData _player;
-
-        private CamerData _camera;
 
         protected override void OnUpdate()
         {
             for (int i = 0; i < _player.Length; i++)
             {
+
+                var playerInput = _player.Player[i];
+
                 var playerPosition = _player.Position[i].position;
 
                 foreach (var _camera in GetEntities<CamerData>())
@@ -42,9 +55,9 @@ namespace WX
             }
 
 
-
-
         }
+
+
 
         //private void CamerMove(Transform playerTf)
         //{

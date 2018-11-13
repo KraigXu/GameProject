@@ -16,20 +16,25 @@ namespace WX
         public int InteractionType;
     }
 
-    public struct PlayerInput : IComponentData
+    /// <summary>
+    /// Npc
+    /// </summary>
+    public struct NpcInput : IComponentData
     {
-        
-        public float3 Move;
-        public float3 Shoot;
-        public float FireCooldown;
-
-        public bool Fire => FireCooldown <= 0.0 && math.length(Shoot) > 0.5f;
+        //趋向
+        public int tend;
+         
     }
 
-    public struct Player : IComponentData { }
+    public enum TragetType {Idie,City, Field }
+    
 
+    public struct PlayerInput : IComponentData
+    {
 
+        public int PlayerCameraStatus;
 
+    }
     public struct District : IComponentData
     {
         public int DistrictId;
@@ -48,6 +53,10 @@ namespace WX
         //public Material Material;
     }
 
+    public struct BiologicalText:IComponentData
+    {
+        public string Name;
+    }
     public struct Biological : IComponentData
     {
         public int BiologicalId;
@@ -83,7 +92,11 @@ namespace WX
 
         public int LocationCode;
         public int LocationType;
+        public int LocationStatus;
 
+        
+
+        
        // public int Huti;
 
         //public int GenGu;
@@ -170,6 +183,7 @@ namespace WX
         //public LivingAreaState[] Groups = new LivingAreaState[0];
 
     }
+
 
 
 }

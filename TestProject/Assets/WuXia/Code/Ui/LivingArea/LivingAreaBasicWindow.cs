@@ -82,10 +82,12 @@ namespace TinyFrameWork
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            WindowContextLivingAreaNodeData data = (WindowContextLivingAreaNodeData)contextData;
-            if (data == null) return;
+            if(contextData==null) return;
+
+            LivingAreaWindowCD content = (LivingAreaWindowCD) contextData;
+
             //_curLivingArea = data.Node;
-            //LivingAreaContent.Find("Name").GetComponent<Text>().text = _curLivingArea.Name;
+            LivingAreaContent.Find("Name").GetComponent<Text>().text = content.LivingAreaName;
             //LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
             //LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
             //LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();
@@ -97,19 +99,6 @@ namespace TinyFrameWork
             // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
 
         }
-
-        void Update()
-        {
-
-        }
-
-
-        void OnDisable()
-        {
-
-        }
-
-
     }
 
 }

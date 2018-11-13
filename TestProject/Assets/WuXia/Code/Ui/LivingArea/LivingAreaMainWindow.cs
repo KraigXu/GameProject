@@ -10,11 +10,9 @@ using UnityEngine.UI;
 /// </summary>
 public class LivingAreaMainWindow : UIWindowBase
 {
-    [Header("LivingArea")]
     [SerializeField]
     private Text _name;
-    private LivingArea _currentLivingArea;
-
+    
 
     [Header("Building")]
     public List<GameObject> BuildingsGo = new List<GameObject>();
@@ -22,6 +20,9 @@ public class LivingAreaMainWindow : UIWindowBase
     private RectTransform _buildingContent;
     private BuildingObject[] _buildings ;
     private bool _buildingViewStatus = false;
+
+    private LivingAreaWindowCD _currentLivingArea;
+
 
     protected override void SetWindowId()
     {
@@ -42,17 +43,19 @@ public class LivingAreaMainWindow : UIWindowBase
     public override void InitWindowOnAwake()
     {
         _buildingContent.Find("Exit").GetComponent<Button>().onClick.AddListener(CloseBuiding);
-        Debuger.Log(">>>");
         _buildingContent.gameObject.SetActive(_buildingViewStatus);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
-        WindowContextLivingAreaNodeData nodeData = (WindowContextLivingAreaNodeData)contextData;
-        if(nodeData==null) return;
+        if(contextData==null) return;
+        _currentLivingArea =(LivingAreaWindowCD)contextData;
+        ChangeData();
+    }
 
-        _currentLivingArea = nodeData.Node;
-        //resolve LivingArea Data
+    private void ChangeData()
+    {
+        _name.text = _currentLivingArea.LivingAreaName;
 
         //resolve Building Data , building图生成
         GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
@@ -61,18 +64,17 @@ public class LivingAreaMainWindow : UIWindowBase
         {
             GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
             go.name = _buildings[i].Name;
-            RectTransform goRect=   go.GetComponent<RectTransform>();
-            goRect.anchoredPosition =new Vector2(i*20f,i*30);
+            RectTransform goRect = go.GetComponent<RectTransform>();
+            goRect.anchoredPosition = new Vector2(i * 20f, i * 30);
 
             go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
-           // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
+            // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
             go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
             //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
             go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();
 
             UIEventTriggerListener.Get(go).onClick += AccessBuilding;
             BuildingsGo.Add(go);
-
         }
     }
 
@@ -93,7 +95,6 @@ public class LivingAreaMainWindow : UIWindowBase
         _buildingContent.gameObject.SetActive(true);
     }
 
-
     private void CloseBuiding()
     {
         _buildingContent.gameObject.SetActive(false);
@@ -103,4 +104,3 @@ public class LivingAreaMainWindow : UIWindowBase
 
     
 }
-

@@ -13,30 +13,6 @@ using WX;
 /// </summary>
 public class StrategyWindow : UIWindowBase
 {
-    public bool IsShowPlayer;
-    public bool IsShowTime;
-    public bool IsShowMap;
-    public bool IsShowMessage;
-
-    [Header("Player")]
-    [SerializeField]
-    private Text _playerName;
-    [SerializeField]
-    private Text _playerMoney;
-    [SerializeField]
-    private Text _playerSW;
-
-
-    [Header("MiMap")]
-    public Text text6;
-
-    [Header("Message")]
-    [SerializeField]
-    private RectTransform _messageContent;
-    [SerializeField]
-    private Text _messageText;
-
-
     [Header("Buttom")]
     [SerializeField]
     private Button _characterInformationBtn;
@@ -65,7 +41,6 @@ public class StrategyWindow : UIWindowBase
     }
     public override void InitWindowOnAwake()
     {
-
     }
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
@@ -80,18 +55,4 @@ public class StrategyWindow : UIWindowBase
             _mapBtn.onClick.AddListener(data.MapEvent);
         }
     }
-
-    //protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
-    //{
-    //    this.BeforeShowWindow(contextData);
-    //    if (contextData != null)
-    //    {
-    //        StrategyWindowInData data = (StrategyWindowInData)contextData;
-    //        //_characterInformationBtn.onClick.AddListener(data.CharavterEvent);
-    //        //_wugongBtn.onClick.AddListener(data.WugongEvent);
-    //        //_technologyBtn.onClick.AddListener(data.TechnologyEvent);
-    //        //_logBtn.onClick.AddListener(data.LogEvent);
-    //        //_mapBtn.onClick.AddListener(data.MapEvent);
-    //    }
-    //}
 }

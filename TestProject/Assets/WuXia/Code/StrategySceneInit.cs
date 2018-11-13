@@ -43,7 +43,7 @@ namespace WX
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea),typeof(Position),typeof(Interactable));
 
             // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)[RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))][RequireComponent(typeof(ThirdPersonCharacter))]
-            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
+           // PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(AICharacterControl));
             //BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(Position), typeof(NavMeshAgent));
             // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
@@ -170,7 +170,7 @@ namespace WX
                         Renown = livingAreaDatas[i].StableValue
                     });
 
-                    //entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
+                    entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
                     //entityManager.SetComponentData(livingArea,new Position
                     //{
                     //    Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
@@ -212,6 +212,14 @@ namespace WX
                         Qi = data[i].Property6,
                         Shen = data[i].Property6
                     });
+
+                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<BiologicalText>());
+                    entityManager.SetComponentData(biologicalEntity, new BiologicalText()
+                    {
+                        Name = data[i].Name,
+                    });
+
+                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<NpcInput>());
 
                     // entityManager.AddSharedComponentData(biologicalEntity,BiologicalLook);
 
@@ -262,7 +270,7 @@ namespace WX
 
                 entityManager.AddComponent(player,ComponentType.Create<PlayerInput>());
 
-                entityManager.AddComponent(player,ComponentType.Create<Player>());
+                //entityManager.AddComponent(player,ComponentType.Create<Player>());
 
                 // Finally we add a shared component which dictates the rendered look
                 //entityManager.AddSharedComponentData(player, PlayerLook);
