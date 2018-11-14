@@ -93,17 +93,7 @@ namespace WX
 
     }
 
-    public class LivingAreaText
-    {
-        public string Name;
-        public string Description;
 
-        public LivingAreaText(string name, string description)
-        {
-            this.Name = name;
-            this.Description = description;
-        }
-    }
 
 
 
@@ -124,8 +114,6 @@ namespace WX
         }
         [Inject]
         private LivingAreaGroup _livingAreas;
-
-        private Dictionary<int, LivingAreaText> _livingAreaTextDic = new Dictionary<int, LivingAreaText>();
 
         protected override void OnStartRunning()
         {
@@ -153,46 +141,30 @@ namespace WX
 
             if (CurShowUi == false)
             {
-                if (_livingAreaTextDic.Count != _livingAreas.Length)    //需要更新数据
-                {
-                    ChangeText();
-                }
-                string[] names = new string[_livingAreas.Length];
-                Vector3[] points = new Vector3[_livingAreas.Length];
+                WindowContextLivingAreaData uidata=  new WindowContextLivingAreaData();
                 for (int i = 0; i < _livingAreas.Length; i++)
                 {
-                    var la = _livingAreas.LivingAreaNode[i];
-                    names[i] = _livingAreaTextDic[la.Id].Name;
-                    points[i] = _livingAreas.LivingAreaPositon[i].position;
+                    uidata.EntityArray.Add(_livingAreas.Entity[i]);
+                    uidata.Points.Add(_livingAreas.LivingAreaPositon[i].position);
                 }
 
                 if (_livingAreaTitle)
                 {
                     ShowWindowData data = new ShowWindowData();
-                    data.contextData = new WindowContextLivingAreaData(names, points);
+                    data.contextData = uidata;
                     _livingAreaTitle.ShowWindow(data.contextData);
                 }
                 else
                 {
                     ShowWindowData data = new ShowWindowData();
-                    data.contextData = new WindowContextLivingAreaData(names, points);
+                    data.contextData = uidata;
                     _livingAreaTitle = (LivingAreaTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
                 }
                 CurShowUi = true;
             }
         }
 
-        private void ChangeText()
-        {
-            Debuger.Log("LivingAreaText Change");
-            _livingAreaTextDic.Clear();
-            for (int i = 0; i < _livingAreas.Length; i++)
-            {
-                var la = _livingAreas.LivingAreaNode[i];
-                //LivingAreaData data = SqlData.GetDataId<LivingAreaData>(la.Id);
-                //_livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name, data.Description));
-            }
-        }
+
 
 
         //public LivingAreaWindowCD GetUiData(int id)

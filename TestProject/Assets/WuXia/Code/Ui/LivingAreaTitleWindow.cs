@@ -30,11 +30,9 @@ namespace TinyFrameWork
             if (contextData != null)
             {
                 WindowContextLivingAreaData data = contextData as WindowContextLivingAreaData;
-                string[] names = data.Names;
-                Vector3[] point = data.Points;
-                for (int i = 0; i < names.Length; i++)
+                for (int i = 0; i < data.EntityArray.Count; i++)
                 {
-                    _titleItems[i].Init(names[i],Camera.main,UICenterMasterManager.Instance._Camera,point[i]+new Vector3(0,1f,0));
+                    _titleItems[i].Init(GameText.NameDic[data.EntityArray[i]],Camera.main,UICenterMasterManager.Instance._Camera, data.Points[i]+ new Vector3(0,1f,0));
                 }
                 
             }

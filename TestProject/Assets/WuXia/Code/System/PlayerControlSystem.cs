@@ -108,6 +108,8 @@ namespace WX
 
                 }
                 var biological = m_Players.Biological[i];
+                var input = m_Players.Input[i];
+
 
                 switch ((LocationType)biological.LocationType)
                 {
@@ -117,6 +119,7 @@ namespace WX
                     case LocationType.Event:
                         break;
                     case LocationType.Field:
+                        
                         break;
                 }
             }
@@ -194,9 +197,7 @@ namespace WX
                 case TragetType.City:
                     {
                         //Loading LivingArea
-                        
                         _livingAreaSystem.OpenLivingArea(targetId);
-
                     }
                     break;
                 case TragetType.Field:

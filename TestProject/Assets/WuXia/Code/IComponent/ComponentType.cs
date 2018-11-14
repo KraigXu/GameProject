@@ -36,7 +36,6 @@ namespace WX
 
     public struct PlayerInput : IComponentData
     {
-        public int PlayerCameraStatus;
     }
     public struct District : IComponentData
     {

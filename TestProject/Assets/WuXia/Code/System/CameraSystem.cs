@@ -34,54 +34,23 @@ namespace WX
             public PlayerCamera camera;
         }
 
-        struct CameraModelData
-        {
-            public ModelCamera camera;
-        }
-
-
         protected override void OnUpdate()
         {
-            
-
             for (int i = 0; i < _player.Length; i++)
             {
                 var playerInput = _player.Player[i];
 
-                if (playerInput.PlayerCameraStatus!= _curModel)
+                var playerPosition = _player.Position[i].position;
+
+                foreach (var _camera in GetEntities<CamerData>())
                 {
-                    _curModel = playerInput.PlayerCameraStatus;
-                    
-                    //if (_curModel == 0)
-                    //{
-
-                    //}
-                    //else
-                    //{
-
-                    //}
-
+                    float dt = Time.deltaTime;
+                    Quaternion newrotation = Quaternion.Euler(_camera.camera.RoationOffset);
+                    Vector3 newposition = newrotation * _camera.camera.Offset + new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+                    _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
+                    _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
                 }
 
-                if (_curModel == 0)
-                {
-                    var playerPosition = _player.Position[i].position;
-
-                    foreach (var _camera in GetEntities<CamerData>())
-                    {
-                        float dt = Time.deltaTime;
-                        Quaternion newrotation = Quaternion.Euler(_camera.camera.RoationOffset);
-                        Vector3 newposition = newrotation * _camera.camera.Offset + new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
-                        _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
-                        _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
-                    }
-                }else if (_curModel == 1)
-                {
-                    foreach (var camera in GetEntities<CameraModelData>())
-                    {
-                        
-                    }
-                }
 
             }
 

@@ -61,8 +61,6 @@ public class ExtendedMenuWindowInData : BaseWindowContextData
     }
 
 }
-
-
 public class BiologicalUiInData : BaseWindowContextData
 {
 
@@ -120,12 +118,9 @@ public class LivingAreaWindowCD:BaseWindowContextData
 
 public class WindowContextLivingAreaData : BaseWindowContextData
 {
-    public string[] Names;
-    public Vector3[] Points;
-    public WindowContextLivingAreaData(string[] names, Vector3[] points)
-    {
-        this.Names = names;
-        this.Points = points;
-    }
+    public List<Entity> EntityArray=new List<Entity>();
+    public List<Vector3> Points=new List<Vector3>();
+
+
 }
 
