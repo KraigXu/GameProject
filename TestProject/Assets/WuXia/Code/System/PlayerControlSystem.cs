@@ -24,15 +24,6 @@ namespace WX
     public class PlayerControlSystem : ComponentSystem
     {
 
-        struct BiologicalGroup
-        {
-            public readonly int Length;
-            public ComponentDataArray<Biological> Biological;
-            public ComponentArray<CapsuleCollider> Renderer;
-        }
-        [Inject]
-        private BiologicalGroup _biologicalData;
-
         struct LivingAreaData
         {
             public readonly int Length;
@@ -48,6 +39,8 @@ namespace WX
             public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<AICharacterControl> AiControl;
+            public ComponentDataArray<Prestige> Prestige;
+            public EntityArray Entity;
         }
 
         [Inject]
@@ -60,7 +53,7 @@ namespace WX
         private CameraSystem _cameraSystem;
 
         private StrategyWindow _strategyWindow;
-        private TipsWindow _tipsWindow;
+        
 
         protected override void OnUpdate()
         {
@@ -112,20 +105,7 @@ namespace WX
                         }
                     }
 
-                    for (int j = 0; j < _biologicalData.Length; j++)
-                    {
-                        if (_biologicalData.Renderer[j].bounds.Contains(hit.point))
-                        {
-                            _tipsWindow.SetBiologicalTip(hit.point, _biologicalData.Biological[j].BiologicalId);
-                            flag = true;
-                            return;
-                        }
-                    }
 
-                    if (flag == false)
-                    {
-                        _tipsWindow.Hide();
-                    }
                 }
                 var biological = m_Players.Biological[i];
 
@@ -141,10 +121,7 @@ namespace WX
                 }
             }
 
-            if (_tipsWindow == null)
-            {
-                _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
-            }
+           
 
             if (_strategyWindow == null)
             {
@@ -179,13 +156,11 @@ namespace WX
             uidata.Jing = biological.Jing;
             uidata.Qi = biological.Qi;
             uidata.Shen = biological.Shen;
-
-            uidata.BiologicalName = data.Surname + data.Name;
-            uidata.Race = ComFun.GetRaceType((RaceType)data.RaceType);
-            uidata.Sex = ComFun.GetSex((SexType)data.Sex);
-            uidata.Prestige = ComFun.GetPrestige(data.Prestige);
-            uidata.Influence = data.Influence.ToString();
-            uidata.Disposition = data.Disposition.ToString();
+            uidata.Sex = data.Sex;
+            uidata.Prestige = m_Players.Prestige[0].Level;
+            uidata.Influence = data.Influence;
+            uidata.Disposition = data.Disposition;
+            uidata.OnlyEntity = m_Players.Entity[0];            
 
             showWindowData.contextData = uidata;
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);
@@ -220,11 +195,8 @@ namespace WX
                     {
                         //Loading LivingArea
                         
+                        _livingAreaSystem.OpenLivingArea(targetId);
 
-
-                        ShowWindowData windowData = new ShowWindowData();
-                        windowData.contextData = _livingAreaSystem.GetUiData(targetId);
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
                     }
                     break;
                 case TragetType.Field:

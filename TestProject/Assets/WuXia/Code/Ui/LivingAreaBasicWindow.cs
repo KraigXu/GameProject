@@ -85,9 +85,8 @@ namespace TinyFrameWork
             if(contextData==null) return;
 
             LivingAreaWindowCD content = (LivingAreaWindowCD) contextData;
-
             //_curLivingArea = data.Node;
-            LivingAreaContent.Find("Name").GetComponent<Text>().text = content.LivingAreaName;
+            LivingAreaContent.Find("Name").GetComponent<Text>().text = GameText.NameDic[content.OnlyEntity];
             //LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
             //LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
             //LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();

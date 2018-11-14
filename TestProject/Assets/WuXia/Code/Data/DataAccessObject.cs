@@ -242,21 +242,6 @@ namespace DataAccessObject
 
         }
 
-        /// <summary>
-        /// 声望
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Prestige(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Type INTEGER," +
-                                       " Level INTEGER," +
-                                       " ContentJson TEXT);");
-
-        }
 
         /// <summary>
         /// 对话
@@ -356,8 +341,22 @@ namespace DataAccessObject
                                        " Type TEXT," +
                                        " Path TEXT);");
         }
+        /// <summary>
+        /// shengwang
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Prestige(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
+                                       " LevelCode INTEGER PRIMARY KEY," +
+                                       " ValueMin INTEGER," +
+                                       " ValueMax INTEGER," +
+                                       " BiologicalTitle TEXT," +
+                                       " LivingAreaTitle TEXT," +
+                                       " DistrictTitle TEXT);");
+        }
 
-
+        
 
     }
 
@@ -381,16 +380,23 @@ namespace DataAccessObject
         public int Id { get; set; }                          // ID
         public string Name { get; set; }                     // 名称
         public string Description { get; set; }              // 说明
+        public int Model { get; set; }
+        public int Type { get; set; }
+        public int ProsperityLevel { get; set; }
+        public int TrafficLevel { get; set; }              //交通系数
         public int GrowingModulus { get; set; }              // 发展系数
         public int SecurityModulus { get; set; }             // 安全系数
-        public int TrafficModulus { get; set; }              //交通系数
         public string LivinfAreasIds { get; set; }           //生活区ID
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id, Name, Description,GrowingModulus,SecurityModulus,TrafficModulus,LivinfAreasIds
+                Id, Name, Description,Model,Type,ProsperityLevel,TrafficLevel,GrowingModulus,SecurityModulus,LivinfAreasIds,X,Y,Z
             };
             return objects;
         }
@@ -404,6 +410,8 @@ namespace DataAccessObject
         public int Id { get; set; }                      //编号 
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
+        public string ModelBase { get; set; }
+        public string ModelMain { get; set; }
         public int PersonNumber { get; set; }           //人口数量
         public int Money { get; set; }
         public int MoneyMax { get; set; }
@@ -487,8 +495,27 @@ namespace DataAccessObject
     }
 
 
+    public class PrestigeData : BaseData
+    {
+        public int LevelCode { get; set; }
+        public int ValueMin { get; set; }
+        public int ValueMax { get; set; }
+        public string BiologicalTitle { get; set; }
+        public string LivingAreaTitle { get; set; }
+        public string DistrictTitle { get; set; }
 
-    
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                LevelCode, ValueMin, ValueMax,BiologicalTitle,LivingAreaTitle,DistrictTitle
+            };
+            return objects;
+        }
+    }
+
+
+
     public class AreaTypeData : BaseData
     {
         public int Id { get; set; }                      //编号 

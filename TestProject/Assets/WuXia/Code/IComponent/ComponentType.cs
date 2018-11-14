@@ -8,6 +8,11 @@ namespace WX
 {
     public struct Mouse : IComponentData { }
 
+    public struct CameraTarget : IComponentData
+    {
+        public Vector3 Target;
+    }
+
     /// <summary>
     /// 可交互物
     /// </summary>
@@ -31,31 +36,23 @@ namespace WX
 
     public struct PlayerInput : IComponentData
     {
-
         public int PlayerCameraStatus;
-
     }
     public struct District : IComponentData
     {
-        public int DistrictId;
-        public int FactionId;
+
+        public int Id;
+        public int Type;
+        public int ProsperityLevel;
+        public int TrafficLevel;
         public int GrowingModulus;
         public int SecurityModulus;
-        public int Traffic;
-        //public string Name;
-        //public string Description;
-        
-        
-        
-        //public List<LivingArea> LivingAreaChilds;
-        //public Projector Projector;
-        //public Transform Model;
-        //public Material Material;
     }
 
-    public struct BiologicalText:IComponentData
+    public struct Prestige : IComponentData
     {
-        public string Name;
+        public int Value;
+        public int Level;
     }
     public struct Biological : IComponentData
     {
@@ -93,9 +90,6 @@ namespace WX
         public int LocationCode;
         public int LocationType;
         public int LocationStatus;
-
-        
-
         
        // public int Huti;
 
@@ -181,6 +175,36 @@ namespace WX
         //public bool IsOpen = false;  //是否打开
 
         //public LivingAreaState[] Groups = new LivingAreaState[0];
+    }
+    public struct LivingAreaMain : IComponentData
+    {
+    }
+
+    public struct Building : IComponentData
+    {
+        public int Level;
+        public int Status;
+        public int Type;
+        public int DurableValue;
+        public int OwnId;
+
+
+        //public string Key { get; set; }
+        //public string Name { get; set; }
+        //public string Description { get; set; }
+        //public int BuildingLevel { get; set; }
+        //public BuildingStatus Status { get; set; }
+        //public BuildingType Type { get; set; }
+        //public int DurableValue { get; set; }
+        //public int OwnId { get; set; }
+        //public string BuildingFeaturesIds
+        //{
+        //    get; set;
+        //    public string MarkIds { get; set; }
+        //public string ModelPath { get; set; }
+        //public BuildingObject() { }
+        //// public int 
+
 
     }
 

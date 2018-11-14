@@ -1,12 +1,12 @@
-﻿using WX;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
 using Newtonsoft.Json;
 using TinyFrameWork;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
+using DataAccessObject;
+using Unity.Mathematics;
 
 namespace WX
 {
@@ -32,16 +32,20 @@ namespace WX
         public string Name { get; set; }                       //名称                                           
         public string Description { get; set; }                 //说明
         public int BuildingLevel { get; set; }                  //建筑物等级
-        public BuildingStatus Status { get; set; }                 //建筑物状态                      
-        public BuildingType Type { get; set; }                   //建筑物类型    
+        public int Status { get; set; }                 //建筑物状态                      
+        public int Type { get; set; }                   //建筑物类型    
         public int DurableValue { get; set; }                   //建筑物耐久  百分比                                                                                                        
         public int OwnId { get; set; }                          //拥有者Id                                        
         public string BuildingFeaturesIds { get; set; }         //建筑物特征
         public string MarkIds { get; set; }                     //建筑物词缀
         public string ModelPath { get; set; }                   //模型位置
         public BuildingObject() { }
+        public int ImageId { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
 
-        public BuildingObject(string key, string name, string description, int buildingLevel, BuildingStatus status, BuildingType type,
+        public BuildingObject(string key, string name, string description, int buildingLevel, int status, int type,
             int durableValue, int ownId, string buildingFeaturesIds, string markIds, string modelPath)
         {
             this.Key = key;
@@ -116,43 +120,12 @@ namespace WX
             public readonly int Length;
             public ComponentDataArray<LivingArea> LivingAreaNode;
             public ComponentArray<Transform> LivingAreaPositon;
+            public EntityArray Entity;
         }
         [Inject]
         private LivingAreaGroup _livingAreas;
 
         private Dictionary<int, LivingAreaText> _livingAreaTextDic = new Dictionary<int, LivingAreaText>();
-
-        public static void SetupComponentData(EntityManager entityManager)
-        {
-            //LivingArea[] livingAreaCom = GameObject.Find("StrategyManager").GetComponentsInChildren<LivingArea>();
-            //List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
-            //for (int i = 0; i < livingAreaCom.Length; i++)
-            //{
-            //    for (int j = 0; j < livingAreaDatas.Count; j++)
-            //    {
-            //        if (livingAreaCom[i].Id == livingAreaDatas[j].Id)
-            //        {
-            //            livingAreaCom[i].Name = livingAreaDatas[j].Name;
-            //            livingAreaCom[i].Description = livingAreaDatas[j].Description;
-            //            livingAreaCom[i].PersonNumber = livingAreaDatas[j].PersonNumber;
-            //            livingAreaCom[i].CurLevel = livingAreaDatas[j].LivingAreaLevel;
-            //            livingAreaCom[i].MaxLevel = livingAreaDatas[j].LivingAreaMaxLevel;
-            //            livingAreaCom[i].Type = (LivingAreaType)livingAreaDatas[j].LivingAreaType;
-            //            livingAreaCom[i].Money = livingAreaDatas[j].Money;
-            //            livingAreaCom[i].MoneyMax = livingAreaDatas[j].MoneyMax;
-            //            livingAreaCom[i].Iron = livingAreaDatas[j].Iron;
-            //            livingAreaCom[i].IronMax = livingAreaDatas[j].IronMax;
-            //            livingAreaCom[i].Wood = livingAreaDatas[j].Wood;
-            //            livingAreaCom[i].WoodMax = livingAreaDatas[j].WoodMax;
-            //            livingAreaCom[i].Food = livingAreaDatas[j].Food;
-            //            livingAreaCom[i].FoodMax = livingAreaDatas[j].FoodMax;
-            //            livingAreaCom[i].DefenseStrength = livingAreaDatas[j].DefenseStrength;
-            //            livingAreaCom[i].StableValue = livingAreaDatas[j].StableValue;
-            //            livingAreaCom[i].BuildingObjects = JsonConvert.DeserializeObject<BuildingObject[]>(livingAreaDatas[j].BuildingInfoJson);
-            //        }
-            //    }
-            //}
-        }
 
         protected override void OnStartRunning()
         {
@@ -207,8 +180,6 @@ namespace WX
                 }
                 CurShowUi = true;
             }
-
-
         }
 
         private void ChangeText()
@@ -218,32 +189,122 @@ namespace WX
             for (int i = 0; i < _livingAreas.Length; i++)
             {
                 var la = _livingAreas.LivingAreaNode[i];
-
-                LivingAreaData data = SqlData.GetDataId<LivingAreaData>(la.Id);
-                _livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name, data.Description));
+                //LivingAreaData data = SqlData.GetDataId<LivingAreaData>(la.Id);
+                //_livingAreaTextDic.Add(la.Id, new LivingAreaText(data.Name, data.Description));
             }
         }
 
 
-        public LivingAreaWindowCD GetUiData(int id)
+        //public LivingAreaWindowCD GetUiData(int id)
+        //{
+        //    LivingAreaWindowCD uidata = new LivingAreaWindowCD();
+        //    for (int i = 0; i < _livingAreas.Length; i++)
+        //    {
+        //        if (_livingAreas.LivingAreaNode[i].Id == id)
+        //        {
+        //            var livingArea = _livingAreas.LivingAreaNode[i];
+        //            uidata.OnlyEntity = _livingAreas.Entity[i];
+        //            uidata.PersonNumber = livingArea.PersonNumber;
+        //            uidata.Money = livingArea.Money;
+        //            uidata.MoneyMax = livingArea.MoneyMax;
+        //            uidata.Iron = livingArea.Iron;
+        //            uidata.IronMax = livingArea.IronMax;
+        //            uidata.Wood = livingArea.Wood;
+        //            uidata.WoodMax = livingArea.WoodMax;
+        //            uidata.Food = livingArea.Food;
+        //            uidata.FoodMax = livingArea.FoodMax;
+        //            uidata.LivingAreaLevel = livingArea.CurLevel;
+        //            uidata.LivingAreaMaxLevel = livingArea.MaxLevel;
+        //            uidata.LivingAreaType = livingArea.TypeId;
+        //            uidata.DefenseStrength = livingArea.DefenseStrength;
+        //            return uidata; 
+        //        }
+        //    }
+        //    return uidata;
+        //}
+
+        public void Get()
         {
-            LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+
+        }
+        public void OpenLivingArea(int id)
+        {
+            LivingAreaWindowCD uidata = new LivingAreaWindowCD();
             for (int i = 0; i < _livingAreas.Length; i++)
             {
-                if (_livingAreas.LivingAreaNode[i].Id == id)
+                if (_livingAreas.LivingAreaNode[i].Id != id)
                 {
-                    livingAreaWindowCd.Id = id;
-
-                    LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
-                    livingAreaWindowCd.LivingAreaName = data.Name;
-                    livingAreaWindowCd.Description = data.Description;
-                    return livingAreaWindowCd; 
+                    continue;
                 }
+
+                var livingArea = _livingAreas.LivingAreaNode[i];
+                uidata.OnlyEntity = _livingAreas.Entity[i];
+                uidata.PersonNumber = livingArea.PersonNumber;
+                uidata.Money = livingArea.Money;
+                uidata.MoneyMax = livingArea.MoneyMax;
+                uidata.Iron = livingArea.Iron;
+                uidata.IronMax = livingArea.IronMax;
+                uidata.Wood = livingArea.Wood;
+                uidata.WoodMax = livingArea.WoodMax;
+                uidata.Food = livingArea.Food;
+                uidata.FoodMax = livingArea.FoodMax;
+                uidata.LivingAreaLevel = livingArea.CurLevel;
+                uidata.LivingAreaMaxLevel = livingArea.MaxLevel;
+                uidata.LivingAreaType = livingArea.TypeId;
+                uidata.DefenseStrength = livingArea.DefenseStrength;
+                break;
             }
-            return livingAreaWindowCd;
+
+            LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
+
+            GameObject go = GameObject.Instantiate(StrategySceneInit.Settings.LivingAreaModelPrefab);
+            GameObject model = GameObject.Instantiate(Resources.Load<GameObject>(data.ModelMain), go.transform);
+
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            EntityArchetype buildingArchetype= entityManager.CreateArchetype(typeof(Building),typeof(Position));
+
+            List<BuildingObject>  buildings = JsonConvert.DeserializeObject<List<BuildingObject>>(data.BuildingInfoJson);
+
+            for (int i = 0; i < buildings.Count; i++)
+            {
+                Entity building = entityManager.CreateEntity(buildingArchetype);
+
+                entityManager.SetComponentData(building,new Building
+                {
+                    DurableValue = buildings[i].DurableValue,
+                    Level = buildings[i].BuildingLevel,
+                    OwnId = buildings[i].OwnId,
+                    Status = buildings[i].Status,
+                    Type = buildings[i].Type,
+                });
+
+                entityManager.SetComponentData(building,new Position
+                {
+                    Value =new float3(buildings[i].X, buildings[i].Y, buildings[i].Z)
+                });
+
+                GameText.BuildingNameDic.Add(building,buildings[i].Name);
+                GameText.BuildingDescriptionDic.Add(building,buildings[i].Description);
+
+                uidata.BuildingPoints.Add(new Vector3(buildings[i].X,buildings[i].Y,buildings[i].Z));
+                uidata.Buildings.Add(building);
+                uidata.BuildingAlats.Add(buildings[i].ImageId);
+            }
+            //GameText
+
+            Entity entity = model.GetComponent<GameObjectEntity>().Entity;
+            
+            entityManager.AddComponent(entity,ComponentType.Create<LivingAreaMain>());
+            entityManager.SetComponentData(entity,new LivingAreaMain()
+            {
+                
+            });
+
+            ShowWindowData windowData = new ShowWindowData();
+            windowData.contextData = uidata;
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+
         }
-
-
 
         ///// <summary>
         ///// 获取指定ID的LivingArea

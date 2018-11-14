@@ -5,6 +5,7 @@ using System.Text;
 using TinyFrameWork;
 using UnityEngine;
 using UnityEngine.UI;
+using WX;
 
 public class WXCharacterPanelWidow : UIWindowBase
 {
@@ -15,6 +16,9 @@ public class WXCharacterPanelWidow : UIWindowBase
     public Text CTName;
     public Text CTDescription;
     public Text CTSex;
+
+    
+
     
     [Header("Log")]
     public Toggle LogTog;
@@ -30,6 +34,16 @@ public class WXCharacterPanelWidow : UIWindowBase
 
     [SerializeField]
     private Button _exitBtn;
+
+    [SerializeField]
+    private Text _name;
+    [SerializeField]
+    private Text _surname;
+    [SerializeField]
+    private Text _sex;
+    [SerializeField]
+    private Text _prestigeLevel;
+
 
     [Header("Property")]
     [SerializeField]
@@ -75,6 +89,11 @@ public class WXCharacterPanelWidow : UIWindowBase
         if (contextData != null)
         {
             BiologicalUiInData data = (BiologicalUiInData)contextData;
+            _name.text = GameText.NameDic[data.OnlyEntity];
+            _surname.text = GameText.SurnameDic[data.OnlyEntity];
+            _sex.text = GameText.BiologicalSex[data.Sex];
+            _prestigeLevel.text = GameText.PrestigeBiolgicalDic[data.Prestige];
+
             _tizhitxt.text = data.Tizhi.ToString();
             _lidaotxt.text = data.Lidao.ToString();
             _jingshentxt.text = data.Jingshen.ToString();

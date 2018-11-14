@@ -13,16 +13,16 @@ public class TextFunction : MonoBehaviour
 	// Use this for initialization
 	void Start () {
        // BuildingObject building1 =new BuildingObject("悦来客栈","这个是客栈说明",1,1,100,300,1,1,"1;2;3");         //新增一个建筑物
-       BuildingObject[] buildingObjects=new BuildingObject[3];
+     //  BuildingObject[] buildingObjects=new BuildingObject[3];
 
-        buildingObjects[0]=new BuildingObject("A101","悦来客栈", "这个是客栈说明",3,BuildingStatus.None, BuildingType.Rest,100,1,"1;2","1;2","");
+     //   buildingObjects[0]=new BuildingObject("A101","悦来客栈", "这个是客栈说明",3,BuildingStatus.None, BuildingType.Rest,100,1,"1;2","1;2","");
 
-	    buildingObjects[1] = new BuildingObject("A102", "比武擂台", "这个是比武擂台说明", 3, BuildingStatus.None, BuildingType.Rest, 100, 1, "1;2", "1;2", "");
+	    //buildingObjects[1] = new BuildingObject("A102", "比武擂台", "这个是比武擂台说明", 3, BuildingStatus.None, BuildingType.Rest, 100, 1, "1;2", "1;2", "");
 
-	    buildingObjects[2] = new BuildingObject("A103", "民居", "这个是客栈说明", 3, BuildingStatus.None, BuildingType.Rest, 100, 1, "1;2", "1;2", "");
+	    //buildingObjects[2] = new BuildingObject("A103", "民居", "这个是客栈说明", 3, BuildingStatus.None, BuildingType.Rest, 100, 1, "1;2", "1;2", "");
 
-        Debug.Log(JsonConvert.SerializeObject(buildingObjects));
-        ////解析设施功能
+     //   Debug.Log(JsonConvert.SerializeObject(buildingObjects));
+     //   ////解析设施功能
 
         //string[] featuresIds = building.BuildingFeaturesIds.Split(';');
 

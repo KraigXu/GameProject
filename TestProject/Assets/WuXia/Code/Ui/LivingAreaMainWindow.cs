@@ -12,8 +12,29 @@ public class LivingAreaMainWindow : UIWindowBase
 {
     [SerializeField]
     private Text _name;
-    
+    [SerializeField]
+    private Text _powerName;
+    [SerializeField]
+    private Text _personName;
+    [SerializeField]
+    private Text _money;
+    [SerializeField]
+    private Text _iron;
+    [SerializeField]
+    private Text _wood;
+    [SerializeField]
+    private Text _food;
+    [SerializeField]
+    private Text _level;
+    [SerializeField]
+    private Text _type;
+    [SerializeField]
+    private Text _strength;
+    [SerializeField]
+    private Text _stable;
 
+
+    
     [Header("Building")]
     public List<GameObject> BuildingsGo = new List<GameObject>();
     [SerializeField]
@@ -21,7 +42,11 @@ public class LivingAreaMainWindow : UIWindowBase
     private BuildingObject[] _buildings ;
     private bool _buildingViewStatus = false;
 
+    [SerializeField]
+    private List<BaseCorrespondenceByModelControl> _buildingBilling;
+
     private LivingAreaWindowCD _currentLivingArea;
+
 
 
     protected override void SetWindowId()
@@ -50,12 +75,35 @@ public class LivingAreaMainWindow : UIWindowBase
     {
         if(contextData==null) return;
         _currentLivingArea =(LivingAreaWindowCD)contextData;
+
         ChangeData();
     }
 
     private void ChangeData()
     {
-        _name.text = _currentLivingArea.LivingAreaName;
+        for (int i = 0; i < _buildingBilling.Count; i++)
+        {
+            _buildingBilling[i].gameObject.SetActive(false);
+        }
+
+        
+
+        _name.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
+        _powerName.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
+        _personName.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
+        _money.text = _currentLivingArea.Money + "/" + _currentLivingArea.MoneyMax;
+        _iron.text = _currentLivingArea.Iron + "/" + _currentLivingArea.IronMax;
+        _wood.text = _currentLivingArea.Wood + "/" + _currentLivingArea.WoodMax;
+        _food.text = _currentLivingArea.Food + "/" + _currentLivingArea.FoodMax;
+        _level.text = GameText.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
+        _type.text = GameText.LivingAreaType[_currentLivingArea.LivingAreaType];
+
+        for (int i = 0; i < _currentLivingArea.Buildings.Count; i++)
+        {
+            _buildingBilling[i].gameObject.SetActive(true);
+            _buildingBilling[i].Init(StrategySceneInit.Settings.ModelCamera,UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingPoints[i]);
+
+        }
 
         //resolve Building Data , building图生成
         GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;

@@ -77,6 +77,7 @@ public class SQLService
 
     public void CreateDB()
     {
+        Tables.CreateTable_Prestige(this);
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);
 

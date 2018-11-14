@@ -13,13 +13,16 @@ public class DemoSetting : MonoBehaviour
 
     public GameObject Biological;
 
+    public GameObject DistrictPrefab;
     public GameObject PlayerBiological;
     public GameObject LivingAreaPrefab;
+    public GameObject LivingAreaModelPrefab;
 
 
     public DateTime curTime = DateTime.Now;
 
     public Camera MainCamera;
+    public Camera ModelCamera;
     public Camera UiCamera;
 
 }

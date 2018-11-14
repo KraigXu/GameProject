@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -64,12 +66,11 @@ public class ExtendedMenuWindowInData : BaseWindowContextData
 public class BiologicalUiInData : BaseWindowContextData
 {
 
-    public string BiologicalName;
-    public string Race;
-    public string Sex;
-    public string Prestige;
-    public string Influence;
-    public string Disposition;
+    public Entity OnlyEntity;
+    public int Sex;
+    public int Prestige;
+    public int Influence;
+    public int Disposition;
 
     public int Age;
     public int AgeMax;
@@ -91,12 +92,8 @@ public class BiologicalUiInData : BaseWindowContextData
 
 public class LivingAreaWindowCD:BaseWindowContextData
 {
-    public string LivingAreaName;
 
-    public int HumanNumber;
-    public int Id;
-    public string Name;
-    public string Description;
+    public Entity OnlyEntity;
     public int PersonNumber;
     public int Money;
     public int MoneyMax;
@@ -111,17 +108,11 @@ public class LivingAreaWindowCD:BaseWindowContextData
     public int LivingAreaType;
     public int DefenseStrength;
     public int StableValue;
-    public string BuildingInfoJson;
-    public int PositionX;
-    public int PositionY;
-    public int PositionZ;
 
+    public List<Vector3> BuildingPoints=new List<Vector3>();
+    public List<Entity> Buildings=new List<Entity>();
+    public List<int> BuildingAlats=new List<int>();
     public LivingAreaWindowCD() { }
-
-    public LivingAreaWindowCD(string name)
-    {
-        this.LivingAreaName = name;
-    }
 
 }
 

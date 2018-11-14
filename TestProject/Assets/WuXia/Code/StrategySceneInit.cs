@@ -17,6 +17,7 @@ namespace WX
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype LivingAreaArchetype;
         public static EntityArchetype BiologicalArchetype;
+        public static EntityArchetype BuildingArchetype;
         public static EntityArchetype PlayerArchetype;
         public static EntityArchetype BasicEnemyArchetype;
         public static EntityArchetype ShotSpawnArchetype;
@@ -40,11 +41,11 @@ namespace WX
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
-            LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea),typeof(Position),typeof(Interactable));
+            LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea), typeof(Position), typeof(Interactable));
 
             // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)[RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))][RequireComponent(typeof(ThirdPersonCharacter))]
-           // PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(AICharacterControl));
+            // PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
             //BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(Position), typeof(NavMeshAgent));
             // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
             //// Create an archetype for "shot spawn request" entities
@@ -120,24 +121,63 @@ namespace WX
 
             #endregion
 
-            #region districtInit
+            #region SexData
+            {
+                GameText.BiologicalSex.Add(1, "男");
+                GameText.BiologicalSex.Add(2, "女");
+                GameText.BiologicalSex.Add(3, "未知");
+            }
+            #endregion
+
+
+            #region Prestige
+
+            {
+                List<PrestigeData> prestigeDatas = SqlData.GetAllDatas<PrestigeData>();
+
+                List<int> max = new List<int>();
+                List<int> min = new List<int>();
+                List<int> level = new List<int>();
+                for (int i = 0; i < prestigeDatas.Count; i++)
+                {
+                    GameText.PrestigeBiolgicalDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].BiologicalTitle);
+                    GameText.PrestigeDistrictDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].DistrictTitle);
+                    GameText.PrestigeLivingAreaDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].LivingAreaTitle);
+                    max.Add(prestigeDatas[i].ValueMax);
+                    min.Add(prestigeDatas[i].ValueMin);
+                    level.Add(prestigeDatas[i].LevelCode);
+                }
+
+                PrestigeSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>(), max, min, level);
+
+            }
+            #endregion
+
+
+            #region DistrictInit
             {
                 List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
 
                 for (int i = 0; i < districtDatas.Count; i++)
                 {
-                    Entity district = entityManager.CreateEntity(DistrictArchetype);
+                    GameObject go = GameObject.Instantiate(Settings.DistrictPrefab, new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
 
-                    entityManager.SetComponentData(district,new District
+                    Entity district = go.GetComponent<GameObjectEntity>().Entity;
+                    entityManager.AddComponent(district,ComponentType.Create<District>());
+                    entityManager.SetComponentData(district, new District
                     {
-                         DistrictId=districtDatas[i].Id,
-                         FactionId = districtDatas[i].Id,
-                         GrowingModulus = districtDatas[i].GrowingModulus,
-                         SecurityModulus = districtDatas[i].SecurityModulus,
-                         Traffic = districtDatas[i].TrafficModulus
+                        Id = districtDatas[i].Id,
+                        Type = districtDatas[i].Type,
+                        ProsperityLevel = districtDatas[i].ProsperityLevel,
+                        TrafficLevel = districtDatas[i].TrafficLevel,
+                        GrowingModulus = districtDatas[i].GrowingModulus,
+                        SecurityModulus = districtDatas[i].SecurityModulus
                     });
+
+                    GameText.NameDic.Add(district, districtDatas[i].Name);
+                    GameText.Description.Add(district, districtDatas[i].Description);
                 }
-                //DistrictSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+
             }
             #endregion
 
@@ -146,16 +186,16 @@ namespace WX
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
                 for (int i = 0; i < livingAreaDatas.Count; i++)
                 {
-                    var go = GameObject.Instantiate(Settings.LivingAreaPrefab,new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),Quaternion.identity);
+                    var go = GameObject.Instantiate(Settings.LivingAreaPrefab, new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ), Quaternion.identity);
 
                     Entity livingArea = go.GetComponent<GameObjectEntity>().Entity;
-                    entityManager.AddComponent(livingArea,ComponentType.Create<LivingArea>());
-                    entityManager.SetComponentData(livingArea,new LivingArea
+                    entityManager.AddComponent(livingArea, ComponentType.Create<LivingArea>());
+                    entityManager.SetComponentData(livingArea, new LivingArea
                     {
-                        Id=livingAreaDatas[i].Id,
-                        PersonNumber=livingAreaDatas[i].PersonNumber,
-                        CurLevel= livingAreaDatas[i].LivingAreaLevel,
-                        MaxLevel=livingAreaDatas[i].LivingAreaMaxLevel,
+                        Id = livingAreaDatas[i].Id,
+                        PersonNumber = livingAreaDatas[i].PersonNumber,
+                        CurLevel = livingAreaDatas[i].LivingAreaLevel,
+                        MaxLevel = livingAreaDatas[i].LivingAreaMaxLevel,
                         TypeId = livingAreaDatas[i].LivingAreaType,
                         Money = livingAreaDatas[i].Money,
                         MoneyMax = livingAreaDatas[i].MoneyMax,
@@ -170,16 +210,10 @@ namespace WX
                         Renown = livingAreaDatas[i].StableValue
                     });
 
-                    entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
-                    //entityManager.SetComponentData(livingArea,new Position
-                    //{
-                    //    Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
-                    //});
+                    GameText.NameDic.Add(livingArea, livingAreaDatas[i].Name);
+                    GameText.Description.Add(livingArea, livingAreaDatas[i].Description);
 
-                    //entityManager.AddSharedComponentData(livingArea, LivingAreaLook);
                 }
-
-                LivingAreaSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
 
@@ -211,38 +245,28 @@ namespace WX
                         Jing = data[i].Property6,
                         Qi = data[i].Property6,
                         Shen = data[i].Property6
+
                     });
 
-                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<BiologicalText>());
-                    entityManager.SetComponentData(biologicalEntity, new BiologicalText()
-                    {
-                        Name = data[i].Name,
-                    });
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
 
-                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<NpcInput>());
-
-                    // entityManager.AddSharedComponentData(biologicalEntity,BiologicalLook);
-
-                    //  float3 position = new float3(10f, 10f, 5.1f);
-                    //  entityManager.SetComponentData(biologicalEntity, new Position { Value = position });
-                    //Transform t = entityManager.GetComponentData<>()
-                    //t.position = Vector3.zero;
-                    //Debug.Log(t.position);
-
+                    //Save Text
+                    GameText.NameDic.Add(biologicalEntity, data[i].Name);
+                    GameText.SurnameDic.Add(biologicalEntity, data[i].Surname);
+                    GameText.Description.Add(biologicalEntity, data[i].Description);
                 }
 
-                //biologicalEntity.en
             }
             #endregion
 
             #region Player
             {
 
-                var go = GameObject.Instantiate(Settings.PlayerBiological,new Vector3(1620.703f, 80.7618f, 629.1682f),quaternion.identity);
+                var go = GameObject.Instantiate(Settings.PlayerBiological, new Vector3(1620.703f, 80.7618f, 629.1682f), quaternion.identity);
                 var player = go.GetComponent<GameObjectEntity>().Entity;
 
                 BiologicalData data = SqlData.GetDataId<BiologicalData>(settings.PlayerId);
-                entityManager.AddComponent(player,ComponentType.Create<Biological>());
+                entityManager.AddComponent(player, ComponentType.Create<Biological>());
                 entityManager.SetComponentData(player, new Biological
                 {
                     BiologicalId = data.Id,
@@ -265,19 +289,22 @@ namespace WX
                     LocationCode = data.LocationType
                 });
 
-                //entityManager.AddComponent(player, ComponentType.Create<Position>());
-                //entityManager.SetComponentData(player, new Position { Value = new float3(1620.703f, 80.7618f, 629.1682f) });
+                entityManager.AddComponent(player, ComponentType.Create<PlayerInput>());
 
-                entityManager.AddComponent(player,ComponentType.Create<PlayerInput>());
+                entityManager.AddComponent(player, ComponentType.Create<Prestige>());
+                entityManager.SetComponentData(player, new Prestige
+                {
+                    Value = data.Prestige,
+                });
+
+                GameText.NameDic.Add(player, data.Name);
+                GameText.SurnameDic.Add(player, data.Surname);
+                GameText.Description.Add(player, data.Description);
 
                 //entityManager.AddComponent(player,ComponentType.Create<Player>());
-
                 // Finally we add a shared component which dictates the rendered look
                 //entityManager.AddSharedComponentData(player, PlayerLook);
-
                 // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
-                
-                
                 //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
             }

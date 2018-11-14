@@ -63,6 +63,11 @@ public class Define : MonoBehaviour
     public GameObject UiLivingAreaBuff { get { return Resources.Load<GameObject>("UIPrefab/ThumbnailsInfo"); } }
     public GameObject UiLivingAreaBuilding { get { return Resources.Load<GameObject>("UIPrefab/LivingArea/LivingAreaBuilding"); } }
 
+
+
+
+
+
     //----->按键
     public KeyCode CofirmCode = KeyCode.Mouse0;
     public KeyCode CancelCode = KeyCode.Mouse1;
