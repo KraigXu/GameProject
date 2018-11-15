@@ -107,10 +107,16 @@ public class LivingAreaWindowCD:BaseWindowContextData
     public int DefenseStrength;
     public int StableValue;
 
+    public List<BuildingiDataItem> BuildingiDataItems=new List<BuildingiDataItem>();
     public List<Vector3> BuildingPoints=new List<Vector3>();
     public List<Entity> Buildings=new List<Entity>();
     public List<int> BuildingAlats=new List<int>();
+
     public LivingAreaWindowCD() { }
+}
+
+public class BuildingiDataItem
+{
 
 }
 

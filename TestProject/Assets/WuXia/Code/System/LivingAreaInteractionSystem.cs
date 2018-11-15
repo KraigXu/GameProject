@@ -9,9 +9,7 @@ using UnityEngine;
 
 namespace WX
 {
-    /// <summary>
-    /// 场景交互
-    /// </summary>
+
     class LivingAreaInteractionSystem : JobComponentSystem
     {
         struct Players

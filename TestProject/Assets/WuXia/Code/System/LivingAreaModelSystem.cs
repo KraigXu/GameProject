@@ -13,7 +13,7 @@ namespace WX
         {
             public readonly int Length;
             public EntityArray Entity;
-            public ComponentDataArray<LivingAreaMain> Main;
+          //  public ComponentDataArray<LivingAreaMain> Main;
         }
         [Inject]
         private LivingAreaData _data;

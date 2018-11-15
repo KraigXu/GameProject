@@ -28,38 +28,44 @@ namespace WX
     /// </summary>
     public class BuildingObject
     {
-        public string Key { get; set; }                         //建筑物key
-        public string Name { get; set; }                       //名称                                           
-        public string Description { get; set; }                 //说明
-        public int BuildingLevel { get; set; }                  //建筑物等级
-        public int Status { get; set; }                 //建筑物状态                      
-        public int Type { get; set; }                   //建筑物类型    
-        public int DurableValue { get; set; }                   //建筑物耐久  百分比                                                                                                        
-        public int OwnId { get; set; }                          //拥有者Id                                        
-        public string BuildingFeaturesIds { get; set; }         //建筑物特征
-        public string MarkIds { get; set; }                     //建筑物词缀
-        public string ModelPath { get; set; }                   //模型位置
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public int BuildingLevel { get; set; }
+        public int Status { get; set; }
+        public int Type { get; set; }
+        public int DurableValue { get; set; }
+        public int OwnId { get; set; }
+
+
+
+
+
         public BuildingObject() { }
         public int ImageId { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
 
-        public BuildingObject(string key, string name, string description, int buildingLevel, int status, int type,
-            int durableValue, int ownId, string buildingFeaturesIds, string markIds, string modelPath)
-        {
-            this.Key = key;
-            this.Name = name;
-            this.Description = description;
-            this.BuildingLevel = buildingLevel;
-            this.Status = status;
-            this.Type = type;
-            this.DurableValue = durableValue;
-            this.OwnId = ownId;
-            this.BuildingFeaturesIds = buildingFeaturesIds;
-            this.MarkIds = markIds;
-            this.ModelPath = modelPath;
-        }
+        // public string MarkIds { get; set; }
+        // public string ModelPath { get; set; }
+        // public string BuildingFeaturesIds { get; set; }
+
+        //public BuildingObject(string key, string name, string description, int buildingLevel, int status, int type,
+        //    int durableValue, int ownId, string buildingFeaturesIds, string markIds, string modelPath)
+        //{
+        //    this.Key = key;
+        //    this.Name = name;
+        //    this.Description = description;
+        //    this.BuildingLevel = buildingLevel;
+        //    this.Status = status;
+        //    this.Type = type;
+        //    this.DurableValue = durableValue;
+        //    this.OwnId = ownId;
+        //    this.BuildingFeaturesIds = buildingFeaturesIds;
+        //    this.MarkIds = markIds;
+        //    this.ModelPath = modelPath;
+        //}
     }
 
     //建筑物状态
@@ -94,9 +100,6 @@ namespace WX
     }
 
 
-
-
-
     public class LivingAreaSystem : ComponentSystem
     {
 
@@ -115,11 +118,8 @@ namespace WX
         [Inject]
         private LivingAreaGroup _livingAreas;
 
-        protected override void OnStartRunning()
-        {
-            base.OnStartRunning();
-            Debug.Log("LivingAreaSystem Start");
-        }
+        [Inject]
+        private BuildingSystem _buildingSystem;
 
         protected override void OnCreateManager()
         {
@@ -141,7 +141,7 @@ namespace WX
 
             if (CurShowUi == false)
             {
-                WindowContextLivingAreaData uidata=  new WindowContextLivingAreaData();
+                WindowContextLivingAreaData uidata = new WindowContextLivingAreaData();
                 for (int i = 0; i < _livingAreas.Length; i++)
                 {
                     uidata.EntityArray.Add(_livingAreas.Entity[i]);
@@ -199,7 +199,8 @@ namespace WX
         {
 
         }
-        public void OpenLivingArea(int id)
+
+        public LivingAreaWindowCD GetLivingAreaData(int id)
         {
             LivingAreaWindowCD uidata = new LivingAreaWindowCD();
             for (int i = 0; i < _livingAreas.Length; i++)
@@ -208,7 +209,6 @@ namespace WX
                 {
                     continue;
                 }
-
                 var livingArea = _livingAreas.LivingAreaNode[i];
                 uidata.OnlyEntity = _livingAreas.Entity[i];
                 uidata.PersonNumber = livingArea.PersonNumber;
@@ -224,57 +224,66 @@ namespace WX
                 uidata.LivingAreaMaxLevel = livingArea.MaxLevel;
                 uidata.LivingAreaType = livingArea.TypeId;
                 uidata.DefenseStrength = livingArea.DefenseStrength;
-                break;
+
             }
 
-            LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
+            return uidata;
+        }
 
-            GameObject go = GameObject.Instantiate(StrategySceneInit.Settings.LivingAreaModelPrefab);
-            GameObject model = GameObject.Instantiate(Resources.Load<GameObject>(data.ModelMain), go.transform);
+        public void OpenLivingArea(int id)
+        {
 
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            EntityArchetype buildingArchetype= entityManager.CreateArchetype(typeof(Building),typeof(Position));
+            //   for (int i = 0; i < _livingAreas.Length; i++)
+            //   {
 
-            List<BuildingObject>  buildings = JsonConvert.DeserializeObject<List<BuildingObject>>(data.BuildingInfoJson);
 
-            for (int i = 0; i < buildings.Count; i++)
-            {
-                Entity building = entityManager.CreateEntity(buildingArchetype);
 
-                entityManager.SetComponentData(building,new Building
-                {
-                    DurableValue = buildings[i].DurableValue,
-                    Level = buildings[i].BuildingLevel,
-                    OwnId = buildings[i].OwnId,
-                    Status = buildings[i].Status,
-                    Type = buildings[i].Type,
-                });
+            //   }
 
-                entityManager.SetComponentData(building,new Position
-                {
-                    Value =new float3(buildings[i].X, buildings[i].Y, buildings[i].Z)
-                });
+            //   LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
 
-                GameText.BuildingNameDic.Add(building,buildings[i].Name);
-                GameText.BuildingDescriptionDic.Add(building,buildings[i].Description);
+            //   GameObject go = GameObject.Instantiate(StrategySceneInit.Settings.LivingAreaModelPrefab);
+            //   GameObject model = GameObject.Instantiate(Resources.Load<GameObject>(data.ModelMain), go.transform);
 
-                uidata.BuildingPoints.Add(new Vector3(buildings[i].X,buildings[i].Y,buildings[i].Z));
-                uidata.Buildings.Add(building);
-                uidata.BuildingAlats.Add(buildings[i].ImageId);
-            }
-            //GameText
+            //   var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            //   EntityArchetype buildingArchetype= entityManager.CreateArchetype(typeof(Building),typeof(Position));
 
-            Entity entity = model.GetComponent<GameObjectEntity>().Entity;
-            
-            entityManager.AddComponent(entity,ComponentType.Create<LivingAreaMain>());
-            entityManager.SetComponentData(entity,new LivingAreaMain()
-            {
-                
-            });
+            //   List<BuildingObject>  buildings = JsonConvert.DeserializeObject<List<BuildingObject>>(data.BuildingInfoJson);
 
-            ShowWindowData windowData = new ShowWindowData();
-            windowData.contextData = uidata;
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+            //   for (int i = 0; i < buildings.Count; i++)
+            //   {
+            //       Entity building = entityManager.CreateEntity(buildingArchetype);
+
+            //       entityManager.SetComponentData(building,new Building
+            //       {
+            //           DurableValue = buildings[i].DurableValue,
+            //           Level = buildings[i].BuildingLevel,
+            //           OwnId = buildings[i].OwnId,
+            //           Status = buildings[i].Status,
+            //           Type = buildings[i].Type,
+            //       });
+
+            //       entityManager.SetComponentData(building,new Position
+            //       {
+            //           Value =new float3(buildings[i].X, buildings[i].Y, buildings[i].Z)
+            //       });
+
+            //       GameText.BuildingNameDic.Add(building,buildings[i].Name);
+            //       GameText.BuildingDescriptionDic.Add(building,buildings[i].Description);
+
+            //       uidata.BuildingPoints.Add(new Vector3(buildings[i].X,buildings[i].Y,buildings[i].Z));
+            //       uidata.Buildings.Add(building);
+            //       uidata.BuildingAlats.Add(buildings[i].ImageId);
+            //   }
+            //   //GameText
+
+            //   Entity entity = go.GetComponent<GameObjectEntity>().Entity;
+
+            //   entityManager.AddComponent(entity,ComponentType.Create<LivingAreaMain>());
+
+            // //  ShowWindowData windowData = new ShowWindowData();
+            ////   windowData.contextData = uidata;
+            //  // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
         }
 

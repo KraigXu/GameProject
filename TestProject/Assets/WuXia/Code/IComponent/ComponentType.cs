@@ -89,6 +89,8 @@ namespace WX
         public int LocationCode;
         public int LocationType;
         public int LocationStatus;
+
+        public int TragetId;
         
        // public int Huti;
 
@@ -142,6 +144,27 @@ namespace WX
         //public Sprite Avatar;
     }
 
+    public struct BiologicalStatus: IComponentData
+    {
+        public Vector3 Position;        //  位置
+        public int TargetId;            // 目标ID
+        public int TargetType;          // 目标类型
+        public int StatusRealTime;       // 实时状态
+        public int LocationId;           //所处位置ID
+
+    }
+
+    public struct InteractionElement : IComponentData
+    {
+        public Vector3 Position;
+        public int Id;
+        public int InteractionType;
+        public int InteractionEnterType;
+        public int InteractionExitType;
+        public int Distance;
+    }
+
+
     public struct LivingArea : IComponentData
     {
 
@@ -175,9 +198,7 @@ namespace WX
 
         //public LivingAreaState[] Groups = new LivingAreaState[0];
     }
-    public struct LivingAreaMain : IComponentData
-    {
-    }
+
 
     public struct Building : IComponentData
     {
@@ -186,7 +207,7 @@ namespace WX
         public int Type;
         public int DurableValue;
         public int OwnId;
-
+        public Vector3 Position;
 
         //public string Key { get; set; }
         //public string Name { get; set; }

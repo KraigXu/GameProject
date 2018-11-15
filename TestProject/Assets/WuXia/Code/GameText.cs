@@ -11,7 +11,9 @@ namespace WX
 
         public static Dictionary<int,string> LivingAreaLevel=new Dictionary<int, string>();
 
-        public static Dictionary<int,string> LivingAreaType=new Dictionary<int, string>(); 
+        public static Dictionary<int,string> LivingAreaType=new Dictionary<int, string>();
+        
+        public static Dictionary<int,string> LivingAreaModelPath=new Dictionary<int, string>();
 
         public static Dictionary<int,string> PrestigeBiolgicalDic=new Dictionary<int, string>();
         public static Dictionary<int,string> PrestigeDistrictDic = new Dictionary<int, string>();

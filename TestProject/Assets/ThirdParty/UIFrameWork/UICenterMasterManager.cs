@@ -148,8 +148,6 @@ namespace TinyFrameWork
                         }
                         dicAllWindows[id] = baseWindow;
                         prefab = null;
-                        //Debug.Log("Resources.UnloadUnusedAssets();");
-                        //Resources.UnloadUnusedAssets();
                     }
                 }
             }
@@ -230,17 +228,6 @@ namespace TinyFrameWork
             {
                 AddWindowInControl(kp.Key);
             }
-            //AddWindowInControl(WindowID.WindowID_Level);
-            //AddWindowInControl(WindowID.WindowID_Rank);
-            //AddWindowInControl(WindowID.WindowID_MainMenu);
-            //AddWindowInControl(WindowID.WindowID_Level);
-            ////AddWindowInControl(WindowID.WindowID_TopBar);
-            ////AddWindowInControl(WindowID.WindowID_MessageBox);
-            ////AddWindowInControl(WindowID.WindowID_LevelDetail);
-            ////AddWindowInControl(WindowID.WindowID_Matching);
-            ////AddWindowInControl(WindowID.WindowID_MatchResult);
-            ////AddWindowInControl(WindowID.WindowID_Skill);
-            //AddWindowInControl(WindowID.WindowID_Shop);
         }
 
 

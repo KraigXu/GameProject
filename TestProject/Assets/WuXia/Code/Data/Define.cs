@@ -33,8 +33,6 @@ public class Define : MonoBehaviour
     public readonly string ManagerSceneName = "Manager";
     public readonly string LoadingSceneName = "Loading";
 
-
-
     /// <summary>
     /// 当前游戏状态             -1:发生错误  0:正常界面 1正常战略 2正常战役
     /// </summary>
@@ -45,12 +43,10 @@ public class Define : MonoBehaviour
     public string CurrentSceneName = "";
     public string NextSceneName = "";
 
+    //public int CurStatus = 3;
 
-    //public  string AvatarPath = "Atlas/";
-    //public TextAsset AvatarText { get { return Resources.Load<TextAsset>("Text/AvatarCodeMap"); } }
 
-    //public string BiologicalPath = "Model/";
-    //public TextAsset BiologicalText { get { return Resources.Load<TextAsset>("Text/BiologicalModelText"); } }
+
 
 
     public GameObject GameTurretManager { get { return Resources.Load<GameObject>("Prefab/TurretManager"); } }
@@ -62,11 +58,6 @@ public class Define : MonoBehaviour
 
     public GameObject UiLivingAreaBuff { get { return Resources.Load<GameObject>("UIPrefab/ThumbnailsInfo"); } }
     public GameObject UiLivingAreaBuilding { get { return Resources.Load<GameObject>("UIPrefab/LivingArea/LivingAreaBuilding"); } }
-
-
-
-
-
 
     //----->按键
     public KeyCode CofirmCode = KeyCode.Mouse0;
@@ -108,13 +99,4 @@ public class Define : MonoBehaviour
         NextSceneName = nextScene;
          SceneManager.LoadScene(LoadingSceneName);
     }
-
-
-
-    //----> Algorithm
-    public Vector2 s()
-    {
-        return new Vector2();
-    }
-
 }

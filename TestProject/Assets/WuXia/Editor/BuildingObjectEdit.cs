@@ -129,7 +129,7 @@ public class BuildingObjectEdit : EditorWindowBase
             //b.DurableMax = 0;
             //b.BuildingStatus = 0;
             //b.HaveId = 0;
-            b.BuildingFeaturesIds = "";
+           // b.BuildingFeaturesIds = "";
             _buildings.Add(b);
         }
         

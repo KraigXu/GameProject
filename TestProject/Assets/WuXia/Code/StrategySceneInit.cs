@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataAccessObject;
+using Newtonsoft.Json;
 using TinyFrameWork;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -42,7 +43,7 @@ namespace WX
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea), typeof(Position), typeof(Interactable));
-
+            BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
             // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)[RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))][RequireComponent(typeof(ThirdPersonCharacter))]
             // PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
@@ -210,6 +211,37 @@ namespace WX
                         Renown = livingAreaDatas[i].StableValue
                     });
 
+                    entityManager.AddComponent(livingArea, ComponentType.Create<InteractionElement>());
+                    entityManager.SetComponentData(livingArea, new InteractionElement
+                    {
+                        Position= new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
+                        Distance = 1,
+                        Id = livingAreaDatas[i].Id,
+                        InteractionType = (int)LocationType.LivingAreaIn,
+                        InteractionExitType = (int)LocationType.LivingAreaExit,
+                        InteractionEnterType = (int)LocationType.LivingAreaEnter
+                    });
+
+                    List<BuildingObject> buildingData = JsonConvert.DeserializeObject<List<BuildingObject>>(livingAreaDatas[i].BuildingInfoJson);
+
+                    for (int j = 0; j < buildingData.Count; j++)
+                    { 
+                        Entity building = entityManager.CreateEntity(BuildingArchetype);
+                        entityManager.SetComponentData(building,new Building
+                        { 
+                            Level = buildingData[j].BuildingLevel,
+                            Status = buildingData[j].Status,
+                            OwnId = buildingData[j].OwnId,
+                            Type = buildingData[j].Type,
+                            DurableValue = buildingData[j].DurableValue,
+                            Position = new Vector3(buildingData[j].X,buildingData[j].Y,buildingData[j].Z)
+                        });
+
+                        GameText.BuildingNameDic.Add(building, buildingData[j].Name);
+                        GameText.BuildingDescriptionDic.Add(building,buildingData[j].Description);
+                    }
+
+                    GameText.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameText.NameDic.Add(livingArea, livingAreaDatas[i].Name);
                     GameText.Description.Add(livingArea, livingAreaDatas[i].Description);
 
@@ -249,6 +281,20 @@ namespace WX
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
+
+                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<BiologicalStatus>());
+                    entityManager.SetComponentData(biologicalEntity,new BiologicalStatus
+                    {
+                        Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                        TargetId = 0,
+                        TargetType = 0,
+                        StatusRealTime=3
+                    });
+
+
+                  
+
+
 
                     //Save Text
                     GameText.NameDic.Add(biologicalEntity, data[i].Name);
@@ -296,6 +342,17 @@ namespace WX
                 {
                     Value = data.Prestige,
                 });
+
+
+                entityManager.AddComponent(player, ComponentType.Create<BiologicalStatus>());
+                entityManager.SetComponentData(player, new BiologicalStatus
+                {
+                    Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                    TargetId = 0,
+                    TargetType = 0,
+                    StatusRealTime = 3
+                });
+
 
                 GameText.NameDic.Add(player, data.Name);
                 GameText.SurnameDic.Add(player, data.Surname);

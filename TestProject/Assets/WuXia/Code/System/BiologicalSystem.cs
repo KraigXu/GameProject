@@ -25,6 +25,10 @@ namespace WX
         Field = 0,
         City = 1,
         Event = 3,
+        InLivingArea =4,
+        LivingAreaExit=5,
+        LivingAreaEnter=6,
+        LivingAreaIn=7
     }
 
     public enum WhereStatus

@@ -9,6 +9,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.ThirdPerson;
+using Unity.Transforms;
+using Unity.Mathematics;
 
 namespace WX
 {
@@ -40,6 +42,7 @@ namespace WX
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<AICharacterControl> AiControl;
             public ComponentDataArray<Prestige> Prestige;
+            public ComponentDataArray<BiologicalStatus> Status;
             public EntityArray Entity;
         }
 
@@ -53,7 +56,7 @@ namespace WX
         private CameraSystem _cameraSystem;
 
         private StrategyWindow _strategyWindow;
-        
+
 
         protected override void OnUpdate()
         {
@@ -63,7 +66,7 @@ namespace WX
             float dt = Time.deltaTime;
             for (int i = 0; i < m_Players.Length; ++i)
             {
-
+                BiologicalStatus newStatus = m_Players.Status[i];
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
                 RaycastHit hit;    //声明一个碰撞的点
                 bool flag = false;
@@ -85,7 +88,8 @@ namespace WX
                                 if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
                                 {
                                     m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center, ContactTarget, (int)TragetType.City, _livingAreaData.LivingArea[j].Id);
-                                    return;
+                                    newStatus.TargetType = 1;
+                                    newStatus.TargetId = _livingAreaData.LivingArea[j].Id;
                                 }
                             }
                         }
@@ -100,32 +104,85 @@ namespace WX
                                 ShowWindowData windowData = new ShowWindowData();
                                 windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, _livingAreaData.LivingArea[j].Id);
                                 flag = true;
-                                return;
                             }
                         }
                     }
-
-
                 }
-                var biological = m_Players.Biological[i];
-                var input = m_Players.Input[i];
 
-
-                switch ((LocationType)biological.LocationType)
+                newStatus.Position = m_Players.AiControl[i].transform.position;
+                if (m_Players.Status[i].StatusRealTime == (int)LocationType.City)
                 {
-                    case LocationType.City:
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
-                        break;
-                    case LocationType.Event:
-                        break;
-                    case LocationType.Field:
-                        
-                        break;
+
                 }
+                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.Event)
+                {
+
+                }
+                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.Field)
+                {
+
+                }
+                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaEnter)
+                {
+                    Debuger.Log("InLivingArea");
+                    newStatus.StatusRealTime = (int)LocationType.LivingAreaIn;
+
+                    GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameText.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+                    
+                    //检查当前状态 显示UI信息 
+                    LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
+                    ShowWindowData windowData = new ShowWindowData();
+                    windowData.contextData = uidata;
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+
+                    // DataAccessObject.LivingAreaData data = SqlData.GetDataId<DataAccessObject.LivingAreaData>(m_Players.Status[i].TargetId);
+                    // m_Players.Status[i] = newStatus;
+                   
+                    //m_Players.Status[i] = newStatus;
+                    //GameObject model = GameObject.Instantiate(Resources.Load<GameObject>(data.ModelMain), go.transform);
+                    //m_Players.Status[i] = newStatus;
+                    //var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+                    //EntityArchetype buildingArchetype = entityManager.CreateArchetype(typeof(Building), typeof(Position));
+                    //m_Players.Status[i] = newStatus;
+                    //List<BuildingObject> buildings = JsonConvert.DeserializeObject<List<BuildingObject>>(data.BuildingInfoJson);
+                    //m_Players.Status[i] = newStatus;
+                    //for (int j = 0; j < buildings.Count; j++)
+                    //{
+                    //    Entity building = entityManager.CreateEntity(buildingArchetype);
+
+                    //    entityManager.SetComponentData(building, new Building
+                    //    {
+                    //        DurableValue = buildings[j].DurableValue,
+                    //        Level = buildings[j].BuildingLevel,
+                    //        OwnId = buildings[j].OwnId,
+                    //        Status = buildings[j].Status,
+                    //        Type = buildings[j].Type,
+                    //    });
+
+                    //    entityManager.SetComponentData(building, new Position
+                    //    {
+                    //        Value = new float3(buildings[i].X, buildings[i].Y, buildings[i].Z)
+                    //    });
+
+                    //    GameText.BuildingNameDic.Add(building, buildings[i].Name);
+                    //    GameText.BuildingDescriptionDic.Add(building, buildings[i].Description);
+
+                    //    uidata.BuildingPoints.Add(new Vector3(buildings[i].X, buildings[i].Y, buildings[i].Z));
+                    //    uidata.Buildings.Add(building);
+                    //    uidata.BuildingAlats.Add(buildings[i].ImageId);
+                    //}
+                    ////GameText
+
+                    //Entity entity = go.GetComponent<GameObjectEntity>().Entity;
+                    //m_Players.Status[i] = newStatus;
+                    //entityManager.AddComponent(entity, ComponentType.Create<LivingAreaMain>());
+
+                    //ShowWindowData windowData = new ShowWindowData();
+                    //windowData.contextData = uidata;
+                    //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+                }
+                m_Players.Status[i] = newStatus;
             }
-
-           
-
             if (_strategyWindow == null)
             {
                 ShowWindowData data = new ShowWindowData();
@@ -163,7 +220,7 @@ namespace WX
             uidata.Prestige = m_Players.Prestige[0].Level;
             uidata.Influence = data.Influence;
             uidata.Disposition = data.Disposition;
-            uidata.OnlyEntity = m_Players.Entity[0];            
+            uidata.OnlyEntity = m_Players.Entity[0];
 
             showWindowData.contextData = uidata;
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);
@@ -192,20 +249,20 @@ namespace WX
 
         private void ContactTarget(int code, int targetId)
         {
-            switch ((TragetType)code)
-            {
-                case TragetType.City:
-                    {
-                        //Loading LivingArea
-                        _livingAreaSystem.OpenLivingArea(targetId);
-                    }
-                    break;
-                case TragetType.Field:
-                    _worldTimeSystem.Pause();
-                    break;
-                case TragetType.Idie:
-                    break;
-            }
+            //switch ((TragetType)code)
+            //{
+            //    case TragetType.City:
+            //        {
+            //            //Loading LivingArea
+            //            _livingAreaSystem.OpenLivingArea(targetId);
+            //        }
+            //        break;
+            //    case TragetType.Field:
+            //        _worldTimeSystem.Pause();
+            //        break;
+            //    case TragetType.Idie:
+            //        break;
+            //}
 
         }
 

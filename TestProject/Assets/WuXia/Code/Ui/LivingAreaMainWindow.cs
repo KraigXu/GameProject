@@ -76,11 +76,12 @@ public class LivingAreaMainWindow : UIWindowBase
         if(contextData==null) return;
         _currentLivingArea =(LivingAreaWindowCD)contextData;
 
-        ChangeData();
+        //ChangeData();
     }
 
     private void ChangeData()
     {
+
         for (int i = 0; i < _buildingBilling.Count; i++)
         {
             _buildingBilling[i].gameObject.SetActive(false);
