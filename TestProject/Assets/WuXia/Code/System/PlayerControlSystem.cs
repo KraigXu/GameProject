@@ -43,6 +43,7 @@ namespace WX
             public ComponentArray<AICharacterControl> AiControl;
             public ComponentDataArray<Prestige> Prestige;
             public ComponentDataArray<BiologicalStatus> Status;
+            public ComponentDataArray<CameraProperty> Property;
             public EntityArray Entity;
         }
 
@@ -110,6 +111,8 @@ namespace WX
                 }
 
                 newStatus.Position = m_Players.AiControl[i].transform.position;
+                CameraProperty newtarget = m_Players.Property[i];
+                
                 if (m_Players.Status[i].StatusRealTime == (int)LocationType.City)
                 {
 
@@ -120,68 +123,42 @@ namespace WX
                 }
                 else if (m_Players.Status[i].StatusRealTime == (int)LocationType.Field)
                 {
-
+                    newtarget.Target = m_Players.AiControl[i].transform.position;
                 }
                 else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaEnter)
                 {
-                    Debuger.Log("InLivingArea");
                     newStatus.StatusRealTime = (int)LocationType.LivingAreaIn;
 
                     GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameText.LivingAreaModelPath[m_Players.Status[i].TargetId]));
-                    
+
+                    Renderer[]  renderers = go.transform.GetComponentsInChildren<Renderer>();
+
+                    Bounds bounds = renderers[0].bounds;
+
+                    for (int j = 1; j < renderers.Length; j++)
+                    {
+                        bounds.Encapsulate(renderers[j].bounds);
+                    }
+                    newtarget.Target = bounds.center;
+
                     //检查当前状态 显示UI信息 
                     LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
                     ShowWindowData windowData = new ShowWindowData();
                     windowData.contextData = uidata;
                     UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-                    // DataAccessObject.LivingAreaData data = SqlData.GetDataId<DataAccessObject.LivingAreaData>(m_Players.Status[i].TargetId);
-                    // m_Players.Status[i] = newStatus;
-                   
-                    //m_Players.Status[i] = newStatus;
-                    //GameObject model = GameObject.Instantiate(Resources.Load<GameObject>(data.ModelMain), go.transform);
-                    //m_Players.Status[i] = newStatus;
-                    //var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-                    //EntityArchetype buildingArchetype = entityManager.CreateArchetype(typeof(Building), typeof(Position));
-                    //m_Players.Status[i] = newStatus;
-                    //List<BuildingObject> buildings = JsonConvert.DeserializeObject<List<BuildingObject>>(data.BuildingInfoJson);
-                    //m_Players.Status[i] = newStatus;
-                    //for (int j = 0; j < buildings.Count; j++)
-                    //{
-                    //    Entity building = entityManager.CreateEntity(buildingArchetype);
-
-                    //    entityManager.SetComponentData(building, new Building
-                    //    {
-                    //        DurableValue = buildings[j].DurableValue,
-                    //        Level = buildings[j].BuildingLevel,
-                    //        OwnId = buildings[j].OwnId,
-                    //        Status = buildings[j].Status,
-                    //        Type = buildings[j].Type,
-                    //    });
-
-                    //    entityManager.SetComponentData(building, new Position
-                    //    {
-                    //        Value = new float3(buildings[i].X, buildings[i].Y, buildings[i].Z)
-                    //    });
-
-                    //    GameText.BuildingNameDic.Add(building, buildings[i].Name);
-                    //    GameText.BuildingDescriptionDic.Add(building, buildings[i].Description);
-
-                    //    uidata.BuildingPoints.Add(new Vector3(buildings[i].X, buildings[i].Y, buildings[i].Z));
-                    //    uidata.Buildings.Add(building);
-                    //    uidata.BuildingAlats.Add(buildings[i].ImageId);
-                    //}
-                    ////GameText
-
-                    //Entity entity = go.GetComponent<GameObjectEntity>().Entity;
-                    //m_Players.Status[i] = newStatus;
-                    //entityManager.AddComponent(entity, ComponentType.Create<LivingAreaMain>());
-
-                    //ShowWindowData windowData = new ShowWindowData();
-                    //windowData.contextData = uidata;
-                    //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
                 }
+                else if (m_Players.Status[i].StatusRealTime == (int) LocationType.LivingAreaExit)
+                {
+
+                }else if (m_Players.Status[i].StatusRealTime == (int) LocationType.LivingAreaIn)
+                {
+
+                }
+
+                m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
+               
             }
             if (_strategyWindow == null)
             {

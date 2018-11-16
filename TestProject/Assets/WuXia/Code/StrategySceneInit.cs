@@ -20,8 +20,6 @@ namespace WX
         public static EntityArchetype BiologicalArchetype;
         public static EntityArchetype BuildingArchetype;
         public static EntityArchetype PlayerArchetype;
-        public static EntityArchetype BasicEnemyArchetype;
-        public static EntityArchetype ShotSpawnArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -36,34 +34,25 @@ namespace WX
         public static void Initialize()
         {
             Debuger.EnableLog = true;
-            // This method creates archetypes for entities we will spawn frequently in this game.
-            // Archetypes are optional but can speed up entity spawning substantially.
+            //此方法为我们将在此游戏中频繁生成的实体创建原型。
+            //Archetypes是可选的，但可以大大加速实体产生。
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea), typeof(Position), typeof(Interactable));
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
-            // Create player archetype typeof(Position), typeof(Rotation), typeof(PlayerInput),typeof(Health)[RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))][RequireComponent(typeof(ThirdPersonCharacter))]
-            // PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl),typeof(Transform),typeof(NavMeshAgent),typeof(ThirdPersonCharacter),typeof(Player));
+            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl), typeof(Transform), typeof(NavMeshAgent), typeof(ThirdPersonCharacter));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
-            //BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological),typeof(Position), typeof(NavMeshAgent));
-            // BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
-            //// Create an archetype for "shot spawn request" entities
-            //ShotSpawnArchetype = entityManager.CreateArchetype(typeof(ShotSpawnData));
-
-            //// Create an archetype for basic enemies.
-            //BasicEnemyArchetype = entityManager.CreateArchetype(
-            //    typeof(Enemy), typeof(Health), typeof(EnemyShootState),
-            //    typeof(Position), typeof(Rotation),
-            //    typeof(MoveSpeed), typeof(MoveForward));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Position), typeof(NavMeshAgent));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeAfterSceneLoad()
         {
-            var settingsGO = GameObject.Find("Settings");
-            if (settingsGO == null)
+            var settingsGo = GameObject.Find("Settings");
+            if (settingsGo == null)
             {
                 SceneManager.sceneLoaded += OnSceneLoaded;
                 return;
@@ -83,13 +72,13 @@ namespace WX
 
         public static void InitializeWithScene()
         {
-            var settingsGO = GameObject.Find("Settings");
-            if (settingsGO == null)
+            var settingsGo = GameObject.Find("Settings");
+            if (settingsGo == null)
             {
                 SceneManager.sceneLoaded += OnSceneLoaded;
                 return;
             }
-            Settings = settingsGO?.GetComponent<DemoSetting>();
+            Settings = settingsGo?.GetComponent<DemoSetting>();
             if (!Settings)
                 return;
 
@@ -105,7 +94,7 @@ namespace WX
 
             //LivingAreaBuildingSystem     --暂无开启
 
-            //  BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
+            //BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
             // World.Active.GetOrCreateManager<UpdatePlayerHUD>().SetupGameObjects();
             //World.Active.GetOrCreateManager<StrategySystem>().Update();
 
@@ -122,11 +111,38 @@ namespace WX
 
             #endregion
 
-            #region SexData
+            #region Dic
             {
                 GameText.BiologicalSex.Add(1, "男");
                 GameText.BiologicalSex.Add(2, "女");
                 GameText.BiologicalSex.Add(3, "未知");
+
+                GameText.LivingAreaLevel.Add(0, "0级");
+                GameText.LivingAreaLevel.Add(1, "1级");
+                GameText.LivingAreaLevel.Add(2, "2级");
+                GameText.LivingAreaLevel.Add(3, "3级");
+                GameText.LivingAreaLevel.Add(4, "4级");
+                GameText.LivingAreaLevel.Add(5, "5级");
+
+                GameText.LivingAreaType.Add(0, "Type1");
+                GameText.LivingAreaType.Add(1, "Type2");
+                GameText.LivingAreaType.Add(2, "Type3");
+                GameText.LivingAreaType.Add(3, "Type4");
+                GameText.LivingAreaType.Add(4, "Type5");
+                GameText.LivingAreaType.Add(5, "Type6");
+
+                GameText.BuildingType.Add(0, "BuildingType1");
+                GameText.BuildingType.Add(1, "BuildingType2");
+                GameText.BuildingType.Add(2, "BuildingType3");
+                GameText.BuildingType.Add(3, "BuildingType4");
+                GameText.BuildingType.Add(4, "BuildingType5");
+                GameText.BuildingType.Add(5, "BuildingType6");
+                GameText.BuildingType.Add(6, "BuildingType7");
+
+                GameText.BuildingStatus.Add(0, "空地");
+                GameText.BuildingStatus.Add(1, "正常");
+                GameText.BuildingStatus.Add(2, "建筑中");
+
             }
             #endregion
 
@@ -164,7 +180,7 @@ namespace WX
                     GameObject go = GameObject.Instantiate(Settings.DistrictPrefab, new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
 
                     Entity district = go.GetComponent<GameObjectEntity>().Entity;
-                    entityManager.AddComponent(district,ComponentType.Create<District>());
+                    entityManager.AddComponent(district, ComponentType.Create<District>());
                     entityManager.SetComponentData(district, new District
                     {
                         Id = districtDatas[i].Id,
@@ -214,7 +230,7 @@ namespace WX
                     entityManager.AddComponent(livingArea, ComponentType.Create<InteractionElement>());
                     entityManager.SetComponentData(livingArea, new InteractionElement
                     {
-                        Position= new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
+                        Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
                         Distance = 1,
                         Id = livingAreaDatas[i].Id,
                         InteractionType = (int)LocationType.LivingAreaIn,
@@ -225,20 +241,20 @@ namespace WX
                     List<BuildingObject> buildingData = JsonConvert.DeserializeObject<List<BuildingObject>>(livingAreaDatas[i].BuildingInfoJson);
 
                     for (int j = 0; j < buildingData.Count; j++)
-                    { 
+                    {
                         Entity building = entityManager.CreateEntity(BuildingArchetype);
-                        entityManager.SetComponentData(building,new Building
-                        { 
+                        entityManager.SetComponentData(building, new Building
+                        {
                             Level = buildingData[j].BuildingLevel,
                             Status = buildingData[j].Status,
                             OwnId = buildingData[j].OwnId,
                             Type = buildingData[j].Type,
                             DurableValue = buildingData[j].DurableValue,
-                            Position = new Vector3(buildingData[j].X,buildingData[j].Y,buildingData[j].Z)
+                            Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
                         });
 
                         GameText.BuildingNameDic.Add(building, buildingData[j].Name);
-                        GameText.BuildingDescriptionDic.Add(building,buildingData[j].Description);
+                        GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
                     }
 
                     GameText.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
@@ -282,19 +298,14 @@ namespace WX
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
 
-                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<BiologicalStatus>());
-                    entityManager.SetComponentData(biologicalEntity,new BiologicalStatus
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
+                    entityManager.SetComponentData(biologicalEntity, new BiologicalStatus
                     {
                         Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
                         TargetId = 0,
                         TargetType = 0,
-                        StatusRealTime=3
+                        StatusRealTime = (int)LocationType.Field
                     });
-
-
-                  
-
-
 
                     //Save Text
                     GameText.NameDic.Add(biologicalEntity, data[i].Name);
@@ -350,7 +361,17 @@ namespace WX
                     Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
                     TargetId = 0,
                     TargetType = 0,
-                    StatusRealTime = 3
+                    StatusRealTime = (int)LocationType.Field
+                });
+
+                entityManager.AddComponent(player, ComponentType.Create<CameraProperty>());
+                entityManager.SetComponentData(player, new CameraProperty
+                {
+                    Target = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                    Damping = 3,
+                    Offset = new Vector3(0, 1, -15),
+                    RoationOffset = new Vector3(50, 0, 0)
+
                 });
 
 

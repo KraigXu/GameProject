@@ -39,13 +39,13 @@ public class LivingAreaMainWindow : UIWindowBase
     public List<GameObject> BuildingsGo = new List<GameObject>();
     [SerializeField]
     private RectTransform _buildingContent;
-    private BuildingObject[] _buildings ;
     private bool _buildingViewStatus = false;
 
     [SerializeField]
     private List<BaseCorrespondenceByModelControl> _buildingBilling;
-
     private LivingAreaWindowCD _currentLivingArea;
+
+    
 
 
 
@@ -76,18 +76,15 @@ public class LivingAreaMainWindow : UIWindowBase
         if(contextData==null) return;
         _currentLivingArea =(LivingAreaWindowCD)contextData;
 
-        //ChangeData();
+        ChangeData();
     }
 
     private void ChangeData()
     {
-
         for (int i = 0; i < _buildingBilling.Count; i++)
         {
             _buildingBilling[i].gameObject.SetActive(false);
         }
-
-        
 
         _name.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
         _powerName.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
@@ -99,44 +96,50 @@ public class LivingAreaMainWindow : UIWindowBase
         _level.text = GameText.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
         _type.text = GameText.LivingAreaType[_currentLivingArea.LivingAreaType];
 
-        for (int i = 0; i < _currentLivingArea.Buildings.Count; i++)
+        for (int i = 0; i < _currentLivingArea.BuildingiDataItems.Count; i++)
         {
             _buildingBilling[i].gameObject.SetActive(true);
-            _buildingBilling[i].Init(StrategySceneInit.Settings.ModelCamera,UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingPoints[i]);
-
+            _buildingBilling[i].GetComponentInChildren<Text>().text=GameText.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
+            _buildingBilling[i].Init(StrategySceneInit.Settings.ModelCamera,UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
+            UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
         }
+
+
 
         //resolve Building Data , building图生成
-        GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
-        // _buildings = _currentLivingArea.BuildingObjects;
-        for (int i = 0; i < _buildings.Length; i++)
-        {
-            GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
-            go.name = _buildings[i].Name;
-            RectTransform goRect = go.GetComponent<RectTransform>();
-            goRect.anchoredPosition = new Vector2(i * 20f, i * 30);
+        //GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
+        //// _buildings = _currentLivingArea.BuildingObjects;
+        //for (int i = 0; i < _buildings.Length; i++)
+        //{
+        //    GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
+        //    go.name = _buildings[i].Name;
+        //    RectTransform goRect = go.GetComponent<RectTransform>();
+        //    goRect.anchoredPosition = new Vector2(i * 20f, i * 30);
 
-            go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
-            // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
-            go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
-            //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
-            go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();
+        //    go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
+        //    // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
+        //    go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
+        //    //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
+        //    go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();
 
-            UIEventTriggerListener.Get(go).onClick += AccessBuilding;
-            BuildingsGo.Add(go);
-        }
+        //    UIEventTriggerListener.Get(go).onClick += AccessBuilding;
+        //    BuildingsGo.Add(go);
+        //}
     }
 
     private void AccessBuilding(GameObject go)
     {
-        for (int i = 0; i < _buildings.Length; i++)
-        {
-            if (go.name == _buildings[i].Name)
-            {
-                OpenBuiding(_buildings[i]);
-                break;
-            }
-        }
+        //for (int i = 0; i < _buildingBilling.Count; i++)
+        //{
+        //}
+        //for (int i = 0; i < _buildings.Length; i++)
+        //{
+        //    if (go.name == _buildings[i].Name)
+        //    {
+        //        OpenBuiding(_buildings[i]);
+        //        break;
+        //    }
+        //}
     }
 
     private void OpenBuiding(BuildingObject building)

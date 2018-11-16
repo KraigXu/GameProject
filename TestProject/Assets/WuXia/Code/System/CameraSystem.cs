@@ -13,46 +13,79 @@ namespace WX
     public class CameraSystem : ComponentSystem
     {
 
-        struct PlayerData
+        struct CameraGroup
         {
             public readonly int Length;
-            public ComponentDataArray<PlayerInput> Player;
-            public ComponentArray<Transform> Position;
+            public ComponentDataArray<CameraProperty> Property;
         }
         [Inject]
-        private PlayerData _player;
+        private CameraGroup _cameraGroup;
 
-        private int _curModel;
+        //struct PlayerData
+        //{
+        //    public readonly int Length;
+        //    public ComponentDataArray<PlayerInput> Player;
+        //    public ComponentArray<Transform> Position;
+        //}
+        //[Inject]
+        //private PlayerData _player;
 
-        struct LivingAreaData
+        //private int _curModel;
+
+        //struct LivingAreaData
+        //{
+        //    public readonly int Length;
+        //}
+
+        //struct CamerData
+        //{
+        //    public PlayerCamera camera;
+        //}
+
+        protected override void OnCreateManager()
         {
-            public readonly int Length;
+            base.OnCreateManager();
+            Debuger.Log("SHow");
+            _camera=Camera.main;
         }
 
-        struct CamerData
-        {
-            public PlayerCamera camera;
-        }
+        private Camera _camera;
+
 
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _player.Length; i++)
+            if (_camera == null)
             {
-                var playerInput = _player.Player[i];
-
-                var playerPosition = _player.Position[i].position;
-
-                foreach (var _camera in GetEntities<CamerData>())
-                {
-                    float dt = Time.deltaTime;
-                    Quaternion newrotation = Quaternion.Euler(_camera.camera.RoationOffset);
-                    Vector3 newposition = newrotation * _camera.camera.Offset + new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
-                    _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
-                    _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
-                }
-
-
+                _camera = StrategySceneInit.Settings.MainCamera;
             }
+
+            for (int i = 0; i < _cameraGroup.Length; i++)
+            {
+                var position = _cameraGroup.Property[i];
+                float dt = Time.deltaTime;
+                Quaternion newrotation = Quaternion.Euler(position.RoationOffset);
+                Vector3 newposition = newrotation * position.Offset + position.Target;
+                _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, newrotation, dt * position.Damping);
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, newposition, dt * position.Damping);
+            }
+
+
+            //for (int i = 0; i < _player.Length; i++)
+            //{
+            //    var playerInput = _player.Player[i];
+
+            //    var playerPosition = _player.Position[i].position;
+
+            //    foreach (var _camera in GetEntities<CamerData>())
+            //    {
+            //        float dt = Time.deltaTime;
+            //        Quaternion newrotation = Quaternion.Euler(_camera.camera.RoationOffset);
+            //        Vector3 newposition = newrotation * _camera.camera.Offset + new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+            //        _camera.camera.transform.rotation = Quaternion.Lerp(_camera.camera.transform.rotation, newrotation, dt * _camera.camera.Damping);
+            //        _camera.camera.transform.position = Vector3.Lerp(_camera.camera.transform.position, newposition, dt * _camera.camera.Damping);
+            //    }
+
+            //}
 
 
         }

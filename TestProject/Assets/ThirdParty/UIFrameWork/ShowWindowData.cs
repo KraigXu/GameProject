@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Events;
+using WX;
 
 public class ShowWindowData
 {
@@ -108,16 +109,19 @@ public class LivingAreaWindowCD:BaseWindowContextData
     public int StableValue;
 
     public List<BuildingiDataItem> BuildingiDataItems=new List<BuildingiDataItem>();
-    public List<Vector3> BuildingPoints=new List<Vector3>();
-    public List<Entity> Buildings=new List<Entity>();
-    public List<int> BuildingAlats=new List<int>();
-
     public LivingAreaWindowCD() { }
 }
 
 public class BuildingiDataItem
 {
+    public Entity OnlyEntity;
+    public int Level;
+    public int Status;
+    public int ImageId;
+    public Vector3 Point;
 
+    public BuildingEvent OnOpen;
+    public BuildingEvent OnClose;
 }
 
 

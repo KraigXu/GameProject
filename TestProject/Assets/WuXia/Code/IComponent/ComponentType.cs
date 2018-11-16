@@ -6,13 +6,15 @@ using UnityEngine;
 
 namespace WX
 {
-    public struct Mouse : IComponentData { }
+    public enum TragetType { Idie, City, Field }
 
-    public struct CameraTarget : IComponentData
+    public struct CameraProperty : IComponentData
     {
         public Vector3 Target;
+        public int Damping;
+        public Vector3 Offset;
+        public Vector3 RoationOffset;
     }
-
     /// <summary>
     /// 可交互物
     /// </summary>
@@ -20,7 +22,6 @@ namespace WX
     {
         public int InteractionType;
     }
-
     /// <summary>
     /// Npc
     /// </summary>
@@ -30,13 +31,7 @@ namespace WX
         public int tend;
          
     }
-
-    public enum TragetType {Idie,City, Field }
-    
-
-    public struct PlayerInput : IComponentData
-    {
-    }
+    public struct PlayerInput : IComponentData{}
     public struct District : IComponentData
     {
 
@@ -202,6 +197,7 @@ namespace WX
 
     public struct Building : IComponentData
     {
+        public int ParentId;
         public int Level;
         public int Status;
         public int Type;

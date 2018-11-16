@@ -36,9 +36,6 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
         _wordpos = target;
         _isInit = true;
     }
-
-
-
     private bool IsAPointInACamera(Camera cam, Vector3 wordPos)
     {
         // 是否在视野内

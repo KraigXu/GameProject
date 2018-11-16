@@ -164,9 +164,6 @@ namespace WX
             }
         }
 
-
-
-
         //public LivingAreaWindowCD GetUiData(int id)
         //{
         //    LivingAreaWindowCD uidata = new LivingAreaWindowCD();
@@ -195,10 +192,6 @@ namespace WX
         //    return uidata;
         //}
 
-        public void Get()
-        {
-
-        }
 
         public LivingAreaWindowCD GetLivingAreaData(int id)
         {
@@ -224,8 +217,9 @@ namespace WX
                 uidata.LivingAreaMaxLevel = livingArea.MaxLevel;
                 uidata.LivingAreaType = livingArea.TypeId;
                 uidata.DefenseStrength = livingArea.DefenseStrength;
-
             }
+
+            uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
 
             return uidata;
         }
@@ -235,9 +229,6 @@ namespace WX
 
             //   for (int i = 0; i < _livingAreas.Length; i++)
             //   {
-
-
-
             //   }
 
             //   LivingAreaData data = SqlData.GetDataId<LivingAreaData>(id);
