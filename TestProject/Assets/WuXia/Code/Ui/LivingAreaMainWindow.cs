@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using WX;
 using TinyFrameWork;
@@ -10,6 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class LivingAreaMainWindow : UIWindowBase
 {
+
     [SerializeField]
     private Text _name;
     [SerializeField]
@@ -25,16 +27,18 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private Text _food;
     [SerializeField]
+    private Text _person;
+    [SerializeField]
     private Text _level;
     [SerializeField]
     private Text _type;
     [SerializeField]
-    private Text _strength;
-    [SerializeField]
     private Text _stable;
 
 
-    
+    [SerializeField]
+    private List<TogglePanel> _toggleArray;
+
     [Header("Building")]
     public List<GameObject> BuildingsGo = new List<GameObject>();
     [SerializeField]
@@ -45,9 +49,13 @@ public class LivingAreaMainWindow : UIWindowBase
     private List<BaseCorrespondenceByModelControl> _buildingBilling;
     private LivingAreaWindowCD _currentLivingArea;
 
-    
 
-
+    [Serializable]
+    class TogglePanel
+    {
+        public Toggle Toggle;
+        public RectTransform Panel;
+    }
 
     protected override void SetWindowId()
     {
@@ -71,10 +79,21 @@ public class LivingAreaMainWindow : UIWindowBase
         _buildingContent.gameObject.SetActive(_buildingViewStatus);
     }
 
+    void Update()
+    {
+        if (_toggleArray.Count > 0)
+        {
+            for (int i = 0; i < _toggleArray.Count; i++)
+            {
+                _toggleArray[i].Panel.gameObject.SetActive(_toggleArray[i].Toggle.isOn);
+            }
+        }
+    }
+
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
     {
-        if(contextData==null) return;
-        _currentLivingArea =(LivingAreaWindowCD)contextData;
+        if (contextData == null) return;
+        _currentLivingArea = (LivingAreaWindowCD)contextData;
 
         ChangeData();
     }
@@ -93,14 +112,16 @@ public class LivingAreaMainWindow : UIWindowBase
         _iron.text = _currentLivingArea.Iron + "/" + _currentLivingArea.IronMax;
         _wood.text = _currentLivingArea.Wood + "/" + _currentLivingArea.WoodMax;
         _food.text = _currentLivingArea.Food + "/" + _currentLivingArea.FoodMax;
+        _person.text = _currentLivingArea.PersonNumber.ToString();
+        _stable.text = _currentLivingArea.DefenseStrength.ToString();
         _level.text = GameText.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
         _type.text = GameText.LivingAreaType[_currentLivingArea.LivingAreaType];
 
         for (int i = 0; i < _currentLivingArea.BuildingiDataItems.Count; i++)
         {
             _buildingBilling[i].gameObject.SetActive(true);
-            _buildingBilling[i].GetComponentInChildren<Text>().text=GameText.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
-            _buildingBilling[i].Init(StrategySceneInit.Settings.ModelCamera,UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
+            _buildingBilling[i].GetComponentInChildren<Text>().text = GameText.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
+            _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera, _currentLivingArea.BuildingiDataItems[i].Point);
             UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
         }
 
@@ -154,5 +175,5 @@ public class LivingAreaMainWindow : UIWindowBase
     }
 
 
-    
+
 }

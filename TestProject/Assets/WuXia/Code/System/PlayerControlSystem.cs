@@ -112,7 +112,7 @@ namespace WX
 
                 newStatus.Position = m_Players.AiControl[i].transform.position;
                 CameraProperty newtarget = m_Players.Property[i];
-                
+
                 if (m_Players.Status[i].StatusRealTime == (int)LocationType.City)
                 {
 
@@ -131,7 +131,7 @@ namespace WX
 
                     GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameText.LivingAreaModelPath[m_Players.Status[i].TargetId]));
 
-                    Renderer[]  renderers = go.transform.GetComponentsInChildren<Renderer>();
+                    Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
                     Bounds bounds = renderers[0].bounds;
 
@@ -148,17 +148,18 @@ namespace WX
                     UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
                 }
-                else if (m_Players.Status[i].StatusRealTime == (int) LocationType.LivingAreaExit)
+                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaExit)
                 {
 
-                }else if (m_Players.Status[i].StatusRealTime == (int) LocationType.LivingAreaIn)
+                }
+                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaIn)
                 {
 
                 }
 
                 m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
-               
+
             }
             if (_strategyWindow == null)
             {

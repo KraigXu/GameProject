@@ -80,6 +80,7 @@ public class SQLService
         Tables.CreateTable_Prestige(this);
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);
+        Tables.CreateTable_BuildingData(this);
 
         Tables.CreateTable_Avatar(this);
         Tables.CreateTable_ModelMap(this);

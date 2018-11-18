@@ -356,7 +356,27 @@ namespace DataAccessObject
                                        " DistrictTitle TEXT);");
         }
 
-        
+        /// <summary>
+        /// BuildingData
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_BuildingData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BuildingData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " ParentId INTEGER," +
+                                       " BuildingLevel TEXT," +
+                                       " Status INTEGER," +
+                                       " Type INTEGER," +
+                                       " DurableValue INTEGER," +
+                                       " OwnId INTEGER," +
+                                       " ImageId INTEGER," +
+                                       " X INTEGER," +
+                                       " Y INTEGER," +
+                                       " Z INTEGER);");
+        }
 
     }
 
@@ -437,6 +457,33 @@ namespace DataAccessObject
                 Id, Name, Description,ModelBase,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
                 Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson,PositionX,PositionY,PositionZ
             };
+            return objects;
+        }
+    }
+
+    public class BuildingData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int ParentId { get; set; }
+        public int BuildingLevel { get; set; }
+        public int Status { get; set; }
+        public int Type { get; set; }
+        public int DurableValue { get; set; }
+        public int OwnId { get; set; }
+        public int ImageId { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Name,Description,ParentId,BuildingLevel,Status,Type,DurableValue,OwnId,ImageId,X,Y,Z
+            };
+
             return objects;
         }
     }

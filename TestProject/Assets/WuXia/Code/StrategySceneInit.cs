@@ -198,6 +198,32 @@ namespace WX
             }
             #endregion
 
+            #region Building
+            {
+                List<BuildingData> buildingData = SqlData.GetAllDatas<BuildingData>();
+
+                for (int j = 0; j < buildingData.Count; j++)
+                {
+                    Entity building = entityManager.CreateEntity(BuildingArchetype);
+                    entityManager.SetComponentData(building, new Building
+                    {
+                        Level = buildingData[j].BuildingLevel,
+                        Status = buildingData[j].Status,
+                        OwnId = buildingData[j].OwnId,
+                        Type = buildingData[j].Type,
+                        DurableValue = buildingData[j].DurableValue,
+                        ParentId = buildingData[j].ParentId,
+                        Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
+                    });
+
+                    GameText.BuildingNameDic.Add(building, buildingData[j].Name);
+                    GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
+                }
+            }
+            
+
+            #endregion
+
             #region LivingAreaInit
             {
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
@@ -237,25 +263,6 @@ namespace WX
                         InteractionExitType = (int)LocationType.LivingAreaExit,
                         InteractionEnterType = (int)LocationType.LivingAreaEnter
                     });
-
-                    List<BuildingObject> buildingData = JsonConvert.DeserializeObject<List<BuildingObject>>(livingAreaDatas[i].BuildingInfoJson);
-
-                    for (int j = 0; j < buildingData.Count; j++)
-                    {
-                        Entity building = entityManager.CreateEntity(BuildingArchetype);
-                        entityManager.SetComponentData(building, new Building
-                        {
-                            Level = buildingData[j].BuildingLevel,
-                            Status = buildingData[j].Status,
-                            OwnId = buildingData[j].OwnId,
-                            Type = buildingData[j].Type,
-                            DurableValue = buildingData[j].DurableValue,
-                            Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
-                        });
-
-                        GameText.BuildingNameDic.Add(building, buildingData[j].Name);
-                        GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
-                    }
 
                     GameText.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameText.NameDic.Add(livingArea, livingAreaDatas[i].Name);
@@ -382,7 +389,8 @@ namespace WX
                 //entityManager.AddComponent(player,ComponentType.Create<Player>());
                 // Finally we add a shared component which dictates the rendered look
                 //entityManager.AddSharedComponentData(player, PlayerLook);
-                // UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
             }

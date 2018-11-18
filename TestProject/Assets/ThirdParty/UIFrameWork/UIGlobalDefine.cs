@@ -16,6 +16,10 @@ namespace TinyFrameWork
         WXCharacterPanelWindow,
         WXCharacterRelationshipWindow,
         TipsWindow,
+
+        MessageWindow,
+        MenuWindow,
+        MapWindow
     }
 
     public enum UIWindowType
@@ -129,7 +133,10 @@ namespace TinyFrameWork
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.WXCharacterRelationshipWindow,"UiPrefab/WXCharacterRelationshipWindow"},
-            {WindowID.TipsWindow,"UiPrefab/TipsWindow" }
+            {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
+            {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
+            {WindowID.MenuWindow,"UiPrefab/MenuWindow" },
+            {WindowID.MapWindow,"UiPrefab/MapWindow" }
         };
     }
 }
