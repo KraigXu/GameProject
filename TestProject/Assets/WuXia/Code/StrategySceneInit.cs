@@ -146,7 +146,6 @@ namespace WX
             }
             #endregion
 
-
             #region Prestige
 
             {
@@ -169,7 +168,6 @@ namespace WX
 
             }
             #endregion
-
 
             #region DistrictInit
             {
@@ -221,7 +219,6 @@ namespace WX
                     GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
                 }
             }
-            
 
             #endregion
 
@@ -275,11 +272,12 @@ namespace WX
 
             #region BiologicalInit
             {
-                List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
+                List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? and Id<>? ", new object[] { 1, settings.PlayerId });
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    var go = GameObject.Instantiate(Settings.Biological, new Vector3(1620.703f, 80.7618f, 629.1682f), quaternion.identity);
+                    var go = GameObject.Instantiate(Settings.Biological, new Vector3(data[i].X, data[i].Y, data[i].Z), quaternion.identity);
+                    go.name = data[i].Id.ToString();
                     Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
@@ -305,11 +303,15 @@ namespace WX
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
+                    entityManager.SetComponentData(biologicalEntity,new NpcInput
+                    {
+                        Movetend = (int)TendType.Move,
+                    });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
                     entityManager.SetComponentData(biologicalEntity, new BiologicalStatus
                     {
-                        Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                        Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         TargetId = 0,
                         TargetType = 0,
                         StatusRealTime = (int)LocationType.Field
@@ -326,11 +328,11 @@ namespace WX
 
             #region Player
             {
-
-                var go = GameObject.Instantiate(Settings.PlayerBiological, new Vector3(1620.703f, 80.7618f, 629.1682f), quaternion.identity);
-                var player = go.GetComponent<GameObjectEntity>().Entity;
-
                 BiologicalData data = SqlData.GetDataId<BiologicalData>(settings.PlayerId);
+                var go = GameObject.Instantiate(Settings.PlayerBiological, new Vector3(data.X, data.Y, data.Z), quaternion.identity);
+                var player = go.GetComponent<GameObjectEntity>().Entity;
+               
+                
                 entityManager.AddComponent(player, ComponentType.Create<Biological>());
                 entityManager.SetComponentData(player, new Biological
                 {
@@ -366,7 +368,7 @@ namespace WX
                 entityManager.AddComponent(player, ComponentType.Create<BiologicalStatus>());
                 entityManager.SetComponentData(player, new BiologicalStatus
                 {
-                    Position = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                    Position = new Vector3(data.X, data.Y, data.Z),
                     TargetId = 0,
                     TargetType = 0,
                     StatusRealTime = (int)LocationType.Field
@@ -375,7 +377,7 @@ namespace WX
                 entityManager.AddComponent(player, ComponentType.Create<CameraProperty>());
                 entityManager.SetComponentData(player, new CameraProperty
                 {
-                    Target = new Vector3(1620.703f, 80.7618f, 629.1682f),
+                    Target = new Vector3(data.X, data.Y, data.Z),
                     Damping = 3,
                     Offset = new Vector3(0, 1, -15),
                     RoationOffset = new Vector3(50, 0, 0)

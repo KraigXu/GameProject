@@ -4,7 +4,11 @@ using TinyFrameWork;
 
 public class BaseCorrespondenceByModelControl : MonoBehaviour
 {
+
     public bool IsNeedModelBlockOut = false;
+
+
+
     private Vector3 _wordpos = Vector3.zero;
     private Camera _camera3D;
     private Camera _camera2D;
@@ -36,6 +40,8 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
         _wordpos = target;
         _isInit = true;
     }
+    
+
     private bool IsAPointInACamera(Camera cam, Vector3 wordPos)
     {
         // 是否在视野内

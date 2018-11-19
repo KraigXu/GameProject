@@ -636,6 +636,9 @@ namespace DataAccessObject
         public int IsDebut { get; set; }                         //是否登场
         public string Location { get; set; }                        //所处地方 地区编号
         public int LocationType { get; set; }                    //所处类型 
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
         public string ArticleJson { get; set; }                  // 物品JSON
         public string EquipmentJson { get; set; }                // 装备JSON
         public string LanguageJson { get; set; }                 // 语言JSON
@@ -648,7 +651,7 @@ namespace DataAccessObject
             object[] objects = new object[]
                 {
                     Id,Surname,Name,AvatarCode,ModeCode,Title,Description,RaceType,Sex,Age,AgeMax,Property1,Property2,Property3,Property4,Property5,Property6,
-                    Prestige,Influence,Disposition,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,LocationType, ArticleJson,EquipmentJson,LanguageJson,
+                    Prestige,Influence,Disposition,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,LocationType,X,Y,Z, ArticleJson,EquipmentJson,LanguageJson,
                     GongfaJson,JifaJson
                 };
             return objects;

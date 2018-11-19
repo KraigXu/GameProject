@@ -31,11 +31,7 @@ namespace WX
         LivingAreaIn=7
     }
 
-    public enum WhereStatus
-    {
-        City,
-        Wilderness
-    }
+
 
     public class BiologicalSystem : ComponentSystem
     {
@@ -88,8 +84,6 @@ namespace WX
                     _tipsWindow.Hide();
                 }
             }
-
-
 
             if (_tipsWindow == null)
             {
