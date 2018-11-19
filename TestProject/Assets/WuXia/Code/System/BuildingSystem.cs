@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TinyFrameWork;
 using Unity.Entities;
 using UnityEngine;
 
@@ -37,12 +38,11 @@ namespace WX
                     var building = _buildingGroup.Building[i];
                     BuildingiDataItem item=new BuildingiDataItem();
                     item.Level = building.Level;
+                    item.Id = building.Id;
                     item.OnlyEntity = _buildingGroup.Entity[i];
                     item.Status = _buildingGroup.Building[i].Status;
-                    item.ImageId = _buildingGroup.Building[i].Type;
                     item.Point = _buildingGroup.Building[i].Position;
-                    item.OnOpen = BuildingOnOpen;
-                    item.OnClose = BuildingOnClose;
+                    //item.OnOpen = BuildingOnOpen;
                     datas.Add(item);
                 }
             }
@@ -50,12 +50,31 @@ namespace WX
         }
 
 
-        private void BuildingOnOpen(Entity entity,int id)
-        {
-            
-        }
+        //private void BuildingOnOpen(Entity entity,int id)
+        //{
+        //    BuildingiMainData maindata=new BuildingiMainData();
+
+        //    for (int i = 0; i < _buildingGroup.Length; i++)
+        //    {
+        //        if (_buildingGroup.Building[i].Id == id)
+        //        {
+        //            maindata.Id = _buildingGroup.Building[i].Id;
+        //            maindata.Type = _buildingGroup.Building[i].Type;
+        //            maindata.Level = _buildingGroup.Building[i].Level;
+        //        }
+        //    }
+
+        //    maindata.Id = id;
+        //    ShowWindowData data = new ShowWindowData();
+        //    data.contextData = new BuildingiMainData();
+        //}
 
         private void BuildingOnClose(Entity entity, int id)
+        {
+
+        }
+
+        private void BuildingOnEnter(Entity entity, int id)
         {
 
         }

@@ -35,20 +35,18 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private Text _stable;
 
-
     [SerializeField]
     private List<TogglePanel> _toggleArray;
-
-    [Header("Building")]
-    public List<GameObject> BuildingsGo = new List<GameObject>();
-    [SerializeField]
-    private RectTransform _buildingContent;
-    private bool _buildingViewStatus = false;
-
     [SerializeField]
     private List<BaseCorrespondenceByModelControl> _buildingBilling;
-    private LivingAreaWindowCD _currentLivingArea;
+    [SerializeField]
+    private GameObject _buildingGo;
+    [SerializeField]
+    private Button _buildingExit;
 
+    private bool _buildingFlag=false;
+
+    private LivingAreaWindowCD _currentLivingArea;
 
     [Serializable]
     class TogglePanel
@@ -75,8 +73,9 @@ public class LivingAreaMainWindow : UIWindowBase
 
     public override void InitWindowOnAwake()
     {
-        _buildingContent.Find("Exit").GetComponent<Button>().onClick.AddListener(CloseBuiding);
-        _buildingContent.gameObject.SetActive(_buildingViewStatus);
+        _buildingExit.onClick.AddListener(BuildingExit);
+
+
     }
 
     void Update()
@@ -88,6 +87,8 @@ public class LivingAreaMainWindow : UIWindowBase
                 _toggleArray[i].Panel.gameObject.SetActive(_toggleArray[i].Toggle.isOn);
             }
         }
+
+        _buildingGo.SetActive(_buildingFlag);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -124,53 +125,34 @@ public class LivingAreaMainWindow : UIWindowBase
             _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera, _currentLivingArea.BuildingiDataItems[i].Point);
             UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
         }
-
-
-
-        //resolve Building Data , building图生成
-        //GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
-        //// _buildings = _currentLivingArea.BuildingObjects;
-        //for (int i = 0; i < _buildings.Length; i++)
-        //{
-        //    GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
-        //    go.name = _buildings[i].Name;
-        //    RectTransform goRect = go.GetComponent<RectTransform>();
-        //    goRect.anchoredPosition = new Vector2(i * 20f, i * 30);
-
-        //    go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
-        //    // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
-        //    go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
-        //    //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
-        //    go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();
-
-        //    UIEventTriggerListener.Get(go).onClick += AccessBuilding;
-        //    BuildingsGo.Add(go);
-        //}
     }
 
     private void AccessBuilding(GameObject go)
     {
-        //for (int i = 0; i < _buildingBilling.Count; i++)
-        //{
-        //}
-        //for (int i = 0; i < _buildings.Length; i++)
-        //{
-        //    if (go.name == _buildings[i].Name)
-        //    {
-        //        OpenBuiding(_buildings[i]);
-        //        break;
-        //    }
-        //}
+        for (int i = 0; i < _buildingBilling.Count; i++)
+        {
+            if (go == _buildingBilling[i].gameObject)
+            {
+                _buildingFlag = true;
+                _currentLivingArea.BuildingiDataItems[i].OnOpen(_currentLivingArea.BuildingiDataItems[i].OnlyEntity,_currentLivingArea.BuildingiDataItems[i].Id);
+                return;
+            }
+            
+        }
+    }
+
+    private void BuildingExit()
+    {
+        _buildingFlag = false;
     }
 
     private void OpenBuiding(BuildingObject building)
     {
-        _buildingContent.gameObject.SetActive(true);
+
     }
 
     private void CloseBuiding()
     {
-        _buildingContent.gameObject.SetActive(false);
 
     }
 
