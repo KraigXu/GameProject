@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class MapWindow : UIWindowBase
 {
-    
-
     public override void InitWindowOnAwake()
     {
 

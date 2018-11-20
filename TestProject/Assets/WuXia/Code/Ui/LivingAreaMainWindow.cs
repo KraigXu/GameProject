@@ -42,11 +42,6 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private GameObject _buildingGo;
     [SerializeField]
-    private GameObject _buildingImage;
-    [SerializeField]
-    private GameObject _buildingContent;
-
-    [SerializeField]
     private Button _buildingExit;
 
     private bool _buildingFlag=false;
@@ -79,6 +74,8 @@ public class LivingAreaMainWindow : UIWindowBase
     public override void InitWindowOnAwake()
     {
         _buildingExit.onClick.AddListener(BuildingExit);
+
+
     }
 
     void Update()
@@ -138,7 +135,10 @@ public class LivingAreaMainWindow : UIWindowBase
             if (go == _buildingBilling[i].gameObject)
             {
                 _buildingFlag = true;
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of c010734... Update
                 _currentLivingArea.BuildingiDataItems[i].OnOpen(_currentLivingArea.BuildingiDataItems[i].OnlyEntity,_currentLivingArea.BuildingiDataItems[i].Id);
                 return;
             }

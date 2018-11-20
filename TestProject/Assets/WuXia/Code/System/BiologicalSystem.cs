@@ -31,12 +31,20 @@ namespace WX
         LivingAreaIn=7
     }
 
+<<<<<<< HEAD
     public struct BiologicalInfo
     {
         
     }
 
 
+=======
+    public enum WhereStatus
+    {
+        City,
+        Wilderness
+    }
+>>>>>>> parent of c010734... Update
 
     public class BiologicalSystem : ComponentSystem
     {
@@ -89,6 +97,8 @@ namespace WX
                     _tipsWindow.Hide();
                 }
             }
+
+
 
             if (_tipsWindow == null)
             {

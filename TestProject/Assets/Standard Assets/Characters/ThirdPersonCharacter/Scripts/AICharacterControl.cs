@@ -43,7 +43,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             if (target != null)
                 agent.SetDestination(target.position);
 
-            
             if (TargetV3 != Vector3.zero)
             {
                 agent.SetDestination(TargetV3);
@@ -69,10 +68,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             this.target = target;
         }
 
-        public void SetTarget(Vector3 targetV3,int targetCode,int targetid)
+        public void SetTarget(Vector3 targetV3, ContactTargetEvent contactEvent,int targetCode,int targetid)
         {
             this.TargetV3 = targetV3;
-           // this._contactTargetEvent = contactEvent;
+            this._contactTargetEvent = contactEvent;
             this.TargetCode = targetCode;
             this.TargetId = targetid;
             //设置路径的点，

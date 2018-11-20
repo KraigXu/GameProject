@@ -108,7 +108,6 @@ public class LivingAreaWindowCD:BaseWindowContextData
     public int StableValue;
 
     public List<BuildingiDataItem> BuildingiDataItems=new List<BuildingiDataItem>();
-
     public LivingAreaWindowCD() { }
 }
 
@@ -120,9 +119,6 @@ public class BuildingiDataItem
     public int Status;
     public int Type;
     public Vector3 Point;
-
-    
-
 
     public BuildingEvent OnOpen;
     public BuildingEvent OnClose;

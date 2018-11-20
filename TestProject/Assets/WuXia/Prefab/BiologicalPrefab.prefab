@@ -2511,10 +2511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  TargetV3: {x: 0, y: 0, z: 0}
-  IsMove: 0
-  TargetCode: 0
-  TargetId: 0
+  targetV3: {x: 0, y: 0, z: 0}
 --- !u!114 &114713951510920196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2533,7 +2530,7 @@ MonoBehaviour:
   m_RunCycleLegOffset: 0.2
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 0.3
+  m_GroundCheckDistance: 0.2
 --- !u!136 &136439417911737682
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -2736,7 +2733,7 @@ NavMeshAgent:
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

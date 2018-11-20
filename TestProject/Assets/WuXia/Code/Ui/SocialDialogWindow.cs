@@ -6,12 +6,6 @@ using UnityEngine.UI;
 
 public class SocialDialogWindow : UIWindowBase
 {
-    private Image _leftImage;
-    private Image _rightImage;
-
-    private Text _leftText;
-    private Text _rightText;
-    private Text _zhegeText;
 
     protected override void SetWindowId()
     {

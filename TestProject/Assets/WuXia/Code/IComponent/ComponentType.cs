@@ -22,17 +22,14 @@ namespace WX
     {
         public int InteractionType;
     }
-
-    public enum TendType { Money,Move }
-
     /// <summary>
     /// Npc
     /// </summary>
     public struct NpcInput : IComponentData
     {
         //趋向
-        public int Movetend;
-
+        public int tend;
+         
     }
     public struct PlayerInput : IComponentData{}
     public struct District : IComponentData

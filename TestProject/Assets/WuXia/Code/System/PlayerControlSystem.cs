@@ -79,7 +79,7 @@ namespace WX
                     {
                         if (hit.collider.tag == "Terrain")
                         {
-                            m_Players.AiControl[i].SetTarget(hit.point, (int)TragetType.Field, -1);
+                            m_Players.AiControl[i].SetTarget(hit.point, ContactTarget, (int)TragetType.Field, -1);
                             return;
                         }
                         else if (hit.collider.tag == "LivingArea")
@@ -88,7 +88,7 @@ namespace WX
                             {
                                 if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
                                 {
-                                    m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center, (int)TragetType.City, _livingAreaData.LivingArea[j].Id);
+                                    m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center, ContactTarget, (int)TragetType.City, _livingAreaData.LivingArea[j].Id);
                                     newStatus.TargetType = 1;
                                     newStatus.TargetId = _livingAreaData.LivingArea[j].Id;
                                 }
