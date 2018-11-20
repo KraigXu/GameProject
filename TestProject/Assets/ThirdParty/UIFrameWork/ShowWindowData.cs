@@ -86,6 +86,7 @@ public class BiologicalUiInData : BaseWindowContextData
 
     public BiologicalUiInData() { }
 
+
 }
 
 public class LivingAreaWindowCD:BaseWindowContextData
@@ -115,10 +116,9 @@ public class LivingAreaWindowCD:BaseWindowContextData
 public class BuildingiDataItem
 {
     public Entity OnlyEntity;
-    public int Id;
     public int Level;
     public int Status;
-    public int Type;
+    public int ImageId;
     public Vector3 Point;
 
     
@@ -126,8 +126,6 @@ public class BuildingiDataItem
 
     public BuildingEvent OnOpen;
     public BuildingEvent OnClose;
-    public BuildingEvent OnExit;
-
 }
 
 

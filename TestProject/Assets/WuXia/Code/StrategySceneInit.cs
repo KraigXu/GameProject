@@ -203,7 +203,6 @@ namespace WX
                     Entity building = entityManager.CreateEntity(BuildingArchetype);
                     entityManager.SetComponentData(building, new Building
                     {
-                        Id = buildingData[j].Id,
                         Level = buildingData[j].BuildingLevel,
                         Status = buildingData[j].Status,
                         OwnId = buildingData[j].OwnId,

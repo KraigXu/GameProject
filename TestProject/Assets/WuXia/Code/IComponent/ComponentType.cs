@@ -200,7 +200,6 @@ namespace WX
 
     public struct Building : IComponentData
     {
-        public int Id;
         public int ParentId;
         public int Level;
         public int Status;

@@ -35,8 +35,10 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private Text _stable;
 
+
     [SerializeField]
     private List<TogglePanel> _toggleArray;
+<<<<<<< HEAD
     [SerializeField]
     private List<BaseCorrespondenceByModelControl> _buildingBilling;
     [SerializeField]
@@ -48,10 +50,19 @@ public class LivingAreaMainWindow : UIWindowBase
 
     [SerializeField]
     private Button _buildingExit;
+=======
+>>>>>>> parent of df74982... Update
 
-    private bool _buildingFlag=false;
+    [Header("Building")]
+    public List<GameObject> BuildingsGo = new List<GameObject>();
+    [SerializeField]
+    private RectTransform _buildingContent;
+    private bool _buildingViewStatus = false;
 
+    [SerializeField]
+    private List<BaseCorrespondenceByModelControl> _buildingBilling;
     private LivingAreaWindowCD _currentLivingArea;
+
 
     [Serializable]
     class TogglePanel
@@ -78,7 +89,12 @@ public class LivingAreaMainWindow : UIWindowBase
 
     public override void InitWindowOnAwake()
     {
+<<<<<<< HEAD
         _buildingExit.onClick.AddListener(BuildingExit);
+=======
+        _buildingContent.Find("Exit").GetComponent<Button>().onClick.AddListener(CloseBuiding);
+        _buildingContent.gameObject.SetActive(_buildingViewStatus);
+>>>>>>> parent of df74982... Update
     }
 
     void Update()
@@ -90,8 +106,6 @@ public class LivingAreaMainWindow : UIWindowBase
                 _toggleArray[i].Panel.gameObject.SetActive(_toggleArray[i].Toggle.isOn);
             }
         }
-
-        _buildingGo.SetActive(_buildingFlag);
     }
 
     protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -128,6 +142,7 @@ public class LivingAreaMainWindow : UIWindowBase
             _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera, _currentLivingArea.BuildingiDataItems[i].Point);
             UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
         }
+<<<<<<< HEAD
 
     }
 
@@ -144,20 +159,55 @@ public class LivingAreaMainWindow : UIWindowBase
             }
             
         }
+=======
+
+
+
+        //resolve Building Data , building图生成
+        //GameObject buildingTitlePrefab = Define.Value.UiLivingAreaBuilding;
+        //// _buildings = _currentLivingArea.BuildingObjects;
+        //for (int i = 0; i < _buildings.Length; i++)
+        //{
+        //    GameObject go = UGUITools.AddChild(gameObject, buildingTitlePrefab);
+        //    go.name = _buildings[i].Name;
+        //    RectTransform goRect = go.GetComponent<RectTransform>();
+        //    goRect.anchoredPosition = new Vector2(i * 20f, i * 30);
+
+        //    go.transform.GetChild(0).GetComponent<Text>().text = _buildings[i].Name;
+        //    // go.transform.GetChild(1).GetComponent<Button>().interactable = _buildings[i].BuildingStatus == 0;
+        //    go.transform.GetChild(1).GetComponent<Button>().name = _buildings[i].Name;
+        //    //go.transform.GetChild(2).GetComponent<Image>().overrideSprite=
+        //    go.transform.GetChild(3).GetComponent<Text>().text = _buildings[i].BuildingLevel.ToString();
+
+        //    UIEventTriggerListener.Get(go).onClick += AccessBuilding;
+        //    BuildingsGo.Add(go);
+        //}
+>>>>>>> parent of df74982... Update
     }
 
-    private void BuildingExit()
+    private void AccessBuilding(GameObject go)
     {
-        _buildingFlag = false;
+        //for (int i = 0; i < _buildingBilling.Count; i++)
+        //{
+        //}
+        //for (int i = 0; i < _buildings.Length; i++)
+        //{
+        //    if (go.name == _buildings[i].Name)
+        //    {
+        //        OpenBuiding(_buildings[i]);
+        //        break;
+        //    }
+        //}
     }
 
     private void OpenBuiding(BuildingObject building)
     {
-
+        _buildingContent.gameObject.SetActive(true);
     }
 
     private void CloseBuiding()
     {
+        _buildingContent.gameObject.SetActive(false);
 
     }
 

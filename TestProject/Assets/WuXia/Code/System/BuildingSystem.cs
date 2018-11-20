@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TinyFrameWork;
 using Unity.Entities;
 using UnityEngine;
 
@@ -38,11 +37,15 @@ namespace WX
                     var building = _buildingGroup.Building[i];
                     BuildingiDataItem item=new BuildingiDataItem();
                     item.Level = building.Level;
-                    item.Id = building.Id;
                     item.OnlyEntity = _buildingGroup.Entity[i];
                     item.Status = _buildingGroup.Building[i].Status;
+                    item.ImageId = _buildingGroup.Building[i].Type;
                     item.Point = _buildingGroup.Building[i].Position;
                     item.OnOpen = BuildingOnOpen;
+<<<<<<< HEAD
+=======
+                    item.OnClose = BuildingOnClose;
+>>>>>>> parent of df74982... Update
                     datas.Add(item);
                 }
 
@@ -52,6 +55,7 @@ namespace WX
         }
 
 
+<<<<<<< HEAD
 
         private void BuildingOnOpen(Entity entity, int id)
         {
@@ -72,11 +76,14 @@ namespace WX
         }
 
         private void BuildingOnClose(Entity entity, int id)
+=======
+        private void BuildingOnOpen(Entity entity,int id)
+>>>>>>> parent of df74982... Update
         {
-
+            
         }
 
-        private void BuildingOnEnter(Entity entity, int id)
+        private void BuildingOnClose(Entity entity, int id)
         {
 
         }
