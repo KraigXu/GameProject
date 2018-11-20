@@ -45,9 +45,12 @@ namespace WX
                     item.OnOpen = BuildingOnOpen;
                     datas.Add(item);
                 }
+
+
             }
             return datas;
         }
+
 
 
         private void BuildingOnOpen(Entity entity, int id)

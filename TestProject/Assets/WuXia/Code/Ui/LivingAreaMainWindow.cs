@@ -49,8 +49,6 @@ public class LivingAreaMainWindow : UIWindowBase
     [SerializeField]
     private Button _buildingExit;
 
-
-
     private bool _buildingFlag=false;
 
     private LivingAreaWindowCD _currentLivingArea;
@@ -130,6 +128,7 @@ public class LivingAreaMainWindow : UIWindowBase
             _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera, _currentLivingArea.BuildingiDataItems[i].Point);
             UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
         }
+
     }
 
     private void AccessBuilding(GameObject go)
@@ -139,7 +138,7 @@ public class LivingAreaMainWindow : UIWindowBase
             if (go == _buildingBilling[i].gameObject)
             {
                 _buildingFlag = true;
-                
+
                 _currentLivingArea.BuildingiDataItems[i].OnOpen(_currentLivingArea.BuildingiDataItems[i].OnlyEntity,_currentLivingArea.BuildingiDataItems[i].Id);
                 return;
             }

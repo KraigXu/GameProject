@@ -183,7 +183,6 @@ namespace WX
                 uidata.LivingAreaType = livingArea.TypeId;
                 uidata.DefenseStrength = livingArea.DefenseStrength;
             }
-
             uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
 
             return uidata;

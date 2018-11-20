@@ -31,6 +31,11 @@ namespace WX
         LivingAreaIn=7
     }
 
+    public struct BiologicalInfo
+    {
+        
+    }
+
 
 
     public class BiologicalSystem : ComponentSystem

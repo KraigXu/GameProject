@@ -420,7 +420,6 @@ namespace TinyFrameWork
 
             }
 
-
             switch (dicShownWindows[wndId].windowData.closeModel)
             {
                 case UIWindowCloseModel.Destory:
