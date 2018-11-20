@@ -11,8 +11,6 @@ namespace MapMagic
 		public int x;
 		public int z;
 
-		public Coord (int x, int z) { this.x=x; this.z=z; }
-
 		public static bool operator > (Coord c1, Coord c2) { return c1.x>c2.x && c1.z>c2.z; }
 		public static bool operator < (Coord c1, Coord c2) { return c1.x<c2.x && c1.z<c2.z; }
 		public static bool operator == (Coord c1, Coord c2) { return c1.x==c2.x && c1.z==c2.z; }
@@ -35,6 +33,7 @@ namespace MapMagic
 		public int SqrMagnitude {get{ return x*x + z*z; } }
 
 		public Vector3 vector3 {get{ return new Vector3(x,0,z); } }
+		public Vector2 vector2 {get{ return new Vector2(x,z); } }
 		
 		public static Coord zero {get{ return new Coord(0,0); }}
 
@@ -44,16 +43,70 @@ namespace MapMagic
 			else { x = Mathf.CeilToInt(x/val); z = Mathf.CeilToInt(z/val); }
 		}*/
 
-		public void Round (int val, bool ceil=false) //make a coord divisible by val
-		{ 
-			x = (ceil ? Mathf.CeilToInt(1f*x/val) : Mathf.FloorToInt(1f*x/val)) * val;
-			z = (ceil ? Mathf.CeilToInt(1f*z/val) : Mathf.FloorToInt(1f*z/val)) * val;
+		public Coord (int x, int z) { this.x=x; this.z=z; }
+
+	/*	public Coord (Vector3 pos, float cellSize = 1) //tested cellSize=1
+		{
+			int x = (int)(pos.x/cellSize);
+			if (pos.x<0 && pos.x!=x*cellSize) x--;
+
+			int z = (int)(pos.z/cellSize);
+			if (pos.z<0 && pos.z!=z*cellSize) z--;
+				
+			this.x=x; this.z=z;
 		}
-		public void Round (Coord c, bool ceil=false)
-		{ 
-			x = (ceil ? Mathf.FloorToInt(1f*x/c.x) : Mathf.CeilToInt(1f*x/c.x)) * c.x;
-			z = (ceil ? Mathf.FloorToInt(1f*z/c.z) : Mathf.CeilToInt(1f*z/c.z)) * c.z;
+
+		public Coord (float fx, float fz, float cellSize)
+		{
+			int x = (int)(fx/cellSize);
+			if (fx<0 && fx!=x*cellSize) x--;
+
+			int z = (int)(fz/cellSize);
+			if (fz<0 && fz!=z*cellSize) z--;
+				
+			this.x=x; this.z=z;
 		}
+
+		public Coord (int ix, int iz, int cellRes)
+		{
+			int x = ix/cellRes;
+			if (ix<0 && ix!=x*cellRes) x--;
+
+			int z = iz/cellRes;
+			if (iz<0 && iz!=z*cellRes) z--;
+				
+			this.x=x; this.z=z;
+		}*/
+
+		#region Cell Operations
+
+			public static Coord PickCell (int ix, int iz, int cellRes)
+			{
+				int x = ix/cellRes;
+				if (ix<0 && ix!=x*cellRes) x--;
+
+				int z = iz/cellRes;
+				if (iz<0 && iz!=z*cellRes) z--;
+				
+				return new Coord(x,z);
+			}
+
+			public static Coord PickCell (Coord c, int cellRes) { return PickCell(c.x, c.z, cellRes); }
+
+			public static Coord PickCellByPos (float fx, float fz, float cellSize=1)
+			{
+				int x = (int)(fx/cellSize);
+				if (fx<0 && fx!=x*cellSize) x--;
+
+				int z = (int)(fz/cellSize);
+				if (fz<0 && fz!=z*cellSize) z--;
+				
+				return new Coord (x,z);
+			}
+
+			public static Coord PickCellByPos (Vector3 v, float cellSize=1) { return PickCellByPos(v.x, v.z, cellSize); }
+
+		#endregion
 
 		public void ClampPositive ()
 			{ x = Mathf.Max(0,x); z = Mathf.Max(0,z); }
@@ -64,10 +117,23 @@ namespace MapMagic
 			if (z<rect.offset.z) z = rect.offset.z; if (z>=rect.offset.z+rect.size.z) z = rect.offset.z+rect.size.z-1;
 		}
 
-		static public Coord Min (Coord c1, Coord c2) { return new Coord(Mathf.Min(c1.x,c2.x), Mathf.Min(c1.z,c2.z)); }
-		static public Coord Max (Coord c1, Coord c2) { return new Coord(Mathf.Max(c1.x,c2.x), Mathf.Max(c1.z,c2.z)); }
-		static public float Distance (Coord c1, Coord c2) { return Mathf.Sqrt((c1.x-c2.x)*(c1.x-c2.x) + (c1.z-c2.z)*(c1.z-c2.z)); }
-		static public float Distance (Coord c1, int x, int z) { return Mathf.Sqrt((c1.x-x)*(c1.x-x) + (c1.z-z)*(c1.z-z)); }
+		static public Coord Min (Coord c1, Coord c2) 
+		{ 
+			//return new Coord(Mathf.Min(c1.x,c2.x), Mathf.Min(c1.z,c2.z)); 
+			int minX = c1.x<c2.x? c1.x : c2.x;
+			int minZ = c1.z<c2.z? c1.z : c2.z;
+			return new Coord(minX, minZ);
+		}
+		static public Coord Max (Coord c1, Coord c2) 
+		{ 
+			//return new Coord(Mathf.Max(c1.x,c2.x), Mathf.Max(c1.z,c2.z));
+			int maxX = c1.x>c2.x? c1.x : c2.x;
+			int maxZ = c1.z>c2.z? c1.z : c2.z;
+			return new Coord(maxX, maxZ);
+
+		}
+		//static public float Distance (Coord c1, Coord c2) { return Mathf.Sqrt((c1.x-c2.x)*(c1.x-c2.x) + (c1.z-c2.z)*(c1.z-c2.z)); }
+		//static public float Distance (Coord c1, int x, int z) { return Mathf.Sqrt((c1.x-x)*(c1.x-x) + (c1.z-z)*(c1.z-z)); }
 
 		public override string ToString()
 		{
@@ -86,6 +152,27 @@ namespace MapMagic
 			yield return new Coord(x-dist, z-i-1);
 			yield return new Coord(x-i-1, z+dist);
 			yield return new Coord(x+dist, z+i+1);
+		}
+
+		public static int AxisAlignedDisatnce (Coord c1, Coord c2)
+		{
+			int distX = c1.x - c2.x; if (distX < 0) distX = -distX;
+			int distZ = c1.z - c2.z; if (distZ < 0) distZ = -distZ;
+			return distX>distZ? distX : distZ;
+		}
+
+		public static float Distance (Coord c1, Coord c2)
+		{
+			int distX = c1.x - c2.x; if (distX < 0) distX = -distX;
+			int distZ = c1.z - c2.z; if (distZ < 0) distZ = -distZ;
+			return Mathf.Sqrt(distX*distX + distZ*distZ);
+		}
+
+		public static float DistanceSq (Coord c1, Coord c2)
+		{
+			int distX = c1.x - c2.x; if (distX < 0) distX = -distX;
+			int distZ = c1.z - c2.z; if (distZ < 0) distZ = -distZ;
+			return distX*distX + distZ*distZ;
 		}
 
 		public IEnumerable<Coord> DistancePerimeter (int dist) //a circular square border sorted by distance
@@ -126,6 +213,7 @@ namespace MapMagic
 		public Vector3 ToVector3 (float cellSize) { return new Vector3(x*cellSize, 0, z*cellSize); }
 		public Vector2 ToVector2 (float cellSize) { return new Vector2(x*cellSize, z*cellSize); }
 		public Rect ToRect (float cellSize) { return new Rect(x*cellSize, z*cellSize, cellSize, cellSize); }
+		public CoordRect ToCoordRect (int cellSize) { return new CoordRect(x*cellSize, z*cellSize, cellSize, cellSize); }
 
 		//serialization
 		public string Encode () { return "x=" + x + " z=" + z; }
@@ -147,11 +235,51 @@ namespace MapMagic
 		public CoordRect (float offsetX, float offsetZ, float sizeX, float sizeZ) { this.offset = new Coord((int)offsetX,(int)offsetZ); this.size = new Coord((int)sizeX,(int)sizeZ);  }
 		public CoordRect (Rect r) { offset = new Coord((int)r.x, (int)r.y); size = new Coord((int)r.width, (int)r.height); }
 
-		public int GetPos(int x, int z) { return (z-offset.z)*size.x + x - offset.x; }
+		public Rect rect {get{ return new Rect(offset.x, offset.z, size.x, size.z); }}
+
+		#region Converting to Cell
+
+			public static CoordRect PickIntersectingCells (CoordRect rect, int cellRes) 
+			{
+				int rectMaxX = rect.offset.x+rect.size.x;
+				int rectMaxZ = rect.offset.z+rect.size.z;
+				
+				int minX = rect.offset.x/cellRes; if (rect.offset.x<0 && rect.offset.x%cellRes!=0) minX--;
+				int minZ = rect.offset.z/cellRes; if (rect.offset.z<0 && rect.offset.z%cellRes!=0) minZ--; 
+				int maxX = rectMaxX/cellRes; if (rectMaxX>=0 && rectMaxX%cellRes!=0) maxX++;
+				int maxZ = rectMaxZ/cellRes; if (rectMaxZ>=0 && rectMaxZ%cellRes!=0) maxZ++;
+
+				return new CoordRect (minX, minZ, maxX-minX, maxZ-minZ);
+			}
+			//public static CoordRect PickIntersectingCells (Coord center, int range, int cellRes=1) { return PickIntersectingCells( new CoordRect(center-range, center+range), cellRes); } //TODO: test, might be broken when cellSize = 1
+
+			public static CoordRect PickIntersectingCellsByPos (float rectMinX, float rectMinZ, float rectMaxX, float rectMaxZ, float cellSize)
+			{
+				int minX = (int)(rectMinX/cellSize); if (rectMinX<0 && rectMinX!=minX*cellSize) minX--;
+				int minZ = (int)(rectMinZ/cellSize); if (rectMinZ<0 && rectMinZ!=minZ*cellSize) minZ--;
+				int maxX = (int)(rectMaxX/cellSize); if (rectMaxX>=0 && rectMaxX!=maxX*cellSize) maxX++;
+				int maxZ = (int)(rectMaxZ/cellSize); if (rectMaxZ>=0 && rectMaxZ!=maxZ*cellSize) maxZ++;
+
+				return new CoordRect (minX, minZ, maxX-minX, maxZ-minZ);
+			}
+			public static CoordRect PickIntersectingCellsByPos (Vector3 pos, float range, float cellSize=1) { return PickIntersectingCellsByPos (pos.x-range, pos.z-range, pos.x+range, pos.z+range, cellSize); }
+			public static CoordRect PickIntersectingCellsByPos (Rect rect, float cellSize=1) { return PickIntersectingCellsByPos (rect.position.x, rect.position.y, rect.position.x+rect.size.x, rect.position.y+rect.size.y, cellSize); }
+
+		#endregion
+
+		public int GetPos (int x, int z) { return (z-offset.z)*size.x + x - offset.x; }
+
+		public int GetPos (Vector2 v) 
+		{
+			int posX = (int)(v.x + 0.5f); if (v.x < 0) posX--;
+			int posZ = (int)(v.y + 0.5f); if (v.y < 0) posZ--;
+			return (posZ-offset.z)*size.x + posX - offset.x; 
+		}
 
 		public Coord Max { get { return offset+size; } set { offset = value-size; } }
 		public Coord Min { get { return offset; } set { offset = value; } }
 		public Coord Center { get { return offset + size/2; } } 
+		public int Count { get {return size.x*size.z;} }
 
 		public static bool operator > (CoordRect c1, CoordRect c2) { return c1.size>c2.size; }
 		public static bool operator < (CoordRect c1, CoordRect c2) { return c1.size<c2.size; }
@@ -162,7 +290,9 @@ namespace MapMagic
 		public static CoordRect operator / (CoordRect c, int s) { return  new CoordRect(c.offset/s, c.size/s); }
 
 		public void Expand (int v) { offset.x-=v; offset.z-=v; size.x+=v*2; size.z+=v*2; }
+		public CoordRect Expanded (int v) { return new CoordRect(offset.x-v, offset.z-v, size.x+v*2, size.z+v*2); }
 		public void Contract (int v) { offset.x+=v; offset.z+=v; size.x-=v*2; size.z-=v*2; }
+		public CoordRect Contracted (int v) { return new CoordRect(offset.x+v, offset.z+v, size.x-v*2, size.z-v*2); }
 
 		public override bool Equals(object obj) { return base.Equals(obj); }
 		public override int GetHashCode() {return offset.x*100000000 + offset.z*1000000 + size.x*1000+size.z;}
@@ -170,8 +300,8 @@ namespace MapMagic
 		//public float SqrDistFromCenter (Coord c) { return (Center-c).SqrMagnitude; }
 		//public bool IsInRadius (Coord c) { return SqrDistFromCenter(c) < radius*radius; }
 		//public void CalcRadius () { radius = size.Minimal/2; }
-		public void Round (int val, bool inscribed=false) { offset.Round(val, ceil:inscribed); size.Round(val, ceil:!inscribed); } //inscribed parameter will shrink rect to make it lay inside original rect
-		public void Round (CoordRect r, bool inscribed=false) { offset.Round(r.offset, ceil:inscribed); size.Round(r.size, ceil:!inscribed); }
+		//public void Round (int val, bool inscribed=false) { offset.Round(val, ceil:inscribed); size.Round(val, ceil:!inscribed); } //inscribed parameter will shrink rect to make it lay inside original rect
+		//public void Round (CoordRect r, bool inscribed=false) { offset.Round(r.offset, ceil:inscribed); size.Round(r.size, ceil:!inscribed); }
 		//public void Divide (int val, bool inscribed=false) { offset.Round(val, ceil:inscribed); size.Round(val, ceil:!inscribed); } //inscribed parameter will shrink rect to make it lay inside original rect
 
 		public void Clamp (Coord min, Coord max)
@@ -184,7 +314,26 @@ namespace MapMagic
 
 		public static CoordRect Intersect (CoordRect c1, CoordRect c2) { c1.Clamp(c2.Min, c2.Max); return c1; }
 
-		//public static bool Intersects (CoordRect c1, CoordRect c2) { c1.Clamp(c2.Min, c2.Max); return c1.size.x>0 && c1.size.z>0; }
+		public static bool IsIntersecting (CoordRect c1, CoordRect c2) 
+		{ 
+			if (c2.Contains(c1.offset.x, c1.offset.z) || c2.Contains(c1.offset.x+c1.size.x, c1.offset.z) || c2.Contains(c1.offset.x, c1.offset.z+c1.size.z) || c2.Contains(c1.offset.x+c1.size.x, c1.offset.z+c1.size.z)) return true;
+			if (c1.Contains(c2.offset.x, c2.offset.z) || c1.Contains(c2.offset.x+c2.size.x, c2.offset.z) || c1.Contains(c2.offset.x, c2.offset.z+c1.size.z) || c1.Contains(c2.offset.x+c2.size.x, c2.offset.z+c2.size.z)) return true;
+
+			return false;
+		}
+
+		public static CoordRect Combine (CoordRect[] rects)
+		{
+			Coord min=new Coord(2000000000, 2000000000); Coord max=new Coord(-2000000000, -2000000000); 
+			for (int i=0; i<rects.Length; i++)
+			{
+				if (rects[i].offset.x < min.x) min.x = rects[i].offset.x;
+				if (rects[i].offset.z < min.z) min.z = rects[i].offset.z;
+				if (rects[i].offset.x + rects[i].size.x > max.x) max.x = rects[i].offset.x + rects[i].size.x;
+				if (rects[i].offset.z + rects[i].size.z > max.z) max.z = rects[i].offset.z + rects[i].size.z;
+			}
+			return new CoordRect(min, max-min);
+		}
 
 		//public int this[int x, int z] { get { return (z-offset.z)*size.x + x - offset.x; } } //gets the pos of the coordinate
 		//public int this[Coord c] { get { return (c.z-offset.z)*size.x + c.x - offset.x; } }
@@ -194,6 +343,12 @@ namespace MapMagic
 			int z = num / size.x;
 			int x = num - z*size.x;
 			return new Coord(x+offset.x, z+offset.z);
+		}
+
+		public bool Contains (int x, int z) //same as check in range
+		{
+			return (x- offset.x >= 0 && x- offset.x < size.x &&
+			        z- offset.z >= 0 && z- offset.z < size.z);
 		}
 
 		public bool CheckInRange (int x, int z)
@@ -227,7 +382,7 @@ namespace MapMagic
 			return (base.ToString() + ": offsetX:" + offset.x + " offsetZ:" + offset.z + " sizeX:" + size.x + " sizeZ:" + size.z);
 		}
 
-		public Vector2 ToWorldspace (Coord coord, Rect worldRect)
+		/*public Vector2 ToWorldspace (Coord coord, Rect worldRect)
 		{
 			return new Vector2 ( 1f*(coord.x-offset.x)/size.x * worldRect.width + worldRect.x, 
 								 1f*(coord.z-offset.z)/size.z * worldRect.height + worldRect.y);  //percentCoord*worldWidth + worldOffset
@@ -237,7 +392,7 @@ namespace MapMagic
 		{
 			return new Coord ( (int) ((pos.x-worldRect.x)/worldRect.width * size.x + offset.x),
 							   (int) ((pos.y-worldRect.y)/worldRect.height * size.z + offset.z) ); //percentPos*size + offset
-		}
+		}*/
 
 		public IEnumerable<Coord> Cells (int cellSize) //coordinates of the cells inside this rect
 		{
@@ -251,8 +406,6 @@ namespace MapMagic
 				yield return new Coord(x,z);
 			}
 		}
-
-		public CoordRect Expanded (int n) { return new CoordRect(offset-n, size+n*2); }
 
 		public CoordRect Approximate (int val)
 		{
@@ -303,7 +456,7 @@ namespace MapMagic
 			{
 				rect = new CoordRect(0,0,x,z);
 				count = x*z;
-				if (array != null && array.Length<count) Debug.Log("Array length: " + array.Length + " is lower then matrix capacity: " + count);
+				if (array != null && array.Length<count) Debug.LogError("Array length: " + array.Length + " is lower then matrix capacity: " + count);
 				if (array != null && array.Length>=count) this.array = array;
 				else this.array = new T[count];
 			}
@@ -407,6 +560,8 @@ namespace MapMagic
 					this[x,z] = m[x,z];
 			if (removeBorders) RemoveBorders(intersection);
 		}
+
+		public Matrix3<T> Matrix3 {get{ return new Matrix3<T>( new CoordCube(rect.offset.x,0,rect.offset.z, rect.size.x,1,rect.size.z), array); }}
 
 		#region Quick Pos
 

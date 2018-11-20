@@ -82,7 +82,7 @@ namespace MapMagic
 
 			else
 			{
-				foreach (FieldInfo field in objType.UsableFields())
+				foreach (FieldInfo field in objType.UsableFields(includeStatic:true))
 					yield return new Value { name=field.Name, type=field.FieldType, obj=field.GetValue(obj) };
 
 				foreach (PropertyInfo prop in objType.UsableProperties())
@@ -328,7 +328,7 @@ namespace MapMagic
 				//type
 				string typeName = lineMembers[1].Remove(0,5); 
 				val.type = GetStandardAssembliesType(typeName);
-				if (val.type == null) { Debug.Log("Could not load " + typeName + " as this type does not exists anymore"); continue; }
+				if (val.type == null) { Debug.Log("Could not load " + typeName + " as this type does not exists anymore"); continue; } 
 
 				//object: quick array
 				if (val.type.IsArray && val.name=="items")
@@ -455,20 +455,6 @@ namespace MapMagic
 				}
 			}
 
-			//reading the links (after the object is created and stored in references)
-			/*int valuesCount = values.Count;
-			for (int i=0; i<valuesCount; i++)
-				if (values[i].link) 
-				{
-					Value val = values[i];
-
-					int valSlotNum = (int)values[i].obj;
-					if (valSlotNum >= 0) val.obj = ReadClass((int)values[i].obj, classes, objects, references);
-					else val.obj = null; //TODO checking if link -1 doesntreally needed as the null is checked before class
-				
-					values[i] = val;
-				}*/
-
 			//filling object
 			int valuesCount = values.Count;
 			if (objType.IsArray)
@@ -478,13 +464,17 @@ namespace MapMagic
 			}
 			else 
 			{
-				foreach (FieldInfo field in objType.UsableFields())
+				//TODO: inline code here
+				//TODO: use attributes
+				foreach (FieldInfo field in objType.UsableFields(includeStatic:true))  
 				{
 					string fieldName = field.Name;
 					Type fieldType = field.FieldType;
 
 					for (int i=0; i<valuesCount; i++)
-						if (values[i].name == fieldName  &&  values[i].type == fieldType) field.SetValue(obj, values[i].obj);
+						try {
+						if (values[i].name == fieldName  &&  values[i].type == fieldType) field.SetValue(obj, values[i].obj); }
+						catch {}
 				}
 				foreach (PropertyInfo prop in objType.UsableProperties())
 				{
@@ -521,7 +511,11 @@ namespace MapMagic
 
 			#if UNITY_EDITOR
 			for (int i=0; i<objects.Count; i++)
-				writer.WriteLine("<Object type=" + objects[i].GetType() + " path=" + UnityEditor.AssetDatabase.GetAssetPath(objects[i]) + "/>");
+			{
+				string path = UnityEditor.AssetDatabase.GetAssetPath(objects[i]);
+				path = path.Replace(" ","*");
+				writer.WriteLine("<Object type=" + objects[i].GetType() + " path=" + path + "/>");
+			}
 			#endif
 
 			writer.Write("<Floats values=");
@@ -558,7 +552,9 @@ namespace MapMagic
 					line = line.Replace("/>","");
 					string[] lineMemebers = line.Split(' ');
 
-					objects.Add(UnityEditor.AssetDatabase.LoadMainAssetAtPath( lineMemebers[2].Replace("path=","") ));
+					string path = lineMemebers[2].Replace("path=","");
+					path = path.Replace("*", " ");
+					objects.Add(UnityEditor.AssetDatabase.LoadMainAssetAtPath(path));
 
 					Type type = GetStandardAssembliesType( lineMemebers[1].Replace("type=","") );
 					if (type==typeof(Transform) && objects[objects.Count-1]!=null) objects[objects.Count-1] = ((GameObject)objects[objects.Count-1]).transform; //converting to transform instead of gameobject

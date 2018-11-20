@@ -107,8 +107,9 @@ namespace MapMagicDemo
 
 			//displaing generate mark
 			GameObject generateMark = GetObject<RectTransform>("GenerateMark").gameObject;
-			if (mapMagic.terrains.complete && generateMark.activeSelf) generateMark.SetActive(false);
-			if (!mapMagic.terrains.complete && !generateMark.activeSelf) generateMark.SetActive(true);
+			bool isWorking = ThreadWorker.IsWorking("MapMagic");
+			if (!isWorking && generateMark.activeSelf) generateMark.SetActive(false);
+			if (isWorking && !generateMark.activeSelf) generateMark.SetActive(true);
 
 			if (generateMark.activeSelf) 
 			{

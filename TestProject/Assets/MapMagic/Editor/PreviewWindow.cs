@@ -2,11 +2,162 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections;
 
-//using Plugins;
+using MapMagic;
 
 namespace MapMagic
 {
 		public class PreviewWindow : EditorWindow
+		{
+			static PreviewWindow instance;
+			
+			Layout baseLayout;
+			Layout infoLayout;
+			
+			int displayedObjectNum = 0;
+			Vector2 range = new Vector2(0,1);
+
+			static public void ShowWindow ()
+			{
+				instance = (PreviewWindow)GetWindow (typeof (PreviewWindow));
+
+				instance.position = new Rect(100, 100, instance.position.width, instance.position.height);
+				instance.titleContent = new GUIContent("Preview");
+				instance.Show();
+			}  
+			static public void CloseWindow () { if (instance!=null) instance.Close(); }
+
+			void OnGUI () 
+			{ 
+				//updating layouts
+				if (baseLayout==null) baseLayout = new Layout();
+				baseLayout.maxZoom = 8; baseLayout.minZoom = 0.125f; baseLayout.zoomStep = 0.125f;
+				baseLayout.Zoom(); baseLayout.Scroll(); //scrolling and zooming
+				
+				if (infoLayout==null) infoLayout = new Layout();
+				infoLayout.cursor = new Rect();
+				infoLayout.margin = 10; infoLayout.rightMargin = 10;
+				infoLayout.field = new Rect(this.position.width - 200 -10, this.position.height - 80 -10, 200, 80);
+
+				//no output exit
+				if (Preview.previewOutput == null) { baseLayout.Label("No preview output is selected"); return; }
+
+
+				//drawing main object
+				//TODO: preview all of the textures in window
+				int counter = 0;
+				foreach (Chunk.Results result in Preview.mapMagic.Results())
+				{
+					//displaing currently selected chunk
+					if (counter != displayedObjectNum) { counter++; continue; }  
+
+					//no object
+					if (result == null)
+						{ baseLayout.Label("Please wait until preview \nresult is being generated."); return; }
+					object previewBox = Preview.previewOutput.GetObject<object>(result);
+					if (previewBox == null)
+						{ baseLayout.Label("Please wait until preview \nobject is being generated."); return; }
+
+					//displaying matrix
+					if (Preview.previewOutput.type == Generator.InoutType.Map)
+					{
+						//refreshing matrices if needed
+						if (Preview.RefreshMatricesNeeded()) Preview.RefreshMatrices(range.x, range.y);
+
+						//finding matrix and texture
+						Matrix matrix = (Matrix)previewBox;
+						Texture2D texture = Preview.matrices[matrix];
+
+						//drawing texture
+						EditorGUI.DrawPreviewTexture(baseLayout.ToDisplay(new Rect(0,0,texture.width,texture.height)), texture);
+
+						//drawing texture info
+						UnityEditor.EditorGUI.HelpBox(infoLayout.field,"", UnityEditor.MessageType.None);
+						UnityEditor.EditorGUI.HelpBox(infoLayout.field,"", UnityEditor.MessageType.None);
+						infoLayout.fieldSize = 0.7f; //infoLayout.inputSize = 0.3f;
+						infoLayout.Label("Size: " + texture.width + "x" + texture.height);
+						infoLayout.Field(ref baseLayout.zoom, "Zoom: ",  min:baseLayout.minZoom, max:baseLayout.maxZoom, slider:true, quadratic:true);
+
+						infoLayout.Field(ref range, "Range: ",  min:0, max:1, slider:true);
+						if (infoLayout.lastChange)
+							Preview.RefreshMatrices(range.x, range.y);
+
+						infoLayout.Par(3); 
+						if (infoLayout.Button("Save To Texture")) 
+						{
+							#if !UNITY_WEBPLAYER //you cannot get access to files for web player platform. Even for an editor. Seems to be Unity bug.
+							string path= UnityEditor.EditorUtility.SaveFilePanel(
+								"Save Output Texture",
+								"Assets",
+								"OutputTexture.png", 
+								"png");
+							if (path!=null && path.Length!=0)
+							{
+								byte[] bytes = texture.EncodeToPNG();
+								System.IO.File.WriteAllBytes(path, bytes);
+							}
+							#endif
+						}
+					}
+
+					else if (Preview.previewOutput.type == Generator.InoutType.Objects)
+					{
+						SpatialHash spatialHash = (SpatialHash)previewBox;
+
+						for (int i=0; i<spatialHash.cells.Length; i++)
+						{
+							SpatialHash.Cell cell = spatialHash.cells[i];
+					
+							//drawing grid
+							UnityEditor.Handles.color = new Color(0.6f, 0.6f, 0.6f); //TODO: meight be too light in pro skin
+							UnityEditor.Handles.DrawPolyLine(  
+								baseLayout.ToDisplay( (cell.min-spatialHash.offset)/spatialHash.size * 1000 ),
+								baseLayout.ToDisplay( (new Vector2(cell.max.x, cell.min.y)-spatialHash.offset)/spatialHash.size * 1000 ),
+								baseLayout.ToDisplay( (cell.max-spatialHash.offset)/spatialHash.size * 1000 ),
+								baseLayout.ToDisplay( (new Vector2(cell.min.x, cell.max.y)-spatialHash.offset)/spatialHash.size * 1000 ),
+								baseLayout.ToDisplay( (cell.min-spatialHash.offset)/spatialHash.size * 1000 ) );
+
+							//drawing objects
+
+
+							UnityEditor.Handles.color = new Color(0.3f, 0.5f, 0.1f);
+							for (int j=0; j<cell.objs.Count; j++)
+							{
+								Vector2 pos = baseLayout.ToDisplay( (cell.objs[j].pos-spatialHash.offset)/spatialHash.size * 1000 );
+								float radius = cell.objs[j].size * baseLayout.zoom / 2;
+								if (radius < 3) radius = 3;
+
+								UnityEditor.Handles.DrawAAConvexPolygon(  
+									pos + new Vector2(0,1)*radius, 
+									pos + new Vector2(0.71f,0.71f)*radius,
+									pos + new Vector2(1,0)*radius,
+									pos + new Vector2(0.71f,-0.71f)*radius,
+									pos + new Vector2(0,-1)*radius,
+									pos + new Vector2(-0.71f,-0.71f)*radius,
+									pos + new Vector2(-1,0)*radius,
+									pos + new Vector2(-0.71f,0.71f)*radius);
+							}
+						}
+
+						//drawing info
+						UnityEditor.EditorGUI.HelpBox(infoLayout.field,"", UnityEditor.MessageType.None);
+						UnityEditor.EditorGUI.HelpBox(infoLayout.field,"", UnityEditor.MessageType.None);
+						infoLayout.Par();
+						infoLayout.fieldSize = 0.7f; //infoLayout.inputSize = 0.3f;
+						infoLayout.Label("Count: " + spatialHash.Count);
+					}
+
+					break; //no need to do anything when selected chunk showed
+
+				} //foreach in results
+			} //OnGUI
+		} //class
+
+
+
+
+
+
+		public class PreviewWindow1 : EditorWindow
 		{
 			static PreviewWindow instance;
 			
@@ -19,13 +170,15 @@ namespace MapMagic
 			object lastUsedObject;
 			Vector2 lastUsedRange = new Vector2(0,1);
 
-			
+			public IMapMagic mapMagic;
 
-			static public void ShowWindow ()
+
+			static public void ShowWindow (IMapMagic mapMagic)
 			{
 				instance = (PreviewWindow)GetWindow (typeof (PreviewWindow));
 				//PreviewWindow window = new PreviewWindow();
 
+			//	instance.mapMagic = mapMagic;
 				instance.position = new Rect(100, 100, instance.position.width, instance.position.height);
 				instance.titleContent = new GUIContent("Preview");
 				instance.Show();
@@ -36,18 +189,19 @@ namespace MapMagic
 			void OnGUI () 
 			{ 
 				//finding the preiew object
-				if (MapMagic.instance == null) MapMagic.instance = FindObjectOfType<MapMagic>();
+				if (mapMagic == null) mapMagic = FindObjectOfType<MapMagic>();
+				if (mapMagic == null) { EditorGUI.LabelField(new Rect(10,10,200,200), "No MapMagic object found, re-open the window."); return; }
 				
 				Vector3 camPos = new Vector3();
 				if (UnityEditor.SceneView.lastActiveSceneView!=null) camPos = UnityEditor.SceneView.lastActiveSceneView.camera.transform.position;
 				
-				Chunk closestChunk = MapMagic.instance.terrains.GetClosestObj(camPos.FloorToCoord(MapMagic.instance.terrainSize));
-				if (closestChunk == null)
+				Chunk.Results closestResults = mapMagic.ClosestResults(camPos);
+				if (closestResults == null)
 					{ EditorGUI.LabelField(new Rect(10,10,200,200), "No terrains are pinned for preview"); return; }
 
-				if (MapMagic.instance.previewOutput == null) { EditorGUI.LabelField(new Rect(10,10,200,200), "No preview output is selected"); return; }
+				if (Preview.previewOutput == null) { EditorGUI.LabelField(new Rect(10,10,200,200), "No preview output is selected"); return; }
 
-				object currentObj = MapMagic.instance.previewOutput.GetObject<object>(closestChunk);
+				object currentObj = Preview.previewOutput.GetObject<object>(closestResults);
 				if (currentObj == null)
 					{ EditorGUI.LabelField(new Rect(10,10,200,200), "Please wait until preview \nobject is being generated."); return; }
 				

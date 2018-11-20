@@ -21,8 +21,8 @@ namespace MapMagic
 				public bool hasSubs { get{ return subItems!=null;} }
 
 				public MenuItem (string name) { this.name=name; }
-				public MenuItem (string name, System.Action onClick, bool disabled=false) { this.name=name; this.onClick=onClick; this.disabled=disabled; }
-				public MenuItem (string name, MenuItem[] subs, bool disabled=false) { this.name=name; subItems=subs; this.disabled=disabled; }
+				public MenuItem (string name, System.Action onClick, bool disabled=false, int priority=0) { this.name=name; this.onClick=onClick; this.disabled=disabled; this.priority=priority; }
+				public MenuItem (string name, MenuItem[] subs, bool disabled=false, int priority=0) { this.name=name; subItems=subs; this.disabled=disabled; this.priority=priority; }
 				public MenuItem () { }
 
 				public void SortItems ()
@@ -30,7 +30,19 @@ namespace MapMagic
 					if (subItems==null) return;
 					for (int i=0; i<subItems.Length; i++) 
 						for (int j=0; j<subItems.Length; j++) 
-							if (subItems[i].priority < subItems[j].priority) ArrayTools.Switch(subItems, subItems[i], subItems[j]);
+					{
+						if (subItems[i].priority == subItems[j].priority) //sorting by name if priority equal
+						{ 
+							for (int c=0; c<Mathf.Min(subItems[i].name.Length, subItems[j].name.Length); c++)
+								if ((int)(subItems[i].name[c]) != (int)(subItems[j].name[c]))
+								{
+									if ((int)(subItems[i].name[c]) < (int)(subItems[j].name[c])) ArrayTools.Switch(subItems, subItems[i], subItems[j]);
+									break;
+								}
+						}
+
+						if (subItems[i].priority < subItems[j].priority) ArrayTools.Switch(subItems, subItems[i], subItems[j]);
+					}
 				
 					for (int i=0; i<subItems.Length; i++) subItems[i].SortItems();
 				}
@@ -64,12 +76,18 @@ namespace MapMagic
 
 			static public PopupMenu DrawPopup (MenuItem[] items, Vector2 pos, bool closeAllOther=false, bool sort=true)
 			{
-				//sorting items according to their priority
+				//sorting items according to their priority/name
 				if (sort)
 				{
 					for (int i=0; i<items.Length; i++) 
 						for (int j=0; j<items.Length; j++) 
-							if (items[i].priority < items[j].priority) ArrayTools.Switch(items, items[i], items[j]);
+						{
+							if (items[i].priority == items[j].priority) //sorting by name if priority equal
+							{ 
+								if ((int)(items[i].name[0]) < (int)(items[j].name[0])) ArrayTools.Switch(items, items[i], items[j]);
+							}
+							else if (items[i].priority < items[j].priority) ArrayTools.Switch(items, items[i], items[j]);
+						}
 					for (int i=0; i<items.Length; i++) items[i].SortItems();
 				}
 								

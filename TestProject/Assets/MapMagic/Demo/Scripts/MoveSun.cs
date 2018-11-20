@@ -15,7 +15,7 @@ namespace MapMagicDemo
 		{
 			Vector3 pos = transform.position;
 			pos.x += Time.deltaTime*speed;
-			pos.x = pos.x % max;
+			//pos.x = pos.x % max;
 			transform.position = pos;
 		}
 	}

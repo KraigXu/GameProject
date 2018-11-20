@@ -1,11 +1,319 @@
 using UnityEngine;
 using System.Collections;
+#if UNITY_5_5_OR_NEWER
+using UnityEngine.Profiling;
+#endif
 
 namespace MapMagic
 {
 
 	public class WeldTerrains
 	{
+		public enum Side { prevX, nextX, prevZ, nextZ };
+
+		public static void WeldToPrevX (ref float[,] heights, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Height");
+			#endif
+			
+			int heightSize = heights.GetLength(0);
+
+			float[,] nStrip = neig.terrainData.GetHeights(heightSize-1,0,1,heightSize);
+			
+			for (int z=0; z<heightSize; z++)
+			{
+				float delta = nStrip[z,0] - heights[z,0];
+
+				for (int x=0; x<margin; x++)
+				{
+					float percent = 1-1f*x/margin;
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+				
+					heights[z,x] += delta*percent;
+				}	
+			}
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+		public static void WeldToNextX (ref float[,] heights, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Height");
+			#endif
+
+			int heightSize = heights.GetLength(0);
+
+			float[,] nStrip = neig.terrainData.GetHeights(0,0,1,heightSize);
+
+			for (int z=0; z<heightSize; z++)
+			{
+				float delta = nStrip[z,0] - heights[z,heightSize-1];
+
+				for (int x=heightSize-margin; x<heightSize; x++)
+				{
+					float percent = 1 - 1f*(heightSize-x-1)/margin;
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+				
+					heights[z,x] += delta*percent;
+				}	
+			}
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+		public static void WeldToPrevZ (ref float[,] heights, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Height");
+			#endif
+
+			int heightSize = heights.GetLength(0);
+
+			float[,] nStrip = neig.terrainData.GetHeights(0,heightSize-1,heightSize,1);
+
+			for (int x=0; x<heightSize; x++)
+			{
+				float delta = nStrip[0,x] - heights[0,x];
+
+				//float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*x/margin),  Mathf.Clamp01(1 - 1f*(x-(heightSize-1-margin))/margin) );
+				//float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int z=0; z<margin; z++)
+				{
+					float percent = 1-1f*z/margin;
+				//	if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+				
+					heights[z,x] += delta*percent;
+				}	
+			}
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+		public static void WeldToNextZ (ref float[,] heights, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Height");
+			#endif
+			
+			int heightSize = heights.GetLength(0);
+
+			float[,] nStrip = neig.terrainData.GetHeights(0,0,heightSize,1);
+
+			for (int x=0; x<heightSize; x++)
+			{
+				float delta = nStrip[0,x] - heights[heightSize-1,x];
+
+			//	float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*x/margin), Mathf.Clamp01(1 - 1f*(x-(heightSize-1-margin))/margin) );
+			//	float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int z=heightSize-margin; z<heightSize; z++)
+				{
+					float percent = 1 - 1f*(heightSize-z-1)/margin;
+			//		if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+				
+					heights[z,x] += delta*percent;
+				}
+			}
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+
+		public static void WeldSplatToPrevX (ref float[,,] splats, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Splat");
+			#endif
+			
+			int splatsSize = splats.GetLength(0);
+			int numSplats = splats.GetLength(2);
+			float[] nRow = new float[numSplats];
+
+			if (margin==0 || neig.terrainData.alphamapResolution!=splatsSize || neig.terrainData.alphamapLayers!=numSplats) return;
+
+			float[,,] nStrip = neig.terrainData.GetAlphamaps(splatsSize-1,0,1,splatsSize);
+
+			for (int z=0; z<splatsSize; z++)
+			{
+				for (int s=0; s<numSplats; s++) nRow[s] = nStrip[z,0,s];
+
+				//float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*z/margin),  Mathf.Clamp01(1 - 1f*(z-(splatsSize-1-margin))/margin) );
+				//float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int x=0; x<margin; x++)
+				{
+					float percent = 1-1f*x/margin;
+					//if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+						
+					for (int s=0; s<numSplats; s++)
+						splats[z,x,s] = nRow[s]*percent + splats[z,x,s]*(1-percent);
+				}
+			}		
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+		public static void WeldSplatToNextX (ref float[,,] splats, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Splat");
+			#endif
+			
+			int splatsSize = splats.GetLength(0);
+			int numSplats = splats.GetLength(2);
+			float[] nRow = new float[numSplats];
+
+			if (margin==0 || neig.terrainData.alphamapResolution!=splatsSize || neig.terrainData.alphamapLayers!=numSplats) return;
+
+			float[,,] nStrip = neig.terrainData.GetAlphamaps(0,0,1,splatsSize);
+
+			for (int z=0; z<splatsSize; z++)
+			{
+				for (int s=0; s<numSplats; s++) nRow[s] = nStrip[z,0,s];
+
+				//float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*z/margin),  Mathf.Clamp01(1 - 1f*(z-(splatsSize-1-margin))/margin) );
+				//float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int x=splatsSize-margin; x<splatsSize; x++)
+				{
+					float percent = 1 - 1f*(splatsSize-x-1)/margin;
+					//if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+						
+					for (int s=0; s<numSplats; s++)
+						splats[z,x,s] = nRow[s]*percent + splats[z,x,s]*(1-percent);
+				}
+			}
+			
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif		
+		}
+
+		public static void WeldSplatToPrevZ (ref float[,,] splats, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Splat");
+			#endif
+
+			int splatsSize = splats.GetLength(0);
+			int numSplats = splats.GetLength(2);
+			float[] nRow = new float[numSplats];
+
+			if (margin==0 || neig.terrainData.alphamapResolution!=splatsSize || neig.terrainData.alphamapLayers!=numSplats) return;
+
+			float[,,] nStrip = neig.terrainData.GetAlphamaps(0,splatsSize-1,splatsSize,1);
+
+			for (int x=0; x<splatsSize; x++)
+			{
+				for (int s=0; s<numSplats; s++) nRow[s] = nStrip[0,x,s];
+
+				//float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*x/margin),  Mathf.Clamp01(1 - 1f*(x-(splatsSize-1-margin))/margin) );
+				//float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int z=0; z<margin; z++)
+				{
+					float percent = 1-1f*z/margin;
+					//if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+						
+					for (int s=0; s<numSplats; s++)
+						splats[z,x,s] = nRow[s]*percent + splats[z,x,s]*(1-percent);
+				}
+			}		
+
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif
+		}
+
+		public static void WeldSplatToNextZ (ref float[,,] splats, Terrain neig, int margin)
+		{
+			#if WDEBUG
+			Profiler.BeginSample("Weld Splat");
+			#endif
+
+			int splatsSize = splats.GetLength(0);
+			int numSplats = splats.GetLength(2);
+			float[] nRow = new float[numSplats];
+
+			if (margin==0 || neig.terrainData.alphamapResolution!=splatsSize || neig.terrainData.alphamapLayers!=numSplats) return;
+
+			float[,,] nStrip = neig.terrainData.GetAlphamaps(0,0,splatsSize,1);
+
+			for (int x=0; x<splatsSize; x++)
+			{
+				for (int s=0; s<numSplats; s++) nRow[s] = nStrip[0,x,s];
+			
+				//float percentFromSide = Mathf.Min( Mathf.Clamp01(1f*x/margin), Mathf.Clamp01(1 - 1f*(x-(splatsSize-1-margin))/margin) );
+				//float invPercentFromSide = 2000000000; if (percentFromSide > 0.0001f) invPercentFromSide = 1f/percentFromSide;
+
+				for (int z=splatsSize-margin; z<splatsSize; z++)
+				{
+					float percent = 1 - 1f*(splatsSize-z-1)/margin;
+					//if (percentFromSide < 0.999f) percent = Mathf.Pow(percent, invPercentFromSide);
+					//percent = 3*percent*percent - 2*percent*percent*percent;
+						
+					for (int s=0; s<numSplats; s++)
+						splats[z,x,s] = nRow[s]*percent + splats[z,x,s]*(1-percent);
+				}
+			}	
+			
+			#if WDEBUG
+			Profiler.EndSample();
+			#endif	
+		}
+
+		public static void WeldTextureToPrevX (Texture2D texture, Texture2D neig) //TODO: margin is 1 now
+		{
+			if (neig==null) return;
+			int splatsSize = texture.width;
+			Color[] nStrip = neig.GetPixels(splatsSize-1,0,1,splatsSize);
+			texture.SetPixels(0,0,1,splatsSize, nStrip);
+		}
+
+		public static void WeldTextureToNextX (Texture2D texture, Texture2D neig)
+		{
+			if (neig==null) return;
+			int splatsSize = texture.width;
+			Color[] nStrip = neig.GetPixels(0,0,1,splatsSize);
+			texture.SetPixels(splatsSize-1,0,1,splatsSize, nStrip);
+		}
+
+		public static void WeldTextureToPrevZ (Texture2D texture, Texture2D neig)
+		{
+			if (neig==null) return;
+			int splatsSize = texture.height;
+			Color[] nStrip = neig.GetPixels(0,splatsSize-1,splatsSize,1);
+			texture.SetPixels(0,0,splatsSize,1, nStrip);
+		}
+
+		public static void WeldTextureToNextZ (Texture2D texture, Texture2D neig)
+		{
+			if (neig==null) return;
+			int splatsSize = texture.height;
+			Color[] nStrip = neig.GetPixels(0,0,splatsSize,1);
+			texture.SetPixels(0,splatsSize-1,splatsSize,1, nStrip);
+		}
+
+
+
 		public static void WeldHeights (float[,] heights, Terrain prevX, Terrain nextZ, Terrain nextX, Terrain prevZ, int margin)
 		{
 			int heightSize = heights.GetLength(0);

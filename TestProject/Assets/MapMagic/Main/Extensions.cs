@@ -6,8 +6,34 @@ using System.Reflection; //to copy properties
 
 namespace MapMagic
 {
+	public interface IFactory
+	{
+		void OnConstruct ();
+		void OnDeconstruct ();
+	}
+	
 	static public class Extensions
 	{
+		public enum VersionState { branch, alpha, beta, candidate, release };
+		public static string ToVersionString (this VersionState state)
+		{
+			switch (state)
+			{
+				case VersionState.branch: return "special edition";
+				case VersionState.alpha: return "development";
+				case VersionState.beta: return "beta";
+				case VersionState.candidate: return "release candidate";
+				default: return "";
+			}
+		}
+		public static string ToVersionString (this int ver)
+		{
+			int val1 = ver/100;
+			int val2 = (ver - val1*100) / 10;
+			int val3 = ver - val1*100 - val2*10;
+			return ""+val1+"."+val2+"."+val3;
+		}
+
 		public static bool InRange (this Rect rect, Vector2 pos) 
 		{ 
 			return (rect.center - pos).sqrMagnitude < (rect.width/2f)*(rect.width/2f); 
@@ -34,6 +60,8 @@ namespace MapMagic
 
 		public static Rect ToRect(this Vector3 center, float range) { return new Rect(center.x-range, center.z-range, range*2, range*2); }
 
+		public static Vector3 Average (this Vector3[] vecs) { Vector3 result = Vector3.zero; for (int i=0; i<vecs.Length; i++) result+=vecs[i]; return result / vecs.Length; }
+
 		public static bool Intersects (this Rect r1, Rect r2)
 		{
 			Vector2 r1min = r1.min; Vector2 r1max = r1.max;
@@ -58,11 +86,31 @@ namespace MapMagic
 
 		public static Rect Extend (this Rect r, float f) { return new Rect(r.x-f, r.y-f, r.width+f*2, r.height+f*2); }
 
-		public static float RectangularDistToRect (this Vector3 pos, Vector3 min, float size)
+		public static float DistToRectCenter (this Vector3 pos, float offsetX, float offsetZ, float size)
+		{
+			//TODO: evaluating distance to center, should evaluate distance to rect edges isntead
+			//float posX = pos.x; float posZ = pos.z;
+			float deltaX = pos.x - (offsetX+size/2); float deltaZ = pos.z - (offsetZ+size/2); float dist = deltaX*deltaX + deltaZ*deltaZ;
+
+			/*float deltaBX = pos.x - offsetX; float deltaBZ = pos.z - offsetZ; float distB = deltaBX*deltaBX + deltaBZ*deltaBZ;
+			float deltaCX = pos.x - (offsetX+size); float deltaCZ = pos.z - (offsetZ+size); float distC = deltaCX*deltaCX + deltaCZ*deltaCZ;
+			float deltaDX = pos.x - (offsetX+size); float deltaDZ = pos.z - (offsetZ+size); float distD = deltaDX*deltaDX + deltaDZ*deltaDZ;
+
+			//zero dist if pos inside rect
+			if (deltaAX>0 && deltaAZ>0 && 
+
+			float minAB = distA<distB? distA : distB;
+			float minCD = distC<distD? distC : distD;
+			float minABCD = minAB<minCD? minAB : minCD;*/
+
+			return Mathf.Sqrt(dist);
+		}
+
+		public static float DistToRectAxisAligned (this Vector3 pos, float offsetX, float offsetZ, float size) //not manhattan dist. offset and size are instead of UnityEngine.Rect
 		{
 			//finding x distance
-			float distPosX = min.x - pos.x;
-			float distNegX = pos.x - min.x - size;
+			float distPosX = offsetX - pos.x;
+			float distNegX = pos.x - offsetX - size;
 			
 			float distX;
 			if (distPosX >= 0) distX = distPosX;
@@ -70,8 +118,8 @@ namespace MapMagic
 			else distX = 0;
 
 			//finding z distance
-			float distPosZ = min.z - pos.z;
-			float distNegZ = pos.z - min.z - size;
+			float distPosZ = offsetZ - pos.z;
+			float distNegZ = pos.z - offsetZ - size;
 			
 			float distZ;
 			if (distPosZ >= 0) distZ = distPosZ;
@@ -82,6 +130,40 @@ namespace MapMagic
 			if (distX > distZ) return distX;
 			else return distZ;
 		}
+
+		public static float DistToRectCenter (this Vector3[] poses, float offsetX, float offsetZ, float size)
+		{
+			float minDist = 200000000;
+			for (int p=0; p<poses.Length; p++)
+			{
+				float dist = poses[p].DistToRectCenter(offsetX, offsetZ, size);
+				if (dist < minDist) minDist = dist;
+			}
+			return minDist;
+		}
+
+		public static float DistToRectAxisAligned (this Vector3[] poses, float offsetX, float offsetZ, float size)
+		{
+			float minDist = 200000000;
+			for (int p=0; p<poses.Length; p++)
+			{
+				float dist = poses[p].DistToRectAxisAligned(offsetX, offsetZ, size);
+				if (dist < minDist) minDist = dist;
+			}
+			return minDist;
+		}
+
+		public static float DistAxisAligned (this Vector3 center, Vector3 pos)
+		{
+			float distX = center.x - pos.x; if (distX<0) distX = -distX;
+			float distZ = center.z - pos.z; if (distZ<0) distZ = -distZ;
+
+			//returning the maximum(!) distance 
+			if (distX > distZ) return distX;
+			else return distZ;
+		}
+
+
 
 		/*public static Coord ToCoord (this Vector3 pos, float cellSize, bool ceil=false) //to use in object grid
 		{
@@ -110,12 +192,12 @@ namespace MapMagic
 			return new CoordRect(min, max-min);
 		}
 
-		/*public static CoordRect ToCoordRect (this Vector3 pos, float range, float cellSize) //this one works with Terrain Sculptor
+		public static CoordRect ToFixedSizeCoordRect (this Vector3 pos, float range, float cellSize)
 		{
 			Coord size = (Vector3.one*range*2).CeilToCoord(cellSize) + 1;
-			Coord offset = pos.FloorToCoord(cellSize) - size/2;
+			Coord offset = pos.RoundToCoord(cellSize) - size/2;
 			return new CoordRect (offset, size);
-		}*/
+		}
 
 		public static CoordRect GetHeightRect (this Terrain terrain) 
 		{
@@ -151,18 +233,6 @@ namespace MapMagic
 			int res = data.alphamapResolution;
 			if (sizeX+offsetX > res) sizeX = res-offsetX; if (sizeZ+offsetZ > res) sizeZ = res-offsetZ;
 			return data.GetAlphamaps(offsetX, offsetZ, sizeX, sizeZ);
-		}
-
-		public static List<Type> GetAllChildTypes (this Type type)
-		{
-			List<Type> result = new List<Type>();
-		
-			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(type);
-			Type[] allTypes = assembly.GetTypes();
-			for (int i=0; i<allTypes.Length; i++) 
-				if (allTypes[i].IsSubclassOf(type)) result.Add(allTypes[i]); //nb: IsAssignableFrom will return derived classes
-
-			return result;
 		}
 
 		public static Texture2D ColorTexture (int width, int height, Color color)
@@ -212,12 +282,39 @@ namespace MapMagic
 			return null;
 		}
 
+		public static Vector3[] InverseTransformPoint (this Transform tfm, Vector3[] points)
+		{
+			for (int c=0; c<points.Length; c++) points[c] = tfm.InverseTransformPoint(points[c]);
+			return points;
+		}
+
+		public static Vector3 GetCenter (this Vector3[] poses)
+		{
+			if (poses.Length == 0) return new Vector3();
+			if (poses.Length == 1) return poses[0];
+
+			float x=0; float y=0; float z=0;
+			for (int i=0; i<poses.Length; i++)
+			{
+				x+=poses[i].x;
+				y+=poses[i].y;
+				z+=poses[i].z;
+			}
+			return new Vector3(x/poses.Length, y/poses.Length, z/poses.Length);
+		}
+
 		public static void ToggleDisplayWireframe (this Transform tfm, bool show)
 		{
 			#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetSelectedRenderState(tfm.GetComponent<Renderer>(), UnityEditor.EditorSelectedRenderState.Hidden);
-			int childCount = tfm.childCount;
-			for (int c=0; c<childCount; c++) tfm.GetChild(c).ToggleDisplayWireframe(show);
+			#if !UNITY_5_5_OR_NEWER
+				UnityEditor.EditorUtility.SetSelectedWireframeHidden(tfm.GetComponent<Renderer>(), !show);
+				int childCount = tfm.childCount;
+				for (int c=0; c<childCount; c++) tfm.GetChild(c).ToggleDisplayWireframe(show);
+			#else
+				UnityEditor.EditorUtility.SetSelectedRenderState(tfm.GetComponent<Renderer>(), show? UnityEditor.EditorSelectedRenderState.Highlight : UnityEditor.EditorSelectedRenderState.Hidden);
+				int childCount = tfm.childCount;
+				for (int c=0; c<childCount; c++) tfm.GetChild(c).ToggleDisplayWireframe(show);
+			#endif
 			#endif
 		}
 
@@ -251,6 +348,24 @@ namespace MapMagic
 		{
 			if (dict.ContainsKey(key)) return dict[key];
 			else return default(TValue);
+		}
+		public static TKey AnyKey<TKey,TValue> (this Dictionary<TKey,TValue> dict)
+		{
+			foreach (KeyValuePair<TKey,TValue> kvp in dict)
+				return kvp.Key;
+			return default(TKey);
+		}
+		public static TValue AnyValue<TKey,TValue> (this Dictionary<TKey,TValue> dict)
+		{
+			foreach (KeyValuePair<TKey,TValue> kvp in dict)
+				return kvp.Value;
+			return default(TValue);
+		}
+		public static T Any<T> (this HashSet<T> hashSet)
+		{
+			foreach (T val in hashSet)
+				return val;
+			return default(T);
 		}
 
 		public static void CheckAdd<T> (this HashSet<T> set, T obj) { if (!set.Contains(obj)) set.Add(obj); }
@@ -342,6 +457,16 @@ namespace MapMagic
 			return go.transform;
 		}
 
+		public static T CreateObjectWithComponent<T> (string name="", Transform parent=null, Vector3 offset=new Vector3()) where T : MonoBehaviour
+		{
+			GameObject go = new GameObject();
+			if (name != null) 
+			if (parent != null) go.transform.parent = parent.transform;
+			go.transform.localPosition = offset;
+			
+			return go.AddComponent<T>();
+		}
+
 		public static IEnumerable<Vector3> CircleAround (this Vector3 center, float radius, int numPoints, bool endWhereStart=false)
 		{
 			float radianStep = 2*Mathf.PI / numPoints;
@@ -421,6 +546,16 @@ namespace MapMagic
 		}
 
 
+		public static object CallStaticMethodFrom (string assembly, string type, string method, object[] parameters)
+		{
+			// editor assembly is Assembly-CSharp-Editor
+			// main is Assembly-CSharp
+
+			Assembly a = Assembly.Load(assembly);
+			Type t = a.GetType(type);
+			return t.GetMethod(method).Invoke(null, parameters);
+		}
+
 		public static void GetPropertiesFrom<T1,T2> (this T1 dst, T2 src) where T1:class where T2:class
 		{
 			PropertyInfo[] srcProps = src.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty);
@@ -435,12 +570,12 @@ namespace MapMagic
          }
 
 
-		public static IEnumerable<FieldInfo> UsableFields (this Type type, bool nonPublic=false)
+		public static IEnumerable<FieldInfo> UsableFields (this Type type, bool nonPublic=false, bool includeStatic=false)
 		{
-			BindingFlags flags;
-			if (nonPublic) flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance; 
-			else flags = BindingFlags.Public | BindingFlags.Instance; 
-			
+			BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+			if (nonPublic) flags = flags | BindingFlags.NonPublic; 
+			if (includeStatic) flags = flags | BindingFlags.Static; 
+
 			FieldInfo[] fields = type.GetFields(flags);
 			for (int i=0; i<fields.Length; i++)
 			{
@@ -516,6 +651,29 @@ namespace MapMagic
 			return dst;
 		}
 
+		/*public static List<Type> GetAllChildTypes (this Type type)
+		{
+			List<Type> result = new List<Type>();
+		
+			Assembly assembly = Assembly.GetAssembly(type);
+			Type[] allTypes = assembly.GetTypes();
+			for (int i=0; i<allTypes.Length; i++) 
+				if (allTypes[i].IsSubclassOf(type)) result.Add(allTypes[i]); //nb: IsAssignableFrom will return derived classes
+
+			return result;
+		}*/
+
+		public static IEnumerable<Type> Subtypes (this Type parent)
+		{
+			Assembly assembly = Assembly.GetAssembly(parent);  //Assembly[] assembleys = AppDomain.CurrentDomain.GetAssemblies();
+			Type[] types = assembly.GetTypes();
+			for (int t=0; t<types.Length; t++) 
+			{
+				Type type = types[t];
+				if (type.IsSubclassOf(parent) && !type.IsInterface && !type.IsAbstract) yield return type;
+			}
+		}
+
 		public static T GetAddComponent<T> (this GameObject go) where T:Component
 		{
 			T c = go.GetComponent<T>();
@@ -542,6 +700,22 @@ namespace MapMagic
 
 			return copy;
 		}
+
+		public static void ReflectionCopyFrom<T> (this T dst, object src)
+		{
+			Type dstType = dst.GetType();
+			Type srcType = src.GetType();
+
+			foreach (FieldInfo dstField in dstType.UsableFields(nonPublic:true))
+			{
+				FieldInfo srcField = srcType.GetField(dstField.Name);
+				if (srcField != null && srcField.FieldType == dstField.FieldType) dstField.SetValue(dst, srcField.GetValue(src));
+			}
+
+
+			//foreach (PropertyInfo prop in type.UsableProperties(nonPublic:true)) prop.SetValue(copy, prop.GetValue(obj,null), null);
+		}
+
 
 		public static object Parse (this string s, Type t)
 		{
@@ -589,6 +763,15 @@ namespace MapMagic
 			return val;
 		}
 
+		public static bool isPlaying
+		{get{
+			#if UNITY_EDITOR
+				return UnityEditor.EditorApplication.isPlaying; //if not playing
+			#else
+				return true;
+			#endif
+		}}
+
 		public static bool IsEditor ()
 		{
 			#if UNITY_EDITOR
@@ -629,15 +812,62 @@ namespace MapMagic
 			}
 		}
 
+		public static Vector3[] GetCamPoses (bool genAroundMainCam=true, string genAroundTag=null, Vector3[] camPoses=null)
+		{
+			if (IsEditor()) 
+			{
+				#if UNITY_EDITOR
+				if (UnityEditor.SceneView.lastActiveSceneView==null || UnityEditor.SceneView.lastActiveSceneView.camera==null) return new Vector3[0]; //this happens right after script compile
+				if (camPoses==null || camPoses.Length!=1) camPoses = new Vector3[1];
+				camPoses[0] = UnityEditor.SceneView.lastActiveSceneView.camera.transform.position;
+				#else
+				camPoses = new Vector3[1];
+				#endif
+			}
+			else
+			{
+				//finding objects with tag
+				GameObject[] taggedObjects = null;
+				if (genAroundTag!=null && genAroundTag.Length!=0) taggedObjects = GameObject.FindGameObjectsWithTag(genAroundTag);
+
+				//calculating cams array length and rescaling it
+				int camPosesLength = 0;
+				if (genAroundMainCam) camPosesLength++;
+				if (taggedObjects !=null) camPosesLength += taggedObjects.Length;
+				
+				if (camPosesLength == 0) { Debug.LogError("No Main Camera to deploy"); return new Vector3[0]; }
+				if (camPoses == null || camPosesLength != camPoses.Length) camPoses = new Vector3[camPosesLength];
+				
+				//filling cams array
+				int counter = 0;
+				if (genAroundMainCam) 
+				{
+					Camera mainCam = Camera.main;
+					if (mainCam==null) mainCam = GameObject.FindObjectOfType<Camera>(); //in case it was destroyed or something
+					camPoses[0] = mainCam.transform.position;
+					counter++;
+				}
+				if (taggedObjects != null)
+					for (int i=0; i<taggedObjects.Length; i++) camPoses[i+counter] = taggedObjects[i].transform.position;
+			}
+
+			return camPoses;		
+		}
+
 		public static Vector2 GetMousePosition ()
 		{
 			if (IsEditor()) 
 			{
 				#if UNITY_EDITOR
+				UnityEditor.SceneView sceneview = UnityEditor.SceneView.lastActiveSceneView;
+				if (sceneview==null || sceneview.camera==null || Event.current==null) return Vector2.zero;
 				Vector2 mousePos = Event.current.mousePosition;
-				mousePos.y = Screen.height - mousePos.y - 40;
+				mousePos = new Vector2(mousePos.x/sceneview.camera.pixelWidth, mousePos.y/sceneview.camera.pixelHeight);
+				#if UNITY_5_4_OR_NEWER 	
+				mousePos *= UnityEditor.EditorGUIUtility.pixelsPerPoint;
+				#endif
+				mousePos.y = 1 - mousePos.y;
 				return mousePos;
-				//TODO: Error with that on Mac
 				#else
 				return Input.mousePosition;
 				#endif
@@ -645,6 +875,165 @@ namespace MapMagic
 			else return Input.mousePosition;
 		}
 
+		public static void GizmosDrawFrame (Vector3 center, Vector3 size, int resolution, float level = 30)
+		{
+			Vector3 offset = center-size/2;
+			
+			Vector3 prevP1=Vector3.zero; Vector3 prevP2=Vector3.zero;
+			for (float x=0; x < size.x+0.0001f; x += 1f*size.x/resolution)
+			{
+				RaycastHit hit = new RaycastHit();
+
+				Vector3 p1 = new Vector3(offset.x+x, 10000, offset.z);
+				if (Physics.Raycast(new Ray(p1, Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y; 
+				else if (Physics.Raycast(new Ray(p1+new Vector3(1,0,0), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(-1,0,0), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(0,0,1), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(0,0,-1), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else p1.y = level;
+				if (x>0.0001f) Gizmos.DrawLine(prevP1, p1);
+				prevP1 = p1;
+
+				Vector3 p2 = new Vector3(offset.x+x, 10000, offset.z+size.z);
+				if (Physics.Raycast(new Ray(p2, Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(1,0,0), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(-1,0,0), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(0,0,1), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(0,0,-1), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else p2.y = level;
+				if (x>0.0001f) Gizmos.DrawLine(prevP2, p2);
+				prevP2 = p2;
+			}
+
+			for (float z=0; z < size.z+0.0001f; z += 1f*size.z/resolution)
+			{
+				RaycastHit hit = new RaycastHit();
+
+				Vector3 p1 = new Vector3(offset.x, 10000, offset.z+z);
+				if (Physics.Raycast(new Ray(p1, Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y; 
+				else if (Physics.Raycast(new Ray(p1+new Vector3(1,0,0), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(-1,0,0), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(0,0,1), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p1+new Vector3(0,0,-1), Vector3.down*20000), out hit, 20000)) p1.y = hit.point.y;
+				else p1.y = level;
+				if (z>0.0001f) Gizmos.DrawLine(prevP1, p1);
+				prevP1 = p1;
+
+				Vector3 p2 = new Vector3(offset.x+size.x, 10000, offset.z+z);
+				if (Physics.Raycast(new Ray(p2, Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(1,0,0), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(-1,0,0), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(0,0,1), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else if (Physics.Raycast(new Ray(p2+new Vector3(0,0,-1), Vector3.down*20000), out hit, 20000)) p2.y = hit.point.y;
+				else p2.y = level;
+				if (z>0.0001f) Gizmos.DrawLine(prevP2, p2);
+				prevP2 = p2;
+			}
+		}
+
+		public static void Planar (this Mesh mesh, float size, int resolution)
+		{
+			float step = size / resolution;
+
+			Vector3[] verts = new Vector3[(resolution+1)*(resolution+1)];
+			Vector2[] uvs = new Vector2[verts.Length];
+			int[] tris = new int[resolution*resolution*2*3];
+
+			int vertCounter = 0;
+			int triCounter = 0;
+			for (float x=0; x<size+0.001f; x+=step) //including max
+				for (float z=0; z<size+0.001f; z+=step)
+			{
+				verts[vertCounter] = new Vector3(x,0,z);
+				uvs[vertCounter] = new Vector2(x/size, z/size);
+
+				if (x>0.001f && z>0.001f)
+				{
+					tris[triCounter] = vertCounter-(resolution+1);		tris[triCounter+1] = vertCounter-1;					tris[triCounter+2] = vertCounter-resolution-2;
+					tris[triCounter+3] = vertCounter-1;					tris[triCounter+4] = vertCounter-(resolution+1);	tris[triCounter+5] = vertCounter;
+					triCounter += 6;
+				}
+
+				vertCounter++;
+			}
+
+			mesh.Clear();
+			mesh.vertices = verts;
+			mesh.uv = uvs;
+			mesh.triangles = tris;
+		}
+
+
+		public static T Save<T> (this T data, string label="Save Data as Unity Asset", string fileName="Data.asset", UnityEngine.Object undoObj=null, string undoName="Save Data") where T : ScriptableObject, ICloneable
+		{
+			#if UNITY_EDITOR
+			//finding path
+			string path= UnityEditor.EditorUtility.SaveFilePanel(label, "Assets", fileName, "asset");
+			if (path==null || path.Length==0) return data;
+
+			//releasing data on re-save
+			T newData = data;
+			if (UnityEditor.AssetDatabase.Contains(data)) newData = (T)data.Clone();
+
+			//saving
+			path = path.Replace(Application.dataPath, "Assets");
+			if (undoObj != null) UnityEditor.Undo.RecordObject(undoObj, undoName); //TODO: undo is actually not recordered because the new data is not assigned
+			//undoObj.setDirty = !undoObj.setDirty;
+			UnityEditor.AssetDatabase.CreateAsset(newData, path);
+			if (undoObj != null) UnityEditor.EditorUtility.SetDirty(undoObj);
+
+			return newData;
+			#else
+			return data;
+			#endif
+		}
+
+		/*public static object Invoke (object target, string methodName, params object[] paramArray)
+		{
+			Type type = target.GetType();
+			MethodInfo methodInfo = type.GetMethod(methodName);
+			return methodInfo.Invoke(target, paramArray);
+		}
+
+		public static object StaticInvoke (string className, string methodName, params object[] paramArray)
+		{
+			Type type = Type.GetType(className);
+			MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+			return methodInfo.Invoke(null, new object[] { paramArray });
+		}*/
+
+		public static string LogBinary (this int src)
+		{
+			string result = "";
+			for (int i=0; i<32; i++)
+			{
+				if (i%4==0) result=" "+result;
+				result = (src & 0x1) + result;
+				
+
+				src = src >> 1;
+			}
+			return result;
+		}
+
+		public static string ToStringArray<T> (this T[] array)
+		{
+			string result = "";
+			for (int i=0; i<array.Length; i++)
+			{
+				result += array[i].ToString();
+				if (i!=array.Length-1) result += ",";
+			}
+			return result;
+		}
+
+		public static Color[] ToColors (this Vector4[] src)
+		{
+			Color[] dst = new Color[src.Length];
+			for (int i=0; i<src.Length; i++)
+				dst[i] = src[i];
+			return dst;
+		}
 
 	}//extensions
 }//namespace

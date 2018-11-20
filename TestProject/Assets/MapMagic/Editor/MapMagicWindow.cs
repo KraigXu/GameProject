@@ -4,34 +4,66 @@ using System.Collections;
 using System.Collections.Generic;
 using MapMagic;
 
-#if UNITY_5_5
-using UnityEngine.Profiling;
-#endif
+//using Plugins;
 
 namespace MapMagic
 {
-	public class MapMagicWindow : EditorWindow
+	public class MapMagicWindow : EditorWindow, ISerializationCallbackReceiver
 	{
 		//private Layoutscript.layout;
 		//private Layout script.toolbarLayout;
 
+		public static MapMagicWindow instance;
+
 		private GUIStyle generatorWindowStyle;
 		private GUIStyle groupWindowStyle;
+
+
+		public IMapMagic mapMagic; //assigned by a window caller
+		
+		public List<GeneratorsAsset> gensBiomeHierarchy = new List<GeneratorsAsset>(); //gensBiomeHierarchy[0] should be a top-level graph. Could be stack but we need access to element 0, don't wanna linq
+		public GeneratorsAsset gens {get {if (gensBiomeHierarchy.Count==0) return null; else return gensBiomeHierarchy[gensBiomeHierarchy.Count-1]; }}
+		static public GeneratorsAsset GetGens () { if (instance!=null) return instance.gens; else return null; }
+
+		public Layout toolbarLayout;
+
+		#region Serialization
+			public MapMagic serializedMM_mapMagic;
+			#if VOXELAND
+			public Voxeland5.Voxeland serializedMM_voxeland;
+			#endif
+
+			public void OnBeforeSerialize () 
+			{ 
+				if (mapMagic is MapMagic) serializedMM_mapMagic = (MapMagic)mapMagic;
+				#if VOXELAND
+				if (mapMagic is Voxeland5.Voxeland) serializedMM_voxeland = (Voxeland5.Voxeland)mapMagic;
+				#endif
+			}
+			public void OnAfterDeserialize () 
+			{ 
+				if (serializedMM_mapMagic != null)  mapMagic = serializedMM_mapMagic;
+				#if VOXELAND
+				else if (serializedMM_voxeland != null)  mapMagic = serializedMM_voxeland;
+				#endif
+			}
+		#endregion
 
 		#region Undo
 
 			void PerformUndo ()
 			{
-				Repaint(); //just to make curve undo work.
+				//Repaint(); //just to make curve undo work.
 				//modifying curve with ascript.layout writes undo the usual way, and it is displayed in undo stack as "MapMaic Generator Change"
 				//but somehow GetCurrentGroupName returns the previous action instead, like "Selection Change"
 			
 				if (!Undo.GetCurrentGroupName().Contains("MapMagic")) return;
 
-				foreach (Chunk tw in MapMagic.instance.terrains.Objects()) tw.results.Clear();
-				if (MapMagic.instance.guiGens != null) MapMagic.instance.guiGens.ChangeGenerator(null);
-				MapMagic.instance.gens.ChangeGenerator(null);
-				if (MapMagic.instance.instantGenerate) { MapMagic.instance.ForceGenerate(); }
+				if (mapMagic!=null) 
+				{
+					mapMagic.ClearResults();
+					mapMagic.Generate();
+				}
 
 				Repaint();
 				
@@ -42,46 +74,69 @@ namespace MapMagic
 	
 			void CreateGenerator (System.Type type, Vector2 guiPos)
 			{
-				if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+				Undo.RecordObject (gens, "MapMagic Create Generator");
+				gens.setDirty = !gens.setDirty;
 
-				Undo.RecordObject (MapMagic.instance.guiGens, "MapMagic Create Generator");
-				MapMagic.instance.guiGens.setDirty = !MapMagic.instance.guiGens.setDirty;
+				Generator gen = gens.CreateGenerator(type, guiPos);
 
-				Generator gen = MapMagic.instance.guiGens.CreateGenerator(type, guiPos);
-				MapMagic.instance.guiGens.ChangeGenerator(gen);
+				if (mapMagic != null)
+				{
+					mapMagic.ClearResults(gen);
+					mapMagic.Generate();
+				}
 
 				repaint=true; Repaint(); 
 
-				EditorUtility.SetDirty(MapMagic.instance.guiGens);
+				EditorUtility.SetDirty(gens);
 			}
 
 			void DeleteGenerator (Generator gen)
 			{
-				if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+				Undo.RecordObject (gens, "MapMagic Delete Generator"); 
+				gens.setDirty = !gens.setDirty;
 
-				Undo.RecordObject (MapMagic.instance.guiGens, "MapMagic Delete Generator"); 
-				MapMagic.instance.guiGens.setDirty = !MapMagic.instance.guiGens.setDirty;
+				//removing generator from 'ready' and 'results' arrays 
+				//mapMagic.ClearResults(gen);
+				//mapMagic.Generate();
+	
+				//manually resetting all dependent generators ready state
+				//for (int g=0; g<gens.list.Length; g++)
+				//	if (gens.CheckDependence(gen,gens.list[g])) mapMagic.ChangeGenerator(gens.list[g]);
 				
-				MapMagic.instance.guiGens.DeleteGenerator(gen);
-				MapMagic.instance.guiGens.ChangeGenerator(null);
+				gens.DeleteGenerator(gen);
+				
+				//.ChangeGenerator(null);
 				Repaint();
 
-				EditorUtility.SetDirty(MapMagic.instance.guiGens);
+				EditorUtility.SetDirty(gens);
 			}
 
 			void PreviewOutput (Generator gen, Generator.Output output, bool inWindow)
 			{
-				MapMagic.instance.previewGenerator = gen;
-				MapMagic.instance.previewOutput = output;
-				
-				if (gen==null || output==null) { MapMagic.instance.previewGenerator=null; MapMagic.instance.previewOutput=null; } //should be defined both - or none
-				
-				if (gen!=null) MapMagic.instance.guiGens.ChangeGenerator(null);
-
-				if (inWindow)
+				if (gen==null || output==null || mapMagic==null) 
 				{
-					//previewOutput.inWindow = true;
-					PreviewWindow.ShowWindow();
+					Preview.Clear(); 
+				}
+				else
+				{
+					Preview.Show(mapMagic, gen, output);
+
+					if (inWindow) PreviewWindow.ShowWindow();
+					else Preview.drawGizmos = true;
+
+					mapMagic.Generate(); 
+				}
+
+				//select MapMagic or Voxeland object to make gizmos update
+				if (Selection.activeTransform == null)
+				{
+					if (MapMagic.instance != null) Selection.activeTransform = MapMagic.instance.transform;
+					else
+					{
+						#if VOXELAND
+						if (Voxeland5.Voxeland.instances!=null && Voxeland5.Voxeland.instances.Count!=0) Selection.activeTransform = Voxeland5.Voxeland.instances.Any().transform;
+						#endif
+					}
 				}
 
 				SceneView.RepaintAll();
@@ -89,181 +144,182 @@ namespace MapMagic
 
 			void ResetGenerator (Generator gen)
 			{
-				if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
-				
-				Undo.RecordObject (MapMagic.instance.guiGens, "MapMagic Reset Generator"); 
-				MapMagic.instance.guiGens.setDirty = !MapMagic.instance.guiGens.setDirty;
+				Undo.RecordObject (gens, "MapMagic Reset Generator"); 
+				gens.setDirty = !gens.setDirty;
 
 				gen.ReflectionReset();
-				MapMagic.instance.guiGens.ChangeGenerator(gen);
 
-				EditorUtility.SetDirty(MapMagic.instance.guiGens);
-			}
-
-			private static Generator[] SmartCopyGenerators (Generator gen)
-			{
-				//saving all gens if clicked to background
-				if (gen == null) return (Generator[])CustomSerialization.DeepCopy(MapMagic.instance.guiGens.list);
-				
-				//saving group
-				else if (gen is Group)
+				if (mapMagic != null)
 				{
-					Group grp = (Group)gen;
-					Generator[] gens = MapMagic.instance.guiGens.list;
-
-					//creating a list of group children (started with a group itself)
-					List<Generator> gensList = new List<Generator>();
-					gensList.Add(gen);
-					for (int g=0; g<gens.Length; g++)
-						if (grp.guiRect.Contains(gens[g].guiRect)) gensList.Add(gens[g]);
-
-					//copying group children
-					Generator[] copyGens =  (Generator[])CustomSerialization.DeepCopy(gensList.ToArray());
-					
-					//unlinking children from out-of-group generators
-					HashSet<Generator> copyGensHash = new HashSet<Generator>();
-					for (int g=0; g<copyGens.Length; g++) copyGensHash.Add(copyGens[g]);
-					for (int g=0; g<copyGens.Length; g++)
-						foreach (Generator.Input input in copyGens[g].Inputs())
-						{
-							if (input.link == null) continue;
-							if (!copyGensHash.Contains(input.linkGen)) input.Unlink();
-						}
-
-					return copyGens;
+					mapMagic.ClearResults(gen);
+					mapMagic.Generate();
 				}
 
-				//single generator
-				else 
-				{
-					Generator copyGen = (Generator)CustomSerialization.DeepCopy(gen);
-					foreach (Generator.Input input in copyGen.Inputs()) { if (input != null) input.Unlink(); }
-					return new Generator[] { copyGen };
-				}
+				EditorUtility.SetDirty(gens);
 			}
 
 			private void DuplicateGenerator (Generator gen)
 			{
-				if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+				Undo.RecordObject (gens, "MapMagic Duplicate Generator"); 
+				gens.setDirty = !gens.setDirty;
 
-				Generator[] copyGens = SmartCopyGenerators(gen);
-				
-				//ignoring already existing outputs
-				for (int i=copyGens.Length-1; i>=0; i--)
+				Generator[] copyGens = gens.SmartDuplicateGenerators(gen);
+
+				if (mapMagic != null)
 				{
-					Generator copyGen = copyGens[i];
-
-					copyGen.guiRect.position += new Vector2(0, gen.guiRect.height + 10);
+					mapMagic.ClearResults(copyGens);
+					mapMagic.Generate();
 				}
 
-				ArrayUtility.AddRange(ref MapMagic.instance.guiGens.list, copyGens);
-				MapMagic.instance.guiGens.ChangeGenerator(null);
-				repaint=true; Repaint();
+				EditorUtility.SetDirty(gens);
 			}
 
-			void SaveGenerator (Generator gen, Vector2 pos, string path=null) //@Chuck: use this similarly to ExportToFile. If path is defined it will export generator using it
+			void ExportGenerator (Generator gen, Vector2 pos, string path=null) //if path is defined it will export generator using it
 			{
 				if (changeLock) return;
-				
-				if (path==null) path= UnityEditor.EditorUtility.SaveFilePanel(
-						"Export Nodes",
-						"",
-						"MapMagicExport.nodes", 
-						"nodes");
-				if (path==null || path.Length==0) return;
-
-				Generator[] saveGens = SmartCopyGenerators(gen);
-				if (gen!=null) for (int i=0; i<saveGens.Length; i++) saveGens[i].guiRect.position -= gen.guiRect.position;
-
-				//preparing serialization arrays
-				List<string> classes = new List<string>();
-				List<UnityEngine.Object> objects = new List<UnityEngine.Object>();
-				List<object> references = new List<object>();
-				List<float> floats = new List<float>();
-
-				//saving
-				CustomSerialization.WriteClass(saveGens, classes, objects, floats, references);
-				using (System.IO.StreamWriter writer = new System.IO.StreamWriter(path))
-					writer.Write(CustomSerialization.ExportXML(classes, objects, floats));
-
-				//AssetDatabase.CreateAsset(saveGens, path);
-				//AssetDatabase.SaveAssets();
+				gens.ExportGenerator(gen, pos,path);
 			}
 
-			void LoadGenerator (Vector2 pos)
+			void ImportGenerator (Vector2 pos)
 			{
-				if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;	
+				if (changeLock) return;
 
-				string path= UnityEditor.EditorUtility.OpenFilePanel(
-						"Import Nodes",
-						"", 
-						"nodes");
-				if (path==null || path.Length==0) return;
+				Undo.RecordObject (gens, "MapMagic Import Generators"); 
+				gens.setDirty = !gens.setDirty;
 
-				//preparing serialization arrays
-				List<string> classes = new List<string>();
-				List<UnityEngine.Object> objects = new List<UnityEngine.Object>();
-				List<object> references = new List<object>();
-				List<float> floats = new List<float>();
+				Generator[] copyGens = gens.ImportGenerator(pos);
 
-				//loading
-				System.IO.StreamReader reader = new System.IO.StreamReader(path);
-				CustomSerialization.ImportXML(reader.ReadToEnd(), out classes, out objects, out floats);
-				Generator[] loadedGens = (Generator[])CustomSerialization.ReadClass(0, classes, objects, floats, references);
-
-				//offset 
-				for (int i=loadedGens.Length-1; i>=0; i--) loadedGens[i].guiRect.position += pos;
-				
-
-				//GeneratorsAsset loadedGens = (GeneratorsAsset)AssetDatabase.LoadAssetAtPath(path, typeof(GeneratorsAsset));
-
-				/*for (int i=loadedGens.list.Length-1; i>=0; i--)
+				if (mapMagic != null)
 				{
-					//cloning
-					//loadedGens.list[i] = loadedGens.list[i].ReflectionCopy();
-					Generator gen = loadedGens.list[i];
+					mapMagic.ClearResults(copyGens);
+					mapMagic.Generate();
+				}
 
-					//offset
-					gen.guiRect.position += pos;
-					
-					//ignoring already existing outputs
-					if (gen is Generator.IOutput && MapMagic.instance.guiGens.GetGenerator(gen.GetType())!=null)
+				EditorUtility.SetDirty(gens);
+				repaint=true; forceAll=true; Repaint();
+			}
+
+			static bool updateWarningShowed = false;
+			void UpdateGenerator (Generator gen)
+			{
+				if (!updateWarningShowed) 
+				{
+					if (EditorUtility.DisplayDialog("Warning", "Updating generator can break your graph. Make a backup before continue", "Go on, I've made a backup", "Cancel"))
+						updateWarningShowed = true;
+					else return;
+				}
+				
+				Undo.RecordObject (gens, "MapMagic Update Generator"); 
+				gens.setDirty = !gens.setDirty;
+
+				//Generator[] copyGens = gens.SmartDuplicateGenerators(gen);
+
+				System.Type type = gen.GetType();
+				GeneratorMenuAttribute attribute = System.Attribute.GetCustomAttribute(type, typeof(GeneratorMenuAttribute)) as GeneratorMenuAttribute;
+
+				//finding type to replace
+				System.Type newType = null;
+				if (attribute.updateType != null) newType = attribute.updateType;
+				else
+				{
+					string name = attribute.name;
+					name = name.Split(new string[] {" (Legacy"}, System.StringSplitOptions.None)[0];
+
+					//iterating types starting from current version
+					for (int v=MapMagic.version; v>=0; v--)
 					{
-						Debug.Log ("MapMagic: tried to load Output which already exists (" + gen + "). Skipping.");
-						loadedGens.UnlinkGenerator(gen);
-						ArrayUtility.RemoveAt(ref loadedGens.list, i);
+						//newType = System.Type.GetType("MapMagic." + name + "Generator" + v.ToString()); //does not work
+						newType = System.Reflection.Assembly.Load("Assembly-CSharp").GetType("MapMagic." + name + "Generator" + v.ToString());
+						if (newType != null) break;
 					}
 
-				}*/
+					if (newType == null)
+					for (int v=MapMagic.version; v>=0; v--)
+					{
+						newType = System.Reflection.Assembly.Load("Assembly-CSharp").GetType("MapMagic." + name + v.ToString()); //for generators that have no "Generator" in name
+						if (newType != null) break;
+					}
+				}
+				if (newType == null) { Debug.Log("Could not find a proper type to update"); return; }
+				
+				Generator newGen = System.Activator.CreateInstance(newType) as Generator;
 
-				ArrayUtility.AddRange(ref MapMagic.instance.guiGens.list, loadedGens);
-				MapMagic.instance.guiGens.ChangeGenerator(null);
-				repaint=true; forceAll=true; Repaint();
+				newGen.ReflectionCopyFrom(gen); 
+
+				//changing links
+				for (int g=0; g<gens.list.Length; g++)
+					foreach (Generator.Input input in gens.list[g].Inputs())
+						if (input != null && input.linkGen == gen) input.linkGen = newGen;
+
+				//replacing in array
+				int numInArray = ArrayTools.Find(gens.list, gen);
+				gens.list[numInArray] = newGen;
+
+				if (mapMagic != null)
+				{
+					mapMagic.ClearResults(gen); //copyGens
+					mapMagic.Generate();
+				}
+
+				EditorUtility.SetDirty(gens);
+			}
+
+			bool CouldBeUpdated (Generator gen)
+			{
+				if (gen == null) return false;
+				
+				System.Type type = gen.GetType();
+				GeneratorMenuAttribute attribute = System.Attribute.GetCustomAttribute(type, typeof(GeneratorMenuAttribute)) as GeneratorMenuAttribute;
+
+				if (attribute.menu == "Legacy") return true;
+				else return false;
 			}
 
 
 		#endregion
-		
-		//repainting gui on generate state changed (or if running to make a animated indicator)
+
+
+		//repainting gui to make a animated indicator
 		private void OnInspectorUpdate () 
 		{ 	
-			if (MapMagic.instance == null) return;
-			if (!MapMagic.instance.terrains.complete) Repaint();
+			if (mapMagic!=null && mapMagic.IsWorking) Repaint();
+		}
 
-			//testing serialization
-			/*if (MapMagic.instance.guiDebug)
+		private void OnEnable ()
+		{
+			//finding mapmagic object if window is empty (has no gens)
+			if (gens==null)
 			{
-				Serializer ser = new Serializer();
-				ser.Store(MapMagic.instance.gens); 
-				if (!ser.Equals(MapMagic.instance.serializer)) Debug.LogError("Serialization Difference");
-			}*/ //old way to test serialization
+				MapMagic mm = GameObject.FindObjectOfType<MapMagic>();
+				if (mm!=null)
+				{
+					mapMagic = mm;
+					gensBiomeHierarchy.Clear();
+					gensBiomeHierarchy.Add(mm.gens);
+				}
+
+				#if VOXELAND
+				else
+				{
+					Voxeland5.Voxeland voxeland = GameObject.FindObjectOfType<Voxeland5.Voxeland>();
+					if (voxeland!=null)
+					{
+						mapMagic = voxeland;
+						gensBiomeHierarchy.Clear();
+						if (voxeland.data!=null && voxeland.data.generator!=null && voxeland.data.generator.mapMagicGens!=null) 
+							gensBiomeHierarchy.Add(voxeland.data.generator.mapMagicGens);
+					}
+				}
+
+				#endif
+			}
+
+			instance = this;
 		}
 
 		private void OnDisable ()
 		{
-			//removing callbacks
-			Portal.OnChooseEnter -= DrawPortalSelector;
-			//Undo.undoRedoPerformed -= PerformUndo;
+			instance = null;
 		}
 
 		private bool repaint = false;
@@ -271,28 +327,30 @@ namespace MapMagic
 		private void OnGUI() { DrawWindow(); if (repaint) DrawWindow(); repaint = false; } //drawing window, or doing it twice if repaint is needed
 		private void DrawWindow()
 		{
-			if (MapMagic.instance == null) MapMagic.instance = FindObjectOfType<MapMagic>();
-			MapMagic script = MapMagic.instance;
-			if (script==null) return;
-			if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
-			GeneratorsAsset gens = MapMagic.instance.guiGens;
-			//if (script.guiGens != null) gens = script.guiGens;
-			//if (script.gens==null) script.gens = ScriptableObject.CreateInstance<GeneratorsAsset>();
+			if (gens == null) return;
 
 			//un-selecting field on drag
+			#if !STANDALONE_LINUX
 			if (Event.current.button != 0) UnityEditor.EditorGUI.FocusTextInControl("");
+			#endif
 
 			//startingscript.layout
 			
-			if (script.layout==null) 
-				{ script.layout = new Layout(); script.layout.scroll = script.guiScroll; script.layout.zoom = script.guiZoom; script.layout.maxZoom = 1f; }
-			script.layout.Zoom(); script.layout.Scroll(); //scrolling and zooming
-			script.layout.field = this.position;
+			if (gens.layout==null) 
+				{ gens.layout = new Layout(); gens.layout.scroll = gens.guiScroll; gens.layout.zoom = gens.guiZoom; gens.layout.maxZoom = 1f; }
+			gens.layout.Zoom(); gens.layout.Scroll(); //scrolling and zooming
+			if (gens.layout.zoom < 0.0001f) gens.layout.zoom = 1;
+			gens.layout.field = this.position;
+
+			//zoomning with keyboard
+			if (Event.current.type == EventType.KeyDown)
+			{
+				if (Event.current.keyCode==KeyCode.Equals && Event.current.alt) { gens.layout.zoom += gens.layout.zoomStep; if (gens.layout.zoom>1) gens.layout.zoom=1; Event.current.Use(); }
+				if (Event.current.keyCode==KeyCode.Minus && Event.current.alt) { gens.layout.zoom -= gens.layout.zoomStep; Event.current.Use(); }
+			}
 			
 			//unity 5.4 beta
 			if (Event.current.type == EventType.MouseDrag || Event.current.type == EventType.Layout) return; 
-
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Redraw Window");
 
 			//using middle mouse click events
 			if (Event.current.button == 2) Event.current.Use();
@@ -303,13 +361,13 @@ namespace MapMagic
 
 			//setting title content
 			titleContent = new GUIContent("Map Magic");
-			titleContent.image =script.layout.GetIcon("MapMagic_WindowIcon");
+			titleContent.image =gens.layout.GetIcon("MapMagic_WindowIcon");
 
 			//drawing background
-			Vector2 windowZeroPos =script.layout.ToInternal(Vector2.zero);
+			Vector2 windowZeroPos =gens.layout.ToInternal(Vector2.zero);
 			windowZeroPos.x = ((int)(windowZeroPos.x/64f)) * 64; 
 			windowZeroPos.y = ((int)(windowZeroPos.y/64f)) * 64; 
-			script.layout.Icon( 
+			gens.layout.Icon( 
 				"MapMagic_Background",
 				new Rect(windowZeroPos - new Vector2(64,64), 
 				position.size + new Vector2(128,128)), 
@@ -319,7 +377,7 @@ namespace MapMagic
 			//script.layout.Button("Zero", new Rect(-10,-10,20,20));
 
 			//calculating visible area
-			Rect visibleArea = script.layout.ToInternal( new Rect(0,0,position.size.x,position.size.y) );
+			Rect visibleArea = gens.layout.ToInternal( new Rect(0,0,position.size.x,position.size.y) );
 			if (forceAll) { visibleArea = new Rect(-200000,-200000,400000,400000); forceAll = false; }
 			//visibleArea = new Rect(visibleArea.x+100, visibleArea.y+100, visibleArea.width-200, visibleArea.height-200);
 			//layout.Label("Area", helpBox:true, rect:visibleArea);
@@ -336,8 +394,6 @@ namespace MapMagic
 			}
 
 			#region Drawing groups
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Drawing Groups");
-
 				for(int i=0; i<gens.list.Length; i++)
 				{
 					if (!(gens.list[i] is Group)) continue;
@@ -346,23 +402,20 @@ namespace MapMagic
 					//checking if this is withinscript.layout field
 					if (group.guiRect.x > visibleArea.x+visibleArea.width || group.guiRect.y > visibleArea.y+visibleArea.height ||
 						group.guiRect.x+group.guiRect.width < visibleArea.x || group.guiRect.y+group.guiRect.height < visibleArea.y) 
-							if (group.guiRect.width > 0.001f &&script.layout.dragState != Layout.DragState.Drag) continue; //if guiRect initialized and not dragging
+							if (group.guiRect.width > 0.001f && gens.layout.dragState != Layout.DragState.Drag) continue; //if guiRect initialized and not dragging
 
 					//settingscript.layout data
 					group.layout.field = group.guiRect;
-					group.layout.scroll =script.layout.scroll;
-					group.layout.zoom =script.layout.zoom;
+					group.layout.scroll = gens.layout.scroll;
+					group.layout.zoom = gens.layout.zoom;
 
-					group.OnGUI();
+					group.OnGUI(gens);
 
 					group.guiRect = group.layout.field;
 				}
-			
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			#region Drawing connections (before generators to make them display under nodes)
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Drawing Connections");
 
 				foreach(Generator gen in gens.list)
 				{
@@ -374,73 +427,71 @@ namespace MapMagic
 							Portal portal = (Portal)gen;
 							if (!portal.drawInputConnection) continue;
 						}
-						script.layout.Spline(input.link.guiConnectionPos, input.guiConnectionPos, color:Generator.CanConnect(input.link,input)? input.guiColor : Color.red);
+						gens.layout.Spline(input.link.guiConnectionPos, input.guiConnectionPos, color:GeneratorsAsset.CanConnect(input.link,input)? input.guiColor : Color.red);
 					}
 				}
-
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			#region creating connections (after generators to make clicking in inout work)
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Creating Connections");
 
 			int dragIdCounter = gens.list.Length+1;
 				foreach (Generator gen in gens.list)
 					foreach (Generator.IGuiInout inout in gen.Inouts())
 				{
 					if (inout == null) continue;
-					if (script.layout.DragDrop(inout.guiRect, dragIdCounter))
+					if (gens.layout.DragDrop(inout.guiRect, dragIdCounter))
 					{
 						//finding target
 						Generator.IGuiInout target = null;
 						foreach (Generator gen2 in gens.list)
 							foreach (Generator.IGuiInout inout2 in gen2.Inouts())
-								if (inout2.guiRect.Contains(script.layout.dragPos)) target = inout2;
+								if (inout2.guiRect.Contains(gens.layout.dragPos)) target = inout2;
 
 						//converting inout to Input (or Output) and target to Output (or Input)
 						Generator.Input input = inout as Generator.Input;		if (input==null) input = target as Generator.Input;
 						Generator.Output output = inout as Generator.Output;	if (output==null) output = target as Generator.Output;
 
 						//connection validity test
-						bool canConnect = input!=null && output!=null && Generator.CanConnect(output,input);
+						bool canConnect = input!=null && output!=null && GeneratorsAsset.CanConnect(output,input);
 
 						//infinite loop test
 						if (canConnect)
 						{ 
 							Generator outputGen = output.GetGenerator(gens.list);
 							Generator inputGen = input.GetGenerator(gens.list);
-							if (inputGen == outputGen || outputGen.IsDependentFrom(inputGen)) canConnect = false;
+							if (inputGen == outputGen || gens.CheckDependence(inputGen,outputGen)) canConnect = false;
 						}
 
 						//drag
 						//if (script.layout.dragState==Layout.DragState.Drag) //commented out because will not be displayed on repaint otherwise
 						//{
-							if (input == null)script.layout.Spline(output.guiConnectionPos,script.layout.dragPos, color:Color.red);
-							else if (output == null)script.layout.Spline(script.layout.dragPos, input.guiConnectionPos, color:Color.red);
-							else script.layout.Spline(output.guiConnectionPos, input.guiConnectionPos, color:canConnect? input.guiColor : Color.red);
+							if (input == null)gens.layout.Spline(output.guiConnectionPos,gens.layout.dragPos, color:Color.red);
+							else if (output == null)gens.layout.Spline(gens.layout.dragPos, input.guiConnectionPos, color:Color.red);
+							else gens.layout.Spline(output.guiConnectionPos, input.guiConnectionPos, color:canConnect? input.guiColor : Color.red);
 						//}
 
 						//release
-						if (script.layout.dragState==Layout.DragState.Released && input!=null) //on release. Do nothing if input not defined
+						if (gens.layout.dragState==Layout.DragState.Released && input!=null) //on release. Do nothing if input not defined
 						{
 							Undo.RecordObject (gens, "MapMagic Connection"); 
 							gens.setDirty = !gens.setDirty;
 
 							input.Unlink();
 							if (canConnect) input.Link(output, output.GetGenerator(gens.list));
-							gens.ChangeGenerator(gen);
+							if (mapMagic!=null) 
+							{
+								mapMagic.ClearResults(gen);
+								mapMagic.Generate();
+							}
 
 							EditorUtility.SetDirty(gens);
 						}
 					}
 					dragIdCounter++;
 				}
-
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			#region Drawing generators
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Drawing Generators");
 
 				for(int i=0; i<gens.list.Length; i++)
 				{
@@ -450,11 +501,11 @@ namespace MapMagic
 					//checking if this generator is withinscript.layout field
 					if (gen.guiRect.x > visibleArea.x+visibleArea.width || gen.guiRect.y > visibleArea.y+visibleArea.height ||
 						gen.guiRect.x+gen.guiRect.width < visibleArea.x || gen.guiRect.y+gen.guiRect.height < visibleArea.y) 
-							if (gen.guiRect.width > 0.001f &&script.layout.dragState != Layout.DragState.Drag) continue; //if guiRect initialized and not dragging
+							if (gen.guiRect.width > 0.001f && gens.layout.dragState != Layout.DragState.Drag) continue; //if guiRect initialized and not dragging
 
 					if (gen.layout == null) gen.layout = new Layout();
 					gen.layout.field = gen.guiRect;
-					gen.layout.field.width = MapMagic.instance.guiGeneratorWidth;
+					gen.layout.field.width = 160; //MapMagic.instance.guiGeneratorWidth;
 				
 					//gen.layout.OnBeforeChange -= RecordGeneratorUndo;
 					//gen.layout.OnBeforeChange += RecordGeneratorUndo;
@@ -464,85 +515,176 @@ namespace MapMagic
 					gen.layout.disabled = changeLock;
 
 					//copyscript.layout params
-					gen.layout.scroll =script.layout.scroll;
-					gen.layout.zoom =script.layout.zoom;
+					gen.layout.scroll = gens.layout.scroll;
+					gen.layout.zoom = gens.layout.zoom;
 
-					//drawing
-					if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Generator GUI");
-					gen.OnGUIBase();
-					if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
+					//drawing background
+					gen.layout.Element("MapMagic_Window", gen.layout.field, new RectOffset(34,34,34,34), new RectOffset(33,33,33,33));
+
+					//resetting layout
+					gen.layout.field.height = 0;
+					gen.layout.field.width =160;
+					gen.layout.cursor = new Rect();
+					gen.layout.change = false;
+					gen.layout.margin = 1; gen.layout.rightMargin = 1;
+					gen.layout.fieldSize = 0.4f;   
+					
+					//drawing header
+					gen.DrawHeader (mapMagic, gens);
+					if (gen is OutputGenerator && gen.layout.change && gen.enabled == false) //if just disabled output
+						gensBiomeHierarchy[0].OnDisableGenerator(gen);
+
+					//drawing parameters
+					#if WDEBUG
+					gen.OnGUI(gens);
+					#else
+					try { gen.OnGUI(gens); }
+					catch (UnityException e) { Debug.LogError("Error drawing generator " + GetType() + "\n" + e);} 
+					//should be system.exception but it causes ExitGUIException on opening curve/color/texture fields
+					//it's so unity...
+					//if something goes wrong but no error is displayed - you know where to find it
+					#endif
+					gen.layout.Par(3);
+
+					//drawing debug generate time
+					#if WDEBUG
+					if (mapMagic!=null)
+					{
+						Rect timerRect = new Rect(gen.layout.field.x, gen.layout.field.y+gen.layout.field.height, 200, 20);
+						string timeLabel = "g:" + gen.guiGenerateTime + "ms ";
+						if (gen is OutputGenerator)
+						{
+							if (Generator.guiProcessTime.ContainsKey(gen.GetType())) timeLabel += " p:" + Generator.guiProcessTime[gen.GetType()] + "ms ";
+							if (Generator.guiApplyTime.ContainsKey(gen.GetType())) timeLabel += " a:" + Generator.guiApplyTime[gen.GetType()] + "ms ";
+						}
+						gen.layout.Label(timeLabel, timerRect);
+					}
+					#endif
 
 					//instant generate on params change
 					if (gen.layout.change) 
 					{
-						gens.ChangeGenerator(gen);
+						if (mapMagic!=null) 
+						{
+							mapMagic.ClearResults(gen);
+							mapMagic.Generate();
+						}
 						repaint=true; Repaint();
 
 						EditorUtility.SetDirty(gens);
-						
 					}
+
+					//drawing biome "edit" button. Rather hacky, but we have to call editor method when pressing "Edit"
+					if (gen is Biome)
+					{
+						Biome biome = (Biome)gen;
+						if (gen.layout.Button("Edit", disabled:biome.data==null)) 
+						{
+							MapMagicWindow.Show(biome.data, mapMagic, forceOpen:true,asBiome: true);
+							Repaint();
+							return; //cancel drawing this graph if biome was opened
+						}
+						gen.layout.Par(10);
+					}
+
+					//changing all of the output generators of the same type (in case this one was disabled to make refresh)
+					if (gen.layout.change && !gen.enabled && gen is OutputGenerator)
+					{
+						foreach (GeneratorsAsset ga in gensBiomeHierarchy)
+						foreach (OutputGenerator sameOut in ga.GeneratorsOfType<OutputGenerator>(onlyEnabled:true, checkBiomes:true))
+							if (sameOut.GetType() == gen.GetType()) 
+							{
+								mapMagic.ClearResults(sameOut);
+								mapMagic.Generate();
+							}
+					}
+
 			
 					if (gen.guiRect.width<1 && gen.guiRect.height<1) { repaint=true;  Repaint(); } //repainting if some of the generators rect is 0
 					gen.guiRect = gen.layout.field;
 				}
-
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			#region Toolbar
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Toolbar");
 
-				if (script.toolbarLayout==null) script.toolbarLayout = new Layout();
-				script.toolbarLayout.margin = 0; script.toolbarLayout.rightMargin = 0;
-				script.toolbarLayout.field.width = this.position.width;
-				script.toolbarLayout.field.height = 18;
-				script.toolbarLayout.cursor = new Rect();
-				//script.toolbarLayout.window = this;
-				script.toolbarLayout.Par(18, padding:0);
+				if (toolbarLayout==null) toolbarLayout = new Layout();
+				toolbarLayout.margin = 0; toolbarLayout.rightMargin = 0;
+				toolbarLayout.field.width = this.position.width;
+				toolbarLayout.field.height = 18;
+				toolbarLayout.cursor = new Rect();
+				//toolbarLayout.window = this;
+				toolbarLayout.Par(18, padding:0);
 
-				EditorGUI.LabelField(script.toolbarLayout.field, "", EditorStyles.toolbarButton);
+				EditorGUI.LabelField(toolbarLayout.field, "", EditorStyles.toolbarButton);
 
-				//drawing state icon
-				script.toolbarLayout.Inset(25);
-				if (!MapMagic.instance.terrains.complete) { script.toolbarLayout.Icon("MapMagic_Loading", new Rect(5,0,16,16), animationFrames:12); Repaint(); }
-				else script.toolbarLayout.Icon("MapMagic_Success", new Rect(5,0,16,16));
-				//TODO: changed sign
-
-				//generate buttons
-				if (GUI.Button(script.toolbarLayout.Inset(120,padding:0), "Generate Changed", EditorStyles.toolbarButton) && MapMagic.instance.enabled) MapMagic.instance.Generate();
-				if (GUI.Button(script.toolbarLayout.Inset(120,padding:0), "Force Generate All", EditorStyles.toolbarButton) && MapMagic.instance.enabled) MapMagic.instance.ForceGenerate();
-
-				//seed field
-				script.toolbarLayout.Inset(10);
-				Rect seedLabelRect = script.toolbarLayout.Inset(34); seedLabelRect.y+=1; seedLabelRect.height-=4;
-				Rect seedFieldRect = script.toolbarLayout.Inset(64); seedFieldRect.y+=2; seedFieldRect.height-=4;
-				EditorGUI.LabelField(seedLabelRect, "Seed:", EditorStyles.miniLabel);
-				int newSeed = EditorGUI.IntField(seedFieldRect, MapMagic.instance.seed, EditorStyles.toolbarTextField);
-				if (newSeed != MapMagic.instance.seed) { MapMagic.instance.seed = newSeed; if (MapMagic.instance.instantGenerate) MapMagic.instance.ForceGenerate(); }
-
-				//right part
-				script.toolbarLayout.Inset(script.toolbarLayout.field.width - script.toolbarLayout.cursor.x - 150,padding:0);
-
-				//drawing exit biome button
-				Rect biomeRect = script.toolbarLayout.Inset(80, padding:0);
-				if (MapMagic.instance.guiGens != null && MapMagic.instance.guiGens != MapMagic.instance.gens) 
+				if (mapMagic!=null  &&  mapMagic.ToString()!="null"  &&  !ReferenceEquals(mapMagic.gameObject,null)) //check game object in case it was deleted
+				//mapMagic.ToString()!="null" - the only efficient delete check. Nor Equals neither ReferenceEquals are reliable. I <3 Unity!
 				{
-					if (script.toolbarLayout.Button("", biomeRect, icon:"MapMagic_ExitBiome", style:EditorStyles.toolbarButton)) MapMagic.instance.guiGens = null;
-					script.toolbarLayout.Label("Exit Biome", new Rect(script.toolbarLayout.cursor.x-60, script.toolbarLayout.cursor.y+3, 60, script.toolbarLayout.cursor.height), fontSize:9);
+					//drawing state icon
+					toolbarLayout.Inset(25);
+					if (ThreadWorker.IsWorking("MapMagic")) { toolbarLayout.Icon("MapMagic_Loading", new Rect(5,0,16,16), animationFrames:12); Repaint(); }
+					else toolbarLayout.Icon("MapMagic_Success", new Rect(5,0,16,16));
+					//TODO: changed sign
+
+					//mapmagic name
+					Rect nameLabelRect = toolbarLayout.Inset(100); nameLabelRect.y+=1; //nameLabelRect.height-=4;
+					EditorGUI.LabelField(nameLabelRect, mapMagic.gameObject.name, EditorStyles.miniLabel);
+
+					//generate buttons
+					if (GUI.Button(toolbarLayout.Inset(110,padding:0), "Generate Changed", EditorStyles.toolbarButton)) mapMagic.Generate(force:true);
+					if (GUI.Button(toolbarLayout.Inset(110,padding:0), "Force Generate All", EditorStyles.toolbarButton)) 
+					{ 
+						mapMagic.ClearResults();  
+
+						if (MapMagic.instance != null)
+							foreach (Chunk chunk in MapMagic.instance.chunks.All())
+								if (chunk.terrain != null) chunk.terrain.transform.RemoveChildren();
+							
+						mapMagic.Generate(force:true); 
+					}
+
+					//seed field
+					toolbarLayout.Inset(10);
+					Rect seedLabelRect = toolbarLayout.Inset(34); seedLabelRect.y+=1; seedLabelRect.height-=4;
+					Rect seedFieldRect = toolbarLayout.Inset(64); seedFieldRect.y+=2; seedFieldRect.height-=4;
+				}
+				else
+				{
+					Rect nameLabelRect = toolbarLayout.Inset(300); nameLabelRect.y+=1; //nameLabelRect.height-=4;
+					EditorGUI.LabelField(nameLabelRect, "External data '" + AssetDatabase.GetAssetPath(gens) + "'", EditorStyles.miniLabel); 
 				}
 
-				//focus button
+				//right part
+				toolbarLayout.Inset(toolbarLayout.field.width - toolbarLayout.cursor.x - 150 - 22,padding:0);
+
+				//drawing exit biome button
+				Rect biomeRect = toolbarLayout.Inset(80, padding:0);
+				if (gensBiomeHierarchy.Count>1) 
+				{
+					if (toolbarLayout.Button("", biomeRect, icon:"MapMagic_ExitBiome", style:EditorStyles.toolbarButton)) 
+					{
+						gensBiomeHierarchy.RemoveAt(gensBiomeHierarchy.Count-1);
+						Repaint();
+						return;
+					}
+
+					toolbarLayout.Label("Exit Biome", new Rect(toolbarLayout.cursor.x-60, toolbarLayout.cursor.y+3, 60, toolbarLayout.cursor.height), fontSize:9);
+				}
+
+				//focus button 
 				
 			//	if (GUI.Button(script.toolbarLayout.Inset(100,padding:0), "Focus", EditorStyles.toolbarButton)) FocusOnGenerators();
-				if (script.toolbarLayout.Button("", script.toolbarLayout.Inset(23,padding:0), icon:"MapMagic_Focus", style:EditorStyles.toolbarButton)) FocusOnGenerators();
-				if (script.toolbarLayout.Button("", script.toolbarLayout.Inset(60,padding:0), icon:"MapMagic_Zoom", style:EditorStyles.toolbarButton))script.layout.zoom=1;
-				script.toolbarLayout.Label((int)(script.layout.zoom*100)+"%", new Rect(script.toolbarLayout.cursor.x-42, script.toolbarLayout.cursor.y+3, 42, script.toolbarLayout.cursor.height), fontSize:8);
+				if (toolbarLayout.Button("", toolbarLayout.Inset(23,padding:0), icon:"MapMagic_Focus", style:EditorStyles.toolbarButton)) FocusOnGenerators();
+				
+				if (toolbarLayout.Button("", toolbarLayout.Inset(47,padding:0), icon:"MapMagic_Zoom", style:EditorStyles.toolbarButton)) gens.layout.zoom=1;
+				toolbarLayout.Label((int)(gens.layout.zoom*100)+"%", new Rect(toolbarLayout.cursor.x-28, toolbarLayout.cursor.y+3, 28, toolbarLayout.cursor.height), fontSize:8);  
+				
+				toolbarLayout.Inset(3, margin:0);
+				toolbarLayout.Label("",  toolbarLayout.Inset(22, margin:0), url:"https://gitlab.com/denispahunov/mapmagic/wikis/Editor%20Window", icon:"MapMagic_Help"); 
 
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			#region Draging
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Dragging");
 
 				//dragging generators
 				for(int i=gens.list.Length-1; i>=0; i--)
@@ -552,19 +694,38 @@ namespace MapMagic
 					gen.layout.field = gen.guiRect;
 
 					//dragging
-					if (script.layout.DragDrop(gen.layout.field, i)) 
+					if (gens.layout.DragDrop(gen.layout.field, i)) 
 					{
-						if (script.layout.dragState == Layout.DragState.Pressed) 
+						if (gens.layout.dragState == Layout.DragState.Pressed) 
 						{
 							Undo.RecordObject (gens, "MapMagic Generators Drag");
 							gens.setDirty = !gens.setDirty;
 						}
-						if (script.layout.dragState == Layout.DragState.Drag ||script.layout.dragState == Layout.DragState.Released) 
+						if (gens.layout.dragState == Layout.DragState.Drag || gens.layout.dragState == Layout.DragState.Released) 
 						{ 
-							//moving inout rects to remove lag
-							//foreach (Generator.IGuiInout inout in gen.Inouts())
-							//	inout.guiRect = new Rect(inout.guiRect.position+layout.dragDelta, inout.guiRect.size);
-							gen.Move(script.layout.dragDelta,true);
+							//gen.Move(gens.layout.dragDelta,true);
+							
+							gen.layout.field.position += gens.layout.dragDelta;
+							gen.guiRect = gens.layout.field;
+
+							//moving inouts to remove lag
+							foreach (Generator.IGuiInout inout in gen.Inouts()) 
+								inout.guiRect = new Rect(inout.guiRect.position+gens.layout.dragDelta, inout.guiRect.size);
+
+							//moving group
+							if (gen is Group)
+							{
+								Group group = gen as Group;
+								for (int g=0; g<group.generators.Count; g++) //group.generators[g].Move(delta,false);
+								{
+									group.generators[g].layout.field.position += gens.layout.dragDelta;
+									group.generators[g].guiRect = gens.layout.field;
+
+									foreach (Generator.IGuiInout inout in group.generators[g].Inouts())  //moving inouts to remove lag
+										inout.guiRect = new Rect(inout.guiRect.position+gens.layout.dragDelta, inout.guiRect.size);
+								}
+							}
+
 							repaint=true; Repaint(); 
 
 							EditorUtility.SetDirty(gens);
@@ -584,32 +745,44 @@ namespace MapMagic
 					group.layout.field = group.guiRect;
 
 					//resizing
-					group.layout.field =script.layout.ResizeRect(group.layout.field, i+20000);
+					group.layout.field =gens.layout.ResizeRect(group.layout.field, i+20000);
 
 					//dragging
-					if (script.layout.DragDrop(group.layout.field, i)) 
+					if (gens.layout.DragDrop(group.layout.field, i)) 
 					{
-						if (script.layout.dragState == Layout.DragState.Pressed) 
+						if (gens.layout.dragState == Layout.DragState.Pressed) 
 						{
 							Undo.RecordObject (gens, "MapMagic Group Drag");
 							gens.setDirty = !gens.setDirty;
 							group.Populate(gens);
 						}
-						if (script.layout.dragState == Layout.DragState.Drag ||script.layout.dragState == Layout.DragState.Released) 
+						if (gens.layout.dragState == Layout.DragState.Drag || gens.layout.dragState == Layout.DragState.Released) 
 						{ 
-							group.Move(script.layout.dragDelta,true);
+							//group.Move(gens.layout.dragDelta,true);
+							
+							group.layout.field.position += gens.layout.dragDelta;
+							group.guiRect = gens.layout.field;
+
+							for (int g=0; g<group.generators.Count; g++) //group.generators[g].Move(delta,false);
+							{
+								group.generators[g].layout.field.position += gens.layout.dragDelta;
+								group.generators[g].guiRect.position += gens.layout.dragDelta; // = gens.layout.field;
+
+					//			foreach (Generator.IGuiInout inout in group.generators[g].Inouts())  //moving inouts to remove lag
+					//				inout.guiRect = new Rect(inout.guiRect.position+gens.layout.dragDelta, inout.guiRect.size);
+							}
+
 							repaint=true; Repaint(); 
 
 							EditorUtility.SetDirty(gens);
 						}
-						if (script.layout.dragState == Layout.DragState.Released && group != null) gens.SortGroups();
+						if (gens.layout.dragState == Layout.DragState.Released && group != null) gens.SortGroups();
 					}
 
 					//saving all group rects
 					group.guiRect = group.layout.field;
 				}
 
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
 			#endregion
 
 			//right-click menus
@@ -622,20 +795,19 @@ namespace MapMagic
 			Portal.OnChooseEnter -= DrawPortalSelector; Portal.OnChooseEnter += DrawPortalSelector;
 
 			//saving scroll and zoom
-			script.guiScroll =script.layout.scroll; script.guiZoom =script.layout.zoom;  
+			gens.guiScroll = gens.layout.scroll; gens.guiZoom = gens.layout.zoom;  
 
 			DrawDemoLock();
-	
-			if (script.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
+
 		}
 
 		public void DrawPopup ()
 		{
-			if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
-			GeneratorsAsset gens = MapMagic.instance.guiGens;
+			//if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+			//GeneratorsAsset gens = MapMagic.instance.guiGens;
 			//if (MapMagic.instance.guiGens != null) gens = MapMagic.instance.guiGens;
 			
-			Vector2 mousePos = MapMagic.instance.layout.ToInternal(Event.current.mousePosition);
+			Vector2 mousePos = gens.layout.ToInternal(Event.current.mousePosition);
 				
 			//finding something that was clicked
 			Generator clickedGenerator = null;
@@ -659,13 +831,12 @@ namespace MapMagic
 			//create
 			Dictionary<string, PopupMenu.MenuItem> itemsDict = new Dictionary<string, PopupMenu.MenuItem>();
 			
-			List<System.Type> allGeneratorTypes = typeof(Generator).GetAllChildTypes();
-			for (int i=0; i<allGeneratorTypes.Count; i++)
+			foreach (System.Type type in typeof(Generator).Subtypes())
 			{
-				if (System.Attribute.IsDefined(allGeneratorTypes[i], typeof(GeneratorMenuAttribute)))
+				if (System.Attribute.IsDefined(type, typeof(GeneratorMenuAttribute)))
 				{
-					GeneratorMenuAttribute attribute = System.Attribute.GetCustomAttribute(allGeneratorTypes[i], typeof(GeneratorMenuAttribute)) as GeneratorMenuAttribute;
-					System.Type genType = allGeneratorTypes[i];
+					GeneratorMenuAttribute attribute = System.Attribute.GetCustomAttribute(type, typeof(GeneratorMenuAttribute)) as GeneratorMenuAttribute;
+					System.Type genType = type;
 
 					if (attribute.disabled) continue;
 
@@ -675,7 +846,7 @@ namespace MapMagic
 					if (attribute.menu.Length != 0)
 					{
 						if (!itemsDict.ContainsKey(attribute.menu)) itemsDict.Add(attribute.menu, new PopupMenu.MenuItem(attribute.menu, subs:new PopupMenu.MenuItem[0]));
-						ArrayTools.Add(ref itemsDict[attribute.menu].subItems, item);
+						ArrayTools.Add(ref itemsDict[attribute.menu].subItems, createElement:() => item);
 					}
 					else itemsDict.Add(attribute.name, item);
 				}
@@ -687,6 +858,7 @@ namespace MapMagic
 			itemsDict["Portal"].priority = 4;
 			itemsDict["Group"].priority = 5;
 			itemsDict["Biome"].priority = 6;
+			itemsDict["Legacy"].priority = 7;
 
 			PopupMenu.MenuItem[] createItems = new PopupMenu.MenuItem[itemsDict.Count];
 			itemsDict.Values.CopyTo(createItems, 0);
@@ -706,20 +878,21 @@ namespace MapMagic
 			//preview
 			PopupMenu.MenuItem[] previewSubs = new PopupMenu.MenuItem[]
 			{
-				new PopupMenu.MenuItem("On Terrain", delegate() {PreviewOutput(clickedGenerator, clickedOutput, false);}, disabled:clickedOutput==null||clickedGenerator==null), 
-				new PopupMenu.MenuItem("In Window", delegate() {PreviewOutput(clickedGenerator, clickedOutput, true);}, disabled:clickedOutput==null||clickedGenerator==null),
-				new PopupMenu.MenuItem("Clear", delegate() {PreviewOutput(null, null, false);} )//, disabled:MapMagic.instance.previewOutput==null)
+				new PopupMenu.MenuItem("On Terrain", delegate() {PreviewOutput(clickedGenerator, clickedOutput, false);}, disabled:clickedOutput==null||clickedGenerator==null, priority:0), 
+				new PopupMenu.MenuItem("In Window", delegate() {PreviewOutput(clickedGenerator, clickedOutput, true);}, disabled:clickedOutput==null||clickedGenerator==null, priority:1),
+				new PopupMenu.MenuItem("Clear", delegate() {PreviewOutput(null, null, false);}, priority:2 )//, disabled:MapMagic.instance.previewOutput==null)
 			};
 
 			PopupMenu.MenuItem[] popupItems = new PopupMenu.MenuItem[]
 			{
-				new PopupMenu.MenuItem("Create", createItems),
-				new PopupMenu.MenuItem("Export",	delegate () { SaveGenerator(clickedGenerator, mousePos); }),
-				new PopupMenu.MenuItem("Import",						delegate () { LoadGenerator(mousePos); }),
-				new PopupMenu.MenuItem("Duplicate",					delegate () { DuplicateGenerator(clickedGenerator); }),
-				new PopupMenu.MenuItem("Remove",	delegate () { if (clickedGenerator!=null) DeleteGenerator(clickedGenerator); },	disabled:(clickedGenerator==null)),
-				new PopupMenu.MenuItem("Reset",						delegate () { if (clickedGenerator!=null) ResetGenerator(clickedGenerator); },	disabled:clickedGenerator==null), 
-				new PopupMenu.MenuItem("Preview", previewSubs)
+				new PopupMenu.MenuItem("Create", createItems, priority:0),
+				new PopupMenu.MenuItem("Export",	delegate () { ExportGenerator(clickedGenerator, mousePos); }, priority:1),
+				new PopupMenu.MenuItem("Import",	delegate () { ImportGenerator(mousePos); }, priority:2),
+				new PopupMenu.MenuItem("Duplicate",	delegate () { DuplicateGenerator(clickedGenerator); }, priority:3),
+				new PopupMenu.MenuItem("Update",	delegate () { UpdateGenerator(clickedGenerator); }, disabled:clickedGenerator==null || !CouldBeUpdated(clickedGenerator), priority:4),
+				new PopupMenu.MenuItem("Remove",	delegate () { if (clickedGenerator!=null) DeleteGenerator(clickedGenerator); },	disabled:clickedGenerator==null, priority:5),
+				new PopupMenu.MenuItem("Reset",		delegate () { if (clickedGenerator!=null) ResetGenerator(clickedGenerator); },	disabled:clickedGenerator==null, priority:6), 
+				new PopupMenu.MenuItem("Preview", previewSubs, priority:6)
 			};
 
 			PopupMenu.DrawPopup(popupItems, Event.current.mousePosition, closeAllOther:true);
@@ -727,8 +900,8 @@ namespace MapMagic
 
 		public void DrawPortalSelector (Portal exit, Generator.InoutType type)
 		{
-			if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
-			GeneratorsAsset gens = MapMagic.instance.guiGens;
+			//if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+			//GeneratorsAsset gens = MapMagic.instance.guiGens;
 			//if (MapMagic.instance.guiGens != null) gens = MapMagic.instance.guiGens;
 
 			int entersNum = 0;
@@ -753,9 +926,13 @@ namespace MapMagic
 
 				popupItems[counter] = new PopupMenu.MenuItem( enter.name, delegate () 
 					{ 
-						if (enter.IsDependentFrom(exit)) { Debug.LogError("MapMagic: Linking portals this way will create dependency loop."); return; }
+						if (gens.CheckDependence(exit,enter)) { Debug.LogError("MapMagic: Linking portals this way will create dependency loop."); return; }
 						exit.input.Link(enter.output, enter); 
-						gens.ChangeGenerator(exit); 
+						if (mapMagic!=null) 
+						{
+							mapMagic.ClearResults(exit);
+							mapMagic.Generate();
+						}
 					} );
 				counter++;
 			}
@@ -766,14 +943,14 @@ namespace MapMagic
 
 		public void FocusOnGenerators ()
 		{
-			if (MapMagic.instance == null) MapMagic.instance = FindObjectOfType<MapMagic>();
-			if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
+			//if (MapMagic.instance == null) MapMagic.instance = FindObjectOfType<MapMagic>();
+			//if (MapMagic.instance.guiGens == null) MapMagic.instance.guiGens = MapMagic.instance.gens;
 			
 			//finding generators center
 			Vector2 min = new Vector2(2000000,2000000); Vector2 max = new Vector2(-2000000,-2000000);
-			for (int g=0; g<MapMagic.instance.guiGens.list.Length; g++)
+			for (int g=0; g<gens.list.Length; g++)
 			{
-				Generator gen = MapMagic.instance.guiGens.list[g];
+				Generator gen = gens.list[g];
 				if (gen.guiRect.x<min.x) min.x = gen.guiRect.x;
 				if (gen.guiRect.y<min.y) min.y = gen.guiRect.y;
 				if (gen.guiRect.max.x>max.x) max.x = gen.guiRect.max.x;
@@ -786,7 +963,7 @@ namespace MapMagic
 		//	center *= MapMagic.instance.guiZoom;
 		//	MapMagic.instance.layout.scroll = -center;
 		//	MapMagic.instance.layout.scroll += new Vector2(this.position.width/2f, this.position.height/2f);
-			MapMagic.instance.layout.Focus(center);
+			gens.layout.Focus(center);
 
 			
 
@@ -799,6 +976,28 @@ namespace MapMagic
 			//saving
 			if (script==null) script = FindObjectOfType<MapMagic>();
 			script.guiScroll =script.layout.scroll; script.guiZoom =script.layout.zoom; //saving*/
+		}
+
+		public static void Show (GeneratorsAsset gens, IMapMagic mapMagic, bool forceOpen=true, bool asBiome=false)
+		{
+			//opening if force open
+			if (forceOpen)
+				instance = (MapMagicWindow)EditorWindow.GetWindow (typeof (MapMagicWindow));
+			
+			//finding instance
+			if (instance == null)
+			{
+				MapMagicWindow[] windows = Resources.FindObjectsOfTypeAll<MapMagicWindow>();
+				if (windows.Length==0) return;
+				instance = windows[0];
+			}
+			
+			instance.mapMagic = mapMagic; 
+			if (!asBiome) instance.gensBiomeHierarchy.Clear();
+			instance.gensBiomeHierarchy.Add(gens);
+		
+			instance.Show();
+			instance.Repaint();
 		}
 
 		#region Demo lock

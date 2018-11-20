@@ -21,9 +21,9 @@ namespace WX
         public static EntityArchetype BuildingArchetype;
         public static EntityArchetype PlayerArchetype;
 
-        //public static MeshInstanceRenderer PlayerLook;
-        //public static MeshInstanceRenderer BiologicalLook;
-        //public static MeshInstanceRenderer LivingAreaLook;
+        public static MeshInstanceRenderer PlayerLook;
+        public static MeshInstanceRenderer BiologicalLook;
+        public static MeshInstanceRenderer LivingAreaLook;
         public static MeshInstanceRenderer PlayerShotLook;
         public static MeshInstanceRenderer EnemyShotLook;
         public static MeshInstanceRenderer EnemyLook;
@@ -82,9 +82,9 @@ namespace WX
             if (!Settings)
                 return;
 
-            //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
-            //BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
-            //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
+            PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
+            BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
+            LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
             //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
             //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
             //EnemyLook = GetLookFromPrototype("EnemyRenderPrototype");
@@ -147,6 +147,7 @@ namespace WX
             #endregion
 
             #region Prestige
+
             {
                 List<PrestigeData> prestigeDatas = SqlData.GetAllDatas<PrestigeData>();
 
@@ -164,6 +165,7 @@ namespace WX
                 }
 
                 PrestigeSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>(), max, min, level);
+
             }
             #endregion
 
@@ -189,8 +191,8 @@ namespace WX
 
                     GameText.NameDic.Add(district, districtDatas[i].Name);
                     GameText.Description.Add(district, districtDatas[i].Description);
-                    
                 }
+
             }
             #endregion
 
@@ -296,6 +298,7 @@ namespace WX
                         Jing = data[i].Property6,
                         Qi = data[i].Property6,
                         Shen = data[i].Property6
+
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
@@ -316,7 +319,7 @@ namespace WX
                     //Save Text
                     GameText.NameDic.Add(biologicalEntity, data[i].Name);
                     GameText.SurnameDic.Add(biologicalEntity, data[i].Surname);
-                    GameText.Description.Add(biologicalEntity, data[i].Description);   
+                    GameText.Description.Add(biologicalEntity, data[i].Description);
                 }
 
             }

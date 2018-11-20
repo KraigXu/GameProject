@@ -4,20 +4,4 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/CreativeSpore/RpgMapEditor/Samples/Scenes/demo1 - Big Map.unity
-    guid: aeeb1c1d89a87ea4cad0e2c4bf6a5834
-  - enabled: 1
-    path: Assets/CreativeSpore/RpgMapEditor/Samples/Scenes/demo2 - Farm House.unity
-    guid: 3411c0dcb3a77e44e9be85b4fb43f401
-  - enabled: 1
-    path: Assets/CreativeSpore/RpgMapEditor/Samples/Scenes/demo3 - Player House.unity
-    guid: 26f58ea04eb21cf44b44dbe8dae351d0
-  - enabled: 1
-    path: Assets/CreativeSpore/RpgMapEditor/Samples/Scenes/demo4 - FogOfWar.unity
-    guid: fca2156c6a410d64b8297e294b00acdf
-  - enabled: 1
-    path: Assets/CreativeSpore/RpgMapEditor/Samples/Scenes/demo5 - PathFinding.unity
-    guid: 25b3de9f2670a9c48b1b399120c78fe9
-  m_configObjects: {}
+  m_Scenes: []

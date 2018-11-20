@@ -115,6 +115,8 @@ public class LivingAreaWindowCD:BaseWindowContextData
 
 public class BuildingiDataItem
 {
+
+    public int Id;
     public Entity OnlyEntity;
     public int Level;
     public int Status;

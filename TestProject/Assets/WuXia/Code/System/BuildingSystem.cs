@@ -41,21 +41,12 @@ namespace WX
                     item.Status = _buildingGroup.Building[i].Status;
                     item.ImageId = _buildingGroup.Building[i].Type;
                     item.Point = _buildingGroup.Building[i].Position;
-                    item.OnOpen = BuildingOnOpen;
-<<<<<<< HEAD
-=======
-                    item.OnClose = BuildingOnClose;
->>>>>>> parent of df74982... Update
+
                     datas.Add(item);
                 }
-
-
             }
             return datas;
         }
-
-
-<<<<<<< HEAD
 
         private void BuildingOnOpen(Entity entity, int id)
         {
@@ -74,23 +65,6 @@ namespace WX
             //ShowWindowData data = new ShowWindowData();
             //data.contextData = new BuildingiMainData();
         }
-
-        private void BuildingOnClose(Entity entity, int id)
-=======
-        private void BuildingOnOpen(Entity entity,int id)
->>>>>>> parent of df74982... Update
-        {
-            
-        }
-
-        private void BuildingOnClose(Entity entity, int id)
-        {
-
-        }
-
-
-
-        
 
     }
 

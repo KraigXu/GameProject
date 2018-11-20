@@ -55,7 +55,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Tex:
-        m_Texture: {fileID: 8900000, guid: d15052f346b192246900db94f323ca23, type: 3}
+        m_Texture: {fileID: 8900000, guid: 78f41cf387f9f8d4b93140d0c0310c1b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -69,7 +69,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rotation: 299
+    - _Rotation: 18
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1

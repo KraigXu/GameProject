@@ -64,6 +64,14 @@ namespace MapMagic
 				else this.array = new float[count];
 			}
 
+			public Matrix (Texture2D texture)
+			{
+				rect = new CoordRect(0,0, texture.width, texture.height);
+				count = texture.width*texture.height;
+				array = new float[count];
+				FromTexture(texture);
+			}
+
 			public override object Clone () { return Copy(null); } //separate fn for IClonable
 			public Matrix Copy (Matrix result=null)
 			{
@@ -341,6 +349,24 @@ namespace MapMagic
 					Color col = colors[tz*(max.x-min.x) + tx];
 
 					this[x,z] = (col.r+col.g+col.b)/3;
+				}
+			}
+
+			public void FromTextureAlpha (Texture2D texture)
+			{
+				CoordRect textureRect = new CoordRect(0,0, texture.width, texture.height);
+				CoordRect intersection = CoordRect.Intersect(textureRect, rect);
+
+				Color[] colors = texture.GetPixels(intersection.offset.x, intersection.offset.z, intersection.size.x, intersection.size.z);
+
+				Coord min = intersection.Min; Coord max = intersection.Max;
+				for (int x=min.x; x<max.x; x++)
+					for (int z=min.z; z<max.z; z++)
+				{
+					int tx = x-min.x; int tz = z-min.z;
+					Color col = colors[tz*(max.x-min.x) + tx];
+
+					this[x,z] = (col.r+col.g+col.b+col.a)/4;
 				}
 			}
 
@@ -867,6 +893,44 @@ namespace MapMagic
 				}
 			}
 
+			public void SimpleBlur (int iterations, float strength)
+			{
+				Coord min = rect.Min; Coord max = rect.Max;
+
+				for (int iteration=0; iteration<iterations; iteration++)
+				{
+					for (int z=min.z; z<max.z; z++)
+					{
+						float prev = this[min.x,z];
+						for (int x=min.x+1; x<max.x-1; x++)
+						{
+							int i = (z-rect.offset.z)*rect.size.x + x - rect.offset.x;
+							float curr = array[i];
+							float next = array[i+1];
+
+							float val = (prev+next)/2*strength + curr*(1-strength);
+							array[i] = val;
+							prev = val;
+						}
+					}
+
+					for (int x=min.x; x<max.x; x++)
+					{
+						float prev = this[x,min.z];
+						for (int z=min.z+1; z<max.z-1; z++)
+						{
+							int i = (z-rect.offset.z)*rect.size.x + x - rect.offset.x;
+							float curr = array[i];
+							float next = array[i+rect.size.x];
+
+							float val = (prev+next)/2*strength + curr*(1-strength);
+							array[i] = val;
+							prev = val;
+						}
+					}
+				}
+			}
+
 
 			public void Blur (System.Func<float,float,float,float> blurFn=null, float intensity=0.666f, bool additive=false, bool takemax=false, bool horizontal=true, bool vertical=true, Matrix reference=null)
 			{
@@ -1129,17 +1193,38 @@ namespace MapMagic
 
 			static public void BlendLayers (Matrix[] matrices, float[] opacity=null) //changes splatmaps in photoshop layered style so their summary value does not exceed 1
 			{
-				Coord min = matrices[0].rect.Min; Coord max = matrices[0].rect.Max; //TODO: iterate an array
-				for (int x=min.x; x<max.x; x++)
-					for (int z=min.z; z<max.z; z++)
+				//finding any existing matrix
+				int anyMatrixNum = -1;
+				for (int i=0; i<matrices.Length; i++)
+					if (matrices[i]!=null) { anyMatrixNum = i; break; }
+				if (anyMatrixNum == -1) { Debug.LogError("No matrices were found to blend " + matrices.Length); return; }
+
+				//finding rect
+				CoordRect rect = matrices[anyMatrixNum].rect;
+
+				//checking rect size
+				#if WDEBUG
+				for (int i=0; i<matrices.Length; i++)
+					if (matrices[i]!=null && matrices[i].rect!=rect) { Debug.LogError("Matrix rect mismatch " + rect + " " + matrices[i].rect); return; }
+				#endif
+
+				int rectCount = rect.Count;
+				for (int pos=0; pos<rectCount; pos++)
 				{
 					float sum = 0;
 					for (int i=matrices.Length-1; i>=0; i--) //layer 0 is background, layer Length-1 is the top one
 					{
-						float val = matrices[i][x,z];
+						if (matrices[i] == null) continue;
+						
+						float val = matrices[i].array[pos];
+
 						if (opacity != null) val *= opacity[i];
-						float overly = Mathf.Clamp01(sum + val - 1); //TODO: remove fn call
-						matrices[i][x,z] = val - overly;
+						
+						float overly = sum + val - 1; 
+						if (overly < 0) overly = 0; //faster then calling Math.Clamp
+						if (overly > 1) overly = 1;
+
+						matrices[i].array[pos] = val - overly;
 						sum += val - overly;
 					}
 				}
@@ -1147,15 +1232,30 @@ namespace MapMagic
 
 			static public void NormalizeLayers (Matrix[] matrices, float[] opacity) //changes splatmaps so their summary value does not exceed 1
 			{
-				Coord min = matrices[0].rect.Min; Coord max = matrices[0].rect.Max;
-				for (int x=min.x; x<max.x; x++)
-					for (int z=min.z; z<max.z; z++)
+				//finding any existing matrix
+				int anyMatrixNum = -1;
+				for (int i=0; i<matrices.Length; i++)
+					if (matrices[i]!=null) { anyMatrixNum = i; break; }
+				if (anyMatrixNum == -1) { Debug.LogError("No matrices were found to blend " + matrices.Length); return; }
+
+				//finding rect
+				CoordRect rect = matrices[anyMatrixNum].rect;
+
+				//checking rect size
+				#if WDEBUG
+				for (int i=0; i<matrices.Length; i++)
+					if (matrices[i]!=null && matrices[i].rect!=rect) { Debug.LogError("Matrix rect mismatch " + rect + " " + matrices[i].rect); return; }
+				#endif
+
+
+				int rectCount = rect.Count;
+				for (int pos=0; pos<rectCount; pos++)
 				{
-					for (int i=0; i<matrices.Length; i++) matrices[i][x,z] *= opacity[i];
+					for (int i=0; i<matrices.Length; i++) matrices[i].array[pos] *= opacity[i];
 
 					float sum = 0;
-					for (int i=0; i<matrices.Length; i++) sum += matrices[i][x,z];
-					if (sum > 1f) for (int i=0; i<matrices.Length; i++) matrices[i][x,z] /= sum;
+					for (int i=0; i<matrices.Length; i++) sum += matrices[i].array[pos];
+					if (sum > 1f) for (int i=0; i<matrices.Length; i++) matrices[i].array[pos] /= sum;
 				}
 			}
 
@@ -1262,10 +1362,11 @@ namespace MapMagic
 			public void Add (Matrix add, Matrix mask) { for (int i=0; i<count; i++) array[i] += add.array[i]*mask.array[i]; }
 			public void Add (float add) { for (int i=0; i<count; i++) array[i] += add; }
 			public void Subtract (Matrix m) { for (int i=0; i<count; i++) array[i] -= m.array[i]; }
+			//public void Subtract (float v) //use Add with negative value
 			public void InvSubtract (Matrix m) { for (int i=0; i<count; i++) array[i] = m.array[i] - array[i]; }
-			public void ClampSubtract (Matrix m) { for (int i=0; i<count; i++) array[i] = Mathf.Clamp01(array[i] - m.array[i]); } //useful for subtracting layers
 			public void Multiply (Matrix m) { for (int i=0; i<count; i++) array[i] *= m.array[i]; }
 			public void Multiply (float m) { for (int i=0; i<count; i++) array[i] *= m; }
+			public void Max (Matrix m) { for (int i=0; i<count; i++) if (m.array[i]>array[i]) array[i] = m.array[i]; }
 			public bool CheckRange (float min, float max) { for (int i=0; i<count; i++) if (array[i]<min || array[i]>max) return false; return true; } 
 			public void Invert() { for (int i=0; i<count; i++) array[i] = -array[i]; }
 			public void InvertOne() { for (int i=0; i<count; i++) array[i] = 1-array[i]; }
@@ -1273,13 +1374,24 @@ namespace MapMagic
 			{ 
 				for (int i=0; i<count; i++) 
 				{
-					if (array[i] > 1) array[i] = 1;
-					else if (array[i] < 0) array[i] = 0;
+					float val = array[i];
+					if (val > 1) array[i] = 1;
+					else if (val < 0) array[i] = 0;
 				}
+			}
+			public void ClampSubtract (Matrix m) //useful for subtracting layers
+			{ 
+				for (int i=0; i<count; i++) 
+				{
+					float val = array[i] - m.array[i]; 
+					if (val > 1) val = 1;
+					else if (val < 0) val = 0;
+					array[i] = val;
+				} 
 			}
 
 			public bool IsEmpty (float delta=0.0001f) { for (int i=0; i<count; i++) if (array[i] > delta) return false; return true; }
-			public float Max () 
+			public float MaxValue () 
 			{ 
 				float max=-20000000; 
 				for (int i=0; i<count; i++) 

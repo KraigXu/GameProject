@@ -1,11 +1,12 @@
-
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-#if UNITY_5_5
+#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
 #endif
+
+using MapMagic;
 
 namespace MapMagic 
 {
@@ -16,6 +17,8 @@ namespace MapMagic
 		public bool disengageable { get; set; }
 		public bool disabled { get; set; }
 		public int priority { get; set; }
+		public string helpLink { get; set; }
+		public Type updateType { get; set; }
 	}
 
 	[System.Serializable]
@@ -23,7 +26,7 @@ namespace MapMagic
 	{
 		#region Inout
 
-			public enum InoutType { Map, Objects, Spline }
+			public enum InoutType { Map, Objects, Spline, Voxel }
 
 			public interface IGuiInout
 			{
@@ -33,8 +36,6 @@ namespace MapMagic
 
 				//void DrawIcon (Layout layout, bool drawLabel);
 			}
-
-			public interface IOutput {} //can store result in chunk results dict. Could be either Output or Output Generator
 
 			public class Input : IGuiInout
 			{
@@ -56,12 +57,18 @@ namespace MapMagic
 
 					switch (type)
 					{
+						//old skin
 						case InoutType.Map: return isProSkin? new Color(0.23f, 0.5f, 0.652f) : new Color(0.05f, 0.2f, 0.35f);
 						case InoutType.Objects: return isProSkin? new Color(0.15f, 0.6f, 0.15f) : new Color(0.1f, 0.4f, 0.1f);
+						
+						//20 skin
+						//case InoutType.Map: return isProSkin? new Color(0f, 0.55f, 0.8f) : new Color(0.0f, 0.325f, 0.5f);
+						//case InoutType.Objects: return isProSkin? new Color(0.1f, 0.75f, 0.0f) : new Color(0.07f, 0.45f, 0.0f);
+						
 						default: return Color.black; 
 					}
 				}}
-				public Vector2 guiConnectionPos {get{ return new Vector2(guiRect.xMin, guiRect.center.y); }}
+				public Vector2 guiConnectionPos {get{ return new Vector2(guiRect.xMin+1, guiRect.center.y); }}
 
 				public void DrawIcon (Layout layout, string label=null, bool mandatory=false, bool setRectOnly=false)
 				{ 
@@ -103,18 +110,18 @@ namespace MapMagic
 				link = output; linkGen = outputGen; }
 				public void Unlink () { link = null; linkGen = null; }
 
-				public object GetObject (Chunk tw)
+				public object GetObject (Chunk.Results tw)
 				{ 
 					if (link == null) return null;
 					if (!tw.results.ContainsKey(link)) return null;
 					return tw.results[link];
 				}
 
-				public T GetObject<T> (Chunk chunk) where T : class
+				public T GetObject<T> (Chunk.Results tw) where T : class
 				{
 					if (link == null) return null;
-					if (!chunk.results.ContainsKey(link)) return null;
-					object obj = chunk.results[link];
+					if (!tw.results.ContainsKey(link)) return null;
+					object obj = tw.results[link];
 					if (obj == null) return null;
 					else return (T)obj;
 				}
@@ -134,15 +141,15 @@ namespace MapMagic
 				}*/
 			}
 
-			public class Output : IGuiInout, IOutput
+			public class Output : IGuiInout
 			{
 				public InoutType type;
 				
 				//gui
 				public Rect guiRect { get; set; }
-				public Vector2 guiConnectionPos {get{ return new Vector2(guiRect.xMax, guiRect.center.y); }}
+				public Vector2 guiConnectionPos {get{ return new Vector2(guiRect.xMax-1, guiRect.center.y); }}
 				
-				public void DrawIcon (Layout layout, string label=null, bool setRectOnly=false) 
+				public void DrawIcon (Layout layout, string label=null, bool setRectOnly=false, bool debug=false) 
 				{ 
 					string textureName = "";
 					switch (type) 
@@ -164,17 +171,19 @@ namespace MapMagic
 					if (!setRectOnly) layout.Icon(textureName, guiRect); //detail:resolution.ToString());
 
 					//drawing obj id
-					if (MapMagic.instance.guiDebug)
+					#if WDEBUG
+					if (MapMagic.instance!=null)
 					{
 						Rect idRect = guiRect;
 						idRect.width = 100; idRect.x += 25;
-						Chunk closest = MapMagic.instance.terrains.GetClosestObj(new Coord(0,0));
+						Chunk closest = MapMagic.instance.chunks.GetClosestObj(new Coord(0,0));
 						if (closest != null)
 						{
-							object obj = closest.results.CheckGet(this);
+							object obj = closest.results.results.CheckGet(this);
 							layout.Label(obj!=null? obj.GetHashCode().ToString() : "null", idRect, textAnchor:TextAnchor.LowerLeft);
 						}
 					}
+					#endif
 				}
 
 				public Output () {} //default constructor to create with activator
@@ -197,47 +206,53 @@ namespace MapMagic
 					return null;
 				}
 
-				public void SetObject (Chunk terrain, object obj) //TODO: maybe better replace with CheckAdd
+				public void SetObject (Chunk.Results tw, object obj) //TODO: maybe better replace with CheckAdd
 				{
-					if (terrain.results.ContainsKey(this))
+					if (tw.results.ContainsKey(this))
 					{
-						if (obj == null) terrain.results.Remove(this);
-						else terrain.results[this] = obj;
+						if (obj == null) tw.results.Remove(this);
+						else tw.results[this] = obj;
 					}
 					else
 					{
-						if (obj != null) terrain.results.Add(this, obj);
+						if (obj != null) tw.results.Add(this, obj);
 					}
 				}
 
-				public T GetObject<T> (Chunk chunk) where T:class
+				public T GetObject<T> (Chunk.Results tw) where T:class
 				{
-					if (!chunk.results.ContainsKey(this)) return null;
-					object obj = chunk.results[this];
+					if (!tw.results.ContainsKey(this)) return null;    
+					object obj = tw.results[this];
 					if (obj == null) return null;
 					else return (T)obj;
+				}
+
+				public void UnlinkInActiveGens ()
+				{
+					//TODO20: each generator should have a link to gens
+
+					object activeGensBoxed = Extensions.CallStaticMethodFrom("Assembly-CSharp-Editor", "MapMagic.MapMagicWindow", "GetGens", null);
+					if (activeGensBoxed == null) return;
+					GeneratorsAsset activeGens = activeGensBoxed as GeneratorsAsset;  
+
+					Input connectedInput = GetConnectedInput(activeGens.list);
+					if (connectedInput != null) connectedInput.Link(null, null);
 				}
 			}
 		#endregion
 
 		public bool enabled = true;
+		public bool mandatory = false; //output or preview generator, should be generated with priors
 
 		//gui
 		[System.NonSerialized] public Layout layout = new Layout();
 		public Rect guiRect; //just for serialization
-		public float guiDebugTime;
+		
+		[System.NonSerialized] public int guiGenerateTime;
+		public static Dictionary<System.Type, int> guiApplyTime = new Dictionary<System.Type, int>();
+		public static Dictionary<System.Type, int> guiProcessTime = new Dictionary<System.Type, int>();
 
 		[System.NonSerialized] public Biome biome; //assigned automatically in GeneratorsOfType enumerable
-
-		public virtual void Move (Vector2 delta, bool moveChildren=true) 
-		{
-			layout.field.position += delta;
-			guiRect = layout.field;
-
-			//moving inouts to remove lag
-			foreach (Generator.IGuiInout inout in Inouts()) 
-				inout.guiRect = new Rect(inout.guiRect.position+delta, inout.guiRect.size);
-		}
 
 		//inputs and outputs
 		public virtual IEnumerable<Output> Outputs() { yield break; }
@@ -248,96 +263,58 @@ namespace MapMagic
 			foreach (Input i in Inputs()) yield return i;
 		}
 
-		//connection states
-		public static bool CanConnect (Output output, Input input) { return output.type == input.type; } //temporary out of order, before implementing resolutions
 
-		/*public bool ValidateConnectionsRecursive ()
-		{
-			foreach (Input input in Inputs())
-			{
-				if (input.link != null)  
-				{ 
-					if (!CanConnect(input.link, input) || 
-						input.linkGen == this ||
-						!input.linkGen.ValidateConnectionsRecursive()) return false; 
-				}
-				else if (input.mandatory) return false;
-			}
-			return true;
-		}*/
 
-		public bool IsDependentFrom (Generator prior)
-		{
-			foreach (Input input in Inputs())
-			{
-				if (input==null || input.linkGen==null) continue;
-				if (prior == input.linkGen) return true;
-				if (input.linkGen.IsDependentFrom(prior)) return true;
-			}
-			return false;
-		}
-
-		public void CheckClearRecursive (Chunk tw) //checks if prior generators were clearied, and if they were - clearing this one
-		{
-			//if (!tw.ready.Contains(this)) //TODO: optimize here
-			foreach (Input input in Inputs())
-			{
-				if (input.linkGen==null) continue;
-
-				//recursive first
-				input.linkGen.CheckClearRecursive(tw);
-
-				//checking if clear
-				if (!tw.ready.Contains(input.linkGen))
-				{
-					if (tw.ready.Contains(this)) tw.ready.Remove(this);
-					//break; do not break, go on checking in case of branching-then-connecting
-				}
-			}
-		}
-
-		public void GenerateWithPriors (Chunk tw, Biome biome=null)
-		{
-			//generating input generators
-			foreach (Generator.Input input in Inputs())
-			{
-				if (input.linkGen==null) continue;
-				if (tw.stop) return; //before entry stop
-				input.linkGen.GenerateWithPriors(tw, biome);
-			}
-
-			if (tw.stop) return; //before generate stop for time economy
-
-			//generating this
-			if (!tw.ready.Contains(this))
-			{
-				//starting timer
-				if (MapMagic.instance.guiDebug)
-				{
-					if (tw.timer==null) tw.timer = new System.Diagnostics.Stopwatch(); 
-					else tw.timer.Reset();
-					tw.timer.Start();
-				}
-
-				Generate(tw, biome);
-				if (!tw.stop) tw.ready.Add(this);
-
-				//stopping timer
-				if (tw.timer != null) 
-				{ 
-					tw.timer.Stop(); 
-					guiDebugTime = tw.timer.ElapsedMilliseconds; 
-				}
-			}
-		}
-
-		public virtual void Generate (Chunk chunk, Biome biome=null) {}
+		public virtual void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null) {}
 
 		//public static virtual void Process (Chunk chunk)
 
 		//gui
-		public abstract void OnGUI ();
-		public void OnGUIBase()
+		public void DrawHeader (IMapMagic mapMagic, GeneratorsAsset gens, bool debug=false)
+		{
+			//drawing header background
+			layout.Icon("MapMagic_Window_Header", new Rect(layout.field.x, layout.field.y, layout.field.width, 16));
+
+			//drawing eye icon
+			layout.Par(14); layout.Inset(2);
+			Rect eyeRect = layout.Inset(18);
+			GeneratorMenuAttribute attribute = System.Attribute.GetCustomAttribute(GetType(), typeof(GeneratorMenuAttribute)) as GeneratorMenuAttribute;
+
+			if (attribute != null && attribute.disengageable) 
+				layout.Toggle(ref enabled, rect:eyeRect, onIcon:"MapMagic_GeneratorEnabled", offIcon:"MapMagic_GeneratorDisabled");
+			else layout.Icon("MapMagic_GeneratorAlwaysOn", eyeRect, Layout.IconAligment.center, Layout.IconAligment.center);
+			
+			//drawing label
+			string genName = "";
+			#if WDEBUG
+			if (mapMagic!=null)
+			{
+				int num = -1;
+				for (int n=0; n<gens.list.Length; n++) if (gens.list[n]==this) num = n;
+				genName += num + ". ";
+			}
+			#endif
+			genName += attribute==null? "Unknown" : attribute.name;
+
+			if (mapMagic!=null && debug && !mapMagic.IsGeneratorReady(this)) genName+="*";
+
+			Rect labelRect = layout.Inset(layout.field.width-18-22); labelRect.height = 25; labelRect.y -= (1f-layout.zoom)*6 + 2;
+			layout.Label(genName, labelRect, fontStyle:FontStyle.Bold, fontSize:19-layout.zoom*8);
+
+			//drawing help link
+			Rect helpRect = layout.Inset(22);
+			if (attribute != null && attribute.helpLink != null && attribute.helpLink.Length != 0)
+			{
+				layout.Label("", helpRect, url:attribute.helpLink, icon:"MapMagic_Help");
+				//if (layout.Button("", helpRect, icon:"MapMagic_Help")) Application.OpenURL(attribute.helpLink); 
+				//UnityEditor.EditorGUIUtility.AddCursorRect (layout.ToDisplay(helpRect), UnityEditor.MouseCursor.Link);
+			}
+
+			layout.Par(4);
+		}
+
+		public abstract void OnGUI (GeneratorsAsset gens);
+		/*public void OnGUIBase(IMapMagic mapMagic, GeneratorsAsset gens, bool debug=false)
 		{
 			//drawing background
 			layout.Element("MapMagic_Window", layout.field, new RectOffset(34,34,34,34), new RectOffset(33,33,33,33));
@@ -351,7 +328,7 @@ namespace MapMagic
 			layout.fieldSize = 0.4f;              
 
 			//drawing window header
-			if (MapMagic.instance.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Header");
+			if (MapMagic.instance!=null && MapMagic.instance.debug) Profiler.BeginSample("Header");
 			layout.Icon("MapMagic_Window_Header", new Rect(layout.field.x, layout.field.y, layout.field.width, 16));
 
 			//drawing eye icon
@@ -362,67 +339,58 @@ namespace MapMagic
 			if (attribute != null && attribute.disengageable) 
 				layout.Toggle(ref enabled, rect:eyeRect, onIcon:"MapMagic_GeneratorEnabled", offIcon:"MapMagic_GeneratorDisabled");
 			else layout.Icon("MapMagic_GeneratorAlwaysOn", eyeRect, Layout.IconAligment.center, Layout.IconAligment.center);
-
-			if (layout.lastChange && !enabled && this is IOutput) //hack to refresh on output disable
-			{
-//				MapMagic.instance.ForceGenerate();
-
-				foreach (Generator sameOut in MapMagic.instance.gens.OutputGenerators(onlyEnabled:false, checkBiomes:true))
-					if (sameOut.GetType() == this.GetType()) 
-						foreach (Chunk chunk in MapMagic.instance.terrains.Objects()) chunk.ready.CheckRemove(sameOut); //MapMagic.instance.gens.ChangeGenerator(sameOut);
-				//MapMagic.instance.Generate(); //re-generate starts itself because generator changed
-			}
 			
 
 			//drawing label
-			string genName = attribute==null? "Unknown" : attribute.name;
-
-			if (MapMagic.instance.guiDebug)
+			string genName = "";
+			if (mapMagic!=null && mapMagic.debug)
 			{
-				bool generated = true;
-				foreach (Chunk tw in MapMagic.instance.terrains.Objects())
-					if (!tw.ready.Contains(this)) generated = false;
-				if (!generated) genName+="*";
+				int num = -1;
+				for (int n=0; n<gens.list.Length; n++) if (gens.list[n]==this) num = n;
+				genName += num + ". ";
 			}
-			
+			genName += attribute==null? "Unknown" : attribute.name;
+
+			if (mapMagic!=null && mapMagic.debug && !mapMagic.IsGeneratorReady(this)) genName+="*";
+
 			Rect labelRect = layout.Inset(); labelRect.height = 25; labelRect.y -= (1f-layout.zoom)*6 + 2;
 			layout.Label(genName, labelRect, fontStyle:FontStyle.Bold, fontSize:19-layout.zoom*8);
 
 			layout.Par(1);
 			
-			if (MapMagic.instance.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
+			if (MapMagic.instance!=null && MapMagic.instance.debug) Profiler.EndSample();
 
 			//gen params
-			if (MapMagic.instance.guiDebug) UnityEngine.Profiling.Profiler.BeginSample("Gen Params");
+			if (MapMagic.instance!=null && MapMagic.instance.debug) Profiler.BeginSample("Gen Params");
 			layout.Par(3);
-			if (!MapMagic.instance.guiDebug)
+			if (!(MapMagic.instance!=null && MapMagic.instance.debug))
 			{
-				try {OnGUI();}
+				try {OnGUI(gens);}
 				catch (System.Exception e) 
 					{if (e is System.ArgumentOutOfRangeException || e is System.NullReferenceException) Debug.LogError("Error drawing generator " + GetType() + "\n" + e);}
 			}
-			else OnGUI();
+			else OnGUI(gens);
 			layout.Par(3);
-			if (MapMagic.instance.guiDebug) UnityEngine.Profiling.Profiler.EndSample();
+			if (MapMagic.instance!=null && MapMagic.instance.debug) Profiler.EndSample();
 
 			//drawing debug generate time
-			if (MapMagic.instance.guiDebug)
+			if (mapMagic!=null && mapMagic.debug)
 			{
 				Rect timerRect = new Rect(layout.field.x, layout.field.y+layout.field.height, 200, 20);
-				string timeLabel = "g:" + guiDebugTime + "ms ";
-				if (this is IOutput)
+				string timeLabel = "g:" + guiGenerateTime + "ms ";
+				if (this is OutputGenerator)
 				{
-					if (MapMagic.instance.guiDebugProcessTimes.ContainsKey(this.GetType())) timeLabel += " p:" + MapMagic.instance.guiDebugProcessTimes[this.GetType()] + "ms ";
-					if (MapMagic.instance.guiDebugApplyTimes.ContainsKey(this.GetType())) timeLabel += " a:" + MapMagic.instance.guiDebugApplyTimes[this.GetType()] + "ms ";
+					if (MapMagic.instance!=null && MapMagic.instance.guiDebugProcessTimes.ContainsKey(this.GetType())) timeLabel += " p:" + MapMagic.instance.guiDebugProcessTimes[this.GetType()] + "ms ";
+					if (MapMagic.instance!=null && MapMagic.instance.guiDebugApplyTimes.ContainsKey(this.GetType())) timeLabel += " a:" + MapMagic.instance.guiDebugApplyTimes[this.GetType()] + "ms ";
 				}
 				layout.Label(timeLabel, timerRect);
 				//EditorGUI.LabelField(gen.layout.ToLocal(timerRect), gen.timer.ElapsedMilliseconds + "ms");
 			}
-		}
+		}*/
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="", name ="Portal", disengageable = true, priority = 1)]
+	[GeneratorMenu (menu="", name ="Portal", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/Portal", priority = 1)]
 	public class Portal : Generator
 	{
 		public Input input = new Input(InoutType.Map);
@@ -433,7 +401,7 @@ namespace MapMagic
 		//public enum PortalType { enter, exit }
 		//public PortalType type;
 
-		public string name;
+		public string name = "Portal";
 		public InoutType type;
 		public enum PortalForm { In, Out }
 		public PortalForm form;
@@ -454,21 +422,21 @@ namespace MapMagic
 			return result;
 		}}
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			object obj = null;
-			if (input.link != null && enabled) obj = input.GetObject(chunk);
+			if (input.link != null && enabled) obj = input.GetObject(results);
 			else 
 			{ 
-				if (type == InoutType.Map) obj = chunk.defaultMatrix;
-				if (type == InoutType.Objects) obj = chunk.defaultSpatialHash;
+				if (type == InoutType.Map) obj = new Matrix(rect);
+				if (type == InoutType.Objects) obj = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
 			}
 
-			if (chunk.stop) return;
-			output.SetObject(chunk, obj); 
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, obj); 
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			layout.margin = 18; layout.rightMargin = 15;
 			layout.Par(17); 
@@ -491,12 +459,14 @@ namespace MapMagic
 			{
 				foreach (Portal portal in MapMagic.instance.gens.GeneratorsOfType<Portal>())
 					if (portal.input.linkGen == this) portal.input.Unlink();
+				//TODO: can't change type without MM instance
 			} 
 
 			layout.Field(ref form,rect:layout.Inset(0.30f));
 			layout.CheckButton(ref drawConnections, label: "", rect:layout.Inset(20), monitorChange:false, icon:"MapMagic_ShowConnections", tooltip:"Show portal connections");
 			if (layout.Button("", layout.Inset(20), monitorChange:false, icon:"MapMagic_Focus_Small", disabled:form==PortalForm.In, tooltip:"Focus on input portal") && 
-				input.linkGen != null)
+				input.linkGen != null &&
+				MapMagic.instance!=null)
 			{
 				MapMagic.instance.layout.Focus(input.linkGen.guiRect.center);
 			}
@@ -532,7 +502,7 @@ namespace MapMagic
 		[System.NonSerialized] public List<Generator> generators = new List<Generator>();
 
 
-		public override void OnGUI () 
+		public override void OnGUI (GeneratorsAsset gens) 
 		{
 			//initializing layout
 			layout.cursor = new Rect();
@@ -580,51 +550,33 @@ namespace MapMagic
 				if (layout.field.Contains(gen.layout.field)) generators.Add(gen); 
 			}
 		}
-
-		public override void Move (Vector2 delta, bool moveChildren=true)
-		{
-			base.Move(delta,true);
-			if (moveChildren) for (int g=0; g<generators.Count; g++) generators[g].Move(delta,false);
-		}
-
-
 	}
 
 	[System.Serializable]
 	[GeneratorMenu (menu="", name ="Biome", disengageable = true, priority = 3)]
-	public class Biome : Generator, Generator.IOutput
+	public class Biome : Generator
 	{
 		public Input mask = new Input(InoutType.Map);
 		public override IEnumerable<Input> Inputs() { yield return mask; }
 		
 		public GeneratorsAsset data;
 
-		public override void OnGUI ()
+		//get static actions using instance
+		//public override Action<CoordRect, Chunk.Results, GeneratorsAsset, Chunk.Size, Func<float,bool>> GetProces () { return null; }
+		//public override System.Func<CoordRect, Terrain, object, Func<float,bool>, IEnumerator> GetApply () { return null; }
+		//public override System.Action<CoordRect, Terrain> GetPurge () { return null; }
+
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			layout.Par(20); mask.DrawIcon(layout, "Mask");
 			layout.Par(5);
 
-			layout.fieldSize = 0.7f; layout.margin =3;
-			layout.Field(ref data, "Data");
+			layout.fieldSize = 0.7f;
+			data = layout.ScriptableAssetField(data, construct:null);
 
-			layout.Par(20);
-
-			if (data == null) 
-				{ if (layout.Button("Create", rect:layout.Inset(0.5f))) data = ScriptableObject.CreateInstance<GeneratorsAsset>(); }
-			else
-				{ if (layout.Button("Edit", rect:layout.Inset(0.5f))) MapMagic.instance.guiGens = data; }
-
-			#if UNITY_EDITOR
-			if (data==null || !UnityEditor.AssetDatabase.Contains(data))
-				{ if (layout.Button("Save", rect:layout.Inset(0.5f), disabled:data==null)) data.SaveAsset(); }
-			else 
-				{ if (layout.Button("Release", rect:layout.Inset(0.5f))) data = data.ReleaseAsset(); }
-			#endif
-
+			//drawing "Edit" button in mmwindow
 		}
 
-
 	}
-
 
 }

@@ -20,7 +20,14 @@ namespace MapMagic
 			static public int Find<T> (T[] array, T obj) where T : class
 			{
 				for (int i=0; i<array.Length; i++)
-					if (array[i] == obj) return i;
+					if (Equals(array[i],obj)) return i;
+				return -1;
+			}
+
+			static public int FindEquatable<T> (T[] array, T obj) where T : IEquatable<T>
+			{
+				for (int i=0; i<array.Length; i++)
+					if (Equals(array[i],obj)) return i;
 				return -1;
 			}
 			
@@ -37,49 +44,94 @@ namespace MapMagic
 				return newArray;
 			}
 
-			static public void Remove<T> (ref T[] array, T obj) where T : class {array = Remove(array, obj); }
+			static public void Remove<T> (ref T[] array, T obj) where T : class  {array = Remove(array, obj); }
 			static public T[] Remove<T> (T[] array, T obj) where T : class
 			{
 				int num = Find<T>(array, obj);
 				return RemoveAt<T>(array,num);
 			}
-			
 
-			static public void Add<T> (ref T[] array, int after, T element=default(T)) { array = Add(array, after, element:element); }
-			static public T[] Add<T> (T[] array, int after, T element=default(T))
+			static public void Add<T> (ref T[] array, Func<T> createElement=null) { array = Add(array, createElement:createElement); }
+			static public T[] Add<T> (T[] array, Func<T> createElement=null)
 			{
-				if (array==null || array.Length==0) { return new T[] {element}; }
-				if (after > array.Length-1) after = array.Length-1;
+				if (array==null || array.Length==0) 
+				{ 
+					if (createElement != null) return new T[] {createElement()};
+					else return new T[] {default(T)};
+				}
+
+				T[] newArray = new T[array.Length+1];
+				for (int i=0; i<array.Length; i++) 
+					newArray[i] = array[i];
+				
+				if (createElement != null) newArray[array.Length] = createElement();
+				else newArray[array.Length] = default(T);
+				
+				return newArray;
+			}
+
+			static public void Insert<T> (ref T[] array, int pos, Func<T> createElement=null) { array = Insert(array, pos, createElement:createElement); }
+			static public T[] Insert<T> (T[] array, int pos, Func<T> createElement=null)
+			{
+				if (array==null || array.Length==0) 
+				{ 
+					if (createElement != null) return new T[] {createElement()};
+					else return new T[] {default(T)};
+				}
+				if (pos > array.Length || pos < 0) pos = array.Length;
 				
 				T[] newArray = new T[array.Length+1];
 				for (int i=0; i<newArray.Length; i++) 
 				{
-					if (i<=after) newArray[i] = array[i];
-					else if (i == after+1) newArray[i] = element;
+					if (i<pos) newArray[i] = array[i];
+					else if (i == pos) 
+					{
+						if (createElement != null) newArray[i] = createElement();
+						else newArray[i] = default(T);
+					}
 					else newArray[i] = array[i-1];
 				}
 				return newArray;
 			}
-			static public T[] Add<T> (T[] array, T element=default(T)) { return Add(array, array.Length-1, element); }
-			static public void Add<T> (ref T[] array, T element=default(T)) { array = Add(array, array.Length-1, element); }
 
-			static public void Resize<T> (ref T[] array, int newSize, T element=default(T)) { array = Resize(array, newSize, element); }
-			static public T[] Resize<T> (T[] array, int newSize, T element=default(T))
+			static public T[] InsertRange<T> (T[] array, int after, T[] add)
 			{
-				//NOTE: element is not unique. On adding 2 items it will fill both with one instance
-				if (array.Length == newSize) return array;
-				else if (newSize > array.Length) 
-				{ 
-					array = Add(array, element); 
-					array = Resize(array,newSize); 
-					return array; 
+				if (array==null || array.Length==0) { return add; }
+				if (after > array.Length || after<0) after = array.Length;
+				
+				T[] newArray = new T[array.Length+add.Length];
+				for (int i=0; i<newArray.Length; i++) 
+				{
+					if (i<after) newArray[i] = array[i];
+					else if (i == after) 
+					{
+						for (int j=0; j<add.Length; j++)
+							newArray[i+j] = add[j];
+						i+= add.Length-1;
 					}
-				else 
-				{ 
-					array = RemoveAt(array, array.Length-1); 
-					array = Resize(array,newSize); 
-					return array;
+					else newArray[i] = array[i-add.Length];
 				}
+				return newArray;
+			}
+
+			static public void Resize<T> (ref T[] array, int newSize, Func<int,T> createElementCallback=null) { array = Resize(array, newSize, createElementCallback); }
+			static public T[] Resize<T> (T[] array, int newSize, Func<int,T> createElementCallback=null)
+			{
+				if (array.Length == newSize) return array;
+
+				T[] newArray = new T[newSize];
+					
+				int min = newSize<array.Length? newSize : array.Length;
+				for (int i=0; i<min; i++)
+					newArray[i] = array[i];
+
+				if (newSize > array.Length && createElementCallback!=null)
+				{
+					for (int i=array.Length; i<newSize; i++)
+						newArray[i] = createElementCallback(i);
+				}
+
+				return newArray;
 			}
 
 			static public void Append<T> (ref T[] array, T[] additional) { array = Append(array, additional); }
@@ -113,6 +165,40 @@ namespace MapMagic
 				for (int i=0; i<length; i++) dst[i] = src[i];
 				return dst;
 			}
+
+			public static bool Equals<T> (T[] a1, T[] a2) where T : class
+			{
+				if (a1.Length != a2.Length) return false;
+				for (int i=0; i<a1.Length; i++)
+					if (a1[i] != a2[i]) return false;
+				return true;
+			}
+
+			public static bool EqualsEquatable<T> (T[] a1, T[] a2) where T : IEquatable<T>
+			{
+				if (a1.Length != a2.Length) return false;
+				for (int i=0; i<a1.Length; i++)
+					if (!Equals(a1[i],a2[i])) return false;
+				return true;
+			}
+
+			public static bool EqualsVector3 (UnityEngine.Vector3[] a1, UnityEngine.Vector3[] a2, float delta=float.Epsilon)
+			{
+				if (a1==null || a2==null || a1.Length != a2.Length) return false;
+				for (int i=0; i<a1.Length; i++)
+				{
+					float dist = a1[i].x-a2[i].x;
+					if (!(dist<delta && -dist<delta)) return false;
+
+					dist = a1[i].y-a2[i].y;
+					if (!(dist<delta && -dist<delta)) return false;
+
+					dist = a1[i].z-a2[i].z;
+					if (!(dist<delta && -dist<delta)) return false;
+				}
+				return true;
+			}
+
 		#endregion
 
 		#region Array Sorting

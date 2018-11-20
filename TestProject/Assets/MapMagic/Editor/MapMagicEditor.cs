@@ -4,7 +4,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-//using Plugins;
+using MapMagic;
 
 namespace MapMagic 
 {
@@ -16,45 +16,62 @@ namespace MapMagic
 		
 		public int backgroundHeight = 0; //to draw type background
 		public int oldSelected = 0; //to repaint gui with new background if new type was selected
-		public enum SelectionMode { none, nailing, locking }
+		public enum SelectionMode { none, nailing, locking, exporting }
 		public SelectionMode selectionMode = SelectionMode.none;
-		Color nailColor = new Color(0.6f,0.8f,1,1); Color lockColor = new Color(1,0.3f,0.2f,1);
+		Color nailColor = new Color(0.6f,0.8f,1,1); Color lockColor = new Color(1,0.3f,0.2f,1); Color exportColor = new Color(0.3f,1,0.2f,1);
 		//public List<Vector3> selectedCoords; use script.selectedcoords
 		public enum Pots { _64=64, _128=128, _256=256, _512=512, _1024=1024, _2048=2048, _4096=4096 };
 
-		#region Previewing
-		[DrawGizmo(GizmoType.NotInSelectionHierarchy)]
-		static void ShowPreview(Transform objectTransform, GizmoType gizmoType)
-		{
-			if (MapMagic.instance==null || MapMagic.instance.terrains==null) return; 
-			foreach (Chunk tw in MapMagic.instance.terrains.Objects()) tw.Preview();
-		}
-		#endregion
 
-		public void  OnSceneGUI ()
+		//when both selected and not selected
+		static float lastGizmoFrame = 0;
+		[DrawGizmo(GizmoType.NonSelected | GizmoType.Active)]
+		static void OnDeselectedSceneGUI(Transform objectTransform, GizmoType gizmoType)
+		{
+			//updating with 10 fps
+			if (lastGizmoFrame == Time.renderedFrameCount) return;
+			lastGizmoFrame = Time.renderedFrameCount;
+			
+			if (MapMagic.instance==null || MapMagic.instance.chunks==null) return; 
+			MapMagic mapMagic = MapMagic.instance;
+
+			//previewing
+			//foreach (Chunk tw in MapMagic.instance.chunks.All()) tw.Preview(); 
+
+			//update custom shader templates
+			if (CustomShaderOutput.instantUpdateMaterial && !mapMagic.assignCustomTerrainMaterial && mapMagic.terrainMaterialType==Terrain.MaterialType.Custom && mapMagic.customTerrainMaterial != null)
+				CustomShaderOutput.UpdateCustomShaderMaterials();
+		}
+
+
+		//when selected
+		public void OnSceneGUI ()
 		{	
 			if (script == null) script = (MapMagic)target;
 			MapMagic.instance = script;
 			if (!script.enabled) return;
-			script.terrains.CheckEmpty();
+
+			//checking removed terrains
+			foreach (Chunk chunk in script.chunks.All())
+				if (chunk.terrain == null) script.chunks.Remove(chunk.coord);
 			
 
 			#region Drawing Selection
 
 			//drawing frames
 			if (Event.current.type == EventType.Repaint)
-			foreach(Coord coord in MapMagic.instance.terrains.Coords())
+			foreach(Chunk chunk in MapMagic.instance.chunks.All())
 			{
 				Handles.color = nailColor*0.8f;
-				if (MapMagic.instance.terrains[coord].locked) Handles.color = lockColor*0.8f;
-				DrawSelectionFrame(coord, 5f);
+				if (chunk.locked) Handles.color = lockColor*0.8f;
+				DrawSelectionFrame(chunk.coord, 5f);
 			}
 
 			#endregion
 		
 
 			#region Selecting terrains
-			if (selectionMode==SelectionMode.nailing || selectionMode==SelectionMode.locking)
+			if (selectionMode!=SelectionMode.none)
 			{
 				//disabling selection
 				HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
@@ -95,19 +112,21 @@ namespace MapMagic
 					//selecting / unselecting
 					if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
 					{
-						if (MapMagic.instance.terrains[aimCoord]==null) //if obj not exists - nail
+						if (MapMagic.instance.chunks[aimCoord]==null) //if obj not exists - nail
 						{
 							Undo.RegisterFullObjectHierarchyUndo(MapMagic.instance, "MapMagic Pin Terrain");
-							MapMagic.instance.terrains.Nail(aimCoord); 
+							MapMagic.instance.chunks.Create(aimCoord, script, pin:true); 
 							//MapMagic.instance.terrains.maxCount++;
 						}
 						else 
 						{
-							Undo.DestroyObjectImmediate(MapMagic.instance.terrains[aimCoord].terrain.gameObject);
+							Terrain terrain = MapMagic.instance.chunks[aimCoord].terrain;
+							if (terrain != null) Undo.DestroyObjectImmediate(terrain.gameObject);
 							Undo.RecordObject(MapMagic.instance, "MapMagic Unpin Terrain");
 							MapMagic.instance.setDirty = !MapMagic.instance.setDirty;
 
-							MapMagic.instance.terrains.Unnail(aimCoord); 
+							MapMagic.instance.chunks.Remove(aimCoord);
+							//MapMagic.instance.chunks[aimCoord].pinned = false;
 							//MapMagic.instance.terrains.maxCount--;
 						}
 						//if (MapMagic.instance.terrains.maxCount < MapMagic.instance.terrains.nailedHashes.Count+4) MapMagic.instance.terrains.maxCount = MapMagic.instance.terrains.nailedHashes.Count+4;
@@ -117,7 +136,7 @@ namespace MapMagic
 
 				if (selectionMode == SelectionMode.locking  && !Event.current.alt)
 				{
-					Chunk aimedTerrain = MapMagic.instance.terrains[aimCoord];
+					Chunk aimedTerrain = MapMagic.instance.chunks[aimCoord];
 					if (aimedTerrain != null)
 					{
 						//drawing selection frame
@@ -135,12 +154,65 @@ namespace MapMagic
 						}
 					}
 				}
+
+				if (selectionMode == SelectionMode.exporting && !Event.current.alt)
+				{
+					Chunk aimedTerrain = MapMagic.instance.chunks[aimCoord];
+					if (aimedTerrain != null)
+					{
+						//drawing selection frame
+						Handles.color = exportColor;
+						DrawSelectionFrame(aimCoord, width:5f);
+
+						//exporting
+						if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+						{
+							string path= UnityEditor.EditorUtility.SaveFilePanel(
+										"Export Terrain Data",
+										"",
+										"TerrainData.asset", 
+										"asset");
+							if (path!=null && path.Length!=0)
+							{
+								path = path.Replace(Application.dataPath, "Assets");
+								if (!path.Contains("Assets")) { Debug.LogError("MapMagic: Path is out of the Assets folder"); return; }
+								if (AssetDatabase.LoadAssetAtPath(path, typeof(TerrainData)) as TerrainData == aimedTerrain.terrain.terrainData) { Debug.Log("MapMagic: this terrain was already exported at the given path"); return; }
+     
+								Terrain terrain = aimedTerrain.terrain;
+								float[,,] splats = terrain.terrainData.GetAlphamaps(0,0,terrain.terrainData.alphamapResolution, terrain.terrainData.alphamapResolution);
+								//else splats = new float[terrain.terrainData.alphamapResolution,terrain.terrainData.alphamapResolution,1];
+
+								if (terrain.terrainData.alphamapLayers==1 && terrain.terrainData.alphamapTextures[0].width==2)
+								{
+									terrain.terrainData.splatPrototypes = new SplatPrototype[0];
+									terrain.terrainData.SetAlphamaps(0,0,new float[0,0,0]);
+								}
+     
+								AssetDatabase.DeleteAsset(path);
+
+								if (AssetDatabase.Contains(terrain.terrainData)) 
+								{
+									AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(terrain.terrainData),path);
+									terrain.terrainData = AssetDatabase.LoadAssetAtPath(path, typeof(TerrainData)) as TerrainData;
+									if (terrain.GetComponent<TerrainCollider>()!=null) terrain.GetComponent<TerrainCollider>().terrainData = terrain.terrainData;
+								}
+								else AssetDatabase.CreateAsset(terrain.terrainData, path);
+
+								terrain.terrainData.SetAlphamaps(0,0,splats);
+
+								AssetDatabase.SaveAssets();
+							}
+						}
+					}
+				}
 				
 				//redrawing scene by moving temp object
 				if (script.sceneRedrawObject==null) { script.sceneRedrawObject = new GameObject(); script.sceneRedrawObject.hideFlags = HideFlags.HideInHierarchy; }
 				script.sceneRedrawObject.transform.position = aimPos;
 			}
 			#endregion
+		
+
 		}
 
 		public void DrawSelectionFrame (Coord coord, float width=3f)
@@ -151,9 +223,9 @@ namespace MapMagic
 			float stepDist = sideSize / numSteps;
 			Vector3 start = coord.ToVector3(MapMagic.instance.terrainSize) + new Vector3(margins,0,margins) + MapMagic.instance.transform.position;
 
-			Chunk terrain = MapMagic.instance.terrains[coord];
+			Chunk chunk = MapMagic.instance.chunks[coord];
 
-			if (terrain==null)
+			if (chunk==null || chunk.terrain==null)
 			{
 				Handles.DrawAAPolyLine( width, new Vector3[] {
 					start, start+new Vector3(sideSize,0,0), start+new Vector3(sideSize,0,sideSize), start+new Vector3(0,0,sideSize), start} );
@@ -161,10 +233,10 @@ namespace MapMagic
 			else
 			{
 				//DrawTerrainFrame(terrain.terrain, margins, numSteps:50, width:width);
-				DrawLineOnTerrain(terrain.terrain, start, new Vector3(stepDist,0,0), numSteps+1, width);
-				DrawLineOnTerrain(terrain.terrain, start+new Vector3(0,0,sideSize), new Vector3(stepDist,0,0), numSteps+1, width);
-				DrawLineOnTerrain(terrain.terrain, start, new Vector3(0,0,stepDist), numSteps+1, width);
-				DrawLineOnTerrain(terrain.terrain, start+new Vector3(sideSize,0,0), new Vector3(0,0,stepDist), numSteps+1, width);
+				DrawLineOnTerrain(chunk.terrain, start, new Vector3(stepDist,0,0), numSteps+1, width);
+				DrawLineOnTerrain(chunk.terrain, start+new Vector3(0,0,sideSize), new Vector3(stepDist,0,0), numSteps+1, width);
+				DrawLineOnTerrain(chunk.terrain, start, new Vector3(0,0,stepDist), numSteps+1, width);
+				DrawLineOnTerrain(chunk.terrain, start+new Vector3(sideSize,0,0), new Vector3(0,0,stepDist), numSteps+1, width);
 			}
 		}
 
@@ -175,7 +247,7 @@ namespace MapMagic
 			for (int i=0; i<steps.Length; i++)
 			{
 				steps[i] = start + step*i;
-				steps[i].y = terrain.SampleHeight(steps[i]);
+				steps[i].y = terrain.SampleHeight(steps[i]) + terrain.transform.position.y;
 			}
 			Handles.DrawAAPolyLine(width, steps);
 		}
@@ -268,31 +340,37 @@ namespace MapMagic
 		{
 			script = (MapMagic)target;
 			if (MapMagic.instance == null) MapMagic.instance = script;
-			script.terrains.CheckEmpty();
+			
+			//checking removed terrains
+			foreach (Chunk chunk in script.chunks.All())
+				if (chunk.terrain == null) script.chunks.Remove(chunk.coord);
+
+			//assigning mapmagic to mapmagic window
+			if (MapMagicWindow.instance != null && MapMagicWindow.instance.mapMagic != (IMapMagic)script)
+				MapMagicWindow.Show(script.gens, script, forceOpen:false);
 			
 			if (layout == null) layout = new Layout();
 			layout.margin = 0;
+			layout.rightMargin = 0;
 			layout.field = Layout.GetInspectorRect();
 			layout.cursor = new Rect();
 			layout.undoObject = script;
 			layout.undoName =  "MapMagic settings change";
 
-			layout.Par(20); bool modeNailing = layout.CheckButton(selectionMode == SelectionMode.nailing, "Pin Terrain", rect:layout.Inset(0.5f), icon:"MapMagic_PinIcon");
+			layout.Par(20); bool modeNailing = layout.CheckButton(selectionMode == SelectionMode.nailing, "Pin", rect:layout.Inset(0.3333f), icon:"MapMagic_PinIcon");
 				if (layout.lastChange && modeNailing) selectionMode = SelectionMode.nailing;
 				if (layout.lastChange && !modeNailing) selectionMode = SelectionMode.none;
-			bool modeLocking = layout.CheckButton(selectionMode == SelectionMode.locking, "Lock Terrain", rect:layout.Inset(0.5f), icon:"MapMagic_LockIcon");
+			bool modeLocking = layout.CheckButton(selectionMode == SelectionMode.locking, "Lock", rect:layout.Inset(0.3333f), icon:"MapMagic_LockIcon");
 				if (layout.lastChange && modeLocking) selectionMode = SelectionMode.locking;
 				if (layout.lastChange && !modeLocking) selectionMode = SelectionMode.none;
+			bool modeExporting = layout.CheckButton(selectionMode == SelectionMode.exporting, "Save", rect:layout.Inset(0.3333f), icon:"MapMagic_ExportIcon");
+				if (layout.lastChange && modeExporting) selectionMode = SelectionMode.exporting;
+				if (layout.lastChange && !modeExporting) selectionMode = SelectionMode.none;
+
 
 			layout.Par(4);
 			layout.Par(24); if (layout.Button("Show Editor", rect:layout.Inset(), icon:"MapMagic_EditorIcon"))
-			{
-				MapMagicWindow window = (MapMagicWindow)EditorWindow.GetWindow (typeof (MapMagicWindow));
-				//SceneMagicWindow window = EditorWindow.GetWindow<VoxelandCreate>();
-				//window.script = script;
-				window.Show();
-//				window.FocusOnOutput();
-			}
+				MapMagicWindow.Show(script.gens, script, forceOpen:true);
 
 //			layout.ComplexField(ref MapMagic.instance.seed, "Seed");
 //			layout.ComplexSlider(script.terrains.terrainSize, "Terrain Size", max:2048, quadratic:true);
@@ -305,18 +383,23 @@ namespace MapMagic
 //			layout.Par(); if (layout.Button("Clear")) MapMagic.instance.generators.ClearGenerators();
 
 //			Undo.RecordObject (script, "MapMagic settings change");
-			layout.margin =10;
 
 			layout.fieldSize = 0.4f;
-			layout.Par(5); layout.Foldout(ref script.guiSettings, "General Settings");
+			layout.Par(8); layout.Foldout(ref script.guiSettings, "General Settings");
 			if (script.guiSettings)
 			{
+				Rect anchor = layout.lastRect;
+				layout.margin += 10; layout.rightMargin += 5;
+				
+				//layout.Field(ref MapMagic.instance.voxelandMode, "Voxeland Mode");
+				layout.Field(ref MapMagic.instance.seed, "Seed");
+				layout.Toggle(ref MapMagic.instance.changeSeed, "Change Seed on Playmode Start");
 				MapMagic.instance.resolution = (int)layout.Field((Pots)MapMagic.instance.resolution, "Resolution");
-				if (layout.lastChange && MapMagic.instance.instantGenerate) MapMagic.instance.ForceGenerate();
+				if (layout.lastChange) { MapMagic.instance.ClearResults(); MapMagic.instance.Generate(); }
 				layout.Field(ref MapMagic.instance.terrainSize, "Terrain Size");
-				if (layout.lastChange) MapMagic.instance.terrains.Reset();
+				if (layout.lastChange) MapMagic.instance.ResetChunks();
 				layout.Field(ref MapMagic.instance.terrainHeight, "Terrain Height");
-				if (layout.lastChange) MapMagic.instance.terrains.Reset();
+				if (layout.lastChange) MapMagic.instance.ResetChunks();
 
 				layout.Par(5);
 				layout.Field(ref MapMagic.instance.generateInfinite, "Generate Infinite Terrain");
@@ -329,11 +412,29 @@ namespace MapMagic
 					//layout.Field(ref MapMagic.instance.terrains.detailRange, "Full Detail Range");
 				}
 
+				//threads
 				layout.Par(5);
-				layout.Field(ref script.multiThreaded, "Multithreaded");
-				if (script.multiThreaded) layout.Field(ref script.maxThreads, "Max Threads");
-				layout.Field(ref script.instantGenerate, "Instant Generate");
+				layout.Field(ref script.multithreading, "Multithreading");
+				if (script.multithreading)
+				{
+					layout.Par();
+					layout.Field(ref script.maxThreads, "Max Threads", rect:layout.Inset(0.75f), fieldSize:0.2f, disabled:script.autoMaxThreads);
+					layout.Toggle(ref script.autoMaxThreads, "Auto",rect:layout.Inset(0.25f));
+				}
+				else layout.Field(ref script.maxThreads, "Max Coroutines");
+				layout.Field(ref script.maxApplyTime, "Max Apply Time");
+
+				layout.Par(5);
+				script.instantGenerate = layout.Field(script.instantGenerate, "Instant Generate");
 				layout.Field(ref script.saveIntermediate, "Save Intermediate Results");
+				#if WDEBUG
+				layout.Label("Ready Count: " +script.chunks.Any().results.ready.Count);
+				layout.Label("Results Count: " +script.chunks.Any().results.results.Count);
+				layout.Label("Apply Count: " +script.chunks.Any().results.apply.Count); 
+				#endif
+				
+				layout.Field(ref script.guiHideWireframe, "Hide Frame");
+				if (layout.lastChange) script.transform.ToggleDisplayWireframe(!script.guiHideWireframe);
 
 				layout.Par(5);
 				layout.Field(ref script.heightWeldMargins, "Height Weld Margins", max:100);
@@ -342,74 +443,103 @@ namespace MapMagic
 				
 				layout.Par(5);
 				layout.Toggle(ref script.hideFarTerrains, "Hide Out-of-Range Terrains");
-				//layout.Toggle(ref script.useAllCameras, "Generate around All Cameras");
-				layout.Toggle(ref script.copyLayersTags, "Copy Layers and Tags to Terrains");
-				layout.Toggle(ref script.copyComponents, "Copy Components to Terrains");
-
-				layout.Par(5);
-				layout.Label("Generate Terrain Markers:");
-				layout.Field(ref script.genAroundMainCam, "Around Main Camera");
 				
-				layout.Par(); layout.Field(ref script.genAroundObjsTag, "Around Objects Tagged", rect:layout.Inset());
-				int tagFieldWidth = (int)(layout.field.width*layout.fieldSize - 25);
-				layout.cursor.x -= tagFieldWidth;
-				script.genAroundTag = EditorGUI.TagField(layout.Inset(tagFieldWidth), script.genAroundTag);
+				layout.Par(10);
+				layout.Par(0,padding:0); layout.Inset();
+				Rect internalAnchor = layout.lastRect;
+					layout.Toggle(ref script.copyLayersTags, "Copy Layers and Tags to Terrains");
+					layout.Toggle(ref script.copyComponents, "Copy Components to Terrains");
+				layout.Foreground(internalAnchor);
 
 				layout.Par(10);
-				layout.Par(); layout.Label("Data", layout.Inset(0.2f));
-				GeneratorsAsset newGens = layout.Field<GeneratorsAsset>(script.gens, rect:layout.Inset(0.5f));
-				if (newGens != script.gens) { script.gens = newGens; script.guiGens = newGens; }
-				if (layout.lastChange) script.gens.OnAfterDeserialize();
-				if (script.gens == null)
+				layout.Par(0,padding:0); layout.Inset();
+				internalAnchor = layout.lastRect;
+					layout.Label("Generate Terrain Markers:");
+					layout.Field(ref script.genAroundMainCam, "Around Main Camera");
+					layout.Par(); layout.Field(ref script.genAroundObjsTag, "Around Objects Tagged", rect:layout.Inset());	
+				
+					int tagFieldWidth = (int)(layout.field.width*layout.fieldSize - 25);
+					layout.cursor.x -= tagFieldWidth;
+					script.genAroundTag = EditorGUI.TagField(layout.Inset(tagFieldWidth), script.genAroundTag);
+				layout.Foreground(internalAnchor);
+
+				layout.Par(10);
+				layout.Par(0,padding:0); layout.Inset();
+				internalAnchor = layout.lastRect;
+					layout.Label("Floating Point Origin Solution:");
+					layout.Toggle(ref script.shift, "Shift World");
+					layout.Field(ref script.shiftThreshold, "Shift Threshold", disabled:!script.shift);
+					layout.LayersField(ref script.shiftExcludeLayers, "Exclude Layers", disabled:!script.shift);
+				layout.Foreground(internalAnchor);
+
+				//data
+				layout.Par(10);
+				layout.Par(0,padding:0); layout.Inset();
+				internalAnchor = layout.lastRect;
+					layout.fieldSize = 0.7f;
+					script.gens = layout.ScriptableAssetField(script.gens, construct:GeneratorsAsset.Default, savePath: null);
+					if (layout.lastChange) 
+						MapMagicWindow.Show(script.gens, script, forceOpen:false, asBiome:false);
+				layout.Foreground(internalAnchor);
+
+				//debug
+				BuildTargetGroup buildGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+				string defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildGroup);
+				
+				bool debug = false;
+				if (defineSymbols.Contains("WDEBUG;") || defineSymbols.EndsWith("WDEBUG")) debug = true;
+				
+				layout.Par(7);
+				layout.Toggle(ref debug, "Debug (Requires re-compile)");
+				if (layout.lastChange) 
 				{
-					if (layout.Button("Create", layout.Inset(0.3f)))
+					if (debug)
 					{
-						MapMagic.instance.gens = GeneratorsAsset.Default();
-						MapMagic.instance.guiGens = MapMagic.instance.gens;
-						EditorUtility.SetDirty(MapMagic.instance); 
+						defineSymbols += (defineSymbols.Length!=0? ";" : "") + "WDEBUG";
 					}
-				}
-                else if (!AssetDatabase.Contains(script.gens))
-				{
-					if (layout.Button("Save", layout.Inset(0.3f))) 
+					else
 					{
-						MapMagic.instance.gens.SaveAsset();
-						EditorUtility.SetDirty(MapMagic.instance); 
+						defineSymbols = defineSymbols.Replace("WDEBUG",""); 
+						defineSymbols = defineSymbols.Replace(";;", ";"); 
 					}
-				}
-				else 
-				{
-					if (layout.Button("Release", layout.Inset(0.3f))) 
-					{ 
-						MapMagic.instance.gens = MapMagic.instance.gens.ReleaseAsset(); 
-						MapMagic.instance.guiGens = MapMagic.instance.gens;
-						EditorUtility.SetDirty(MapMagic.instance); 
-					}
+					PlayerSettings.SetScriptingDefineSymbolsForGroup(buildGroup, defineSymbols);
 				}
 
-				layout.Par(5);
-				//layout.Field(ref script.guiGeneratorWidth, "Node Width");
-				layout.Toggle(ref script.guiDebug, "Debug");
+				layout.margin -= 10; layout.rightMargin -= 5;
+				layout.Foreground(anchor);
 			}
 
 			layout.fieldSize = 0.5f; layout.sliderSize = 0.6f;
-			layout.Par(5); layout.Foldout(ref script.guiTerrainSettings, "Terrain Settings");
+			layout.Par(8); layout.Foldout(ref script.guiTerrainSettings, "Terrain Settings");
 			if (script.guiTerrainSettings)
 			{
+				Rect anchor = layout.lastRect;
+				layout.margin += 10; layout.rightMargin += 5;
+
 				layout.Field(ref script.pixelError, "Pixel Error", min:0, max:200, slider:true);
-				layout.Field(ref script.baseMapDist, "Base Map Dist.", min:0, max:2000, slider:true);
+				layout.Field(ref script.baseMapDist, "Base Map Dist.", min:0, max:2000, slider:true, disabled:!script.showBaseMap);
+				layout.Field(ref script.showBaseMap, "Show Base Map");
 				layout.Field(ref script.castShadows, "Cast Shadows");
-
-				layout.Field(ref script.terrainMaterialType, "Material Type", disabled:script.previewGenerator!=null);
-				layout.Field(ref script.customTerrainMaterial, "Custom Material", disabled:script.terrainMaterialType!=MapMagic.TerrainMaterialType.Custom);
-				if (script.previewGenerator!=null) layout.Label("Terrain Material is disabled in preview mode", helpbox: true);
-
 				layout.Field(ref script.applyColliders, "Apply Terrain Colliders");
+
+				layout.Par(5);
+				layout.Field(ref script.terrainMaterialType, "Material Type");
+				layout.Field(ref script.customTerrainMaterial, "Custom Material", disabled:script.terrainMaterialType!=Terrain.MaterialType.Custom); 
+				layout.Toggle(ref script.assignCustomTerrainMaterial, "Assign Material (disable for MegaSplat/RTP)", disabled:script.terrainMaterialType!=Terrain.MaterialType.Custom);
+					
+				//layout.Toggle(ref script.materialTemplateMode, "Material Template Mode (MegaSplat/RTP)");
+				if (Preview.enabled) layout.Label("Terrain Material is disabled in preview mode", helpbox: true);
+
+				layout.margin -= 10; layout.rightMargin -= 5;
+				layout.Foreground(anchor);
 			}
 
-			layout.Par(5); layout.Foldout(ref script.guiTreesGrassSettings, "Trees, Details and Grass Settings");
+			layout.Par(8); layout.Foldout(ref script.guiTreesGrassSettings, "Trees, Details and Grass Settings");
 			if (script.guiTreesGrassSettings)
 			{
+				Rect anchor = layout.lastRect;
+				layout.margin += 10; layout.rightMargin += 5;
+
 				layout.Field(ref script.detailDraw, "Draw");
 				layout.Field(ref script.detailDistance, "Detail Distance", min:0, max:250, slider:true);
 				layout.Field(ref script.detailDensity, "Detail Density", min:0, max:1, slider:true);
@@ -417,22 +547,77 @@ namespace MapMagic
 				layout.Field(ref script.treeBillboardStart, "Billboard Start", min:0, max:2000, slider:true);
 				layout.Field(ref script.treeFadeLength, "Fade Length", min:0, max:200, slider:true);
 				layout.Field(ref script.treeFullLod, "Max Full LOD Trees", min:0, max:10000, slider:true);
+				layout.Field(ref script.bakeLightProbesForTrees, "Bake Light Probes For Trees");
 
 				layout.Par(5);
 				layout.Field(ref script.windSpeed, "Wind Amount", min:0, max:1, slider:true);
 				layout.Field(ref script.windSize, "Wind Bending", min:0, max:1, slider:true);
 				layout.Field(ref script.windBending, "Wind Speed", min:0, max:1, slider:true); //there's no mistake here. Variable names are swapped in unity
 				layout.Field(ref script.grassTint, "Grass Tint");
+
+				layout.margin -= 10; layout.rightMargin -= 5;
+				layout.Foreground(anchor);
 			}
 
 			if (layout.change) 
-				foreach (Chunk tw in MapMagic.instance.terrains.Objects()) tw.SetSettings();
+				foreach (Chunk tw in MapMagic.instance.chunks.All()) tw.SetSettings();
 
+
+			#region Mass Pin
+			layout.Par(8); layout.Foldout(ref script.guiMassPin, "Mass Pin/Lock");
+			if (script.guiMassPin)
+			{
+				Rect anchor = layout.lastRect;
+				layout.margin += 10; layout.rightMargin += 5;
+
+				layout.Par(52);
+				layout.Label("This feature is designed to be used with streaming plugins. Using it in all other purposes is not recommended because of performance reasons", layout.Inset(), helpbox:true);
+
+				layout.Par();
+				layout.Label("Offset (chunks):", layout.Inset(0.5f));
+				layout.Field(ref script.guiPinRect.offset.x, "X", layout.Inset(0.25f), fieldSize:0.7f);
+				layout.Field(ref script.guiPinRect.offset.z, "Z", layout.Inset(0.25f), fieldSize:0.7f);
+
+				layout.Par();
+				layout.Label("Area Size (chunks):", layout.Inset(0.5f));
+				layout.Field(ref script.guiPinRect.size.x, "X", layout.Inset(0.25f), fieldSize:0.7f);
+				layout.Field(ref script.guiPinRect.size.z, "Z", layout.Inset(0.25f), fieldSize:0.7f);
+
+				layout.Par();
+				if (layout.Button("Pin", layout.Inset(0.333f)))
+				{
+					Undo.RegisterFullObjectHierarchyUndo(MapMagic.instance, "MapMagic Mass Pin Terrain");
+					Coord min = script.guiPinRect.Min; Coord max = script.guiPinRect.Max;
+					for (int x=min.x; x<max.x; x++)
+						for (int z=min.z; z<max.z; z++)
+							MapMagic.instance.chunks.Create(new Coord(x,z), script, pin:true); 
+				}
+
+				if (layout.Button("Lock All", layout.Inset(0.333f)))
+				{
+					Undo.RegisterFullObjectHierarchyUndo(MapMagic.instance, "MapMagic Mass Lock Terrain");
+					foreach (Chunk chunk in MapMagic.instance.chunks.All(pinnedOnly:true))
+						chunk.locked = true;
+				}
+
+				if (layout.Button("Unpin All", layout.Inset(0.333f)))
+				{
+					Undo.RegisterFullObjectHierarchyUndo(MapMagic.instance, "MapMagic Mass Pin Terrain");
+					MapMagic.instance.chunks.Clear();
+				}
+
+				layout.margin -= 10; layout.rightMargin -= 5;
+				layout.Foreground(anchor);
+			}
+			#endregion
 
 			#region About
-			layout.Par(5); layout.Foldout(ref script.guiAbout, "About");
+			layout.Par(8); layout.Foldout(ref script.guiAbout, "About");
 			if (script.guiAbout)
 			{
+				Rect anchor = layout.lastRect;
+				layout.margin += 10; layout.rightMargin += 5;
+
 				Rect savedCursor = layout.cursor;
 				
 				layout.Par(100, padding:0);
@@ -441,30 +626,24 @@ namespace MapMagic
 				layout.cursor = savedCursor;
 				layout.margin = 115;
 
-				layout.Label("MapMagic " + (int)(MapMagic.version/10f) + "." + (MapMagic.version - (int)(MapMagic.version/10f)*10));
+				layout.Label("MapMagic " + MapMagic.version.ToVersionString() + " " + MapMagic.versionState.ToVersionString());
 				layout.Label("by Denis Pahunov");
 				
 				layout.Par(10);
-				layout.Label(" - Online Documentation", url:"https://docs.google.com/document/d/1OX7zYOrPz9qOFNAfO0qawhB7T3M6tLG9VgZSEntRJTA/edit?usp=sharing");
+				layout.Label(" - Online Documentation", url:"https://gitlab.com/denispahunov/mapmagic/wikis/home");
 				layout.Label(" - Video Tutorials", url:"https://www.youtube.com/playlist?list=PL8fjbXLqBxvZb5yqXwp_bn4keyzyg5e0R");
 				layout.Label(" - Forum Thread", url:"http://forum.unity3d.com/threads/map-magic-a-node-based-procedural-and-infinite-map-generator-for-asset-store.344440/");
+				layout.Label(" - Issues / Ideas", url:"https://gitlab.com/denispahunov/mapmagic/issues");
 
-				//layout.Par(10);
-				//layout.Par(); layout.Label("Review or rating vote on");
-				//layout.Par(); layout.Label("Asset Store", url:"--");
-				//layout.Par(); layout.Label("would be appreciated.");
-
-				layout.Par(10);
-				layout.Label("On any issues related");
-				layout.Label("with plugin functioning ");
-				layout.Label("you can contact the");
-				layout.Label("author by mail:");
-				layout.Label("mail@denispahunov.ru", url:"mailto:mail@denispahunov.ru");
+				layout.margin -= 10; layout.rightMargin -= 5;
+				layout.Foreground(anchor);
 			}
 			#endregion
 
 			Layout.SetInspectorRect(layout.field);
 		}
+
+
 
 		[MenuItem ("GameObject/3D Object/Map Magic")]
 		static void CreateMapMagic () 
@@ -480,19 +659,21 @@ namespace MapMagic
 			MapMagic.instance = go.AddComponent<MapMagic>();
 
 			//new terrains
-			MapMagic.instance.terrains = new TerrainGrid();
+			MapMagic.instance.chunks = new ChunkGrid<Chunk>();
 			MapMagic.instance.seed=12345; MapMagic.instance.terrainSize=1000; MapMagic.instance.terrainHeight=300; MapMagic.instance.resolution=512;
-			MapMagic.instance.terrains.Nail(new Coord(0,0));
+			MapMagic.instance.chunks.Create(new Coord(0,0), MapMagic.instance, pin:true);
 			//MapMagic.instance.terrains.maxCount = 5;
 
 			//creating initial generators
 			MapMagic.instance.gens = GeneratorsAsset.Default();
-			MapMagic.instance.guiGens = MapMagic.instance.gens;
+			//MapMagic.instance.guiGens = MapMagic.instance.gens;
 
 			//registering undo
 			MapMagic.instance.gens.OnBeforeSerialize();
 			Undo.RegisterCreatedObjectUndo (go, "MapMagic Create");
 			EditorUtility.SetDirty(MapMagic.instance);
+
+			MapMagicWindow.Show(MapMagic.instance.gens, MapMagic.instance, forceOpen:false, asBiome:false);
 
 			/*HeightOutput heightOut =  new HeightOutput();
 			heightOut.guiRect = new Rect(43,76,200,20);
@@ -501,5 +682,16 @@ namespace MapMagic
 			
 		}
 
+		
+		[MenuItem ("Window/MapMagic/Editor")]
+		public static void ShowEditor ()
+		{
+			//GeneratorsAsset gens = FindObjectOfType<GeneratorsAsset>();
+			MapMagic mm = FindObjectOfType<MapMagic>();
+			GeneratorsAsset gens = mm!=null? mm.gens : null;
+			MapMagicWindow.Show(gens, mm, forceOpen:true);
+		}
+
 	}//class
+
 }//namespace

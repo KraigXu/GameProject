@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -109,6 +110,13 @@ namespace MapMagic
 			return Inset(width, margin, rightMargin, horizontalPadding); 
 		}
 
+		public void Repaint ()
+		{
+			#if UNITY_EDITOR
+			if (UnityEditor.EditorWindow.focusedWindow != null) UnityEditor.EditorWindow.focusedWindow.Repaint(); 
+			#endif
+		}
+
 
 		#region Scroll/zoom
 
@@ -176,6 +184,13 @@ namespace MapMagic
 				#endif
 			}
 
+			public void ScrollWheel (int step=3) 
+			{
+				float delta = 0;
+				if (Event.current.type==EventType.ScrollWheel) delta = Event.current.delta.y / 3f;
+				scroll.y -= delta*lineHeight*step;
+			}
+
 
 			public Rect ToDisplay (Rect rect)
 				{ return new Rect(rect.x*zoom+scroll.x, rect.y*zoom+scroll.y, rect.width*zoom, rect.height*zoom ); }
@@ -202,6 +217,7 @@ namespace MapMagic
 			[System.NonSerialized] public GUIStyle boldLabelStyle = null;
 			[System.NonSerialized] public GUIStyle foldoutStyle = null;
 			[System.NonSerialized] public GUIStyle fieldStyle = null;
+			[System.NonSerialized] public GUIStyle dragFieldStyle = null;
 			[System.NonSerialized] public GUIStyle buttonStyle = null;
 			[System.NonSerialized] public GUIStyle enumZoomStyle = null;
 			[System.NonSerialized] public GUIStyle urlStyle = null;
@@ -218,12 +234,21 @@ namespace MapMagic
 					boldLabelStyle = new GUIStyle(UnityEditor.EditorStyles.label); boldLabelStyle.fontStyle = FontStyle.Bold; boldLabelStyle.focused.textColor = boldLabelStyle.active.textColor = boldLabelStyle.normal.textColor;
 					urlStyle = new GUIStyle(UnityEditor.EditorStyles.label); urlStyle.normal.textColor = new Color(0.3f, 0.5f, 1f); 
 					foldoutStyle = new GUIStyle(UnityEditor.EditorStyles.foldout);  foldoutStyle.fontStyle = FontStyle.Bold;
-					fieldStyle = new GUIStyle(UnityEditor.EditorStyles.numberField);
+					
 					buttonStyle = new GUIStyle("Button"); 
 					enumZoomStyle = new GUIStyle(UnityEditor.EditorStyles.miniButton); enumZoomStyle.alignment = TextAnchor.MiddleLeft;
 					toolbarStyle = new GUIStyle(UnityEditor.EditorStyles.toolbar);
 					toolbarButtonStyle = new GUIStyle(UnityEditor.EditorStyles.toolbarButton);  
 					helpBoxStyle = new GUIStyle(UnityEditor.EditorStyles.helpBox);  
+				}
+
+				if (fieldStyle == null)
+				{
+					fieldStyle = new GUIStyle(UnityEditor.EditorStyles.numberField);
+
+					//20 skin
+					//fieldStyle.normal.background = GetIcon("DPLayout_Field"); //Resources.Load("MapMagic_Window") as Texture2D;
+					//fieldStyle.border = new RectOffset(4,4,4,4);
 				}
 
 				int fontSize = Mathf.RoundToInt(this.fontSize * zoom);
@@ -280,7 +305,7 @@ namespace MapMagic
 
 			public enum IconAligment { resize, min, max, center }
 
-			public bool Icon (string textureName, Rect rect, IconAligment horizontalAlign=IconAligment.resize, IconAligment verticalAlign=IconAligment.resize, int animationFrames=0, bool tile=false, bool clickable=false)
+			public bool Icon (string textureName, Rect rect, IconAligment horizontalAlign=IconAligment.resize, IconAligment verticalAlign=IconAligment.resize, int animationFrames=0, bool frame=false, bool tile=false, bool clickable=false)
 			{
 				//drawing animation frames
 				if (animationFrames != 0)
@@ -288,16 +313,27 @@ namespace MapMagic
 					System.DateTime now = System.DateTime.Now;
 					int frameNum = (int)((now.Second*5f + now.Millisecond*5f/1000f) % animationFrames);
 					string frameString = (frameNum+1<10? "0" : "") + (frameNum+1).ToString();
-					return Icon(textureName + frameString, rect, animationFrames:0);
+					return Icon(textureName + frameString, rect, horizontalAlign, verticalAlign, 0, frame, tile, clickable);
 				}
 				
 				//drawig texture
-				return Icon(GetIcon(textureName), rect, horizontalAlign, verticalAlign, tile, clickable);
+				return Icon(GetIcon(textureName), rect, horizontalAlign, verticalAlign, frame, tile, clickable);
 			}
 
-			public bool Icon (Texture2D texture, Rect rect, IconAligment horizontalAlign=IconAligment.resize, IconAligment verticalAlign=IconAligment.resize, bool tile=false, bool clickable=false)
+			public bool Icon (Texture2D texture, Rect rect, IconAligment horizontalAlign=IconAligment.resize, IconAligment verticalAlign=IconAligment.resize, bool frame=false, bool tile=false, bool clickable=false, bool alphaBlend=true)
 			{
-
+				#if UNITY_EDITOR
+				if (frame) UnityEditor.EditorGUI.DrawRect(ToDisplay(rect.Extend(1)), Color.black);
+				#endif
+			
+				if (texture==null) 
+				{
+					#if UNITY_EDITOR
+					UnityEditor.EditorGUI.DrawRect(ToDisplay(rect), Color.gray);
+					#endif
+					return false;
+				}
+				
 				//aligning texture if the rect width or height is more than icon size
 				if (rect.width > texture.width) 
 				{
@@ -325,14 +361,25 @@ namespace MapMagic
 				//#endif
 
 				//drawing texture
-				if (!tile) GUI.DrawTexture(ToDisplay(rect), texture, ScaleMode.ScaleAndCrop); 
+				if (!tile) 
+				{
+					if (alphaBlend) GUI.DrawTexture(ToDisplay(rect), texture, ScaleMode.ScaleAndCrop); 
+					#if UNITY_EDITOR
+					else UnityEditor.EditorGUI.DrawPreviewTexture(ToDisplay(rect), texture, null, ScaleMode.ScaleAndCrop);
+					#endif
+				}
 				else
 				{
 					//Debug.Log(zoom);
 					Rect localRect = ToDisplay(rect);
 					for (float x=0; x<rect.width; x+=texture.width*zoom)
 						for (float y=0; y<rect.height; y+=texture.height*zoom)
-							GUI.DrawTexture(new Rect(x+localRect.x, y+localRect.y, texture.width*zoom, texture.height*zoom), texture);
+						{
+							if (alphaBlend) GUI.DrawTexture(new Rect(x+localRect.x, y+localRect.y, texture.width*zoom, texture.height*zoom), texture, ScaleMode.StretchToFill);
+							#if UNITY_EDITOR
+							else UnityEditor.EditorGUI.DrawPreviewTexture(new Rect(x+localRect.x, y+localRect.y, texture.width*zoom, texture.height*zoom), texture, null, ScaleMode.StretchToFill);
+							#endif
+						}
 				}
 
 				return result;
@@ -359,10 +406,12 @@ namespace MapMagic
 					elementStyles.CheckAdd(textureName, elementStyle);
 				}
 
-				elementStyle.border = borders;
+				if (borders != null)
+					elementStyle.border = borders;
 
 				Rect paddedRect = ToDisplay(rect);
-				paddedRect = new Rect(paddedRect.x-offset.left, paddedRect.y-offset.top, paddedRect.width+offset.left+offset.right, paddedRect.height+offset.top+offset.bottom);
+				if (offset != null)
+					paddedRect = new Rect(paddedRect.x-offset.left, paddedRect.y-offset.top, paddedRect.width+offset.left+offset.right, paddedRect.height+offset.top+offset.bottom);
 				
 				#if UNITY_EDITOR
 				elementStyle.Draw(paddedRect, UnityEditor.EditorGUIUtility.isProSkin, false, false, false);
@@ -372,6 +421,15 @@ namespace MapMagic
 		#endregion
 
 		#region Drag Change
+
+		float StepRound (float src)
+		{
+			if (src < 1) src= ((int)(src*1000))/1000f;
+			else if (src < 10) src= ((int)(src*100))/100f;
+			else if (src < 100) src= ((int)(src*10))/10f;
+			else src= (int)(src);
+			return src;
+		}
 
 		Vector2 sliderClickPos;
 			int sliderDraggingId = -20000000;
@@ -480,16 +538,17 @@ namespace MapMagic
 			public int iconOffset = 4;
 			public bool dragChange = false;
 			public bool slider = false;
+			public bool delayed = false;
 			public enum HelpboxType { off, empty, info, warning, error };
 
-			public void Field<T> (ref T src, string label=null, Rect rect = new Rect(), float min=-200000000, float max=200000000, Val fieldSize = new Val(), Val sliderSize = new Val(), Val monitorChange = new Val(), Val useEvent = new Val(), Val disabled = new Val(), Val dragChange = new Val(), Val slider = new Val(), Val quadratic = new Val(), Val allowSceneObject = new Val(), GUIStyle style=null, string tooltip=null)
-			{ src = Field<T> (src, label, rect, min, max, fieldSize, sliderSize, monitorChange, markup, useEvent, disabled, dragChange, slider, quadratic, allowSceneObject, style, tooltip); }
+			public void Field<T> (ref T src, string label=null, Rect rect = new Rect(), float min=-200000000, float max=200000000, bool limit=true, Val fieldSize = new Val(), Val sliderSize = new Val(), Val monitorChange = new Val(), Val useEvent = new Val(), Val disabled = new Val(), Val dragChange = new Val(), Val slider = new Val(), Val quadratic = new Val(), Val allowSceneObject = new Val(), Val delayed = new Val(), GUIStyle style=null, string tooltip=null)
+			{ src = Field<T> (src, label, rect, min, max, limit, fieldSize, sliderSize, monitorChange, markup, useEvent, disabled, dragChange, slider, quadratic, allowSceneObject, delayed, style, tooltip); }
 
 			public T Field<T> (
 				T src, 
 				string label=null,
 				Rect rect = new Rect(), 
-				float min=-200000000, float max=200000000, 
+				float min=-200000000, float max=200000000, bool limit=true,
 				Val fieldSize = new Val(),
 				Val sliderSize = new Val(),
 				Val monitorChange = new Val(), 
@@ -500,6 +559,7 @@ namespace MapMagic
 				Val slider = new Val(),
 				Val quadratic = new Val(),
 				Val allowSceneObject = new Val(),
+				Val delayed = new Val(),
 				GUIStyle style = null, 
 				string tooltip=null)
 			{
@@ -507,6 +567,7 @@ namespace MapMagic
 				fieldSize.Verify(this.fieldSize); sliderSize.Verify(this.sliderSize);
 				useEvent.Verify(this.useEvent); disabled.Verify(this.disabled); markup.Verify(this.markup);
 				dragChange.Verify(this.dragChange); slider.Verify(this.slider);
+				delayed.Verify(this.delayed);
 
 				//loading styles
 				CheckStyles();
@@ -549,13 +610,24 @@ namespace MapMagic
 
 					if (slider)
 					{
-						if (!quadratic) val = GUI.HorizontalSlider(ToDisplay(sliderRect), val, min, max); 
-						else val = Mathf.Pow(GUI.HorizontalSlider(ToDisplay(sliderRect), Mathf.Pow(val,0.5f), Mathf.Pow(min,0.5f), Mathf.Pow(max,0.5f)),2); 
+						float newval = val;
+						if (!quadratic) newval = GUI.HorizontalSlider(ToDisplay(sliderRect), val, min, max); 
+						else newval = Mathf.Pow(GUI.HorizontalSlider(ToDisplay(sliderRect), Mathf.Pow(val,0.5f), Mathf.Pow(min,0.5f), Mathf.Pow(max,0.5f)),2); 
+						if (!Mathf.Approximately(val,newval)) val = StepRound(newval);
 					}
 					if (dragChange && zoom>0.45f) val = DragChangeField(val, fieldRect.ClampFromLeft((int)22), minStep:0);
-					val = UnityEditor.EditorGUI.FloatField(ToDisplay(fieldRect), val, fieldStyle);	
+					
+					if (delayed) 
+					{
+						#if UNITY_5_5_OR_NEWER
+						val = UnityEditor.EditorGUI.DelayedFloatField(ToDisplay(fieldRect), val, fieldStyle);
+						#else
+						val = UnityEditor.EditorGUI.FloatField(ToDisplay(fieldRect), val, fieldStyle);	
+						#endif
+					}	
+					else val = UnityEditor.EditorGUI.FloatField(ToDisplay(fieldRect), val, fieldStyle);	
 
-					if (val > max) val = max; if (val < min) val = min;
+					if (limit) { if (val > max) val = max; if (val < min) val = min; }
 					dstObj = val;
 
 					if (dragChange && zoom>0.45f) Icon("DPLayoutIcon_Slider", fieldRect, horizontalAlign:IconAligment.max, verticalAlign:IconAligment.center);
@@ -570,7 +642,16 @@ namespace MapMagic
 						else val = (int)Mathf.Pow(GUI.HorizontalSlider(ToDisplay(sliderRect), Mathf.Pow(val,0.5f), Mathf.Pow(min,0.5f), Mathf.Pow(max,0.5f)),2); 
 					}
 					if (dragChange && zoom>0.45f) val = (int)DragChangeField(val, fieldRect.ClampFromLeft((int)22), minStep:1);
-					val = UnityEditor.EditorGUI.IntField(ToDisplay(fieldRect), val, fieldStyle);
+					
+					if (delayed) 
+					{
+						#if UNITY_5_5_OR_NEWER
+						val = UnityEditor.EditorGUI.DelayedIntField(ToDisplay(fieldRect), val, fieldStyle);
+						#else
+						val = UnityEditor.EditorGUI.IntField(ToDisplay(fieldRect), val, fieldStyle);
+						#endif
+					}
+					else val = UnityEditor.EditorGUI.IntField(ToDisplay(fieldRect), val, fieldStyle);
 
 					if (val > max) val = (int)max; if (val < min) val = (int)min;
 					dstObj = val;
@@ -584,8 +665,48 @@ namespace MapMagic
 
 					Vector2 val = (Vector2)srcObj;
 
-					val.x = Field(val.x, rect:leftRect, min:min, max:max, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
-					val.y = Field(val.y, rect:rightRect, min:min, max:max, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+					if (slider)
+					{
+						Vector2 newval = val;
+						if (!quadratic) UnityEditor.EditorGUI.MinMaxSlider(ToDisplay(sliderRect), ref newval.x, ref newval.y, min, max);
+						else 
+						{
+							newval = new Vector2(Mathf.Pow(newval.x,0.5f), Mathf.Pow(newval.y,0.5f));
+							UnityEditor.EditorGUI.MinMaxSlider(ToDisplay(sliderRect), ref newval.x, ref newval.y, Mathf.Pow(min,0.5f), Mathf.Pow(max,0.5f));
+							newval = new Vector2(Mathf.Pow(newval.x,2f), Mathf.Pow(newval.y,2f));
+						}
+						if (Mathf.Abs(val.x-newval.x)>0.001f) val.x = StepRound(newval.x);
+						if (Mathf.Abs(val.y-newval.y)>0.001f) val.y = StepRound(newval.y);
+					}
+
+					val.x = Field(val.x, rect:leftRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+					val.y = Field(val.y, rect:rightRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+
+					dstObj = val;
+				}
+				else if (type == typeof(Coord)) 
+				{
+					Rect leftRect = fieldRect.Clamp((int)(fieldRect.width/2f-1));
+					Rect rightRect = fieldRect.ClampFromLeft((int)(fieldRect.width/2f-1));
+
+					Coord val = (Coord)srcObj;
+
+					val.x = Field(val.x, rect:leftRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+					val.z = Field(val.z, rect:rightRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+
+					dstObj = val;
+				}
+				else if (type == typeof(Vector3)) 
+				{
+					Rect leftRect = fieldRect.Clamp((int)(fieldRect.width/3f-1));
+					Rect midRect = fieldRect.Clamp((int)(fieldRect.width/3f-1)); midRect.x += leftRect.width + 3;
+					Rect rightRect = fieldRect.ClampFromLeft((int)(fieldRect.width/3f-1));
+
+					Vector3 val = (Vector3)srcObj;
+
+					val.x = Field(val.x, rect:leftRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+					val.y = Field(val.y, rect:midRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
+					val.z = Field(val.z, rect:rightRect, min:min, max:max, limit:limit, monitorChange:false, disabled:disabled, dragChange:dragChange, slider:false, quadratic:quadratic, tooltip:tooltip);
 
 					dstObj = val;
 				}
@@ -654,6 +775,9 @@ namespace MapMagic
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
 				if (color.a < 0.001f) color = Color.black;
 
+				//exit on markup
+				if (markup) return;
+
 				#if UNITY_EDITOR
 				UnityEditor.EditorGUI.HelpBox(ToDisplay(rect), null, UnityEditor.MessageType.None);
 				for (int p=0; p<curve.points.Length-1; p++)
@@ -680,12 +804,16 @@ namespace MapMagic
 
 			System.Type curveWindowType;
 			AnimationCurve windowCurveRef = null;
-			public void Curve (AnimationCurve src, Rect rect, float min=-200000000, float max=200000000, Color color=new Color(), string tooltip=null)
+			public void Curve (AnimationCurve src, Rect rect, Rect ranges=new Rect(), Color color=new Color(), string tooltip=null)
 			{
 				//if no rect specified - taking all of the next line
+				if (ranges.width < Mathf.Epsilon && ranges.height < Mathf.Epsilon) { ranges.width = 1; ranges.height = 1; }
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
 				if (color.a < 0.001f) color = Color.white;
 				lastChange = false; //custom set change
+
+				//exit on markup
+				if (markup) return;
 
 				#if UNITY_EDITOR
 
@@ -717,7 +845,7 @@ namespace MapMagic
 				}
 				catch {};
 
-				UnityEditor.EditorGUI.CurveField(ToDisplay(rect), src, Color.white, new Rect(0,0,1,1)); 
+				UnityEditor.EditorGUI.CurveField(ToDisplay(rect), src, Color.white, ranges); 
 
 				#endif
 			}
@@ -734,10 +862,14 @@ namespace MapMagic
 				FontStyle fontStyle = FontStyle.Normal,
 				TextAnchor textAnchor = TextAnchor.UpperLeft,
 				bool prefix = false,
+				string icon = null,
 				string tooltip=null )
 			{
 				//if no rect specified - taking all of the next line
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				
+				//exit on markup
+				if (markup) return;
 			
 				//setting styles
 				CheckStyles();
@@ -751,6 +883,9 @@ namespace MapMagic
 				if (style.alignment != textAnchor) labelStyle.alignment = textAnchor;
 				if (style.fontStyle != fontStyle) labelStyle.fontStyle = fontStyle;
 				
+				//icon
+				if (icon!=null) Icon(icon, new Rect(rect.x+4, rect.y, rect.width-8, rect.height), horizontalAlign:IconAligment.min, verticalAlign:IconAligment.center);
+
 				//gui content
 				GUIContent content = new GUIContent(label, tooltip);
 
@@ -774,12 +909,16 @@ namespace MapMagic
 				Val monitorChange = new Val(),
 				Val disabled = new Val(),
 				string icon = null,
+				int iconAnimFrames=0,
 				GUIStyle style = null,
 				string tooltip=null )
 			{
 				CheckStyles();
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
 				GUIContent content = new GUIContent(label, tooltip);
+
+				//exit on markup
+				if (markup) return false;
 				
 				//disabling
 				disabled.Verify(this.disabled);
@@ -803,7 +942,7 @@ namespace MapMagic
 					else SetChange(false);
 				}
 					
-				if (icon!=null) Icon(icon, new Rect(rect.x+4, rect.y, rect.width-8, rect.height), horizontalAlign:IconAligment.min, verticalAlign:IconAligment.center);
+				if (icon!=null) Icon(icon, new Rect(rect.x+4, rect.y, rect.width-8, rect.height), horizontalAlign:IconAligment.min, verticalAlign:IconAligment.center, animationFrames:iconAnimFrames);
 
 				return result;
 			}
@@ -822,7 +961,8 @@ namespace MapMagic
 				string tooltip=null )
 			{
 				CheckStyles();
-				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }		
+				if (markup) return src; //exit on markup
 				GUIContent content = new GUIContent(label, tooltip);
 				
 				bool dst = GUI.Toggle(ToDisplay(rect), src, content, buttonStyle);
@@ -853,6 +993,13 @@ namespace MapMagic
 			{
 				CheckStyles();
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return src; //exit on markup
+
+				//disabling
+				disabled.Verify(this.disabled);
+				#if UNITY_EDITOR
+				if (disabled) UnityEditor.EditorGUI.BeginDisabledGroup(true);
+				#endif
 
 				Rect fieldRect = new Rect(rect.x, rect.y, 20, rect.height);
 				Rect labelRect = new Rect(rect.x+20, rect.y, rect.width-20, rect.height);
@@ -871,6 +1018,11 @@ namespace MapMagic
 				else  dst = UnityEditor.EditorGUI.Toggle(ToDisplay(new Rect(fieldRect.x,fieldRect.y,20,fieldRect.height)), src, UnityEditor.EditorStyles.miniButton);
 				#endif
 
+				//end disabling
+				#if UNITY_EDITOR
+				if (disabled) UnityEditor.EditorGUI.EndDisabledGroup();
+				#endif
+
 				monitorChange.Verify(this.monitorChange);
 				if (monitorChange)
 				{
@@ -881,38 +1033,324 @@ namespace MapMagic
 				return dst;
 			}
 
-			public void Foldout (ref bool src, string label = null, Rect rect = new Rect(), Val disabled = new Val(), string tooltip=null )
-			{ src = Foldout(src, label, rect, disabled, tooltip);}
+			public void LayersField (ref int src, string label = null, Rect rect = new Rect(), Val monitorChange = new Val(), Val disabled = new Val(), string onIcon=null, string offIcon=null, string tooltip=null )
+				{ src = LayersField(src, label, rect, monitorChange, disabled, onIcon, offIcon, tooltip);}
+			public int LayersField (
+				int src,
+				string label = null,
+				Rect rect = new Rect(),  
+				Val monitorChange = new Val(),
+				Val disabled = new Val(),
+				string onIcon=null, string offIcon=null, 
+				string tooltip=null )
+			{
+				CheckStyles();
+				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return src; //exit on markup
+
+				//disabling
+				disabled.Verify(this.disabled);
+				#if UNITY_EDITOR
+				if (disabled) UnityEditor.EditorGUI.BeginDisabledGroup(true);
+				#endif
+
+				//finding field and label rects
+				if (label==null) fieldSize = 1;
+				Rect labelRect = rect.Clamp(1f-fieldSize); //new Rect(rect.x, rect.y, (1f-_fieldSize)*rect.width, rect.height);
+				Rect fieldRect = rect.ClampFromLeft((float)fieldSize); //new Rect(rect.x+(1f-_fieldSize)*rect.width, rect.y, _fieldSize*rect.width, rect.height);
+
+				if (label != null) Label(label, labelRect);
+
+				int dst = src;
+				#if UNITY_EDITOR
+				if (zoom > 0.99f) dst = UnityEditor.EditorGUI.MaskField(ToDisplay(fieldRect),src, UnityEditorInternal.InternalEditorUtility.layers);
+				else dst = UnityEditor.EditorGUI.LayerField(ToDisplay(fieldRect), src, enumZoomStyle);
+				#endif
+
+				//end disabling
+				#if UNITY_EDITOR
+				if (disabled) UnityEditor.EditorGUI.EndDisabledGroup();
+				#endif
+
+				monitorChange.Verify(this.monitorChange);
+				if (monitorChange)
+				{
+					if (dst != src) SetChange(true);
+					else SetChange(false);
+				}
+					
+				return dst;
+			}
+
+			public void Foldout (ref bool src, string label = null, Rect rect = new Rect(), Val disabled = new Val(), string tooltip=null, bool bold=true )
+			{ src = Foldout(src, label, rect, disabled, tooltip, bold);}
 
 			public bool Foldout (
 				bool src,
 				string label = null,
 				Rect rect = new Rect(),  
 				Val disabled = new Val(),
-				string tooltip=null )
+				string tooltip=null,
+				bool bold=true )
 			{
 				CheckStyles();
 				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return src; //exit on markup
 				GUIContent content = new GUIContent(label, tooltip);
+				if (bold) foldoutStyle.fontStyle = FontStyle.Bold; else foldoutStyle.fontStyle = FontStyle.Normal;
+
+				//offset rect to make triangle within field
+				rect.x += 12; rect.width -= 12;
 				
 				#if UNITY_EDITOR
-				return UnityEditor.EditorGUI.Foldout(ToDisplay(rect), src, content, true, foldoutStyle);
+				GUIUtility.GetControlID(FocusType.Passive);
+				bool dst = UnityEditor.EditorGUI.Foldout(ToDisplay(rect), src, content, true, foldoutStyle);
+				//if (ToDisplay(rect).Contains( GUIUtility.GUIToScreenPoint(Event.current.mousePosition-) )) Debug.Log("H");
+				//GUIUtility.
+				if (src != dst) UnityEditor.EditorGUI.FocusTextInControl("");
+				return dst;
 				#else
 				return false;
 				#endif
 			}
 
-			public void Spline (Vector2 pos1, Vector2 pos2, Color color=new Color(), bool invert=false)
+			public void ToggleFoldout (
+				ref bool unfolded,
+				ref bool enabled,
+				string label = null,
+				Rect rect = new Rect(),  
+				Val disabled = new Val(),
+				string tooltip=null)
+			{
+				CheckStyles();
+				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return; //exit on markup
+				label = "     " + label;
+				GUIContent content = new GUIContent(label, tooltip);
+				foldoutStyle.fontStyle = FontStyle.Normal;
+				
+				#if UNITY_EDITOR
+				Rect foldoutRect = new Rect(rect.x+12, rect.y, 10, rect.height);
+				unfolded = UnityEditor.EditorGUI.Foldout(ToDisplay(foldoutRect), unfolded, " ", true, foldoutStyle);
+				
+				Rect fieldRect = new Rect(rect.x+20, rect.y, 20, rect.height);
+				if (zoom > 0.75f) enabled = UnityEditor.EditorGUI.Toggle(ToDisplay(fieldRect), enabled);
+				else  enabled = UnityEditor.EditorGUI.Toggle(ToDisplay(fieldRect), enabled, UnityEditor.EditorStyles.miniButton);
+
+				Rect labelRect = new Rect(rect.x+20, rect.y, rect.width-50, rect.height);
+				UnityEditor.EditorGUI.LabelField(ToDisplay(labelRect), content);
+				#endif
+			}
+
+			public void Gauge (float progress, string label, Rect rect = new Rect(),  Val disabled = new Val(), string tooltip=null)
+			{
+				CheckStyles();
+				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return; //exit on markup
+				GUIContent content = new GUIContent(label, tooltip);
+
+				#if UNITY_EDITOR
+				if (disabled) UnityEditor.EditorGUI.BeginDisabledGroup(true);
+				UnityEditor.EditorGUI.ProgressBar(ToDisplay(rect), progress, label);
+				if (disabled) UnityEditor.EditorGUI.EndDisabledGroup();
+				#endif
+			}
+
+			public int Popup (int selected, string[] displayedOptions, string label=null, Rect rect = new Rect(),  Val disabled = new Val(), string tooltip=null)
+			{
+				CheckStyles();
+				if (rect.width < 0.9f && rect.height < 0.9f) { Par(); rect = Inset(); }
+				if (markup) return selected; //exit on markup
+				GUIContent content = new GUIContent(label, tooltip);
+
+				int newSelected = selected;
+				#if UNITY_EDITOR
+				newSelected = UnityEditor.EditorGUI. Popup(ToDisplay(rect), selected, displayedOptions);
+				#endif
+
+				if (newSelected != selected) SetChange(true);
+				else SetChange(false);
+
+				return newSelected;
+			}
+
+			#if UNITY_EDITOR
+			public void MaterialEditor (UnityEditor.MaterialEditor matEd)
+			{
+				UnityEditor.EditorGUILayout.BeginVertical();
+				UnityEditor.EditorGUILayout.LabelField("", GUILayout.Height(cursor.y + cursor.height));
+				UnityEditor.EditorGUI.indentLevel = 0;
+				matEd.DrawHeader (); 
+				matEd.OnInspectorGUI (); 
+				UnityEditor.EditorGUILayout.EndVertical();
+				//TODO: have to determine space used to make an offset, but 
+			}
+			#endif
+
+			//static Vector3[] splinePoints = new Vector3[100];
+			static Texture2D splineTex = null;
+			public void Spline (Vector2 pos1, Vector2 pos2, Color color=new Color(), int steps=10)
 			{
 				#if UNITY_EDITOR
 				pos1 = ToDisplay(pos1); pos2 = ToDisplay(pos2);
 				if (color.a < 0.001f) color = Color.black;
-				
+
 				float distance = (pos2-pos1).magnitude;
 
-				if (invert) UnityEditor.Handles.DrawBezier(pos2, pos1, new Vector2(pos2.x + distance/3, pos2.y), new Vector2(pos1.x-distance/3, pos1.y), color, null, 3f*zoom+2f);
-				else UnityEditor.Handles.DrawBezier(pos1, pos2, new Vector2(pos1.x + distance/3, pos1.y), new Vector2(pos2.x-distance/3, pos2.y), color, null, 3f*zoom+2f);
+				//preparing texture
+				if (splineTex == null) splineTex = Resources.Load("DPLayout_SplineTex") as Texture2D;
+
+				//old skin
+				UnityEditor.Handles.DrawBezier(pos1, pos2, new Vector2(pos1.x + distance/3, pos1.y), new Vector2(pos2.x-distance/3, pos2.y), color, null, 3f*zoom+2f);
+
+				//20 skin
+				//UnityEditor.Handles.DrawBezier(pos1, pos2, new Vector2(pos1.x + distance/3, pos1.y), new Vector2(pos2.x-distance/3, pos2.y), color, splineTex, 4f*zoom+2f);
+
+
+				
+				/*//manual spline
+				steps = ((steps-1)/10 + 1) * 10;  //steps is always multiples of 10
+
+				Vector2 tan1 = new Vector2(pos1.x + distance/3, pos1.y);
+				Vector2 tan2 = new Vector2(pos2.x-distance/3, pos2.y);
+
+				for (int i=0; i<steps; i++)
+				{
+					float p = 1f*i/steps;
+					float ip = 1f-p;
+					splinePoints[i] = ip*ip*ip*pos1 + 3*p*ip*ip*tan1 + 3*p*p*ip*tan2 + p*p*p*pos2;
+				}
+				UnityEditor.Handles.DrawAAPolyLine(splineTex, 4f, steps, splineTex);
+				*/
+
 				#endif
+			}
+
+			public T ScriptableAssetField<T> (T asset, System.Func<T> construct, string savePath=null, Val fieldSize = new Val()) where T : ScriptableObject, ISerializationCallbackReceiver
+			//construct should always be determined, even if it is null. Otherwise it will cause unhandled exception in unity pre-5.5
+			{
+				fieldSize.Verify(this.fieldSize);
+				bool prevChange = change;
+				change = false;
+
+				//data label
+				Par(); Label("Data", Inset(1-fieldSize.val));
+				asset = Field(asset, rect:Inset(fieldSize.val));
+				if (lastChange && asset!=null) asset.OnAfterDeserialize();
+					
+				//create/reset buttons
+				#if UNITY_EDITOR
+				Par(18); Inset(1-fieldSize.val);
+				if (asset==null)
+				{
+					if (Button("Create", rect:Inset(fieldSize.val))) 
+					{
+						if (construct==null) asset = ScriptableObject.CreateInstance<T>();
+						else asset = construct();
+					}
+				}
+				else 
+				{
+					if (Button("Reset", rect:Inset(fieldSize.val))) 
+					{
+						if (UnityEditor.EditorUtility.DisplayDialog("Reset to Default", "This will remove all of the data and create a default one. Are you sure you wsih to continue?", "Reset to Default", "Cancel"))
+						{
+							if (construct==null) asset = ScriptableObject.CreateInstance<T>();
+							else asset = construct();
+						}
+					}
+				}
+
+				//save/release buttons
+				Par(18); Inset(1-fieldSize.val);
+				if (asset==null || !UnityEditor.AssetDatabase.Contains(asset))
+				{ 
+					if (Button("Store to Assets", rect:Inset(fieldSize.val), disabled:asset==null)) asset = SaveAsset(asset,savePath);
+				}
+				else 
+				{ 
+					if (Button("Release", rect:Inset(fieldSize.val), disabled:asset==null)) asset = ReleaseAsset(asset);
+				}
+
+				//save copy button
+				Par(18); Inset(1-fieldSize.val);
+				if (Button("Save as Copy", rect:Inset(fieldSize.val), disabled:asset==null))
+				{
+					T copyAsset = ScriptableObject.Instantiate<T>(asset);
+					SaveAsset(copyAsset,savePath);
+				}
+				#endif
+
+				if (change) lastChange = true;
+				change = prevChange || lastChange;
+
+				return asset;
+			}
+
+			private T SaveAsset<T> (T asset, string savePath=null) where T : ScriptableObject, ISerializationCallbackReceiver
+			{
+				#if UNITY_EDITOR
+				if (savePath==null) savePath = UnityEditor.EditorUtility.SaveFilePanel(
+					"Save Data as Unity Asset",
+					"Assets",
+					"Data.asset", 
+					"asset");
+				if (savePath!=null && savePath.Length!=0)
+				{
+					savePath = savePath.Replace(Application.dataPath, "Assets");
+
+					UnityEditor.Undo.RecordObject(undoObject, undoName+" Save Data");
+					
+					UnityEditor.AssetDatabase.CreateAsset(asset, savePath);
+					asset.OnBeforeSerialize();
+					UnityEditor.AssetDatabase.SaveAssets();
+
+					UnityEditor.EditorUtility.SetDirty(undoObject);
+					change = true;
+				}
+				#endif
+
+				return asset;
+			} 
+
+			public T SaveAnyAsset<T> (T asset, string savePath=null, string filename="Data", string type="asset") where T : UnityEngine.Object
+			{
+				#if UNITY_EDITOR
+				if (savePath==null) savePath = UnityEditor.EditorUtility.SaveFilePanel(
+					"Save Data as Unity Asset",
+					"Assets",
+					filename, 
+					type);
+				if (savePath!=null && savePath.Length!=0)
+				{
+					savePath = savePath.Replace(Application.dataPath, "Assets");
+
+					UnityEditor.Undo.RecordObject(undoObject, undoName+" Save Data");
+					
+					UnityEditor.AssetDatabase.CreateAsset(asset, savePath);
+					if (asset is ISerializationCallbackReceiver) ((ISerializationCallbackReceiver)asset).OnBeforeSerialize();
+					UnityEditor.AssetDatabase.SaveAssets();
+
+					UnityEditor.EditorUtility.SetDirty(undoObject);
+					change = true;
+				}
+				#endif
+
+				return asset;
+			}
+
+			private T ReleaseAsset<T> (T asset, string savePath=null) where T : ScriptableObject, ISerializationCallbackReceiver
+			{
+				#if UNITY_EDITOR
+				UnityEditor.Undo.RecordObject(undoObject, undoName+" Release Data");
+				UnityEditor.EditorUtility.SetDirty(undoObject);
+
+				asset = ScriptableObject.Instantiate<T>(asset); 
+
+				change = true;
+				#endif
+
+				return asset;
 			}
 
 			#pragma warning restore 0219,0414 
@@ -1075,297 +1513,261 @@ namespace MapMagic
 
 		#region Layered
 
-			public interface ILayered
+			public void DrawArrayAdd<T> (ref T[] layers, ref int selected, Rect rect, bool reverse=false, Func<T> createElement=null, Action<int> onAdded=null, GUIStyle style=null)  //createElement is called to return element before it was added. onAdded called after the element has been added.
 			{
-				int selected { get; set; }
-				
-				int collapsedHeight { get; set; }
-				int extendedHeight {get; set; }
-
-				ILayer[] layers { get; set; }
-
-				//void Add (int num);
-				//void Remove (int num);
-				//void Switch (int n1, int n2);
-
-				ILayer def { get; }
-			}
-
-			public interface ILayer
-			{
-				bool pinned { get; }
-				void OnCollapsedGUI (Layout layout);
-				void OnExtendedGUI (Layout layout); 
-				void OnAdd (int n);
-				void OnRemove (int n); 
-				void OnSwitch (int o, int n);
-				int guiHeight { get; set; }
-			}
-
-			public void DrawArrayAdd<T> (ref T[] layers, ref int selected, Rect rect, System.Action<int> onAdded=null, T def = default(T))
-			{
-				if (Button(rect:rect, tooltip:"Add new array element")) 
+				if (Button(rect:rect, tooltip:"Add new array element", style:style)) 
 				{ 
 					if (OnBeforeChange != null) OnBeforeChange();
-					layers = ArrayTools.Add(layers, selected, element:def);
-					selected++;
-					if (onAdded != null) onAdded(selected);
-					selected = Mathf.Clamp(selected, 0, layers.Length-1);
+					if (selected >= 0)
+					{
+						layers = ArrayTools.Insert(layers, selected + (reverse?1 : 0), createElement:createElement);
+						if (reverse) selected++;
+						if (onAdded != null) onAdded(selected);
+						selected = Mathf.Clamp(selected, 0, layers.Length-1);
+					}
+					else //if nothing selected adding to the end
+					{
+						layers = ArrayTools.Add(layers, createElement:createElement);
+						if (onAdded != null) onAdded(layers.Length-1);
+					}
 					change = true; lastChange = true;
+
+					#if UNITY_EDITOR
+					UnityEditor.EditorGUI.FocusTextInControl("");
+					#endif
 				}
 				Icon("DPLayout_Add", rect, IconAligment.center, IconAligment.center);
 			}
 
-			public void DrawArrayRemove<T> (ref T[] layers, ref int selected, Rect rect, int min=0, int max=-1, System.Action<int> onBeforeRemove=null, System.Action<int> onRemoved=null) //where T : ILayer
+			public void DrawArrayRemove<T> (ref T[] layers, ref int selected, Rect rect, bool reverse=false, System.Action<int> onBeforeRemove=null, System.Action<int> onRemoved=null, GUIStyle style=null) //where T : ILayer
 			{
-				if (max<0) max = layers.Length;
-				if (Button(rect:rect, tooltip:"Remove element") &&
-					selected < max && selected >= min)
+				if (Button(rect:rect, tooltip:"Remove element", style:style) &&
+					selected < layers.Length && selected >= 0)
 				{
 					if (OnBeforeChange != null) OnBeforeChange();
 					if (onBeforeRemove != null) onBeforeRemove(selected);
 					layers = ArrayTools.RemoveAt(layers, selected);
 					if (onRemoved != null) onRemoved(selected);
-					selected--; 
-					selected = Mathf.Max(selected,0); 
+					if (reverse) selected--; 
+					selected = Mathf.Clamp(selected,0,layers.Length-1);
 					change = true; lastChange = true;
+
+					#if UNITY_EDITOR
+					UnityEditor.EditorGUI.FocusTextInControl("");
+					#endif
 				}
 				Icon("DPLayout_Remove", lastRect, IconAligment.center, IconAligment.center);
 			}
 
-			public void DrawArrayUp<T> (ref T[] layers, ref int selected, Rect rect, int min=0, int max=-1, bool reverseOrder=true, System.Action<int,int> onSwitch=null) //where T : ILayer
+			public void DrawArrayDown<T> (ref T[] layers, ref int selected, Rect rect, bool dispUp=false, System.Action<int,int> onSwitch=null, GUIStyle style=null) //where T : ILayer
 			{
-				if (max<0) max = layers.Length;
-				if (Button(rect:rect, tooltip:"Move selected " + (reverseOrder? "up" : "down")) && 
-					selected < max-1 && selected >= min) 
+				if (Button(rect:rect, tooltip:"Move selected " + (dispUp? "up" : "down"), style:style) && 
+					selected < layers.Length-1 && selected >= 0) 
 				{ 
 					if (OnBeforeChange != null) OnBeforeChange();
 					ArrayTools.Switch(layers, selected, selected+1);
 					selected++; 
 					if (onSwitch != null) onSwitch(selected-1, selected);
-					Debug.Log((selected-1) + " " + selected);
 					change = true; lastChange = true;
+
+					#if UNITY_EDITOR
+					UnityEditor.EditorGUI.FocusTextInControl("");
+					#endif
 				}
-				Icon(reverseOrder? "DPLayout_Up" : "DPLayout_Down", lastRect, IconAligment.center, IconAligment.center);
+				Icon(dispUp? "DPLayout_Up" : "DPLayout_Down", lastRect, IconAligment.center, IconAligment.center);
 			}
 
-			public void DrawArrayDown<T> (ref T[] layers, ref int selected, Rect rect, int min=0, int max=-1, bool reverseOrder=true, System.Action<int,int> onSwitch=null) //where T : ILayer
+			public void DrawArrayUp<T> (ref T[] layers, ref int selected, Rect rect, bool dispDown=false, System.Action<int,int> onSwitch=null, GUIStyle style=null) //where T : ILayer
 			{
-				if (max<0) max = layers.Length;
-				if (Button(rect:rect, tooltip:"Move selected " + (reverseOrder? "down" : "up")) && 
-					selected < max && selected > min)
+				if (Button(rect:rect, tooltip:"Move selected " + (dispDown? "down" : "up"), style:style) && 
+					selected < layers.Length && selected > 0)
 				{  
 					if (OnBeforeChange != null) OnBeforeChange();
 					ArrayTools.Switch(layers, selected, selected-1); 
 					selected--; 
 					if (onSwitch != null) onSwitch(selected+1, selected);
 					change = true; lastChange = true;
-				}
-				Icon(reverseOrder? "DPLayout_Down" : "DPLayout_Up", lastRect, IconAligment.center, IconAligment.center);
-			}
-				 
-
-			public void DrawLayered<T> (T[] layers, ref int selected, int min=0, int max=-1, bool reverseOrder=true, bool selectable=true, System.Action<T,Layout,int,bool> onLayerGUI=null) //where T : ILayer
-			{
-				Rect backgroundRect = new Rect(0,0,0,0);
-				Rect backgroundStartCursor = new Rect(0,0,0,0);
-				int newSelected = selected;
-				if (max<0) max = layers.Length;
-
-				#region Layers
-				for (int i=min; i<max; i++)
-				{
-					int num = i;
-					if (reverseOrder) num = layers.Length-1 - i + min;
-
-					T layer = layers[num];
-
-					Par(2);
-
-					bool mousePressed = Event.current.type==EventType.MouseUp; //saving mouse state before drawing layer - it will be needed to select layers
-
-					Rect startCursor = cursor;
-					bool prevMarkup = markup; 
-					if (num==selected) markup = true;
-					if (onLayerGUI != null) onLayerGUI(layer, this, num, num==selected); 
-					markup = prevMarkup;
-					Rect endCursor = cursor;
-
-					Par(3);
-				
-					float rectHeight = endCursor.y-startCursor.y + endCursor.height;
-					Rect layerRect = new Rect(startCursor.x-1, startCursor.y+startCursor.height+1, endCursor.x-startCursor.x, rectHeight-1); //-1 is initial padding
-					layerRect.y += field.y;
-					//Label("", layerRect, helpbox: true);
-
-					if (num==selected) //saving background
-					{
-						backgroundRect = layerRect;
-						backgroundStartCursor = startCursor;
-					}
-					else //selecting
-					{
-						#if UNITY_EDITOR
-						if (mousePressed && layerRect.Contains(ToInternal(Event.current.mousePosition))) 
-						{
-							newSelected = num;
-							UnityEditor.EditorGUI.FocusTextInControl(""); //stop writing on selection change
-						}
-						#endif
-					}
-
-					
-				}
-				#endregion
-
-				#region Background and re-drawing selected layer above
-				if (backgroundRect.width>0.1f && backgroundRect.height>0.1f && selected>=0)
-				{
-					backgroundRect = backgroundRect.Extend(5);
-					GUI.Box(ToDisplay(backgroundRect), "");
-
-					Rect savedCursor = cursor;
-					cursor = backgroundStartCursor;
-					onLayerGUI(layers[selected], this, selected, true);
-					cursor = savedCursor;
-				}
-				#endregion
-
-				selected = newSelected;
-				if (!selectable) selected = -1;
-			}
-
-			public void DrawLayered (ILayered splatOut, string label="", string tooltip="", bool reverseOrder=true, bool selectable=true, bool drawButtons=true)
-			{
-				ILayer[] layers = splatOut.layers;
-
-				//array buttons
-				if (drawButtons)
-				{
-					Par();
-					if (label.Length != 0) Label(label, Inset(0.4f), tooltip:tooltip);
-
-					if (Button(rect:Inset(0.15f), tooltip:"Add new array element")) 
-					{ 
-						if (OnBeforeChange != null) OnBeforeChange();
-						splatOut.layers = ArrayTools.Add(splatOut.layers, splatOut.selected, element:splatOut.def);
-						splatOut.selected++;
-						splatOut.selected = Mathf.Clamp(splatOut.selected, 0, splatOut.layers.Length-1);
-						splatOut.layers[splatOut.selected].OnAdd(splatOut.selected);
-						change = true; lastChange = true;
-					}
-					Icon("DPLayout_Add", lastRect, IconAligment.center, IconAligment.center);
-
-
-					if (Button(rect:Inset(0.15f), tooltip:"Remove element") &&
-						splatOut.selected < layers.Length &&
-						!layers[splatOut.selected].pinned)
-					{
-						if (OnBeforeChange != null) OnBeforeChange();
-						splatOut.layers[splatOut.selected].OnRemove(splatOut.selected);
-						splatOut.layers = ArrayTools.RemoveAt(splatOut.layers, splatOut.selected);
-						splatOut.selected--; 
-						splatOut.selected = Mathf.Max(splatOut.selected,0); 
-						change = true; lastChange = true;
-					}
-					Icon("DPLayout_Remove", lastRect, IconAligment.center, IconAligment.center);
-
-					if (Button(rect:Inset(0.15f), tooltip:"Move selected up") && 
-						splatOut.selected < layers.Length-1 &&
-						!layers[splatOut.selected].pinned && !layers[splatOut.selected+1].pinned) 
-					{ 
-						if (OnBeforeChange != null) OnBeforeChange();
-						ArrayTools.Switch(splatOut.layers, splatOut.selected, splatOut.selected+1);
-						splatOut.selected++; 
-						change = true; lastChange = true;
-					}
-					Icon("DPLayout_Up", lastRect, IconAligment.center, IconAligment.center);
-
-					if (Button(rect:Inset(0.15f), tooltip:"Move selected down") && 
-						splatOut.selected != 0 &&
-						!layers[splatOut.selected].pinned && !layers[splatOut.selected-1].pinned) 
-					{  
-						if (OnBeforeChange != null) OnBeforeChange();
-						ArrayTools.Switch(splatOut.layers, splatOut.selected, splatOut.selected-1); 
-						splatOut.selected--; 
-						change = true; lastChange = true;
-					}
-					Icon("DPLayout_Down", lastRect, IconAligment.center, IconAligment.center);
-					Par(2);
-				}
-
-				//drawing selection background
-				if (splatOut.selected<layers.Length && splatOut.selected>=0)
-				{
-					Rect savedRect = cursor;
-
-					int selectedLine = splatOut.selected;
-					if (reverseOrder) selectedLine = layers.Length-1 - splatOut.selected; //num inversed from bottom
-					Par( Mathf.Max(1, (selectedLine*(splatOut.collapsedHeight+8)+3)) ); //par 0 will create line 18
-				
-					Par(splatOut.extendedHeight, margin:3, padding:0);
-					margin = 0; rightMargin = 7;
-					Rect backgroundRect = Inset(margin:3, rightMargin:3, padding:0); backgroundRect.y-=3; backgroundRect.height += 8;
-					GUI.Box(ToDisplay(backgroundRect), "");
 
 					#if UNITY_EDITOR
-//					if (UnityEditor.EditorGUIUtility.isProSkin) DrawIcon(ToBase(backgroundRect), "MapMagic_LayerBackground_pro");
+					UnityEditor.EditorGUI.FocusTextInControl("");
 					#endif
-
-					cursor = savedRect;
 				}
+				Icon(dispDown? "DPLayout_Down" : "DPLayout_Up", lastRect, IconAligment.center, IconAligment.center);
+			}
 
-				//drawing layers
-				int newSelected = splatOut.selected;
-				margin += 4; rightMargin += 1;
-				for (int i=0; i<layers.Length; i++)
+
+			public Rect GetBackgroundRect (Action<Layout> onGUI, bool fullWidth=true)
+			{
+				//saving margins (margins changed during ongui can cause increasing odffset)
+				int lMargn = margin;
+				int rMargin = rightMargin;
+
+				//rendering in markup mode
+				Rect startCursor = cursor;
+				bool prevMarkup = markup; 
+				markup = true;
+				onGUI(this); 
+				markup = prevMarkup;
+				Rect endCursor = cursor;
+				Par(0, margin:0);
+
+				//calculating rect
+				Rect layerRect = new Rect(
+					startCursor.x, 
+					startCursor.y, 
+					endCursor.x-startCursor.x, 
+					endCursor.y-startCursor.y + endCursor.height); //-1 is initial padding
+				layerRect.y += field.y;
+
+				//making rect full width
+				if (fullWidth)
 				{
-					int num = i;
-					if (reverseOrder) num = layers.Length-1 - i;
-
-					ILayer layer = layers[num];
-					bool selected = num==splatOut.selected;
-
-					Par(3);
-
-					if (!selected) 
-					{
-						//selecting
-						#if UNITY_EDITOR
-						Rect selectRect = new Rect(margin, cursor.y, field.width-margin-rightMargin, 20);
-						selectRect.position += field.position;
-						selectRect = ToDisplay(selectRect);
-						if (Event.current.type == EventType.MouseDown && selectRect.Contains(Event.current.mousePosition) ) newSelected = num;
-						#endif
-
-						Rect beforeGui = cursor; 
-						layer.OnCollapsedGUI(this);
-						Rect afterGui = cursor;
-
-						splatOut.collapsedHeight = (int)((afterGui.y+afterGui.height)-(beforeGui.y+beforeGui.height)); 
-					}
-
-					else
-					{
-						Rect beforeGui = cursor; 
-						layer.OnExtendedGUI(this);
-						Rect afterGui = cursor;
-
-						splatOut.extendedHeight = (int)((afterGui.y+afterGui.height)-(beforeGui.y+beforeGui.height)); 
-					}
-
-					Par(5);
+					layerRect.x = field.x;// + margin;
+					layerRect.width = field.width;// - margin - rightMargin;
 				}
 
-				//changing selection
-				if (selectable && splatOut.selected != newSelected)
+				//returning cursor
+				cursor = startCursor;
+
+				//restoring margins
+				margin = lMargn;
+				rightMargin = rMargin;
+
+				return layerRect;
+			}
+
+			public void DrawLayer (Action<Layout,bool,int> onGUI, ref int selectedNum, int num, int heightSpacing=3, int widthOffset=3)  //heightSpacing - vertical margins from contents expanding background. WidthOffset - horizontal offset from field borders shrinking background
+			{
+				Par(0); //starting from new line
+
+				//selected num should not be changed unless layer is rendered twice
+				bool curIsSelected = selectedNum==num;
+
+				//calculating background rect
+				Rect backgroundRect = GetBackgroundRect( (Layout tmp) => { Par(heightSpacing,margin:0); onGUI(this, curIsSelected, num); Par(heightSpacing,margin:0); } );
+
+				//modifying background rect
+				backgroundRect.x += widthOffset;
+				backgroundRect.width -= widthOffset*2;
+
+				//selecting
+				#if UNITY_EDITOR
+				if (Event.current.type==EventType.MouseUp && backgroundRect.Contains(ToInternal(Event.current.mousePosition))) 
 				{
-					#if UNITY_EDITOR
-					UnityEditor.EditorGUI.FocusTextInControl(""); //stop writing on selection change
-					#endif
-					splatOut.selected = newSelected;
+					if (!curIsSelected) UnityEditor.EditorGUI.FocusTextInControl(""); //stop writing on selection change
+					selectedNum = num;
 				}
-				if (!selectable) splatOut.selected = -1;
+				#endif
+
+				//drawing background
+				#if UNITY_EDITOR
+				//GUI.Box(ToDisplay(backgroundRect), "");
+				//Texture2D backGround = GetIcon("DPLayout_LayerInactive");
+				//GUI.DrawTexture( ToDisplay(backgroundRect), 
+				if (curIsSelected) Element("DPLayout_LayerActive", backgroundRect, new RectOffset(4,4,4,4), new RectOffset(0,0,1,1));
+				else Element("DPLayout_LayerInactive", backgroundRect, new RectOffset(4,4,4,4), new RectOffset(0,0,1,1));
+				#endif
+
+				//marking change
+				bool layoutChange = change;
+				change = false;
+
+				//drawing layer
+				Par(heightSpacing,margin:0);
+				onGUI(this, curIsSelected, num); //with old selected value
+				Par(heightSpacing,margin:0);
+				Par(0, margin:0);
+
+				//returning last change (selection change not taken into account!)
+				lastChange = change;
+				change = layoutChange || lastChange;
+			}
+
+			public void Foreground (Rect startAnchor, Rect endAnchor, int padding=3)
+			{
+				Vector2 start = startAnchor.position;
+				Vector2 end = endAnchor.position + endAnchor.size;
+
+				Element("DPLayout_FoldoutBackground", 
+					new Rect(
+						start.x-padding, 
+						start.y-padding, 
+						end.x-start.x + padding*2, 
+						end.y-start.y + padding*2), 
+					new RectOffset(6,6,6,6), null);
+			}
+
+			public void Foreground (Rect startAnchor, int padding=3)
+			{
+				Par(0,padding:0); Inset(1);
+				Rect endAnchor = lastRect;
+				
+				Vector2 start = startAnchor.position;
+				Vector2 end = endAnchor.position + endAnchor.size;
+
+				Element("DPLayout_FoldoutBackground", 
+					new Rect(
+						start.x-padding, 
+						start.y-padding, 
+						end.x-start.x + padding*2, 
+						end.y-start.y + padding*2), 
+					new RectOffset(6,6,6,6), null);
+			}
+
+		#endregion
+
+		#region Material
+			
+			public void MatKeyword (Material mat, string keyword, string label)
+			{
+				bool state = mat.IsKeywordEnabled(keyword);
+				Toggle(ref state, label);
+				if (lastChange) 
+				{
+					if (state) mat.EnableKeyword(keyword); 
+					else mat.DisableKeyword(keyword);
+				}
+			}
+
+			public void MatField<T> (Material mat, string name, string label=null, Rect rect = new Rect(), float min=-200000000, float max=200000000, bool limit=true, Val fieldSize = new Val(), Val sliderSize = new Val(), Val monitorChange = new Val(), Val useEvent = new Val(), Val disabled = new Val(), Val dragChange = new Val(), Val slider = new Val(), Val quadratic = new Val(), Val allowSceneObject = new Val(), Val delayed = new Val(), GUIStyle style=null, string tooltip=null, bool zwOfVector4=false)
+			{ 
+				if (mat==null || !mat.HasProperty(name)) return; //Field(default(T), label, disabled: true);
+				Vector4 fullVector = new Vector4();
+
+				T prop = default(T);
+				if (typeof(T) == typeof(float)) prop = (T)(object)mat.GetFloat(name);
+				else if (typeof(T) == typeof(int)) prop = (T)(object)mat.GetInt(name);
+				else if (typeof(T) == typeof(Color)) prop = (T)(object)mat.GetColor(name);
+				else if (typeof(T) == typeof(Vector2))
+				{
+					fullVector = mat.GetVector(name);
+					if (!zwOfVector4) prop = (T)(object)new Vector2(fullVector.x, fullVector.y);
+					else prop = (T)(object)new Vector2(fullVector.z, fullVector.w);
+				}
+				else if (typeof(T) == typeof(Vector4)) prop = (T)(object)mat.GetVector(name);
+				else if (typeof(T) == typeof(Texture)) prop = (T)(object)mat.GetTexture(name);
+				
+
+				prop = Field<T> (prop, label, rect, min, max, limit, fieldSize, sliderSize, monitorChange, markup, useEvent, disabled, dragChange, slider, quadratic, allowSceneObject, delayed, style, tooltip); 
+
+
+				if (lastChange)
+				{
+					if (typeof(T) == typeof(float)) mat.SetFloat(name, (float)(object)prop);
+					else if (typeof(T) == typeof(int)) mat.SetInt(name, (int)(object)prop);
+					else if (typeof(T) == typeof(Color)) mat.SetColor(name, (Color)(object)prop);
+					else if (typeof(T) == typeof(Vector2))
+					{
+						Vector2 vec = (Vector2)(object)prop;
+						if (!zwOfVector4) { fullVector.x=vec.x; fullVector.y=vec.y; }
+						else { fullVector.z=vec.x; fullVector.w=vec.y; }
+						mat.SetVector(name, fullVector);
+					}
+					else if (typeof(T) == typeof(Vector4) || typeof(T) == typeof(Vector2)) mat.SetVector(name, (Vector4)(object)prop);
+					else if (typeof(T) == typeof(Texture)) mat.SetTexture(name, (Texture)(object)prop);
+				}
+			
+			
 			}
 
 		#endregion

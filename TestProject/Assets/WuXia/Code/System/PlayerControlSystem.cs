@@ -77,7 +77,7 @@ namespace WX
 
                     if (Input.GetMouseButtonUp(0))
                     {
-                        if (hit.collider.tag == "Terrain")
+                        if (hit.collider.name.Contains("Terrain"))
                         {
                             m_Players.AiControl[i].SetTarget(hit.point, (int)TragetType.Field, -1);
                             return;

@@ -6,6 +6,9 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
 {
 
     public bool IsNeedModelBlockOut = false;
+
+
+
     private Vector3 _wordpos = Vector3.zero;
     private Camera _camera3D;
     private Camera _camera2D;
@@ -26,6 +29,8 @@ public class BaseCorrespondenceByModelControl : MonoBehaviour
         {
             transform.localScale = Vector3.zero;
         }
+
+
     }
 
     public virtual void Init(Camera camera3D, Camera camera2D, Vector3 target)

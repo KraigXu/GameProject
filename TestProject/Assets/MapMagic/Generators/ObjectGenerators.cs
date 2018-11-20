@@ -1,14 +1,15 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//using Plugins;
+using MapMagic;  
 
 namespace MapMagic
 {
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Scatter", disengageable = true)]
-	public class ScatterGenerator1 : Generator
+	[GeneratorMenu (menu="Objects", name ="Scatter", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Scatter")]
+	public class ScatterGenerator184 : Generator
 	{
 		public Input probability = new Input(InoutType.Map);
 		public Output output = new Output(InoutType.Objects);
@@ -23,32 +24,34 @@ namespace MapMagic
 		public float relax = 0.1f;
 		public int safeBorders = 2;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
-			Matrix probMatrix = (Matrix)probability.GetObject(chunk);
-			if (!enabled || chunk.stop) return;
-			SpatialHash spatialHash = chunk.defaultSpatialHash;
+			Matrix probMatrix = (Matrix)probability.GetObject(results);
+			if (!enabled || (stop!=null && stop(0))) return;
+			SpatialHash spatialHash = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
 			
 			//initializing random
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + seed + chunk.coord.x*1000 + chunk.coord.z);
+			InstanceRandom rnd = new InstanceRandom(seed + this.seed + terrainSize.Seed(rect));
 
-			float square = MapMagic.instance.terrainSize * MapMagic.instance.terrainSize;
+			float square = terrainSize.dimensions * terrainSize.dimensions; //rect.size.x * rect.size.z;
 			int count = (int)(square*(density/1000000)); //number of items per terrain
 			
-			if (algorithm==Algorithm.Random) RandomScatter(count, spatialHash, rnd, probMatrix);
-			else CellScatter(count, spatialHash, rnd, probMatrix, hex:algorithm==Algorithm.HexCells);
+			if (algorithm==Algorithm.Random) RandomScatter(count, spatialHash, rnd, probMatrix, stop:stop);  
+			else CellScatter(count, spatialHash, rnd, probMatrix, hex:algorithm==Algorithm.HexCells, stop:stop);
 
-			if (chunk.stop) return;
-			output.SetObject(chunk, spatialHash);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, spatialHash);
 		}
 
-		public void RandomScatter (int count, SpatialHash spatialHash, InstanceRandom rnd, Matrix probMatrix)
+		public void RandomScatter (int count, SpatialHash spatialHash, InstanceRandom rnd, Matrix probMatrix, Func<float,bool> stop = null)
 		{
 			int candidatesNum = (int)(uniformity*100);
 			if (candidatesNum < 1) candidatesNum = 1;
 			
 			for (int i=0; i<count; i++)
 			{
+				if (stop!=null && stop(0)) return;
+
 				Vector2 bestCandidate = Vector3.zero;
 				float bestDist = 0;
 				
@@ -83,6 +86,8 @@ namespace MapMagic
 				SpatialHash.Cell cell = spatialHash.cells[c];
 				for (int i=cell.objs.Count-1; i>=0; i--)
 				{
+					if (stop!=null && stop(0)) return;
+
 					Vector2 pos = cell.objs[i].pos;
 				
 					if (pos.x < spatialHash.offset.x+safeBorders || 
@@ -95,7 +100,7 @@ namespace MapMagic
 			}
 		}
 
-		public void CellScatter (int count, SpatialHash spatialHash, InstanceRandom rnd, Matrix probMatrix, bool hex=true)
+		public void CellScatter (int count, SpatialHash spatialHash, InstanceRandom rnd, Matrix probMatrix, bool hex=true, Func<float,bool> stop = null)
 		{
 			//finding scatter rect
 			CoordRect rect = new CoordRect(spatialHash.offset.x+1, spatialHash.offset.y+1, spatialHash.size-2, spatialHash.size-2);
@@ -114,6 +119,8 @@ namespace MapMagic
 			for (int x=min.x; x<max.x; x++)
 				for (int z=min.z; z<max.z; z++)
 			{
+				if (stop!=null && stop(0)) return;
+				
 				Vector2 position = new Vector2(x*cellSize.x + spatialHash.offset.x,  z*cellSize.y + spatialHash.offset.y);
 				position.x += cellSize.x/2; position.y += cellSize.y/2;
 				if (hex && z%2!=0) position.x += cellSize.x/2;
@@ -131,6 +138,8 @@ namespace MapMagic
 			for (int x=min.x; x<max.x; x++)
 				for (int z=min.z; z<max.z; z++)
 			{
+				if (stop!=null && stop(0)) return;
+
 				if (x==min.x || x==max.x-1 || z==min.z || z==max.z-1) { newPositions[x,z] = positions[x,z]; continue; }
 
 				Vector2 position = positions[x,z];
@@ -164,6 +173,8 @@ namespace MapMagic
 			for (int x=min.x; x<max.x; x++)
 				for (int z=min.z; z<max.z; z++)
 			{
+				if (stop!=null && stop(0)) return;
+				
 				Vector2 pos = newPositions[x,z];
 
 				if (pos.x < spatialHash.offset.x+safeBorders+0.001f || 
@@ -178,7 +189,7 @@ namespace MapMagic
 		}
 
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); probability.DrawIcon(layout, "Probability"); output.DrawIcon(layout, "Output");
@@ -195,7 +206,7 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Adjust", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Adjust", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Adjust")]
 	public class AdjustGenerator : Generator
 	{
 		public Input input = new Input(InoutType.Objects);
@@ -212,21 +223,21 @@ namespace MapMagic
 		public Vector2 scale = Vector2.one;
 		public float sizeFactor = 0;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash sourceHash = (SpatialHash)input.GetObject(chunk); if (sourceHash==null) return;
+			SpatialHash sourceHash = (SpatialHash)input.GetObject(results); if (sourceHash==null) return;
 			SpatialHash spatialHash = sourceHash.Copy();
-			Matrix intensityMatrix = (Matrix)intensity.GetObject(chunk);
+			Matrix intensityMatrix = (Matrix)intensity.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || spatialHash==null) { output.SetObject(chunk, spatialHash); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || spatialHash==null) { output.SetObject(results, spatialHash); return; }
 			
 			//preparing output
 			spatialHash = spatialHash.Copy();
 
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + seed + chunk.coord.x*1000 + chunk.coord.z, lutLength:1000);
+			InstanceRandom rnd = new InstanceRandom(seed + this.seed + terrainSize.Seed(rect), lutLength:1000);
 
 			foreach (SpatialObject obj in spatialHash.AllObjs())
 			{
@@ -240,7 +251,7 @@ namespace MapMagic
 
 					//everything else does
 					percent = percent*(1-sizeFactor) + percent*obj.size*sizeFactor;
-					obj.height += rnd.CoordinateRandom(obj.id, height) * percent / MapMagic.instance.terrainHeight;
+					obj.height += rnd.CoordinateRandom(obj.id, height) * percent / terrainSize.height;
 					obj.rotation += rnd.CoordinateRandom(obj.id+1, rotation) * percent;
 				}
 				else 
@@ -248,17 +259,17 @@ namespace MapMagic
 					obj.size = rnd.CoordinateRandom(obj.id+2, scale) * percent;
 					
 					percent = percent*(1-sizeFactor) + percent*obj.size*sizeFactor;
-					obj.height = rnd.CoordinateRandom(obj.id, height) * percent / MapMagic.instance.terrainHeight;
+					obj.height = rnd.CoordinateRandom(obj.id, height) * percent / terrainSize.height;
 					obj.rotation = rnd.CoordinateRandom(obj.id+1, rotation) * percent;
 				}
 			}
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, spatialHash);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, spatialHash);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); input.DrawIcon(layout, "Input", mandatory:true); output.DrawIcon(layout, "Output");
@@ -278,7 +289,7 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Clean Up", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Clean Up", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Clean_Up")]
 	public class CleanUpGenerator : Generator
 	{
 		public Input mask = new Input(InoutType.Map);
@@ -289,16 +300,16 @@ namespace MapMagic
 
 		public int seed = 12345;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
-			Matrix matrix = (Matrix)mask.GetObject(chunk);
-			SpatialHash src = (SpatialHash)input.GetObject(chunk);
+			Matrix matrix = (Matrix)mask.GetObject(results);
+			SpatialHash src = (SpatialHash)input.GetObject(results);
 			
-			if (chunk.stop) return; 
-			if (!enabled || matrix==null) { output.SetObject(chunk, src); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || matrix==null) { output.SetObject(results, src); return; }
 			
 			//random
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + seed + chunk.coord.x*1000 + chunk.coord.z);
+			InstanceRandom rnd = new InstanceRandom(seed + this.seed + terrainSize.Seed(rect));
 
 			//preparing output
 			SpatialHash dst = new SpatialHash(src.offset, src.size, src.resolution);
@@ -311,12 +322,12 @@ namespace MapMagic
 				if (matrix[obj.pos] > rnd.Random()) dst.Add(obj);
 			}
 
-			if (chunk.stop) return;
-			output.SetObject(chunk, dst);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
 		}
 
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); input.DrawIcon(layout, "Input"); output.DrawIcon(layout, "Output");
@@ -328,11 +339,11 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Split", disengageable = true)]
-	public class SplitGenerator : Generator, Layout.ILayered
+	[GeneratorMenu (menu="Objects", name ="Split", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Split")]
+	public class SplitGenerator : Generator
 	{
 		//layer
-		public class Layer : Layout.ILayer
+		public class Layer
 		{
 			public string name = "Object Layer";
 			public Output output = new Output(InoutType.Objects);
@@ -342,52 +353,35 @@ namespace MapMagic
 			public Vector2 scaleCondition = new Vector2(0,100);
 			public float chance = 1;
 
-			public bool pinned { get{return false;}}
-			public int guiHeight { get; set; }
-			
-			public void OnCollapsedGUI (Layout layout) 
-			{ 
-				layout.rightMargin = 20; layout.fieldSize = 1f;
-				
-				layout.Par(20); 
-				layout.Label(name, rect:layout.Inset()); 
-				output.DrawIcon(layout);
-			}
-			public void OnExtendedGUI (Layout layout) 
-			{ 
+			public void OnGUI (Layout layout, bool selected, int num) 
+			{
 				layout.margin = 7; layout.rightMargin = 20; layout.fieldSize = 1f;
 				
 				layout.Par(20); 
-				name = layout.Field(name, rect:layout.Inset()); 
+				if (selected) name = layout.Field(name, rect:layout.Inset()); 
+				else layout.Label(name, rect:layout.Inset());
 				output.DrawIcon(layout);
 
-				layout.margin = 5; layout.rightMargin = 5; layout.fieldSize = 0.6f;
-				layout.Field(ref heightCondition, "Height");
-				layout.Field(ref rotationCondition, "Rotation");
-				layout.Field(ref scaleCondition, "Scale");
-				layout.Field(ref chance, "Chance");
+				if (selected)
+				{
+					layout.margin = 5; layout.rightMargin = 5; layout.fieldSize = 0.6f;
+					layout.Field(ref heightCondition, "Height");
+					layout.Field(ref rotationCondition, "Rotation");
+					layout.Field(ref scaleCondition, "Scale");
+					layout.Field(ref chance, "Chance");
+				}
 			}
-
-			public void OnAdd (int n) {  }
-			public void OnRemove (int n) 
-			{ 
-				Input connectedInput = output.GetConnectedInput(MapMagic.instance.gens.list);
-				if (connectedInput != null) connectedInput.Link(null, null);
-			}
-			public void OnSwitch (int o, int n) { }
 		}
 
+		//layer
 		public Layer[] baseLayers = new Layer[0];
-		public Layout.ILayer[] layers 
-		{ 
-			get {return baseLayers;} 
-			set {baseLayers=ArrayTools.Convert<Layer,Layout.ILayer>(value);} 
-		}
+		public int selected;
 
-		public int selected { get; set; }
-		public int collapsedHeight { get; set; }
-		public int extendedHeight { get; set; }
-		public Layout.ILayer def {get{ return new Layer(); }}
+		public void UnlinkLayer (int num)
+		{
+			//baseLayers[num].input.Link(null,null); //unlink input
+			baseLayers[num].output.UnlinkInActiveGens(); //try to unlink output
+		}
 
 		//generator
 		public Input input = new Input(InoutType.Objects);
@@ -403,17 +397,17 @@ namespace MapMagic
 		public MatchType matchType = MatchType.layered;
 
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting input
-			SpatialHash src = (SpatialHash)input.GetObject(chunk);
+			SpatialHash src = (SpatialHash)input.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop || baseLayers.Length==0) return;
+			if ((stop!=null && stop(0)) || baseLayers.Length==0) return;
 			if (!enabled || src==null) 
 			{
 				for (int i=0; i<baseLayers.Length; i++)
-					baseLayers[i].output.SetObject(chunk, null); 
+					baseLayers[i].output.SetObject(results, null); 
 				return; 
 			}
 
@@ -423,7 +417,7 @@ namespace MapMagic
 				dst[i] = new SpatialHash(src.offset, src.size, src.resolution);
 			
 			//random
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + 12345 + chunk.coord.x*1000 + chunk.coord.z);
+			InstanceRandom rnd = new InstanceRandom(seed + 12345 + terrainSize.Seed(rect));
 			
 			//procedural array
 			bool[] match = new bool[baseLayers.Length];
@@ -477,10 +471,10 @@ namespace MapMagic
 			}
 
 			for (int i=0; i<baseLayers.Length; i++)
-				baseLayers[i].output.SetObject(chunk, dst[i]); 
+				baseLayers[i].output.SetObject(results, dst[i]); 
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); input.DrawIcon(layout, "Input", mandatory:true);
@@ -491,12 +485,28 @@ namespace MapMagic
 			layout.Label("Match Type", rect:layout.Inset(0.5f));
 			layout.Field(ref matchType, rect:layout.Inset(0.5f));
 
-			layout.DrawLayered(this, "Layers:");
+			//layers
+			//layout.DrawLayered(this, "Layers:");
+			layout.Par();
+			layout.Label("Layers:", layout.Inset(0.4f));
+
+			layout.DrawArrayAdd(ref baseLayers, ref selected, rect:layout.Inset(0.15f), createElement:() => new Layer());
+			layout.DrawArrayRemove(ref baseLayers, ref selected, rect:layout.Inset(0.15f), onBeforeRemove:UnlinkLayer);
+			layout.DrawArrayUp(ref baseLayers, ref selected, rect:layout.Inset(0.15f));
+			layout.DrawArrayDown(ref baseLayers, ref selected, rect:layout.Inset(0.15f));
+
+			layout.Par(2);
+			for (int i=0; i<baseLayers.Length; i++)
+				layout.DrawLayer(baseLayers[i].OnGUI, ref selected, i);
+
+			//layout.DrawLayered2(baseLayers, ref selected, baseLayers[0].OnGUI);
+			//for (int num=0; num<baseLayers.Length; num++)
+			//	if (layout.DrawWithBackground(baseLayers[num].OnGUI, num:num)) selected = num;
 		}
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Subtract", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Subtract", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Subtract")]
 	public class SubtractGenerator : Generator
 	{
 		public Input minuendIn = new Input(InoutType.Objects);
@@ -508,21 +518,21 @@ namespace MapMagic
 		public float distance = 1;
 		public float sizeFactor = 0;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash minuend = (SpatialHash)minuendIn.GetObject(chunk);
-			SpatialHash subtrahend = (SpatialHash)subtrahendIn.GetObject(chunk);
+			SpatialHash minuend = (SpatialHash)minuendIn.GetObject(results);
+			SpatialHash subtrahend = (SpatialHash)subtrahendIn.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop) return;
-			if (!enabled || subtrahend==null || subtrahend.Count==0 || minuend==null) { minuendOut.SetObject(chunk, minuend); return; }
+			if (stop!=null && stop(0)) return;
+			if (!enabled || subtrahend==null || subtrahend.Count==0 || minuend==null) { minuendOut.SetObject(results, minuend); return; }
 
 			//preparing output
 			SpatialHash result = minuend.Copy();
 
 			//transforming distance to map-space
-			float pixelSize = 1f * MapMagic.instance.terrainSize / MapMagic.instance.resolution;
+			float pixelSize = terrainSize.pixelSize; 
 			float pixelDist = distance / pixelSize;
 
 			//removing objects in range
@@ -533,11 +543,11 @@ namespace MapMagic
 			}
 
 			//setting output
-			if (chunk.stop) return;
-			minuendOut.SetObject(chunk, result);
+			if (stop!=null && stop(0)) return;
+			minuendOut.SetObject(results, result);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); minuendIn.DrawIcon(layout, "Input"); minuendOut.DrawIcon(layout, "Output");
@@ -551,7 +561,62 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Combine", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Rarefy", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Rerefy")]
+	public class RarefyGenerator : Generator
+	{
+		public Input input = new Input(InoutType.Objects);
+		public Output output = new Output(InoutType.Objects);
+		public override IEnumerable<Input> Inputs() { yield return input; }
+		public override IEnumerable<Output> Outputs() { yield return output; }
+
+		public float distance = 1;
+		public float sizeFactor = 0;
+
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
+		{
+			//getting inputs
+			SpatialHash src = (SpatialHash)input.GetObject(results);
+
+			//return on stop/disable/null input
+			if (stop!=null && stop(0)) return;
+			if (!enabled || src==null || src.Count==0) { output.SetObject(results, src); return; }
+
+			//preparing output
+			SpatialHash dst = new SpatialHash(src.offset, src.size, src.resolution); //src.Copy();
+
+			//transforming distance to map-space
+			float pixelSize = terrainSize.pixelSize; 
+			float pixelDist = distance / pixelSize;
+
+			//removing objects in range
+			foreach (SpatialObject refObj in src.AllObjs())
+			{
+				if (stop!=null && stop(0)) return;
+				
+				float range = pixelDist*(1-sizeFactor) + pixelDist*refObj.size*sizeFactor;
+				if (!dst.IsAnyObjInRange(refObj.pos, range))
+					dst.Add(refObj);
+			}
+
+			//setting output
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
+		}
+
+		public override void OnGUI (GeneratorsAsset gens)
+		{
+			//inouts
+			layout.Par(20); input.DrawIcon(layout, "Input"); output.DrawIcon(layout, "Output");
+			layout.Par(5);
+			
+			//params
+			layout.Field(ref distance, "Distance");
+			layout.Field(ref sizeFactor, "Size Factor"); 
+		}
+	}
+
+	[System.Serializable]
+	[GeneratorMenu (menu="Objects", name ="Combine", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Combine")]
 	public class CombineGenerator : Generator
 	{
 		public Input[] inputs = new Input[] { new Input(InoutType.Objects), new Input(InoutType.Objects) };
@@ -561,34 +626,34 @@ namespace MapMagic
 
 		public int inputsNum = 2;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{	
 			//return on stop/disable
-			if (chunk.stop) return; 
-			if (inputs.Length==0) { output.SetObject(chunk,null); return; }
+			if (stop!=null && stop(0)) return; 
+			if (inputs.Length==0) { output.SetObject(results,null); return; }
 			if (!enabled)
 			{
-				if (inputs.Length>1) output.SetObject(chunk, (SpatialHash)inputs[0].GetObject(chunk));
-				else output.SetObject(chunk,null);
+				if (inputs.Length>1) output.SetObject(results, (SpatialHash)inputs[0].GetObject(results));
+				else output.SetObject(results,null);
 				return;
 			}
 
 			//preparing output
-			SpatialHash result = chunk.defaultSpatialHash;
+			SpatialHash result = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
 
 			for (int i=0; i<inputs.Length; i++)
 			{
-				if (chunk.stop) return;
-				SpatialHash inputHash = (SpatialHash)inputs[i].GetObject(chunk);
+				if (stop!=null && stop(0)) return;
+				SpatialHash inputHash = (SpatialHash)inputs[i].GetObject(results);
 				if (inputHash == null) continue;
 
 				result.Add(inputHash);
 			}
 			
-			output.SetObject(chunk, result);
+			output.SetObject(results, result);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			if (inputs.Length >= 1) { layout.Par(20); inputs[0].DrawIcon(layout, "Input"); output.DrawIcon(layout, "Output"); }
@@ -602,14 +667,14 @@ namespace MapMagic
 			{
 				if (inputsNum > inputs.Length) 
 					for (int i=0; i<inputsNum-inputs.Length; i++)
-						ArrayTools.Add(ref inputs, inputsNum, new Input(InoutType.Objects));
-				else ArrayTools.Resize(ref inputs, inputsNum);
+						ArrayTools.Add(ref inputs, createElement:() => new Input(InoutType.Objects));
+				else ArrayTools.Resize<Input>(ref inputs, inputsNum); //Unity 5.4 can't compile if <Input> is not specified
 			}
 		}
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Propagate", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Propagate", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Propagate")]
 	public class PropagateGenerator : Generator
 	{
 		public Input input = new Input(InoutType.Objects);
@@ -622,19 +687,19 @@ namespace MapMagic
 		public Vector2 distance = new Vector2(1,10);
 		public float sizeFactor = 0;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash src = (SpatialHash)input.GetObject(chunk);
+			SpatialHash src = (SpatialHash)input.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || src==null) { output.SetObject(chunk, src); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || src==null) { output.SetObject(results, src); return; }
 
 			//preparing output
-			SpatialHash dst = chunk.defaultSpatialHash;
+			SpatialHash dst = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
 
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + seed + chunk.coord.x*1000 + chunk.coord.z);
+			InstanceRandom rnd = new InstanceRandom(seed + this.seed + terrainSize.Seed(rect));
 
 			foreach (SpatialObject obj in src.AllObjs())
 			{
@@ -650,7 +715,7 @@ namespace MapMagic
 					Vector2 direction = new Vector2( Mathf.Sin(angle), Mathf.Cos(angle) );
 					float dist = distance.x + rnd.CoordinateRandom(obj.id, n*2+1)*(distance.y-distance.x);
 					dist = dist*(1-sizeFactor) + dist*obj.size*sizeFactor;
-					dist = dist / MapMagic.instance.terrainSize * MapMagic.instance.resolution; //transforming distance to map-space
+					dist = dist * terrainSize.pixelSize; //transforming distance to map-space
 
 					Vector2 pos = obj.pos + direction*dist;
 					if (pos.x <= dst.offset.x+1.01f) pos.x = dst.offset.x+1.01f; if (pos.y <= dst.offset.y+1.01f) pos.y = dst.offset.y+1.01f;
@@ -661,11 +726,11 @@ namespace MapMagic
 			}
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, dst);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); input.DrawIcon(layout, "Input"); output.DrawIcon(layout, "Output");
@@ -681,8 +746,8 @@ namespace MapMagic
 	}
 	
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Stamp", disengageable = true)]
-	public class StampGenerator1 : Generator
+	[GeneratorMenu (menu="Objects", name ="Stamp", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Stamp")]
+	public class StampGenerator184 : Generator
 	{
 		public Input stampIn = new Input(InoutType.Map);
 		public Input canvasIn = new Input(InoutType.Map);
@@ -693,25 +758,26 @@ namespace MapMagic
 		public Output output = new Output(InoutType.Map);
 		public override IEnumerable<Output> Outputs() { yield return output; }
 
-		public BlendGenerator.Algorithm guiAlgorithm;
+		public BlendGenerator.Algorithm guiAlgorithm = BlendGenerator.Algorithm.max;
 		public float radius = 1;
 		public float sizeFactor = 1;
+		public float heightFactor = 0;
 		public int safeBorders = 0;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			Matrix stamp = (Matrix)stampIn.GetObject(chunk);
-			Matrix src = (Matrix)canvasIn.GetObject(chunk);
-			SpatialHash objs = (SpatialHash)positionsIn.GetObject(chunk);
+			Matrix stamp = (Matrix)stampIn.GetObject(results);
+			Matrix src = (Matrix)canvasIn.GetObject(results);
+			SpatialHash objs = (SpatialHash)positionsIn.GetObject(results);
 			
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || stamp==null || objs==null) { output.SetObject(chunk,src); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || stamp==null || objs==null) { output.SetObject(results,src); return; }
 
 			//preparing output
 			Matrix dst = null;
-			if (src==null) dst = chunk.defaultMatrix; 
+			if (src==null) dst = new Matrix(rect); 
 			else dst = src.Copy(null);
 
 			//algorithm
@@ -721,16 +787,16 @@ namespace MapMagic
 			{
 				//finding current radius
 				float curRadius = radius*(1-sizeFactor) + radius*obj.size*sizeFactor;
-				curRadius = curRadius / MapMagic.instance.terrainSize * MapMagic.instance.resolution; //transforming to map-space
+				curRadius = curRadius / terrainSize.pixelSize; //transforming to map-space
 
 				//stamp coordinates
-				float scale = curRadius*2 / stamp.rect.size.x;
+				//float scale = curRadius*2 / stamp.rect.size.x;
 				Vector2 stampMin = obj.pos - new Vector2(curRadius, curRadius);
 				Vector2 stampMax = obj.pos + new Vector2(curRadius, curRadius);
 				Vector2 stampSize = new Vector2(curRadius*2, curRadius*2);
 
 				//calculating rects 
-				CoordRect stampRect = new CoordRect(stampMin.x, stampMin.y, stampSize.x, stampSize.y);
+				CoordRect stampRect = new CoordRect(stampMin.x, stampMin.y, stampSize.x+1, stampSize.y+1);
 				CoordRect intersection = CoordRect.Intersect(stampRect, dst.rect);
 				Coord min = intersection.Min; Coord max = intersection.Max; 
 
@@ -743,24 +809,25 @@ namespace MapMagic
 
 					Vector2 relativePos = new Vector2(1f*(x-stampMin.x)/(stampMax.x-stampMin.x), 1f*(z-stampMin.y)/(stampMax.y-stampMin.y));
 					float val = stamp.GetInterpolated(relativePos.x*stamp.rect.size.x + stamp.rect.offset.x, relativePos.y*stamp.rect.size.z + stamp.rect.offset.z, Matrix.WrapMode.Clamp);
+					val = val*obj.size*heightFactor + val*(1-heightFactor);
 					//float val = stamp.CheckGet((int)(relativePos.x*stamp.rect.size.x + stamp.rect.offset.x), (int)(relativePos.y*stamp.rect.size.z + stamp.rect.offset.z)); //TODO use bilenear filtering
 
 					//matrix[x,z] = matrix[x,z]+val*scale;
 					//matrix[x,z] = Mathf.Max(matrix[x,z],val*scale);
-					dst[x,z] = algorithm(dst[x,z],val*scale);
+					dst[x,z] = algorithm(dst[x,z],val);
 				}
 			}
 
-			Matrix mask = (Matrix)maskIn.GetObject(chunk);
+			Matrix mask = (Matrix)maskIn.GetObject(results);
 			if (mask != null) Matrix.Mask(src, dst, mask);
 			if (safeBorders != 0) Matrix.SafeBorders(src, dst, safeBorders);
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, dst);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); positionsIn.DrawIcon(layout, "Positions", mandatory:true); output.DrawIcon(layout, "Output");
@@ -774,12 +841,13 @@ namespace MapMagic
 			layout.Field(ref guiAlgorithm, "Algorithm");
 			layout.Field(ref radius, "Radius");
 			layout.Field(ref sizeFactor, "Size Factor");
+			layout.Field(ref heightFactor, "Height Factor");
 			layout.Field(ref safeBorders, "Safe Borders");
 		}
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Blob", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Blob", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Blob")]
 	public class BlobGenerator : Generator
 	{
 		public Input objectsIn = new Input(InoutType.Objects);
@@ -805,7 +873,7 @@ namespace MapMagic
 				radius*2+2, radius*2+2 );
 
 			Curve curve = new Curve(fallof);
-			Noise noise = new Noise(noiseSize, MapMagic.instance.resolution, MapMagic.instance.seed*7, MapMagic.instance.seed*3);
+			InstanceRandom noise = new InstanceRandom(noiseSize, 512, 12345, 123); //TODO: use normal noise instead
 
 			CoordRect intersection = CoordRect.Intersect(canvas.rect, blobRect);
 			Coord center = blobRect.Center;
@@ -813,7 +881,7 @@ namespace MapMagic
 			for (int x=min.x; x<max.x; x++)
 				for (int z=min.z; z<max.z; z++)
 			{
-				float dist = Coord.Distance(center, x,z);
+				float dist = Coord.Distance(center, new Coord(x,z));
 				float percent = curve.Evaluate(1f-dist/radius);
 				float result = percent;
 
@@ -828,40 +896,40 @@ namespace MapMagic
 			}
 		}
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash objects = (SpatialHash)objectsIn.GetObject(chunk);
-			Matrix src = (Matrix)canvasIn.GetObject(chunk);
+			SpatialHash objects = (SpatialHash)objectsIn.GetObject(results);
+			Matrix src = (Matrix)canvasIn.GetObject(results);
 			
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || objects==null) { output.SetObject(chunk, src); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || objects==null) { output.SetObject(results, src); return; }
 
 			//preparing output
 			Matrix dst; 
 			if (src != null) dst = src.Copy(null); 
-			else dst = chunk.defaultMatrix;
+			else dst = new Matrix(rect);
 
 			foreach (SpatialObject obj in objects.AllObjs())
 			{
 				//finding current radius
 				float curRadius = radius*(1-sizeFactor) + radius*obj.size*sizeFactor;
-				curRadius = curRadius / MapMagic.instance.terrainSize * MapMagic.instance.resolution; //transforming to map-space
+				curRadius = curRadius / terrainSize.pixelSize; //transforming to map-space
 
 				DrawBlob(dst, obj.pos, intensity, curRadius, fallof, noiseAmount, noiseSize);
 			}
 
-			Matrix mask = (Matrix)maskIn.GetObject(chunk);
+			Matrix mask = (Matrix)maskIn.GetObject(results);
 			if (mask != null) Matrix.Mask(src, dst, mask);
 			if (safeBorders != 0) Matrix.SafeBorders(src, dst, safeBorders);
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, dst);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); objectsIn.DrawIcon(layout, "Objects", mandatory:true); output.DrawIcon(layout, "Output");
@@ -893,7 +961,7 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Flatten", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Flatten", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Flatten")]
 	public class FlattenGenerator : Generator
 	{
 		public Input objectsIn = new Input(InoutType.Objects);
@@ -911,45 +979,45 @@ namespace MapMagic
 		public float noiseSize = 100;
 		public int safeBorders = 0;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash objects = (SpatialHash)objectsIn.GetObject(chunk);
-			Matrix src = (Matrix)canvasIn.GetObject(chunk);
+			SpatialHash objects = (SpatialHash)objectsIn.GetObject(results);
+			Matrix src = (Matrix)canvasIn.GetObject(results);
 			
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || objects==null) { output.SetObject(chunk, src); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || objects==null || src==null) { output.SetObject(results, src); return; }
 
 			//preparing output
 			Matrix dst; 
 			if (src != null) dst = src.Copy(null); 
-			else dst = chunk.defaultMatrix;
+			else dst = new Matrix(rect);
 
 			foreach (SpatialObject obj in objects.AllObjs())
 			{
 				//finding current radius
 				float curRadius = radius*(1-sizeFactor) + radius*obj.size*sizeFactor;
-				curRadius = curRadius / MapMagic.instance.terrainSize * MapMagic.instance.resolution; //transforming to map-space
+				curRadius = curRadius / terrainSize.pixelSize; //transforming to map-space
 
 				float objHeight = src.GetInterpolated(obj.pos.x, obj.pos.y);
 				BlobGenerator.DrawBlob(dst, obj.pos, objHeight, curRadius, fallof, noiseAmount, noiseSize);
 			}
 
-			Matrix mask = (Matrix)maskIn.GetObject(chunk);
+			Matrix mask = (Matrix)maskIn.GetObject(results);
 			if (mask != null) Matrix.Mask(src, dst, mask);
 			if (safeBorders != 0) Matrix.SafeBorders(src, dst, safeBorders);
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, dst);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, dst);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); objectsIn.DrawIcon(layout, "Objects", mandatory:true); output.DrawIcon(layout, "Output");
-			layout.Par(20); canvasIn.DrawIcon(layout, "Canvas");
+			layout.Par(20); canvasIn.DrawIcon(layout, "Canvas", mandatory:true);
 			layout.Par(20); maskIn.DrawIcon(layout, "Mask");
 			layout.Par(5);
 
@@ -976,7 +1044,7 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Forest", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Forest", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Forest")]
 	public class ForestGenerator1 : Generator
 	{
 		public Input seedlingsIn = new Input(InoutType.Objects);
@@ -994,24 +1062,24 @@ namespace MapMagic
 		public float survivalRate = 0.5f;
 		public float lifeAge = 100;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash seedlings = (SpatialHash)seedlingsIn.GetObject(chunk);
-			SpatialHash otherTrees = (SpatialHash)otherTreesIn.GetObject(chunk);
-			Matrix soil = (Matrix)soilIn.GetObject(chunk);
+			SpatialHash seedlings = (SpatialHash)seedlingsIn.GetObject(results);
+			SpatialHash otherTrees = (SpatialHash)otherTreesIn.GetObject(results);
+			Matrix soil = (Matrix)soilIn.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || seedlings==null) { treesOut.SetObject(chunk, seedlings); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || seedlings==null) { treesOut.SetObject(results, seedlings); return; }
 
 			//initializing random
-			InstanceRandom rnd = new InstanceRandom(MapMagic.instance.seed + 12345 + chunk.coord.x*1000 + chunk.coord.z);
+			InstanceRandom rnd = new InstanceRandom(seed + 12345 + terrainSize.Seed(rect));
 
 			//creating forest map
 			int resolution = (int)Mathf.Sqrt(density*10000f);
 			float pixelSize = seedlings.size / resolution;
-			float forestSoilFactor = 1f * MapMagic.instance.resolution / resolution;
+			float forestSoilFactor = 1f * terrainSize.resolution / resolution;
 
 			Matrix forest = new Matrix( new CoordRect(0,0,resolution,resolution) );
 			Matrix otherForest = new Matrix( new CoordRect(0,0,resolution,resolution) );
@@ -1062,7 +1130,7 @@ namespace MapMagic
 			}
 
 			//preparing outputs
-			SpatialHash trees = chunk.defaultSpatialHash;
+			SpatialHash trees = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
 			for (int x=0; x<resolution; x++)
 				for (int z=0; z<resolution; z++)
 			{
@@ -1100,12 +1168,12 @@ namespace MapMagic
 			}*/
 
 			//setting outputs
-			if (chunk.stop) return;
-			treesOut.SetObject(chunk, trees);
+			if (stop!=null && stop(0)) return;
+			treesOut.SetObject(results, trees);
 			//touchwoodOut.SetObject(chunk, touchwood);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); seedlingsIn.DrawIcon(layout, "Seedlings", mandatory:true); treesOut.DrawIcon(layout, "Trees");
@@ -1125,7 +1193,7 @@ namespace MapMagic
 	}
 
 	[System.Serializable]
-	[GeneratorMenu (menu="Objects", name ="Slide", disengageable = true)]
+	[GeneratorMenu (menu="Objects", name ="Slide", disengageable = true, helpLink = "https://gitlab.com/denispahunov/mapmagic/wikis/object_generators/Slide")]
 	public class SlideGenerator : Generator
 	{
 		public Input input = new Input(InoutType.Objects);
@@ -1139,16 +1207,16 @@ namespace MapMagic
 		public float moveFactor = 3;
 		public float stopSlope = 15;
 
-		public override void Generate (Chunk chunk, Biome biome=null)
+		public override void Generate (CoordRect rect, Chunk.Results results, Chunk.Size terrainSize, int seed, Func<float,bool> stop = null)
 		{
 			//getting inputs
-			SpatialHash inputHash = (SpatialHash)input.GetObject(chunk);
-			SpatialHash outputHash = chunk.defaultSpatialHash;
-			Matrix stratum = (Matrix) stratumIn.GetObject(chunk);
+			SpatialHash inputHash = (SpatialHash)input.GetObject(results);
+			SpatialHash outputHash = new SpatialHash(new Vector2(rect.offset.x,rect.offset.z), rect.size.x, 16);
+			Matrix stratum = (Matrix) stratumIn.GetObject(results);
 
 			//return on stop/disable/null input
-			if (chunk.stop) return; 
-			if (!enabled || stratum==null || inputHash==null) { output.SetObject(chunk, inputHash); return; }
+			if (stop!=null && stop(0)) return; 
+			if (!enabled || stratum==null || inputHash==null) { output.SetObject(results, inputHash); return; }
 
 			//preparing output
 			inputHash = inputHash.Copy();
@@ -1163,8 +1231,8 @@ namespace MapMagic
 			}*/
 
 			//finding stop slope (in 0-1 height difference, same as slope gen)
-			float pixelSize = 1f * MapMagic.instance.terrainSize / MapMagic.instance.resolution;
-			float stopDelta = Mathf.Tan(stopSlope*Mathf.Deg2Rad) * pixelSize / MapMagic.instance.terrainHeight;
+			float pixelSize = terrainSize.pixelSize;
+			float stopDelta = Mathf.Tan(stopSlope*Mathf.Deg2Rad) * pixelSize / terrainSize.height;
 
 			for (int c=0; c<inputHash.cells.Length; c++)
 			{
@@ -1173,7 +1241,7 @@ namespace MapMagic
 				for (int n=cell.objs.Count-1; n>=0; n--)
 				{
 					SpatialObject obj = cell.objs[n];
-					if (chunk.stop) return;
+					if (stop!=null && stop(0)) return;
 
 					Vector2 pos = obj.pos;
 					bool inRange = true;
@@ -1203,7 +1271,7 @@ namespace MapMagic
 
 						Vector2 normal = new Vector2( (xNormal1+xNormal2)/2f, (zNormal1+zNormal2)/2f );
 
-						pos += normal*(MapMagic.instance.terrainHeight*moveFactor); 
+						pos += normal*(terrainSize.height*moveFactor); 
 						inRange = pos.x > inputHash.offset.x+1 && pos.x < inputHash.offset.x+inputHash.size-1.01f && 
 								  pos.y > inputHash.offset.y+1 && pos.y < inputHash.offset.y+inputHash.size-1.01f;
 
@@ -1219,11 +1287,11 @@ namespace MapMagic
 			}
 
 			//setting output
-			if (chunk.stop) return;
-			output.SetObject(chunk, outputHash);
+			if (stop!=null && stop(0)) return;
+			output.SetObject(results, outputHash);
 		}
 
-		public override void OnGUI ()
+		public override void OnGUI (GeneratorsAsset gens)
 		{
 			//inouts
 			layout.Par(20); input.DrawIcon(layout, "Input", mandatory:true); output.DrawIcon(layout, "Output");

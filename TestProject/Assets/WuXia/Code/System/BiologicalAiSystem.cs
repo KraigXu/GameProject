@@ -13,7 +13,6 @@ namespace  WX
         {
             public readonly int Length;
             public ComponentDataArray<Biological> Biological;
-            public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<NpcInput> NpcInput;
             public ComponentArray<AICharacterControl> AiControl;
         }
@@ -37,8 +36,16 @@ namespace  WX
                     default:
                         break;
                 }
+                
+               
             }
+
+
+
+
         }
+
+
 
     }
 }
