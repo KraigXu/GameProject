@@ -42,7 +42,7 @@ namespace WX
                     item.OnlyEntity = _buildingGroup.Entity[i];
                     item.Status = _buildingGroup.Building[i].Status;
                     item.Point = _buildingGroup.Building[i].Position;
-                    //item.OnOpen = BuildingOnOpen;
+                    item.OnOpen = BuildingOnOpen;
                     datas.Add(item);
                 }
 
@@ -52,7 +52,6 @@ namespace WX
         }
 
 
-<<<<<<< HEAD
 
         private void BuildingOnOpen(Entity entity, int id)
         {
@@ -71,26 +70,6 @@ namespace WX
             //ShowWindowData data = new ShowWindowData();
             //data.contextData = new BuildingiMainData();
         }
-=======
-        //private void BuildingOnOpen(Entity entity,int id)
-        //{
-        //    BuildingiMainData maindata=new BuildingiMainData();
-
-        //    for (int i = 0; i < _buildingGroup.Length; i++)
-        //    {
-        //        if (_buildingGroup.Building[i].Id == id)
-        //        {
-        //            maindata.Id = _buildingGroup.Building[i].Id;
-        //            maindata.Type = _buildingGroup.Building[i].Type;
-        //            maindata.Level = _buildingGroup.Building[i].Level;
-        //        }
-        //    }
-
-        //    maindata.Id = id;
-        //    ShowWindowData data = new ShowWindowData();
-        //    data.contextData = new BuildingiMainData();
-        //}
->>>>>>> parent of c010734... Update
 
         private void BuildingOnClose(Entity entity, int id)
         {
