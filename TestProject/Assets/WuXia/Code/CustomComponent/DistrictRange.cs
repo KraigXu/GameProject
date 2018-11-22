@@ -7,7 +7,6 @@ namespace  WX
     public class DistrictRange : MonoBehaviour
     {
         public int DistrictId;
-
         public Color Color;
 
 

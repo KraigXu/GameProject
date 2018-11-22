@@ -1,0 +1,222 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &158370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 477274}
+  - 114: {fileID: 11401164}
+  m_Layer: 0
+  m_Name: HOME
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &477274
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 158370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11401164
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 158370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ae11916a957ba4186bdf6163f0cfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DisplayOptions:
+    Enabled: 0
+    Foldout: 0
+    DefaultSaturation: 0.1
+    DefaultSaturationSelected: 0.5
+    SystemColor:
+      Hue: 0.6
+      Saturation: 0.1
+      SaturationSelected: 0.5
+      Brightness: 1
+      DefaultColor:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      DefaultSelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+      Color:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      SelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+    ListColor:
+      Hue: 0.6
+      Saturation: 0.1
+      SaturationSelected: 0.5
+      Brightness: 1
+      DefaultColor:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      DefaultSelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+      Color:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      SelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+    DebugColor:
+      Hue: 0.6
+      Saturation: 0.1
+      SaturationSelected: 0.5
+      Brightness: 1
+      DefaultColor:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      DefaultSelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+      Color:
+        r: 0.9
+        g: 0.93999994
+        b: 1
+        a: 1
+      SelectedColor:
+        r: 0.5
+        g: 0.69999987
+        b: 1
+        a: 1
+  UseDebug: 0
+  ShowInfo: 0
+  ShowHelp: 0
+  ShowNotes: 0
+  UseDebugLogs: 0
+  UseDebugLogsSelectedOnly: 0
+  UseDebugRays: 0
+  UseDebugRaysSelectedOnly: 0
+  UseDontDestroyOnLoad: 0
+  m_Status:
+    Enabled: 0
+    Foldout: 0
+    InfoText: 
+    ShowInfoText: 0
+    EnableDebugLog: 0
+    EnableDebugRay: 0
+    LifespanMin: 0
+    LifespanMax: 0
+    LifespanDefaultMax: 360
+    UseAging: 0
+    MaxAge: 60
+    MaxAgeMaximum: 3600
+    UseLifespan: 0
+    MassMin: 1
+    MassMax: 1
+    MassMaximum: 100
+    m_Corpse:
+      Enabled: 0
+      Foldout: 0
+      InfoText: 
+      ShowInfoText: 0
+      EnableDebugLog: 0
+      EnableDebugRay: 0
+      CorpseReferencePrefab: {fileID: 0}
+      CorpseRemovingDelay: 20
+      CorpseRemovingDelayMin: 20
+      CorpseRemovingDelayMax: 20
+      CorpseRemovingDelayMaximum: 20
+      UseCorpseScaling: 0
+      UseRandomDelay: 0
+    m_Odour:
+      Enabled: 0
+      Foldout: 0
+      Type: 0
+      Intensity: 50
+      IntensityMax: 100
+      Range: 25
+      RangeMax: 100
+      UseMarker: 0
+      MarkerMinInterval: 2
+      MarkerMaxInterval: 5
+      MarkerIntervalMax: 60
+      MarkerPrefab: {fileID: 0}
+      UseEffect: 0
+      EffectPrefab: {fileID: 0}
+    UseDamageTransfer: 1
+    DamageTransferMultiplier: 1
+    DamageTransferMultiplierMaximum: 100
+    m_IsDestructible: 1
+    InitialDurabilityMin: 100
+    InitialDurabilityMax: 100
+    InitialDurabilityMaximum: 100
+  m_RuntimeOptions:
+    Enabled: 1
+    Foldout: 0
+    InfoText: 
+    ShowInfoText: 0
+    EnableDebugLog: 0
+    EnableDebugRay: 0
+    UseRemoveOnLost: 0
+    LostRemovingLevel: -200
+    LostRemovingLevelMaximum: -1000
+    UseDontDestroyOnLoad: 0
+    UseCoroutine: 1
+    UseRuntimeName: 0
+    RuntimeName: 
+    UseHierarchyManagement: 1
+    m_CullingOptions:
+      Enabled: 0
+      Foldout: 0
+      UseCullingConditions: 0
+      MainCameraDistanceMin: -100
+      MainCameraDistanceMax: 200
+      MainCameraDistanceMaximum: 1000
+  BaseOffset: 0
+  BaseOffsetMaximum: 1
+  m_Message:
+    Enabled: 0
+    Foldout: 0
+    LastGroupCommand: 
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 158370}
+  m_IsPrefabParent: 1

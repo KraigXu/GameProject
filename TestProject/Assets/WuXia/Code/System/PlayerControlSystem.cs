@@ -52,6 +52,16 @@ namespace WX
 
         private StrategyWindow _strategyWindow;
 
+        public static void SetupComponentData(EntityManager entityManager)
+        {
+
+            //ShowWindowData menuWindow=new ShowWindowData();
+            //menuWindow.contextData=
+        }
+
+
+
+
 
         protected override void OnUpdate()
         {
@@ -237,7 +247,6 @@ namespace WX
             //}
 
         }
-
 
         private void LivingAreaOnClick()
         {

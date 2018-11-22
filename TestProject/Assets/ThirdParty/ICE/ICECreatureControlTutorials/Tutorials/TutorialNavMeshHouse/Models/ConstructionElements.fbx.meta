@@ -1,0 +1,377 @@
+fileFormatVersion: 2
+guid: e16368e1907f20242b1cd3ae06f5e3af
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Empty_Mesh
+    100004: Empty_Mesh_1
+    100006: Empty_Mesh_2
+    100008: Empty_Mesh_3
+    100010: Empty_Mesh_4
+    100012: Empty_Mesh_5
+    100014: Empty_Mesh_6
+    100016: Empty_Mesh_7
+    100018: Empty_Mesh_8
+    100020: Empty_Mesh_9
+    100022: Empty_Mesh_10
+    100024: Empty_Mesh_11
+    100026: BeamDia
+    100028: Column_1
+    100030: ColumnHalf
+    100032: Floor
+    100034: Frame
+    100036: Landing_6
+    100038: Stairs
+    100040: WallDoor_4
+    100042: WallFull
+    100044: WallWindow_3
+    100046: Balustrade_1
+    100048: Column_2
+    100050: Landing_7
+    100052: WallDoor_5
+    100054: WallWindow_4
+    100056: ColumnSmall_12
+    100058: Floor_8
+    100060: Door_13
+    100062: Balustrade_2
+    100064: Column_3
+    100066: ColumnSmall_13
+    100068: Door_14
+    100070: Landing_8
+    100072: WallDoor_6
+    100074: WallWindow_5
+    100076: FirePlace
+    100078: Floor2
+    400000: //RootNode
+    400002: Empty_Mesh
+    400004: Empty_Mesh_1
+    400006: Empty_Mesh_2
+    400008: Empty_Mesh_3
+    400010: Empty_Mesh_4
+    400012: Empty_Mesh_5
+    400014: Empty_Mesh_6
+    400016: Empty_Mesh_7
+    400018: Empty_Mesh_8
+    400020: Empty_Mesh_9
+    400022: Empty_Mesh_10
+    400024: Empty_Mesh_11
+    400026: BeamDia
+    400028: Column_1
+    400030: ColumnHalf
+    400032: Floor
+    400034: Frame
+    400036: Landing_6
+    400038: Stairs
+    400040: WallDoor_4
+    400042: WallFull
+    400044: WallWindow_3
+    400046: Balustrade_1
+    400048: Column_2
+    400050: Landing_7
+    400052: WallDoor_5
+    400054: WallWindow_4
+    400056: ColumnSmall_12
+    400058: Floor_8
+    400060: Door_13
+    400062: Balustrade_2
+    400064: Column_3
+    400066: ColumnSmall_13
+    400068: Door_14
+    400070: Landing_8
+    400072: WallDoor_6
+    400074: WallWindow_5
+    400076: FirePlace
+    400078: Floor2
+    2300000: Empty_Mesh
+    2300002: Empty_Mesh_1
+    2300004: Empty_Mesh_2
+    2300006: Empty_Mesh_3
+    2300008: Empty_Mesh_4
+    2300010: Empty_Mesh_5
+    2300012: Empty_Mesh_6
+    2300014: Empty_Mesh_7
+    2300016: Empty_Mesh_8
+    2300018: Empty_Mesh_9
+    2300020: Empty_Mesh_10
+    2300022: Empty_Mesh_11
+    2300024: BeamDia
+    2300026: Column_1
+    2300028: ColumnHalf
+    2300030: Floor
+    2300032: Frame
+    2300034: Landing_6
+    2300036: Stairs
+    2300038: WallDoor_4
+    2300040: WallFull
+    2300042: WallWindow_3
+    2300044: Balustrade_1
+    2300046: Column_2
+    2300048: Landing_7
+    2300050: WallDoor_5
+    2300052: WallWindow_4
+    2300054: ColumnSmall_12
+    2300056: Floor_8
+    2300058: Door_13
+    2300060: Balustrade_2
+    2300062: Column_3
+    2300064: ColumnSmall_13
+    2300066: Door_14
+    2300068: Landing_8
+    2300070: WallDoor_6
+    2300072: WallWindow_5
+    2300074: FirePlace
+    2300076: Floor2
+    3300000: Empty_Mesh
+    3300002: Empty_Mesh_1
+    3300004: Empty_Mesh_2
+    3300006: Empty_Mesh_3
+    3300008: Empty_Mesh_4
+    3300010: Empty_Mesh_5
+    3300012: Empty_Mesh_6
+    3300014: Empty_Mesh_7
+    3300016: Empty_Mesh_8
+    3300018: Empty_Mesh_9
+    3300020: Empty_Mesh_10
+    3300022: Empty_Mesh_11
+    3300024: BeamDia
+    3300026: Column_1
+    3300028: ColumnHalf
+    3300030: Floor
+    3300032: Frame
+    3300034: Landing_6
+    3300036: Stairs
+    3300038: WallDoor_4
+    3300040: WallFull
+    3300042: WallWindow_3
+    3300044: Balustrade_1
+    3300046: Column_2
+    3300048: Landing_7
+    3300050: WallDoor_5
+    3300052: WallWindow_4
+    3300054: ColumnSmall_12
+    3300056: Floor_8
+    3300058: Door_13
+    3300060: Balustrade_2
+    3300062: Column_3
+    3300064: ColumnSmall_13
+    3300066: Door_14
+    3300068: Landing_8
+    3300070: WallDoor_6
+    3300072: WallWindow_5
+    3300074: FirePlace
+    3300076: Floor2
+    4300000: Empty_Mesh
+    4300002: Empty_Mesh_1
+    4300004: Empty_Mesh_2
+    4300006: Empty_Mesh_3
+    4300008: Empty_Mesh_4
+    4300010: Empty_Mesh_5
+    4300012: Empty_Mesh_6
+    4300014: Empty_Mesh_7
+    4300016: Empty_Mesh_8
+    4300018: Empty_Mesh_9
+    4300020: Empty_Mesh_10
+    4300022: Empty_Mesh_11
+    4300024: Column_1
+    4300026: WallFull
+    4300028: WallWindow_3
+    4300030: WallDoor_4
+    4300032: Stairs
+    4300034: Landing_6
+    4300036: Floor
+    4300038: Frame
+    4300040: ColumnHalf
+    4300042: BeamDia
+    4300044: Balustrade_1
+    4300046: Column_2
+    4300048: WallWindow_4
+    4300050: WallDoor_5
+    4300052: Landing_7
+    4300054: Floor_8
+    4300056: ColumnSmall_12
+    4300058: Door_13
+    4300060: Balustrade_2
+    4300062: Column_3
+    4300064: WallWindow_5
+    4300066: WallDoor_6
+    4300068: Landing_8
+    4300070: ColumnSmall_13
+    4300072: Door_14
+    4300074: Floor2
+    4300076: FirePlace
+    9500000: //RootNode
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Balustrade_1
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ColumnSmall_12
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Column_11
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Column_12
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Column_2
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DoorHandle_13
+    second: {fileID: 2100000, guid: 12fbd602b2ff922488599d38ffd2772a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DoorHinge_13
+    second: {fileID: 2100000, guid: 12fbd602b2ff922488599d38ffd2772a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Door_13
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FireplacePlates_14
+    second: {fileID: 2100000, guid: 5aa164c3791507942abbc666c75d8e6a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fireplace_14
+    second: {fileID: 2100000, guid: 2bfacf5eaafb7064b8dd893e642d79d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FloorFull
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FloorFull_8
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Landing_7
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stair_6
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WallDoor_5
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WallEnd_9
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WallWindow_4
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall_3
+    second: {fileID: 2100000, guid: 33d508642e701844091d5b156370969c, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

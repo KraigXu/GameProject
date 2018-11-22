@@ -1,0 +1,499 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &135234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22442260}
+  - 114: {fileID: 11442788}
+  - 114: {fileID: 11444646}
+  - 114: {fileID: 11441622}
+  m_Layer: 0
+  m_Name: ICEFilledBarGreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &165928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22448168}
+  - 222: {fileID: 22243678}
+  - 114: {fileID: 11495464}
+  m_Layer: 0
+  m_Name: generated_fg_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &166472
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22469746}
+  - 222: {fileID: 22233244}
+  - 114: {fileID: 11462256}
+  m_Layer: 0
+  m_Name: generated_bar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &11441622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01a9a691aad03cf49be7c0e95e7ac913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followObject: {fileID: 0}
+  offset: {x: 0, y: 2.3, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
+  worldCamera:
+    chosenMethod: 8
+    path: 2f4d61696e2043616d657261
+    tag: 4d61696e43616d657261
+    reference: {fileID: 0}
+    typeString: 556e697479456e67696e652e43616d657261
+    assembly: 556e697479456e67696e652c2056657273696f6e3d302e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d6e756c6c
+  lookAtCamera: 1
+  updateLookupReference: 0
+  renderCamera: {fileID: 0}
+--- !u!114 &11442788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2bfc393ba3e9ba4886cecff90d9a611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _valueCurrent: 83
+  valueMin: 0
+  valueMax: 100
+  animationEnabled: 1
+  animValueF: 21.18101
+--- !u!114 &11444646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6808a0d129d198c459c70be6483acfd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 169
+  labelEnabled: 0
+  labelPosition: {x: 0, y: 0}
+  labelPositionNormalized: 1
+  labelFormat: 7b6375727d2f7b6d61787d
+  labelColor:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
+  effectSmoothChange: 0
+  effectSmoothChangeSpeed: 0.5
+  effectSmoothChangeDirection: 0
+  effectSmoothChangeFinishedNotify:
+    receiver: {fileID: 0}
+    methodName: 
+  effectBurn: 0
+  effectBurnTextureBar: {fileID: 0}
+  atlasEffectBurnTextureBarGUID: 
+  effectBurnTextureBarColor:
+    r: 1
+    g: 0
+    b: 0
+    a: 1
+  effectBurnFinishedNotify:
+    receiver: {fileID: 0}
+    methodName: 
+  effectBurnDirection: 1
+  _tint:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
+  spritesBackground: []
+  spritesForeground:
+  - color:
+      r: 0
+      g: 0
+      b: 0
+      a: 1
+    sprite: {fileID: 21300000, guid: 0508dd4e3733e2847bc8d31ac5041009, type: 3}
+    material: {fileID: 0}
+  label: {fileID: 0}
+  effectBurnSprite:
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    sprite: {fileID: 0}
+    material: {fileID: 0}
+  debugMode: 0
+  createdChildren:
+  - {fileID: 166472}
+  - {fileID: 165928}
+  backgroundBinds: []
+  foregroundBinds:
+  - image: {fileID: 11495464}
+    index: 0
+  spriteBar: {fileID: 21300000, guid: c64125d34f21e8343b920f3e9331f8a8, type: 3}
+  spriteBarMaterial: {fileID: 0}
+  spriteBarColorType: 0
+  spriteBarColor:
+    r: 0
+    g: 0.71323526
+    b: 0
+    a: 1
+  spriteBarGradient:
+    key0: {}
+    key1: {}
+    key2: {}
+    key3: {}
+    key4: {}
+    key5: {}
+    key6: {}
+    key7: {}
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  growDirection: 0
+  radialOffset: 0
+  radialLength: 1
+  barImageScale: {x: 1, y: 1, z: 1}
+  barImageOffset: {x: 0, y: 0, z: 0}
+  barImageRepeater: {x: 1, y: 1}
+  effectBlink: 0
+  effectBlinkValue: 0.2
+  effectBlinkRatePerSecond: 1
+  effectBlinkColor:
+    r: 1
+    g: 1
+    b: 1
+    a: 0
+  effectBlinkOperator: 1
+  effectFollow: 0
+  effectFollowObject: {fileID: 0}
+  effectFollowOffset: {x: 0, y: 0, z: 0}
+  effectFollowScaleX:
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  effectFollowScaleY:
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  effectFollowScaleZ:
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  effectFollowRotation:
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  effectFollowColor:
+    key0: {}
+    key1: {}
+    key2: {}
+    key3: {}
+    key4: {}
+    key5: {}
+    key6: {}
+    key7: {}
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  effectTiled: 0
+  effectTiledSprite: {fileID: 0}
+  effectTiledTiling: {x: 2, y: 2}
+  effectTiledStartOffset: {x: 0, y: 0}
+  effectTiledOffsetChangeSpeed: {x: -1, y: 0}
+  effectTiledTint:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
+  effectTilledImageBarMask: {fileID: 0}
+  effectTilledImageTiles: {fileID: 0}
+  lastRebuildHash: 1777683412
+  dirty: 0
+  imageBar: {fileID: 11462256}
+  imageBurn: {fileID: 0}
+--- !u!114 &11462256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca294cb88bcef846ad69aa7e26a17f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color:
+    r: 0.34509805
+    g: 0.654902
+    b: 0.78039217
+    a: 1
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: 556e697479456e67696e652e55492e4d61736b61626c65477261706869632b43756c6c53746174654368616e6765644576656e742c20556e697479456e67696e652e55492c2056657273696f6e3d312e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d6e756c6c
+  sprite: {fileID: 21300000, guid: c64125d34f21e8343b920f3e9331f8a8, type: 3}
+  cachedSprite: {fileID: 0}
+  cachedPadding: {x: 0, y: 0, z: 0, w: 0}
+  growDirection: 0
+  _fillValue: 0.5
+  radialFillOffset: 0
+  radialFillLength: 1
+  uvOffset: {x: 0, y: 0}
+  uvTiling: {x: 1, y: 1}
+  readable: 1
+--- !u!114 &11495464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 0508dd4e3733e2847bc8d31ac5041009, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &22233244
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166472}
+--- !u!222 &22243678
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165928}
+--- !u!224 &22442260
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135234}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
+  m_Children:
+  - {fileID: 22469746}
+  - {fileID: 22448168}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -370.5, y: -228.56}
+  m_SizeDelta: {x: 18, y: 3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &22448168
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22442260}
+  m_RootOrder: 1
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 18, y: 3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &22469746
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166472}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22442260}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 18, y: 3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: valueMax
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _valueCurrent
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: barImageScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: barImageScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: barImageScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: barImageOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: offset.y
+      value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: spriteBarColor.g
+      value: 0.71323526
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: spriteBarColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: spriteBarColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: lookAtCamera
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: updateLookupReference
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 135234}
+  m_IsPrefabParent: 1

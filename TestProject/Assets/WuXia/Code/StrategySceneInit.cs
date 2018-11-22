@@ -77,7 +77,6 @@ namespace WX
             DemoSetting settings = GameObject.Find("Settings").GetComponent<DemoSetting>();
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
         }
 
         public static void InitializeWithScene()
@@ -164,9 +163,7 @@ namespace WX
                     min.Add(prestigeDatas[i].ValueMin);
                     level.Add(prestigeDatas[i].LevelCode);
                 }
-
                 PrestigeSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>(), max, min, level);
-
             }
             #endregion
 
@@ -217,6 +214,7 @@ namespace WX
                         Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
                     });
 
+
                     GameText.BuildingNameDic.Add(building, buildingData[j].Name);
                     GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
                 }
@@ -263,6 +261,8 @@ namespace WX
                         InteractionExitType = (int)LocationType.LivingAreaExit,
                         InteractionEnterType = (int)LocationType.LivingAreaEnter
                     });
+
+                    //entityManager.AddComponent(livingArea,ComponentType.Create<>());
 
                     GameText.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameText.NameDic.Add(livingArea, livingAreaDatas[i].Name);
@@ -386,9 +386,6 @@ namespace WX
 
                 });
 
-                
-
-
                 GameText.NameDic.Add(player, data.Name);
                 GameText.SurnameDic.Add(player, data.Surname);
                 GameText.Description.Add(player, data.Description);
@@ -400,6 +397,14 @@ namespace WX
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
+            }
+            #endregion
+
+
+            #region TimeEvent
+            {
+
+
             }
             #endregion
 

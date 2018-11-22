@@ -5,7 +5,10 @@ using UnityEngine;
 
 namespace WX
 {
-    public class PrestigeSystem : JobComponentSystem
+    /// <summary>
+    /// 声望系统
+    /// </summary>
+    public class PrestigeSystem : ComponentSystem
     {
         struct PrestigeCheckValue
         {
@@ -19,7 +22,6 @@ namespace WX
 
         public static void SetupComponentData(EntityManager entityManager,List<int> max,List<int> min,List<int> levels)
         {
-
             for (int i = 0; i < levels.Count; i++)
             {
                 _check.Add(new PrestigeCheckValue
@@ -29,10 +31,18 @@ namespace WX
                     Min = min[i],
                 });
             }
-
-
         }
 
+        struct PrestigeGroup
+        {
+            public readonly int Length;
+            public ComponentDataArray<PrestigeValue> PrestigeValue;
+        }
+
+
+        protected override void OnUpdate()
+        {
+        }
     }
 
 }

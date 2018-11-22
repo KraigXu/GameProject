@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &129196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 469880}
+  - 33: {fileID: 3325554}
+  - 23: {fileID: 2382624}
+  - 114: {fileID: 11494688}
+  m_Layer: 0
+  m_Name: RifleBullet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &469880
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.595, y: 0.10642582, z: 0.09475}
+  m_LocalScale: {x: 0.013773322, y: 0.014970772, z: 0.039449308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!23 &2382624
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129196}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 9e2018ca2a042e440b472de3f83db8b1, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3325554
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129196}
+  m_Mesh: {fileID: 4300008, guid: c52cfffe5a8af964a8df943254f0894e, type: 3}
+--- !u!114 &11494688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e789de82e5794b4baeedf13b0b0391a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseDebug: 0
+  UseDebugLogs: 0
+  UseDebugActiveOnly: 0
+  UseDebugRays: 0
+  UseDontDestroyOnLoad: 0
+  m_Status:
+    Enabled: 0
+    Foldout: 0
+    InfoText: 
+    ShowInfoText: 0
+    EnableDebugLog: 0
+    EnableDebugRay: 0
+    LifespanMin: 0
+    LifespanMax: 0
+    LifespanDefaultMax: 360
+    UseAging: 0
+    MaxAge: 60
+    MaxAgeMaximum: 60
+    UseLifespan: 0
+    m_Corpse:
+      Enabled: 0
+      Foldout: 0
+      InfoText: 
+      ShowInfoText: 0
+      EnableDebugLog: 0
+      EnableDebugRay: 0
+      CorpseReferencePrefab: {fileID: 0}
+      CorpseRemovingDelay: 20
+      CorpseRemovingDelayMaximum: 20
+      CorpseRemovingDelayVariance: 0.25
+      UseCorpseScaling: 0
+    IsDestructible: 1
+    InitialDurabilityMin: 100
+    InitialDurabilityMax: 100
+    InitialDurabilityMaximum: 100
+  m_Message:
+    Enabled: 0
+    Foldout: 0
+    LastGroupCommand: 
+  UseRuntimeName: 0
+  RuntimeName: 
+  BaseOffset: 0
+  BaseOffsetMaximum: 1
+  m_Odour:
+    Enabled: 0
+    Foldout: 0
+    Type: 0
+    Intensity: 50
+    IntensityMax: 100
+    Range: 25
+    RangeMax: 100
+    UseMarker: 0
+    MarkerMinInterval: 2
+    MarkerMaxInterval: 5
+    MarkerIntervalMax: 60
+    MarkerPrefab: {fileID: 0}
+    UseEffect: 0
+    EffectPrefab: {fileID: 0}
+  m_Inventory:
+    Enabled: 0
+    Foldout: 0
+    InfoText: 
+    ShowInfoText: 0
+    EnableDebugLog: 0
+    EnableDebugRay: 0
+    m_Slots: []
+    MaxSlots: 9
+    IgnoreInventoryOwner: 0
+    DefaultDropRange: 0.5
+    LastCollectedObjectID: 0
+    UseDetachOnDie: 0
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 129196}
+  m_IsPrefabParent: 1

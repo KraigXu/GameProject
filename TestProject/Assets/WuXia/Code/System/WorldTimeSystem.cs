@@ -86,22 +86,8 @@ namespace WX
         [Inject]
         private PlayerData _playerData;
 
-
         protected override void OnUpdate()
         {
-            //for (int i = 0; i < _playerData.Length; i++)
-            //{
-            //    var aiControl = _playerData.Aicontrol[i];
-            //    if (aiControl.IsMove == true)
-            //    {
-            //        curStatus = TimeSatus.Play;
-            //    }
-            //    else
-            //    {
-            //        curStatus = TimeSatus.Stop;
-            //    }
-            //}
-
             CurTime = StrategySceneInit.Settings.curTime;
             if (curStatus == TimeSatus.Play)
             {

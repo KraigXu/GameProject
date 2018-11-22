@@ -23,8 +23,19 @@ namespace WX.Ui
         // force ignore add nav data
         public bool ignoreAddNavData = false;
     }
+
     // Base window data context for Refresh window or show window
     public class BaseWindowContextData { }
+
+    public class MenuEventData:BaseWindowContextData
+    {
+        public UnityAction value;
+        
+        public List<string> Names;
+
+
+    }
+
 
     public class StrategyWindowInData : BaseWindowContextData
     {

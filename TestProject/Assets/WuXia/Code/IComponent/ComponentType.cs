@@ -90,56 +90,7 @@ namespace WX
 
         public int TragetId;
         
-       // public int Huti;
-
-        //public int GenGu;
-        //public int LingMin;
-        //public int DongCha;
-        //public int JiYi;
-        //public int WuXing;
-        //public int YunQi;
-
-        ////public DateTime TimeAppearance;
-        ////public DateTime TimeEnd;
-
-        
-        
-        //public int Magic;
-        //public int CurMagic;
-        //public int AttackOutMin;
-        //public int AttackOutMax;
-        //public int AttackInMin;
-        //public int AttackInMax;
-
-       
-        //public int StatusCode;
-        //public int GruopId;
-
         public Vector3 CurTarget;
-
-        //public int Id;
-        //public string Surname;
-        //public string Name;
-        //public string AvatarCode;
-        //public string ModeCode;
-        //public string Title;
-        //public string Description;
-        //public RaceType RaceType;
-        //public SexType Sex;
-
-        //public string FeatureIds;
-        //public string Location;
-        //public LocationType LocationType;
-        //public string ArticleJson;
-        //public string EquipmentJson;
-        //public string LanguageJson;
-        //public string GongfaJson;
-        //public string JifaJson;
-
-        //public BiologicalStatus CurStatus;
-        //public WhereStatus CurWhereStatus;
-        //public int GroupId = -1;                
-        //public Sprite Avatar;
     }
 
     public struct BiologicalStatus: IComponentData
@@ -165,7 +116,6 @@ namespace WX
 
     public struct LivingArea : IComponentData
     {
-
         public int Id;         
         public int PersonNumber;
         public int CurLevel;
@@ -184,17 +134,6 @@ namespace WX
         public int Renown;
 
         public int IsInternal;   //是否显示内部 0 不显示 1显示
-
-        //public BuildingObject[] BuildingObjects;
-        //public string Name;
-        //public string Description;
-
-        //public GameObject LivingAreaM;
-        //public Renderer LivingAreaRender;
-        //public Collider LivingAreaCollider;
-        //public bool IsOpen = false;  //是否打开
-
-        //public LivingAreaState[] Groups = new LivingAreaState[0];
     }
 
 
@@ -209,23 +148,13 @@ namespace WX
         public int OwnId;
         public Vector3 Position;
 
-        //public string Key { get; set; }
-        //public string Name { get; set; }
-        //public string Description { get; set; }
-        //public int BuildingLevel { get; set; }
-        //public BuildingStatus Status { get; set; }
-        //public BuildingType Type { get; set; }
-        //public int DurableValue { get; set; }
-        //public int OwnId { get; set; }
-        //public string BuildingFeaturesIds
-        //{
-        //    get; set;
-        //    public string MarkIds { get; set; }
-        //public string ModelPath { get; set; }
-        //public BuildingObject() { }
-        //// public int 
+        public int LoactionId;
+        public int LoactionType;
+    }
 
-
+    public struct PrestigeValue : IComponentData
+    {
+        public int value;
     }
 
 

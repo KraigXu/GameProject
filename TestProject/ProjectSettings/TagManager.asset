@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Player
   - LivingArea
   - Terrain
   layers:
@@ -17,10 +18,10 @@ TagManager:
   - 
   - LivingArea
   - Terrain
-  - 
-  - 
-  - 
-  - 
+  - WalkableSurface
+  - Obstacle
+  - Creature
+  - Player
   - 
   - 
   - 

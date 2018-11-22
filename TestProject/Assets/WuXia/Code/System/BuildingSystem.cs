@@ -1,17 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Jobs;
 using UnityEngine;
 using WX.Ui;
 
 namespace WX
 {
-
     public delegate void BuildingEvent(Entity entity, int id);
 
-    public class BuildingSystem : ComponentSystem
+    public class BuildingSystem : JobComponentSystem
     {
-
         struct BuildingGroup
         {
             public readonly int Length;
@@ -22,10 +21,11 @@ namespace WX
         [Inject]
         private BuildingGroup _buildingGroup;
 
-        protected override void OnUpdate()
+        protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-        }
 
+            return base.OnUpdate(inputDeps);
+        }
 
         public List<BuildingiDataItem> GetUiData(int livingAreaId)
         {
@@ -66,6 +66,7 @@ namespace WX
             //ShowWindowData data = new ShowWindowData();
             //data.contextData = new BuildingiMainData();
         }
+
 
     }
 

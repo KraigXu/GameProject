@@ -79,15 +79,6 @@ namespace WX
         public string Description;
     }
 
-    /// <summary>
-    /// 设施类型
-    /// </summary>
-    public enum BuildingFeatureType
-    {
-
-    }
-
-
     public class LivingAreaSystem : ComponentSystem
     {
 
@@ -152,6 +143,11 @@ namespace WX
             }
         }
 
+        /// <summary>
+        /// 获取UI数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public LivingAreaWindowCD GetLivingAreaData(int id)
         {
             LivingAreaWindowCD uidata = new LivingAreaWindowCD();
