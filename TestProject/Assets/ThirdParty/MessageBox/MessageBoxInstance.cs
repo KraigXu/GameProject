@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using WX.Ui;
 
 /// <summary>
 /// 消息框显示

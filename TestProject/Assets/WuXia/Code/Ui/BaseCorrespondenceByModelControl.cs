@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using TinyFrameWork;
-
 public class BaseCorrespondenceByModelControl : MonoBehaviour
 {
 
     public bool IsNeedModelBlockOut = false;
-
-
 
     private Vector3 _wordpos = Vector3.zero;
     private Camera _camera3D;

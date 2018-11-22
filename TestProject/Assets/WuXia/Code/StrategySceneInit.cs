@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using DataAccessObject;
-using Newtonsoft.Json;
-using TinyFrameWork;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,6 +8,7 @@ using Unity.Transforms;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.ThirdPerson;
+using WX.Ui;
 
 namespace WX
 {
@@ -48,15 +47,26 @@ namespace WX
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
         }
 
+
+        /// <summary>
+        /// 在场景加载后初始化数据
+        /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeAfterSceneLoad()
         {
             var settingsGo = GameObject.Find("Settings");
+
             if (settingsGo == null)
             {
                 SceneManager.sceneLoaded += OnSceneLoaded;
                 return;
             }
+            else
+            {
+                Settings = settingsGo?.GetComponent<DemoSetting>();
+                if (!Settings) return;
+            }
+
             InitializeWithScene();
         }
 
@@ -72,16 +82,7 @@ namespace WX
 
         public static void InitializeWithScene()
         {
-            var settingsGo = GameObject.Find("Settings");
-            if (settingsGo == null)
-            {
-                SceneManager.sceneLoaded += OnSceneLoaded;
-                return;
-            }
-            Settings = settingsGo?.GetComponent<DemoSetting>();
-            if (!Settings)
-                return;
-
+           
             PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
             BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
             LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
@@ -177,6 +178,9 @@ namespace WX
                 {
                     GameObject go = GameObject.Instantiate(Settings.DistrictPrefab, new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
 
+                    DistrictRange districtRange = go.GetComponent<DistrictRange>();
+                    districtRange.DistrictId = districtDatas[i].Id;
+
                     Entity district = go.GetComponent<GameObjectEntity>().Entity;
                     entityManager.AddComponent(district, ComponentType.Create<District>());
                     entityManager.SetComponentData(district, new District
@@ -192,7 +196,6 @@ namespace WX
                     GameText.NameDic.Add(district, districtDatas[i].Name);
                     GameText.Description.Add(district, districtDatas[i].Description);
                 }
-
             }
             #endregion
 
@@ -382,6 +385,8 @@ namespace WX
                     RoationOffset = new Vector3(50, 0, 0)
 
                 });
+
+                
 
 
                 GameText.NameDic.Add(player, data.Name);

@@ -116,6 +116,7 @@ namespace MapMagic
 			writer.Write("<" + objTypeName);
 			if (objType.IsArray) writer.Write(" length=" + ((Array)obj).Length);
 			writer.WriteLine(">");
+            
 
 			//values
 			foreach (Value val in Values(obj))

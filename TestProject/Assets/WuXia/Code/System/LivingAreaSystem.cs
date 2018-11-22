@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using TinyFrameWork;
-using Unity.Entities;
-using Unity.Transforms;
+﻿using Unity.Entities;
 using UnityEngine;
-using DataAccessObject;
-using Unity.Mathematics;
+using WX.Ui;
 
 namespace WX
 {

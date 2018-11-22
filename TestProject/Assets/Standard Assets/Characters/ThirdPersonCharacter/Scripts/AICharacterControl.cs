@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,9 +8,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class AICharacterControl : MonoBehaviour
     {
-
         public delegate void ContactTargetEvent(int code,int targetId);
-
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public Transform target;                                    // target to aim for
@@ -32,6 +30,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 _moveLine = gameObject.AddComponent<LineRenderer>();
             }
+
+            _moveLine.startWidth = 0.1f;
+            _moveLine.endWidth = 0.1f;
+            
 
             agent.updateRotation = false;
 	        agent.updatePosition = true;
@@ -64,6 +66,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }
             }       
         }
+
+        void FixedUpdate()
+        {
+            if (agent.path.corners.Length > 1)
+            {
+                _moveLine.positionCount = agent.path.corners.Length;
+                _moveLine.SetPositions(agent.path.corners);
+            }
+
+        }
         public void SetTarget(Transform target)
         {
             this.target = target;
@@ -75,13 +87,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
            // this._contactTargetEvent = contactEvent;
             this.TargetCode = targetCode;
             this.TargetId = targetid;
-            //ÉèÖÃÂ·¾¶µÄµã£¬
-            //Â·¾¶  µ¼º½¡£
+            //è®¾ç½®è·¯å¾„çš„ç‚¹ï¼Œ
+            //è·¯å¾„  å¯¼èˆªã€‚
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(targetV3, path);
-            //ÏßĞÔäÖÈ¾ÉèÖÃ¹ÕµãµÄ¸öÊı¡£Êı×éÀàĞÍµÄ¡£
+            //çº¿æ€§æ¸²æŸ“è®¾ç½®æ‹ç‚¹çš„ä¸ªæ•°ã€‚æ•°ç»„ç±»å‹çš„ã€‚
             _moveLine.positionCount = path.corners.Length;
-            //ÏßĞÔäÖÈ¾µÄ¹ÕµãÎ»ÖÃ£¬Êı×éÀàĞÍ£¬
+            //çº¿æ€§æ¸²æŸ“çš„æ‹ç‚¹ä½ç½®ï¼Œæ•°ç»„ç±»å‹ï¼Œ
             agent.SetDestination(targetV3);
             _moveLine.SetPositions(path.corners);
         }

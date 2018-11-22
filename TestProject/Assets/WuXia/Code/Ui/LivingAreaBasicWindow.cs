@@ -4,7 +4,7 @@ using WX;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TinyFrameWork
+namespace WX.Ui
 {
     public class LivingAreaBasicWindow : UIWindowBase
     {

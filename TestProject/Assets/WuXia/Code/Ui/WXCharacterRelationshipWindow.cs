@@ -1,29 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TinyFrameWork;
 using UnityEngine;
 
-public class WXCharacterRelationshipWindow : UIWindowBase
+namespace WX.Ui
 {
-    protected override void SetWindowId()
+    public class WXCharacterRelationshipWindow : UIWindowBase
     {
-        this.ID = WindowID.WXCharacterRelationshipWindow;
-    }
+        protected override void SetWindowId()
+        {
+            this.ID = WindowID.WXCharacterRelationshipWindow;
+        }
 
-    protected override void InitWindowCoreData()
-    {
-        windowData.windowType = UIWindowType.BackgroundLayer;
-        windowData.showMode = UIWindowShowMode.DoNothing;
-        windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
-        windowData.colliderMode = UIWindowColliderMode.None;
-        windowData.closeModel = UIWindowCloseModel.Destory;
-        windowData.animationType = UIWindowAnimationType.None;
-        windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
-    }
+        protected override void InitWindowCoreData()
+        {
+            windowData.windowType = UIWindowType.BackgroundLayer;
+            windowData.showMode = UIWindowShowMode.DoNothing;
+            windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
+            windowData.colliderMode = UIWindowColliderMode.None;
+            windowData.closeModel = UIWindowCloseModel.Destory;
+            windowData.animationType = UIWindowAnimationType.None;
+            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
+        }
 
-    public override void InitWindowOnAwake()
-    {
+        public override void InitWindowOnAwake()
+        {
 
 
+        }
     }
 }

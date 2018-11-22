@@ -25,6 +25,7 @@ namespace MapMagic
 				public MenuItem (string name, MenuItem[] subs, bool disabled=false, int priority=0) { this.name=name; subItems=subs; this.disabled=disabled; this.priority=priority; }
 				public MenuItem () { }
 
+
 				public void SortItems ()
 				{
 					if (subItems==null) return;

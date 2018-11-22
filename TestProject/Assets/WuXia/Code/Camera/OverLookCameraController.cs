@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using TinyFrameWork;
 using UnityEngine.EventSystems;
 public class OverLookCameraController : MonoBehaviour
 {

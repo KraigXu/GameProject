@@ -1,16 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using DataAccessObject;
-using Newtonsoft.Json;
-using WX;
-using TinyFrameWork;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.ThirdPerson;
-using Unity.Transforms;
-using Unity.Mathematics;
+using WX.Ui;
 
 namespace WX
 {

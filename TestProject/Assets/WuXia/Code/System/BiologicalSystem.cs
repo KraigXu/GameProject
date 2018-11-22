@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
-using TinyFrameWork;
 using Unity.Entities;
 using UnityEngine;
+using WX.Ui;
 
 namespace WX
 {

@@ -4,7 +4,7 @@ using DataAccessObject;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TinyFrameWork
+namespace WX.Ui
 {
     public class TipsWindow : UIWindowBase
     {
