@@ -52,7 +52,7 @@ namespace WX.Ui
 
             for (int i = 0; i < _data.Names.Count; i++)
             {
-    
+
             }
 
         }

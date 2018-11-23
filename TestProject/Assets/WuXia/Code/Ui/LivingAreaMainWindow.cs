@@ -25,21 +25,21 @@ namespace WX.Ui
         [SerializeField] private Text _type;
         [SerializeField] private Text _stable;
 
-
         [SerializeField] private List<TogglePanel> _toggleArray;
         [SerializeField] private List<BaseCorrespondenceByModelControl> _buildingBilling;
-        [SerializeField] private GameObject _buildingGo;
+        [SerializeField] private List<GameObject> _buildingFeatures;
+        [SerializeField] private List<BiologicalBaseUi> _buildingBiological;
+        [SerializeField] private GameObject _buildingMainView;                                //建筑主视图
         [SerializeField] private GameObject _buildingImage;
         [SerializeField] private GameObject _buildingContent;
 
+       // [SerializeField] private List<TogglePanel> _buildingViewGroup;                         //管理建筑物组
+
         [SerializeField] private Button _buildingExit;
 
-        [Header("Building")] public List<GameObject> BuildingsGo = new List<GameObject>();
-        private bool _buildingViewStatus = false;
+        private bool _buildingIsShow = false;
 
-        private bool _buildingFlag = false;
         private LivingAreaWindowCD _currentLivingArea;
-
 
         [Serializable]
         class TogglePanel
@@ -66,10 +66,7 @@ namespace WX.Ui
 
         public override void InitWindowOnAwake()
         {
-
-            //_buildingExit.onClick.AddListener(BuildingExit);
-            //_buildingContent.Find("Exit").GetComponent<Button>().onClick.AddListener(CloseBuiding);
-            //_buildingContent.gameObject.SetActive(_buildingViewStatus);
+            _buildingExit.onClick.AddListener(CloseBuidingView);
         }
 
         void Update()
@@ -81,12 +78,14 @@ namespace WX.Ui
                     _toggleArray[i].Panel.gameObject.SetActive(_toggleArray[i].Toggle.isOn);
                 }
             }
+
+            _buildingMainView.gameObject.SetActive(_buildingIsShow);
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             if (contextData == null) return;
-            _currentLivingArea = (LivingAreaWindowCD) contextData;
+            _currentLivingArea = (LivingAreaWindowCD)contextData;
 
             ChangeData();
         }
@@ -98,58 +97,73 @@ namespace WX.Ui
                 _buildingBilling[i].gameObject.SetActive(false);
             }
 
-            _name.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
-            _powerName.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
-            _personName.text = GameText.NameDic[_currentLivingArea.OnlyEntity];
+            _name.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
+            _powerName.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
+            _personName.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
             _money.text = _currentLivingArea.Money + "/" + _currentLivingArea.MoneyMax;
             _iron.text = _currentLivingArea.Iron + "/" + _currentLivingArea.IronMax;
             _wood.text = _currentLivingArea.Wood + "/" + _currentLivingArea.WoodMax;
             _food.text = _currentLivingArea.Food + "/" + _currentLivingArea.FoodMax;
             _person.text = _currentLivingArea.PersonNumber.ToString();
             _stable.text = _currentLivingArea.DefenseStrength.ToString();
-            _level.text = GameText.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
-            _type.text = GameText.LivingAreaType[_currentLivingArea.LivingAreaType];
+            _level.text = GameStaticData.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
+            _type.text = GameStaticData.LivingAreaType[_currentLivingArea.LivingAreaType];
 
             for (int i = 0; i < _currentLivingArea.BuildingiDataItems.Count; i++)
             {
                 _buildingBilling[i].gameObject.SetActive(true);
-                _buildingBilling[i].GetComponentInChildren<Text>().text =
-                    GameText.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
-                _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,
-                    _currentLivingArea.BuildingiDataItems[i].Point);
+                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
+                _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }
         }
 
         private void AccessBuilding(GameObject go)
         {
+            BuildingiDataItem item = null;
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
                 if (go == _buildingBilling[i].gameObject)
                 {
-                    _buildingFlag = true;
-
-                    _currentLivingArea.BuildingiDataItems[i].OnOpen(_currentLivingArea.BuildingiDataItems[i].OnlyEntity,
-                        _currentLivingArea.BuildingiDataItems[i].Id);
-                    return;
+                    item = _currentLivingArea.BuildingiDataItems[i];
                 }
-
             }
 
+            if(item==null)
+                return;
+
+            _buildingIsShow = true;
+
+
+            if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
+            {
+                int number = item.Biologicals.Count - _buildingBiological.Count;
+
+                for (int i = 0; i < number; i++)
+                {
+                    GameObject newItem= UGUITools.AddChild(_buildingBiological[0].transform.parent.gameObject, _buildingBiological[0].gameObject);
+                    _buildingBiological.Add(newItem.GetComponent<BiologicalBaseUi>());
+                }
+            }
+
+            for (int i = 0; i < item.Biologicals.Count; i++)
+            {
+                _buildingBiological[i].NameTex.text = item.Biologicals[i].Name;
+                _buildingBiological[i].HeadImg.sprite = GameStaticData.BiologicalAvatar[item.Biologicals[i].AtlasId];
+                _buildingBiological[i].gameObject.name = item.Biologicals[i].Id.ToString();
+            }
+            item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }
 
-        private void OpenBuiding(BuildingObject building)
+        private void OpenBuidingView(BuildingObject building)
         {
-            _buildingContent.gameObject.SetActive(true);
+            _buildingIsShow = true;
         }
 
-        private void CloseBuiding()
+        private void CloseBuidingView()
         {
-            _buildingContent.gameObject.SetActive(false);
-
+            _buildingIsShow = false;
         }
-
-
 
     }
 }

@@ -18,4 +18,14 @@ public class DemoSetting : MonoBehaviour
     public DateTime curTime = DateTime.Now;
     public Camera MainCamera;
 
+    public GameObject Biological1;
+    public GameObject Biological2;
+    public GameObject Biological3;
+
+    public Material LineMat;
+    public Material BiologicalMat;
+
+    public Shader Shader;
+
+
 }

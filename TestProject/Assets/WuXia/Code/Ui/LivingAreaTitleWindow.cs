@@ -31,7 +31,7 @@ namespace WX.Ui
                 WindowContextLivingAreaData data = contextData as WindowContextLivingAreaData;
                 for (int i = 0; i < data.EntityArray.Count; i++)
                 {
-                    _titleItems[i].Init(GameText.NameDic[data.EntityArray[i]],Camera.main,UICenterMasterManager.Instance._Camera, data.Points[i]+ new Vector3(0,1f,0));
+                    _titleItems[i].Init(GameStaticData.NameDic[data.EntityArray[i]],Camera.main,UICenterMasterManager.Instance._Camera, data.Points[i]+ new Vector3(0,1f,0));
                 }
                 
             }

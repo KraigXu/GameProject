@@ -77,15 +77,24 @@ public class SQLService
 
     public void CreateDB()
     {
-        Tables.CreateTable_Prestige(this);
+
+        //------------建筑相关
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);
         Tables.CreateTable_BuildingData(this);
 
+        //------------生物相关
+        Tables.CreateTable_Biological(this);
+        Tables.CreateTable_Faction(this);
+        Tables.CreateTable_Relation(this);
+        Tables.CreateTable_Prestige(this);
+        Tables.CreateTable_Techniques(this);
+        Tables.CreateTable_Gongfa(this);
+        Tables.CreateTable_Xinfa(this);
+
+        //-----------资源相关
         Tables.CreateTable_Avatar(this);
         Tables.CreateTable_ModelMap(this);
-        Tables.CreateTable_Biological(this);
-
     }
 
 

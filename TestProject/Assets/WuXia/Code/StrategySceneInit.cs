@@ -113,36 +113,54 @@ namespace WX
 
             #region Dic
             {
-                GameText.BiologicalSex.Add(1, "男");
-                GameText.BiologicalSex.Add(2, "女");
-                GameText.BiologicalSex.Add(3, "未知");
+                GameStaticData.BiologicalSex.Add(1, "男");
+                GameStaticData.BiologicalSex.Add(2, "女");
+                GameStaticData.BiologicalSex.Add(3, "未知");
 
-                GameText.LivingAreaLevel.Add(0, "0级");
-                GameText.LivingAreaLevel.Add(1, "1级");
-                GameText.LivingAreaLevel.Add(2, "2级");
-                GameText.LivingAreaLevel.Add(3, "3级");
-                GameText.LivingAreaLevel.Add(4, "4级");
-                GameText.LivingAreaLevel.Add(5, "5级");
+                GameStaticData.LivingAreaLevel.Add(0, "0级");
+                GameStaticData.LivingAreaLevel.Add(1, "1级");
+                GameStaticData.LivingAreaLevel.Add(2, "2级");
+                GameStaticData.LivingAreaLevel.Add(3, "3级");
+                GameStaticData.LivingAreaLevel.Add(4, "4级");
+                GameStaticData.LivingAreaLevel.Add(5, "5级");
 
-                GameText.LivingAreaType.Add(0, "Type1");
-                GameText.LivingAreaType.Add(1, "Type2");
-                GameText.LivingAreaType.Add(2, "Type3");
-                GameText.LivingAreaType.Add(3, "Type4");
-                GameText.LivingAreaType.Add(4, "Type5");
-                GameText.LivingAreaType.Add(5, "Type6");
+                GameStaticData.LivingAreaType.Add(0, "Type1");
+                GameStaticData.LivingAreaType.Add(1, "Type2");
+                GameStaticData.LivingAreaType.Add(2, "Type3");
+                GameStaticData.LivingAreaType.Add(3, "Type4");
+                GameStaticData.LivingAreaType.Add(4, "Type5");
+                GameStaticData.LivingAreaType.Add(5, "Type6");
 
-                GameText.BuildingType.Add(0, "BuildingType1");
-                GameText.BuildingType.Add(1, "BuildingType2");
-                GameText.BuildingType.Add(2, "BuildingType3");
-                GameText.BuildingType.Add(3, "BuildingType4");
-                GameText.BuildingType.Add(4, "BuildingType5");
-                GameText.BuildingType.Add(5, "BuildingType6");
-                GameText.BuildingType.Add(6, "BuildingType7");
+                GameStaticData.BuildingType.Add(0, "BuildingType1");
+                GameStaticData.BuildingType.Add(1, "BuildingType2");
+                GameStaticData.BuildingType.Add(2, "BuildingType3");
+                GameStaticData.BuildingType.Add(3, "BuildingType4");
+                GameStaticData.BuildingType.Add(4, "BuildingType5");
+                GameStaticData.BuildingType.Add(5, "BuildingType6");
+                GameStaticData.BuildingType.Add(6, "BuildingType7");
 
-                GameText.BuildingStatus.Add(0, "空地");
-                GameText.BuildingStatus.Add(1, "正常");
-                GameText.BuildingStatus.Add(2, "建筑中");
+                GameStaticData.BuildingStatus.Add(0, "空地");
+                GameStaticData.BuildingStatus.Add(1, "正常");
+                GameStaticData.BuildingStatus.Add(2, "建筑中");
 
+            }
+            #endregion
+
+            #region Avatar
+            {
+                List<AvatarData>  avatarDatas = SqlData.GetAllDatas<AvatarData>();
+
+                for (int i = 0; i < avatarDatas.Count; i++)
+                {
+                    if (avatarDatas[i].Type ==1)
+                    {
+                        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id,Resources.Load<Sprite>(avatarDatas[i].Path));
+                    }
+                    else if(avatarDatas[i].Type== 2)
+                    {
+                        GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
+                    }
+                }
             }
             #endregion
 
@@ -156,9 +174,9 @@ namespace WX
                 List<int> level = new List<int>();
                 for (int i = 0; i < prestigeDatas.Count; i++)
                 {
-                    GameText.PrestigeBiolgicalDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].BiologicalTitle);
-                    GameText.PrestigeDistrictDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].DistrictTitle);
-                    GameText.PrestigeLivingAreaDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].LivingAreaTitle);
+                    GameStaticData.PrestigeBiolgicalDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].BiologicalTitle);
+                    GameStaticData.PrestigeDistrictDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].DistrictTitle);
+                    GameStaticData.PrestigeLivingAreaDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].LivingAreaTitle);
                     max.Add(prestigeDatas[i].ValueMax);
                     min.Add(prestigeDatas[i].ValueMin);
                     level.Add(prestigeDatas[i].LevelCode);
@@ -190,8 +208,8 @@ namespace WX
                         SecurityModulus = districtDatas[i].SecurityModulus
                     });
 
-                    GameText.NameDic.Add(district, districtDatas[i].Name);
-                    GameText.Description.Add(district, districtDatas[i].Description);
+                    GameStaticData.NameDic.Add(district, districtDatas[i].Name);
+                    GameStaticData.Description.Add(district, districtDatas[i].Description);
                 }
             }
             #endregion
@@ -215,8 +233,8 @@ namespace WX
                     });
 
 
-                    GameText.BuildingNameDic.Add(building, buildingData[j].Name);
-                    GameText.BuildingDescriptionDic.Add(building, buildingData[j].Description);
+                    GameStaticData.BuildingNameDic.Add(building, buildingData[j].Name);
+                    GameStaticData.BuildingDescriptionDic.Add(building, buildingData[j].Description);
                 }
             }
 
@@ -264,10 +282,9 @@ namespace WX
 
                     //entityManager.AddComponent(livingArea,ComponentType.Create<>());
 
-                    GameText.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
-                    GameText.NameDic.Add(livingArea, livingAreaDatas[i].Name);
-                    GameText.Description.Add(livingArea, livingAreaDatas[i].Description);
-
+                    GameStaticData.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
+                    GameStaticData.NameDic.Add(livingArea, livingAreaDatas[i].Name);
+                    GameStaticData.Description.Add(livingArea, livingAreaDatas[i].Description);
                 }
             }
             #endregion
@@ -320,11 +337,10 @@ namespace WX
                     });
 
                     //Save Text
-                    GameText.NameDic.Add(biologicalEntity, data[i].Name);
-                    GameText.SurnameDic.Add(biologicalEntity, data[i].Surname);
-                    GameText.Description.Add(biologicalEntity, data[i].Description);
+                    GameStaticData.NameDic.Add(biologicalEntity, data[i].Name);
+                    GameStaticData.SurnameDic.Add(biologicalEntity, data[i].Surname);
+                    GameStaticData.Description.Add(biologicalEntity, data[i].Description);
                 }
-
             }
             #endregion
 
@@ -386,9 +402,9 @@ namespace WX
 
                 });
 
-                GameText.NameDic.Add(player, data.Name);
-                GameText.SurnameDic.Add(player, data.Surname);
-                GameText.Description.Add(player, data.Description);
+                GameStaticData.NameDic.Add(player, data.Name);
+                GameStaticData.SurnameDic.Add(player, data.Surname);
+                GameStaticData.Description.Add(player, data.Description);
 
                 //entityManager.AddComponent(player,ComponentType.Create<Player>());
                 // Finally we add a shared component which dictates the rendered look
@@ -399,7 +415,6 @@ namespace WX
                 // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
             }
             #endregion
-
 
             #region TimeEvent
             {

@@ -52,95 +52,29 @@ namespace DataAccessObject
                                        " BuildingInfoJson TEXT);");
         }
 
-
         /// <summary>
-        /// 阵营，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
+        /// 建筑表
         /// </summary>
         /// <param name="service"></param>
-        public static void CreateTable_Faction(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS FactionData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Sex INTEGER," +
-                                       " Age INTEGER," +
-                                       " AgeMax INTEGER," +
-                                       " Life INTEGER," +
-                                       " LifeMax INTEGER," +
-                                       " Prestige INTEGER," +
-                                       " TimeAppearance TEXT," +
-                                       " TimeEnd TEXT," +
-                                       " IsDebut TEXT," +
-                                       " Location INTEGER," +
-                                       " LocationType INTEGER," +
-                                       " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT," +
-                                       " LanguageJson TEXT);");
-        }
-
-        /// <summary>
-        /// 时间事件
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="ifNotExists"></param>
-        public static void CreateTable_TimeEvent(SQLService service, bool ifNotExists)
-        {
-            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
-            service.connection.Execute("CREATE TABLE " +
-                                       constraint +
-                                       " TimeEventData (" +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT);");
-        }
-
-
-        /// <summary>
-        /// 关系
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Relation(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " XinfaType TEXT," +
-
-                                       " ContentTitle TEXT);");
-        }
-
-
-
-
-
-        /// <summary>
-        /// 指定的建筑无
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Building(SQLService service)
+        public static void CreateTable_BuildingData(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS BuildingData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " RaceId INTEGER," +
                                        " Name TEXT," +
-                                       " Description TEXT, " +
-                                       " Sex INTEGER," +
-                                       " Age INTEGER," +
-                                       " AgeMax INTEGER," +
-                                       " Life INTEGER," +
-                                       " LifeMax INTEGER," +
-                                       " Prestige INTEGER," +
-                                       " TimeAppearance TEXT," +
-                                       " TimeEnd TEXT," +
-                                       " IsDebut TEXT," +
-                                       " Location INTEGER," +
-                                       " LocationType INTEGER," +
-                                       " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT," +
-                                       " LanguageJson TEXT);");
+                                       " Description TEXT," +
+                                       " ParentId INTEGER," +
+                                       " BuildingLevel TEXT," +
+                                       " Status INTEGER," +
+                                       " Type INTEGER," +
+                                       " DurableValue INTEGER," +
+                                       " OwnId INTEGER," +
+                                       " ImageId INTEGER," +
+                                       " X INTEGER," +
+                                       " Y INTEGER," +
+                                       " Z INTEGER);");
         }
+
+
 
 
         /// <summary>
@@ -183,8 +117,60 @@ namespace DataAccessObject
                                        " JifaJson TEXT);");
         }
 
+        /// <summary>
+        /// 阵营，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Faction(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS FactionData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " Life INTEGER," +
+                                       " LifeMax INTEGER," +
+                                       " Prestige INTEGER," +
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " IsDebut TEXT," +
+                                       " Location INTEGER," +
+                                       " LocationType INTEGER," +
+                                       " ArticleJson TEXT," +
+                                       " EquipmentJson TEXT," +
+                                       " LanguageJson TEXT);");
+        }
 
+        /// <summary>
+        /// 关系
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Relation(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " XinfaType TEXT," +
+                                       " ContentTitle TEXT);");
+        }
 
+        /// <summary>
+        /// 声望
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Prestige(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
+                                       " LevelCode INTEGER PRIMARY KEY," +
+                                       " ValueMin INTEGER," +
+                                       " ValueMax INTEGER," +
+                                       " BiologicalTitle TEXT," +
+                                       " LivingAreaTitle TEXT," +
+                                       " DistrictTitle TEXT);");
+        }
 
         /// <summary>
         /// 技法
@@ -202,6 +188,36 @@ namespace DataAccessObject
                                        " TechniquesValue INTEGER," +
                                        " Effect TEXT);");
         }
+
+        /// <summary>
+        /// 功法
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Gongfa(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS GongfaData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " ContentTitle TEXT);");
+        }
+        /// <summary>
+        /// 心法
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_Xinfa(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS XinfaData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description  TEXT," +
+                                       " XinfaType TEXT," +
+
+                                       " ContentTitle TEXT);");
+        }
+
+
+
 
         /// <summary>
         /// 书籍
@@ -241,6 +257,22 @@ namespace DataAccessObject
                                        " ContentJson TEXT);");
 
         }
+        /// <summary>
+        /// 时间事件
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="ifNotExists"></param>
+        public static void CreateTable_TimeEvent(SQLService service, bool ifNotExists)
+        {
+            string constraint = ifNotExists ? "IF NOT EXISTS " : "";
+            service.connection.Execute("CREATE TABLE " +
+                                       constraint +
+                                       " TimeEventData (" +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT);");
+        }
+
 
 
         /// <summary>
@@ -272,32 +304,7 @@ namespace DataAccessObject
                                        " ContentTitle TEXT);");
         }
 
-        /// <summary>
-        /// 功法
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Gongfa(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS GongfaData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " ContentTitle TEXT);");
-        }
-        /// <summary>
-        /// 心法
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Xinfa(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS XinfaData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " XinfaType TEXT,"+
 
-                                       " ContentTitle TEXT);");
-        }
 
 
 
@@ -325,7 +332,7 @@ namespace DataAccessObject
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS AvatarData ( " +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Code TEXT," +
-                                       " Type TEXT," +
+                                       " Type INTEGER," +
                                        " Path TEXT);");
         }
 
@@ -341,42 +348,8 @@ namespace DataAccessObject
                                        " Type TEXT," +
                                        " Path TEXT);");
         }
-        /// <summary>
-        /// shengwang
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Prestige(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
-                                       " LevelCode INTEGER PRIMARY KEY," +
-                                       " ValueMin INTEGER," +
-                                       " ValueMax INTEGER," +
-                                       " BiologicalTitle TEXT," +
-                                       " LivingAreaTitle TEXT," +
-                                       " DistrictTitle TEXT);");
-        }
 
-        /// <summary>
-        /// BuildingData
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_BuildingData(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BuildingData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description TEXT," +
-                                       " ParentId INTEGER," +
-                                       " BuildingLevel TEXT," +
-                                       " Status INTEGER," +
-                                       " Type INTEGER," +
-                                       " DurableValue INTEGER," +
-                                       " OwnId INTEGER," +
-                                       " ImageId INTEGER," +
-                                       " X INTEGER," +
-                                       " Y INTEGER," +
-                                       " Z INTEGER);");
-        }
+
 
     }
 
@@ -421,7 +394,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     /// <summary>
     /// 居住地
     /// </summary>
@@ -460,7 +432,9 @@ namespace DataAccessObject
             return objects;
         }
     }
-
+    /// <summary>
+    /// 建筑
+    /// </summary>
     public class BuildingData : BaseData
     {
         public int Id { get; set; }
@@ -514,9 +488,33 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     /// <summary>
-    /// 势力职位
+    /// 家族
+    /// </summary>
+    public class FamilyData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int BossId { get; set; }
+        public int Money { get; set; }
+        public int Iron { get; set; }
+        public int Wood { get; set; }
+        public int Food { get; set; }
+        public int Population { get; set; }
+        public int FactionType { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Name,BossId
+            };
+
+            return objects;
+        }
+    }
+    /// <summary>
+    /// 派系
     /// </summary>
     public class FactionPositionData : BaseData
     {
@@ -527,7 +525,6 @@ namespace DataAccessObject
             throw new NotImplementedException();
         }
     }
-
     public class FactionRelationData: BaseData
     {
         public override object[] GetValues()
@@ -540,8 +537,9 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-
+    /// <summary>
+    /// 声望
+    /// </summary>
     public class PrestigeData : BaseData
     {
         public int LevelCode { get; set; }
@@ -560,9 +558,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-
-
     public class AreaTypeData : BaseData
     {
         public int Id { get; set; }                      //编号 
@@ -578,15 +573,6 @@ namespace DataAccessObject
         }
     }
 
-    public class RaceData : BaseData
-    {
-        public int RaceCode { get; set; }
-        public string RaceName { get; set; }
-        public override object[] GetValues()
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class SexData : BaseData
     {
         public int SexCode { get; set; }
@@ -600,10 +586,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-   
-
-
 
     /// <summary>
     /// 生物信息
@@ -657,10 +639,13 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-    
-
-
+    public class BiologicalRelation : BaseData
+    {
+        public override object[] GetValues()
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class DialogData : BaseData
     {
         public int Id { get; set; }
@@ -679,18 +664,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-
-
-    public class ScenarioData : BaseData
-    {
-        public int Id { get; set; }
-
-        public override object[] GetValues()
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class TaskData : BaseData
     {
         public int Id { get; set; }
@@ -707,7 +680,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     public class TipsData : BaseData
     {
         public int Id { get; set; }
@@ -723,12 +695,11 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     public class AvatarData : BaseData
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
         public string Path { get; set; }
 
         public override object[] GetValues()
@@ -740,28 +711,10 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-    public class ModelMapData : BaseData
-    {
-        public int Id { get; set; }
-        public string Code { get; set; }
-        public string Type { get; set; }
-        public string Path { get; set; }
-
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                Id,Code,Type,Path
-            };
-            return objects;
-        }
-    }
-
 
     //----------------------------------------映射数据库----------------------------------End
 
-        //-----------------------------------------取值--------------------------------------Start
+    //-----------------------------------------取值--------------------------------------Start
 
     public static class SqlData
     {

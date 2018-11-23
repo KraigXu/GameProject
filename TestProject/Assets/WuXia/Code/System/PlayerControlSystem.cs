@@ -133,7 +133,7 @@ namespace WX
                 {
                     newStatus.StatusRealTime = (int)LocationType.LivingAreaIn;
 
-                    GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameText.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+                    GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
 
                     Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 

@@ -134,13 +134,22 @@ namespace WX.Ui
         public int ImageId;
         public Vector3 Point;
 
-
-
-
         public BuildingEvent OnOpen;
         public BuildingEvent OnClose;
+
+        public List<BiologicalUiInfo> Biologicals= new List<BiologicalUiInfo>();
+       
     }
 
+
+    public class BiologicalUiInfo
+    {
+        public int Id;
+        public int AtlasId;
+        public string Name;
+        
+
+    }
 
 
     public class WindowContextLivingAreaData : BaseWindowContextData
