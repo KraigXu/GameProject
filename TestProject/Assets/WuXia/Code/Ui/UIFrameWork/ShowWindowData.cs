@@ -39,6 +39,10 @@ namespace WX.Ui
 
     public class StrategyWindowInData : BaseWindowContextData
     {
+
+        public int PlayerAvatarId;
+        public int PlayerId;
+
         public UnityAction CharavterEvent;
         public UnityAction WugongEvent;
         public UnityAction TechnologyEvent;
@@ -46,13 +50,15 @@ namespace WX.Ui
         public UnityAction MapEvent;
 
         public StrategyWindowInData(UnityAction charavterEvent, UnityAction wugongEvent, UnityAction technologyEvent, UnityAction logEvent,
-            UnityAction mapEvent)
+            UnityAction mapEvent,int id1,int  playerId)
         {
             this.CharavterEvent = charavterEvent;
             this.WugongEvent = wugongEvent;
             this.TechnologyEvent = technologyEvent;
             this.LogEvent = logEvent;
             this.MapEvent = mapEvent;
+            this.PlayerAvatarId = id1;
+            this.PlayerId = playerId;
         }
     }
 
@@ -75,8 +81,7 @@ namespace WX.Ui
     }
     public class BiologicalUiInData : BaseWindowContextData
     {
-
-        public Entity OnlyEntity;
+        public int Id;
         public int Sex;
         public int Prestige;
         public int Influence;
@@ -103,7 +108,9 @@ namespace WX.Ui
     public class LivingAreaWindowCD : BaseWindowContextData
     {
 
-        public Entity OnlyEntity;
+        public int LivingAreaId;
+        public int PowerId;
+        public int PersonId;
         public int PersonNumber;
         public int Money;
         public int MoneyMax;
@@ -154,7 +161,7 @@ namespace WX.Ui
 
     public class WindowContextLivingAreaData : BaseWindowContextData
     {
-        public List<Entity> EntityArray = new List<Entity>();
+        public List<int> EntityArray = new List<int>();
         public List<Vector3> Points = new List<Vector3>();
 
 

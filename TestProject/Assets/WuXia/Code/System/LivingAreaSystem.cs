@@ -123,7 +123,7 @@ namespace WX
                 WindowContextLivingAreaData uidata = new WindowContextLivingAreaData();
                 for (int i = 0; i < _livingAreas.Length; i++)
                 {
-                    uidata.EntityArray.Add(_livingAreas.Entity[i]);
+                    uidata.EntityArray.Add(_livingAreas.LivingAreaNode[i].Id);
                     uidata.Points.Add(_livingAreas.LivingAreaPositon[i].position);
                 }
 
@@ -158,7 +158,9 @@ namespace WX
                     continue;
                 }
                 var livingArea = _livingAreas.LivingAreaNode[i];
-                uidata.OnlyEntity = _livingAreas.Entity[i];
+                uidata.LivingAreaId = _livingAreas.LivingAreaNode[i].Id;
+                uidata.PowerId = _livingAreas.LivingAreaNode[i].Id;
+                uidata.PersonId = _livingAreas.LivingAreaNode[i].Id;
                 uidata.PersonNumber = livingArea.PersonNumber;
                 uidata.Money = livingArea.Money;
                 uidata.MoneyMax = livingArea.MoneyMax;

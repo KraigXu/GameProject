@@ -97,9 +97,9 @@ namespace WX.Ui
                 _buildingBilling[i].gameObject.SetActive(false);
             }
 
-            _name.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
-            _powerName.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
-            _personName.text = GameStaticData.NameDic[_currentLivingArea.OnlyEntity];
+            _name.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
+            _powerName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
+            _personName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
             _money.text = _currentLivingArea.Money + "/" + _currentLivingArea.MoneyMax;
             _iron.text = _currentLivingArea.Iron + "/" + _currentLivingArea.IronMax;
             _wood.text = _currentLivingArea.Wood + "/" + _currentLivingArea.WoodMax;

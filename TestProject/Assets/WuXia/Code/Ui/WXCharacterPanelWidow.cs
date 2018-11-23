@@ -71,8 +71,8 @@ namespace WX.Ui
             if (contextData != null)
             {
                 BiologicalUiInData data = (BiologicalUiInData) contextData;
-                _name.text = GameStaticData.NameDic[data.OnlyEntity];
-                _surname.text = GameStaticData.SurnameDic[data.OnlyEntity];
+                _name.text = GameStaticData.BiologicalNameDic[data.Id];
+                _surname.text = GameStaticData.BiologicalSurnameDic[data.Id];
                 _sex.text = GameStaticData.BiologicalSex[data.Sex];
                 _prestigeLevel.text = GameStaticData.PrestigeBiolgicalDic[data.Prestige];
 

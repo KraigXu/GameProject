@@ -55,12 +55,7 @@ namespace WX
         public static void SetupComponentData(EntityManager entityManager)
         {
 
-            //ShowWindowData menuWindow=new ShowWindowData();
-            //menuWindow.contextData=
         }
-
-
-
 
 
         protected override void OnUpdate()
@@ -158,17 +153,15 @@ namespace WX
                 }
                 else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaIn)
                 {
-
                 }
 
                 m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
-
             }
             if (_strategyWindow == null)
             {
                 ShowWindowData data = new ShowWindowData();
-                data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent);
+                data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent,1,1);
                 _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
             }
         }
@@ -200,9 +193,10 @@ namespace WX
             uidata.Shen = biological.Shen;
             uidata.Sex = data.Sex;
             uidata.Prestige = m_Players.Prestige[0].Level;
-            uidata.Influence = data.Influence;
-            uidata.Disposition = data.Disposition;
-            uidata.OnlyEntity = m_Players.Entity[0];
+            uidata.Id = biological.BiologicalId;
+            //uidata.Influence = data.Influence;
+            //uidata.Disposition = data.Disposition;
+           // uidata.OnlyEntity = m_Players.Entity[0];
 
             showWindowData.contextData = uidata;
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);

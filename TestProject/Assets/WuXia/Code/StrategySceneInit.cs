@@ -164,8 +164,7 @@ namespace WX
             }
             #endregion
 
-            #region Prestige
-
+            #region 初始化声望
             {
                 List<PrestigeData> prestigeDatas = SqlData.GetAllDatas<PrestigeData>();
 
@@ -184,6 +183,51 @@ namespace WX
                 PrestigeSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>(), max, min, level);
             }
             #endregion
+
+            #region 初始化派系
+
+            {
+                List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
+
+                for (int i = 0; i < factionDatas.Count; i++)
+                {
+                    GameStaticData.FactionName.Add(factionDatas[i].Id,factionDatas[i].Name);
+                }
+
+            }
+
+
+            #endregion
+
+
+            #region 初始化家族
+
+            {
+                List<FamilyData> familyDatas = SqlData.GetAllDatas<FamilyData>();
+
+
+                for (int i = 0; i < familyDatas.Count; i++)
+                {
+                    GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
+                }
+            }
+            #endregion
+
+            #region 初始化关系
+
+            {
+                List<RelationData> biologicalRelations = SqlData.GetAllDatas<RelationData>();
+
+                for (int i = 0; i < biologicalRelations.Count; i++)
+                {
+                    
+                }
+            }
+            
+
+
+            #endregion
+
 
             #region DistrictInit
             {
@@ -208,8 +252,8 @@ namespace WX
                         SecurityModulus = districtDatas[i].SecurityModulus
                     });
 
-                    GameStaticData.NameDic.Add(district, districtDatas[i].Name);
-                    GameStaticData.Description.Add(district, districtDatas[i].Description);
+                    GameStaticData.DistrictName.Add(districtDatas[i].Id, districtDatas[i].Name);
+                    GameStaticData.DistrictDescriptione.Add(districtDatas[i].Id, districtDatas[i].Description);
                 }
             }
             #endregion
@@ -283,8 +327,8 @@ namespace WX
                     //entityManager.AddComponent(livingArea,ComponentType.Create<>());
 
                     GameStaticData.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
-                    GameStaticData.NameDic.Add(livingArea, livingAreaDatas[i].Name);
-                    GameStaticData.Description.Add(livingArea, livingAreaDatas[i].Description);
+                    GameStaticData.LivingAreaName.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Name);
+                    GameStaticData.LivingAreaDescriptione.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Description);
                 }
             }
             #endregion
@@ -303,22 +347,15 @@ namespace WX
                     entityManager.SetComponentData(biologicalEntity, new Biological
                     {
                         BiologicalId = data[i].Id,
-                        RaceId = data[i].RaceType,
                         SexId = data[i].Sex,
                         Age = data[i].Age,
                         AgeMax = data[i].AgeMax,
-                        Prestige = data[i].Prestige,
-                        Influence = data[i].Influence,
-                        Disposition = data[i].Disposition,
-                        Tizhi = data[i].Property1,
-                        Lidao = data[i].Property2,
-                        Jingshen = data[i].Property3,
-                        Lingdong = data[i].Property4,
-                        Wuxing = data[i].Property5,
-                        Jing = data[i].Property6,
-                        Qi = data[i].Property6,
-                        Shen = data[i].Property6
 
+                        Tizhi = data[i].Tizhi,
+                        Lidao = data[i].Lidao,
+                        Jingshen = data[i].Jingshen,
+                        Lingdong = data[i].Lingdong,
+                        Wuxing = data[i].Wuxing
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
@@ -337,9 +374,9 @@ namespace WX
                     });
 
                     //Save Text
-                    GameStaticData.NameDic.Add(biologicalEntity, data[i].Name);
-                    GameStaticData.SurnameDic.Add(biologicalEntity, data[i].Surname);
-                    GameStaticData.Description.Add(biologicalEntity, data[i].Description);
+                    GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
+                    GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
+                    GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
                 }
             }
             #endregion
@@ -355,21 +392,15 @@ namespace WX
                 entityManager.SetComponentData(player, new Biological
                 {
                     BiologicalId = data.Id,
-                    RaceId = data.RaceType,
                     SexId = data.Sex,
                     Age = data.Age,
                     AgeMax = data.AgeMax,
-                    Prestige = data.Prestige,
-                    Influence = data.Influence,
-                    Disposition = data.Disposition,
-                    Tizhi = data.Property1,
-                    Lidao = data.Property2,
-                    Jingshen = data.Property3,
-                    Lingdong = data.Property4,
-                    Wuxing = data.Property5,
-                    Jing = data.Property6,
-                    Qi = data.Property6,
-                    Shen = data.Property6,
+
+                    Tizhi = data.Tizhi,
+                    Lidao = data.Lidao,
+                    Jingshen = data.Jingshen,
+                    Lingdong = data.Lingdong,
+                    Wuxing = data.Wuxing,
                     LocationType = data.LocationType,
                     LocationCode = data.LocationType
                 });
@@ -379,7 +410,7 @@ namespace WX
                 entityManager.AddComponent(player, ComponentType.Create<Prestige>());
                 entityManager.SetComponentData(player, new Prestige
                 {
-                    Value = data.Prestige,
+                    Value =1,
                 });
 
 
@@ -402,9 +433,9 @@ namespace WX
 
                 });
 
-                GameStaticData.NameDic.Add(player, data.Name);
-                GameStaticData.SurnameDic.Add(player, data.Surname);
-                GameStaticData.Description.Add(player, data.Description);
+                GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
+                GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
+                GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
 
                 //entityManager.AddComponent(player,ComponentType.Create<Player>());
                 // Finally we add a shared component which dictates the rendered look

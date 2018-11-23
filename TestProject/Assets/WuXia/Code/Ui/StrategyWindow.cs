@@ -14,6 +14,13 @@ namespace WX.Ui
     /// </summary>
     public class StrategyWindow : UIWindowBase
     {
+        [SerializeField]
+        Image AvatarImage;
+        [SerializeField]
+        Text NameTex;
+        [SerializeField]
+        Text SunNameTex;
+
         [Header("Buttom")] [SerializeField] private Button _characterInformationBtn;
         [SerializeField] private Button _wugongBtn;
         [SerializeField] private Button _technologyBtn;
@@ -51,6 +58,10 @@ namespace WX.Ui
                 _technologyBtn.onClick.AddListener(data.TechnologyEvent);
                 _logBtn.onClick.AddListener(data.LogEvent);
                 _mapBtn.onClick.AddListener(data.MapEvent);
+
+                AvatarImage.overrideSprite = GameStaticData.BiologicalAvatar[data.PlayerAvatarId];
+                NameTex.text = GameStaticData.BiologicalNameDic[data.PlayerId];
+                SunNameTex.text = GameStaticData.BiologicalSurnameDic[data.PlayerId];
             }
         }
     }

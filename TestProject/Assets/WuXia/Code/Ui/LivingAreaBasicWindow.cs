@@ -86,7 +86,7 @@ namespace WX.Ui
 
             LivingAreaWindowCD content = (LivingAreaWindowCD) contextData;
             //_curLivingArea = data.Node;
-            LivingAreaContent.Find("Name").GetComponent<Text>().text = GameStaticData.NameDic[content.OnlyEntity];
+           // LivingAreaContent.Find("Name").GetComponent<Text>().text = GameStaticData.NameDic[content.OnlyEntity];
             //LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
             //LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
             //LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();

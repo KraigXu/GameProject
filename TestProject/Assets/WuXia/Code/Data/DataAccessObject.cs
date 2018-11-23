@@ -87,75 +87,82 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Surname TEXT," +
                                        " Name TEXT," +
-                                       " AvatarCode TEXT," +
-                                       " ModeCode TEXT," +
-                                       " Title TEXT," +
+                                       " AvatarId INTEGER," +
+                                       " ModelId INTEGER," +
+                                       " PrestigeId INTEGER," +
+                                       " FamilyId INTEGER," +
+                                       " FactionId INTEGER," +
+                                       " TitleId INTEGER," +
                                        " Description TEXT," +
-                                       " RaceType INTEGER," +
                                        " Sex INTEGER," +
                                        " Age INTEGER," +
                                        " AgeMax INTEGER," +
-                                       " Property1 INTEGER," +
-                                       " Property2 INTEGER," +
-                                       " Property3 INTEGER," +
-                                       " Property4 INTEGER," +
-                                       " Property5 INTEGER," +
-                                       " Property6 INTEGER," +
-                                       " Prestige INTEGER," +
-                                       " Influence INTEGER," +
-                                       " Disposition INTEGER," +
                                        " TimeAppearance TEXT," +
                                        " TimeEnd TEXT," +
                                        " FeatureIds TEXT," +
                                        " IsDebut INTEGER," +
                                        " Location TEXT," +
                                        " LocationType INTEGER," +
-                                       " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT, " +
-                                       " LanguageJson INTEGER," +
+                                       " X INTEGER," +
+                                       " Y INTEGER," +
+                                       " Z INTEGER," +
+                                       " Tizhi INTEGER," +
+                                       " Lidao INTEGER," +
+                                       " Jingshen INTEGER," +
+                                       " Lingdong INTEGER," +
+                                       " Wuxing INTEGER, " +
+                                       " ArticleJson INTEGER," +
+                                       " EquipmentJson INTEGER," +
                                        " GongfaJson INTEGER," +
-                                       " JifaJson TEXT);");
-        }
+                                       " JifaJson INTEGER," +
+                                       " LanguageJson TEXT);");
+    }
 
         /// <summary>
-        /// 阵营，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
+        /// 阵营,派系，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
         /// </summary>
         /// <param name="service"></param>
-        public static void CreateTable_Faction(SQLService service)
+        public static void CreateTable_FactionData(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS FactionData ( " +
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT, " +
-                                       " Sex INTEGER," +
-                                       " Age INTEGER," +
-                                       " AgeMax INTEGER," +
-                                       " Life INTEGER," +
-                                       " LifeMax INTEGER," +
-                                       " Prestige INTEGER," +
-                                       " TimeAppearance TEXT," +
-                                       " TimeEnd TEXT," +
-                                       " IsDebut TEXT," +
-                                       " Location INTEGER," +
-                                       " LocationType INTEGER," +
-                                       " ArticleJson TEXT," +
-                                       " EquipmentJson TEXT," +
-                                       " LanguageJson TEXT);");
+                                       " BossId INTEGER," +
+                                       " Money INTEGER," +
+                                       " Iron INTEGER," +
+                                       " Wood INTEGER," +
+                                       " Food INTEGER," +
+                                       " Population TEXT," +
+                                       " FactionType INTEGER);");
+        }
+
+        /// <summary>
+        /// 家族
+        /// </summary>
+        public static void CreateTable_FamilyData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS FamilyData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT, " +
+                                       " BossId INTEGER," +
+                                       " ChildIds INTEGER);");
         }
 
         /// <summary>
         /// 关系
         /// </summary>
         /// <param name="service"></param>
-        public static void CreateTable_Relation(SQLService service)
+        public static void CreateTable_RelationData(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS RelationData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " XinfaType TEXT," +
-                                       " ContentTitle TEXT);");
+                                       " MainId INTEGER ," +
+                                       " AimsId INTEGER," +
+                                       " RelationshipValue INTEGER," +
+                                       " RalationType INTEGER);");
         }
+
 
         /// <summary>
         /// 声望
@@ -463,13 +470,68 @@ namespace DataAccessObject
     }
 
 
+
     /// <summary>
-    /// 势力
+    /// 生物信息
+    /// </summary>
+    public class BiologicalData : BaseData
+    {
+        public int Id { get; set; }                              //ID
+        public string Surname { get; set; }                      //姓
+        public string Name { get; set; }                         //名 
+       
+        public int AvatarId { get; set; }           //头像ID
+        public int ModelId { get; set; }            //模型ID
+        public int PrestigeId { get; set; }           //声望ID
+        public int RelationId { get; set; }           //关系ID
+        public int FamilyId { get; set; }               //家族ID
+        public int FactionId { get; set; }              //派系ID
+        public int TitleId { get; set; }                //称号ID
+
+        public string Description { get; set; }                  //说明
+        public int Sex { get; set; }                             // 性别
+        public int Age { get; set; }                             // 当前年龄
+        public int AgeMax { get; set; }                          // 最大年龄
+        public DateTime TimeAppearance { get; set; }             //出生时间
+        public DateTime TimeEnd { get; set; }                    //死亡时间
+        public string FeatureIds { get; set; }                   //特征ID
+        public int IsDebut { get; set; }                         //是否登场
+        public string Location { get; set; }                        //所处地方 地区编号
+        public int LocationType { get; set; }                       //所处类型 
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+
+        public int Tizhi { get; set; }
+        public int Lidao { get; set; }
+        public int Jingshen { get; set; }
+        public int Lingdong { get; set; }
+        public int Wuxing { get; set; }
+
+        public string ArticleJson { get; set; }                  // 物品JSON
+        public string EquipmentJson { get; set; }                // 装备JSON
+        public string GongfaJson { get; set; }                   //功法JSON
+        public string JifaJson { get; set; }                     //技法JSON
+        public string LanguageJson { get; set; }                 // 语言JSON
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+                {
+                    Id,Surname,Name,AvatarId,ModelId,PrestigeId,RelationId,FamilyId,FactionId,TitleId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
+                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson
+                };
+            return objects;
+        }
+    }
+    /// <summary>
+    /// 派系
     /// </summary>
     public class FactionData : BaseData
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int BossId { get; set; }
         public int Money { get; set; }
         public int Iron { get; set; }
@@ -477,12 +539,12 @@ namespace DataAccessObject
         public int Food { get; set; }
         public int Population { get; set; }
         public int FactionType { get; set; }
-        
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,Name,BossId
+                Id,Name,Description,BossId,Money,Iron,Wood,Food,Population,FactionType
             };
 
             return objects;
@@ -495,43 +557,15 @@ namespace DataAccessObject
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int BossId { get; set; }
-        public int Money { get; set; }
-        public int Iron { get; set; }
-        public int Wood { get; set; }
-        public int Food { get; set; }
-        public int Population { get; set; }
-        public int FactionType { get; set; }
+        public string ChildIds { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,Name,BossId
-            };
-
-            return objects;
-        }
-    }
-    /// <summary>
-    /// 派系
-    /// </summary>
-    public class FactionPositionData : BaseData
-    {
-        public int Id { get; set; }
-        public int FactionId { get; set; }
-        public override object[] GetValues()
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public class FactionRelationData: BaseData
-    {
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                
+                Id,Name,Description,BossId,ChildIds
             };
 
             return objects;
@@ -558,94 +592,27 @@ namespace DataAccessObject
             return objects;
         }
     }
-    public class AreaTypeData : BaseData
-    {
-        public int Id { get; set; }                      //编号 
-        public string Name { get; set; }                //名称
-        public string Description { get; set; }         //说明
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                Id, Name, Description
-            };
-            return objects;
-        }
-    }
-
-    public class SexData : BaseData
-    {
-        public int SexCode { get; set; }
-        public string SexName { get; set; }
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-                SexCode,SexName
-            };
-            return objects;
-        }
-    }
 
     /// <summary>
-    /// 生物信息
+    /// 生物关系
     /// </summary>
-    public class BiologicalData : BaseData
+    public class RelationData : BaseData
     {
-        public int Id { get; set; }                              //ID
-        public string Surname { get; set; }                      //姓
-        public string Name { get; set; }                         //名 
-        public string AvatarCode { get; set; }                     //头像ID
-        public string ModeCode { get; set; }                       //模型ID
-        public string Title { get; set; }                        //称号
-        public string Description { get; set; }                  //说明
-        public int RaceType { get; set; }                          //种族类型
-        public int Sex { get; set; }                             // 性别
-        public int Age { get; set; }                             // 当前年龄
-        public int AgeMax { get; set; }                          // 最大年龄
-        public int Property1 { get; set; }                       // 主要属性1
-        public int Property2 { get; set; }                       //主要属性2
-        public int Property3 { get; set; }                       //主要属性3
-        public int Property4 { get; set; }                       //主要属性4
-        public int Property5 { get; set; }                       //主要属性5
-        public int Property6 { get; set; }                       //主要属性6
-        public int Prestige { get; set; }                        // 声望
-        public int Influence { get; set; }                       //影响力
-        public int Disposition { get; set; }                     //性格值  -500到500  
-        public DateTime TimeAppearance { get; set; }             //出生时间
-        public DateTime TimeEnd { get; set; }                    //死亡时间
-        public string FeatureIds { get; set; }                   //特征IDs
-        public int IsDebut { get; set; }                         //是否登场
-        public string Location { get; set; }                        //所处地方 地区编号
-        public int LocationType { get; set; }                    //所处类型 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-        public string ArticleJson { get; set; }                  // 物品JSON
-        public string EquipmentJson { get; set; }                // 装备JSON
-        public string LanguageJson { get; set; }                 // 语言JSON
-        public string GongfaJson { get; set; }                   //功法JSON
-        public string JifaJson { get; set; }                     //技法JSON
-        
-        public int XiangXing { get; set; }
+        public int MainId;
+        public int AimsId;
+        public int RelationshipValue;
+        public int RalationType;
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
-                {
-                    Id,Surname,Name,AvatarCode,ModeCode,Title,Description,RaceType,Sex,Age,AgeMax,Property1,Property2,Property3,Property4,Property5,Property6,
-                    Prestige,Influence,Disposition,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,LocationType,X,Y,Z, ArticleJson,EquipmentJson,LanguageJson,
-                    GongfaJson,JifaJson
-                };
+            {
+                MainId,AimsId,RelationshipValue,RalationType
+            };
             return objects;
         }
     }
-    public class BiologicalRelation : BaseData
-    {
-        public override object[] GetValues()
-        {
-            throw new NotImplementedException();
-        }
-    }
+
     public class DialogData : BaseData
     {
         public int Id { get; set; }
@@ -695,6 +662,31 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+    /// <summary>
+    /// 模型信息
+    /// </summary>
+    public class ModelData : BaseData
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public int Type { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Type,Path
+            };
+            return objects;
+        }
+    }
+
+
+    /// <summary>
+    /// 头像数据
+    /// </summary>
     public class AvatarData : BaseData
     {
         public int Id { get; set; }

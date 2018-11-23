@@ -85,8 +85,9 @@ public class SQLService
 
         //------------生物相关
         Tables.CreateTable_Biological(this);
-        Tables.CreateTable_Faction(this);
-        Tables.CreateTable_Relation(this);
+        Tables.CreateTable_FactionData(this);
+        Tables.CreateTable_FamilyData(this);
+        Tables.CreateTable_RelationData(this);
         Tables.CreateTable_Prestige(this);
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_Gongfa(this);
