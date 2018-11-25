@@ -19,11 +19,18 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
+                                       " Model INTEGER," +
+                                       " Type INTEGER," +
+                                       " ProsperityLevel INTEGER," +
+                                       " TrafficLevel INTEGER," +
                                        " GrowingModulus INTEGER," +
                                        " SecurityModulus INTEGER," +
-                                       " TrafficModulus INTEGER," +
-                                       " LivinfAreasIds TEXT);");
+                                       " X INTEGER," +
+                                       " Y INTEGER," +
+                                       " Z INTEGER);");
         }
+
+
         /// <summary>
         /// 生活区表 ，设计上生活区的建筑物种类是固有的 但是通过独立的json数据来变更建筑物数据
         /// </summary>
@@ -33,6 +40,7 @@ namespace DataAccessObject
         {
             service.connection.Execute("CREATE TABLE IF NOT EXISTS LivingAreaData (" +
                                        " Id INTEGER PRIMARY KEY," +
+                                       " DistrictId INTEGER,"+
                                        " Name TEXT," +
                                        " Description TEXT," +
                                        " PersonNumber INTEGER," +

@@ -114,7 +114,6 @@ namespace WX
                 if (livingArea.IsInternal == 1)
                 {
                     UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
-
                 }
             }
 

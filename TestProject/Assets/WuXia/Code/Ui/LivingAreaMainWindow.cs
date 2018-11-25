@@ -25,8 +25,7 @@ namespace WX.Ui
         [SerializeField] private Text _type;
         [SerializeField] private Text _stable;
 
-        [SerializeField] private List<TogglePanel> _toggleArray;
-        [SerializeField] private List<BaseCorrespondenceByModelControl> _buildingBilling;
+        [SerializeField] private List<GameObject> _buildingBilling;
         [SerializeField] private List<GameObject> _buildingFeatures;
         [SerializeField] private List<BiologicalBaseUi> _buildingBiological;
         [SerializeField] private GameObject _buildingMainView;                                //建筑主视图
@@ -35,6 +34,7 @@ namespace WX.Ui
 
        // [SerializeField] private List<TogglePanel> _buildingViewGroup;                         //管理建筑物组
 
+        [SerializeField] private Button _livingAreaExit;
         [SerializeField] private Button _buildingExit;
 
         private bool _buildingIsShow = false;
@@ -67,18 +67,11 @@ namespace WX.Ui
         public override void InitWindowOnAwake()
         {
             _buildingExit.onClick.AddListener(CloseBuidingView);
+            _livingAreaExit.onClick.AddListener(CloseLivingArea);
         }
 
         void Update()
         {
-            if (_toggleArray.Count > 0)
-            {
-                for (int i = 0; i < _toggleArray.Count; i++)
-                {
-                    _toggleArray[i].Panel.gameObject.SetActive(_toggleArray[i].Toggle.isOn);
-                }
-            }
-
             _buildingMainView.gameObject.SetActive(_buildingIsShow);
         }
 
@@ -113,7 +106,7 @@ namespace WX.Ui
             {
                 _buildingBilling[i].gameObject.SetActive(true);
                 _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
-                _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
+               // _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }
         }
@@ -163,6 +156,11 @@ namespace WX.Ui
         private void CloseBuidingView()
         {
             _buildingIsShow = false;
+        }
+
+        private void CloseLivingArea()
+        {
+            //_currentLivingArea.
         }
 
     }
