@@ -73,18 +73,14 @@ namespace WX
         // Begin a new game.
         public static void NewGame()
         {
-            //获取配置
-            DemoSetting settings = GameObject.Find("Settings").GetComponent<DemoSetting>();
-            // Access the ECS entity manager
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
 
         public static void InitializeWithScene()
         {
-           
-            PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
-            BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
-            LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
+
+            //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
+            // BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
+            //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
             //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
             //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
             //EnemyLook = GetLookFromPrototype("EnemyRenderPrototype");
@@ -148,21 +144,35 @@ namespace WX
 
             #region Avatar
             {
-                List<AvatarData>  avatarDatas = SqlData.GetAllDatas<AvatarData>();
+                List<AvatarData> avatarDatas = SqlData.GetAllDatas<AvatarData>();
 
                 for (int i = 0; i < avatarDatas.Count; i++)
                 {
-                    if (avatarDatas[i].Type ==1)
+                    if (avatarDatas[i].Type == 1)
                     {
-                        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id,Resources.Load<Sprite>(avatarDatas[i].Path));
+                        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
                     }
-                    else if(avatarDatas[i].Type== 2)
+                    else if (avatarDatas[i].Type == 2)
                     {
                         GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
                     }
                 }
             }
+
             #endregion
+
+            #region Model
+            {
+
+                List<ModelData> modelDatas = SqlData.GetAllDatas<ModelData>();
+                for (int i = 0; i < modelDatas.Count; i++)
+                {
+                    GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
+
+                }
+            }
+            #endregion
+
 
             #region 初始化声望
             {
@@ -191,14 +201,13 @@ namespace WX
 
                 for (int i = 0; i < factionDatas.Count; i++)
                 {
-                    GameStaticData.FactionName.Add(factionDatas[i].Id,factionDatas[i].Name);
+                    GameStaticData.FactionName.Add(factionDatas[i].Id, factionDatas[i].Name);
                 }
 
             }
 
 
             #endregion
-
 
             #region 初始化家族
 
@@ -220,10 +229,10 @@ namespace WX
 
                 for (int i = 0; i < biologicalRelations.Count; i++)
                 {
-                    
+
                 }
             }
-            
+
 
 
             #endregion
@@ -267,6 +276,7 @@ namespace WX
                     Entity building = entityManager.CreateEntity(BuildingArchetype);
                     entityManager.SetComponentData(building, new Building
                     {
+                        Id = buildingData[j].Id,
                         Level = buildingData[j].BuildingLevel,
                         Status = buildingData[j].Status,
                         OwnId = buildingData[j].OwnId,
@@ -276,9 +286,9 @@ namespace WX
                         Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
                     });
 
+                    GameStaticData.BuildingName.Add(buildingData[j].Id, buildingData[j].Name);
+                    GameStaticData.BuildingDescription.Add(buildingData[j].Id, buildingData[j].Description);
 
-                    GameStaticData.BuildingNameDic.Add(building, buildingData[j].Name);
-                    GameStaticData.BuildingDescriptionDic.Add(building, buildingData[j].Description);
                 }
             }
 
@@ -286,6 +296,8 @@ namespace WX
 
             #region LivingAreaInit
             {
+                
+
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
                 for (int i = 0; i < livingAreaDatas.Count; i++)
                 {
@@ -328,14 +340,14 @@ namespace WX
 
                     GameStaticData.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameStaticData.LivingAreaName.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Name);
-                    GameStaticData.LivingAreaDescriptione.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Description);
+                    GameStaticData.LivingAreaDescription.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Description);
                 }
             }
             #endregion
 
             #region BiologicalInit
             {
-                List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? and Id<>? ", new object[] { 1, settings.PlayerId });
+                List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
 
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -347,21 +359,22 @@ namespace WX
                     entityManager.SetComponentData(biologicalEntity, new Biological
                     {
                         BiologicalId = data[i].Id,
+                        AvatarId = data[i].AvatarId,
+                        ModelId = data[i].ModelId,
+                        PrestigeId = data[i].PrestigeId,
+                        RelationId = data[i].RelationId,
+                        FamilyId = data[i].FamilyId,
+                        FactionId = data[i].FactionId,
+                        TitleId = data[i].TitleId,
+
                         SexId = data[i].Sex,
                         Age = data[i].Age,
                         AgeMax = data[i].AgeMax,
-
                         Tizhi = data[i].Tizhi,
                         Lidao = data[i].Lidao,
                         Jingshen = data[i].Jingshen,
                         Lingdong = data[i].Lingdong,
                         Wuxing = data[i].Wuxing
-                    });
-
-                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
-                    entityManager.SetComponentData(biologicalEntity,new NpcInput
-                    {
-                        Movetend = (int)TendType.Move,
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
@@ -370,87 +383,54 @@ namespace WX
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         TargetId = 0,
                         TargetType = 0,
-                        StatusRealTime = (int)LocationType.Field
+                        StatusRealTime = (int)LocationType.Field,
+
+                        PrestigeValue=100
+
                     });
+
+                    if (data[i].FamilyId != 0)
+                    {
+                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<Family>());
+                        entityManager.SetComponentData(biologicalEntity,new Family
+                        {
+                            FamilyId = data[i].FamilyId,
+                            ThisId = data[i].Id
+                        });
+
+                    }
+
+                    if (data[i].Id == settings.PlayerId)
+                    {
+                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<PlayerInput>());
+
+                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<CameraProperty>());
+                        entityManager.SetComponentData(biologicalEntity, new CameraProperty
+                        {
+                            Target = new Vector3(data[i].X, data[i].Y, data[i].Z),
+                            Damping = 3,
+                            Offset = new Vector3(0, 1, -15),
+                            RoationOffset = new Vector3(50, 0, 0)
+
+                        });
+
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+                        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+                    }
+                    else
+                    {
+                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
+                        entityManager.SetComponentData(biologicalEntity, new NpcInput
+                        {
+                            Movetend = (int)TendType.Move,
+                        });
+                    }
 
                     //Save Text
                     GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
                     GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
                 }
-            }
-            #endregion
-
-            #region Player
-            {
-                BiologicalData data = SqlData.GetDataId<BiologicalData>(settings.PlayerId);
-                var go = GameObject.Instantiate(Settings.PlayerBiological, new Vector3(data.X, data.Y, data.Z), quaternion.identity);
-                var player = go.GetComponent<GameObjectEntity>().Entity;
-               
-                
-                entityManager.AddComponent(player, ComponentType.Create<Biological>());
-                entityManager.SetComponentData(player, new Biological
-                {
-                    BiologicalId = data.Id,
-                    SexId = data.Sex,
-                    Age = data.Age,
-                    AgeMax = data.AgeMax,
-
-                    Tizhi = data.Tizhi,
-                    Lidao = data.Lidao,
-                    Jingshen = data.Jingshen,
-                    Lingdong = data.Lingdong,
-                    Wuxing = data.Wuxing,
-                    LocationType = data.LocationType,
-                    LocationCode = data.LocationType
-                });
-
-                entityManager.AddComponent(player, ComponentType.Create<PlayerInput>());
-
-                entityManager.AddComponent(player, ComponentType.Create<Prestige>());
-                entityManager.SetComponentData(player, new Prestige
-                {
-                    Value =1,
-                });
-
-
-                entityManager.AddComponent(player, ComponentType.Create<BiologicalStatus>());
-                entityManager.SetComponentData(player, new BiologicalStatus
-                {
-                    Position = new Vector3(data.X, data.Y, data.Z),
-                    TargetId = 0,
-                    TargetType = 0,
-                    StatusRealTime = (int)LocationType.Field
-                });
-
-                entityManager.AddComponent(player, ComponentType.Create<CameraProperty>());
-                entityManager.SetComponentData(player, new CameraProperty
-                {
-                    Target = new Vector3(data.X, data.Y, data.Z),
-                    Damping = 3,
-                    Offset = new Vector3(0, 1, -15),
-                    RoationOffset = new Vector3(50, 0, 0)
-
-                });
-
-                GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
-                GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
-                GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
-
-                //entityManager.AddComponent(player,ComponentType.Create<Player>());
-                // Finally we add a shared component which dictates the rendered look
-                //entityManager.AddSharedComponentData(player, PlayerLook);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-                //PlayerControlSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-                // PlayerControlSystem.SetupPlayerView(World.Active.GetOrCreateManager<EntityManager>());
-            }
-            #endregion
-
-            #region TimeEvent
-            {
-
-
             }
             #endregion
 

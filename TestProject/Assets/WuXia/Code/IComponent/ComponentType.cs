@@ -46,15 +46,18 @@ namespace WX
         public int SecurityModulus;
     }
 
-    public struct Prestige : IComponentData
-    {
-        public int Value;
-        public int Level;
-    }
+
     public struct Biological : IComponentData
     {
         public int BiologicalId;
-        public int RaceId;
+        public int AvatarId; 
+        public int ModelId;
+        public int PrestigeId;
+        public int RelationId; 
+        public int FamilyId;
+        public int FactionId;
+        public int TitleId;
+
         public int SexId;
         public int Age;
         public int AgeMax;
@@ -93,6 +96,13 @@ namespace WX
         public Vector3 CurTarget;
     }
 
+    public struct Family : IComponentData
+    {
+        public int FamilyId;
+        public int ThisId;
+
+    }
+
     public struct BiologicalStatus: IComponentData
     {
         public Vector3 Position;        //  位置
@@ -100,6 +110,8 @@ namespace WX
         public int TargetType;          // 目标类型
         public int StatusRealTime;       // 实时状态
         public int LocationId;           //所处位置ID
+
+        public int PrestigeValue;
 
     }
 

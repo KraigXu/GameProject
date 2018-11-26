@@ -95,6 +95,7 @@ public class SQLService
 
         //-----------资源相关
         Tables.CreateTable_Avatar(this);
+        Tables.CreateTable_ModelData(this);
         Tables.CreateTable_ModelMap(this);
     }
 

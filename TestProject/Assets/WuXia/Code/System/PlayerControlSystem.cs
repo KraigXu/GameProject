@@ -35,7 +35,6 @@ namespace WX
             public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<AICharacterControl> AiControl;
-            public ComponentDataArray<Prestige> Prestige;
             public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<CameraProperty> Property;
             public EntityArray Entity;
@@ -192,7 +191,7 @@ namespace WX
             uidata.Qi = biological.Qi;
             uidata.Shen = biological.Shen;
             uidata.Sex = data.Sex;
-            uidata.Prestige = m_Players.Prestige[0].Level;
+            uidata.Prestige = m_Players.Status[0].PrestigeValue;
             uidata.Id = biological.BiologicalId;
             //uidata.Influence = data.Influence;
             //uidata.Disposition = data.Disposition;

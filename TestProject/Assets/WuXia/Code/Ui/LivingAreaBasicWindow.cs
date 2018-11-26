@@ -25,6 +25,7 @@ namespace WX.Ui
         private RectTransform AnnualHistoryView;
 
         private LivingArea _curLivingArea;          //记录当前显示的生活区
+        private LivingAreaWindowCD _livingAreaWindowCd;
 
         protected override void SetWindowId()
         {
@@ -83,19 +84,23 @@ namespace WX.Ui
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             if(contextData==null) return;
+            _livingAreaWindowCd = (LivingAreaWindowCD) contextData;
+            
+            LivingAreaContent.Find("Name").GetComponent<Text>().text= GameStaticData.LivingAreaName[_livingAreaWindowCd.LivingAreaId];
+            LivingAreaContent.Find("Level").GetComponent<Text>().text=GameStaticData.LivingAreaLevel[_livingAreaWindowCd.LivingAreaLevel];
+            LivingAreaContent.Find("Description").GetComponent<Text>().text=GameStaticData.LivingAreaDescription[_livingAreaWindowCd.LivingAreaId];
 
-            LivingAreaWindowCD content = (LivingAreaWindowCD) contextData;
             //_curLivingArea = data.Node;
-           // LivingAreaContent.Find("Name").GetComponent<Text>().text = GameStaticData.NameDic[content.OnlyEntity];
+            // LivingAreaContent.Find("Name").GetComponent<Text>().text = GameStaticData.NameDic[content.OnlyEntity];
             //LivingAreaContent.Find("Description").GetComponent<Text>().text = _curLivingArea.Description;
             //LivingAreaContent.Find("Level").GetComponent<Text>().text = _curLivingArea.CurLevel.ToString();
             //LivingAreaContent.Find("Type").GetComponent<Text>().text = _curLivingArea.Type.ToString();
-            //// LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   //势力
+            //// LivingAreaContent.Find("Power").GetComponent<Text>().text = _curLivingArea.Value.PowerId.ToString();   
             //LivingAreaContent.Find("Renown").GetComponent<Text>().text = _curLivingArea.Renown.ToString();
 
             //LivingAreaContent.Find("HaveName").GetComponent<Text>().text = _curLivingArea.ToString();
             //  LivingAreaContent.Find("MoneyMax").GetComponent<Text>().text=node.LivingAreaMoneyMax.ToString();
-            // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();  //建筑  年表  进入
+            // LivingAreaContent.Find("MoneyValue").GetComponent<Text>().text = node.LivingAreaMoney.ToString();
 
         }
     }

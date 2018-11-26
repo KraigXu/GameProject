@@ -105,7 +105,7 @@ namespace WX.Ui
             for (int i = 0; i < _currentLivingArea.BuildingiDataItems.Count; i++)
             {
                 _buildingBilling[i].gameObject.SetActive(true);
-                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingNameDic[_currentLivingArea.BuildingiDataItems[i].OnlyEntity];
+                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[_currentLivingArea.BuildingiDataItems[i].Id];
                // _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }

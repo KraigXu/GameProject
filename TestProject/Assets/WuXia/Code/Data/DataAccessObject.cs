@@ -352,6 +352,20 @@ namespace DataAccessObject
         }
 
         /// <summary>
+        /// 模型
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_ModelData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ModelData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type INTEGER," +
+                                       " Path TEXT);");
+        }
+
+
+        /// <summary>
         /// 模型地图
         /// </summary>
         /// <param name="service"></param>
