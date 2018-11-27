@@ -41,20 +41,46 @@ namespace WX.Ui
 
         public override void InitWindowOnAwake()
         {
-
+            this._button1.onClick.AddListener(Button1Event);
+            this._button2.onClick.AddListener(Button2Event);
+            this._button3.onClick.AddListener(Button3Event);
+            this._button4.onClick.AddListener(Button4Event);
+            this._button5.onClick.AddListener(Button5Event);
+            this._button6.onClick.AddListener(Button6Event);
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
+            if (contextData == null) return;
             base.BeforeShowWindow(contextData);
-            if (contextData ==null)return;
-            _data = (MenuEventData) contextData;
-
-            for (int i = 0; i < _data.Names.Count; i++)
-            {
-
-            }
-
+            _data = (MenuEventData)contextData;
         }
+
+        private void Button1Event()
+        {
+            _data.Rest();
+        }
+
+        private void Button2Event()
+        {
+            _data.Article();
+        }
+        private void Button3Event()
+        {
+            _data.Team();
+        }
+        private void Button4Event()
+        {
+            _data.Recording();
+        }
+        private void Button5Event()
+        {
+            _data.Log();
+        }
+        private void Button6Event()
+        {
+            _data.Relationship();
+        }
+
     }
 }

@@ -21,6 +21,21 @@ namespace  WX
 
         protected override void OnUpdate()
         {
+
+            float dt = Time.deltaTime;
+
+            for (int i = 0; i < _aiGroup.Length; i++)
+            {
+                //switch (_aiGroup.NpcInput[i])
+                //{
+                        
+                //}
+
+
+            }
+
+
+
             for (int i = 0; i < _aiGroup.Length; i++)
             {
                 switch ((TendType)_aiGroup.NpcInput[i].Movetend)
@@ -30,19 +45,13 @@ namespace  WX
                     case TendType.Move:
                         if (_aiGroup.AiControl[i].IsMove == false)
                         {
-                            _aiGroup.AiControl[i].SetTarget(new Vector3(Random.Range(1500f,1700f),80.7618f,Random.Range(500f,700f)), (int)TragetType.Field, -1);
+                            _aiGroup.AiControl[i].SetTarget(new Vector3(Random.Range(1500f, 1700f), 80.7618f, Random.Range(500f, 700f)));
                         }
                         break;
                     default:
                         break;
                 }
-                
-               
             }
-
-
-
-
         }
 
 

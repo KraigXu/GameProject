@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace WX.Ui
 {
     public class MapWindow : UIWindowBase
     {
+        [SerializeField]
+        private Image image;
 
+        [SerializeField]
+        private Image _input;
 
-        public override void InitWindowOnAwake()
+        protected override void SetWindowId()
         {
-
+            this.ID = WindowID.MapWindow;
         }
 
         protected override void InitWindowCoreData()
@@ -23,11 +28,12 @@ namespace WX.Ui
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
-
-        protected override void SetWindowId()
+        public override void InitWindowOnAwake()
         {
-            this.ID = WindowID.MapWindow;
+
         }
+
+        
 
     }
 }

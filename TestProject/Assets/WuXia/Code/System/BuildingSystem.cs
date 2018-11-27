@@ -37,6 +37,7 @@ namespace WX
                 {
                     var building = _buildingGroup.Building[i];
                     BuildingiDataItem item=new BuildingiDataItem();
+                    item.Id = building.Id;
                     item.Level = building.Level;
                     item.OnlyEntity = _buildingGroup.Entity[i];
                     item.Status = _buildingGroup.Building[i].Status;

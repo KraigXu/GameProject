@@ -41,14 +41,15 @@ namespace WX
                 Vector3 point = Status[index].Position;
                 for (int i = 0; i < Interaction.Length; i++)
                 {
+                   
                     if (Vector3.Distance(point, Interaction[i].Position) < Interaction[i].Distance &&
                         Status[index].TargetId== Interaction[i].Id&&
-                        Status[index].StatusRealTime != Interaction[i].InteractionType&&
-                        Status[index].StatusRealTime != Interaction[i].InteractionEnterType &&
-                        Status[index].StatusRealTime != Interaction[i].InteractionExitType)
+                        Status[index].LocationType != Interaction[i].InteractionType&&
+                        Status[index].LocationType != Interaction[i].InteractionEnterType &&
+                        Status[index].LocationType != Interaction[i].InteractionExitType)
                     {
                         BiologicalStatus status = Status[index];
-                        status.StatusRealTime = Interaction[i].InteractionEnterType;
+                        status.LocationType = Interaction[i].InteractionEnterType;
                         Status[index] = status;
                     }
                 }

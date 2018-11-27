@@ -8,14 +8,6 @@ using WX.Ui;
 
 namespace WX
 {
-    public enum PlayerType
-    {
-        WatchingWar,
-        ParticipatingWar,
-        Dying
-    }
-
-
 
     public class PlayerControlSystem : ComponentSystem
     {
@@ -49,18 +41,19 @@ namespace WX
         [Inject]
         private CameraSystem _cameraSystem;
 
+        private bool _uiInit = false;
+        private TipsWindow _tipsWindow;
         private StrategyWindow _strategyWindow;
-
-        public static void SetupComponentData(EntityManager entityManager)
-        {
-
-        }
-
 
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject() || StrategySceneInit.Settings == null || m_Players.Length == 0)
                 return;
+
+            if (_uiInit == false)
+            {
+                UiInit();
+            }
 
             float dt = Time.deltaTime;
             for (int i = 0; i < m_Players.Length; ++i)
@@ -69,28 +62,55 @@ namespace WX
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
                 RaycastHit hit;    //声明一个碰撞的点
                 bool flag = false;
+                bool tipflag = false;
                 if (Physics.Raycast(ray, out hit))
                 {
                     Debug.DrawLine(ray.origin, hit.point, Color.blue);
 
+                    if (hit.collider.CompareTag(Define.TagBiological))
+                    {
+                        Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
+                        Biological biological = EntityManager.GetComponentData<Biological>(entity);
+                        _tipsWindow.SetBiologicalTip(hit.point, biological.BiologicalId);
+                        tipflag = true;
+                    }
+
                     if (Input.GetMouseButtonUp(0))
                     {
-                        if (hit.collider.name.Contains("Terrain"))
+                        if (hit.collider.name.Contains(Define.TagTerrain))
                         {
-                            m_Players.AiControl[i].SetTarget(hit.point, (int)TragetType.Field, -1);
+                            m_Players.AiControl[i].SetTarget(hit.point);
+                            newStatus.TargetType = (int)TargetType.Field;
+                            newStatus.TargetPosition = hit.point;
                             return;
                         }
-                        else if (hit.collider.tag == "LivingArea")
+                        else if (hit.collider.CompareTag(Define.TagLivingArea))
                         {
-                            for (int j = 0; j < _livingAreaData.Length; j++)
-                            {
-                                if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
-                                {
-                                    m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center, (int)TragetType.City, _livingAreaData.LivingArea[j].Id);
-                                    newStatus.TargetType = 1;
-                                    newStatus.TargetId = _livingAreaData.LivingArea[j].Id;
-                                }
-                            }
+
+                            //if(_livingAreaSystem.IsTrue())
+
+                            //if(_livingAreaSystem)
+
+                            //_livingAreaSystem.GetLivingAreaData()
+                            //for (int j = 0; j < _livingAreaData.Length; j++)
+                            //{
+                            //    if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
+                            //    {
+                            //        m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center);
+                            //        newStatus.TargetType = (int)TargetType.City;
+                            //        newStatus.TargetId = _livingAreaData.LivingArea[j].Id;
+                            //    }
+                            //}
+                        }
+                        else if (hit.collider.CompareTag(Define.TagBiological))
+                        {
+                            Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
+                            Biological biological = EntityManager.GetComponentData<Biological>(entity);
+
+                            newStatus.TargetType = (int)TargetType.Biological;
+                            newStatus.TargetId = biological.BiologicalId;
+
+                            m_Players.AiControl[i].SetTarget(hit.collider.transform);
                         }
                     }
 
@@ -111,60 +131,88 @@ namespace WX
                 newStatus.Position = m_Players.AiControl[i].transform.position;
                 CameraProperty newtarget = m_Players.Property[i];
 
-                if (m_Players.Status[i].StatusRealTime == (int)LocationType.City)
+                switch ((LocationType)m_Players.Status[i].LocationType)
                 {
+                    case LocationType.None:
+                        break;
+                    case LocationType.Field:
+                        {
+                            newtarget.Target = m_Players.AiControl[i].transform.position;
+                        }
+                        break;
+                    case LocationType.LivingAreaEnter:
+                        {
+                            //检查当前状态 显示UI信息 
+                           
+                            ShowWindowData windowData = new ShowWindowData();
+                            LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
+                            
+                            uidata.OnOpen = LivingAreaOnOpen;
+                            uidata.OnExit = LivingAreaOnExit;
+                            windowData.contextData = uidata;
+                            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-                }
-                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.Event)
-                {
+                            newStatus.LocationType = (int)LocationType.LivingAreaIn;
+                            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+                            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
-                }
-                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.Field)
-                {
-                    newtarget.Target = m_Players.AiControl[i].transform.position;
-                }
-                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaEnter)
-                {
-                    newStatus.StatusRealTime = (int)LocationType.LivingAreaIn;
+                            Bounds bounds = renderers[0].bounds;
 
-                    GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+                            for (int j = 1; j < renderers.Length; j++)
+                            {
+                                bounds.Encapsulate(renderers[j].bounds);
+                            }
+                            newtarget.Target = bounds.center;
+                        }
+                        break;
+                    case LocationType.LivingAreaIn:
+                        {
 
-                    Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
-
-                    Bounds bounds = renderers[0].bounds;
-
-                    for (int j = 1; j < renderers.Length; j++)
+                        }
+                        break;
+                    case LocationType.LivingAreaExit:
                     {
-                        bounds.Encapsulate(renderers[j].bounds);
+
                     }
-                    newtarget.Target = bounds.center;
-
-                    //检查当前状态 显示UI信息 
-                    LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
-                    ShowWindowData windowData = new ShowWindowData();
-                    windowData.contextData = uidata;
-                    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
-
+                        break;
                 }
-                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaExit)
+
+
+
+                if (Input.GetKeyUp(KeyCode.Escape))
                 {
 
                 }
-                else if (m_Players.Status[i].StatusRealTime == (int)LocationType.LivingAreaIn)
+
+                if (tipflag == false)
                 {
+                    _tipsWindow.Hide();
                 }
 
                 m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
             }
-            if (_strategyWindow == null)
-            {
-                ShowWindowData data = new ShowWindowData();
-                data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent,1,1);
-                _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
-            }
         }
 
+        private void UiInit()
+        {
+
+            _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
+
+            ShowWindowData menuWindow = new ShowWindowData();
+            menuWindow.contextData = new MenuEventData(Rest, Article, Team, Recording, Log, Relationship);
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow, menuWindow);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+
+            ShowWindowData data = new ShowWindowData();
+            data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent, 1, 1);
+            _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
+
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow);
+
+        }
 
 
         //-----------------------UI
@@ -195,11 +243,36 @@ namespace WX
             uidata.Id = biological.BiologicalId;
             //uidata.Influence = data.Influence;
             //uidata.Disposition = data.Disposition;
-           // uidata.OnlyEntity = m_Players.Entity[0];
+            // uidata.OnlyEntity = m_Players.Entity[0];
 
             showWindowData.contextData = uidata;
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);
 
+        }
+
+        /// <summary>
+        /// 当进入LivingArea时调用
+        /// </summary>
+        private void LivingAreaOnOpen(Entity entity, int id)
+        {
+            Debuger.Log(id+"+LivingArea");
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+
+            status.LocationType = (int)LocationType.LivingAreaIn;
+        }
+
+        /// <summary>
+        /// 当退出时调用
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="id"></param>
+        private void LivingAreaOnExit(Entity entity, int id)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+
+            status.LocationType = (int) LocationType.Field;
         }
 
         private void ShowGFUi()
@@ -222,24 +295,6 @@ namespace WX
 
         }
 
-        private void ContactTarget(int code, int targetId)
-        {
-            //switch ((TragetType)code)
-            //{
-            //    case TragetType.City:
-            //        {
-            //            //Loading LivingArea
-            //            _livingAreaSystem.OpenLivingArea(targetId);
-            //        }
-            //        break;
-            //    case TragetType.Field:
-            //        _worldTimeSystem.Pause();
-            //        break;
-            //    case TragetType.Idie:
-            //        break;
-            //}
-
-        }
 
         private void LivingAreaOnClick()
         {
@@ -251,6 +306,32 @@ namespace WX
 
         }
 
+        //------------------------------------------
+
+        public void Rest()
+        {
+            //  UICenterMasterManager.Instance.ShowWindow(WindowID)
+
+
+        }
+
+        public void Article()
+        {
+
+        }
+        public void Team()
+        {
+        }
+        public void Recording()
+        {
+        }
+        public void Log()
+        {
+        }
+
+        public void Relationship()
+        {
+        }
     }
 
 

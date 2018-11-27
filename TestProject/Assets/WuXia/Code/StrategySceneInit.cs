@@ -383,7 +383,7 @@ namespace WX
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         TargetId = 0,
                         TargetType = 0,
-                        StatusRealTime = (int)LocationType.Field,
+                        LocationType = (int)LocationType.Field,
 
                         PrestigeValue=100
 
@@ -413,9 +413,6 @@ namespace WX
                             RoationOffset = new Vector3(50, 0, 0)
 
                         });
-
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                     }
                     else
                     {

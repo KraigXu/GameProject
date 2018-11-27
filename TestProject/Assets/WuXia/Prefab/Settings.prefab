@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4211081570981538}
   - component: {fileID: 114167890342839918}
-  - component: {fileID: 114731466343500160}
   m_Layer: 0
   m_Name: Settings
   m_TagString: Untagged
@@ -65,45 +64,9 @@ MonoBehaviour:
   LivingAreaModelPrefab: {fileID: 1931229191172230, guid: 5c5c90f28677c6545b526a5ea0e8b040,
     type: 2}
   MainCamera: {fileID: 0}
-  ModelCamera: {fileID: 0}
-  UiCamera: {fileID: 0}
---- !u!114 &114731466343500160
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1718885368324334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e7dd84df32a4ca4384c5a1beb8df21d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameStatus: 0
-  PlayerId: 1
-  CurrentSceneName: 
-  NextSceneName: 
-  CofirmCode: 323
-  CancelCode: 324
-  GameRoationLeft: 122
-  GameRoationRight: 120
-  ItemSlot1: 49
-  ItemSlot2: 50
-  ItemSlot3: 51
-  ItemSlot4: 52
-  ItemSlot5: 53
-  ItemSlot6: 54
-  ItemSlot7: 55
-  ItemSlot8: 56
-  CommandSkill1: 113
-  CommandSkill2: 119
-  CommandSkill3: 101
-  Intelligent: 304
-  LevelMap: 109
-  SkillSlot1: 49
-  SkillSlot2: 50
-  SkillSlot3: 51
-  SkillSlot4: 52
-  SkillSlot5: 53
-  SkillSlot6: 54
-  SkillSlot7: 55
-  SkillSlot8: 56
+  Biological1: {fileID: 0}
+  Biological2: {fileID: 0}
+  Biological3: {fileID: 0}
+  LineMat: {fileID: 0}
+  BiologicalMat: {fileID: 0}
+  Shader: {fileID: 0}

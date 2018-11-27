@@ -9,7 +9,7 @@ namespace WX
     /// <summary>
     /// 记录整个程序运行中所有的确定 和流动数据，不应该被删除
     /// </summary>
-    public sealed class Define : MonoBehaviour
+    public sealed class Define 
     {
         public static readonly string TaskSceneName = "Start";
         public static readonly string FightingSceneName = "Demo";
@@ -52,12 +52,13 @@ namespace WX
         public static KeyCode SkillSlot7 = KeyCode.Alpha7;
         public static KeyCode SkillSlot8 = KeyCode.Alpha8;
 
-        //---->  Main
-        public static void LoadScene(string nextScene)
-        {
-            NextSceneName = nextScene;
-            SceneManager.LoadScene(LoadingSceneName);
-        }
+
+        public static readonly string TagTerrain = "Terrain";
+
+        public static readonly string TagLivingArea = "LivingArea";
+
+        public static readonly string TagBiological = "Biological";
+
     }
 }
 

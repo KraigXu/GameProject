@@ -181,6 +181,27 @@ namespace WX
         }
 
 
+        /// <summary>
+        /// 检测这个ID是否存在数据
+        /// </summary>
+        /// <param name="livingAreaId"></param>
+        /// <returns></returns>
+        public bool IsTrue(int livingAreaId)
+        {
+            ComponentDataArray<LivingArea> livingAreas = _livingAreas.LivingAreaNode;
+
+            for (int i = 0; i < livingAreas.Length; i++)
+            {
+                if (livingAreas[i].Id == livingAreaId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 
 }

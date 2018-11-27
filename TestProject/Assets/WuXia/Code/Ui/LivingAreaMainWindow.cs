@@ -89,7 +89,6 @@ namespace WX.Ui
             {
                 _buildingBilling[i].gameObject.SetActive(false);
             }
-
             _name.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
             _powerName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
             _personName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];

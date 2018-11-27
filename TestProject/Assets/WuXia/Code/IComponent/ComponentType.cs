@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace WX
 {
-    public enum TragetType { Idie, City, Field }
+
 
     public struct CameraProperty : IComponentData
     {
@@ -73,10 +73,13 @@ namespace WX
 
         public int Jing;
         public float RestoreJing;
+        public int CurJing;
         public int Qi;
         public float RestoreQi;
+        public int CurQi;
         public int Shen;
         public float RestoreShen;
+        public int CurShen;
 
         public int WaigongMin;
         public int WaigongMax;
@@ -103,12 +106,14 @@ namespace WX
 
     }
 
+    public enum TargetType {  None,City, Field, Biological }
     public struct BiologicalStatus: IComponentData
     {
         public Vector3 Position;        //  位置
         public int TargetId;            // 目标ID
         public int TargetType;          // 目标类型
-        public int StatusRealTime;       // 实时状态
+        public Vector3 TargetPosition;       //目标位置
+        public int LocationType;       // 实时状态
         public int LocationId;           //所处位置ID
 
         public int PrestigeValue;

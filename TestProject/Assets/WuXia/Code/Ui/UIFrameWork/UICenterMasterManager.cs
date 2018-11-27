@@ -34,11 +34,6 @@ namespace WX.Ui
         [HideInInspector]
         public Camera _Camera;
 
-        [Header("鼠标样式")]
-        public Texture2D cursorTexture;
-        public CursorMode cursorMode = CursorMode.Auto;
-        public Vector2 hotSpot = Vector2.zero;
-
         // Each Type window start Depth
         private const int fixedWindowDepth = 100;
         private const int popUpWindowDepth = 150;
@@ -63,12 +58,6 @@ namespace WX.Ui
             _Camera = _Canvas.worldCamera;
             InitWindowManager();
             Debuger.Log("## UICenterMasterManager is call awake.");
-        }
-
-        void Start()
-        {
-            if (cursorTexture != null)
-                Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
         }
 
         public override UIWindowBase ShowWindow(WindowID id, ShowWindowData showData = null)
@@ -632,57 +621,6 @@ namespace WX.Ui
             return UIRoot;
         }
 
-        ///// <summary>
-        ///// MessageBox
-        ///// </summary>
-        ///// 
-        //public void ShowMessageBox(string msg)
-        //{
-        //    UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
-        //    if (msgWindow != null)
-        //    {
-        //        ((UIMessageBox)msgWindow).SetMsg(msg);
-        //        ((UIMessageBox)msgWindow).ResetWindow();
-        //        RealShowWindow(msgWindow, WindowID.WindowID_MessageBox);
-        //    }
-        //}
-
-        //         public void ShowMessageBox(string msg, string centerStr, UIEventListener.VoidDelegate callBack)
-        //         {
-        //             UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
-        //             if (msgWindow != null)
-        //             {
-        //                 UIMessageBox messageBoxWindow = ((UIMessageBox)msgWindow);
-        //                 ((UIMessageBox)msgWindow).ResetWindow();
-        //                 messageBoxWindow.SetMsg(msg);
-        //                 messageBoxWindow.SetCenterBtnCallBack(centerStr, callBack);
-        //                 RealShowWindow(msgWindow, WindowID.WindowID_MessageBox);
-        //             }
-        //         }
-        // 
-        //         public void ShowMessageBox(string msg, string leftStr, UIEventListener.VoidDelegate leftCallBack, string rightStr, UIEventListener.VoidDelegate rightCallBack)
-        //         {
-        //             UIWindowBase msgWindow = ReadyToShowBaseWindow(WindowID.WindowID_MessageBox);
-        //             if (msgWindow != null)
-        //             {
-        //                 UIMessageBox messageBoxWindow = ((UIMessageBox)msgWindow);
-        //                 ((UIMessageBox)msgWindow).ResetWindow();
-        //                 messageBoxWindow.SetMsg(msg);
-        //                 messageBoxWindow.SetRightBtnCallBack(rightStr, rightCallBack);
-        //                 messageBoxWindow.SetLeftBtnCallBack(leftStr, leftCallBack);
-        //                 RealShowWindow(msgWindow, WindowID.WindowID_MessageBox);
-        //             }
-        //         }
-
-        //public void CloseMessageBox(Action onClosed = null)
-        //{
-        //    HideWindow(WindowID.WindowID_MessageBox);
-        //}
-
-        // 
-        // Depth Helper Functions
-        // 
-
         // Push target GameObject to top depth
         // Case: when you open multi PopWindow
         // You want one of these PopWindow stay at the Top 
@@ -746,15 +684,5 @@ namespace WX.Ui
             Application.targetFrameRate = -1;
 
         }
-
-        public void OpenView()
-        {
-            Debug.Log("开始开始动画");
-        }
-        public void CloseView()
-        {
-            Debug.Log("开始关闭动画");
-        }
-
     }
 }

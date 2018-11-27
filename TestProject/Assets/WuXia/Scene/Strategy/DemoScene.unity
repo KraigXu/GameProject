@@ -4604,7 +4604,8 @@ Prefab:
       propertyPath: MainCamera
       value: 
       objectReference: {fileID: 322339856}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4cbf388ac99a1e044a60e9fb387be4e6, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1001 &1240789851
@@ -4856,7 +4857,7 @@ MonoBehaviour:
       startNum: 26
       stopNum: 25
       name: MMChunk 1,0
-      priority: 0.001
+      priority: 0.0010461156
       stage: 7
       tag: MapMagic
       progress: 0

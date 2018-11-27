@@ -8,16 +8,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class AICharacterControl : MonoBehaviour
     {
-        public delegate void ContactTargetEvent(int code,int targetId);
+        public enum FollowType
+        {
+            None,
+            Transform,
+            Vector
+        }
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
-        public Transform target;                                    // target to aim for
 
-        public Vector3 TargetV3=Vector3.zero;
         public bool IsMove = false;
-        public int  TargetCode;
-        public int TargetId;
-        private ContactTargetEvent _contactTargetEvent;
+        [SerializeField]
+        private FollowType _followType;
+        [SerializeField]
+        private Transform _targetrTransform;
+        [SerializeField]
+        private Vector3 _targetVector3;
+
         private LineRenderer _moveLine;
 
         private void Start()
@@ -40,16 +47,27 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
 
 
-        private void Update()
+         void Update()
         {
-            if (target != null)
-                agent.SetDestination(target.position);
-
-            
-            if (TargetV3 != Vector3.zero)
+            switch (_followType)
             {
-                agent.SetDestination(TargetV3);
+                case FollowType.None:
+
+                    break;
+                case FollowType.Transform:
+                {
+                    agent.SetDestination(_targetrTransform.position);
+                }
+                    
+                    break;
+                case FollowType.Vector:
+                {
+                    agent.SetDestination(_targetVector3);
+                }
+                   
+                    break;
             }
+
             if (agent.remainingDistance > agent.stoppingDistance)
             {
                 IsMove = true;
@@ -59,12 +77,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 IsMove = false;
                 character.Move(Vector3.zero, false, false);
-                if (_contactTargetEvent != null)
-                {
-                    _contactTargetEvent(TargetCode,TargetId);
-                    _contactTargetEvent = null;
-                }
-            }       
+                _followType = FollowType.None;
+            }
+                
         }
 
         void FixedUpdate()
@@ -76,27 +91,36 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
 
         }
+
+
         public void SetTarget(Transform target)
         {
-            this.target = target;
-        }
+            this._targetrTransform = target;
+            _followType = FollowType.Transform;
 
-        public void SetTarget(Vector3 targetV3,int targetCode,int targetid)
-        {
-            this.TargetV3 = targetV3;
-           // this._contactTargetEvent = contactEvent;
-            this.TargetCode = targetCode;
-            this.TargetId = targetid;
-            //设置路径的点，
-            //路径  导航。
+
             NavMeshPath path = new NavMeshPath();
-            agent.CalculatePath(targetV3, path);
+            agent.CalculatePath(target.position, path);
             //线性渲染设置拐点的个数。数组类型的。
             _moveLine.positionCount = path.corners.Length;
             //线性渲染的拐点位置，数组类型，
-            agent.SetDestination(targetV3);
+            agent.SetDestination(target.position);
             _moveLine.SetPositions(path.corners);
+
         }
 
+        public void SetTarget(Vector3 target)
+        {
+            this._targetVector3 = target;
+            _followType = FollowType.Vector;
+
+            NavMeshPath path = new NavMeshPath();
+            agent.CalculatePath(target, path);
+            //线性渲染设置拐点的个数。数组类型的。
+            _moveLine.positionCount = path.corners.Length;
+            //线性渲染的拐点位置，数组类型，
+            agent.SetDestination(target);
+            _moveLine.SetPositions(path.corners);
+        }
     }
 }

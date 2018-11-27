@@ -29,11 +29,28 @@ namespace WX.Ui
 
     public class MenuEventData:BaseWindowContextData
     {
-        public UnityAction value;
-        
-        public List<string> Names;
 
+        public UnityAction Rest;
 
+        public UnityAction Article;
+
+        public UnityAction Team;
+
+        public UnityAction Recording;
+
+        public UnityAction Log;
+
+        public UnityAction Relationship;
+
+        public MenuEventData(UnityAction rest,UnityAction article,UnityAction team,UnityAction recording,UnityAction log,UnityAction relationship)
+        {
+            this.Rest = rest;
+            this.Article = article;
+            this.Team = team;
+            this.Recording = recording;
+            this.Log = log;
+            this.Relationship = relationship;
+        }
     }
 
 
@@ -105,6 +122,8 @@ namespace WX.Ui
 
     }
 
+    public delegate void EntityCallBack(Entity entity, int id);
+
     public class LivingAreaWindowCD : BaseWindowContextData
     {
 
@@ -126,6 +145,14 @@ namespace WX.Ui
         public int DefenseStrength;
         public int StableValue;
 
+
+        //public Dictionary<int, List<int>> BiologicalBranch=new Dictionary<int, List<int>>();
+        //public 
+
+        
+
+        public EntityCallBack OnOpen;
+        public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
 
         public LivingAreaWindowCD() { }
@@ -148,14 +175,27 @@ namespace WX.Ui
        
     }
 
+    /// <summary>
+    /// 分支组
+    /// </summary>
+    public class BranchGroup
+    {
+        //public int Bio
+        
+
+    }
+
+    public class BranchNode
+    {
+        public int AskKey;
+        public int AnswerKey;
+    }
 
     public class BiologicalUiInfo
     {
         public int Id;
         public int AtlasId;
         public string Name;
-        
-
     }
 
 
