@@ -39,7 +39,7 @@ namespace WX
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
-            LivingAreaArchetype = entityManager.CreateArchetype(typeof(LivingArea), typeof(Position), typeof(Interactable));
+
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
             PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl), typeof(Transform), typeof(NavMeshAgent), typeof(ThirdPersonCharacter));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
@@ -304,6 +304,13 @@ namespace WX
                     var go = GameObject.Instantiate(Settings.LivingAreaPrefab, new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ), Quaternion.identity);
 
                     Entity livingArea = go.GetComponent<GameObjectEntity>().Entity;
+
+                    entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
+                    entityManager.SetComponentData(livingArea, new Position
+                    {
+                        Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+                    });
+
                     entityManager.AddComponent(livingArea, ComponentType.Create<LivingArea>());
                     entityManager.SetComponentData(livingArea, new LivingArea
                     {
@@ -322,7 +329,9 @@ namespace WX
                         FoodMax = livingAreaDatas[i].FoodMax,
                         DefenseStrength = livingAreaDatas[i].DefenseStrength,
                         StableValue = livingAreaDatas[i].StableValue,
-                        Renown = livingAreaDatas[i].StableValue
+                        Renown = livingAreaDatas[i].StableValue,
+                        Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+
                     });
 
                     entityManager.AddComponent(livingArea, ComponentType.Create<InteractionElement>());
@@ -333,10 +342,9 @@ namespace WX
                         Id = livingAreaDatas[i].Id,
                         InteractionType = (int)LocationType.LivingAreaIn,
                         InteractionExitType = (int)LocationType.LivingAreaExit,
-                        InteractionEnterType = (int)LocationType.LivingAreaEnter
+                        InteractionEnterType = (int)LocationType.LivingAreaEnter,
+                        Type = ElementType.LivingArea
                     });
-
-                    //entityManager.AddComponent(livingArea,ComponentType.Create<>());
 
                     GameStaticData.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameStaticData.LivingAreaName.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Name);
@@ -354,6 +362,12 @@ namespace WX
                     var go = GameObject.Instantiate(Settings.Biological, new Vector3(data[i].X, data[i].Y, data[i].Z), quaternion.identity);
                     go.name = data[i].Id.ToString();
                     Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
+
+                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<Position>());
+                    entityManager.SetComponentData(biologicalEntity,new Position
+                    {
+                        Value = new float3(data[i].X, data[i].Y, data[i].Z)
+                    });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
                     entityManager.SetComponentData(biologicalEntity, new Biological
@@ -384,9 +398,20 @@ namespace WX
                         TargetId = 0,
                         TargetType = 0,
                         LocationType = (int)LocationType.Field,
-
                         PrestigeValue=100
 
+                    });
+
+                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<InteractionElement>());
+                    entityManager.SetComponentData(biologicalEntity, new InteractionElement
+                    {
+                        Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
+                        Distance = 1,
+                        Id = data[i].Id,
+                        InteractionType = (int)LocationType.SocialDialog,
+                        InteractionExitType = (int)LocationType.SocialDialog,
+                        InteractionEnterType = (int)LocationType.SocialDialog,
+                        Type = ElementType.Biological
                     });
 
                     if (data[i].FamilyId != 0)
@@ -397,12 +422,15 @@ namespace WX
                             FamilyId = data[i].FamilyId,
                             ThisId = data[i].Id
                         });
-
                     }
 
                     if (data[i].Id == settings.PlayerId)
                     {
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<PlayerInput>());
+                        entityManager.SetComponentData(biologicalEntity,new PlayerInput
+                        {
+                            MousePoint = Vector3.zero
+                        });
 
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<CameraProperty>());
                         entityManager.SetComponentData(biologicalEntity, new CameraProperty

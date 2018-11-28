@@ -11,7 +11,6 @@ namespace WX
     public class BiologicalAiPerceptionSystem : JobComponentSystem
     {
 
-
         struct BiologicalGroup
         {
             public readonly int Length;
@@ -41,7 +40,6 @@ namespace WX
                 }
             }
         }
-
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {

@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace WX
@@ -31,17 +32,29 @@ namespace WX
         [BurstCompile]
         struct BaseInteraction : IJobParallelFor
         {
-            [ReadOnly] public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BiologicalStatus> Status;
+            public ComponentDataArray<Position> BiologicalPosition;
 
             [ReadOnly] public ComponentDataArray<InteractionElement> Interaction;
+            [ReadOnly] public ComponentDataArray<Position> InteractionPosition;
 
             public void Execute(int index)
             {
-                Vector3 point = Status[index].Position;
+
+                var position = BiologicalPosition[index].Value;
+                BiologicalStatus status = Status[index];
+                //   Vector3 point = BiologicalPosition[]  Status[index].Position;
+
                 for (int i = 0; i < Interaction.Length; i++)
                 {
-                   
+                    if (Vector3.Distance(position, Interaction[i].Position) <= Interaction[i].Distance &&Status[index].TargetId == Interaction[i].Id &&
+                        status.TargetId==Interaction[i].Id&& status.TargetType==In
+                        )
+                    {
+
+
+                    }
+
                     if (Vector3.Distance(point, Interaction[i].Position) < Interaction[i].Distance &&
                         Status[index].TargetId== Interaction[i].Id&&
                         Status[index].LocationType != Interaction[i].InteractionType&&

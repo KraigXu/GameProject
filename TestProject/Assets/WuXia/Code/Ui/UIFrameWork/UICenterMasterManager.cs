@@ -482,7 +482,7 @@ namespace WX.Ui
             WindowCoreData windowData = baseWindow.windowData;
             if (baseWindow.RefreshBackSeqData)
             {
-                this.RefreshBackSequenceData(baseWindow, showData);
+                RefreshBackSequenceData(baseWindow, showData);
             }
             else if (windowData.showMode == UIWindowShowMode.HideOtherWindow)
             {
@@ -504,58 +504,54 @@ namespace WX.Ui
 
         }
 
-
-
-
         private void RefreshBackSequenceData(UIWindowBase targetWindow, ShowWindowData showData)
         {
             WindowCoreData coreData = targetWindow.windowData;
-            bool dealBackSequence = true;
-            if (dicShownWindows.Count > 0 && dealBackSequence)
+
+            if (dicShownWindows.Count == 0)
+                return;
+
+            List<WindowID> removedKey = null;
+            List<UIWindowBase> sortedHiddenWindows = new List<UIWindowBase>();
+
+            NavigationData backData = new NavigationData();
+            foreach (KeyValuePair<WindowID, UIWindowBase> window in dicShownWindows)
             {
-                List<WindowID> removedKey = null;
-                List<UIWindowBase> sortedHiddenWindows = new List<UIWindowBase>();
-
-                NavigationData backData = new NavigationData();
-                foreach (KeyValuePair<WindowID, UIWindowBase> window in dicShownWindows)
+                if (coreData.showMode != UIWindowShowMode.DoNothing)
                 {
-                    if (coreData.showMode != UIWindowShowMode.DoNothing)
-                    {
-                        if (window.Value.windowData.windowType == UIWindowType.BackgroundLayer)
-                            continue;
-                        if (removedKey == null)
-                            removedKey = new List<WindowID>();
-                        removedKey.Add(window.Key);
-                        window.Value.HideWindowDirectly();
-                    }
-
-                    if (window.Value.windowData.windowType != UIWindowType.BackgroundLayer)
-                        sortedHiddenWindows.Add(window.Value);
+                    if (window.Value.windowData.windowType == UIWindowType.BackgroundLayer)
+                        continue;
+                    if (removedKey == null)
+                        removedKey = new List<WindowID>();
+                    removedKey.Add(window.Key);
+                    window.Value.HideWindowDirectly();
                 }
 
-                if (removedKey != null)
-                {
-                    for (int i = 0; i < removedKey.Count; i++)
-                        dicShownWindows.Remove(removedKey[i]);
-                }
+                if (window.Value.windowData.windowType != UIWindowType.BackgroundLayer)
+                    sortedHiddenWindows.Add(window.Value);
+            }
 
-                // Push new navigation data
-                if (coreData.navigationMode == UIWindowNavigationMode.NormalNavigation &&
-                    (showData == null || (!showData.ignoreAddNavData)))
+            if (removedKey != null)
+            {
+                for (int i = 0; i < removedKey.Count; i++)
+                    dicShownWindows.Remove(removedKey[i]);
+            }
+
+            // Push new navigation data
+            if (coreData.navigationMode == UIWindowNavigationMode.NormalNavigation && (showData == null || (!showData.ignoreAddNavData)))
+            {
+                // Add to return show target list
+                sortedHiddenWindows.Sort(this.compareWindowFun);
+                List<WindowID> navHiddenWindows = new List<WindowID>();
+                for (int i = 0; i < sortedHiddenWindows.Count; i++)
                 {
-                    // Add to return show target list
-                    sortedHiddenWindows.Sort(this.compareWindowFun);
-                    List<WindowID> navHiddenWindows = new List<WindowID>();
-                    for (int i = 0; i < sortedHiddenWindows.Count; i++)
-                    {
-                        WindowID pushWindowId = sortedHiddenWindows[i].ID;
-                        navHiddenWindows.Add(pushWindowId);
-                    }
-                    backData.CloseTargetWindow = targetWindow;
-                    backData.backShowTargets = navHiddenWindows;
-                    backSequence.Push(backData);
-                    Debuger.Log("<color=#E6E6FA>### !!!Push new Navigation data!!! ###</color>");
+                    WindowID pushWindowId = sortedHiddenWindows[i].ID;
+                    navHiddenWindows.Add(pushWindowId);
                 }
+                backData.CloseTargetWindow = targetWindow;
+                backData.backShowTargets = navHiddenWindows;
+                backSequence.Push(backData);
+                Debuger.Log("<color=#E6E6FA>### !!!Push new Navigation data!!! ###</color>");
             }
         }
 

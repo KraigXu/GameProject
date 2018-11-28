@@ -202,6 +202,26 @@ namespace WX
         }
 
 
+        /// <summary>
+        /// 获取指定Transform的数据
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public LivingArea GetLivingArea(Transform node)
+        {
+            ComponentArray<Transform> livingAreas = _livingAreas.LivingAreaPositon;
+
+            for (int i = 0; i < livingAreas.Length; i++)
+            {
+                if (livingAreas[i] == node)
+                {
+                    return _livingAreas.LivingAreaNode[i];
+                }
+            }
+            return new LivingArea();
+        }
+
+
     }
 
 }

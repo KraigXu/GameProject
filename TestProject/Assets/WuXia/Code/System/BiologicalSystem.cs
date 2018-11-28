@@ -28,7 +28,7 @@ namespace WX
         LivingAreaExit = 5,
         LivingAreaEnter = 6,
         LivingAreaIn = 7,
-        Interactive=8,
+        SocialDialog=8
     }
 
 

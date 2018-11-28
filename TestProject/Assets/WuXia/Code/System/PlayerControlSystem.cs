@@ -1,6 +1,7 @@
 ﻿
 using DataAccessObject;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -11,21 +12,12 @@ namespace WX
 
     public class PlayerControlSystem : ComponentSystem
     {
-
-        struct LivingAreaData
-        {
-            public readonly int Length;
-            public ComponentDataArray<LivingArea> LivingArea;
-            public ComponentArray<BoxCollider> Collider;
-        }
-        [Inject]
-        private LivingAreaData _livingAreaData;
-
         struct PlayerData
         {
             public readonly int Length;
             public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<Biological> Biological;
+            public ComponentDataArray<Position> Position;
             public ComponentArray<AICharacterControl> AiControl;
             public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<CameraProperty> Property;
@@ -45,6 +37,33 @@ namespace WX
         private TipsWindow _tipsWindow;
         private StrategyWindow _strategyWindow;
 
+        /// <summary>
+        /// Update Input
+        /// </summary>
+        private void UpdatePlayerInput()
+        {
+
+            for (int i = 0; i < m_Players.Length; i++)
+            {
+                PlayerInput input = m_Players.Input[i];
+
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
+                RaycastHit hit; //声明一个碰撞的点
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Debug.DrawLine(ray.origin, hit.point, Color.blue);
+                    input.MousePoint = hit.point;
+                }
+                else
+                {
+                    input.MousePoint = Vector3.zero;
+                }
+
+
+            }
+        }
+
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject() || StrategySceneInit.Settings == null || m_Players.Length == 0)
@@ -53,11 +72,14 @@ namespace WX
             if (_uiInit == false)
             {
                 UiInit();
+                return;
             }
+            
+            UpdatePlayerInput();          //更新输入
 
-            float dt = Time.deltaTime;
             for (int i = 0; i < m_Players.Length; ++i)
             {
+                Debuger.Log(m_Players.Position[i].Value);
                 BiologicalStatus newStatus = m_Players.Status[i];
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
                 RaycastHit hit;    //声明一个碰撞的点
@@ -66,7 +88,6 @@ namespace WX
                 if (Physics.Raycast(ray, out hit))
                 {
                     Debug.DrawLine(ray.origin, hit.point, Color.blue);
-
                     if (hit.collider.CompareTag(Define.TagBiological))
                     {
                         Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
@@ -86,21 +107,10 @@ namespace WX
                         }
                         else if (hit.collider.CompareTag(Define.TagLivingArea))
                         {
-
-                            //if(_livingAreaSystem.IsTrue())
-
-                            //if(_livingAreaSystem)
-
-                            //_livingAreaSystem.GetLivingAreaData()
-                            //for (int j = 0; j < _livingAreaData.Length; j++)
-                            //{
-                            //    if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
-                            //    {
-                            //        m_Players.AiControl[i].SetTarget(_livingAreaData.Collider[j].bounds.center);
-                            //        newStatus.TargetType = (int)TargetType.City;
-                            //        newStatus.TargetId = _livingAreaData.LivingArea[j].Id;
-                            //    }
-                            //}
+                            LivingArea livingArea= _livingAreaSystem.GetLivingArea(hit.collider.transform);
+                            m_Players.AiControl[i].SetTarget(livingArea.Position);
+                            newStatus.TargetType = (int) TargetType.City;
+                            newStatus.TargetId = livingArea.Id;
                         }
                         else if (hit.collider.CompareTag(Define.TagBiological))
                         {
@@ -116,14 +126,23 @@ namespace WX
 
                     if (Input.GetMouseButtonUp(1))
                     {
-                        for (int j = 0; j < _livingAreaData.Length; j++)
+                        if (hit.collider.name.Contains(Define.TagTerrain))
                         {
-                            if (_livingAreaData.Collider[j].bounds.Contains(hit.point))
-                            {
-                                ShowWindowData windowData = new ShowWindowData();
-                                windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, _livingAreaData.LivingArea[j].Id);
-                                flag = true;
-                            }
+                            //ShowWindowData windowData=new ShowWindowData();
+
+
+                        }
+                        else if(hit.collider.CompareTag(Define.TagLivingArea))
+                        {
+                            LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
+
+                            ShowWindowData windowData = new ShowWindowData();
+                            windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, livingArea.Id);
+                            UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, windowData);
+                        }
+                        else if (hit.collider.CompareTag(Define.TagBiological))
+                        {
+
                         }
                     }
                 }
@@ -177,11 +196,8 @@ namespace WX
                         break;
                 }
 
-
-
                 if (Input.GetKeyUp(KeyCode.Escape))
                 {
-
                 }
 
                 if (tipflag == false)
@@ -210,8 +226,8 @@ namespace WX
             _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
 
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow);
-
+            // UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow);
+            _uiInit = true;
         }
 
 

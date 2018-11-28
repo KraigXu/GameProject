@@ -7,6 +7,18 @@ using UnityEngine;
 namespace WX
 {
 
+    /// <summary>
+    /// 元素类型
+    /// </summary>
+    public enum ElementType
+    {
+        None=0,
+        Terrain=1,
+        Biological=2,
+        District=3,
+        LivingArea=4
+
+    }
 
     public struct CameraProperty : IComponentData
     {
@@ -14,13 +26,6 @@ namespace WX
         public int Damping;
         public Vector3 Offset;
         public Vector3 RoationOffset;
-    }
-    /// <summary>
-    /// 可交互物
-    /// </summary>
-    public struct Interactable : IComponentData
-    {
-        public int InteractionType;
     }
 
     public enum TendType { Money,Move }
@@ -34,7 +39,12 @@ namespace WX
         public int Movetend;
 
     }
-    public struct PlayerInput : IComponentData{}
+
+    public struct PlayerInput : IComponentData
+    {
+        public Vector3 MousePoint;
+
+    }
     public struct District : IComponentData
     {
 
@@ -111,7 +121,7 @@ namespace WX
     {
         public Vector3 Position;        //  位置
         public int TargetId;            // 目标ID
-        public int TargetType;          // 目标类型
+        public ElementType TargetType;          // 目标类型
         public Vector3 TargetPosition;       //目标位置
         public int LocationType;       // 实时状态
         public int LocationId;           //所处位置ID
@@ -119,7 +129,9 @@ namespace WX
         public int PrestigeValue;
 
     }
-
+    /// <summary>
+    /// 可交互物
+    /// </summary>
     public struct InteractionElement : IComponentData
     {
         public Vector3 Position;
@@ -128,6 +140,8 @@ namespace WX
         public int InteractionEnterType;
         public int InteractionExitType;
         public int Distance;
+        public ElementType Type;
+
     }
 
 
@@ -151,6 +165,8 @@ namespace WX
         public int Renown;
 
         public int IsInternal;   //是否显示内部 0 不显示 1显示
+
+        public Vector3 Position;
     }
 
 
