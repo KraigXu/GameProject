@@ -28,7 +28,12 @@ namespace WX
         public Vector3 RoationOffset;
     }
 
-    public enum TendType { Money,Move }
+    public enum TendType
+    {
+        None=0, //无
+        Patrol=1,  //巡逻
+
+    }
 
     /// <summary>
     /// Npc
@@ -36,7 +41,9 @@ namespace WX
     public struct NpcInput : IComponentData
     {
         //趋向
-        public int Movetend;
+        public TendType Movetend;
+
+        public int RandomSeed;
 
     }
 
@@ -71,8 +78,6 @@ namespace WX
         public int SexId;
         public int Age;
         public int AgeMax;
-        public int Prestige;
-        public int Influence;
         public int Disposition;
 
         public int Tizhi;
@@ -123,7 +128,7 @@ namespace WX
         public int TargetId;            // 目标ID
         public ElementType TargetType;          // 目标类型
         public Vector3 TargetPosition;       //目标位置
-        public int LocationType;       // 实时状态
+        public LocationType LocationType;       // 实时状态
         public int LocationId;           //所处位置ID
 
         public int PrestigeValue;
@@ -136,9 +141,9 @@ namespace WX
     {
         public Vector3 Position;
         public int Id;
-        public int InteractionType;
-        public int InteractionEnterType;
-        public int InteractionExitType;
+        public LocationType InteractionType;
+        public LocationType InteractionEnterType;
+        public LocationType InteractionExitType;
         public int Distance;
         public ElementType Type;
 

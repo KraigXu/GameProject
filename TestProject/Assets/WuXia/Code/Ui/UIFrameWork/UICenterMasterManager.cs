@@ -79,6 +79,8 @@ namespace WX.Ui
             return baseWindow;
         }
 
+
+
         protected override UIWindowBase ReadyToShowBaseWindow(WindowID id, ShowWindowData showData = null)
         {
             // Check the window control state

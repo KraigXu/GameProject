@@ -203,8 +203,17 @@ namespace WX.Ui
     {
         public List<int> EntityArray = new List<int>();
         public List<Vector3> Points = new List<Vector3>();
+    }
+    public delegate int[] SocialDialogEvent(int id);
+    public class SocialDialogWindowData : BaseWindowContextData
+    {
+        public int Aid;
+        public int Bid;
 
-
+        public int PangBaiId;
+        public int StartId;
+        public int[] StartlogId;
+        public SocialDialogEvent DialogEvent;
     }
 
 }

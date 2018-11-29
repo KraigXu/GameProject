@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 namespace WX.Ui
 {
+
     public class SocialDialogWindow : UIWindowBase
     {
-
+        
         [SerializeField]
         private GameObject _dialogPanel;
 
@@ -31,6 +32,8 @@ namespace WX.Ui
         [SerializeField]
         private int[] _currentItem;
 
+        private SocialDialogWindowData _socialDialogWindowData;
+
         protected override void SetWindowId()
         {
             this.ID = WindowID.SocialDialogWindow;
@@ -46,42 +49,41 @@ namespace WX.Ui
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
-
-        public delegate int[] SocialDialogEvent(int id);
+       
 
         public override void InitWindowOnAwake()
         {
-            _socialDialog=new SocialDialog();
+            //_socialDialog=new SocialDialog();
 
-            _socialDialog.Aid = 1;
-            _socialDialog.Bid = 2;
+            //_socialDialog.Aid = 1;
+            //_socialDialog.Bid = 2;
 
-            _socialDialog.StartId = 2;
-            _socialDialog.StartlogId =new int[]{1,2,3};
+            //_socialDialog.StartId = 2;
+            //_socialDialog.StartlogId =new int[]{1,2,3};
 
-            _socialDialog.DialogEvent = SocialDialogCallBack;
-            log =new Dictionary<int, string>();
-            log.Add(1,"A{0}");
-            log.Add(2,"B1");
-            log.Add(3,"B2");
-            log.Add(4,"B3");
-            log.Add(5,"B4");
-            log.Add(6, "C1");
-            log.Add(7, "C2");
-            log.Add(8, "C3");
+            //_socialDialog.DialogEvent = SocialDialogCallBack;
+            //log =new Dictionary<int, string>();
+            //log.Add(1,"A{0}");
+            //log.Add(2,"B1");
+            //log.Add(3,"B2");
+            //log.Add(4,"B3");
+            //log.Add(5,"B4");
+            //log.Add(6, "C1");
+            //log.Add(7, "C2");
+            //log.Add(8, "C3");
 
 
-            _dialogPanel.SetActive(true);
-            _aText.text = "A";
-            _bText.text = "B";
+            //_dialogPanel.SetActive(true);
+            //_aText.text = "A";
+            //_bText.text = "B";
 
-            _startTxt.text = string.Format(log[_socialDialog.StartId]);
-            _currentItem = _socialDialog.StartlogId;
-            Change();
+            //_startTxt.text = string.Format(log[_socialDialog.StartId]);
+            //_currentItem = _socialDialog.StartlogId;
+            //
         }
 
-        private SocialDialog _socialDialog;
-        private Dictionary<int,string> log=new Dictionary<int, string>();
+        //private SocialDialog _socialDialog;
+        //private Dictionary<int,string> log=new Dictionary<int, string>();
 
         public class SocialDialog
         {
@@ -93,18 +95,20 @@ namespace WX.Ui
             public SocialDialogEvent DialogEvent;
         }
 
-
-
         public override void ShowWindow(BaseWindowContextData contextData)
         {
             if(contextData==null)return;
             base.ShowWindow(contextData);
+
+            _socialDialogWindowData = (SocialDialogWindowData) contextData;
+
+            Change();
         }
 
         public void ItemOnClick(GameObject go)
         {
             int id =Int32.Parse( go.name);
-           _currentItem= _socialDialog.DialogEvent(id);
+           _currentItem= _socialDialogWindowData.DialogEvent(id);
             Change();
         }
 
@@ -116,11 +120,12 @@ namespace WX.Ui
                 _items[i].SetActive(false);
             }
            
+
             for (int i = 0; i < _currentItem.Length; i++)
             {
-                _items[i].gameObject.name = _socialDialog.StartlogId[i].ToString();
+                _items[i].gameObject.name = _socialDialogWindowData.StartlogId[i].ToString();
                 
-                _items[i].GetComponentInChildren<Text>().text = string.Format(log[_currentItem[i]],"张三"); 
+                _items[i].GetComponentInChildren<Text>().text = string.Format(GameStaticData.SocialDialogNarration[_currentItem[i]],"张三"); 
                 UIEventTriggerListener.Get(_items[i]).onClick = ItemOnClick;
             }
         }

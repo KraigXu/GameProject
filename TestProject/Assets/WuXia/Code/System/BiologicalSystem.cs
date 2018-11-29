@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 using WX.Ui;
 
@@ -28,7 +29,9 @@ namespace WX
         LivingAreaExit = 5,
         LivingAreaEnter = 6,
         LivingAreaIn = 7,
-        SocialDialog=8
+        SocialDialogIn=8,
+        SocialDialogEnter=9,
+        SocialDialogExit= 10
     }
 
 
@@ -38,9 +41,11 @@ namespace WX
         struct BiologicalGroup
         {
             public readonly int Length;
+            public ComponentDataArray<Position> Position;
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<CapsuleCollider> Renderer;
             public ComponentDataArray<BiologicalStatus> Status;
+            public ComponentDataArray<InteractionElement> Interaction;
         }
 
         [Inject]
@@ -62,9 +67,12 @@ namespace WX
 
                 _biologicalGroup.Biological[i] = property;
 
-                
+                //Update Interaction
+                InteractionElement element = _biologicalGroup.Interaction[i];
+                element.Position = _biologicalGroup.Renderer[i].transform.position;
 
-                
+                _biologicalGroup.Interaction[i] = element;
+
             }
         }
 

@@ -19,6 +19,7 @@ namespace WX
         public static EntityArchetype BiologicalArchetype;
         public static EntityArchetype BuildingArchetype;
         public static EntityArchetype PlayerArchetype;
+        public static EntityArchetype CameraArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -29,14 +30,18 @@ namespace WX
 
         public static DemoSetting Settings;
 
+        /// <summary>
+        /// 在场景加载之前初始化数据
+        /// 此方法为我们将在此游戏中频繁生成的实体创建原型。
+        ///Archetypes是可选的，但可以大大加速实体产生。
+        /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
             Debuger.EnableLog = true;
-            //此方法为我们将在此游戏中频繁生成的实体创建原型。
-            //Archetypes是可选的，但可以大大加速实体产生。
-
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            CameraArchetype = entityManager.CreateArchetype(typeof(CameraProperty));
 
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
 
@@ -142,7 +147,7 @@ namespace WX
             }
             #endregion
 
-            #region Avatar
+            #region Data
             {
                 List<AvatarData> avatarDatas = SqlData.GetAllDatas<AvatarData>();
 
@@ -157,6 +162,20 @@ namespace WX
                         GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
                     }
                 }
+
+                List<SocialDialogData> socialDialogDatas = SqlData.GetAllDatas<SocialDialogData>();
+
+                for (int i = 0; i < socialDialogDatas.Count; i++)
+                {
+                    if (socialDialogDatas[i].Type == 1)
+                    {
+                        GameStaticData.SocialDialogInfo.Add(socialDialogDatas[i].Id, socialDialogDatas[i].Content);
+                    }
+                    else if (socialDialogDatas[i].Type == 2)
+                    {
+                        GameStaticData.SocialDialogNarration.Add(socialDialogDatas[i].Id, socialDialogDatas[i].Content);
+                    }
+                }
             }
 
             #endregion
@@ -168,7 +187,6 @@ namespace WX
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
-
                 }
             }
             #endregion
@@ -340,9 +358,9 @@ namespace WX
                         Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
                         Distance = 1,
                         Id = livingAreaDatas[i].Id,
-                        InteractionType = (int)LocationType.LivingAreaIn,
-                        InteractionExitType = (int)LocationType.LivingAreaExit,
-                        InteractionEnterType = (int)LocationType.LivingAreaEnter,
+                        InteractionType = LocationType.LivingAreaIn,
+                        InteractionExitType = LocationType.LivingAreaExit,
+                        InteractionEnterType = LocationType.LivingAreaEnter,
                         Type = ElementType.LivingArea
                     });
 
@@ -363,12 +381,6 @@ namespace WX
                     go.name = data[i].Id.ToString();
                     Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
 
-                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<Position>());
-                    entityManager.SetComponentData(biologicalEntity,new Position
-                    {
-                        Value = new float3(data[i].X, data[i].Y, data[i].Z)
-                    });
-
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
                     entityManager.SetComponentData(biologicalEntity, new Biological
                     {
@@ -384,11 +396,16 @@ namespace WX
                         SexId = data[i].Sex,
                         Age = data[i].Age,
                         AgeMax = data[i].AgeMax,
+                        Disposition = data[i].Disposition,
+
                         Tizhi = data[i].Tizhi,
                         Lidao = data[i].Lidao,
                         Jingshen = data[i].Jingshen,
                         Lingdong = data[i].Lingdong,
                         Wuxing = data[i].Wuxing
+
+
+
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
@@ -397,7 +414,7 @@ namespace WX
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         TargetId = 0,
                         TargetType = 0,
-                        LocationType = (int)LocationType.Field,
+                        LocationType = LocationType.Field,
                         PrestigeValue=100
 
                     });
@@ -406,11 +423,11 @@ namespace WX
                     entityManager.SetComponentData(biologicalEntity, new InteractionElement
                     {
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
-                        Distance = 1,
+                        Distance = 2,
                         Id = data[i].Id,
-                        InteractionType = (int)LocationType.SocialDialog,
-                        InteractionExitType = (int)LocationType.SocialDialog,
-                        InteractionEnterType = (int)LocationType.SocialDialog,
+                        InteractionType = LocationType.SocialDialogIn,
+                        InteractionExitType =LocationType.SocialDialogExit,
+                        InteractionEnterType = LocationType.SocialDialogEnter,
                         Type = ElementType.Biological
                     });
 
@@ -447,7 +464,7 @@ namespace WX
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
                         entityManager.SetComponentData(biologicalEntity, new NpcInput
                         {
-                            Movetend = (int)TendType.Move,
+                            //Movetend = (int)TendType.Move,
                         });
                     }
 
@@ -458,6 +475,18 @@ namespace WX
                 }
             }
             #endregion
+
+            {
+               //Entity entity= entityManager.CreateEntity(BuildingArchetype);
+               // entityManager.SetComponentData(entity, new CameraProperty
+               // {
+               //     Target=Vector3.zero,
+               //     Damping = 3,
+               //     Offset = new Vector3(0, 1, -15),
+               //     RoationOffset = new Vector3(50, 0, 0)
+               // });
+              
+            }
 
             var sceneSwitcher = GameObject.Find("SceneSwitcher");
             if (sceneSwitcher != null)

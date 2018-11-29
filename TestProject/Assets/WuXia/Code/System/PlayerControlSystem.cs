@@ -17,10 +17,10 @@ namespace WX
             public readonly int Length;
             public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<Biological> Biological;
-            public ComponentDataArray<Position> Position;
             public ComponentArray<AICharacterControl> AiControl;
             public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<CameraProperty> Property;
+            public ComponentDataArray<InteractionElement> Interaction;
             public EntityArray Entity;
         }
 
@@ -42,14 +42,11 @@ namespace WX
         /// </summary>
         private void UpdatePlayerInput()
         {
-
             for (int i = 0; i < m_Players.Length; i++)
             {
                 PlayerInput input = m_Players.Input[i];
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
                 RaycastHit hit; //声明一个碰撞的点
-
                 if (Physics.Raycast(ray, out hit))
                 {
                     Debug.DrawLine(ray.origin, hit.point, Color.blue);
@@ -59,8 +56,6 @@ namespace WX
                 {
                     input.MousePoint = Vector3.zero;
                 }
-
-
             }
         }
 
@@ -74,12 +69,12 @@ namespace WX
                 UiInit();
                 return;
             }
-            
+
             UpdatePlayerInput();          //更新输入
 
             for (int i = 0; i < m_Players.Length; ++i)
             {
-                Debuger.Log(m_Players.Position[i].Value);
+                Biological biological = m_Players.Biological[i];
                 BiologicalStatus newStatus = m_Players.Status[i];
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
                 RaycastHit hit;    //声明一个碰撞的点
@@ -91,8 +86,8 @@ namespace WX
                     if (hit.collider.CompareTag(Define.TagBiological))
                     {
                         Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
-                        Biological biological = EntityManager.GetComponentData<Biological>(entity);
-                        _tipsWindow.SetBiologicalTip(hit.point, biological.BiologicalId);
+                        Biological tagBiological  = EntityManager.GetComponentData<Biological>(entity);
+                        _tipsWindow.SetBiologicalTip(hit.point + new Vector3(0, 3, 0), tagBiological.BiologicalId);
                         tipflag = true;
                     }
 
@@ -101,25 +96,27 @@ namespace WX
                         if (hit.collider.name.Contains(Define.TagTerrain))
                         {
                             m_Players.AiControl[i].SetTarget(hit.point);
-                            newStatus.TargetType = (int)TargetType.Field;
+                            newStatus.TargetType = ElementType.Terrain;
                             newStatus.TargetPosition = hit.point;
                             return;
                         }
                         else if (hit.collider.CompareTag(Define.TagLivingArea))
                         {
-                            LivingArea livingArea= _livingAreaSystem.GetLivingArea(hit.collider.transform);
+                            LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
                             m_Players.AiControl[i].SetTarget(livingArea.Position);
-                            newStatus.TargetType = (int) TargetType.City;
+                            newStatus.TargetType = ElementType.LivingArea;
                             newStatus.TargetId = livingArea.Id;
                         }
                         else if (hit.collider.CompareTag(Define.TagBiological))
                         {
                             Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
-                            Biological biological = EntityManager.GetComponentData<Biological>(entity);
+                            Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
 
-                            newStatus.TargetType = (int)TargetType.Biological;
-                            newStatus.TargetId = biological.BiologicalId;
+                            newStatus.TargetType = ElementType.Biological;
+                            newStatus.TargetId = tagBiological.BiologicalId;
 
+                            Debug.Log(newStatus.TargetType);
+                            Debug.Log(newStatus.TargetId);
                             m_Players.AiControl[i].SetTarget(hit.collider.transform);
                         }
                     }
@@ -132,7 +129,7 @@ namespace WX
 
 
                         }
-                        else if(hit.collider.CompareTag(Define.TagLivingArea))
+                        else if (hit.collider.CompareTag(Define.TagLivingArea))
                         {
                             LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
 
@@ -150,7 +147,7 @@ namespace WX
                 newStatus.Position = m_Players.AiControl[i].transform.position;
                 CameraProperty newtarget = m_Players.Property[i];
 
-                switch ((LocationType)m_Players.Status[i].LocationType)
+                switch (m_Players.Status[i].LocationType)
                 {
                     case LocationType.None:
                         break;
@@ -162,16 +159,16 @@ namespace WX
                     case LocationType.LivingAreaEnter:
                         {
                             //检查当前状态 显示UI信息 
-                           
+
                             ShowWindowData windowData = new ShowWindowData();
                             LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
-                            
+
                             uidata.OnOpen = LivingAreaOnOpen;
                             uidata.OnExit = LivingAreaOnExit;
                             windowData.contextData = uidata;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-                            newStatus.LocationType = (int)LocationType.LivingAreaIn;
+                            
                             GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
                             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
@@ -182,6 +179,7 @@ namespace WX
                                 bounds.Encapsulate(renderers[j].bounds);
                             }
                             newtarget.Target = bounds.center;
+                            newStatus.LocationType = LocationType.LivingAreaIn;
                         }
                         break;
                     case LocationType.LivingAreaIn:
@@ -190,14 +188,37 @@ namespace WX
                         }
                         break;
                     case LocationType.LivingAreaExit:
-                    {
+                        {
 
-                    }
+                        }
                         break;
-                }
+                    case LocationType.SocialDialogEnter:
+                        {
+                           
+                            SocialDialogWindowData socialDialogWindowData =new SocialDialogWindowData();
+                            socialDialogWindowData.Aid = biological.BiologicalId;
+                            socialDialogWindowData.Bid = newStatus.TargetId;
+                            //socialDialogWindowData.
 
-                if (Input.GetKeyUp(KeyCode.Escape))
-                {
+
+
+                            ShowWindowData windowData = new ShowWindowData();
+                            windowData.contextData = socialDialogWindowData;
+                            UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
+
+                            newStatus.LocationType =  LocationType.SocialDialogIn;
+                        }
+                        break;
+                    case LocationType.SocialDialogIn:
+                        {
+                            Debug.Log(";;;;;SocialDialogin");
+                        }
+                        break;
+                    case LocationType.SocialDialogExit:
+                        {
+                            UICenterMasterManager.Instance.DestroyWindow(WindowID.SocialDialogWindow);
+                        }
+                        break;
                 }
 
                 if (tipflag == false)
@@ -271,11 +292,11 @@ namespace WX
         /// </summary>
         private void LivingAreaOnOpen(Entity entity, int id)
         {
-            Debuger.Log(id+"+LivingArea");
+            Debuger.Log(id + "+LivingArea");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
 
-            status.LocationType = (int)LocationType.LivingAreaIn;
+            status.LocationType = LocationType.LivingAreaIn;
         }
 
         /// <summary>
@@ -288,7 +309,7 @@ namespace WX
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
 
-            status.LocationType = (int) LocationType.Field;
+            status.LocationType = LocationType.Field;
         }
 
         private void ShowGFUi()

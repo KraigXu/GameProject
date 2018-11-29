@@ -378,6 +378,20 @@ namespace DataAccessObject
                                        " Path TEXT);");
         }
 
+        /// <summary>
+        /// 话语数据
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_SocialDialog(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS SocialDialogData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Type INTEGER," +
+                                       " Content TEXT);");
+        }
+
+
+
 
 
     }
@@ -536,12 +550,14 @@ namespace DataAccessObject
         public string JifaJson { get; set; }                     //技法JSON
         public string LanguageJson { get; set; }                 // 语言JSON
 
+        public int Disposition { get; set; }                    //性格
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
                 {
                     Id,Surname,Name,AvatarId,ModelId,PrestigeId,RelationId,FamilyId,FactionId,TitleId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
-                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson
+                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition
                 };
             return objects;
         }
@@ -725,6 +741,27 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+    /// <summary>
+    /// 话语信息
+    /// </summary>
+    public class SocialDialogData : BaseData
+    {
+        public int Id { get; set; }
+        public int Type { get; set; }
+        public string Content { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects=new object[]
+            {
+                Id,Type,Content
+            };
+            return objects;
+        }
+    }
+
+
 
     //----------------------------------------映射数据库----------------------------------End
 
