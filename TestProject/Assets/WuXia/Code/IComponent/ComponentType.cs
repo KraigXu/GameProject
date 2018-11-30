@@ -134,20 +134,7 @@ namespace WX
         public int PrestigeValue;
 
     }
-    /// <summary>
-    /// 可交互物
-    /// </summary>
-    public struct InteractionElement : IComponentData
-    {
-        public Vector3 Position;
-        public int Id;
-        public LocationType InteractionType;
-        public LocationType InteractionEnterType;
-        public LocationType InteractionExitType;
-        public int Distance;
-        public ElementType Type;
 
-    }
 
 
     public struct LivingArea : IComponentData
@@ -196,6 +183,32 @@ namespace WX
     }
 
 
+    /// <summary>
+    /// 可交互物
+    /// </summary>
+    public struct InteractionElement : IComponentData
+    {
+        public Vector3 Position;
+        public int Id;
+
+        public LocationType InteractionType;
+        public LocationType InteractionEnterType;
+        public LocationType InteractionExitType;
+        public int Distance;
+        public ElementType Type;
+    }
+
+
+    /// <summary>
+    /// 两个Biological交互时信息体
+    /// </summary>
+    public struct InteractionBiologicalData
+    {
+        public int IsUi;
+        public int BiologicalAId;
+        public int BiologicalBId;
+        
+    }
 
 }
 

@@ -17,8 +17,6 @@ namespace WX.Ui
         public Text CTSex;
 
 
-
-
         [Header("Log")] public Toggle LogTog;
         public GameObject LogPanel;
 

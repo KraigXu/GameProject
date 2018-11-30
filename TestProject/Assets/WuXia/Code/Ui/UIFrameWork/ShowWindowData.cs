@@ -31,25 +31,23 @@ namespace WX.Ui
     {
 
         public UnityAction Rest;
-
-        public UnityAction Article;
-
         public UnityAction Team;
-
-        public UnityAction Recording;
-
+        public UnityAction Person;
         public UnityAction Log;
+        public UnityAction Intelligence;
+        public UnityAction Map;
+        public UnityAction Option;
 
-        public UnityAction Relationship;
-
-        public MenuEventData(UnityAction rest,UnityAction article,UnityAction team,UnityAction recording,UnityAction log,UnityAction relationship)
+        public MenuEventData() { }
+        public MenuEventData(UnityAction rest,UnityAction team,UnityAction person,UnityAction log,UnityAction intelligence,UnityAction map,UnityAction option)
         {
             this.Rest = rest;
-            this.Article = article;
             this.Team = team;
-            this.Recording = recording;
+            this.Person = person;
             this.Log = log;
-            this.Relationship = relationship;
+            this.Intelligence = intelligence;
+            this.Map = map;
+            this.Option = option;
         }
     }
 
@@ -60,20 +58,8 @@ namespace WX.Ui
         public int PlayerAvatarId;
         public int PlayerId;
 
-        public UnityAction CharavterEvent;
-        public UnityAction WugongEvent;
-        public UnityAction TechnologyEvent;
-        public UnityAction LogEvent;
-        public UnityAction MapEvent;
-
-        public StrategyWindowInData(UnityAction charavterEvent, UnityAction wugongEvent, UnityAction technologyEvent, UnityAction logEvent,
-            UnityAction mapEvent,int id1,int  playerId)
+        public StrategyWindowInData(int id1,int  playerId)
         {
-            this.CharavterEvent = charavterEvent;
-            this.WugongEvent = wugongEvent;
-            this.TechnologyEvent = technologyEvent;
-            this.LogEvent = logEvent;
-            this.MapEvent = mapEvent;
             this.PlayerAvatarId = id1;
             this.PlayerId = playerId;
         }
@@ -204,7 +190,7 @@ namespace WX.Ui
         public List<int> EntityArray = new List<int>();
         public List<Vector3> Points = new List<Vector3>();
     }
-    public delegate int[] SocialDialogEvent(int id);
+    public delegate int[] SocialDialogEvent(int resoult,int a,int b);
     public class SocialDialogWindowData : BaseWindowContextData
     {
         public int Aid;

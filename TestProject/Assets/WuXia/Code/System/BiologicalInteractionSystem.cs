@@ -47,12 +47,12 @@ namespace WX
                         status.TargetId==Interaction[i].Id&& status.TargetType==Interaction[i].Type&&
                         Status[index].LocationType != Interaction[i].InteractionType &&
                         Status[index].LocationType != Interaction[i].InteractionEnterType &&
-                        Status[index].LocationType != Interaction[i].InteractionExitType
-                        )
+                        Status[index].LocationType != Interaction[i].InteractionExitType)
                     {
 
                         status.LocationType = Interaction[i].InteractionEnterType;
                         Status[index] = status;
+                        
                     }
                 }
             }

@@ -189,7 +189,6 @@ namespace WX
                         break;
                     case LocationType.LivingAreaExit:
                         {
-
                         }
                         break;
                     case LocationType.SocialDialogEnter:
@@ -198,10 +197,10 @@ namespace WX
                             SocialDialogWindowData socialDialogWindowData =new SocialDialogWindowData();
                             socialDialogWindowData.Aid = biological.BiologicalId;
                             socialDialogWindowData.Bid = newStatus.TargetId;
-                            //socialDialogWindowData.
-
-
-
+                            socialDialogWindowData.PangBaiId = 1;
+                            socialDialogWindowData.StartId =1;
+                            socialDialogWindowData.StartlogId=new int[]{1};
+                            socialDialogWindowData.DialogEvent = SocialDialogEvent;
                             ShowWindowData windowData = new ShowWindowData();
                             windowData.contextData = socialDialogWindowData;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
@@ -211,12 +210,13 @@ namespace WX
                         break;
                     case LocationType.SocialDialogIn:
                         {
-                            Debug.Log(";;;;;SocialDialogin");
+                           // Debug.Log(";;;;;SocialDialogin");
                         }
                         break;
                     case LocationType.SocialDialogExit:
                         {
                             UICenterMasterManager.Instance.DestroyWindow(WindowID.SocialDialogWindow);
+                          
                         }
                         break;
                 }
@@ -237,23 +237,62 @@ namespace WX
             _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
 
             ShowWindowData menuWindow = new ShowWindowData();
-            menuWindow.contextData = new MenuEventData(Rest, Article, Team, Recording, Log, Relationship);
-
+            menuWindow.contextData = new MenuEventData(Rest,Team, Person, Log, Intelligence,Map,Option);
+            
             UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow, menuWindow);
             UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
             ShowWindowData data = new ShowWindowData();
-            data.contextData = new StrategyWindowInData(PlayerInfoUi, ShowGFUi, TechnologyUi, LogEvent, MapEvent, 1, 1);
+            data.contextData = new StrategyWindowInData(1,1);
             _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
 
-
-            // UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow);
             _uiInit = true;
         }
 
 
         //-----------------------UI
         private void PlayerInfoUi()
+        {
+
+        }
+
+        /// <summary>
+        /// 当进入LivingArea时调用
+        /// </summary>
+        private void LivingAreaOnOpen(Entity entity, int id)
+        {
+            Debuger.Log(id + "+LivingArea");
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+
+            status.LocationType = LocationType.LivingAreaIn;
+        }
+
+        /// <summary>
+        /// 当退出时调用
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="id"></param>
+        private void LivingAreaOnExit(Entity entity, int id)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+
+            status.LocationType = LocationType.Field;
+        }
+
+
+        public void Rest()
+        {
+            //  UICenterMasterManager.Instance.ShowWindow(WindowID)
+
+
+        }
+        public void Team()
+        {
+        }
+
+        public void Person()
         {
 
             if (m_Players.Length == 0)
@@ -287,50 +326,17 @@ namespace WX
 
         }
 
-        /// <summary>
-        /// 当进入LivingArea时调用
-        /// </summary>
-        private void LivingAreaOnOpen(Entity entity, int id)
+        public void Log()
         {
-            Debuger.Log(id + "+LivingArea");
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-
-            status.LocationType = LocationType.LivingAreaIn;
         }
 
-        /// <summary>
-        /// 当退出时调用
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="id"></param>
-        private void LivingAreaOnExit(Entity entity, int id)
+        public void Intelligence()
         {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-
-            status.LocationType = LocationType.Field;
         }
+        public void Map() { }
 
-        private void ShowGFUi()
-        {
+        public void Option() { }
 
-        }
-
-        private void TechnologyUi()
-        {
-
-        }
-
-        private void LogEvent()
-        {
-
-        }
-
-        private void MapEvent()
-        {
-
-        }
 
 
         private void LivingAreaOnClick()
@@ -345,30 +351,24 @@ namespace WX
 
         //------------------------------------------
 
-        public void Rest()
-        {
-            //  UICenterMasterManager.Instance.ShowWindow(WindowID)
 
+       
+        //---------------
 
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        private int[] SocialDialogEvent(int result, int a, int b)
+        {
+            return null;
 
-        public void Article()
-        {
-
-        }
-        public void Team()
-        {
-        }
-        public void Recording()
-        {
-        }
-        public void Log()
-        {
         }
 
-        public void Relationship()
-        {
-        }
+        
     }
 
 

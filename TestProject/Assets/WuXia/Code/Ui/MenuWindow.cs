@@ -8,18 +8,21 @@ namespace WX.Ui
 {
     public class MenuWindow : UIWindowBase
     {
+
         [SerializeField]
-        private Button _button1;
+        private Button _rest;
         [SerializeField]
-        private Button _button2;
+        private Button _team;
         [SerializeField]
-        private Button _button3;
+        private Button _person;
         [SerializeField]
-        private Button _button4;
+        private Button _log;
         [SerializeField]
-        private Button _button5;
+        private Button _intelligence;
         [SerializeField]
-        private Button _button6;
+        private Button _map;
+        [SerializeField]
+        private Button _option;
 
         private MenuEventData _data;
 
@@ -41,12 +44,14 @@ namespace WX.Ui
 
         public override void InitWindowOnAwake()
         {
-            this._button1.onClick.AddListener(Button1Event);
-            this._button2.onClick.AddListener(Button2Event);
-            this._button3.onClick.AddListener(Button3Event);
-            this._button4.onClick.AddListener(Button4Event);
-            this._button5.onClick.AddListener(Button5Event);
-            this._button6.onClick.AddListener(Button6Event);
+            this._rest.onClick.AddListener(ButtonRest);
+            this._team.onClick.AddListener(ButtonTeam);
+            this._person.onClick.AddListener(ButtonPerson);
+            this._log.onClick.AddListener(ButtonLog);
+            this._intelligence.onClick.AddListener(ButtonIntelligence);
+            this._map.onClick.AddListener(ButtonMap);
+            this._option.onClick.AddListener(ButtonOption);
+
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -56,31 +61,41 @@ namespace WX.Ui
             _data = (MenuEventData)contextData;
         }
 
-        private void Button1Event()
+        private void ButtonRest()
         {
             _data.Rest();
         }
 
-        private void Button2Event()
-        {
-            _data.Article();
-        }
-        private void Button3Event()
+        private void ButtonTeam()
         {
             _data.Team();
         }
-        private void Button4Event()
+
+        private void ButtonPerson()
         {
-            _data.Recording();
+            _data.Person();
         }
-        private void Button5Event()
+
+        private void ButtonLog()
         {
             _data.Log();
         }
-        private void Button6Event()
+
+        private void ButtonIntelligence()
         {
-            _data.Relationship();
+            _data.Intelligence();
         }
+
+        private void ButtonMap()
+        {
+            _data.Map();
+        }
+
+        private void ButtonOption()
+        {
+            _data.Option();
+        }
+
 
     }
 }

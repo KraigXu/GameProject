@@ -108,7 +108,7 @@ namespace WX.Ui
         public void ItemOnClick(GameObject go)
         {
             int id =Int32.Parse( go.name);
-           _currentItem= _socialDialogWindowData.DialogEvent(id);
+           _currentItem= _socialDialogWindowData.DialogEvent(id, _socialDialogWindowData.Aid, _socialDialogWindowData.Bid);
             Change();
         }
 
