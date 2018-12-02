@@ -9,32 +9,23 @@ namespace WX.Ui
 {
     public class WXCharacterPanelWidow : UIWindowBase
     {
-        [Header("Character")] public Toggle CharacterTog;
-        public GameObject CharacterPanel;
-        public Text CTRaceType;
-        public Text CTName;
-        public Text CTDescription;
-        public Text CTSex;
-
-
-        [Header("Log")] public Toggle LogTog;
-        public GameObject LogPanel;
-
-        [Header("Skill")] public Toggle SkillTog;
-        public GameObject SkillPanel;
-
-        [Header("Technique")] public Toggle TechniqueTog;
-        public GameObject TechniquePanel;
 
         [SerializeField] private Button _exitBtn;
-
         [SerializeField] private Text _name;
         [SerializeField] private Text _surname;
-        [SerializeField] private Text _sex;
-        [SerializeField] private Text _prestigeLevel;
+
+        [SerializeField] private Toggle _propertyTog;
+        [SerializeField] private GameObject _propertyGo;
+        [SerializeField] private Toggle _wuxueTog;
+        [SerializeField] private GameObject _wuxueGo;
+        [SerializeField] private Toggle _jiyiTog;
+        [SerializeField] private GameObject _jiyiGo;
+        [SerializeField] private Toggle _tagTog;
+        [SerializeField] private GameObject _tagGo;
 
 
-        [Header("Property")] [SerializeField] private Text _tizhitxt;
+        [Header("Property")]
+        [SerializeField] private Text _tizhitxt;
         [SerializeField] private Text _lidaotxt;
         [SerializeField] private Text _jingshentxt;
         [SerializeField] private Text _lingdongtxt;
@@ -60,8 +51,35 @@ namespace WX.Ui
 
         public override void InitWindowOnAwake()
         {
+
             _exitBtn.onClick.AddListener(Exit);
+
+            _propertyTog.onValueChanged.AddListener(PropertyTogChange);
+            _wuxueTog.onValueChanged.AddListener(WuxueTogChange);
+            _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
+            _tagTog.onValueChanged.AddListener(TagTogChange);
+
+          
         }
+
+        private void PropertyTogChange(bool flag)
+        {
+           _propertyGo.gameObject.SetActive(flag);
+        }
+
+        private void WuxueTogChange(bool flag)
+        {
+            _wuxueGo.SetActive(flag);
+        }
+        private void JiyiTogChange(bool flag)
+        {
+            _jiyiGo.SetActive(flag);
+        }
+        private void TagTogChange(bool flag)
+        {
+            _tagGo.SetActive(flag);
+        }
+
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
@@ -71,8 +89,8 @@ namespace WX.Ui
                 BiologicalUiInData data = (BiologicalUiInData) contextData;
                 _name.text = GameStaticData.BiologicalNameDic[data.Id];
                 _surname.text = GameStaticData.BiologicalSurnameDic[data.Id];
-                _sex.text = GameStaticData.BiologicalSex[data.Sex];
-                _prestigeLevel.text = GameStaticData.PrestigeBiolgicalDic[data.Prestige];
+                //_sex.text = GameStaticData.BiologicalSex[data.Sex];
+                //_prestigeLevel.text = GameStaticData.PrestigeBiolgicalDic[data.Prestige];
 
                 _tizhitxt.text = data.Tizhi.ToString();
                 _lidaotxt.text = data.Lidao.ToString();
@@ -87,27 +105,9 @@ namespace WX.Ui
 
         }
 
-        private void CharacterTogMain(bool flag)
+        private void Update()
         {
-            CharacterPanel.SetActive(flag);
-        }
 
-        private void LogTogMain(bool flag)
-        {
-            LogPanel.SetActive(flag);
-        }
-
-        private void SkillTogMain(bool flag)
-        {
-            SkillPanel.SetActive(flag);
-        }
-
-        private void TechniqueTogMain(bool flag)
-        {
-            TechniquePanel.SetActive(flag);
-            //if (string.IsNullOrEmpty(value)==false)
-            //{
-            //}
         }
 
         private void Exit()

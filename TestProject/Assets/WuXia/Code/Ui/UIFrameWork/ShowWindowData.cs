@@ -84,8 +84,15 @@ namespace WX.Ui
     }
     public class BiologicalUiInData : BaseWindowContextData
     {
-        public int Id;
+        public int BiologicalId;
+        public int PrestigeId;  //声望
+        public int FactionId;  //势力
+       
+
         public int Sex;
+
+        public int Id;
+        
         public int Prestige;
         public int Influence;
         public int Disposition;
