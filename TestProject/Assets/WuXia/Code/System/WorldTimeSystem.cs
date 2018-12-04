@@ -4,16 +4,10 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using WX.Ui;
 
 namespace WX
 {
-
-    public enum TimeSpeed
-    {
-        Normal = 1,  //正常
-        Slow = 2,   //慢速
-        Extreme = 3  //快速
-    }
 
     public enum TimeSatus
     {
@@ -25,56 +19,16 @@ namespace WX
     /// </summary>
     public class WorldTimeSystem : ComponentSystem
     {
-
-
         public DateTime CurTime;
-
-        public int curYera = 194;
-        public int curMonth = 1;
-        public int curDay = 1;
-        public int curHour = 1;
-        public string curGd = "";
-        public string curSeason = "";
-        public string curJieQi = "";
-        public TimeSatus curStatus;
-        public TimeSpeed curSpeed;
-
-        public float TimeScalar = 5;         //时间标量，以秒为单位
-        public float curSchedule = 0;        //当前进度，当进度>=时间标量时则计算为一小时  ，时间速率分别为  {正常=时间标量*1,  慢速=时间标量*2,快速=时间标量*0.5}
-        public float curSpeedValue = 1;
-
-        public bool IsResetTime = true;
-
-        //        子时 丑时  寅时 卯时  辰时 巳时
-        //        23:00 - 00:59 01:00 - 02:59 03:00 - 04:59 05:00 - 06:59 07:00 - 08:59 09:00 - 10:59
-        //        午时 未时  申时 酉时  戊时 亥时
-        //        11:00 - 12:59 13:00 - 14:59 15:00 - 16:59 17:00 - 18:59 19:00 - 20:59 21:00 - 22:59
-        public const string Zishi = "子时";
-        public const string Choshi = "丑时";
-        public const string Yinshi = "寅时";
-        public const string Moshi = "卯时";
-        public const string Chenshi = "辰时";
-        public const string Sishi = "巳时";
-        public const string Wushi = "午时";
-        public const string Weishi = "未时";
-        public const string Shenshi = "申时";
-        public const string Youshi = "酉时";
-        public const string Shushi = "戊时";
-        public const string Haishi = "亥时";
-
         public static DateTime CurWorldTime;
 
-        struct TimeData
+        struct TimeDataGroup
         {
-            public WorldTimeUi WorldTimeUI;
+            public readonly int Length;
+            public ComponentDataArray<TimeData> Data;
+            
         }
 
-
-        //public ov
-        struct TimeUi
-        {
-            public WorldTimeUi time;
-        }
 
         struct PlayerData
         {
@@ -85,144 +39,115 @@ namespace WX
 
         [Inject]
         private PlayerData _playerData;
+        [Inject]
+        private TimeDataGroup _timeData;
+
+        private StrategyWindow _strategyWindow;
 
         protected override void OnUpdate()
         {
+
+            if (_strategyWindow == null)
+            {
+                ShowWindowData data = new ShowWindowData();
+                data.contextData = new StrategyWindowInData(1, 1);
+                _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
+                return;
+            }
+
             CurTime = StrategySceneInit.Settings.curTime;
-            if (curStatus == TimeSatus.Play)
+
+            float dt= Time.deltaTime;
+            for (int i = 0; i < _timeData.Length; i++)
             {
-                curSchedule += (Time.deltaTime * curSpeedValue);
-                if (curSchedule >= TimeScalar)
+                TimeData data = _timeData.Data[i];
+
+                data.Schedule += dt * data.TimeScalar;
+                if (data.Schedule >= data.ScheduleCell)
                 {
-                    curSchedule = 0;
-
+                    data.Schedule = 0;
                     CurTime = CurTime.AddHours(1);
+                    data.Year = CurTime.Year;
+                    data.Month = CurTime.Month;
+                    data.Day = CurTime.Day;
+                    data.Hour = CurTime.Hour;
+                    data.Shichen = UpdateGuDaiTime(data.Hour);
+                    data.Jijie = UpdateTimeJijie(data.Month);
 
-                    curYera = CurTime.Year;
-                    curMonth = CurTime.Month;
-                    curDay = CurTime.Day;
-                    curHour = CurTime.Hour;
-                    curGd = UpdateGuDaiTime();
-                    curJieQi = "";
-                    if (curMonth == 2 || curMonth == 3 || curMonth == 4)
-                    {
-                        curSeason = "春";
-                    }
-                    else if (curMonth == 5 || curMonth == 6 || curMonth == 7)
-                    {
-                        curSeason = "夏";
-                    }
-                    else if (curMonth == 8 || curMonth == 9 || curMonth == 10)
-                    {
-                        curSeason = "秋";
-                    }
-                    else if (curMonth == 11 || curMonth == 12 || curMonth == 1)
-                    {
-                        curSeason = "冬";
-                    }
-
+                    _strategyWindow.UpdateTime(data);
                 }
-            }
-            else if (curStatus == TimeSatus.Stop)
-            {
-                Time.timeScale = 0;
-            }
+                _timeData.Data[i] = data;
 
-            foreach (var v in GetEntities<TimeUi>())
-            {
-                v.time.Year.text = curYera.ToString();
-                v.time.Month.text = curMonth.ToString();
-                v.time.Day.text = curDay.ToString();
-                v.time.ShiChen.text = curGd.ToString();
-               // v.time.JieQi.text = "";
-                v.time.Season.text = curSeason;
+
             }
             StrategySceneInit.Settings.curTime = CurTime;
         }
 
-        private string UpdateGuDaiTime()
+        private int UpdateGuDaiTime(int curHour)
         {
             if (curHour == 23 || curHour == 0)
-                return Zishi;
+                return 1;
             else if (curHour == 1 || curHour == 2)
-                return Choshi;
+                return 2;
             else if (curHour == 3 || curHour == 4)
-                return Yinshi;
+                return 3;
             else if (curHour == 5 || curHour == 6)
-                return Moshi;
+                return 4;
             else if (curHour == 7 || curHour == 8)
-                return Chenshi;
+                return 5;
             else if (curHour == 9 || curHour == 10)
-                return Sishi;
+                return 6;
             else if (curHour == 11 || curHour == 12)
-                return Wushi;
+                return 7;
             else if (curHour == 13 || curHour == 14)
-                return Weishi;
+                return 8;
             else if (curHour == 15 || curHour == 16)
-                return Shenshi;
+                return 9;
             else if (curHour == 17 || curHour == 18)
-                return Youshi;
+                return 10;
             else if (curHour == 19 || curHour == 20)
-                return Shushi;
+                return 11;
             else if (curHour == 21 || curHour == 22)
-                return Haishi;
+                return 12;
             else
-                return Choshi;
+                return 1;
         }
 
-        //===============时间履历
-
-        //===============时间事件
-
-
-        public void Pause()
+        private int UpdateTimeJijie(int curMonth)
         {
-
+            if (curMonth == 2 || curMonth == 3 || curMonth == 4)
+            {
+                return 1;
+            }
+            else if (curMonth == 5 || curMonth == 6 || curMonth == 7)
+            {
+                return 2;
+            }
+            else if (curMonth == 8 || curMonth == 9 || curMonth == 10)
+            {
+                return 3;
+            }
+            else if (curMonth == 11 || curMonth == 12 || curMonth == 1)
+            {
+                return 4;
+            }
+            else
+            {
+                return 1;
+            }
         }
 
-        /// <summary>
-        /// 新增时间
-        /// </summary>
-        public void AddTimeEvent()
+
+        public void SetTimeScalar(byte timescalar)
         {
+            for (int i = 0; i < _timeData.Length; i++)
+            {
+                TimeData data = _timeData.Data[i];
 
-
-
+                data.TimeScalar = timescalar;
+                _timeData.Data[i] = data;
+            }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="startYear"></param>
-        /// <param name="startMonth"></param>
-        /// <param name="startDay"></param>
-        /// <param name="endYear"></param>
-        /// <param name="endMonth"></param>
-        /// <param name="endDay"></param>
-        /// <param name="target"></param>
-        public void AddTimeEvent(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay, params object[] target)
-        {
-
-
-
-        }
-
-
-        public void AddTimeEvent(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay, int eventId)
-        {
-
-
-
-        }
-
-        /// <summary>
-        /// 删除时间
-        /// </summary>
-        public void RemoveTimeEvent()
-        {
-
-        }
-
-
     }
 
 

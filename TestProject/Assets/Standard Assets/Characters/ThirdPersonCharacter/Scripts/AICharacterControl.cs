@@ -26,6 +26,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 _targetVector3;
 
         private LineRenderer _moveLine;
+        
+
 
         private void Start()
         {

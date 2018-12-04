@@ -28,7 +28,6 @@ namespace WX
         [Inject]
         InteractionGroup _interation;
 
-
         [BurstCompile]
         struct BaseInteraction : IJobParallelFor
         {

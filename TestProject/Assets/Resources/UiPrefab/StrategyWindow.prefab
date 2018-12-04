@@ -224,8 +224,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224200368388233368}
   - component: {fileID: 114386314932082686}
-  - component: {fileID: 114818941392113782}
-  - component: {fileID: 114920583768975890}
   m_Layer: 5
   m_Name: StrategyWindow
   m_TagString: Untagged
@@ -404,6 +402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abcb5b494ff28154c9a088adfbf89253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Year: {fileID: 114084504058731484}
+  Month: {fileID: 114975820887866150}
+  Day: {fileID: 114659355787189780}
+  ShiChen: {fileID: 114154506112552682}
+  Season: {fileID: 114688308230408554}
 --- !u!114 &114387956187631690
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -602,23 +605,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u6708"
---- !u!114 &114818941392113782
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1842202852626244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6000c2b7cd369eb45a4041e591712a25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Year: {fileID: 114084504058731484}
-  Month: {fileID: 114975820887866150}
-  Day: {fileID: 114659355787189780}
-  ShiChen: {fileID: 114154506112552682}
-  Season: {fileID: 114688308230408554}
-  JieQi: {fileID: 114978756540432368}
 --- !u!114 &114892496816787524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -646,17 +632,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114920583768975890
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1842202852626244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114940726008007164
 MonoBehaviour:
   m_ObjectHideFlags: 1

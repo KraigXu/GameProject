@@ -30,7 +30,8 @@ namespace WX.Ui
         [SerializeField] private Text _jingshentxt;
         [SerializeField] private Text _lingdongtxt;
         [SerializeField] private Text _wuxingtxt;
-
+        [SerializeField] private Text _neigongtxt;
+        [SerializeField] private Text _waigongtxt;
         [SerializeField] private Text _jingtxt;
         [SerializeField] private Text _qitxt;
         [SerializeField] private Text _shentxt;
@@ -59,7 +60,6 @@ namespace WX.Ui
             _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
             _tagTog.onValueChanged.AddListener(TagTogChange);
 
-          
         }
 
         private void PropertyTogChange(bool flag)
@@ -89,8 +89,9 @@ namespace WX.Ui
                 BiologicalUiInData data = (BiologicalUiInData) contextData;
                 _name.text = GameStaticData.BiologicalNameDic[data.Id];
                 _surname.text = GameStaticData.BiologicalSurnameDic[data.Id];
-                //_sex.text = GameStaticData.BiologicalSex[data.Sex];
-                //_prestigeLevel.text = GameStaticData.PrestigeBiolgicalDic[data.Prestige];
+
+                _tizhitxt.text = data.Tizhi.ToString();
+                _lidaotxt.text = data.AgeMax.ToString();
 
                 _tizhitxt.text = data.Tizhi.ToString();
                 _lidaotxt.text = data.Lidao.ToString();
@@ -102,7 +103,6 @@ namespace WX.Ui
                 _shentxt.text = data.Shen.ToString();
 
             }
-
         }
 
         private void Update()
@@ -113,6 +113,7 @@ namespace WX.Ui
         private void Exit()
         {
             UICenterMasterManager.Instance.CloseWindow(this.ID);
+            
         }
     }
 }

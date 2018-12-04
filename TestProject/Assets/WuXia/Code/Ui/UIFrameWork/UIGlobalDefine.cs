@@ -19,6 +19,10 @@ namespace WX.Ui
 
         MessageWindow,
         MenuWindow,
+        RestWindow,
+        TeamWindow,
+        LogWindow,
+
         MapWindow
     }
 
@@ -136,6 +140,7 @@ namespace WX.Ui
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
             {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
             {WindowID.MenuWindow,"UiPrefab/MenuWindow" },
+            {WindowID.RestWindow,"UiPrefab/RestWindow" },
             {WindowID.MapWindow,"UiPrefab/MapWindow" }
         };
     }

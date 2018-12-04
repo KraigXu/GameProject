@@ -4,8 +4,8 @@
 Shader "Custom/OutLine1" {
 	Properties{
 		_MainTex("Main Tex",2D)="black"{}
-		_RimColor("Rim color",Color)=(1,1,1,1)  //边缘颜色
-		_RimPower("Rim Power",Range(1,10))=2    //边缘强度
+		_RimColor("Rim color",Color)=(1,1,1,1)  
+		_RimPower("Rim Power",Range(1,10))=2    
 	}
 
 	SubShader{
@@ -39,6 +39,7 @@ Shader "Custom/OutLine1" {
 			half4 frag(v2f IN):COLOR{
 				half4 c=tex2D(_MainTex,IN.uv);
 				c.rgb+=pow((1-IN.NdotV.x),_RimPower)*_RimColor.rgb;
+			
 				return c;
 			}
 			ENDCG

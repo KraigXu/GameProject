@@ -51,6 +51,34 @@ namespace WX.Ui
         }
     }
 
+    /// <summary>
+    /// RestWindowData
+    /// </summary>
+    public class RestWindowInData : BaseWindowContextData
+    {
+        public UnityAction OnExit;
+        public UnityAction OnOpen;
+
+        public UnityAction OnWuXueOpen;
+
+        public List<Biological> Biologicals;
+        
+             
+        
+        public RestWindowInData() { }
+
+        public RestWindowInData(UnityAction onExit,UnityAction onOpen)
+        {
+            this.OnExit = onExit;
+            this.OnOpen = onOpen;
+
+        }
+    }
+
+    
+
+
+
 
     public class StrategyWindowInData : BaseWindowContextData
     {
@@ -138,18 +166,22 @@ namespace WX.Ui
         public int DefenseStrength;
         public int StableValue;
 
-
-        //public Dictionary<int, List<int>> BiologicalBranch=new Dictionary<int, List<int>>();
-        //public 
-
         
-
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
 
         public LivingAreaWindowCD() { }
     }
+
+    public class LivingAreaInfo
+    {
+        public int Id;
+      
+
+    }
+
+
 
     public class BuildingiDataItem
     {

@@ -14,18 +14,12 @@ namespace WX.Ui
     /// </summary>
     public class StrategyWindow : UIWindowBase
     {
-        //[SerializeField]
-        //Image AvatarImage;
-        //[SerializeField]
-        //Text NameTex;
-        //[SerializeField]
-        //Text SunNameTex;
 
-        //[Header("Buttom")] [SerializeField] private Button _characterInformationBtn;
-        //[SerializeField] private Button _wugongBtn;
-        //[SerializeField] private Button _technologyBtn;
-        //[SerializeField] private Button _logBtn;
-        //[SerializeField] private Button _mapBtn;
+        public Text Year;
+        public Text Month;
+        public Text Day;
+        public Text ShiChen;
+        public Text Season;
 
         protected override void SetWindowId()
         {
@@ -63,6 +57,20 @@ namespace WX.Ui
                // NameTex.text = GameStaticData.BiologicalNameDic[data.PlayerId];
                // SunNameTex.text = GameStaticData.BiologicalSurnameDic[data.PlayerId];
             }
+
+            
+
+        }
+
+
+        public void UpdateTime(TimeData timeData)
+        {
+            this.Year.text = timeData.Year.ToString();
+            this.Month.text = timeData.Month.ToString();
+            this.Day.text = timeData.Day.ToString();
+            this.ShiChen.text = GameStaticData.TimeShichen[timeData.Shichen];
+            this.Season.text = GameStaticData.TimeJijie[timeData.Jijie];
+
         }
     }
 }

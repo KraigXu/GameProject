@@ -32,10 +32,12 @@ namespace WX
         private LivingAreaSystem _livingAreaSystem;
         [Inject]
         private CameraSystem _cameraSystem;
+        [Inject]
+        private BiologicalSystem _biologicalSystem;
 
         private bool _uiInit = false;
         private TipsWindow _tipsWindow;
-        private StrategyWindow _strategyWindow;
+
 
         /// <summary>
         /// Update Input
@@ -162,13 +164,13 @@ namespace WX
 
                             ShowWindowData windowData = new ShowWindowData();
                             LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
-
+                            
+                            //_biologicalSystem.GetBiologicalOnLocation()
                             uidata.OnOpen = LivingAreaOnOpen;
                             uidata.OnExit = LivingAreaOnExit;
                             windowData.contextData = uidata;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-                            
                             GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
                             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
@@ -231,6 +233,9 @@ namespace WX
             }
         }
 
+        
+
+
         private void UiInit()
         {
 
@@ -242,9 +247,6 @@ namespace WX
             UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow, menuWindow);
             UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
-            ShowWindowData data = new ShowWindowData();
-            data.contextData = new StrategyWindowInData(1,1);
-            _strategyWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow, data).GetComponent<StrategyWindow>();
 
             _uiInit = true;
         }
@@ -284,10 +286,19 @@ namespace WX
 
         public void Rest()
         {
-            //  UICenterMasterManager.Instance.ShowWindow(WindowID)
-
-
+            _worldTimeSystem.SetTimeScalar(0);
+            ShowWindowData windowData =new ShowWindowData();
+            RestWindowInData restWindowInData=new RestWindowInData();
+            restWindowInData.OnExit = RestExit;
+            
+            UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow,windowData);
         }
+
+        private void RestExit()
+        {
+            _worldTimeSystem.SetTimeScalar(1);
+        }
+
         public void Team()
         {
         }
@@ -332,8 +343,14 @@ namespace WX
 
         public void Intelligence()
         {
+
         }
-        public void Map() { }
+
+        public void Map()
+        {
+
+
+        }
 
         public void Option() { }
 
@@ -365,6 +382,11 @@ namespace WX
         private int[] SocialDialogEvent(int result, int a, int b)
         {
             return null;
+
+        }
+
+        public void Debug111()
+        {
 
         }
 

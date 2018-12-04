@@ -105,7 +105,8 @@ namespace WX.Ui
             {
                 _buildingBilling[i].gameObject.SetActive(true);
                 _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[_currentLivingArea.BuildingiDataItems[i].Id];
-               // _buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
+               //_buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
+               
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }
         }
@@ -159,7 +160,7 @@ namespace WX.Ui
 
         private void CloseLivingArea()
         {
-            //_currentLivingArea.
+           
         }
 
     }

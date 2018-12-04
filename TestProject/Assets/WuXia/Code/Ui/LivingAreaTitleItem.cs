@@ -42,5 +42,6 @@ public class LivingAreaTitleItem : BaseCorrespondenceByModelControl
         base.Init(camera3D, camera2D, target);
     }
 
+
     
 }

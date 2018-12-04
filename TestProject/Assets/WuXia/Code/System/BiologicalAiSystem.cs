@@ -6,13 +6,16 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace  WX
 {
-
+    /// <summary>
+    /// 生物AI系统
+    /// </summary>
     public class BiologicalAiSystem : ComponentSystem
     {
 
         struct BiologicalAiGroup
         {
             public readonly int Length;
+            public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<NpcInput> NpcInput;
             public ComponentArray<AICharacterControl> AiControl;
@@ -27,25 +30,36 @@ namespace  WX
 
             for (int i = 0; i < _aiGroup.Length; i++)
             {
-
-
-
-
+                Biological biological = _aiGroup.Biological[i];
                 BiologicalStatus status = _aiGroup.Status[i];
 
-                switch ((LocationType)status.LocationType)
+
+                switch (status.TargetType)
                 {
-                    case LocationType.None:
+                    case ElementType.None: //如果对象没有Target类型 时 说明为闲置状态
+                        if (status.LocationType == LocationType.Field)
+                        {
+                            //选择新目标
+                            ChangeAiSystem(_aiGroup.Entitys[i], status, biological, _aiGroup.NpcInput[i]);
+                        }
+                        else
+                        {
+
+                        }
+
                         break;
-                    case LocationType.Field:
+                    case ElementType.Biological:
                         break;
-                    case LocationType.LivingAreaEnter:
+                    case ElementType.District:
                         break;
-                    case LocationType.LivingAreaIn:
+                    case ElementType.LivingArea:
                         break;
-                    case LocationType.LivingAreaExit:
+                    case ElementType.Terrain:
                         break;
                 }
+
+                _aiGroup.Biological[i] = biological;
+                _aiGroup.Status[i] = status;
 
                 //switch ((LocationType)m_Players.Status[i].LocationType)
                 //{
@@ -116,16 +130,29 @@ namespace  WX
         }
 
 
-        private void ChangeAiSystem(Entity entity, BiologicalStatus status)
+        /// <summary>
+        /// 根据属性 选择合适的行为
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="status"></param>
+        /// <param name="biological"></param>
+        private void ChangeAiSystem(Entity entity, BiologicalStatus status, Biological biological, NpcInput input)
         {
-
+            
+            switch (input.BehaviorPolicy)
+            {
+                case BehaviorPolicyType.Cruising:
+                    
+                    break;
+            }
 
         }
 
 
+        private void CheckAi()
+        {
 
-
-
+        }
     }
 }
 

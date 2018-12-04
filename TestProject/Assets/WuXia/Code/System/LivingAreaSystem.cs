@@ -142,6 +142,8 @@ namespace WX
             }
         }
 
+
+
         /// <summary>
         /// 获取UI数据
         /// </summary>
@@ -178,6 +180,7 @@ namespace WX
             uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
 
             return uidata;
+
         }
 
 

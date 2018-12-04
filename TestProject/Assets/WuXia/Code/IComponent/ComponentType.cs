@@ -17,7 +17,6 @@ namespace WX
         Biological=2,
         District=3,
         LivingArea=4
-
     }
 
     public struct CameraProperty : IComponentData
@@ -28,6 +27,21 @@ namespace WX
         public Vector3 RoationOffset;
     }
 
+    public struct TimeData : IComponentData
+    {
+        public int Year;
+        public int Month;
+        public int Day;
+        public int Hour;
+        public int Shichen;
+        public int Jijie;
+
+        public byte TimeScalar;           //时间的放大比 如果是0 则是暂停
+        public float Schedule;             //一个时间节点的进度
+        public byte ScheduleCell;         //时间节点的大小
+    }
+
+
     public enum TendType
     {
         None=0, //无
@@ -35,6 +49,11 @@ namespace WX
 
     }
 
+    public enum BehaviorPolicyType
+    {
+        Cruising,
+
+    }
     /// <summary>
     /// Npc
     /// </summary>
@@ -44,7 +63,8 @@ namespace WX
         public TendType Movetend;
 
         public int RandomSeed;
-
+        public BehaviorPolicyType BehaviorPolicy;
+        public float BehaviorTime;
     }
 
     public struct PlayerInput : IComponentData
@@ -80,6 +100,8 @@ namespace WX
         public int AgeMax;
         public int Disposition;
 
+
+        //固有属性
         public int Tizhi;
         public int Lidao;
         public int Jingshen;
@@ -87,32 +109,43 @@ namespace WX
         public int Wuxing;
 
         public int Jing;
-        public float RestoreJing;
-        public int CurJing;
         public int Qi;
-        public float RestoreQi;
-        public int CurQi;
         public int Shen;
-        public float RestoreShen;
-        public int CurShen;
-
         public int WaigongMin;
         public int WaigongMax;
         public int NeigongMin;
         public int NeigongMax;
 
+        public int Mingzhong;
+        public int Shanbi;
+        public int Huixin;
+
         public int StrategyMoveSpeed;
         public int FireMoveSpeed;
-        public int ShanBi;
 
-        public int LocationCode;
-        public int LocationType;
-        public int LocationStatus;
 
-        public int TragetId;
-        
-        public Vector3 CurTarget;
+        //性格属性
+        public byte CharacterValue;
+        public byte NeutralValue; //中立值
+
     }
+
+    public enum TargetType { None, City, Field, Biological }
+    public struct BiologicalStatus : IComponentData
+    {
+        public Vector3 Position;        //  位置
+        public int TargetId;            // 目标ID
+        public ElementType TargetType;          // 目标类型
+        public Vector3 TargetPosition;       //目标位置
+
+        public LocationType LocationType;       // 实时状态
+        public int LocationId;           //所处位置ID
+
+        public int PrestigeValue;
+        public float IdleTime;             //闲置时间
+    }
+
+
 
     public struct Family : IComponentData
     {
@@ -121,25 +154,10 @@ namespace WX
 
     }
 
-    public enum TargetType {  None,City, Field, Biological }
-    public struct BiologicalStatus: IComponentData
-    {
-        public Vector3 Position;        //  位置
-        public int TargetId;            // 目标ID
-        public ElementType TargetType;          // 目标类型
-        public Vector3 TargetPosition;       //目标位置
-        public LocationType LocationType;       // 实时状态
-        public int LocationId;           //所处位置ID
-
-        public int PrestigeValue;
-
-    }
-
-
 
     public struct LivingArea : IComponentData
     {
-        public int Id;         
+        public int Id;
         public int PersonNumber;
         public int CurLevel;
         public int MaxLevel;
@@ -161,7 +179,6 @@ namespace WX
         public Vector3 Position;
     }
 
-
     public struct Building : IComponentData
     {
         public int Id;
@@ -181,7 +198,6 @@ namespace WX
     {
         public int value;
     }
-
 
     /// <summary>
     /// 可交互物
@@ -207,7 +223,6 @@ namespace WX
         public int IsUi;
         public int BiologicalAId;
         public int BiologicalBId;
-        
     }
 
 }

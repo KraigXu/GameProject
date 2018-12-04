@@ -31,7 +31,11 @@ namespace WX
         LivingAreaIn = 7,
         SocialDialogIn=8,
         SocialDialogEnter=9,
-        SocialDialogExit= 10
+        SocialDialogExit= 10,
+        BuildingIn=11,
+        BuildingExit=12,
+        BuildingEnter13,
+        
     }
 
 
@@ -41,6 +45,7 @@ namespace WX
         struct BiologicalGroup
         {
             public readonly int Length;
+            public EntityArray Entity;
             public ComponentDataArray<Position> Position;
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<CapsuleCollider> Renderer;
@@ -50,7 +55,6 @@ namespace WX
 
         [Inject]
         private BiologicalGroup _biologicalGroup;
-
 
         private TipsWindow _tipsWindow;
         protected override void OnUpdate()
@@ -75,6 +79,29 @@ namespace WX
 
             }
         }
+
+
+        /// <summary>
+        /// 根据当前状态获取Biologicals
+        /// </summary>
+        /// <param name="type">本地状态</param>
+        /// <param name="id">本地ID</param>
+        /// <returns>Entity 集合，使用ECS获取所需数据</returns>
+        public List<Entity> GetBiologicalOnLocation(LocationType type,int id)
+        {
+            List<Entity> entities =new List<Entity>();
+            for (int i = 0; i < _biologicalGroup.Length; i++)
+            {
+                if (_biologicalGroup.Status[i].LocationType == type &&_biologicalGroup.Status[i].LocationId==id)
+                {
+                    entities.Add(_biologicalGroup.Entity[i]);
+                }
+                
+            }
+
+            return entities;
+        }
+
 
 
     }

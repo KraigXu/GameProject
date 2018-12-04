@@ -20,6 +20,7 @@ namespace WX
         public static EntityArchetype BuildingArchetype;
         public static EntityArchetype PlayerArchetype;
         public static EntityArchetype CameraArchetype;
+        public static EntityArchetype TimeArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -50,6 +51,8 @@ namespace WX
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Position), typeof(NavMeshAgent));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
+
+            TimeArchetype = entityManager.CreateArchetype(typeof(TimeData));
         }
 
 
@@ -144,6 +147,24 @@ namespace WX
                 GameStaticData.BuildingStatus.Add(1, "正常");
                 GameStaticData.BuildingStatus.Add(2, "建筑中");
 
+
+                GameStaticData.TimeJijie.Add(1, "春");
+                GameStaticData.TimeJijie.Add(2, "夏");
+                GameStaticData.TimeJijie.Add(3, "秋");
+                GameStaticData.TimeJijie.Add(4, "冬");
+
+                GameStaticData.TimeShichen.Add(1, "子时");
+                GameStaticData.TimeShichen.Add(2, "丑时");
+                GameStaticData.TimeShichen.Add(3, "寅时");
+                GameStaticData.TimeShichen.Add(4, "卯时");
+                GameStaticData.TimeShichen.Add(5, "辰时");
+                GameStaticData.TimeShichen.Add(6, "巳时");
+                GameStaticData.TimeShichen.Add(7, "午时");
+                GameStaticData.TimeShichen.Add(8, "未时");
+                GameStaticData.TimeShichen.Add(9, "申时");
+                GameStaticData.TimeShichen.Add(10, "酉时");
+                GameStaticData.TimeShichen.Add(11, "戊时");
+                GameStaticData.TimeShichen.Add(12, "亥时");
             }
             #endregion
 
@@ -314,7 +335,7 @@ namespace WX
 
             #region LivingAreaInit
             {
-                
+
 
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
                 for (int i = 0; i < livingAreaDatas.Count; i++)
@@ -415,18 +436,18 @@ namespace WX
                         TargetId = 0,
                         TargetType = 0,
                         LocationType = LocationType.Field,
-                        PrestigeValue=100
+                        PrestigeValue = 100
 
                     });
 
-                    entityManager.AddComponent(biologicalEntity,ComponentType.Create<InteractionElement>());
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<InteractionElement>());
                     entityManager.SetComponentData(biologicalEntity, new InteractionElement
                     {
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         Distance = 2,
                         Id = data[i].Id,
                         InteractionType = LocationType.SocialDialogIn,
-                        InteractionExitType =LocationType.SocialDialogExit,
+                        InteractionExitType = LocationType.SocialDialogExit,
                         InteractionEnterType = LocationType.SocialDialogEnter,
                         Type = ElementType.Biological
                     });
@@ -434,7 +455,7 @@ namespace WX
                     if (data[i].FamilyId != 0)
                     {
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<Family>());
-                        entityManager.SetComponentData(biologicalEntity,new Family
+                        entityManager.SetComponentData(biologicalEntity, new Family
                         {
                             FamilyId = data[i].FamilyId,
                             ThisId = data[i].Id
@@ -444,7 +465,7 @@ namespace WX
                     if (data[i].Id == settings.PlayerId)
                     {
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<PlayerInput>());
-                        entityManager.SetComponentData(biologicalEntity,new PlayerInput
+                        entityManager.SetComponentData(biologicalEntity, new PlayerInput
                         {
                             MousePoint = Vector3.zero
                         });
@@ -477,15 +498,20 @@ namespace WX
             #endregion
 
             {
-               //Entity entity= entityManager.CreateEntity(BuildingArchetype);
-               // entityManager.SetComponentData(entity, new CameraProperty
-               // {
-               //     Target=Vector3.zero,
-               //     Damping = 3,
-               //     Offset = new Vector3(0, 1, -15),
-               //     RoationOffset = new Vector3(50, 0, 0)
-               // });
-              
+                Entity entity = entityManager.CreateEntity(TimeArchetype);
+                entityManager.SetComponentData(entity, new TimeData
+                {
+                    //Year;
+                    //Month;
+                    //Day;
+                    //Hour;
+                    //Shichen;
+                    //Jijie;
+
+                    TimeScalar = 1,
+                    Schedule = 0,
+                    ScheduleCell = 5,
+                });
             }
 
             var sceneSwitcher = GameObject.Find("SceneSwitcher");

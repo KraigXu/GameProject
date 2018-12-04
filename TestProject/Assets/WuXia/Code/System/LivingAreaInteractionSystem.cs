@@ -15,7 +15,7 @@ namespace WX
         {
             public readonly int Length;
             [ReadOnly] public ComponentDataArray<Position> Position;
-            public ComponentDataArray<Biological> Biological;
+            public ComponentDataArray<BiologicalStatus> Biological;
             [ReadOnly] public ComponentDataArray<PlayerInput> PlayerMarker;
         }
         [Inject]
@@ -34,7 +34,8 @@ namespace WX
         struct LivingAreaCollision : IJobParallelFor
         {
             public float CollisionRadiusSquared;
-            public ComponentDataArray<Biological> Biological;
+            public ComponentDataArray<BiologicalStatus> Biological;
+           
             [ReadOnly]
             public ComponentDataArray<Position> Positions;
 
@@ -48,11 +49,12 @@ namespace WX
             public void Execute(int index)
             {
                 var biologicalIndex = Biological[index];
-                if ((LocationType)biologicalIndex.LocationCode == LocationType.Field)
+
+                if ( /*(LocationType)*/biologicalIndex.LocationType == LocationType.Field)
                 {
                     float damage = 0.0f;
                     float3 receiverPos = Positions[index].Value;
-                    var livingAreav= LivingAreas[0];
+                    var livingAreav = LivingAreas[0];
                     for (int i = 0; i < LivingAreas.Length; i++)
                     {
                         float3 lpos = LivibfAreaPos[i].Value;
@@ -65,19 +67,30 @@ namespace WX
                             LivingAreas[i] = livingAreav;
                         }
                     }
+                }
+                else if (biologicalIndex.LocationType == LocationType.None)
+                {
+                    float3 receiverPos = Positions[index].Value;
+                    for (int i = 0; i < LivingAreas.Length; i++)
+                    {
+                        float3 lpos = LivibfAreaPos[i].Value;
+                    }
 
-                  //  var b = Biological[index];
-                  //  b.LocationType = (int)LocationType.City;
-                  //  b.LocationCode = livingAreav.Id;
-                  //  Biological[index] = b;
-                    //MessageBoxInstance.Instance.MessageBoxShow("1");
+
+                }
+
+                //var b = Biological[index];
+                   //b.LocationType = (int)LocationType.City;
+                   //b.LocationCode = livingAreav.Id;
+                   //Biological[index] = b;
+                   //MessageBoxInstance.Instance.MessageBoxShow("1");
                    // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
 
-                    //MessageBoxInstance.Instance.MessageBoxShow();
-                    ////livingAreav
-                    //LivingArea node = target.GetComponent<LivingArea>();
-                    //  _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
-                    //  MessageBoxInstansce.Instance.MessageBoxShow("");
+                    // MessageBoxInstance.Instance.MessageBoxShow();
+                    // livingAreav
+                    // LivingArea node = target.GetComponent<LivingArea>();
+                    // _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
+                    // MessageBoxInstansce.Instance.MessageBoxShow("");
 
                     //判断逻辑
 
@@ -113,18 +126,13 @@ namespace WX
 
 
                     //    //先对角色的属性进行检测 是否可以进入城市，1，角色位置是否在城市附近，2 角色与城市势力关系 3角色与城市首领关系 4城市的异常状态 
-
-
                     //    //关闭当前开启的界面 ---
-
                     //    UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
-
                     //    ShowWindowData showWindowData = new ShowWindowData();
                     //    showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
                     //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
 
-                    //    //初始化LivingArea
-
+                    //    //    初始化LivingArea
                     //    //    StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
 
 
@@ -142,7 +150,6 @@ namespace WX
                     //    }
                     //    //  M_LivingArea.EnterLivingArea(livingArea);
                     //}
-                }
                 else
                 {
                     return;
@@ -198,7 +205,6 @@ namespace WX
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             //var settings = TwoStickBootstrap.Settings;
-
             //if (settings == null)
             //    return inputDeps;
 
@@ -210,6 +216,8 @@ namespace WX
                 Biological = m_Players.Biological,
                 Positions = m_Players.Position
             }.Schedule(m_Players.Length, 1, inputDeps);
+
+            
 
             return palyersI;
             //var enemiesVsPlayers = new CollisionJob
