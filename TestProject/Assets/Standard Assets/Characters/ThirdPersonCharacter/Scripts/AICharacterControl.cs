@@ -1,11 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
-    [RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))]
-    [RequireComponent(typeof (ThirdPersonCharacter))]
+    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
+    [RequireComponent(typeof(ThirdPersonCharacter))]
     public class AICharacterControl : MonoBehaviour
     {
         public enum FollowType
@@ -26,7 +25,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 _targetVector3;
 
         private LineRenderer _moveLine;
-        
+
+        //private StateController _
 
 
         private void Start()
@@ -42,14 +42,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             _moveLine.startWidth = 0.1f;
             _moveLine.endWidth = 0.1f;
-            
+
 
             agent.updateRotation = false;
-	        agent.updatePosition = true;
+            agent.updatePosition = true;
         }
 
 
-         void Update()
+        void Update()
         {
             switch (_followType)
             {
@@ -57,16 +57,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
                     break;
                 case FollowType.Transform:
-                {
-                    agent.SetDestination(_targetrTransform.position);
-                }
-                    
+                    {
+                        agent.SetDestination(_targetrTransform.position);
+                    }
+
                     break;
                 case FollowType.Vector:
-                {
-                    agent.SetDestination(_targetVector3);
-                }
-                   
+                    {
+                        agent.SetDestination(_targetVector3);
+                    }
+
                     break;
             }
 
@@ -81,7 +81,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 character.Move(Vector3.zero, false, false);
                 _followType = FollowType.None;
             }
-                
+
         }
 
         void FixedUpdate()

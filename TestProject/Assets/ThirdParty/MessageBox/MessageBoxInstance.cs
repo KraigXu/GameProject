@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using WX.Ui;
+using GameSystem.Ui;
 
 /// <summary>
 /// 消息框显示

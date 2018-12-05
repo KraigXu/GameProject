@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
-using WX;
+using GameSystem;
 
 public class BuildingObjectEdit : EditorWindowBase
 {
@@ -36,7 +36,6 @@ public class BuildingObjectEdit : EditorWindowBase
         window.Show();
         //手动聚焦
         window.Focus();
-
 
     }
 
