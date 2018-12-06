@@ -46,11 +46,11 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public ComponentDataArray<Position> Position;
             public ComponentDataArray<Biological> Biological;
-            public ComponentArray<CapsuleCollider> Renderer;
             public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<InteractionElement> Interaction;
+            public ComponentArray<CapsuleCollider> Renderer;
+ 
         }
 
         [Inject]
@@ -116,20 +116,37 @@ namespace GameSystem
             {
                 result.Add(_biologicalGroup.Biological[i].BiologicalId);
             }
-
-
-
             return result;
         }
 
 
-        public void GetAllBiological()
+        /// <summary>
+        /// 获取指定ID的信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BiologicalUi GetBiologicalInfo(int id)
         {
+            for (int i = 0; i < _biologicalGroup.Length; i++)
+            {
+                if (id == _biologicalGroup.Biological[i].BiologicalId)
+                {
+                    BiologicalUi biologicalUi = new BiologicalUi();
+                    biologicalUi.Id = _biologicalGroup.Biological[i].BiologicalId;
+                    biologicalUi.AvatarId = _biologicalGroup.Biological[i].AvatarId;
+                    biologicalUi.ModelId = _biologicalGroup.Biological[i].ModelId;
+                    biologicalUi.SexId = _biologicalGroup.Biological[i].SexId;
+                    biologicalUi.Age = _biologicalGroup.Biological[i].Age;
+                    biologicalUi.Disposition = _biologicalGroup.Biological[i].Disposition;
+                    biologicalUi.PrestigeId = _biologicalGroup.Biological[i].PrestigeId;
+                    biologicalUi.RelationId = _biologicalGroup.Biological[i].RelationId;
+                    biologicalUi.FamilyId = _biologicalGroup.Biological[i].FamilyId;
 
-
-            //List<>
-
-
+                    return biologicalUi;
+                }
+                
+            }
+            return new BiologicalUi();
         }
 
 

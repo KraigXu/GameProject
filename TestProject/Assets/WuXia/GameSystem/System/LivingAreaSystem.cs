@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using GameSystem.Ui;
 
@@ -161,6 +162,7 @@ namespace GameSystem
                 var livingArea = _livingAreas.LivingAreaNode[i];
                 uidata.LivingAreaId = _livingAreas.LivingAreaNode[i].Id;
                 uidata.PowerId = _livingAreas.LivingAreaNode[i].Id;
+                uidata.ModelId = _livingAreas.LivingAreaNode[i].ModelId;
                 uidata.PersonId = _livingAreas.LivingAreaNode[i].Id;
                 uidata.PersonNumber = livingArea.PersonNumber;
                 uidata.Money = livingArea.Money;
@@ -182,6 +184,8 @@ namespace GameSystem
             return uidata;
 
         }
+
+        
 
 
         /// <summary>
@@ -224,10 +228,21 @@ namespace GameSystem
             return new LivingArea();
         }
 
-        public void Test()
+        public List<int> GetLivingAreaIds()
         {
-            Debug.Log("sasfjak");
+            List<int> ids=new List<int>();
+
+            for (int i = 0; i < _livingAreas.Length; i++)
+            {
+                ids.Add(_livingAreas.LivingAreaNode[i].Id);
+            }
+
+            return ids;
         }
+
+        
+
+
 
 
     }

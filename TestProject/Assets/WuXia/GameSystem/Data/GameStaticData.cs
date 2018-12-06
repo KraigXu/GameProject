@@ -15,7 +15,6 @@ namespace GameSystem
 
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
-        public static Dictionary<int, string> LivingAreaModelPath = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaDescription = new Dictionary<int, string>();
 

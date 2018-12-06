@@ -149,6 +149,7 @@ namespace GameSystem.Ui
     {
 
         public int LivingAreaId;
+        public int ModelId;
         public int PowerId;
         public int PersonId;
         public int PersonNumber;
@@ -244,9 +245,25 @@ namespace GameSystem.Ui
     /// <summary>
     /// Ui界面上 BiologicalList
     /// </summary>
-    public class BiologicalUiList
+    public struct BiologicalUi
     {
-        //public 
+        public int Id;   //唯一标识 id
+        public int AvatarId;
+        public int ModelId;
+
+        public int SexId;
+        public int Age;
+        public int Disposition;
+
+        public int PrestigeId;
+        public int RelationId;
+        public int FamilyId;
+
+    }
+
+
+    public struct LivingAreaUi
+    {
 
     }
 

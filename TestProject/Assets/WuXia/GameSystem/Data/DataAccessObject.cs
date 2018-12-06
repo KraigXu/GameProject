@@ -10,6 +10,24 @@ namespace DataAccessObject
     {
 
         /// <summary>
+        /// 剧本
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_PlayProject(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PlayProjectData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " PlayName TEXT," +
+                                       " CreateDataTime TEXT," +
+                                       " StartDataTime TEXT," +
+                                       " EndDataTime TEXT," +
+                                       " Description TEXT);");
+        }
+
+
+
+
+        /// <summary>
         /// 区
         /// </summary>
         /// <param name="service"></param>
@@ -446,7 +464,7 @@ namespace DataAccessObject
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
         public string ModelBase { get; set; }
-        public string ModelMain { get; set; }
+        public int ModelMain { get; set; }
         public int PersonNumber { get; set; }           //人口数量
         public int Money { get; set; }
         public int MoneyMax { get; set; }
@@ -757,6 +775,22 @@ namespace DataAccessObject
             {
                 Id,Type,Content
             };
+            return objects;
+        }
+    }
+
+    public class PlayProjectData : BaseData
+    {
+        public int Id { get; set; }
+        public string PlayName { get; set; }
+        public string Description { get; set; }
+
+        public override object[] GetValues()
+        {
+           object[] objects=new object[]
+           {
+               Id,PlayName,Description
+           };
             return objects;
         }
     }

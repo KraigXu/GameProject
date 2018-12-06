@@ -23,6 +23,9 @@ public class LogWindow : UIWindowBase
     protected override void SetWindowId()
     {
         this.ID = WindowID.LogWindow;
+
+
+
     }
 
 }

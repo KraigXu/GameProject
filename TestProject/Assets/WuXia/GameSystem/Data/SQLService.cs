@@ -78,6 +78,7 @@ public class SQLService
     public void CreateDB()
     {
 
+        Tables.CreateTable_PlayProject(this);
         //------------建筑相关
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);

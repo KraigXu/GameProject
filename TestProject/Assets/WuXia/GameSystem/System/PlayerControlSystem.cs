@@ -122,6 +122,7 @@ namespace GameSystem
                             m_Players.AiControl[i].SetTarget(livingArea.Position);
                             newStatus.TargetType = ElementType.LivingArea;
                             newStatus.TargetId = livingArea.Id;
+                            
                         }
                         else if (hit.collider.CompareTag(Define.TagBiological))
                         {
@@ -185,7 +186,7 @@ namespace GameSystem
                             windowData.contextData = uidata;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-                            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+                            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[uidata.ModelId]);
                             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
                             Bounds bounds = renderers[0].bounds;

@@ -59,6 +59,8 @@ namespace GameSystem
 
         public static readonly string TagBiological = "Biological";
 
+        public static readonly string PoolName = "GeneratedPool";
+
     }
 }
 

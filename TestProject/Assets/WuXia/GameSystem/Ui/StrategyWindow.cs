@@ -28,7 +28,7 @@ namespace GameSystem.Ui
 
         protected override void InitWindowCoreData()
         {
-            windowData.windowType = UIWindowType.ForegroundLayer;
+            windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;

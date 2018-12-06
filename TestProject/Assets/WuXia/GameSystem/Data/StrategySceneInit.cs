@@ -107,10 +107,18 @@ namespace GameSystem
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            #region Time
+            WorldTimeSystem.CurWorldTime = settings.curTime;
 
+            #region Time
             {
-                WorldTimeSystem.CurWorldTime = settings.curTime;
+                Debuger.Log("PlayProject Read Start  ");
+                
+
+
+
+
+
+                Debuger.Log("PlayProject Read End");
             }
 
             #endregion
@@ -272,8 +280,6 @@ namespace GameSystem
                 }
             }
 
-
-
             #endregion
 
 
@@ -283,7 +289,7 @@ namespace GameSystem
 
                 for (int i = 0; i < districtDatas.Count; i++)
                 {
-                    GameObject go = GameObject.Instantiate(Settings.DistrictPrefab, new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
+                    GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[districtDatas[i].Model], new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
 
                     DistrictRange districtRange = go.GetComponent<DistrictRange>();
                     districtRange.DistrictId = districtDatas[i].Id;
@@ -340,7 +346,7 @@ namespace GameSystem
                 List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
                 for (int i = 0; i < livingAreaDatas.Count; i++)
                 {
-                    var go = GameObject.Instantiate(Settings.LivingAreaPrefab, new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ), Quaternion.identity);
+                    var go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingAreaDatas[i].ModelMain] , new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ), Quaternion.identity);
 
                     Entity livingArea = go.GetComponent<GameObjectEntity>().Entity;
 
@@ -354,6 +360,7 @@ namespace GameSystem
                     entityManager.SetComponentData(livingArea, new LivingArea
                     {
                         Id = livingAreaDatas[i].Id,
+                        ModelId = livingAreaDatas[i].ModelMain,
                         PersonNumber = livingAreaDatas[i].PersonNumber,
                         CurLevel = livingAreaDatas[i].LivingAreaLevel,
                         MaxLevel = livingAreaDatas[i].LivingAreaMaxLevel,
@@ -370,6 +377,7 @@ namespace GameSystem
                         StableValue = livingAreaDatas[i].StableValue,
                         Renown = livingAreaDatas[i].StableValue,
                         Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+                        
 
                     });
 
@@ -382,10 +390,10 @@ namespace GameSystem
                         InteractionType = LocationType.LivingAreaIn,
                         InteractionExitType = LocationType.LivingAreaExit,
                         InteractionEnterType = LocationType.LivingAreaEnter,
-                        Type = ElementType.LivingArea
+                        Type = ElementType.LivingArea,
+                        
                     });
 
-                    GameStaticData.LivingAreaModelPath.Add(livingAreaDatas[i].Id, livingAreaDatas[i].ModelMain);
                     GameStaticData.LivingAreaName.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Description);
                 }
@@ -398,7 +406,7 @@ namespace GameSystem
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    var go = GameObject.Instantiate(Settings.Biological, new Vector3(data[i].X, data[i].Y, data[i].Z), quaternion.identity);
+                    var go = GameObject.Instantiate(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z), quaternion.identity);
                     go.name = data[i].Id.ToString();
                     Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
 
@@ -485,7 +493,11 @@ namespace GameSystem
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<NpcInput>());
                         entityManager.SetComponentData(biologicalEntity, new NpcInput
                         {
-                            //Movetend = (int)TendType.Move,
+                            Movetend = TendType.None,
+                            RandomSeed = 1,
+                            BehaviorPolicy = BehaviorPolicyType.Cruising,
+                            BehaviorTime = 1
+                           
                         });
                     }
 
@@ -501,13 +513,6 @@ namespace GameSystem
                 Entity entity = entityManager.CreateEntity(TimeArchetype);
                 entityManager.SetComponentData(entity, new TimeData
                 {
-                    //Year;
-                    //Month;
-                    //Day;
-                    //Hour;
-                    //Shichen;
-                    //Jijie;
-
                     TimeScalar = 1,
                     Schedule = 0,
                     ScheduleCell = 5,

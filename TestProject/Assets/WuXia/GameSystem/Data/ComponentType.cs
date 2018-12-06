@@ -158,6 +158,7 @@ namespace GameSystem
     public struct LivingArea : IComponentData
     {
         public int Id;
+        public int ModelId;
         public int PersonNumber;
         public int CurLevel;
         public int MaxLevel;
