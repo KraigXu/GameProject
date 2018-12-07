@@ -61,6 +61,7 @@ namespace DataAccessObject
                                        " DistrictId INTEGER,"+
                                        " Name TEXT," +
                                        " Description TEXT," +
+                                       " ModelBaseId INTEGER,"+
                                        " PersonNumber INTEGER," +
                                        " Money INTEGER," +
                                        " MoneyMax INTEGER," +
@@ -464,6 +465,7 @@ namespace DataAccessObject
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
         public string ModelBase { get; set; }
+        public int ModelBaseId { get; set; }
         public int ModelMain { get; set; }
         public int PersonNumber { get; set; }           //人口数量
         public int Money { get; set; }
@@ -487,7 +489,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
             {
-                Id, Name, Description,ModelBase,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
+                Id, Name, Description,ModelBase,ModelBaseId,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
                 Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson,PositionX,PositionY,PositionZ
             };
             return objects;

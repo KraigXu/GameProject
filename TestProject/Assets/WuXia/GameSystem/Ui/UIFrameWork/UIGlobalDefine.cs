@@ -14,6 +14,7 @@ namespace GameSystem.Ui
         TeamWindow,
         LogWindow,
         TipsWindow,
+        FixedTitleWindow,
         IntelligenceWindow,
 
         SocialDialogWindow,
@@ -144,7 +145,8 @@ namespace GameSystem.Ui
             {WindowID.MapWindow,"UiPrefab/MapWindow" },
             {WindowID.TeamWindow,"UiPrefab/TeamWindow" },
             {WindowID.LogWindow,"UiPrefab/LogWindow" },
-            {WindowID.IntelligenceWindow,"UiPrefab/IntelligenceWindow" }
+            {WindowID.IntelligenceWindow,"UiPrefab/IntelligenceWindow" },
+            {WindowID.FixedTitleWindow,"UiPrefab/FixedTitleWindow" }
         };
     }
 }

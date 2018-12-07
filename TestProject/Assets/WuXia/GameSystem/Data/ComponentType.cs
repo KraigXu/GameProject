@@ -70,6 +70,12 @@ namespace GameSystem
     public struct PlayerInput : IComponentData
     {
         public Vector3 MousePoint;
+        public ElementType TouchedElement;
+        public int TouchedId;
+
+       
+
+
 
     }
     public struct District : IComponentData
@@ -140,13 +146,9 @@ namespace GameSystem
 
         public LocationType LocationType;       // 实时状态
         public int LocationId;           //所处位置ID
-
         public int PrestigeValue;
         public float IdleTime;             //闲置时间
     }
-
-
-
     public struct Family : IComponentData
     {
         public int FamilyId;
@@ -158,6 +160,7 @@ namespace GameSystem
     public struct LivingArea : IComponentData
     {
         public int Id;
+        public int ModelBaseId;
         public int ModelId;
         public int PersonNumber;
         public int CurLevel;
@@ -174,9 +177,7 @@ namespace GameSystem
         public int DefenseStrength;
         public int StableValue;
         public int Renown;
-
         public int IsInternal;   //是否显示内部 0 不显示 1显示
-
         public Vector3 Position;
     }
 

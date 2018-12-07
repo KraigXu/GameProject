@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using DataAccessObject;
 using Unity.Entities;
 using Unity.Transforms;
@@ -10,6 +11,9 @@ using GameSystem.Ui;
 namespace GameSystem
 {
 
+    /// <summary>
+    /// 玩家控制System
+    /// </summary>
     public class PlayerControlSystem : ComponentSystem
     {
         struct PlayerData
@@ -35,76 +39,29 @@ namespace GameSystem
         [Inject]
         private BiologicalSystem _biologicalSystem;
 
-        private bool _uiInit = false;
-        private TipsWindow _tipsWindow;
-
-        private static PlayerControlSystem _instance;
-
-        public static PlayerControlSystem Instance
-        {
-            get { return _instance; }
-        }
-
-        protected override void OnStartRunning()
-        {
-            base.OnStartRunning();
-         //   VoidSystem<PlayerControlSystem>()
-        }
-
-
-        /// <summary>
-        /// Update Input
-        /// </summary>
-        private void UpdatePlayerInput()
-        {
-           
-            for (int i = 0; i < m_Players.Length; i++)
-            {
-                PlayerInput input = m_Players.Input[i];
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
-                RaycastHit hit; //声明一个碰撞的点
-                if (Physics.Raycast(ray, out hit))
-                {
-                    Debug.DrawLine(ray.origin, hit.point, Color.blue);
-                    input.MousePoint = hit.point;
-                }
-                else
-                {
-                    input.MousePoint = Vector3.zero;
-                }
-            }
-        }
-
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject() || StrategySceneInit.Settings == null || m_Players.Length == 0)
                 return;
 
-            if (_uiInit == false)
-            {
-                UiInit();
-                return;
-            }
-
-            UpdatePlayerInput();          //更新输入
-
             for (int i = 0; i < m_Players.Length; ++i)
             {
+                PlayerInput input = m_Players.Input[i];
                 Biological biological = m_Players.Biological[i];
                 BiologicalStatus newStatus = m_Players.Status[i];
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    //定义一条射线，这条射线从摄像机屏幕射向鼠标所在位置
-                RaycastHit hit;    //声明一个碰撞的点
-                bool flag = false;
-                bool tipflag = false;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
                     Debug.DrawLine(ray.origin, hit.point, Color.blue);
+                    input.MousePoint = hit.point;
+
                     if (hit.collider.CompareTag(Define.TagBiological))
                     {
                         Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
-                        Biological tagBiological  = EntityManager.GetComponentData<Biological>(entity);
-                        _tipsWindow.SetBiologicalTip(hit.point + new Vector3(0, 3, 0), tagBiological.BiologicalId);
-                        tipflag = true;
+                        Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
+                        UICenterMasterManager.Instance.GetGameWindowScript<TipsWindow>(WindowID.TipsWindow).
+                            SetBiologicalTip(hit.point, tagBiological.BiologicalId);
                     }
 
                     if (Input.GetMouseButtonUp(0))
@@ -122,7 +79,7 @@ namespace GameSystem
                             m_Players.AiControl[i].SetTarget(livingArea.Position);
                             newStatus.TargetType = ElementType.LivingArea;
                             newStatus.TargetId = livingArea.Id;
-                            
+
                         }
                         else if (hit.collider.CompareTag(Define.TagBiological))
                         {
@@ -132,21 +89,13 @@ namespace GameSystem
                             newStatus.TargetType = ElementType.Biological;
                             newStatus.TargetId = tagBiological.BiologicalId;
 
-                            Debug.Log(newStatus.TargetType);
-                            Debug.Log(newStatus.TargetId);
                             m_Players.AiControl[i].SetTarget(hit.collider.transform);
                         }
                     }
 
                     if (Input.GetMouseButtonUp(1))
                     {
-                        if (hit.collider.name.Contains(Define.TagTerrain))
-                        {
-                            //ShowWindowData windowData=new ShowWindowData();
-
-
-                        }
-                        else if (hit.collider.CompareTag(Define.TagLivingArea))
+                        if (hit.collider.CompareTag(Define.TagLivingArea))
                         {
                             LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
 
@@ -154,13 +103,14 @@ namespace GameSystem
                             windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, livingArea.Id);
                             UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, windowData);
                         }
-                        else if (hit.collider.CompareTag(Define.TagBiological))
-                        {
-
-                        }
                     }
                 }
+                else
+                {
+                    input.MousePoint = Vector3.zero;
+                }
 
+                m_Players.Input[i] = input;
                 newStatus.Position = m_Players.AiControl[i].transform.position;
                 CameraProperty newtarget = m_Players.Property[i];
 
@@ -179,7 +129,7 @@ namespace GameSystem
 
                             ShowWindowData windowData = new ShowWindowData();
                             LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
-                            
+
                             //_biologicalSystem.GetBiologicalOnLocation()
                             uidata.OnOpen = LivingAreaOnOpen;
                             uidata.OnExit = LivingAreaOnExit;
@@ -187,6 +137,7 @@ namespace GameSystem
                             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
                             GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[uidata.ModelId]);
+                            Debug.Log(go.gameObject.name+">>>");
                             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
                             Bounds bounds = renderers[0].bounds;
@@ -210,52 +161,34 @@ namespace GameSystem
                         break;
                     case LocationType.SocialDialogEnter:
                         {
-                           
-                            SocialDialogWindowData socialDialogWindowData =new SocialDialogWindowData();
+                            SocialDialogWindowData socialDialogWindowData = new SocialDialogWindowData();
                             socialDialogWindowData.Aid = biological.BiologicalId;
                             socialDialogWindowData.Bid = newStatus.TargetId;
                             socialDialogWindowData.PangBaiId = 1;
-                            socialDialogWindowData.StartId =1;
-                            socialDialogWindowData.StartlogId=new int[]{1};
+                            socialDialogWindowData.StartId = 1;
+                            socialDialogWindowData.StartlogId = new int[] { 1 };
                             socialDialogWindowData.DialogEvent = SocialDialogEvent;
                             ShowWindowData windowData = new ShowWindowData();
                             windowData.contextData = socialDialogWindowData;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
 
-                            newStatus.LocationType =  LocationType.SocialDialogIn;
+                            newStatus.LocationType = LocationType.SocialDialogIn;
                         }
                         break;
                     case LocationType.SocialDialogIn:
                         {
-                           // Debug.Log(";;;;;SocialDialogin");
                         }
                         break;
                     case LocationType.SocialDialogExit:
                         {
                             UICenterMasterManager.Instance.DestroyWindow(WindowID.SocialDialogWindow);
-                          
+
                         }
                         break;
                 }
-
-                if (tipflag == false)
-                {
-                    _tipsWindow.Hide();
-                }
-
                 m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
             }
-        }
-
-        private void UiInit()
-        {
-            _tipsWindow = (TipsWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
-            ShowWindowData menuWindow = new ShowWindowData();
-            menuWindow.contextData = new MenuEventData(Rest,Team, Person, Log, Intelligence,Map,Option);
-            UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow, menuWindow);
-            UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-            _uiInit = true;
         }
 
         /// <summary>
@@ -290,11 +223,11 @@ namespace GameSystem
         public void Rest()
         {
             _worldTimeSystem.SetTimeScalar(0);
-            ShowWindowData windowData =new ShowWindowData();
-            RestWindowInData restWindowInData=new RestWindowInData();
+            ShowWindowData windowData = new ShowWindowData();
+            RestWindowInData restWindowInData = new RestWindowInData();
             restWindowInData.OnExit = RestExit;
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow,windowData);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow, windowData);
         }
 
         /// <summary>
@@ -322,7 +255,7 @@ namespace GameSystem
             {
                 return;
             }
-            
+
             var biological = m_Players.Biological[0];
             BiologicalData data = SqlData.GetDataId<BiologicalData>(m_Players.Biological[0].BiologicalId);
 
@@ -341,7 +274,7 @@ namespace GameSystem
             uidata.Sex = data.Sex;
             uidata.Prestige = m_Players.Status[0].PrestigeValue;
             uidata.Id = biological.BiologicalId;
-            
+
             //uidata.Influence = data.Influence;
             //uidata.Disposition = data.Disposition;
             // uidata.OnlyEntity = m_Players.Entity[0];
@@ -364,10 +297,6 @@ namespace GameSystem
 
 
         }
-
-
-
-
         public void Option() { }
 
 
@@ -385,7 +314,7 @@ namespace GameSystem
         //------------------------------------------
 
 
-       
+
         //---------------
 
         /// <summary>
@@ -401,12 +330,7 @@ namespace GameSystem
 
         }
 
-        public void Debug111()
-        {
 
-        }
-
-        
     }
 
 

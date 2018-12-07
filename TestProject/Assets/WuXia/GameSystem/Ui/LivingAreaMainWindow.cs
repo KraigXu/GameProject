@@ -128,6 +128,12 @@ namespace GameSystem.Ui
             _buildingIsShow = true;
 
 
+            for (int i = 0; i < item.Features.Count; i++)
+            {
+                //_buildingFeatures[i].GetComponentInChildren<Text>()
+
+            }
+
             if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
             {
                 int number = item.Biologicals.Count - _buildingBiological.Count;
@@ -144,6 +150,8 @@ namespace GameSystem.Ui
                 _buildingBiological[i].NameTex.text = item.Biologicals[i].Name;
                 _buildingBiological[i].HeadImg.sprite = GameStaticData.BiologicalAvatar[item.Biologicals[i].AtlasId];
                 _buildingBiological[i].gameObject.name = item.Biologicals[i].Id.ToString();
+
+
             }
             item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }

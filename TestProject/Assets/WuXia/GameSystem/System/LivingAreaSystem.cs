@@ -82,17 +82,12 @@ namespace GameSystem
 
     public class LivingAreaSystem : ComponentSystem
     {
-
-        public bool CurShowUi = false;
-
-        //UI
-        private LivingAreaTitleWindow _livingAreaTitle;
-
         struct LivingAreaGroup
         {
             public readonly int Length;
             public ComponentDataArray<LivingArea> LivingAreaNode;
             public ComponentArray<Transform> LivingAreaPositon;
+            
             public EntityArray Entity;
         }
         [Inject]
@@ -101,6 +96,13 @@ namespace GameSystem
         [Inject]
         private BuildingSystem _buildingSystem;
 
+        public bool CurShowUi = false;
+
+
+        //UI
+        private LivingAreaTitleWindow _livingAreaTitle;
+
+
         protected override void OnCreateManager()
         {
             base.OnCreateManager();
@@ -108,14 +110,10 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-
             for (int i = 0; i < _livingAreas.Length; i++)
             {
                 var livingArea = _livingAreas.LivingAreaNode[i];
-                if (livingArea.IsInternal == 1)
-                {
-                    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
-                }
+              //  UICenterMasterManager.Instance.GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).Add(livingArea.Id);
             }
 
             if (CurShowUi == false)
@@ -142,9 +140,6 @@ namespace GameSystem
                 CurShowUi = true;
             }
         }
-
-
-
         /// <summary>
         /// 获取UI数据
         /// </summary>
@@ -180,7 +175,6 @@ namespace GameSystem
             }
 
             uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
-
             return uidata;
 
         }
@@ -207,7 +201,6 @@ namespace GameSystem
 
             return false;
         }
-
 
         /// <summary>
         /// 获取指定Transform的数据

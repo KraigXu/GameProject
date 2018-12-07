@@ -44,28 +44,43 @@ namespace GameSystem
                     item.ImageId = _buildingGroup.Building[i].Type;
                     item.Point = _buildingGroup.Building[i].Position;
 
+                    //item.OnOpen = BuildingOnOpen;
+                    //item.OnClose = BuildingOnClose;
+
                     datas.Add(item);
                 }
             }
             return datas;
         }
 
-        private void BuildingOnOpen(Entity entity, int id)
+        //private BuildingiMainData BuildingOnOpen(Entity entity, int id)
+        //{
+        //    var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+        //    Building building= entityManager.GetComponentData<Building>(entity);
+
+        //    //building
+
+
+        //    for (int i = 0; i < _buildingGroup.Length; i++)
+        //    {
+        //        if (_buildingGroup.Building[i].Id == id)
+        //        {
+        //            _buildingGroup.Building[i].DurableValue = main;
+        //            maindata.Id = _buildingGroup.Building[i].Id;
+        //            maindata.Type = _buildingGroup.Building[i].Type;
+        //            maindata.Level = _buildingGroup.Building[i].Level;
+        //        }
+        //    }
+        //    BuildingiMainData maindata = new BuildingiMainData();
+        //    //maindata.Id = id;
+        //    //ShowWindowData data = new ShowWindowData();
+        //    //data.contextData = new BuildingiMainData();
+        //}
+
+        private void BuildingOnClose(Entity entity, int id)
         {
-            for (int i = 0; i < _buildingGroup.Length; i++)
-            {
-                if (_buildingGroup.Building[i].Id == id)
-                {
-                    //_buildingGroup.Building[i].DurableValue=main
-                    //maindata.Id = _buildingGroup.Building[i].Id;
-                    //maindata.Type = _buildingGroup.Building[i].Type;
-                    //maindata.Level = _buildingGroup.Building[i].Level;
-                }
-            }
-            //BuildingiMainData maindata = new BuildingiMainData();
-            //maindata.Id = id;
-            //ShowWindowData data = new ShowWindowData();
-            //data.contextData = new BuildingiMainData();
+
         }
 
 

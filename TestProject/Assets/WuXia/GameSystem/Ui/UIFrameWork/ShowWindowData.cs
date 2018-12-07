@@ -27,29 +27,6 @@ namespace GameSystem.Ui
     // Base window data context for Refresh window or show window
     public class BaseWindowContextData { }
 
-    public class MenuEventData:BaseWindowContextData
-    {
-
-        public UnityAction Rest;
-        public UnityAction Team;
-        public UnityAction Person;
-        public UnityAction Log;
-        public UnityAction Intelligence;
-        public UnityAction Map;
-        public UnityAction Option;
-
-        public MenuEventData() { }
-        public MenuEventData(UnityAction rest,UnityAction team,UnityAction person,UnityAction log,UnityAction intelligence,UnityAction map,UnityAction option)
-        {
-            this.Rest = rest;
-            this.Team = team;
-            this.Person = person;
-            this.Log = log;
-            this.Intelligence = intelligence;
-            this.Map = map;
-            this.Option = option;
-        }
-    }
 
     /// <summary>
     /// RestWindowData
@@ -167,7 +144,7 @@ namespace GameSystem.Ui
         public int DefenseStrength;
         public int StableValue;
 
-        
+
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
@@ -175,18 +152,8 @@ namespace GameSystem.Ui
         public LivingAreaWindowCD() { }
     }
 
-    public class LivingAreaInfo
-    {
-        public int Id;
-      
-
-    }
-
-
-
     public class BuildingiDataItem
     {
-
         public int Id;
         public Entity OnlyEntity;
         public int Level;
@@ -198,31 +165,23 @@ namespace GameSystem.Ui
         public BuildingEvent OnClose;
 
         public List<BiologicalUiInfo> Biologicals= new List<BiologicalUiInfo>();
+        public List<BuildingFeaturesUiInfo> Features=new List<BuildingFeaturesUiInfo>();
        
     }
-
-    /// <summary>
-    /// 分支组
-    /// </summary>
-    public class BranchGroup
-    {
-        //public int Bio
-        
-
-    }
-
-    public class BranchNode
-    {
-        public int AskKey;
-        public int AnswerKey;
-    }
-
     public class BiologicalUiInfo
     {
         public int Id;
         public int AtlasId;
         public string Name;
     }
+
+    public class BuildingFeaturesUiInfo
+    {
+        public int Id;
+        
+    }
+
+
 
 
     public class WindowContextLivingAreaData : BaseWindowContextData

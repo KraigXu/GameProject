@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,8 +24,6 @@ namespace GameSystem.Ui
         [SerializeField]
         private Button _option;
 
-        private MenuEventData _data;
-
         protected override void SetWindowId()
         {
             this.ID = WindowID.MenuWindow;
@@ -39,7 +37,6 @@ namespace GameSystem.Ui
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
 
         public override void InitWindowOnAwake()
@@ -54,46 +51,43 @@ namespace GameSystem.Ui
 
         }
 
-        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
-        {
-            if (contextData == null) return;
-            base.BeforeShowWindow(contextData);
-            _data = (MenuEventData)contextData;
-        }
-
         private void ButtonRest()
         {
-            _data.Rest();
+            World.Active.GetExistingManager<PlayerControlSystem>().Rest();
         }
 
         private void ButtonTeam()
         {
-            _data.Team();
+            World.Active.GetExistingManager<PlayerControlSystem>().Team();
         }
 
         private void ButtonPerson()
         {
-            _data.Person();
+            World.Active.GetExistingManager<PlayerControlSystem>().Person();
+        
         }
 
         private void ButtonLog()
         {
-            _data.Log();
+            World.Active.GetExistingManager<PlayerControlSystem>().Log();
+          
         }
 
         private void ButtonIntelligence()
         {
-            _data.Intelligence();
+            World.Active.GetExistingManager<PlayerControlSystem>().Intelligence();
+
         }
 
         private void ButtonMap()
         {
-            _data.Map();
+            World.Active.GetExistingManager<PlayerControlSystem>().Map();
+            
         }
 
         private void ButtonOption()
         {
-            _data.Option();
+            World.Active.GetExistingManager<PlayerControlSystem>().Option();
         }
 
 
