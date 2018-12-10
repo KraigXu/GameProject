@@ -24,6 +24,8 @@ namespace GameSystem
         public static Dictionary<int, string> BuildingStatus = new Dictionary<int, string>();
         public static Dictionary<int, Sprite> BuildingAvatar = new Dictionary<int, Sprite>();
 
+        public static Dictionary<int,string>  FeaturesName=new Dictionary<int, string>();
+
         public static Dictionary<int, string> PrestigeBiolgicalDic = new Dictionary<int, string>();
         public static Dictionary<int, string> PrestigeDistrictDic = new Dictionary<int, string>();
         public static Dictionary<int, string> PrestigeLivingAreaDic = new Dictionary<int, string>();

@@ -26,7 +26,7 @@ namespace GameSystem.Ui
         [SerializeField] private Text _stable;
 
         [SerializeField] private List<GameObject> _buildingBilling;
-        [SerializeField] private List<GameObject> _buildingFeatures;
+        [SerializeField] private List<Button> _buildingFeatures;
         [SerializeField] private List<BiologicalBaseUi> _buildingBiological;
         [SerializeField] private GameObject _buildingMainView;                                //建筑主视图
         [SerializeField] private GameObject _buildingImage;
@@ -130,8 +130,7 @@ namespace GameSystem.Ui
 
             for (int i = 0; i < item.Features.Count; i++)
             {
-                //_buildingFeatures[i].GetComponentInChildren<Text>()
-
+                _buildingFeatures[i].GetComponentInChildren<Text>().text=GameStaticData.FeaturesName[item.Features[i].Id];
             }
 
             if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
