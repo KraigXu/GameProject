@@ -50,6 +50,9 @@ namespace GameSystem.Ui
         [SerializeField]
         private Text _pontText1;
 
+        [Header("Faction")]
+        public Text FactionName;
+        public Text FactionDescription;
 
         [Header("LivingAreaInfo")]
         [SerializeField]
@@ -90,14 +93,14 @@ namespace GameSystem.Ui
             {
                 _personInfoGo.SetActive(flag);
                 if (flag)
-                {
                     ChangePersonInfo();
-                }
             });
 
             _factionTog.onValueChanged.AddListener(delegate (bool flag)
             {
                 _factionGo.SetActive(flag);
+                if(flag)
+                    ChangeFactionInfo();
             });
 
             _familyTog.onValueChanged.AddListener(delegate (bool flag)
@@ -152,7 +155,15 @@ namespace GameSystem.Ui
                 UiListItem uiitem= item.GetComponent<UiListItem>();
                 uiitem.Text.text=GameStaticData.BiologicalSurnameDic[biologicalIds[i]]+ GameStaticData.BiologicalNameDic[biologicalIds[i]];
                 uiitem.Id = biologicalIds[i];
-                uiitem.ClickCallback = ChangePersonCallback;
+                uiitem.ClickCallback = delegate(int id)
+                {
+                    BiologicalUi biologicalUi = World.Active.GetExistingManager<BiologicalSystem>().GetBiologicalInfo(id);
+                    _personInfoImage.sprite = GameStaticData.BiologicalAvatar[biologicalUi.Id];
+                    _personName.text = GameStaticData.BiologicalSurnameDic[biologicalUi.Id] + GameStaticData.BuildingName[biologicalUi.Id];
+                    _personName.text = "1";
+
+                    _personProperty.text = "1";
+                };
                 
 
                 _listItems.Add(uiitem);
@@ -160,19 +171,31 @@ namespace GameSystem.Ui
 
         }
 
-        /// <summary>
-        /// 项 被点击时  刷新Person界面，显示该人员信息
-        /// </summary>
-        /// <param name="id"></param>
-        private void ChangePersonCallback(int id)
+        #region  Faction
+        private void ChangeFactionInfo()
         {
-            BiologicalUi biologicalUi= World.Active.GetExistingManager<BiologicalSystem>().GetBiologicalInfo(id);
-            _personInfoImage.sprite = GameStaticData.BiologicalAvatar[biologicalUi.Id];
-            _personName.text =GameStaticData.BiologicalSurnameDic[biologicalUi.Id]+GameStaticData.BuildingName[biologicalUi.Id];
-            _personName.text = "1";
-            
-            _personProperty.text = "1";
+            ClearListItem();
+
+            ComponentDataArray<Faction> factions = World.Active.GetExistingManager<FactionSystem>().GetFactions();
+            for (int i = 0; i < factions.Length; i++)
+            {
+                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
+                UiListItem uiitem = item.GetComponent<UiListItem>();
+                uiitem.Text.text = GameStaticData.LivingAreaName[factions[i].Id];
+                uiitem.Id = factions[i].Id;
+                uiitem.ClickCallback = delegate (int id)
+                {
+                    LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
+
+                    _livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
+                    _livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                };
+            }
         }
+
+        #endregion
+
+
 
         private void ChangeWuxueInfo()
         {
@@ -193,18 +216,14 @@ namespace GameSystem.Ui
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[livngAreaIds[i]];
                 uiitem.Id = livngAreaIds[i];
-                uiitem.ClickCallback = ChangeLivingArea;
+                uiitem.ClickCallback = delegate(int id)
+                {
+                    LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
+
+                    _livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
+                    _livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                };
             }
-        }
-
-        private void ChangeLivingArea(int id)
-        {
-            LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-
-            _livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
-            _livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
-            
-
         }
     }
 }

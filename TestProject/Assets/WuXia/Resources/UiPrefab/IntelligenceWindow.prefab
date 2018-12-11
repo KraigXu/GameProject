@@ -583,7 +583,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1594847563088676
 GameObject:
   m_ObjectHideFlags: 1
@@ -2066,8 +2066,13 @@ MonoBehaviour:
   _personInfoImage: {fileID: 114446855107412998}
   _personName: {fileID: 114461610205733508}
   _personProperty: {fileID: 114605617515418612}
-  _ponText: {fileID: 0}
-  _pontText1: {fileID: 0}
+  _ponText: {fileID: 114447056301101440}
+  _pontText1: {fileID: 114605617515418612}
+  FactionName: {fileID: 114973120376022512}
+  FactionDescription: {fileID: 114334802531420180}
+  _livingAreaImage: {fileID: 114981028812907782}
+  _livingAreaNameTxt: {fileID: 114605731652567218}
+  _livingAreaDisTxt: {fileID: 114835565686363786}
 --- !u!114 &114496767110257416
 MonoBehaviour:
   m_ObjectHideFlags: 1

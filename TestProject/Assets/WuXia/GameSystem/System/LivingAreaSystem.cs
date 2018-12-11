@@ -98,7 +98,6 @@ namespace GameSystem
 
         public bool CurShowUi = false;
 
-
         //UI
         private LivingAreaTitleWindow _livingAreaTitle;
 

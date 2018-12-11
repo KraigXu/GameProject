@@ -22,6 +22,7 @@ namespace GameSystem
         public static EntityArchetype PlayerArchetype;
         public static EntityArchetype CameraArchetype;
         public static EntityArchetype TimeArchetype;
+        public static EntityArchetype FactionArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -52,6 +53,7 @@ namespace GameSystem
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Position), typeof(NavMeshAgent));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
+
 
             TimeArchetype = entityManager.CreateArchetype(typeof(TimeData));
         }
@@ -328,67 +330,6 @@ namespace GameSystem
             }
             #endregion
 
-            #region 初始化声望
-            {
-                List<PrestigeData> prestigeDatas = SqlData.GetAllDatas<PrestigeData>();
-
-                List<int> max = new List<int>();
-                List<int> min = new List<int>();
-                List<int> level = new List<int>();
-                for (int i = 0; i < prestigeDatas.Count; i++)
-                {
-                    GameStaticData.PrestigeBiolgicalDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].BiologicalTitle);
-                    GameStaticData.PrestigeDistrictDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].DistrictTitle);
-                    GameStaticData.PrestigeLivingAreaDic.Add(prestigeDatas[i].LevelCode, prestigeDatas[i].LivingAreaTitle);
-                    max.Add(prestigeDatas[i].ValueMax);
-                    min.Add(prestigeDatas[i].ValueMin);
-                    level.Add(prestigeDatas[i].LevelCode);
-                }
-                PrestigeSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>(), max, min, level);
-            }
-            #endregion
-
-            #region 初始化派系
-
-            {
-                List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
-
-                for (int i = 0; i < factionDatas.Count; i++)
-                {
-                    GameStaticData.FactionName.Add(factionDatas[i].Id, factionDatas[i].Name);
-                }
-
-            }
-
-
-            #endregion
-
-            #region 初始化家族
-
-            {
-                List<FamilyData> familyDatas = SqlData.GetAllDatas<FamilyData>();
-
-
-                for (int i = 0; i < familyDatas.Count; i++)
-                {
-                    GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
-                }
-            }
-            #endregion
-
-            #region 初始化关系
-
-            {
-                List<RelationData> biologicalRelations = SqlData.GetAllDatas<RelationData>();
-
-                for (int i = 0; i < biologicalRelations.Count; i++)
-                {
-
-                }
-            }
-
-            #endregion
-
             #region BiologicalInit
             {
                 List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
@@ -405,8 +346,7 @@ namespace GameSystem
                         BiologicalId = data[i].Id,
                         AvatarId = data[i].AvatarId,
                         ModelId = data[i].ModelId,
-                        PrestigeId = data[i].PrestigeId,
-                        RelationId = data[i].RelationId,
+                        
                         FamilyId = data[i].FamilyId,
                         FactionId = data[i].FactionId,
                         TitleId = data[i].TitleId,
@@ -422,8 +362,6 @@ namespace GameSystem
                         Lingdong = data[i].Lingdong,
                         Wuxing = data[i].Wuxing
 
-
-
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
@@ -432,8 +370,7 @@ namespace GameSystem
                         Position = new Vector3(data[i].X, data[i].Y, data[i].Z),
                         TargetId = 0,
                         TargetType = 0,
-                        LocationType = LocationType.Field,
-                        PrestigeValue = 100
+                        LocationType = LocationType.Field
 
                     });
 
@@ -449,15 +386,6 @@ namespace GameSystem
                         Type = ElementType.Biological
                     });
 
-                    if (data[i].FamilyId != 0)
-                    {
-                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<Family>());
-                        entityManager.SetComponentData(biologicalEntity, new Family
-                        {
-                            FamilyId = data[i].FamilyId,
-                            ThisId = data[i].Id
-                        });
-                    }
 
                     if (data[i].Id == settings.PlayerId)
                     {
@@ -490,18 +418,91 @@ namespace GameSystem
                         });
                     }
 
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<Prestige>());
+                    entityManager.SetComponentData(biologicalEntity, new Prestige
+                    {
+                        PrestigeValue= data[i].PrestigeValue
+                    });
+
+                    ////初始这个Biological的Relation
+                    //if (data[i].RelationId > 0)
+                    //{
+                    //    List<RelationData> relationDatas= SqlData.GetWhereDatas<RelationData>(" MainId=? ", new object[] { data[i].RelationId });
+                    //    //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Relation>());
+                    //    //entityManager.SetComponentData(biologicalEntity,new Relation
+                    //    //{
+
+                    //    //});
+                    //}
+                    //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Faction>());
+                    //entityManager.SetComponentData(biologicalEntity, new Faction
+                    //{
+                    //    FactionId = data[i].RelationId,
+                    //});
+
+
+                    //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Family>());
+                    //entityManager.SetComponentData(biologicalEntity, new Family
+                    //{
+                    //    FamilyId = data[i].FamilyId,
+                    //    ThisId = data[i].Id
+
+                    //});
+                    //entityManager.SetComponentData(biologicalEntity,new Relation());
+                    //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Relation>());
+
                     //Save Text
                     GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
                     GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
                 }
+               
 
                 GameStaticData.BiologicalSex.Add(1, "男");
                 GameStaticData.BiologicalSex.Add(2, "女");
                 GameStaticData.BiologicalSex.Add(3, "未知");
+
+                RelationSystem.SetupComponentData(entityManager);
+
+                //FamilySystem.SetupComponentData(entityManager);
+                //FactionSystem.SetupComponentData(entityManager);
+
+                //PrestigeSystem.SetupComponentData(entityManager);
             }
+
             #endregion
 
+            #region FactionData
+            {
+
+                EntityArchetype factionArchetype = entityManager.CreateArchetype(typeof(Faction));
+                List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
+                for (int i = 0; i < factionDatas.Count; i++)
+                {
+                    Entity faction = entityManager.CreateEntity(factionArchetype);
+                    entityManager.SetComponentData(faction, new Faction
+                    {
+
+                        Id = factionDatas[i].Id,
+                        Level = factionDatas[i].FactionLevel,
+                        Type = factionDatas[i].FactionType,
+
+                        Food = factionDatas[i].Food,
+                        FoodMax = factionDatas[i].FoodMax,
+                        Iron = factionDatas[i].Iron,
+                        IronMax = factionDatas[i].IronMax,
+                        Money = factionDatas[i].Money,
+                        MoneyMax = factionDatas[i].MoneyMax,
+                        Wood = factionDatas[i].Wood,
+                        WoodMax = factionDatas[i].WoodMax
+                    });
+
+                    GameStaticData.FactionName.Add(factionDatas[i].Id, factionDatas[i].Name);
+                    GameStaticData.FactionDescription.Add(factionDatas[i].Id, factionDatas[i].Description);
+                }
+
+            }
+            #endregion
 
             #region UiInit
             {

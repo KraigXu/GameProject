@@ -198,6 +198,7 @@ namespace GameSystem.Ui
         public int PangBaiId;
         public int StartId;
         public int[] StartlogId;
+        public int Relation;
         public SocialDialogEvent DialogEvent;
     }
 

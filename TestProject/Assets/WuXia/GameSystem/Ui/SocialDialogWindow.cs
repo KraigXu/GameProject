@@ -25,6 +25,8 @@ namespace GameSystem.Ui
 
         [SerializeField]
         private Text _startTxt;
+        [SerializeField]
+        private Text _relationText;
 
         [SerializeField]
         private List<GameObject> _items;
@@ -114,6 +116,7 @@ namespace GameSystem.Ui
 
         public void Change()
         {
+            _relationText.text = _socialDialogWindowData.Relation.ToString();
 
             for (int i = 0; i < _items.Count; i++)
             {

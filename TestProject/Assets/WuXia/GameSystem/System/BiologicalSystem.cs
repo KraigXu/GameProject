@@ -138,8 +138,8 @@ namespace GameSystem
                     biologicalUi.SexId = _biologicalGroup.Biological[i].SexId;
                     biologicalUi.Age = _biologicalGroup.Biological[i].Age;
                     biologicalUi.Disposition = _biologicalGroup.Biological[i].Disposition;
-                    biologicalUi.PrestigeId = _biologicalGroup.Biological[i].PrestigeId;
-                    biologicalUi.RelationId = _biologicalGroup.Biological[i].RelationId;
+                    //biologicalUi.PrestigeId = _biologicalGroup.Biological[i].PrestigeId;
+                    //biologicalUi.RelationId = _biologicalGroup.Biological[i].RelationId;
                     biologicalUi.FamilyId = _biologicalGroup.Biological[i].FamilyId;
 
                     return biologicalUi;

@@ -168,6 +168,8 @@ namespace GameSystem
                             socialDialogWindowData.StartId = 1;
                             socialDialogWindowData.StartlogId = new int[] { 1 };
                             socialDialogWindowData.DialogEvent = SocialDialogEvent;
+                            socialDialogWindowData.Relation = RelationSystem.GetRelationValue(biological.BiologicalId, newStatus.TargetId);
+
                             ShowWindowData windowData = new ShowWindowData();
                             windowData.contextData = socialDialogWindowData;
                             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
@@ -272,7 +274,7 @@ namespace GameSystem
             uidata.Qi = biological.Qi;
             uidata.Shen = biological.Shen;
             uidata.Sex = data.Sex;
-            uidata.Prestige = m_Players.Status[0].PrestigeValue;
+            //uidata.Prestige = m_Players.Status[0].PrestigeValue;
             uidata.Id = biological.BiologicalId;
 
             //uidata.Influence = data.Influence;

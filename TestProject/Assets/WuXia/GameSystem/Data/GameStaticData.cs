@@ -37,6 +37,7 @@ namespace GameSystem
         public static Dictionary<int, Sprite> BiologicalAvatar = new Dictionary<int, Sprite>();
 
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
+        public static Dictionary<int,string> FactionDescription=new  Dictionary<int, string>();
 
         public static Dictionary<int, string> FamilyName = new Dictionary<int, string>();
 

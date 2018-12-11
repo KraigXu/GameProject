@@ -95,8 +95,8 @@ namespace GameSystem
         public int BiologicalId;
         public int AvatarId; 
         public int ModelId;
-        public int PrestigeId;
-        public int RelationId; 
+        //public int PrestigeId;
+        //public int RelationId; 
         public int FamilyId;
         public int FactionId;
         public int TitleId;
@@ -105,6 +105,8 @@ namespace GameSystem
         public int Age;
         public int AgeMax;
         public int Disposition;
+        public int PrestigeValue;
+
 
 
         //固有属性
@@ -146,7 +148,6 @@ namespace GameSystem
 
         public LocationType LocationType;       // 实时状态
         public int LocationId;           //所处位置ID
-        public int PrestigeValue;
         public float IdleTime;             //闲置时间
     }
     public struct Family : IComponentData
@@ -154,6 +155,27 @@ namespace GameSystem
         public int FamilyId;
         public int ThisId;
 
+    }
+
+    public struct Faction : IComponentData
+    {
+        public int Id;
+        public int Level;
+        public int Type;
+
+        public int Money;
+        public int MoneyMax;
+        public int Iron;
+        public int IronMax;
+        public int Wood;
+        public int WoodMax;
+        public int Food;
+        public int FoodMax;
+    }
+
+    public struct Prestige : IComponentData
+    {
+        public int PrestigeValue;
     }
 
 

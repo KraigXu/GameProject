@@ -538,8 +538,7 @@ namespace DataAccessObject
        
         public int AvatarId { get; set; }           //头像ID
         public int ModelId { get; set; }            //模型ID
-        public int PrestigeId { get; set; }           //声望ID
-        public int RelationId { get; set; }           //关系ID
+
         public int FamilyId { get; set; }               //家族ID
         public int FactionId { get; set; }              //派系ID
         public int TitleId { get; set; }                //称号ID
@@ -572,12 +571,14 @@ namespace DataAccessObject
 
         public int Disposition { get; set; }                    //性格
 
+        public int PrestigeValue { get; set; }
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
                 {
-                    Id,Surname,Name,AvatarId,ModelId,PrestigeId,RelationId,FamilyId,FactionId,TitleId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
-                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition
+                    Id,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
+                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,PrestigeValue
                 };
             return objects;
         }
@@ -590,19 +591,22 @@ namespace DataAccessObject
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int BossId { get; set; }
-        public int Money { get; set; }
-        public int Iron { get; set; }
-        public int Wood { get; set; }
-        public int Food { get; set; }
-        public int Population { get; set; }
+        public int FactionLevel { get; set; }
         public int FactionType { get; set; }
+        public int Money { get; set; }
+        public int MoneyMax { get; set; }
+        public int Iron { get; set; }
+        public int IronMax { get; set; }
+        public int Wood { get; set; }
+        public int WoodMax { get; set; }
+        public int Food { get; set; }
+        public int FoodMax { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,Name,Description,BossId,Money,Iron,Wood,Food,Population,FactionType
+                Id,Name,Description,FactionLevel,FactionType,Money,Iron,Wood,Food
             };
 
             return objects;
@@ -656,10 +660,10 @@ namespace DataAccessObject
     /// </summary>
     public class RelationData : BaseData
     {
-        public int MainId;
-        public int AimsId;
-        public int RelationshipValue;
-        public int RalationType;
+        public int MainId { get; set; }
+        public int AimsId { get; set; }
+        public int RelationshipValue { get; set; }
+        public int RalationType { get; set; }
 
         public override object[] GetValues()
         {
@@ -807,7 +811,7 @@ namespace DataAccessObject
     {
         public static T GetDataId<T>(int id) where T : BaseData
         {
-            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=?", new object[] { id });
+            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=? ", new object[] { id });
         }
 
         public static List<T> GetAllDatas<T>() where T : BaseData
