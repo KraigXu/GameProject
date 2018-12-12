@@ -31,7 +31,7 @@ namespace GameSystem.Ui
         [SerializeField]
         private RectTransform _listItemPrefab;
         [SerializeField]
-        private List<UiListItem> _listItems=new List<UiListItem>();
+        private List<UiListItem> _listItems = new List<UiListItem>();
         [SerializeField]
         private RectTransform _listItemParent;
 
@@ -39,16 +39,11 @@ namespace GameSystem.Ui
         private Button _exitBtn;
 
         [Header("PersonInfo")]
-        [SerializeField]
-        private Image _personInfoImage;
-        [SerializeField]
-        private Text _personName;
-        [SerializeField]
-        private Text _personProperty;
-        [SerializeField]
-        private Text _ponText;
-        [SerializeField]
-        private Text _pontText1;
+        public Image PonAvatr;
+        public Text PonName;
+        public Text PonSex;
+        public Text PonPrestige;
+        public Text PonFamily;
 
         [Header("Faction")]
         public Text FactionName;
@@ -63,9 +58,6 @@ namespace GameSystem.Ui
         private Text _livingAreaDisTxt;
         //[SerializeField]
         //private Text _livingArea
-
-
-
         protected override void SetWindowId()
         {
             this.ID = WindowID.IntelligenceWindow;
@@ -84,7 +76,7 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            _exitBtn.onClick.AddListener(delegate()
+            _exitBtn.onClick.AddListener(delegate ()
             {
                 UICenterMasterManager.Instance.DestroyWindow(this.ID);
             });
@@ -99,7 +91,7 @@ namespace GameSystem.Ui
             _factionTog.onValueChanged.AddListener(delegate (bool flag)
             {
                 _factionGo.SetActive(flag);
-                if(flag)
+                if (flag)
                     ChangeFactionInfo();
             });
 
@@ -117,7 +109,7 @@ namespace GameSystem.Ui
                 }
             });
 
-            _livingAreaTog.onValueChanged.AddListener(delegate(bool flag)
+            _livingAreaTog.onValueChanged.AddListener(delegate (bool flag)
             {
                 _livingAreaGo.SetActive(flag);
                 if (flag)
@@ -150,25 +142,22 @@ namespace GameSystem.Ui
             List<int> biologicalIds = World.Active.GetExistingManager<BiologicalSystem>().GetAllBiologicalName();
             for (int i = 0; i < biologicalIds.Count; i++)
             {
-                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab,_listItemParent);
+                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
 
-                UiListItem uiitem= item.GetComponent<UiListItem>();
-                uiitem.Text.text=GameStaticData.BiologicalSurnameDic[biologicalIds[i]]+ GameStaticData.BiologicalNameDic[biologicalIds[i]];
+                UiListItem uiitem = item.GetComponent<UiListItem>();
+                uiitem.Text.text = GameStaticData.BiologicalSurnameDic[biologicalIds[i]] + GameStaticData.BiologicalNameDic[biologicalIds[i]];
                 uiitem.Id = biologicalIds[i];
-                uiitem.ClickCallback = delegate(int id)
+                uiitem.ClickCallback = delegate (int id)
                 {
-                    BiologicalUi biologicalUi = World.Active.GetExistingManager<BiologicalSystem>().GetBiologicalInfo(id);
-                    _personInfoImage.sprite = GameStaticData.BiologicalAvatar[biologicalUi.Id];
-                    _personName.text = GameStaticData.BiologicalSurnameDic[biologicalUi.Id] + GameStaticData.BuildingName[biologicalUi.Id];
-                    _personName.text = "1";
-
-                    _personProperty.text = "1";
+                    Biological biological = World.Active.GetExistingManager<BiologicalSystem>().GetBiologicalInfo(id);
+                    PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
+                    PonName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
+                    PonSex.text = GameStaticData.BiologicalSex[biological.SexId];
+                    PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue,ElementType.Biological);
+                    PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
                 };
-                
-
                 _listItems.Add(uiitem);
             }
-
         }
 
         #region  Faction
@@ -200,7 +189,7 @@ namespace GameSystem.Ui
         private void ChangeWuxueInfo()
         {
             ClearListItem();
-            
+
         }
 
 
@@ -216,7 +205,7 @@ namespace GameSystem.Ui
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[livngAreaIds[i]];
                 uiitem.Id = livngAreaIds[i];
-                uiitem.ClickCallback = delegate(int id)
+                uiitem.ClickCallback = delegate (int id)
                 {
                     LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
 

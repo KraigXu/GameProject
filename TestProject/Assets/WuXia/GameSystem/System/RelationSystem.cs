@@ -35,7 +35,6 @@ namespace GameSystem
                 if (_relationDic.ContainsKey(newKey) == true)
                 {
                     _relationDic[newKey] = relationDatas[i];
-                    Debug.Log(">>>");
                 }
                 else
                 {
@@ -46,7 +45,6 @@ namespace GameSystem
 
         public static int GetRelationValue(int mainId, int targetId)
         {
-            Debug.Log(mainId+">>+"+targetId);
             DoubleKey key=new DoubleKey
             {
                 Key1=mainId,

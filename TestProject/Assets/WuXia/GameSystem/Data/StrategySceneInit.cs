@@ -33,6 +33,7 @@ namespace GameSystem
 
         public static DemoSetting Settings;
 
+
         /// <summary>
         /// 在场景加载之前初始化数据
         /// 此方法为我们将在此游戏中频繁生成的实体创建原型。
@@ -164,28 +165,18 @@ namespace GameSystem
                     }
                 }
 
-                List<SocialDialogData> socialDialogDatas = SqlData.GetAllDatas<SocialDialogData>();
-
-                for (int i = 0; i < socialDialogDatas.Count; i++)
-                {
-                    if (socialDialogDatas[i].Type == 1)
-                    {
-                        GameStaticData.SocialDialogInfo.Add(socialDialogDatas[i].Id, socialDialogDatas[i].Content);
-                    }
-                    else if (socialDialogDatas[i].Type == 2)
-                    {
-                        GameStaticData.SocialDialogNarration.Add(socialDialogDatas[i].Id, socialDialogDatas[i].Content);
-                    }
-                }
-
                 List<ModelData> modelDatas = SqlData.GetAllDatas<ModelData>();
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
                 }
+                SocialDialogSystem.SetupComponentData(entityManager);
+                PrestigeSystem.SetupComponentData(entityManager);
             }
 
             #endregion
+
+
 
             #region DistrictInit
             {
@@ -374,6 +365,17 @@ namespace GameSystem
 
                     });
 
+                    
+
+                    //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Techniques>());
+                    //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Techniques>(data[i].JifaJson));
+
+                    //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Equipment>());
+                    //entityManager.SetComponentData(biologicalEntity,JsonConvert.DeserializeObject<Equipment>(data[i].EquipmentJson));
+
+                    //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Wuxue>());
+                    //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Wuxue>(data[i].GongfaJson));
+
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<InteractionElement>());
                     entityManager.SetComponentData(biologicalEntity, new InteractionElement
                     {
@@ -402,7 +404,6 @@ namespace GameSystem
                             Damping = 3,
                             Offset = new Vector3(0, 1, -15),
                             RoationOffset = new Vector3(50, 0, 0)
-
                         });
                     }
                     else
@@ -457,17 +458,11 @@ namespace GameSystem
                     GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
                 }
                
-
                 GameStaticData.BiologicalSex.Add(1, "男");
                 GameStaticData.BiologicalSex.Add(2, "女");
                 GameStaticData.BiologicalSex.Add(3, "未知");
 
                 RelationSystem.SetupComponentData(entityManager);
-
-                //FamilySystem.SetupComponentData(entityManager);
-                //FactionSystem.SetupComponentData(entityManager);
-
-                //PrestigeSystem.SetupComponentData(entityManager);
             }
 
             #endregion
@@ -482,7 +477,6 @@ namespace GameSystem
                     Entity faction = entityManager.CreateEntity(factionArchetype);
                     entityManager.SetComponentData(faction, new Faction
                     {
-
                         Id = factionDatas[i].Id,
                         Level = factionDatas[i].FactionLevel,
                         Type = factionDatas[i].FactionType,
@@ -500,9 +494,33 @@ namespace GameSystem
                     GameStaticData.FactionName.Add(factionDatas[i].Id, factionDatas[i].Name);
                     GameStaticData.FactionDescription.Add(factionDatas[i].Id, factionDatas[i].Description);
                 }
-
             }
             #endregion
+
+            #region FamilySystem
+
+            {
+                EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
+                List<FamilyData> familyData = SqlData.GetAllDatas<FamilyData>();
+                for (int i = 0; i < familyData.Count; i++)
+                {
+                    Entity family = entityManager.CreateEntity(familyArchetype);
+                    entityManager.SetComponentData(family,new Family
+                    {
+                        FamilyId = familyData[i].Id
+                    });
+
+                }
+
+
+
+            }
+
+
+            #endregion
+
+
+
 
             #region UiInit
             {

@@ -92,7 +92,6 @@ public class SQLService
         Tables.CreateTable_Prestige(this);
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_Gongfa(this);
-        Tables.CreateTable_Xinfa(this);
 
         //-----------资源相关
         Tables.CreateTable_Avatar(this);

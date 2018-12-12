@@ -95,8 +95,6 @@ namespace GameSystem
         public int BiologicalId;
         public int AvatarId; 
         public int ModelId;
-        //public int PrestigeId;
-        //public int RelationId; 
         public int FamilyId;
         public int FactionId;
         public int TitleId;
@@ -171,6 +169,30 @@ namespace GameSystem
         public int WoodMax;
         public int Food;
         public int FoodMax;
+    }
+
+    public struct Equipment : IComponentData
+    {
+        public int HelmetId;
+        public int ClothesId;
+        public int BeltId;
+        public int HandGuard;
+        public int Pants;
+        public int Shoes;
+        public int WeaponFirstId;
+        public int WeaponSecondaryId;
+    }
+
+    public struct Techniques : IComponentData
+    {
+        
+
+
+    }
+
+    public struct Wuxue : IComponentData
+    {
+
     }
 
     public struct Prestige : IComponentData

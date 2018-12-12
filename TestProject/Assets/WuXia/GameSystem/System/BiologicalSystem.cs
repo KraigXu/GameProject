@@ -56,6 +56,12 @@ namespace GameSystem
         [Inject]
         private BiologicalGroup _biologicalGroup;
 
+        public ComponentDataArray<Biological> GetBiological
+        {
+            get { return _biologicalGroup.Biological; }
+        }
+
+
 
 
         private TipsWindow _tipsWindow;
@@ -119,34 +125,21 @@ namespace GameSystem
             return result;
         }
 
-
         /// <summary>
         /// 获取指定ID的信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public BiologicalUi GetBiologicalInfo(int id)
+        public Biological GetBiologicalInfo(int id)
         {
             for (int i = 0; i < _biologicalGroup.Length; i++)
             {
                 if (id == _biologicalGroup.Biological[i].BiologicalId)
                 {
-                    BiologicalUi biologicalUi = new BiologicalUi();
-                    biologicalUi.Id = _biologicalGroup.Biological[i].BiologicalId;
-                    biologicalUi.AvatarId = _biologicalGroup.Biological[i].AvatarId;
-                    biologicalUi.ModelId = _biologicalGroup.Biological[i].ModelId;
-                    biologicalUi.SexId = _biologicalGroup.Biological[i].SexId;
-                    biologicalUi.Age = _biologicalGroup.Biological[i].Age;
-                    biologicalUi.Disposition = _biologicalGroup.Biological[i].Disposition;
-                    //biologicalUi.PrestigeId = _biologicalGroup.Biological[i].PrestigeId;
-                    //biologicalUi.RelationId = _biologicalGroup.Biological[i].RelationId;
-                    biologicalUi.FamilyId = _biologicalGroup.Biological[i].FamilyId;
-
-                    return biologicalUi;
+                    return _biologicalGroup.Biological[i];
                 }
-                
             }
-            return new BiologicalUi();
+            return new Biological();
         }
 
 

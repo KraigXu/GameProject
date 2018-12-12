@@ -66,13 +66,6 @@ namespace GameSystem
             return _faction.Faction;
         }
 
-
-
-
-        
-
-
-        
     }
 
 }

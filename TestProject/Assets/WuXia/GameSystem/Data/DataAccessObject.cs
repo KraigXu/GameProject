@@ -198,12 +198,11 @@ namespace DataAccessObject
         public static void CreateTable_Prestige(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
-                                       " LevelCode INTEGER PRIMARY KEY," +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Type INTEGER,"+
+                                       " Title TEXT,"+
                                        " ValueMin INTEGER," +
-                                       " ValueMax INTEGER," +
-                                       " BiologicalTitle TEXT," +
-                                       " LivingAreaTitle TEXT," +
-                                       " DistrictTitle TEXT);");
+                                       " ValueMax INTEGER);");
         }
 
         /// <summary>
@@ -235,22 +234,6 @@ namespace DataAccessObject
                                        " Description  TEXT," +
                                        " ContentTitle TEXT);");
         }
-        /// <summary>
-        /// 心法
-        /// </summary>
-        /// <param name="service"></param>
-        public static void CreateTable_Xinfa(SQLService service)
-        {
-            service.connection.Execute(" CREATE TABLE IF NOT EXISTS XinfaData ( " +
-                                       " Id INTEGER PRIMARY KEY," +
-                                       " Name TEXT," +
-                                       " Description  TEXT," +
-                                       " XinfaType TEXT," +
-
-                                       " ContentTitle TEXT);");
-        }
-
-
 
 
         /// <summary>
@@ -638,18 +621,17 @@ namespace DataAccessObject
     /// </summary>
     public class PrestigeData : BaseData
     {
-        public int LevelCode { get; set; }
+        public int Id { get; set; }
+        public int Type { get; set; }
+        public string Title { get; set; }
         public int ValueMin { get; set; }
         public int ValueMax { get; set; }
-        public string BiologicalTitle { get; set; }
-        public string LivingAreaTitle { get; set; }
-        public string DistrictTitle { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                LevelCode, ValueMin, ValueMax,BiologicalTitle,LivingAreaTitle,DistrictTitle
+                Id,Type, ValueMin, ValueMax,Title
             };
             return objects;
         }
@@ -765,21 +747,22 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     /// <summary>
-    /// 话语信息
+    /// SocialInfoData
     /// </summary>
     public class SocialDialogData : BaseData
     {
         public int Id { get; set; }
         public int Type { get; set; }
         public string Content { get; set; }
+        public string ParentId { get; set; }
+        public string ChildId { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects=new object[]
             {
-                Id,Type,Content
+                Id,Type,Content,ParentId,ChildId
             };
             return objects;
         }

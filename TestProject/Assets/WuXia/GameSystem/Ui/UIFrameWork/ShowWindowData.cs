@@ -202,26 +202,6 @@ namespace GameSystem.Ui
         public SocialDialogEvent DialogEvent;
     }
 
-    /// <summary>
-    /// Ui界面上 BiologicalList
-    /// </summary>
-    public struct BiologicalUi
-    {
-        public int Id;   //唯一标识 id
-        public int AvatarId;
-        public int ModelId;
-
-        public int SexId;
-        public int Age;
-        public int Disposition;
-
-        public int PrestigeId;
-        public int RelationId;
-        public int FamilyId;
-
-    }
-
-
     public struct LivingAreaUi
     {
 

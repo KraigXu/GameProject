@@ -101,7 +101,6 @@ namespace GameSystem.Ui
                 _jingtxt.text = data.Jing.ToString();
                 _qitxt.text = data.Qi.ToString();
                 _shentxt.text = data.Shen.ToString();
-
             }
         }
 
