@@ -11,7 +11,7 @@ namespace GameSystem.Ui
 
         private ExtendedMenuWindowInData _info;
         [SerializeField]
-        private BaseCorrespondenceByModelControl _contentUi;
+        private UiTitleitem _contentUi;
 
         protected override void SetWindowId()
         {

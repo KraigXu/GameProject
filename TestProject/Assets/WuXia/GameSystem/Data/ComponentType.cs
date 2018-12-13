@@ -223,6 +223,10 @@ namespace GameSystem
         public int Renown;
         public int IsInternal;   //是否显示内部 0 不显示 1显示
         public Vector3 Position;
+
+
+        public int TitleUiId;
+
     }
 
     public struct Building : IComponentData

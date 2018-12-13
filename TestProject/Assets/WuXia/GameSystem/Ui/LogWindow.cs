@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class LogWindow : UIWindowBase
 {
-    public override void InitWindowOnAwake()
-    {
-    }
 
+    protected override void SetWindowId()
+    {
+        this.ID = WindowID.LogWindow;
+    }
     protected override void InitWindowCoreData()
     {
         windowData.windowType = UIWindowType.NormalLayer;
@@ -17,15 +18,10 @@ public class LogWindow : UIWindowBase
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
         windowData.animationType = UIWindowAnimationType.None;
-        windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
     }
-
-    protected override void SetWindowId()
+    public override void InitWindowOnAwake()
     {
-        this.ID = WindowID.LogWindow;
-
-
-
     }
+
 
 }

@@ -9,11 +9,13 @@ namespace GameSystem.Ui
     /// </summary>
     public class FixedTitleWindow : UIWindowBase
     {
-        [SerializeField]
-        private List<LivingAreaTitleItem> _titleItems = new List<LivingAreaTitleItem>();
 
         [SerializeField]
-        private Dictionary<int, LivingAreaTitleItem> _itemDic=new Dictionary<int, LivingAreaTitleItem>();
+        private RectTransform _titlePrefab;
+
+
+        private Dictionary<int, UiTitleitem>  _modelTitle=new Dictionary<int, UiTitleitem>();
+        private int _idCounter;
 
         protected override void SetWindowId()
         {
@@ -29,35 +31,37 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
       
         }
-        public override void InitWindowOnAwake() { }
 
-        //public override void ShowWindow(BaseWindowContextData contextData)
-        //{
-        //    if (contextData != null)
-        //    {
-        //        WindowContextLivingAreaData data = contextData as WindowContextLivingAreaData;
-        //        for (int i = 0; i < data.EntityArray.Count; i++)
-        //        {
-        //            _titleItems[i].Init(GameStaticData.LivingAreaName[data.EntityArray[i]], Camera.main, UICenterMasterManager.Instance._Camera, data.Points[i] + new Vector3(0, 1f, 0));
-        //        }
-
-        //    }
-        //}
-
-
-        public void Add(int id)
+        public override void InitWindowOnAwake()
         {
-            if (_itemDic.ContainsKey(id) == false)
-            {
-
-            }
-            else
-            {
-
-            }
-
-
         }
+
+        /// <summary>
+        /// 新增固定气泡
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="typeId"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public int AddTitle(ElementType type, int typeId, Vector3 point)
+        {
+            int id=0;
+            switch (type)
+            {
+                case ElementType.LivingArea:
+                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_titlePrefab, transform);
+                    UiTitleitem item = rectGo.GetComponent<UiTitleitem>();
+                    item.Id = ++_idCounter;
+                    item.Lable.text = GameStaticData.LivingAreaName[typeId];
+                    item.Init(Camera.main,UICenterMasterManager.Instance._Camera,point);
+                    id = item.Id;
+                    break;
+                default:
+                    break;
+            }
+            return id;
+        }
+
     }
 
 }

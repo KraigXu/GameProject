@@ -50,14 +50,21 @@ namespace GameSystem.Ui
         public Text FactionDescription;
 
         [Header("LivingAreaInfo")]
-        [SerializeField]
-        private Image _livingAreaImage;
-        [SerializeField]
-        private Text _livingAreaNameTxt;
-        [SerializeField]
-        private Text _livingAreaDisTxt;
-        //[SerializeField]
-        //private Text _livingArea
+        public Transform LivingAreaContent;
+        public Toggle StatusTog;             
+        public RectTransform StatusView;
+        public Toggle BulidingTog;              
+        public RectTransform BulidingView;
+        public Toggle AnnualHistoryTog;              
+        public RectTransform AnnualHistoryView;
+        public Text LaNameTxt;
+        public Text LaDescriptionTxt;
+        public Text LaTypeTxt;
+        public Text LaLevelTxt;
+
+
+
+
         protected override void SetWindowId()
         {
             this.ID = WindowID.IntelligenceWindow;
@@ -117,6 +124,27 @@ namespace GameSystem.Ui
                     ChangeLivingAreaInfo();
                 }
             });
+
+            StatusTog.onValueChanged.AddListener(StatusTogValueChanged);
+            BulidingTog.onValueChanged.AddListener(BulidingTogValueChanged);
+            AnnualHistoryTog.onValueChanged.AddListener(AnnualHistoryTogValueChanged);
+
+            StatusTog.isOn = true;
+
+
+        }
+
+        private void StatusTogValueChanged(bool flag)
+        {
+            StatusView.gameObject.SetActive(flag);
+        }
+        private void BulidingTogValueChanged(bool flag)
+        {
+            BulidingView.gameObject.SetActive(flag);
+        }
+        private void AnnualHistoryTogValueChanged(bool flag)
+        {
+            AnnualHistoryView.gameObject.SetActive(flag);
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -176,8 +204,8 @@ namespace GameSystem.Ui
                 {
                     LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
 
-                    _livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
-                    _livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                    //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
+                    //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
                 };
             }
         }
@@ -191,9 +219,6 @@ namespace GameSystem.Ui
             ClearListItem();
 
         }
-
-
-
         private void ChangeLivingAreaInfo()
         {
             ClearListItem();
@@ -207,10 +232,11 @@ namespace GameSystem.Ui
                 uiitem.Id = livngAreaIds[i];
                 uiitem.ClickCallback = delegate (int id)
                 {
-                    LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-
-                    _livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
-                    _livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                    LivingArea livingArea = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaInfo(id);
+                    LaNameTxt.text = GameStaticData.LivingAreaName[livingArea.Id];
+                    LaDescriptionTxt.text = GameStaticData.LivingAreaDescription[livingArea.Id];
+                    LaLevelTxt.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
+                    LaTypeTxt.text = GameStaticData.LivingAreaType[livingArea.TypeId];
                 };
             }
         }

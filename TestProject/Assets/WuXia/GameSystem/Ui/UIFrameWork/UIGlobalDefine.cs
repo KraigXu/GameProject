@@ -16,14 +16,10 @@ namespace GameSystem.Ui
         TipsWindow,
         FixedTitleWindow,
         IntelligenceWindow,
-
         SocialDialogWindow,
-        LivingAreaBasicWindow,
         LivingAreaMainWindow,
-        LivingAreaTitleWindow,
         ExtendedMenuWindow,
-        WXCharacterPanelWindow,
-        WXCharacterRelationshipWindow,
+        WxCharacterPanelWindow,
         MapWindow
     }
 
@@ -132,12 +128,9 @@ namespace GameSystem.Ui
         {
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
-            {WindowID.LivingAreaBasicWindow,"UiPrefab/LivingArea/LivingAreaBasicWindow"},
-            {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingArea/LivingAreaTitleWindow"},
-            {WindowID.LivingAreaMainWindow,"UiPrefab/LivingArea/LivingAreaMainWindow"},
+            {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
-            {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
-            {WindowID.WXCharacterRelationshipWindow,"UiPrefab/WXCharacterRelationshipWindow"},
+            {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
             {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
             {WindowID.MenuWindow,"UiPrefab/MenuWindow" },

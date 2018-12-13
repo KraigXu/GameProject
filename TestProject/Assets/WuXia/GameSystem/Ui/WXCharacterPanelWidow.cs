@@ -38,7 +38,7 @@ namespace GameSystem.Ui
 
         protected override void SetWindowId()
         {
-            this.ID = WindowID.WXCharacterPanelWindow;
+            this.ID = WindowID.WxCharacterPanelWindow;
         }
 
         protected override void InitWindowCoreData()
@@ -53,7 +53,10 @@ namespace GameSystem.Ui
         public override void InitWindowOnAwake()
         {
 
-            _exitBtn.onClick.AddListener(Exit);
+            _exitBtn.onClick.AddListener(delegate()
+            {
+                UICenterMasterManager.Instance.CloseWindow(this.ID);
+            });
 
             _propertyTog.onValueChanged.AddListener(PropertyTogChange);
             _wuxueTog.onValueChanged.AddListener(WuxueTogChange);
@@ -102,17 +105,6 @@ namespace GameSystem.Ui
                 _qitxt.text = data.Qi.ToString();
                 _shentxt.text = data.Shen.ToString();
             }
-        }
-
-        private void Update()
-        {
-
-        }
-
-        private void Exit()
-        {
-            UICenterMasterManager.Instance.CloseWindow(this.ID);
-            
         }
     }
 }

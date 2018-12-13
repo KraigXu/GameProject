@@ -92,51 +92,23 @@ namespace GameSystem
         }
         [Inject]
         private LivingAreaGroup _livingAreas;
-
         [Inject]
         private BuildingSystem _buildingSystem;
-
-        public bool CurShowUi = false;
-
-        //UI
-        private LivingAreaTitleWindow _livingAreaTitle;
-
-
-        protected override void OnCreateManager()
-        {
-            base.OnCreateManager();
-        }
-
         protected override void OnUpdate()
         {
             for (int i = 0; i < _livingAreas.Length; i++)
             {
                 var livingArea = _livingAreas.LivingAreaNode[i];
-              //  UICenterMasterManager.Instance.GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).Add(livingArea.Id);
-            }
 
-            if (CurShowUi == false)
-            {
-                WindowContextLivingAreaData uidata = new WindowContextLivingAreaData();
-                for (int i = 0; i < _livingAreas.Length; i++)
+                if (livingArea.TitleUiId == 0)
                 {
-                    uidata.EntityArray.Add(_livingAreas.LivingAreaNode[i].Id);
-                    uidata.Points.Add(_livingAreas.LivingAreaPositon[i].position);
+                    livingArea.TitleUiId= UICenterMasterManager.Instance
+                        .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(
+                            ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
                 }
 
-                if (_livingAreaTitle)
-                {
-                    ShowWindowData data = new ShowWindowData();
-                    data.contextData = uidata;
-                    _livingAreaTitle.ShowWindow(data.contextData);
-                }
-                else
-                {
-                    ShowWindowData data = new ShowWindowData();
-                    data.contextData = uidata;
-                    _livingAreaTitle = (LivingAreaTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow, data);
-                }
-                CurShowUi = true;
+
+                _livingAreas.LivingAreaNode[i] = livingArea;
             }
         }
         /// <summary>
@@ -176,6 +148,18 @@ namespace GameSystem
             uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
             return uidata;
 
+        }
+
+        public LivingArea GetLivingAreaInfo(int id)
+        {
+            for (int i = 0; i < _livingAreas.Length; i++)
+            {
+                if (_livingAreas.LivingAreaNode[i].Id != id)
+                {
+                    return _livingAreas.LivingAreaNode[i];
+                }
+            }
+           return  new LivingArea();
         }
 
         

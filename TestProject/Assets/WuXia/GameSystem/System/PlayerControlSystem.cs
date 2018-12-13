@@ -282,7 +282,7 @@ namespace GameSystem
             // uidata.OnlyEntity = m_Players.Entity[0];
             showWindowData.contextData = uidata;
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow, showWindowData);
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
         }
 
         public void Log()

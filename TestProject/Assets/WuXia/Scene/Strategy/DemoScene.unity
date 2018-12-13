@@ -417,7 +417,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &835578540
 Prefab:
@@ -4736,7 +4736,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1356281197
 GameObject:
@@ -4855,7 +4855,7 @@ MonoBehaviour:
       startNum: 26
       stopNum: 25
       name: MMChunk 1,0
-      priority: 0.0009507188
+      priority: 0.0010164168
       stage: 7
       tag: MapMagic
       progress: 0
@@ -4883,7 +4883,7 @@ Transform:
   m_Children:
   - {fileID: 2116671176}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1786920909
 GameObject:
@@ -4914,7 +4914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   databaseName: UiDatabase
   selectedItem: 0
-  haveToShowArr: 00
+  haveToShowArr: 0000
 --- !u!4 &1786920911
 Transform:
   m_ObjectHideFlags: 0
@@ -4926,7 +4926,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1819035030
 GameObject:

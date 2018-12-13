@@ -181,14 +181,6 @@ namespace GameSystem.Ui
         
     }
 
-
-
-
-    public class WindowContextLivingAreaData : BaseWindowContextData
-    {
-        public List<int> EntityArray = new List<int>();
-        public List<Vector3> Points = new List<Vector3>();
-    }
     public delegate int[] SocialDialogEvent(int resoult,int a,int b);
     public class SocialDialogWindowData : BaseWindowContextData
     {

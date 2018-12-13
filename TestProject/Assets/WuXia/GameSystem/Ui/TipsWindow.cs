@@ -73,7 +73,7 @@ namespace GameSystem.Ui
             _rect.gameObject.SetActive(true);
             if (CheckId(id * 2)==false)
             {
-                BaseCorrespondenceByModelControl control= _rect.gameObject.GetComponent<BaseCorrespondenceByModelControl>();
+                UiTitleitem control= _rect.gameObject.GetComponent<UiTitleitem>();
                 control.Init(Camera.main,UICenterMasterManager.Instance._Camera,point);
                 _text.text = GameStaticData.BiologicalSurnameDic[id] + GameStaticData.BiologicalNameDic[id];
                 _curId = id * 2;

@@ -431,8 +431,7 @@ public class WXPool : MonoBehaviour
         {
             poolLengthCurrent[curPos]++;
             RectTransform newGO = Instantiate(templates[curPos], Vector3.zero, Quaternion.identity) as RectTransform;
-            newGO.transform.parent = this.gameObject.transform;
-           
+            newGO.SetParent(transform,false);
             newGO.gameObject.SetActive(true);
 
             if (par == null)

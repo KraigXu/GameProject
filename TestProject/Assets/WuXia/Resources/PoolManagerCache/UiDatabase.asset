@@ -16,8 +16,9 @@ MonoBehaviour:
   - poolName: GeneratedPool
     templates:
     - {fileID: 224984124462592786, guid: 62ec9a10bab2be94b8867782d5a9d3c8, type: 2}
-    poolLength: 0a000000
-    poolLengthMax: 14000000
+    - {fileID: 224178495827405684, guid: 7cae9aa25fc52c6478994dd19529a841, type: 2}
+    poolLength: 0a0000000a000000
+    poolLengthMax: 1400000014000000
     broadcastSpawnName: OnDespawned
     broadcastDespawnName: OnDespawned
     delayedSpawnInInstall: 1

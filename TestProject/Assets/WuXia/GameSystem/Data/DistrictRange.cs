@@ -8,8 +8,6 @@ namespace  GameSystem
     {
         public int DistrictId;
         public Color Color;
-
-
     }
 
 

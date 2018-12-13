@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-public class BaseCorrespondenceByModelControl : MonoBehaviour
+using UnityEngine.UI;
+
+public class UiTitleitem : MonoBehaviour
 {
 
+
+
     public bool IsNeedModelBlockOut = false;
+    public int Id;
+    public Text Lable;
+
 
     private Vector3 _wordpos = Vector3.zero;
     private Camera _camera3D;

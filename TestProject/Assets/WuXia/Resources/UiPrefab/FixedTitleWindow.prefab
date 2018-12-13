@@ -38,7 +38,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725ccab36bbd83c48869cc9d9dcff7a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _titleItems: []
+  _titlePrefab: {fileID: 224178495827405684, guid: 7cae9aa25fc52c6478994dd19529a841,
+    type: 2}
 --- !u!224 &224377436259539690
 RectTransform:
   m_ObjectHideFlags: 1

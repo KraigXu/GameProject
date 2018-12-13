@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace GameSystem.Ui
 {
-    // Token: 0x02000002 RID: 2
     public class UIWindowBaseMonoBehaviour : MonoBehaviour
     {
         // Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
@@ -195,42 +194,36 @@ namespace GameSystem.Ui
             //}
         }
 
-        // Token: 0x02000003 RID: 3
+
         private class RectModel
         {
-            // Token: 0x04000001 RID: 1
+
             public Vector2 StartPoint;
 
-            // Token: 0x04000002 RID: 2
             public float Width;
 
-            // Token: 0x04000003 RID: 3
             public float Height;
 
-            // Token: 0x04000004 RID: 4
             public float SceneWidth;
 
-            // Token: 0x04000005 RID: 5
             public float SceneHeight;
         }
 
-        // Token: 0x02000004 RID: 4
+
         private struct Rectangle
         {
-            // Token: 0x04000006 RID: 6
+
             public float ymax;
 
-            // Token: 0x04000007 RID: 7
             public float ymin;
 
-            // Token: 0x04000008 RID: 8
             public float xmin;
 
-            // Token: 0x04000009 RID: 9
+
             public float xmax;
         }
 
-        // Token: 0x02000005 RID: 5
+
         private struct Point
         {
             public float y;

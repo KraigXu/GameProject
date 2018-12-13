@@ -33,7 +33,6 @@ namespace GameSystem
 
         public static DemoSetting Settings;
 
-
         /// <summary>
         /// 在场景加载之前初始化数据
         /// 此方法为我们将在此游戏中频繁生成的实体创建原型。
@@ -54,7 +53,6 @@ namespace GameSystem
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Position), typeof(NavMeshAgent));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
-
 
             TimeArchetype = entityManager.CreateArchetype(typeof(TimeData));
         }
@@ -91,7 +89,7 @@ namespace GameSystem
         public static void InitializeWithScene()
         {
             //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
-            // BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
+            //BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
             //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
             //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
             //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
@@ -511,16 +509,9 @@ namespace GameSystem
                     });
 
                 }
-
-
-
             }
 
-
             #endregion
-
-
-
 
             #region UiInit
             {
