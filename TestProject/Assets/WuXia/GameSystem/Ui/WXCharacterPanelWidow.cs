@@ -14,6 +14,12 @@ namespace GameSystem.Ui
         [SerializeField] private Text _name;
         [SerializeField] private Text _surname;
 
+        public Toggle PersonTog;
+        public GameObject PersonGo;
+        public Toggle WuxueTog;
+        public GameObject WuxueGo;
+
+
         [SerializeField] private Toggle _propertyTog;
         [SerializeField] private GameObject _propertyGo;
         [SerializeField] private Toggle _wuxueTog;
@@ -22,7 +28,6 @@ namespace GameSystem.Ui
         [SerializeField] private GameObject _jiyiGo;
         [SerializeField] private Toggle _tagTog;
         [SerializeField] private GameObject _tagGo;
-
 
         [Header("Property")]
         [SerializeField] private Text _tizhitxt;
@@ -82,8 +87,6 @@ namespace GameSystem.Ui
         {
             _tagGo.SetActive(flag);
         }
-
-
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             base.BeforeShowWindow(contextData);
