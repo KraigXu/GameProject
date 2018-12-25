@@ -120,7 +120,7 @@ namespace GameSystem.Ui
             {
                 lastNavigationWindow = curNavigationWindow;
                 curNavigationWindow = baseWindow;
-                Debuger.Log("<color=magenta>### current Navigation window </color>" + baseWindow.ID.ToString());
+                Debug.Log("<color=magenta>### current Navigation window </color>" + baseWindow.ID.ToString());
             }
         }
 
@@ -139,7 +139,7 @@ namespace GameSystem.Ui
         {
             if (!IsWindowInControl(id))
             {
-                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
+                Debug.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
             if (!dicShownWindows.ContainsKey(id))
@@ -209,7 +209,7 @@ namespace GameSystem.Ui
                 WindowID preWindowId = curNavigationWindow.PreWindowID;
                 if (preWindowId != WindowID.Invaild)
                 {
-                    Debuger.LogWarning(string.Format(string.Format("## Current nav window {0} need show pre window {1}.", curNavigationWindow.ID.ToString(), preWindowId.ToString())));
+                    Debug.LogWarning(string.Format(string.Format("## Current nav window {0} need show pre window {1}.", curNavigationWindow.ID.ToString(), preWindowId.ToString())));
                     switch (curNavigationWindow.windowData.closeModel)
                     {
                         case UIWindowCloseModel.Hide:
@@ -236,7 +236,7 @@ namespace GameSystem.Ui
                 }
                 else
                 {
-                    Debuger.LogWarning("## CurrentShownWindow " + curNavigationWindow.ID + " preWindowId is " + WindowID.Invaild);
+                    Debug.LogWarning("## CurrentShownWindow " + curNavigationWindow.ID + " preWindowId is " + WindowID.Invaild);
                 }
                 return false;
             }
@@ -247,7 +247,7 @@ namespace GameSystem.Ui
                 WindowID curId = this.GetCurrentShownWindow();
                 if (curId != backData.CloseTargetWindow.ID)
                 {
-                    Debuger.Log("<color=red>Can't PopUp seq data [backData.hideTargetWindow.ID != this.curShownWindowId]</color>");
+                    Debug.Log("<color=red>Can't PopUp seq data [backData.hideTargetWindow.ID != this.curShownWindowId]</color>");
                     return false;
                 }
 
@@ -305,7 +305,7 @@ namespace GameSystem.Ui
                     {
                         this.lastNavigationWindow = this.curNavigationWindow;
                         this.curNavigationWindow = window;
-                        Debuger.Log("<color=magenta>##[UIManagerBase return window]##</color> Change currentShownNormalWindow : " + backId);
+                        Debug.Log("<color=magenta>##[UIManagerBase return window]##</color> Change currentShownNormalWindow : " + backId);
                     }
                 }
             }
@@ -318,7 +318,7 @@ namespace GameSystem.Ui
         {
             if (!this.IsWindowInControl(id))
             {
-                Debuger.Log("## Current UI Manager has no control power of " + id.ToString());
+                Debug.Log("## Current UI Manager has no control power of " + id.ToString());
                 return;
             }
             if (dicShownWindows.ContainsKey(id))
@@ -516,7 +516,7 @@ namespace GameSystem.Ui
         {
             if (!IsWindowInControl(id))
             {
-                Debuger.Log("UIRankManager has no control power of " + id.ToString());
+                Debug.Log("UIRankManager has no control power of " + id.ToString());
                 return;
             }
             if (dicShownWindows.ContainsKey(id))
@@ -526,7 +526,7 @@ namespace GameSystem.Ui
                 UIWindowBase baseWindow = dicAllWindows[id];
                 if (baseWindow.ID != id)
                 {
-                    Debuger.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
+                    Debug.LogError(string.Format("[UIRankManager BaseWindowId :{0} != shownWindowId :{1}]", baseWindow.ID, id));
                     return;
                 }
                 this.RealShowWindow(baseWindow, baseWindow.ID, showData);

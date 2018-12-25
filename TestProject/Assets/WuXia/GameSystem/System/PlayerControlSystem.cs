@@ -137,7 +137,6 @@ namespace GameSystem
                             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
                             GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[uidata.ModelId]);
-                            Debug.Log(go.gameObject.name+">>>");
                             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
                             Bounds bounds = renderers[0].bounds;
@@ -198,10 +197,8 @@ namespace GameSystem
         /// </summary>
         private void LivingAreaOnOpen(Entity entity, int id)
         {
-            Debuger.Log(id + "+LivingArea");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-
             status.LocationType = LocationType.LivingAreaIn;
         }
 

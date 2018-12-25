@@ -62,9 +62,6 @@ namespace GameSystem.Ui
         public Text LaTypeTxt;
         public Text LaLevelTxt;
 
-
-
-
         protected override void SetWindowId()
         {
             this.ID = WindowID.IntelligenceWindow;
@@ -125,31 +122,23 @@ namespace GameSystem.Ui
                 }
             });
 
-            StatusTog.onValueChanged.AddListener(StatusTogValueChanged);
-            BulidingTog.onValueChanged.AddListener(BulidingTogValueChanged);
-            AnnualHistoryTog.onValueChanged.AddListener(AnnualHistoryTogValueChanged);
+
+            StatusTog.onValueChanged.AddListener(delegate(bool flag)
+            {
+                StatusView.gameObject.SetActive(flag);
+            });
+
+            BulidingTog.onValueChanged.AddListener(delegate(bool flag)
+            {
+                BulidingView.gameObject.SetActive(flag);
+            });
+
+            AnnualHistoryTog.onValueChanged.AddListener(delegate(bool flag)
+            {
+                AnnualHistoryView.gameObject.SetActive(flag);
+            });
 
             StatusTog.isOn = true;
-
-
-        }
-
-        private void StatusTogValueChanged(bool flag)
-        {
-            StatusView.gameObject.SetActive(flag);
-        }
-        private void BulidingTogValueChanged(bool flag)
-        {
-            BulidingView.gameObject.SetActive(flag);
-        }
-        private void AnnualHistoryTogValueChanged(bool flag)
-        {
-            AnnualHistoryView.gameObject.SetActive(flag);
-        }
-
-        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
-        {
-            base.BeforeShowWindow(contextData);
         }
 
         private void ClearListItem()
@@ -203,7 +192,7 @@ namespace GameSystem.Ui
                 uiitem.ClickCallback = delegate (int id)
                 {
                     LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-
+                    
                     //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
                     //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
                 };

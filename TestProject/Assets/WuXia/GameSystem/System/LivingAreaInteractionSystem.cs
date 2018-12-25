@@ -50,7 +50,7 @@ namespace GameSystem
             {
                 var biologicalIndex = Biological[index];
 
-                if ( /*(LocationType)*/biologicalIndex.LocationType == LocationType.Field)
+                if (biologicalIndex.LocationType == LocationType.Field)
                 {
                     float damage = 0.0f;
                     float3 receiverPos = Positions[index].Value;
@@ -75,7 +75,8 @@ namespace GameSystem
                     {
                         float3 lpos = LivibfAreaPos[i].Value;
                     }
-
+                }else if (biologicalIndex.LocationType == LocationType.LivingAreaIn)
+                {
 
                 }
 
@@ -204,10 +205,6 @@ namespace GameSystem
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            //var settings = TwoStickBootstrap.Settings;
-            //if (settings == null)
-            //    return inputDeps;
-
             var palyersI = new LivingAreaCollision
             {
                 LivingAreas = m_LivibgAreas.LivingArea,
@@ -216,29 +213,7 @@ namespace GameSystem
                 Biological = m_Players.Biological,
                 Positions = m_Players.Position
             }.Schedule(m_Players.Length, 1, inputDeps);
-
-            
-
             return palyersI;
-            //var enemiesVsPlayers = new CollisionJob
-            //{
-            //    ShotPositions = m_EnemyShots.Position,
-            //    Shots = m_EnemyShots.Shot,
-            //    CollisionRadiusSquared = settings.playerCollisionRadius * settings.playerCollisionRadius,
-            //    Health = m_Players.Health,
-            //    Positions = m_Players.Position,
-            //}.Schedule(m_Players.Length, 1, inputDeps);
-
-            //var playersVsEnemies = new CollisionJob
-            //{
-            //    ShotPositions = m_PlayerShots.Position,
-            //    Shots = m_PlayerShots.Shot,
-            //    CollisionRadiusSquared = settings.enemyCollisionRadius * settings.enemyCollisionRadius,
-            //    Health = m_Enemies.Health,
-            //    Positions = m_Enemies.Position,
-            //}.Schedule(m_Enemies.Length, 1, enemiesVsPlayers);
-
-            //return playersVsEnemies;
         }
     }
 

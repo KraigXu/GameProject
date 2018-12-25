@@ -27,7 +27,6 @@ public class LoadingControl : MonoBehaviour
     void Awake()
     {
         this._fullMask = transform.Find("FullMake").gameObject;
-        Debuger.EnableLog = true;
         this._icon = transform.Find("Icon").gameObject;
         _sequence = DOTween.Sequence();
         _sequence.Append(_icon.transform.DORotate(new Vector3(0, 0, 180), 2));

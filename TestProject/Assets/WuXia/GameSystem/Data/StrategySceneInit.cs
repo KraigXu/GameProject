@@ -41,7 +41,6 @@ namespace GameSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
-            Debuger.EnableLog = true;
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
             CameraArchetype = entityManager.CreateArchetype(typeof(CameraProperty));
@@ -113,8 +112,6 @@ namespace GameSystem
 
             #region Time
             {
-                Debuger.Log("PlayProject Read Start  ");
-
                 Entity entity = entityManager.CreateEntity(TimeArchetype);
                 entityManager.SetComponentData(entity, new TimeData
                 {
@@ -141,8 +138,6 @@ namespace GameSystem
                 GameStaticData.TimeShichen.Add(10, "酉时");
                 GameStaticData.TimeShichen.Add(11, "戊时");
                 GameStaticData.TimeShichen.Add(12, "亥时");
-
-                Debuger.Log("PlayProject Read End");
             }
 
             #endregion
@@ -173,8 +168,6 @@ namespace GameSystem
             }
 
             #endregion
-
-
 
             #region DistrictInit
             {
@@ -350,7 +343,6 @@ namespace GameSystem
                         Jingshen = data[i].Jingshen,
                         Lingdong = data[i].Lingdong,
                         Wuxing = data[i].Wuxing
-
                     });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
@@ -363,9 +355,9 @@ namespace GameSystem
 
                     });
 
-                    
-
                     //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Techniques>());
+                    //entityManager.SetComponentData(biologicalEntity,);
+
                     //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Techniques>(data[i].JifaJson));
 
                     //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Equipment>());
@@ -478,7 +470,6 @@ namespace GameSystem
                         Id = factionDatas[i].Id,
                         Level = factionDatas[i].FactionLevel,
                         Type = factionDatas[i].FactionType,
-
                         Food = factionDatas[i].Food,
                         FoodMax = factionDatas[i].FoodMax,
                         Iron = factionDatas[i].Iron,
@@ -523,7 +514,6 @@ namespace GameSystem
 
             }
             #endregion
-
 
             var sceneSwitcher = GameObject.Find("SceneSwitcher");
             if (sceneSwitcher != null)

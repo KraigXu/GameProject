@@ -6,8 +6,6 @@ using UnityEngine;
 
 namespace GameSystem
 {
-
-
     public class FactionSystem: ComponentSystem
     {
         public struct FactionGroup
@@ -34,7 +32,6 @@ namespace GameSystem
                 Entity faction = entityManager.CreateEntity(factionArchetype);
                 entityManager.SetComponentData(faction, new Faction
                 {
-
                     Id = factionDatas[i].Id,
                     Level = factionDatas[i].FactionLevel,
                     Food = factionDatas[i].Food,
@@ -55,10 +52,7 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _faction.Length; i++)
-            {
-                
-            }
+
         }
 
         public ComponentDataArray<Faction> GetFactions()

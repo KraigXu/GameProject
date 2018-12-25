@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -129,10 +130,11 @@ namespace GameSystem
         public int StrategyMoveSpeed;
         public int FireMoveSpeed;
 
-
         //性格属性
         public byte CharacterValue;
         public byte NeutralValue; //中立值
+
+        public Vector2[]s;
 
     }
 
@@ -185,14 +187,17 @@ namespace GameSystem
 
     public struct Techniques : IComponentData
     {
-        
-
+        public int Id;
+        public Vector2 jineng;
+        public Vector2 jineng1;
+        public int Value;
+       
 
     }
 
     public struct Wuxue : IComponentData
     {
-
+      
     }
 
     public struct Prestige : IComponentData
@@ -224,9 +229,7 @@ namespace GameSystem
         public int IsInternal;   //是否显示内部 0 不显示 1显示
         public Vector3 Position;
 
-
         public int TitleUiId;
-
     }
 
     public struct Building : IComponentData

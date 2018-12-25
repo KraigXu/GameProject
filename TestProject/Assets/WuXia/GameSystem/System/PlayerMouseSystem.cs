@@ -47,8 +47,6 @@ namespace GameSystem
 
             }
         }
-
-
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             var mouveoverInaction=new MouseOverInteraction

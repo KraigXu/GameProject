@@ -58,7 +58,7 @@ namespace GameSystem.Ui
             _Canvas = UIRoot.GetComponent<Canvas>();
             _Camera = _Canvas.worldCamera;
             InitWindowManager();
-            Debuger.Log("## UICenterMasterManager is call awake.");
+            Debug.Log("## UICenterMasterManager is call awake.");
         }
 
         public override UIWindowBase ShowWindow(WindowID id, ShowWindowData showData = null)
@@ -85,7 +85,7 @@ namespace GameSystem.Ui
             // Check the window control state
             if (!this.IsWindowInControl(id))
             {
-                Debuger.Log("## UIManager has no control power of " + id.ToString());
+                Debug.Log("## UIManager has no control power of " + id.ToString());
                 return null;
             }
 
@@ -112,7 +112,7 @@ namespace GameSystem.Ui
                         baseWindow = uiObject.GetComponent<UIWindowBase>();
                         if (baseWindow.ID != id)
                         {
-                            Debuger.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
+                            Debug.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
                         // Get the window target root parent
@@ -133,7 +133,7 @@ namespace GameSystem.Ui
                         //  baseWindow = UGUITools.AddChild(targetRoot.gameObject, prefab).GetComponent<UIWindowBase>();
                         if (baseWindow.ID != id)
                         {
-                            Debuger.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
+                            Debug.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
                         dicAllWindows[id] = baseWindow;
@@ -143,7 +143,7 @@ namespace GameSystem.Ui
             }
 
             if (baseWindow == null)
-                Debuger.LogError("[window instance is null.]" + id.ToString());
+                Debug.LogError("[window instance is null.]" + id.ToString());
 
             // Call reset window when first load new window
             // Or get forceResetWindow param
@@ -390,7 +390,7 @@ namespace GameSystem.Ui
         {
             if (!IsWindowInControl(wndId))
             {
-                Debuger.LogError("## Current UI Manager has no control power of " + wndId.ToString());
+                Debug.LogError("## Current UI Manager has no control power of " + wndId.ToString());
                 return;
             }
 
@@ -404,7 +404,7 @@ namespace GameSystem.Ui
                 if (seqData != null && seqData.CloseTargetWindow == window)
                 {
                     PopNavigationWindow();
-                    Debuger.Log("<color=magenta>## close window use PopNavigationWindow() ##</color>");
+                    Debug.Log("<color=magenta>## close window use PopNavigationWindow() ##</color>");
                     return;
                 }
 
@@ -423,7 +423,7 @@ namespace GameSystem.Ui
 
 
             //  HideWindow(wndId);
-            Debuger.Log("<color=magenta>## close window without PopNavigationWindow() ##</color>");
+            Debug.Log("<color=magenta>## close window without PopNavigationWindow() ##</color>");
         }
 
         /// <summary>
@@ -437,17 +437,17 @@ namespace GameSystem.Ui
             if (windowType == UIWindowType.NormalLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UINormalLayerRoot.gameObject, false) + 1, normalWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.Normal] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debug.Log(string.Format("<color=#E6E6FA>[UIWindowType.Normal] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.ForegroundLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UIForegroundLayerRoot.gameObject) + 1, popUpWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.PopUp] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debug.Log(string.Format("<color=#E6E6FA>[UIWindowType.PopUp] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             else if (windowType == UIWindowType.BackgroundLayer)
             {
                 needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(UIBackgroundLayerRoot.gameObject) + 1, fixedWindowDepth, int.MaxValue);
-                Debuger.Log(string.Format("<color=#E6E6FA>[UIWindowType.Fixed] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
+                Debug.Log(string.Format("<color=#E6E6FA>[UIWindowType.Fixed] maxDepth is {0} , {1}.</color>", needDepth.ToString(), baseWindow.ID.ToString()));
             }
             if (baseWindow.MinDepth != needDepth)
                 UGUITools.SetTargetMinPanelDepth(baseWindow.gameObject, needDepth);
@@ -494,7 +494,7 @@ namespace GameSystem.Ui
             // Show data need force clear the back seq data
             if (baseWindow.windowData.forceClearNavigation || (showData != null && showData.forceClearBackSeqData))
             {
-                Debuger.Log("<color=#E6E6FA>## [Enter the start window, reset the backSequenceData for the navigation system.]##</color>");
+                Debug.Log("<color=#E6E6FA>## [Enter the start window, reset the backSequenceData for the navigation system.]##</color>");
                 ClearBackSequence();
             }
             else
@@ -552,7 +552,7 @@ namespace GameSystem.Ui
                 backData.CloseTargetWindow = targetWindow;
                 backData.backShowTargets = navHiddenWindows;
                 backSequence.Push(backData);
-                Debuger.Log("<color=#E6E6FA>### !!!Push new Navigation data!!! ###</color>");
+                Debug.Log("<color=#E6E6FA>### !!!Push new Navigation data!!! ###</color>");
             }
         }
 
@@ -596,13 +596,13 @@ namespace GameSystem.Ui
                     {
                         if (backData.CloseTargetWindow.ID != baseWindow.ID)
                         {
-                            Debuger.Log("<color=#E6E6FA>## UICenterMasterManager : clear sequence data ##</color>");
-                            Debuger.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.CloseTargetWindow.ID + " != " + baseWindow.ID);
+                            Debug.Log("<color=#E6E6FA>## UICenterMasterManager : clear sequence data ##</color>");
+                            Debug.Log("## UICenterMasterManager : Hide target window and show window id is " + backData.CloseTargetWindow.ID + " != " + baseWindow.ID);
                             ClearBackSequence();
                         }
                     }
                     else
-                        Debuger.LogError("Back data hide target window is null!");
+                        Debug.LogError("Back data hide target window is null!");
                 }
             }
         }

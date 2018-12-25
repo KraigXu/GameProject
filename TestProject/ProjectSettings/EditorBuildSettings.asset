@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/WuXia/Scene/Strategy/DemoScene.unity
+    guid: 63ce3bc67d8a88d40ab75edcce65031c
+  - enabled: 1
     path: Assets/WuXia/Scene/Start/Start.unity
     guid: 2c531668b5591a74ab701d00485fc443
   - enabled: 1
     path: Assets/WuXia/Scene/Loading/Loading.unity
     guid: 5a3241fa35cb85849bea57a86472170f
-  - enabled: 1
-    path: Assets/WuXia/Scene/Strategy/DemoScene.unity
-    guid: 63ce3bc67d8a88d40ab75edcce65031c
   m_configObjects: {}

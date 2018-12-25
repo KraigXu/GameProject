@@ -628,7 +628,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: a6bd9680-e5a3-41df-bb2f-8dad368d50a0
   projectName: WuXiaWorld
   organizationId: xukunlei

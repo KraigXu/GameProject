@@ -5,6 +5,32 @@ namespace GameSystem.Ui
 {
     public class UIWindowBaseMonoBehaviour : MonoBehaviour
     {
+        // Token: 0x06000004 RID: 4 RVA: 0x00002568 File Offset: 0x00000768
+        protected virtual void Awake()
+        {
+            bool flag = Application.platform != RuntimePlatform.WindowsEditor;
+            //Debug.Log(flag);
+            //if (flag)
+            //{
+
+            //    DateTime now = DateTime.Now;
+            //    DateTime t = new DateTime(2018, 4, 11);
+            //    int num = DateTime.Compare(now, t);
+            //    bool flag2 = num >= 0;
+            //    if (flag2)
+            //    {
+            //        int num2 = UnityEngine.Random.Range(2, 100);
+            //        bool flag3 = now.Day % num2 == 0;
+            //        if (flag3)
+            //        {
+            //            QualitySettings.vSyncCount = 0;
+            //            Application.targetFrameRate = 5;
+            //        }
+            //    }
+            //}
+        }
+
+
         // Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
         private int IntervalOverlap(double x1, double x2, double x3, double x4)
         {
@@ -169,30 +195,7 @@ namespace GameSystem.Ui
             return rectModel;
         }
 
-        // Token: 0x06000004 RID: 4 RVA: 0x00002568 File Offset: 0x00000768
-        protected virtual void Awake()
-        {
-            bool flag = Application.platform != RuntimePlatform.WindowsEditor;
-            //Debug.Log(flag);
-            //if (flag)
-            //{
-                
-            //    DateTime now = DateTime.Now;
-            //    DateTime t = new DateTime(2018, 4, 11);
-            //    int num = DateTime.Compare(now, t);
-            //    bool flag2 = num >= 0;
-            //    if (flag2)
-            //    {
-            //        int num2 = UnityEngine.Random.Range(2, 100);
-            //        bool flag3 = now.Day % num2 == 0;
-            //        if (flag3)
-            //        {
-            //            QualitySettings.vSyncCount = 0;
-            //            Application.targetFrameRate = 5;
-            //        }
-            //    }
-            //}
-        }
+     
 
 
         private class RectModel
@@ -209,20 +212,13 @@ namespace GameSystem.Ui
             public float SceneHeight;
         }
 
-
         private struct Rectangle
         {
-
             public float ymax;
-
             public float ymin;
-
             public float xmin;
-
-
             public float xmax;
         }
-
 
         private struct Point
         {
