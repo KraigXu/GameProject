@@ -88,7 +88,6 @@ public class LoadingControl : MonoBehaviour
     /// </summary>
     private void ButtonDown()
     {
-
         _currentPage = _currentPage == _maxPage - 1 ? 0 : _currentPage+1;
         ChangeTips();
     }

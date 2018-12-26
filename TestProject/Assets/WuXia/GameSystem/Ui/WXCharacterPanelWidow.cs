@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameSystem;
+using Unity.Entities;
 
 namespace GameSystem.Ui
 {
@@ -24,8 +25,14 @@ namespace GameSystem.Ui
         [SerializeField] private GameObject _propertyGo;
         [SerializeField] private Toggle _wuxueTog;
         [SerializeField] private GameObject _wuxueGo;
+
+
         [SerializeField] private Toggle _jiyiTog;
         [SerializeField] private GameObject _jiyiGo;
+        [SerializeField] private GameObject _techniquesPrefab;
+        private List<GameObject> _techniquesItems=new List<GameObject>();
+        
+
         [SerializeField] private Toggle _tagTog;
         [SerializeField] private GameObject _tagGo;
 
@@ -41,6 +48,9 @@ namespace GameSystem.Ui
         [SerializeField] private Text _qitxt;
         [SerializeField] private Text _shentxt;
 
+        [SerializeField]
+        private Biological _biological;
+    
         protected override void SetWindowId()
         {
             this.ID = WindowID.WxCharacterPanelWindow;
@@ -57,7 +67,6 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-
             _exitBtn.onClick.AddListener(delegate()
             {
                 UICenterMasterManager.Instance.CloseWindow(this.ID);
@@ -70,29 +79,12 @@ namespace GameSystem.Ui
 
         }
 
-        private void PropertyTogChange(bool flag)
-        {
-           _propertyGo.gameObject.SetActive(flag);
-        }
-
-        private void WuxueTogChange(bool flag)
-        {
-            _wuxueGo.SetActive(flag);
-        }
-        private void JiyiTogChange(bool flag)
-        {
-            _jiyiGo.SetActive(flag);
-        }
-        private void TagTogChange(bool flag)
-        {
-            _tagGo.SetActive(flag);
-        }
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             base.BeforeShowWindow(contextData);
             if (contextData != null)
             {
-                BiologicalUiInData data = (BiologicalUiInData) contextData;
+                BiologicalUiInData data = (BiologicalUiInData)contextData;
                 _name.text = GameStaticData.BiologicalNameDic[data.Id];
                 _surname.text = GameStaticData.BiologicalSurnameDic[data.Id];
 
@@ -109,5 +101,48 @@ namespace GameSystem.Ui
                 _shentxt.text = data.Shen.ToString();
             }
         }
+
+        private void PropertyTogChange(bool flag)
+        {
+           _propertyGo.gameObject.SetActive(flag);
+        }
+
+        private void WuxueTogChange(bool flag)
+        {
+            _wuxueGo.SetActive(flag);
+        }
+        /// <summary>
+        /// Techniques面板打开 更新和清除
+        /// </summary>
+        /// <param name="flag"></param>
+        private void JiyiTogChange(bool flag)
+        {
+            _jiyiGo.SetActive(flag);
+
+            if (flag == true)
+            {
+                List<Techniques> techniqueses =SystemManager.Get<TechniquesSystem>().GetIdTechniques(_biological.BiologicalId);
+
+                for (int i = 0; i < techniqueses.Count; i++)
+                {
+                    GameObject go = UGUITools.AddChild(_jiyiGo, _techniquesPrefab);
+                    
+                    _techniquesItems.Add(go);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _techniquesItems.Count; i++)
+                {
+                    Destroy(_techniquesItems[i]);
+                }
+                _techniquesItems.Clear();
+            }
+        }
+        private void TagTogChange(bool flag)
+        {
+            _tagGo.SetActive(flag);
+        }
+
     }
 }

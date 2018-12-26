@@ -79,12 +79,10 @@ public class SQLService
     {
 
         Tables.CreateTable_PlayProject(this);
-        //------------建筑相关
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);
         Tables.CreateTable_BuildingData(this);
 
-        //------------生物相关
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_FactionData(this);
         Tables.CreateTable_FamilyData(this);
@@ -93,7 +91,6 @@ public class SQLService
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_Gongfa(this);
 
-        //-----------资源相关
         Tables.CreateTable_Avatar(this);
         Tables.CreateTable_ModelData(this);
         Tables.CreateTable_ModelMap(this);

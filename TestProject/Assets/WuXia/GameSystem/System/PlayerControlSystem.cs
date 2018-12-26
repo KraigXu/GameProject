@@ -296,9 +296,6 @@ namespace GameSystem
 
 
         }
-        public void Option() { }
-
-
 
         private void LivingAreaOnClick()
         {

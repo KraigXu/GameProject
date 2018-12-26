@@ -8,4 +8,7 @@ public class DemoSetting : MonoBehaviour
     public DateTime curTime = DateTime.Now;
     public int PlayerId=1;
     public Camera MainCamera;
+    public GameObject go;
+
+
 }

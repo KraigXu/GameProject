@@ -78,16 +78,18 @@ namespace GameSystem.Ui
             World.Active.GetExistingManager<PlayerControlSystem>().Intelligence();
 
         }
-
         private void ButtonMap()
         {
             World.Active.GetExistingManager<PlayerControlSystem>().Map();
             
         }
-
+        /// <summary>
+        /// Option按钮
+        /// </summary>
         private void ButtonOption()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Option();
+            UICenterMasterManager.Instance.ShowWindow(WindowID.SettingMenuWindow);
+
         }
 
 

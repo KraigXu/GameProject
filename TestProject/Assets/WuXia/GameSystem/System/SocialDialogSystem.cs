@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
 using Unity.Entities;
-using UnityEngine;
-
 
 namespace GameSystem
 {
@@ -28,9 +25,6 @@ namespace GameSystem
         }
 
         private static Dictionary<int, DialogData> _dialogDic = new Dictionary<int, DialogData>();
-
-
-
 
         public static void SetupComponentData(EntityManager entityManager)
         {
@@ -82,24 +76,11 @@ namespace GameSystem
             if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.Biological)
             {
                 Biological biologicalA = entityManager.GetComponentData<Biological>(a);
-                
-                
-
             }
             else if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.LivingArea)
             {
-
+                
             }
-
-
-
         }
-
-
-
-
-
     }
-
-
 }

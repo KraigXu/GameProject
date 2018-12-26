@@ -24,9 +24,6 @@ namespace DataAccessObject
                                        " Description TEXT);");
         }
 
-
-
-
         /// <summary>
         /// 区
         /// </summary>
@@ -47,7 +44,6 @@ namespace DataAccessObject
                                        " Y INTEGER," +
                                        " Z INTEGER);");
         }
-
 
         /// <summary>
         /// 生活区表 ，设计上生活区的建筑物种类是固有的 但是通过独立的json数据来变更建筑物数据
@@ -100,9 +96,6 @@ namespace DataAccessObject
                                        " Y INTEGER," +
                                        " Z INTEGER);");
         }
-
-
-
 
         /// <summary>
         /// 生物属性
@@ -190,7 +183,6 @@ namespace DataAccessObject
                                        " RalationType INTEGER);");
         }
 
-
         /// <summary>
         /// 声望
         /// </summary>
@@ -215,6 +207,8 @@ namespace DataAccessObject
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS TechniquesData ( " +
                                        " Id INTEGER PRIMARY KEY," +
+                                       " ParentId INTEGER, "+
+                                       " BiologicalId INTEGER ,"+
                                        " Name TEXT," +
                                        " MarkIds TEXT,"+
                                        " Description TEXT, " +
@@ -508,8 +502,6 @@ namespace DataAccessObject
         }
     }
 
-
-
     /// <summary>
     /// 生物信息
     /// </summary>
@@ -657,6 +649,48 @@ namespace DataAccessObject
         }
     }
 
+    /// <summary>
+    /// 队伍数据
+    /// </summary>
+    public class TeamData : BaseData
+    {
+        public int Id { get; set; }
+        public int TeamNumber { get; set; }
+        public int TeamMaxNumber { get; set; }
+
+        public string TeamIds { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+               Id,TeamNumber,TeamMaxNumber,TeamIds
+            };
+            return objects;
+        }
+    }
+
+    public class TechniquesData : BaseData
+    {
+        public int Id { get; set; }
+        public int ParentId { get; set; }
+        public int BiologicalId { get; set; }
+        public string Name { get; set; }
+        public string MarkIds { get; set; }
+        public string Description { get; set; }
+        public int TechniquesValue { get; set; }
+        public string Effect { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,ParentId,BiologicalId,Name,MarkIds,Description,TechniquesValue,Effect
+            };
+            return objects;
+        }
+    }
+
     public class DialogData : BaseData
     {
         public int Id { get; set; }
@@ -706,7 +740,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
     /// <summary>
     /// 模型信息
     /// </summary>
@@ -726,7 +759,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
 
     /// <summary>
     /// 头像数据
@@ -783,8 +815,6 @@ namespace DataAccessObject
             return objects;
         }
     }
-
-
 
     //----------------------------------------映射数据库----------------------------------End
 

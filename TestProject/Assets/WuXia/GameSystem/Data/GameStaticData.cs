@@ -49,6 +49,9 @@ namespace GameSystem
         //        11:00 - 12:59 13:00 - 14:59 15:00 - 16:59 17:00 - 18:59 19:00 - 20:59 21:00 - 22:59
         public static Dictionary<int, string> TimeShichen = new Dictionary<int, string>();
 
+        public static Dictionary<int,string> TechniquesName=new Dictionary<int, string>();
+        public static Dictionary<int,string> TechniquesDescription=new Dictionary<int, string>();
+
 
     }
 }

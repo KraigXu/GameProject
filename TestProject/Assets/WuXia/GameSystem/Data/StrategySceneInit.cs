@@ -16,13 +16,11 @@ namespace GameSystem
     public sealed class StrategySceneInit
     {
         public static EntityArchetype DistrictArchetype;
-        public static EntityArchetype LivingAreaArchetype;
-        public static EntityArchetype BiologicalArchetype;
         public static EntityArchetype BuildingArchetype;
-        public static EntityArchetype PlayerArchetype;
-        public static EntityArchetype CameraArchetype;
         public static EntityArchetype TimeArchetype;
-        public static EntityArchetype FactionArchetype;
+        public static EntityArchetype TeamArchetype;
+
+        public static EntityArchetype TechniquesArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -41,19 +39,14 @@ namespace GameSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
+            Debug.Log("Initialize Over");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-            CameraArchetype = entityManager.CreateArchetype(typeof(CameraProperty));
-
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
-
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
-            PlayerArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(PlayerInput), typeof(Position), typeof(Rotation), typeof(AICharacterControl), typeof(Transform), typeof(NavMeshAgent), typeof(ThirdPersonCharacter));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(AICharacterControl));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Position), typeof(NavMeshAgent));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(Rigidbody), typeof(Transform), typeof(CapsuleCollider), typeof(NavMeshAgent));
-
             TimeArchetype = entityManager.CreateArchetype(typeof(TimeData));
+            TeamArchetype = entityManager.CreateArchetype(typeof(Team));
+            TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
+
         }
 
 
@@ -63,8 +56,8 @@ namespace GameSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeAfterSceneLoad()
         {
+            Debug.Log("InitializeAfterSceneLoad Over");
             var settingsGo = GameObject.Find("Settings");
-
             if (settingsGo == null)
             {
                 SceneManager.sceneLoaded += OnSceneLoaded;
@@ -75,13 +68,13 @@ namespace GameSystem
                 Settings = settingsGo?.GetComponent<DemoSetting>();
                 if (!Settings) return;
             }
-
             InitializeWithScene();
         }
 
         // Begin a new game.
         public static void NewGame()
         {
+            Debug.Log("NewGame Over!");
         }
 
 
@@ -352,11 +345,9 @@ namespace GameSystem
                         TargetId = 0,
                         TargetType = 0,
                         LocationType = LocationType.Field
-
                     });
 
-                    //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Techniques>());
-                    //entityManager.SetComponentData(biologicalEntity,);
+
 
                     //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Techniques>(data[i].JifaJson));
 
@@ -454,7 +445,26 @@ namespace GameSystem
 
                 RelationSystem.SetupComponentData(entityManager);
             }
+            #endregion
 
+            #region TechniquesData
+            {
+                List<TechniquesData> techniquesDatas = SqlData.GetAllDatas<TechniquesData>();
+                for (int i = 0; i < techniquesDatas.Count; i++)
+                {
+                    Entity techniques = entityManager.CreateEntity(TechniquesArchetype);
+
+                    entityManager.SetComponentData(techniques, new Techniques
+                    {
+                        Id = techniquesDatas[i].Id,
+                        BiologicalId = techniquesDatas[i].BiologicalId,
+                        ParentId = techniquesDatas[i].ParentId,
+                    });
+
+                    GameStaticData.TechniquesName.Add(techniquesDatas[i].Id,techniquesDatas[i].Name);
+                    GameStaticData.TechniquesDescription.Add(techniquesDatas[i].Id,techniquesDatas[i].Description);
+                }
+            }
             #endregion
 
             #region FactionData
@@ -487,7 +497,6 @@ namespace GameSystem
             #endregion
 
             #region FamilySystem
-
             {
                 EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
                 List<FamilyData> familyData = SqlData.GetAllDatas<FamilyData>();
@@ -498,11 +507,25 @@ namespace GameSystem
                     {
                         FamilyId = familyData[i].Id
                     });
-
                 }
             }
 
             #endregion
+
+            #region TeamSystem
+            {
+                //List<TeamData> teamDatas = SqlData.GetAllDatas<TeamData>();
+                //for (int i = 0; i < teamDatas.Count; i++)
+                //{
+                //    Entity team = entityManager.CreateEntity(TeamArchetype);
+                //    entityManager.SetComponentData(team,new Team
+                //    {
+                       
+                //    });
+                //}
+            }
+            #endregion
+
 
             #region UiInit
             {

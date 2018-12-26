@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -81,7 +82,6 @@ namespace GameSystem
     }
     public struct District : IComponentData
     {
-
         public int Id;
         public int Type;
         public int ProsperityLevel;
@@ -89,7 +89,6 @@ namespace GameSystem
         public int GrowingModulus;
         public int SecurityModulus;
     }
-
 
     public struct Biological : IComponentData
     {
@@ -133,8 +132,10 @@ namespace GameSystem
         //性格属性
         public byte CharacterValue;
         public byte NeutralValue; //中立值
+    }
 
-        public Vector2[]s;
+    public struct Team : IComponentData
+    {
 
     }
 
@@ -188,10 +189,16 @@ namespace GameSystem
     public struct Techniques : IComponentData
     {
         public int Id;
-        public Vector2 jineng;
-        public Vector2 jineng1;
-        public int Value;
-       
+        public int ParentId;
+        public int BiologicalId;
+        public int TechniquesValue;
+
+        //public string Name { get; set; }
+        //public string MarkIds { get; set; }
+        //public string Description { get; set; }
+        //public int  { get; set; }
+        //public string Effect { get; set; }
+
 
     }
 
