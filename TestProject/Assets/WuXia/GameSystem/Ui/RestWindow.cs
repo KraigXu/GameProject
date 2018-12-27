@@ -15,6 +15,7 @@ namespace GameSystem.Ui
         private Toggle _waitTog;
         [SerializeField]
         private GameObject _waitGo;
+        
         [SerializeField]
         private Toggle _wuxueTog;
         [SerializeField]
@@ -50,6 +51,8 @@ namespace GameSystem.Ui
         {
             _exitBtn.onClick.AddListener(CloseBtnMain);
             _waitTog.onValueChanged.AddListener(ChangeWaitView);
+            _wuxueTog.onValueChanged.AddListener();
+
 
         }
 
@@ -74,10 +77,6 @@ namespace GameSystem.Ui
             _waitGo.SetActive(flag);
             if (flag)
             {
-                
-                
-                
-
 
             }
             else

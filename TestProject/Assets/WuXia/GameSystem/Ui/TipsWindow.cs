@@ -23,6 +23,7 @@ namespace GameSystem.Ui
         protected override void InitWindowData()
         {
             this.ID = WindowID.TipsWindow;
+
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
