@@ -13,13 +13,10 @@ namespace GameSystem.Ui
         [SerializeField]
         private Image _input;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.MapWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -28,6 +25,7 @@ namespace GameSystem.Ui
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
+
         public override void InitWindowOnAwake()
         {
 

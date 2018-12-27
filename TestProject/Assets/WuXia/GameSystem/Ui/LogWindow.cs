@@ -6,12 +6,10 @@ using UnityEngine;
 public class LogWindow : UIWindowBase
 {
 
-    protected override void SetWindowId()
+    protected override void InitWindowData()
     {
         this.ID = WindowID.LogWindow;
-    }
-    protected override void InitWindowCoreData()
-    {
+
         windowData.windowType = UIWindowType.NormalLayer;
         windowData.showMode = UIWindowShowMode.DoNothing;
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;

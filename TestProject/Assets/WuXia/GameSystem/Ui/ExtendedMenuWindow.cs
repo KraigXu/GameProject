@@ -13,12 +13,10 @@ namespace GameSystem.Ui
         [SerializeField]
         private UiTitleitem _contentUi;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.ExtendedMenuWindow;
-        }
-        protected override void InitWindowCoreData()
-        {
+
             windowData.windowType = UIWindowType.BackgroundLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;

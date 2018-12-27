@@ -21,13 +21,12 @@ namespace GameSystem.Ui
         public Text ShiChen;
         public Text Season;
 
-        protected override void SetWindowId()
+        private float _cd;
+
+        protected override void InitWindowData()
         {
             this.ID = WindowID.StrategyWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -37,40 +36,30 @@ namespace GameSystem.Ui
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
 
+
         public override void InitWindowOnAwake()
         {
         }
 
-        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
+
+        void Update()
         {
-            base.BeforeShowWindow(contextData);
-            if (contextData != null)
-            {
-                StrategyWindowInData data = (StrategyWindowInData) contextData;
-                //_characterInformationBtn.onClick.AddListener(data.CharavterEvent);
-                //_wugongBtn.onClick.AddListener(data.WugongEvent);
-                //_technologyBtn.onClick.AddListener(data.TechnologyEvent);
-               // _logBtn.onClick.AddListener(data.LogEvent);
-               // _mapBtn.onClick.AddListener(data.MapEvent);
-
-               // AvatarImage.overrideSprite = GameStaticData.BiologicalAvatar[data.PlayerAvatarId];
-               // NameTex.text = GameStaticData.BiologicalNameDic[data.PlayerId];
-               // SunNameTex.text = GameStaticData.BiologicalSurnameDic[data.PlayerId];
-            }
-
-            
-
+            UpdateTime();
         }
 
 
-        public void UpdateTime(TimeData timeData)
+        public void UpdateTime()
         {
-            this.Year.text = timeData.Year.ToString();
-            this.Month.text = timeData.Month.ToString();
-            this.Day.text = timeData.Day.ToString();
-            this.ShiChen.text = GameStaticData.TimeShichen[timeData.Shichen];
-            this.Season.text = GameStaticData.TimeJijie[timeData.Jijie];
-
+            _cd+=Time.deltaTime;
+            if (_cd > 1)
+            {
+                this.Year.text = WorldTimeManager.Instance.Year.ToString();
+                this.Month.text = WorldTimeManager.Instance.Month.ToString();
+                this.Day.text = WorldTimeManager.Instance.Day.ToString();
+                this.ShiChen.text = GameStaticData.TimeShichen[WorldTimeManager.Instance.Shichen];
+                this.Season.text = GameStaticData.TimeJijie[WorldTimeManager.Instance.Jijie];
+                _cd = 0;
+            }
         }
     }
 }

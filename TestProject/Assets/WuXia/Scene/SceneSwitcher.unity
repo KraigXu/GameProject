@@ -142,13 +142,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneSwitchInterval: 20
   TimeUntilNextSwitch: 5
-  CurrentSceneIndex: 0
+  CurrentSceneIndex: 1
   EntitiesDestroyed: 0
   SceneConfigs:
-  - SceneName: DemoScene
-    CustomDuration: 1
   - SceneName: Start
     CustomDuration: 1
+  - SceneName: DemoScene
+    CustomDuration: 4
 --- !u!4 &1841332245
 Transform:
   m_ObjectHideFlags: 0

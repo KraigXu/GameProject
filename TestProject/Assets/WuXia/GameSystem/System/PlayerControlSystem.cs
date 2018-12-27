@@ -31,8 +31,6 @@ namespace GameSystem
         [Inject]
         private PlayerData m_Players;
         [Inject]
-        private WorldTimeSystem _worldTimeSystem;
-        [Inject]
         private LivingAreaSystem _livingAreaSystem;
         [Inject]
         private CameraSystem _cameraSystem;
@@ -217,86 +215,14 @@ namespace GameSystem
 
 
         /// <summary>
-        /// 打开"Rest"界面
+        /// 获取当前Person
         /// </summary>
-        public void Rest()
+        /// <returns></returns>
+        public Biological GetCurrentPerson()
         {
-            _worldTimeSystem.SetTimeScalar(0);
-            ShowWindowData windowData = new ShowWindowData();
-            RestWindowInData restWindowInData = new RestWindowInData();
-            restWindowInData.OnExit = RestExit;
-
-            UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow, windowData);
-        }
-
-        /// <summary>
-        /// "Rest"界面退出
-        /// </summary>
-        private void RestExit()
-        {
-            _worldTimeSystem.SetTimeScalar(1);
-        }
-
-
-        /// <summary>
-        /// 打开 "Team"界面
-        /// </summary>
-        public void Team()
-        {
-            UICenterMasterManager.Instance.ShowWindow(WindowID.TeamWindow);
+            return m_Players.Biological[0];
 
         }
-
-        public void Person()
-        {
-
-            if (m_Players.Length == 0)
-            {
-                return;
-            }
-
-            var biological = m_Players.Biological[0];
-            BiologicalData data = SqlData.GetDataId<BiologicalData>(m_Players.Biological[0].BiologicalId);
-
-            ShowWindowData showWindowData = new ShowWindowData();
-            BiologicalUiInData uidata = new BiologicalUiInData();
-            uidata.Age = biological.Age;
-            uidata.AgeMax = biological.AgeMax;
-            uidata.Tizhi = biological.Tizhi;
-            uidata.Lidao = biological.Lidao;
-            uidata.Jingshen = biological.Jingshen;
-            uidata.Lingdong = biological.Lingdong;
-            uidata.Wuxing = biological.Wuxing;
-            uidata.Jing = biological.Jing;
-            uidata.Qi = biological.Qi;
-            uidata.Shen = biological.Shen;
-            uidata.Sex = data.Sex;
-            //uidata.Prestige = m_Players.Status[0].PrestigeValue;
-            uidata.Id = biological.BiologicalId;
-
-            //uidata.Influence = data.Influence;
-            //uidata.Disposition = data.Disposition;
-            // uidata.OnlyEntity = m_Players.Entity[0];
-            showWindowData.contextData = uidata;
-
-            UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
-        }
-
-        public void Log()
-        {
-        }
-
-        public void Intelligence()
-        {
-            UICenterMasterManager.Instance.ShowWindow(WindowID.IntelligenceWindow);
-        }
-
-        public void Map()
-        {
-
-
-        }
-
         private void LivingAreaOnClick()
         {
 
@@ -307,11 +233,6 @@ namespace GameSystem
 
         }
 
-        //------------------------------------------
-
-
-
-        //---------------
 
         /// <summary>
         /// 

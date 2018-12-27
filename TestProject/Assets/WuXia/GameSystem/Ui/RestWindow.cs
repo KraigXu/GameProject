@@ -10,7 +10,7 @@ namespace GameSystem.Ui
     /// </summary>
     public class RestWindow : UIWindowBase
     {
-
+        
         [SerializeField]
         private Toggle _waitTog;
         [SerializeField]
@@ -19,6 +19,14 @@ namespace GameSystem.Ui
         private Toggle _wuxueTog;
         [SerializeField]
         private  GameObject _wuxueGo;
+        [SerializeField]
+        private Toggle _productionTog;
+        [SerializeField]
+        private GameObject _productionGo;
+        [SerializeField]
+        private Toggle _recuperateTog;
+        [SerializeField]
+        private GameObject _recuperateGo;
 
         [SerializeField]
         private Button _exitBtn;
@@ -26,62 +34,57 @@ namespace GameSystem.Ui
         [Header("Project")]
         private List<GameObject> _headergo;
         
-
-        private RestWindowInData _restWindowInData;
-
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.RestWindow;
-        }
 
-        public override void InitWindowOnAwake()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
-
         }
 
-        protected override void InitWindowCoreData()
+        public override void InitWindowOnAwake()
         {
-            _exitBtn.onClick.AddListener(CloseWindow);
-            _waitTog.onValueChanged.AddListener(delegate(bool flag)
-            {
-                _waitGo.SetActive(flag);
-            });
-
-            _wuxueTog.onValueChanged.AddListener(delegate(bool flag)
-            {
-                _wuxueGo.SetActive(flag);
-                if (_restWindowInData.OnWuXueOpen != null)
-                {
-                    _restWindowInData.OnWuXueOpen();
-                }
-            });
+            _exitBtn.onClick.AddListener(CloseBtnMain);
+            _waitTog.onValueChanged.AddListener(ChangeWaitView);
 
         }
-
-        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
-        {
-            if(contextData==null) return;
-            base.BeforeShowWindow(contextData);
-            _restWindowInData = (RestWindowInData)contextData;
-        }
-
 
         protected override void CloseWindow()
         {
-            if (_restWindowInData.OnExit != null)
-            {
-                _restWindowInData.OnExit();
-            }
-            base.CloseWindow();
+            WorldTimeManager.Instance.Play();
         }
 
+
+        private void CloseBtnMain()
+        {
+            UICenterMasterManager.Instance.CloseWindow(this.ID);
+        }
+
+
+        /// <summary>
+        /// 更新界面
+        /// </summary>
+        /// <param name="flag"></param>
+        private void ChangeWaitView(bool flag)
+        {
+            _waitGo.SetActive(flag);
+            if (flag)
+            {
+                
+                
+                
+
+
+            }
+            else
+            {
+
+            }
+        }
 
 
     }

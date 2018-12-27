@@ -7,7 +7,6 @@ using GameSystem;
 
 namespace GameSystem.Ui
 {
-
     public class ShowWindowData
     {
         // Reset window
@@ -27,48 +26,6 @@ namespace GameSystem.Ui
     // Base window data context for Refresh window or show window
     public class BaseWindowContextData { }
 
-
-    /// <summary>
-    /// RestWindowData
-    /// </summary>
-    public class RestWindowInData : BaseWindowContextData
-    {
-        public UnityAction OnExit;
-        public UnityAction OnOpen;
-
-        public UnityAction OnWuXueOpen;
-
-        public List<Biological> Biologicals;
-        
-             
-        
-        public RestWindowInData() { }
-
-        public RestWindowInData(UnityAction onExit,UnityAction onOpen)
-        {
-            this.OnExit = onExit;
-            this.OnOpen = onOpen;
-
-        }
-    }
-
-    
-
-
-
-
-    public class StrategyWindowInData : BaseWindowContextData
-    {
-
-        public int PlayerAvatarId;
-        public int PlayerId;
-
-        public StrategyWindowInData(int id1,int  playerId)
-        {
-            this.PlayerAvatarId = id1;
-            this.PlayerId = playerId;
-        }
-    }
 
     public class ExtendedMenuWindowInData : BaseWindowContextData
     {
@@ -178,7 +135,6 @@ namespace GameSystem.Ui
     public class BuildingFeaturesUiInfo
     {
         public int Id;
-        
     }
 
     public delegate int[] SocialDialogEvent(int resoult,int a,int b);

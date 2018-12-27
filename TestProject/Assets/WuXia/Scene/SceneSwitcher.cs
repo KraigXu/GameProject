@@ -21,12 +21,12 @@ public class SceneSwitcher : MonoBehaviour
 
     public SceneConfig[] SceneConfigs;
 
-	// Use this for initialization
-	void Start ()
-	{
-	    DontDestroyOnLoad(this);
-	    LoadNextScene();
-	}
+    // Use this for initialization
+    void Start()
+    {
+        DontDestroyOnLoad(this);
+        LoadNextScene();
+    }
 
     private void DestroyAllEntitiesInScene()
     {
@@ -59,7 +59,7 @@ public class SceneSwitcher : MonoBehaviour
     {
         foreach (var scene in SceneConfigs)
         {
-            if (!scenePath.EndsWith(scene.SceneName +".unity"))
+            if (!scenePath.EndsWith(scene.SceneName + ".unity"))
                 continue;
             if (scene.CustomDuration <= 0)
                 continue;
@@ -79,21 +79,20 @@ public class SceneSwitcher : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-	void Update ()
-	{
-	    TimeUntilNextSwitch -= Time.deltaTime;
-	    if (TimeUntilNextSwitch > 0.0f)
-	        return;
+    void Update()
+    {
+        //TimeUntilNextSwitch -= Time.deltaTime;
+        //if (TimeUntilNextSwitch > 0.0f)
+        //    return;
 
-	    if (!EntitiesDestroyed)
-	    {
-	        DestroyAllEntitiesInScene();
-	    }
-	    else
-	    {
-	        DestroyAllEntitiesInScene();
-	        LoadNextScene();
-	    }
-	}
+        //if (!EntitiesDestroyed)
+        //{
+        //    DestroyAllEntitiesInScene();
+        //}
+        //else
+        //{
+        //    DestroyAllEntitiesInScene();
+        //    LoadNextScene();
+        //}
+    }
 }

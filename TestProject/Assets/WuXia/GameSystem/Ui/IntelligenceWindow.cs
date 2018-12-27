@@ -62,13 +62,10 @@ namespace GameSystem.Ui
         public Text LaTypeTxt;
         public Text LaLevelTxt;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.IntelligenceWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -76,7 +73,9 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
+
         }
+
 
         public override void InitWindowOnAwake()
         {

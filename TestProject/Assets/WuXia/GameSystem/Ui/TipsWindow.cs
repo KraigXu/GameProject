@@ -20,18 +20,16 @@ namespace GameSystem.Ui
         [SerializeField]
         private float _curdelaytime;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.TipsWindow;
-        }
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
         }
+
 
         public override void InitWindowOnAwake()
         {

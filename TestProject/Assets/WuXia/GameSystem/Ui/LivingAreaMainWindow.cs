@@ -48,13 +48,10 @@ namespace GameSystem.Ui
             public RectTransform Panel;
         }
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.LivingAreaMainWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -63,6 +60,7 @@ namespace GameSystem.Ui
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
+
 
         public override void InitWindowOnAwake()
         {
@@ -106,7 +104,7 @@ namespace GameSystem.Ui
                 _buildingBilling[i].gameObject.SetActive(true);
                 _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[_currentLivingArea.BuildingiDataItems[i].Id];
                //_buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
-               
+
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }
         }
@@ -149,8 +147,6 @@ namespace GameSystem.Ui
                 _buildingBiological[i].NameTex.text = item.Biologicals[i].Name;
                 _buildingBiological[i].HeadImg.sprite = GameStaticData.BiologicalAvatar[item.Biologicals[i].AtlasId];
                 _buildingBiological[i].gameObject.name = item.Biologicals[i].Id.ToString();
-
-
             }
             item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }

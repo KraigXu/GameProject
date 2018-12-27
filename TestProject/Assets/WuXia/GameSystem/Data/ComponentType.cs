@@ -29,20 +29,6 @@ namespace GameSystem
         public Vector3 RoationOffset;
     }
 
-    public struct TimeData : IComponentData
-    {
-        public int Year;
-        public int Month;
-        public int Day;
-        public int Hour;
-        public int Shichen;
-        public int Jijie;
-
-        public byte TimeScalar;           //时间的放大比 如果是0 则是暂停
-        public float Schedule;             //一个时间节点的进度
-        public byte ScheduleCell;         //时间节点的大小
-    }
-
 
     public enum TendType
     {

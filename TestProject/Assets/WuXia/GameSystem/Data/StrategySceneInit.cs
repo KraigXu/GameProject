@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataAccessObject;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
 using Newtonsoft.Json;
+using Object = UnityEngine.Object;
 
 namespace GameSystem
 {
@@ -17,7 +19,6 @@ namespace GameSystem
     {
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype BuildingArchetype;
-        public static EntityArchetype TimeArchetype;
         public static EntityArchetype TeamArchetype;
 
         public static EntityArchetype TechniquesArchetype;
@@ -43,7 +44,6 @@ namespace GameSystem
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
-            TimeArchetype = entityManager.CreateArchetype(typeof(TimeData));
             TeamArchetype = entityManager.CreateArchetype(typeof(Team));
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
 
@@ -66,7 +66,10 @@ namespace GameSystem
             else
             {
                 Settings = settingsGo?.GetComponent<DemoSetting>();
-                if (!Settings) return;
+                if (!Settings)
+                {
+                    return;
+                }
             }
             InitializeWithScene();
         }
@@ -80,6 +83,17 @@ namespace GameSystem
 
         public static void InitializeWithScene()
         {
+            var settingsGo = GameObject.Find("Settings");
+            if (settingsGo == null)
+            {
+                return;
+            }
+
+            Settings = settingsGo?.GetComponent<DemoSetting>();
+            if (!Settings)
+            {
+                return;
+            }
             //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
             //BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
             //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
@@ -93,7 +107,7 @@ namespace GameSystem
             //LivingAreaBuildingSystem     --暂无开启
 
             //BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            // World.Active.GetOrCreateManager<UpdatePlayerHUD>().SetupGameObjects();
+            //World.Active.GetOrCreateManager<UpdatePlayerHUD>().SetupGameObjects();
             //World.Active.GetOrCreateManager<StrategySystem>().Update();
 
             //获取配置
@@ -101,17 +115,13 @@ namespace GameSystem
 
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            WorldTimeSystem.CurWorldTime = settings.curTime;
 
             #region Time
+
             {
-                Entity entity = entityManager.CreateEntity(TimeArchetype);
-                entityManager.SetComponentData(entity, new TimeData
-                {
-                    TimeScalar = 1,
-                    Schedule = 0,
-                    ScheduleCell = 5,
-                });
+
+                DateTime time = Convert.ToDateTime("1000-01-01 00:00:00");
+                WorldTimeManager.Instance.Init(time);
 
 
                 GameStaticData.TimeJijie.Add(1, "春");
@@ -305,7 +315,7 @@ namespace GameSystem
             }
             #endregion
 
-            #region BiologicalInit
+            #region Biological
             {
                 List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
 
@@ -512,28 +522,15 @@ namespace GameSystem
 
             #endregion
 
-            #region TeamSystem
-            {
-                //List<TeamData> teamDatas = SqlData.GetAllDatas<TeamData>();
-                //for (int i = 0; i < teamDatas.Count; i++)
-                //{
-                //    Entity team = entityManager.CreateEntity(TeamArchetype);
-                //    entityManager.SetComponentData(team,new Team
-                //    {
-                       
-                //    });
-                //}
-            }
-            #endregion
-
-
             #region UiInit
             {
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
-                //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow)
+                UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+
+              //  WorldTimeManager.Instance.AddTimerNode(DateTime.Now.AddHours(2),Test1, DateTime.Now.AddHours(6),Test2);
 
             }
             #endregion
@@ -544,6 +541,7 @@ namespace GameSystem
                 NewGame();
             }
         }
+
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {

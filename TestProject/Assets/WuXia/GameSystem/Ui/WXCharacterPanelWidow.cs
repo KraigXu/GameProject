@@ -51,13 +51,10 @@ namespace GameSystem.Ui
         [SerializeField]
         private Biological _biological;
     
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.WxCharacterPanelWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.ForegroundLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;

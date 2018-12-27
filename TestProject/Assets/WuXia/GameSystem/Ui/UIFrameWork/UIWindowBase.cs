@@ -79,12 +79,8 @@ namespace GameSystem.Ui
         }
 
         // Set the window Id use 
-        protected abstract void SetWindowId();
+        protected abstract void InitWindowData();
 
-        /// <summary>
-        /// Init the window core data
-        /// </summary>
-        protected abstract void InitWindowCoreData();
         /// <summary>
         /// Called on Awake() used for window data Init
         /// </summary>
@@ -107,9 +103,8 @@ namespace GameSystem.Ui
         {
             this.gameObject.SetActive(true);
             _RectTransform = UGUIGraphControl.GetObjectRectTransform(gameObject);
-            SetWindowId();
+            InitWindowData();
             InitWindowOnAwake();
-            InitWindowCoreData();
         }
 
         /// <summary>

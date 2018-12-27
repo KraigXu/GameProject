@@ -7,6 +7,8 @@ namespace GameSystem.Ui
     public enum WindowID
     {
         Invaild = 0,
+        ProjectSelectWindow,
+
         StrategyWindow,
         MessageWindow,
         MenuWindow,
@@ -128,6 +130,7 @@ namespace GameSystem.Ui
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
+            {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },

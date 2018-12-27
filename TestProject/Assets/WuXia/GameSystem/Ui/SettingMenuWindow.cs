@@ -6,12 +6,10 @@ using UnityEngine;
 public class SettingMenuWindow : UIWindowBase
 {
 
-    protected override void SetWindowId()
+    protected override void InitWindowData()
     {
         this.ID = WindowID.SettingMenuWindow;
-    }
-    protected override void InitWindowCoreData()
-    {
+
         windowData.windowType = UIWindowType.NormalLayer;
         windowData.showMode = UIWindowShowMode.DoNothing;
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -21,8 +19,9 @@ public class SettingMenuWindow : UIWindowBase
         windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
     }
 
+
     public override void InitWindowOnAwake()
     {
-     
+        
     }
 }

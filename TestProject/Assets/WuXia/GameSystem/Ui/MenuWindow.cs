@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DataAccessObject;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
@@ -6,9 +7,12 @@ using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
+
+    /// <summary>
+    /// 功能菜单界面
+    /// </summary>
     public class MenuWindow : UIWindowBase
     {
-
         [SerializeField]
         private Button _rest;
         [SerializeField]
@@ -24,13 +28,10 @@ namespace GameSystem.Ui
         [SerializeField]
         private Button _option;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.MenuWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
@@ -38,6 +39,7 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
         }
+
 
         public override void InitWindowOnAwake()
         {
@@ -48,40 +50,61 @@ namespace GameSystem.Ui
             this._intelligence.onClick.AddListener(ButtonIntelligence);
             this._map.onClick.AddListener(ButtonMap);
             this._option.onClick.AddListener(ButtonOption);
-
         }
-
+        /// <summary>
+        /// 修整按钮
+        /// </summary>
         private void ButtonRest()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Rest();
+            WorldTimeManager.Instance.Pause();
+            UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow);
         }
 
         private void ButtonTeam()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Team();
+            UICenterMasterManager.Instance.ShowWindow(WindowID.TeamWindow);
         }
 
         private void ButtonPerson()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Person();
-        
+            var biological = SystemManager.Get<PlayerControlSystem>().GetCurrentPerson();
+            
+            BiologicalData data = SqlData.GetDataId<BiologicalData>(biological.BiologicalId);
+            ShowWindowData showWindowData = new ShowWindowData();
+            BiologicalUiInData uidata = new BiologicalUiInData();
+            uidata.Age = biological.Age;
+            uidata.AgeMax = biological.AgeMax;
+            uidata.Tizhi = biological.Tizhi;
+            uidata.Lidao = biological.Lidao;
+            uidata.Jingshen = biological.Jingshen;
+            uidata.Lingdong = biological.Lingdong;
+            uidata.Wuxing = biological.Wuxing;
+            uidata.Jing = biological.Jing;
+            uidata.Qi = biological.Qi;
+            uidata.Shen = biological.Shen;
+            uidata.Sex = data.Sex;
+            //uidata.Prestige = m_Players.Status[0].PrestigeValue;
+            uidata.Id = biological.BiologicalId;
+
+            //uidata.Influence = data.Influence;
+            //uidata.Disposition = data.Disposition;
+            // uidata.OnlyEntity = m_Players.Entity[0];
+            showWindowData.contextData = uidata;
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
+
         }
 
         private void ButtonLog()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Log();
-          
         }
 
         private void ButtonIntelligence()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Intelligence();
-
+            UICenterMasterManager.Instance.ShowWindow(WindowID.IntelligenceWindow);
         }
         private void ButtonMap()
         {
-            World.Active.GetExistingManager<PlayerControlSystem>().Map();
-            
         }
         /// <summary>
         /// Option按钮
@@ -89,7 +112,6 @@ namespace GameSystem.Ui
         private void ButtonOption()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.SettingMenuWindow);
-
         }
 
 

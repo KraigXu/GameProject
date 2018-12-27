@@ -16,12 +16,10 @@ namespace GameSystem.Ui
 
         public Dictionary<Text, Sequence> TextSequences=new Dictionary<Text, Sequence>();
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.MessageWindow;
-        }
-        protected override void InitWindowCoreData()
-        {
+
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;

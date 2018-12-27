@@ -13,23 +13,19 @@ namespace GameSystem.Ui
         [SerializeField]
         private RectTransform _titlePrefab;
 
-
         private Dictionary<int, UiTitleitem>  _modelTitle=new Dictionary<int, UiTitleitem>();
         private int _idCounter;
 
-        protected override void SetWindowId()
+        protected override void InitWindowData()
         {
             this.ID = WindowID.FixedTitleWindow;
-        }
 
-        protected override void InitWindowCoreData()
-        {
             windowData.windowType = UIWindowType.BackgroundLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
-      
+
         }
 
         public override void InitWindowOnAwake()
