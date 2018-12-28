@@ -221,8 +221,13 @@ namespace GameSystem
         public Biological GetCurrentPerson()
         {
             return m_Players.Biological[0];
-
         }
+
+        public BiologicalStatus GetCurrentStatus()
+        {
+            return m_Players.Status[0];
+        }
+
         private void LivingAreaOnClick()
         {
 

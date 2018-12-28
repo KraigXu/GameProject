@@ -51,9 +51,9 @@ namespace GameSystem.Ui
         {
             _exitBtn.onClick.AddListener(CloseBtnMain);
             _waitTog.onValueChanged.AddListener(ChangeWaitView);
-            _wuxueTog.onValueChanged.AddListener();
-
-
+            _wuxueTog.onValueChanged.AddListener(ChangeWuxueView);
+            _productionTog.onValueChanged.AddListener(ChangeProductionView);
+            _recuperateTog.onValueChanged.AddListener(ChangeRecuperateView);
         }
 
         protected override void CloseWindow()
@@ -77,7 +77,7 @@ namespace GameSystem.Ui
             _waitGo.SetActive(flag);
             if (flag)
             {
-
+                
             }
             else
             {
@@ -85,6 +85,24 @@ namespace GameSystem.Ui
             }
         }
 
+        /// <summary>
+        /// 更新界面
+        /// </summary>
+        /// <param name="flag"></param>
+        private void ChangeWuxueView(bool flag)
+        {
+
+
+        }
+
+        private void ChangeProductionView(bool flag)
+        {
+        }
+
+        private void ChangeRecuperateView(bool flag)
+        {
+
+        }
 
     }
 

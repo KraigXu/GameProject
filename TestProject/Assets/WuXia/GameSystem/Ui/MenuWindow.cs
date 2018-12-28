@@ -58,6 +58,7 @@ namespace GameSystem.Ui
         {
             WorldTimeManager.Instance.Pause();
             UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow);
+            
         }
 
         private void ButtonTeam()
@@ -67,44 +68,36 @@ namespace GameSystem.Ui
 
         private void ButtonPerson()
         {
-            var biological = SystemManager.Get<PlayerControlSystem>().GetCurrentPerson();
-            
-            BiologicalData data = SqlData.GetDataId<BiologicalData>(biological.BiologicalId);
-            ShowWindowData showWindowData = new ShowWindowData();
+
             BiologicalUiInData uidata = new BiologicalUiInData();
-            uidata.Age = biological.Age;
-            uidata.AgeMax = biological.AgeMax;
-            uidata.Tizhi = biological.Tizhi;
-            uidata.Lidao = biological.Lidao;
-            uidata.Jingshen = biological.Jingshen;
-            uidata.Lingdong = biological.Lingdong;
-            uidata.Wuxing = biological.Wuxing;
-            uidata.Jing = biological.Jing;
-            uidata.Qi = biological.Qi;
-            uidata.Shen = biological.Shen;
-            uidata.Sex = data.Sex;
-            //uidata.Prestige = m_Players.Status[0].PrestigeValue;
-            uidata.Id = biological.BiologicalId;
-
-            //uidata.Influence = data.Influence;
-            //uidata.Disposition = data.Disposition;
-            // uidata.OnlyEntity = m_Players.Entity[0];
+            uidata.CurPlayer = SystemManager.Get<PlayerControlSystem>().GetCurrentPerson();
+            uidata.Biologicals = SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.TeamId);
+            ShowWindowData showWindowData = new ShowWindowData();
             showWindowData.contextData = uidata;
-
             UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
 
         }
 
         private void ButtonLog()
         {
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LogWindow);
         }
 
+        /// <summary>
+        /// Intelligence
+        /// </summary>
         private void ButtonIntelligence()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.IntelligenceWindow);
         }
+
+        /// <summary>
+        /// Map
+        /// </summary>
         private void ButtonMap()
         {
+            UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
+            
         }
         /// <summary>
         /// Option按钮

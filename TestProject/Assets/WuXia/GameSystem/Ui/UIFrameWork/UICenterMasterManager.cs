@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GameSystem.Ui
 {
@@ -180,10 +178,10 @@ namespace GameSystem.Ui
             {
                 GameObject BackgroundLayerRoot = new GameObject("UIBackgroundLayerRoot");
                 UIBackgroundLayerRoot = BackgroundLayerRoot.gameObject.AddComponent<RectTransform>();
-                UIBackgroundLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                UIBackgroundLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                UIBackgroundLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                UIBackgroundLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                UIBackgroundLayerRoot.anchorMax = new Vector2(1f, 1f);
+                UIBackgroundLayerRoot.anchorMin = new Vector2(0f, 0f);
+                UIBackgroundLayerRoot.offsetMax = new Vector2(0, 0);
+                UIBackgroundLayerRoot.offsetMin = new Vector2(0, 0);
                 UGUITools.AddChildToTarget(UIRoot, UIBackgroundLayerRoot);
                 UGUITools.ChangeChildLayer(UIBackgroundLayerRoot, UIRoot.gameObject.layer);
             }
@@ -191,10 +189,10 @@ namespace GameSystem.Ui
             {
                 GameObject NormalLayerRoot = new GameObject("UINormalWindowRoot");
                 UINormalLayerRoot = NormalLayerRoot.gameObject.AddComponent<RectTransform>();
-                UINormalLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                UINormalLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                UINormalLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                UINormalLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                UINormalLayerRoot.anchorMax = new Vector2(1f, 1f);
+                UINormalLayerRoot.anchorMin = new Vector2(0f, 0f);
+                UINormalLayerRoot.offsetMax = new Vector2(0, 0);
+                UINormalLayerRoot.offsetMin = new Vector2(0, 0);
                 UGUITools.AddChildToTarget(UIRoot, UINormalLayerRoot);
                 UGUITools.ChangeChildLayer(UINormalLayerRoot, UIRoot.gameObject.layer);
             }
@@ -202,10 +200,10 @@ namespace GameSystem.Ui
             {
                 GameObject ForegroundLayerRoot = new GameObject("UIForegroundLayerRoot");
                 UIForegroundLayerRoot = ForegroundLayerRoot.gameObject.AddComponent<RectTransform>();
-                UIForegroundLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                UIForegroundLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                UIForegroundLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                UIForegroundLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                UIForegroundLayerRoot.anchorMax = new Vector2(1f, 1f);
+                UIForegroundLayerRoot.anchorMin = new Vector2(0f, 0f);
+                UIForegroundLayerRoot.offsetMax = new Vector2(0, 0);
+                UIForegroundLayerRoot.offsetMin = new Vector2(0, 0);
                 UGUITools.AddChildToTarget(UIRoot, UIForegroundLayerRoot);
                 UGUITools.ChangeChildLayer(UIForegroundLayerRoot, UIRoot.gameObject.layer);
             }
@@ -628,7 +626,7 @@ namespace GameSystem.Ui
             if (targetWindow == null)
                 return;
 
-            Transform windowRoot = UICenterMasterManager.Instance.GetTargetRoot(targetWindow.windowData.windowType);
+            Transform windowRoot = Instance.GetTargetRoot(targetWindow.windowData.windowType);
             int needDepth = Mathf.Clamp(UGUITools.GetMaxTargetDepth(windowRoot.gameObject, true) + 1, popUpWindowDepth, int.MaxValue);
             UGUITools.SetTargetMinPanelDepth(targetWindow.gameObject, needDepth);
             targetWindow.MinDepth = needDepth;
@@ -662,20 +660,20 @@ namespace GameSystem.Ui
                     UINormalLayerRoot.anchorMax != Vector2.one || UINormalLayerRoot.anchorMin != Vector2.zero || UINormalLayerRoot.offsetMax != Vector2.zero || UINormalLayerRoot.offsetMin != Vector2.zero ||
                   UIForegroundLayerRoot.anchorMax != Vector2.one || UIForegroundLayerRoot.anchorMin != Vector2.zero || UIForegroundLayerRoot.offsetMax != Vector2.zero || UIForegroundLayerRoot.offsetMin != Vector2.zero)
                 {
-                    UIBackgroundLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                    UIBackgroundLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                    UIBackgroundLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                    UIBackgroundLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                    UIBackgroundLayerRoot.anchorMax = new Vector2(1f, 1f);
+                    UIBackgroundLayerRoot.anchorMin = new Vector2(0f, 0f);
+                    UIBackgroundLayerRoot.offsetMax = new Vector2(0, 0);
+                    UIBackgroundLayerRoot.offsetMin = new Vector2(0, 0);
 
-                    UINormalLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                    UINormalLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                    UINormalLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                    UINormalLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                    UINormalLayerRoot.anchorMax = new Vector2(1f, 1f);
+                    UINormalLayerRoot.anchorMin = new Vector2(0f, 0f);
+                    UINormalLayerRoot.offsetMax = new Vector2(0, 0);
+                    UINormalLayerRoot.offsetMin = new Vector2(0, 0);
 
-                    UIForegroundLayerRoot.anchorMax = new UnityEngine.Vector2(1f, 1f);
-                    UIForegroundLayerRoot.anchorMin = new UnityEngine.Vector2(0f, 0f);
-                    UIForegroundLayerRoot.offsetMax = new UnityEngine.Vector2(0, 0);
-                    UIForegroundLayerRoot.offsetMin = new UnityEngine.Vector2(0, 0);
+                    UIForegroundLayerRoot.anchorMax = new Vector2(1f, 1f);
+                    UIForegroundLayerRoot.anchorMin = new Vector2(0f, 0f);
+                    UIForegroundLayerRoot.offsetMax = new Vector2(0, 0);
+                    UIForegroundLayerRoot.offsetMin = new Vector2(0, 0);
                 }
             }
             Application.targetFrameRate = -1;

@@ -39,7 +39,6 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-
         }
 
 

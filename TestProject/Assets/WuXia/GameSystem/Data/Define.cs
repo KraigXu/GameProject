@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace GameSystem
 {
+    public delegate void EntityCallBack(Entity entity, int id);
+    public delegate int[] SocialDialogEvent(int resoult, int a, int b);
     /// <summary>
     /// 记录整个程序运行中所有的确定 和流动数据，不应该被删除
     /// </summary>

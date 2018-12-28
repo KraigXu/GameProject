@@ -1,10 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
 namespace GameSystem
 {
+    public class TechniqueJsonData
+    {
+        public int Id;
+        public List<KeyValuePair<int, int>> Content = new List<KeyValuePair<int, int>>();
+    }
+
+
     public class TechniquesSystem : ComponentSystem
     {
 
@@ -17,6 +25,19 @@ namespace GameSystem
         [Inject]
         private TechniquesGroup _techniques;
 
+        private static Dictionary<int, TechniqueJsonData> _techniqueDic=new Dictionary<int, TechniqueJsonData>();
+
+        public static void SetData(TechniqueJsonData jsonData)
+        {
+            if (_techniqueDic.ContainsKey(jsonData.Id) == true)
+            {
+                Debug.Log("有重复数据！ Technique");
+            }
+            else
+            {
+                _techniqueDic.Add(jsonData.Id,jsonData);
+            }
+        }
         protected override void OnUpdate()
         {
           
@@ -42,7 +63,13 @@ namespace GameSystem
             }
             return techniqueses;
         }
-        
+
+        public static TechniqueJsonData GetTechnique(int id)
+        {
+            return _techniqueDic[id];
+        }
+
+
 
         
 

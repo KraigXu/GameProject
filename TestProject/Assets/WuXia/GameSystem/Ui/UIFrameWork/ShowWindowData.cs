@@ -32,7 +32,6 @@ namespace GameSystem.Ui
         public UnityAction LivingAreEvent;
         public UnityAction DistrictEvent;
 
-
         public Vector3 Point;
         public int Id;
         public ExtendedMenuWindowInData(UnityAction livingAreEvent, UnityAction districtEvent, Vector3 point, int id)
@@ -42,42 +41,12 @@ namespace GameSystem.Ui
             this.Point = point;
             this.Id = id;
         }
-
     }
     public class BiologicalUiInData : BaseWindowContextData
     {
-        public int BiologicalId;
-        public int PrestigeId;  //声望
-        public int FactionId;  //势力
-       
-
-        public int Sex;
-
-        public int Id;
-        
-        public int Prestige;
-        public int Influence;
-        public int Disposition;
-
-        public int Age;
-        public int AgeMax;
-
-        public int Tizhi;
-        public int Lidao;
-        public int Jingshen;
-        public int Lingdong;
-        public int Wuxing;
-
-        public int Jing;
-        public int Qi;
-        public int Shen;
-
-        public BiologicalUiInData() { }
-
-
+        public Biological CurPlayer;
+        public List<Biological> Biologicals=new List<Biological>();
     }
-
-    public delegate void EntityCallBack(Entity entity, int id);
 
     public class LivingAreaWindowCD : BaseWindowContextData
     {
@@ -137,7 +106,6 @@ namespace GameSystem.Ui
         public int Id;
     }
 
-    public delegate int[] SocialDialogEvent(int resoult,int a,int b);
     public class SocialDialogWindowData : BaseWindowContextData
     {
         public int Aid;
@@ -149,12 +117,6 @@ namespace GameSystem.Ui
         public int Relation;
         public SocialDialogEvent DialogEvent;
     }
-
-    public struct LivingAreaUi
-    {
-
-    }
-
 
 
 

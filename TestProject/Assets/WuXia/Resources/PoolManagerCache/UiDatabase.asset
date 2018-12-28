@@ -17,8 +17,10 @@ MonoBehaviour:
     templates:
     - {fileID: 224984124462592786, guid: 62ec9a10bab2be94b8867782d5a9d3c8, type: 2}
     - {fileID: 224178495827405684, guid: 7cae9aa25fc52c6478994dd19529a841, type: 2}
-    poolLength: 0a0000000a000000
-    poolLengthMax: 1400000014000000
+    - {fileID: 224428170135215738, guid: f040489e2d9792c4190d70806ae378c3, type: 2}
+    - {fileID: 224172163875099090, guid: 58c6557106ffe834795a58e53783aff0, type: 2}
+    poolLength: 0a0000000a0000000a00000005000000
+    poolLengthMax: 1400000014000000140000000a000000
     broadcastSpawnName: OnDespawned
     broadcastDespawnName: OnDespawned
     delayedSpawnInInstall: 1

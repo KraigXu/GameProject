@@ -11,25 +11,24 @@ namespace GameSystem.Ui
     public class WXCharacterPanelWidow : UIWindowBase
     {
 
+        [SerializeField] private Transform _personnelParent;
+        [SerializeField] private RectTransform _personnelPrefab;
+
+
         [SerializeField] private Button _exitBtn;
         [SerializeField] private Text _name;
         [SerializeField] private Text _surname;
 
-        public Toggle PersonTog;
-        public GameObject PersonGo;
-        public Toggle WuxueTog;
-        public GameObject WuxueGo;
-
-
         [SerializeField] private Toggle _propertyTog;
         [SerializeField] private GameObject _propertyGo;
-        [SerializeField] private Toggle _wuxueTog;
-        [SerializeField] private GameObject _wuxueGo;
 
+        [SerializeField] private Toggle _combatTog;
+        [SerializeField] private GameObject _combatGo;
 
         [SerializeField] private Toggle _jiyiTog;
-        [SerializeField] private GameObject _jiyiGo;
-        [SerializeField] private GameObject _techniquesPrefab;
+        [SerializeField] private Transform _jiyiGo;
+        [SerializeField] private RectTransform _techniquesPrefab;
+        [SerializeField] private Transform _jiyiContent;
         private List<GameObject> _techniquesItems=new List<GameObject>();
         
 
@@ -48,9 +47,10 @@ namespace GameSystem.Ui
         [SerializeField] private Text _qitxt;
         [SerializeField] private Text _shentxt;
 
-        [SerializeField]
-        private Biological _biological;
-    
+
+        private BiologicalUiInData _uiData;
+        private Biological _curBiological;
+
         protected override void InitWindowData()
         {
             this.ID = WindowID.WxCharacterPanelWindow;
@@ -70,7 +70,7 @@ namespace GameSystem.Ui
             });
 
             _propertyTog.onValueChanged.AddListener(PropertyTogChange);
-            _wuxueTog.onValueChanged.AddListener(WuxueTogChange);
+            _combatTog.onValueChanged.AddListener(CombatTogChange);
             _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
             _tagTog.onValueChanged.AddListener(TagTogChange);
 
@@ -81,32 +81,61 @@ namespace GameSystem.Ui
             base.BeforeShowWindow(contextData);
             if (contextData != null)
             {
-                BiologicalUiInData data = (BiologicalUiInData)contextData;
-                _name.text = GameStaticData.BiologicalNameDic[data.Id];
-                _surname.text = GameStaticData.BiologicalSurnameDic[data.Id];
+                _uiData = (BiologicalUiInData)contextData;
+                _curBiological = _uiData.CurPlayer;
 
-                _tizhitxt.text = data.Tizhi.ToString();
-                _lidaotxt.text = data.AgeMax.ToString();
+                
+                for (int i = 0; i < _uiData.Biologicals.Count; i++)
+                {
+                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_personnelPrefab, _personnelParent);
+                    rectGo.GetChild(0).GetComponent<Image>().sprite=GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
+                }
 
-                _tizhitxt.text = data.Tizhi.ToString();
-                _lidaotxt.text = data.Lidao.ToString();
-                _jingshentxt.text = data.Jingshen.ToString();
-                _lingdongtxt.text = data.Lingdong.ToString();
-                _wuxingtxt.text = data.Wuxing.ToString();
-                _jingtxt.text = data.Jing.ToString();
-                _qitxt.text = data.Qi.ToString();
-                _shentxt.text = data.Shen.ToString();
+                _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
+                _surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
+
+                PropertyTogChange(true);
+
             }
         }
 
         private void PropertyTogChange(bool flag)
         {
            _propertyGo.gameObject.SetActive(flag);
+            if (flag == true)
+            {
+                _tizhitxt.text = _curBiological.Tizhi.ToString();
+                _lidaotxt.text = _curBiological.AgeMax.ToString();
+
+                _tizhitxt.text = _curBiological.Tizhi.ToString();
+                _lidaotxt.text = _curBiological.Lidao.ToString();
+                _jingshentxt.text = _curBiological.Jingshen.ToString();
+                _lingdongtxt.text = _curBiological.Lingdong.ToString();
+                _wuxingtxt.text = _curBiological.Wuxing.ToString();
+                _jingtxt.text = _curBiological.Jing.ToString();
+                _qitxt.text = _curBiological.Qi.ToString();
+                _shentxt.text = _curBiological.Shen.ToString();
+            }
+            else
+            {
+            }
         }
 
-        private void WuxueTogChange(bool flag)
+        private void CombatTogChange(bool flag)
         {
-            _wuxueGo.SetActive(flag);
+            _combatGo.gameObject.SetActive(flag);
+
+            if (flag == true)
+            {
+                
+
+
+
+            }
+            else
+            {
+
+            }
         }
         /// <summary>
         /// Techniques面板打开 更新和清除
@@ -114,31 +143,40 @@ namespace GameSystem.Ui
         /// <param name="flag"></param>
         private void JiyiTogChange(bool flag)
         {
-            _jiyiGo.SetActive(flag);
+            _jiyiGo.gameObject.SetActive(flag);
 
             if (flag == true)
             {
-                List<Techniques> techniqueses =SystemManager.Get<TechniquesSystem>().GetIdTechniques(_biological.BiologicalId);
+                List<KeyValuePair<int, int>> content = TechniquesSystem.GetTechnique(_curBiological.TechniquesId).Content;
 
-                for (int i = 0; i < techniqueses.Count; i++)
+                for (int i = 0; i < content.Count; i++)
                 {
-                    GameObject go = UGUITools.AddChild(_jiyiGo, _techniquesPrefab);
-                    
-                    _techniquesItems.Add(go);
+                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_techniquesPrefab, _jiyiContent);
+                    rectGo.GetChild(0).GetComponent<Text>().text = GameStaticData.TechniquesName[content[i].Key];
+                    rectGo.GetChild(1).GetComponent<Text>().text = content[i].Value.ToString();
                 }
             }
             else
             {
                 for (int i = 0; i < _techniquesItems.Count; i++)
                 {
-                    Destroy(_techniquesItems[i]);
+                    WXPoolManager.Pools[Define.PoolName].Despawn(_techniquesItems[i].transform);
                 }
                 _techniquesItems.Clear();
             }
         }
         private void TagTogChange(bool flag)
         {
-            _tagGo.SetActive(flag);
+            _tagGo.gameObject.SetActive(flag);
+            if (flag == true)
+            {
+                
+            }
+            else
+            {
+
+            }
+
         }
 
     }

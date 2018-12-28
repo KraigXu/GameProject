@@ -85,13 +85,13 @@ namespace GameSystem
         public int FactionId;
         public int TitleId;
 
+        public int TeamId;
+
         public int SexId;
         public int Age;
         public int AgeMax;
         public int Disposition;
         public int PrestigeValue;
-
-
 
         //固有属性
         public int Tizhi;
@@ -118,10 +118,13 @@ namespace GameSystem
         //性格属性
         public byte CharacterValue;
         public byte NeutralValue; //中立值
+
+        public int TechniquesId;
     }
 
     public struct Team : IComponentData
     {
+        public int TeamBossId;
 
     }
 
@@ -141,7 +144,6 @@ namespace GameSystem
     {
         public int FamilyId;
         public int ThisId;
-
     }
 
     public struct Faction : IComponentData
@@ -178,14 +180,7 @@ namespace GameSystem
         public int ParentId;
         public int BiologicalId;
         public int TechniquesValue;
-
-        //public string Name { get; set; }
-        //public string MarkIds { get; set; }
-        //public string Description { get; set; }
-        //public int  { get; set; }
-        //public string Effect { get; set; }
-
-
+        public int Effect;
     }
 
     public struct Wuxue : IComponentData

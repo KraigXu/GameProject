@@ -13,7 +13,6 @@ public class ProjectSelectWindow : UIWindowBase
 {
     public Button StartBtn;
 
-
     private class  ProjectInfo
     {
         public int Id;

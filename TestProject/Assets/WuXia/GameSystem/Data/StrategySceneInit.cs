@@ -19,8 +19,6 @@ namespace GameSystem
     {
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype BuildingArchetype;
-        public static EntityArchetype TeamArchetype;
-
         public static EntityArchetype TechniquesArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
@@ -44,7 +42,6 @@ namespace GameSystem
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
-            TeamArchetype = entityManager.CreateArchetype(typeof(Team));
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
 
         }
@@ -81,6 +78,7 @@ namespace GameSystem
         }
 
 
+
         public static void InitializeWithScene()
         {
             var settingsGo = GameObject.Find("Settings");
@@ -94,6 +92,15 @@ namespace GameSystem
             {
                 return;
             }
+
+            //TechniqueJsonData techniqueJson=new TechniqueJsonData();
+            //techniqueJson.Id = 1;
+            //techniqueJson.Content.Add(new KeyValuePair<int, int>(1,500));
+            //techniqueJson.Content.Add(new KeyValuePair<int, int>(7, 300));
+            //techniqueJson.Content.Add(new KeyValuePair<int, int>(9, 800));
+
+            //Debug.Log(JsonConvert.SerializeObject(techniqueJson));
+
             //PlayerLook = GetLookFromPrototype("PlayerRenderPrototype");
             //BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
             //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
@@ -325,28 +332,37 @@ namespace GameSystem
                     go.name = data[i].Id.ToString();
                     Entity biologicalEntity = go.GetComponent<GameObjectEntity>().Entity;
 
-                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
-                    entityManager.SetComponentData(biologicalEntity, new Biological
+                    Biological biological=new Biological();
+                    biological.BiologicalId = data[i].Id;
+                    biological.AvatarId = data[i].AvatarId;
+                    biological.ModelId = data[i].ModelId;
+
+                    biological.FamilyId = data[i].FamilyId;
+                    biological.FactionId = data[i].FactionId;
+                    biological.TitleId = data[i].TitleId;
+
+                    biological.SexId = data[i].Sex;
+                    biological.Age = data[i].Age;
+                    biological.AgeMax = data[i].AgeMax;
+                    biological.Disposition = data[i].Disposition;
+
+                    biological.Tizhi = data[i].Tizhi;
+                    biological.Lidao = data[i].Lidao;
+                    biological.Jingshen = data[i].Jingshen;
+                    biological.Lingdong = data[i].Lingdong;
+                    biological.Wuxing = data[i].Wuxing;
+
+                    //初始Technique
+                    if (string.IsNullOrEmpty(data[i].JifaJson) == false)
                     {
-                        BiologicalId = data[i].Id,
-                        AvatarId = data[i].AvatarId,
-                        ModelId = data[i].ModelId,
-                        
-                        FamilyId = data[i].FamilyId,
-                        FactionId = data[i].FactionId,
-                        TitleId = data[i].TitleId,
+                        TechniqueJsonData jsonData = JsonConvert.DeserializeObject<TechniqueJsonData>(data[i].JifaJson);
+                        TechniquesSystem.SetData(jsonData);
+                        biological.TechniquesId = jsonData.Id;
+                    }
 
-                        SexId = data[i].Sex,
-                        Age = data[i].Age,
-                        AgeMax = data[i].AgeMax,
-                        Disposition = data[i].Disposition,
+                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
+                    entityManager.SetComponentData(biologicalEntity, biological);
 
-                        Tizhi = data[i].Tizhi,
-                        Lidao = data[i].Lidao,
-                        Jingshen = data[i].Jingshen,
-                        Lingdong = data[i].Lingdong,
-                        Wuxing = data[i].Wuxing
-                    });
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
                     entityManager.SetComponentData(biologicalEntity, new BiologicalStatus
@@ -356,10 +372,6 @@ namespace GameSystem
                         TargetType = 0,
                         LocationType = LocationType.Field
                     });
-
-
-
-                    //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Techniques>(data[i].JifaJson));
 
                     //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Equipment>());
                     //entityManager.SetComponentData(biologicalEntity,JsonConvert.DeserializeObject<Equipment>(data[i].EquipmentJson));
@@ -379,6 +391,14 @@ namespace GameSystem
                         Type = ElementType.Biological
                     });
 
+                    if (data[i].TeamId > 0)
+                    {
+                        entityManager.AddComponent(biologicalEntity,ComponentType.Create<Team>());
+                        entityManager.SetComponentData(biologicalEntity,new Team
+                        {
+                            TeamBossId=data[i].TeamId,
+                        });
+                    }
 
                     if (data[i].Id == settings.PlayerId)
                     {
@@ -463,11 +483,9 @@ namespace GameSystem
                 for (int i = 0; i < techniquesDatas.Count; i++)
                 {
                     Entity techniques = entityManager.CreateEntity(TechniquesArchetype);
-
                     entityManager.SetComponentData(techniques, new Techniques
                     {
                         Id = techniquesDatas[i].Id,
-                        BiologicalId = techniquesDatas[i].BiologicalId,
                         ParentId = techniquesDatas[i].ParentId,
                     });
 
@@ -521,6 +539,9 @@ namespace GameSystem
             }
 
             #endregion
+
+            
+
 
             #region UiInit
             {

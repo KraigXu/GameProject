@@ -170,6 +170,7 @@ namespace DataAccessObject
                                        " ChildIds INTEGER);");
         }
 
+
         /// <summary>
         /// 关系
         /// </summary>
@@ -517,6 +518,7 @@ namespace DataAccessObject
         public int FamilyId { get; set; }               //家族ID
         public int FactionId { get; set; }              //派系ID
         public int TitleId { get; set; }                //称号ID
+        public int TeamId { get; set; }
 
         public string Description { get; set; }                  //说明
         public int Sex { get; set; }                             // 性别
@@ -552,7 +554,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
                 {
-                    Id,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
+                    Id,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,TeamId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
                     LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,PrestigeValue
                 };
             return objects;
@@ -649,32 +651,12 @@ namespace DataAccessObject
         }
     }
 
-    /// <summary>
-    /// 队伍数据
-    /// </summary>
-    public class TeamData : BaseData
-    {
-        public int Id { get; set; }
-        public int TeamNumber { get; set; }
-        public int TeamMaxNumber { get; set; }
 
-        public string TeamIds { get; set; }
-
-        public override object[] GetValues()
-        {
-            object[] objects = new object[]
-            {
-               Id,TeamNumber,TeamMaxNumber,TeamIds
-            };
-            return objects;
-        }
-    }
 
     public class TechniquesData : BaseData
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
-        public int BiologicalId { get; set; }
         public string Name { get; set; }
         public string MarkIds { get; set; }
         public string Description { get; set; }
@@ -685,7 +667,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
             {
-                Id,ParentId,BiologicalId,Name,MarkIds,Description,TechniquesValue,Effect
+                Id,ParentId,Name,MarkIds,Description,TechniquesValue,Effect
             };
             return objects;
         }
