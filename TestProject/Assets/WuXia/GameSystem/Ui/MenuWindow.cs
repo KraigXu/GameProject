@@ -58,7 +58,6 @@ namespace GameSystem.Ui
         {
             WorldTimeManager.Instance.Pause();
             UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow);
-            
         }
 
         private void ButtonTeam()
@@ -68,14 +67,12 @@ namespace GameSystem.Ui
 
         private void ButtonPerson()
         {
-
             BiologicalUiInData uidata = new BiologicalUiInData();
             uidata.CurPlayer = SystemManager.Get<PlayerControlSystem>().GetCurrentPerson();
-            uidata.Biologicals = SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.TeamId);
+            uidata.Biologicals = SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.BiologicalId);
             ShowWindowData showWindowData = new ShowWindowData();
             showWindowData.contextData = uidata;
             UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
-
         }
 
         private void ButtonLog()
@@ -88,7 +85,9 @@ namespace GameSystem.Ui
         /// </summary>
         private void ButtonIntelligence()
         {
+            
             UICenterMasterManager.Instance.ShowWindow(WindowID.IntelligenceWindow);
+           // UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow);
         }
 
         /// <summary>
@@ -97,7 +96,6 @@ namespace GameSystem.Ui
         private void ButtonMap()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-            
         }
         /// <summary>
         /// Option按钮

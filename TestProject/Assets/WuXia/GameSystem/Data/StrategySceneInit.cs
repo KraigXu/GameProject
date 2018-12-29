@@ -20,6 +20,7 @@ namespace GameSystem
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype BuildingArchetype;
         public static EntityArchetype TechniquesArchetype;
+        public static EntityArchetype RelationArchetype;
 
         public static MeshInstanceRenderer PlayerLook;
         public static MeshInstanceRenderer BiologicalLook;
@@ -43,6 +44,7 @@ namespace GameSystem
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
+            RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
 
         }
 
@@ -336,7 +338,6 @@ namespace GameSystem
                     biological.BiologicalId = data[i].Id;
                     biological.AvatarId = data[i].AvatarId;
                     biological.ModelId = data[i].ModelId;
-
                     biological.FamilyId = data[i].FamilyId;
                     biological.FactionId = data[i].FactionId;
                     biological.TitleId = data[i].TitleId;
@@ -345,12 +346,19 @@ namespace GameSystem
                     biological.Age = data[i].Age;
                     biological.AgeMax = data[i].AgeMax;
                     biological.Disposition = data[i].Disposition;
+                    biological.PrestigeValue = data[i].PrestigeValue;
+                    biological.CharmValue = 0;
+                    biological.CharacterValue = 0;
+                    biological.NeutralValue = 0;
+                    biological.BodyValue = 0;
+                    biological.LuckValue = 0;
 
                     biological.Tizhi = data[i].Tizhi;
                     biological.Lidao = data[i].Lidao;
                     biological.Jingshen = data[i].Jingshen;
                     biological.Lingdong = data[i].Lingdong;
                     biological.Wuxing = data[i].Wuxing;
+
 
                     //初始Technique
                     if (string.IsNullOrEmpty(data[i].JifaJson) == false)
@@ -360,6 +368,22 @@ namespace GameSystem
                         biological.TechniquesId = jsonData.Id;
                     }
 
+                    //初始Equipment
+                    if (string.IsNullOrEmpty(data[i].EquipmentJson) == false)
+                    {
+                        EquipmentJsonData jsonData=JsonConvert.DeserializeObject<EquipmentJsonData>(data[i].EquipmentJson);
+                        EquipmentSystem.SetData(jsonData);
+                        biological.EquipmentId = jsonData.Id;
+                       
+                    }
+                    if (string.IsNullOrEmpty(data[i].ArticleJson) == false)
+                    {
+                    }
+
+                    if (string.IsNullOrEmpty(data[i].GongfaJson) == false)
+                    {
+                    }
+                    
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
                     entityManager.SetComponentData(biologicalEntity, biological);
 
@@ -372,12 +396,6 @@ namespace GameSystem
                         TargetType = 0,
                         LocationType = LocationType.Field
                     });
-
-                    //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Equipment>());
-                    //entityManager.SetComponentData(biologicalEntity,JsonConvert.DeserializeObject<Equipment>(data[i].EquipmentJson));
-
-                    //entityManager.AddComponent(biologicalEntity,ComponentType.Create<Wuxue>());
-                    //entityManager.SetComponentData(biologicalEntity, JsonConvert.DeserializeObject<Wuxue>(data[i].GongfaJson));
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<InteractionElement>());
                     entityManager.SetComponentData(biologicalEntity, new InteractionElement
@@ -429,12 +447,7 @@ namespace GameSystem
                            
                         });
                     }
-
-                    entityManager.AddComponent(biologicalEntity, ComponentType.Create<Prestige>());
-                    entityManager.SetComponentData(biologicalEntity, new Prestige
-                    {
-                        PrestigeValue= data[i].PrestigeValue
-                    });
+                    
 
                     ////初始这个Biological的Relation
                     //if (data[i].RelationId > 0)
@@ -458,7 +471,6 @@ namespace GameSystem
                     //{
                     //    FamilyId = data[i].FamilyId,
                     //    ThisId = data[i].Id
-
                     //});
                     //entityManager.SetComponentData(biologicalEntity,new Relation());
                     //entityManager.AddComponent(biologicalEntity, ComponentType.Create<Relation>());
@@ -477,6 +489,25 @@ namespace GameSystem
             }
             #endregion
 
+            #region Relation
+            {
+                List<RelationData> relationDatas = SqlData.GetAllDatas<RelationData>();
+                for (int i = 0; i < relationDatas.Count; i++)
+                {
+                    Entity entity = entityManager.CreateEntity(RelationArchetype);
+                    entityManager.SetComponentData(entity, new Relation
+                    {
+                        ObjectAid = relationDatas[i].ObjectAid,
+                        ObjectBid = relationDatas[i].ObjectBid,
+                        Value = relationDatas[i].Value
+                    });
+
+                }
+
+            }
+            #endregion
+
+
             #region TechniquesData
             {
                 List<TechniquesData> techniquesDatas = SqlData.GetAllDatas<TechniquesData>();
@@ -491,6 +522,7 @@ namespace GameSystem
 
                     GameStaticData.TechniquesName.Add(techniquesDatas[i].Id,techniquesDatas[i].Name);
                     GameStaticData.TechniquesDescription.Add(techniquesDatas[i].Id,techniquesDatas[i].Description);
+                    GameStaticData.TechniqueSprites.Add(techniquesDatas[i].Id,Resources.Load<Sprite>(techniquesDatas[i].AvatarPath));
                 }
             }
             #endregion

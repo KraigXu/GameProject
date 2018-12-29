@@ -6,17 +6,13 @@ using UnityEngine;
 
 namespace GameSystem
 {
-    public class EquipmentJsonData
+    public class GongfaJsonData
     {
         public int Id;
 
-
     }
 
-   
-
-
-    public class EquipmentSystem : ComponentSystem
+    public class GongfaSystem : ComponentSystem
     {
         struct EquipmentGroup
         {
@@ -45,6 +41,7 @@ namespace GameSystem
         {
             for (int i = 0; i < _equipmentInfo.Length; i++)
             {
+                
             }
         }
 

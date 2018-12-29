@@ -9,6 +9,7 @@ namespace GameSystem
 {
     public delegate void EntityCallBack(Entity entity, int id);
     public delegate int[] SocialDialogEvent(int resoult, int a, int b);
+    public delegate void SingleParameterEvent(int key);
     /// <summary>
     /// 记录整个程序运行中所有的确定 和流动数据，不应该被删除
     /// </summary>

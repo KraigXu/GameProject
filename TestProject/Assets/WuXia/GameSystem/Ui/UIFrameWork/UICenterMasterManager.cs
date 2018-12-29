@@ -655,7 +655,6 @@ namespace GameSystem.Ui
                     UIForegroundLayerRoot.SetParent(UIRoot);
                 }
 
-
                 if (UIBackgroundLayerRoot.anchorMax != Vector2.one || UIBackgroundLayerRoot.anchorMin != Vector2.zero || UIBackgroundLayerRoot.offsetMax != Vector2.zero || UIBackgroundLayerRoot.offsetMin != Vector2.zero ||
                     UINormalLayerRoot.anchorMax != Vector2.one || UINormalLayerRoot.anchorMin != Vector2.zero || UINormalLayerRoot.offsetMax != Vector2.zero || UINormalLayerRoot.offsetMin != Vector2.zero ||
                   UIForegroundLayerRoot.anchorMax != Vector2.one || UIForegroundLayerRoot.anchorMin != Vector2.zero || UIForegroundLayerRoot.offsetMax != Vector2.zero || UIForegroundLayerRoot.offsetMin != Vector2.zero)

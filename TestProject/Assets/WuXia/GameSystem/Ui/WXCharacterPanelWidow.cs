@@ -15,6 +15,11 @@ namespace GameSystem.Ui
         [SerializeField] private RectTransform _personnelPrefab;
 
 
+        [Header("Introduction")]
+        [SerializeField] private Toggle _introductionTog;
+        [SerializeField] private GameObject _introductionGo;
+
+
         [SerializeField] private Button _exitBtn;
         [SerializeField] private Text _name;
         [SerializeField] private Text _surname;
@@ -31,9 +36,11 @@ namespace GameSystem.Ui
         [SerializeField] private Transform _jiyiContent;
         private List<GameObject> _techniquesItems=new List<GameObject>();
         
-
         [SerializeField] private Toggle _tagTog;
         [SerializeField] private GameObject _tagGo;
+
+
+
 
         [Header("Property")]
         [SerializeField] private Text _tizhitxt;
@@ -47,6 +54,10 @@ namespace GameSystem.Ui
         [SerializeField] private Text _qitxt;
         [SerializeField] private Text _shentxt;
 
+
+        [Header("Equipment")]
+        [SerializeField]
+        private List<UiEquipmentItem> _equipmentItems;
 
         private BiologicalUiInData _uiData;
         private Biological _curBiological;
@@ -84,19 +95,46 @@ namespace GameSystem.Ui
                 _uiData = (BiologicalUiInData)contextData;
                 _curBiological = _uiData.CurPlayer;
 
-                
                 for (int i = 0; i < _uiData.Biologicals.Count; i++)
                 {
                     RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_personnelPrefab, _personnelParent);
-                    rectGo.GetChild(0).GetComponent<Image>().sprite=GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
+                    UiBiologicalAvatarItem item= rectGo.GetComponent<UiBiologicalAvatarItem>();
+                    item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
+                    item.Key = _uiData.Biologicals[i].BiologicalId;
+                    item.ClickCallBack = BiologicalChange;
+
                 }
 
                 _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
                 _surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
 
                 PropertyTogChange(true);
-
             }
+        }
+
+        /// <summary>
+        /// 切换人物信息
+        /// </summary>
+        /// <param name="key"></param>
+        private void BiologicalChange(int key)
+        {
+            for (int i = 0; i < _uiData.Biologicals.Count; i++)
+            {
+                if (_uiData.Biologicals[i].BiologicalId == key)
+                {
+                    _curBiological = _uiData.Biologicals[i];
+                }
+            }
+
+            _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
+            _surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
+
+            PropertyTogChange(_propertyTog.isOn);
+            CombatTogChange(_combatTog.isOn);
+            JiyiTogChange(_jiyiTog.isOn);
+            TagTogChange(_tagTog.isOn);
+            ChangeEquipment();
+            ChangeArticle();
         }
 
         private void PropertyTogChange(bool flag)
@@ -124,13 +162,9 @@ namespace GameSystem.Ui
         private void CombatTogChange(bool flag)
         {
             _combatGo.gameObject.SetActive(flag);
-
             if (flag == true)
             {
                 
-
-
-
             }
             else
             {
@@ -178,6 +212,22 @@ namespace GameSystem.Ui
             }
 
         }
+
+        /// <summary>
+        /// 更新界面
+        /// </summary>
+        private void ChangeEquipment()
+        {
+           //EquipmentJsonData jsonData=  EquipmentSystem.GetEquipment(_curBiological.EquipmentId);
+           
+        }
+
+        private void ChangeArticle()
+        {
+
+        }
+
+        
 
     }
 }

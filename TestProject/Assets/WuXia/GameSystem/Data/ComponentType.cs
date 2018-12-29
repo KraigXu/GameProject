@@ -85,15 +85,17 @@ namespace GameSystem
         public int FactionId;
         public int TitleId;
 
-        public int TeamId;
-
         public int SexId;
         public int Age;
         public int AgeMax;
         public int Disposition;
         public int PrestigeValue;
+        public int CharmValue;         
+        public byte CharacterValue;     //性格值
+        public byte NeutralValue;       //中立值
+        public byte BodyValue;         //身体值
+        public byte LuckValue;          //运气值
 
-        //固有属性
         public int Tizhi;
         public int Lidao;
         public int Jingshen;
@@ -115,11 +117,12 @@ namespace GameSystem
         public int StrategyMoveSpeed;
         public int FireMoveSpeed;
 
-        //性格属性
-        public byte CharacterValue;
-        public byte NeutralValue; //中立值
+
+
 
         public int TechniquesId;
+
+        public int EquipmentId;
     }
 
     public struct Team : IComponentData
@@ -187,12 +190,6 @@ namespace GameSystem
     {
       
     }
-
-    public struct Prestige : IComponentData
-    {
-        public int PrestigeValue;
-    }
-
 
     public struct LivingArea : IComponentData
     {
@@ -264,6 +261,22 @@ namespace GameSystem
         public int IsUi;
         public int BiologicalAId;
         public int BiologicalBId;
+    }
+
+
+    public struct Article : IComponentData
+    {
+
+    }
+
+    public struct Relation : IComponentData
+    {
+        public int ObjectAid;
+        public int ObjectBid;
+        public int Value;
+        
+
+
     }
 
 }

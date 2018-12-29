@@ -636,26 +636,25 @@ namespace DataAccessObject
     /// </summary>
     public class RelationData : BaseData
     {
-        public int MainId { get; set; }
-        public int AimsId { get; set; }
-        public int RelationshipValue { get; set; }
-        public int RalationType { get; set; }
+
+        public int ObjectAid { get; set; }
+        public int ObjectBid { get; set; }
+        public int Value { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                MainId,AimsId,RelationshipValue,RalationType
+                ObjectAid,ObjectBid,Value
             };
             return objects;
         }
     }
 
-
-
     public class TechniquesData : BaseData
     {
         public int Id { get; set; }
+        public string AvatarPath { get; set; }
         public int ParentId { get; set; }
         public string Name { get; set; }
         public string MarkIds { get; set; }
@@ -663,11 +662,30 @@ namespace DataAccessObject
         public int TechniquesValue { get; set; }
         public string Effect { get; set; }
 
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,ParentId,Name,MarkIds,Description,TechniquesValue,Effect
+                Id,AvatarPath,ParentId,Name,MarkIds,Description,TechniquesValue,Effect
+            };
+            return objects;
+        }
+    }
+
+    public class EquipmentData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Type { get; set; }
+        public string AvatarPath { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Name,Description,Type,AvatarPath
             };
             return objects;
         }
