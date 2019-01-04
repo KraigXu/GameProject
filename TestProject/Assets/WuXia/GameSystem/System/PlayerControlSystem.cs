@@ -124,32 +124,22 @@ namespace GameSystem
                     case LocationType.LivingAreaEnter:
                         {
                             //检查当前状态 显示UI信息 
-
                             ShowWindowData windowData = new ShowWindowData();
-                            LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
 
-                            //_biologicalSystem.GetBiologicalOnLocation()
-                            uidata.OnOpen = LivingAreaOnOpen;
-                            uidata.OnExit = LivingAreaOnExit;
-                            windowData.contextData = uidata;
-                            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+                            LivingAreaWindowCD livingAreaWindowCd=new LivingAreaWindowCD();
+                            livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
+                            livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
+                            livingAreaWindowCd.OnExit = LivingAreaOnExit;
+                            windowData.contextData = livingAreaWindowCd;
+                            
+                            SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
 
-                            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[uidata.ModelId]);
-                            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
-
-                            Bounds bounds = renderers[0].bounds;
-
-                            for (int j = 1; j < renderers.Length; j++)
-                            {
-                                bounds.Encapsulate(renderers[j].bounds);
-                            }
-                            newtarget.Target = bounds.center;
+                           // newtarget.Target = bounds.center;
                             newStatus.LocationType = LocationType.LivingAreaIn;
                         }
                         break;
                     case LocationType.LivingAreaIn:
                         {
-
                         }
                         break;
                     case LocationType.LivingAreaExit:
@@ -212,6 +202,18 @@ namespace GameSystem
 
             status.LocationType = LocationType.Field;
         }
+
+        public void Target(Vector3 point)
+        {
+            for (int i = 0; i < m_Players.Length; i++)
+            {
+                var value = m_Players.Property[i];
+                value.Target = point;
+
+                m_Players.Property[i] = value;
+            }
+        }
+
 
 
         /// <summary>

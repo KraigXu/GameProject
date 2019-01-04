@@ -141,7 +141,17 @@ namespace GameSystem
             }
             return new Biological();
         }
-
+        public Entity GetBiologicalEntity(int id)
+        {
+            for (int i = 0; i < _biologicalGroup.Length; i++)
+            {
+                if (id == _biologicalGroup.Biological[i].BiologicalId)
+                {
+                    return _biologicalGroup.Entity[i];
+                }
+            }
+            return new Entity();
+        }
 
 
 

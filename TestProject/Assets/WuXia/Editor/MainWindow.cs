@@ -56,7 +56,7 @@ public class MainWindow : EditorWindowBase
 
         if (GUILayout.Button("创建BuildingJSON",GUILayout.Width(150)))
         {
-            BuildingObjectEdit.Popup(window.position.position);
+            //BuildingObjectEdit.Popup(window.position.position);
         }
 
         GUILayout.EndVertical();

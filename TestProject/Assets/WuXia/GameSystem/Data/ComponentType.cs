@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
@@ -14,11 +15,11 @@ namespace GameSystem
     /// </summary>
     public enum ElementType
     {
-        None=0,
-        Terrain=1,
-        Biological=2,
-        District=3,
-        LivingArea=4
+        None = 0,
+        Terrain = 1,
+        Biological = 2,
+        District = 3,
+        LivingArea = 4
     }
 
     public struct CameraProperty : IComponentData
@@ -32,8 +33,8 @@ namespace GameSystem
 
     public enum TendType
     {
-        None=0, //无
-        Patrol=1,  //巡逻
+        None = 0, //无
+        Patrol = 1,  //巡逻
 
     }
 
@@ -61,7 +62,7 @@ namespace GameSystem
         public ElementType TouchedElement;
         public int TouchedId;
 
-       
+
 
 
 
@@ -74,12 +75,13 @@ namespace GameSystem
         public int TrafficLevel;
         public int GrowingModulus;
         public int SecurityModulus;
+        public int Value;
     }
 
     public struct Biological : IComponentData
     {
         public int BiologicalId;
-        public int AvatarId; 
+        public int AvatarId;
         public int ModelId;
         public int FamilyId;
         public int FactionId;
@@ -90,7 +92,7 @@ namespace GameSystem
         public int AgeMax;
         public int Disposition;
         public int PrestigeValue;
-        public int CharmValue;         
+        public int CharmValue;
         public byte CharacterValue;     //性格值
         public byte NeutralValue;       //中立值
         public byte BodyValue;         //身体值
@@ -188,12 +190,13 @@ namespace GameSystem
 
     public struct Wuxue : IComponentData
     {
-      
+
     }
 
     public struct LivingArea : IComponentData
     {
         public int Id;
+        public int PowerId;
         public int ModelBaseId;
         public int ModelId;
         public int PersonNumber;
@@ -215,10 +218,14 @@ namespace GameSystem
         public Vector3 Position;
 
         public int TitleUiId;
+        public int BuildGroupId;
     }
 
     public struct Building : IComponentData
     {
+        public int LivingAreaId;
+        public int BuildingModelId;
+
         public int Id;
         public int ParentId;
         public int Level;
@@ -274,10 +281,29 @@ namespace GameSystem
         public int ObjectAid;
         public int ObjectBid;
         public int Value;
-        
-
 
     }
 
+    public struct Sound : IComponentData
+    {
+        public int SoundId;
+    }
+
+    /// <summary>
+    /// 周期类型
+    /// </summary>
+    public enum PeriodType
+    {
+        Year, Month, Day, Shichen
+    }
+
+    /// <summary>
+    /// 周期时间
+    /// </summary>
+    public struct PeriodTime : IComponentData
+    {
+        public byte Value;
+        public PeriodType Type;
+    }
 }
 

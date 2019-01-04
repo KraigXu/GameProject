@@ -43,7 +43,6 @@ namespace GameSystem
                     return _prestigeDatas[i].Title;
                 }
             }
-
             return "";
         }
     }

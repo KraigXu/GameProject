@@ -50,14 +50,15 @@ namespace GameSystem.Ui
 
         public void UpdateTime()
         {
-            _cd+=Time.deltaTime;
+            _cd += Time.deltaTime;
             if (_cd > 1)
             {
-                this.Year.text = WorldTimeManager.Instance.Year.ToString();
-                this.Month.text = WorldTimeManager.Instance.Month.ToString();
-                this.Day.text = WorldTimeManager.Instance.Day.ToString();
-                this.ShiChen.text = GameStaticData.TimeShichen[WorldTimeManager.Instance.Shichen];
-                this.Season.text = GameStaticData.TimeJijie[WorldTimeManager.Instance.Jijie];
+                this.Year.text = WorldTimeSystem.Year.ToString();
+                this.Month.text = WorldTimeSystem.Month.ToString();
+                this.Day.text = WorldTimeSystem.Day.ToString();
+
+                this.ShiChen.text = GameStaticData.TimeShichen[WorldTimeSystem.Shichen];
+                this.Season.text = GameStaticData.TimeJijie[WorldTimeSystem.Jijie];
                 _cd = 0;
             }
         }

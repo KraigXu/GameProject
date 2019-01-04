@@ -48,27 +48,35 @@ namespace GameSystem.Ui
         public List<Biological> Biologicals=new List<Biological>();
     }
 
+
+
+
     public class LivingAreaWindowCD : BaseWindowContextData
     {
-
         public int LivingAreaId;
-        public int ModelId;
-        public int PowerId;
-        public int PersonId;
-        public int PersonNumber;
-        public int Money;
-        public int MoneyMax;
-        public int Iron;
-        public int IronMax;
-        public int Wood;
-        public int WoodMax;
-        public int Food;
-        public int FoodMax;
-        public int LivingAreaLevel;
-        public int LivingAreaMaxLevel;
-        public int LivingAreaType;
-        public int DefenseStrength;
-        public int StableValue;
+        public int PlayerId;
+
+        //public int PowerId;
+
+
+        //public int ModelId;
+
+       
+        //public int PersonId;
+        //public int PersonNumber;
+        //public int Money;
+        //public int MoneyMax;
+        //public int Iron;
+        //public int IronMax;
+        //public int Wood;
+        //public int WoodMax;
+        //public int Food;
+        //public int FoodMax;
+        //public int LivingAreaLevel;
+        //public int LivingAreaMaxLevel;
+        //public int LivingAreaType;
+        //public int DefenseStrength;
+        //public int StableValue;
 
 
         public EntityCallBack OnOpen;
@@ -94,11 +102,17 @@ namespace GameSystem.Ui
         public List<BuildingFeaturesUiInfo> Features=new List<BuildingFeaturesUiInfo>();
        
     }
-    public class BiologicalUiInfo
+    public class BiologicalUiInfo : BaseWindowContextData
     {
         public int Id;
         public int AtlasId;
         public string Name;
+
+        public int BiologicalId;
+        public LocationType LocationType;
+        public int LoactionId;
+        public int TargetId;
+        public Entity TargetEntity;
     }
 
     public class BuildingFeaturesUiInfo

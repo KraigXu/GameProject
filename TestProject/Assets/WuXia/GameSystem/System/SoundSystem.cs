@@ -7,10 +7,24 @@ namespace GameSystem
 {
     public class SoundSystem : ComponentSystem
     {
+        struct SoundGroup
+        {
+            public readonly int Length;
+            public ComponentDataArray<Sound> Sound;
+        }
+
         protected override void OnUpdate()
         {
 
+
+
         }
+
+        public void Test()
+        {
+
+        }
+
 
     }
 

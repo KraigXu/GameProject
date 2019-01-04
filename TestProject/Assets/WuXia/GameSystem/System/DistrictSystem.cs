@@ -13,6 +13,7 @@ namespace GameSystem
         {
             public readonly int Length;
             public ComponentDataArray<District> District;
+            public ComponentDataArray<PeriodTime> Time;
         }
 
         [Inject]
@@ -22,13 +23,17 @@ namespace GameSystem
         {
             for (int i = 0; i <  _district.Length; i++)
             {
-                District district = _district.District[i];
-
+                var time = _district.Time[i];
+                if (time.Value > 0)
+                {
+                    District district = _district.District[i];
+                    district.Value++;
+                    _district.District[i] = district;
+                }
+                time.Value = 0;
+                _district.Time[i] = time;
             }
-            
         }
-
-
     }
 
 }

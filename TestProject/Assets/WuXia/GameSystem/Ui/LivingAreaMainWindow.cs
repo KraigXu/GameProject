@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameSystem;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,8 +39,8 @@ namespace GameSystem.Ui
         [SerializeField] private Button _buildingExit;
 
         private bool _buildingIsShow = false;
-
-        private LivingAreaWindowCD _currentLivingArea;
+        private LivingAreaWindowCD _livingAreaWindowCd;
+        private float _changeCd;
 
         [Serializable]
         class TogglePanel
@@ -76,37 +77,77 @@ namespace GameSystem.Ui
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             if (contextData == null) return;
-            _currentLivingArea = (LivingAreaWindowCD)contextData;
 
-            ChangeData();
-        }
+            _livingAreaWindowCd = (LivingAreaWindowCD) contextData;
 
-        private void ChangeData()
-        {
+
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
+            LivingArea livingArea = entityManager.GetComponentData<LivingArea>(entityLivingArea);
+
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
                 _buildingBilling[i].gameObject.SetActive(false);
             }
-            _name.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
-            _powerName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
-            _personName.text = GameStaticData.LivingAreaName[_currentLivingArea.LivingAreaId];
-            _money.text = _currentLivingArea.Money + "/" + _currentLivingArea.MoneyMax;
-            _iron.text = _currentLivingArea.Iron + "/" + _currentLivingArea.IronMax;
-            _wood.text = _currentLivingArea.Wood + "/" + _currentLivingArea.WoodMax;
-            _food.text = _currentLivingArea.Food + "/" + _currentLivingArea.FoodMax;
-            _person.text = _currentLivingArea.PersonNumber.ToString();
-            _stable.text = _currentLivingArea.DefenseStrength.ToString();
-            _level.text = GameStaticData.LivingAreaLevel[_currentLivingArea.LivingAreaLevel];
-            _type.text = GameStaticData.LivingAreaType[_currentLivingArea.LivingAreaType];
 
-            for (int i = 0; i < _currentLivingArea.BuildingiDataItems.Count; i++)
+            _name.text = GameStaticData.LivingAreaName[livingArea.Id];
+            _money.text = livingArea.Money + "/" + livingArea.MoneyMax;
+            _iron.text = livingArea.Iron + "/" + livingArea.IronMax;
+            _wood.text = livingArea.Wood + "/" + livingArea.WoodMax;
+            _food.text = livingArea.Food + "/" + livingArea.FoodMax;
+            _person.text = livingArea.PersonNumber.ToString();
+            _stable.text = livingArea.DefenseStrength.ToString();
+            _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
+            _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+
+            Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
+            Biological biological = entityManager.GetComponentData<Biological>(entityBiological);
+            
+            _powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
+            _personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+
+            List<Entity> entitieBuilding = SystemManager.Get<BuildingSystem>().GetBuildingGroup(livingArea.Id);
+
+            for (int i = 0; i < entitieBuilding.Count; i++)
             {
+                Building building = entityManager.GetComponentData<Building>(entitieBuilding[i]);
                 _buildingBilling[i].gameObject.SetActive(true);
-                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[_currentLivingArea.BuildingiDataItems[i].Id];
-               //_buildingBilling[i].Init(StrategySceneInit.Settings.MainCamera, UICenterMasterManager.Instance._Camera,_currentLivingArea.BuildingiDataItems[i].Point);
-
+                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
                 UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
             }
+            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
+            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
+            Bounds bounds = renderers[0].bounds;
+            for (int j = 1; j < renderers.Length; j++)
+            {
+                bounds.Encapsulate(renderers[j].bounds);
+            }
+            SystemManager.Get<PlayerControlSystem >().Target(bounds.center);
+
+        }
+
+        private void ChangeData()
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
+            LivingArea livingArea = entityManager.GetComponentData<LivingArea>(entityLivingArea);
+
+            for (int i = 0; i < _buildingBilling.Count; i++)
+            {
+                _buildingBilling[i].gameObject.SetActive(false);
+            }
+
+            _name.text = GameStaticData.LivingAreaName[livingArea.Id];
+            _money.text = livingArea.Money + "/" + livingArea.MoneyMax;
+            _iron.text = livingArea.Iron + "/" + livingArea.IronMax;
+            _wood.text = livingArea.Wood + "/" + livingArea.WoodMax;
+            _food.text = livingArea.Food + "/" + livingArea.FoodMax;
+            _person.text = livingArea.PersonNumber.ToString();
+            _stable.text = livingArea.DefenseStrength.ToString();
+            _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
+            _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
         }
 
         private void AccessBuilding(GameObject go)
@@ -116,7 +157,7 @@ namespace GameSystem.Ui
             {
                 if (go == _buildingBilling[i].gameObject)
                 {
-                    item = _currentLivingArea.BuildingiDataItems[i];
+                    item = _livingAreaWindowCd.BuildingiDataItems[i];
                 }
             }
 
@@ -151,10 +192,6 @@ namespace GameSystem.Ui
             item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }
 
-        private void OpenBuidingView(BuildingObject building)
-        {
-            _buildingIsShow = true;
-        }
 
         private void CloseBuidingView()
         {
@@ -164,6 +201,19 @@ namespace GameSystem.Ui
         private void CloseLivingArea()
         {
            
+        }
+
+        void OnUpdate()
+        {
+            _changeCd += Time.deltaTime;
+            if (_changeCd > 1)
+            {
+                _changeCd = 0;
+                ChangeData();
+            }
+
+
+          
         }
 
     }

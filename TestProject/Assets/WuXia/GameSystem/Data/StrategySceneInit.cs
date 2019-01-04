@@ -18,7 +18,6 @@ namespace GameSystem
     public sealed class StrategySceneInit
     {
         public static EntityArchetype DistrictArchetype;
-        public static EntityArchetype BuildingArchetype;
         public static EntityArchetype TechniquesArchetype;
         public static EntityArchetype RelationArchetype;
 
@@ -42,7 +41,7 @@ namespace GameSystem
             Debug.Log("Initialize Over");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
-            BuildingArchetype = entityManager.CreateArchetype(typeof(Building));
+            
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
 
@@ -95,6 +94,15 @@ namespace GameSystem
                 return;
             }
 
+            //BuildingJsonData b=new BuildingJsonData();
+            //b.GroupId = 1;
+            //b.Item.Add(new BuildingItem(1,1,3,1,1,100));
+            //b.Item.Add(new BuildingItem(1, 2, 3, 1, 1, 100));
+            //b.Item.Add(new BuildingItem(1, 3, 3, 1, 1, 100));
+            //b.Item.Add(new BuildingItem(1, 4, 3, 1, 1, 100));
+            //b.Item.Add(new BuildingItem(1, 5, 3, 1, 1, 100));
+
+            //Debug.Log(JsonConvert.SerializeObject(b));
             //TechniqueJsonData techniqueJson=new TechniqueJsonData();
             //techniqueJson.Id = 1;
             //techniqueJson.Content.Add(new KeyValuePair<int, int>(1,500));
@@ -128,11 +136,6 @@ namespace GameSystem
             #region Time
 
             {
-
-                DateTime time = Convert.ToDateTime("1000-01-01 00:00:00");
-                WorldTimeManager.Instance.Init(time);
-
-
                 GameStaticData.TimeJijie.Add(1, "春");
                 GameStaticData.TimeJijie.Add(2, "夏");
                 GameStaticData.TimeJijie.Add(3, "秋");
@@ -150,6 +153,13 @@ namespace GameSystem
                 GameStaticData.TimeShichen.Add(10, "酉时");
                 GameStaticData.TimeShichen.Add(11, "戊时");
                 GameStaticData.TimeShichen.Add(12, "亥时");
+
+                DateTime time = Convert.ToDateTime("1000-01-01 00:00:00");
+                WorldTimeManager.Instance.Init(time);
+                WorldTimeSystem.InitTimeData(time);
+
+
+
             }
 
             #endregion
@@ -206,105 +216,88 @@ namespace GameSystem
 
                     GameStaticData.DistrictName.Add(districtDatas[i].Id, districtDatas[i].Name);
                     GameStaticData.DistrictDescriptione.Add(districtDatas[i].Id, districtDatas[i].Description);
-                }
 
-
-                GameStaticData.BuildingType.Add(0, "BuildingType1");
-                GameStaticData.BuildingType.Add(1, "BuildingType2");
-                GameStaticData.BuildingType.Add(2, "BuildingType3");
-                GameStaticData.BuildingType.Add(3, "BuildingType4");
-                GameStaticData.BuildingType.Add(4, "BuildingType5");
-                GameStaticData.BuildingType.Add(5, "BuildingType6");
-                GameStaticData.BuildingType.Add(6, "BuildingType7");
-
-                GameStaticData.BuildingStatus.Add(0, "空地");
-                GameStaticData.BuildingStatus.Add(1, "正常");
-                GameStaticData.BuildingStatus.Add(2, "建筑中");
-
-            }
-            #endregion
-
-            #region Building
-            {
-                List<BuildingData> buildingData = SqlData.GetAllDatas<BuildingData>();
-
-                for (int j = 0; j < buildingData.Count; j++)
-                {
-                    Entity building = entityManager.CreateEntity(BuildingArchetype);
-                    entityManager.SetComponentData(building, new Building
+                    entityManager.AddComponent(district,ComponentType.Create<PeriodTime>());
+                    entityManager.SetComponentData(district,new PeriodTime
                     {
-                        Id = buildingData[j].Id,
-                        Level = buildingData[j].BuildingLevel,
-                        Status = buildingData[j].Status,
-                        OwnId = buildingData[j].OwnId,
-                        Type = buildingData[j].Type,
-                        DurableValue = buildingData[j].DurableValue,
-                        ParentId = buildingData[j].ParentId,
-                        Position = new Vector3(buildingData[j].X, buildingData[j].Y, buildingData[j].Z)
+                        Value = 0,
+                        Type = PeriodType.Shichen
                     });
-
-                    GameStaticData.BuildingName.Add(buildingData[j].Id, buildingData[j].Name);
-                    GameStaticData.BuildingDescription.Add(buildingData[j].Id, buildingData[j].Description);
                 }
+                GameStaticData.DistrictStatusDsc.Add(0,"11");
+                GameStaticData.DistrictStatusDsc.Add(1, "11");
+                GameStaticData.DistrictStatusDsc.Add(2, "11");
+                GameStaticData.DistrictTypeDsc.Add(0,"1");
             }
-
             #endregion
 
             #region LivingAreaInit
             {
-                List<LivingAreaData> livingAreaDatas = SqlData.GetAllDatas<LivingAreaData>();
-                for (int i = 0; i < livingAreaDatas.Count; i++)
+                List<LivingAreaData> data = SqlData.GetAllDatas<LivingAreaData>();
+                for (int i = 0; i < data.Count; i++)
                 {
-                    var go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingAreaDatas[i].ModelBaseId] , new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ), Quaternion.identity);
+                    var go = GameObject.Instantiate(GameStaticData.ModelPrefab[data[i].ModelBaseId], new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ), Quaternion.identity);
+                    Entity entity = go.GetComponent<GameObjectEntity>().Entity;
 
-                    Entity livingArea = go.GetComponent<GameObjectEntity>().Entity;
+                    entityManager.AddComponent(entity, ComponentType.Create<LivingArea>());
 
-                    entityManager.AddComponent(livingArea, ComponentType.Create<Position>());
-                    entityManager.SetComponentData(livingArea, new Position
+                    LivingArea livingArea=new LivingArea();
+
+                    livingArea.Id = data[i].Id;
+                    livingArea.PowerId = data[i].PowerId;
+                    livingArea.ModelBaseId = data[i].ModelBaseId;
+                    livingArea.ModelId = data[i].ModelMain;
+                    livingArea.PersonNumber = data[i].PersonNumber;
+                    livingArea.CurLevel = data[i].LivingAreaLevel;
+                    livingArea.MaxLevel = data[i].LivingAreaMaxLevel;
+                    livingArea.TypeId = data[i].LivingAreaType;
+                    livingArea.Money = data[i].Money;
+                    livingArea.MoneyMax = data[i].MoneyMax;
+                    livingArea.Iron = data[i].Iron;
+                    livingArea.IronMax = data[i].IronMax;
+                    livingArea.Wood = data[i].Wood;
+                    livingArea.WoodMax = data[i].WoodMax;
+                    livingArea.Food = data[i].Food;
+                    livingArea.FoodMax = data[i].FoodMax;
+                    livingArea.DefenseStrength = data[i].DefenseStrength;
+                    livingArea.StableValue = data[i].StableValue;
+                    livingArea.Renown = data[i].StableValue;
+                    livingArea.Position = new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ);
+
+                    if (string.IsNullOrEmpty(data[i].BuildingInfoJson) == false)
                     {
-                        Value = new float3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ)
+                        BuildingJsonData jsonData=JsonConvert.DeserializeObject<BuildingJsonData>(data[i].BuildingInfoJson);
+                        BuildingSystem.SetData(entityManager,jsonData,livingArea.Id);
+                        livingArea.BuildGroupId = jsonData.GroupId;
+                    }
+                    entityManager.SetComponentData(entity, livingArea);
+                    
+                    entityManager.AddComponent(entity, ComponentType.Create<Position>());
+                    entityManager.SetComponentData(entity, new Position
+                    {
+                        Value = new float3(data[i].PositionX, data[i].PositionY, data[i].PositionZ)
                     });
 
-                    entityManager.AddComponent(livingArea, ComponentType.Create<LivingArea>());
-                    entityManager.SetComponentData(livingArea, new LivingArea
+                    entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
+                    entityManager.SetComponentData(entity, new InteractionElement
                     {
-                        Id = livingAreaDatas[i].Id,
-                        ModelBaseId=livingAreaDatas[i].ModelBaseId,
-                        ModelId = livingAreaDatas[i].ModelMain,
-                        PersonNumber = livingAreaDatas[i].PersonNumber,
-                        CurLevel = livingAreaDatas[i].LivingAreaLevel,
-                        MaxLevel = livingAreaDatas[i].LivingAreaMaxLevel,
-                        TypeId = livingAreaDatas[i].LivingAreaType,
-                        Money = livingAreaDatas[i].Money,
-                        MoneyMax = livingAreaDatas[i].MoneyMax,
-                        Iron = livingAreaDatas[i].Iron,
-                        IronMax = livingAreaDatas[i].IronMax,
-                        Wood = livingAreaDatas[i].Wood,
-                        WoodMax = livingAreaDatas[i].WoodMax,
-                        Food = livingAreaDatas[i].Food,
-                        FoodMax = livingAreaDatas[i].FoodMax,
-                        DefenseStrength = livingAreaDatas[i].DefenseStrength,
-                        StableValue = livingAreaDatas[i].StableValue,
-                        Renown = livingAreaDatas[i].StableValue,
-                        Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
-                    });
-
-                    entityManager.AddComponent(livingArea, ComponentType.Create<InteractionElement>());
-                    entityManager.SetComponentData(livingArea, new InteractionElement
-                    {
-                        Position = new Vector3(livingAreaDatas[i].PositionX, livingAreaDatas[i].PositionY, livingAreaDatas[i].PositionZ),
+                        Position = new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ),
                         Distance = 1,
-                        Id = livingAreaDatas[i].Id,
+                        Id = data[i].Id,
                         InteractionType = LocationType.LivingAreaIn,
                         InteractionExitType = LocationType.LivingAreaExit,
                         InteractionEnterType = LocationType.LivingAreaEnter,
                         Type = ElementType.LivingArea,
                     });
-
-
-
-                    GameStaticData.LivingAreaName.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Name);
-                    GameStaticData.LivingAreaDescription.Add(livingAreaDatas[i].Id, livingAreaDatas[i].Description);
+                    
+                    entityManager.AddComponent(entity,ComponentType.Create<PeriodTime>());
+                    entityManager.SetComponentData(entity,new PeriodTime
+                    {
+                        Type=PeriodType.Month
+                    });
+                    
+                    GameStaticData.LivingAreaName.Add(data[i].Id, data[i].Name);
+                    GameStaticData.LivingAreaDescription.Add(data[i].Id, data[i].Description);
                 }
 
 
@@ -321,6 +314,9 @@ namespace GameSystem
                 GameStaticData.LivingAreaType.Add(3, "洞窟");
                 GameStaticData.LivingAreaType.Add(4, "遗迹");
                 GameStaticData.LivingAreaType.Add(5, "奇迹");
+
+                //建筑Model初始化
+                BuildingSystem.InitModel(entityManager);
             }
             #endregion
 
@@ -374,19 +370,19 @@ namespace GameSystem
                         EquipmentJsonData jsonData=JsonConvert.DeserializeObject<EquipmentJsonData>(data[i].EquipmentJson);
                         EquipmentSystem.SetData(jsonData);
                         biological.EquipmentId = jsonData.Id;
-                       
                     }
                     if (string.IsNullOrEmpty(data[i].ArticleJson) == false)
                     {
+
                     }
 
                     if (string.IsNullOrEmpty(data[i].GongfaJson) == false)
                     {
+
                     }
                     
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<Biological>());
                     entityManager.SetComponentData(biologicalEntity, biological);
-
 
                     entityManager.AddComponent(biologicalEntity, ComponentType.Create<BiologicalStatus>());
                     entityManager.SetComponentData(biologicalEntity, new BiologicalStatus
@@ -407,7 +403,7 @@ namespace GameSystem
                         InteractionExitType = LocationType.SocialDialogExit,
                         InteractionEnterType = LocationType.SocialDialogEnter,
                         Type = ElementType.Biological
-                    });
+                    }); 
 
                     if (data[i].TeamId > 0)
                     {
@@ -433,7 +429,7 @@ namespace GameSystem
                             Damping = 3,
                             Offset = new Vector3(0, 1, -15),
                             RoationOffset = new Vector3(50, 0, 0)
-                        });
+                        });      
                     }
                     else
                     {
@@ -444,10 +440,9 @@ namespace GameSystem
                             RandomSeed = 1,
                             BehaviorPolicy = BehaviorPolicyType.Cruising,
                             BehaviorTime = 1
-                           
                         });
                     }
-                    
+
 
                     ////初始这个Biological的Relation
                     //if (data[i].RelationId > 0)
@@ -503,7 +498,6 @@ namespace GameSystem
                     });
 
                 }
-
             }
             #endregion
 
@@ -529,7 +523,6 @@ namespace GameSystem
 
             #region FactionData
             {
-
                 EntityArchetype factionArchetype = entityManager.CreateArchetype(typeof(Faction));
                 List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
                 for (int i = 0; i < factionDatas.Count; i++)

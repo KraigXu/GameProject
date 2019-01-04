@@ -77,7 +77,8 @@ namespace GameSystem
                     }
                 }else if (biologicalIndex.LocationType == LocationType.LivingAreaIn)
                 {
-
+                    float3 receiverPos = Positions[index].Value;
+                   
                 }
 
                 //var b = Biological[index];
@@ -215,6 +216,8 @@ namespace GameSystem
             }.Schedule(m_Players.Length, 1, inputDeps);
             return palyersI;
         }
+
+        
     }
 
 }

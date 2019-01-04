@@ -440,6 +440,7 @@ namespace DataAccessObject
     public class LivingAreaData : BaseData
     {
         public int Id { get; set; }                      //编号 
+        public int PowerId { get; set; }
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
         public string ModelBase { get; set; }
@@ -467,7 +468,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
             {
-                Id, Name, Description,ModelBase,ModelBaseId,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
+                Id,PowerId, Name, Description,ModelBase,ModelBaseId,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
                 Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson,PositionX,PositionY,PositionZ
             };
             return objects;
