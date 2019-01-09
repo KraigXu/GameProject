@@ -61,8 +61,20 @@ namespace GameSystem
         public Vector3 MousePoint;
         public ElementType TouchedElement;
         public int TouchedId;
+        /// <summary>
+        /// 目标ID
+        /// </summary>
+        public int TargetCode;
 
+        /// <summary>
+        /// 目标类型Code
+        /// </summary>
+        public ElementType TargetType;
 
+        public Vector3 TargetPoint;
+
+        //newStatus.TargetType = ElementType.Terrain;
+        //newStatus.TargetPosition = hit.point;
 
 
 
@@ -130,7 +142,7 @@ namespace GameSystem
     public struct Team : IComponentData
     {
         public int TeamBossId;
-
+        public int RunModelCode;        //运行模型Id
     }
 
     public enum TargetType { None, City, Field, Biological }
@@ -138,12 +150,18 @@ namespace GameSystem
     {
         public Vector3 Position;        //  位置
         public int TargetId;            // 目标ID
+       
+
         public ElementType TargetType;          // 目标类型
         public Vector3 TargetPosition;       //目标位置
 
         public LocationType LocationType;       // 实时状态
+        public int LocationIsInit;
         public int LocationId;           //所处位置ID
         public float IdleTime;             //闲置时间
+        public Entity TargetEntity;
+
+
     }
     public struct Family : IComponentData
     {
@@ -217,8 +235,20 @@ namespace GameSystem
         public int IsInternal;   //是否显示内部 0 不显示 1显示
         public Vector3 Position;
 
+        public Vector3 ModelPoint;
+
+
         public int TitleUiId;
         public int BuildGroupId;
+
+    }
+
+    public struct LivingAreaEnterInfo : IComponentData
+    {
+        public int UiType;
+
+        public Entity LivingAreaEntity;
+        public Entity TargetEntity;
     }
 
     public struct Building : IComponentData

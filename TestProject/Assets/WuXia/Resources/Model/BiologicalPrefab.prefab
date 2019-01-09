@@ -385,10 +385,9 @@ GameObject:
   - component: {fileID: 54867483641062540}
   - component: {fileID: 136439417911737682}
   - component: {fileID: 195318658745542990}
+  - component: {fileID: 120557643756327404}
   - component: {fileID: 114250608446244654}
   - component: {fileID: 114713951510920196}
-  - component: {fileID: 114160577689377552}
-  - component: {fileID: 120557643756327404}
   m_Layer: 0
   m_Name: BiologicalPrefab
   m_TagString: Biological
@@ -2489,17 +2488,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114160577689377552
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1271197327544774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114250608446244654
 MonoBehaviour:
   m_ObjectHideFlags: 1

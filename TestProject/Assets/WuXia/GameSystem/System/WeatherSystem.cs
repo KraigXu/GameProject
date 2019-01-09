@@ -11,8 +11,6 @@ namespace GameSystem
     public class WeatherSystem : ComponentSystem
     {
 
-        
-
         private static GameObject _weatherGo;
         
         protected override void OnUpdate()

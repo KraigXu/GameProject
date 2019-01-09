@@ -6,6 +6,8 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 using GameSystem.Ui;
+using Newtonsoft.Json;
+using Unity.Rendering;
 
 namespace GameSystem
 {
@@ -23,68 +25,109 @@ namespace GameSystem
 
     public enum LocationType
     {
-        None=0,
-        Field = 1,    
-        InLivingArea = 4,
-        LivingAreaExit = 5,
-        LivingAreaEnter = 6,
-        LivingAreaIn = 7,
-        SocialDialogIn=8,
-        SocialDialogEnter=9,
-        SocialDialogExit= 10,
-        BuildingIn=11,
-        BuildingExit=12,
-        BuildingEnter13,
-        
+        None = 0,
+        Field = 10,
+        City = 20,
+        LivingAreaExit = 30,
+        LivingAreaEnter = 40,
+        LivingAreaIn = 50,
+        SocialDialogIn = 60,
+        SocialDialogEnter = 70,
+        SocialDialogExit = 80,
+        BuildingIn = 90,
+        BuildingExit = 100,
+        BuildingEnter=110,
     }
-
-
     public class BiologicalSystem : ComponentSystem
     {
+        //struct BiologicalGroup
+        //{
+        //    public readonly int Length;
+        //    public EntityArray Entity;
+        //    public ComponentDataArray<Biological> Biological;
+        //    public ComponentDataArray<BiologicalStatus> Status;
+        //    public ComponentDataArray<InteractionElement> Interaction;
+        //    public ComponentArray<CapsuleCollider> Renderer;
+        //}
+        //[Inject]
+        //private BiologicalGroup _data;
 
-        struct BiologicalGroup
+        struct Data
         {
             public readonly int Length;
-            public EntityArray Entity;
+            public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BiologicalStatus> Status;
-            public ComponentDataArray<InteractionElement> Interaction;
-            public ComponentArray<CapsuleCollider> Renderer;
- 
         }
-
+        
         [Inject]
-        private BiologicalGroup _biologicalGroup;
+        private Data _data;
+
+        private EntityManager _entityManager;
 
         public ComponentDataArray<Biological> GetBiological
         {
-            get { return _biologicalGroup.Biological; }
+            get { return _data.Biological; }
+        }
+        private TipsWindow _tipsWindow;
+
+        public BiologicalSystem()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
 
 
-
-
-        private TipsWindow _tipsWindow;
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _biologicalGroup.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                var property = _biologicalGroup.Biological[i];
+                var biological = _data.Biological[i];
+                var status = _data.Status[i];
+                var entity = _data.Entitys[i];
 
-                var status = _biologicalGroup.Status[i];
+                biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
+                biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
+                biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
-                property.Jing = Convert.ToInt16(property.Tizhi + (property.Wuxing * 0.3f) + (property.Lidao * 0.5f));
-                property.Qi = Convert.ToInt16(property.Jingshen + (property.Tizhi * 0.5f) + (property.Wuxing * 0.5f));
-                property.Shen = Convert.ToInt16(property.Wuxing + property.Lidao * 0.3);
+                
 
-                _biologicalGroup.Biological[i] = property;
+                //if (status.LocationIsInit == 0)
+                //{
+                //    switch (status.LocationType)
+                //    {
+                //        case LocationType.None:
+                //            PostUpdateCommands.RemoveComponent<MeshInstanceRenderer>(entity);
+                //            ModelManager.Instance.ModelStatus(status.RunModelCode, false);
+                //            break;
+                //        case LocationType.Field:
+                //            ModelManager.Instance.ModelStatus(status.RunModelCode,true);
 
-                //Update Interaction
-                InteractionElement element = _biologicalGroup.Interaction[i];
-                element.Position = _biologicalGroup.Renderer[i].transform.position;
+                //            if (biological.SexId == 0)
+                //            {
+                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalNormalLook);
+                //            }
+                //            else if (biological.SexId == 1)
+                //            {
+                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalManLook);
+                //            }
+                //            else if (biological.SexId == 2)
+                //            {
+                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalFemaleLook);
+                //            }
+                //            break;
+                //        case LocationType.City:
+                //            ModelManager.Instance.ModelStatus(status.RunModelCode,false);
+                //            PostUpdateCommands.RemoveComponent<MeshInstanceRenderer>(entity);
+                //            break;
+                //        default:
+                //            break;
+                //    }
+                //    status.LocationIsInit = 1;
+                //}
+                //ModelManager.Instance.ModelStatus();
 
-                _biologicalGroup.Interaction[i] = element;
-
+                _data.Biological[i] = biological;
+                _data.Status[i] = status;
             }
         }
 
@@ -95,16 +138,16 @@ namespace GameSystem
         /// <param name="type">本地状态</param>
         /// <param name="id">本地ID</param>
         /// <returns>Entity 集合，使用ECS获取所需数据</returns>
-        public List<Entity> GetBiologicalOnLocation(LocationType type,int id)
+        public List<Entity> GetBiologicalOnLocation(LocationType type, int id)
         {
-            List<Entity> entities =new List<Entity>();
-            for (int i = 0; i < _biologicalGroup.Length; i++)
+            List<Entity> entities = new List<Entity>();
+            for (int i = 0; i < _data.Length; i++)
             {
-                if (_biologicalGroup.Status[i].LocationType == type &&_biologicalGroup.Status[i].LocationId==id)
+                if (_data.Status[i].LocationType == type && _data.Status[i].LocationId == id)
                 {
-                    entities.Add(_biologicalGroup.Entity[i]);
+                    entities.Add(_data.Entitys[i]);
                 }
-                
+
             }
 
             return entities;
@@ -116,11 +159,11 @@ namespace GameSystem
         /// <returns></returns>
         public List<int> GetAllBiologicalName()
         {
-            List<int> result=new List<int>();
+            List<int> result = new List<int>();
 
-            for (int i = 0; i < _biologicalGroup.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                result.Add(_biologicalGroup.Biological[i].BiologicalId);
+                result.Add(_data.Biological[i].BiologicalId);
             }
             return result;
         }
@@ -132,31 +175,26 @@ namespace GameSystem
         /// <returns></returns>
         public Biological GetBiologicalInfo(int id)
         {
-            for (int i = 0; i < _biologicalGroup.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                if (id == _biologicalGroup.Biological[i].BiologicalId)
+                if (id == _data.Biological[i].BiologicalId)
                 {
-                    return _biologicalGroup.Biological[i];
+                    return _data.Biological[i];
                 }
             }
             return new Biological();
         }
         public Entity GetBiologicalEntity(int id)
         {
-            for (int i = 0; i < _biologicalGroup.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                if (id == _biologicalGroup.Biological[i].BiologicalId)
+                if (id == _data.Biological[i].BiologicalId)
                 {
-                    return _biologicalGroup.Entity[i];
+                    return _data.Entitys[i];
                 }
             }
             return new Entity();
         }
-
-
-
-
-
     }
 
 }

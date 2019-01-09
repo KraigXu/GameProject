@@ -113,6 +113,7 @@ namespace GameSystem.Ui
                             Debug.LogError(string.Format("<color=#E6E6FA>[BaseWindowId :{0} != shownWindowId :{1}]</color>", baseWindow.ID, id));
                             return null;
                         }
+                        
                         // Get the window target root parent
                         Transform targetRoot = GetTargetRoot(baseWindow.windowData.windowType);
                         Transform t = uiObject.transform;

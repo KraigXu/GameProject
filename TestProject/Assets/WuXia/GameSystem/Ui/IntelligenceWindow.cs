@@ -73,7 +73,6 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
-
         }
 
 
@@ -190,8 +189,7 @@ namespace GameSystem.Ui
                 uiitem.Id = factions[i].Id;
                 uiitem.ClickCallback = delegate (int id)
                 {
-                   // LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-                    
+                    // LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
                     //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
                     //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
                 };

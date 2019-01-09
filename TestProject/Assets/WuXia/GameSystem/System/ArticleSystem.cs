@@ -9,7 +9,6 @@ namespace GameSystem
     public class ArticleJsonData
     {
         public int Id;
-
     }
 
     public class ArticleSystem : ComponentSystem
@@ -27,10 +26,7 @@ namespace GameSystem
       
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _group.Length; i++)
-            {
-                
-            }
+
         }
 
         

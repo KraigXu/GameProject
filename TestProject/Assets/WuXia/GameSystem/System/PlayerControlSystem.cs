@@ -30,6 +30,15 @@ namespace GameSystem
 
         [Inject]
         private PlayerData m_Players;
+
+
+        struct Data
+        {
+            public readonly int Length;
+            public ComponentDataArray<PlayerInput> Input;
+        }
+
+
         [Inject]
         private LivingAreaSystem _livingAreaSystem;
         [Inject]
@@ -37,10 +46,43 @@ namespace GameSystem
         [Inject]
         private BiologicalSystem _biologicalSystem;
 
+        [Inject]
+        private PlayerData _player;
+        [Inject]
+        private Data _data;
+
+        private EntityManager _entityManager;
+
+        public PlayerControlSystem()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
+
+
+
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject() || StrategySceneInit.Settings == null || m_Players.Length == 0)
                 return;
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var input = _data.Input[i];
+
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Debug.DrawLine(ray.origin, hit.point, Color.red);
+                    input.MousePoint = hit.point;
+
+                }
+                else
+                {
+                    input.MousePoint = Vector3.zero;
+                }
+                _data.Input[i] = input;
+            }
 
             for (int i = 0; i < m_Players.Length; ++i)
             {
@@ -123,18 +165,18 @@ namespace GameSystem
                         break;
                     case LocationType.LivingAreaEnter:
                         {
+                            //行为
                             //检查当前状态 显示UI信息 
                             ShowWindowData windowData = new ShowWindowData();
 
-                            LivingAreaWindowCD livingAreaWindowCd=new LivingAreaWindowCD();
+                            LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
                             livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
                             livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
                             livingAreaWindowCd.OnExit = LivingAreaOnExit;
                             windowData.contextData = livingAreaWindowCd;
-                            
-                            SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
 
-                           // newtarget.Target = bounds.center;
+                            SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
+                            // newtarget.Target = bounds.center;
                             newStatus.LocationType = LocationType.LivingAreaIn;
                         }
                         break;
