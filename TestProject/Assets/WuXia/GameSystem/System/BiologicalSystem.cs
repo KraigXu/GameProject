@@ -89,8 +89,6 @@ namespace GameSystem
                 biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
                 biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
-                
-
                 //if (status.LocationIsInit == 0)
                 //{
                 //    switch (status.LocationType)

@@ -409,10 +409,6 @@ namespace GameSystem
             #endregion
 
 
-
-
-
-
             #region Biological
             {
                 // List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
