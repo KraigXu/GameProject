@@ -10,6 +10,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
+using Manager;
 using Newtonsoft.Json;
 using Object = UnityEngine.Object;
 
@@ -366,7 +367,6 @@ namespace GameSystem
                     biological.FamilyId = data[i].FamilyId;
                     biological.FactionId = data[i].FactionId;
                     biological.TitleId = data[i].TitleId;
-
                     biological.SexId = data[i].Sex;
                     biological.Age = data[i].Age;
                     biological.AgeMax = data[i].AgeMax;
@@ -377,13 +377,11 @@ namespace GameSystem
                     biological.NeutralValue = 0;
                     biological.BodyValue = 0;
                     biological.LuckValue = 0;
-
                     biological.Tizhi = data[i].Tizhi;
                     biological.Lidao = data[i].Lidao;
                     biological.Jingshen = data[i].Jingshen;
                     biological.Lingdong = data[i].Lingdong;
                     biological.Wuxing = data[i].Wuxing;
-
                     entityManager.SetComponentData(entity, biological);
 
                     BiologicalStatus biologicalStatus = new BiologicalStatus();
@@ -391,15 +389,20 @@ namespace GameSystem
                     biologicalStatus.TargetId = 0;
                     biologicalStatus.TargetType = 0;
                     biologicalStatus.LocationType = (LocationType)data[i].LocationType;
-
                     entityManager.SetComponentData(entity, biologicalStatus);
 
                     Team team=new Team();
                     team.TeamBossId = data[i].TeamId;
                     team.RunModelCode = 0;
                     team.RunModelCode= ModelManager.Instance.AddModel(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z));
-
                     entityManager.SetComponentData(entity,team);
+
+
+                    
+
+
+
+
 
                     GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
@@ -411,7 +414,6 @@ namespace GameSystem
 
             #region Biological
             {
-                // List<BiologicalData> data = SqlData.GetWhereDatas<BiologicalData>(" IsDebut=? ", new object[] { 1 });
                 List<BiologicalData> data = new List<BiologicalData>();
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -426,7 +428,6 @@ namespace GameSystem
                     biological.FamilyId = data[i].FamilyId;
                     biological.FactionId = data[i].FactionId;
                     biological.TitleId = data[i].TitleId;
-
                     biological.SexId = data[i].Sex;
                     biological.Age = data[i].Age;
                     biological.AgeMax = data[i].AgeMax;
@@ -437,21 +438,12 @@ namespace GameSystem
                     biological.NeutralValue = 0;
                     biological.BodyValue = 0;
                     biological.LuckValue = 0;
-
                     biological.Tizhi = data[i].Tizhi;
                     biological.Lidao = data[i].Lidao;
                     biological.Jingshen = data[i].Jingshen;
                     biological.Lingdong = data[i].Lingdong;
                     biological.Wuxing = data[i].Wuxing;
-
-
-                    //初始Technique
-                    if (string.IsNullOrEmpty(data[i].JifaJson) == false)
-                    {
-                        TechniqueJsonData jsonData = JsonConvert.DeserializeObject<TechniqueJsonData>(data[i].JifaJson);
-                        TechniquesSystem.SetData(jsonData);
-                        biological.TechniquesId = jsonData.Id;
-                    }
+                    biological.TechniquesId = TechniquesSystem.SetData(data[i].JifaJson);
 
                     //初始Equipment
                     if (string.IsNullOrEmpty(data[i].EquipmentJson) == false)
@@ -511,14 +503,6 @@ namespace GameSystem
                             MousePoint = Vector3.zero
                         });
 
-                        entityManager.AddComponent(biologicalEntity, ComponentType.Create<CameraProperty>());
-                        entityManager.SetComponentData(biologicalEntity, new CameraProperty
-                        {
-                            Target = new Vector3(data[i].X, data[i].Y, data[i].Z),
-                            Damping = 3,
-                            Offset = new Vector3(0, 1, -15),
-                            RoationOffset = new Vector3(50, 0, 0)
-                        });
                     }
                     else
                     {
@@ -669,6 +653,25 @@ namespace GameSystem
 
             }
             #endregion
+
+
+            #region Camera
+            {
+                List<BiologicalData> data = SqlData.GetAllDatas<BiologicalData>();
+                for (int i = 0; i < data.Count; i++)
+                {
+                    if (data[i].Id == settings.PlayerId)
+                    {
+                        StrategyCameraManager.Instance.SetTarget(new Vector3(data[i].X, data[i].Y, data[i].Z), true);
+                    }
+                }
+                data=null;
+               
+            }
+
+            #endregion
+
+
 
             var sceneSwitcher = GameObject.Find("SceneSwitcher");
             if (sceneSwitcher != null)

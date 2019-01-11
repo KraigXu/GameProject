@@ -102,7 +102,6 @@ namespace GameSystem.Ui
                     item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
                     item.Key = _uiData.Biologicals[i].BiologicalId;
                     item.ClickCallBack = BiologicalChange;
-
                 }
 
                 _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];

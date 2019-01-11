@@ -5,6 +5,8 @@ using UnityEngine;
 public sealed class StaticValue
 {
 
-    public static int PlayerBiologicalId;
+
+
+    public static int PlayerBiologicalId=1;
 
 }

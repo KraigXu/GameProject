@@ -23,7 +23,6 @@ namespace GameSystem
             public ComponentDataArray<Biological> Biological;
             public ComponentArray<AICharacterControl> AiControl;
             public ComponentDataArray<BiologicalStatus> Status;
-            public ComponentDataArray<CameraProperty> Property;
             public ComponentDataArray<InteractionElement> Interaction;
             public EntityArray Entity;
         }
@@ -41,8 +40,6 @@ namespace GameSystem
 
         [Inject]
         private LivingAreaSystem _livingAreaSystem;
-        [Inject]
-        private CameraSystem _cameraSystem;
         [Inject]
         private BiologicalSystem _biologicalSystem;
 
@@ -152,7 +149,7 @@ namespace GameSystem
 
                 m_Players.Input[i] = input;
                 newStatus.Position = m_Players.AiControl[i].transform.position;
-                CameraProperty newtarget = m_Players.Property[i];
+           
 
                 switch (m_Players.Status[i].LocationType)
                 {
@@ -160,7 +157,7 @@ namespace GameSystem
                         break;
                     case LocationType.Field:
                         {
-                            newtarget.Target = m_Players.AiControl[i].transform.position;
+                        //    newtarget.Target = m_Players.AiControl[i].transform.position;
                         }
                         break;
                     case LocationType.LivingAreaEnter:
@@ -217,7 +214,7 @@ namespace GameSystem
                         }
                         break;
                 }
-                m_Players.Property[i] = newtarget;
+               // m_Players.Property[i] = newtarget;
                 m_Players.Status[i] = newStatus;
             }
         }
@@ -247,13 +244,13 @@ namespace GameSystem
 
         public void Target(Vector3 point)
         {
-            for (int i = 0; i < m_Players.Length; i++)
-            {
-                var value = m_Players.Property[i];
-                value.Target = point;
+            //for (int i = 0; i < m_Players.Length; i++)
+            //{
+            //    var value = m_Players.Property[i];
+            //    value.Target = point;
 
-                m_Players.Property[i] = value;
-            }
+            //    m_Players.Property[i] = value;
+            //}
         }
 
 

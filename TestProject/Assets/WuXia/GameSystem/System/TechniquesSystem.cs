@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 
@@ -27,8 +28,9 @@ namespace GameSystem
 
         private static Dictionary<int, TechniqueJsonData> _techniqueDic=new Dictionary<int, TechniqueJsonData>();
 
-        public static void SetData(TechniqueJsonData jsonData)
+        public static int SetData(string json)
         {
+            TechniqueJsonData jsonData = JsonConvert.DeserializeObject<TechniqueJsonData>(json);
             if (_techniqueDic.ContainsKey(jsonData.Id) == true)
             {
                 Debug.Log("有重复数据！ Technique");
@@ -37,7 +39,12 @@ namespace GameSystem
             {
                 _techniqueDic.Add(jsonData.Id,jsonData);
             }
+
+            return jsonData.Id;
         }
+
+
+
         protected override void OnUpdate()
         {
           

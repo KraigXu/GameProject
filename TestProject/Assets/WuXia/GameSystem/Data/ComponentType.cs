@@ -22,14 +22,6 @@ namespace GameSystem
         LivingArea = 4
     }
 
-    public struct CameraProperty : IComponentData
-    {
-        public Vector3 Target;
-        public int Damping;
-        public Vector3 Offset;
-        public Vector3 RoationOffset;
-    }
-
 
     public enum TendType
     {

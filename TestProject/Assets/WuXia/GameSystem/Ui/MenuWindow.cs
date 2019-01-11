@@ -65,14 +65,21 @@ namespace GameSystem.Ui
             UICenterMasterManager.Instance.ShowWindow(WindowID.TeamWindow);
         }
 
+        /// <summary>
+        /// 获取人物信息
+        /// </summary>
         private void ButtonPerson()
         {
-            BiologicalUiInData uidata = new BiologicalUiInData();
-            uidata.CurPlayer = SystemManager.Get<PlayerControlSystem>().GetCurrentPerson();
-            uidata.Biologicals = SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.BiologicalId);
-            ShowWindowData showWindowData = new ShowWindowData();
-            showWindowData.contextData = uidata;
-            UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
+            if (StaticValue.PlayerBiologicalId != 0)
+            {
+                BiologicalUiInData uidata = new BiologicalUiInData();
+                uidata.CurPlayer=SystemManager.Get<BiologicalSystem>().GetBiologicalInfo(StaticValue.PlayerBiologicalId);
+                uidata.Biologicals= SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.BiologicalId);
+
+                ShowWindowData showWindowData = new ShowWindowData();
+                showWindowData.contextData = uidata;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
+            }
         }
 
         private void ButtonLog()
