@@ -11,9 +11,6 @@ namespace GameSystem
         public int Id;
     }
 
-   
-
-
     public class EquipmentSystem : ComponentSystem
     {
         struct EquipmentGroup

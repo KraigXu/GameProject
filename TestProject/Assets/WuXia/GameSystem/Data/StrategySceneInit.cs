@@ -173,7 +173,6 @@ namespace GameSystem
             #region Data
             {
                 List<AvatarData> avatarDatas = SqlData.GetAllDatas<AvatarData>();
-
                 for (int i = 0; i < avatarDatas.Count; i++)
                 {
                     if (avatarDatas[i].Type == 1)
@@ -185,6 +184,8 @@ namespace GameSystem
                         GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
                     }
                 }
+
+                
 
                 List<ModelData> modelDatas = SqlData.GetAllDatas<ModelData>();
                 for (int i = 0; i < modelDatas.Count; i++)

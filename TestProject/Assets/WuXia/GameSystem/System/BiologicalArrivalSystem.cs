@@ -13,8 +13,6 @@ namespace GameSystem
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
-
-
         EntityManager _entityManager;
 
         struct Biologicals
@@ -28,9 +26,33 @@ namespace GameSystem
         [Inject]
         Biologicals _biological;
 
+        [Inject] private Biologicals _biologicals;
+
+        struct Data
+        {
+            public readonly int Length;
+            public ComponentDataArray<Biological> Biological;
+            public ComponentDataArray<BiologicalStatus> Status;
+            public EntityArray Entitys;
+        }
+        [Inject]
+        private Data _data;
 
         protected override void OnUpdate()
         {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                int i2 = 1223;
+
+
+
+            }
+            //for (int i = 0; i < UPPER; i++)
+            //{
+                
+            //}
+
+
             //if (_biological.Length == 0)
             //    return;
 
@@ -45,29 +67,22 @@ namespace GameSystem
             //    arrivingShipTransforms.Add(entity);
             //    arrivingShipData.Add(data);
             //    arrivingstatus.Add(_biological.Status[i]);
-
             //}
 
-            ////HandleArrivedShips(arrivingShipData, arrivingShipTransforms, arrivingstatus);
-
+            //HandleArrivedShips(arrivingShipData, arrivingShipTransforms, arrivingstatus);
             //arrivingShipTransforms.Dispose();
             //arrivingShipData.Dispose();
+            
         }
 
         void HandleArrivedShips(NativeList<Biological> arrivingShipData, NativeList<Entity> arrivingShipEntities,NativeArray<BiologicalStatus> status)
         {
             for (var shipIndex = 0; shipIndex < arrivingShipData.Length; shipIndex++)
             {
-
                 var shipData = arrivingShipData[shipIndex];
                 var planetData = _entityManager.GetComponentData<LivingArea>(status[shipIndex].TargetEntity);
-
-                if (planetData.Id == planetData.Id)
-                {
-                    
-
-
-                }
+                var planetDat = _entityManager.GetComponentData<LivingArea>(status[shipIndex].TargetEntity);
+                //var planetData=_entityManager.GetComponentData<>()
                 //if (shipData.TeamOwnership != planetData.TeamOwnership)
                 //{
                 //    planetData.Occupants = planetData.Occupants - 1;

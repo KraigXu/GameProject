@@ -349,6 +349,20 @@ namespace DataAccessObject
         }
 
         /// <summary>
+        /// 生物头像数据
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_BiologicalAvatarData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalAvatarData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Path TEXT);");
+        }
+
+        
+
+        /// <summary>
         /// 模型
         /// </summary>
         /// <param name="service"></param>
@@ -780,6 +794,47 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+    public class BiologicalAvatarData : BaseData
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Path
+            };
+            return objects;
+        }
+    }
+
+    public class SkillData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int SkillType { get; set; }        //种类
+        public int DifficultLevel { get; set; }    //难度等级
+        public int Wisdom { get; set; }             //要求智慧值
+        public int Strength { get; set; }
+        public int Effect { get; set; }
+        public int Consumption { get; set; }
+
+
+        public int AvatarId { get; set; }
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Name,SkillType,DifficultLevel,Wisdom,Strength,AvatarId,
+            };
+            return objects;
+        }
+
+    }
+
     /// <summary>
     /// SocialInfoData
     /// </summary>

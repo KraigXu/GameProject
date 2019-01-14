@@ -92,6 +92,7 @@ public class SQLService
         Tables.CreateTable_Gongfa(this);
 
         Tables.CreateTable_Avatar(this);
+        Tables.CreateTable_BiologicalAvatarData(this);
         Tables.CreateTable_ModelData(this);
         Tables.CreateTable_ModelMap(this);
         Tables.CreateTable_SocialDialog(this);
