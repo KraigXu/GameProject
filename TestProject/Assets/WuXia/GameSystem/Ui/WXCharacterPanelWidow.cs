@@ -14,12 +14,9 @@ namespace GameSystem.Ui
         [SerializeField] private Transform _personnelParent;
         [SerializeField] private RectTransform _personnelPrefab;
 
-
         [Header("Introduction")]
         [SerializeField] private Toggle _introductionTog;
         [SerializeField] private GameObject _introductionGo;
-
-
         [SerializeField] private Button _exitBtn;
         [SerializeField] private Text _name;
         [SerializeField] private Text _surname;
@@ -34,13 +31,10 @@ namespace GameSystem.Ui
         [SerializeField] private Transform _jiyiGo;
         [SerializeField] private RectTransform _techniquesPrefab;
         [SerializeField] private Transform _jiyiContent;
-        private List<GameObject> _techniquesItems=new List<GameObject>();
-        
+        private List<GameObject> _techniquesItems = new List<GameObject>();
+
         [SerializeField] private Toggle _tagTog;
         [SerializeField] private GameObject _tagGo;
-
-
-
 
         [Header("Property")]
         [SerializeField] private Text _tizhitxt;
@@ -54,10 +48,10 @@ namespace GameSystem.Ui
         [SerializeField] private Text _qitxt;
         [SerializeField] private Text _shentxt;
 
-
         [Header("Equipment")]
-        [SerializeField]
-        private List<UiEquipmentItem> _equipmentItems;
+        [SerializeField] private List<UiEquipmentItem> _equipmentItems;
+        [SerializeField] private RectTransform _equipmentParent;
+       // [SerializeField] private RectTransform _equipment
 
         private BiologicalUiInData _uiData;
         private Biological _curBiological;
@@ -75,7 +69,8 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            _exitBtn.onClick.AddListener(delegate()
+
+            _exitBtn.onClick.AddListener(delegate ()
             {
                 UICenterMasterManager.Instance.CloseWindow(this.ID);
             });
@@ -84,7 +79,6 @@ namespace GameSystem.Ui
             _combatTog.onValueChanged.AddListener(CombatTogChange);
             _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
             _tagTog.onValueChanged.AddListener(TagTogChange);
-
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -98,7 +92,7 @@ namespace GameSystem.Ui
                 for (int i = 0; i < _uiData.Biologicals.Count; i++)
                 {
                     RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_personnelPrefab, _personnelParent);
-                    UiBiologicalAvatarItem item= rectGo.GetComponent<UiBiologicalAvatarItem>();
+                    UiBiologicalAvatarItem item = rectGo.GetComponent<UiBiologicalAvatarItem>();
                     item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
                     item.Key = _uiData.Biologicals[i].BiologicalId;
                     item.ClickCallBack = BiologicalChange;
@@ -138,7 +132,7 @@ namespace GameSystem.Ui
 
         private void PropertyTogChange(bool flag)
         {
-           _propertyGo.gameObject.SetActive(flag);
+            _propertyGo.gameObject.SetActive(flag);
             if (flag == true)
             {
                 _tizhitxt.text = _curBiological.Tizhi.ToString();
@@ -163,7 +157,7 @@ namespace GameSystem.Ui
             _combatGo.gameObject.SetActive(flag);
             if (flag == true)
             {
-                
+
             }
             else
             {
@@ -203,7 +197,7 @@ namespace GameSystem.Ui
             _tagGo.gameObject.SetActive(flag);
             if (flag == true)
             {
-                
+
             }
             else
             {
@@ -217,8 +211,8 @@ namespace GameSystem.Ui
         /// </summary>
         private void ChangeEquipment()
         {
-           //EquipmentJsonData jsonData=  EquipmentSystem.GetEquipment(_curBiological.EquipmentId);
-           
+            //EquipmentJsonData jsonData=  EquipmentSystem.GetEquipment(_curBiological.EquipmentId);
+
         }
 
         private void ChangeArticle()
@@ -226,7 +220,7 @@ namespace GameSystem.Ui
 
         }
 
-        
+
 
     }
 }

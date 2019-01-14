@@ -9,8 +9,6 @@ namespace GameSystem
     public class EquipmentJsonData
     {
         public int Id;
-
-
     }
 
    

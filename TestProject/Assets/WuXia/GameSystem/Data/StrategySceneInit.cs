@@ -397,13 +397,6 @@ namespace GameSystem
                     team.RunModelCode= ModelManager.Instance.AddModel(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z));
                     entityManager.SetComponentData(entity,team);
 
-
-                    
-
-
-
-
-
                     GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
                     GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
