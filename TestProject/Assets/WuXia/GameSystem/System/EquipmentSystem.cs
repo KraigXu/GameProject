@@ -19,7 +19,7 @@ namespace GameSystem
             public EntityArray Entity;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<Equipment> Equipment;
-
+            
         }
         [Inject]
         private  EquipmentGroup _equipmentInfo;

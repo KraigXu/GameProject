@@ -77,6 +77,7 @@ public class SQLService
 
     public void CreateDB()
     {
+        Tables.CreateTable_Tips(this);
 
         Tables.CreateTable_PlayProject(this);
         Tables.CreateTable_District(this);

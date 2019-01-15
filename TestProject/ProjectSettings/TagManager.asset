@@ -7,6 +7,8 @@ TagManager:
   - Prototype
   - Planet
   - Ship
+  - Biological
+  - Terrain
   layers:
   - Default
   - TransparentFX

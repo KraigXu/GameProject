@@ -8,7 +8,7 @@ namespace GameSystem.Ui
     {
         Invaild = 0,
         ProjectSelectWindow,
-
+        LoadingWindow,
         StrategyWindow,
         MessageWindow,
         MenuWindow,
@@ -144,7 +144,8 @@ namespace GameSystem.Ui
             {WindowID.TeamWindow,"UiPrefab/TeamWindow" },
             {WindowID.LogWindow,"UiPrefab/LogWindow" },
             {WindowID.IntelligenceWindow,"UiPrefab/IntelligenceWindow" },
-            {WindowID.FixedTitleWindow,"UiPrefab/FixedTitleWindow" }
+            {WindowID.FixedTitleWindow,"UiPrefab/FixedTitleWindow" },
+            {WindowID.LoadingWindow,"UiPrefab/LoadingWindow" }
         };
     }
 }

@@ -96,6 +96,7 @@ namespace GameSystem
                 return;
             }
 
+
             //BuildingJsonData b=new BuildingJsonData();
             //b.GroupId = 1;
             //b.Item.Add(new BuildingItem(1,1,3,1,1,100));
@@ -113,6 +114,7 @@ namespace GameSystem
 
             //Debug.Log(JsonConvert.SerializeObject(techniqueJson));
 
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
 
             BiologicalNormalLook = GetLookFromPrototype("BiologicalNormalLook");
             BiologicalManLook = GetLookFromPrototype("BiologicalManLook");
@@ -135,7 +137,7 @@ namespace GameSystem
 
             //获取配置
             DemoSetting settings = GameObject.Find("Settings").GetComponent<DemoSetting>();
-
+           
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 

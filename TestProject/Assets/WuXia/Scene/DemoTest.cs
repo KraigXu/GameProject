@@ -23,14 +23,14 @@ public class DemoTest : MonoBehaviour
     void Start()
     {
 
-        for (int i = 0; i <=Rownumber; i++)
-        {
-            for (int j = 0; j <= Columnumber; j++)
-            {
-                GameObject go = GameObject.Instantiate(prefab);
-                go.transform.position=new Vector3(i,0,j);
-            }
-        }
+        //for (int i = 0; i <=Rownumber; i++)
+        //{
+        //    for (int j = 0; j <= Columnumber; j++)
+        //    {
+        //        GameObject go = GameObject.Instantiate(prefab);
+        //        go.transform.position=new Vector3(i,0,j);
+        //    }
+        //}
 
 
 
