@@ -26,7 +26,7 @@ namespace GameSystem
         public static void SetupComponentData(EntityManager entityManager)
         {
             EntityArchetype  factionArchetype = entityManager.CreateArchetype(typeof(Faction));
-            List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
+            List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
             for (int i = 0; i < factionDatas.Count; i++)
             {
                 Entity faction = entityManager.CreateEntity(factionArchetype);

@@ -28,30 +28,29 @@ namespace GameSystem
                 var team = _data.Team[i];
                 var status = _data.Status[i];
                 var biological = _data.Biological[i];
-
-                if (team.TeamBossId == biological.BiologicalId)  
+                if (team.TeamBossId == biological.BiologicalId)
                 {
-                    if (status.LocationIsInit == 0)
+                    switch (status.LocationType)
                     {
-                        switch (status.LocationType)
-                        {
-                            case LocationType.None:
-                                ModelManager.Instance.ModelStatus(team.RunModelCode, false);
-                                break;
-                            case LocationType.Field:
-                                ModelManager.Instance.ModelStatus(team.RunModelCode, true);
-                                break;
-                            case LocationType.City:
-                                ModelManager.Instance.ModelStatus(team.RunModelCode, false);
-                                break;
-                            default:
-                                break;
-                        }
-                        status.LocationIsInit = 1;
+                        case LocationType.None:
+                            ModelManager.Instance.ModelStatus(team.RunModelCode, false);
+                            break;
+                        case LocationType.City:
+                            if (status.TargetLocationType == LocationType.Field)
+                            {
+                                status.LocationType = status.TargetLocationType;
+                            }
+                            ModelManager.Instance.ModelStatus(team.RunModelCode, false);
+                            break;
+                        case LocationType.Field:
+                            ModelManager.Instance.ModelStatus(team.RunModelCode, true);
+                            ModelManager.Instance.ModelTarget(team.RunModelCode, status.TargetPosition);
+                            break;
                     }
                 }
                 else
                 {
+
                 }
 
                 _data.Biological[i] = biological;
@@ -61,7 +60,7 @@ namespace GameSystem
 
         public List<Biological> TeamIdRetrunBiological(int biologicalId)
         {
-            List<Biological> biologicals=new List<Biological>();
+            List<Biological> biologicals = new List<Biological>();
 
             for (int i = 0; i < _data.Length; i++)
             {

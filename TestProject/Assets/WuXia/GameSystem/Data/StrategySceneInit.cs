@@ -6,13 +6,9 @@ using Unity.Mathematics;
 using UnityEngine;
 using Unity.Rendering;
 using Unity.Transforms;
-using UnityEngine.AI;
-using UnityEngine.SceneManagement;
-using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
 using Manager;
 using Newtonsoft.Json;
-using Object = UnityEngine.Object;
 
 namespace GameSystem
 {
@@ -21,13 +17,11 @@ namespace GameSystem
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype TechniquesArchetype;
         public static EntityArchetype RelationArchetype;
-        public static EntityArchetype LivingAreaEnterArchetype;
         public static EntityArchetype BiologicalArchetype;
 
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
         public static MeshInstanceRenderer BiologicalFemaleLook;
-
 
         public static DemoSetting Settings;
 
@@ -47,6 +41,9 @@ namespace GameSystem
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(Biological), typeof(BiologicalStatus),typeof(Team));
 
+            Debug.Log("Initialize SqlData");
+            SQLService.GetInstance("TD.db");
+
         }
 
 
@@ -60,7 +57,6 @@ namespace GameSystem
             var settingsGo = GameObject.Find("Settings");
             if (settingsGo == null)
             {
-                SceneManager.sceneLoaded += OnSceneLoaded;
                 return;
             }
             else
@@ -74,72 +70,20 @@ namespace GameSystem
             InitializeWithScene();
         }
 
-        // Begin a new game.
-        public static void NewGame()
-        {
-            Debug.Log("NewGame Over!");
-        }
-
-
-
         public static void InitializeWithScene()
         {
-            var settingsGo = GameObject.Find("Settings");
-            if (settingsGo == null)
-            {
-                return;
-            }
-
-            Settings = settingsGo?.GetComponent<DemoSetting>();
-            if (!Settings)
-            {
-                return;
-            }
-
-
-            //BuildingJsonData b=new BuildingJsonData();
-            //b.GroupId = 1;
-            //b.Item.Add(new BuildingItem(1,1,3,1,1,100));
-            //b.Item.Add(new BuildingItem(1, 2, 3, 1, 1, 100));
-            //b.Item.Add(new BuildingItem(1, 3, 3, 1, 1, 100));
-            //b.Item.Add(new BuildingItem(1, 4, 3, 1, 1, 100));
-            //b.Item.Add(new BuildingItem(1, 5, 3, 1, 1, 100));
-
-            //Debug.Log(JsonConvert.SerializeObject(b));
-            //TechniqueJsonData techniqueJson=new TechniqueJsonData();
-            //techniqueJson.Id = 1;
-            //techniqueJson.Content.Add(new KeyValuePair<int, int>(1,500));
-            //techniqueJson.Content.Add(new KeyValuePair<int, int>(7, 300));
-            //techniqueJson.Content.Add(new KeyValuePair<int, int>(9, 800));
-
-            //Debug.Log(JsonConvert.SerializeObject(techniqueJson));
-
             UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
 
             BiologicalNormalLook = GetLookFromPrototype("BiologicalNormalLook");
             BiologicalManLook = GetLookFromPrototype("BiologicalManLook");
             BiologicalFemaleLook = GetLookFromPrototype("BiologicalFemaleLook");
 
-            //BiologicalLook = GetLookFromPrototype("BiologicalRenderPrototype");
-            //LivingAreaLook = GetLookFromPrototype("LivingAreaRenderPrototype");
-            //PlayerShotLook = GetLookFromPrototype("PlayerShotRenderPrototype");
-            //EnemyShotLook = GetLookFromPrototype("EnemyShotRenderPrototype");
-            //EnemyLook = GetLookFromPrototype("EnemyRenderPrototype");
-            //EnemySpawnSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-
-            //StrategySystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-
-            //LivingAreaBuildingSystem     --暂无开启
-
-            //BiologicalSystem.SetupComponentData(World.Active.GetOrCreateManager<EntityManager>());
-            //World.Active.GetOrCreateManager<UpdatePlayerHUD>().SetupGameObjects();
-            //World.Active.GetOrCreateManager<StrategySystem>().Update();
-
-            //获取配置
-            DemoSetting settings = GameObject.Find("Settings").GetComponent<DemoSetting>();
-           
             // Access the ECS entity manager
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            RelationSystem.SetupComponentData(entityManager);
+            SocialDialogSystem.SetupComponentData(entityManager);
+            PrestigeSystem.SetupComponentData(entityManager);
 
             #region Time
 
@@ -173,36 +117,39 @@ namespace GameSystem
             #endregion
 
             #region Data
+
             {
-                List<AvatarData> avatarDatas = SqlData.GetAllDatas<AvatarData>();
-                for (int i = 0; i < avatarDatas.Count; i++)
+                //List<AvatarData> avatarDatas = SQLService.Instance.QueryAll<AvatarData>();
+                //for (int i = 0; i < avatarDatas.Count; i++)
+                //{
+                //    if (avatarDatas[i].Type == 1)
+                //    {
+                //        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
+                //    }
+                //    else if (avatarDatas[i].Type == 2)
+                //    {
+                //        GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
+                //    }
+                //}
+
+                List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
+                for (int i = 0; i < biologicalAvatarDatas.Count; i++)
                 {
-                    if (avatarDatas[i].Type == 1)
-                    {
-                        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
-                    }
-                    else if (avatarDatas[i].Type == 2)
-                    {
-                        GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
-                    }
+                    GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
                 }
 
-                
-
-                List<ModelData> modelDatas = SqlData.GetAllDatas<ModelData>();
+                List<ModelData> modelDatas = SQLService.Instance.QueryAll<ModelData>();
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
                 }
-                SocialDialogSystem.SetupComponentData(entityManager);
-                PrestigeSystem.SetupComponentData(entityManager);
             }
 
             #endregion
 
             #region DistrictInit
             {
-                List<DistrictData> districtDatas = SqlData.GetAllDatas<DistrictData>();
+                List<DistrictData> districtDatas = SQLService.Instance.QueryAll<DistrictData>();
 
                 for (int i = 0; i < districtDatas.Count; i++)
                 {
@@ -242,7 +189,7 @@ namespace GameSystem
 
             #region LivingAreaInit
             {
-                List<LivingAreaData> data = SqlData.GetAllDatas<LivingAreaData>();
+                List<LivingAreaData> data = SQLService.Instance.QueryAll<LivingAreaData>();
                 for (int i = 0; i < data.Count; i++)
                 {
                     var go = GameObject.Instantiate(GameStaticData.ModelPrefab[data[i].ModelBaseId], new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ), Quaternion.identity);
@@ -347,7 +294,7 @@ namespace GameSystem
 
             #region Boglogical
             {
-                List<BiologicalData> data = SqlData.GetAllDatas<BiologicalData>();
+                List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
 
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -388,10 +335,12 @@ namespace GameSystem
                     entityManager.SetComponentData(entity, biological);
 
                     BiologicalStatus biologicalStatus = new BiologicalStatus();
+                    biologicalStatus.BiologicalIdentity = data[i].Identity;
                     biologicalStatus.Position = new Vector3(data[i].X, data[i].Y, data[i].Z);
                     biologicalStatus.TargetId = 0;
                     biologicalStatus.TargetType = 0;
                     biologicalStatus.LocationType = (LocationType)data[i].LocationType;
+
                     entityManager.SetComponentData(entity, biologicalStatus);
 
                     Team team=new Team();
@@ -406,7 +355,6 @@ namespace GameSystem
                 }
             }
             #endregion
-
 
             #region Biological
             {
@@ -491,14 +439,13 @@ namespace GameSystem
                         });
                     }
 
-                    if (data[i].Id == settings.PlayerId)
+                    if (data[i].Id == Settings.PlayerId)
                     {
                         entityManager.AddComponent(biologicalEntity, ComponentType.Create<PlayerInput>());
                         entityManager.SetComponentData(biologicalEntity, new PlayerInput
                         {
                             MousePoint = Vector3.zero
                         });
-
                     }
                     else
                     {
@@ -549,13 +496,13 @@ namespace GameSystem
                 GameStaticData.BiologicalSex.Add(2, "女");
                 GameStaticData.BiologicalSex.Add(3, "未知");
 
-                RelationSystem.SetupComponentData(entityManager);
+              
             }
             #endregion
 
             #region Relation
             {
-                List<RelationData> relationDatas = SqlData.GetAllDatas<RelationData>();
+                List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
                 for (int i = 0; i < relationDatas.Count; i++)
                 {
                     Entity entity = entityManager.CreateEntity(RelationArchetype);
@@ -570,10 +517,9 @@ namespace GameSystem
             }
             #endregion
 
-
             #region TechniquesData
             {
-                List<TechniquesData> techniquesDatas = SqlData.GetAllDatas<TechniquesData>();
+                List<TechniquesData> techniquesDatas = SQLService.Instance.QueryAll<TechniquesData>();
                 for (int i = 0; i < techniquesDatas.Count; i++)
                 {
                     Entity techniques = entityManager.CreateEntity(TechniquesArchetype);
@@ -593,7 +539,7 @@ namespace GameSystem
             #region FactionData
             {
                 EntityArchetype factionArchetype = entityManager.CreateArchetype(typeof(Faction));
-                List<FactionData> factionDatas = SqlData.GetAllDatas<FactionData>();
+                List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
                 for (int i = 0; i < factionDatas.Count; i++)
                 {
                     Entity faction = entityManager.CreateEntity(factionArchetype);
@@ -621,7 +567,7 @@ namespace GameSystem
             #region FamilySystem
             {
                 EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
-                List<FamilyData> familyData = SqlData.GetAllDatas<FamilyData>();
+                List<FamilyData> familyData = SQLService.Instance.QueryAll<FamilyData>();
                 for (int i = 0; i < familyData.Count; i++)
                 {
                     Entity family = entityManager.CreateEntity(familyArchetype);
@@ -633,9 +579,6 @@ namespace GameSystem
             }
 
             #endregion
-
-
-
 
             #region UiInit
             {
@@ -650,13 +593,12 @@ namespace GameSystem
             }
             #endregion
 
-
             #region Camera
             {
-                List<BiologicalData> data = SqlData.GetAllDatas<BiologicalData>();
+                List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
                 for (int i = 0; i < data.Count; i++)
                 {
-                    if (data[i].Id == settings.PlayerId)
+                    if (data[i].Id == Settings.PlayerId)
                     {
                         StrategyCameraManager.Instance.SetTarget(new Vector3(data[i].X, data[i].Y, data[i].Z), true);
                     }
@@ -667,27 +609,16 @@ namespace GameSystem
 
             #endregion
 
+            SystemManager.Get<PlayerControlSystem>().SetupInit();
 
-
-            var sceneSwitcher = GameObject.Find("SceneSwitcher");
-            if (sceneSwitcher != null)
-            {
-                NewGame();
-            }
-        }
-
-
-        private static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            InitializeWithScene();
+            UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
         }
 
         private static MeshInstanceRenderer GetLookFromPrototype(string protoName)
         {
             var proto = GameObject.Find(protoName);
-            
             var result = proto.GetComponent<MeshInstanceRendererComponent>().Value;
-            Object.Destroy(proto);
+            UnityEngine.Object.Destroy(proto);
             return result;
         }
 

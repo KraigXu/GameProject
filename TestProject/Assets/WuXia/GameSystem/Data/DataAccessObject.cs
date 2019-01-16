@@ -524,6 +524,8 @@ namespace DataAccessObject
     public class BiologicalData : BaseData
     {
         public int Id { get; set; }                              //ID
+        public int Identity { get; set; }
+
         public string Surname { get; set; }                      //姓
         public string Name { get; set; }                         //名 
        
@@ -569,7 +571,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
                 {
-                    Id,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,TeamId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
+                    Id,Identity,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,TeamId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
                     LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,PrestigeValue
                 };
             return objects;
@@ -876,29 +878,30 @@ namespace DataAccessObject
 
     //-----------------------------------------取值--------------------------------------Start
 
-    public static class SqlData
-    {
-        public static T GetDataId<T>(int id) where T : BaseData
-        {
-            return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=? ", new object[] { id });
-        }
+    //public static class SqlData
+    //{
+    //    public static T GetDataId<T>(int id) where T : BaseData
+    //    {
+    //        return SQLService.GetInstance("TD.db").QueryUnique<T>(" Id=? ", new object[] { id });
+    //    }
 
-        public static List<T> GetAllDatas<T>() where T : BaseData
-        {
-            return SQLService.GetInstance("TD.db").QueryAll<T>();
-        }
+    //    public static List<T> GetAllDatas<T>() where T : BaseData
+    //    {
+    //        return SQLService.GetInstance("TD.db").QueryAll<T>();
+    //    }
 
-        public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
-        {
-            return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
-        }
+    //    public static List<T> GetWhereDatas<T>(string where, params object[] args) where T : BaseData
+    //    {
+    //        return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
+    //    }
         
-        public static T GetDataWhereOnly<T>(string where, params object[] args) where T : BaseData
-        {
-            return SQLService.GetInstance("TD.db").QueryUnique<T>(where, args);
-        }
+    //    public static T GetDataWhereOnly<T>(string where, params object[] args) where T : BaseData
+    //    {
+            
+    //        return SQLService.GetInstance("TD.db").QueryUnique<T>(where, args);
+    //    }
 
-    }
+    //}
 
 
 }

@@ -65,7 +65,7 @@ namespace GameSystem
 
         public static void InitModel(EntityManager entityManager)
         {
-            BuildingDatas = SqlData.GetAllDatas<BuildingData>();
+            BuildingDatas = SQLService.Instance.QueryAll<BuildingData>();
             for (int j = 0; j < BuildingDatas.Count; j++)
             {
                 GameStaticData.BuildingName.Add(BuildingDatas[j].Id, BuildingDatas[j].Name);

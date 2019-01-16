@@ -9,6 +9,8 @@ TagManager:
   - Ship
   - Biological
   - Terrain
+  - Undefined
+  - LivingArea
   layers:
   - Default
   - TransparentFX

@@ -1170,7 +1170,7 @@ GameObject:
   - component: {fileID: 120066041483646548}
   m_Layer: 0
   m_Name: YTH_1
-  m_TagString: Untagged
+  m_TagString: Biological
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

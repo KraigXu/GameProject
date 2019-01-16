@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using UnityEngine;
 
 public sealed class StaticValue

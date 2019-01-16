@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GameSystem
 {
@@ -25,6 +26,7 @@ namespace GameSystem
         {
             public int ModelCode;
             public GameObject Prefab;
+            
         }
 
 
@@ -33,6 +35,7 @@ namespace GameSystem
         {
 
             public GameObject Model;
+            public AICharacterControl Ai;
             public int Id;
         }
 
@@ -54,6 +57,8 @@ namespace GameSystem
             modeler.Id = ++idCounter;
             modeler.Model = go;
 
+            modeler.Ai = go.GetComponent<AICharacterControl>();
+
             ModelerArray.Add(modeler);
             go.SetActive(false);
             return modeler.Id;
@@ -65,7 +70,23 @@ namespace GameSystem
             {
                 if (ModelerArray[i].Id == id)
                 {
-                    ModelerArray[i].Model.SetActive(flag);
+                    if (ModelerArray[i].Model.activeSelf != flag)
+                    {
+                        ModelerArray[i].Model.SetActive(flag); 
+                    }
+                    return;
+                }
+            }
+        }
+
+        public void ModelTarget(int id, Vector3 target)
+        {
+            for (int i = 0; i < ModelerArray.Count; i++)
+            {
+                if (ModelerArray[i].Id == id)
+                {
+                    ModelerArray[i].Ai.SetTarget(target);
+                    return;
                 }
             }
         }

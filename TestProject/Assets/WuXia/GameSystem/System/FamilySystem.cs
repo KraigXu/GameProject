@@ -15,7 +15,7 @@ namespace GameSystem
         {
 
             _familyDatas.Clear();
-            List<FamilyData> familyDatas = SqlData.GetAllDatas<FamilyData>();
+            List<FamilyData> familyDatas = SQLService.Instance.QueryAll<FamilyData>();
 
             for (int i = 0; i < familyDatas.Count; i++)
             {

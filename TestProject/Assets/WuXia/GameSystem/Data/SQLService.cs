@@ -30,6 +30,21 @@ public class SQLService
         return sqlService;
     }
 
+    public static SQLService Instance
+    {
+        get
+        {
+            if (sqlService != null)
+            {
+                return sqlService;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
     public static void CloseDB()
     {
         if (sqlService != null)
@@ -38,6 +53,9 @@ public class SQLService
             sqlService = null;
         }
     }
+
+    
+
 
     public SQLService(string databaseName)
     {

@@ -32,7 +32,7 @@ namespace GameSystem
 
         public static void SetupComponentData(EntityManager entityManager)
         {
-            List<RelationData> relationDatas = SqlData.GetAllDatas<RelationData>();
+            List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
 
             for (int i = 0; i < relationDatas.Count; i++)
             {

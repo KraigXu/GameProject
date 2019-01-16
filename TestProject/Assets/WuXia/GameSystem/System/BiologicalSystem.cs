@@ -127,6 +127,7 @@ namespace GameSystem
 
                 _data.Biological[i] = biological;
                 _data.Status[i] = status;
+                
             }
         }
 
@@ -146,9 +147,7 @@ namespace GameSystem
                 {
                     entities.Add(_data.Entitys[i]);
                 }
-
             }
-
             return entities;
         }
 
@@ -183,6 +182,20 @@ namespace GameSystem
             }
             return new Biological();
         }
+
+
+        public void EnitiyAppendComponent<T>(int id)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (id == _data.Biological[i].BiologicalId)
+                {
+                    Entity entity = _data.Entitys[i];
+                    _entityManager.AddComponent(entity, ComponentType.Create<T>());
+                }
+            }
+        }
+
         public Entity GetBiologicalEntity(int id)
         {
             for (int i = 0; i < _data.Length; i++)
@@ -204,9 +217,25 @@ namespace GameSystem
                     return _data.Position[i].Value;
                 }
             }
-            Debug.Log(">>>");
             return Vector3.zero;
         }
+
+        //PlayerControl
+
+        public void SetBiologicalInfo(int bid)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (_data.Status[i].BiologicalIdentity == 1)
+                {
+
+                }
+                return;
+            }
+        }
+
+
+
     }
 
 }

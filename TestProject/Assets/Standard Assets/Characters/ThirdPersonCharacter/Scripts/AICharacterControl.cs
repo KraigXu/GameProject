@@ -26,7 +26,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private LineRenderer _moveLine;
 
-        private void Start()
+        private void Awake()
         {
             // get the components on the object we need ( should not be null due to require component so no need to check )
             agent = GetComponentInChildren<NavMeshAgent>();
@@ -36,6 +36,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 _moveLine = gameObject.AddComponent<LineRenderer>();
             }
+        }
+        
+        private void Start()
+        {
+            
 
             _moveLine.startWidth = 0.1f;
             _moveLine.endWidth = 0.1f;

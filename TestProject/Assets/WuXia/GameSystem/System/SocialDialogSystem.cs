@@ -28,7 +28,7 @@ namespace GameSystem
 
         public static void SetupComponentData(EntityManager entityManager)
         {
-            List<SocialDialogData> socialDialogDatas = SqlData.GetAllDatas<SocialDialogData>();
+            List<SocialDialogData> socialDialogDatas = SQLService.Instance.QueryAll<SocialDialogData>();
 
             for (int i = 0; i < socialDialogDatas.Count; i++)
             {

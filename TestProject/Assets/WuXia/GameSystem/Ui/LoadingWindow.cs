@@ -67,7 +67,7 @@ namespace GameSystem.Ui
             transform.Find("TipsDown").GetComponent<Button>().onClick.AddListener(ButtonDown);
 
             //取值
-            _tipsDatas = SqlData.GetWhereDatas<TipsData>(" TipsType=? ", new object[] { "1" });
+            _tipsDatas = SQLService.Instance.SimpleQuery<TipsData>(" TipsType=? ", new object[] { "1" });
             _maxPage = _tipsDatas.Count;
             _tipsTitle.text = _currentPage + "/" + _maxPage;
 
@@ -75,6 +75,7 @@ namespace GameSystem.Ui
             _maxPage = _tipsDatas.Count;
             _tipsTitle.text = _tipsDatas[_currentPage].ContentTitle;
             _tipsContent.text = _tipsDatas[_currentPage].Content;
+            
         }
 
 

@@ -15,7 +15,7 @@ namespace GameSystem
 
         public static void SetupComponentData(EntityManager entityManager)
         {
-             _prestigeDatas = SqlData.GetAllDatas<PrestigeData>();
+             _prestigeDatas = SQLService.Instance.QueryAll<PrestigeData>();
 
             for (int i = 0; i < _prestigeDatas.Count; i++)
             {

@@ -140,17 +140,21 @@ namespace GameSystem
     public enum TargetType { None, City, Field, Biological }
     public struct BiologicalStatus : IComponentData
     {
+        public int BiologicalIdentity;  //身份编号 0  AI 1 玩家
+
         public Vector3 Position;        //  位置
         public int TargetId;            // 目标ID
        
-
         public ElementType TargetType;          // 目标类型
         public Vector3 TargetPosition;       //目标位置
 
         public LocationType LocationType;       // 实时状态
-        public int LocationIsInit;
+
+        public LocationType TargetLocationType;
+
         public int LocationId;           //所处位置ID
         public float IdleTime;             //闲置时间
+        
         public Entity TargetEntity;
 
 
