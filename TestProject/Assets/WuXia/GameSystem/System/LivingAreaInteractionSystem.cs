@@ -8,155 +8,186 @@ using UnityEngine;
 
 namespace GameSystem
 {
-
+    public class LiningAreaEnterBarrier : BarrierSystem
+    { }
     class LivingAreaInteractionSystem : JobComponentSystem
     {
-        struct Players
+        struct BiologicalData
         {
             public readonly int Length;
-            [ReadOnly] public ComponentDataArray<Position> Position;
-            public ComponentDataArray<BiologicalStatus> Biological;
-            [ReadOnly] public ComponentDataArray<PlayerInput> PlayerMarker;
+            [ReadOnly] public ComponentDataArray<Biological> Biological;
+            [ReadOnly] public ComponentDataArray<BiologicalStatus> Status;
         }
         [Inject]
-        Players m_Players;
+        BiologicalData _biologicalData;
 
-        struct LivingAreas
-        {
-            public readonly int Length;
-            [ReadOnly] public ComponentDataArray<Position> Position;
-            public ComponentDataArray<LivingArea> LivingArea;
-        }
         [Inject]
-        LivingAreas m_LivibgAreas;
+        LiningAreaEnterBarrier _areaEnterBarrier;
 
-        [BurstCompile]
-        struct LivingAreaCollision : IJobParallelFor
+       // [BurstCompile]
+        struct LivingAreaCollision : IJobProcessComponentData<LivingArea, InteractionElement>
         {
-            public float CollisionRadiusSquared;
-            public ComponentDataArray<BiologicalStatus> Biological;
+            
+            public ComponentDataArray<Biological> Biological;
+            public ComponentDataArray<BiologicalStatus> BiologicalStatus;
            
-            [ReadOnly]
-            public ComponentDataArray<Position> Positions;
-
-            [NativeDisableParallelForRestriction]
-            public ComponentDataArray<LivingArea> LivingAreas;
-
-            [NativeDisableParallelForRestriction]
-            [ReadOnly]
-            public ComponentDataArray<Position> LivibfAreaPos;
-
-            public void Execute(int index)
+            public EntityCommandBuffer CommandBuffer;
+            public EntityArchetype LivingInfoArchetype;
+            public void Execute([ReadOnly]  ref LivingArea livingArea, [ReadOnly]  ref InteractionElement interaction)
             {
-                var biologicalIndex = Biological[index];
-
-                if (biologicalIndex.LocationType == LocationType.Field)
+                for (int i = 0; i < BiologicalStatus.Length; i++)
                 {
-                    float damage = 0.0f;
-                    float3 receiverPos = Positions[index].Value;
-                    var livingAreav = LivingAreas[0];
-                    for (int i = 0; i < LivingAreas.Length; i++)
-                    {
-                        float3 lpos = LivibfAreaPos[i].Value;
-                        float3 delta = lpos - receiverPos;
-                        float distSquared = math.dot(delta, delta);
-                        if (distSquared <= CollisionRadiusSquared)
-                        {
-                            livingAreav = LivingAreas[i];
-                            livingAreav.IsInternal = 1;
-                            LivingAreas[i] = livingAreav;
-                        }
-                    }
-                }
-                else if (biologicalIndex.LocationType == LocationType.None)
-                {
-                    float3 receiverPos = Positions[index].Value;
-                    for (int i = 0; i < LivingAreas.Length; i++)
-                    {
-                        float3 lpos = LivibfAreaPos[i].Value;
-                    }
-                }else if (biologicalIndex.LocationType == LocationType.LivingAreaIn)
-                {
-                    float3 receiverPos = Positions[index].Value;
-                   
-                }
-
-                //var b = Biological[index];
-                   //b.LocationType = (int)LocationType.City;
-                   //b.LocationCode = livingAreav.Id;
-                   //Biological[index] = b;
-                   //MessageBoxInstance.Instance.MessageBoxShow("1");
-                   // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
-
-                    // MessageBoxInstance.Instance.MessageBoxShow();
-                    // livingAreav
-                    // LivingArea node = target.GetComponent<LivingArea>();
-                    // _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
-                    // MessageBoxInstansce.Instance.MessageBoxShow("");
-
-                    //判断逻辑
-
-                    //if (CurPlayer != null)
+                    //var status = BiologicalStatus[i];
+                    //if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
+                    //    && status.TargetId== livingArea.Id
+                    //    && status.TargetType == interaction.Type
+                    //    )
                     //{
-                    //    Debuger.Log("Enter LivingAreas");
-                    //    CurPlayer.transform.position = node.transform.position;
-                    //    //M_Strategy.InstanceLivingArea(node);
-
-                    //    ShowWindowData showWindowData = new ShowWindowData();
-                    //    showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
-                    //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
-
-                    //    if (CurPlayer.GroupId == -1)
+                    //    if (status.BiologicalIdentity ==0)
                     //    {
-                    //        //  M_Strategy.EnterLivingAreas(node, CurPlayer);
+                    //        status.LocationType = LocationType.City;
+                    //        status.LocationId = livingArea.Id;
+                    //        //BiologicalStatus[i] = status;
                     //    }
-                    //    else
+                    //    else if (status.BiologicalIdentity == 1)
                     //    {
-                    //        //  M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+                    //        EventInfo eventInfo=new EventInfo();
+                    //        eventInfo.Aid = Biological[i].BiologicalId;
+                    //        eventInfo.Bid = livingArea.Id;
+
+                    //         CommandBuffer.CreateEntity(LivingInfoArchetype);
+                    //         CommandBuffer.SetComponent(eventInfo);
                     //    }
                     //}
-
-                    ///// 进入生活区
-                    ///// </summary>
-                    //public void LivingAreaEnter(LivingArea livingArea)
-                    //{
-                    //    if (livingArea == null)
-                    //    {
-                    //        Debuger.LogError("进入生活区时，数据为NULL");
-                    //        return;
-                    //    }
-
-
-                    //    //先对角色的属性进行检测 是否可以进入城市，1，角色位置是否在城市附近，2 角色与城市势力关系 3角色与城市首领关系 4城市的异常状态 
-                    //    //关闭当前开启的界面 ---
-                    //    UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
-                    //    ShowWindowData showWindowData = new ShowWindowData();
-                    //    showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
-                    //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
-
-                    //    //    初始化LivingArea
-                    //    //    StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
-
-
-                    //    //更新相机
-                    //    Renderer[] renderers = livingArea.LivingAreaM.GetComponentsInChildren<Renderer>();
-                    //    if (renderers.Length > 0)
-                    //    {
-                    //        Bounds mapBounds = renderers[0].bounds;
-                    //        for (int i = 0; i < renderers.Length; i++)
-                    //        {
-                    //            mapBounds.Encapsulate(renderers[i].bounds);
-                    //        }
-                    //        LivingfAreaCameraControl.SetBounds(mapBounds);
-                    //        LivingfAreaCameraControl.SetPosition(mapBounds.center);
-                    //    }
-                    //    //  M_LivingArea.EnterLivingArea(livingArea);
-                    //}
-                else
-                {
-                    return;
                 }
             }
+
+            //public void Execute(int index)
+            //{
+            //    var status = BiologicalStatus[index];
+
+            //    for (int i = 0; i < Interaction.Length; i++)
+            //    {
+            //        if (Vector3.Distance(BiologicalPosition[index].Value, Interaction[i].Position) <=Interaction[i].Distance 
+            //            && status.TargetId==Interaction[i].Id
+            //            &&status.TargetType==Interaction[i].Type)
+            //        {
+
+            //            status.TargetType = 0;
+            //            BiologicalStatus[index] = status;
+            //        }
+                    
+            //    }
+
+            //    //var biologicalIndex = Biological[index];
+
+            //    //if (biologicalIndex.LocationType == LocationType.Field)
+            //    //{
+            //    //    float damage = 0.0f;
+            //    //    float3 receiverPos = Positions[index].Value;
+            //    //    var livingAreav = LivingAreas[0];
+            //    //    for (int i = 0; i < LivingAreas.Length; i++)
+            //    //    {
+            //    //        float3 lpos = LivibfAreaPos[i].Value;
+            //    //        float3 delta = lpos - receiverPos;
+            //    //        float distSquared = math.dot(delta, delta);
+            //    //        if (distSquared <= CollisionRadiusSquared)
+            //    //        {
+            //    //            livingAreav = LivingAreas[i];
+            //    //            livingAreav.IsInternal = 1;
+            //    //            LivingAreas[i] = livingAreav;
+            //    //        }
+            //    //    }
+            //    //}
+            //    //else if (biologicalIndex.LocationType == LocationType.None)
+            //    //{
+            //    //    float3 receiverPos = Positions[index].Value;
+            //    //    for (int i = 0; i < LivingAreas.Length; i++)
+            //    //    {
+            //    //        float3 lpos = LivibfAreaPos[i].Value;
+            //    //    }
+            //    //}else if (biologicalIndex.LocationType == LocationType.LivingAreaIn)
+            //    //{
+            //    //    float3 receiverPos = Positions[index].Value;
+                   
+            //    //}
+
+            //    //var b = Biological[index];
+            //       //b.LocationType = (int)LocationType.City;
+            //       //b.LocationCode = livingAreav.Id;
+            //       //Biological[index] = b;
+            //       //MessageBoxInstance.Instance.MessageBoxShow("1");
+            //       // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+
+            //        // MessageBoxInstance.Instance.MessageBoxShow();
+            //        // livingAreav
+            //        // LivingArea node = target.GetComponent<LivingArea>();
+            //        // _livingAreasSelect.position = node.LivingAreaRender.bounds.center;
+            //        // MessageBoxInstansce.Instance.MessageBoxShow("");
+
+            //        //判断逻辑
+
+            //        //if (CurPlayer != null)
+            //        //{
+            //        //    Debuger.Log("Enter LivingAreas");
+            //        //    CurPlayer.transform.position = node.transform.position;
+            //        //    //M_Strategy.InstanceLivingArea(node);
+
+            //        //    ShowWindowData showWindowData = new ShowWindowData();
+            //        //    showWindowData.contextData = new WindowContextLivingAreaNodeData(node);
+            //        //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+
+            //        //    if (CurPlayer.GroupId == -1)
+            //        //    {
+            //        //        //  M_Strategy.EnterLivingAreas(node, CurPlayer);
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        //  M_Strategy.EnterLivingAreas(node, M_Biological.GroupsDic[CurPlayer.GroupId].Partners);
+            //        //    }
+            //        //}
+
+            //        ///// 进入生活区
+            //        ///// </summary>
+            //        //public void LivingAreaEnter(LivingArea livingArea)
+            //        //{
+            //        //    if (livingArea == null)
+            //        //    {
+            //        //        Debuger.LogError("进入生活区时，数据为NULL");
+            //        //        return;
+            //        //    }
+
+
+            //        //    //先对角色的属性进行检测 是否可以进入城市，1，角色位置是否在城市附近，2 角色与城市势力关系 3角色与城市首领关系 4城市的异常状态 
+            //        //    //关闭当前开启的界面 ---
+            //        //    UICenterMasterManager.Instance.CloseWindow(WindowID.LivingAreaBasicWindow);
+            //        //    ShowWindowData showWindowData = new ShowWindowData();
+            //        //    showWindowData.contextData = new WindowContextLivingAreaNodeData(livingArea);
+            //        //    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+
+            //        //    //    初始化LivingArea
+            //        //    //    StaticValue.Instance.EnterLivingAreaId = livingArea.Id;
+
+
+            //        //    //更新相机
+            //        //    Renderer[] renderers = livingArea.LivingAreaM.GetComponentsInChildren<Renderer>();
+            //        //    if (renderers.Length > 0)
+            //        //    {
+            //        //        Bounds mapBounds = renderers[0].bounds;
+            //        //        for (int i = 0; i < renderers.Length; i++)
+            //        //        {
+            //        //            mapBounds.Encapsulate(renderers[i].bounds);
+            //        //        }
+            //        //        LivingfAreaCameraControl.SetBounds(mapBounds);
+            //        //        LivingfAreaCameraControl.SetPosition(mapBounds.center);
+            //        //    }
+            //        //    //  M_LivingArea.EnterLivingArea(livingArea);
+            //        //}
+            //    //else
+            //    //{
+            //    //    return;
+            //    //}
+            //}
         }
 
         //[BurstCompile]
@@ -204,19 +235,29 @@ namespace GameSystem
 
 
 
+        //protected override JobHandle OnUpdate(JobHandle inputDeps)
+        //{
+        //    var palyersI = new LivingAreaCollision
+        //    {
+        //        LivingAreas = _livingAreaData.LivingArea,
+        //        Interaction = _livingAreaData.Interaction,
+
+
+        //    }.Schedule(_biologicalData.Length, 32, inputDeps);
+        //    return palyersI;
+        //}
+
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            var palyersI = new LivingAreaCollision
+            var job = new LivingAreaCollision()
             {
-                LivingAreas = m_LivibgAreas.LivingArea,
-                LivibfAreaPos = m_LivibgAreas.Position,
-                CollisionRadiusSquared = 1f,
-                Biological = m_Players.Biological,
-                Positions = m_Players.Position
-            }.Schedule(m_Players.Length, 1, inputDeps);
-            return palyersI;
+                Biological = _biologicalData.Biological,
+                BiologicalStatus = _biologicalData.Status,
+                CommandBuffer = _areaEnterBarrier.CreateCommandBuffer(),
+                LivingInfoArchetype=StrategySceneInit.LivingAreatype
+            };
+            return job.Schedule(this, inputDeps);
         }
-
         
     }
 

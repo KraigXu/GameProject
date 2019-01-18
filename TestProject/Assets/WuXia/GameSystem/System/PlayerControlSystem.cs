@@ -51,6 +51,12 @@ namespace GameSystem
         private GameObject _playerGo;
 
 
+        private int _targetId;
+        private Vector3 _targetPosition;
+        private ElementType _targetType;
+        private LocationType _targetLocationType;
+        private bool _newIsInfo=false;
+
 
         void OnDestroy()
         {
@@ -64,7 +70,6 @@ namespace GameSystem
 
         public void SetupInit()
         {
-            
             StrategyCameraManager.Instance.SingleStart += MouseClick;
         }
 
@@ -72,29 +77,56 @@ namespace GameSystem
         {
             if (args.MouseButton == 0)
             {
-                for (int i = 0; i < _data.Length; i++)
+                if (sender.go.tag == Define.TagLivingArea)
                 {
-                    if(_data.Status[i].BiologicalIdentity==0)
-                        continue;
+                    GameObjectEntity gameObjectEntity = sender.go.GetComponent<GameObjectEntity>();
+                    LivingArea livingArea=  _entityManager.GetComponentData<LivingArea>(gameObjectEntity.Entity);
 
-                    var status = _data.Status[i];
-                    status.TargetPosition = sender.Point;
-                    
-                    if (sender.go.tag == Define.TagTerrain)
-                    {
-                        status.TargetLocationType = LocationType.Field;
-                        status.TargetType = ElementType.Terrain;
-                    }else if (sender.go.tag == Define.TagLivingArea)
-                    {
-                        status.TargetLocationType = LocationType.City;
-                        status.TargetType = ElementType.LivingArea;
-                    }else if (sender.go.tag == Define.TagBiological)
-                    {
-                        status.TargetLocationType = LocationType.Field;
-                        status.TargetType = ElementType.Biological;
-                    }
-                    _data.Status[i] = status;
+                    var interaction = _entityManager.GetComponentData<InteractionElement>(gameObjectEntity.Entity);
+
+                    _targetId = interaction.Id;
+                    _targetPosition = interaction.Position;
+                    _targetType = interaction.Type;
+                    _targetLocationType = LocationType.City;
+                    _newIsInfo = true;
+                }else if (sender.go.tag == Define.TagTerrain)
+                {
+                    _targetId = -1;
+                    _targetPosition = sender.Point;
+                    _targetType = ElementType.Terrain;
+                    _targetLocationType = LocationType.Field;
+                    _newIsInfo = true;
                 }
+                else if (sender.go.tag == Define.TagBiological)
+                {
+                   //GameObjectEntity
+
+                }
+
+
+                //for (int i = 0; i < _data.Length; i++)
+                //{
+                //    if(_data.Status[i].BiologicalIdentity==0)
+                //        continue;
+
+                //    var status = _data.Status[i];
+                //    status.TargetPosition = sender.Point;
+                    
+                //    if (sender.go.tag == Define.TagTerrain)
+                //    {
+                //        status.TargetLocationType = LocationType.Field;
+                //        status.TargetType = ElementType.Terrain;
+                //    }else if (sender.go.tag == Define.TagLivingArea)
+                //    {
+                //        status.TargetLocationType = LocationType.City;
+                //        status.TargetType = ElementType.LivingArea;
+                //    }else if (sender.go.tag == Define.TagBiological)
+                //    {
+                //        status.TargetLocationType = LocationType.Field;
+                //        status.TargetType = ElementType.Biological;
+                //    }
+                //    _data.Status[i] = status;
+                //}
             }
             else
             {
@@ -102,12 +134,24 @@ namespace GameSystem
             }
         }
 
-
-
         protected override void OnUpdate()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current.IsPointerOverGameObject() && _newIsInfo ==false)
                 return;
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (_data.Status[i].BiologicalIdentity == 0)
+                    continue;
+
+                var status = _data.Status[i];
+                status.TargetId = _targetId;
+                status.TargetType = _targetType;
+                status.TargetPosition = _targetPosition;
+                status.TargetLocationType = _targetLocationType;
+                _data.Status[i] = status;
+            }
+            _newIsInfo = false;
 
             //for (int i = 0; i < _data.Length; i++)
             //{

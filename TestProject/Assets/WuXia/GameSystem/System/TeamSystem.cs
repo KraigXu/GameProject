@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GameSystem
 {
@@ -11,6 +12,15 @@ namespace GameSystem
     /// </summary>
     public class TeamSystem : ComponentSystem
     {
+
+        public class Modeler
+        {
+            public GameObject Model;
+            public AICharacterControl Ai;
+            public int Id;
+        }
+
+
         struct TeamGroup
         {
             public readonly int Length;
@@ -20,6 +30,34 @@ namespace GameSystem
         }
 
         [Inject] private TeamGroup _data;
+
+        private int idCounter;
+        private Transform _modelParent;
+
+
+        public List<Modeler> ModelerArray = new List<Modeler>();
+        
+
+        public int AddModel(GameObject prefab, Vector3 point)
+        {
+            if (_modelParent == null)
+            {
+                GameObject modelparentgo=new GameObject("TeamModel");
+                _modelParent = modelparentgo.transform;
+            }
+
+            GameObject go = GameObject.Instantiate(prefab, point, Quaternion.identity, _modelParent);
+            Modeler modeler = new Modeler();
+            modeler.Id = ++idCounter;
+            modeler.Model = go;
+
+            modeler.Ai = go.GetComponent<AICharacterControl>();
+
+            ModelerArray.Add(modeler);
+            go.SetActive(false);
+            return modeler.Id;
+        }
+
 
         protected override void OnUpdate()
         {
@@ -33,25 +71,28 @@ namespace GameSystem
                     switch (status.LocationType)
                     {
                         case LocationType.None:
-                            ModelManager.Instance.ModelStatus(team.RunModelCode, false);
+                            ModelStatus(team.RunModelCode, false);
                             break;
                         case LocationType.City:
                             if (status.TargetLocationType == LocationType.Field)
                             {
                                 status.LocationType = status.TargetLocationType;
                             }
-                            ModelManager.Instance.ModelStatus(team.RunModelCode, false);
+                            ModelStatus(team.RunModelCode, false);
                             break;
                         case LocationType.Field:
-                            ModelManager.Instance.ModelStatus(team.RunModelCode, true);
-                            ModelManager.Instance.ModelTarget(team.RunModelCode, status.TargetPosition);
+                            ModelStatus(team.RunModelCode, true);
+                            ModelTarget(team.RunModelCode, status.TargetPosition);
                             break;
                     }
+
                 }
                 else
                 {
 
                 }
+
+                status.Position = ModelPosition(team.TeamBossId);
 
                 _data.Biological[i] = biological;
                 _data.Status[i] = status;
@@ -70,6 +111,45 @@ namespace GameSystem
                 }
             }
             return biologicals;
+        }
+
+        public void ModelStatus(int id, bool flag)
+        {
+            for (int i = 0; i < ModelerArray.Count; i++)
+            {
+                if (ModelerArray[i].Id == id)
+                {
+                    if (ModelerArray[i].Model.activeSelf != flag)
+                    {
+                        ModelerArray[i].Model.SetActive(flag);
+                    }
+                    return;
+                }
+            }
+        }
+
+        public void ModelTarget(int id, Vector3 target)
+        {
+            for (int i = 0; i < ModelerArray.Count; i++)
+            {
+                if (ModelerArray[i].Id == id)
+                {
+                    ModelerArray[i].Ai.SetTarget(target);
+                    return;
+                }
+            }
+        }
+
+        public Vector3 ModelPosition(int id)
+        {
+            for (int i = 0; i < ModelerArray.Count; i++)
+            {
+                if (ModelerArray[i].Id == id)
+                {
+                    return ModelerArray[i].Model.transform.position;
+                }
+            }
+            return Vector3.zero;
         }
     }
 

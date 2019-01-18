@@ -18,6 +18,7 @@ namespace GameSystem
         public static EntityArchetype TechniquesArchetype;
         public static EntityArchetype RelationArchetype;
         public static EntityArchetype BiologicalArchetype;
+        public static EntityArchetype LivingAreatype;
 
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
@@ -39,7 +40,8 @@ namespace GameSystem
 
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(Biological), typeof(BiologicalStatus),typeof(Team));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(BiologicalStatus), typeof(Team));
+            LivingAreatype = entityManager.CreateArchetype(typeof(EventInfo));
 
             Debug.Log("Initialize SqlData");
             SQLService.GetInstance("TD.db");
@@ -300,16 +302,6 @@ namespace GameSystem
                 {
                     Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 
-                    entityManager.SetComponentData(entity, new Position
-                    {
-                        Value = new float3(data[i].X, data[i].Y, data[i].Z)
-                    });
-
-                    entityManager.SetComponentData(entity, new Rotation
-                    {
-                        Value = quaternion.identity
-                    });
-
                     Biological biological = new Biological();
                     biological.BiologicalId = data[i].Id;
                     biological.AvatarId = data[i].AvatarId;
@@ -337,17 +329,17 @@ namespace GameSystem
                     BiologicalStatus biologicalStatus = new BiologicalStatus();
                     biologicalStatus.BiologicalIdentity = data[i].Identity;
                     biologicalStatus.Position = new Vector3(data[i].X, data[i].Y, data[i].Z);
+                    biologicalStatus.Quaternion = Quaternion.identity;
                     biologicalStatus.TargetId = 0;
                     biologicalStatus.TargetType = 0;
                     biologicalStatus.LocationType = (LocationType)data[i].LocationType;
-
                     entityManager.SetComponentData(entity, biologicalStatus);
 
-                    Team team=new Team();
+                    Team team = new Team();
                     team.TeamBossId = data[i].TeamId;
                     team.RunModelCode = 0;
-                    team.RunModelCode= ModelManager.Instance.AddModel(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z));
-                    entityManager.SetComponentData(entity,team);
+                    team.RunModelCode =SystemManager.Get<TeamSystem>().AddModel(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z));
+                    entityManager.SetComponentData(entity, team);
 
                     GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
@@ -496,7 +488,7 @@ namespace GameSystem
                 GameStaticData.BiologicalSex.Add(2, "女");
                 GameStaticData.BiologicalSex.Add(3, "未知");
 
-              
+
             }
             #endregion
 
@@ -603,8 +595,8 @@ namespace GameSystem
                         StrategyCameraManager.Instance.SetTarget(new Vector3(data[i].X, data[i].Y, data[i].Z), true);
                     }
                 }
-                data=null;
-               
+                data = null;
+
             }
 
             #endregion

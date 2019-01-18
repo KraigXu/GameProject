@@ -56,7 +56,6 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entitys;
-            public ComponentDataArray<Position> Position;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BiologicalStatus> Status;
         }
@@ -208,17 +207,17 @@ namespace GameSystem
             return new Entity();
         }
 
-        public Vector3 GetBiologicalPosition(int id)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (id == _data.Biological[i].BiologicalId)
-                {
-                    return _data.Position[i].Value;
-                }
-            }
-            return Vector3.zero;
-        }
+        //public Vector3 GetBiologicalPosition(int id)
+        //{
+        //    for (int i = 0; i < _data.Length; i++)
+        //    {
+        //        if (id == _data.Biological[i].BiologicalId)
+        //        {
+        //            return _data.Position[i].Value;
+        //        }
+        //    }
+        //    return Vector3.zero;
+        //}
 
         //PlayerControl
 
