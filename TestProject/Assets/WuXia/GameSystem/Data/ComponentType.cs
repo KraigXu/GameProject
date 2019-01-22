@@ -123,9 +123,6 @@ namespace GameSystem
         public int StrategyMoveSpeed;
         public int FireMoveSpeed;
 
-
-
-
         public int TechniquesId;
 
         public int EquipmentId;
@@ -280,6 +277,7 @@ namespace GameSystem
         public LocationType InteractionExitType;
         public int Distance;
         public ElementType Type;
+        public int EventCode;  //事件ID;
     }
 
 
@@ -331,8 +329,9 @@ namespace GameSystem
 
     public struct EventInfo : IComponentData
     {
-        public int Aid;
-        public int Bid;
+        public int Aid;           //为接触方
+        public int Bid;          //被接触方
+        public int EventCode;
     }
 }
 

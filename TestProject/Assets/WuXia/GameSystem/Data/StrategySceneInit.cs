@@ -18,7 +18,7 @@ namespace GameSystem
         public static EntityArchetype TechniquesArchetype;
         public static EntityArchetype RelationArchetype;
         public static EntityArchetype BiologicalArchetype;
-        public static EntityArchetype LivingAreatype;
+        public static EntityArchetype EventInfotype;
 
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
@@ -41,7 +41,7 @@ namespace GameSystem
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
             BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(BiologicalStatus), typeof(Team));
-            LivingAreatype = entityManager.CreateArchetype(typeof(EventInfo));
+            EventInfotype = entityManager.CreateArchetype(typeof(EventInfo));
 
             Debug.Log("Initialize SqlData");
             SQLService.GetInstance("TD.db");
@@ -262,6 +262,7 @@ namespace GameSystem
                         InteractionExitType = LocationType.LivingAreaExit,
                         InteractionEnterType = LocationType.LivingAreaEnter,
                         Type = ElementType.LivingArea,
+                        EventCode = 1000,
                     });
 
                     entityManager.AddComponent(entity, ComponentType.Create<PeriodTime>());
@@ -604,6 +605,8 @@ namespace GameSystem
             SystemManager.Get<PlayerControlSystem>().SetupInit();
 
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
+
+            LivingAreaSystem.SetupInfo();
         }
 
         private static MeshInstanceRenderer GetLookFromPrototype(string protoName)

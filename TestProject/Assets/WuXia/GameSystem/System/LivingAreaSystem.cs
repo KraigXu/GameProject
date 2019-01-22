@@ -20,6 +20,14 @@ namespace GameSystem
         [Inject]
         private BuildingSystem _buildingSystem;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void SetupInfo()
+        {
+            GameEventSystem.SetEvent(1000, LivingAreaEntity);
+        }
+
         protected override void OnUpdate()
         {
             for (int i = 0; i < _livingAreas.Length; i++)
@@ -161,6 +169,23 @@ namespace GameSystem
                 ids.Add(_livingAreas.LivingAreaNode[i].Id);
             }
             return ids;
+        }
+
+
+        /// <summary>
+        /// LivingAreaEnter  //进入方法
+        /// </summary>
+        /// <param name="info"></param>
+        public static void LivingAreaEntity(EventInfo info)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            
+           // Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(info.Aid);
+
+           // Biological biological = entityManager.GetComponentData<Biological>(entity);
+           // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+           // SystemManager.Get<BiologicalSystem>().SetBiologicalInfo();
+            LivingArea livingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaInfo(info.Bid);
         }
 
         

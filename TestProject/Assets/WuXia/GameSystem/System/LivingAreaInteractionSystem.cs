@@ -27,38 +27,48 @@ namespace GameSystem
        // [BurstCompile]
         struct LivingAreaCollision : IJobProcessComponentData<LivingArea, InteractionElement>
         {
-            
+            [ReadOnly]
             public ComponentDataArray<Biological> Biological;
+            [ReadOnly]
             public ComponentDataArray<BiologicalStatus> BiologicalStatus;
            
+            [ReadOnly]
             public EntityCommandBuffer CommandBuffer;
             public EntityArchetype LivingInfoArchetype;
-            public void Execute([ReadOnly]  ref LivingArea livingArea, [ReadOnly]  ref InteractionElement interaction)
+            public void Execute(ref LivingArea livingArea,ref InteractionElement interaction)
             {
                 for (int i = 0; i < BiologicalStatus.Length; i++)
                 {
-                    //var status = BiologicalStatus[i];
-                    //if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
-                    //    && status.TargetId== livingArea.Id
-                    //    && status.TargetType == interaction.Type
-                    //    )
-                    //{
-                    //    if (status.BiologicalIdentity ==0)
-                    //    {
-                    //        status.LocationType = LocationType.City;
-                    //        status.LocationId = livingArea.Id;
-                    //        //BiologicalStatus[i] = status;
-                    //    }
-                    //    else if (status.BiologicalIdentity == 1)
-                    //    {
-                    //        EventInfo eventInfo=new EventInfo();
-                    //        eventInfo.Aid = Biological[i].BiologicalId;
-                    //        eventInfo.Bid = livingArea.Id;
+                    var status = BiologicalStatus[i];
+                    if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
+                        && status.TargetId == livingArea.Id
+                        && status.TargetType == interaction.Type
+                    )
+                    {
+                        //LivingAreaEnterInfo info=new LivingAreaEnterInfo();
+                        //EventInfo eventInfo=new EventInfo();
+                        //eventInfo.Aid = Biological[i].BiologicalId;
+                        //eventInfo.Bid = livingArea.Id;
 
-                    //         CommandBuffer.CreateEntity(LivingInfoArchetype);
-                    //         CommandBuffer.SetComponent(eventInfo);
-                    //    }
-                    //}
+                        //eventInfo.EventCode = 100;
+                        //CommandBuffer.CreateEntity(LivingInfoArchetype);
+                        //CommandBuffer.SetComponent(eventInfo);
+
+                        //if (status)
+                        //if (status.BiologicalIdentity == 0)
+                        //{
+                        //    status.LocationType = LocationType.City;
+                        //    status.LocationId = livingArea.Id;
+                        //    //BiologicalStatus[i] = status;
+                        //}
+                        //else if (status.BiologicalIdentity == 1)
+                        //{
+                        //    EventInfo eventInfo = new EventInfo();
+                        //    eventInfo.Aid = Biological[i].BiologicalId;
+                        //    eventInfo.Bid = livingArea.Id;
+                        //}
+                    }
+
                 }
             }
 
@@ -254,7 +264,7 @@ namespace GameSystem
                 Biological = _biologicalData.Biological,
                 BiologicalStatus = _biologicalData.Status,
                 CommandBuffer = _areaEnterBarrier.CreateCommandBuffer(),
-                LivingInfoArchetype=StrategySceneInit.LivingAreatype
+                LivingInfoArchetype=StrategySceneInit.EventInfotype
             };
             return job.Schedule(this, inputDeps);
         }

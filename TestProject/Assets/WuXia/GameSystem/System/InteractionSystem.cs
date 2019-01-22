@@ -1,21 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using GameSystem.Ui;
+
 
 namespace GameSystem
 {
-
-    /// <summary>
-    /// 对产生的消息体进行解析
-    /// </summary>
     public class InteractionSystem : ComponentSystem
     {
 
+        struct Data
+        {
+            public readonly int Length;
+            public ComponentDataArray<InteractionElement> Interaction;
+            public EntityArray Entity;
+        }
+        [Inject]
+        private Data _data;
+
         protected override void OnUpdate()
         {
-           
+          
         }
     }
+
 }
 

@@ -76,7 +76,6 @@ namespace GameSystem
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
 
-
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
@@ -129,6 +128,9 @@ namespace GameSystem
                 
             }
         }
+
+
+
 
 
         /// <summary>
@@ -233,7 +235,16 @@ namespace GameSystem
             }
         }
 
+        /// <summary>
+        /// Biological状态改变
+        /// </summary>
+        /// <param name="info"></param>
+        public void BiologicalStatusChange(EventInfo info)
+        {
 
+
+
+        }
 
     }
 

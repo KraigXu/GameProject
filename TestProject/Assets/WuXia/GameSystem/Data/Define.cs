@@ -10,6 +10,8 @@ public delegate void EntityCallBack(Entity entity, int id);
 public delegate int[] SocialDialogEvent(int resoult, int a, int b);
 public delegate void SingleParameterEvent(int key);
 
+public delegate void EntitySingleEvent(Entity a, Entity b);
+
 
 
 
