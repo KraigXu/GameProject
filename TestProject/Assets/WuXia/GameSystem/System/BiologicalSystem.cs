@@ -28,30 +28,9 @@ namespace GameSystem
         None = 0,
         Field = 10,
         City = 20,
-        LivingAreaExit = 30,
-        LivingAreaEnter = 40,
-        LivingAreaIn = 50,
-        SocialDialogIn = 60,
-        SocialDialogEnter = 70,
-        SocialDialogExit = 80,
-        BuildingIn = 90,
-        BuildingExit = 100,
-        BuildingEnter=110,
     }
     public class BiologicalSystem : ComponentSystem
     {
-        //struct BiologicalGroup
-        //{
-        //    public readonly int Length;
-        //    public EntityArray Entity;
-        //    public ComponentDataArray<Biological> Biological;
-        //    public ComponentDataArray<BiologicalStatus> Status;
-        //    public ComponentDataArray<InteractionElement> Interaction;
-        //    public ComponentArray<CapsuleCollider> Renderer;
-        //}
-        //[Inject]
-        //private BiologicalGroup _data;
-
         struct Data
         {
             public readonly int Length;
@@ -64,11 +43,6 @@ namespace GameSystem
         private Data _data;
 
         private EntityManager _entityManager;
-
-        public ComponentDataArray<Biological> GetBiological
-        {
-            get { return _data.Biological; }
-        }
         private TipsWindow _tipsWindow;
 
         public BiologicalSystem()
@@ -98,7 +72,6 @@ namespace GameSystem
                 //            break;
                 //        case LocationType.Field:
                 //            ModelManager.Instance.ModelStatus(status.RunModelCode,true);
-
                 //            if (biological.SexId == 0)
                 //            {
                 //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalNormalLook);
@@ -128,11 +101,6 @@ namespace GameSystem
                 
             }
         }
-
-
-
-
-
         /// <summary>
         /// 根据当前状态获取Biologicals
         /// </summary>
@@ -208,32 +176,30 @@ namespace GameSystem
             }
             return new Entity();
         }
-
-        //public Vector3 GetBiologicalPosition(int id)
-        //{
-        //    for (int i = 0; i < _data.Length; i++)
-        //    {
-        //        if (id == _data.Biological[i].BiologicalId)
-        //        {
-        //            return _data.Position[i].Value;
-        //        }
-        //    }
-        //    return Vector3.zero;
-        //}
-
-        //PlayerControl
-
         public void SetBiologicalInfo(int bid)
         {
             for (int i = 0; i < _data.Length; i++)
             {
                 if (_data.Status[i].BiologicalIdentity == 1)
                 {
-
                 }
                 return;
             }
         }
+
+        public void SetBiologicalStatus(int id, BiologicalStatus status)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (_data.Biological[i].BiologicalId == id)
+                {
+                    _data.Status[i] = status;
+                    return;
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Biological状态改变

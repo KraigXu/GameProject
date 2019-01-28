@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
@@ -13,8 +14,17 @@ namespace GameSystem.Ui
         [SerializeField]
         private RectTransform _titlePrefab;
 
-        private Dictionary<int, UiTitleitem>  _modelTitle=new Dictionary<int, UiTitleitem>();
-        private int _idCounter;
+        private FixedTitleWindowData _data;
+        private List<FixedTitleTf> _items= new List<FixedTitleTf>();
+        private Camera _camera3D;
+        private Camera _camera2D;
+
+        public class FixedTitleTf
+        {
+            public string Content;
+            public Vector3 Point;
+            public RectTransform node;
+        }
 
         protected override void InitWindowData()
         {
@@ -30,34 +40,84 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
+            _camera3D = Camera.main;
+            _camera2D = UICenterMasterManager.Instance._Camera;
         }
 
-        /// <summary>
-        /// 新增固定气泡
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="typeId"></param>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public int AddTitle(ElementType type, int typeId, Vector3 point)
+        protected override void BeforeShowWindow(BaseWindowContextData contextData)
         {
-            int id=0;
-            switch (type)
+            if(contextData==null)return;
+
+            base.ShowWindow(contextData);
+            _data = (FixedTitleWindowData) contextData;
+
+            List<KeyValuePair<string, Vector3>> kv = _data.Items;
+
+            if (_items.Count >= kv.Count)
             {
-                case ElementType.LivingArea:
-                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_titlePrefab, transform);
-                    UiTitleitem item = rectGo.GetComponent<UiTitleitem>();
-                    item.Id = ++_idCounter;
-                    item.Lable.text = GameStaticData.LivingAreaName[typeId];
-                    item.Init(Camera.main,UICenterMasterManager.Instance._Camera,point);
-                    id = item.Id;
-                    break;
-                default:
-                    break;
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    if (i < kv.Count)
+                    {
+                        if (_items[i].Content == kv[i].Key && _items[i].Point == kv[i].Value)
+                        {
+                            continue;
+                        }
+
+                        _items[i].Point = kv[i].Value;
+                        _items[i].Content = kv[i].Key;
+
+                    }
+                    else
+                    {
+                        WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
+                    }
+                }
+
+                _items.RemoveRange(kv.Count, _items.Count - kv.Count);
             }
-            return id;
+            else
+            {
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
+                }
+                _items.Clear();
+                for (int i = 0; i < kv.Count; i++)
+                {
+                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_titlePrefab, transform);
+                    rectGo.GetComponentInChildren<Text>().text = kv[i].Key;
+                    FixedTitleTf tf=new FixedTitleTf();
+                    tf.Content = kv[i].Key;
+                    tf.Point = kv[i].Value;
+                    tf.node = rectGo;
+                    _items.Add(tf);
+                }
+                
+            }
         }
 
+        void LateUpdate()
+        {
+
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (Define.IsAPointInACamera(_camera3D, _items[i].Point))
+                {
+                    
+                    Vector2 tempPos = _camera3D.WorldToScreenPoint(_items[i].Point);
+                    Vector3 temppos = _camera2D.ScreenToWorldPoint(tempPos);
+                    temppos.z = 0f;
+                    _items[i].node.localScale = Vector3.one;
+                    _items[i].node.position = temppos;
+                }
+                else
+                {
+                    _items[i].node.localScale = Vector3.zero;
+                }
+            }
+            
+        }
     }
 
 }

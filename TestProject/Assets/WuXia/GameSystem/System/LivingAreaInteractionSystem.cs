@@ -37,39 +37,40 @@ namespace GameSystem
             public EntityArchetype LivingInfoArchetype;
             public void Execute(ref LivingArea livingArea,ref InteractionElement interaction)
             {
-                for (int i = 0; i < BiologicalStatus.Length; i++)
-                {
-                    var status = BiologicalStatus[i];
-                    if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
-                        && status.TargetId == livingArea.Id
-                        && status.TargetType == interaction.Type
-                    )
-                    {
-                        //LivingAreaEnterInfo info=new LivingAreaEnterInfo();
-                        //EventInfo eventInfo=new EventInfo();
-                        //eventInfo.Aid = Biological[i].BiologicalId;
-                        //eventInfo.Bid = livingArea.Id;
+                //for (int i = 0; i < BiologicalStatus.Length; i++)
+                //{
+                //    var status = BiologicalStatus[i];
+                //    if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
+                //        && status.TargetId == livingArea.Id
+                //        && status.TargetType == interaction.Type
+                //    )
+                //    {
+                        
+                //        //LivingAreaEnterInfo info=new LivingAreaEnterInfo();
+                //        //EventInfo eventInfo=new EventInfo();
+                //        //eventInfo.Aid = Biological[i].BiologicalId;
+                //        //eventInfo.Bid = livingArea.Id;
 
-                        //eventInfo.EventCode = 100;
-                        //CommandBuffer.CreateEntity(LivingInfoArchetype);
-                        //CommandBuffer.SetComponent(eventInfo);
+                //        //eventInfo.EventCode = 100;
+                //        //CommandBuffer.CreateEntity(LivingInfoArchetype);
+                //        //CommandBuffer.SetComponent(eventInfo);
 
-                        //if (status)
-                        //if (status.BiologicalIdentity == 0)
-                        //{
-                        //    status.LocationType = LocationType.City;
-                        //    status.LocationId = livingArea.Id;
-                        //    //BiologicalStatus[i] = status;
-                        //}
-                        //else if (status.BiologicalIdentity == 1)
-                        //{
-                        //    EventInfo eventInfo = new EventInfo();
-                        //    eventInfo.Aid = Biological[i].BiologicalId;
-                        //    eventInfo.Bid = livingArea.Id;
-                        //}
-                    }
+                //        //if (status)
+                //        //if (status.BiologicalIdentity == 0)
+                //        //{
+                //        //    status.LocationType = LocationType.City;
+                //        //    status.LocationId = livingArea.Id;
+                //        //    //BiologicalStatus[i] = status;
+                //        //}
+                //        //else if (status.BiologicalIdentity == 1)
+                //        //{
+                //        //    EventInfo eventInfo = new EventInfo();
+                //        //    eventInfo.Aid = Biological[i].BiologicalId;
+                //        //    eventInfo.Bid = livingArea.Id;
+                //        //}
+                //    }
 
-                }
+                //}
             }
 
             //public void Execute(int index)

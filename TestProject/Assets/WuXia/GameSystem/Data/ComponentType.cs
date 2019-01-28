@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace GameSystem
@@ -19,8 +20,12 @@ namespace GameSystem
         Terrain = 1,
         Biological = 2,
         District = 3,
-        LivingArea = 4
+        LivingArea = 4,
+        Team= 5,
     }
+
+
+
 
 
     public enum TendType
@@ -35,6 +40,30 @@ namespace GameSystem
         Cruising,
 
     }
+
+    public struct Element : IComponentData
+    {
+        public ElementType Type;
+    }
+
+    /// <summary>
+    /// 悬浮信息
+    /// </summary>
+    public struct FloatingInfo : IComponentData
+    {
+
+    }
+
+
+    public struct ModelSpawnData : IComponentData
+    {
+        public Position Position;
+        public Rotation Rotation;
+        public ModelMove Model;
+        public MoveSpeed Speed;
+    }
+
+
     /// <summary>
     /// Npc
     /// </summary>
@@ -82,9 +111,21 @@ namespace GameSystem
         public int Value;
     }
 
+    /// <summary>
+    /// 区域标识  有此组件的实体会被标记为在大地图中
+    /// </summary>
+    public struct RegionTag : IComponentData
+    {
+        public Vector3 Position;                //位置
+        public Quaternion Quaternion;           //角度
+        public int DistrictId;                  //所处范围ID
+    }
+
     public struct Biological : IComponentData
     {
         public int BiologicalId;
+
+
         public int AvatarId;
         public int ModelId;
         public int FamilyId;
@@ -128,20 +169,26 @@ namespace GameSystem
         public int EquipmentId;
     }
 
+    public struct ModelMove : IComponentData
+    {
+        public Vector3 Target;
+        public int Id;
+    }
+
+    public struct MoveSpeed : IComponentData
+    {
+        public float Speed;
+    }
+
     public struct Team : IComponentData
     {
         public int TeamBossId;
-        public int RunModelCode;        //运行模型Id
     }
 
     public enum TargetType { None, City, Field, Biological }
     public struct BiologicalStatus : IComponentData
     {
         public int BiologicalIdentity;          //身份编号 0  AI 1 玩家
-
-        public Vector3 Position;                //位置
-        public Quaternion Quaternion;           //角度
-
         public LocationType LocationType;       //实时状态
         public int LocationId;                  //所处位置ID
         public float IdleTime;                  //闲置时间
@@ -201,16 +248,19 @@ namespace GameSystem
 
     }
 
+    public enum LivingAreaType
+    {
+        SingleRoom=1,  //独房
+        Sect=2,       //门派
+        Village=3,    //村庄
+        City=4,       //城市
+    }
+
     public struct LivingArea : IComponentData
     {
         public int Id;
-        public int PowerId;
-        public int ModelBaseId;
-        public int ModelId;
         public int PersonNumber;
-        public int CurLevel;
-        public int MaxLevel;
-        public int TypeId;
+        public LivingAreaType Type;
         public int Money;
         public int MoneyMax;
         public int Iron;
@@ -221,16 +271,16 @@ namespace GameSystem
         public int FoodMax;
         public int DefenseStrength;
         public int StableValue;
-        public int Renown;
-        public int IsInternal;   //是否显示内部 0 不显示 1显示
-        public Vector3 Position;
 
-        public Vector3 ModelPoint;
-
-
+        public int PowerId;
+        public int ModelBaseId;
+        public int ModelId;
+      
         public int TitleUiId;
         public int BuildGroupId;
 
+        public int CurLevel;
+        public int MaxLevel;
     }
 
     public struct LivingAreaEnterInfo : IComponentData
@@ -268,16 +318,17 @@ namespace GameSystem
     /// 可交互物
     /// </summary>
     public struct InteractionElement : IComponentData
-    {
-        public Vector3 Position;
-        public int Id;
-
-        public LocationType InteractionType;
-        public LocationType InteractionEnterType;
-        public LocationType InteractionExitType;
+    {      
         public int Distance;
-        public ElementType Type;
-        public int EventCode;  //事件ID;
+
+        public int ModelCode;
+        // public ElementType Type;
+        //public int Id;
+        //public Vector3 Position;
+        //public LocationType InteractionType;
+        //public LocationType InteractionEnterType;
+        //public LocationType InteractionExitType;
+        //public int EventCode;  //事件ID;
     }
 
 

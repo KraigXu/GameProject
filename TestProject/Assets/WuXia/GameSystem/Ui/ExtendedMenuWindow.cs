@@ -10,8 +10,8 @@ namespace GameSystem.Ui
         private GameObject _contentMenus;
 
         private ExtendedMenuWindowInData _info;
-        [SerializeField]
-        private UiTitleitem _contentUi;
+      //  [SerializeField]
+      // private UiTitleitem _contentUi;
 
         protected override void InitWindowData()
         {
@@ -40,7 +40,7 @@ namespace GameSystem.Ui
 
             _info = (ExtendedMenuWindowInData)contextData;
 
-            _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera, _info.Point);
+          //  _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera, _info.Point);
 
             if (_info.DistrictEvent != null)
             {

@@ -23,8 +23,6 @@ namespace GameSystem
         [Inject]
         private BiologicalBarrier _biologicalBarrier;
 
-        public
-
         struct BiologicalCollision : IJobProcessComponentData<Biological, BiologicalStatus>
         {
             [ReadOnly]
@@ -35,22 +33,22 @@ namespace GameSystem
             public EntityArchetype EventInfoArchetype;
             public void Execute(ref Biological biological, ref BiologicalStatus status)
             {
-                for (int i = 0; i < Insteraction.Length; i++)
-                {
-                    var interaction = Insteraction[i];
-                    if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
-                        && status.TargetId == interaction.Id
-                        && status.TargetType == interaction.Type
-                    )
-                    {
-                        EventInfo eventInfo = new EventInfo();
-                        eventInfo.Aid = biological.BiologicalId;
-                        eventInfo.Bid = interaction.Id;
-                        eventInfo.EventCode = interaction.EventCode;
-                        CommandBuffer.CreateEntity(EventInfoArchetype);
-                        CommandBuffer.SetComponent(eventInfo);
-                    }
-                }
+                //for (int i = 0; i < Insteraction.Length; i++)
+                //{
+                //    var interaction = Insteraction[i];
+                //    if (Vector3.Distance(status.Position, interaction.Position) <= interaction.Distance
+                //        && status.TargetId == interaction.Id
+                //        && status.TargetType == interaction.Type
+                //    )
+                //    {
+                //        EventInfo eventInfo = new EventInfo();
+                //        eventInfo.Aid = biological.BiologicalId;
+                //        eventInfo.Bid = interaction.Id;
+                //        eventInfo.EventCode = interaction.EventCode;
+                //        CommandBuffer.CreateEntity(EventInfoArchetype);
+                //        CommandBuffer.SetComponent(eventInfo);
+                //    }
+                //}
 
 
 

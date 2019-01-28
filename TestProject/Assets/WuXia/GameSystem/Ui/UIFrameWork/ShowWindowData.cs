@@ -132,6 +132,38 @@ namespace GameSystem.Ui
         public SocialDialogEvent DialogEvent;
     }
 
+    public class FixedTitleWindowData : BaseWindowContextData
+    {
+        public List<KeyValuePair<string, Vector3>> Items;
+    }
 
+    
+
+    /// <summary>
+    /// 鼠标tips界面
+    /// </summary>
+    public class TipsInfoWindowData : BaseWindowContextData
+    {
+        public Vector3 Point;
+        public bool IsShow;
+        public int Id;
+        public List<TipsInfoItemData> InfoItemDatas=new List<TipsInfoItemData>();
+    }
+
+
+
+    public class TipsInfoItemData
+    {
+        public string Title;
+        public string Content;
+
+        public TipsInfoItemData() { }
+
+        public TipsInfoItemData(string title, string content)
+        {
+            this.Title = title;
+            this.Content = content;
+        }
+    }
 
 }

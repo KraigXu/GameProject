@@ -58,6 +58,27 @@ namespace GameSystem
             return modeler.Id;
         }
 
+        public int AddModel(GameObject prefab)
+        {
+            if (_modelParent == null)
+            {
+                GameObject modelparentgo = new GameObject("TeamModel");
+                _modelParent = modelparentgo.transform;
+            }
+
+            GameObject go = GameObject.Instantiate(prefab,Vector3.zero , Quaternion.identity, _modelParent);
+            Modeler modeler = new Modeler();
+            modeler.Id = ++idCounter;
+            modeler.Model = go;
+
+            modeler.Ai = go.GetComponent<AICharacterControl>();
+
+            ModelerArray.Add(modeler);
+            go.SetActive(false);
+            return modeler.Id;
+        }
+
+
 
         protected override void OnUpdate()
         {
@@ -68,23 +89,23 @@ namespace GameSystem
                 var biological = _data.Biological[i];
                 if (team.TeamBossId == biological.BiologicalId)
                 {
-                    switch (status.LocationType)
-                    {
-                        case LocationType.None:
-                            ModelStatus(team.RunModelCode, false);
-                            break;
-                        case LocationType.City:
-                            if (status.TargetLocationType == LocationType.Field)
-                            {
-                                status.LocationType = status.TargetLocationType;
-                            }
-                            ModelStatus(team.RunModelCode, false);
-                            break;
-                        case LocationType.Field:
-                            ModelStatus(team.RunModelCode, true);
-                            ModelTarget(team.RunModelCode, status.TargetPosition);
-                            break;
-                    }
+                    //switch (status.LocationType)
+                    //{
+                    //    case LocationType.None:
+                    //        ModelStatus(team.RunModelCode, false);
+                    //        break;
+                    //    case LocationType.City:
+                    //        if (status.TargetLocationType == LocationType.Field)
+                    //        {
+                    //            status.LocationType = status.TargetLocationType;
+                    //        }
+                    //        ModelStatus(team.RunModelCode, false);
+                    //        break;
+                    //    case LocationType.Field:
+                    //        ModelStatus(team.RunModelCode, true);
+                    //        ModelTarget(team.RunModelCode, status.TargetPosition);
+                    //        break;
+                    //}
 
                 }
                 else
@@ -92,7 +113,7 @@ namespace GameSystem
 
                 }
 
-                status.Position = ModelPosition(team.TeamBossId);
+                //status.Position = ModelPosition(team.TeamBossId);
 
                 _data.Biological[i] = biological;
                 _data.Status[i] = status;

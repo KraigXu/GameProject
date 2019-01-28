@@ -70,4 +70,44 @@ public sealed class Define
 
     public static readonly string PoolName = "GeneratedPool";
 
+
+
+    public static bool IsAPointInACamera(Camera camera ,Vector3 position,bool isNeedModelBlockOut=false)
+    {
+        // 是否在视野内
+        bool result1 = false;
+        Vector3 posViewport = camera.WorldToViewportPoint(position);
+        Rect rect = new Rect(0, 0, 1, 1);
+        result1 = rect.Contains(posViewport);
+        // 是否在远近平面内
+        bool result2 = false;
+        if (posViewport.z >= camera.nearClipPlane && posViewport.z <= camera.farClipPlane)
+        {
+            result2 = true;
+        }
+        // 综合判断
+        bool result = result1 && result2;
+        if (isNeedModelBlockOut)
+        {
+            Vector3 dir = position - camera.transform.position;
+            RaycastHit[] hits;
+            bool isBlock = false;
+            hits = Physics.RaycastAll(position, -dir);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                RaycastHit hit = hits[i];
+                Debug.DrawLine(position, hit.point, Color.black);
+                if (hit.transform.tag == "Terrain")
+                {
+                    isBlock = true;
+                    break;
+                }
+            }
+            return result && !isBlock;
+        }
+        else
+            return result;
+
+    }
+
 }

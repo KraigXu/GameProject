@@ -12,13 +12,19 @@ namespace GameSystem.Ui
     public class TipsWindow : UIWindowBase
     {
         [SerializeField]
-        private RectTransform _rect;
+        private RectTransform _textPrefab;
+        [SerializeField]
+        private RectTransform _pointTf;
+        [SerializeField]
+        private RectTransform _contentParent;
 
-        [SerializeField]
-        private  Text  _text;
+        private Vector3 _wordpos = Vector3.zero;
+        private Camera _camera3D;
+        private Camera _camera2D;
+        private bool _isNeedModelBlockOut = false;
+        private TipsInfoWindowData _infodata;
+        private List<RectTransform> _initItem = new List<RectTransform>();
         private int _curId;
-        [SerializeField]
-        private float _curdelaytime;
 
         protected override void InitWindowData()
         {
@@ -34,54 +40,96 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
+            _camera3D = Camera.main;
+            _camera2D = UICenterMasterManager.Instance._Camera;
         }
 
-        void Update()
+        protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            if (_curdelaytime > 0)
+            if (contextData == null)
+                return;
+            _infodata = (TipsInfoWindowData)contextData;
+            List<TipsInfoItemData> infoItemDatas = _infodata.InfoItemDatas;
+
+            if (_initItem.Count >= infoItemDatas.Count)
             {
-                _curdelaytime -= Time.deltaTime;
-                if (_curdelaytime < 0)
+                for (int i = 0; i < _initItem.Count; i++)
                 {
-                    _rect.gameObject.SetActive(false);
+                    if (i < infoItemDatas.Count)
+                    {
+                        TipsInfoItemData data = infoItemDatas[i];
+                        RectTransform item = _initItem[i];
+                        item.GetComponent<Text>().text = data.Title + data.Content;
+                    }
+                    else
+                    {
+                        WXPoolManager.Pools[Define.PoolName].Despawn(_initItem[i]);
+                    }
                 }
-            }
-        }
-
-
-        /// <summary>
-        /// 检查当前ID是否与之前一样
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private bool CheckId(int id)
-        {
-            if (id == _curId)
-            {
-                return true;
+                _initItem.RemoveRange(infoItemDatas.Count,_initItem.Count-infoItemDatas.Count);
             }
             else
             {
-                return false;
+                for (int i = 0; i < _initItem.Count; i++)
+                {
+                    WXPoolManager.Pools[Define.PoolName].Despawn(_initItem[i]);
+                }
+                _initItem.Clear();
+                for (int i = 0; i < infoItemDatas.Count; i++)
+                {
+                    TipsInfoItemData data = infoItemDatas[i];
+                    RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_textPrefab, _contentParent);
+                    item.GetComponent<Text>().text = data.Title + data.Content;
+                    _initItem.Add(item);
+                }
+                _curId = _infodata.Id;
             }
         }
 
-        public void SetBiologicalTip(Vector3 point,int id)
+        void LateUpdate()
         {
-            _curdelaytime = 0.3f;
-            _rect.gameObject.SetActive(true);
-            if (CheckId(id * 2)==false)
+            if (_infodata.IsShow)
             {
-                UiTitleitem control= _rect.gameObject.GetComponent<UiTitleitem>();
-                control.Init(Camera.main,UICenterMasterManager.Instance._Camera,point);
-                _text.text = GameStaticData.BiologicalSurnameDic[id] + GameStaticData.BiologicalNameDic[id];
-                _curId = id * 2;
+                _pointTf.gameObject.SetActive(true);
+            }
+            else
+            {
+                _pointTf.gameObject.SetActive(false);
+                return;
+            }
+
+            _wordpos = _infodata.Point;
+            if (Define.IsAPointInACamera(_camera3D, _wordpos))
+            {
+                _pointTf.localScale = Vector3.one;
+                Vector2 tempPos = _camera3D.WorldToScreenPoint(_wordpos);
+                Vector3 temppos = _camera2D.ScreenToWorldPoint(tempPos);
+                temppos.z = 0f;
+                _pointTf.position = temppos;
+            }
+            else
+            {
+                _pointTf.localScale = Vector3.zero;
             }
         }
+       
 
-        public void Hide()
-        {
-            _rect.gameObject.SetActive(false);
-        }
+        //public void SetBiologicalTip(Vector3 point,int id)
+        //{
+        //    _curdelaytime = 0.3f;
+        //    _pointTf.gameObject.SetActive(true);
+        //    if (CheckId(id * 2)==false)
+        //    {
+        //        UiTitleitem control= _pointTf.gameObject.GetComponent<UiTitleitem>();
+        //        control.Init(Camera.main,UICenterMasterManager.Instance._Camera,point);
+        //        //_text.text = GameStaticData.BiologicalSurnameDic[id] + GameStaticData.BiologicalNameDic[id];
+        //        _curId = id * 2;
+        //    }
+        //}
+
+        //public void Hide()
+        //{
+        //    _pointTf.gameObject.SetActive(false);
+        //}
     }
 }

@@ -13,7 +13,7 @@ public class LivingAreaAdd : LivingAreaAction
     public int value;
     public override void Act(GameSystem.LivingArea node)
     {
-        node.Renown += value;
+        //node.Renown += value;
     }
 }
 

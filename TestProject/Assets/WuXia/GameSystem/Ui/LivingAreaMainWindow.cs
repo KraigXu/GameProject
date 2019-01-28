@@ -99,7 +99,7 @@ namespace GameSystem.Ui
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
             _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+           // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
 
             Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
             Biological biological = entityManager.GetComponentData<Biological>(entityBiological);
@@ -147,7 +147,7 @@ namespace GameSystem.Ui
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
             _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+           // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
         }
 
         private void AccessBuilding(GameObject go)

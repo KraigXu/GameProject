@@ -2,11 +2,20 @@
 using Unity.Entities;
 using UnityEngine;
 using GameSystem.Ui;
+using Unity.Transforms;
 
 namespace GameSystem
 {
     public class LivingAreaSystem : ComponentSystem
     {
+        struct Data
+        {
+            public readonly int Length;
+            public ComponentDataArray<LivingArea> LivingArea;
+            public ComponentDataArray<Position> Position;
+            public EntityArray Entity;
+        }
+
         struct LivingAreaGroup
         {
             public readonly int Length;
@@ -19,6 +28,9 @@ namespace GameSystem
         private LivingAreaGroup _livingAreas;
         [Inject]
         private BuildingSystem _buildingSystem;
+
+        [Inject] private Data _data;
+
 
         /// <summary>
         /// 
@@ -36,7 +48,7 @@ namespace GameSystem
 
                 if (livingArea.TitleUiId == 0)
                 {
-                    livingArea.TitleUiId= UICenterMasterManager.Instance .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
+                    // livingArea.TitleUiId= UICenterMasterManager.Instance .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
                 }
 
                 var time = _livingAreas.PeriodTime[i];
@@ -52,10 +64,8 @@ namespace GameSystem
             }
         }
 
-
         public void ShowMainWindow(int id, ShowWindowData data)
         {
-
             UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, data);
         }
 
@@ -93,7 +103,7 @@ namespace GameSystem
                 //uidata.DefenseStrength = livingArea.DefenseStrength;
             }
 
-            uidata.BuildingiDataItems=_buildingSystem.GetUiData(id);
+            uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
             return uidata;
 
         }
@@ -102,19 +112,19 @@ namespace GameSystem
         {
             for (int i = 0; i < _livingAreas.Length; i++)
             {
-                if (_livingAreas.LivingAreaNode[i].Id != id)
+                if (_livingAreas.LivingAreaNode[i].Id == id)
                 {
                     return _livingAreas.LivingAreaNode[i];
                 }
             }
-           return  new LivingArea();
+            return new LivingArea();
         }
 
         public Entity GetLivingAreaEntity(int id)
         {
             for (int i = 0; i < _livingAreas.Length; i++)
             {
-                if (_livingAreas.LivingAreaNode[i].Id != id)
+                if (_livingAreas.LivingAreaNode[i].Id == id)
                 {
                     return _livingAreas.Entity[i];
                 }
@@ -162,7 +172,7 @@ namespace GameSystem
 
         public List<int> GetLivingAreaIds()
         {
-            List<int> ids=new List<int>();
+            List<int> ids = new List<int>();
 
             for (int i = 0; i < _livingAreas.Length; i++)
             {
@@ -179,16 +189,25 @@ namespace GameSystem
         public static void LivingAreaEntity(EventInfo info)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            
-           // Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(info.Aid);
 
-           // Biological biological = entityManager.GetComponentData<Biological>(entity);
-           // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-           // SystemManager.Get<BiologicalSystem>().SetBiologicalInfo();
+            Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(info.Aid);
+
+            Biological biological = entityManager.GetComponentData<Biological>(biologicalEntity);
+            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(biologicalEntity);
+
             LivingArea livingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaInfo(info.Bid);
+
+            status.LocationType = LocationType.City;
+            status.LocationId = livingArea.Id;
+
+            status.TargetType = ElementType.None;
+            status.TargetId = 0;
+
+            SystemManager.Get<BiologicalSystem>().SetBiologicalStatus(biological.BiologicalId, status);
+
         }
 
-        
+
 
 
     }

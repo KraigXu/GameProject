@@ -219,7 +219,7 @@ namespace GameSystem.Ui
                     LaNameTxt.text = GameStaticData.LivingAreaName[livingArea.Id];
                     LaDescriptionTxt.text = GameStaticData.LivingAreaDescription[livingArea.Id];
                     LaLevelTxt.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-                    LaTypeTxt.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+                  //  LaTypeTxt.text = GameStaticData.LivingAreaType[livingArea.TypeId];
                 };
             }
         }

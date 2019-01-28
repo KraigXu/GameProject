@@ -83,10 +83,9 @@ namespace GameSystem
                     LivingArea livingArea=  _entityManager.GetComponentData<LivingArea>(gameObjectEntity.Entity);
 
                     var interaction = _entityManager.GetComponentData<InteractionElement>(gameObjectEntity.Entity);
-
-                    _targetId = interaction.Id;
-                    _targetPosition = interaction.Position;
-                    _targetType = interaction.Type;
+                    //_targetId = interaction.Id;
+                    //_targetPosition = interaction.Position;
+                   // _targetType = interaction.Type;
                     _targetLocationType = LocationType.City;
                     _newIsInfo = true;
                 }else if (sender.go.tag == Define.TagTerrain)
@@ -100,33 +99,7 @@ namespace GameSystem
                 else if (sender.go.tag == Define.TagBiological)
                 {
                    //GameObjectEntity
-
                 }
-
-
-                //for (int i = 0; i < _data.Length; i++)
-                //{
-                //    if(_data.Status[i].BiologicalIdentity==0)
-                //        continue;
-
-                //    var status = _data.Status[i];
-                //    status.TargetPosition = sender.Point;
-                    
-                //    if (sender.go.tag == Define.TagTerrain)
-                //    {
-                //        status.TargetLocationType = LocationType.Field;
-                //        status.TargetType = ElementType.Terrain;
-                //    }else if (sender.go.tag == Define.TagLivingArea)
-                //    {
-                //        status.TargetLocationType = LocationType.City;
-                //        status.TargetType = ElementType.LivingArea;
-                //    }else if (sender.go.tag == Define.TagBiological)
-                //    {
-                //        status.TargetLocationType = LocationType.Field;
-                //        status.TargetType = ElementType.Biological;
-                //    }
-                //    _data.Status[i] = status;
-                //}
             }
             else
             {
@@ -317,7 +290,7 @@ namespace GameSystem
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-            status.LocationType = LocationType.LivingAreaIn;
+            status.LocationType = LocationType.City;
         }
 
         /// <summary>

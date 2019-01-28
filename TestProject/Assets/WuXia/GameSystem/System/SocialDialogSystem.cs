@@ -73,14 +73,14 @@ namespace GameSystem
             InteractionElement interactionA = entityManager.GetComponentData<InteractionElement>(a);
             InteractionElement interactionB = entityManager.GetComponentData<InteractionElement>(b);
 
-            if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.Biological)
-            {
-                Biological biologicalA = entityManager.GetComponentData<Biological>(a);
-            }
-            else if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.LivingArea)
-            {
+            //if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.Biological)
+            //{
+            //    Biological biologicalA = entityManager.GetComponentData<Biological>(a);
+            //}
+            //else if (interactionA.Type == ElementType.Biological && interactionB.Type == ElementType.LivingArea)
+            //{
                 
-            }
+            //}
         }
     }
 }
