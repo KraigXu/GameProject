@@ -25,9 +25,6 @@ namespace GameSystem
     }
 
 
-
-
-
     public enum TendType
     {
         None = 0, //无
@@ -54,13 +51,16 @@ namespace GameSystem
 
     }
 
+    public struct BehaviorData : IComponentData
+    {
+        public Vector3 Target;
+        public ElementType TargetType;
+        public int TargetId;
+    }
 
     public struct ModelSpawnData : IComponentData
     {
-        public Position Position;
-        public Rotation Rotation;
-        public ModelMove Model;
-        public MoveSpeed Speed;
+        public ModelComponent ModelData;
     }
 
 
@@ -80,25 +80,9 @@ namespace GameSystem
     public struct PlayerInput : IComponentData
     {
         public Vector3 MousePoint;
-        public ElementType TouchedElement;
-        public int TouchedId;
-        /// <summary>
-        /// 目标ID
-        /// </summary>
-        public int TargetCode;
-
-        /// <summary>
-        /// 目标类型Code
-        /// </summary>
-        public ElementType TargetType;
-
-        public Vector3 TargetPoint;
-
-        //newStatus.TargetType = ElementType.Terrain;
-        //newStatus.TargetPosition = hit.point;
-
-
-
+        public Vector2 MousePosition;
+        public Vector3 ClickPoint;
+        public Vector2 ViewMove;
     }
     public struct District : IComponentData
     {
@@ -169,15 +153,11 @@ namespace GameSystem
         public int EquipmentId;
     }
 
-    public struct ModelMove : IComponentData
-    {
-        public Vector3 Target;
-        public int Id;
-    }
-
-    public struct MoveSpeed : IComponentData
+    public struct ModelComponent: IComponentData
     {
         public float Speed;
+        public Vector3 Target;
+        public int Id;
     }
 
     public struct Team : IComponentData

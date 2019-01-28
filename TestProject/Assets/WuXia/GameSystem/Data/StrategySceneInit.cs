@@ -143,7 +143,7 @@ namespace GameSystem
                     GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
                 }
 
-                List<ModelData> modelDatas = SQLService.Instance.QueryAll<ModelData>();
+                List<ModelData> modelDatas = SQLService.Instance.QueryAll< ModelData>();
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
@@ -418,6 +418,18 @@ namespace GameSystem
                 {
                     Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 
+                    
+                    entityManager.AddComponent(entity,ComponentType.Create<Rotation>());
+                    entityManager.SetComponentData(entity,new Rotation
+                    {
+                        Value =quaternion.identity
+                    });
+
+                    entityManager.AddComponent(entity,ComponentType.Create<Position>());
+                    entityManager.SetComponentData(entity,new Position
+                    {
+                        Value = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
+                    });
 
                     entityManager.SetComponentData(entity, new Biological()
                     {
@@ -474,7 +486,6 @@ namespace GameSystem
                         //public int EquipmentId;
                     });
 
-
                     BiologicalStatus biologicalStatus = new BiologicalStatus();
                     biologicalStatus.BiologicalIdentity = datas[i].Identity;
                     biologicalStatus.TargetId = 0;
@@ -501,14 +512,12 @@ namespace GameSystem
                                 entityManager.AddComponent(entity,ComponentType.Create<ModelSpawnData>());
                                 entityManager.SetComponentData(entity,new ModelSpawnData
                                 {
-                                    Model = new ModelMove
+                                    ModelData = new ModelComponent
                                     {
                                         Id = SystemManager.Get<ModelMoveSystem>().AddModel(GameStaticData.ModelPrefab[datas[i].ModelId], new Vector3(datas[i].X, datas[i].Y, datas[i].Z)),
-                                        Target = Vector3.zero
+                                        Target = Vector3.zero,
+                                        Speed = 6,
                                 },
-                                    Position = new Position { Value = new float3(datas[i].X, datas[i].Y, datas[i].Z) },
-                                    Rotation = new Rotation { Value = quaternion.identity},
-                                    Speed =new MoveSpeed { Speed = 6}
                                 });
                                 
                                 entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
@@ -524,12 +533,18 @@ namespace GameSystem
                     if (datas[i].Identity==0)
                     {
                         entityManager.AddComponent(entity,ComponentType.Create<NpcInput>());
-
                     }
                     else if (datas[i].Identity == 1)
                     {
                         entityManager.AddComponent(entity,ComponentType.Create<PlayerInput>());
                     }
+
+                    entityManager.AddComponent(entity,ComponentType.Create<BehaviorData>());
+                    entityManager.SetComponentData(entity,new BehaviorData
+                    {
+
+                    });
+
 
                     GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);

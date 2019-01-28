@@ -1,21 +1,16 @@
-﻿
-using Unity.Entities;
-
+﻿using Unity.Entities;
 
 namespace GameSystem
 {
 
     public class ModelSpawnSystem : ComponentSystem
     {
-
-        
         struct Data
         {
             public readonly int Length;
             public EntityArray SpawnedEntities;
             public ComponentDataArray<ModelSpawnData> ModelSpawn;
         }
-
         [Inject]
         private Data _data;
 
@@ -28,12 +23,9 @@ namespace GameSystem
                 var ms = _data.ModelSpawn[i];
                 var shotEntity = _data.SpawnedEntities[i];
 
-
                 em.RemoveComponent<ModelSpawnData>(shotEntity);
-                em.AddComponent(shotEntity, ms.Model);
-                em.AddComponent(shotEntity, ms.Position);
-                em.AddComponent(shotEntity, ms.Rotation);
-                em.AddComponent(shotEntity,ms.Speed);
+                em.AddComponent(shotEntity, ms.ModelData);
+                
 
                 //if (sd.Faction == Factions.kPlayer)
                 //{

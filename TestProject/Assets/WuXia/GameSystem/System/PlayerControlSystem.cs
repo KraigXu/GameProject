@@ -22,8 +22,30 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public ComponentDataArray<Biological> Biological;
-            public ComponentDataArray<BiologicalStatus> Status;
+            public readonly ComponentDataArray<PlayerInput> Input;
+            public ComponentDataArray<BehaviorData> Behavior;
+            //public ComponentDataArray<Biological> Biological;
+            //public ComponentDataArray<BiologicalStatus> Status;
+        }
+
+        struct InteractionData
+        {
+            public readonly int Length;
+            public EntityArray Entity;
+            public ComponentDataArray<InteractionElement> Interaction;
+            public ComponentDataArray<Position> Position;
+            public ComponentDataArray<Element> Element;
+        }
+
+        [Inject]
+        private Data _data;
+        [Inject]
+        private InteractionData _interactionData;
+        private EntityManager _entityManager;
+
+        public PlayerControlSystem()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
 
 
@@ -32,10 +54,9 @@ namespace GameSystem
         [Inject]
         private BiologicalSystem _biologicalSystem;
 
-        [Inject]
-        private Data _data;
 
-        private EntityManager _entityManager;
+
+
 
 
         public enum PlayerStatus
@@ -55,7 +76,7 @@ namespace GameSystem
         private Vector3 _targetPosition;
         private ElementType _targetType;
         private LocationType _targetLocationType;
-        private bool _newIsInfo=false;
+        private bool _newIsInfo = false;
 
 
         void OnDestroy()
@@ -63,10 +84,7 @@ namespace GameSystem
             StrategyCameraManager.Instance.SingleStart -= MouseClick;
         }
 
-        public PlayerControlSystem()
-        {
-            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-        }
+
 
         public void SetupInit()
         {
@@ -80,15 +98,16 @@ namespace GameSystem
                 if (sender.go.tag == Define.TagLivingArea)
                 {
                     GameObjectEntity gameObjectEntity = sender.go.GetComponent<GameObjectEntity>();
-                    LivingArea livingArea=  _entityManager.GetComponentData<LivingArea>(gameObjectEntity.Entity);
+                    LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(gameObjectEntity.Entity);
 
                     var interaction = _entityManager.GetComponentData<InteractionElement>(gameObjectEntity.Entity);
                     //_targetId = interaction.Id;
                     //_targetPosition = interaction.Position;
-                   // _targetType = interaction.Type;
+                    // _targetType = interaction.Type;
                     _targetLocationType = LocationType.City;
                     _newIsInfo = true;
-                }else if (sender.go.tag == Define.TagTerrain)
+                }
+                else if (sender.go.tag == Define.TagTerrain)
                 {
                     _targetId = -1;
                     _targetPosition = sender.Point;
@@ -98,7 +117,7 @@ namespace GameSystem
                 }
                 else if (sender.go.tag == Define.TagBiological)
                 {
-                   //GameObjectEntity
+                    //GameObjectEntity
                 }
             }
             else
@@ -109,22 +128,74 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            if (EventSystem.current.IsPointerOverGameObject() && _newIsInfo ==false)
-                return;
-
             for (int i = 0; i < _data.Length; i++)
             {
-                if (_data.Status[i].BiologicalIdentity == 0)
-                    continue;
+                var input = _data.Input[i];
+                var behavior = _data.Behavior[i];
 
-                var status = _data.Status[i];
-                status.TargetId = _targetId;
-                status.TargetType = _targetType;
-                status.TargetPosition = _targetPosition;
-                status.TargetLocationType = _targetLocationType;
-                _data.Status[i] = status;
+                if (input.MousePoint != Vector3.zero)
+                {
+                    Touch(input);
+                }
+
+                if (input.ClickPoint != Vector3.zero)
+                {
+                    _data.Behavior[i] = GetNewBehavior(input);
+                }
+
+                if (input.ViewMove != Vector2.zero)
+                {
+
+                }
             }
-            _newIsInfo = false;
+
+            //for (int i = 0; i < _interactionData.Length; i++)
+            //{
+            //    var interaction = _interactionData.Interaction[i];
+            //    var position = _interactionData.Position[i];
+            //    var element = _interactionData.Element[i];
+            //    if (Vector3.Distance(position.Value, input.MousePoint) < interaction.Distance)
+            //    {
+            //        switch (element.Type)
+            //        {
+            //            case ElementType.None:
+            //                break;
+            //            case ElementType.Biological:
+            //                // Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
+            //                break;
+            //            case ElementType.District:
+            //                break;
+            //            case ElementType.LivingArea:
+            //                {
+            //                    behaviorData.Target = position.Value;
+            //                }
+            //                break;
+            //            case ElementType.Terrain:
+            //                break;
+            //            case ElementType.Team:
+            //                break;
+            //            default:
+            //                break;
+            //        }
+            //    }
+            //}
+
+            //if (EventSystem.current.IsPointerOverGameObject() && _newIsInfo == false)
+            //    return;
+
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    if (_data.Status[i].BiologicalIdentity == 0)
+            //        continue;
+
+            //    var status = _data.Status[i];
+            //    status.TargetId = _targetId;
+            //    status.TargetType = _targetType;
+            //    status.TargetPosition = _targetPosition;
+            //    status.TargetLocationType = _targetLocationType;
+            //    _data.Status[i] = status;
+            //}
+            //_newIsInfo = false;
 
             //for (int i = 0; i < _data.Length; i++)
             //{
@@ -281,6 +352,106 @@ namespace GameSystem
             //    // m_Players.Property[i] = newtarget;
             //    m_Players.Status[i] = newStatus;
             //}
+        }
+
+
+        private BehaviorData GetNewBehavior(PlayerInput input)
+        {
+
+            var behavior = new BehaviorData();
+            bool flag = false;
+            for (int i = 0; i < _interactionData.Length; i++)
+            {
+                var interaction = _interactionData.Interaction[i];
+                var position = _interactionData.Position[i];
+                var element = _interactionData.Element[i];
+                if (Vector3.Distance(position.Value, input.ClickPoint) <=interaction.Distance)
+                {
+                    flag = true;
+                    switch (element.Type)
+                    {
+                        case ElementType.None:
+                            break;
+                        case ElementType.Biological:
+                            break;
+                        case ElementType.District:
+
+                            break;
+                        case ElementType.LivingArea:
+                            {
+                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_data.Entity[i]);
+
+                                Position livingareaPos = SystemManager.GetProperty<Position>(_data.Entity[i]);
+                                behavior.Target = livingareaPos.Value;
+                                behavior.TargetType = ElementType.LivingArea;
+                                behavior.TargetId = livingArea.Id;
+                            }
+                            break;
+                        case ElementType.Terrain:
+                            {
+                            }
+                            break;
+                        case ElementType.Team:
+                            { }
+                            break;
+                        default:
+                            {
+                                behavior.TargetId = -1;
+                                behavior.Target = input.ClickPoint;
+                                behavior.TargetType = ElementType.Terrain;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            if (flag == false)
+            {
+                behavior.TargetId = -1;
+                behavior.Target = input.ClickPoint;
+                behavior.TargetType = ElementType.Terrain;
+            }
+
+            return behavior;
+        }
+
+        private void Touch(PlayerInput input)
+        {
+            for (int j = 0; j < _interactionData.Length; j++)
+            {
+                var interaction = _interactionData.Interaction[j];
+                var position = _interactionData.Position[j];
+                var element = _interactionData.Element[j];
+                if (Vector3.Distance(position.Value, input.MousePoint) < interaction.Distance)
+                {
+                    switch (element.Type)
+                    {
+                        case ElementType.None:
+                            break;
+                        case ElementType.Biological:
+                            // Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
+                            break;
+                        case ElementType.District:
+                            break;
+                        case ElementType.LivingArea:
+                            {
+                                //behaviorData.Target = position.Value;
+                            }
+                            break;
+                        case ElementType.Terrain:
+                            {
+                            }
+                            break;
+                        case ElementType.Team:
+                            { }
+                            break;
+                        default:
+                            {
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         /// <summary>

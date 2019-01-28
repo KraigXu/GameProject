@@ -15,7 +15,6 @@ namespace GameSystem
     /// </summary>
     public class MouseTipsSystem : ComponentSystem
     {
-
         struct Data
         {
             public readonly int Length;
@@ -67,7 +66,6 @@ namespace GameSystem
                             break;
                         case ElementType.Biological:
                             //Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
-                            
                             break;
                         case ElementType.District:
                             break;
