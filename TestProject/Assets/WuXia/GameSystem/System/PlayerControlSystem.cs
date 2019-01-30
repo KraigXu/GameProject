@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
 using Manager;
+using Unity.Rendering;
 
 namespace GameSystem
 {
@@ -17,17 +18,18 @@ namespace GameSystem
     /// </summary>
     public class PlayerControlSystem : ComponentSystem
     {
+        public PlayerControlSystem()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
 
         struct Data
         {
             public readonly int Length;
             public EntityArray Entity;
-            public readonly ComponentDataArray<PlayerInput> Input;
+            public ComponentDataArray<PlayerInput> Input;
             public ComponentDataArray<BehaviorData> Behavior;
-            //public ComponentDataArray<Biological> Biological;
-            //public ComponentDataArray<BiologicalStatus> Status;
         }
-
         struct InteractionData
         {
             public readonly int Length;
@@ -43,95 +45,13 @@ namespace GameSystem
         private InteractionData _interactionData;
         private EntityManager _entityManager;
 
-        public PlayerControlSystem()
-        {
-            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-        }
-
-
-        [Inject]
-        private LivingAreaSystem _livingAreaSystem;
-        [Inject]
-        private BiologicalSystem _biologicalSystem;
-
-
-
-
-
-
-        public enum PlayerStatus
-        {
-            None,  //无
-            Normal, //模型存在且状态正常
-            Stay,  //模型不存在且状态正常,
-            Death,  //模型存在且状态死亡，
-            Disappear, //模型不存在且状态死亡
-        }
-
-        private PlayerStatus _playerStatus;
-        private GameObject _playerGo;
-
-
-        private int _targetId;
-        private Vector3 _targetPosition;
-        private ElementType _targetType;
-        private LocationType _targetLocationType;
-        private bool _newIsInfo = false;
-
-
-        void OnDestroy()
-        {
-            StrategyCameraManager.Instance.SingleStart -= MouseClick;
-        }
-
-
-
-        public void SetupInit()
-        {
-            StrategyCameraManager.Instance.SingleStart += MouseClick;
-        }
-
-        public void MouseClick(MouseInfo sender, MouseEventArgs args)
-        {
-            if (args.MouseButton == 0)
-            {
-                if (sender.go.tag == Define.TagLivingArea)
-                {
-                    GameObjectEntity gameObjectEntity = sender.go.GetComponent<GameObjectEntity>();
-                    LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(gameObjectEntity.Entity);
-
-                    var interaction = _entityManager.GetComponentData<InteractionElement>(gameObjectEntity.Entity);
-                    //_targetId = interaction.Id;
-                    //_targetPosition = interaction.Position;
-                    // _targetType = interaction.Type;
-                    _targetLocationType = LocationType.City;
-                    _newIsInfo = true;
-                }
-                else if (sender.go.tag == Define.TagTerrain)
-                {
-                    _targetId = -1;
-                    _targetPosition = sender.Point;
-                    _targetType = ElementType.Terrain;
-                    _targetLocationType = LocationType.Field;
-                    _newIsInfo = true;
-                }
-                else if (sender.go.tag == Define.TagBiological)
-                {
-                    //GameObjectEntity
-                }
-            }
-            else
-            {
-
-            }
-        }
-
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
             {
                 var input = _data.Input[i];
                 var behavior = _data.Behavior[i];
+                var entity = _data.Entity[i];
 
                 if (input.MousePoint != Vector3.zero)
                 {
@@ -140,11 +60,36 @@ namespace GameSystem
 
                 if (input.ClickPoint != Vector3.zero)
                 {
-                    _data.Behavior[i] = GetNewBehavior(input);
+                    _data.Behavior[i] = GetNewBehavior(_data.Entity[i], input);
                 }
 
                 if (input.ViewMove != Vector2.zero)
                 {
+                }
+
+                if (behavior.TimeToLive <= 0 && behavior.TargetEntity != Entity.Null)
+                {
+                    switch (behavior.TargetType)
+                    {
+                        case ElementType.LivingArea:
+                            {
+                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(behavior.TargetEntity);
+
+                                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+                                var model= _entityManager.GetComponentData<ModelComponent>(entity);
+                                model.Status = 1;
+                                _entityManager.SetComponentData(entity,model);
+                            }
+                            break;
+                        case ElementType.Biological:
+                            {
+
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
 
                 }
             }
@@ -355,7 +300,7 @@ namespace GameSystem
         }
 
 
-        private BehaviorData GetNewBehavior(PlayerInput input)
+        private BehaviorData GetNewBehavior(Entity entity, PlayerInput input)
         {
 
             var behavior = new BehaviorData();
@@ -365,7 +310,7 @@ namespace GameSystem
                 var interaction = _interactionData.Interaction[i];
                 var position = _interactionData.Position[i];
                 var element = _interactionData.Element[i];
-                if (Vector3.Distance(position.Value, input.ClickPoint) <=interaction.Distance)
+                if (Vector3.Distance(position.Value, input.ClickPoint) <= interaction.Distance)
                 {
                     flag = true;
                     switch (element.Type)
@@ -373,18 +318,25 @@ namespace GameSystem
                         case ElementType.None:
                             break;
                         case ElementType.Biological:
+
+                            Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
+
+                            behavior.Target = input.ClickPoint;
+                            behavior.TargetId = biological.BiologicalId;
+                            behavior.TargetType = ElementType.Biological;
                             break;
                         case ElementType.District:
 
                             break;
                         case ElementType.LivingArea:
                             {
-                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_data.Entity[i]);
-
-                                Position livingareaPos = SystemManager.GetProperty<Position>(_data.Entity[i]);
+                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_interactionData.Entity[i]);
+                                Position livingareaPos = SystemManager.GetProperty<Position>(_interactionData.Entity[i]);
                                 behavior.Target = livingareaPos.Value;
                                 behavior.TargetType = ElementType.LivingArea;
                                 behavior.TargetId = livingArea.Id;
+                                behavior.TimeToLive = 10;
+                                behavior.TargetEntity = _interactionData.Entity[i];
                             }
                             break;
                         case ElementType.Terrain:
@@ -460,8 +412,8 @@ namespace GameSystem
         private void LivingAreaOnOpen(Entity entity, int id)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-            status.LocationType = LocationType.City;
+          //  BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+          //  status.LocationType = LocationType.City;
         }
 
         /// <summary>
@@ -472,9 +424,9 @@ namespace GameSystem
         private void LivingAreaOnExit(Entity entity, int id)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+           // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
 
-            status.LocationType = LocationType.Field;
+           // status.LocationType = LocationType.Field;
         }
 
         public void Target(Vector3 point)

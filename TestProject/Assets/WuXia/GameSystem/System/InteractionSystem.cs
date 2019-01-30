@@ -16,6 +16,7 @@ namespace GameSystem
         {
             public readonly int Length;
             public ComponentDataArray<InteractionElement> Interaction;
+            
             public ComponentDataArray<Element> Element;
             public EntityArray Entity;
         }
@@ -29,7 +30,9 @@ namespace GameSystem
             {
                 var interaction = _data.Interaction[i];
                 var element = _data.Element[i];
+                
             }
+
 
             //for (int i = 0; i < m_Data.Length; ++i)
             //{

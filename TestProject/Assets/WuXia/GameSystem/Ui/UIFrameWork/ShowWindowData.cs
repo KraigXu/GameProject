@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
@@ -26,6 +27,14 @@ namespace GameSystem.Ui
     // Base window data context for Refresh window or show window
     public class BaseWindowContextData { }
 
+    public class MessageBoxWindowData:BaseWindowContextData
+    {
+        public int Type;
+        public string Content;
+        public Action ConfirmAction;
+        public Action CancelAction;
+    }
+
 
     public class ExtendedMenuWindowInData : BaseWindowContextData
     {
@@ -45,7 +54,7 @@ namespace GameSystem.Ui
     public class BiologicalUiInData : BaseWindowContextData
     {
         public Biological CurPlayer;
-        public List<Biological> Biologicals=new List<Biological>();
+        public List<Biological> Biologicals = new List<Biological>();
     }
 
 
@@ -61,7 +70,7 @@ namespace GameSystem.Ui
 
         //public int ModelId;
 
-       
+
         //public int PersonId;
         //public int PersonNumber;
         //public int Money;
@@ -98,9 +107,9 @@ namespace GameSystem.Ui
         public BuildingEvent OnOpen;
         public BuildingEvent OnClose;
 
-        public List<BiologicalUiInfo> Biologicals= new List<BiologicalUiInfo>();
-        public List<BuildingFeaturesUiInfo> Features=new List<BuildingFeaturesUiInfo>();
-       
+        public List<BiologicalUiInfo> Biologicals = new List<BiologicalUiInfo>();
+        public List<BuildingFeaturesUiInfo> Features = new List<BuildingFeaturesUiInfo>();
+
     }
     public class BiologicalUiInfo : BaseWindowContextData
     {
@@ -137,7 +146,7 @@ namespace GameSystem.Ui
         public List<KeyValuePair<string, Vector3>> Items;
     }
 
-    
+
 
     /// <summary>
     /// 鼠标tips界面
@@ -147,7 +156,7 @@ namespace GameSystem.Ui
         public Vector3 Point;
         public bool IsShow;
         public int Id;
-        public List<TipsInfoItemData> InfoItemDatas=new List<TipsInfoItemData>();
+        public List<TipsInfoItemData> InfoItemDatas = new List<TipsInfoItemData>();
     }
 
 

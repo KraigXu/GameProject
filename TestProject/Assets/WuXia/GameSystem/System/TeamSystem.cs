@@ -24,7 +24,7 @@ namespace GameSystem
         struct TeamGroup
         {
             public readonly int Length;
-            public ComponentDataArray<BiologicalStatus> Status;
+          //  public ComponentDataArray<BiologicalStatus> Status;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<Team> Team;
         }
@@ -85,7 +85,7 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var team = _data.Team[i];
-                var status = _data.Status[i];
+               // var status = _data.Status[i];
                 var biological = _data.Biological[i];
                 if (team.TeamBossId == biological.BiologicalId)
                 {
@@ -116,7 +116,7 @@ namespace GameSystem
                 //status.Position = ModelPosition(team.TeamBossId);
 
                 _data.Biological[i] = biological;
-                _data.Status[i] = status;
+              //  _data.Status[i] = status;
             }
         }
 

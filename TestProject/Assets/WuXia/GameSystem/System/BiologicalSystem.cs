@@ -11,18 +11,6 @@ using Unity.Rendering;
 
 namespace GameSystem
 {
-    public class BiologicalGroup
-    {
-        public int GroupId;
-        public Biological LeaderId;
-        public List<Biological> Partners = new List<Biological>();
-    }
-    public enum BiologicalModelType
-    {
-        HumanMen,
-        HumanWoMen,
-    }
-
     public enum LocationType
     {
         None = 0,
@@ -36,7 +24,7 @@ namespace GameSystem
             public readonly int Length;
             public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
-            public ComponentDataArray<BiologicalStatus> Status;
+         //   public ComponentDataArray<BiologicalStatus> Status;
         }
         
         [Inject]
@@ -55,7 +43,7 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var biological = _data.Biological[i];
-                var status = _data.Status[i];
+               // var status = _data.Status[i];
                 var entity = _data.Entitys[i];
 
                 biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
@@ -97,7 +85,7 @@ namespace GameSystem
                 //ModelManager.Instance.ModelStatus();
 
                 _data.Biological[i] = biological;
-                _data.Status[i] = status;
+             //   _data.Status[i] = status;
                 
             }
         }
@@ -112,10 +100,10 @@ namespace GameSystem
             List<Entity> entities = new List<Entity>();
             for (int i = 0; i < _data.Length; i++)
             {
-                if (_data.Status[i].LocationType == type && _data.Status[i].LocationId == id)
-                {
-                    entities.Add(_data.Entitys[i]);
-                }
+                //if (_data.Status[i].LocationType == type && _data.Status[i].LocationId == id)
+                //{
+                //    entities.Add(_data.Entitys[i]);
+                //}
             }
             return entities;
         }
@@ -176,28 +164,17 @@ namespace GameSystem
             }
             return new Entity();
         }
-        public void SetBiologicalInfo(int bid)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data.Status[i].BiologicalIdentity == 1)
-                {
-                }
-                return;
-            }
-        }
-
-        public void SetBiologicalStatus(int id, BiologicalStatus status)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data.Biological[i].BiologicalId == id)
-                {
-                    _data.Status[i] = status;
-                    return;
-                }
-            }
-        }
+        //public void SetBiologicalStatus(int id, BiologicalStatus status)
+        //{
+        //    for (int i = 0; i < _data.Length; i++)
+        //    {
+        //        if (_data.Biological[i].BiologicalId == id)
+        //        {
+        //            _data.Status[i] = status;
+        //            return;
+        //        }
+        //    }
+        //}
 
 
 

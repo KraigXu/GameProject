@@ -35,11 +35,11 @@ namespace GameSystem
     public enum BehaviorPolicyType
     {
         Cruising,
-
     }
 
     public struct Element : IComponentData
     {
+        public int InnerId;
         public ElementType Type;
     }
 
@@ -56,6 +56,8 @@ namespace GameSystem
         public Vector3 Target;
         public ElementType TargetType;
         public int TargetId;
+        public float TimeToLive;
+        public Entity TargetEntity;
     }
 
     public struct ModelSpawnData : IComponentData
@@ -158,6 +160,7 @@ namespace GameSystem
         public float Speed;
         public Vector3 Target;
         public int Id;
+        public int Status;
     }
 
     public struct Team : IComponentData
@@ -166,20 +169,20 @@ namespace GameSystem
     }
 
     public enum TargetType { None, City, Field, Biological }
-    public struct BiologicalStatus : IComponentData
-    {
-        public int BiologicalIdentity;          //身份编号 0  AI 1 玩家
-        public LocationType LocationType;       //实时状态
-        public int LocationId;                  //所处位置ID
-        public float IdleTime;                  //闲置时间
+    //public struct BiologicalStatus : IComponentData
+    //{
+    //    public int BiologicalIdentity;          //身份编号 0  AI 1 玩家
+    //    public LocationType LocationType;       //实时状态
+    //    public int LocationId;                  //所处位置ID
+    //    public float IdleTime;                  //闲置时间
 
-        public int TargetId;                    // 目标ID
-        public ElementType TargetType;          // 目标类型
-        public Vector3 TargetPosition;          //目标位置
-        public LocationType TargetLocationType;  //目标所处状态
+    //    public int TargetId;                    // 目标ID
+    //    public ElementType TargetType;          // 目标类型
+    //    public Vector3 TargetPosition;          //目标位置
+    //    public LocationType TargetLocationType;  //目标所处状态
 
-        public Entity TargetEntity;
-    }
+    //    public Entity TargetEntity;
+    //}
     public struct Family : IComponentData
     {
         public int FamilyId;
@@ -225,7 +228,7 @@ namespace GameSystem
 
     public struct Wuxue : IComponentData
     {
-
+        public int Value;
     }
 
     public enum LivingAreaType
@@ -262,6 +265,13 @@ namespace GameSystem
         public int CurLevel;
         public int MaxLevel;
     }
+
+    public struct LivingAreaInside : IComponentData
+    {
+        
+    }
+
+
 
     public struct LivingAreaEnterInfo : IComponentData
     {
@@ -300,15 +310,8 @@ namespace GameSystem
     public struct InteractionElement : IComponentData
     {      
         public int Distance;
-
         public int ModelCode;
-        // public ElementType Type;
-        //public int Id;
-        //public Vector3 Position;
-        //public LocationType InteractionType;
-        //public LocationType InteractionEnterType;
-        //public LocationType InteractionExitType;
-        //public int EventCode;  //事件ID;
+
     }
 
 
@@ -364,5 +367,13 @@ namespace GameSystem
         public int Bid;          //被接触方
         public int EventCode;
     }
+
+    public struct BiologicalSocial : IComponentData
+    {
+        public int Info;
+
+    }
+
+
 }
 

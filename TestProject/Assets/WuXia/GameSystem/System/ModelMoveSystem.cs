@@ -41,9 +41,17 @@ namespace GameSystem
                 var behavior = _data.BData[i];
                 if (IsContains(move.Id))
                 {
-                    var position = new Position{ Value = ModelTarget(move.Id, behavior.Target, move.Speed)};
+                    if (move.Status == 1)
+                    {
+                        ModelStatus(move.Id,false);
+                    }
+                    else
+                    {
 
-                    _data.Position[i] = position;
+                        ModelStatus(move.Id,true);
+                        var position = new Position { Value = ModelTarget(move.Id, behavior.Target, move.Speed) };
+                        _data.Position[i] = position;
+                    }
                 }
                
             }

@@ -7,10 +7,11 @@ namespace GameSystem.Ui
     public enum WindowID
     {
         Invaild = 0,
-        ProjectSelectWindow,
-        LoadingWindow,
-        StrategyWindow,
-        MessageWindow,
+        ProjectSelectWindow,     //项目选择
+        LoadingWindow,           //加载
+        StrategyWindow,  
+        MessageWindow,           //滚动消息窗口
+        MessageBoxWindow,        //消息弹出框
         MenuWindow,
         SettingMenuWindow,
         RestWindow,
@@ -138,6 +139,7 @@ namespace GameSystem.Ui
             {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
             {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
+            {WindowID.MessageBoxWindow,"UiPrefab/MessageBoxWindow" },
             {WindowID.MenuWindow,"UiPrefab/MenuWindow" },
             {WindowID.RestWindow,"UiPrefab/RestWindow" },
             {WindowID.MapWindow,"UiPrefab/MapWindow" },

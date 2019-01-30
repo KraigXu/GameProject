@@ -2,7 +2,6 @@
 
 namespace GameSystem
 {
-
     public class ModelSpawnSystem : ComponentSystem
     {
         struct Data

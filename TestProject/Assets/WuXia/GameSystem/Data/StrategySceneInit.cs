@@ -20,6 +20,7 @@ namespace GameSystem
         public static EntityArchetype BiologicalArchetype;
         public static EntityArchetype EventInfotype;
         public static EntityArchetype LivingAreaArchetype;
+        public static EntityArchetype BiologicalSocialArchetype;
 
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
@@ -39,11 +40,12 @@ namespace GameSystem
             Debug.Log("Initialize Over");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
-            LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(LivingArea), typeof(InteractionElement), typeof(Element), typeof(FloatingInfo));
+            LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position),typeof(Rotation),typeof(LivingArea));
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Biological), typeof(BiologicalStatus));
+            BiologicalArchetype = entityManager.CreateArchetype(typeof(Element),typeof(Position),typeof(Rotation),typeof(Biological));
             EventInfotype = entityManager.CreateArchetype(typeof(EventInfo));
+            BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
 
             Debug.Log("Initialize SqlData");
             SQLService.GetInstance("TD.db");
@@ -195,14 +197,23 @@ namespace GameSystem
             #region LivingAreaInit
             {
                 List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-
                 for (int i = 0; i < datas.Count; i++)
                 {
                     Entity entity = entityManager.CreateEntity(LivingAreaArchetype);
 
+                    entityManager.AddComponentData(entity, new Element
+                    {
+                        Type = ElementType.LivingArea
+                    });
+
                     entityManager.SetComponentData(entity, new Position
                     {
                         Value = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ)
+                    });
+
+                    entityManager.SetComponentData(entity,new Rotation
+                    {
+                        Value = Quaternion.identity
                     });
 
                     entityManager.SetComponentData(entity, new LivingArea
@@ -222,17 +233,11 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
-                    entityManager.SetComponentData(entity, new InteractionElement
+                    entityManager.AddComponent(entity,ComponentType.Create<InteractionElement>());
+                    entityManager.SetComponentData(entity,new InteractionElement
                     {
-                        Distance = 1,
+                        Distance = 1
                     });
-
-                    entityManager.SetComponentData(entity, new Element
-                    {
-                        Type = ElementType.LivingArea,
-                    });
-
-                    //entityManager.SetComponentData(entity,new FloatingInfo());
 
                     entityManager.AddSharedComponentData(entity, LivingAreaLook);
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
@@ -417,15 +422,17 @@ namespace GameSystem
                 for (int i = 0; i < datas.Count; i++)
                 {
                     Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-
+                    entityManager.SetComponentData(entity,new Element
+                    {
+                        InnerId = datas[i].Id,
+                        Type = ElementType.Biological
+                    });
                     
-                    entityManager.AddComponent(entity,ComponentType.Create<Rotation>());
                     entityManager.SetComponentData(entity,new Rotation
                     {
                         Value =quaternion.identity
                     });
 
-                    entityManager.AddComponent(entity,ComponentType.Create<Position>());
                     entityManager.SetComponentData(entity,new Position
                     {
                         Value = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
@@ -434,6 +441,7 @@ namespace GameSystem
                     entityManager.SetComponentData(entity, new Biological()
                     {
                         BiologicalId = datas[i].Id,
+
                         Age = datas[i].Age,
                         AgeMax = datas[i].AgeMax,
 
@@ -486,12 +494,12 @@ namespace GameSystem
                         //public int EquipmentId;
                     });
 
-                    BiologicalStatus biologicalStatus = new BiologicalStatus();
-                    biologicalStatus.BiologicalIdentity = datas[i].Identity;
-                    biologicalStatus.TargetId = 0;
-                    biologicalStatus.TargetType = 0;
-                    biologicalStatus.LocationType = (LocationType)datas[i].LocationType;
-                    entityManager.SetComponentData(entity, biologicalStatus);
+                   // BiologicalStatus biologicalStatus = new BiologicalStatus();
+                   //// biologicalStatus.BiologicalIdentity = datas[i].Identity;
+                   // biologicalStatus.TargetId = 0;
+                   // biologicalStatus.TargetType = 0;
+                   // biologicalStatus.LocationType = (LocationType)datas[i].LocationType;
+                   // entityManager.SetComponentData(entity, biologicalStatus);
 
                     entityManager.AddComponent(entity, ComponentType.Create<Team>());
                     entityManager.SetComponentData(entity, new Team
@@ -542,6 +550,7 @@ namespace GameSystem
                     entityManager.AddComponent(entity,ComponentType.Create<BehaviorData>());
                     entityManager.SetComponentData(entity,new BehaviorData
                     {
+                        Target = Vector3.zero,
 
                     });
 
@@ -668,7 +677,7 @@ namespace GameSystem
 
             #endregion
 
-            SystemManager.Get<PlayerControlSystem>().SetupInit();
+           // SystemManager.Get<PlayerControlSystem>().SetupInit();
 
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
