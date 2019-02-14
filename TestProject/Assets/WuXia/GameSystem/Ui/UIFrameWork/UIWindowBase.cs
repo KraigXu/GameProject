@@ -163,8 +163,8 @@ namespace GameSystem.Ui
                 {
                     EnterAnimation(() =>
                     {
+                      
                         ShowWindow(contextData);
-
                     });
                 }
                 else
@@ -176,8 +176,6 @@ namespace GameSystem.Ui
                         ShowWindow(contextData);
                     });
                 }
-
-
             }
             else
             {

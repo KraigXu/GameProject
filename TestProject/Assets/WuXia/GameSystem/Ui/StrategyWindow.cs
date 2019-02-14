@@ -32,8 +32,7 @@ namespace GameSystem.Ui
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
-            windowData.animationType = UIWindowAnimationType.None;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
+
         }
 
 
