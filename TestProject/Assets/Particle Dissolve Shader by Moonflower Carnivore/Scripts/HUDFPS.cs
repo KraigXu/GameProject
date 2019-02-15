@@ -34,6 +34,7 @@ public class HUDFPS : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(">>>>");
         timeleft -= Time.deltaTime;
         accum += Time.timeScale / Time.deltaTime;
         ++frames;

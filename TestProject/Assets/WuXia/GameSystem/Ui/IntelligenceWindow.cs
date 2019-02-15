@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
+    /// <summary>
+    /// 情报窗口
+    /// </summary>
     public class IntelligenceWindow : UIWindowBase
     {
         [SerializeField]
@@ -44,6 +47,10 @@ namespace GameSystem.Ui
         public Text PonSex;
         public Text PonPrestige;
         public Text PonFamily;
+        public Toggle PonInfoTog1;
+        public Toggle PonInfoTog2;
+        public Toggle PonInfoTog3;
+        public Toggle PonInfoTog4;
 
         [Header("Faction")]
         public Text FactionName;
@@ -148,13 +155,11 @@ namespace GameSystem.Ui
             _listItems.Clear();
         }
 
-        /// <summary>
-        /// 更新界面
-        /// </summary>
         private void ChangePersonInfo()
         {
             ClearListItem();
             List<int> biologicalIds = World.Active.GetExistingManager<BiologicalSystem>().GetAllBiologicalName();
+
             for (int i = 0; i < biologicalIds.Count; i++)
             {
                 RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
@@ -162,18 +167,33 @@ namespace GameSystem.Ui
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.BiologicalSurnameDic[biologicalIds[i]] + GameStaticData.BiologicalNameDic[biologicalIds[i]];
                 uiitem.Id = biologicalIds[i];
-                uiitem.ClickCallback = delegate (int id)
-                {
-                    Biological biological = World.Active.GetExistingManager<BiologicalSystem>().GetBiologicalInfo(id);
-                    PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
-                    PonName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
-                    PonSex.text = GameStaticData.BiologicalSex[biological.SexId];
-                    PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue,ElementType.Biological);
-                    PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
-                };
+                uiitem.ClickCallback = ShowPersonDetailedInfo;
                 _listItems.Add(uiitem);
             }
         }
+
+        private void ShowPersonDetailedInfo(int id)
+        {
+            Entity entity= SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(id);
+
+            Biological biological = SystemManager.GetProperty<Biological>(entity);
+            PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
+            PonName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
+            PonSex.text = GameStaticData.BiologicalSex[biological.Sex];
+            PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue, ElementType.Biological);
+            PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
+
+
+            PonInfoTog1.gameObject.SetActive(true);
+
+
+            PonInfoTog2.gameObject.SetActive(true);
+            
+
+            PonInfoTog3.gameObject.SetActive(true);
+
+        }
+
 
         #region  Faction
         private void ChangeFactionInfo()

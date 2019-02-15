@@ -135,14 +135,14 @@ namespace GameSystem.Ui
             _propertyGo.gameObject.SetActive(flag);
             if (flag == true)
             {
-                _tizhitxt.text = _curBiological.Tizhi.ToString();
-                _lidaotxt.text = _curBiological.AgeMax.ToString();
+                //_tizhitxt.text = _curBiological.Tizhi.ToString();
+                //_lidaotxt.text = _curBiological.AgeMax.ToString();
 
-                _tizhitxt.text = _curBiological.Tizhi.ToString();
-                _lidaotxt.text = _curBiological.Lidao.ToString();
-                _jingshentxt.text = _curBiological.Jingshen.ToString();
-                _lingdongtxt.text = _curBiological.Lingdong.ToString();
-                _wuxingtxt.text = _curBiological.Wuxing.ToString();
+                //_tizhitxt.text = _curBiological.Tizhi.ToString();
+                //_lidaotxt.text = _curBiological.Lidao.ToString();
+                //_jingshentxt.text = _curBiological.Jingshen.ToString();
+                //_lingdongtxt.text = _curBiological.Lingdong.ToString();
+                //_wuxingtxt.text = _curBiological.Wuxing.ToString();
                 _jingtxt.text = _curBiological.Jing.ToString();
                 _qitxt.text = _curBiological.Qi.ToString();
                 _shentxt.text = _curBiological.Shen.ToString();

@@ -111,14 +111,13 @@ namespace GameSystem
     {
         public int BiologicalId;
 
-
         public int AvatarId;
         public int ModelId;
         public int FamilyId;
         public int FactionId;
         public int TitleId;
 
-        public int SexId;
+        public int Sex;
         public int Age;
         public int AgeMax;
         public int Disposition;
@@ -129,11 +128,6 @@ namespace GameSystem
         public byte BodyValue;         //身体值
         public byte LuckValue;          //运气值
 
-        public int Tizhi;
-        public int Lidao;
-        public int Jingshen;
-        public int Lingdong;
-        public int Wuxing;
 
         public int Jing;
         public int Qi;
@@ -153,6 +147,48 @@ namespace GameSystem
         public int TechniquesId;
 
         public int EquipmentId;
+    }
+
+    public struct Life : IComponentData
+    {
+        public float Value;
+    }
+
+    public struct Energy : IComponentData
+    {
+        
+        public float Value1;
+        public float Value2;
+    }
+
+    public struct BiologicalAvatar : IComponentData
+    {
+        public int Id;
+    }
+
+
+    public struct Power : IComponentData
+    {
+        public int Tizhi;
+        public int Lidao;
+        public int Jingshen;
+        public int Lingdong;
+        public int Wuxing;
+
+        public int WaigongMin;
+        public int WaigongMax;
+        public int NeigongMin;
+        public int NeigongMax;
+
+        public int Mingzhong;
+        public int Shanbi;
+        public int Huixin;
+
+    }
+
+    public struct Relationship : IComponentData
+    {
+
     }
 
     public struct ModelComponent: IComponentData

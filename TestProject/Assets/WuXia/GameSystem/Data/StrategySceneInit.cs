@@ -438,12 +438,65 @@ namespace GameSystem
                         Value = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
                     });
 
+                    entityManager.AddComponent(entity, ComponentType.Create<Life>());
+                    entityManager.SetComponentData(entity,new Life
+                    {
+                        Value=100,
+                    });
+
+                    entityManager.AddComponent(entity,ComponentType.Create<Energy>());
+                    entityManager.SetComponentData(entity,new Energy
+                    {
+                        Value1=100,
+                        Value2 = 300,
+                    });
+
+
                     entityManager.SetComponentData(entity, new Biological()
                     {
                         BiologicalId = datas[i].Id,
 
+                        Sex = datas[i].Sex,
                         Age = datas[i].Age,
                         AgeMax = datas[i].AgeMax,
+                        Disposition = datas[i].Disposition,
+                        PrestigeValue = datas[i].PrestigeValue,
+                        CharmValue=10,
+                        CharacterValue=70,
+                        NeutralValue = 100,
+                        BodyValue = 100,
+                        LuckValue = 100,
+
+                        //public int FamilyId;
+                        //public int FactionId;
+                        //public int TitleId;
+                    });
+
+                    entityManager.AddComponent(entity,ComponentType.Create<BiologicalAvatar>());
+                    entityManager.SetComponentData(entity,new BiologicalAvatar
+                    {
+                        Id = datas[i].AvatarId,
+                    });
+
+                    entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
+                    entityManager.SetComponentData(entity, new Equipment
+                    {
+                        HelmetId=-1,
+                        ClothesId = -1,
+                        BeltId = -1,
+                        HandGuard = -1,
+                        Pants = -1,
+                        Shoes = -1,
+                        WeaponFirstId = -1,
+                        WeaponSecondaryId = -1
+                    });
+
+                    entityManager.AddComponent(entity,ComponentType.Create<Power>());
+                    entityManager.SetComponentData(entity,new Power
+                    {
+                        //public int ;
+                        //public int Qi;
+                        //public int Shen;
 
                         Tizhi = datas[i].Tizhi,
                         Lidao = datas[i].Lidao,
@@ -451,48 +504,25 @@ namespace GameSystem
                         Lingdong = datas[i].Lingdong,
                         Wuxing = datas[i].Wuxing,
 
-                        //public int AvatarId;
-                        //public int ModelId;
-                        //public int FamilyId;
-                        //public int FactionId;
-                        //public int TitleId;
+                        WaigongMin=-1,
+                        WaigongMax = -1,
+                        NeigongMin = -1,
+                        NeigongMax = -1,
 
-                        //public int SexId;
-                        //public int Age;
-                        //public int AgeMax;
-                        //public int Disposition;
-                        //public int PrestigeValue;
-                        //public int CharmValue;
-                        //public byte CharacterValue;     //性格值
-                        //public byte NeutralValue;       //中立值
-                        //public byte BodyValue;         //身体值
-                        //public byte LuckValue;          //运气值
-
-                        //public int Tizhi;
-                        //public int Lidao;
-                        //public int Jingshen;
-                        //public int Lingdong;
-                        //public int Wuxing;
-
-                        //public int Jing;
-                        //public int Qi;
-                        //public int Shen;
-                        //public int WaigongMin;
-                        //public int WaigongMax;
-                        //public int NeigongMin;
-                        //public int NeigongMax;
-
-                        //public int Mingzhong;
-                        //public int Shanbi;
-                        //public int Huixin;
-
-                        //public int StrategyMoveSpeed;
-                        //public int FireMoveSpeed;
-
-                        //public int TechniquesId;
-
-                        //public int EquipmentId;
+                        Mingzhong = -1,
+                        Shanbi = -1,
+                        Huixin = -1,
                     });
+
+                    entityManager.AddComponent(entity,ComponentType.Create<Techniques>());
+                    entityManager.SetComponentData(entity,new Techniques
+                    {
+
+                    });
+
+
+
+                   // entityManager.SetComponentData(entity,new Relationship());
 
                    // BiologicalStatus biologicalStatus = new BiologicalStatus();
                    //// biologicalStatus.BiologicalIdentity = datas[i].Identity;

@@ -74,6 +74,7 @@ namespace GameSystem
                         case ElementType.LivingArea:
                             {
                                 LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(behavior.TargetEntity);
+                                
 
                                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                                 var model= _entityManager.GetComponentData<ModelComponent>(entity);

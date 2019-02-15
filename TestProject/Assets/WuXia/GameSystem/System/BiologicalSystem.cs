@@ -46,9 +46,9 @@ namespace GameSystem
                // var status = _data.Status[i];
                 var entity = _data.Entitys[i];
 
-                biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
-                biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
-                biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
+                //biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
+                //biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
+                //biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
                 //if (status.LocationIsInit == 0)
                 //{

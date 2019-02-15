@@ -677,7 +677,6 @@ namespace GameSystem.Ui
                 }
             }
             Application.targetFrameRate = -1;
-
         }
     }
 }
