@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/WuXia/Scene/Start.unity
+    guid: 2c531668b5591a74ab701d00485fc443
+  - enabled: 1
+    path: Assets/WuXia/Scene/Loading.unity
+    guid: 5a3241fa35cb85849bea57a86472170f
+  - enabled: 1
+    path: Assets/WuXia/Scene/FightingScene.unity
+    guid: 8a055dc1b8285354f9bf2a733314abdf
+  - enabled: 1
+    path: Assets/WuXia/Scene/DemoScene.unity
+    guid: 63ce3bc67d8a88d40ab75edcce65031c
+  - enabled: 1
+    path: Assets/WuXia/Scene/SceneSwitcher.unity
+    guid: 3a61b0c9a815a59478056bb0d8a24ffd
   m_configObjects: {}

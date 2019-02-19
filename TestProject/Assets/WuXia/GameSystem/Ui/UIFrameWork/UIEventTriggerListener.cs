@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace GameSystem.Ui
 {
-
-    public class UIEventTriggerListener : UnityEngine.EventSystems.EventTrigger
+    public class UIEventTriggerListener :EventTrigger
     {
         public delegate void VoidDelegate(GameObject go);
 

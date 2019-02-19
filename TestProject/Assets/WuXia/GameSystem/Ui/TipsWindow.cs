@@ -112,6 +112,11 @@ namespace GameSystem.Ui
                 _pointTf.localScale = Vector3.zero;
             }
         }
+
+        public void ShowTips()
+        {
+
+        }
        
 
         //public void SetBiologicalTip(Vector3 point,int id)

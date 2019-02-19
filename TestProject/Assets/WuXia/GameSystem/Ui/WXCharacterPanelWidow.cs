@@ -10,7 +10,6 @@ namespace GameSystem.Ui
 {
     public class WXCharacterPanelWidow : UIWindowBase
     {
-
         [SerializeField] private Transform _personnelParent;
         [SerializeField] private RectTransform _personnelPrefab;
 
@@ -49,12 +48,15 @@ namespace GameSystem.Ui
         [SerializeField] private Text _shentxt;
 
         [Header("Equipment")]
-        [SerializeField] private List<UiEquipmentItem> _equipmentItems;
-        [SerializeField] private RectTransform _equipmentParent;
-       // [SerializeField] private RectTransform _equipment
+        [SerializeField] private List<GameObject> _equipmentItems = new List<GameObject>();
 
+
+        // [SerializeField] private RectTransform _equipment
         private BiologicalUiInData _uiData;
         private Biological _curBiological;
+
+        private int _curShowId;
+        private Transform _showTransform;
 
         protected override void InitWindowData()
         {
@@ -79,7 +81,71 @@ namespace GameSystem.Ui
             _combatTog.onValueChanged.AddListener(CombatTogChange);
             _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
             _tagTog.onValueChanged.AddListener(TagTogChange);
+
+            for (int i = 0; i < _equipmentItems.Count; i++)
+            {
+                UIEventTriggerListener.Get(_equipmentItems[i]).onEnter = ShowEquipmentInfo;
+                UIEventTriggerListener.Get(_equipmentItems[i]).onExit = CloseEquipmentInfo;
+            }
         }
+
+        private void ShowEquipmentInfo(GameObject go)
+        {
+            Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
+            _showTransform = WXPoolManager.Pools[Define.PoolName].Spawn(StrategySceneInit.Settings.ArticleInfoPerfab.transform, transform);
+
+            UiEquipmentItem equipment = _showTransform.gameObject.GetComponent<UiEquipmentItem>();
+
+            string[] nameValue = go.name.Split('_');  //type_Id
+
+            switch ((ArticleType)int.Parse(nameValue[0]))
+            {
+                case ArticleType.Coat:
+                    {
+                        if (SystemManager.Contains<EquipmentCoat>(biologicalEntity))
+                        {
+                            UiEquipmentStyle style = new UiEquipmentStyle();
+                            EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
+
+                            style.Title = "equipmentCoat";
+                            style.Level = (int) EquipLevel.General;
+                            style.conents=new Dictionary<string, List<string>>();
+                            style.Values=new Dictionary<string, string>();
+                            style.Values.Add("钝器防御:", equipmentCoat.BluntDefense.ToString());
+                            style.Values.Add("利器防御:",equipmentCoat.SharpDefense.ToString());
+                            style.Values.Add("操作性:",equipmentCoat.Operational.ToString());
+
+                            style.Values.Add("重量:",equipmentCoat.Weight.ToString());
+                            style.Values.Add("价格:",equipmentCoat.Price.ToString());
+                            style.Values.Add("耐久:",equipmentCoat.Durable.ToString());
+                            style.BackgroundId = equipmentCoat.SpriteId;
+
+                           
+                            //equipmentCoat
+                        }
+                        else
+                        {
+                        }
+
+                    }
+                    break;
+                case ArticleType.Gloves:
+                    break;
+                case ArticleType.Pants:
+                    break;
+            }
+
+            //UICenterMasterManager.Instance.ShowWindow(id:)
+        }
+
+        private void CloseEquipmentInfo(GameObject go)
+        {
+            WXPoolManager.Pools[Define.PoolName].Despawn(_showTransform);
+            //WXPoolManager.Pools[Define.PoolName].Despawn(_items)
+            //WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
+        }
+
+
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
@@ -100,9 +166,23 @@ namespace GameSystem.Ui
 
                 _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
                 _surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
-
                 PropertyTogChange(true);
             }
+
+
+        }
+
+        void BeforeShow()
+        {
+            PlayerControlSystem system = SystemManager.Get<PlayerControlSystem>();
+        }
+
+
+
+
+        void Update()
+        {
+
         }
 
         /// <summary>
@@ -137,7 +217,6 @@ namespace GameSystem.Ui
             {
                 //_tizhitxt.text = _curBiological.Tizhi.ToString();
                 //_lidaotxt.text = _curBiological.AgeMax.ToString();
-
                 //_tizhitxt.text = _curBiological.Tizhi.ToString();
                 //_lidaotxt.text = _curBiological.Lidao.ToString();
                 //_jingshentxt.text = _curBiological.Jingshen.ToString();
@@ -203,7 +282,6 @@ namespace GameSystem.Ui
             {
 
             }
-
         }
 
         /// <summary>
@@ -211,7 +289,20 @@ namespace GameSystem.Ui
         /// </summary>
         private void ChangeEquipment()
         {
-            //EquipmentJsonData jsonData=  EquipmentSystem.GetEquipment(_curBiological.EquipmentId);
+            Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
+
+            if (SystemManager.Contains<EquipmentCoat>(biologicalEntity))
+            {
+                EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
+
+            }
+            else
+            {
+            }
+
+
+
+
 
         }
 
@@ -219,8 +310,5 @@ namespace GameSystem.Ui
         {
 
         }
-
-
-
     }
 }

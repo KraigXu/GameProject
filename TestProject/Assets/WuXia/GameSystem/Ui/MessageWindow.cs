@@ -50,16 +50,7 @@ namespace GameSystem.Ui
             Debug.Log(text.gameObject.name);
         }
 
-        void OnGUI()
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 60), "输入"))
-            {
 
-               // UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log();
-
-                //World.Active.GetExistingManager<LivingAreaSystem>().Test();
-            }
-        }
 
 
 

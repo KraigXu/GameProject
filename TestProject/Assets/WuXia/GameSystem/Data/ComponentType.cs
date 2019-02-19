@@ -253,6 +253,64 @@ namespace GameSystem
         public int WeaponSecondaryId;
     }
 
+    public enum EquipType
+    {
+        Coat,
+
+
+        Underwear,
+        Helmets,
+        Necklace,
+    }
+
+    public enum ArticleType
+    {
+        Flood=10, //食物
+
+        Coat=20, //外套
+        Gloves=21,//手套
+        Pants=22, 
+
+        Weapon =30,// 武器
+    }
+
+    public enum EquipLevel
+    {
+        General=1
+    }
+
+    public enum EquipPart
+    {
+        All=0,
+        Head =1,
+        Neck=2,
+        Chest=3,
+        Ring=4,
+        Leg=5,
+    }
+
+    public struct EquipmentCoat : IComponentData
+    {
+        public int SpriteId;
+        public EquipType Type;
+        public EquipLevel Level;
+        public EquipPart Part;
+        public byte BluntDefense;
+        public byte SharpDefense;
+        public byte Operational;
+
+        public float Weight;
+        public float Price;
+        public byte Durable;
+
+    }
+
+    public struct EquipmentHead : IComponentData
+    {
+
+    }
+
+
     public struct Techniques : IComponentData
     {
         public int Id;

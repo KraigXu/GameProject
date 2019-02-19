@@ -14,6 +14,8 @@ public class DemoSetting : MonoBehaviour
 
     public float KeySpeed = 3f;
 
+    public GameObject ArticleInfoPerfab;
+
 
 
 }

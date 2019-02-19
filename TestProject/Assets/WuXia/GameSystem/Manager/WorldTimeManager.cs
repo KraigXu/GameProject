@@ -91,6 +91,8 @@ namespace GameSystem
         void Awake()
         {
             _instance = this;
+
+
         }
 
         public void Init(DateTime dataTime)
