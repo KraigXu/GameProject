@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameSystem;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -63,6 +64,7 @@ namespace Manager
 
             if (GUI.Button(new Rect(0, 0, 160, 60), "战斗测试"))
             {
+                World.DisposeAllWorlds();
                 SceneManager.LoadScene("FightingScene");
             }
         }

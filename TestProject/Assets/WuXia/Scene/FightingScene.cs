@@ -36,10 +36,9 @@ namespace GameSystem
 
         void Awake()
         {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+         //   var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            FightingPerson = entityManager.CreateArchetype(typeof(Position),typeof(Rotation),typeof(Life),typeof(Energy));
-
+         //   FightingPerson = entityManager.CreateArchetype(typeof(Position),typeof(Rotation),typeof(Life),typeof(Energy));
 
 
 

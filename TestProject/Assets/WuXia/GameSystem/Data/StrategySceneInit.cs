@@ -23,7 +23,6 @@ namespace GameSystem
         public static EntityArchetype BiologicalSocialArchetype;
         public static EntityArchetype AncientTombArchetype;
 
-
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
         public static MeshInstanceRenderer BiologicalFemaleLook;

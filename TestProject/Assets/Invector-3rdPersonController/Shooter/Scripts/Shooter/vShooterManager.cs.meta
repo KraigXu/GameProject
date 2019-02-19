@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 4c53b06e64363f74ca9377ee0b41842b
+timeCreated: 1541785243
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - leftAdditiveWeaponIKAdjustment: {fileID: 11400000, guid: 60ffb03bc9ed5994db9b68eed6ebe1c4,
+      type: 2}
+  - rightAdditiveWeaponIKAdjustment: {fileID: 11400000, guid: 31cbce213d9244b4b811ff9a01f985de,
+      type: 2}
+  - rWeapon: {instanceID: 0}
+  - lWeapon: {instanceID: 0}
+  - ammoManager: {instanceID: 0}
+  - ammoDisplayR: {instanceID: 0}
+  - ammoDisplayL: {instanceID: 0}
+  - tpCamera: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

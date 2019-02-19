@@ -17,7 +17,6 @@ namespace GameSystem
             public ComponentDataArray<ModelComponent> Modeldata;
             public ComponentDataArray<BehaviorData> BData;
             public ComponentDataArray<Position> Position;
-            
         }
 
         [Inject]
