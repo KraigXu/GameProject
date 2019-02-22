@@ -169,7 +169,9 @@ public class SkillScriptEditor : EditorWindow
             sr.Close();
         return ret;
     }
+  
 
+   
     private bool LoadScriptFromStream(StreamReader sr)
     {
         bool bracket = false;

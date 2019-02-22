@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+﻿using System.IO;
+using System;
 
-public class FileReaderProxy  {
+public class FileReaderProxy
+{
     public static StreamReader ReadFile(string fileName)
     {
-        StreamReader st = null;
+        StreamReader sr = null;
         try
         {
-            st = File.OpenText(fileName);
+            sr = File.OpenText(fileName);
         }
         catch (Exception)
         {
             return null;
         }
-
-        return st;
+        return sr;
     }
 }

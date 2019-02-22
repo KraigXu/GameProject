@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class SkillInstance
 {
-
     public bool m_IsUsed = false;
-    public List<ISkillTrigger> m_SkillTrigers=new List<ISkillTrigger>();
+    public List<ISkillTrigger> m_SkillTrigers = new List<ISkillTrigger>();
 
     public SkillInstance() { }
 
     public SkillInstance(SkillInstance other)
     {
-        foreach (ISkillTrigger  trigger in other.m_SkillTrigers)
+        foreach (ISkillTrigger trigger in other.m_SkillTrigers)
         {
             m_SkillTrigers.Add(trigger.Clone());
         }

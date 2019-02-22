@@ -14,7 +14,8 @@ public class PlayAnimationTrigger : AbstractSkillTrigger
 
     public override bool Execute(ISkillTrigger instance, float curTime)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("PlayAnimation");
+        return true;
     }
 
     public override void Init(string args)

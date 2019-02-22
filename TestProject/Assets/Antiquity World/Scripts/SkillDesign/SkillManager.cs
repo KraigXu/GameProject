@@ -2,22 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 单一对象的skill管理
+/// </summary>
 public class SkillManager : MonoBehaviour {
 
 
 
+    public List<SkillInstance> SkillInstances=new List<SkillInstance>();
+    public TextAsset Texts1;
+    public TextAsset Texts2;
+    public TextAsset Texts3;
+    public TextAsset Texts4;
+    public TextAsset Texts5;
+
     void Awake()
     {
 
-        SkillTriggerMgr.Instance.RegisterTriggerFactory("PlayAnimation",new SkillTriggerFactory<PlayAnimationTrigger>());
-       // SkillTriggerMgr.Instance.RegisterTriggerFactory();
     }
 
-	void Start () {
-		
-	}
+    void Start()
+    {
+        if (Texts1 != null)
+        {
+          //  SkillInstances.Add(Texts1);
+        }
 
-	void Update () {
-		
-	}
+        if (Texts2 != null)
+        {
+
+        }
+
+
+
+    }
+
+    void Update()
+    {
+
+    }
 }

@@ -1,25 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
-public enum SkillTriggerExecuteType
-{
-    STET_SKILL_START
-}
-
-public interface ISkillTrigger
-{
-    void Init(string args);
-    void Reset();
-    ISkillTrigger Clone();
-    bool Execute(ISkillTrigger instance, float curTime);
-    bool IsExecuted();
-    SkillTriggerExecuteType GetExecuteType();
-    string GetTypeName();
-}
-
-
+﻿
 public abstract class AbstractSkillTrigger : ISkillTrigger
 {
     protected float m_StartTime = 0;
