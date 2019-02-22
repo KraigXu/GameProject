@@ -19,8 +19,6 @@ public class PlayAnimationTrigger : AbstractSkillTrigger
 
     public override void Init(string args)
     {
-
-
         throw new System.NotImplementedException();
     }
 
