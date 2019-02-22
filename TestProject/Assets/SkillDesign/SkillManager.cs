@@ -10,6 +10,7 @@ public class SkillManager : MonoBehaviour {
     {
 
         SkillTriggerMgr.Instance.RegisterTriggerFactory("PlayAnimation",new SkillTriggerFactory<PlayAnimationTrigger>());
+       // SkillTriggerMgr.Instance.RegisterTriggerFactory();
     }
 
 	void Start () {

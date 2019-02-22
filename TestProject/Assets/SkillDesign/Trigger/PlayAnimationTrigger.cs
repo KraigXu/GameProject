@@ -8,6 +8,7 @@ public class PlayAnimationTrigger : AbstractSkillTrigger
 
     public override ISkillTrigger Clone()
     {
+
         throw new System.NotImplementedException();
     }
 
@@ -18,6 +19,8 @@ public class PlayAnimationTrigger : AbstractSkillTrigger
 
     public override void Init(string args)
     {
+
+
         throw new System.NotImplementedException();
     }
 

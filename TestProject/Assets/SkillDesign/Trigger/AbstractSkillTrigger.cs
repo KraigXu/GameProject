@@ -20,7 +20,6 @@ public interface ISkillTrigger
 }
 
 
-
 public abstract class AbstractSkillTrigger : ISkillTrigger
 {
     protected float m_StartTime = 0;
