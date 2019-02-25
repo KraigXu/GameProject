@@ -14,18 +14,11 @@ public class GameDebug : MonoBehaviour
     public InputField InputContent;
 	void Start ()
 	{
-
-	    string io = "Player.Skill.AI 100 100 100";
-	    string strs = "Game.Skill(11,11,11,11)";
-
-        //string text=string.Format({},)
-
-
+	    string strs = "GameDebug.Test(11,11,11,11)";
     }
 	
 	void Update ()
 	{
-
 
 	    if (Input.GetKeyDown(KeyCode.BackQuote))
 	    {
@@ -52,22 +45,28 @@ public class GameDebug : MonoBehaviour
                 Debug.Log(gamename);
                 Debug.Log(mainname);
                 string content = strs.Substring(strs.IndexOf('(') + 1, strs.IndexOf(')') - 1 - strs.IndexOf('('));
-                Debug.Log(content);
-
                 string[] values = content.Split(',');
-               // GameObject.Find(gamename.SendMessage(str[1]);
-                // SceneManager.
-
-                string[] items = InputContent.text.Split('.');
-                GameObject.Find(items[0]).SendMessage(items[1],items[2]);
+                GameObject.Find(gamename).SendMessage(mainname, values);
 	            InputContent.text = "";
 	            InputContent.ActivateInputField();
 	        }
 	    }
 	}
 
-    public void Test(int value)
+    public void Test(object value)
     {
-        Debug.Log(value);
+        string[] values = (string[])value;
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            Debug.Log(values[i]);
+        }
+        Debug.Log(values.ToString());
+    }
+
+    public void ShowSkillCount(object value)
+    {
+        Debug.Log(SkillSystem.DicSkillInstancePool.Count);
+
     }
 }

@@ -4,38 +4,34 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
-public class SkillTriggerFactory<T> where T : AbstractSkillTrigger
+public class SkillTriggerFactory<T>
 {
-    public T Instance;
+    public T data;
 
-    public AbstractSkillTrigger GetIntance()
-    {
-        AbstractSkillTrigger trigger = Instance;
-        return trigger;
-    }
 
-    public SkillTriggerFactory()
-    {
 
-    }
 }
 
 public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
 {
-    public static Dictionary<string, AbstractSkillTrigger> DicSkillTrigger=new Dictionary<string, AbstractSkillTrigger>();
+
 
     public static Dictionary<int, SkillInstance> DicSkillInstancePool = new Dictionary<int, SkillInstance>();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
     {
-       RegisterTriggerFactory("PlayAnimation",new SkillTriggerFactory<PlayAnimationTrigger>());
+        SkillTriggerMgr.Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
+        SkillTriggerMgr.Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
+        ParseScript(Application.streamingAssetsPath + "/SkillScript1000.txt");
 
+        //Debug.Log(DicSkillInstancePool.Count);
         //DicSkillTrigger["PlayAnimation"].Execute(instance)
     }
 
-    private bool ParseScript(string filename)
+    private static bool ParseScript(string filename)
     {
         bool ret = false;
         try
@@ -49,11 +45,10 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
             string err = "Exception:" + e.Message + "\n" + e.StackTrace + "\n";
             Debuger.LogError(err);
         }
-
         return ret;
     }
 
-    private bool LoadScriptFromStream(StreamReader sr)
+    private static bool LoadScriptFromStream(StreamReader sr)
     {
         bool bracket = false;
         SkillInstance skill = null;
@@ -132,10 +127,14 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
-                    ISkillTrigger trigger = CreateTrigger(type, args);
+                    ISkillTrigger trigger = SkillTriggerMgr.Instance.CreateTrigger(type, args);
                     if (trigger != null)
                     {
                         skill.m_SkillTrigers.Add(trigger);
+                    }
+                    else
+                    {
+                        Debug.Log("Not "+type+"  Type");
                     }
                 }
             }
@@ -145,44 +144,11 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
         return true;
     }
 
-    public ISkillTrigger CreateTrigger(string type, string args)
-    {
-        ISkillTrigger s=new PlayAnimationTrigger();
-
-        return s;
-
-    }
-
-
-    /// <summary>
-    /// 注册
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="skillCode"></param>
-    /// <param name="skillTrigger"></param>
-    public static void RegisterTriggerFactory<T>(string skillCode, SkillTriggerFactory<T> skillTrigger) where T : AbstractSkillTrigger
-    {
-        if (DicSkillTrigger.ContainsKey(skillCode) == false)
-        {
-            DicSkillTrigger.Add(skillCode, skillTrigger.GetIntance());
-        }
-        else
-        {
-
-        }
-
-
-
-
-
-    }
-
-
-    public void AddSkillInstanceToPool(int skillId, SkillInstance skill, bool v)
+    public static void AddSkillInstanceToPool(int skillId, SkillInstance skill, bool v)
     {
         if (DicSkillInstancePool.ContainsKey(skillId) == false)
         {
-            DicSkillInstancePool.Add(skillId,skill);
+            DicSkillInstancePool.Add(skillId, skill);
         }
     }
 

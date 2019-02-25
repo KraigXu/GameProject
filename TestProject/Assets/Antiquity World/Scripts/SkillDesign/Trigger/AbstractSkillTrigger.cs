@@ -7,7 +7,11 @@ public abstract class AbstractSkillTrigger : ISkillTrigger
     protected SkillTriggerExecuteType m_ExecuteType = SkillTriggerExecuteType.STET_SKILL_START;
 
     public abstract void Init(string args);
-    public virtual void Reset(){m_IsExected=false;}
+
+    public virtual void Reset()
+    {
+        m_IsExected=false;
+    }
     public abstract ISkillTrigger Clone();
     public abstract bool Execute(ISkillTrigger instance, float curTime);
 

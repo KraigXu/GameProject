@@ -6,9 +6,6 @@ using UnityEngine;
 /// 单一对象的skill管理
 /// </summary>
 public class SkillManager : MonoBehaviour {
-
-
-
     public List<SkillInstance> SkillInstances=new List<SkillInstance>();
     public TextAsset Texts1;
     public TextAsset Texts2;
@@ -25,16 +22,14 @@ public class SkillManager : MonoBehaviour {
     {
         if (Texts1 != null)
         {
-          //  SkillInstances.Add(Texts1);
+           // SkillInstances.Add();
+            //SkillInstances.Add();
         }
 
         if (Texts2 != null)
         {
 
         }
-
-
-
     }
 
     void Update()

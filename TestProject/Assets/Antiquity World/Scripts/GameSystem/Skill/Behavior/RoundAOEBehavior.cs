@@ -17,14 +17,14 @@ namespace GameSystem.Skill
         {
             if (_effect == null)
             {
-             //   _effect = Instantiate(EffectRangePrefab, controller.transform, true);
-              //  _effect.transform.localPosition = Vector3.zero;
-               // _effect.GetComponent<RangeIndicator>().Scale = radius;
+               // _effect = Instantiate(EffectRangePrefab, controller.transform, true);
+               // _effect.transform.localPosition = Vector3.zero;
+                //_effect.GetComponent<RangeIndicator>().Scale = radius;
 
-            //    CapsuleCollider capsuleCollider= controller.gameObject.AddComponent<CapsuleCollider>();
-                //capsuleCollider.radius = radius/2f;
-                //capsuleCollider.isTrigger = true;
-                //controller.ColliderSelf = capsuleCollider;
+               // CapsuleCollider capsuleCollider = controller.gameObject.AddComponent<CapsuleCollider>();
+               // capsuleCollider.radius = radius / 2f;
+               // capsuleCollider.isTrigger = true;
+               // controller.ColliderSelf = capsuleCollider;
             }
 
         }
