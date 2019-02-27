@@ -1,4 +1,6 @@
 ﻿
+using GameSystem.Skill;
+
 public interface ISkillTrigger
 {
     void Init(string args);
@@ -8,6 +10,7 @@ public interface ISkillTrigger
     float GetStartTime();
     bool IsExecuted();
     SkillTriggerExecuteType GetExecuteType();
+    void Act(SkillController controller);
     string GetTypeName();
 }
 

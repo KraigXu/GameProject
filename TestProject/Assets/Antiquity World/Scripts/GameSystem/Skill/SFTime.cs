@@ -11,7 +11,7 @@ public class SFTime : MonoBehaviour
     private List<int> _removalPending;
     private int _idCounter;
 
-    private class  Timer
+    private class Timer
     {
         public int Id;
         public bool IsActive;
@@ -127,7 +127,6 @@ public class SFTime : MonoBehaviour
         }
     }
 	
-	// Update is called once per frame
 	void Update () {
 		Remove();
         Tick();

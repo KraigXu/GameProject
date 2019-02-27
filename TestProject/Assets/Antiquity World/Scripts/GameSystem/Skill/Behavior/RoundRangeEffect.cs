@@ -9,8 +9,6 @@ namespace GameSystem.Skill
     {
         public override bool Decide(SkillController controller)
         {
-            
-
             return true;
         }
     }

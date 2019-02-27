@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameSystem.Skill;
 using UnityEngine;
 
 public class SkillTriggerMgr
@@ -27,7 +28,7 @@ public class SkillTriggerMgr
     /// <typeparam name="T"></typeparam>
     /// <param name="skillCode"></param>
     /// <param name="skillTrigger"></param>
-    public void RegisterTriggerFactory<T>(string skillCode, SkillTriggerFactory<T> skillTrigger) where T : AbstractSkillTrigger
+    public void RegisterTriggerFactory<T>(string skillCode, SkillTriggerFactory<T> skillTrigger) where T : ISkillTrigger
     {
         if (DicSkillTriggerRegister.ContainsKey(skillCode) == false)
         {
@@ -39,7 +40,21 @@ public class SkillTriggerMgr
         }
     }
 
-    public ISkillTrigger CreateTrigger(string type, string args)
+    //public ISkillTrigger CreateTrigger(string type, string args)
+    //{
+    //    //if (DicSkillTriggerRegister.ContainsKey(type) == true)
+    //    //{
+
+    //    //}
+    //    Type t = DicSkillTriggerRegister[type];
+    //    object o = System.Activator.CreateInstance(t);  //创建实例
+    //    System.Reflection.MethodInfo mi = t.GetMethod("Init");
+    //    mi.Invoke(o, new object[] { args });
+    //    Debug.Log(">>>>>>>>>");
+    //    return (ISkillTrigger)o;
+    //}
+
+    public SkillBehavior CreateTrigger(string type, string args)
     {
         //if (DicSkillTriggerRegister.ContainsKey(type) == true)
         //{
@@ -50,7 +65,6 @@ public class SkillTriggerMgr
         System.Reflection.MethodInfo mi = t.GetMethod("Init");
         mi.Invoke(o, new object[] { args });
         Debug.Log(">>>>>>>>>");
-        return (ISkillTrigger)o;
+        return (SkillBehavior)o;
     }
-
 }

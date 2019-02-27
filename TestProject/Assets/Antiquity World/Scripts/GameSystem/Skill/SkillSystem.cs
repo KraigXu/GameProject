@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using GameSystem.Skill;
 using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
@@ -17,8 +18,7 @@ public class SkillTriggerFactory<T>
 public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
 {
 
-
-    public static Dictionary<int, SkillInstance> DicSkillInstancePool = new Dictionary<int, SkillInstance>();
+    public static Dictionary<int, SkillGroup> DicSkillInstancePool = new Dictionary<int, SkillGroup>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
@@ -51,7 +51,7 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
     private static bool LoadScriptFromStream(StreamReader sr)
     {
         bool bracket = false;
-        SkillInstance skill = null;
+        SkillGroup skill = null;
         do
         {
             string line = sr.ReadLine();
@@ -79,7 +79,7 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
 
                 string args = line.Substring(start + 1, length);
                 int skillId = (int)Convert.ChangeType(args, typeof(int));
-                skill = new SkillInstance();
+                skill = new SkillGroup();
                 AddSkillInstanceToPool(skillId, skill, true);
             }
             else if (line.StartsWith("{"))
@@ -91,7 +91,7 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
                 bracket = false;
 
                 // 按时间排序
-                skill.m_SkillTrigers.Sort((left, right) =>
+                skill.Behaviors.Sort((left, right) =>
                 {
                     if (left.GetStartTime() > right.GetStartTime())
                     {
@@ -127,10 +127,10 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
-                    ISkillTrigger trigger = SkillTriggerMgr.Instance.CreateTrigger(type, args);
+                    SkillBehavior trigger = SkillTriggerMgr.Instance.CreateTrigger(type, args);
                     if (trigger != null)
                     {
-                        skill.m_SkillTrigers.Add(trigger);
+                        skill.Behaviors.Add(trigger);
                     }
                     else
                     {
@@ -144,7 +144,7 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
         return true;
     }
 
-    public static void AddSkillInstanceToPool(int skillId, SkillInstance skill, bool v)
+    public static void AddSkillInstanceToPool(int skillId, SkillGroup skill, bool v)
     {
         if (DicSkillInstancePool.ContainsKey(skillId) == false)
         {

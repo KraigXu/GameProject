@@ -9,14 +9,14 @@ namespace GameSystem.Skill
         public SkillGroup CurrentGroup;          //当前行为
         public SkillGroup RemainGroup;        //保持当前状态
 
-        public float ContinuedTime=3f;       //持续时间   持续时间应是外界赋值
-        public GameObject[] AillTarget=new GameObject[3];   //所有目标  数组长度应是外界赋值
+        public float ContinuedTime = 3f;       //持续时间   持续时间应是外界赋值
+        public GameObject[] AillTarget = new GameObject[3];   //所有目标  数组长度应是外界赋值
         public string[] ImpactLabel;  //影响标签  凡是元素集内的标签 才会被技能影响
 
         public Collider ColliderSelf;
         public Transform[] AllTarget;
         [SerializeField]
-        private float _currentTime=0;
+        public float _currentTime = 0;
 
 
         void Start()
@@ -35,7 +35,7 @@ namespace GameSystem.Skill
             }
         }
 
-         void OnTriggerEnter(Collider collider)
+        void OnTriggerEnter(Collider collider)
         {
             if (collider.gameObject.tag == "Enemy")
             {
@@ -50,7 +50,7 @@ namespace GameSystem.Skill
             }
         }
 
-         void OnTriggerExit(Collider collider)
+        void OnTriggerExit(Collider collider)
         {
             if (collider.gameObject.tag == "Enemy")
             {
