@@ -15,18 +15,17 @@ namespace GameSystem.Skill
         public float Frequency=0.3f;           //频率
 
         private GameObject _currentEffect;
-        private SkillController skillController;
+        private SkillInstance skillController;
         
-        public override void Act(SkillController controller)
+        public override void Act(SkillInstance controller)
         {
             if (_currentEffect == null)
             {
                 _currentEffect = GameObject.Instantiate(Effect, controller.transform);
                 _currentEffect.transform.position = controller.transform.position;
-                SFTime.Instance.AddTimer(Frequency, 10, Dot);
+                WXTime.time.AddTimer(Frequency, 10, Dot);
                 skillController = controller;
             }
-            
         }
 
         public override ISkillTrigger Clone()

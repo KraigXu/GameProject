@@ -4,8 +4,6 @@ using GameSystem.Skill;
 using Invector;
 using UnityEngine;
 
-
-
 public class vSkillManger : vMonoBehaviour
 {
     /// <summary>
@@ -13,23 +11,23 @@ public class vSkillManger : vMonoBehaviour
     /// </summary>
     public List<SkillGroup> SkillGroups=new List<SkillGroup>();
     public List<KeyValuePair<int,float>> SkillCD=new List<KeyValuePair<int, float>>();
+    public List<SkillInstance> SkillControllers=new List<SkillInstance>();
 
-    public List<SkillController> SkillControllers=new List<SkillController>();
     
-	
 	void Start () {
 		
+        SkillSystem.Instance.
+
 	}
 	
 	void Update () {
 	    if (Input.GetKeyUp(KeyCode.Alpha2))
 	    {
-            Debug.Log(">>Skill2");
 	        if (SkillGroups[0] != null)
 	        {
 	            if (Check(SkillGroups[0].Id) == false)
 	            {
-	                SkillController controller = transform.gameObject.AddComponent<SkillController>();
+	                SkillInstance controller = transform.gameObject.AddComponent<SkillInstance>();
 	                controller.CurrentGroup = SkillGroups[0];
 	                SkillControllers.Add(controller);
                 }

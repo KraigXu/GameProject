@@ -9,6 +9,6 @@ namespace GameSystem.Skill
     /// </summary>
     public abstract class SkillEffect : ScriptableObject
     {
-        public abstract bool Decide(SkillController controller);
+        public abstract bool Decide(SkillInstance controller);
     }
 }

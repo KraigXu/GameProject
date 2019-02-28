@@ -1,0 +1,20 @@
+skill(1)
+{
+	PlayAnimation(0,0.5f,0);
+	Play
+}
+
+skill(2)
+{
+	PlayAnimation(1,2,0);
+	PlayAnimation(1,1,0);
+}
+
+skill(1000)
+{
+	CurveMove(0,0.413,104,0,0,0,0);
+	PlayAnimation(0,0,108);
+	PlaySound(0,0,1008);
+	AreaDamage(0,0.1,0,0,1,0,3,360,0,0,0,213);
+	SingleDamage(1, 1, 1, 0, 0, 1, 0, 0, 0);
+}

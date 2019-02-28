@@ -20,28 +20,22 @@ namespace GameSystem
         public int Energy;
     }
 
-
-
-    /// <summary>
-    /// 战斗场景管理
-    /// </summary>
     public class FightingScene : MonoBehaviour
     {
         public static EntityArchetype FightingPerson;
 
+        private static FightingScene _instance;
+        public static FightingScene Instance
+        {
+            get { return _instance; }
+        }
+
         public int PlayerId;
         public TextAsset Data;
-
-
+        public GameObject PlayerGo;
 
         void Awake()
         {
-         //   var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-         //   FightingPerson = entityManager.CreateArchetype(typeof(Position),typeof(Rotation),typeof(Life),typeof(Energy));
-
-
-
 
         }
 

@@ -25,7 +25,7 @@ namespace GameSystem.Skill
                 //Behaviors.Add(other.Behaviors[i].Clone());
             }
         }
-        public void UpdateBehaviors(SkillController controller)
+        public void UpdateBehaviors(SkillInstance controller)
         {
             DoBehaviors(controller);
         }
@@ -34,7 +34,7 @@ namespace GameSystem.Skill
         /// 顺序执行所有效果
         /// </summary>
         /// <param name="controller"></param>
-        private void DoBehaviors(SkillController controller)
+        private void DoBehaviors(SkillInstance controller)
         {
             for (int i = 0; i < Behaviors.Count; i++)
             {

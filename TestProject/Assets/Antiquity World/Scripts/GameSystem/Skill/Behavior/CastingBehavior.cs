@@ -13,7 +13,7 @@ namespace GameSystem.Skill
 
         private GameObject _currentEffect;
 
-        public override void Act(SkillController controller)
+        public override void Act(SkillInstance controller)
         {
             if (_currentEffect == null)
             {

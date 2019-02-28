@@ -10,26 +10,40 @@ using Object = System.Object;
 public class SkillTriggerFactory<T>
 {
     public T data;
-
-
-
 }
 
-public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
+public sealed class SkillSystem
 {
-
     public static Dictionary<int, SkillGroup> DicSkillInstancePool = new Dictionary<int, SkillGroup>();
-
+  
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
     {
-        SkillTriggerMgr.Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
-        SkillTriggerMgr.Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
-        ParseScript(Application.streamingAssetsPath + "/SkillScript1000.txt");
+        Instance.RegisterTriggerFactory("PlayEffect", new SkillTriggerFactory<PlayEffectTrigger>());
+        Instance.RegisterTriggerFactory("PlayAudio", new SkillTriggerFactory<PlayAudioTrigger>());
+        Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
+        Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
+        Instance.RegisterTriggerFactory("AreaDamage",new SkillTriggerFactory<AreaDamageTrigger>());
 
-        //Debug.Log(DicSkillInstancePool.Count);
-        //DicSkillTrigger["PlayAnimation"].Execute(instance)
+        ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
+
     }
+    private static SkillSystem _instance;
+
+    public static SkillSystem Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+               _instance=new SkillSystem();
+            }
+
+            return _instance;
+        }
+    }
+
+    public Dictionary<string, Type> DicSkillTriggerRegister = new Dictionary<string, Type>();
 
     private static bool ParseScript(string filename)
     {
@@ -48,6 +62,11 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
         return ret;
     }
 
+    /// <summary>
+    /// 加载脚本
+    /// </summary>
+    /// <param name="sr"></param>
+    /// <returns></returns>
     private static bool LoadScriptFromStream(StreamReader sr)
     {
         bool bracket = false;
@@ -127,7 +146,7 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
-                    SkillBehavior trigger = SkillTriggerMgr.Instance.CreateTrigger(type, args);
+                    SkillBehavior trigger = Instance.CreateTrigger(type, args);
                     if (trigger != null)
                     {
                         skill.Behaviors.Add(trigger);
@@ -146,10 +165,50 @@ public sealed class SkillSystem : ScriptableSingleton<SkillSystem>
 
     public static void AddSkillInstanceToPool(int skillId, SkillGroup skill, bool v)
     {
+        Debug.Log(skillId);
         if (DicSkillInstancePool.ContainsKey(skillId) == false)
         {
             DicSkillInstancePool.Add(skillId, skill);
         }
+    }
+
+
+    /// <summary>
+    /// 注册
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="skillCode"></param>
+    /// <param name="skillTrigger"></param>
+    public void RegisterTriggerFactory<T>(string skillCode, SkillTriggerFactory<T> skillTrigger) where T : ISkillTrigger
+    {
+        if (DicSkillTriggerRegister.ContainsKey(skillCode) == false)
+        {
+            DicSkillTriggerRegister.Add(skillCode, typeof(T));
+        }
+        else
+        {
+
+        }
+    }
+
+    public SkillBehavior CreateTrigger(string type, string args)
+    {
+        //if (DicSkillTriggerRegister.ContainsKey(type) == true)
+        //{
+
+        //}
+        Type t = DicSkillTriggerRegister[type];
+        object o = System.Activator.CreateInstance(t);  //创建实例
+        System.Reflection.MethodInfo mi = t.GetMethod("Init");
+        mi.Invoke(o, new object[] { args });
+        Debug.Log(">>>>>>>>>");
+        return (SkillBehavior)o;
+    }
+
+    public SkillInstance NewSkillInstance(int skillId)
+    {
+        SkillInstance skillInstance=new SkillInstance();
+        return skillInstance;
     }
 
 }

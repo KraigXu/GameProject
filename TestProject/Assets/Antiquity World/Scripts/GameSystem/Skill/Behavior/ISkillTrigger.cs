@@ -10,7 +10,13 @@ public interface ISkillTrigger
     float GetStartTime();
     bool IsExecuted();
     SkillTriggerExecuteType GetExecuteType();
-    void Act(SkillController controller);
+    void Act(SkillInstance controller);
     string GetTypeName();
 }
 
+public enum SkillTriggerExecuteType
+{
+    STET_SKILL_START
+
+
+}

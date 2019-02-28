@@ -11,8 +11,9 @@ namespace GameSystem.Skill
         private float m_StartPlayTime = 0;
         private int m_AnimationId = 0;
 
-        public override void Act(SkillController controller)
+        public override void Act(SkillInstance controller)
         {
+
 
         }
 
@@ -35,6 +36,8 @@ namespace GameSystem.Skill
             m_StartPlayTime = float.Parse(values[1]);
             m_AnimationId = int.Parse(values[2]);
         }
+
+        
 
     }
 }
