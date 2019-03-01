@@ -4,7 +4,6 @@ namespace GameSystem.Skill
     /// <summary>
     /// 圆形力场
     /// </summary>
-    [CreateAssetMenu(menuName = "GameSystem/Skill/SkillBehavior/HoldingBuff")]
     public class HoldingBuff : SkillBehavior
     {
         public GameObject  Effect;
@@ -52,8 +51,8 @@ namespace GameSystem.Skill
             {
                 targets[i] = hit[i].collider.transform;
 
-                GameObject go = Instantiate(HitEffect, targets[i]);
-                go.transform.position = targets[i].position;
+              //  GameObject go = Instantiate(HitEffect, targets[i]);
+                //go.transform.position = targets[i].position;
                 
             }
             skillController.AllTarget = targets;

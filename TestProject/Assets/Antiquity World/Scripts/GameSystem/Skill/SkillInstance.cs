@@ -32,6 +32,7 @@ namespace GameSystem.Skill
             {
                 _currentTime = 0;
                 Destroy(gameObject);
+                return;
             }
         }
 
@@ -66,7 +67,12 @@ namespace GameSystem.Skill
         }
 
 
+        void OnDestroy()
+        {
 
+            CurrentGroup.Reset();
+
+        }
 
     }
 

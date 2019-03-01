@@ -9,4 +9,8 @@ public sealed class StaticValue
 
     public static float LoadingValue=0;
 
+
+
+ 
+
 }

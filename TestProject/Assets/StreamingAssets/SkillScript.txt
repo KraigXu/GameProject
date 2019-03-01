@@ -1,7 +1,8 @@
 skill(1)
 {
-	PlayAnimation(0,0.5f,0);
-	Play
+	PlayAnimation(0,0.5,0);
+	PlayEffect(0,0.5,1);
+	PlaySound(0,0.5,2);
 }
 
 skill(2)
@@ -10,7 +11,7 @@ skill(2)
 	PlayAnimation(1,1,0);
 }
 
-skill(1000)
+skill(3)
 {
 	CurveMove(0,0.413,104,0,0,0,0);
 	PlayAnimation(0,0,108);

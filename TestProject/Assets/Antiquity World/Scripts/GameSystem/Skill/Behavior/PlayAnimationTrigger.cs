@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    [CreateAssetMenu(menuName = "GameSystem/Skill/SkillBehavior/PlayAnimationTrigger")]
     public class PlayAnimationTrigger : SkillBehavior
     {
         private float m_StartPlayTime = 0;
@@ -13,8 +12,6 @@ namespace GameSystem.Skill
 
         public override void Act(SkillInstance controller)
         {
-
-
         }
 
         public override ISkillTrigger Clone()
@@ -25,8 +22,15 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime)
         {
-            Debug.Log("PlayAnimation");
-            return true;
+            if (curTime >= m_StartTime && m_IsExected==false)
+            {
+                Debug.Log("PlayAnimation");
+                m_IsExected = true;
+                return true;
+            }
+
+            
+            return false ;
         }
 
         public override void Init(string args)

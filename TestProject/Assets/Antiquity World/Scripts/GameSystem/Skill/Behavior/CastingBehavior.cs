@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    [CreateAssetMenu(menuName = "GameSystem/Skill/SkillBehavior/CastingBehavior")]
     public class CastingBehavior : SkillBehavior
     {
         public GameObject Effect;
@@ -17,14 +16,17 @@ namespace GameSystem.Skill
         {
             if (_currentEffect == null)
             {
-                _currentEffect = Instantiate(Effect, controller.transform);
-                _currentEffect.transform.position = controller.transform.position;
+              //  _currentEffect = Instantiate(Effect, controller.transform);
+              //  _currentEffect.transform.position = controller.transform.position;
             }
 
             if (controller._currentTime > Continued)
             {
-                if(_currentEffect!=null)
-                    Destroy(_currentEffect);
+                if (_currentEffect != null)
+                {
+                 //   Destroy(_currentEffect);
+                }
+                  
             }
         }
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem.Skill;
 using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class AreaDamageTrigger : SkillBehavior
+    public class FaceToTargetTrigger : SkillBehavior
     {
         public override void Act(SkillInstance controller)
         {
@@ -23,17 +24,8 @@ namespace GameSystem.Skill
 
         public override void Init(string args)
         {
-            throw new System.NotImplementedException();
+         
         }
 
-        void Start()
-        {
-
-        }
-        void Update()
-        {
-
-        }
     }
-
 }

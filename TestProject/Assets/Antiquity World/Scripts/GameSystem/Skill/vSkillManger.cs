@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using GameSystem.Skill;
 using Invector;
 using UnityEngine;
@@ -10,33 +11,64 @@ public class vSkillManger : vMonoBehaviour
     /// ALL skill
     /// </summary>
     public List<SkillGroup> SkillGroups=new List<SkillGroup>();
-    public List<KeyValuePair<int,float>> SkillCD=new List<KeyValuePair<int, float>>();
-    public List<SkillInstance> SkillControllers=new List<SkillInstance>();
+    public List<int> SkillId=new List<int>();
 
-    
-	void Start () {
-		
-        SkillSystem.Instance.
+    public List<KeyValuePair<int, float>> SkillCD = new List<KeyValuePair<int, float>>();
+    public List<SkillInstance> SkillControllers = new List<SkillInstance>();
+
+    public bool IsFast = false;
+    public bool IsReadying;
+   
+    void Start () {
+
+        //InitSkill
+	    for (int i = 0; i < SkillId.Count; i++)
+	    {
+	        SkillGroups.Add(SkillSystem.Instance.NewSkillGroup(SkillId[i]));
+        }
 
 	}
 	
 	void Update () {
-	    if (Input.GetKeyUp(KeyCode.Alpha2))
+
+	    if (Input.GetKey(KeyCode.LeftShift))
 	    {
-	        if (SkillGroups[0] != null)
+	        IsFast = true;
+        }
+	    else
+	    {
+	        IsFast = false;
+	    }
+
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+	    {
+	        if (Check(SkillGroups[0].Id) == false)
 	        {
-	            if (Check(SkillGroups[0].Id) == false)
+	            if (IsFast == true)
 	            {
-	                SkillInstance controller = transform.gameObject.AddComponent<SkillInstance>();
-	                controller.CurrentGroup = SkillGroups[0];
+	                SkillInstance controller = WXPoolManager.Pools[Define.PoolName].Spawn(FightingScene.Instance.SkillPrefab, transform).GetComponent<SkillInstance>();
+	                controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[0]);
 	                SkillControllers.Add(controller);
-                }
+	            }
 	            else
 	            {
-                    Debug.Log("正在CD中");
+
+
+
 	            }
-            }
+	        }
+	        else
+	        {
+	            Debug.Log("正在CD中");
+	        }
+
+
+         //   if (SkillGroups[0] != null)
+	        //{
+	            
+         //   }
 	    }
+
 
 	    if (Input.GetKeyUp(KeyCode.Alpha3))
 	    {

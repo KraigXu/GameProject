@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GameSystem.Skill;
 using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class PlayEffectTrigger : SkillBehavior
+    public class PlaySoundTrigger : SkillBehavior
     {
-        public int EffectId;
 
+        public AudioData Data;
+        public int AudioId;
 
         public override void Act(SkillInstance controller)
         {
@@ -16,30 +16,30 @@ namespace GameSystem.Skill
 
         public override ISkillTrigger Clone()
         {
-            throw new System.NotImplementedException();
+            return new PlaySoundTrigger();
         }
 
         public override bool Execute(ISkillTrigger instance, float curTime)
         {
-            Debug.Log("PlayEffect");
-            if (curTime >= m_StartTime && m_IsExected == false)
+            if (curTime >= m_StartTime &&m_IsExected==false)
             {
+                Debug.Log("PlaySound");
+                m_IsExected = true;
+                WXAudioController.instance.ShowAudio(Vector3.up,Data.freed);
                 return true;
             }
             return false;
         }
 
-        /// <summary>
-        ///    
-        /// </summary>  
-        /// <param name="args">  0,0,108</param>
         public override void Init(string args)
         {
             string[] values = args.Split(',');
 
             m_StartTime = float.Parse(values[1]);
-            EffectId = int.Parse(values[2]);
-
+            AudioId = int.Parse(values[2]);
+            Data = WXAudioController.instance.GetAudioData(AudioId);
         }
+
     }
+
 }

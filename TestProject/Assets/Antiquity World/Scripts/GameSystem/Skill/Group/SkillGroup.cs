@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    [CreateAssetMenu(menuName ="GameSystem/Skill/SkillGroup")]
-    public class SkillGroup : ScriptableObject
+    public class SkillGroup 
     {
         public int Id;                                      //编号
         public string Name;                            //名称
@@ -39,6 +38,7 @@ namespace GameSystem.Skill
             for (int i = 0; i < Behaviors.Count; i++)
             {
                 Behaviors[i].Act(controller);
+                Behaviors[i].Execute(Behaviors[i], controller._currentTime);
             }
         }
         public void Reset()

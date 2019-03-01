@@ -20,10 +20,13 @@ public sealed class SkillSystem
     public static void Initialize()
     {
         Instance.RegisterTriggerFactory("PlayEffect", new SkillTriggerFactory<PlayEffectTrigger>());
-        Instance.RegisterTriggerFactory("PlayAudio", new SkillTriggerFactory<PlayAudioTrigger>());
+        Instance.RegisterTriggerFactory("PlaySound", new SkillTriggerFactory<PlaySoundTrigger>());
         Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
+
         Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
         Instance.RegisterTriggerFactory("AreaDamage",new SkillTriggerFactory<AreaDamageTrigger>());
+        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
+
 
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 
@@ -165,11 +168,11 @@ public sealed class SkillSystem
 
     public static void AddSkillInstanceToPool(int skillId, SkillGroup skill, bool v)
     {
-        Debug.Log(skillId);
         if (DicSkillInstancePool.ContainsKey(skillId) == false)
         {
             DicSkillInstancePool.Add(skillId, skill);
         }
+
     }
 
 
@@ -193,15 +196,18 @@ public sealed class SkillSystem
 
     public SkillBehavior CreateTrigger(string type, string args)
     {
+        Debug.Log(type);
         //if (DicSkillTriggerRegister.ContainsKey(type) == true)
         //{
 
         //}
+
+       
         Type t = DicSkillTriggerRegister[type];
         object o = System.Activator.CreateInstance(t);  //创建实例
+       
         System.Reflection.MethodInfo mi = t.GetMethod("Init");
         mi.Invoke(o, new object[] { args });
-        Debug.Log(">>>>>>>>>");
         return (SkillBehavior)o;
     }
 
@@ -209,6 +215,17 @@ public sealed class SkillSystem
     {
         SkillInstance skillInstance=new SkillInstance();
         return skillInstance;
+    }
+
+    public SkillGroup NewSkillGroup(int skillId)
+    {
+        SkillGroup group = null;
+        if (DicSkillInstancePool.ContainsKey(skillId))
+        {
+            group = DicSkillInstancePool[skillId];
+        }
+        
+        return group;
     }
 
 }

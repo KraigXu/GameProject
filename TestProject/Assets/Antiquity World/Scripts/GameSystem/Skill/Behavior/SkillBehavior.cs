@@ -7,7 +7,7 @@ namespace GameSystem.Skill
     /// <summary>
     /// Skill的基类 
     /// </summary>
-    public abstract  class SkillBehavior : ScriptableObject,ISkillTrigger
+    public abstract  class SkillBehavior : ISkillTrigger
     {
         protected float m_StartTime = 0;
         protected bool m_IsExected = false;

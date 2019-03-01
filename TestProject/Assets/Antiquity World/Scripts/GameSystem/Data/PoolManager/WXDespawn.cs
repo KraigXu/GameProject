@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 对象池回收组件
+/// </summary>
 public class WXDespawn : MonoBehaviour {
 
     public float DespawnDelay; // Despawn delay in ms
@@ -23,7 +26,6 @@ public class WXDespawn : MonoBehaviour {
             WXTime.time.AddTimer(DespawnDelay, 1, DespawnOnTimer);
     }
 
-    // OnDespawned called by pool manager 
     public void OnDespawned()
     {
 

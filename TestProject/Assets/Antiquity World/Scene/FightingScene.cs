@@ -34,8 +34,12 @@ namespace GameSystem
         public TextAsset Data;
         public GameObject PlayerGo;
 
+
+        public Transform SkillPrefab;
+
         void Awake()
         {
+            _instance = this;
 
         }
 

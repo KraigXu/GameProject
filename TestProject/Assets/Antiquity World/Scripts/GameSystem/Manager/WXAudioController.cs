@@ -94,6 +94,19 @@ using Random = UnityEngine.Random;
             timer_02 += Time.deltaTime;
         }
 
+        public AudioData GetAudioData(int id)
+        {
+            for (int i = 0; i < AudioDatas.Count; i++)
+            {
+                if (AudioDatas[i].Id == id)
+                {
+                    return AudioDatas[i];
+                }
+            }
+
+            return AudioDatas[0];
+        }
+
         public void ShowAudio(Vector3 pos,int id)
         {
 
@@ -104,9 +117,7 @@ using Random = UnityEngine.Random;
                     if (timer_01 >= AudioDatas[i].freedDelay)
                     {
 
-                        AudioSource asrc = WXPoolManager.Pools[Define.PoolName]
-                            .SpawnAudio(audioSource, AudioDatas[i].freed, pos, null).gameObject
-                            .GetComponent<AudioSource>();
+                        AudioSource asrc = WXPoolManager.Pools[Define.PoolName] .SpawnAudio(audioSource, AudioDatas[i].freed, pos, null).gameObject.GetComponent<AudioSource>();
 
                         if (asrc != null)
                         {
@@ -122,9 +133,33 @@ using Random = UnityEngine.Random;
                     return;
                 }
             }
-
-            
         }
+
+        public void ShowAudio(Vector3 pos, AudioClip clip)
+        {
+            // Audio source can only be played once for each vulcanDelay
+            if (timer_01 >= vulcanDelay)
+            {
+                // Spawn audio source prefab from pool
+                AudioSource aSrc =
+                    WXPoolManager.Pools[Define.PoolName].SpawnAudio(audioSource, clip, pos, null)
+                        .gameObject.GetComponent<AudioSource>();
+
+                if (aSrc != null)
+                {
+                    // Modify audio source settings specific to it's type
+                    aSrc.pitch = Random.Range(0.95f, 1f);
+                    aSrc.volume = Random.Range(0.8f, 1f);
+                    aSrc.minDistance = 5f;
+                    aSrc.loop = false;
+                    aSrc.Play();
+
+                    // Reset delay timer
+                    timer_01 = 0f;
+                }
+            }
+
+    }
 
         // Play vulcan shot audio at specific position
         public void VulcanShot(Vector3 pos)
