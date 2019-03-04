@@ -32,7 +32,7 @@ namespace GameSystem.Skill
             throw new System.NotImplementedException();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime)
+        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
             throw new System.NotImplementedException();
         }

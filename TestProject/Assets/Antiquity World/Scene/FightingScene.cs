@@ -37,6 +37,9 @@ namespace GameSystem
 
         public Transform SkillPrefab;
 
+
+        public List<Transform> Enemy=new List<Transform>();
+
         void Awake()
         {
             _instance = this;

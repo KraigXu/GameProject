@@ -18,6 +18,8 @@ namespace GameSystem.Skill
         [SerializeField]
         public float _currentTime = 0;
 
+        public Vector3 TargetPos;
+
 
         void Start()
         {
@@ -31,6 +33,7 @@ namespace GameSystem.Skill
             if (_currentTime >= ContinuedTime)
             {
                 _currentTime = 0;
+                CurrentGroup.Reset();
                 Destroy(gameObject);
                 return;
             }
@@ -65,15 +68,6 @@ namespace GameSystem.Skill
                 }
             }
         }
-
-
-        void OnDestroy()
-        {
-
-            CurrentGroup.Reset();
-
-        }
-
     }
 
 }

@@ -32,10 +32,10 @@ namespace GameSystem.Skill
 
         public override ISkillTrigger Clone()
         {
-            throw new System.NotImplementedException();
+            return new CastingBehavior();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime)
+        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
             throw new System.NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Invector.vCharacterController
@@ -28,6 +29,12 @@ namespace Invector.vCharacterController
         // know if the character is ragdolled or not
         // [HideInInspector]
         public bool ragdolled { get; set; }
+
+
+        [vEditorToolbar("Fighting")]
+        public int AttackValue=40;
+        public int DefenseValue=30;
+
 
         [vEditorToolbar("Events")]
         [SerializeField] protected OnActiveRagdoll _onActiveRagdoll = new OnActiveRagdoll();

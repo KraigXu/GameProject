@@ -38,7 +38,7 @@ namespace GameSystem.Skill
             for (int i = 0; i < Behaviors.Count; i++)
             {
                 Behaviors[i].Act(controller);
-                Behaviors[i].Execute(Behaviors[i], controller._currentTime);
+                Behaviors[i].Execute(Behaviors[i], controller._currentTime,controller);
             }
         }
         public void Reset()

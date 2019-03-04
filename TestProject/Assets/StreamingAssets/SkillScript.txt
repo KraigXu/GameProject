@@ -3,6 +3,8 @@ skill(1)
 	PlayAnimation(0,0.5,0);
 	PlayEffect(0,0.5,1);
 	PlaySound(0,0.5,2);
+	AreaDamage(0,0.5,0,0,1,0,3,360,10,0,0,3);
+
 }
 
 skill(2)
@@ -16,6 +18,6 @@ skill(3)
 	CurveMove(0,0.413,104,0,0,0,0);
 	PlayAnimation(0,0,108);
 	PlaySound(0,0,1008);
-	AreaDamage(0,0.1,0,0,1,0,3,360,0,0,0,213);
+	
 	SingleDamage(1, 1, 1, 0, 0, 1, 0, 0, 0);
 }

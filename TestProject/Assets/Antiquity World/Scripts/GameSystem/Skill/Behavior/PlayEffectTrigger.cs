@@ -16,14 +16,17 @@ namespace GameSystem.Skill
 
         public override ISkillTrigger Clone()
         {
-            throw new System.NotImplementedException();
+            return new PlayEffectTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime)
+        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
             Debug.Log("PlayEffect");
             if (curTime >= m_StartTime && m_IsExected == false)
             {
+               SkillData skillData=  WXSkillController.instance.GetSkillData(EffectId);
+                WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+                m_IsExected = true;
                 return true;
             }
             return false;

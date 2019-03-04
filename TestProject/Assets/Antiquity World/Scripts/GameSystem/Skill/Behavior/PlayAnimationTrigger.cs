@@ -20,7 +20,7 @@ namespace GameSystem.Skill
             return iTrigger;
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime)
+        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
             if (curTime >= m_StartTime && m_IsExected==false)
             {

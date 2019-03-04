@@ -20,7 +20,7 @@ namespace GameSystem.Skill
             m_IsExected = false;
         }
         public abstract ISkillTrigger Clone();
-        public abstract bool Execute( ISkillTrigger instance, float curTime);
+        public abstract bool Execute( ISkillTrigger instance, float curTime,SkillInstance controller);
 
         public float GetStartTime() { return m_StartTime; }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Invector.vCharacterController
@@ -41,6 +42,7 @@ namespace Invector.vCharacterController
         private Color startColor, endColor;
         private bool fade;
         #endregion
+
 
         #endregion
 
@@ -143,6 +145,7 @@ namespace Invector.vCharacterController
 
         void UpdateSliders(vThirdPersonController cc)
         {
+
             if (cc.maxHealth != healthSlider.maxValue)
             {
                 healthSlider.maxValue = Mathf.Lerp(healthSlider.maxValue, cc.maxHealth, 2f * Time.fixedDeltaTime);
@@ -156,6 +159,7 @@ namespace Invector.vCharacterController
             }
             staminaSlider.value = cc.currentStamina;
         }
+
 
         public void ShowDamageSprite()
         {

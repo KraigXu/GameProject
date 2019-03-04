@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Invector
 {
-    [vClassHeader("HealthController",iconName ="HealthControllerIcon")]
+    [vClassHeader("HealthController", iconName = "HealthControllerIcon")]
     public class vHealthController : vMonoBehaviour, vIHealthController
     {
         [vEditorToolbar("Health", order = 0)]
@@ -64,7 +64,7 @@ namespace Invector
         [vEditorToolbar("Events", order = 100)]
         [SerializeField] protected OnReceiveDamage _onReceiveDamage = new OnReceiveDamage();
         [SerializeField] protected OnDead _onDead = new OnDead();
-        public OnReceiveDamage onReceiveDamage { get { return _onReceiveDamage; }protected set { _onReceiveDamage = value; } }
+        public OnReceiveDamage onReceiveDamage { get { return _onReceiveDamage; } protected set { _onReceiveDamage = value; } }
         public OnDead onDead { get { return _onDead; } protected set { _onDead = value; } }
         bool inHealthRecovery;
 
@@ -93,7 +93,7 @@ namespace Invector
             inHealthRecovery = false;
         }
 
-        protected virtual void HealthRecovery()
+        protected virtual void HealthRecovery()     
         {
             if (!canRecoverHealth) return;
             if (currentHealthRecoveryDelay > 0)
@@ -112,7 +112,7 @@ namespace Invector
         /// </summary>
         /// <param name="value"></param>
         public virtual void ChangeHealth(int value)
-        {            
+        {
             currentHealth += value;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
             if (!isDead && currentHealth <= 0)
@@ -145,8 +145,8 @@ namespace Invector
                 if (damage.damageValue > 0 && !inHealthRecovery)
                 {
                     StartCoroutine(RecoverHealth());
-                }                    
-                
+                }
+
                 if (currentHealth > 0)
                 {
                     currentHealth -= damage.damageValue;
