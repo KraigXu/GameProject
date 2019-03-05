@@ -111,6 +111,11 @@ public sealed class Define
 
     }
 
+    
+
+    //-------------------------Fighting
+    //public static int
+
   
 }
 public static class TransExpV2<TIn, TOut>

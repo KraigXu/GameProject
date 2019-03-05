@@ -223,7 +223,6 @@ public sealed class SkillSystem
         {
             group = DicSkillInstancePool[skillId];
         }
-        
         return group;
     }
 

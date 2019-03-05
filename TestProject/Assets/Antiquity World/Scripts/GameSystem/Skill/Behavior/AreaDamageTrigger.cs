@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Invector.vCharacterController;
 namespace GameSystem.Skill
 {
     public class AreaDamageTrigger : SkillBehavior
@@ -32,19 +32,24 @@ namespace GameSystem.Skill
                 Vector3 point = controller.TargetPos;
 
                 List<Transform> enemy = FightingScene.Instance.Enemy;
-
+                vCharacter enemyCr = null;
                 for (int i = 0; i < enemy.Count; i++)
                 {
                     float distance = Vector3.Distance(enemy[i].position, point);
                     if (distance < Radius)
                     {
-                        Debug.Log("Hit >>>"+enemy[i].name);
+                        enemyCr= enemy[i].GetComponent<vCharacter>();
+                        int hurt = controller.Character.AttackValue-enemyCr.DefenseValue;
+                        if (hurt <= 0)
+                        {
+                            hurt = 0;
+                        }
+
+                        enemyCr.ChangeHealth(-hurt);
+                        Debug.Log("Hit >>>"+enemy[i].name+">>>造成"+ hurt);
                         WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
                     }
                 }
-               
-
-
                // controller
                //SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
                //WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
@@ -53,6 +58,10 @@ namespace GameSystem.Skill
             }
             return false;
         }
+
+
+
+
         /// <summary>
         /// 
         /// </summary>

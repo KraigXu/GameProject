@@ -54,7 +54,7 @@ public class vSkillManger : vMonoBehaviour
                     SkillInstance controller = WXPoolManager.Pools[Define.PoolName].Spawn(FightingScene.Instance.SkillPrefab, transform).GetComponent<SkillInstance>();
                     controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[0]);
                     controller.TargetPos = new Vector3(7f, -4f, 21f);
-
+                    controller.Character = _character;
                     SkillControllers.Add(controller);
                     //WXSkillController.instance.ShowSkill(this,transform, Vector3.zero,SkillId[0]);
                 }

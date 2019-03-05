@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Invector.vCharacterController;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ namespace GameSystem.Skill
         public float _currentTime = 0;
 
         public Vector3 TargetPos;
+
+        public vCharacter Character;
 
 
         void Start()
