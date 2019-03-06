@@ -31,8 +31,6 @@ namespace GameSystem.Skill
                 if (EffectNumber == 0)
                 {
                     Effectgo= WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
-                    
-                    
                 }
                 else 
                 {
