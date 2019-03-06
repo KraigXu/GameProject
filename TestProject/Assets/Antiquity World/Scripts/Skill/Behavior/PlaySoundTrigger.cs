@@ -8,12 +8,19 @@ namespace GameSystem.Skill
     {
 
         public AudioData Data;
+        public Transform asTf;
         public int AudioId;
 
-        public override void Act(SkillInstance controller)
+        public override void Act(SkillInstance controller){}
+        public override void Reset()
         {
+            base.Reset();
+            if (asTf != null)
+            {
+                bool flag = WXPoolManager.Pools[Define.PoolName].Despawn(asTf);
+                Debug.Log("回收音效" + flag);
+            }
         }
-
         public override ISkillTrigger Clone()
         {
             return new PlaySoundTrigger();
@@ -25,7 +32,7 @@ namespace GameSystem.Skill
             {
                 Debug.Log("PlaySound");
                 m_IsExected = true;
-                WXAudioController.instance.ShowAudio(Vector3.up,Data.freed);
+                asTf = WXPoolManager.Pools[Define.PoolName].SpawnAudio(WXAudioController.instance.audioSource, Data.freed, Vector3.up, null);
                 return true;
             }
             return false;

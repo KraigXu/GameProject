@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using GameSystem;
 
 namespace Invector.vCharacterController
 {
@@ -43,6 +45,7 @@ namespace Invector.vCharacterController
         private bool fade;
         #endregion
 
+        public RectTransform damageText;
 
         #endregion
 
@@ -145,7 +148,6 @@ namespace Invector.vCharacterController
 
         void UpdateSliders(vThirdPersonController cc)
         {
-
             if (cc.maxHealth != healthSlider.maxValue)
             {
                 healthSlider.maxValue = Mathf.Lerp(healthSlider.maxValue, cc.maxHealth, 2f * Time.fixedDeltaTime);
@@ -178,6 +180,15 @@ namespace Invector.vCharacterController
             if (damageImage != null)
                 damageImage.enabled = true;
             damaged = true;
+
+            //伤害数字
+
+            RectTransform textRect = WXPoolManager.Pools[Define.PoolName].Spawn(damageText, transform.parent);
+            Text text = textRect.GetComponent<Text>();
+            text.text = damage.damageValue.ToString();
+            Vector2 position = FightingScene.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
+            textRect.anchoredPosition = position;
+            textRect.DOAnchorPosY(position.y + 10, 3);
         }
 
         void UpdateDebugWindow(vThirdPersonController cc)
@@ -220,7 +231,6 @@ namespace Invector.vCharacterController
             else
                 Debug.Log("Please assign a Text object on the field Fade Text");
         }
-
         void FadeEffect()
         {
             if (fadeText != null)

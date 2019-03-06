@@ -22,18 +22,6 @@ public class WXSkillController : MonoBehaviour
     {
         instance = this;
     }
-
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public SkillData GetSkillData(int id)
     {
         for (int i = 0; i < SkillDatas.Count; i++)

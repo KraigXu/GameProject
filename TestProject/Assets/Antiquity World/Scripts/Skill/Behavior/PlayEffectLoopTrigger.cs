@@ -15,7 +15,6 @@ namespace GameSystem.Skill
         public override void Act(SkillInstance controller)
         {
         }
-
         public override ISkillTrigger Clone()
         {
             return new PlayEffectLoopTrigger();

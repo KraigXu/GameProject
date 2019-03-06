@@ -9,6 +9,18 @@ namespace GameSystem.Skill
     {
         public int EffectId;
         public int EffectType;    //0:原点 1:目标
+        public Transform Effecttf;
+
+        public override void Reset()
+        {
+            base.Reset();
+            if (Effecttf != null)
+            {
+               bool flag= WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
+                Debug.Log("回收特效"+flag);
+            }
+              
+        }
 
         public override void Act(SkillInstance controller) { }
         public override ISkillTrigger Clone()
@@ -25,11 +37,11 @@ namespace GameSystem.Skill
 
                 if (EffectType == 0)
                 {
-                    WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform.position,controller.transform.rotation);
+                    Effecttf= WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform.position,controller.transform.rotation);
                 }
                 else if(EffectType==1)
                 {
-                    WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab, controller.TargetPos);
+                    Effecttf=WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab, controller.TargetPos);
                 }
                 m_IsExected = true;
                 return true;

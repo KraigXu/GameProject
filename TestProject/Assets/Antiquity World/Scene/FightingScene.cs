@@ -31,13 +31,8 @@ namespace GameSystem
         }
 
         public int PlayerId;
-        public TextAsset Data;
         public GameObject PlayerGo;
-
-
-        public Transform SkillPrefab;
-
-
+        public Camera PlayerCamera;
         public List<Transform> Enemy=new List<Transform>();
 
         void Awake()
@@ -45,17 +40,5 @@ namespace GameSystem
             _instance = this;
 
         }
-
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
-
-
     }
 }

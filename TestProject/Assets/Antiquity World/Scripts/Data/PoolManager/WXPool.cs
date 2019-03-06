@@ -34,7 +34,7 @@ public class WXPool : MonoBehaviour
     [HideInInspector]
     public bool needDebugging = false;                      // If need debugging
     [HideInInspector]
-    public bool needSort = true;                            // if Need sort? It means, that after Despawn() it will be parented to it's template's parent
+    public bool needSort = false;                            // if Need sort? It means, that after Despawn() it will be parented to it's template's parent
     [HideInInspector]
     public bool needParenting = true;                       // if need start parenting to parents
 

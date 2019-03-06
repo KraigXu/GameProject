@@ -24,9 +24,10 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("PlaySound", new SkillTriggerFactory<PlaySoundTrigger>());
         Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
 
-        // Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
         Instance.RegisterTriggerFactory("AreaDamage", new SkillTriggerFactory<AreaDamageTrigger>());
-        //     Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
+
+        Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
+        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
 
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 
@@ -102,6 +103,7 @@ public sealed class SkillSystem
                 string args = line.Substring(start + 1, length);
                 int skillId = (int)Convert.ChangeType(args, typeof(int));
                 skill = new SkillGroup();
+
                 AddSkillInstanceToPool(skillId, skill, true);
             }
             else if (line.StartsWith("{"))
@@ -149,6 +151,7 @@ public sealed class SkillSystem
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
+                    Debug.Log(args);
                     SkillBehavior trigger = Instance.CreateTrigger(type, args);
                     if (trigger != null)
                     {
@@ -162,7 +165,7 @@ public sealed class SkillSystem
             }
         } while (true);
 
-
+        Debug.Log("Skill Config Over!");
         return true;
     }
 

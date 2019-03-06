@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Invector;
 using UnityEngine;
 using Invector.vCharacterController;
+using Invector.vMelee;
+
 namespace GameSystem.Skill
 {
     public class AreaDamageTrigger : SkillBehavior
     {
 
-
-        public float Radius=3;
-        public float Limit=360;
+        public float Radius = 3;
+        public float Limit = 360;
 
         public Transform _hitEffect;
 
+        public Vector3 center;
         public override void Act(SkillInstance controller)
         {
         }
@@ -38,25 +41,47 @@ namespace GameSystem.Skill
                     float distance = Vector3.Distance(enemy[i].position, point);
                     if (distance < Radius)
                     {
-                        enemyCr= enemy[i].GetComponent<vCharacter>();
-                        int hurt = controller.Character.AttackValue-enemyCr.DefenseValue;
+                        enemyCr = enemy[i].GetComponent<vCharacter>();
+                        int hurt = controller.Character.AttackValue - enemyCr.DefenseValue;
                         if (hurt <= 0)
                         {
                             hurt = 0;
                         }
 
-                        enemyCr.ChangeHealth(-hurt);
-                        Debug.Log("Hit >>>"+enemy[i].name+">>>造成"+ hurt);
+
+                        vDamage _damage = new vDamage();
+                        _damage.sender = controller.transform;
+                        _damage.receiver = enemyCr.transform;
+                        _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.Character.AttackValue + 2) * (((float)10) * 0.01f)));
+                        _damage.hitPosition = enemy[i].position;
+                        enemyCr.gameObject.ApplyDamage(_damage);
+
+                        //GameObject go=new GameObject();
+                        //BoxCollider collider= go.AddComponent<BoxCollider>();
+                        //vHitBox box= go.AddComponent<vHitBox>();
+
+                        //enemyCr.ChangeHealth(-hurt);
+
+                        Debug.Log("Hit >>>" + enemy[i].name + ">>>造成" + _damage.damageValue);
                         WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
                     }
                 }
-               // controller
-               //SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
-               //WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+                // controller
+                //SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
+                //WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
 
                 return true;
             }
             return false;
+        }
+
+        void OnDrawGizmos()
+        {
+            if (m_IsExected == true)
+            {
+                Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
+                Gizmos.DrawSphere(center, Radius);
+            }
         }
 
 
@@ -81,7 +106,7 @@ namespace GameSystem.Skill
         public override void Init(string args)
         {
             string[] values = args.Split(',');
-            m_StartTime =float.Parse(values[1]);
+            m_StartTime = float.Parse(values[1]);
             Limit = float.Parse(values[7]);
             Radius = float.Parse(values[8]);
             _hitEffect = WXSkillController.instance.GetSkillData(int.Parse(values[11])).Prefab;

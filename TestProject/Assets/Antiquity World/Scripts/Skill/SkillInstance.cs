@@ -20,10 +20,7 @@ namespace GameSystem.Skill
         public float _currentTime = 0;
 
         public Vector3 TargetPos;
-
         public vCharacter Character;
-
-
         void Start()
         {
 

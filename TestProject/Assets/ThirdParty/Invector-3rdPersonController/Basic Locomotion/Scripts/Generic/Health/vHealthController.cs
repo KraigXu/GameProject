@@ -93,7 +93,7 @@ namespace Invector
             inHealthRecovery = false;
         }
 
-        protected virtual void HealthRecovery()     
+        protected virtual void HealthRecovery()
         {
             if (!canRecoverHealth) return;
             if (currentHealthRecoveryDelay > 0)
