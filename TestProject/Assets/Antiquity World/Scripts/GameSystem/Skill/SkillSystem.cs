@@ -15,17 +15,18 @@ public class SkillTriggerFactory<T>
 public sealed class SkillSystem
 {
     public static Dictionary<int, SkillGroup> DicSkillInstancePool = new Dictionary<int, SkillGroup>();
-  
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
     {
         Instance.RegisterTriggerFactory("PlayEffect", new SkillTriggerFactory<PlayEffectTrigger>());
+        Instance.RegisterTriggerFactory("PlayEffectLoop", new SkillTriggerFactory<PlayEffectLoopTrigger>());
         Instance.RegisterTriggerFactory("PlaySound", new SkillTriggerFactory<PlaySoundTrigger>());
         Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
 
-        Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
-        Instance.RegisterTriggerFactory("AreaDamage",new SkillTriggerFactory<AreaDamageTrigger>());
-        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
+        // Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
+        Instance.RegisterTriggerFactory("AreaDamage", new SkillTriggerFactory<AreaDamageTrigger>());
+        //     Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
 
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 
@@ -38,7 +39,7 @@ public sealed class SkillSystem
         {
             if (_instance == null)
             {
-               _instance=new SkillSystem();
+                _instance = new SkillSystem();
             }
 
             return _instance;
@@ -155,7 +156,7 @@ public sealed class SkillSystem
                     }
                     else
                     {
-                        Debug.Log("Not "+type+"  Type");
+                        Debug.Log("Not " + type + "  Type");
                     }
                 }
             }
@@ -201,10 +202,10 @@ public sealed class SkillSystem
 
         //}
 
-       
+
         Type t = DicSkillTriggerRegister[type];
         object o = System.Activator.CreateInstance(t);  //创建实例
-       
+
         System.Reflection.MethodInfo mi = t.GetMethod("Init");
         mi.Invoke(o, new object[] { args });
         return (SkillBehavior)o;
@@ -212,7 +213,7 @@ public sealed class SkillSystem
 
     public SkillInstance NewSkillInstance(int skillId)
     {
-        SkillInstance skillInstance=new SkillInstance();
+        SkillInstance skillInstance = new SkillInstance();
         return skillInstance;
     }
 

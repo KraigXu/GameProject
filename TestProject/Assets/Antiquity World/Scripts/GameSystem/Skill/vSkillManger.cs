@@ -51,7 +51,7 @@ public class vSkillManger : vMonoBehaviour
             {
                 if (IsFast == true)
                 {
-                    SkillInstance controller = WXPoolManager.Pools[Define.PoolName].Spawn(FightingScene.Instance.SkillPrefab, transform).GetComponent<SkillInstance>();
+                    SkillInstance controller = gameObject.AddComponent<SkillInstance>();
                     controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[0]);
                     controller.TargetPos = new Vector3(7f, -4f, 21f);
                     controller.Character = _character;

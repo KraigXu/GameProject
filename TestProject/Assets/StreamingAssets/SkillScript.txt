@@ -1,7 +1,8 @@
 skill(1)
 {
-	PlayEffect(0,0.5,11);
+	PlayEffect(0,0.5,11,0);
 	PlaySound(0,0.5,1);
+	PlayEffectLoop(0,0.5,12,0);
 }
 
 skill(2)
