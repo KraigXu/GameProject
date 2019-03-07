@@ -187,6 +187,7 @@ public class WXPool : MonoBehaviour
                 if (source != null)
                 {
                     source.clip = clip;
+                    source.Play();
                 }
                 return tempTransform;
             }

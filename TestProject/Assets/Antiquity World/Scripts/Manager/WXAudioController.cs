@@ -33,7 +33,6 @@ public class WXAudioController : MonoBehaviour
 
     void Update()
     {
-        // Update timers
         timer_01 += Time.deltaTime;
         timer_02 += Time.deltaTime;
     }
@@ -53,7 +52,6 @@ public class WXAudioController : MonoBehaviour
 
     public void ShowAudio(Vector3 pos, int id)
     {
-
         for (int i = 0; i < AudioDatas.Count; i++)
         {
             if (AudioDatas[i].Id == id)
@@ -81,9 +79,7 @@ public class WXAudioController : MonoBehaviour
 
     public void ShowAudio(Vector3 pos, AudioClip clip)
     {
-        AudioSource aSrc =
-            WXPoolManager.Pools[Define.PoolName].SpawnAudio(audioSource, clip, pos, null)
-                .gameObject.GetComponent<AudioSource>();
+        AudioSource aSrc =WXPoolManager.Pools[Define.PoolName].SpawnAudio(audioSource, clip, pos, null).gameObject.GetComponent<AudioSource>();
 
         if (aSrc != null)
         {

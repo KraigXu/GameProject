@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using GameSystem.Skill;
+using Invector.vCharacterController;
 
 namespace Invector.vMelee
 {
@@ -36,6 +38,10 @@ namespace Invector.vMelee
         private bool inRecoil;
         private string attackName;
 
+        public List<int> SkillId = new List<int>()
+        {
+            1,2,3
+        };
         protected virtual void Start()
         {
             Init();
@@ -356,6 +362,15 @@ namespace Invector.vMelee
                 }
             }
         }
+
+        public virtual void CoreSkill(vCharacter cc)
+        {
+            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
+            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[0]);
+            controller.TargetPos = new Vector3(7f, -4f, 21f);
+            controller.Character = cc;
+        }
+
 
         /// <summary>
         /// 

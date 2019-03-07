@@ -29,7 +29,6 @@ public class WXDespawn : MonoBehaviour
 
     void OnDespawned()
     {
-
     }
 
     // Run required checks for the looping audio source and despawn the game object

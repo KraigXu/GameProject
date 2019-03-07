@@ -17,8 +17,12 @@ namespace Invector.vCharacterController
         [Header("Melee Inputs")]
         public GenericInput weakAttackInput = new GenericInput("Mouse0", "RB", "RB");
         public GenericInput strongAttackInput = new GenericInput("Alpha1", false, "RT", true, "RT", false);
-        public GenericInput blockInput = new GenericInput("Mouse1", "LB", "LB");
+        public GenericInput blockInput = new GenericInput("Mouse1", "LB", "LB"); 
+        public GenericInput coreAttackInput=new GenericInput("Alpha2", "RB", "RB");
+        public GenericInput twoAttackInput = new GenericInput("Alpha3", "RB", "RB");
+        public GenericInput secondaryAttackInput = new GenericInput("Alpha4", "RB", "RB");
 
+        
         internal vMeleeManager meleeManager;
         public bool isAttacking { get; protected set; }
         public bool isBlocking { get; protected set; }
@@ -66,6 +70,9 @@ namespace Invector.vCharacterController
                 MeleeWeakAttackInput();
                 MeleeStrongAttackInput();
                 BlockingInput();
+                CoreAttackInput();
+                TwoAttackInput();
+                SecondaryAttackInput();
             }
             else
             {
@@ -128,6 +135,64 @@ namespace Invector.vCharacterController
 
             isBlocking = blockInput.GetButton() && cc.currentStamina > 0;
         }
+        //coreAttackInput=new 
+        //twoAttackInput = new
+        //secondaryAttackInput
+        //
+        public virtual void CoreAttackInput()
+        {
+            if (cc.animator == null) return;
+
+            if (coreAttackInput.GetButtonDown() && MeleeAttackStaminaConditions())
+            {
+                TriggerCoreAttack();
+            }
+        }
+
+        public virtual void TriggerCoreAttack()
+        {
+            cc.animator.SetInteger("AttackID", meleeManager.GetAttackID());
+            cc.animator.SetTrigger("WeakAttack");
+            meleeManager.CoreSkill(cc);
+        }
+
+
+
+        public virtual void TwoAttackInput()
+        {
+            if (cc.animator == null) return;
+
+            if (twoAttackInput.GetButtonDown() && MeleeAttackStaminaConditions())
+            {
+                TriggerTwoAttack();
+            }
+        }
+
+        public virtual void TriggerTwoAttack()
+        {
+            cc.animator.SetInteger("AttackID", meleeManager.GetAttackID());
+            cc.animator.SetTrigger("WeakAttack");
+            meleeManager.CoreSkill(cc);
+        }
+
+
+        public virtual void SecondaryAttackInput()
+        {
+            if (cc.animator == null) return;
+
+            if (secondaryAttackInput.GetButtonDown() && MeleeAttackStaminaConditions())
+            {
+                TriggerSecondaryAttack();
+            }
+        }
+
+        public virtual void TriggerSecondaryAttack()
+        {
+            cc.animator.SetInteger("AttackID", meleeManager.GetAttackID());
+            cc.animator.SetTrigger("WeakAttack");
+            meleeManager.CoreSkill(cc);
+        }
+
 
         #endregion
 

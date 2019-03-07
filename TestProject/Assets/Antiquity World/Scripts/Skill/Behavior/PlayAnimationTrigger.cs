@@ -22,15 +22,13 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            if (curTime >= m_StartTime && m_IsExected==false)
+            if (curTime >= m_StartTime && m_IsExected == false)
             {
                 Debug.Log("PlayAnimation");
                 m_IsExected = true;
                 return true;
             }
-
-            
-            return false ;
+            return false;
         }
 
         public override void Init(string args)
@@ -41,7 +39,7 @@ namespace GameSystem.Skill
             m_AnimationId = int.Parse(values[2]);
         }
 
-        
+
 
     }
 }
