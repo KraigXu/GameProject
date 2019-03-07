@@ -5,12 +5,10 @@ using UnityEngine;
 /// <summary>
 /// 对象池回收组件
 /// </summary>
-public class WXDespawn : MonoBehaviour {
-
+public class WXDespawn : MonoBehaviour
+{
     public float DespawnDelay; // Despawn delay in ms
-    public bool DespawnOnMouseUp; // Despawn on mouse up used for beams demo 
-
-    AudioSource aSrc; // Cached audio source component
+    private AudioSource aSrc; // Cached audio source component
 
     void Awake()
     {
@@ -18,15 +16,18 @@ public class WXDespawn : MonoBehaviour {
         aSrc = GetComponent<AudioSource>();
     }
 
-    // OnSpawned called by pool manager 
-    public void OnSpawned()
+    void Start()
     {
-        // Invokes despawn using timer delay
-        if (!DespawnOnMouseUp)
-            WXTime.time.AddTimer(DespawnDelay, 1, DespawnOnTimer);
+
     }
 
-    public void OnDespawned()
+    // OnSpawned called by pool manager 
+    void OnSpawned()
+    {
+        WXTime.time.AddTimer(DespawnDelay, 1, DespawnOnTimer);
+    }
+
+    void OnDespawned()
     {
 
     }
@@ -34,13 +35,15 @@ public class WXDespawn : MonoBehaviour {
     // Run required checks for the looping audio source and despawn the game object
     public void DespawnOnTimer()
     {
+       
         if (aSrc != null)
         {
             if (aSrc.loop)
-                DespawnOnMouseUp = true;
+            {
+
+            }
             else
             {
-                DespawnOnMouseUp = false;
                 Despawn();
             }
         }
@@ -53,15 +56,15 @@ public class WXDespawn : MonoBehaviour {
     // Despawn game object this script attached to
     public void Despawn()
     {
-        WXPoolManager.Pools["GeneratedPool"].Despawn(transform);
-        //F3DPool.instance.Despawn(transform);
+        WXPoolManager.Pools[Define.PoolName].Despawn(transform);
     }
 
     void Update()
     {
-        // Despawn on mouse up        
-        if (Input.GetMouseButtonUp(0))
-            if (aSrc != null && aSrc.loop || DespawnOnMouseUp)
-                Despawn();
+
+    }
+
+    void OnDestroy()
+    {
     }
 }

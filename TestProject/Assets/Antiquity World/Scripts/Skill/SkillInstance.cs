@@ -8,12 +8,9 @@ namespace GameSystem.Skill
     public class SkillInstance : MonoBehaviour
     {
         public SkillGroup CurrentGroup;          //当前行为
-        public SkillGroup RemainGroup;        //保持当前状态
-
-        public float ContinuedTime = 3f;       //持续时间   持续时间应是外界赋值
+        public float ContinuedTime = 5f;       //持续时间   持续时间应是外界赋值
         public GameObject[] AillTarget = new GameObject[3];   //所有目标  数组长度应是外界赋值
         public string[] ImpactLabel;  //影响标签  凡是元素集内的标签 才会被技能影响
-
         public Collider ColliderSelf;
         public Transform[] AllTarget;
         [SerializeField]
@@ -25,7 +22,6 @@ namespace GameSystem.Skill
         {
 
         }
-
         void Update()
         {
             CurrentGroup.UpdateBehaviors(this);
@@ -38,7 +34,6 @@ namespace GameSystem.Skill
                 return;
             }
         }
-
         void OnTriggerEnter(Collider collider)
         {
             if (collider.gameObject.tag == "Enemy")

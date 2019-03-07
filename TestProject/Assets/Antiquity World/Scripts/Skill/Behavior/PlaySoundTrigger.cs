@@ -12,15 +12,6 @@ namespace GameSystem.Skill
         public int AudioId;
 
         public override void Act(SkillInstance controller){}
-        public override void Reset()
-        {
-            base.Reset();
-            if (asTf != null)
-            {
-                bool flag = WXPoolManager.Pools[Define.PoolName].Despawn(asTf);
-                Debug.Log("回收音效" + flag);
-            }
-        }
         public override ISkillTrigger Clone()
         {
             return new PlaySoundTrigger();

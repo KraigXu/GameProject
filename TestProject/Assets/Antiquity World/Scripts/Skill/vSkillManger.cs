@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class vSkillManger : vMonoBehaviour
 {
-
     /// <summary>
     /// ALL skill
     /// </summary>
@@ -56,7 +55,6 @@ public class vSkillManger : vMonoBehaviour
                     controller.TargetPos = new Vector3(7f, -4f, 21f);
                     controller.Character = _character;
                     SkillControllers.Add(controller);
-                    //WXSkillController.instance.ShowSkill(this,transform, Vector3.zero,SkillId[0]);
                 }
                 else
                 {

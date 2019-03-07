@@ -9,7 +9,7 @@ namespace GameSystem.Skill
         public int EffectId;
         public int EffectNumber;   //0无限：
 
-        private Transform Effectgo;
+        private Transform Effecttf;
         
 
         public override void Act(SkillInstance controller)
@@ -29,7 +29,7 @@ namespace GameSystem.Skill
 
                 if (EffectNumber == 0)
                 {
-                    Effectgo= WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
+                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
                 }
                 else 
                 {
@@ -41,7 +41,6 @@ namespace GameSystem.Skill
             return false;
 
         }
-
         public override void Init(string args)
         {
             string[] values = args.Split(',');

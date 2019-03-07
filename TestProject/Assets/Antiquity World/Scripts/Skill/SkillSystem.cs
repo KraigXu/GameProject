@@ -25,6 +25,7 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
 
         Instance.RegisterTriggerFactory("AreaDamage", new SkillTriggerFactory<AreaDamageTrigger>());
+        Instance.RegisterTriggerFactory("AreaDamageLoop",new SkillTriggerFactory<AreaDamageLoopTrigger>());
 
         Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
         Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
