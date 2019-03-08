@@ -16,10 +16,6 @@ namespace GameSystem.Skill
         public Transform _hitEffect;
 
         public Vector3 center;
-        public override void Act(SkillInstance controller)
-        {
-        }
-
         public override ISkillTrigger Clone()
         {
             return new AreaDamageTrigger();
@@ -107,7 +103,7 @@ namespace GameSystem.Skill
             m_StartTime = float.Parse(values[1]);
             Limit = float.Parse(values[7]);
             Radius = float.Parse(values[8]);
-            _hitEffect = WXSkillController.instance.GetSkillData(int.Parse(values[11])).Prefab;
+            _hitEffect = FightingScene.Instance.GetSkillData(int.Parse(values[11])).Prefab;
 
         }
     }

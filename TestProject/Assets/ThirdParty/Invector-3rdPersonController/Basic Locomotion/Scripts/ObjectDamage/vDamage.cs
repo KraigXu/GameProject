@@ -4,6 +4,8 @@ namespace Invector
     [System.Serializable]
     public class vDamage
     {
+        public static  string[] DamageType = new string[] { "physical", "gold", "earth", "tree", "water" };
+
         [Tooltip("Apply damage to the Character Health")]
         public int damageValue = 15;
         [Tooltip("How much stamina the target will lost when blocking this attack")]

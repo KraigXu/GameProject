@@ -28,7 +28,8 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("AreaDamageLoop",new SkillTriggerFactory<AreaDamageLoopTrigger>());
 
         Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
-        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<PlayEffectTrigger>());
+        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<CurveMoveTrigger>());
+        Instance.RegisterTriggerFactory("ProjectionEffect",new SkillTriggerFactory<ProjectionEffectTrigger>());
 
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 

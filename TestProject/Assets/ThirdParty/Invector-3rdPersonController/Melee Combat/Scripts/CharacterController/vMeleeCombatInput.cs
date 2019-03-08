@@ -172,7 +172,7 @@ namespace Invector.vCharacterController
         {
             cc.animator.SetInteger("AttackID", meleeManager.GetAttackID());
             cc.animator.SetTrigger("WeakAttack");
-            meleeManager.CoreSkill(cc);
+            meleeManager.TwoSkill(cc);
         }
 
 
@@ -190,7 +190,7 @@ namespace Invector.vCharacterController
         {
             cc.animator.SetInteger("AttackID", meleeManager.GetAttackID());
             cc.animator.SetTrigger("WeakAttack");
-            meleeManager.CoreSkill(cc);
+            meleeManager.SecondarySkill(cc);
         }
 
 

@@ -6,12 +6,12 @@ namespace GameSystem.Skill
 {
     public class SkillGroup 
     {
-        public int Id;                                      //编号
-        public string Name;                            //名称
-        public string Description;                   //说明
-        public float CoolingTime;                  //冷却
-        public Sprite Icon;                          //图标
-        public Color sceneGizmoColor = Color.gray;      //拿来渲染eyes的Gizmos颜色
+        public int Id;                                                          //编号
+        public string Name;                                                     //名称
+        public string Description;                                              //说明
+        public float CoolingTime;                                               //冷却
+        public Sprite Icon;                                                     //图标
+        public Color sceneGizmoColor = Color.gray;                              //拿来渲染eyes的Gizmos颜色
         public List<SkillBehavior> Behaviors=new List<SkillBehavior>();
 
         public bool m_IsUsed = false;
@@ -37,7 +37,6 @@ namespace GameSystem.Skill
         {
             for (int i = 0; i < Behaviors.Count; i++)
             {
-                Behaviors[i].Act(controller);
                 Behaviors[i].Execute(Behaviors[i], controller._currentTime,controller);
             }
         }
@@ -59,9 +58,6 @@ namespace GameSystem.Skill
             }
             return count;
         }
-
-
-
     }
 
 }

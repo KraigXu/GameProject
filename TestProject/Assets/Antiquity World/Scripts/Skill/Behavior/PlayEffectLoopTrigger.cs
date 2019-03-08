@@ -12,9 +12,6 @@ namespace GameSystem.Skill
         private Transform Effecttf;
         
 
-        public override void Act(SkillInstance controller)
-        {
-        }
         public override ISkillTrigger Clone()
         {
             return new PlayEffectLoopTrigger();
@@ -25,7 +22,7 @@ namespace GameSystem.Skill
 
             if (curTime >= m_StartTime && m_IsExected == false)
             {
-                SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
+                SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
 
                 if (EffectNumber == 0)
                 {

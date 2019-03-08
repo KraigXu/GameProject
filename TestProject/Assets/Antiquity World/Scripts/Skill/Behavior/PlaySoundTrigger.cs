@@ -6,12 +6,9 @@ namespace GameSystem.Skill
 {
     public class PlaySoundTrigger : SkillBehavior
     {
-
         public AudioData Data;
-        public Transform asTf;
+        public AudioSource asrc;
         public int AudioId;
-
-        public override void Act(SkillInstance controller){}
         public override ISkillTrigger Clone()
         {
             return new PlaySoundTrigger();
@@ -19,11 +16,19 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            if (curTime >= m_StartTime &&m_IsExected==false)
+            if (curTime >= m_StartTime && m_IsExected == false)
             {
                 Debug.Log("PlaySound");
                 m_IsExected = true;
-                asTf = WXPoolManager.Pools[Define.PoolName].SpawnAudio(WXAudioController.instance.audioSource, Data.freed, Vector3.up, null);
+                asrc = WXPoolManager.Pools[Define.PoolName].SpawnAudio(FightingScene.Instance.audioSource, Data.Clip, Vector3.up, null).GetComponent<AudioSource>();
+                if (asrc != null)
+                {
+                    asrc.pitch = Random.Range(0.95f, 1f);
+                    asrc.volume = Random.Range(0.8f, 1f);
+                    asrc.minDistance = 5f;
+                    asrc.loop = false;
+                    asrc.Play();
+                }
                 return true;
             }
             return false;
@@ -35,7 +40,7 @@ namespace GameSystem.Skill
 
             m_StartTime = float.Parse(values[1]);
             AudioId = int.Parse(values[2]);
-            Data = WXAudioController.instance.GetAudioData(AudioId);
+            Data = FightingScene.Instance.GetAudioData(AudioId);
         }
 
     }

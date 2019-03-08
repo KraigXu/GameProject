@@ -371,7 +371,19 @@ namespace Invector.vMelee
             controller.Character = cc;
         }
 
+        public virtual void TwoSkill(vCharacter cc)
+        {
+            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
+            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[1]);
+            controller.Character = cc;
+        }
 
+        public virtual void SecondarySkill(vCharacter cc)
+        {
+            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
+            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[2]);
+            controller.Character = cc;
+        }
         /// <summary>
         /// 
         /// </summary>

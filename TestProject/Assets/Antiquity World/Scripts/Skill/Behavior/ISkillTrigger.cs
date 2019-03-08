@@ -10,7 +10,6 @@ public interface ISkillTrigger
     float GetStartTime();
     bool IsExecuted();
     SkillTriggerExecuteType GetExecuteType();
-    void Act(SkillInstance controller);
     string GetTypeName();
 }
 

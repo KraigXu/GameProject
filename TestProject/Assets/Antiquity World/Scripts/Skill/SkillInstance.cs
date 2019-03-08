@@ -18,6 +18,7 @@ namespace GameSystem.Skill
 
         public Vector3 TargetPos;
         public vCharacter Character;
+        
         void Start()
         {
 

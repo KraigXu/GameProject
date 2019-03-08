@@ -7,24 +7,24 @@ namespace GameSystem.Skill
 {
     public class FaceToTargetTrigger : SkillBehavior
     {
-        public override void Act(SkillInstance controller)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override ISkillTrigger Clone()
         {
-            throw new System.NotImplementedException();
+            return new FaceToTargetTrigger();
         }
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            throw new System.NotImplementedException();
+            return false;
         }
 
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="args">FaceToTarget(0,0,1);</param>
         public override void Init(string args)
         {
-         
+            string[] values = Define.SkillDataSplit(args);
+            m_StartTime = float.Parse(values[1]);
         }
 
     }

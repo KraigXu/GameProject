@@ -5,19 +5,18 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
+    /// <summary>
+    /// 播放指定动画 
+    /// </summary>
     public class PlayAnimationTrigger : SkillBehavior
     {
         private float m_StartPlayTime = 0;
         private int m_AnimationId = 0;
 
-        public override void Act(SkillInstance controller)
-        {
-        }
 
         public override ISkillTrigger Clone()
         {
-            ISkillTrigger iTrigger = new PlayAnimationTrigger();
-            return iTrigger;
+            return new PlayAnimationTrigger();
         }
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)

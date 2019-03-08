@@ -28,7 +28,6 @@ namespace GameSystem.Skill
         public SkillTriggerExecuteType GetExecuteType() { return m_ExecuteType; }
 
         public string GetTypeName() { return m_TypeName; }
-        public abstract void Act(SkillInstance controller);
 
     }
 }

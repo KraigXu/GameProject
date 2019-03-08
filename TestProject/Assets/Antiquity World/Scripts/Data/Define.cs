@@ -111,6 +111,11 @@ public sealed class Define
 
     }
 
+    public static string[] SkillDataSplit(string value)
+    {
+        return value.Split(',');
+    }
+
     
 
     //-------------------------Fighting

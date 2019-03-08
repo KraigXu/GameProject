@@ -14,13 +14,10 @@ namespace GameSystem.Skill
         public float Limit = 360;
         public float Interval = 0.3f;
         public Transform _hitEffect;
-        
+        public int HitType;
 
         public Vector3 center;
         private float cd=0;
-        public override void Act(SkillInstance controller)
-        {
-        }
         public override ISkillTrigger Clone()
         {
             return new AreaDamageTrigger();
@@ -70,10 +67,11 @@ namespace GameSystem.Skill
                         _damage.receiver = enemyCr.transform;
                         _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.Character.AttackValue + 2) * (((float)10) * 0.01f)));
                         _damage.hitPosition = enemy[i].position;
+                        _damage.damageType = vDamage.DamageType[HitType];
                         enemyCr.gameObject.ApplyDamage(_damage);
                         //enemyCr.ChangeHealth(-hurt);
                         Debug.Log("Hit >>>" + enemy[i].name + ">>>造成" + _damage.damageValue);
-                        WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
+                      //  WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
                     }
                 }
                 // controller
@@ -120,10 +118,11 @@ namespace GameSystem.Skill
             string[] values = args.Split(',');
             TargetType = int.Parse(values[0]);
             m_StartTime = float.Parse(values[1]);
+            HitType = int.Parse(values[3]);
             Limit = float.Parse(values[8]);
             Radius = float.Parse(values[7]);
             Interval = float.Parse(values[9]);
-            _hitEffect = WXSkillController.instance.GetSkillData(int.Parse(values[12])).Prefab;
+            _hitEffect = FightingScene.Instance.GetSkillData(int.Parse(values[12])).Prefab;
 
         }
     }

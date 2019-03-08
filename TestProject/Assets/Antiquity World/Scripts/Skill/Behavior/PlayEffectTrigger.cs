@@ -11,7 +11,6 @@ namespace GameSystem.Skill
         public int EffectType;    //0:原点 1:目标
         public Transform Effecttf;
 
-        public override void Act(SkillInstance controller) { }
         public override ISkillTrigger Clone()
         {
             return new PlayEffectTrigger();
@@ -22,8 +21,8 @@ namespace GameSystem.Skill
             Debug.Log("PlayEffect");
             if (curTime >= m_StartTime && m_IsExected == false)
             {
-                SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
-
+                SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
+                Debug.Log(skillData.Prefab.name);
                 if (EffectType == 0)
                 {
                     Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
