@@ -9,11 +9,12 @@ namespace GameSystem.Skill
         public int Id;                                                          //编号
         public string Name;                                                     //名称
         public string Description;                                              //说明
+        public float ContinuedTime =5;
         public float CoolingTime;                                               //冷却
         public Sprite Icon;                                                     //图标
         public Color sceneGizmoColor = Color.gray;                              //拿来渲染eyes的Gizmos颜色
         public List<SkillBehavior> Behaviors=new List<SkillBehavior>();
-
+        
         public bool m_IsUsed = false;
         public SkillGroup() { }
 
@@ -24,6 +25,14 @@ namespace GameSystem.Skill
                 //Behaviors.Add(other.Behaviors[i].Clone());
             }
         }
+
+        
+
+        public string GetDescription()
+        {
+            return "";
+        }
+
         public void UpdateBehaviors(SkillInstance controller)
         {
             DoBehaviors(controller);

@@ -9,6 +9,7 @@ namespace GameSystem.Skill
     {
         public int EffectId;
         public int EffectType;    //0:原点 1:目标
+        public int EffectNumber;   //0无限：
         public Transform Effecttf;
 
         public override ISkillTrigger Clone()
@@ -16,31 +17,60 @@ namespace GameSystem.Skill
             return new PlayEffectTrigger();
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
+            Effecttf = null;
+           // EffectId = 0;
+           // EffectType = 0;
+          //  EffectNumber = 0;
+
+        }
+
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            Debug.Log("PlayEffect");
-            if (curTime >= m_StartTime && m_IsExected == false)
+            if (curTime >= m_StartTime)
             {
-                SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
-                Debug.Log(skillData.Prefab.name);
+                if (Effecttf == null)
+                {
+                    m_IsExected = true;
+                    SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
+                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+
+                    // WXDespawn despawn= Effecttf.transform.GetComponent<WXDespawn>();
+                    //if (despawn == null)
+                    //    despawn = Effecttf.gameObject.AddComponent<WXDespawn>();
+                    //despawn.DespawnDelay = controller.ContinuedTime - controller._currentTime;
+                    //Debug.Log(despawn.DespawnDelay);
+                }
+
+
                 if (EffectType == 0)
                 {
-                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
+                    Effecttf.transform.position = controller.transform.position;
                 }
-                else if (EffectType == 1)
+                else
                 {
-                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab, controller.TargetPos);
+                    Effecttf.transform.position = controller.TargetPos;
                 }
-                m_IsExected = true;
-                return true;
+
+                if (EffectNumber == 0)
+                {
+                    Effecttf.transform.position = controller.transform.position;
+                }
+                else
+                {
+                    Effecttf.transform.position = controller.TargetPos;
+                }
             }
-            return false;
+            return m_IsExected;
         }
 
         /// <summary>
         /// 初始化
         /// </summary>  
-        /// <param name="args">  0,0,108,1</param>
+        /// <param name="args"> 0,0,108,1,0</param>
         public override void Init(string args)
         {
             string[] values = args.Split(',');
@@ -48,6 +78,7 @@ namespace GameSystem.Skill
             m_StartTime = float.Parse(values[1]);
             EffectId = int.Parse(values[2]);
             EffectType = int.Parse(values[3]);
+            EffectNumber = int.Parse(values[4]);
         }
     }
 }

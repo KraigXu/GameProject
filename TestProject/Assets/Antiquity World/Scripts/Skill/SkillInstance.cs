@@ -8,7 +8,7 @@ namespace GameSystem.Skill
     public class SkillInstance : MonoBehaviour
     {
         public SkillGroup CurrentGroup;          //当前行为
-        public float ContinuedTime = 5f;       //持续时间   持续时间应是外界赋值
+       // public float ContinuedTime = 5f;       //持续时间   持续时间应是外界赋值
         public GameObject[] AillTarget = new GameObject[3];   //所有目标  数组长度应是外界赋值
         public string[] ImpactLabel;  //影响标签  凡是元素集内的标签 才会被技能影响
         public Collider ColliderSelf;
@@ -27,7 +27,7 @@ namespace GameSystem.Skill
         {
             CurrentGroup.UpdateBehaviors(this);
             _currentTime += Time.deltaTime;
-            if (_currentTime >= ContinuedTime)
+            if (_currentTime >= CurrentGroup.ContinuedTime)
             {
                 _currentTime = 0;
                 CurrentGroup.Reset();

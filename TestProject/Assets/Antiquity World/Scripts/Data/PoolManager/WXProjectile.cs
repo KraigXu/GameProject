@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using GameSystem;
 using UnityEngine;
 
-public class WXProjectile : MonoBehaviour {
+public class WXProjectile : MonoBehaviour
+{
 
     public LayerMask layerMask;
     public float lifeTime = 5f; // Projectile life time

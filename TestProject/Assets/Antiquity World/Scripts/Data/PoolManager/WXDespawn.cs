@@ -24,6 +24,7 @@ public class WXDespawn : MonoBehaviour
     // OnSpawned called by pool manager 
     void OnSpawned()
     {
+        Debug.Log(DespawnDelay);
         WXTime.time.AddTimer(DespawnDelay, 1, DespawnOnTimer);
     }
 

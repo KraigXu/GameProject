@@ -19,6 +19,7 @@ public sealed class SkillSystem
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
     {
+        Debug.Log(">>1");
         Instance.RegisterTriggerFactory("PlayEffect", new SkillTriggerFactory<PlayEffectTrigger>());
         Instance.RegisterTriggerFactory("PlayEffectLoop", new SkillTriggerFactory<PlayEffectLoopTrigger>());
         Instance.RegisterTriggerFactory("PlaySound", new SkillTriggerFactory<PlaySoundTrigger>());
@@ -29,8 +30,9 @@ public sealed class SkillSystem
 
         Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
         Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<CurveMoveTrigger>());
-        Instance.RegisterTriggerFactory("ProjectionEffect",new SkillTriggerFactory<ProjectionEffectTrigger>());
+        Instance.RegisterTriggerFactory("ProjectionEffect", new SkillTriggerFactory<ProjectionEffectTrigger>());
 
+        Debug.Log(">>2");
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 
     }
@@ -153,8 +155,8 @@ public sealed class SkillSystem
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
-                    Debug.Log(args);
                     SkillBehavior trigger = Instance.CreateTrigger(type, args);
+                    Debug.Log(type+">>>生成完毕！");
                     if (trigger != null)
                     {
                         skill.Behaviors.Add(trigger);
@@ -191,6 +193,7 @@ public sealed class SkillSystem
     {
         if (DicSkillTriggerRegister.ContainsKey(skillCode) == false)
         {
+            Debug.Log(skillCode+">>>>>>"+typeof(T));
             DicSkillTriggerRegister.Add(skillCode, typeof(T));
         }
         else
@@ -201,18 +204,11 @@ public sealed class SkillSystem
 
     public SkillBehavior CreateTrigger(string type, string args)
     {
-        Debug.Log(type);
-        //if (DicSkillTriggerRegister.ContainsKey(type) == true)
-        //{
-
-        //}
-
-
         Type t = DicSkillTriggerRegister[type];
         object o = System.Activator.CreateInstance(t);  //创建实例
-
         System.Reflection.MethodInfo mi = t.GetMethod("Init");
         mi.Invoke(o, new object[] { args });
+        Debug.Log(type);
         return (SkillBehavior)o;
     }
 

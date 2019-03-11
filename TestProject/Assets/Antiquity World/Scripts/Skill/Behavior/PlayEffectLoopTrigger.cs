@@ -10,7 +10,6 @@ namespace GameSystem.Skill
         public int EffectNumber;   //0无限：
 
         private Transform Effecttf;
-        
 
         public override ISkillTrigger Clone()
         {
@@ -19,25 +18,33 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-
-            if (curTime >= m_StartTime && m_IsExected == false)
+            if (curTime >= m_StartTime)
             {
-                SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
+                if (Effecttf == null)
+                {
+                    m_IsExected = true;
+                    SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
+                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+                }
 
                 if (EffectNumber == 0)
                 {
-                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab,controller.transform, controller.transform.position, controller.transform.rotation);
+                    Effecttf.transform.position = controller.transform.position;
                 }
-                else 
+                else
                 {
-
+                    Effecttf.transform.position = controller.TargetPos;
                 }
-                m_IsExected = true;
-                return true;
             }
-            return false;
-
+            return m_IsExected;
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            Effecttf = null;
+        }
+
         public override void Init(string args)
         {
             string[] values = args.Split(',');

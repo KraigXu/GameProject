@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GameSystem.Skill;
+using Invector;
 using UnityEngine;
+using Invector.vCharacterController;
+using Invector.vMelee;
+using MapMagic;
+
 namespace GameSystem.Skill
 {
     /// <summary>
@@ -12,7 +16,7 @@ namespace GameSystem.Skill
         public int ProjectileEffectId;
         public int EffectImpactId;
         public Transform Effecttf;
-        
+
 
         public override ISkillTrigger Clone()
         {
@@ -26,7 +30,7 @@ namespace GameSystem.Skill
                 SkillData skillData = FightingScene.Instance.GetSkillData(ProjectileEffectId);
                 Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab, controller.transform, controller.transform.position, controller.transform.rotation);
 
-                WXProjectile projectile = Effecttf.GetComponent<WXProjectile>();
+                WXProjectile projectile = Effecttf.gameObject.AddComponent<WXProjectile>();
                 projectile.EffectImpactId = EffectImpactId;
                 m_IsExected = true;
                 return true;
@@ -35,28 +39,23 @@ namespace GameSystem.Skill
             return false;
         }
 
-        /// <summary>
-        /// 初始化参数
-        /// </summary>
-        /// <param name="args">ProjectionEffect(0,0.5,15,0,16,0,3,360,10,0,0,3);</param>
-        ///0,
-        ///0.5,
-        ///0,       第一ID
-        ///0,
-        ///1,
-        ///0,
-        /// 3,
-        /// 360,
-        /// 
-        ///
-        /// 
         public override void Init(string args)
         {
-            string[] values = Define.SkillDataSplit(args);
-            m_StartTime = int.Parse(values[1]);
+            Debug.Log(args);
+            string[] values = args.Split(',');
+            m_StartTime = float.Parse(values[1]);
             ProjectileEffectId = int.Parse(values[2]);
             EffectImpactId = int.Parse(values[4]);
+        }
 
+        public override void Reset()
+        {
+            base.Reset();
+            WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
+            Effecttf = null;
+            // EffectId = 0;
+            // EffectType = 0;
+            //  EffectNumber = 0;
 
         }
     }

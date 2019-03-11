@@ -11,24 +11,22 @@ public class LogObject
 
 public class DebugOutside : MonoBehaviour
 {
-    public  bool IsOpenConsole = false;
-
-
-    public  int LogFontSize = 18;
-    public  bool IsShowLogUI = false;
-    public  List<LogObject> lo = new List<LogObject>();
-    public  Vector2 scrollPosition=new Vector2(0,1);
-    public  Rect m_logWinRect = new Rect(10, 10, 600f, 800f);
-    public Rect m_inputRect=new Rect(15,750,560f,30);
-    public  Rect m_minBtnRect = new Rect(0, 0, 150, 50);
-    public  bool m_showLog = true;
-    public  bool m_showWarning = false;
-    public  bool m_showError = true;
-    public  string m_inputValue = "";
+    public bool IsOpenConsole = false;
+    public int LogFontSize = 18;
+    public bool IsShowLogUI = false;
+    public List<LogObject> lo = new List<LogObject>();
+    public Vector2 scrollPosition = new Vector2(0, 1);
+    public Rect m_logWinRect = new Rect(10, 10, 600f, 800f);
+    public Rect m_inputRect = new Rect(15, 750, 560f, 30);
+    public Rect m_minBtnRect = new Rect(0, 0, 150, 50);
+    public bool m_showLog = true;
+    public bool m_showWarning = false;
+    public bool m_showError = true;
+    public string m_inputValue = "";
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -46,7 +44,7 @@ public class DebugOutside : MonoBehaviour
                 RunMain(m_inputValue);
                 m_inputValue = "";
             }
-            
+
         }
     }
 
@@ -73,7 +71,7 @@ public class DebugOutside : MonoBehaviour
     }
     void OnGUI()
     {
-        if (IsShowLogUI==false)
+        if (IsShowLogUI == false)
             return;
 
         m_logWinRect = GUI.Window(0, m_logWinRect, LogWin, "ConsoleView");
@@ -86,7 +84,7 @@ public class DebugOutside : MonoBehaviour
     }
     void LogWin(int id)
     {
-        GUILayout.BeginScrollView(m_logWinRect.position, false, true, GUILayout.Width(m_logWinRect.width), GUILayout.Height(m_logWinRect.height)); 
+        GUILayout.BeginScrollView(m_logWinRect.position, false, true, GUILayout.Width(m_logWinRect.width), GUILayout.Height(m_logWinRect.height));
         foreach (LogObject item in lo)
         {
             if (item.logType == LogType.Log && !m_showLog)
@@ -114,7 +112,7 @@ public class DebugOutside : MonoBehaviour
                     GUI.color = Color.red;
                     break;
                 default:
-                     GUI.color = Color.red;
+                    GUI.color = Color.red;
                     break;
             }
 
@@ -139,7 +137,7 @@ public class DebugOutside : MonoBehaviour
         m_showWarning = GUILayout.Toggle(m_showWarning, "Warning");
         m_showError = GUILayout.Toggle(m_showError, "Error");
         GUILayout.Space(-20);
-       
+
         m_inputValue = GUI.TextField(m_inputRect, m_inputValue, 50);
 
         GUILayout.EndHorizontal();
@@ -156,9 +154,9 @@ public class DebugOutside : MonoBehaviour
             {
                 GameObject.Find(str[0]).SendMessage(str[1]);
             }
-            else if(str.Length >2)
+            else if (str.Length > 2)
             {
-                GameObject.Find(str[0]).SendMessage(str[1],str[2]);
+                GameObject.Find(str[0]).SendMessage(str[1], str[2]);
             }
 
         }
