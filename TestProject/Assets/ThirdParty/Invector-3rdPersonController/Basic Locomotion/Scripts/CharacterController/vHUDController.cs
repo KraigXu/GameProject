@@ -181,14 +181,6 @@ namespace Invector.vCharacterController
                 damageImage.enabled = true;
             damaged = true;
 
-            //伤害数字
-
-            RectTransform textRect = WXPoolManager.Pools[Define.PoolName].Spawn(damageText, transform.parent);
-            Text text = textRect.GetComponent<Text>();
-            text.text = damage.damageValue.ToString();
-            Vector2 position = FightingScene.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
-            textRect.anchoredPosition = position;
-            textRect.DOAnchorPosY(position.y + 10, 3);
         }
 
         void UpdateDebugWindow(vThirdPersonController cc)
@@ -261,6 +253,17 @@ namespace Invector.vCharacterController
                     }
                 }
             }
+        }
+
+        public void DamageUi(vDamage damage)
+        {
+            RectTransform textRect = WXPoolManager.Pools[Define.PoolName].Spawn(damageText, transform);
+            Text text = textRect.GetComponent<Text>();
+            text.text = damage.damageValue.ToString();
+            Vector2 position = FightingScene.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
+            Debug.Log(position);
+            textRect.anchoredPosition = position;
+            textRect.DOAnchorPosY(position.y + 10, 3);
         }
     }
 }

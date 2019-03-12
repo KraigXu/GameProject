@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Invector;
+using Invector.vCharacterController;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -55,6 +57,7 @@ namespace GameSystem
 
         public List<AudioData> AudioDatas = new List<AudioData>();
         public Transform audioSource;
+        public vHUDController controller;
         void Awake()
         {
             _instance = this;
@@ -85,6 +88,11 @@ namespace GameSystem
             }
 
             return SkillDatas[0];
+        }
+
+        public void ShowUI(vDamage damage)
+        {
+            controller.DamageUi(damage);
         }
     }
 }

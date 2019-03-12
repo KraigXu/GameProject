@@ -152,7 +152,6 @@ public class WXProjectile : MonoBehaviour
         //    aSrc.minDistance = 25f;
         //    aSrc.loop = false;
         //    aSrc.Play();
-
         //}
-    }
+    } 
 }

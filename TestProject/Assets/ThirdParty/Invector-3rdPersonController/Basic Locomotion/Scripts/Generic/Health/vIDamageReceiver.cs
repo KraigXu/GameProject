@@ -23,8 +23,12 @@ namespace Invector
         {
             var receivers = receiver.GetComponents<vIDamageReceiver>();
             if (receivers != null)
+            {
                 for (int i = 0; i < receivers.Length; i++)
+                {
                     receivers[i].TakeDamage(damage);
+                }
+            }
         }
 
         /// <summary>

@@ -19,7 +19,6 @@ public sealed class SkillSystem
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void Initialize()
     {
-        Debug.Log(">>1");
         Instance.RegisterTriggerFactory("PlayEffect", new SkillTriggerFactory<PlayEffectTrigger>());
         Instance.RegisterTriggerFactory("PlayEffectLoop", new SkillTriggerFactory<PlayEffectLoopTrigger>());
         Instance.RegisterTriggerFactory("PlaySound", new SkillTriggerFactory<PlaySoundTrigger>());
@@ -28,11 +27,10 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("AreaDamage", new SkillTriggerFactory<AreaDamageTrigger>());
         Instance.RegisterTriggerFactory("AreaDamageLoop",new SkillTriggerFactory<AreaDamageLoopTrigger>());
 
-        Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<PlayAnimationTrigger>());
+        Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<SingleDamageTrigger>());
         Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<CurveMoveTrigger>());
         Instance.RegisterTriggerFactory("ProjectionEffect", new SkillTriggerFactory<ProjectionEffectTrigger>());
 
-        Debug.Log(">>2");
         ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
 
     }

@@ -44,11 +44,9 @@ namespace GameSystem.Skill
                         projectile.EffectImpactId = EffectImpactId;
                     }
                 }
-
                 m_IsExected = true;
                 return true;
             }
-
             return false;
         }
 
@@ -64,7 +62,6 @@ namespace GameSystem.Skill
             ProjectileEffectId = int.Parse(values[2]);
             ProjectileNumber = int.Parse(values[3]);
             EffectImpactId = int.Parse(values[4]);
-            
         }
 
         public override void Reset()
@@ -72,10 +69,6 @@ namespace GameSystem.Skill
             base.Reset();
             WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
             Effecttf = null;
-            // EffectId = 0;
-            // EffectType = 0;
-            //  EffectNumber = 0;
-
         }
     }
 

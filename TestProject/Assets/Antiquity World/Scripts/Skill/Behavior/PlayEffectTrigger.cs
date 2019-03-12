@@ -37,7 +37,6 @@ namespace GameSystem.Skill
                     m_IsExected = true;
                     SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
                     Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
-
                     // WXDespawn despawn= Effecttf.transform.GetComponent<WXDespawn>();
                     //if (despawn == null)
                     //    despawn = Effecttf.gameObject.AddComponent<WXDespawn>();

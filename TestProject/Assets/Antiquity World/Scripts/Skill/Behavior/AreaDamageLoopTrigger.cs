@@ -25,7 +25,6 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            Debug.Log("AreaDamageLoopTrigger");
             if (curTime >= m_StartTime)
             {
                 m_IsExected = true;

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using GameSystem;
 using UnityEngine;
 
 namespace Invector
@@ -147,6 +148,7 @@ namespace Invector
                     StartCoroutine(RecoverHealth());
                 }
 
+                FightingScene.Instance.ShowUI(damage);
                 if (currentHealth > 0)
                 {
                     currentHealth -= damage.damageValue;
