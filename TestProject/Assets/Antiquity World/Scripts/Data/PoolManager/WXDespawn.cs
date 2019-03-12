@@ -18,7 +18,6 @@ public class WXDespawn : MonoBehaviour
 
     void Start()
     {
-
     }
     void OnSpawned()
     {

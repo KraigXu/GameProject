@@ -69,7 +69,6 @@ namespace GameSystem.Skill
                         _damage.damageType = vDamage.DamageType[HitType];
                         enemyCr.gameObject.ApplyDamage(_damage);
                         //enemyCr.ChangeHealth(-hurt);
-                        Debug.Log("Hit >>>" + enemy[i].name + ">>>造成" + _damage.damageValue);
                       //  WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
                     }
                 }
