@@ -43,7 +43,6 @@ namespace GameSystem.Skill
                         WXProjectile projectile = Effecttf.GetComponent<WXProjectile>();
                         projectile.EffectImpactId = EffectImpactId;
                     }
-
                 }
 
                 m_IsExected = true;
