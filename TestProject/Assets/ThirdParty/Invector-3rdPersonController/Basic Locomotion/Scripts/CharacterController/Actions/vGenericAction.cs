@@ -98,7 +98,7 @@ namespace Invector.vCharacterController.vActions
                 tpInput.cc.animator.CrossFadeInFixedTime(triggerAction.playAnimation, 0.1f);    // trigger the action animation clip
                 tpInput.ChangeCameraState(triggerAction.customCameraState);                     // change current camera state to a custom
             }
-
+            
             // trigger OnDoAction Event, you can add a delay in the inspector   
             StartCoroutine(triggerAction.OnDoActionDelay(gameObject));           
 

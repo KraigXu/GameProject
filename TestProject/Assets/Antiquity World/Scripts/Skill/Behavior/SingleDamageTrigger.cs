@@ -9,6 +9,10 @@ namespace GameSystem.Skill
     /// </summary>
     public class SingleDamageTrigger : SkillBehavior
     {
+        public override void Reset()
+        {
+            base.Reset();
+        }
 
         public override ISkillTrigger Clone()
         {
@@ -30,15 +34,6 @@ namespace GameSystem.Skill
         /// 初始化参数
         /// </summary>
         /// <param name="args">SingleDamage(1,1,1,0,0,1,0,0,0);</param>///
-        /// 1
-        /// 1
-        /// 1
-        /// 0
-        /// 0
-        /// 1
-        /// 0
-        /// 0
-        /// 0
         public override void Init(string args)
         {
             string[] values = args.Split(',');

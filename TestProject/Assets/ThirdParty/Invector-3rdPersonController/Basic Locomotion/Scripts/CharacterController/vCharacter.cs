@@ -9,7 +9,7 @@ namespace Invector.vCharacterController
     [System.Serializable]
 
     [vClassHeader("vCharacter")]
-    public abstract class vCharacter : vHealthController,vICharacter
+    public abstract class vCharacter : vHealthController, vICharacter
     {
         #region Character Variables 
 
@@ -32,8 +32,8 @@ namespace Invector.vCharacterController
 
 
         [vEditorToolbar("Fighting")]
-        public int AttackValue=40;
-        public int DefenseValue=30;
+        public int AttackValue = 40;
+        public int DefenseValue = 30;
 
 
         [vEditorToolbar("Events")]
@@ -89,7 +89,6 @@ namespace Invector.vCharacterController
 
         public virtual void EnableRagdoll()
         {
-
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -108,7 +107,7 @@ namespace Invector.vCharacterController
         }
 
         public override void TakeDamage(vDamage damage)
-        {            
+        {
             base.TakeDamage(damage);
             TriggerDamageReaction(damage);
         }
@@ -133,8 +132,8 @@ namespace Invector.vCharacterController
                     if (triggerResetStateHash.isValid) animator.SetTrigger(triggerResetStateHash);
                 }
             }
-            if (damage.activeRagdoll)                            
-                onActiveRagdoll.Invoke();                        
+            if (damage.activeRagdoll)
+                onActiveRagdoll.Invoke();
         }
     }
 }

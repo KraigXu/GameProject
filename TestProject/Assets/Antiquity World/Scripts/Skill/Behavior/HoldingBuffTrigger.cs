@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 namespace GameSystem.Skill
 {
-    /// <summary>
-    /// 圆形力场
-    /// </summary>
+
     public class HoldingBuff : SkillBehavior
     {
-        public GameObject  Effect;
+        public GameObject Effect;
         public GameObject HitEffect;
-        [Range(1,10)]
+        [Range(1, 10)]
         public float Range;
 
-        public float Frequency=0.3f;           //频率
+        public float Frequency = 0.3f;                  //频率
 
         private GameObject _currentEffect;
         private SkillInstance skillController;
@@ -19,7 +17,7 @@ namespace GameSystem.Skill
 
         public override ISkillTrigger Clone()
         {
-           return new HoldingBuff();
+            return new HoldingBuff();
         }
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
@@ -35,9 +33,15 @@ namespace GameSystem.Skill
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         public override void Init(string args)
         {
-            throw new System.NotImplementedException();
+            string[] values = Define.SkillDataSplit(args);
+            m_StartTime = float.Parse(values[1]);
+
         }
 
         void Dot()
@@ -49,14 +53,12 @@ namespace GameSystem.Skill
             {
                 targets[i] = hit[i].collider.transform;
 
-              //  GameObject go = Instantiate(HitEffect, targets[i]);
+                //  GameObject go = Instantiate(HitEffect, targets[i]);
                 //go.transform.position = targets[i].position;
-                
+
             }
             skillController.AllTarget = targets;
         }
-
-        
     }
 
 }

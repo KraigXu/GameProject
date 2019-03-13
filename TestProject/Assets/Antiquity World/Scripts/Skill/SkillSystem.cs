@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using GameSystem.Skill;
-using UnityEditor;
 using UnityEngine;
-using Object = System.Object;
 
 public class SkillTriggerFactory<T>
 {
@@ -25,13 +22,25 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("PlayAnimation", new SkillTriggerFactory<PlayAnimationTrigger>());
 
         Instance.RegisterTriggerFactory("AreaDamage", new SkillTriggerFactory<AreaDamageTrigger>());
-        Instance.RegisterTriggerFactory("AreaDamageLoop",new SkillTriggerFactory<AreaDamageLoopTrigger>());
+        Instance.RegisterTriggerFactory("AreaDamageLoop", new SkillTriggerFactory<AreaDamageLoopTrigger>());
 
         Instance.RegisterTriggerFactory("SingleDamage", new SkillTriggerFactory<SingleDamageTrigger>());
-        Instance.RegisterTriggerFactory("CurveMove",new SkillTriggerFactory<CurveMoveTrigger>());
+        Instance.RegisterTriggerFactory("CurveMove", new SkillTriggerFactory<CurveMoveTrigger>());
         Instance.RegisterTriggerFactory("ProjectionEffect", new SkillTriggerFactory<ProjectionEffectTrigger>());
 
-        ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
+        Instance.RegisterTriggerFactory("AppendSpeed", new SkillTriggerFactory<AppendSpeedTrigger>());
+        Instance.RegisterTriggerFactory("AppendHealth", new SkillTriggerFactory<AppendHealthTrigger>());
+
+        bool flag= ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
+        if (flag)
+        {
+
+        }
+        else
+        {
+
+        }
+
 
     }
     private static SkillSystem _instance;
@@ -154,7 +163,7 @@ public sealed class SkillSystem
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
                     SkillBehavior trigger = Instance.CreateTrigger(type, args);
-                    Debug.Log(type+">>>生成完毕！");
+                    Debug.Log(type + ">>>生成完毕！");
                     if (trigger != null)
                     {
                         skill.Behaviors.Add(trigger);
@@ -191,7 +200,7 @@ public sealed class SkillSystem
     {
         if (DicSkillTriggerRegister.ContainsKey(skillCode) == false)
         {
-            Debug.Log(skillCode+">>>>>>"+typeof(T));
+            Debug.Log(skillCode + ">>>>>>" + typeof(T));
             DicSkillTriggerRegister.Add(skillCode, typeof(T));
         }
         else
@@ -203,10 +212,12 @@ public sealed class SkillSystem
     public SkillBehavior CreateTrigger(string type, string args)
     {
         Type t = DicSkillTriggerRegister[type];
-        object o = System.Activator.CreateInstance(t);  //创建实例
+        object o = Activator.CreateInstance(t);  //创建实例
         System.Reflection.MethodInfo mi = t.GetMethod("Init");
-        mi.Invoke(o, new object[] { args });
-        Debug.Log(type);
+        if (mi != null)
+        {
+            mi.Invoke(o, new object[] { args });
+        }
         return (SkillBehavior)o;
     }
 

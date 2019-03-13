@@ -21,7 +21,7 @@ namespace GameSystem.Skill
         
         void Start()
         {
-
+            //1裂 2击 诅 3诅咒 4多重 5
         }
         void Update()
         {

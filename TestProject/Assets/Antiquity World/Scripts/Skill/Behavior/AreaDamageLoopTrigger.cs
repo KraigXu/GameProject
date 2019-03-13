@@ -12,12 +12,15 @@ namespace GameSystem.Skill
         public int TargetType;
         public float Radius = 3;
         public float Limit = 360;
+        public float Hurt = 50;
         public float Interval = 0.3f;
         public Transform _hitEffect;
         public int HitType;
 
         public Vector3 center;
-        private float cd=0;
+
+        private vDamage _damage=new vDamage();
+        private float _perFrameHurt;
         public override ISkillTrigger Clone()
         {
             return new AreaDamageTrigger();
@@ -37,16 +40,8 @@ namespace GameSystem.Skill
                     point = controller.TargetPos;
                 }
 
-                bool flag = false;
-                cd += Time.deltaTime;
-                if (cd >= Interval)
-                {
-                    cd = 0;
-                    flag = true;
-                }
-
-                if (flag == false)
-                    return true;
+                Debug.Log(Time.deltaTime);
+                _perFrameHurt = Time.deltaTime * Hurt;
 
                 List<Transform> enemy = FightingScene.Instance.Enemy;
                 vCharacter enemyCr = null;
@@ -61,15 +56,16 @@ namespace GameSystem.Skill
                         {
                             hurt = 0;
                         }
-                        vDamage _damage = new vDamage();
                         _damage.sender = controller.transform;
                         _damage.receiver = enemyCr.transform;
-                        _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.Character.AttackValue + 2) * (((float)10) * 0.01f)));
+                        _damage.damageValue = Mathf.RoundToInt(_perFrameHurt);
+                       // _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.Character.AttackValue + 2) * (((float)10) * 0.01f)));
                         _damage.hitPosition = enemy[i].position;
                         _damage.damageType = vDamage.DamageType[HitType];
                         enemyCr.gameObject.ApplyDamage(_damage);
+                        Debug.Log(_damage.damageValue);
                         //enemyCr.ChangeHealth(-hurt);
-                      //  WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
+                        //WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
                     }
                 }
                 // controller

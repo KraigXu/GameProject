@@ -13,7 +13,6 @@ namespace GameSystem.Skill
         private float m_StartPlayTime = 0;
         private int m_AnimationId = 0;
 
-
         public override ISkillTrigger Clone()
         {
             return new PlayAnimationTrigger();
@@ -24,6 +23,7 @@ namespace GameSystem.Skill
             if (curTime >= m_StartTime && m_IsExected == false)
             {
                 Debug.Log("PlayAnimation");
+                //controller.Character.animator=
                 m_IsExected = true;
                 return true;
             }
@@ -38,7 +38,9 @@ namespace GameSystem.Skill
             m_AnimationId = int.Parse(values[2]);
         }
 
-
-
+        public override void Reset()
+        {
+            base.Reset();
+        }
     }
 }
