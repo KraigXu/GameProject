@@ -162,7 +162,7 @@ namespace GameSystem.Ui
 
             for (int i = 0; i < biologicalIds.Count; i++)
             {
-                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_listItemPrefab, _listItemParent);
 
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.BiologicalSurnameDic[biologicalIds[i]] + GameStaticData.BiologicalNameDic[biologicalIds[i]];
@@ -203,7 +203,7 @@ namespace GameSystem.Ui
             ComponentDataArray<Faction> factions = World.Active.GetExistingManager<FactionSystem>().GetFactions();
             for (int i = 0; i < factions.Length; i++)
             {
-                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_listItemPrefab, _listItemParent);
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[factions[i].Id];
                 uiitem.Id = factions[i].Id;
@@ -228,7 +228,7 @@ namespace GameSystem.Ui
             List<int> livngAreaIds = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaIds();
             for (int i = 0; i < livngAreaIds.Count; i++)
             {
-                RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_listItemPrefab, _listItemParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_listItemPrefab, _listItemParent);
 
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[livngAreaIds[i]];

@@ -7,7 +7,7 @@ using Invector.vMelee;
 
 namespace GameSystem.Skill
 {
-    public class AreaDamageTrigger : SkillBehavior
+    public class AreaDamageTrigger : SkillTrigger
     {
 
         public float Radius = 3;
@@ -23,7 +23,6 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
-            Debug.Log("AreaDamageTrigger");
             if (curTime >= m_StartTime && m_IsExected == false)
             {
                 m_IsExected = true;
@@ -57,7 +56,7 @@ namespace GameSystem.Skill
                         //enemyCr.ChangeHealth(-hurt);
 
                         Debug.Log("Hit >>>" + enemy[i].name + ">>>造成" + _damage.damageValue);
-                        WXPoolManager.Pools[Define.PoolName].Spawn(_hitEffect);
+                        WXPoolManager.Pools[Define.ParticlePool].Spawn(_hitEffect);
                     }
                 }
                 // controller

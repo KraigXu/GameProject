@@ -11,13 +11,12 @@ namespace GameSystem.Skill
     /// <summary>
     /// 发射弹道
     /// </summary>
-    public class ProjectionEffectTrigger : SkillBehavior
+    public class ProjectionEffectTrigger : SkillTrigger
     {
         public int ProjectileEffectId;
         public int ProjectileNumber;
         public int EffectImpactId;
         public Transform Effecttf;
-
 
         public override ISkillTrigger Clone()
         {
@@ -30,14 +29,14 @@ namespace GameSystem.Skill
             {
                 if (Effecttf == null)
                 {
-                    SkillData skillData = FightingScene.Instance.GetSkillData(ProjectileEffectId);
+                    ParticleItem skillData = FightingScene.Instance.GetSkillData(ProjectileEffectId);
 
                     float roation2 = ProjectileNumber * 15f/2f;
                     
                     for (int i = 0; i < ProjectileNumber; i++)
                     {
                         Vector3 angle = controller.transform.eulerAngles+new Vector3(0,15*i-roation2,0);
-                        Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab, controller.transform.position + new Vector3(0, 1.5f, 0), Quaternion.Euler(angle));
+                        Effecttf = WXPoolManager.Pools[Define.ParticlePool].Spawn(skillData.Prefab, controller.transform.position + new Vector3(0, 1.5f, 0), Quaternion.Euler(angle));
                         WXProjectile projectile = Effecttf.GetComponent<WXProjectile>();
                         projectile.EffectImpactId = EffectImpactId;
                     }
@@ -65,7 +64,7 @@ namespace GameSystem.Skill
         public override void Reset()
         {
             base.Reset();
-            WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
+            WXPoolManager.Pools[Define.ParticlePool].Despawn(Effecttf);
             Effecttf = null;
         }
     }

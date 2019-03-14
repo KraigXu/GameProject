@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
+    /// <summary>
+    /// 技能实例
+    /// </summary>
     public class SkillInstance : MonoBehaviour
     {
         public SkillGroup CurrentGroup;          //当前行为
@@ -21,7 +24,6 @@ namespace GameSystem.Skill
         
         void Start()
         {
-            //1裂 2击 诅 3诅咒 4多重 5
         }
         void Update()
         {

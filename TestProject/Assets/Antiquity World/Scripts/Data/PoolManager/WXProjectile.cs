@@ -69,7 +69,7 @@ public class WXProjectile : MonoBehaviour
     // OnDespawned called by pool manager 
     void OnProjectileDestroy()
     {
-        WXPoolManager.Pools[Define.PoolName].Despawn(transform);
+        WXPoolManager.Pools[Define.ParticlePool].Despawn(transform);
     }
 
     // Apply hit force on impact
@@ -141,8 +141,8 @@ public class WXProjectile : MonoBehaviour
     }
     public void Impact(Vector3 pos)
     {
-        SkillData data = FightingScene.Instance.GetSkillData(EffectImpactId);
-        WXPoolManager.Pools[Define.PoolName].Spawn(data.Prefab, pos, Quaternion.identity, null);
+        ParticleItem data = FightingScene.Instance.GetSkillData(EffectImpactId);
+        WXPoolManager.Pools[Define.ParticlePool].Spawn(data.Prefab, pos, Quaternion.identity, null);
 
         //AudioSource aSrc = WXPoolManager.Pools[Define.PoolName].SpawnAudio(FightingScene.Instance.audioSource, seekerHit[Random.Range(0, seekerHit.Length)], pos, null).gameObject.GetComponent<AudioSource>();
         //if (aSrc != null)

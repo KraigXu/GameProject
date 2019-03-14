@@ -38,7 +38,8 @@ namespace Invector.vMelee
         private bool inRecoil;
         private string attackName;
 
-        
+        public List<SkillGroup> SkillGroups=new List<SkillGroup>(new SkillGroup[]{new SkillGroup()});
+
         public List<int> SkillId = new List<int>()
         {
             1,2,3,4,5,6,7,8,9
@@ -367,22 +368,21 @@ namespace Invector.vMelee
         public virtual void CoreSkill(vCharacter cc)
         {
             SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[0]);
-            controller.TargetPos = new Vector3(7f, -4f, 21f);
+            controller.CurrentGroup =SkillGroups[0];
             controller.Character = cc;
         }
 
         public virtual void TwoSkill(vCharacter cc)
         {
             SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[1]);
+            controller.CurrentGroup = SkillGroups[1];
             controller.Character = cc;
         }
 
         public virtual void SecondarySkill(vCharacter cc)
         {
             SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup = SkillSystem.Instance.NewSkillGroup(SkillId[2]);
+            controller.CurrentGroup = SkillGroups[2];
             controller.Character = cc;
         }
         /// <summary>

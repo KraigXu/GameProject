@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class AppendSpeedTrigger : SkillBehavior
+    public class AppendSpeedTrigger : SkillTrigger
     {
         public float magnification;
 
@@ -50,7 +50,6 @@ namespace GameSystem.Skill
 
             m_StartTime = float.Parse(values[1]);
             magnification = float.Parse(values[2]);
-            Debug.Log(magnification);
         }
 
         public override void Reset()

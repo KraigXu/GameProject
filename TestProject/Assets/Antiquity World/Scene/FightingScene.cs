@@ -7,6 +7,8 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
+
+
 namespace GameSystem
 {
     public class FightingInitData
@@ -24,12 +26,7 @@ namespace GameSystem
         public int Energy;
     }
 
-    [Serializable]
-    public class SkillData
-    {
-        public int Id;
-        public Transform Prefab;
-    }
+
 
     [Serializable]
     public class AudioData
@@ -52,9 +49,7 @@ namespace GameSystem
         public GameObject PlayerGo;
         public Camera PlayerCamera;
         public List<Transform> Enemy=new List<Transform>();
-
-        public List<SkillData> SkillDatas = new List<SkillData>();
-
+        public List<ParticleItem> ParticleDatas = new List<ParticleItem>();
         public List<AudioData> AudioDatas = new List<AudioData>();
         public Transform audioSource;
         public vHUDController controller;
@@ -77,17 +72,17 @@ namespace GameSystem
             return AudioDatas[0];
         }
 
-        public SkillData GetSkillData(int id)
+        public ParticleItem GetSkillData(int id)
         {
-            for (int i = 0; i < SkillDatas.Count; i++)
+            for (int i = 0; i < ParticleDatas.Count; i++)
             {
-                if (SkillDatas[i].Id == id)
+                if (ParticleDatas[i].Id == id)
                 {
-                    return SkillDatas[i];
+                    return ParticleDatas[i];
                 }
             }
 
-            return SkillDatas[0];
+            return ParticleDatas[0];
         }
 
         public void ShowUI(vDamage damage)

@@ -2,7 +2,7 @@
 namespace GameSystem.Skill
 {
 
-    public class HoldingBuff : SkillBehavior
+    public class HoldingBuff : SkillTrigger
     {
         public GameObject Effect;
         public GameObject HitEffect;

@@ -7,7 +7,7 @@ namespace GameSystem.Skill
     /// <summary>
     ///  单一伤害
     /// </summary>
-    public class SingleDamageTrigger : SkillBehavior
+    public class SingleDamageTrigger : SkillTrigger
     {
         public override void Reset()
         {

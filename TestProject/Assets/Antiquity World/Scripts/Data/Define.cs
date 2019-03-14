@@ -70,9 +70,9 @@ public sealed class Define
 
     public static readonly string TagBiological = "Biological";
 
-    public static readonly string PoolName = "GeneratedPool";
+    public static readonly string GeneratedPool = "GeneratedPool";
+    public static readonly string ParticlePool = "ParticlePool";
 
-   
     public static bool IsAPointInACamera(Camera camera ,Vector3 position,bool isNeedModelBlockOut=false)
     {
         // 是否在视野内

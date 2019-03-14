@@ -8,7 +8,7 @@ namespace GameSystem.Skill
     /// <summary>
     /// 播放指定动画 
     /// </summary>
-    public class PlayAnimationTrigger : SkillBehavior
+    public class PlayAnimationTrigger : SkillTrigger
     {
         private float m_StartPlayTime = 0;
         private int m_AnimationId = 0;

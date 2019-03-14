@@ -257,7 +257,7 @@ namespace Invector.vCharacterController
 
         public void DamageUi(vDamage damage)
         {
-            RectTransform textRect = WXPoolManager.Pools[Define.PoolName].Spawn(damageText, transform);
+            RectTransform textRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(damageText, transform);
             Text text = textRect.GetComponent<Text>();
             text.text = damage.damageValue.ToString();
             Vector2 position = FightingScene.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);

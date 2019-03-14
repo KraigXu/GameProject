@@ -1,14 +1,14 @@
 skill(1)
 {
-	PlayEffect(0,0,11,0,0);
+	PlayEffect(0,0,1,0,0);
 	PlaySound(0,0.5,1);
-	PlayEffect(0,2,12,0,0);
+	PlayEffect(0,2,2,0,0);
 	AreaDamageLoop(0,2,0.3,1,0,0,3,5,360,0.5,0,0,3);
 }
 skill(2)
 {
 	PlayAnimation(0,0.5,0);
-	PlayEffect(0,0.3,14,0,0);
+	PlayEffect(0,0.3,3,0,0);
 	PlaySound(0,0.3,2);
 	AreaDamage(0,0.5,0,0,1,0,3,360,10,0,0,3);
 
@@ -16,7 +16,7 @@ skill(2)
 skill(3)
 {
 	PlaySound(0,0,2);
-	ProjectionEffect(0,0,15,3,16,0,3,360,10,0,0,3);
+	ProjectionEffect(0,0,4,3,5,0,3,360,10,0,0,3);
 }
 skill(4)
 {

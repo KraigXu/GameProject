@@ -63,7 +63,7 @@ namespace GameSystem.Ui
                     }
                     else
                     {
-                        WXPoolManager.Pools[Define.PoolName].Despawn(_initItem[i]);
+                        WXPoolManager.Pools[Define.GeneratedPool].Despawn(_initItem[i]);
                     }
                 }
                 _initItem.RemoveRange(infoItemDatas.Count,_initItem.Count-infoItemDatas.Count);
@@ -72,13 +72,13 @@ namespace GameSystem.Ui
             {
                 for (int i = 0; i < _initItem.Count; i++)
                 {
-                    WXPoolManager.Pools[Define.PoolName].Despawn(_initItem[i]);
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(_initItem[i]);
                 }
                 _initItem.Clear();
                 for (int i = 0; i < infoItemDatas.Count; i++)
                 {
                     TipsInfoItemData data = infoItemDatas[i];
-                    RectTransform item = WXPoolManager.Pools[Define.PoolName].Spawn(_textPrefab, _contentParent);
+                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_textPrefab, _contentParent);
                     item.GetComponent<Text>().text = data.Title + data.Content;
                     _initItem.Add(item);
                 }

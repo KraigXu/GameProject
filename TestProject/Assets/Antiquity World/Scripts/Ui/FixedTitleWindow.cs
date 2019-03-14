@@ -70,7 +70,7 @@ namespace GameSystem.Ui
                     }
                     else
                     {
-                        WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
+                        WXPoolManager.Pools[Define.GeneratedPool].Despawn(_items[i].node);
                     }
                 }
 
@@ -80,12 +80,12 @@ namespace GameSystem.Ui
             {
                 for (int i = 0; i < _items.Count; i++)
                 {
-                    WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(_items[i].node);
                 }
                 _items.Clear();
                 for (int i = 0; i < kv.Count; i++)
                 {
-                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_titlePrefab, transform);
+                    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_titlePrefab, transform);
                     rectGo.GetComponentInChildren<Text>().text = kv[i].Key;
                     FixedTitleTf tf=new FixedTitleTf();
                     tf.Content = kv[i].Key;

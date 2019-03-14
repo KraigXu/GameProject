@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class PlaySoundTrigger : SkillBehavior
+    [CreateAssetMenu(menuName = "GameSystem/Skill/Trigger/PlaySoundTrigger")]
+    public class PlaySoundTrigger : SkillTrigger
     {
         public AudioData Data;
         public AudioSource asrc;
@@ -20,7 +21,7 @@ namespace GameSystem.Skill
             {
                 Debug.Log("PlaySound");
                 m_IsExected = true;
-                asrc = WXPoolManager.Pools[Define.PoolName].SpawnAudio(FightingScene.Instance.audioSource, Data.Clip, Vector3.up, null).GetComponent<AudioSource>();
+                asrc = WXPoolManager.Pools[Define.ParticlePool].SpawnAudio(FightingScene.Instance.audioSource, Data.Clip, Vector3.up, null).GetComponent<AudioSource>();
                 if (asrc != null)
                 {
                     asrc.pitch = Random.Range(0.95f, 1f);

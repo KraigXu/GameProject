@@ -92,7 +92,7 @@ namespace GameSystem.Ui
         private void ShowEquipmentInfo(GameObject go)
         {
             Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
-            _showTransform = WXPoolManager.Pools[Define.PoolName].Spawn(StrategySceneInit.Settings.ArticleInfoPerfab.transform, transform);
+            _showTransform = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategySceneInit.Settings.ArticleInfoPerfab.transform, transform);
 
             UiEquipmentItem equipment = _showTransform.gameObject.GetComponent<UiEquipmentItem>();
 
@@ -140,7 +140,7 @@ namespace GameSystem.Ui
 
         private void CloseEquipmentInfo(GameObject go)
         {
-            WXPoolManager.Pools[Define.PoolName].Despawn(_showTransform);
+            WXPoolManager.Pools[Define.GeneratedPool].Despawn(_showTransform);
             //WXPoolManager.Pools[Define.PoolName].Despawn(_items)
             //WXPoolManager.Pools[Define.PoolName].Despawn(_items[i].node);
         }
@@ -157,7 +157,7 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < _uiData.Biologicals.Count; i++)
                 {
-                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_personnelPrefab, _personnelParent);
+                    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_personnelPrefab, _personnelParent);
                     UiBiologicalAvatarItem item = rectGo.GetComponent<UiBiologicalAvatarItem>();
                     item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[_uiData.Biologicals[i].BiologicalId];
                     item.Key = _uiData.Biologicals[i].BiologicalId;
@@ -257,7 +257,7 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < content.Count; i++)
                 {
-                    RectTransform rectGo = WXPoolManager.Pools[Define.PoolName].Spawn(_techniquesPrefab, _jiyiContent);
+                    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_techniquesPrefab, _jiyiContent);
                     rectGo.GetChild(0).GetComponent<Text>().text = GameStaticData.TechniquesName[content[i].Key];
                     rectGo.GetChild(1).GetComponent<Text>().text = content[i].Value.ToString();
                 }
@@ -266,7 +266,7 @@ namespace GameSystem.Ui
             {
                 for (int i = 0; i < _techniquesItems.Count; i++)
                 {
-                    WXPoolManager.Pools[Define.PoolName].Despawn(_techniquesItems[i].transform);
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(_techniquesItems[i].transform);
                 }
                 _techniquesItems.Clear();
             }

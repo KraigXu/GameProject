@@ -7,7 +7,7 @@ namespace GameSystem.Skill
     /// <summary>
     ///  曲线移动
     /// </summary>
-    public class CurveMoveTrigger : SkillBehavior
+    public class CurveMoveTrigger : SkillTrigger
     {
         private float m_StartPlayTime = 0;
         private int m_AnimationId = 0;

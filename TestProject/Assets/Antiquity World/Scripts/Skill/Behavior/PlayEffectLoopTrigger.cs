@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class PlayEffectLoopTrigger : SkillBehavior
+    public class PlayEffectLoopTrigger : SkillTrigger
     {
         public int EffectId;
         public int EffectNumber;   //0无限：
@@ -23,8 +23,8 @@ namespace GameSystem.Skill
                 if (Effecttf == null)
                 {
                     m_IsExected = true;
-                    SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
-                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+                    ParticleItem skillData = FightingScene.Instance.GetSkillData(EffectId);
+                    Effecttf = WXPoolManager.Pools[Define.ParticlePool].Spawn(skillData.Prefab);
                 }
 
                 if (EffectNumber == 0)

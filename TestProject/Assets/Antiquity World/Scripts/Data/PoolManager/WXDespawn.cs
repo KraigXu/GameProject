@@ -52,7 +52,7 @@ public class WXDespawn : MonoBehaviour
     // Despawn game object this script attached to
     public void Despawn()
     {
-        WXPoolManager.Pools[Define.PoolName].Despawn(transform);
+        WXPoolManager.Pools[Define.ParticlePool].Despawn(transform);
     }
 
     void Update()

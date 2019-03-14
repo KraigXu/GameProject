@@ -7,18 +7,19 @@ namespace GameSystem.Skill
     /// <summary>
     /// Skill的基类 
     /// </summary>
-    public abstract  class SkillBehavior : ISkillTrigger
+    public abstract  class SkillTrigger : ISkillTrigger
     {
         protected float m_StartTime = 0;
         protected bool m_IsExected = false;
         protected string m_TypeName;
         protected SkillTriggerExecuteType m_ExecuteType = SkillTriggerExecuteType.STET_SKILL_START;
 
-        public abstract void Init(string args);
         public virtual void Reset()
         {
             m_IsExected = false;
         }
+        public abstract void Init(string args);
+
         public abstract ISkillTrigger Clone();
         public abstract bool Execute( ISkillTrigger instance, float curTime,SkillInstance controller);
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class AppendHealthTrigger : SkillBehavior
+    public class AppendHealthTrigger : SkillTrigger
     {
         public int Value;
         public override ISkillTrigger Clone()

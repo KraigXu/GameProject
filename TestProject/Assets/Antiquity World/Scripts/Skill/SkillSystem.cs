@@ -9,6 +9,9 @@ public class SkillTriggerFactory<T>
     public T data;
 }
 
+/// <summary>
+/// 整个项目内技能系统的生成
+/// </summary>
 public sealed class SkillSystem
 {
     public static Dictionary<int, SkillGroup> DicSkillInstancePool = new Dictionary<int, SkillGroup>();
@@ -31,17 +34,7 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("AppendSpeed", new SkillTriggerFactory<AppendSpeedTrigger>());
         Instance.RegisterTriggerFactory("AppendHealth", new SkillTriggerFactory<AppendHealthTrigger>());
 
-        bool flag= ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
-        if (flag)
-        {
-
-        }
-        else
-        {
-
-        }
-
-
+        ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
     }
     private static SkillSystem _instance;
 
@@ -57,7 +50,6 @@ public sealed class SkillSystem
             return _instance;
         }
     }
-
     public Dictionary<string, Type> DicSkillTriggerRegister = new Dictionary<string, Type>();
 
     private static bool ParseScript(string filename)
@@ -162,7 +154,7 @@ public sealed class SkillSystem
                     string type = line.Substring(0, start);
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
-                    SkillBehavior trigger = Instance.CreateTrigger(type, args);
+                    SkillTrigger trigger = Instance.CreateTrigger(type, args);
                     Debug.Log(type + ">>>生成完毕！");
                     if (trigger != null)
                     {
@@ -176,7 +168,8 @@ public sealed class SkillSystem
             }
         } while (true);
 
-        Debug.Log("Skill Config Over!");
+        Debug.
+            Log("Skill Config Over!");
         return true;
     }
 
@@ -200,7 +193,6 @@ public sealed class SkillSystem
     {
         if (DicSkillTriggerRegister.ContainsKey(skillCode) == false)
         {
-            Debug.Log(skillCode + ">>>>>>" + typeof(T));
             DicSkillTriggerRegister.Add(skillCode, typeof(T));
         }
         else
@@ -209,7 +201,7 @@ public sealed class SkillSystem
         }
     }
 
-    public SkillBehavior CreateTrigger(string type, string args)
+    public SkillTrigger CreateTrigger(string type, string args)
     {
         Type t = DicSkillTriggerRegister[type];
         object o = Activator.CreateInstance(t);  //创建实例
@@ -218,7 +210,7 @@ public sealed class SkillSystem
         {
             mi.Invoke(o, new object[] { args });
         }
-        return (SkillBehavior)o;
+        return (SkillTrigger)o;
     }
 
     public SkillInstance NewSkillInstance(int skillId)

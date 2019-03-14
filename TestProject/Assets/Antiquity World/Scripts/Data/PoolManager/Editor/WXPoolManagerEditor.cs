@@ -9,7 +9,7 @@ using System;
 [Serializable]
 public class F3DPoolManagerEditor : Editor
 {
-    [MenuItem("WuXia/Pool Manager")]
+    [MenuItem("Antiquity World/Pool Manager")]
     public static void OpenPoolManager()
     {
         WXPoolManager manager = GameObject.FindObjectOfType<WXPoolManager>();
@@ -50,7 +50,7 @@ public class F3DPoolManagerEditor : Editor
 
     string lastLoadedDatabaseName = "";
 
-    private string assetPath = "Assets/WuXia/Resources/PoolManagerCache/";
+    private string assetPath = "Assets/Antiquity World/Resources/PoolManagerCache/";
 
     /// <summary>
     /// Update info and data

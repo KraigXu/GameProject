@@ -13,7 +13,7 @@ namespace GameSystem.Skill
         public float CoolingTime;                                               //冷却
         public Sprite Icon;                                                     //图标
         public Color sceneGizmoColor = Color.gray;                              //拿来渲染eyes的Gizmos颜色
-        public List<SkillBehavior> Behaviors=new List<SkillBehavior>();
+        public List<SkillTrigger> Behaviors=new List<SkillTrigger>();
         
         public bool m_IsUsed = false;
         public SkillGroup() { }

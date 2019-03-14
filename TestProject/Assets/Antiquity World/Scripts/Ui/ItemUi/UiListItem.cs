@@ -29,7 +29,7 @@ public class UiListItem : MonoBehaviour
 
     public void Destroy()
     {
-        WXPoolManager.Pools[Define.PoolName].Despawn(transform);
+        WXPoolManager.Pools[Define.GeneratedPool].Despawn(transform);
     }
 
 

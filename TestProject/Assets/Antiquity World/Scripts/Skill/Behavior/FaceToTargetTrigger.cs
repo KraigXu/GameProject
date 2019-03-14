@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class FaceToTargetTrigger : SkillBehavior
+    public class FaceToTargetTrigger : SkillTrigger
     {
         public override ISkillTrigger Clone()
         {

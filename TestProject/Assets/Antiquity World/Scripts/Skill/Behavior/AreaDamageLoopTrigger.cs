@@ -7,7 +7,7 @@ using Invector.vMelee;
 
 namespace GameSystem.Skill
 {
-    public class AreaDamageLoopTrigger : SkillBehavior
+    public class AreaDamageLoopTrigger : SkillTrigger
     {
         public int TargetType;
         public float Radius = 3;

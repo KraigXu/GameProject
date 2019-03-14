@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    public class PlayEffectTrigger : SkillBehavior
+    public class PlayEffectTrigger : SkillTrigger
     {
         public int EffectId;
         public int EffectType;    //0:原点 1:目标
@@ -20,11 +20,11 @@ namespace GameSystem.Skill
         public override void Reset()
         {
             base.Reset();
-            WXPoolManager.Pools[Define.PoolName].Despawn(Effecttf);
+            WXPoolManager.Pools[Define.ParticlePool].Despawn(Effecttf);
             Effecttf = null;
-           // EffectId = 0;
-           // EffectType = 0;
-          //  EffectNumber = 0;
+            // EffectId = 0;
+            // EffectType = 0;
+            //  EffectNumber = 0;
 
         }
 
@@ -35,8 +35,8 @@ namespace GameSystem.Skill
                 if (Effecttf == null)
                 {
                     m_IsExected = true;
-                    SkillData skillData = FightingScene.Instance.GetSkillData(EffectId);
-                    Effecttf = WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
+                    ParticleItem skillData = FightingScene.Instance.GetSkillData(EffectId);
+                    Effecttf = WXPoolManager.Pools[Define.ParticlePool].Spawn(skillData.Prefab);
                     // WXDespawn despawn= Effecttf.transform.GetComponent<WXDespawn>();
                     //if (despawn == null)
                     //    despawn = Effecttf.gameObject.AddComponent<WXDespawn>();
