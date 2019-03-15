@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 namespace GameSystem.Skill
 {
-
     public class HoldingBuff : SkillTrigger
     {
         public GameObject Effect;

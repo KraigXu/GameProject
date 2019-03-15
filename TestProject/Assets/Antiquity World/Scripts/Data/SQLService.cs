@@ -110,6 +110,8 @@ public class SQLService
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_Gongfa(this);
 
+        Tables.CreateTable_Skill(this);
+
         Tables.CreateTable_Avatar(this);
         Tables.CreateTable_BiologicalAvatarData(this);
         Tables.CreateTable_ModelData(this);

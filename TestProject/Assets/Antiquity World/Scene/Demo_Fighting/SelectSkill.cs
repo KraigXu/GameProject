@@ -57,8 +57,7 @@ public class SelectSkill : MonoBehaviour
         Manager.SkillGroups[0] = _skill;
         _number.text = _currentId + "/" + SkillSystem.DicSkillInstancePool.Count;
         _name.text = _skill.Name;
-
-       
+        _container.sprite = _skill.Icon;
     }
 
     private void NextSkill()

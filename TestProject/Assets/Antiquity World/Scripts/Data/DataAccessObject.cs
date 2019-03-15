@@ -402,8 +402,21 @@ namespace DataAccessObject
         }
 
 
-
-
+        public static void CreateTable_Skill(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS SkillData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " IconPath TEXT," +
+                                       " SkillType INTEGER," +
+                                       " DifficultLevel INTEGER," +
+                                       " Wisdom INTEGER," +
+                                       " Strength INTEGER," +
+                                       " Effect INTEGER," +
+                                       " Consumption INTEGER," +
+                                       " AvatarId INTEGER);");
+        }
 
     }
 
@@ -817,20 +830,20 @@ namespace DataAccessObject
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
+        public string IconPath { get; set; }
         public int SkillType { get; set; }        //种类
         public int DifficultLevel { get; set; }    //难度等级
         public int Wisdom { get; set; }             //要求智慧值
         public int Strength { get; set; }
         public int Effect { get; set; }
         public int Consumption { get; set; }
-
-
         public int AvatarId { get; set; }
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,Name,SkillType,DifficultLevel,Wisdom,Strength,AvatarId,
+                Id,Name,Description,IconPath,SkillType,DifficultLevel,Wisdom,Strength,Effect,Consumption,AvatarId,
             };
             return objects;
         }

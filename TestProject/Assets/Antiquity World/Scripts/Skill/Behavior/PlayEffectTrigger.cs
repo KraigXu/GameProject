@@ -9,7 +9,7 @@ namespace GameSystem.Skill
     {
         public int EffectId;
         public int EffectType;    //0:原点 1:目标
-        public int EffectNumber;   //0无限：
+        public int EffectNumber;   // 0无限：
         public Transform Effecttf;
 
         public override ISkillTrigger Clone()
@@ -22,10 +22,6 @@ namespace GameSystem.Skill
             base.Reset();
             WXPoolManager.Pools[Define.ParticlePool].Despawn(Effecttf);
             Effecttf = null;
-            // EffectId = 0;
-            // EffectType = 0;
-            //  EffectNumber = 0;
-
         }
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)

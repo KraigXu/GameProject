@@ -10,8 +10,10 @@ namespace GameSystem.Skill
     /// </summary>
     public class SkillInstance : MonoBehaviour
     {
-        public SkillGroup CurrentGroup;          //当前行为
-       // public float ContinuedTime = 5f;       //持续时间   持续时间应是外界赋值
+        public SkillGroup CurrentGroup;           //当前效果
+        public Vector3 EffectPosition;          //作用位置
+        public Transform EffectNode;           //作用节点
+
         public GameObject[] AillTarget = new GameObject[3];   //所有目标  数组长度应是外界赋值
         public string[] ImpactLabel;  //影响标签  凡是元素集内的标签 才会被技能影响
         public Collider ColliderSelf;
@@ -34,38 +36,10 @@ namespace GameSystem.Skill
                 _currentTime = 0;
                 CurrentGroup.Reset();
                 Destroy(this);
-                return;
             }
         }
-        void OnTriggerEnter(Collider collider)
-        {
-            if (collider.gameObject.tag == "Enemy")
-            {
-                for (int i = 0; i < AillTarget.Length; i++)
-                {
-                    if (AillTarget[i] == null)
-                    {
-                        AillTarget[i] = collider.gameObject;
-                        break;
-                    }
-                }
-            }
-        }
+       
 
-        void OnTriggerExit(Collider collider)
-        {
-            if (collider.gameObject.tag == "Enemy")
-            {
-                for (int i = 0; i < AillTarget.Length; i++)
-                {
-                    if (AillTarget[i] == collider.gameObject)
-                    {
-                        AillTarget[i] = null;
-                        break;
-                    }
-                }
-            }
-        }
     }
 
 }

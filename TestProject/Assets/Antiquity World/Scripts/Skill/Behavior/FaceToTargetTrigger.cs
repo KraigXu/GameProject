@@ -14,6 +14,16 @@ namespace GameSystem.Skill
 
         public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
         {
+            if (m_StartTime <= curTime)
+            {
+
+
+
+
+                m_IsExected = true;
+                return m_IsExected;
+            }
+
             return false;
         }
 

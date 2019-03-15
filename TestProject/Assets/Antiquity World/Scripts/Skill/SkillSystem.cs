@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using DataAccessObject;
+using GameSystem;
 using GameSystem.Skill;
+using Unity.Entities;
 using UnityEngine;
 
 public class SkillTriggerFactory<T>
@@ -220,12 +223,18 @@ public sealed class SkillSystem
     }
 
     public SkillGroup NewSkillGroup(int skillId)
-    {
+    {   
         SkillGroup group = null;
         if (DicSkillInstancePool.ContainsKey(skillId))
         {
             group = DicSkillInstancePool[skillId];
         }
+
+        SkillData data = SQLService.Instance.QueryUnique<SkillData>(" Id=?",skillId);
+
+        group.Name = data.Name;
+        group.Description = data.DifficultLevel.ToString();
+        group.Icon = Resources.Load<Sprite>(data.IconPath);
         return group;
     }
 

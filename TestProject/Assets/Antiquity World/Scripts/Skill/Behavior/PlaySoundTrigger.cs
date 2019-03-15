@@ -19,7 +19,6 @@ namespace GameSystem.Skill
         {
             if (curTime >= m_StartTime && m_IsExected == false)
             {
-                Debug.Log("PlaySound");
                 m_IsExected = true;
                 asrc = WXPoolManager.Pools[Define.ParticlePool].SpawnAudio(FightingScene.Instance.audioSource, Data.Clip, Vector3.up, null).GetComponent<AudioSource>();
                 if (asrc != null)

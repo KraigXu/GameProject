@@ -40,7 +40,6 @@ namespace GameSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
-            Debug.Log("Initialize Over");
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
@@ -51,9 +50,8 @@ namespace GameSystem
             BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
 
-            Debug.Log("Initialize SqlData");
             SQLService.GetInstance("TD.db");
-
+            Debug.Log("Initialize Over");
         }
 
 
@@ -63,7 +61,6 @@ namespace GameSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeAfterSceneLoad()
         {
-            Debug.Log("InitializeAfterSceneLoad Over");
             var settingsGo = GameObject.Find("Settings");
             if (settingsGo == null)
             {

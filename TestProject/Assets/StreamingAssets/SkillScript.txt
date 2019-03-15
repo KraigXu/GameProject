@@ -20,14 +20,14 @@ skill(3)
 }
 skill(4)
 {
-	CurveMove(0,0.413,104,0,0,0,0);
-	PlayAnimation(0,0,108);
-	PlaySound(0,0,1008);
-	SingleDamage(1,1,1,0,0,1,0,0,0);
-}
-skill(5)
-{
 	PlayAnimation(0,0.3,0);
 	AppendSpeed(0,0.3,3);
 	AppendHealth(0,0.3,30);
+}
+skill(5)
+{
+	CurveMove(0,0.413,0,0,0,0,0);
+	PlayAnimation(0,0,3);
+	PlaySound(0,0,3);
+	SingleDamage(1,1,1,0,0,1,0,0,0);
 }

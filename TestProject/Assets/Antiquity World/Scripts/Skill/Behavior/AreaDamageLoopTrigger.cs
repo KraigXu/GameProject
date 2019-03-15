@@ -40,7 +40,6 @@ namespace GameSystem.Skill
                     point = controller.TargetPos;
                 }
 
-                Debug.Log(Time.deltaTime);
                 _perFrameHurt = Time.deltaTime * Hurt;
 
                 List<Transform> enemy = FightingScene.Instance.Enemy;

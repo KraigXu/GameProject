@@ -35,6 +35,16 @@ namespace GameSystem
         public AudioClip Clip;
     }
 
+    [Serializable]
+    public class CurveData
+    {
+        public int Id;
+        public float Time;
+        public AnimationCurve X=new AnimationCurve();
+        public AnimationCurve Y=new AnimationCurve();
+        public AnimationCurve Z=new AnimationCurve();
+    }
+
     public class FightingScene : MonoBehaviour
     {
         public static EntityArchetype FightingPerson;
@@ -51,12 +61,12 @@ namespace GameSystem
         public List<Transform> Enemy=new List<Transform>();
         public List<ParticleItem> ParticleDatas = new List<ParticleItem>();
         public List<AudioData> AudioDatas = new List<AudioData>();
+        public List<CurveData> CurveDatas=new List<CurveData>();
         public Transform audioSource;
         public vHUDController controller;
         void Awake()
         {
             _instance = this;
-
         }
 
         public AudioData GetAudioData(int id)
