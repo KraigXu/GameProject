@@ -132,21 +132,25 @@ namespace Invector.vCharacterController
         public virtual void BlockingInput()
         {
             if (cc.animator == null) return;
-
             isBlocking = blockInput.GetButton() && cc.currentStamina > 0;
         }
-        //coreAttackInput=new 
-        //twoAttackInput = new
-        //secondaryAttackInput
-        //
+        
+        /// <summary>
+        /// 核心技能点击输入
+        /// </summary>
         public virtual void CoreAttackInput()
         {
             if (cc.animator == null) return;
 
+            if (coreAttackInput.GetButton())
+            {
+                Debug.Log("Button");
+            }
             if (coreAttackInput.GetButtonDown() && MeleeAttackStaminaConditions())
             {
                 TriggerCoreAttack();
             }
+            
         }
 
         public virtual void TriggerCoreAttack()
@@ -155,6 +159,8 @@ namespace Invector.vCharacterController
             cc.animator.SetTrigger("WeakAttack");
             meleeManager.CoreSkill(cc);
         }
+
+
 
 
 
@@ -192,8 +198,6 @@ namespace Invector.vCharacterController
             cc.animator.SetTrigger("WeakAttack");
             meleeManager.SecondarySkill(cc);
         }
-
-
         #endregion
 
         #region Conditions

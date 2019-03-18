@@ -40,10 +40,6 @@ namespace Invector.vMelee
 
         public List<SkillGroup> SkillGroups=new List<SkillGroup>(new SkillGroup[]{new SkillGroup()});
 
-        public List<int> SkillId = new List<int>()
-        {
-            1,2,3,4,5,6,7,8,9
-        };
         protected virtual void Start()
         {
             Init();
@@ -367,6 +363,10 @@ namespace Invector.vMelee
 
         public virtual void CoreSkill(vCharacter cc)
         {
+            
+            //SkillGroups
+
+
             SkillInstance controller = gameObject.AddComponent<SkillInstance>();
             controller.CurrentGroup =SkillGroups[0];
             controller.Character = cc;

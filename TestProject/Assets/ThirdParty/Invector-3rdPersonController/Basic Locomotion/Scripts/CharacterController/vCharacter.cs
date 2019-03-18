@@ -35,7 +35,10 @@ namespace Invector.vCharacterController
         public int AttackValue = 40;
         public int DefenseValue = 30;
 
-
+        public int EnergyValue = 500;
+        public float ProbabilityCrit = 30f;
+        public float ProbabilityHurt = 100f;
+        
         [vEditorToolbar("Events")]
         [SerializeField] protected OnActiveRagdoll _onActiveRagdoll = new OnActiveRagdoll();
         public OnActiveRagdoll onActiveRagdoll { get { return _onActiveRagdoll; } protected set { _onActiveRagdoll = value; } }

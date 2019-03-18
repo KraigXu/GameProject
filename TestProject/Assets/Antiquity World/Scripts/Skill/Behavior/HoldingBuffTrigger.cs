@@ -5,13 +5,18 @@ namespace GameSystem.Skill
     {
         public GameObject Effect;
         public GameObject HitEffect;
-        [Range(1, 10)]
         public float Range;
-
         public float Frequency = 0.3f;                  //频率
 
         private GameObject _currentEffect;
         private SkillInstance skillController;
+
+
+        public override void Reset()
+        {
+            base.Reset();
+            //GameObject = null;
+        }
 
 
         public override ISkillTrigger Clone()
@@ -28,7 +33,6 @@ namespace GameSystem.Skill
                 WXTime.time.AddTimer(Frequency, 10, Dot);
                 skillController = controller;
             }
-
             return false;
         }
 
@@ -54,7 +58,6 @@ namespace GameSystem.Skill
 
                 //  GameObject go = Instantiate(HitEffect, targets[i]);
                 //go.transform.position = targets[i].position;
-
             }
             skillController.AllTarget = targets;
         }
