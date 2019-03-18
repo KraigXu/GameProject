@@ -148,7 +148,7 @@ namespace Invector
                     StartCoroutine(RecoverHealth());
                 }
 
-                FightingScene.Instance.ShowUI(damage);
+                FightingScene.Instance.ShowUi(damage);
                 if (currentHealth > 0)
                 {
                     currentHealth -= damage.damageValue;

@@ -171,8 +171,7 @@ public sealed class SkillSystem
             }
         } while (true);
 
-        Debug.
-            Log("Skill Config Over!");
+        Debug.Log("Skill Config Over!");
         return true;
     }
 
@@ -222,6 +221,11 @@ public sealed class SkillSystem
         return skillInstance;
     }
 
+    /// <summary>
+    /// 技能实例和数据库数据对应
+    /// </summary>
+    /// <param name="skillId"></param>
+    /// <returns></returns>
     public SkillGroup NewSkillGroup(int skillId)
     {   
         SkillGroup group = null;
@@ -231,10 +235,18 @@ public sealed class SkillSystem
         }
 
         SkillData data = SQLService.Instance.QueryUnique<SkillData>(" Id=?",skillId);
+        try
+        {
+            group.Name = data.Name;
+            group.Description = data.DifficultLevel.ToString();
+            group.Icon = Resources.Load<Sprite>(data.IconPath);
+        }
+        catch (Exception ex)
+        {
+            Debuger.LogError("解析Skill Sql 时发生错误，错误Id"+skillId+"，错误信息:"+ex.Message);
 
-        group.Name = data.Name;
-        group.Description = data.DifficultLevel.ToString();
-        group.Icon = Resources.Load<Sprite>(data.IconPath);
+        }
+
         return group;
     }
 

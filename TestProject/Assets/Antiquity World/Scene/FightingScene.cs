@@ -95,7 +95,7 @@ namespace GameSystem
             return ParticleDatas[0];
         }
 
-        public void ShowUI(vDamage damage)
+        public void ShowUi(vDamage damage)
         {
             controller.DamageUi(damage);
         }
