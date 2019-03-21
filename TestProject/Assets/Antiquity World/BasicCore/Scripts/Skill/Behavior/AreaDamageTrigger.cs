@@ -21,13 +21,13 @@ namespace GameSystem.Skill
             return new AreaDamageTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime && m_IsExected == false)
             {
                 m_IsExected = true;
 
-                Vector3 point = controller.TargetPos;
+                Vector3 point = controller.transform.forward * 4;
 
                 List<Transform> enemy = FightingScene.Instance.Enemy;
                 vCharacter enemyCr = null;
@@ -37,7 +37,7 @@ namespace GameSystem.Skill
                     if (distance < Radius)
                     {
                         enemyCr = enemy[i].GetComponent<vCharacter>();
-                        int hurt = controller.Character.AttackValue - enemyCr.DefenseValue;
+                        int hurt = controller.AttackValue - enemyCr.DefenseValue;
                         if (hurt <= 0)
                         {
                             hurt = 0;
@@ -46,7 +46,7 @@ namespace GameSystem.Skill
                         vDamage _damage = new vDamage();
                         _damage.sender = controller.transform;
                         _damage.receiver = enemyCr.transform;
-                        _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.Character.AttackValue + 2) * (((float)10) * 0.01f)));
+                        _damage.damageValue = (int)Mathf.RoundToInt(((float)(controller.AttackValue + 2) * (((float)10) * 0.01f)));
                         _damage.hitPosition = enemy[i].position;
                         enemyCr.gameObject.ApplyDamage(_damage);
 

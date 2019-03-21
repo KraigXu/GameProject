@@ -13,11 +13,11 @@ namespace GameSystem.Skill
             return  new AppendHealthTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime && m_IsExected == false)
             {
-                controller.Character.ChangeHealth(Value);
+                controller.ChangeHealth(Value);
                 m_IsExected = true;
                 return m_IsExected;
             }

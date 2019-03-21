@@ -9,6 +9,7 @@ using Unity.Transforms;
 using GameSystem.Ui;
 using Manager;
 using Newtonsoft.Json;
+using AntiquityWorld.StrategyManager;
 
 namespace GameSystem
 {
@@ -584,6 +585,12 @@ namespace GameSystem
                     GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
                     GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
+                    if (datas[i].Id == 1)
+                    {
+                        BiologicalItem item = GameObject.Find("TestA").GetComponent<BiologicalItem>();
+                        item.Entity = entity;
+                        item.IsInit = true;
+                    }
                 }
             }
 

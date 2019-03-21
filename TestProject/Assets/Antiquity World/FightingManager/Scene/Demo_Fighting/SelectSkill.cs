@@ -15,6 +15,8 @@ public class SelectSkill : MonoBehaviour
     [SerializeField]
     private Image _container;
     [SerializeField]
+    private Image _mask;
+    [SerializeField]
     private Text _number;
     [SerializeField]
     private Text _name;
@@ -22,8 +24,9 @@ public class SelectSkill : MonoBehaviour
     private Button _rightBtn;
     [SerializeField]
     private Button _leftBtn;
-
+    
     private int _currentId = 1; //当前技能ID
+    
 
     private SkillGroup _skill;
 	// Use this for initialization
@@ -36,8 +39,11 @@ public class SelectSkill : MonoBehaviour
 	}
 	
 	void Update () {
-
-	    if (Input.GetKeyUp(KeyCode.LeftArrow))
+	    if (Manager.SkillGroups[0] != null)
+	    {
+	        _mask.fillAmount = Manager.SkillGroups[0].CurCooling / Manager.SkillGroups[0].CoolingTime;
+	    }
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
 	    {
             PreviousSkill();
 	    }

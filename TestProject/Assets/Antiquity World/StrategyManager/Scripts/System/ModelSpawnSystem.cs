@@ -24,7 +24,6 @@ namespace GameSystem
 
                 em.RemoveComponent<ModelSpawnData>(shotEntity);
                 em.AddComponent(shotEntity, ms.ModelData);
-                
 
                 //if (sd.Faction == Factions.kPlayer)
                 //{

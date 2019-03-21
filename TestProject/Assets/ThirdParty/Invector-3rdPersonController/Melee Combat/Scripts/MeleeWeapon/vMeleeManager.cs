@@ -44,7 +44,6 @@ namespace Invector.vMelee
         {
             Init();
         }
-
         /// <summary>
         /// Init properties
         /// </summary>
@@ -363,27 +362,17 @@ namespace Invector.vMelee
 
         public virtual void CoreSkill(vCharacter cc)
         {
-            
-            //SkillGroups
-
-
-            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup =SkillGroups[0];
-            controller.Character = cc;
+            SkillGroups[0].ChangeStatus(SkillRunStatus.TriggeredIng, cc);
         }
 
         public virtual void TwoSkill(vCharacter cc)
         {
-            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup = SkillGroups[1];
-            controller.Character = cc;
+            SkillGroups[1].ChangeStatus(SkillRunStatus.TriggeredIng, cc);
         }
 
         public virtual void SecondarySkill(vCharacter cc)
         {
-            SkillInstance controller = gameObject.AddComponent<SkillInstance>();
-            controller.CurrentGroup = SkillGroups[2];
-            controller.Character = cc;
+            SkillGroups[2].ChangeStatus(SkillRunStatus.TriggeredIng, cc);
         }
         /// <summary>
         /// 
@@ -473,6 +462,15 @@ namespace Invector.vMelee
         protected virtual void ResetRecoil()
         {
             inRecoil = false;
+        }
+
+        void Update()
+        {
+            for (int i = 0; i < SkillGroups.Count; i++)
+            {
+                SkillGroups[i].Change();
+            }
+
         }
     }
 

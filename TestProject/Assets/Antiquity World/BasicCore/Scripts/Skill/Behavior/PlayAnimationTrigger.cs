@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameSystem.Skill;
+using Invector.vCharacterController;
 using UnityEngine;
 
 namespace GameSystem.Skill
@@ -18,7 +19,7 @@ namespace GameSystem.Skill
             return new PlayAnimationTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime && m_IsExected == false)
             {

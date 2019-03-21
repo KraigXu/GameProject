@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameSystem.Skill;
+using Invector.vCharacterController;
 using UnityEngine;
 
 namespace GameSystem.Skill
@@ -24,7 +25,7 @@ namespace GameSystem.Skill
             Effecttf = null;
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime)
             {
@@ -47,7 +48,7 @@ namespace GameSystem.Skill
                 }
                 else
                 {
-                    Effecttf.transform.position = controller.TargetPos;
+                    Effecttf.transform.position = controller.transform.forward * 4;
                 }
 
                 if (EffectNumber == 0)
@@ -56,7 +57,7 @@ namespace GameSystem.Skill
                 }
                 else
                 {
-                    Effecttf.transform.position = controller.TargetPos;
+                    Effecttf.transform.position = controller.transform.forward * 4;
                 }
             }
             return m_IsExected;
@@ -69,7 +70,7 @@ namespace GameSystem.Skill
         public override void Init(string args)
         {
             string[] values = args.Split(',');
-
+            m_ExecuteType = (SkillTriggerExecuteType)int.Parse(values[0]);
             m_StartTime = float.Parse(values[1]);
             EffectId = int.Parse(values[2]);
             EffectType = int.Parse(values[3]);

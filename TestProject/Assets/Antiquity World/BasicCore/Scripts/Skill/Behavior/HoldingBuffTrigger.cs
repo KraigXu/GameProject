@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Invector.vCharacterController;
+using UnityEngine;
 namespace GameSystem.Skill
 {
     public class HoldingBuff : SkillTrigger
@@ -9,7 +10,7 @@ namespace GameSystem.Skill
         public float Frequency = 0.3f;                  //频率
 
         private GameObject _currentEffect;
-        private SkillInstance skillController;
+        private vCharacter skillController;
 
 
         public override void Reset()
@@ -24,7 +25,7 @@ namespace GameSystem.Skill
             return new HoldingBuff();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (_currentEffect == null)
             {
@@ -59,7 +60,7 @@ namespace GameSystem.Skill
                 //  GameObject go = Instantiate(HitEffect, targets[i]);
                 //go.transform.position = targets[i].position;
             }
-            skillController.AllTarget = targets;
+            //skillController.AllTarget = targets;
         }
     }
 

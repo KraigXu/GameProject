@@ -34,16 +34,16 @@ namespace Manager
         public delegate void TouchInputEventHandler<T, U>(T sender, U e);
 
         public event TouchInputEventHandler<MouseInfo, MouseEventArgs> SingleStart;
-        
+
         public Vector3 Target;
-        public Vector3 RoationOffset= new Vector3(50, 0, 0);
-        public Vector3 Offset= new Vector3(0, 1, -15);
+        public Vector3 RoationOffset = new Vector3(50, 0, 0);
+        public Vector3 Offset = new Vector3(0, 1, -15);
         public float Damping = 3;
 
         public Camera Camera;
         public Transform CameraTf;
         public bool IsFollow;
-        public float Speed=3.5f;
+        public float Speed = 3.5f;
 
         public LayerMask Layer;
         public Vector3 MousePoint;
@@ -80,13 +80,13 @@ namespace Manager
             if (Input.GetKey(KeyCode.W))
             {
                 IsFollow = false;
-                CameraTf.position+=Vector3.forward*Time.deltaTime* Speed;
+                CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
             }
 
             if (Input.GetKey(KeyCode.S))
             {
                 IsFollow = false;
-                CameraTf.position+=Vector3.back*Time.deltaTime*Speed;
+                CameraTf.position += Vector3.back * Time.deltaTime * Speed;
             }
 
             if (Input.GetKey(KeyCode.A))
@@ -101,7 +101,7 @@ namespace Manager
                 CameraTf.position += Vector3.right * Time.deltaTime * Speed;
             }
 
-            if (IsFollow == true )
+            if (IsFollow == true)
             {
                 float dt = Time.deltaTime;
                 Quaternion newrotation = Quaternion.Euler(RoationOffset);
@@ -123,9 +123,10 @@ namespace Manager
                 GameObject go = hit.collider.gameObject;
                 var point = hit.point;
 
-                UpdateMousePoint(point,go);
+                UpdateMousePoint(point, go);
                 UpdateLeftMouse(point, go);
-                UpdateRightMouse(point,go);            }
+                UpdateRightMouse(point, go);
+            }
             else
             {
 
@@ -141,7 +142,7 @@ namespace Manager
             IsFollow = true;
         }
 
-        public void SetTarget(Vector3 target,bool isfollow=false)
+        public void SetTarget(Vector3 target, bool isfollow = false)
         {
             Target = target;
             IsFollow = isfollow;
@@ -150,11 +151,11 @@ namespace Manager
         /// <summary>
         /// 更新鼠标点位置
         /// </summary>
-        public void UpdateMousePoint(Vector3 point,GameObject go)
+        public void UpdateMousePoint(Vector3 point, GameObject go)
         {
             MousePoint = point;
             MouseTarget = go;
-            
+
         }
 
         public void UpdateLeftMouse(Vector3 point, GameObject go)
@@ -162,11 +163,11 @@ namespace Manager
             //左键点击
             if (Input.GetMouseButtonDown(0))
             {
-                MouseInfo info=new MouseInfo();
+                MouseInfo info = new MouseInfo();
                 info.go = go;
                 info.Point = point;
 
-                MouseEventArgs eventArgs=new MouseEventArgs();
+                MouseEventArgs eventArgs = new MouseEventArgs();
                 eventArgs.MouseButton = 0;
                 eventArgs.TouchPoint = Input.mousePosition;
                 SingleStart?.Invoke(info, eventArgs);

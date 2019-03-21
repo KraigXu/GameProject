@@ -28,6 +28,7 @@ public class F3DPoolManagerEditor : Editor
     WXPoolManager menu; // Menu script that we have to attach somewhere 
     List<WXPoolContainer> pools = new List<WXPoolContainer>(); //our local pools.  
     public Dictionary<string, WXPoolContainer> poolsDict = new Dictionary<string, WXPoolContainer>(); //dicti 
+    [SerializeField]
     public ScriptableObject database;
     private string databaseName;
     public string[] poolNames = new string[0];
@@ -49,8 +50,8 @@ public class F3DPoolManagerEditor : Editor
     bool unClickedTemplates = false;
 
     string lastLoadedDatabaseName = "";
-
-    private string assetPath = "Assets/Antiquity World/Resources/PoolManagerCache/";
+    // Assets/Antiquity World/Resources/PoolManagerCache/PoolDefaultData.asset failed.
+    private string assetPath = "Assets/Antiquity World/FightingManager/Resources/PoolManagerCache/";
 
     /// <summary>
     /// Update info and data
@@ -58,6 +59,7 @@ public class F3DPoolManagerEditor : Editor
     void OnEnable()
     {
         menu = (WXPoolManager)target;
+        Debug.Log(menu.databaseName);
         databaseName = menu.databaseName;
         index = menu.selectedItem;
         haveToShow = menu.haveToShowArr;
@@ -96,6 +98,7 @@ public class F3DPoolManagerEditor : Editor
     /// </summary>
     void SaveManager()
     {
+        Debug.Log(">>SaveManager");
         if (Application.isPlaying)
             return;
         WXPoolManagerDB newManager = ScriptableObject.CreateInstance<WXPoolManagerDB>();

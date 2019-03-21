@@ -24,14 +24,10 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-
-            
             //for (int i = 0; i < UPPER; i++)
             //{
 
             //}
-
-
             //if (_biological.Length == 0)
             //    return;
 

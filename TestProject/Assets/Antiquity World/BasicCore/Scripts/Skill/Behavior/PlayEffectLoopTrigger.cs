@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Invector.vCharacterController;
 using UnityEngine;
 
 namespace GameSystem.Skill
@@ -16,7 +17,7 @@ namespace GameSystem.Skill
             return new PlayEffectLoopTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime)
             {
@@ -33,7 +34,7 @@ namespace GameSystem.Skill
                 }
                 else
                 {
-                    Effecttf.transform.position = controller.TargetPos;
+                    Effecttf.transform.position = controller.transform.forward * 4;
                 }
             }
             return m_IsExected;

@@ -832,9 +832,9 @@ namespace DataAccessObject
         public string Name { get; set; }
         public string Description { get; set; }
         public string IconPath { get; set; }
-        public int SkillType { get; set; }        //种类
-        public int DifficultLevel { get; set; }    //难度等级
-        public int Wisdom { get; set; }             //要求智慧值
+        public int SkillType { get; set; }     
+        public int DifficultLevel { get; set; }    
+        public int Wisdom { get; set; }             
         public int Strength { get; set; }
         public int Effect { get; set; }
         public int Consumption { get; set; }
@@ -887,6 +887,26 @@ namespace DataAccessObject
         }
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ArticleData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        
+       // public i
+
+        public override object[] GetValues()
+        {
+            object[] objects = {Id};
+            return objects;
+        }
+        
+    }
+
     //----------------------------------------映射数据库----------------------------------End
 
     //-----------------------------------------取值--------------------------------------Start
@@ -907,10 +927,10 @@ namespace DataAccessObject
     //    {
     //        return SQLService.GetInstance("TD.db").SimpleQuery<T>(where, args);
     //    }
-        
+
     //    public static T GetDataWhereOnly<T>(string where, params object[] args) where T : BaseData
     //    {
-            
+
     //        return SQLService.GetInstance("TD.db").QueryUnique<T>(where, args);
     //    }
 

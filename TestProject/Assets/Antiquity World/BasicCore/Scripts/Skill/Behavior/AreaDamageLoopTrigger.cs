@@ -26,7 +26,7 @@ namespace GameSystem.Skill
             return new AreaDamageTrigger();
         }
 
-        public override bool Execute(ISkillTrigger instance, float curTime, SkillInstance controller)
+        public override bool Execute(ISkillTrigger instance, float curTime, vCharacter controller)
         {
             if (curTime >= m_StartTime)
             {
@@ -37,7 +37,7 @@ namespace GameSystem.Skill
                     point = controller.transform.position;
                 }else if (TargetType == 1)
                 {
-                    point = controller.TargetPos;
+                    point = controller.transform.forward*4;
                 }
 
                 _perFrameHurt = Time.deltaTime * Hurt;
@@ -50,7 +50,7 @@ namespace GameSystem.Skill
                     if (distance < Radius)
                     {
                         enemyCr = enemy[i].GetComponent<vCharacter>();
-                        int hurt = controller.Character.AttackValue - enemyCr.DefenseValue;
+                        int hurt = controller.AttackValue - enemyCr.DefenseValue;
                         if (hurt <= 0)
                         {
                             hurt = 0;

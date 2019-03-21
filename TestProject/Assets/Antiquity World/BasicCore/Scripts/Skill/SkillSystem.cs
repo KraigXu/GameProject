@@ -215,11 +215,6 @@ public sealed class SkillSystem
         return (SkillTrigger)o;
     }
 
-    public SkillInstance NewSkillInstance(int skillId)
-    {
-        SkillInstance skillInstance = new SkillInstance();
-        return skillInstance;
-    }
 
     /// <summary>
     /// 技能实例和数据库数据对应
@@ -227,23 +222,24 @@ public sealed class SkillSystem
     /// <param name="skillId"></param>
     /// <returns></returns>
     public SkillGroup NewSkillGroup(int skillId)
-    {   
+    {
         SkillGroup group = null;
         if (DicSkillInstancePool.ContainsKey(skillId))
         {
             group = DicSkillInstancePool[skillId];
         }
 
-        SkillData data = SQLService.Instance.QueryUnique<SkillData>(" Id=?",skillId);
+        SkillData data = SQLService.Instance.QueryUnique<SkillData>(" Id=?", skillId);
         try
         {
+            //group.CoolingTime= data.c
             group.Name = data.Name;
             group.Description = data.DifficultLevel.ToString();
             group.Icon = Resources.Load<Sprite>(data.IconPath);
         }
         catch (Exception ex)
         {
-            Debuger.LogError("解析Skill Sql 时发生错误，错误Id"+skillId+"，错误信息:"+ex.Message);
+            Debuger.LogError("解析Skill Sql 时发生错误，错误Id" + skillId + "，错误信息:" + ex.Message);
 
         }
 

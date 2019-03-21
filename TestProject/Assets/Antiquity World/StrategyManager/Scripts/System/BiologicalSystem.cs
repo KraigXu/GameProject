@@ -45,7 +45,11 @@ namespace GameSystem
                 var biological = _data.Biological[i];
                // var status = _data.Status[i];
                 var entity = _data.Entitys[i];
+                if (_data.Biological[i].BiologicalId == 1)
+                {
+                    biological.Age += 1;
 
+                }
                 //biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
                 //biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
                 //biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);

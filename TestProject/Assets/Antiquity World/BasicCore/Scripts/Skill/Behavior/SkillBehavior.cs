@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Invector.vCharacterController;
 using UnityEngine;
 
 namespace GameSystem.Skill
@@ -21,7 +22,7 @@ namespace GameSystem.Skill
         public abstract void Init(string args);
 
         public abstract ISkillTrigger Clone();
-        public abstract bool Execute( ISkillTrigger instance, float curTime,SkillInstance controller);
+        public abstract bool Execute( ISkillTrigger instance, float curTime, vCharacter controller);
 
         public float GetStartTime() { return m_StartTime; }
 
