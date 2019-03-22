@@ -39,7 +39,18 @@ namespace AntiquityWorld.StrategyManager
             AssociationEcsComponent component = collision.gameObject.GetComponent<AssociationEcsComponent>();
             if (component)
             {
+                BehaviorData target = SystemManager.GetProperty<BehaviorData>(Entity);
                 
+                if (target.TargetEntity == component.Entity)
+                {
+                    Element selftype = SystemManager.GetProperty<Element>(Entity);
+                    //触发判定
+                    if (selftype.Type == ElementType.Biological && target.TargetType==ElementType.LivingArea)
+                    {
+                        //BiologicalSystem.
+                    }
+
+                }
 
 
             }
@@ -50,6 +61,8 @@ namespace AntiquityWorld.StrategyManager
         {
 
         }
+
+        
     }
 
 }

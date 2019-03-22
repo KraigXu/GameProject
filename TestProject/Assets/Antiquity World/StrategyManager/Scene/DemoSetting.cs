@@ -15,6 +15,4 @@ public class DemoSetting : MonoBehaviour
 
     public GameObject ArticleInfoPerfab;
 
-
-
 }

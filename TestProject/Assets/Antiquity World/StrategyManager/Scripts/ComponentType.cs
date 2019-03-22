@@ -120,6 +120,12 @@ namespace GameSystem
         public int Value;
     }
 
+    public struct Identity : IComponentData
+    {
+
+    }
+
+
     /// <summary>
     /// 区域标识  有此组件的实体会被标记为在大地图中
     /// </summary>
@@ -206,8 +212,9 @@ namespace GameSystem
         public int Mingzhong;
         public int Shanbi;
         public int Huixin;
-
     }
+
+    
 
 
     public struct ModelComponent: IComponentData
