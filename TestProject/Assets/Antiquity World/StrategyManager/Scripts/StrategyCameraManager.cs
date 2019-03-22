@@ -56,7 +56,7 @@ namespace Manager
 
         void Start()
         {
-            StrategySceneInit.InitializeAfterSceneLoad();
+            StrategySceneInit.InitializeWithScene();
         }
 
 

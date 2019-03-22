@@ -88,6 +88,17 @@ public sealed class Define
         SQLService.GetInstance("TD.db");
     }
 
+    /// <summary>
+    /// 在场景加载后初始化数据
+    /// </summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    public static void InitializeAfterSceneLoad()
+    {
+
+
+    }
+
+
 
     public static bool IsAPointInACamera(Camera camera ,Vector3 position,bool isNeedModelBlockOut=false)
     {

@@ -158,7 +158,6 @@ public sealed class SkillSystem
                     string args = line.Substring(start + 1, length);
                     args = args.Replace(" ", "");
                     SkillTrigger trigger = Instance.CreateTrigger(type, args);
-                    Debug.Log(type + ">>>生成完毕！");
                     if (trigger != null)
                     {
                         skill.Behaviors.Add(trigger);

@@ -10,8 +10,7 @@ public class DemoSetting : MonoBehaviour
     public GameObject go;
     public float LivingAreaCollisionRadius = 1.0f;
     public float PlayerCollisionRadius = 1.0f;
-    
-
+   
     public float KeySpeed = 3f;
 
     public GameObject ArticleInfoPerfab;

@@ -51,6 +51,9 @@ namespace GameSystem
 
     }
 
+    /// <summary>
+    /// 行为数据
+    /// </summary>
     public struct BehaviorData : IComponentData
     {
         public Vector3 Target;
@@ -58,13 +61,32 @@ namespace GameSystem
         public int TargetId;
         public float TimeToLive;
         public Entity TargetEntity;
+
+        public Vector3 SelfPoint;
+        public Vector3 NextPoint;
+        public uint BehaviourType;
+    }
+
+
+    /// <summary>
+    /// 关联数据
+    /// </summary>
+    public struct AssociationPropertyData : IComponentData
+    {
+        public int IsEntityOver;       //为1表示实体正常
+        public int IsGameObjectOver;   //为1表示游戏物体关联
+
+        public int ModelUid;         //模型编号
+        public int IsModelShow;
+
+        public Vector3 Position;
+
     }
 
     public struct ModelSpawnData : IComponentData
     {
         public ModelComponent ModelData;
     }
-
 
     /// <summary>
     /// Npc
@@ -86,6 +108,7 @@ namespace GameSystem
         public Vector3 ClickPoint;
         public Vector2 ViewMove;
     }
+
     public struct District : IComponentData
     {
         public int Id;
@@ -186,10 +209,6 @@ namespace GameSystem
 
     }
 
-    public struct Relationship : IComponentData
-    {
-
-    }
 
     public struct ModelComponent: IComponentData
     {

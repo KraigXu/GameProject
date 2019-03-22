@@ -26,25 +26,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private LineRenderer _moveLine;
 
-        private void Awake()
+        private void Start()
         {
-            // get the components on the object we need ( should not be null due to require component so no need to check )
-            agent = GetComponentInChildren<NavMeshAgent>();
+            agent = gameObject.GetComponent<NavMeshAgent>();
+            agent.enabled = true;
             character = GetComponent<ThirdPersonCharacter>();
             _moveLine = gameObject.GetComponent<LineRenderer>();
             if (_moveLine == null)
             {
                 _moveLine = gameObject.AddComponent<LineRenderer>();
             }
-        }
-        
-        private void Start()
-        {
-            
 
             _moveLine.startWidth = 0.1f;
             _moveLine.endWidth = 0.1f;
-
 
             agent.updateRotation = false;
             agent.updatePosition = true;
@@ -53,6 +47,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         void Update()
         {
+            if (_targetVector3 == Vector3.zero && _targetrTransform==null)
+            {
+                return;
+            }
             switch (_followType)
             {
                 case FollowType.None:
@@ -102,7 +100,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             this._targetrTransform = target;
             _followType = FollowType.Transform;
 
-
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(target.position, path);
             //线性渲染设置拐点的个数。数组类型的。
@@ -119,6 +116,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             _followType = FollowType.Vector;
 
             NavMeshPath path = new NavMeshPath();
+            
             agent.CalculatePath(target, path);
             //线性渲染设置拐点的个数。数组类型的。
             _moveLine.positionCount = path.corners.Length;

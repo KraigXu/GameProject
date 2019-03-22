@@ -31,26 +31,8 @@ namespace GameSystem
         
         public static DemoSetting Settings;
 
-        /// <summary>
-        /// 在场景加载之前初始化数据
-        /// 此方法为我们将在此游戏中频繁生成的实体创建原型。
-        ///Archetypes是可选的，但可以大大加速实体产生。
-        /// </summary>
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        //public static void Initialize()
-        //{
 
-
-        //    SQLService.GetInstance("TD.db");
-        //    Debug.Log("Initialize Over");
-        //}
-
-
-        ///// <summary>
-        ///// 在场景加载后初始化数据
-        ///// </summary>
-        //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        public static void InitializeAfterSceneLoad()
+        public static void InitializeWithScene()
         {
             var settingsGo = GameObject.Find("Settings");
             if (settingsGo == null)
@@ -65,11 +47,6 @@ namespace GameSystem
                     return;
                 }
             }
-            InitializeWithScene();
-        }
-
-        public static void InitializeWithScene()
-        {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
@@ -124,7 +101,6 @@ namespace GameSystem
             #endregion
 
             #region Data
-
             {
                 //List<AvatarData> avatarDatas = SQLService.Instance.QueryAll<AvatarData>();
                 //for (int i = 0; i < avatarDatas.Count; i++)
@@ -239,7 +215,19 @@ namespace GameSystem
                         Distance = 1
                     });
 
-                    entityManager.AddSharedComponentData(entity, LivingAreaLook);
+
+                    //结合GameObject
+                    entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
+                    entityManager.SetComponentData(entity, new AssociationPropertyData
+                    {
+                        IsEntityOver = 1,
+                        IsGameObjectOver = 0,
+                        IsModelShow = 0,
+                        Position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ),
+                        ModelUid = datas[i].ModelBaseId
+                    });
+
+                   // entityManager.AddSharedComponentData(entity, LivingAreaLook);
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
                 }
@@ -546,23 +534,23 @@ namespace GameSystem
                             break;
                         case LocationType.Field:
                             {
-                                entityManager.AddComponent(entity, ComponentType.Create<ModelSpawnData>());
-                                entityManager.SetComponentData(entity, new ModelSpawnData
-                                {
-                                    ModelData = new ModelComponent
-                                    {
-                                        Id = SystemManager.Get<ModelMoveSystem>().AddModel(GameStaticData.ModelPrefab[datas[i].ModelId], new Vector3(datas[i].X, datas[i].Y, datas[i].Z)),
-                                        Target = Vector3.zero,
-                                        Speed = 6,
-                                    },
-                                });
+                                //entityManager.AddComponent(entity, ComponentType.Create<ModelSpawnData>());
+                                //entityManager.SetComponentData(entity, new ModelSpawnData
+                                //{
+                                //    ModelData = new ModelComponent
+                                //    {
+                                //        Id = SystemManager.Get<ModelMoveSystem>().AddModel(GameStaticData.ModelPrefab[datas[i].ModelId], new Vector3(datas[i].X, datas[i].Y, datas[i].Z)),
+                                //        Target = Vector3.zero,
+                                //        Speed = 6,
+                                //    },
+                                //});
 
-                                entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
-                                entityManager.SetComponentData(entity, new InteractionElement
-                                {
-                                    Distance = 1,
-                                    ModelCode = 1,
-                                });
+                                //entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
+                                //entityManager.SetComponentData(entity, new InteractionElement
+                                //{
+                                //    Distance = 1,
+                                //    ModelCode = 1,
+                                //});
                             }
                             break;
                     }
@@ -585,12 +573,24 @@ namespace GameSystem
                     GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
                     GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
-                    if (datas[i].Id == 1)
+
+                    //结合GameObject
+                    entityManager.AddComponent(entity,ComponentType.Create<AssociationPropertyData>());
+                    entityManager.SetComponentData(entity, new AssociationPropertyData
                     {
-                        BiologicalItem item = GameObject.Find("TestA").GetComponent<BiologicalItem>();
-                        item.Entity = entity;
-                        item.IsInit = true;
-                    }
+                        IsEntityOver =1,
+                        IsGameObjectOver = 0,
+                        IsModelShow =0,
+                        Position = new Vector3(datas[i].X, datas[i].Y+10, datas[i].Z),
+                        ModelUid=datas[i].ModelId
+                    });
+                    //if (datas[i].Id == 1)
+                    //{
+                    //    BiologicalItem item = GameObject.Find("TestA").GetComponent<BiologicalItem>();
+                    //    item.Entity = entity;
+                    //    item.IsInit = true;
+                    //}
+
                 }
             }
 

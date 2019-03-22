@@ -181,7 +181,6 @@ namespace GameSystem
             else
                 return 1;
         }
-
         private int UpdateTimeJijie(int curMonth)
         {
             if (curMonth == 2 || curMonth == 3 || curMonth == 4)
