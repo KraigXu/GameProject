@@ -207,6 +207,42 @@ namespace GameSystem
 
         }
 
+        /// <summary>
+        /// 进入城市
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="livingAreaEntity"></param>
+        public void LivingAreaEntityCheck(Entity entity, Entity livingAreaEntity)
+        {
+            if (SystemManager.Contains<NpcInput>(entity))
+            {
+
+
+            }
+            else if (SystemManager.Contains<PlayerInput>(entity))
+            {
+                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(livingAreaEntity);
+
+                ShowWindowData windowData = new ShowWindowData();
+                LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+                livingAreaWindowCd.LivingAreaId = livingArea.Id;
+                windowData.contextData = livingAreaWindowCd;
+
+                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+                //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
+                //// newtarget.Target = bounds.center;
+                //newStatus.LocationType = LocationType.LivingAreaIn;
+
+                // = entityManager.GetComponentData<Biological>(biologicalEntity);
+
+            }
+
+
+        }
+
+
+        
+
 
 
 

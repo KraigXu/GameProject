@@ -47,6 +47,7 @@ namespace AntiquityWorld.StrategyManager
                     //触发判定
                     if (selftype.Type == ElementType.Biological && target.TargetType==ElementType.LivingArea)
                     {
+                        SystemManager.Get<LivingAreaSystem>().LivingAreaEntityCheck(Entity, component.Entity);
                         //BiologicalSystem.
                     }
 

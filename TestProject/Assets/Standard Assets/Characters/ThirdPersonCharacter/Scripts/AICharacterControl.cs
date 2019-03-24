@@ -29,7 +29,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Start()
         {
             agent = gameObject.GetComponent<NavMeshAgent>();
-            agent.enabled = true;
             character = GetComponent<ThirdPersonCharacter>();
             _moveLine = gameObject.GetComponent<LineRenderer>();
             if (_moveLine == null)
@@ -112,11 +111,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         public void SetTarget(Vector3 target)
         {
+            if(_targetVector3==target)
+                return;
+
+            agent.enabled = false;
+            agent.enabled = true;
             this._targetVector3 = target;
             _followType = FollowType.Vector;
-
-            NavMeshPath path = new NavMeshPath();
             
+            NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(target, path);
             //线性渲染设置拐点的个数。数组类型的。
             _moveLine.positionCount = path.corners.Length;

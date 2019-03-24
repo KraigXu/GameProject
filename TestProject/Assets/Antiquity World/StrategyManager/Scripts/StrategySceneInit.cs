@@ -212,7 +212,7 @@ namespace GameSystem
                     entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
                     entityManager.SetComponentData(entity, new InteractionElement
                     {
-                        Distance = 1
+                        Distance = 3
                     });
 
 
@@ -581,7 +581,7 @@ namespace GameSystem
                         IsEntityOver =1,
                         IsGameObjectOver = 0,
                         IsModelShow =0,
-                        Position = new Vector3(datas[i].X, datas[i].Y+10, datas[i].Z),
+                        Position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
                         ModelUid=datas[i].ModelId
                     });
                     //if (datas[i].Id == 1)

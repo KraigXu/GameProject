@@ -245,17 +245,17 @@ namespace GameSystem
             //            {
             //                //行为
             //                //检查当前状态 显示UI信息 
-            //                ShowWindowData windowData = new ShowWindowData();
+                            //ShowWindowData windowData = new ShowWindowData();
 
-            //                LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
-            //                livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
-            //                livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
-            //                livingAreaWindowCd.OnExit = LivingAreaOnExit;
-            //                windowData.contextData = livingAreaWindowCd;
+                            //LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+                            //livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
+                            //livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
+                            //livingAreaWindowCd.OnExit = LivingAreaOnExit;
+                            //windowData.contextData = livingAreaWindowCd;
 
-            //                SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
-            //                // newtarget.Target = bounds.center;
-            //                newStatus.LocationType = LocationType.LivingAreaIn;
+                            //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
+                            //// newtarget.Target = bounds.center;
+                            //newStatus.LocationType = LocationType.LivingAreaIn;
             //            }
             //            break;
             //        case LocationType.LivingAreaIn:
@@ -322,7 +322,7 @@ namespace GameSystem
 
                             Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
 
-                            behavior.Target = input.ClickPoint;
+                            behavior.Target = input.ClickPoint+Vector3.up;
                             behavior.TargetId = biological.BiologicalId;
                             behavior.TargetType = ElementType.Biological;
                             break;
