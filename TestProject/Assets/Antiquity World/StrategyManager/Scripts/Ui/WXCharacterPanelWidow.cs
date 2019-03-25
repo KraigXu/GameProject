@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using AntiquityWorld.StrategyManager;
 using UnityEngine;
 using UnityEngine.UI;
 using GameSystem;
@@ -50,6 +51,8 @@ namespace GameSystem.Ui
         [Header("Equipment")]
         [SerializeField] private List<GameObject> _equipmentItems = new List<GameObject>();
 
+        [Header("Article")]
+        private ArticleManager _articleManager = new ArticleManager();
 
         // [SerializeField] private RectTransform _equipment
         private BiologicalUiInData _uiData;
@@ -108,19 +111,19 @@ namespace GameSystem.Ui
                             EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
 
                             style.Title = "equipmentCoat";
-                            style.Level = (int) EquipLevel.General;
-                            style.conents=new Dictionary<string, List<string>>();
-                            style.Values=new Dictionary<string, string>();
+                            style.Level = (int)EquipLevel.General;
+                            style.conents = new Dictionary<string, List<string>>();
+                            style.Values = new Dictionary<string, string>();
                             style.Values.Add("钝器防御:", equipmentCoat.BluntDefense.ToString());
-                            style.Values.Add("利器防御:",equipmentCoat.SharpDefense.ToString());
-                            style.Values.Add("操作性:",equipmentCoat.Operational.ToString());
+                            style.Values.Add("利器防御:", equipmentCoat.SharpDefense.ToString());
+                            style.Values.Add("操作性:", equipmentCoat.Operational.ToString());
 
-                            style.Values.Add("重量:",equipmentCoat.Weight.ToString());
-                            style.Values.Add("价格:",equipmentCoat.Price.ToString());
-                            style.Values.Add("耐久:",equipmentCoat.Durable.ToString());
+                            style.Values.Add("重量:", equipmentCoat.Weight.ToString());
+                            style.Values.Add("价格:", equipmentCoat.Price.ToString());
+                            style.Values.Add("耐久:", equipmentCoat.Durable.ToString());
                             style.BackgroundId = equipmentCoat.SpriteId;
 
-                           
+
                             //equipmentCoat
                         }
                         else
@@ -294,7 +297,6 @@ namespace GameSystem.Ui
             if (SystemManager.Contains<EquipmentCoat>(biologicalEntity))
             {
                 EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
-
             }
             else
             {
@@ -308,6 +310,17 @@ namespace GameSystem.Ui
 
         private void ChangeArticle()
         {
+            Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
+
+            GameObject playgo = StrategySceneInit.EcsGameObjectsDic[biologicalEntity];
+            if (playgo == null)
+            {
+                Debug.LogError(">>>>>>>>>>ChangeArticle Error");
+            }
+
+            // BiologicalBehaviourComponent component= playgo.GetComponent<BiologicalBehaviourComponent>();
+            //_articleManager.Init()
+
 
         }
     }

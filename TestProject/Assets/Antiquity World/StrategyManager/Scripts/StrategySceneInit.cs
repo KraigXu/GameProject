@@ -23,13 +23,16 @@ namespace GameSystem
         public static EntityArchetype LivingAreaArchetype;
         public static EntityArchetype BiologicalSocialArchetype;
         public static EntityArchetype AncientTombArchetype;
+        public static EntityArchetype ArticleArchetype;
 
         public static MeshInstanceRenderer BiologicalNormalLook;
         public static MeshInstanceRenderer BiologicalManLook;
         public static MeshInstanceRenderer BiologicalFemaleLook;
         public static MeshInstanceRenderer LivingAreaLook;
-        
+
         public static DemoSetting Settings;
+
+        public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
 
 
         public static void InitializeWithScene()
@@ -56,6 +59,7 @@ namespace GameSystem
             EventInfotype = entityManager.CreateArchetype(typeof(EventInfo));
             BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
+            ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
 
@@ -227,7 +231,7 @@ namespace GameSystem
                         ModelUid = datas[i].ModelBaseId
                     });
 
-                   // entityManager.AddSharedComponentData(entity, LivingAreaLook);
+                    // entityManager.AddSharedComponentData(entity, LivingAreaLook);
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
                 }
@@ -440,40 +444,35 @@ namespace GameSystem
                         BiologicalId = datas[i].Id,
 
                         Sex = datas[i].Sex,
+
                         Age = datas[i].Age,
-                        AgeMax = datas[i].AgeMax,
-                        Disposition = datas[i].Disposition,
+                        // Disposition = datas[i].Disposition,
                         PrestigeValue = datas[i].PrestigeValue,
                         CharmValue = 10,
-                        CharacterValue = 70,
+                        // CharacterValue = 70,
                         NeutralValue = 100,
-                        BodyValue = 100,
+                        // BodyValue = 100,
                         LuckValue = 100,
 
                     });
 
-                    entityManager.AddComponent(entity, ComponentType.Create<BiologicalAvatar>());
-                    entityManager.SetComponentData(entity, new BiologicalAvatar
+                    entityManager.AddComponent(entity, ComponentType.Create<BodyProperty>());
+                    entityManager.SetComponentData(entity, new BodyProperty
                     {
-                        Id = datas[i].AvatarId,
-                    });
+                        Thought = 100,
+                        Neck = 100,
+                        Heart = 100,
+                        Eye = 100,
+                        Ear = 100,
+                        LeftLeg = 100,
+                        RightLeg = 100,
+                        LeftHand = 100,
+                        RightHand = 100,
+                        Fertility = 100,
+                        Appearance = 100,
+                        Dress = 100,
+                        Skin = 100,
 
-                    entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
-                    entityManager.SetComponentData(entity, new Equipment
-                    {
-                        HelmetId = -1,
-                        ClothesId = -1,
-                        BeltId = -1,
-                        HandGuard = -1,
-                        Pants = -1,
-                        Shoes = -1,
-                        WeaponFirstId = -1,
-                        WeaponSecondaryId = -1
-                    });
-
-                    entityManager.AddComponent(entity, ComponentType.Create<Power>());
-                    entityManager.SetComponentData(entity, new Power
-                    {
                         Tizhi = datas[i].Tizhi,
                         Lidao = datas[i].Lidao,
                         Jingshen = datas[i].Jingshen,
@@ -488,6 +487,27 @@ namespace GameSystem
                         Mingzhong = -1,
                         Shanbi = -1,
                         Huixin = -1,
+                    });
+
+                    entityManager.AddComponent(entity, ComponentType.Create<BiologicalAvatar>());
+                    entityManager.SetComponentData(entity, new BiologicalAvatar
+                    {
+                        Id = datas[i].AvatarId,
+                    });
+
+
+
+                    entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
+                    entityManager.SetComponentData(entity, new Equipment
+                    {
+                        HelmetId = -1,
+                        ClothesId = -1,
+                        BeltId = -1,
+                        HandGuard = -1,
+                        Pants = -1,
+                        Shoes = -1,
+                        WeaponFirstId = -1,
+                        WeaponSecondaryId = -1
                     });
 
                     entityManager.AddComponent(entity, ComponentType.Create<Techniques>());
@@ -575,14 +595,14 @@ namespace GameSystem
                     GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
 
                     //结合GameObject
-                    entityManager.AddComponent(entity,ComponentType.Create<AssociationPropertyData>());
+                    entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
                     entityManager.SetComponentData(entity, new AssociationPropertyData
                     {
-                        IsEntityOver =1,
+                        IsEntityOver = 1,
                         IsGameObjectOver = 0,
-                        IsModelShow =0,
+                        IsModelShow = 0,
                         Position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
-                        ModelUid=datas[i].ModelId
+                        ModelUid = datas[i].ModelId
                     });
                     //if (datas[i].Id == 1)
                     //{
@@ -594,6 +614,26 @@ namespace GameSystem
                 }
             }
 
+            #endregion
+
+            #region Article
+            {
+                List<ArticleData> datas = SQLService.Instance.QueryAll<ArticleData>();
+
+                for (int i = 0; i < datas.Count; i++)
+                {
+                    Entity entity = entityManager.CreateEntity(ArticleArchetype);
+                    entityManager.SetComponentData(entity,new ArticleItem
+                    {
+                        Type=ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK
+                    });
+
+
+                }
+
+
+
+            }
             #endregion
 
             #region Relation

@@ -75,7 +75,7 @@ namespace GameSystem.Ui
             _maxPage = _tipsDatas.Count;
             _tipsTitle.text = _tipsDatas[_currentPage].ContentTitle;
             _tipsContent.text = _tipsDatas[_currentPage].Content;
-            
+
         }
 
 

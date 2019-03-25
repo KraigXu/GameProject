@@ -889,7 +889,7 @@ namespace DataAccessObject
 
 
     /// <summary>
-    /// 
+    /// 物品数据
     /// </summary>
     public class ArticleData : BaseData
     {

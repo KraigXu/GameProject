@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using AntiquityWorld.StrategyManager;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -78,9 +79,7 @@ namespace GameSystem
 
         public int ModelUid;         //模型编号
         public int IsModelShow;
-
         public Vector3 Position;
-
     }
 
     public struct ModelSpawnData : IComponentData
@@ -124,8 +123,6 @@ namespace GameSystem
     {
 
     }
-
-
     /// <summary>
     /// 区域标识  有此组件的实体会被标记为在大地图中
     /// </summary>
@@ -136,27 +133,47 @@ namespace GameSystem
         public int DistrictId;                  //所处范围ID
     }
 
+    /// <summary>
+    /// 生物属性，其中参数大多是提升入手物体效率
+    /// </summary>
     public struct Biological : IComponentData
     {
         public int BiologicalId;
 
+        public int Age;
+        public int Sex;
+        public int CharmValue;
+        public float Mobility;
+        public float OperationalAbility;
+        public float LogicalThinking;
+
+        public byte Disposition;        //性格值
+        public byte NeutralValue;       //中立值
+        public byte LuckValue;          //运气值
+
+        public int PrestigeValue;
+
+        public byte ExpEmptyHand;          //空手
+        public byte ExpLongSoldier;        //长兵
+        public byte ExpShortSoldier;       //短兵
+        public byte ExpJones;              //奇兵
+        public byte ExpHiddenWeapone;      //射术
+        public byte ExpMedicine;           //医学
+        public byte ExpArithmetic;         //算术
+        public byte ExpMusic;              //音律
+        public byte ExpWrite;              //书法
+        public byte ExpDrawing;            //绘画
+        public byte ExpExchange;           //交流
+        public byte ExpTaoism;             //道法
+        public byte ExpDharma;             //佛法
+        public byte ExpPranayama;          //心法
+
+        public float Burden;
         public int AvatarId;
         public int ModelId;
         public int FamilyId;
         public int FactionId;
         public int TitleId;
-
-        public int Sex;
-        public int Age;
-        public int AgeMax;
-        public int Disposition;
-        public int PrestigeValue;
-        public int CharmValue;
-        public byte CharacterValue;     //性格值
-        public byte NeutralValue;       //中立值
-        public byte BodyValue;         //身体值
-        public byte LuckValue;          //运气值
-
 
         public int Jing;
         public int Qi;
@@ -178,26 +195,30 @@ namespace GameSystem
         public int EquipmentId;
     }
 
-    public struct Life : IComponentData
-    {
-        public float Value;
-    }
-
-    public struct Energy : IComponentData
+    /// <summary>
+    /// 身体属性 ，参数大多是提升物品使用效率
+    /// </summary>
+    public struct BodyProperty : IComponentData
     {
         
-        public float Value1;
-        public float Value2;
-    }
 
-    public struct BiologicalAvatar : IComponentData
-    {
-        public int Id;
-    }
+        public byte Thought;   //思想
+        public byte Neck;      //脖子
+        public byte Heart;     //心脏
+        public byte Eye;       //眼睛
+        public byte Ear;       //耳朵
+        public byte LeftLeg;    //左腿
+        public byte RightLeg;   //右腿
+        public byte LeftHand;   //左手 
+        public byte RightHand;  //右手
+        public byte Fertility;  //生育
+        public byte Appearance;  //容貌
+        public byte Dress;      //着装
+        public byte Skin;       //皮肤
 
+        public byte Blod;  //血液
+        public byte JingLuo;  //经络
 
-    public struct Power : IComponentData
-    {
         public int Tizhi;
         public int Lidao;
         public int Jingshen;
@@ -212,9 +233,24 @@ namespace GameSystem
         public int Mingzhong;
         public int Shanbi;
         public int Huixin;
+
     }
 
-    
+    public struct Life : IComponentData
+    {
+        public float Value;
+    }
+
+    public struct Energy : IComponentData
+    {
+        public float Value1;
+        public float Value2;
+    }
+
+    public struct BiologicalAvatar : IComponentData
+    {
+        public int Id;
+    }
 
 
     public struct ModelComponent: IComponentData
@@ -231,20 +267,7 @@ namespace GameSystem
     }
 
     public enum TargetType { None, City, Field, Biological }
-    //public struct BiologicalStatus : IComponentData
-    //{
-    //    public int BiologicalIdentity;          //身份编号 0  AI 1 玩家
-    //    public LocationType LocationType;       //实时状态
-    //    public int LocationId;                  //所处位置ID
-    //    public float IdleTime;                  //闲置时间
 
-    //    public int TargetId;                    // 目标ID
-    //    public ElementType TargetType;          // 目标类型
-    //    public Vector3 TargetPosition;          //目标位置
-    //    public LocationType TargetLocationType;  //目标所处状态
-
-    //    public Entity TargetEntity;
-    //}
     public struct Family : IComponentData
     {
         public int FamilyId;
@@ -256,7 +279,6 @@ namespace GameSystem
         public int Id;
         public int Level;
         public int Type;
-
         public int Money;
         public int MoneyMax;
         public int Iron;
@@ -289,16 +311,6 @@ namespace GameSystem
         Necklace,
     }
 
-    public enum ArticleType
-    {
-        Flood=10, //食物
-
-        Coat=20, //外套
-        Gloves=21,//手套
-        Pants=22, 
-
-        Weapon =30,// 武器
-    }
 
     public enum EquipLevel
     {
@@ -396,7 +408,6 @@ namespace GameSystem
     public struct LivingAreaEnterInfo : IComponentData
     {
         public int UiType;
-
         public Entity LivingAreaEntity;
         public Entity TargetEntity;
     }
@@ -445,12 +456,6 @@ namespace GameSystem
         public int BiologicalBId;
     }
 
-
-    public struct Article : IComponentData
-    {
-
-    }
-
     public struct Relation : IComponentData
     {
         public int ObjectAid;
@@ -494,6 +499,22 @@ namespace GameSystem
 
     }
 
+    public struct ArticleItem: IComponentData
+    {
+        public ENUM_ITEM_CLASS Type;
 
+    }
+
+
+    public enum ArticleType
+    {
+        Flood = 10, //食物
+
+        Coat = 20, //外套
+        Gloves = 21,//手套
+        Pants = 22,
+
+        Weapon = 30,// 武器
+    }
 }
 
