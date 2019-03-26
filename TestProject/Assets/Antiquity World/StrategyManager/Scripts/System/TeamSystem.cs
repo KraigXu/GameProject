@@ -85,7 +85,7 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var team = _data.Team[i];
-               // var status = _data.Status[i];
+               //var status = _data.Status[i];
                 var biological = _data.Biological[i];
                 if (team.TeamBossId == biological.BiologicalId)
                 {
@@ -106,6 +106,8 @@ namespace GameSystem
                     //        ModelTarget(team.RunModelCode, status.TargetPosition);
                     //        break;
                     //}
+
+
 
                 }
                 else

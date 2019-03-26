@@ -8,6 +8,7 @@ using UnityEngine;
 using GameSystem.Ui;
 using Newtonsoft.Json;
 using Unity.Rendering;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GameSystem
 {
@@ -23,8 +24,9 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entitys;
+            public GameObjectArray GameObjects;
             public ComponentDataArray<Biological> Biological;
-         //   public ComponentDataArray<BiologicalStatus> Status;
+            public ComponentDataArray<BodyProperty> Body;
         }
         
         [Inject]
@@ -33,9 +35,38 @@ namespace GameSystem
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
+        public class ComponentGroup
+        {
+            public AICharacterControl AiCharacter;
+            public Animator Animator;
+        }
+
+        private Dictionary<Entity, ComponentGroup> ComponentDic;
+
+
         public BiologicalSystem()
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
+
+        /// <summary>
+        /// 缓存组件
+        /// </summary>
+        public void InitComponent()
+        {
+            ComponentDic=new Dictionary<Entity, ComponentGroup>();
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var go = _data.GameObjects[i];
+
+                ComponentGroup group=new ComponentGroup();
+                group.AiCharacter = go.GetComponent<AICharacterControl>();
+                group.Animator = go.GetComponent<Animator>();
+                
+                ComponentDic.Add(_data.Entitys[i],group);
+
+            }
         }
 
         protected override void OnUpdate()
@@ -43,56 +74,25 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var biological = _data.Biological[i];
-               // var status = _data.Status[i];
+                var body = _data.Body[i];
                 var entity = _data.Entitys[i];
-                if (_data.Biological[i].BiologicalId == 1)
-                {
-                    biological.Age += 1;
 
-                }
-                //biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
-                //biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
-                //biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
+                biological.Sex = body.Fertility;
+                biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
+                biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
+                biological.OperationalAbility = (3 * (body.RightHand / 100)) + (3 * (body.LeftHand / 100));
+                biological.LogicalThinking = (100 * (body.Thought / 100));
 
-                //if (status.LocationIsInit == 0)
-                //{
-                //    switch (status.LocationType)
-                //    {
-                //        case LocationType.None:
-                //            PostUpdateCommands.RemoveComponent<MeshInstanceRenderer>(entity);
-                //            ModelManager.Instance.ModelStatus(status.RunModelCode, false);
-                //            break;
-                //        case LocationType.Field:
-                //            ModelManager.Instance.ModelStatus(status.RunModelCode,true);
-                //            if (biological.SexId == 0)
-                //            {
-                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalNormalLook);
-                //            }
-                //            else if (biological.SexId == 1)
-                //            {
-                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalManLook);
-                //            }
-                //            else if (biological.SexId == 2)
-                //            {
-                //                PostUpdateCommands.AddSharedComponent(entity, StrategySceneInit.BiologicalFemaleLook);
-                //            }
-                //            break;
-                //        case LocationType.City:
-                //            ModelManager.Instance.ModelStatus(status.RunModelCode,false);
-                //            PostUpdateCommands.RemoveComponent<MeshInstanceRenderer>(entity);
-                //            break;
-                //        default:
-                //            break;
-                //    }
-                //    status.LocationIsInit = 1;
-                //}
-                //ModelManager.Instance.ModelStatus();
+                biological.Jing= Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
+                biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
+                biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
                 _data.Biological[i] = biological;
-             //   _data.Status[i] = status;
-                
+                _data.Body[i] = body;
             }
         }
+
+
         /// <summary>
         /// 根据当前状态获取Biologicals
         /// </summary>

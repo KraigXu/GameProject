@@ -17,7 +17,7 @@ namespace AntiquityWorld.StrategyManager
         OBJECT_DISPLAY_STATE = 0x01,            //可视
         OBJECT_INVALID_STATE = 0x02,            //无效
     };
-    enum ENUM_ITEM_ATTRIBUTE : int
+    public enum ENUM_ITEM_ATTRIBUTE : int
     {
         ITEM_ATTRIBUTE_MIN_ATTACK = 0x00,    //最小攻击
         ITEM_ATTRIBUTE_MAX_ATTACK = 0x01,    //最大攻击
@@ -30,9 +30,10 @@ namespace AntiquityWorld.StrategyManager
         ITEM_ATTRIBUTE_ATTACKSPEED = 0x08,    //攻速 
         ITEM_ATTRIBUTE_HIT = 0x09,    //命中 
         ITEM_ATTRIBUTE_DODGE = 0x0A,    //躲闪 
-        ITEM_ATTRIBUTE_RECOVER_LIFE = 0x0B,    //生命回复 
-        ITEM_ATTRIBUTE_RECOVER_MAGIC = 0x0C,    //魔法回复 
-        ITEM_ATTRIBUTE_SKILL_ATTACK = 0x0D,    //攻击技能 
+        ITEM_ATTRIBUTE_RECOVER_LIFE = 0x1F,    //生命回复 
+                                               //ITEM_ATTRIBUTE_RECOVER_LIFE = 0x0B,    //生命回复 
+                                               // ITEM_ATTRIBUTE_RECOVER_MAGIC = 0x0C,    //魔法回复 
+        ITEM_ATTRIBUTE_SKILL_ATTACK = 0x0D,    //攻击技能 
         ITEM_ATTRIBUTE_SKILL_P_DEFENCE = 0x0E,    //物防技能
         ITEM_ATTRIBUTE_SKILL_M_DEFENCE = 0x0F,    //魔防技能
         ITEM_ATTRIBUTE_SKILL_CRIT = 0x10,    //暴击技能

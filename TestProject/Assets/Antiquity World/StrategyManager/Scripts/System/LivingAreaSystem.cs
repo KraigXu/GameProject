@@ -11,26 +11,26 @@ namespace GameSystem
         struct Data
         {
             public readonly int Length;
-            public ComponentDataArray<LivingArea> LivingArea;
-            public ComponentDataArray<Position> Position;
             public EntityArray Entity;
+            public GameObjectEntity GameObjects;
+            public ComponentDataArray<LivingArea> LivingArea;
         }
 
-        //struct LivingAreaGroup
-        //{
-        //    public readonly int Length;
-        //    public ComponentDataArray<LivingArea> LivingAreaNode;
-        //    public ComponentArray<Transform> LivingAreaPositon;
-        //    public ComponentDataArray<PeriodTime> PeriodTime;
-        //    public EntityArray Entity;
-        //}
-        //[Inject]
-        //private LivingAreaGroup _livingAreas;
-        [Inject]
-        private BuildingSystem _buildingSystem;
 
         [Inject] private Data _data;
+        //public class ComponentGroup
+        //{
+        //    public AICharacterControl AiCharacter;
+        //    public Animator Animator;
+        //}
 
+        /// <summary>
+        /// ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        /// </summary>
+
+
+        [Inject]
+        private BuildingSystem _buildingSystem;
 
         /// <summary>
         /// 
@@ -42,26 +42,26 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            //for (int i = 0; i < _livingAreas.Length; i++)
-            //{
-            //    var livingArea = _livingAreas.LivingAreaNode[i];
+            for (int i = 0; i < _data.Length; i++)
+            {
+                //var livingArea = _data.LivingAreaNode[i];
 
-            //    if (livingArea.TitleUiId == 0)
-            //    {
-            //        // livingArea.TitleUiId= UICenterMasterManager.Instance .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
-            //    }
+                //if (livingArea.TitleUiId == 0)
+                //{
+                //    // livingArea.TitleUiId= UICenterMasterManager.Instance .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
+                //}
 
-            //    var time = _livingAreas.PeriodTime[i];
-            //    if (time.Value > 0)
-            //    {
-            //        livingArea.Food += 100;
-            //        livingArea.Iron += 100;
-            //        time.Value = 0;
-            //    }
+                //var time = _data.PeriodTime[i];
+                //if (time.Value > 0)
+                //{
+                //    livingArea.Food += 100;
+                //    livingArea.Iron += 100;
+                //    time.Value = 0;
+                //}
 
-            //    _livingAreas.PeriodTime[i] = time;
-            //    _livingAreas.LivingAreaNode[i] = livingArea;
-            //}
+                //_data.PeriodTime[i] = time;
+                //_data.LivingAreaNode[i] = livingArea;
+            }
         }
 
         public void ShowMainWindow(int id, ShowWindowData data)

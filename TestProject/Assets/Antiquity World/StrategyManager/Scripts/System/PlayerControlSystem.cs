@@ -18,16 +18,13 @@ namespace GameSystem
     /// </summary>
     public class PlayerControlSystem : ComponentSystem
     {
-        public PlayerControlSystem()
-        {
-            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-        }
-
         struct Data
         {
             public readonly int Length;
             public EntityArray Entity;
+            public GameObjectArray GameObjects;
             public ComponentDataArray<PlayerInput> Input;
+           
             public ComponentDataArray<BehaviorData> Behavior;
         }
         struct InteractionData
@@ -37,6 +34,7 @@ namespace GameSystem
             public ComponentDataArray<InteractionElement> Interaction;
             public ComponentDataArray<Position> Position;
             public ComponentDataArray<Element> Element;
+            public GameObjectArray Array;
         }
 
         [Inject]
@@ -45,6 +43,11 @@ namespace GameSystem
         private InteractionData _interactionData;
         private EntityManager _entityManager;
 
+        public PlayerControlSystem()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
+
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
@@ -52,7 +55,6 @@ namespace GameSystem
                 var input = _data.Input[i];
                 var behavior = _data.Behavior[i];
                 var entity = _data.Entity[i];
-
                 if (input.MousePoint != Vector3.zero)
                 {
                     Touch(input);
@@ -61,6 +63,8 @@ namespace GameSystem
                 if (input.ClickPoint != Vector3.zero)
                 {
                     _data.Behavior[i] = GetNewBehavior(_data.Entity[i], input);
+                    var go = _data.GameObjects[i];
+                    go.GetComponent<AICharacterControl>().SetTarget(_data.Behavior[i].Target);
                 }
 
                 if (input.ViewMove != Vector2.zero)
@@ -74,8 +78,6 @@ namespace GameSystem
                         case ElementType.LivingArea:
                             {
                                 LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(behavior.TargetEntity);
-                                
-
                                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                                 var model= _entityManager.GetComponentData<ModelComponent>(entity);
                                 model.Status = 1;
@@ -90,9 +92,10 @@ namespace GameSystem
                         default:
                             break;
                     }
-
-
                 }
+
+                //ChangeProperty
+
             }
 
             //for (int i = 0; i < _interactionData.Length; i++)
@@ -300,7 +303,6 @@ namespace GameSystem
             //}
         }
 
-
         private BehaviorData GetNewBehavior(Entity entity, PlayerInput input)
         {
 
@@ -365,8 +367,25 @@ namespace GameSystem
                 behavior.TargetType = ElementType.Terrain;
             }
 
+            
+
             return behavior;
         }
+
+        /// <summary>
+        /// 初始化Player事件
+        /// </summary>
+        public void InitPlayerEvent()
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var go = _data.GameObjects[i];
+                ColliderTriggerEvent goevent= go.GetComponent<ColliderTriggerEvent>();
+                goevent.TriggerEnter = PlayerOnCollisionEnter;
+                goevent.TriggerExit = PlayerOnCollisionExit;
+            }
+        }
+
 
         private void Touch(PlayerInput input)
         {
@@ -410,11 +429,33 @@ namespace GameSystem
         /// <summary>
         /// 当进入LivingArea时调用
         /// </summary>
-        private void LivingAreaOnOpen(Entity entity, int id)
+        private void PlayerOnCollisionEnter(GameObject go, Collision collision)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-          //  BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-          //  status.LocationType = LocationType.City;
+            //  BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+            //  status.LocationType = LocationType.City;
+
+            GameObjectEntity goEntity = go.GetComponent<GameObjectEntity>();
+
+            GameObjectEntity collisoneEntity = collision.gameObject.GetComponent<GameObjectEntity>();
+            if (collisoneEntity)
+            {
+                BehaviorData target = SystemManager.GetProperty<BehaviorData>(goEntity.Entity);
+
+                if (target.TargetEntity == collisoneEntity.Entity)
+                {
+                    Element selftype = SystemManager.GetProperty<Element>(goEntity.Entity);
+                    //触发判定
+                    if (selftype.Type == ElementType.Biological && target.TargetType == ElementType.LivingArea)
+                    {
+                        SystemManager.Get<LivingAreaSystem>().LivingAreaEntityCheck(goEntity.Entity, collisoneEntity.Entity);
+                        //BiologicalSystem.
+                    }
+
+                }
+            }
+
+            //go.GetComponent<>()
         }
 
         /// <summary>
@@ -422,7 +463,7 @@ namespace GameSystem
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="id"></param>
-        private void LivingAreaOnExit(Entity entity, int id)
+        private void PlayerOnCollisionExit(GameObject go, Collision collision)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
            // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);

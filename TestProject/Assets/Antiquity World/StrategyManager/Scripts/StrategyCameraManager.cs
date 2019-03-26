@@ -40,7 +40,6 @@ namespace Manager
         public Vector3 Offset = new Vector3(0, 1, -15);
         public float Damping = 3;
 
-        public Camera Camera;
         public Transform CameraTf;
         public bool IsFollow;
         public float Speed = 3.5f;
@@ -52,11 +51,13 @@ namespace Manager
         void Awake()
         {
             _instance = this;
+            CameraTf = transform;
         }
 
         void Start()
         {
             StrategySceneInit.InitializeWithScene();
+            
         }
 
 
@@ -116,7 +117,7 @@ namespace Manager
 
         private void MouseMain()
         {
-            Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000, Layer))
             {

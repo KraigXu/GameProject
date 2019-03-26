@@ -153,45 +153,37 @@ namespace GameSystem
 
         public int PrestigeValue;
 
-        public byte ExpEmptyHand;          //空手
-        public byte ExpLongSoldier;        //长兵
-        public byte ExpShortSoldier;       //短兵
-        public byte ExpJones;              //奇兵
-        public byte ExpHiddenWeapone;      //射术
-        public byte ExpMedicine;           //医学
-        public byte ExpArithmetic;         //算术
-        public byte ExpMusic;              //音律
-        public byte ExpWrite;              //书法
-        public byte ExpDrawing;            //绘画
-        public byte ExpExchange;           //交流
-        public byte ExpTaoism;             //道法
-        public byte ExpDharma;             //佛法
-        public byte ExpPranayama;          //心法
+        public ushort ExpEmptyHand;          //空手
+        public ushort ExpLongSoldier;        //长兵
+        public ushort ExpShortSoldier;       //短兵
+        public ushort ExpJones;              //奇兵
+        public ushort ExpHiddenWeapone;      //射术
+        public ushort ExpMedicine;           //医学
+        public ushort ExpArithmetic;         //算术
+        public ushort ExpMusic;              //音律
+        public ushort ExpWrite;              //书法
+        public ushort ExpDrawing;            //绘画
+        public ushort ExpExchange;           //交流
+        public ushort ExpTaoism;             //道法
+        public ushort ExpDharma;             //佛法
+        public ushort ExpPranayama;          //心法
 
-        public float Burden;
+        public int Jing;
+        public int Qi;
+        public int Shen;
+
+        public int Tizhi;
+        public int Lidao;
+        public int Jingshen;
+        public int Lingdong;
+        public int Wuxing;
+
         public int AvatarId;
         public int ModelId;
         public int FamilyId;
         public int FactionId;
         public int TitleId;
-
-        public int Jing;
-        public int Qi;
-        public int Shen;
-        public int WaigongMin;
-        public int WaigongMax;
-        public int NeigongMin;
-        public int NeigongMax;
-
-        public int Mingzhong;
-        public int Shanbi;
-        public int Huixin;
-
-        public int StrategyMoveSpeed;
-        public int FireMoveSpeed;
-
         public int TechniquesId;
-
         public int EquipmentId;
     }
 
@@ -219,20 +211,11 @@ namespace GameSystem
         public byte Blod;  //血液
         public byte JingLuo;  //经络
 
-        public int Tizhi;
-        public int Lidao;
-        public int Jingshen;
-        public int Lingdong;
-        public int Wuxing;
 
-        public int WaigongMin;
-        public int WaigongMax;
-        public int NeigongMin;
-        public int NeigongMax;
+        public int StrategyMoveSpeed;
+        public int FireMoveSpeed;
 
-        public int Mingzhong;
-        public int Shanbi;
-        public int Huixin;
+        public int UpperLimit;
 
     }
 
@@ -499,12 +482,39 @@ namespace GameSystem
 
     }
 
-    public struct ArticleItem: IComponentData
+    /// <summary>
+    /// 道具
+    /// </summary>
+    public struct ArticleItem : IComponentData
     {
+
+        public int GuiId;
+        public int Count;
+        public int MaxCount;
+        public ENUM_OBJECT_TYPE ObjectType;   //对象类型
+        public ENUM_OBJECT_STATE ObjectState;  //对象状态
+
+        public int BiologicalId;
+
         public ENUM_ITEM_CLASS Type;
 
+        public ENUM_ITEM_ATTRIBUTE Attribute1;
+        public int AttributeValue1;
+        public ENUM_ITEM_ATTRIBUTE Attribute2;
+        public int AttributeValue2;
+        public ENUM_ITEM_ATTRIBUTE Attribute3;
+        public int AttributeValue3;
+        public ENUM_ITEM_ATTRIBUTE Attribute4;
+        public int AttributeValue4;
+        public ENUM_ITEM_ATTRIBUTE Attribute5;
+        public int AttributeValue5;
+        public ENUM_ITEM_ATTRIBUTE Attribute6;
+        public int AttributeValue6;
+        public ENUM_ITEM_ATTRIBUTE Attribute7;
+        public int AttributeValue7;
+        public ENUM_ITEM_ATTRIBUTE Attribute8;
+        public int AttributeValue8;
     }
-
 
     public enum ArticleType
     {

@@ -893,11 +893,18 @@ namespace DataAccessObject
     /// </summary>
     public class ArticleData : BaseData
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
 
-        
-       // public i
+        public ArticleData()
+        {
+
+        }
+
+
+        public int Id { get; set; }
+
+
+
+        // public i
 
         public override object[] GetValues()
         {
@@ -905,6 +912,45 @@ namespace DataAccessObject
             return objects;
         }
         
+    }
+
+    public class ArticleRecordingData : BaseData
+    {
+        public ArticleRecordingData()
+        {
+
+        }
+
+        public ArticleRecordingData(int id, string name, string attribute, string itemdesc, int guiid, int type, int state, int count, int maxCount)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Attribute = attribute;
+            this.ItemDesc = itemdesc;
+            this.GuiId = guiid;
+            this.Type = type;
+            this.State = state;
+            this.Count = count;
+            this.MaxCount = count;
+
+        }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Attribute { get; set; }
+        public string ItemDesc { get; set; }
+        public int GuiId { get; set; }
+        public int Type { get; set; }
+        public int State { get; set; }
+        public int Count { get; set; }
+        public int MaxCount { get; set; }
+
+
+        public override object[] GetValues()
+        {
+            object[] objects = { Id };
+            return objects;
+        }
+
     }
 
     //----------------------------------------映射数据库----------------------------------End

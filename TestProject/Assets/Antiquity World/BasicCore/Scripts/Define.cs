@@ -7,8 +7,9 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+public delegate void GameObjectCollider(GameObject go, Collision collision);
 public delegate void EntityCallBack(Entity entity, int id);
+public delegate void EntityGameObjectCallBack(Entity entity,GameObject go, Collision collision);
 public delegate int[] SocialDialogEvent(int resoult, int a, int b);
 public delegate void SingleParameterEvent(int key);
 

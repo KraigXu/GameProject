@@ -28,14 +28,14 @@ namespace AntiquityWorld.StrategyManager
             {
                 if (_data.Property[i].IsEntityOver == 1 && _data.Property[i].IsGameObjectOver == 0)
                 {
-                    var pro = _data.Property[i];
-                    Transform node = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[pro.ModelUid].transform);
-                    AssociationEcsComponent component = node.GetComponent<AssociationEcsComponent>();
-                    if (component.Association(_data.Entity[i], pro.Position) == true)
-                    {
-                        pro.IsGameObjectOver = 1;
-                        _data.Property[i] = pro;
-                    }
+                    //var pro = _data.Property[i];
+                    //Transform node = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[pro.ModelUid].transform);
+                    //AssociationEcsComponent component = node.GetComponent<AssociationEcsComponent>();
+                    //if (component.Association(_data.Entity[i], pro.Position) == true)
+                    //{
+                    //    pro.IsGameObjectOver = 1;
+                    //    _data.Property[i] = pro;
+                    //}
                   
                 }
 
