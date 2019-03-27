@@ -38,7 +38,6 @@ public class ColliderTriggerEvent : MonoBehaviour
     {
         if (TriggerExit != null)
         {
-
             TriggerExit(gameObject, collision);
         }
     }

@@ -31,6 +31,8 @@ namespace GameSystem
         public static MeshInstanceRenderer LivingAreaLook;
 
         public static DemoSetting Settings;
+        public static Entity PlayerEntity;
+
 
         public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
 
@@ -182,24 +184,7 @@ namespace GameSystem
                     Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
                     entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                    entityManager.AddComponent(entity, ComponentType.Create<Biological>());
-
-
-                    //entityManager.AddComponentData(entity, new Element
-                    //{
-                    //    Type = ElementType.LivingArea
-                    //});
-
-                    //entityManager.SetComponentData(entity, new Position
-                    //{
-                    //    Value = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ)
-                    //});
-
-                    //entityManager.SetComponentData(entity, new Rotation
-                    //{
-                    //    Value = Quaternion.identity
-                    //});
-
+                   
                     entityManager.AddComponentData(entity, new LivingArea
                     {
                         Id = datas[i].Id,
@@ -217,12 +202,37 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
+                    BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
+
+
+                    for (int j = 0; j < jsonData.Item.Count; j++)
+                    {
+                        var item = jsonData.Item[i];
+                        Entity buildEntity = entityManager.CreateEntity(typeof(HousesControl));
+
+                        entityManager.SetComponentData(buildEntity, new HousesControl
+                        {
+                            No1 = item.No1
+                        });
+
+                        if (item.Type == 1)
+                        {
+                            entityManager.AddComponentData(buildEntity, new BuildingBlacksmith
+                            {
+                                LevelId = 1,
+                                OperateEnd = 10,
+                                OperateStart = 10
+                            });
+                        }
+
+
+                        SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
+                    }
 
                     entityManager.AddComponentData(entity, new InteractionElement
                     {
                         Distance = 3
                     });
-
 
                     ////结合GameObject
                     //entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
@@ -236,6 +246,9 @@ namespace GameSystem
                     //});
 
                     // entityManager.AddSharedComponentData(entity, LivingAreaLook);
+
+                    SystemManager.Get<LivingAreaSystem>().DataInit();
+
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
                 }
@@ -278,9 +291,7 @@ namespace GameSystem
 
             //        if (string.IsNullOrEmpty(data[i].BuildingInfoJson) == false)
             //        {
-            //            BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(data[i].BuildingInfoJson);
-            //            BuildingSystem.SetData(entityManager, jsonData, livingArea.Id);
-            //            livingArea.BuildGroupId = jsonData.GroupId;
+
             //        }
 
             //        if (livingArea.ModelId != 0)
@@ -419,8 +430,7 @@ namespace GameSystem
 
 
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                    entityManager.AddComponent(entity,ComponentType.Create<Biological>());
-                    entityManager.SetComponentData(entity, new Biological()
+                    entityManager.AddComponentData(entity, new Biological()
                     {
                         BiologicalId = datas[i].Id,
                         Age = datas[i].Age,
@@ -465,11 +475,9 @@ namespace GameSystem
                         Jingshen = datas[i].Jingshen,
                         Lingdong = datas[i].Lingdong,
                         Wuxing = datas[i].Wuxing
-
                     });
 
-                    entityManager.AddComponent(entity, ComponentType.Create<BodyProperty>());
-                    entityManager.SetComponentData(entity, new BodyProperty
+                    entityManager.AddComponentData(entity, new BodyProperty
                     {
                         Thought = 100,
                         Neck = 100,
@@ -490,6 +498,8 @@ namespace GameSystem
 
                         UpperLimit = 50000,//克
                     });
+
+
 
 
                     entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
@@ -616,7 +626,9 @@ namespace GameSystem
                     {
                         entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
                         entityGo.name = "PlayerMain";
-                        
+                        PlayerEntity = entity;
+
+
                     }
 
                     entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());

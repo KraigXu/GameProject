@@ -64,13 +64,8 @@ namespace GameSystem.Ui
     {
         public int LivingAreaId;
         public int PlayerId;
-
         //public int PowerId;
-
-
         //public int ModelId;
-
-
         //public int PersonId;
         //public int PersonNumber;
         //public int Money;
@@ -86,8 +81,6 @@ namespace GameSystem.Ui
         //public int LivingAreaType;
         //public int DefenseStrength;
         //public int StableValue;
-
-
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();

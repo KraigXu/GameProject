@@ -22,6 +22,7 @@ namespace GameSystem.Ui
         IntelligenceWindow,
         SocialDialogWindow,
         LivingAreaMainWindow,
+        BuildingWindow,
         ExtendedMenuWindow,
         WxCharacterPanelWindow,
         MapWindow
@@ -134,6 +135,7 @@ namespace GameSystem.Ui
             {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
+            {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},

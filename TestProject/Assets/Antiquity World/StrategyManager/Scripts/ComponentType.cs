@@ -381,10 +381,35 @@ namespace GameSystem
         public int MaxLevel;
     }
 
-    public struct LivingAreaInside : IComponentData
+    /// <summary>
+    /// 建筑物：铁匠铺
+    /// </summary>
+    public struct BuildingBlacksmith : IComponentData
     {
-        
+
+        public int LevelId;
+        public int OperateStart;
+        public int OperateEnd;
+        public int ShopSeed;
+
     }
+
+    /// <summary>
+    /// 房屋控制权
+    /// </summary>
+    public struct HousesControl : IComponentData
+    {
+        public int SeedId;
+        public Entity Entity1;
+        public Entity Entity2;
+        public Entity Entity3;
+        public Entity Entity4;
+
+        public int No1;
+        public int No2;
+        public int No3;
+    }
+
 
 
 

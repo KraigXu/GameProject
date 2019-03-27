@@ -81,9 +81,8 @@ namespace GameSystem
         public float Schedule=0;             //一个时间节点的进度
         public byte ScheduleCell=5;         //时间节点的大小
 
-
         public List<WorldTimerNode>  WorldTimerNodes=new List<WorldTimerNode>() ;
-
+    
         private List<int> _removalPending=new List<int>();
         private int _idCounter;
 
@@ -91,8 +90,6 @@ namespace GameSystem
         void Awake()
         {
             _instance = this;
-
-
         }
 
         public void Init(DateTime dataTime)

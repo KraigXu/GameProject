@@ -77,6 +77,8 @@ public sealed class Define
     public static readonly string GeneratedPool = "GeneratedPool";
     public static readonly string ParticlePool = "ParticlePool";
 
+    
+
 
     /// <summary>
     /// 在场景加载之前初始化数据

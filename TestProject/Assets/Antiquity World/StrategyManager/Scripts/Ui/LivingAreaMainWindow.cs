@@ -33,7 +33,14 @@ namespace GameSystem.Ui
         [SerializeField] private GameObject _buildingImage;
         [SerializeField] private GameObject _buildingContent;
 
-       // [SerializeField] private List<TogglePanel> _buildingViewGroup;                         //管理建筑物组
+        [SerializeField] 
+        private RectTransform _billingParent;
+        [SerializeField]
+        private RectTransform _billingPrefab;
+
+        private List<UiBuildingItem> _buildingItems = new List<UiBuildingItem>();
+
+        // [SerializeField] private List<TogglePanel> _buildingViewGroup;                         //管理建筑物组
 
         [SerializeField] private Button _livingAreaExit;
         [SerializeField] private Button _buildingExit;
@@ -41,6 +48,12 @@ namespace GameSystem.Ui
         private bool _buildingIsShow = false;
         private LivingAreaWindowCD _livingAreaWindowCd;
         private float _changeCd;
+
+        private Entity _livingAreaEntity;
+        
+        private EntityManager _entityManager;
+        private LivingAreaSystem _livingAreaSystem;
+    
 
         [Serializable]
         class TogglePanel
@@ -62,29 +75,44 @@ namespace GameSystem.Ui
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
 
-
         public override void InitWindowOnAwake()
         {
+            transform.Find("Exit").GetComponent<Button>().onClick.AddListener(Exit);
+
+
             _buildingExit.onClick.AddListener(CloseBuidingView);
             _livingAreaExit.onClick.AddListener(CloseLivingArea);
+
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
 
-        void Update()
-        {
-            _buildingMainView.gameObject.SetActive(_buildingIsShow);
-        }
+        
+
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             if (contextData == null) return;
 
-            _livingAreaWindowCd = (LivingAreaWindowCD) contextData;
+            _livingAreaWindowCd = (LivingAreaWindowCD)contextData;
 
+            //-----初始化选项
 
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaEntity);
+            for (int i = 0; i < entitys.Count; i++)
+            {
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_billingPrefab, _billingParent).GetComponent<UiBuildingItem>();
+                HousesControl houses = _entityManager.GetComponentData<HousesControl>(entitys[i]);
+                uiBuildingItem.BuildingEntity = entitys[i];
+                uiBuildingItem.Name.text = GameStaticData.BuildingName[houses.SeedId];
 
+                UIEventTriggerListener.Get(uiBuildingItem.gameObject).onClick += AccessBuilding;
+                _buildingItems.Add(uiBuildingItem);
+            }
+
+            return;
             Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
-            LivingArea livingArea = entityManager.GetComponentData<LivingArea>(entityLivingArea);
+            LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(entityLivingArea);
 
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
@@ -99,11 +127,11 @@ namespace GameSystem.Ui
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
             _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-           // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
 
             Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
-            Biological biological = entityManager.GetComponentData<Biological>(entityBiological);
-            
+            Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
+
             _powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
             _personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
 
@@ -111,10 +139,10 @@ namespace GameSystem.Ui
 
             for (int i = 0; i < entitieBuilding.Count; i++)
             {
-                Building building = entityManager.GetComponentData<Building>(entitieBuilding[i]);
+                Building building = _entityManager.GetComponentData<Building>(entitieBuilding[i]);
                 _buildingBilling[i].gameObject.SetActive(true);
                 _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
-                UIEventTriggerListener.Get(_buildingBilling[i].gameObject).onClick += AccessBuilding;
+               
             }
             GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
@@ -123,9 +151,11 @@ namespace GameSystem.Ui
             {
                 bounds.Encapsulate(renderers[j].bounds);
             }
-            SystemManager.Get<PlayerControlSystem >().Target(bounds.center);
-
+            SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
         }
+
+        
+        
 
         private void ChangeData()
         {
@@ -147,11 +177,25 @@ namespace GameSystem.Ui
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
             _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-           // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+
+
+
         }
 
+        /// <summary>
+        /// 打开
+        /// </summary>
+        /// <param name="go"></param>
         private void AccessBuilding(GameObject go)
         {
+            UiBuildingItem uiBuildingItem = go.GetComponent<UiBuildingItem>();
+
+            // SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
+
+            
+            BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
+            return;
             BuildingiDataItem item = null;
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
@@ -161,7 +205,7 @@ namespace GameSystem.Ui
                 }
             }
 
-            if(item==null)
+            if (item == null)
                 return;
 
             _buildingIsShow = true;
@@ -169,7 +213,7 @@ namespace GameSystem.Ui
 
             for (int i = 0; i < item.Features.Count; i++)
             {
-                _buildingFeatures[i].GetComponentInChildren<Text>().text=GameStaticData.FeaturesName[item.Features[i].Id];
+                _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
             }
 
             if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
@@ -178,7 +222,7 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < number; i++)
                 {
-                    GameObject newItem= UGUITools.AddChild(_buildingBiological[0].transform.parent.gameObject, _buildingBiological[0].gameObject);
+                    GameObject newItem = UGUITools.AddChild(_buildingBiological[0].transform.parent.gameObject, _buildingBiological[0].gameObject);
                     _buildingBiological.Add(newItem.GetComponent<BiologicalBaseUi>());
                 }
             }
@@ -192,6 +236,19 @@ namespace GameSystem.Ui
             item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }
 
+        /// <summary>
+        /// 退出
+        /// </summary>
+        private void Exit()
+        {
+            for (int i = 0; i < _buildingItems.Count; i++)
+            {
+                WXPoolManager.Pools[Define.GeneratedPool].Despawn(_buildingItems[i].transform);
+            }
+            _buildingItems.Clear();
+
+            this.CloseWindow();
+        }
 
         private void CloseBuidingView()
         {
@@ -200,7 +257,7 @@ namespace GameSystem.Ui
 
         private void CloseLivingArea()
         {
-           
+
         }
 
         void OnUpdate()
@@ -211,9 +268,6 @@ namespace GameSystem.Ui
                 _changeCd = 0;
                 ChangeData();
             }
-
-
-          
         }
 
     }
