@@ -27,6 +27,7 @@ namespace GameSystem
             public GameObjectArray GameObjects;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BodyProperty> Body;
+            public ComponentDataArray<BehaviorData> Behavior;
         }
         
         [Inject]
@@ -41,7 +42,7 @@ namespace GameSystem
             public Animator Animator;
         }
 
-        private Dictionary<Entity, ComponentGroup> ComponentDic;
+        private Dictionary<Entity, ComponentGroup> ComponentDic=new Dictionary<Entity, ComponentGroup>();
 
 
         public BiologicalSystem()
@@ -52,21 +53,23 @@ namespace GameSystem
         /// <summary>
         /// 缓存组件
         /// </summary>
-        public void InitComponent()
+        public void InitComponent(GameObject go)
         {
-            ComponentDic=new Dictionary<Entity, ComponentGroup>();
 
-            for (int i = 0; i < _data.Length; i++)
+            ComponentGroup group = new ComponentGroup();
+            group.AiCharacter = go.GetComponent<AICharacterControl>();
+            group.Animator = go.GetComponent<Animator>();
+
+            Entity entity= go.GetComponent<GameObjectEntity>().Entity;
+            if (ComponentDic.ContainsKey(entity) == false)
             {
-                var go = _data.GameObjects[i];
-
-                ComponentGroup group=new ComponentGroup();
-                group.AiCharacter = go.GetComponent<AICharacterControl>();
-                group.Animator = go.GetComponent<Animator>();
-                
-                ComponentDic.Add(_data.Entitys[i],group);
+                ComponentDic.Add(entity, group);
+            }
+            else
+            {
 
             }
+
         }
 
         protected override void OnUpdate()
@@ -76,7 +79,7 @@ namespace GameSystem
                 var biological = _data.Biological[i];
                 var body = _data.Body[i];
                 var entity = _data.Entitys[i];
-
+                var behavior = _data.Behavior[i];
                 biological.Sex = body.Fertility;
                 biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
                 biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
@@ -89,6 +92,12 @@ namespace GameSystem
 
                 _data.Biological[i] = biological;
                 _data.Body[i] = body;
+
+                if (behavior.Target != Vector3.zero)
+                {
+                    ComponentDic[entity].AiCharacter.SetTarget(behavior.Target);
+                }
+                
             }
         }
 

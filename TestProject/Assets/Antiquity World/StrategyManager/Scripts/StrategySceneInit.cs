@@ -207,7 +207,7 @@ namespace GameSystem
 
                     for (int j = 0; j < jsonData.Item.Count; j++)
                     {
-                        var item = jsonData.Item[i];
+                        var item = jsonData.Item[j];
                         Entity buildEntity = entityManager.CreateEntity(typeof(HousesControl));
 
                         entityManager.SetComponentData(buildEntity, new HousesControl
@@ -628,7 +628,7 @@ namespace GameSystem
                         entityGo.name = "PlayerMain";
                         PlayerEntity = entity;
 
-
+                        SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
                     }
 
                     entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
@@ -657,10 +657,10 @@ namespace GameSystem
                     //    item.Entity = entity;
                     //    item.IsInit = true;
                     //}
-
+                   // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+                    SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
                 }
-                SystemManager.Get<PlayerControlSystem>().InitPlayerEvent();
-                SystemManager.Get<BiologicalSystem>().InitComponent();
+
             }
 
             #endregion

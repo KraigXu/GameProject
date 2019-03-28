@@ -106,6 +106,7 @@ namespace GameSystem
         public Vector2 MousePosition;
         public Vector3 ClickPoint;
         public Vector2 ViewMove;
+        public Entity MouseEntity;
     }
 
     public struct District : IComponentData
@@ -380,6 +381,14 @@ namespace GameSystem
         public int CurLevel;
         public int MaxLevel;
     }
+
+    public struct LivingAreaAssociated : IComponentData
+    {
+        public Entity LivingAreaEntity;
+        public Entity BuildingEntity;
+    }
+
+
 
     /// <summary>
     /// 建筑物：铁匠铺

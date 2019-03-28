@@ -192,8 +192,6 @@ namespace GameSystem.Ui
             UiBuildingItem uiBuildingItem = go.GetComponent<UiBuildingItem>();
 
             // SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
-
-            
             BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
             return;
             BuildingiDataItem item = null;
@@ -216,23 +214,23 @@ namespace GameSystem.Ui
                 _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
             }
 
-            if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
-            {
-                int number = item.Biologicals.Count - _buildingBiological.Count;
+            //if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
+            //{
+            //    int number = item.Biologicals.Count - _buildingBiological.Count;
 
-                for (int i = 0; i < number; i++)
-                {
-                    GameObject newItem = UGUITools.AddChild(_buildingBiological[0].transform.parent.gameObject, _buildingBiological[0].gameObject);
-                    _buildingBiological.Add(newItem.GetComponent<BiologicalBaseUi>());
-                }
-            }
+            //    for (int i = 0; i < number; i++)
+            //    {
+            //        GameObject newItem = UGUITools.AddChild(_buildingBiological[0].transform.parent.gameObject, _buildingBiological[0].gameObject);
+            //        _buildingBiological.Add(newItem.GetComponent<BiologicalBaseUi>());
+            //    }
+            //}
 
-            for (int i = 0; i < item.Biologicals.Count; i++)
-            {
-                _buildingBiological[i].NameTex.text = item.Biologicals[i].Name;
-                _buildingBiological[i].HeadImg.sprite = GameStaticData.BiologicalAvatar[item.Biologicals[i].AtlasId];
-                _buildingBiological[i].gameObject.name = item.Biologicals[i].Id.ToString();
-            }
+            //for (int i = 0; i < item.Biologicals.Count; i++)
+            //{
+            //    _buildingBiological[i].NameTex.text = item.Biologicals[i].Name;
+            //    _buildingBiological[i].HeadImg.sprite = GameStaticData.BiologicalAvatar[item.Biologicals[i].AtlasId];
+            //    _buildingBiological[i].gameObject.name = item.Biologicals[i].Id.ToString();
+            //}
             item.OnOpen?.Invoke(item.OnlyEntity, item.Id);
         }
 

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
+using Invector;
 using Manager;
 using Unity.Rendering;
 
@@ -24,7 +25,7 @@ namespace GameSystem
             public EntityArray Entity;
             public GameObjectArray GameObjects;
             public ComponentDataArray<PlayerInput> Input;
-           
+
             public ComponentDataArray<BehaviorData> Behavior;
         }
         struct InteractionData
@@ -62,9 +63,8 @@ namespace GameSystem
 
                 if (input.ClickPoint != Vector3.zero)
                 {
-                    _data.Behavior[i] = GetNewBehavior(_data.Entity[i], input);
-                    var go = _data.GameObjects[i];
-                    go.GetComponent<AICharacterControl>().SetTarget(_data.Behavior[i].Target);
+                    _data.Behavior[i] = GetNewBehavior(_data.Entity[i], _data.GameObjects[i], input);
+
                 }
 
                 if (input.ViewMove != Vector2.zero)
@@ -79,9 +79,9 @@ namespace GameSystem
                             {
                                 LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(behavior.TargetEntity);
                                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-                                var model= _entityManager.GetComponentData<ModelComponent>(entity);
+                                var model = _entityManager.GetComponentData<ModelComponent>(entity);
                                 model.Status = 1;
-                                _entityManager.SetComponentData(entity,model);
+                                _entityManager.SetComponentData(entity, model);
                             }
                             break;
                         case ElementType.Biological:
@@ -248,17 +248,17 @@ namespace GameSystem
             //            {
             //                //行为
             //                //检查当前状态 显示UI信息 
-                            //ShowWindowData windowData = new ShowWindowData();
+            //ShowWindowData windowData = new ShowWindowData();
 
-                            //LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
-                            //livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
-                            //livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
-                            //livingAreaWindowCd.OnExit = LivingAreaOnExit;
-                            //windowData.contextData = livingAreaWindowCd;
+            //LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+            //livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
+            //livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
+            //livingAreaWindowCd.OnExit = LivingAreaOnExit;
+            //windowData.contextData = livingAreaWindowCd;
 
-                            //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
-                            //// newtarget.Target = bounds.center;
-                            //newStatus.LocationType = LocationType.LivingAreaIn;
+            //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
+            //// newtarget.Target = bounds.center;
+            //newStatus.LocationType = LocationType.LivingAreaIn;
             //            }
             //            break;
             //        case LocationType.LivingAreaIn:
@@ -303,87 +303,104 @@ namespace GameSystem
             //}
         }
 
-        private BehaviorData GetNewBehavior(Entity entity, PlayerInput input)
+        private BehaviorData GetNewBehavior(Entity entity, GameObject go, PlayerInput input)
         {
-
             var behavior = new BehaviorData();
-            bool flag = false;
-            for (int i = 0; i < _interactionData.Length; i++)
+            if (input.MouseEntity != Entity.Null)
             {
-                var interaction = _interactionData.Interaction[i];
-                var position = _interactionData.Position[i];
-                var element = _interactionData.Element[i];
-                if (Vector3.Distance(position.Value, input.ClickPoint) <= interaction.Distance)
+
+                if (SystemManager.Contains<LivingArea>(input.MouseEntity) == true)
                 {
-                    flag = true;
-                    switch (element.Type)
-                    {
-                        case ElementType.None:
-                            break;
-                        case ElementType.Biological:
-
-                            Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
-
-                            behavior.Target = input.ClickPoint+Vector3.up;
-                            behavior.TargetId = biological.BiologicalId;
-                            behavior.TargetType = ElementType.Biological;
-                            break;
-                        case ElementType.District:
-
-                            break;
-                        case ElementType.LivingArea:
-                            {
-                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_interactionData.Entity[i]);
-                                Position livingareaPos = SystemManager.GetProperty<Position>(_interactionData.Entity[i]);
-                                behavior.Target = livingareaPos.Value;
-                                behavior.TargetType = ElementType.LivingArea;
-                                behavior.TargetId = livingArea.Id;
-                                behavior.TimeToLive = 10;
-                                behavior.TargetEntity = _interactionData.Entity[i];
-                            }
-                            break;
-                        case ElementType.Terrain:
-                            {
-                            }
-                            break;
-                        case ElementType.Team:
-                            { }
-                            break;
-                        default:
-                            {
-                                behavior.TargetId = -1;
-                                behavior.Target = input.ClickPoint;
-                                behavior.TargetType = ElementType.Terrain;
-                            }
-                            break;
-                    }
+                    LivingArea livingArea = SystemManager.GetProperty<LivingArea>(input.MouseEntity);
+                    behavior.Target = input.MousePoint;
+                    behavior.TargetType = ElementType.LivingArea;
+                    behavior.TargetId = livingArea.Id;
+                    behavior.TimeToLive = 10;
+                    behavior.TargetEntity = input.MouseEntity;
                 }
             }
-
-            if (flag == false)
+            else
             {
                 behavior.TargetId = -1;
                 behavior.Target = input.ClickPoint;
                 behavior.TargetType = ElementType.Terrain;
             }
 
-            
-
             return behavior;
+            //go.GetComponent<AICharacterControl>().SetTarget(_data.Behavior[i].Target);
+
+            //bool flag = false;
+            //for (int i = 0; i < _interactionData.Length; i++)
+            //{
+            //    var interaction = _interactionData.Interaction[i];
+            //    var position = _interactionData.Position[i];
+            //    var element = _interactionData.Element[i];
+            //    if (Vector3.Distance(position.Value, input.ClickPoint) <= interaction.Distance)
+            //    {
+            //        flag = true;
+            //        switch (element.Type)
+            //        {
+            //            case ElementType.None:
+            //                break;
+            //            case ElementType.Biological:
+
+            //                Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
+
+            //                behavior.Target = input.ClickPoint+Vector3.up;
+            //                behavior.TargetId = biological.BiologicalId;
+            //                behavior.TargetType = ElementType.Biological;
+            //                break;
+            //            case ElementType.District:
+
+            //                break;
+            //            case ElementType.LivingArea:
+            //                {
+            //                    LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_interactionData.Entity[i]);
+            //                    Position livingareaPos = SystemManager.GetProperty<Position>(_interactionData.Entity[i]);
+            //                    behavior.Target = livingareaPos.Value;
+            //                    behavior.TargetType = ElementType.LivingArea;
+            //                    behavior.TargetId = livingArea.Id;
+            //                    behavior.TimeToLive = 10;
+            //                    behavior.TargetEntity = _interactionData.Entity[i];
+            //                }
+            //                break;
+            //            case ElementType.Terrain:
+            //                {
+            //                }
+            //                break;
+            //            case ElementType.Team:
+            //                { }
+            //                break;
+            //            default:
+            //                {
+            //                    behavior.TargetId = -1;
+            //                    behavior.Target = input.ClickPoint;
+            //                    behavior.TargetType = ElementType.Terrain;
+            //                }
+            //                break;
+            //        }
+            //    }
+            //}
+
+            //if (flag == false)
+            //{
+
+            //}
+
+
+
+            //return behavior;
         }
 
         /// <summary>
         /// 初始化Player事件
         /// </summary>
-        public void InitPlayerEvent()
+        public void InitPlayerEvent(GameObject go)
         {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                var go = _data.GameObjects[i];
-                ColliderTriggerEvent goevent= go.GetComponent<ColliderTriggerEvent>();
-                goevent.TriggerEnter = PlayerOnCollisionEnter;
-                goevent.TriggerExit = PlayerOnCollisionExit;
-            }
+
+            ColliderTriggerEvent goevent = go.GetComponent<ColliderTriggerEvent>();
+            goevent.TriggerEnter = PlayerOnCollisionEnter;
+            goevent.TriggerExit = PlayerOnCollisionExit;
         }
 
 
@@ -429,46 +446,50 @@ namespace GameSystem
         /// <summary>
         /// 当进入LivingArea时调用
         /// </summary>
-        private void PlayerOnCollisionEnter(GameObject go, Collision collision)
+        private void PlayerOnCollisionEnter(GameObject go, Collider other)
         {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            //  BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
-            //  status.LocationType = LocationType.City;
-
             GameObjectEntity goEntity = go.GetComponent<GameObjectEntity>();
-
-            GameObjectEntity collisoneEntity = collision.gameObject.GetComponent<GameObjectEntity>();
+            GameObjectEntity collisoneEntity = other.gameObject.GetComponent<GameObjectEntity>();
             if (collisoneEntity)
             {
                 BehaviorData target = SystemManager.GetProperty<BehaviorData>(goEntity.Entity);
 
                 if (target.TargetEntity == collisoneEntity.Entity)
                 {
-                    Element selftype = SystemManager.GetProperty<Element>(goEntity.Entity);
-                    //触发判定
-                    if (selftype.Type == ElementType.Biological && target.TargetType == ElementType.LivingArea)
+                    if (SystemManager.Contains<LivingArea>(collisoneEntity.Entity))  //进入LivingArea判定
                     {
-                        SystemManager.Get<LivingAreaSystem>().LivingAreaEntityCheck(goEntity.Entity, collisoneEntity.Entity);
-                        //BiologicalSystem.
+                        int code = LivingAreaSystem.IsEnterLivingArea(goEntity.Entity, collisoneEntity.Entity);
+                        if (code == 0)
+                        {
+                            //播放进入动画
+
+                            //改变层级
+                            go.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
+                            LivingAreaSystem.EnterLivingArea(goEntity.Entity, collisoneEntity.Entity);
+                        }
+                        else if (code == 1)
+                        {
+
+                        }
                     }
 
                 }
             }
-
-            //go.GetComponent<>()
         }
+
+
 
         /// <summary>
         /// 当退出时调用
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="id"></param>
-        private void PlayerOnCollisionExit(GameObject go, Collision collision)
+        private void PlayerOnCollisionExit(GameObject go, Collider other)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-           // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
+            // BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(entity);
 
-           // status.LocationType = LocationType.Field;
+            // status.LocationType = LocationType.Field;
         }
 
         public void Target(Vector3 point)

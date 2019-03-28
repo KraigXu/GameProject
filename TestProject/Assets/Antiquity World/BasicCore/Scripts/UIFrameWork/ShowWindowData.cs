@@ -100,7 +100,7 @@ namespace GameSystem.Ui
         public BuildingEvent OnOpen;
         public BuildingEvent OnClose;
 
-        public List<BiologicalUiInfo> Biologicals = new List<BiologicalUiInfo>();
+       
         public List<BuildingFeaturesUiInfo> Features = new List<BuildingFeaturesUiInfo>();
 
     }
@@ -117,9 +117,19 @@ namespace GameSystem.Ui
         public Entity TargetEntity;
     }
 
+    public class BuildingUiInfo : BaseWindowContextData
+    {
+
+        public List<BuildingFeaturesUiInfo> Infos=new List<BuildingFeaturesUiInfo>();
+        public List<BiologicalUiInfo> Biologicals = new List<BiologicalUiInfo>();
+    }
+
     public class BuildingFeaturesUiInfo
     {
         public int Id;
+        public int FeatureName;
+        public EntityCallBack CallBack;
+
     }
 
     public class SocialDialogWindowData : BaseWindowContextData

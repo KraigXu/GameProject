@@ -47,10 +47,17 @@ namespace GameSystem
                         input.ClickPoint = Vector3.zero;
                     }
 
+                    GameObjectEntity go = hit.collider.GetComponent<GameObjectEntity>();
+                    if (go != null)
+                    {
+                        input.MouseEntity = go.Entity;
+                    }
+
                 }
                 else
                 {
                     input.MousePoint = Vector3.zero;
+                    input.MouseEntity=Entity.Null;
                 }
 
 

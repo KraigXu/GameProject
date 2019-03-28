@@ -75,7 +75,7 @@ namespace GameSystem
             }
             else
             {
-                _livingAreaBuildMap.Add(new Entity(), new List<Entity>
+                _livingAreaBuildMap.Add(livingentity, new List<Entity>
                 {
                     buildingentity
                 });
@@ -216,6 +216,31 @@ namespace GameSystem
             //}
             return new LivingArea();
         }
+        /// <summary>
+        /// 是否可以进入城市
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static int IsEnterLivingArea(Entity entity, Entity livingAreaEntity)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// 进入城市
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="livingAreaEntity"></param>
+        public static void EnterLivingArea(Entity entity, Entity livingAreaEntity)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            entityManager.AddComponentData(entity,new LivingAreaAssociated
+            {
+                LivingAreaEntity = livingAreaEntity,
+                BuildingEntity=Entity.Null,
+            });
+        }
+
 
         public List<int> GetLivingAreaIds()
         {
@@ -296,15 +321,16 @@ namespace GameSystem
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true)
+            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true )   //铁匠铺
             {
-                BuildingWindow window = (BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
+                ShowWindowData show=new ShowWindowData();
+                show.contextData = new BuildingUiInfo()
+                {
+
+                };
+
+                BuildingWindow window = (BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow, show);
             }
-
-
-
-            
-
         }
     }
 

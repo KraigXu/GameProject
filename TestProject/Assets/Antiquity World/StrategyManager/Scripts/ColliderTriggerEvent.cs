@@ -23,22 +23,22 @@ public class ColliderTriggerEvent : MonoBehaviour
 
 	}
 	
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
         if (TriggerEnter != null)
         {
             
-            TriggerEnter(gameObject,collision);
+            TriggerEnter(gameObject, other);
         }
 
 
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnTriggerExit(Collider other)
     {
         if (TriggerExit != null)
         {
-            TriggerExit(gameObject, collision);
+            TriggerExit(gameObject, other);
         }
     }
 

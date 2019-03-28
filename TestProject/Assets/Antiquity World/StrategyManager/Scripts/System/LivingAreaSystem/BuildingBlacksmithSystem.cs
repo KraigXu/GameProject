@@ -9,18 +9,6 @@ namespace GameSystem
     public class BuildingBlacksmithSystem : ComponentSystem
     {
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         /// <summary>
         /// 打开建筑内景视图
         /// </summary>
@@ -34,7 +22,6 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
