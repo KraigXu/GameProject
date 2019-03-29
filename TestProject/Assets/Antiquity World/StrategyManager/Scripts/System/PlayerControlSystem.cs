@@ -466,6 +466,9 @@ namespace GameSystem
                             //改变层级
                             go.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
                             LivingAreaSystem.EnterLivingArea(goEntity.Entity, collisoneEntity.Entity);
+
+                            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow);
+
                         }
                         else if (code == 1)
                         {

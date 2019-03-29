@@ -225,13 +225,17 @@ namespace GameSystem
                             });
                         }
 
-
                         SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
                     }
 
                     entityManager.AddComponentData(entity, new InteractionElement
                     {
                         Distance = 3
+                    });
+
+                    entityManager.AddComponentData(entity,new FloatingInfo
+                    {
+
                     });
 
                     ////结合GameObject
@@ -247,7 +251,7 @@ namespace GameSystem
 
                     // entityManager.AddSharedComponentData(entity, LivingAreaLook);
 
-                    SystemManager.Get<LivingAreaSystem>().DataInit();
+//                    SystemManager.Get<LivingAreaSystem>().DataInit();
 
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
@@ -897,7 +901,7 @@ namespace GameSystem
 
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
-            LivingAreaSystem.SetupInfo();
+           // LivingAreaSystem.SetupInfo();
         }
 
         private static MeshInstanceRenderer GetLookFromPrototype(string protoName)

@@ -7,6 +7,9 @@ using Unity.Transforms;
 
 namespace GameSystem
 {
+    /// <summary>
+    /// 城市管理
+    /// </summary>
     public class LivingAreaSystem : ComponentSystem
     {
         struct Data
@@ -18,56 +21,25 @@ namespace GameSystem
         }
         [Inject]
         private Data _data;
-        [Inject]
-        private BuildingSystem _buildingSystem;
-        
-        private Type[] BuildingTypes=new Type[30];
 
-        
         /// <summary>
         /// Key为LivingAreaEntity, Value=Building集的Entity
+        /// 存储城市与建筑关联信息
         /// </summary>
-        private Dictionary<Entity,List<Entity>> _livingAreaBuildMap=new Dictionary<Entity, List<Entity>>();
+        private Dictionary<Entity, List<Entity>> _livingAreaBuildMap = new Dictionary<Entity, List<Entity>>();
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void SetupInfo()
+        public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {
-            GameEventSystem.SetEvent(1000, LivingAreaEntity);
-        }
-
-        public LivingAreaSystem()
-        {
-            BuildingTypes[0] = typeof(BuildingBlacksmith);
-        }
-
-        public List<Entity> GetBuilding(Entity livingEntity)
-        {
-            if (_livingAreaBuildMap.ContainsKey(livingEntity))
-            {
-                return _livingAreaBuildMap[livingEntity];
-            }
-
-            return null;
-
+            get { return _livingAreaBuildMap; }
         }
 
         /// <summary>
-        /// 初始化Data
+        /// 新增城市建筑物信息
         /// </summary>
-        public void DataInit()
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                var entity = _data.Entity[i];
-                
-                
-            }
-        }
-
-        public void LivingAreaAddBuilding(Entity livingentity,Entity buildingentity)
+        /// <param name="livingentity"></param>
+        /// <param name="buildingentity"></param>
+        public void LivingAreaAddBuilding(Entity livingentity, Entity buildingentity)
         {
             if (_livingAreaBuildMap.ContainsKey(livingentity))
             {
@@ -82,39 +54,27 @@ namespace GameSystem
             }
         }
 
-
+        /// <summary>
+        /// 获取这个城市内的建筑物实体
+        /// </summary>
+        /// <param name="livingEntity"></param>
+        /// <returns></returns>
+        public List<Entity> GetBuilding(Entity livingEntity)
+        {
+            if (_livingAreaBuildMap.ContainsKey(livingEntity))
+            {
+                return _livingAreaBuildMap[livingEntity];
+            }
+            return null;
+        }
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
             {
                 var livingArea = _data.LivingArea[i];
-                
 
-
-                //var livingArea = _data.LivingAreaNode[i];
-
-                //if (livingArea.TitleUiId == 0)
-                //{
-                //    // livingArea.TitleUiId= UICenterMasterManager.Instance .GetGameWindowScript<FixedTitleWindow>(WindowID.FixedTitleWindow).AddTitle(ElementType.LivingArea, livingArea.Id, _livingAreas.LivingAreaPositon[i].position);
-                //}
-
-                //var time = _data.PeriodTime[i];
-                //if (time.Value > 0)
-                //{
-                //    livingArea.Food += 100;
-                //    livingArea.Iron += 100;
-                //    time.Value = 0;
-                //}
                 _data.LivingArea[i] = livingArea;
-                
-                //_data.PeriodTime[i] = time;
-                //_data.LivingAreaNode[i] = livingArea;
             }
-        }
-
-        public void ShowMainWindow(int id, ShowWindowData data)
-        {
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, data);
         }
 
         /// <summary>
@@ -150,8 +110,7 @@ namespace GameSystem
             //    //uidata.LivingAreaType = livingArea.TypeId;
             //    //uidata.DefenseStrength = livingArea.DefenseStrength;
             //}
-
-            uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
+           // uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
             return uidata;
 
         }

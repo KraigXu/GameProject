@@ -33,7 +33,7 @@ namespace GameSystem.Ui
         [SerializeField] private GameObject _buildingImage;
         [SerializeField] private GameObject _buildingContent;
 
-        [SerializeField] 
+        [SerializeField]
         private RectTransform _billingParent;
         [SerializeField]
         private RectTransform _billingPrefab;
@@ -50,10 +50,10 @@ namespace GameSystem.Ui
         private float _changeCd;
 
         private Entity _livingAreaEntity;
-        
+
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
-    
+
 
         [Serializable]
         class TogglePanel
@@ -79,7 +79,6 @@ namespace GameSystem.Ui
         {
             transform.Find("Exit").GetComponent<Button>().onClick.AddListener(Exit);
 
-
             _buildingExit.onClick.AddListener(CloseBuidingView);
             _livingAreaExit.onClick.AddListener(CloseLivingArea);
 
@@ -87,7 +86,7 @@ namespace GameSystem.Ui
             _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
 
-        
+
 
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
@@ -142,7 +141,7 @@ namespace GameSystem.Ui
                 Building building = _entityManager.GetComponentData<Building>(entitieBuilding[i]);
                 _buildingBilling[i].gameObject.SetActive(true);
                 _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
-               
+
             }
             GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
             Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
@@ -154,8 +153,8 @@ namespace GameSystem.Ui
             SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
         }
 
-        
-        
+
+
 
         private void ChangeData()
         {
