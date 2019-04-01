@@ -7,7 +7,7 @@ using UnityEditor;
 public class SkillScriptEditor : EditorWindow
 {
 
-    [MenuItem("SkillScriptEditor/Open Script Editor")]
+    [MenuItem("Antiquity World/Open Script Editor")]
     static void OpenSkillScriptEditor()
     {
         SkillScriptEditor window = GetWindow<SkillScriptEditor>(true, "SkillScriptEditor");
