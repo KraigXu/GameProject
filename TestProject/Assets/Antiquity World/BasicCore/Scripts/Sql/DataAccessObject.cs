@@ -54,10 +54,10 @@ namespace DataAccessObject
         {
             service.connection.Execute("CREATE TABLE IF NOT EXISTS LivingAreaData (" +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " DistrictId INTEGER,"+
+                                       " DistrictId INTEGER," +
                                        " Name TEXT," +
                                        " Description TEXT," +
-                                       " ModelBaseId INTEGER,"+
+                                       " ModelBaseId INTEGER," +
                                        " PersonNumber INTEGER," +
                                        " Money INTEGER," +
                                        " MoneyMax INTEGER," +
@@ -85,6 +85,8 @@ namespace DataAccessObject
                                        " Id INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
                                        " Description TEXT," +
+                                       " BuildingModelId INTEGER," +
+                                       " Behavior INTEGER," +
                                        " ParentId INTEGER," +
                                        " BuildingLevel TEXT," +
                                        " Status INTEGER," +
@@ -94,8 +96,13 @@ namespace DataAccessObject
                                        " ImageId INTEGER," +
                                        " X INTEGER," +
                                        " Y INTEGER," +
-                                       " Z INTEGER);");
+                                       " Z INTEGER," +
+                                       " Property1 TEXT," +
+                                       " Property2 TEXT," +
+                                       " Property3 TEXT," +
+                                       " Property4 TEXT);");
         }
+
 
         /// <summary>
         /// 生物属性
@@ -136,7 +143,7 @@ namespace DataAccessObject
                                        " GongfaJson INTEGER," +
                                        " JifaJson INTEGER," +
                                        " LanguageJson TEXT);");
-    }
+        }
 
         /// <summary>
         /// 阵营,派系，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
@@ -192,8 +199,8 @@ namespace DataAccessObject
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS PrestigeData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " Type INTEGER,"+
-                                       " Title TEXT,"+
+                                       " Type INTEGER," +
+                                       " Title TEXT," +
                                        " ValueMin INTEGER," +
                                        " ValueMax INTEGER);");
         }
@@ -204,14 +211,14 @@ namespace DataAccessObject
         /// </summary>
         /// <param name="service"></param>
         /// <param name="ifNotExists"></param>
-        public static void CreateTable_Techniques(SQLService service )
+        public static void CreateTable_Techniques(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS TechniquesData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " ParentId INTEGER, "+
-                                       " BiologicalId INTEGER ,"+
+                                       " ParentId INTEGER, " +
+                                       " BiologicalId INTEGER ," +
                                        " Name TEXT," +
-                                       " MarkIds TEXT,"+
+                                       " MarkIds TEXT," +
                                        " Description TEXT, " +
                                        " TechniquesValue INTEGER," +
                                        " Effect TEXT);");
@@ -311,7 +318,7 @@ namespace DataAccessObject
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS TipsData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " TipsType TEXT,"+
+                                       " TipsType TEXT," +
                                        " Content TEXT," +
                                        " ContentTitle TEXT);");
         }
@@ -360,7 +367,7 @@ namespace DataAccessObject
                                        " Path TEXT);");
         }
 
-        
+
 
         /// <summary>
         /// 模型
@@ -509,6 +516,8 @@ namespace DataAccessObject
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int BuildingModelId { get; set; }
+        public string Behavior { get; set; }
         public int ParentId { get; set; }
         public int BuildingLevel { get; set; }
         public int Status { get; set; }
@@ -520,11 +529,16 @@ namespace DataAccessObject
         public int Y { get; set; }
         public int Z { get; set; }
 
+        public string Property1 { get; set; }
+        public string Property2 { get; set; }
+        public string Property3 { get; set; }
+        public string Property4 { get; set; }
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                Id,Name,Description,ParentId,BuildingLevel,Status,Type,DurableValue,OwnId,ImageId,X,Y,Z
+                Id,Name,Description,BuildingModelId,Behavior,ParentId,BuildingLevel,Status,Type,DurableValue,OwnId,ImageId,X,Y,Z,Property1,Property2,Property3,Property4
             };
 
             return objects;
@@ -541,7 +555,7 @@ namespace DataAccessObject
 
         public string Surname { get; set; }                      //姓
         public string Name { get; set; }                         //名 
-       
+
         public int AvatarId { get; set; }           //头像ID
         public int ModelId { get; set; }            //模型ID
 
@@ -729,7 +743,7 @@ namespace DataAccessObject
         public int StatementType { get; set; }
         public string Content { get; set; }
         public int ReplyIndex { get; set; }
-        
+
         public override object[] GetValues()
         {
             object[] objects = new object[]
@@ -832,9 +846,9 @@ namespace DataAccessObject
         public string Name { get; set; }
         public string Description { get; set; }
         public string IconPath { get; set; }
-        public int SkillType { get; set; }     
-        public int DifficultLevel { get; set; }    
-        public int Wisdom { get; set; }             
+        public int SkillType { get; set; }
+        public int DifficultLevel { get; set; }
+        public int Wisdom { get; set; }
         public int Strength { get; set; }
         public int Effect { get; set; }
         public int Consumption { get; set; }
@@ -863,7 +877,7 @@ namespace DataAccessObject
 
         public override object[] GetValues()
         {
-            object[] objects=new object[]
+            object[] objects = new object[]
             {
                 Id,Type,Content,ParentId,ChildId
             };
@@ -879,10 +893,10 @@ namespace DataAccessObject
 
         public override object[] GetValues()
         {
-           object[] objects=new object[]
-           {
+            object[] objects = new object[]
+            {
                Id,PlayName,Description
-           };
+            };
             return objects;
         }
     }
@@ -908,10 +922,10 @@ namespace DataAccessObject
 
         public override object[] GetValues()
         {
-            object[] objects = {Id};
+            object[] objects = { Id };
             return objects;
         }
-        
+
     }
 
     public class ArticleRecordingData : BaseData

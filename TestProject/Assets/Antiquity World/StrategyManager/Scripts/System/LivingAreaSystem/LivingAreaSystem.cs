@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.Entities;
 using UnityEngine;
 using GameSystem.Ui;
@@ -12,6 +13,8 @@ namespace GameSystem
     /// </summary>
     public class LivingAreaSystem : ComponentSystem
     {
+
+
         struct Data
         {
             public readonly int Length;
@@ -27,7 +30,6 @@ namespace GameSystem
         /// 存储城市与建筑关联信息
         /// </summary>
         private Dictionary<Entity, List<Entity>> _livingAreaBuildMap = new Dictionary<Entity, List<Entity>>();
-
 
         public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {

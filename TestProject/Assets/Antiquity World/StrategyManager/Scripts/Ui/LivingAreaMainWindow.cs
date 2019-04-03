@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DataAccessObject;
 using GameSystem;
+using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,14 +42,22 @@ namespace GameSystem.Ui
 
         private List<UiBuildingItem> _buildingItems = new List<UiBuildingItem>();
 
-        // [SerializeField] private List<TogglePanel> _buildingViewGroup;                         //管理建筑物组
-
         [SerializeField] private Button _livingAreaExit;
         [SerializeField] private Button _buildingExit;
 
+
+
+
+
+
         private bool _buildingIsShow = false;
+
+
         private LivingAreaWindowCD _livingAreaWindowCd;
+        private LivingArea _livingArea;
+        private LivingAreaData _livingAreaData;
         private float _changeCd;
+
 
         private Entity _livingAreaEntity;
 
@@ -88,22 +98,32 @@ namespace GameSystem.Ui
 
 
 
-
+        /// <summary>
+        ///  //-----初始化选项
+        /// </summary>
+        /// <param name="contextData"></param>
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            if (contextData == null) return;
-
+            if (contextData == null)
+            {
+                Debuger.LogError("Enter LivingArea Error");
+                return;
+            }
             _livingAreaWindowCd = (LivingAreaWindowCD)contextData;
+            _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
+            _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
-            //-----初始化选项
+            BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
 
-            List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaEntity);
+            List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaWindowCd.LivingAreaEntity);
             for (int i = 0; i < entitys.Count; i++)
             {
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_billingPrefab, _billingParent).GetComponent<UiBuildingItem>();
                 HousesControl houses = _entityManager.GetComponentData<HousesControl>(entitys[i]);
                 uiBuildingItem.BuildingEntity = entitys[i];
-                uiBuildingItem.Name.text = GameStaticData.BuildingName[houses.SeedId];
+
+                BuildingItem item = jsonData.GetBuildingItem(houses.SeedId);
+                uiBuildingItem.Name.text = item.BuildingName;
 
                 UIEventTriggerListener.Get(uiBuildingItem.gameObject).onClick += AccessBuilding;
                 _buildingItems.Add(uiBuildingItem);

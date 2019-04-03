@@ -33,9 +33,7 @@ namespace GameSystem
         public static DemoSetting Settings;
         public static Entity PlayerEntity;
 
-
         public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
-
 
         public static void InitializeWithScene()
         {
@@ -75,36 +73,43 @@ namespace GameSystem
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
 
-            #region Time
+            #region Test
 
             {
-                GameStaticData.TimeJijie.Add(1, "春");
-                GameStaticData.TimeJijie.Add(2, "夏");
-                GameStaticData.TimeJijie.Add(3, "秋");
-                GameStaticData.TimeJijie.Add(4, "冬");
+                //List<BuildingItem> jsonData=new List<BuildingItem>();
+                
+                //BuildingItem buildingItem=new BuildingItem();
 
-                GameStaticData.TimeShichen.Add(1, "子时");
-                GameStaticData.TimeShichen.Add(2, "丑时");
-                GameStaticData.TimeShichen.Add(3, "寅时");
-                GameStaticData.TimeShichen.Add(4, "卯时");
-                GameStaticData.TimeShichen.Add(5, "辰时");
-                GameStaticData.TimeShichen.Add(6, "巳时");
-                GameStaticData.TimeShichen.Add(7, "午时");
-                GameStaticData.TimeShichen.Add(8, "未时");
-                GameStaticData.TimeShichen.Add(9, "申时");
-                GameStaticData.TimeShichen.Add(10, "酉时");
-                GameStaticData.TimeShichen.Add(11, "戊时");
-                GameStaticData.TimeShichen.Add(12, "亥时");
+                //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
+                //for (int j = 0; j < jsonData.Item.Count; j++)
+                //{
+                //    var item = jsonData.Item[j];
+                //    Entity buildEntity = entityManager.CreateEntity(typeof(HousesControl));
 
-                DateTime time = Convert.ToDateTime("1000-01-01 00:00:00");
-                WorldTimeManager.Instance.Init(time);
-                WorldTimeSystem.InitTimeData(time);
+                //    entityManager.SetComponentData(buildEntity, new HousesControl
+                //    {
+                //        SeedId = item.Id,
+                //        No1 = item.No1
+                //    });
 
-
-
+                //    if (item.Type == 1)
+                //    {
+                //        entityManager.AddComponentData(buildEntity, new BuildingBlacksmith
+                //        {
+                //            LevelId = 1,
+                //            OperateEnd = 10,
+                //            OperateStart = 10
+                //        });
+                //    }
+                //    SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
+                //}
             }
 
+            
+
             #endregion
+
+
 
             #region Data
             {
@@ -178,6 +183,21 @@ namespace GameSystem
 
             #region LivingAreaInit
             {
+
+                GameStaticData.LivingAreaLevel.Add(0, "0级");
+                GameStaticData.LivingAreaLevel.Add(1, "1级");
+                GameStaticData.LivingAreaLevel.Add(2, "2级");
+                GameStaticData.LivingAreaLevel.Add(3, "3级");
+                GameStaticData.LivingAreaLevel.Add(4, "4级");
+                GameStaticData.LivingAreaLevel.Add(5, "5级");
+
+                GameStaticData.LivingAreaType.Add(0, "城市");
+                GameStaticData.LivingAreaType.Add(1, "帮派");
+                GameStaticData.LivingAreaType.Add(2, "村落");
+                GameStaticData.LivingAreaType.Add(3, "洞窟");
+                GameStaticData.LivingAreaType.Add(4, "遗迹");
+                GameStaticData.LivingAreaType.Add(5, "奇迹");
+
                 List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
                 for (int i = 0; i < datas.Count; i++)
                 {
@@ -202,9 +222,20 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
+                    entityManager.AddComponentData(entity, new InteractionElement
+                    {
+                        Distance = 3
+                    });
+
+                    entityManager.AddComponentData(entity, new FloatingInfo
+                    {
+
+                    });
+
+                    GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
+                    GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
+
                     BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-
-
                     for (int j = 0; j < jsonData.Item.Count; j++)
                     {
                         var item = jsonData.Item[j];
@@ -212,7 +243,8 @@ namespace GameSystem
 
                         entityManager.SetComponentData(buildEntity, new HousesControl
                         {
-                            No1 = item.No1
+                            SeedId = item.Id,
+                            //No1 = item.No1
                         });
 
                         if (item.Type == 1)
@@ -224,145 +256,12 @@ namespace GameSystem
                                 OperateStart = 10
                             });
                         }
-
                         SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
                     }
-
-                    entityManager.AddComponentData(entity, new InteractionElement
-                    {
-                        Distance = 3
-                    });
-
-                    entityManager.AddComponentData(entity,new FloatingInfo
-                    {
-
-                    });
-
-                    ////结合GameObject
-                    //entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
-                    //entityManager.AddComponentData(entity, new AssociationPropertyData
-                    //{
-                    //    IsEntityOver = 1,
-                    //    IsGameObjectOver = 0,
-                    //    IsModelShow = 0,
-                    //    Position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ),
-                    //    ModelUid = datas[i].ModelBaseId
-                    //});
-
-                    // entityManager.AddSharedComponentData(entity, LivingAreaLook);
-
-//                    SystemManager.Get<LivingAreaSystem>().DataInit();
-
-                    GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
-                    GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
                 }
             }
             #endregion
 
-            //#region LivingAreaInit
-            //{
-
-            //    List<LivingAreaData> data = SQLService.Instance.QueryAll<LivingAreaData>();
-            //    for (int i = 0; i < data.Count; i++)
-            //    {
-            //        var go = GameObject.Instantiate(GameStaticData.ModelPrefab[data[i].ModelBaseId], new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ), Quaternion.identity);
-            //        Entity entity = go.GetComponent<GameObjectEntity>().Entity;
-
-            //        entityManager.AddComponent(entity, ComponentType.Create<LivingArea>());
-
-            //        LivingArea livingArea = new LivingArea();
-            //        livingArea.Id = data[i].Id;
-            //        livingArea.Id = data[i].Id;
-            //        livingArea.PowerId = data[i].PowerId;
-            //        livingArea.ModelBaseId = data[i].ModelBaseId;
-            //        livingArea.ModelId = data[i].ModelMain;
-            //        livingArea.PersonNumber = data[i].PersonNumber;
-            //        livingArea.CurLevel = data[i].LivingAreaLevel;
-            //        livingArea.MaxLevel = data[i].LivingAreaMaxLevel;
-            //       // livingArea.TypeId = data[i].LivingAreaType;
-            //        livingArea.Money = data[i].Money;
-            //        livingArea.MoneyMax = data[i].MoneyMax;
-            //        livingArea.Iron = data[i].Iron;
-            //        livingArea.IronMax = data[i].IronMax;
-            //        livingArea.Wood = data[i].Wood;
-            //        livingArea.WoodMax = data[i].WoodMax;
-            //        livingArea.Food = data[i].Food;
-            //        livingArea.FoodMax = data[i].FoodMax;
-            //        livingArea.DefenseStrength = data[i].DefenseStrength;
-            //        livingArea.StableValue = data[i].StableValue;
-            //       // livingArea.Renown = data[i].StableValue;
-            //       // livingArea.Position = new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ);
-
-            //        if (string.IsNullOrEmpty(data[i].BuildingInfoJson) == false)
-            //        {
-
-            //        }
-
-            //        if (livingArea.ModelId != 0)
-            //        {
-            //            GameObject livingGo = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
-            //            livingGo.transform.SetParent(go.transform);
-            //            livingGo.SetActive(false);
-
-            //            Renderer[] renderers = livingGo.transform.GetComponentsInChildren<Renderer>();
-            //            Bounds bounds = renderers[0].bounds;
-            //            for (int j = 1; j < renderers.Length; j++)
-            //            {
-            //                bounds.Encapsulate(renderers[j].bounds);
-            //            }
-            //            livingArea.ModelPoint = bounds.center;
-            //        }
-
-            //        entityManager.SetComponentData(entity, livingArea);
-
-            //        entityManager.AddComponent(entity, ComponentType.Create<Position>());
-            //        entityManager.SetComponentData(entity, new Position
-            //        {
-            //            Value = new float3(data[i].PositionX, data[i].PositionY, data[i].PositionZ)
-            //        });
-
-            //        entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
-            //        entityManager.SetComponentData(entity, new InteractionElement
-            //        {
-            //            Position = new Vector3(data[i].PositionX, data[i].PositionY, data[i].PositionZ),
-            //            Distance = 1,
-            //            Id = data[i].Id,
-            //            InteractionType = LocationType.LivingAreaIn,
-            //            InteractionExitType = LocationType.LivingAreaExit,
-            //            InteractionEnterType = LocationType.LivingAreaEnter,
-            //            Type = ElementType.LivingArea,
-            //            EventCode = 1000,
-            //        });
-
-            //        entityManager.AddComponent(entity, ComponentType.Create<PeriodTime>());
-            //        entityManager.SetComponentData(entity, new PeriodTime
-            //        {
-            //            Type = PeriodType.Month
-            //        });
-
-            //        GameStaticData.LivingAreaName.Add(data[i].Id, data[i].Name);
-            //        GameStaticData.LivingAreaDescription.Add(data[i].Id, data[i].Description);
-            //    }
-
-
-            //    GameStaticData.LivingAreaLevel.Add(0, "0级");
-            //    GameStaticData.LivingAreaLevel.Add(1, "1级");
-            //    GameStaticData.LivingAreaLevel.Add(2, "2级");
-            //    GameStaticData.LivingAreaLevel.Add(3, "3级");
-            //    GameStaticData.LivingAreaLevel.Add(4, "4级");
-            //    GameStaticData.LivingAreaLevel.Add(5, "5级");
-
-            //    GameStaticData.LivingAreaType.Add(0, "城市");
-            //    GameStaticData.LivingAreaType.Add(1, "帮派");
-            //    GameStaticData.LivingAreaType.Add(2, "村落");
-            //    GameStaticData.LivingAreaType.Add(3, "洞窟");
-            //    GameStaticData.LivingAreaType.Add(4, "遗迹");
-            //    GameStaticData.LivingAreaType.Add(5, "奇迹");
-
-            //    //建筑Model初始化
-            //    BuildingSystem.InitModel(entityManager);
-            //}
-            //#endregion
             #region Boglogical
             {
                 //                List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();

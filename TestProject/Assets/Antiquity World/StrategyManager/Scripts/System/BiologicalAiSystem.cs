@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.Entities;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -19,7 +21,6 @@ namespace  GameSystem
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<NpcInput> NpcInput;
             public ComponentArray<AICharacterControl> AiControl;
-          //  public ComponentDataArray<BiologicalStatus> Status;
         }
 
         [Inject] private BiologicalAiGroup _aiGroup;

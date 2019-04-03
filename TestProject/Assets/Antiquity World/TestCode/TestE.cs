@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-    public class TestE : MonoBehaviour
+public class TestE : MonoBehaviour
+{
+    void Start()
     {
 
-        public string Value = ">>>>>";
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+}
 
 

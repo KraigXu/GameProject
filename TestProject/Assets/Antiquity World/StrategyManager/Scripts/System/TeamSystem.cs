@@ -12,7 +12,6 @@ namespace GameSystem
     /// </summary>
     public class TeamSystem : ComponentSystem
     {
-
         public class Modeler
         {
             public GameObject Model;

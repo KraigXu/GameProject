@@ -19,9 +19,10 @@ namespace GameSystem
         public int Id;
         public bool IsActive;
 
+        public bool IsStart;
         public DateTime StartTime;
         public Action StartCallback;
-        public bool IsStart=false;
+        
 
         public DateTime EndTime;
         public Action EndCallback;
@@ -39,13 +40,13 @@ namespace GameSystem
 
         public void Tick(DateTime time)
         {
-            if (time>=StartTime &&IsStart==false)
+            if (time >= StartTime && IsStart == false)
             {
                 StartCallback.Invoke();
                 IsStart = true;
             }
 
-            if (time>=EndTime)
+            if (time >= EndTime)
             {
                 EndCallback.Invoke();
                 IsActive = false;
@@ -69,27 +70,63 @@ namespace GameSystem
 
         public bool IsInit = false;
         public bool IsPlay = false;
-        public DateTime CurTime;
-        public int Year;
-        public int Month;
-        public int Day;
-        public int Hour;
-        public int Shichen;
-        public int Jijie;
+        public bool IsStart = false;
 
-        public byte TimeScalar=1;           //时间的放大比 如果是0 则是暂停
-        public float Schedule=0;             //一个时间节点的进度
-        public byte ScheduleCell=5;         //时间节点的大小
+        public DateTime CurTime= Convert.ToDateTime("1000-01-01 00:00:00");
+        public int Year = 1000;
+        public int Month = 1;
+        public int Day = 1;
+        public int Shichen = 1;
+        public int Hour = 0;
 
-        public List<WorldTimerNode>  WorldTimerNodes=new List<WorldTimerNode>() ;
-    
-        private List<int> _removalPending=new List<int>();
+        public  int Jijie;
+
+        public byte TimeScalar = 1;           //时间的放大比 如果是0 则是暂停
+        public byte ScheduleCell = 5;         //时间节点的大小
+        public float Schedule = 0;             //一个时间节点的进度
+        public byte ScheduleMonth = 0;
+        public byte ScheduleDay = 0;
+        public byte ScheduleYear = 0;
+
+
+        public List<WorldTimerNode> WorldTimerNodes = new List<WorldTimerNode>();
+
+        private List<int> _removalPending = new List<int>();
         private int _idCounter;
+
+
+        private  Dictionary<int, string> TimeJijie = new Dictionary<int, string>();
+        //        子时 丑时  寅时 卯时  辰时 巳时
+        //        23:00 - 00:59 01:00 - 02:59 03:00 - 04:59 05:00 - 06:59 07:00 - 08:59 09:00 - 10:59
+        //        午时 未时  申时 酉时  戊时 亥时
+        //        11:00 - 12:59 13:00 - 14:59 15:00 - 16:59 17:00 - 18:59 19:00 - 20:59 21:00 - 22:59
+        private  Dictionary<int, string> TimeShichen = new Dictionary<int, string>();
 
 
         void Awake()
         {
             _instance = this;
+
+            TimeJijie.Add(1, "春");
+            TimeJijie.Add(2, "夏");
+            TimeJijie.Add(3, "秋");
+            TimeJijie.Add(4, "冬");
+
+            TimeShichen.Add(1, "子时");
+            TimeShichen.Add(2, "丑时");
+            TimeShichen.Add(3, "寅时");
+            TimeShichen.Add(4, "卯时");
+            TimeShichen.Add(5, "辰时");
+            TimeShichen.Add(6, "巳时");
+            TimeShichen.Add(7, "午时");
+            TimeShichen.Add(8, "未时");
+            TimeShichen.Add(9, "申时");
+            TimeShichen.Add(10, "酉时");
+            TimeShichen.Add(11, "戊时");
+            TimeShichen.Add(12, "亥时");
+
+            DateTime time = Convert.ToDateTime("1000-01-01 00:00:00");
+            Init(time);
         }
 
         public void Init(DateTime dataTime)
@@ -115,38 +152,44 @@ namespace GameSystem
 
         void Update()
         {
-            if (IsInit == false)
-            {
-                return;
-            }
-
-            if (IsPlay == false)
+            if (IsStart == false || IsInit == false)
             {
                 return;
             }
 
             float dt = Time.deltaTime;
-
             Schedule += dt * TimeScalar;
-
-            if (Schedule >= ScheduleCell)
+            if (Schedule >= ScheduleCell)   //表示一个时间节点完成
             {
                 Schedule = 0;
-                CurTime = CurTime.AddHours(1);
+                CurTime = CurTime.AddHours(2);
                 Year = CurTime.Year;
                 Month = CurTime.Month;
                 Day = CurTime.Day;
-                Hour = CurTime.Hour;
-                Shichen = UpdateGuDaiTime(Hour);
-                Jijie = UpdateTimeJijie(Month);
-            }
+                Shichen = UpdateGuDaiTime(CurTime.Hour);
+                Jijie = UpdateTimeJijie(CurTime.Month);
+                ScheduleDay++;
 
-            Remove();
-            for (int i = 0; i < WorldTimerNodes.Count; i++)
-            {
-                WorldTimerNodes[i].Tick(CurTime);
+                //AddPeriodValue(PeriodType.Shichen);
+
+                if (ScheduleDay > 12)
+                {
+                    ScheduleDay = 0;
+                    ScheduleMonth++;
+                  //  AddPeriodValue(PeriodType.Day);
+                    if (ScheduleMonth > 31)
+                    {
+                        ScheduleMonth = 0;
+                       // AddPeriodValue(PeriodType.Month);
+                        ScheduleYear++;
+                        if (ScheduleYear > 12)
+                        {
+                          // AddPeriodValue(PeriodType.Year);
+                            ScheduleYear = 0;
+                        }
+                    }
+                }
             }
-            
         }
 
         private int UpdateGuDaiTime(int curHour)
@@ -212,7 +255,7 @@ namespace GameSystem
         /// <returns></returns>
         public int AddTimerNode(DateTime startTime, Action startAction, DateTime endTime, Action endAction)
         {
-            WorldTimerNode node=new WorldTimerNode(++_idCounter,startTime,startAction,endTime,endAction);
+            WorldTimerNode node = new WorldTimerNode(++_idCounter, startTime, startAction, endTime, endAction);
             WorldTimerNodes.Add(node);
             return node.Id;
         }
@@ -259,6 +302,23 @@ namespace GameSystem
         {
             IsPlay = false;
         }
+
+
+        public void InitTimeData(DateTime time)
+        {
+            CurTime = time;
+            Year = CurTime.Year;
+            Month = CurTime.Month;
+            Day = CurTime.Day;
+            Shichen = UpdateGuDaiTime(CurTime.Hour);
+            Jijie = UpdateTimeJijie(CurTime.Month);
+
+            IsInit = true;
+        }
+
+
+
+
 
     }
 }

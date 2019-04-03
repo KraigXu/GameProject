@@ -62,30 +62,14 @@ namespace GameSystem.Ui
 
     public class LivingAreaWindowCD : BaseWindowContextData
     {
+        public Entity LivingAreaEntity;
+
         public int LivingAreaId;
         public int PlayerId;
-        //public int PowerId;
-        //public int ModelId;
-        //public int PersonId;
-        //public int PersonNumber;
-        //public int Money;
-        //public int MoneyMax;
-        //public int Iron;
-        //public int IronMax;
-        //public int Wood;
-        //public int WoodMax;
-        //public int Food;
-        //public int FoodMax;
-        //public int LivingAreaLevel;
-        //public int LivingAreaMaxLevel;
-        //public int LivingAreaType;
-        //public int DefenseStrength;
-        //public int StableValue;
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
 
-        public LivingAreaWindowCD() { }
     }
 
     public class BuildingiDataItem

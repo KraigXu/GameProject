@@ -17,7 +17,7 @@ public class TestEditor:Editor
     public override void OnInspectorGUI()
     {
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(_test.Value);
+        //GUILayout.Label(_test.Value);
         EditorGUILayout.EndHorizontal();
 
     }

@@ -52,12 +52,11 @@ namespace GameSystem.Ui
             _cd += Time.deltaTime;
             if (_cd > 1)
             {
-                this.Year.text = WorldTimeSystem.Year.ToString();
-                this.Month.text = WorldTimeSystem.Month.ToString();
-                this.Day.text = WorldTimeSystem.Day.ToString();
-
-                this.ShiChen.text = GameStaticData.TimeShichen[WorldTimeSystem.Shichen];
-                this.Season.text = GameStaticData.TimeJijie[WorldTimeSystem.Jijie];
+                Year.text = WorldTimeManager.Instance.Year.ToString();
+                Month.text = WorldTimeManager.Instance.Month.ToString();
+                Day.text = WorldTimeManager.Instance.Day.ToString();
+               // ShiChen.text=   GameStaticData.TimeShichen[WorldTimeManager.Instance.Shichen];
+              //  Season.text = GameStaticData.TimeJijie[WorldTimeManager.Instance.Jijie];
                 _cd = 0;
             }
         }

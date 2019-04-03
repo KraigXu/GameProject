@@ -14,16 +14,37 @@ namespace GameSystem
     {
         public int GroupId;
         public List<BuildingItem> Item = new List<BuildingItem>();
+
+        public BuildingItem GetBuildingItem(int buildingid)
+        {
+            for (int i = 0; i < Item.Count; i++)
+            {
+                if (Item[i].Id == buildingid)
+                {
+                    return Item[i];
+                }
+            }
+            return null;
+        }
     }
 
     public class BuildingItem
     {
-        public int No1;
+        public int Id;
+        public int Level;
+        public string BuildingName="XX";
+        public string Behavior = "Default";
+        public int X;
+        public int Y;
         public int BuildingModelId;
         public int BuildingLevel;
         public int Status;
         public int Type;
         public int DurableValue;
+        public string Property1;
+        public string Property2;
+        public string Property3;
+        public string Property4;
 
         public BuildingItem() { }
         public BuildingItem(int buildingModelId, int buildingLevel, int status, int type, int durableValue)

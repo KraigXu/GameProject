@@ -69,7 +69,6 @@ namespace GameSystem
             {
 
             }
-
         }
 
         protected override void OnUpdate()
@@ -120,7 +119,6 @@ namespace GameSystem
             }
             return entities;
         }
-
         /// <summary>
         /// 获取所有生物名字
         /// </summary>
