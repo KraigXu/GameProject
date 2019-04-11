@@ -23,7 +23,6 @@ namespace GameSystem
         public DateTime StartTime;
         public Action StartCallback;
         
-
         public DateTime EndTime;
         public Action EndCallback;
 

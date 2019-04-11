@@ -425,11 +425,17 @@ namespace DataAccessObject
                                        " AvatarId INTEGER);");
         }
 
+        public static void CreateTable_NounsData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS NounsData ( " +
+                                       " NId INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Note TEXT," +
+                                       " Content1 TEXT," +
+                                       " Content2 TEXT);");
+        }
     }
-
     //-----------------------------------------建表语句 -----------------------------------End
-
-
 
 
     //----------------------------------------映射数据库----------------------------------Start
@@ -927,6 +933,25 @@ namespace DataAccessObject
         }
 
     }
+
+    /// <summary>
+    /// 名词注解表
+    /// </summary>
+    public class NounsData : BaseData
+    {
+        public int NId { get; set; }
+        public string Name { get; set; }
+        public string Note { get; set; }
+        public string Content1 { get; set; }
+        public string Content2 { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = { NId,Name,Note,Content1,Content2 };
+            return objects;
+        }
+    }
+
 
     public class ArticleRecordingData : BaseData
     {

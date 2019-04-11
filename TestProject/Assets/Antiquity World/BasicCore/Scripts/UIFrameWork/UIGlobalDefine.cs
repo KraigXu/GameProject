@@ -21,9 +21,11 @@ namespace GameSystem.Ui
         FixedTitleWindow,
         IntelligenceWindow,
         SocialDialogWindow,
+
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
         BuildingWindow,
+
         ExtendedMenuWindow,
         WxCharacterPanelWindow,
         MapWindow

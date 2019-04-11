@@ -8,6 +8,40 @@ namespace  GameSystem
     {
         public int DistrictId;
         public Color Color;
+
+        public MeshCollider Collider;
+        public MeshFilter Filter;
+        public MeshRenderer Renderer;
+
+
+        void Awake()
+        {
+            Collider = gameObject.GetComponent<MeshCollider>();
+            Filter = gameObject.GetComponent<MeshFilter>();
+        }
+
+        
+
+        void Start()
+        {
+
+
+        }
+        void Update()
+        {
+
+
+        }
+
+        void OnTriggerEnter(Collider collider)
+        {
+
+        }
+
+        void OnTriggerExit(Collider collider)
+        {
+
+        }
     }
 
 

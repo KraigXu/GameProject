@@ -25,16 +25,23 @@ namespace GameSystem
         [Inject]
         private Data _data;
 
+
+
         /// <summary>
         /// Key为LivingAreaEntity, Value=Building集的Entity
         /// 存储城市与建筑关联信息
         /// </summary>
         private Dictionary<Entity, List<Entity>> _livingAreaBuildMap = new Dictionary<Entity, List<Entity>>();
 
+        private LivingAreaTitleWindow _livingAreaTitle;
+
+
         public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {
             get { return _livingAreaBuildMap; }
         }
+
+
 
         /// <summary>
         /// 新增城市建筑物信息
@@ -56,6 +63,12 @@ namespace GameSystem
             }
         }
 
+        public void InitSystem()
+        {
+            _livingAreaTitle=UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow).GetComponent<LivingAreaTitleWindow>();
+
+        }
+
         /// <summary>
         /// 获取这个城市内的建筑物实体
         /// </summary>
@@ -74,10 +87,31 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var livingArea = _data.LivingArea[i];
+                var node = _data.GameObjects[i];
+
+                if (livingArea.TitleType == 0 && _livingAreaTitle.TitleDisplayMap.ContainsKey(livingArea.Id)==false)
+                {
+                    _livingAreaTitle.ShowWindow(livingArea.Id, node.transform);
+                }
+                else if (livingArea.TitleType == 1)
+                {
+
+                }
+                else if (livingArea.TitleType == 2)
+                {
+
+                }
+                else
+                {
+
+                }
+
+
 
                 _data.LivingArea[i] = livingArea;
             }
         }
+
 
         /// <summary>
         /// 获取UI数据
@@ -112,7 +146,7 @@ namespace GameSystem
             //    //uidata.LivingAreaType = livingArea.TypeId;
             //    //uidata.DefenseStrength = livingArea.DefenseStrength;
             //}
-           // uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
+            // uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
             return uidata;
 
         }
@@ -195,10 +229,10 @@ namespace GameSystem
         public static void EnterLivingArea(Entity entity, Entity livingAreaEntity)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            entityManager.AddComponentData(entity,new LivingAreaAssociated
+            entityManager.AddComponentData(entity, new LivingAreaAssociated
             {
                 LivingAreaEntity = livingAreaEntity,
-                BuildingEntity=Entity.Null,
+                BuildingEntity = Entity.Null,
             });
         }
 
@@ -282,9 +316,9 @@ namespace GameSystem
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true )   //铁匠铺
+            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true)   //铁匠铺
             {
-                ShowWindowData show=new ShowWindowData();
+                ShowWindowData show = new ShowWindowData();
                 show.contextData = new BuildingUiInfo()
                 {
 

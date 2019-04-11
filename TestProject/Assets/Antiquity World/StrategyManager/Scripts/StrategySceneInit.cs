@@ -73,44 +73,6 @@ namespace GameSystem
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
 
-            #region Test
-
-            {
-                //List<BuildingItem> jsonData=new List<BuildingItem>();
-                
-                //BuildingItem buildingItem=new BuildingItem();
-
-                //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-                //for (int j = 0; j < jsonData.Item.Count; j++)
-                //{
-                //    var item = jsonData.Item[j];
-                //    Entity buildEntity = entityManager.CreateEntity(typeof(HousesControl));
-
-                //    entityManager.SetComponentData(buildEntity, new HousesControl
-                //    {
-                //        SeedId = item.Id,
-                //        No1 = item.No1
-                //    });
-
-                //    if (item.Type == 1)
-                //    {
-                //        entityManager.AddComponentData(buildEntity, new BuildingBlacksmith
-                //        {
-                //            LevelId = 1,
-                //            OperateEnd = 10,
-                //            OperateStart = 10
-                //        });
-                //    }
-                //    SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
-                //}
-            }
-
-            
-
-            #endregion
-
-
-
             #region Data
             {
                 //List<AvatarData> avatarDatas = SQLService.Instance.QueryAll<AvatarData>();
@@ -136,6 +98,7 @@ namespace GameSystem
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
+                    
                 }
             }
 
@@ -143,66 +106,43 @@ namespace GameSystem
 
             #region DistrictInit
             {
-                //List<DistrictData> districtDatas = SQLService.Instance.QueryAll<DistrictData>();
+                List<DistrictData> datas = SQLService.Instance.QueryAll<DistrictData>();
 
-                //for (int i = 0; i < districtDatas.Count; i++)
-                //{
-                //    GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[districtDatas[i].Model], new Vector3(districtDatas[i].X, districtDatas[i].Y, districtDatas[i].Z), Quaternion.identity);
+                for (int i = 0; i < datas.Count; i++)
+                {
+                    GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[datas[i].Model]);
+                    go.transform.position = new Vector3(datas[i].X,datas[i].Y,datas[i].Z);
 
-                //    DistrictRange districtRange = go.GetComponent<DistrictRange>();
-                //    districtRange.DistrictId = districtDatas[i].Id;
+                    Entity entity = go.GetComponent<GameObjectEntity>().Entity;
+                    entityManager.AddComponentData(entity, new District
+                    {
+                        Id = datas[i].Id,
+                        GId =324+i,
+                        Type = datas[i].Type,
+                        ProsperityLevel = datas[i].ProsperityLevel,
+                        TrafficLevel = datas[i].TrafficLevel,
+                        GrowingModulus = datas[i].GrowingModulus,
+                        SecurityModulus = datas[i].SecurityModulus
+                    });
 
-                //    Entity district = go.GetComponent<GameObjectEntity>().Entity;
-                //    entityManager.AddComponent(district, ComponentType.Create<District>());
-                //    entityManager.SetComponentData(district, new District
-                //    {
-                //        Id = districtDatas[i].Id,
-                //        Type = districtDatas[i].Type,
-                //        ProsperityLevel = districtDatas[i].ProsperityLevel,
-                //        TrafficLevel = districtDatas[i].TrafficLevel,
-                //        GrowingModulus = districtDatas[i].GrowingModulus,
-                //        SecurityModulus = districtDatas[i].SecurityModulus
-                //    });
+                    entityManager.AddComponentData(entity, new PeriodTime
+                    {
+                        Value = 0,
+                        Type = PeriodType.Shichen,
+                    });
+                }
 
-                //    GameStaticData.DistrictName.Add(districtDatas[i].Id, districtDatas[i].Name);
-                //    GameStaticData.DistrictDescriptione.Add(districtDatas[i].Id, districtDatas[i].Description);
-
-                //    entityManager.AddComponent(district, ComponentType.Create<PeriodTime>());
-                //    entityManager.SetComponentData(district, new PeriodTime
-                //    {
-                //        Value = 0,
-                //        Type = PeriodType.Shichen
-                //    });
-                //}
-                //GameStaticData.DistrictStatusDsc.Add(0, "11");
-                //GameStaticData.DistrictStatusDsc.Add(1, "11");
-                //GameStaticData.DistrictStatusDsc.Add(2, "11");
-                //GameStaticData.DistrictTypeDsc.Add(0, "1");
             }
             #endregion
 
             #region LivingAreaInit
             {
-
-                GameStaticData.LivingAreaLevel.Add(0, "0级");
-                GameStaticData.LivingAreaLevel.Add(1, "1级");
-                GameStaticData.LivingAreaLevel.Add(2, "2级");
-                GameStaticData.LivingAreaLevel.Add(3, "3级");
-                GameStaticData.LivingAreaLevel.Add(4, "4级");
-                GameStaticData.LivingAreaLevel.Add(5, "5级");
-
-                GameStaticData.LivingAreaType.Add(0, "城市");
-                GameStaticData.LivingAreaType.Add(1, "帮派");
-                GameStaticData.LivingAreaType.Add(2, "村落");
-                GameStaticData.LivingAreaType.Add(3, "洞窟");
-                GameStaticData.LivingAreaType.Add(4, "遗迹");
-                GameStaticData.LivingAreaType.Add(5, "奇迹");
-
                 List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
                 for (int i = 0; i < datas.Count; i++)
                 {
                     Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
                     entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
+                    entityGo.gameObject.name = datas[i].Name;
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
                    
                     entityManager.AddComponentData(entity, new LivingArea
@@ -244,7 +184,7 @@ namespace GameSystem
                         entityManager.SetComponentData(buildEntity, new HousesControl
                         {
                             SeedId = item.Id,
-                            //No1 = item.No1
+
                         });
 
                         if (item.Type == 1)
@@ -259,64 +199,8 @@ namespace GameSystem
                         SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
                     }
                 }
-            }
-            #endregion
 
-            #region Boglogical
-            {
-                //                List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
-                //                for (int i = 0; i < data.Count; i++)
-                //                {
-                //                    Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-
-                //                    Biological biological = new Biological();
-                //                    biological.BiologicalId = data[i].Id;
-                //                    biological.AvatarId = data[i].AvatarId;
-                //                    biological.ModelId = data[i].ModelId;
-                //                    biological.FamilyId = data[i].FamilyId;
-                //                    biological.FactionId = data[i].FactionId;
-                //                    biological.TitleId = data[i].TitleId;
-                //                    biological.SexId = data[i].Sex;
-                //                    biological.Age = data[i].Age;
-                //                    biological.AgeMax = data[i].AgeMax;
-                //                    biological.Disposition = data[i].Disposition;
-                //                    biological.PrestigeValue = data[i].PrestigeValue;
-                //                    biological.CharmValue = 0;
-                //                    biological.CharacterValue = 0;
-                //                    biological.NeutralValue = 0;
-                //                    biological.BodyValue = 0;
-                //                    biological.LuckValue = 0;
-                //                    biological.Tizhi = data[i].Tizhi;
-                //                    biological.Lidao = data[i].Lidao;
-                //                    biological.Jingshen = data[i].Jingshen;
-                //                    biological.Lingdong = data[i].Lingdong;
-                //                    biological.Wuxing = data[i].Wuxing;
-                //                    entityManager.SetComponentData(entity, biological);
-
-                //                    BiologicalStatus biologicalStatus = new BiologicalStatus();
-                //                    biologicalStatus.BiologicalIdentity = data[i].Identity;
-                //                    biologicalStatus.Position = new Vector3(data[i].X, data[i].Y, data[i].Z);
-                //                    biologicalStatus.Quaternion = Quaternion.identity;
-                //                    biologicalStatus.TargetId = 0;
-                //                    biologicalStatus.TargetType = 0;
-                //                    biologicalStatus.LocationType = (LocationType)data[i].LocationType;
-                //                    entityManager.SetComponentData(entity, biologicalStatus);
-
-                //                    Team team = new Team();
-                //                    team.TeamBossId = data[i].TeamId;
-                ////                    team.RunModelCode = 0;
-                // //                   team.RunModelCode = SystemManager.Get<TeamSystem>().AddModel(GameStaticData.ModelPrefab[data[i].ModelId], new Vector3(data[i].X, data[i].Y, data[i].Z));
-                //                    entityManager.SetComponentData(entity, team);
-
-                //                    GameStaticData.BiologicalNameDic.Add(data[i].Id, data[i].Name);
-                //                    GameStaticData.BiologicalSurnameDic.Add(data[i].Id, data[i].Surname);
-                //                    GameStaticData.BiologicalDescription.Add(data[i].Id, data[i].Description);
-
-
-                //                }
-                //                GameStaticData.BiologicalSex.Add(1, "男");
-                //                GameStaticData.BiologicalSex.Add(2, "女");
-                //                GameStaticData.BiologicalSex.Add(3, "未知");
+                SystemManager.Get<LivingAreaSystem>().InitSystem();
             }
             #endregion
 
@@ -568,13 +452,10 @@ namespace GameSystem
 
             #endregion
 
-
             #region Article
             {
             //    List<ArticleRecordingData> datas = SQLService.Instance.QueryAll<ArticleRecordingData>();
                 List<ArticleRecordingData> datas=new List<ArticleRecordingData>();
-
-
 
                 //datas=new List<ArticleRecordingData>();
 
@@ -674,9 +555,6 @@ namespace GameSystem
                         AttributeValue8 = 10
                     });
                 }
-
-
-
             }
             #endregion
 
@@ -760,28 +638,9 @@ namespace GameSystem
 
             #endregion
 
-            #region UiInit
+            #region InitOver
+
             {
-                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-
-                //常驻窗口
-                UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
-                //  WorldTimeManager.Instance.AddTimerNode(DateTime.Now.AddHours(2),Test1, DateTime.Now.AddHours(6),Test2);
-
-            }
-            #endregion
-
-            #region Camera
-            {
-
-                if (Settings.Player != null)
-                {
-                   // Settings.Player.GetComponent<>()
-
-                }
-
                 List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -792,15 +651,16 @@ namespace GameSystem
                 }
                 data = null;
 
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+
+                UICenterMasterManager.Instance.DestroyWindow(WindowID.LogWindow);
+
             }
-
+            
             #endregion
-
-            // SystemManager.Get<PlayerControlSystem>().SetupInit();
-
-            UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
-
-           // LivingAreaSystem.SetupInfo();
         }
 
         private static MeshInstanceRenderer GetLookFromPrototype(string protoName)

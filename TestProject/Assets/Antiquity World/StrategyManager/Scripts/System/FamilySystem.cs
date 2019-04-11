@@ -8,8 +8,16 @@ namespace GameSystem
 {
     public class FamilySystem : ComponentSystem
     {
+        struct Data
+        {
+            public readonly int Length;
+            public EntityArray Entitys;
+            public ComponentDataArray<Family> Familys;
+        }
 
-        private static Dictionary<int,FamilyData> _familyDatas=new Dictionary<int, FamilyData>();
+        [Inject] private Data _data;
+
+        private static Dictionary<int, FamilyData> _familyDatas = new Dictionary<int, FamilyData>();
 
         public static void SetupComponentData(EntityManager entityManager)
         {
@@ -19,7 +27,7 @@ namespace GameSystem
 
             for (int i = 0; i < familyDatas.Count; i++)
             {
-                _familyDatas.Add(familyDatas[i].Id,familyDatas[i]);
+                _familyDatas.Add(familyDatas[i].Id, familyDatas[i]);
                 GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
             }
         }

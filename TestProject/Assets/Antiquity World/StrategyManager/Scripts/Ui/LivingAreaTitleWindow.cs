@@ -22,20 +22,32 @@ namespace GameSystem.Ui
 
         }
 
+        private RectTransform _Prefab;
+
+        private Dictionary<int, RectTransform> _titleDisplaysMap = new Dictionary<int, RectTransform>();
+        private Dictionary<int, RectTransform> _titleHideMap = new Dictionary<int, RectTransform>();
+
+
+        public Dictionary<int, RectTransform> TitleDisplayMap
+        {
+            get { return _titleDisplaysMap; }
+        }
+
+        public Dictionary<int, RectTransform> TitleHideMap
+        {
+            get { return _titleHideMap; }
+        }
+
         public override void InitWindowOnAwake()
         {
         }
 
-        protected override void BeforeShowWindow(BaseWindowContextData contextData)
+        public void ShowWindow(int id, Transform node)
         {
-            var value= SystemManager.Get<LivingAreaSystem>().LivingAreaBuildMap;
-
-            foreach (var item in value)
-            {
-                
-            }
-
+           // RectTransform titleRtf = WXPoolManager.Pools[Define.ParticlePool].Spawn(_Prefab, transform);
+          //  titleRtf.gameObject.GetComponent<>()
         }
+
     }
 
 }

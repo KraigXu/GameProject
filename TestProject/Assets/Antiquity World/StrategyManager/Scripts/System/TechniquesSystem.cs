@@ -77,10 +77,5 @@ namespace GameSystem
         {
             return _techniqueDic[id];
         }
-
-
-
-        
-
     }
 }

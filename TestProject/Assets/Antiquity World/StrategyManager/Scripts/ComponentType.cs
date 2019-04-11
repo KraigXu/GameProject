@@ -112,6 +112,7 @@ namespace GameSystem
     public struct District : IComponentData
     {
         public int Id;
+        public int GId;
         public int Type;
         public int ProsperityLevel;
         public int TrafficLevel;
@@ -380,6 +381,8 @@ namespace GameSystem
 
         public int CurLevel;
         public int MaxLevel;
+
+        public byte TitleType;
     }
 
     public struct LivingAreaAssociated : IComponentData
