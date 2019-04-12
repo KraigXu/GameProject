@@ -15,7 +15,6 @@ public class ColliderTriggerEvent : MonoBehaviour
         if (_collider == null)
             _collider = gameObject.AddComponent<BoxCollider>();
 
-
     }
 
     void OnTriggerEnter(Collider other)

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UiListItem : MonoBehaviour
 {
-    public delegate void OnClick(int id);
+    public delegate void OnClick(UiListItem ui);
     public Text Text;
     public int Id;
     public OnClick ClickCallback;
@@ -22,7 +22,7 @@ public class UiListItem : MonoBehaviour
         {
             if (ClickCallback != null)
             {
-                ClickCallback(Id);
+                ClickCallback(this);
             }
         });
     }

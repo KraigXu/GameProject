@@ -130,47 +130,47 @@ namespace GameSystem.Ui
             }
 
             return;
-            Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
-            LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(entityLivingArea);
+            //Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
+            //LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(entityLivingArea);
 
-            for (int i = 0; i < _buildingBilling.Count; i++)
-            {
-                _buildingBilling[i].gameObject.SetActive(false);
-            }
+            //for (int i = 0; i < _buildingBilling.Count; i++)
+            //{
+            //    _buildingBilling[i].gameObject.SetActive(false);
+            //}
 
-            _name.text = GameStaticData.LivingAreaName[livingArea.Id];
-            _money.text = livingArea.Money + "/" + livingArea.MoneyMax;
-            _iron.text = livingArea.Iron + "/" + livingArea.IronMax;
-            _wood.text = livingArea.Wood + "/" + livingArea.WoodMax;
-            _food.text = livingArea.Food + "/" + livingArea.FoodMax;
-            _person.text = livingArea.PersonNumber.ToString();
-            _stable.text = livingArea.DefenseStrength.ToString();
-            _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+            //_name.text = GameStaticData.LivingAreaName[livingArea.Id];
+            //_money.text = livingArea.Money + "/" + livingArea.MoneyMax;
+            //_iron.text = livingArea.Iron + "/" + livingArea.IronMax;
+            //_wood.text = livingArea.Wood + "/" + livingArea.WoodMax;
+            //_food.text = livingArea.Food + "/" + livingArea.FoodMax;
+            //_person.text = livingArea.PersonNumber.ToString();
+            //_stable.text = livingArea.DefenseStrength.ToString();
+            //_level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
+            //// _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
 
-            Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
-            Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
+            //Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
+            //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
 
-            _powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
-            _personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+            //_powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
+            //_personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
 
-            List<Entity> entitieBuilding = SystemManager.Get<BuildingSystem>().GetBuildingGroup(livingArea.Id);
+            //List<Entity> entitieBuilding = SystemManager.Get<BuildingSystem>().GetBuildingGroup(livingArea.Id);
 
-            for (int i = 0; i < entitieBuilding.Count; i++)
-            {
-                Building building = _entityManager.GetComponentData<Building>(entitieBuilding[i]);
-                _buildingBilling[i].gameObject.SetActive(true);
-                _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
+            //for (int i = 0; i < entitieBuilding.Count; i++)
+            //{
+            //    Building building = _entityManager.GetComponentData<Building>(entitieBuilding[i]);
+            //    _buildingBilling[i].gameObject.SetActive(true);
+            //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
 
-            }
-            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
-            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
-            Bounds bounds = renderers[0].bounds;
-            for (int j = 1; j < renderers.Length; j++)
-            {
-                bounds.Encapsulate(renderers[j].bounds);
-            }
-            SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
+            //}
+            //GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
+            //Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
+            //Bounds bounds = renderers[0].bounds;
+            //for (int j = 1; j < renderers.Length; j++)
+            //{
+            //    bounds.Encapsulate(renderers[j].bounds);
+            //}
+            //SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
         }
 
 
@@ -178,11 +178,8 @@ namespace GameSystem.Ui
 
         private void ChangeData()
         {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
-            LivingArea livingArea = entityManager.GetComponentData<LivingArea>(entityLivingArea);
-
+            LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
                 _buildingBilling[i].gameObject.SetActive(false);
@@ -195,9 +192,8 @@ namespace GameSystem.Ui
             _food.text = livingArea.Food + "/" + livingArea.FoodMax;
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
-            _level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
-
+            _level.text =livingArea.CurLevel.ToString();
+            _type.text = livingArea.Type.ToString();
 
 
         }

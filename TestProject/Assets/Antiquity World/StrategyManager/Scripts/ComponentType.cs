@@ -312,6 +312,20 @@ namespace GameSystem
         Leg=5,
     }
 
+    public struct Belong : IComponentData
+    {
+        public Entity Entity;
+    }
+
+
+    
+
+    public struct Output : IComponentData
+    {
+
+    }
+
+
     public struct EquipmentCoat : IComponentData
     {
         public int SpriteId;
@@ -384,6 +398,41 @@ namespace GameSystem
 
         public byte TitleType;
     }
+
+    public struct Crowd : IComponentData
+    {
+        public int Number;
+       
+    }
+
+
+
+    /// <summary>
+    /// 集体，标明一个明确组织的生物群体 
+    /// </summary>
+    public struct Collective : IComponentData
+    {
+        public int CollectiveClassId;
+        public int Cohesion;
+
+    }
+
+    public struct ModelInfo : IComponentData
+    {
+        public int ModelId;
+    }
+
+    public struct Money : IComponentData
+    {
+        public int Value;
+        public int Upperlimit;
+    }
+
+    public struct Reputation : IComponentData
+    {
+
+    }
+
 
     public struct LivingAreaAssociated : IComponentData
     {
@@ -563,5 +612,8 @@ namespace GameSystem
 
         Weapon = 30,// 武器
     }
+
+
+
 }
 

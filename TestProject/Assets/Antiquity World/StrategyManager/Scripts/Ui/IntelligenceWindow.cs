@@ -172,9 +172,9 @@ namespace GameSystem.Ui
             }
         }
 
-        private void ShowPersonDetailedInfo(int id)
+        private void ShowPersonDetailedInfo(UiListItem item)
         {
-            Entity entity= SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(id);
+            Entity entity= SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1);
 
             Biological biological = SystemManager.GetProperty<Biological>(entity);
             PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
@@ -207,12 +207,12 @@ namespace GameSystem.Ui
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[factions[i].Id];
                 uiitem.Id = factions[i].Id;
-                uiitem.ClickCallback = delegate (int id)
-                {
-                    // LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-                    //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
-                    //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
-                };
+                //uiitem.ClickCallback = delegate (int id)
+                //{
+                //    // LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
+                //    //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
+                //    //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                //};
             }
         }
 
@@ -225,24 +225,27 @@ namespace GameSystem.Ui
         private void ChangeLivingAreaInfo()
         {
             ClearListItem();
-            List<int> livngAreaIds = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaIds();
-            for (int i = 0; i < livngAreaIds.Count; i++)
+
+            LivingAreaSystem system = World.Active.GetExistingManager<LivingAreaSystem>();
+            List<string> contents = system.GetLivingAreaNames();
+
+            for (int i = 0; i < contents.Count; i++)
             {
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_listItemPrefab, _listItemParent);
 
                 UiListItem uiitem = item.GetComponent<UiListItem>();
-                uiitem.Text.text = GameStaticData.LivingAreaName[livngAreaIds[i]];
-                uiitem.Id = livngAreaIds[i];
-                uiitem.ClickCallback = delegate (int id)
-                {
-                    LivingArea livingArea = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaInfo(id);
-                    LaNameTxt.text = GameStaticData.LivingAreaName[livingArea.Id];
-                    LaDescriptionTxt.text = GameStaticData.LivingAreaDescription[livingArea.Id];
-                    LaLevelTxt.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-                  //  LaTypeTxt.text = GameStaticData.LivingAreaType[livingArea.TypeId];
-                };
+                uiitem.Text.text = contents[i];
+                uiitem.ClickCallback = ShowLivingAreaInfo;
             }
         }
+
+        private void ShowLivingAreaInfo(UiListItem item)
+        {
+
+
+        }
+
+
     }
 }
 

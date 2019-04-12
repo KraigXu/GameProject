@@ -73,6 +73,13 @@ namespace GameSystem
 
     public class BuildingSystem : ComponentSystem
     {
+
+        struct Data
+        {
+            public readonly int Lenght;
+            public ComponentDataArray<Building> Building;
+        }
+
         struct BuildingGroup
         {
             public readonly int Length;
@@ -140,7 +147,6 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-
         }
 
         public List<BuildingiDataItem> GetUiData(int livingAreaId)

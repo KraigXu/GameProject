@@ -35,6 +35,8 @@ namespace GameSystem
 
         public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
 
+        public static FixedTitleWindow FixedTitleWindow;
+
         public static void InitializeWithScene()
         {
             var settingsGo = GameObject.Find("Settings");
@@ -98,7 +100,7 @@ namespace GameSystem
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
-                    
+
                 }
             }
 
@@ -111,13 +113,13 @@ namespace GameSystem
                 for (int i = 0; i < datas.Count; i++)
                 {
                     GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[datas[i].Model]);
-                    go.transform.position = new Vector3(datas[i].X,datas[i].Y,datas[i].Z);
+                    go.transform.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
 
                     Entity entity = go.GetComponent<GameObjectEntity>().Entity;
                     entityManager.AddComponentData(entity, new District
                     {
                         Id = datas[i].Id,
-                        GId =324+i,
+                        GId = 324 + i,
                         Type = datas[i].Type,
                         ProsperityLevel = datas[i].ProsperityLevel,
                         TrafficLevel = datas[i].TrafficLevel,
@@ -143,8 +145,16 @@ namespace GameSystem
                     Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
                     entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
                     entityGo.gameObject.name = datas[i].Name;
+                    ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
+
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                   
+
+
+                    entityManager.AddComponentData(entity, new ModelInfo
+                    {
+                        ModelId = datas[i].ModelBaseId
+                    });
+
                     entityManager.AddComponentData(entity, new LivingArea
                     {
                         Id = datas[i].Id,
@@ -162,6 +172,35 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
+                    entityManager.AddComponentData(entity,new Money
+                    {
+                        Value = datas[i].Money,
+                        Upperlimit=datas[i].MoneyMax
+                    });
+
+                    if (datas[i].LivingAreaType == 0)
+                    {
+                        entityManager.AddComponentData(entity, new Crowd()
+                        {
+                            Number=3000000,
+                        });
+
+                        trigger.TriggerEnter = CitySystem.CityColliderEnter;
+                        trigger.TriggerExit = CitySystem.CityColliderExit;
+                    }
+                    else if (datas[i].LivingAreaType == 1)
+                    {
+                        entityManager.AddComponentData(entity,new Collective()
+                        {
+                            CollectiveClassId = 1,
+                            Cohesion = 1
+                        });
+
+                        trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
+                        trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
+
+                    }
+                    
                     entityManager.AddComponentData(entity, new InteractionElement
                     {
                         Distance = 3
@@ -225,33 +264,33 @@ namespace GameSystem
                         CharmValue = 0,
                         Mobility = 0,
                         OperationalAbility = 0,
-                        LogicalThinking=0,
+                        LogicalThinking = 0,
                         Disposition = 100,
                         NeutralValue = 100,
                         LuckValue = 100,
-                        PrestigeValue=100,
+                        PrestigeValue = 100,
 
-                        ExpEmptyHand=9999,
-                        ExpLongSoldier=9999,
-                        ExpShortSoldier=9999,
-                        ExpJones=9999,
-                        ExpHiddenWeapone=9999,
-                        ExpMedicine=9999,
-                        ExpArithmetic=9999,
-                        ExpMusic=9999,
-                        ExpWrite=9999,
-                        ExpDrawing=9999,
-                        ExpExchange=9999,
-                        ExpTaoism=9999,
-                        ExpDharma=9999,
-                        ExpPranayama=9999,
+                        ExpEmptyHand = 9999,
+                        ExpLongSoldier = 9999,
+                        ExpShortSoldier = 9999,
+                        ExpJones = 9999,
+                        ExpHiddenWeapone = 9999,
+                        ExpMedicine = 9999,
+                        ExpArithmetic = 9999,
+                        ExpMusic = 9999,
+                        ExpWrite = 9999,
+                        ExpDrawing = 9999,
+                        ExpExchange = 9999,
+                        ExpTaoism = 9999,
+                        ExpDharma = 9999,
+                        ExpPranayama = 9999,
 
                         AvatarId = datas[i].AvatarId,
                         ModelId = datas[i].ModelId,
                         FamilyId = datas[i].FamilyId,
                         FactionId = datas[i].FactionId,
                         TitleId = datas[i].TitleId,
-                        TechniquesId=0,
+                        TechniquesId = 0,
                         EquipmentId = 0,
 
                         Jing = 100,
@@ -321,7 +360,7 @@ namespace GameSystem
                         Price = 1233,
                     });
 
-                    
+
 
                     ////Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 
@@ -444,7 +483,7 @@ namespace GameSystem
                     //    item.Entity = entity;
                     //    item.IsInit = true;
                     //}
-                   // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+                    // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
                     SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
                 }
 
@@ -454,8 +493,8 @@ namespace GameSystem
 
             #region Article
             {
-            //    List<ArticleRecordingData> datas = SQLService.Instance.QueryAll<ArticleRecordingData>();
-                List<ArticleRecordingData> datas=new List<ArticleRecordingData>();
+                //    List<ArticleRecordingData> datas = SQLService.Instance.QueryAll<ArticleRecordingData>();
+                List<ArticleRecordingData> datas = new List<ArticleRecordingData>();
 
                 //datas=new List<ArticleRecordingData>();
 
@@ -510,9 +549,9 @@ namespace GameSystem
                 //Debug.Log(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE.GetHashCode());
                 //  Debug.Log(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE.);
                 //+Convert.ToString(9801, 16)
-               
+
                 int id = Convert.ToInt32("0x0A", 16);
-              //  Debug.Log((ENUM_ITEM_ATTRIBUTE)id);
+                //  Debug.Log((ENUM_ITEM_ATTRIBUTE)id);
                 //Debug.Log("0x0B" + Convert.ToString(10, 16));
                 //Debug.Log("0x0B" + Convert.ToString(999, 16));
                 //Debug.Log("0x0B" + Convert.ToString(230, 16));
@@ -653,13 +692,13 @@ namespace GameSystem
 
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
+                FixedTitleWindow= (FixedTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
 
-                UICenterMasterManager.Instance.DestroyWindow(WindowID.LogWindow);
+                UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
             }
-            
+
             #endregion
         }
 

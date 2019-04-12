@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using DataAccessObject;
 using Unity.Entities;
 using UnityEngine;
 using GameSystem.Ui;
@@ -13,8 +14,6 @@ namespace GameSystem
     /// </summary>
     public class LivingAreaSystem : ComponentSystem
     {
-
-
         struct Data
         {
             public readonly int Length;
@@ -25,23 +24,17 @@ namespace GameSystem
         [Inject]
         private Data _data;
 
-
-
         /// <summary>
         /// Key为LivingAreaEntity, Value=Building集的Entity
         /// 存储城市与建筑关联信息
         /// </summary>
         private Dictionary<Entity, List<Entity>> _livingAreaBuildMap = new Dictionary<Entity, List<Entity>>();
 
-        private LivingAreaTitleWindow _livingAreaTitle;
-
 
         public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {
             get { return _livingAreaBuildMap; }
         }
-
-
 
         /// <summary>
         /// 新增城市建筑物信息
@@ -65,7 +58,7 @@ namespace GameSystem
 
         public void InitSystem()
         {
-            _livingAreaTitle=UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow).GetComponent<LivingAreaTitleWindow>();
+            //_livingAreaTitle=UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow).GetComponent<LivingAreaTitleWindow>();
 
         }
 
@@ -88,129 +81,34 @@ namespace GameSystem
             {
                 var livingArea = _data.LivingArea[i];
                 var node = _data.GameObjects[i];
-
-                if (livingArea.TitleType == 0 && _livingAreaTitle.TitleDisplayMap.ContainsKey(livingArea.Id)==false)
-                {
-                    _livingAreaTitle.ShowWindow(livingArea.Id, node.transform);
-                }
-                else if (livingArea.TitleType == 1)
-                {
-
-                }
-                else if (livingArea.TitleType == 2)
-                {
-
-                }
-                else
-                {
-
-                }
-
-
-
+               
                 _data.LivingArea[i] = livingArea;
+                StrategySceneInit.FixedTitleWindow.Change(livingArea, node.transform);
             }
         }
 
+        #region  Info
 
         /// <summary>
-        /// 获取UI数据
+        /// 获取所有名称
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
-        public LivingAreaWindowCD GetLivingAreaData(int id)
+        public List<string> GetLivingAreaNames()
         {
-            LivingAreaWindowCD uidata = new LivingAreaWindowCD();
-            //for (int i = 0; i < _livingAreas.Length; i++)
-            //{
-            //    if (_livingAreas.LivingAreaNode[i].Id != id)
-            //    {
-            //        continue;
-            //    }
-            //    var livingArea = _livingAreas.LivingAreaNode[i];
-            //    uidata.LivingAreaId = _livingAreas.LivingAreaNode[i].Id;
-            //    //uidata.PowerId = _livingAreas.LivingAreaNode[i].Id;
-            //    //uidata.ModelId = _livingAreas.LivingAreaNode[i].ModelId;
-            //    //uidata.PersonId = _livingAreas.LivingAreaNode[i].Id;
-            //    //uidata.PersonNumber = livingArea.PersonNumber;
-            //    //uidata.Money = livingArea.Money;
-            //    //uidata.MoneyMax = livingArea.MoneyMax;
-            //    //uidata.Iron = livingArea.Iron;
-            //    //uidata.IronMax = livingArea.IronMax;
-            //    //uidata.Wood = livingArea.Wood;
-            //    //uidata.WoodMax = livingArea.WoodMax;
-            //    //uidata.Food = livingArea.Food;
-            //    //uidata.FoodMax = livingArea.FoodMax;
-            //    //uidata.LivingAreaLevel = livingArea.CurLevel;
-            //    //uidata.LivingAreaMaxLevel = livingArea.MaxLevel;
-            //    //uidata.LivingAreaType = livingArea.TypeId;
-            //    //uidata.DefenseStrength = livingArea.DefenseStrength;
-            //}
-            // uidata.BuildingiDataItems = _buildingSystem.GetUiData(id);
-            return uidata;
+            List<string> names=new List<string>();
+ 
+           List<LivingAreaData> datas=  SQLService.Instance.QueryAll<LivingAreaData>();
 
+            for (int i = 0; i < datas.Count; i++)
+            {
+                names.Add(datas[i].Name);
+            }
+            return names;
         }
 
-        public LivingArea GetLivingAreaInfo(int id)
-        {
-            //for (int i = 0; i < _livingAreas.Length; i++)
-            //{
-            //    if (_livingAreas.LivingAreaNode[i].Id == id)
-            //    {
-            //        return _livingAreas.LivingAreaNode[i];
-            //    }
-            //}
-            return new LivingArea();
-        }
-        public Entity GetLivingAreaEntity(int id)
-        {
-            //for (int i = 0; i < _livingAreas.Length; i++)
-            //{
-            //    if (_livingAreas.LivingAreaNode[i].Id == id)
-            //    {
-            //        return _livingAreas.Entity[i];
-            //    }
-            //}
-            return new Entity();
-        }
+        #endregion
 
-        /// <summary>
-        /// 检测这个ID是否存在数据
-        /// </summary>
-        /// <param name="livingAreaId"></param>
-        /// <returns></returns>
-        public bool IsTrue(int livingAreaId)
-        {
-            //ComponentDataArray<LivingArea> livingAreas = _livingAreas.LivingAreaNode;
 
-            //for (int i = 0; i < livingAreas.Length; i++)
-            //{
-            //    if (livingAreas[i].Id == livingAreaId)
-            //    {
-            //        return true;
-            //    }
-            //}
-
-            return false;
-        }
-        /// <summary>
-        /// 获取指定Transform的数据
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public LivingArea GetLivingArea(Transform node)
-        {
-            //ComponentArray<Transform> livingAreas = _livingAreas.LivingAreaPositon;
-
-            //for (int i = 0; i < livingAreas.Length; i++)
-            //{
-            //    if (livingAreas[i] == node)
-            //    {
-            //        return _livingAreas.LivingAreaNode[i];
-            //    }
-            //}
-            return new LivingArea();
-        }
         /// <summary>
         /// 是否可以进入城市
         /// </summary>
@@ -237,76 +135,6 @@ namespace GameSystem
         }
 
 
-        public List<int> GetLivingAreaIds()
-        {
-            List<int> ids = new List<int>();
-
-            //for (int i = 0; i < _livingAreas.Length; i++)
-            //{
-            //    ids.Add(_livingAreas.LivingAreaNode[i].Id);
-            //}
-            return ids;
-        }
-
-
-        /// <summary>
-        /// LivingAreaEnter  //进入方法
-        /// </summary>
-        /// <param name="info"></param>
-        public static void LivingAreaEntity(EventInfo info)
-        {
-            //var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-            //Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(info.Aid);
-
-            //Biological biological = entityManager.GetComponentData<Biological>(biologicalEntity);
-            //BiologicalStatus status = entityManager.GetComponentData<BiologicalStatus>(biologicalEntity);
-
-            //LivingArea livingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaInfo(info.Bid);
-
-            //status.LocationType = LocationType.City;
-            //status.LocationId = livingArea.Id;
-
-            //status.TargetType = ElementType.None;
-            //status.TargetId = 0;
-
-            //SystemManager.Get<BiologicalSystem>().SetBiologicalStatus(biological.BiologicalId, status);
-
-        }
-
-        /// <summary>
-        /// 进入城市
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="livingAreaEntity"></param>
-        public void LivingAreaEntityCheck(Entity entity, Entity livingAreaEntity)
-        {
-            if (SystemManager.Contains<NpcInput>(entity))
-            {
-
-
-            }
-            else if (SystemManager.Contains<PlayerInput>(entity))
-            {
-                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(livingAreaEntity);
-
-                ShowWindowData windowData = new ShowWindowData();
-                LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
-                livingAreaWindowCd.LivingAreaId = livingArea.Id;
-                windowData.contextData = livingAreaWindowCd;
-
-                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
-                //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
-                //// newtarget.Target = bounds.center;
-                //newStatus.LocationType = LocationType.LivingAreaIn;
-
-                // = entityManager.GetComponentData<Biological>(biologicalEntity);
-
-            }
-
-
-        }
-
         /// <summary>
         /// 打开建筑内景视图
         /// </summary>
@@ -315,18 +143,26 @@ namespace GameSystem
         public static void ShowBuildingInside(Entity buildingEntity, Entity biologicalentity, Entity livingarEntity)
         {
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true)   //铁匠铺
+            
+            if (SystemManager.Contains<BuildingBlacksmith>(buildingEntity) == true)   
             {
                 ShowWindowData show = new ShowWindowData();
                 show.contextData = new BuildingUiInfo()
                 {
-
                 };
 
                 BuildingWindow window = (BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow, show);
+            }else if (SystemManager.Contains<Building>(buildingEntity) == true)
+            {
+
+            }
+            else
+            {
+                Debug.Log("?????");
             }
         }
+
+
     }
 
 }
