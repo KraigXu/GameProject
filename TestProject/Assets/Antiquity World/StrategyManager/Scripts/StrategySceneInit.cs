@@ -10,6 +10,8 @@ using GameSystem.Ui;
 using Manager;
 using Newtonsoft.Json;
 using AntiquityWorld.StrategyManager;
+using Unity.Collections;
+
 
 namespace GameSystem
 {
@@ -149,7 +151,6 @@ namespace GameSystem
 
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
 
-
                     entityManager.AddComponentData(entity, new ModelInfo
                     {
                         ModelId = datas[i].ModelBaseId
@@ -172,25 +173,25 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
-                    entityManager.AddComponentData(entity,new Money
+                    entityManager.AddComponentData(entity, new Money
                     {
                         Value = datas[i].Money,
-                        Upperlimit=datas[i].MoneyMax
+                        Upperlimit = datas[i].MoneyMax
                     });
 
-                    if (datas[i].LivingAreaType == 0)
+                    if (datas[i].LivingAreaType == 1)
                     {
-                        entityManager.AddComponentData(entity, new Crowd()
+                        entityManager.AddComponentData(entity,new Crowd
                         {
-                            Number=3000000,
+                            Number = 300000
                         });
-
                         trigger.TriggerEnter = CitySystem.CityColliderEnter;
                         trigger.TriggerExit = CitySystem.CityColliderExit;
+
                     }
-                    else if (datas[i].LivingAreaType == 1)
+                    else if (datas[i].LivingAreaType == 2)
                     {
-                        entityManager.AddComponentData(entity,new Collective()
+                        entityManager.AddComponentData(entity, new Collective()
                         {
                             CollectiveClassId = 1,
                             Cohesion = 1
@@ -198,45 +199,36 @@ namespace GameSystem
 
                         trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
                         trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
+                    }
+                    else
+                    {
 
                     }
-                    
-                    entityManager.AddComponentData(entity, new InteractionElement
-                    {
-                        Distance = 3
-                    });
 
-                    entityManager.AddComponentData(entity, new FloatingInfo
-                    {
 
-                    });
+                    Debug.Log(datas[i].BuildingInfoJson);
+                    BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
+
+                    for (int j = 0; j < jsonData.Item.Count; j++)
+                    {
+                        var item = jsonData.Item[j];
+                        if (item.Type == 0)
+                        {
+
+                        }else if (item.Type == 1)
+                        {
+                            if (SystemManager.Contains<BuildingBlacksmith>(entity) == false)
+                            {
+                                SystemManager.Get<BuildingBlacksmithSystem>().AddBuildingSystem(entity,item);
+                            }
+
+                        }
+                    }
+
 
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
 
-                    BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-                    for (int j = 0; j < jsonData.Item.Count; j++)
-                    {
-                        var item = jsonData.Item[j];
-                        Entity buildEntity = entityManager.CreateEntity(typeof(HousesControl));
-
-                        entityManager.SetComponentData(buildEntity, new HousesControl
-                        {
-                            SeedId = item.Id,
-
-                        });
-
-                        if (item.Type == 1)
-                        {
-                            entityManager.AddComponentData(buildEntity, new BuildingBlacksmith
-                            {
-                                LevelId = 1,
-                                OperateEnd = 10,
-                                OperateStart = 10
-                            });
-                        }
-                        SystemManager.Get<LivingAreaSystem>().LivingAreaAddBuilding(entity, buildEntity);
-                    }
                 }
 
                 SystemManager.Get<LivingAreaSystem>().InitSystem();
@@ -692,7 +684,7 @@ namespace GameSystem
 
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-                FixedTitleWindow= (FixedTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
+                FixedTitleWindow = (FixedTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
 
                 UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);

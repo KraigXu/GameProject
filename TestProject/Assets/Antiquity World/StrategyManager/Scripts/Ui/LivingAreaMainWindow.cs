@@ -104,30 +104,37 @@ namespace GameSystem.Ui
         /// <param name="contextData"></param>
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
+
             if (contextData == null)
             {
                 Debuger.LogError("Enter LivingArea Error");
                 return;
             }
+            base.BeforeShowWindow(contextData);
+
             _livingAreaWindowCd = (LivingAreaWindowCD)contextData;
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
-            BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
 
-            List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaWindowCd.LivingAreaEntity);
-            for (int i = 0; i < entitys.Count; i++)
-            {
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_billingPrefab, _billingParent).GetComponent<UiBuildingItem>();
-                HousesControl houses = _entityManager.GetComponentData<HousesControl>(entitys[i]);
-                uiBuildingItem.BuildingEntity = entitys[i];
 
-                BuildingItem item = jsonData.GetBuildingItem(houses.SeedId);
-                uiBuildingItem.Name.text = item.BuildingName;
+            
 
-                UIEventTriggerListener.Get(uiBuildingItem.gameObject).onClick += AccessBuilding;
-                _buildingItems.Add(uiBuildingItem);
-            }
+            //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
+
+            //List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaWindowCd.LivingAreaEntity);
+            //for (int i = 0; i < entitys.Count; i++)
+            //{
+            //    UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_billingPrefab, _billingParent).GetComponent<UiBuildingItem>();
+            //    HousesControl houses = _entityManager.GetComponentData<HousesControl>(entitys[i]);
+            //    uiBuildingItem.BuildingEntity = entitys[i];
+
+            //    BuildingItem item = jsonData.GetBuildingItem(houses.SeedId);
+            //    uiBuildingItem.Name.text = item.BuildingName;
+
+            //    UIEventTriggerListener.Get(uiBuildingItem.gameObject).onClick += AccessBuilding;
+            //    _buildingItems.Add(uiBuildingItem);
+            //}
 
             return;
             //Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
@@ -146,7 +153,7 @@ namespace GameSystem.Ui
             //_person.text = livingArea.PersonNumber.ToString();
             //_stable.text = livingArea.DefenseStrength.ToString();
             //_level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            //// _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
 
             //Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
             //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);

@@ -6,10 +6,6 @@ using UnityEngine;
 public class DemoSetting : MonoBehaviour
 {
 
-    
-
-
-
     public int PlayerId=1;
     public Camera MainCamera;
     public Camera UiCamera;

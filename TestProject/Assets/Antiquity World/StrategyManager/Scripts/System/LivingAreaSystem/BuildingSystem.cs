@@ -32,7 +32,7 @@ namespace GameSystem
     {
         public int Id;
         public int Level;
-        public string BuildingName="XX";
+        public string BuildingName = "XX";
         public string Behavior = "Default";
         public int X;
         public int Y;
@@ -120,7 +120,7 @@ namespace GameSystem
         /// </summary>
         /// <param name="entityManager"></param>
         /// <param name="jsonData"></param>
-        public static void SetData(EntityManager entityManager, BuildingJsonData jsonData,int livingAreaId)
+        public static void SetData(EntityManager entityManager, BuildingJsonData jsonData, int livingAreaId)
         {
             EntityArchetype buildingArchetype = entityManager.CreateArchetype(typeof(Building), typeof(PeriodTime));
             foreach (var item in jsonData.Item)
@@ -133,7 +133,7 @@ namespace GameSystem
                     DurableValue = item.DurableValue,
                     Id = jsonData.GroupId,
                     Level = item.BuildingLevel,
-                   
+
                     Status = item.Status,
                     Type = item.Type,
                 });
@@ -165,7 +165,7 @@ namespace GameSystem
                     item.Status = _buildingGroup.Building[i].Status;
                     item.ImageId = _buildingGroup.Building[i].Type;
                     item.Point = _buildingGroup.Building[i].Position;
-                    
+
                     datas.Add(item);
                 }
             }
@@ -174,7 +174,7 @@ namespace GameSystem
 
         public List<Entity> GetBuildingGroup(int livingAreaId)
         {
-            List<Entity> entities=new List<Entity>();
+            List<Entity> entities = new List<Entity>();
 
             for (int i = 0; i < _buildingGroup.Length; i++)
             {
@@ -187,17 +187,26 @@ namespace GameSystem
 
 
         }
-
-
         /// <summary>
         /// 打开建筑内景视图
         /// </summary>
         /// <param name="buildingEntity"></param>
         /// <param name="biological"></param>
-        public static void ShowBuildingInside(Entity buildingEntity, Entity biologicalentity,Entity livingarEntity)
+        public static void ShowBuildingInside(Entity buildingEntity, Entity biologicalentity, Entity livingarEntity)
         {
-            BuildingWindow window =(BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
-            
+            BuildingWindow window = (BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
+
+        }
+
+
+        public virtual BuildingBlacksmith InitData(string value)
+        {
+            return new BuildingBlacksmith();
+        }
+
+        public virtual void AddBuildingSystem(Entity entity, BuildingItem item)
+        {
+
         }
     }
 

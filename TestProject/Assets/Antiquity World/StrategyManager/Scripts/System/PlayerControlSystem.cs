@@ -461,14 +461,14 @@ namespace GameSystem
                             //播放进入动画
 
                             //改变层级
-                            go.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
-                            LivingAreaSystem.EnterLivingArea(goEntity.Entity, collisoneEntity.Entity);
+                            //go.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
+                            //LivingAreaSystem.EnterLivingArea(goEntity.Entity, collisoneEntity.Entity);
 
-                            ShowWindowData showWindowData=new ShowWindowData();
-                            LivingAreaWindowCD livingAreaWindowCd=new LivingAreaWindowCD();
-                            livingAreaWindowCd.LivingAreaEntity = collisoneEntity.Entity;
-                            showWindowData.contextData = livingAreaWindowCd;
-                            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+                            //ShowWindowData showWindowData=new ShowWindowData();
+                            //LivingAreaWindowCD livingAreaWindowCd=new LivingAreaWindowCD();
+                            //livingAreaWindowCd.LivingAreaEntity = collisoneEntity.Entity;
+                            //showWindowData.contextData = livingAreaWindowCd;
+                            //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
 
                         }
                         else if (code == 1)

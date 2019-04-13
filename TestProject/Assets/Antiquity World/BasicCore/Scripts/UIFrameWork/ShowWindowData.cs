@@ -63,12 +63,13 @@ namespace GameSystem.Ui
     public class LivingAreaWindowCD : BaseWindowContextData
     {
         public Entity LivingAreaEntity;
-
         public int LivingAreaId;
         public int PlayerId;
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
+
+
 
     }
 
@@ -84,7 +85,6 @@ namespace GameSystem.Ui
         public BuildingEvent OnOpen;
         public BuildingEvent OnClose;
 
-       
         public List<BuildingFeaturesUiInfo> Features = new List<BuildingFeaturesUiInfo>();
 
     }

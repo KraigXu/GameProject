@@ -19,6 +19,7 @@ public class ColliderTriggerEvent : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+       // Debug.Log(">>>1"+gameObject.name+"<<<<"+other.name);
         if (TriggerEnter != null)
         {
 
@@ -30,6 +31,7 @@ public class ColliderTriggerEvent : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        Debug.Log(">>>2");
         if (TriggerExit != null)
         {
             TriggerExit(gameObject, other);

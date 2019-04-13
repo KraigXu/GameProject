@@ -448,6 +448,7 @@ namespace GameSystem
     public struct BuildingBlacksmith : IComponentData
     {
 
+        public Entity Person;
         public int LevelId;
         public int OperateStart;
         public int OperateEnd;
@@ -471,7 +472,10 @@ namespace GameSystem
         public int No3;
     }
 
-
+    public struct BuildingFlock : IComponentData
+    {
+ 
+    }
 
 
     public struct LivingAreaEnterInfo : IComponentData

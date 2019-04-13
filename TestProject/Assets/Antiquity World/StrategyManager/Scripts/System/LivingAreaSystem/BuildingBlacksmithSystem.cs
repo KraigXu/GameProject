@@ -1,27 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GameSystem.Ui;
+using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 
 namespace GameSystem
 {
-    public class BuildingBlacksmithSystem : ComponentSystem
+    public class BuildingBlacksmithSystem : BuildingSystem
     {
 
-        /// <summary>
-        /// 打开建筑内景视图
-        /// </summary>
-        /// <param name="buildingEntity"></param>
-        /// <param name="biological"></param>
-        public static void ShowBuildingInside(Entity buildingEntity, Entity biologicalentity, Entity livingarEntity)
-        {
-            BuildingWindow window = (BuildingWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
 
+        struct Data
+        {
+            public readonly int Length;
+            public EntityArray Entitys;
+            public BuildingBlacksmith BuildingBlacksmith;
+            
         }
+
+        private Data _data;
+
+        public class BuildingBlacksmithFeatures
+        {
+            public int Id;
+            public string Name;
+        }
+        
 
         protected override void OnUpdate()
         {
+
         }
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="value"></param>
+        public override void AddBuildingSystem(Entity entity, BuildingItem item)
+        {
+            BuildingBlacksmith blacksmith=new BuildingBlacksmith();
+            blacksmith.LevelId = item.Level;
+            blacksmith.ShopSeed = 10;
+            blacksmith.OperateEnd = 10;
+            blacksmith.OperateStart = 10;
+            EntityManager.AddComponentData(entity,blacksmith);
+        }
+
+        
     }
 }

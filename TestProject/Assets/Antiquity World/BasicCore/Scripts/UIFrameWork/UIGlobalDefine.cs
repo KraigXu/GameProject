@@ -22,6 +22,8 @@ namespace GameSystem.Ui
         IntelligenceWindow,
         SocialDialogWindow,
 
+        CityWindow,
+
         LivingAreaMainWindow,
         BuildingWindow,
 
@@ -137,6 +139,7 @@ namespace GameSystem.Ui
             {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
+            {WindowID.CityWindow,"UiPrefab/CityWindow" },
             {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},

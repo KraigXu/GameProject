@@ -30,7 +30,6 @@ namespace GameSystem
         /// </summary>
         private Dictionary<Entity, List<Entity>> _livingAreaBuildMap = new Dictionary<Entity, List<Entity>>();
 
-
         public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {
             get { return _livingAreaBuildMap; }
@@ -58,7 +57,7 @@ namespace GameSystem
 
         public void InitSystem()
         {
-            //_livingAreaTitle=UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow).GetComponent<LivingAreaTitleWindow>();
+
 
         }
 

@@ -55,11 +55,17 @@ namespace GameSystem
 
                 if (thisEntity == behaviorData.TargetEntity)
                 {
+
                     other.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
 
                     EnterCity(targetEntity, thisEntity);
 
+                    ShowCityInside(thisEntity);
+
                     ShowWindowData showWindowData = new ShowWindowData();
+
+                    
+
                     LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
                     livingAreaWindowCd.LivingAreaEntity = thisEntity;
                     showWindowData.contextData = livingAreaWindowCd;
@@ -80,6 +86,20 @@ namespace GameSystem
 
         public static void CityColliderExit(GameObject go, Collider other)
         {
+
+        }
+
+
+        /// <summary>
+        /// 打开城市内景
+        /// </summary>
+        /// <param name="cityEntity"></param>
+        public static void ShowCityInside(Entity cityEntity)
+        {
+            ShowWindowData windowData=new ShowWindowData();
+            LivingAreaWindowCD  windowCd=new LivingAreaWindowCD();
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow, windowData);
 
         }
     }
