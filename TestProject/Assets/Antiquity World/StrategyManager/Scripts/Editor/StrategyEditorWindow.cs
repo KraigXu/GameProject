@@ -6,27 +6,13 @@ using UnityEngine;
 public class StrategyEditorWindow : EditorWindow {
 
 
-    [MenuItem("Window/TestWindow")]
+    [MenuItem("Antiquity World/StrategyEditorWindow")]
     private static void Open()
     {
-        TestWindow test = GetWindow<TestWindow>();
+        StrategyEditor test = GetWindow<StrategyEditor>();
         test.Show();
 
     }
 
 
-    private void OnGUI()
-    {
-
-        EditorGUILayout.BeginHorizontal();
-
-        GUILayout.Label("This is a test Window");
-        
-
-
-        EditorGUILayout.EndHorizontal();
-
-    }
-
-	
 }

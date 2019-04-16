@@ -71,7 +71,7 @@ namespace GameSystem
         public string Description;
     }
 
-    public class BuildingSystem : ComponentSystem
+    public abstract class BuildingSystem : ComponentSystem
     {
 
         struct Data
@@ -187,6 +187,12 @@ namespace GameSystem
 
 
         }
+
+        public abstract UiBuildingItem GetBuildingItem(Entity entity);
+
+        public abstract void OpenUi(Entity entity);
+
+
         /// <summary>
         /// 打开建筑内景视图
         /// </summary>
@@ -208,6 +214,8 @@ namespace GameSystem
         {
 
         }
+
+        
     }
 
 }

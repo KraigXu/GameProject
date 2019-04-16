@@ -39,6 +39,9 @@ namespace GameSystem
 
         public static FixedTitleWindow FixedTitleWindow;
 
+        public static List<BuildingSystem> BuildingSystems=new List<BuildingSystem>();
+
+
         public static void InitializeWithScene()
         {
             var settingsGo = GameObject.Find("Settings");
@@ -76,6 +79,10 @@ namespace GameSystem
             RelationSystem.SetupComponentData(entityManager);
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
+
+            BuildingSystems.Add(SystemManager.Get<BuildingBlacksmithSystem>());
+            
+
 
             #region Data
             {

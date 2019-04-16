@@ -22,9 +22,9 @@ namespace GameSystem.Ui
         IntelligenceWindow,
         SocialDialogWindow,
 
+        LivingAreaMainWindow,
         CityWindow,
 
-        LivingAreaMainWindow,
         BuildingWindow,
 
         ExtendedMenuWindow,

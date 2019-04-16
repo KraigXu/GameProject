@@ -16,7 +16,7 @@ public class MainWindow : EditorWindowBase
     /// <summary>
     /// 对外的访问接口
     /// </summary>
-    [MenuItem("Tools/RepeateWindow")]
+    [MenuItem("Antiquity World/RepeateWindow")]
     public static void Popup()
     {
         window = EditorWindow.GetWindow(typeof(MainWindow), true, "数据编辑界面") as MainWindow;

@@ -24,7 +24,7 @@ namespace GameSystem.Ui
 
         protected override void InitWindowData()
         {
-           
+
         }
 
         /// <summary>
@@ -39,6 +39,12 @@ namespace GameSystem.Ui
             }
             base.BeforeShowWindow(contextData);
 
+
+        }
+
+
+        public void Show()
+        {
 
         }
 

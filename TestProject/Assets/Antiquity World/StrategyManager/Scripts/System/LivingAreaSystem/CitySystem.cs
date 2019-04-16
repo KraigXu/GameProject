@@ -64,12 +64,11 @@ namespace GameSystem
 
                     ShowWindowData showWindowData = new ShowWindowData();
 
-                    
-
                     LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
                     livingAreaWindowCd.LivingAreaEntity = thisEntity;
                     showWindowData.contextData = livingAreaWindowCd;
-                    UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, showWindowData);
+                    UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, showWindowData);
+                    //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
                 }
             }
             else
@@ -101,6 +100,8 @@ namespace GameSystem
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow, windowData);
 
+
+            UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
         }
     }
 

@@ -9,8 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameSystem.Ui
-{
-
+{   
+    /// <summary>
+    /// 窗口
+    /// </summary>
     public class CityWindow : UIWindowBase
     {
 
@@ -36,29 +38,16 @@ namespace GameSystem.Ui
         [SerializeField]
         private RectTransform _billingParent;
         [SerializeField]
-        private RectTransform _billingPrefab;
-
         private List<UiBuildingItem> _buildingItems = new List<UiBuildingItem>();
-
-        [SerializeField] private Button _livingAreaExit;
-        [SerializeField] private Button _buildingExit;
-
-
-
-
-
+        [SerializeField]
+        private Button _livingAreaExit;
 
         private bool _buildingIsShow = false;
-
-
         private LivingAreaWindowCD _livingAreaWindowCd;
         private LivingArea _livingArea;
         private LivingAreaData _livingAreaData;
         private float _changeCd;
-
-
         private Entity _livingAreaEntity;
-
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
 
@@ -72,7 +61,7 @@ namespace GameSystem.Ui
 
         protected override void InitWindowData()
         {
-            this.ID = WindowID.LivingAreaMainWindow;
+            this.ID = WindowID.CityWindow;
 
             windowData.windowType = UIWindowType.NormalLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
@@ -85,17 +74,11 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            transform.Find("Exit").GetComponent<Button>().onClick.AddListener(Exit);
-
-            _buildingExit.onClick.AddListener(CloseBuidingView);
             _livingAreaExit.onClick.AddListener(CloseLivingArea);
 
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
             _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
-
-
-
         /// <summary>
         ///  //-----初始化选项
         /// </summary>
@@ -115,11 +98,40 @@ namespace GameSystem.Ui
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
 
+            //初始化选项
+            if (_buildingItems.Count > 0)
+            {
+                for (int i = 0; i < _buildingItems.Count; i++)
+                {
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(_buildingItems[i].Rect);
+                }
+               _buildingItems.Clear();
+            }
 
-            
 
+            for (int i = 0; i < StrategySceneInit.BuildingSystems.Count; i++)
+            {
+                var item = StrategySceneInit.BuildingSystems[i];
+                UiBuildingItem buildingitem =  item.GetBuildingItem(_livingAreaWindowCd.LivingAreaEntity);
+
+                buildingitem.Rect.SetParent(_billingParent);
+                _buildingItems.Add(buildingitem);
+            }
+
+            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[_livingArea.ModelId]);
+            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+            SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
+
+            return;
+
+
+            //List<UiBuildingItem> buildingItems=SystemManager.Get<LivingAreaSystem>()
             //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
-
             //List<Entity> entitys = _livingAreaSystem.GetBuilding(_livingAreaWindowCd.LivingAreaEntity);
             //for (int i = 0; i < entitys.Count; i++)
             //{
@@ -133,8 +145,6 @@ namespace GameSystem.Ui
             //    UIEventTriggerListener.Get(uiBuildingItem.gameObject).onClick += AccessBuilding;
             //    _buildingItems.Add(uiBuildingItem);
             //}
-
-            return;
             //Entity entityLivingArea = SystemManager.Get<LivingAreaSystem>().GetLivingAreaEntity(_livingAreaWindowCd.LivingAreaId);
             //LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(entityLivingArea);
 
@@ -142,7 +152,6 @@ namespace GameSystem.Ui
             //{
             //    _buildingBilling[i].gameObject.SetActive(false);
             //}
-
             //_name.text = GameStaticData.LivingAreaName[livingArea.Id];
             //_money.text = livingArea.Money + "/" + livingArea.MoneyMax;
             //_iron.text = livingArea.Iron + "/" + livingArea.IronMax;
@@ -151,7 +160,7 @@ namespace GameSystem.Ui
             //_person.text = livingArea.PersonNumber.ToString();
             //_stable.text = livingArea.DefenseStrength.ToString();
             //_level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            // _type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+            //_type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
 
             //Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
             //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
@@ -166,20 +175,9 @@ namespace GameSystem.Ui
             //    Building building = _entityManager.GetComponentData<Building>(entitieBuilding[i]);
             //    _buildingBilling[i].gameObject.SetActive(true);
             //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
-
             //}
-            //GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[livingArea.ModelId]);
-            //Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
-            //Bounds bounds = renderers[0].bounds;
-            //for (int j = 1; j < renderers.Length; j++)
-            //{
-            //    bounds.Encapsulate(renderers[j].bounds);
-            //}
-            //SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
+            
         }
-
-
-
 
         private void ChangeData()
         {
@@ -280,12 +278,12 @@ namespace GameSystem.Ui
 
         void OnUpdate()
         {
-            _changeCd += Time.deltaTime;
-            if (_changeCd > 1)
-            {
-                _changeCd = 0;
-                ChangeData();
-            }
+            //_changeCd += Time.deltaTime;
+            //if (_changeCd > 1)
+            //{
+            //    _changeCd = 0;
+            //    ChangeData();
+            //}
         }
 
     }
