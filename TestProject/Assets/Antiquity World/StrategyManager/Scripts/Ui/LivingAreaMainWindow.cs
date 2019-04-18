@@ -214,7 +214,7 @@ namespace GameSystem.Ui
             UiBuildingItem uiBuildingItem = go.GetComponent<UiBuildingItem>();
 
             // SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
-            BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
+           // BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
             return;
             BuildingiDataItem item = null;
             for (int i = 0; i < _buildingBilling.Count; i++)
@@ -231,10 +231,10 @@ namespace GameSystem.Ui
             _buildingIsShow = true;
 
 
-            for (int i = 0; i < item.Features.Count; i++)
-            {
-                _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
-            }
+            //for (int i = 0; i < item.Features.Count; i++)
+            //{
+            //    _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
+            //}
 
             //if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
             //{

@@ -27,6 +27,14 @@ namespace GameSystem.Ui
     // Base window data context for Refresh window or show window
     public class BaseWindowContextData { }
 
+    public class EntityContentData : BaseWindowContextData
+    {
+        public Entity Entity;
+        
+    }
+
+
+
     public class MessageBoxWindowData:BaseWindowContextData
     {
         public int Type;
@@ -34,6 +42,7 @@ namespace GameSystem.Ui
         public Action ConfirmAction;
         public Action CancelAction;
     }
+
 
 
     public class ExtendedMenuWindowInData : BaseWindowContextData
@@ -57,9 +66,6 @@ namespace GameSystem.Ui
         public List<Biological> Biologicals = new List<Biological>();
     }
 
-
-
-
     public class LivingAreaWindowCD : BaseWindowContextData
     {
         public Entity LivingAreaEntity;
@@ -68,8 +74,6 @@ namespace GameSystem.Ui
         public EntityCallBack OnOpen;
         public EntityCallBack OnExit;
         public List<BuildingiDataItem> BuildingiDataItems = new List<BuildingiDataItem>();
-
-
 
     }
 
@@ -85,42 +89,29 @@ namespace GameSystem.Ui
         public BuildingEvent OnOpen;
         public BuildingEvent OnClose;
 
-        public List<BuildingFeaturesUiInfo> Features = new List<BuildingFeaturesUiInfo>();
-
     }
-    public class BiologicalUiInfo : BaseWindowContextData
-    {
-        public int Id;
-        public int AtlasId;
-        public string Name;
 
-        public int BiologicalId;
-        public LocationType LocationType;
-        public int LoactionId;
-        public int TargetId;
-        public Entity TargetEntity;
-    }
 
     public class BuildingUiInfo : BaseWindowContextData
     {
-
-        public List<BuildingFeaturesUiInfo> Infos=new List<BuildingFeaturesUiInfo>();
+        public BuildingBlacksmithFeatures[] FeaturesUiInfos;
         public List<BiologicalUiInfo> Biologicals = new List<BiologicalUiInfo>();
     }
 
-    public class BuildingFeaturesUiInfo
+    public class BuildingBlacksmithFeatures
     {
         public int Id;
-        public int FeatureName;
+        public string Name;
+        public string Type;
         public EntityCallBack CallBack;
-
     }
+
+
 
     public class SocialDialogWindowData : BaseWindowContextData
     {
         public int Aid;
         public int Bid;
-
         public int PangBaiId;
         public int StartId;
         public int[] StartlogId;
@@ -133,6 +124,18 @@ namespace GameSystem.Ui
         public List<KeyValuePair<string, Vector3>> Items;
     }
 
+    public class BiologicalUiInfo : BaseWindowContextData
+    {
+        public int Id;
+        public int AtlasId;
+        public string Name;
+
+        public int BiologicalId;
+        public LocationType LocationType;
+        public int LoactionId;
+        public int TargetId;
+        public Entity TargetEntity;
+    }
 
 
     /// <summary>

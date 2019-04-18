@@ -9,7 +9,8 @@ namespace GameSystem
     {
         public Text NameTex;
         public Image HeadImg;
-        
+
+        public int Id;
 
     }
 

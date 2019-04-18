@@ -12,8 +12,6 @@ public class UiBuildingItem : MonoBehaviour
     public RectTransform Rect;
     public Button EnterButton;
     public OnBuildingClick OnBuildingEnter;
-
-
     void Start()
     {
         EnterButton.onClick.AddListener(ButtonClick);

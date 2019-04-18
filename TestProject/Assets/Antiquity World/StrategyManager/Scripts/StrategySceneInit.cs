@@ -39,7 +39,7 @@ namespace GameSystem
 
         public static FixedTitleWindow FixedTitleWindow;
 
-        public static List<BuildingSystem> BuildingSystems=new List<BuildingSystem>();
+        public static List<BuildingFunction> BuildingSystems=new List<BuildingFunction>();
 
 
         public static void InitializeWithScene()
@@ -57,6 +57,10 @@ namespace GameSystem
                     return;
                 }
             }
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
+
+
+
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
@@ -68,36 +72,20 @@ namespace GameSystem
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
-
-            BiologicalNormalLook = GetLookFromPrototype("BiologicalNormalLook");
-            BiologicalManLook = GetLookFromPrototype("BiologicalManLook");
-            BiologicalFemaleLook = GetLookFromPrototype("BiologicalFemaleLook");
-            LivingAreaLook = GetLookFromPrototype("LivingAreaNormalLook");
-
+            //BiologicalNormalLook = GetLookFromPrototype("BiologicalNormalLook");
+            //BiologicalManLook = GetLookFromPrototype("BiologicalManLook");
+            //BiologicalFemaleLook = GetLookFromPrototype("BiologicalFemaleLook");
+            //LivingAreaLook = GetLookFromPrototype("LivingAreaNormalLook");
 
             RelationSystem.SetupComponentData(entityManager);
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
 
-            BuildingSystems.Add(SystemManager.Get<BuildingBlacksmithSystem>());
+
+
             
-
-
             #region Data
             {
-                //List<AvatarData> avatarDatas = SQLService.Instance.QueryAll<AvatarData>();
-                //for (int i = 0; i < avatarDatas.Count; i++)
-                //{
-                //    if (avatarDatas[i].Type == 1)
-                //    {
-                //        GameStaticData.BiologicalAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
-                //    }
-                //    else if (avatarDatas[i].Type == 2)
-                //    {
-                //        GameStaticData.BuildingAvatar.Add(avatarDatas[i].Id, Resources.Load<Sprite>(avatarDatas[i].Path));
-                //    }
-                //}
 
                 List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
                 for (int i = 0; i < biologicalAvatarDatas.Count; i++)
@@ -115,39 +103,47 @@ namespace GameSystem
 
             #endregion
 
-            #region DistrictInit
-            {
-                List<DistrictData> datas = SQLService.Instance.QueryAll<DistrictData>();
+            //#region DistrictInit
+            //{
+            //    List<DistrictData> datas = SQLService.Instance.QueryAll<DistrictData>();
 
-                for (int i = 0; i < datas.Count; i++)
-                {
-                    GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[datas[i].Model]);
-                    go.transform.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
+            //    for (int i = 0; i < datas.Count; i++)
+            //    {
+            //        GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[datas[i].Model]);
+            //        go.transform.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
 
-                    Entity entity = go.GetComponent<GameObjectEntity>().Entity;
-                    entityManager.AddComponentData(entity, new District
-                    {
-                        Id = datas[i].Id,
-                        GId = 324 + i,
-                        Type = datas[i].Type,
-                        ProsperityLevel = datas[i].ProsperityLevel,
-                        TrafficLevel = datas[i].TrafficLevel,
-                        GrowingModulus = datas[i].GrowingModulus,
-                        SecurityModulus = datas[i].SecurityModulus
-                    });
+            //        Entity entity = go.GetComponent<GameObjectEntity>().Entity;
+            //        entityManager.AddComponentData(entity, new District
+            //        {
+            //            Id = datas[i].Id,
+            //            GId = 324 + i,
+            //            Type = datas[i].Type,
+            //            ProsperityLevel = datas[i].ProsperityLevel,
+            //            TrafficLevel = datas[i].TrafficLevel,
+            //            GrowingModulus = datas[i].GrowingModulus,
+            //            SecurityModulus = datas[i].SecurityModulus
+            //        });
 
-                    entityManager.AddComponentData(entity, new PeriodTime
-                    {
-                        Value = 0,
-                        Type = PeriodType.Shichen,
-                    });
-                }
+            //        entityManager.AddComponentData(entity, new PeriodTime
+            //        {
+            //            Value = 0,
+            //            Type = PeriodType.Shichen,
+            //        });
+            //    }
 
-            }
-            #endregion
+            //}
+            //#endregion
 
             #region LivingAreaInit
             {
+                BuildingSystems.Add(SystemManager.Get<BuildingBazaarSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingBlacksmithSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingDressmakSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingDwellingsSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingHospitalSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingOfficialSystem>());
+                BuildingSystems.Add(SystemManager.Get<BuildingTavernSystem>());
+
                 List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
                 for (int i = 0; i < datas.Count; i++)
                 {
@@ -184,6 +180,11 @@ namespace GameSystem
                     {
                         Value = datas[i].Money,
                         Upperlimit = datas[i].MoneyMax
+                    });
+
+                    entityManager.AddComponentData(entity,new District
+                    {
+                        DistrictCode=i
                     });
 
                     if (datas[i].LivingAreaType == 1)

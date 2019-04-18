@@ -1,84 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
-using Unity.Entities;
-using Unity.Jobs;
-using UnityEngine;
 using GameSystem.Ui;
+using Newtonsoft.Json;
+using Unity.Entities;
+using UnityEngine;
 
 namespace GameSystem
 {
-    public delegate void BuildingEvent(Entity entity, int id);
 
-    public class BuildingJsonData
+    public class BuildingBlacksmithSystem : ComponentSystem, BuildingFunction
     {
-        public int GroupId;
-        public List<BuildingItem> Item = new List<BuildingItem>();
-
-        public BuildingItem GetBuildingItem(int buildingid)
-        {
-            for (int i = 0; i < Item.Count; i++)
-            {
-                if (Item[i].Id == buildingid)
-                {
-                    return Item[i];
-                }
-            }
-            return null;
-        }
-    }
-
-    public class BuildingItem
-    {
-        public int Id;
-        public int Level;
-        public string BuildingName = "XX";
-        public string Behavior = "Default";
-        public int X;
-        public int Y;
-        public int BuildingModelId;
-        public int BuildingLevel;
-        public int Status;
-        public int Type;
-        public int DurableValue;
-        public string Property1;
-        public string Property2;
-        public string Property3;
-        public string Property4;
-
-        public BuildingItem() { }
-        public BuildingItem(int buildingModelId, int buildingLevel, int status, int type, int durableValue)
-        {
-            this.BuildingModelId = buildingModelId;
-            this.BuildingLevel = buildingLevel;
-            this.Status = status;
-            this.Type = type;
-            this.DurableValue = durableValue;
-        }
-    }
-
-    //建筑物状态
-    public enum BuildingStatus
-    {
-        None,                   //空地
-        Normal,                 //正常
-        UnderConstruction,     //建筑中
-    }
-
-    public class BuildingFeatures
-    {
-        public string Name;
-        public string Description;
-    }
-
-    public abstract class BuildingSystem : ComponentSystem
-    {
-
         struct Data
         {
-            public readonly int Lenght;
-            public ComponentDataArray<Building> Building;
+            public readonly int Length;
+            public EntityArray Entitys;
+            public BuildingBlacksmith BuildingBlacksmith;
+
         }
+
+        private Data _data;
+
+        private RectTransform BuildingItem;
+
+        public BuildingBlacksmithFeatures[] FeaturesesEntitys;
+
+
 
         struct BuildingGroup
         {
@@ -114,7 +61,6 @@ namespace GameSystem
         }
 
 
-
         /// <summary>
         /// 初始化entity
         /// </summary>
@@ -143,10 +89,6 @@ namespace GameSystem
                     Type = PeriodType.Day
                 });
             }
-        }
-
-        protected override void OnUpdate()
-        {
         }
 
         public List<BuildingiDataItem> GetUiData(int livingAreaId)
@@ -188,10 +130,82 @@ namespace GameSystem
 
         }
 
-        public abstract UiBuildingItem GetBuildingItem(Entity entity);
 
-        public abstract void OpenUi(Entity entity);
+        protected override void OnStartRunning()
+        {
+            base.OnStartRunning();
+            BuildingItem = Resources.Load<RectTransform>("UiPrefab/UiItem/LivingAreaBuilding");
 
+            FeaturesesEntitys = new[]
+            {
+                new BuildingBlacksmithFeatures
+                {
+                    Id = 1,
+                    Name = "ZZ",
+                    Type = "1",
+                    CallBack = BuildingBlackZZ
+                },
+                new BuildingBlacksmithFeatures
+                {
+                    Id = 1,
+                    Name = "YL",
+                    Type = "2",
+                    CallBack = BuildingBlackYL
+                }
+            };
+
+
+        }
+
+        private void BuildingBlackZZ(Entity entity, int id)
+        {
+
+        }
+        private void BuildingBlackYL(Entity entity, int id)
+        {
+
+        }
+
+
+        protected override void OnUpdate()
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="value"></param>
+        public  void AddBuildingSystem(Entity entity, BuildingItem item)
+        {
+            BuildingBlacksmith blacksmith = new BuildingBlacksmith();
+            blacksmith.LevelId = item.Level;
+            blacksmith.ShopSeed = 10;
+            blacksmith.OperateEnd = 10;
+            blacksmith.OperateStart = 10;
+            EntityManager.AddComponentData(entity, blacksmith);
+        }
+
+        /// <summary>
+        /// 获取这个功能的内部方法
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public  UiBuildingItem GetBuildingItem(Entity entity)
+        {
+            if (SystemManager.Contains<BuildingBlacksmith>(entity) == true)
+            {
+                BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(BuildingItem).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Name.text = "TTTT";
+                uiBuildingItem.OnBuildingEnter = OpenUi;
+                return uiBuildingItem;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// 打开建筑内景视图
@@ -204,19 +218,38 @@ namespace GameSystem
 
         }
 
+        /// <summary>
+        /// 打开内部
+        /// </summary>
+        /// <param name="entity"></param>
+        public  void OpenUi(Entity entity)
+        {
+            if (SystemManager.Contains<BuildingBlacksmith>(entity) == true)
+            {
+                //初始化值
+                ShowWindowData showWindowData = new ShowWindowData();
+
+                BuildingUiInfo uiInfo = new BuildingUiInfo();
+                uiInfo.FeaturesUiInfos = FeaturesesEntitys;
+
+                UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBlacksmithWindow, showWindowData);
+
+            }
+            else
+            {
+                Debuger.LogError("在进入BuildingBlacksmite时发生错误！");
+            }
+
+        }
+        public bool IsBuilding(Entity entity)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public virtual BuildingBlacksmith InitData(string value)
         {
             return new BuildingBlacksmith();
         }
 
-        public virtual void AddBuildingSystem(Entity entity, BuildingItem item)
-        {
-
-        }
-
-        
     }
-
 }
-

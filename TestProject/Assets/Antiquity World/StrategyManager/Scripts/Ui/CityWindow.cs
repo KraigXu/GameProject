@@ -9,9 +9,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameSystem.Ui
-{   
+{
     /// <summary>
-    /// 窗口
+    /// 城市窗口
     /// </summary>
     public class CityWindow : UIWindowBase
     {
@@ -47,7 +47,7 @@ namespace GameSystem.Ui
         private LivingArea _livingArea;
         private LivingAreaData _livingAreaData;
         private float _changeCd;
-        private Entity _livingAreaEntity;
+        private Entity _laEntity;
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
 
@@ -105,30 +105,84 @@ namespace GameSystem.Ui
                 {
                     WXPoolManager.Pools[Define.GeneratedPool].Despawn(_buildingItems[i].Rect);
                 }
-               _buildingItems.Clear();
+                _buildingItems.Clear();
             }
+
+
+
+            //检查功能----------------------------------->>>
+
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
+            {
+                BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Name.text = "TTT";
+               // uiBuildingItem
+                //uiBuildingItem.OnBuildingEnter = OpenUi;
+
+            }
+
+            if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
+            {
+                BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Name.text = "SJ";
+
+
+            }
+
+
+
+
+
+            //if (SystemManager.Contains<BuildingBlacksmith>(_livingAreaWindowCd.LivingAreaEntity))
+            //{
+            //    BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
+
+
+            //}
+
+
+
+            //检查功能------------------------------------<<<
+           
+            
+           
+
+
 
 
             for (int i = 0; i < StrategySceneInit.BuildingSystems.Count; i++)
             {
-                var item = StrategySceneInit.BuildingSystems[i];
-                UiBuildingItem buildingitem =  item.GetBuildingItem(_livingAreaWindowCd.LivingAreaEntity);
 
-                buildingitem.Rect.SetParent(_billingParent);
-                _buildingItems.Add(buildingitem);
+                var item = StrategySceneInit.BuildingSystems[i];
+
+                //if (item.GetBuildingItem(_livingAreaEntity))
+                //{
+
+                //}
+
+
+                UiBuildingItem buildingitem = item.GetBuildingItem(_livingAreaWindowCd.LivingAreaEntity);
+                if (buildingitem != null)
+                {
+                    buildingitem.Rect.SetParent(_billingParent);
+                    _buildingItems.Add(buildingitem);
+                }
+
             }
 
-            GameObject go = GameObject.Instantiate(GameStaticData.ModelPrefab[_livingArea.ModelId]);
-            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
+
+            Renderer[] renderers = StrategyStyle.Instance.ModelCityO1.GetComponentsInChildren<Renderer>();
             Bounds bounds = renderers[0].bounds;
             for (int i = 0; i < renderers.Length; i++)
             {
                 bounds.Encapsulate(renderers[i].bounds);
             }
             SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
-
             return;
-
 
             //List<UiBuildingItem> buildingItems=SystemManager.Get<LivingAreaSystem>()
             //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
@@ -176,7 +230,7 @@ namespace GameSystem.Ui
             //    _buildingBilling[i].gameObject.SetActive(true);
             //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
             //}
-            
+
         }
 
         private void ChangeData()
@@ -195,7 +249,7 @@ namespace GameSystem.Ui
             _food.text = livingArea.Food + "/" + livingArea.FoodMax;
             _person.text = livingArea.PersonNumber.ToString();
             _stable.text = livingArea.DefenseStrength.ToString();
-            _level.text =livingArea.CurLevel.ToString();
+            _level.text = livingArea.CurLevel.ToString();
             _type.text = livingArea.Type.ToString();
 
 
@@ -210,7 +264,7 @@ namespace GameSystem.Ui
             UiBuildingItem uiBuildingItem = go.GetComponent<UiBuildingItem>();
 
             // SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
-            BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
+            //BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
             return;
             BuildingiDataItem item = null;
             for (int i = 0; i < _buildingBilling.Count; i++)
@@ -227,10 +281,10 @@ namespace GameSystem.Ui
             _buildingIsShow = true;
 
 
-            for (int i = 0; i < item.Features.Count; i++)
-            {
-                _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
-            }
+            //for (int i = 0; i < item.Features.Count; i++)
+            //{
+            //    _buildingFeatures[i].GetComponentInChildren<Text>().text = GameStaticData.FeaturesName[item.Features[i].Id];
+            //}
 
             //if (item.Biologicals.Count > _buildingBiological.Count)        //如果长度不够，则补齐数据
             //{

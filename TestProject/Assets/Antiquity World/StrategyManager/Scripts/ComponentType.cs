@@ -62,10 +62,13 @@ namespace GameSystem
         public int TargetId;
         public float TimeToLive;
         public Entity TargetEntity;
+        public int CreantePositionCode;
 
         public Vector3 SelfPoint;
         public Vector3 NextPoint;
         public uint BehaviourType;
+
+
     }
 
 
@@ -119,6 +122,9 @@ namespace GameSystem
         public int GrowingModulus;
         public int SecurityModulus;
         public int Value;
+
+        public int DistrictCode;
+
     }
 
     public struct Identity : IComponentData
@@ -370,6 +376,56 @@ namespace GameSystem
         City=4,       //城市
     }
 
+    public class BuildingItem
+    {
+        public int Id;
+        public int Level;
+        public string BuildingName = "XX";
+        public string Behavior = "Default";
+        public int X;
+        public int Y;
+        public int BuildingModelId;
+        public int BuildingLevel;
+        public int Status;
+        public int Type;
+        public int DurableValue;
+        public string Property1;
+        public string Property2;
+        public string Property3;
+        public string Property4;
+
+        public BuildingItem()
+        {
+        }
+
+        public BuildingItem(int buildingModelId, int buildingLevel, int status, int type, int durableValue)
+        {
+            this.BuildingModelId = buildingModelId;
+            this.BuildingLevel = buildingLevel;
+            this.Status = status;
+            this.Type = type;
+            this.DurableValue = durableValue;
+        }
+    }
+
+    public class BuildingJsonData
+    {
+        public int GroupId;
+        public List<BuildingItem> Item = new List<BuildingItem>();
+
+        public BuildingItem GetBuildingItem(int buildingid)
+        {
+            for (int i = 0; i < Item.Count; i++)
+            {
+                if (Item[i].Id == buildingid)
+                {
+                    return Item[i];
+                }
+            }
+            return null;
+        }
+    }
+
     public struct LivingArea : IComponentData
     {
         public int Id;
@@ -454,6 +510,15 @@ namespace GameSystem
         public int OperateEnd;
         public int ShopSeed;
 
+        public int PositionCode;
+
+    }
+
+    /// <summary>
+    /// 建筑物：市集
+    /// </summary>
+    public struct BuildingBazaar : IComponentData
+    {
     }
 
     /// <summary>

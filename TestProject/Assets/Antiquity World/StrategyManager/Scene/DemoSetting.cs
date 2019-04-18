@@ -19,4 +19,6 @@ public class DemoSetting : MonoBehaviour
 
     public GameObject Player;
 
+    
+
 }

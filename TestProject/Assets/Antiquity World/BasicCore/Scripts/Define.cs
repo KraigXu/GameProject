@@ -14,7 +14,7 @@ public delegate int[] SocialDialogEvent(int resoult, int a, int b);
 public delegate void SingleParameterEvent(int key);
 public delegate void OnBuildingClick(Entity buildingEntity);
 public delegate void EntitySingleEvent(Entity a, Entity b);
-
+public delegate void BuildingEvent(Entity entity, int id);
 
 
 

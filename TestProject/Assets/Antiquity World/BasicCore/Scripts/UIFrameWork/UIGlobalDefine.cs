@@ -26,6 +26,7 @@ namespace GameSystem.Ui
         CityWindow,
 
         BuildingWindow,
+        BuildingBlacksmithWindow,
 
         ExtendedMenuWindow,
         WxCharacterPanelWindow,
@@ -141,6 +142,7 @@ namespace GameSystem.Ui
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
             {WindowID.CityWindow,"UiPrefab/CityWindow" },
             {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
+            {WindowID.BuildingBlacksmithWindow,"UiPrefab/BuildingBlacksmithWindow" },
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},

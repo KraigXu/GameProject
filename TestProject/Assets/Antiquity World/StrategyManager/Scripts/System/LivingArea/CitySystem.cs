@@ -25,8 +25,6 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-
-
         }
 
         /// <summary>
