@@ -21,6 +21,21 @@ namespace GameSystem
         }
         private Data _data;
 
+        protected override void OnStartRunning()
+        {
+            base.OnStartRunning();
+
+            
+
+        }
+
+
+        protected override void OnUpdate()
+        {
+
+        }
+
+
 
         /// <summary>
         /// 获取这个功能的内部方法
@@ -33,7 +48,7 @@ namespace GameSystem
             {
                 BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton).GetComponent<UiBuildingItem>();
-                uiBuildingItem.Name.text = "TTTT";
+                uiBuildingItem.Value= "TTTT";
                 uiBuildingItem.OnBuildingEnter = OpenUi;
                 return uiBuildingItem;
             }
@@ -43,8 +58,7 @@ namespace GameSystem
             }
         }
 
-
-        //public object Get
+        
 
         //protected override void OnStartRunning()
         //{
@@ -88,13 +102,6 @@ namespace GameSystem
         //{
 
         //}
-
-
-        //protected override void OnUpdate()
-        //{
-        //}
-
-
 
 
         /// <summary>
@@ -148,9 +155,6 @@ namespace GameSystem
             throw new System.NotImplementedException();
         }
 
-        protected override void OnUpdate()
-        {
-            throw new System.NotImplementedException();
-        }
+
     }
 }

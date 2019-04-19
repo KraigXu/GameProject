@@ -176,15 +176,15 @@ namespace GameSystem
                         StableValue = datas[i].StableValue
                     });
 
+                    entityManager.AddComponentData(entity, new District
+                    {
+                        DistrictCode = i
+                    });
+
                     entityManager.AddComponentData(entity, new Money
                     {
                         Value = datas[i].Money,
                         Upperlimit = datas[i].MoneyMax
-                    });
-
-                    entityManager.AddComponentData(entity,new District
-                    {
-                        DistrictCode=i
                     });
 
                     if (datas[i].LivingAreaType == 1)
@@ -210,28 +210,52 @@ namespace GameSystem
                     }
                     else
                     {
-
                     }
 
-
-                    Debug.Log(datas[i].BuildingInfoJson);
-                    BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-
-                    for (int j = 0; j < jsonData.Item.Count; j++)
+                    if (datas[i].IsBazaar == 0)
                     {
-                        var item = jsonData.Item[j];
-                        if (item.Type == 0)
+                        entityManager.AddComponentData(entity,new BuildingBazaar
                         {
-
-                        }else if (item.Type == 1)
-                        {
-                            if (SystemManager.Contains<BuildingBlacksmith>(entity) == false)
-                            {
-                                SystemManager.Get<BuildingBlacksmithSystem>().AddBuildingSystem(entity,item);
-                            }
-
-                        }
+                            LevelId = 2,
+                            OperateEnd = 9,
+                            OperateStart = 10,
+                            PositionCode = i+2+i,
+                            ShopSeed = 200
+                        });
                     }
+
+                    if (datas[i].IsBlacksmith == 0)
+                    {
+                        entityManager.AddComponentData(entity,new BuildingBlacksmith
+                        {
+                            LevelId = 3,
+                            OperateEnd = 10,
+                            OperateStart = 10,
+                            PositionCode = i+3+i,
+                            ShopSeed = 100,
+                        });
+                    }
+
+
+
+                    //Debug.Log(datas[i].BuildingInfoJson);
+                    //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
+                    
+                    //for (int j = 0; j < jsonData.Item.Count; j++)
+                    //{
+                    //    var item = jsonData.Item[j];
+                    //    if (item.Type == 0)
+                    //    {
+
+                    //    }else if (item.Type == 1)
+                    //    {
+                    //        if (SystemManager.Contains<BuildingBlacksmith>(entity) == false)
+                    //        {
+                    //            SystemManager.Get<BuildingBlacksmithSystem>().AddBuildingSystem(entity,item);
+                    //        }
+
+                    //    }
+                    //}
 
 
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);

@@ -30,7 +30,6 @@ namespace GameSystem.Ui
     public class EntityContentData : BaseWindowContextData
     {
         public Entity Entity;
-        
     }
 
 

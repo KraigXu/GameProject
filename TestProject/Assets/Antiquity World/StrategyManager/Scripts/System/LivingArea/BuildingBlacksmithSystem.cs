@@ -197,7 +197,7 @@ namespace GameSystem
             {
                 BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(BuildingItem).GetComponent<UiBuildingItem>();
-                uiBuildingItem.Name.text = "TTTT";
+                uiBuildingItem.Value = "TTTT";
                 uiBuildingItem.OnBuildingEnter = OpenUi;
                 return uiBuildingItem;
             }

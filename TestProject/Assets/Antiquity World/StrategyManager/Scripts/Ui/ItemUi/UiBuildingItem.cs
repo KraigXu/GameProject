@@ -7,11 +7,23 @@ using UnityEngine.UI;
 public class UiBuildingItem : MonoBehaviour
 {
 
-    public Text Name;
+    public OnBuildingClick OnBuildingEnter;
     public Entity BuildingEntity;
     public RectTransform Rect;
-    public Button EnterButton;
-    public OnBuildingClick OnBuildingEnter;
+
+    public string Value
+    {
+        get { return Textval.text; }
+        set { Textval.text = value; }
+    }
+
+
+    [SerializeField]
+    private Text Textval;
+    [SerializeField]
+    private Button EnterButton;
+
+
     void Start()
     {
         EnterButton.onClick.AddListener(ButtonClick);

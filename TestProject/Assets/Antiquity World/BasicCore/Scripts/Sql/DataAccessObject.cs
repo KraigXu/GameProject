@@ -504,6 +504,12 @@ namespace DataAccessObject
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public int PositionZ { get; set; }
+
+        public byte IsBazaar { get; set; }
+        public byte IsBlacksmith { get; set; }
+
+
+
         public override object[] GetValues()
         {
             object[] objects = new object[]

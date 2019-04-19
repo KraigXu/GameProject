@@ -519,6 +519,12 @@ namespace GameSystem
     /// </summary>
     public struct BuildingBazaar : IComponentData
     {
+        public int LevelId;
+        public int OperateStart;
+        public int OperateEnd;
+        public int ShopSeed;
+
+        public int PositionCode;
     }
 
     /// <summary>

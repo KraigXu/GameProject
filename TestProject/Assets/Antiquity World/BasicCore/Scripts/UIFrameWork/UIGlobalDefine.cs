@@ -26,8 +26,14 @@ namespace GameSystem.Ui
         CityWindow,
 
         BuildingWindow,
+        BuildingBazaarWindow,
         BuildingBlacksmithWindow,
-
+        BuildingDressmakWindow,
+        BuildingDwellingWindow,
+        BuildingHospitalWindow,
+        BuildingOfficalWindow,
+        BuildingTavernWindow,
+        
         ExtendedMenuWindow,
         WxCharacterPanelWindow,
         MapWindow
@@ -142,7 +148,14 @@ namespace GameSystem.Ui
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
             {WindowID.CityWindow,"UiPrefab/CityWindow" },
             {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
+            {WindowID.BuildingBazaarWindow,"UiPrefab/BuildingBazaarWindow" },
             {WindowID.BuildingBlacksmithWindow,"UiPrefab/BuildingBlacksmithWindow" },
+            {WindowID.BuildingDressmakWindow,"UiPrefab/BuildingDressmakWindow" },
+            {WindowID.BuildingDwellingWindow,"UiPrefab/BuildingDwellingWindow" },
+            {WindowID.BuildingHospitalWindow,"UiPrefab/BuildingHospitalWindow" },
+            {WindowID.BuildingOfficalWindow,"UiPrefab/BuildingOfficalWindow" },
+            {WindowID.BuildingTavernWindow,"UiPrefab/BuildingTavernWindow" },
+
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},

@@ -18,9 +18,8 @@ public class StrategyStyle : MonoBehaviour
 
     public RectTransform UiFunctionButton;
     public RectTransform UiPersonButton;
-
-
     
+
 
     void Awake()
     {
