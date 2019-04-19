@@ -27,11 +27,6 @@ namespace GameSystem
         public static EntityArchetype AncientTombArchetype;
         public static EntityArchetype ArticleArchetype;
 
-        public static MeshInstanceRenderer BiologicalNormalLook;
-        public static MeshInstanceRenderer BiologicalManLook;
-        public static MeshInstanceRenderer BiologicalFemaleLook;
-        public static MeshInstanceRenderer LivingAreaLook;
-
         public static DemoSetting Settings;
         public static Entity PlayerEntity;
 
@@ -72,18 +67,10 @@ namespace GameSystem
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
 
-            //BiologicalNormalLook = GetLookFromPrototype("BiologicalNormalLook");
-            //BiologicalManLook = GetLookFromPrototype("BiologicalManLook");
-            //BiologicalFemaleLook = GetLookFromPrototype("BiologicalFemaleLook");
-            //LivingAreaLook = GetLookFromPrototype("LivingAreaNormalLook");
-
             RelationSystem.SetupComponentData(entityManager);
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
 
-
-
-            
             #region Data
             {
 
@@ -236,8 +223,6 @@ namespace GameSystem
                         });
                     }
 
-
-
                     //Debug.Log(datas[i].BuildingInfoJson);
                     //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
                     
@@ -256,14 +241,9 @@ namespace GameSystem
 
                     //    }
                     //}
-
-
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                     GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
-
                 }
-
-                SystemManager.Get<LivingAreaSystem>().InitSystem();
             }
             #endregion
 
