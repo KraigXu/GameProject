@@ -63,18 +63,20 @@ namespace GameSystem.Ui
             if (buildingBlacksmith.LevelId >= 1)
             {
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiListItem uiItem = item.GetComponent<UiListItem>();
-                uiItem.Text.text = "冶炼";
-                uiItem.ClickCallback = delegate { };
+                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
+                uiItem.Value = "冶炼";
+                uiItem.OnBuildingEnter = delegate { };
+
 
             }
 
             if (buildingBlacksmith.LevelId >= 2)
             {
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiListItem uiitem = item.GetComponent<UiListItem>();
-                uiitem.Text.text = "锻造";
-                uiitem.ClickCallback = delegate { };
+                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
+                uiItem.Value = "锻造";
+                uiItem.OnBuildingEnter = delegate { };
+
 
 
             }

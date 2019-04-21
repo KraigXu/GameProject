@@ -120,6 +120,7 @@ namespace GameSystem.Ui
                 BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "TTT";
+                uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = delegate (Entity entity)
                     {
                         ShowWindowData showWindow=new ShowWindowData();
@@ -137,6 +138,7 @@ namespace GameSystem.Ui
                 BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "SJ";
+                uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = delegate
                 {
                     //UICenterMasterManager.Instance.ShowWindow(wIND)
