@@ -32,8 +32,6 @@ namespace GameSystem.Ui
         public Entity Entity;
     }
 
-
-
     public class MessageBoxWindowData:BaseWindowContextData
     {
         public int Type;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Chronos;
 using GameSystem.Ui;
 using Unity.Entities;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace GameSystem
         
         public DateTime EndTime;
         public Action EndCallback;
-
 
         public WorldTimerNode(int id, DateTime startTime, Action startCallback, DateTime endTime, Action endcallback)
         {
@@ -87,7 +87,7 @@ namespace GameSystem
         public byte ScheduleDay = 0;
         public byte ScheduleYear = 0;
 
-
+        public GlobalClock StrategyClock;
         public List<WorldTimerNode> WorldTimerNodes = new List<WorldTimerNode>();
 
         private List<int> _removalPending = new List<int>();
@@ -151,7 +151,7 @@ namespace GameSystem
 
         void Update()
         {
-            if (IsStart == false || IsInit == false)
+            if (StrategyClock.paused == false|| IsStart == false || IsInit == false)
             {
                 return;
             }

@@ -914,31 +914,8 @@ namespace DataAccessObject
     }
 
 
-    /// <summary>
-    /// 物品数据
-    /// </summary>
-    public class ArticleData : BaseData
-    {
-
-        public ArticleData()
-        {
-
-        }
 
 
-        public int Id { get; set; }
-
-
-
-        // public i
-
-        public override object[] GetValues()
-        {
-            object[] objects = { Id };
-            return objects;
-        }
-
-    }
 
     /// <summary>
     /// 名词注解表
@@ -997,6 +974,30 @@ namespace DataAccessObject
         }
 
     }
+
+
+
+    public class ArticleData : BaseData
+    {
+
+        public int Id { get; set; }
+        public int Type { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int AvatarId { get; set; }
+        public int Count { get; set; }
+        public int MaxCount { get; set; }
+        public string Effect { get; set; }
+
+
+        public override object[] GetValues()
+        {
+            object[] objects = { Id,Type,Name,Description,AvatarId,Count,MaxCount,Effect};
+            return objects;
+        }
+
+    }
+
 
     //----------------------------------------映射数据库----------------------------------End
 

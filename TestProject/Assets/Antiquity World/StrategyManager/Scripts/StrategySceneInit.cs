@@ -54,8 +54,6 @@ namespace GameSystem
             }
             UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
 
-
-
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
@@ -73,7 +71,6 @@ namespace GameSystem
 
             #region Data
             {
-
                 List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
                 for (int i = 0; i < biologicalAvatarDatas.Count; i++)
                 {
@@ -84,10 +81,8 @@ namespace GameSystem
                 for (int i = 0; i < modelDatas.Count; i++)
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
-
                 }
             }
-
             #endregion
 
             //#region DistrictInit
@@ -120,7 +115,6 @@ namespace GameSystem
 
             //}
             //#endregion
-
             #region LivingAreaInit
             {
                 BuildingSystems.Add(SystemManager.Get<BuildingBazaarSystem>());
@@ -225,7 +219,6 @@ namespace GameSystem
 
                     //Debug.Log(datas[i].BuildingInfoJson);
                     //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-                    
                     //for (int j = 0; j < jsonData.Item.Count; j++)
                     //{
                     //    var item = jsonData.Item[j];
@@ -238,7 +231,6 @@ namespace GameSystem
                     //        {
                     //            SystemManager.Get<BuildingBlacksmithSystem>().AddBuildingSystem(entity,item);
                     //        }
-
                     //    }
                     //}
                     GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
@@ -257,7 +249,6 @@ namespace GameSystem
 
                     Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelId].transform);
                     entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
-
 
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
                     entityManager.AddComponentData(entity, new Biological()
@@ -329,9 +320,6 @@ namespace GameSystem
                         UpperLimit = 50000,//克
                     });
 
-
-
-
                     entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
                     entityManager.SetComponentData(entity, new Equipment
                     {
@@ -363,6 +351,9 @@ namespace GameSystem
                         Weight = 3,
                         Price = 1233,
                     });
+
+
+
 
 
 
@@ -613,7 +604,6 @@ namespace GameSystem
                         ObjectBid = relationDatas[i].ObjectBid,
                         Value = relationDatas[i].Value
                     });
-
                 }
             }
             #endregion

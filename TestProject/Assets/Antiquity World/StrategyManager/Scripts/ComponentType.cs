@@ -322,16 +322,10 @@ namespace GameSystem
     {
         public Entity Entity;
     }
-
-
-    
-
     public struct Output : IComponentData
     {
 
     }
-
-
     public struct EquipmentCoat : IComponentData
     {
         public int SpriteId;
@@ -495,6 +489,23 @@ namespace GameSystem
         public Entity LivingAreaEntity;
         public Entity BuildingEntity;
     }
+    /// <summary>
+    /// 裁缝
+    /// </summary>
+    public struct BuildingTailor : IComponentData
+    {
+
+    }
+
+    /// <summary>
+    /// 客栈
+    /// </summary>
+    public struct BuidingTavern : IComponentData
+    {
+
+    }
+
+
 
 
 

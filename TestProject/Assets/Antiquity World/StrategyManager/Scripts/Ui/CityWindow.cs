@@ -115,21 +115,14 @@ namespace GameSystem.Ui
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
+
             if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
             {
                 BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "TTT";
                 uiBuildingItem.BuildingEntity = _laEntity;
-                uiBuildingItem.OnBuildingEnter = delegate (Entity entity)
-                    {
-                        ShowWindowData showWindow=new ShowWindowData();
-                        EntityContentData entityWindowData=new EntityContentData();
-                        entityWindowData.Entity = entity;
-                        showWindow.contextData = entityWindowData;
-
-                        UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBlacksmithWindow,showWindow);
-                    };
+                uiBuildingItem.OnBuildingEnter = OpenBlacksmithWindow;
                 _buildingItems.Add(uiBuildingItem);
             }
 
@@ -139,10 +132,31 @@ namespace GameSystem.Ui
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "SJ";
                 uiBuildingItem.BuildingEntity = _laEntity;
-                uiBuildingItem.OnBuildingEnter = delegate
-                {
-                    //UICenterMasterManager.Instance.ShowWindow(wIND)
-                };
+                uiBuildingItem.OnBuildingEnter = null;
+
+                _buildingItems.Add(uiBuildingItem);
+            }
+
+
+            if (entityManager.HasComponent<BuildingTailor>(_laEntity))
+            {
+                BuildingTailor buildingTailor = entityManager.GetComponentData<BuildingTailor>(_laEntity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Value = "";
+                uiBuildingItem.BuildingEntity = _laEntity;
+                uiBuildingItem.OnBuildingEnter = null;  //-------
+
+                _buildingItems.Add(uiBuildingItem);
+            }
+
+
+            if (entityManager.HasComponent<BuidingTavern>(_laEntity))
+            {
+                BuidingTavern buidingTavern = entityManager.GetComponentData<BuidingTavern>(_laEntity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Value = "JD";
+                uiBuildingItem.BuildingEntity = _laEntity;
+                uiBuildingItem.OnBuildingEnter = null;
 
                 _buildingItems.Add(uiBuildingItem);
             }
@@ -205,6 +219,20 @@ namespace GameSystem.Ui
             //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
             //}
 
+        }
+
+
+
+        //--------
+
+        private void OpenBlacksmithWindow(Entity entity)
+        {
+            ShowWindowData showWindow = new ShowWindowData();
+            EntityContentData entityWindowData = new EntityContentData();
+            entityWindowData.Entity = entity;
+            showWindow.contextData = entityWindowData;
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBlacksmithWindow, showWindow);
         }
 
 

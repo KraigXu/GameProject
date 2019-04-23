@@ -23,6 +23,12 @@ namespace GameSystem.Ui
         [SerializeField]
         private RectTransform _personParent;
 
+        [SerializeField] private RectTransform _dz;
+        [SerializeField] private RectTransform _yl;
+        [SerializeField] private RectTransform _mm;
+        [SerializeField] private RectTransform _fj;
+
+       
 
 
         public override void InitWindowOnAwake()
@@ -60,14 +66,22 @@ namespace GameSystem.Ui
 
             BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(EntityData.Entity);
 
+
+            if (buildingBlacksmith.LevelId >= 0)
+            {
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
+                uiItem.Value = "买卖";
+                uiItem.OnBuildingEnter = YL;
+            }
+
+
             if (buildingBlacksmith.LevelId >= 1)
             {
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "冶炼";
-                uiItem.OnBuildingEnter = delegate { };
-
-
+                uiItem.OnBuildingEnter = YL;
             }
 
             if (buildingBlacksmith.LevelId >= 2)
@@ -75,28 +89,18 @@ namespace GameSystem.Ui
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "锻造";
-                uiItem.OnBuildingEnter = delegate { };
-
-
+                uiItem.OnBuildingEnter = DZ;
 
             }
 
             if (buildingBlacksmith.LevelId >= 3)
             {
-                RectTransform zz = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
+                uiItem.Value = "分解";
+                uiItem.OnBuildingEnter = FJ;
             }
 
-            if (buildingBlacksmith.LevelId >= 4)
-            {
-                RectTransform zz = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-
-            }
-
-            if (buildingBlacksmith.LevelId >= 5)
-            {
-                RectTransform zz = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-            }
 
             List<Entity> preson = SystemManager.Get<BehaviorSystem>().GetPositionCode(buildingBlacksmith.PositionCode);
 
@@ -108,7 +112,6 @@ namespace GameSystem.Ui
             }
 
         }
-
 
         public override void DestroyWindow()
         {
@@ -124,6 +127,27 @@ namespace GameSystem.Ui
                 WXPoolManager.Pools[Define.GeneratedPool].Despawn(_personParent.GetChild(i));
             }
         }
+
+
+        public void YL(Entity buildingEntity)
+        {
+
+
+
+        }
+
+        public void DZ(Entity buildingEntity)
+        {
+
+        }
+
+        public void FJ(Entity buildingEntity)
+        {
+
+        }
+
+
+
     }
 
 }

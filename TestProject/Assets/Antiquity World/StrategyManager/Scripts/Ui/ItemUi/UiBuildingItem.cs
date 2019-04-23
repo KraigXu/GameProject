@@ -23,7 +23,6 @@ public class UiBuildingItem : MonoBehaviour
     [SerializeField]
     private Button EnterButton;
 
-
     void Start()
     {
         EnterButton.onClick.AddListener(ButtonClick);

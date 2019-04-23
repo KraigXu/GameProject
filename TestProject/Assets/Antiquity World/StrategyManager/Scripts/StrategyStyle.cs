@@ -15,11 +15,12 @@ public class StrategyStyle : MonoBehaviour
     public Transform ModelCityO1;
     public Transform ModelCity02;
 
-
     public RectTransform UiFunctionButton;
     public RectTransform UiPersonButton;
+    public RectTransform UiEffectTip;
+    public RectTransform UiLableTip;
+    public RectTransform UiImageTips;
     
-
 
     void Awake()
     {
