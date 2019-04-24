@@ -434,6 +434,33 @@ namespace DataAccessObject
                                        " Content1 TEXT," +
                                        " Content2 TEXT);");
         }
+
+
+        public static void CreateTable_ArticleData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ArticleData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Type INTEGER," +
+                                       " Name TEXT," +
+                                       " Description TEXT," +
+                                       " AvatarId INTEGER," +
+                                       " Count INTEGER," +
+                                       " MaxCount INTEGER," +
+                                       " Weight INTEGER, "+
+                                       " Effect TEXT);");
+        }
+
+        public static void CreateTable_ArticleRecordData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ArticleRecordData ( " +
+                                       " Bid INTEGER," +
+                                       " ArticleId INTEGER," +
+                                       " Count INTEGER," +
+                                       " MaxCount INTEGER," +
+                                       " Time TEXT);");
+        }
+
+
     }
     //-----------------------------------------建表语句 -----------------------------------End
 
@@ -988,15 +1015,32 @@ namespace DataAccessObject
         public int Count { get; set; }
         public int MaxCount { get; set; }
         public string Effect { get; set; }
+        public int Weight { get; set; }
 
 
         public override object[] GetValues()
         {
-            object[] objects = { Id,Type,Name,Description,AvatarId,Count,MaxCount,Effect};
+            object[] objects = { Id,Type,Name,Description,AvatarId,Count,MaxCount,Effect, Weight };
             return objects;
         }
 
     }
+
+    public class ArticleRecordData : BaseData
+    {
+        public int Bid { get; set; }
+        public int ArticleId { get; set; }
+        public int Count { get; set; }
+        public int MaxCount { get; set; }
+        public string Time { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = { Bid, ArticleId, Count, MaxCount, Time };
+            return objects;
+        }
+    }
+
 
 
     //----------------------------------------映射数据库----------------------------------End

@@ -223,7 +223,6 @@ namespace GameSystem
         public int StrategyMoveSpeed;
         public int FireMoveSpeed;
 
-        public int UpperLimit;
 
     }
 
@@ -339,6 +338,21 @@ namespace GameSystem
         public float Weight;
         public float Price;
         public byte Durable;
+
+    }
+
+    /// <summary>
+    /// 背包
+    /// </summary>
+
+    public struct Knapsack : IComponentData
+    {
+        public int UpperLimit; //克  负载量
+
+        public int KnapscakCode;
+
+        public int CurUpper;
+
 
     }
 
@@ -660,9 +674,11 @@ namespace GameSystem
     public struct ArticleItem : IComponentData
     {
 
+        public Entity BiologicalEntity;
         public int GuiId;
         public int Count;
         public int MaxCount;
+        public int Weight;
         public ENUM_OBJECT_TYPE ObjectType;   //对象类型
         public ENUM_OBJECT_STATE ObjectState;  //对象状态
 

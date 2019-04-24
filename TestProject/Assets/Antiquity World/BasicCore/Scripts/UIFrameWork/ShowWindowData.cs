@@ -32,6 +32,8 @@ namespace GameSystem.Ui
         public Entity Entity;
     }
 
+
+
     public class MessageBoxWindowData:BaseWindowContextData
     {
         public int Type;
@@ -61,6 +63,7 @@ namespace GameSystem.Ui
     {
         public Biological CurPlayer;
         public List<Biological> Biologicals = new List<Biological>();
+        public List<Entity> Entities;
     }
 
     public class LivingAreaWindowCD : BaseWindowContextData

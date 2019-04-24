@@ -246,7 +246,6 @@ namespace GameSystem
 
                 for (int i = 0; i < datas.Count; i++)
                 {
-
                     Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelId].transform);
                     entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
 
@@ -317,7 +316,7 @@ namespace GameSystem
                         StrategyMoveSpeed = 6,
                         FireMoveSpeed = 10,
 
-                        UpperLimit = 50000,//克
+                        
                     });
 
                     entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
@@ -337,7 +336,6 @@ namespace GameSystem
                     entityManager.SetComponentData(entity, new Techniques
                     {
                     });
-
                     entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
                     entityManager.SetComponentData(entity, new EquipmentCoat
                     {
@@ -352,10 +350,32 @@ namespace GameSystem
                         Price = 1233,
                     });
 
+                    entityManager.AddComponentData(entity,new Knapsack
+                    {
+                        UpperLimit = 1000000,
+                        KnapscakCode = datas[i].Id
+                    });
+
+                    //
+                    //List<ArticleRecordData> articleRecordDatas= SQLService.Instance.SimpleQuery<ArticleRecordData>(" Bid=? ",datas[i].Id);
+                    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
+                        "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
+                        datas[i].Id);
 
 
+                    for (int j = 0; j < articleRecordDatas.Count; j++)
+                    {
+                        Entity articleentity = entityManager.CreateEntity(ArticleArchetype);
 
+                        entityManager.SetComponentData(articleentity,new ArticleItem()
+                        {
+                            BiologicalEntity= entity,
+                            Count = articleRecordDatas[j].Count,
+                            MaxCount = articleRecordDatas[j].MaxCount,
+                            Weight = 1,
+                        });
 
+                    }
 
                     ////Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 

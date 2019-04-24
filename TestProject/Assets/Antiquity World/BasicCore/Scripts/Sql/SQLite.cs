@@ -3342,9 +3342,9 @@ namespace SQLite4Unity3d
 #else
             var r = Prepare2(db, query, System.Text.UTF8Encoding.UTF8.GetByteCount(query), out stmt, IntPtr.Zero);
 #endif
+           
             if (r != Result.OK)
             {
-                
                 throw SQLiteException.New(r, GetErrmsg(db));
             }
             return stmt;

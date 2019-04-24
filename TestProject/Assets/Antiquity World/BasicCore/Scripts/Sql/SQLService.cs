@@ -98,6 +98,9 @@ public class SQLService
         Tables.CreateTable_Tips(this);
         Tables.CreateTable_NounsData(this);
 
+        Tables.CreateTable_ArticleData(this);
+        Tables.CreateTable_ArticleRecordData(this);
+
         Tables.CreateTable_PlayProject(this);
         Tables.CreateTable_District(this);
         Tables.CreateTable_LivingArea(this);
@@ -119,7 +122,6 @@ public class SQLService
         Tables.CreateTable_ModelMap(this);
         Tables.CreateTable_SocialDialog(this);
     }
-
 
     public long InsertOrReplace(BaseData baseModel)
     {
