@@ -25,7 +25,6 @@ namespace GameSystem
             public EntityArray Entity;
             public GameObjectArray GameObjects;
             public ComponentDataArray<PlayerInput> Input;
-
             public ComponentDataArray<BehaviorData> Behavior;
         }
         struct InteractionData
@@ -43,6 +42,11 @@ namespace GameSystem
         [Inject]
         private InteractionData _interactionData;
         private EntityManager _entityManager;
+
+        public EntityArray Entitys
+        {
+            get { return _data.Entity;}
+        }
 
         public PlayerControlSystem()
         {

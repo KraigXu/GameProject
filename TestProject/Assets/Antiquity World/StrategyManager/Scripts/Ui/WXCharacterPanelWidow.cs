@@ -64,7 +64,7 @@ namespace GameSystem.Ui
         private int _curShowId;
         private Transform _showTransform;
 
-        private List<Entity> _entities;
+        private EntityArray _entities;
         private EntityManager _entityManager;
 
         protected override void InitWindowData()
@@ -160,16 +160,12 @@ namespace GameSystem.Ui
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            if (contextData == null)
-                return;
 
-            base.BeforeShowWindow(contextData);
+            _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
 
-            _entities = _uiData.Entities;
-            _uiData = (BiologicalUiInData)contextData;
-            _curBiological = _uiData.CurPlayer;
+          //  _curBiological = _uiData.CurPlayer;
 
-            for (int i = 0; i < _entities.Count; i++)
+            for (int i = 0; i < _entities.Length; i++)
             {
                 Biological biological = _entityManager.GetComponentData<Biological>(_entities[i]);
 
@@ -188,8 +184,8 @@ namespace GameSystem.Ui
 
                 KnapsackNew(_entities[i], articleView.ContentRect);
             }
-            _name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
-            _surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
+            //_name.text = GameStaticData.BiologicalNameDic[_curBiological.BiologicalId];
+            //_surname.text = GameStaticData.BiologicalSurnameDic[_curBiological.BiologicalId];
             PropertyTogChange(true);
 
         }
@@ -207,10 +203,10 @@ namespace GameSystem.Ui
             {
                 RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, parent);
 
-                RectTransform articlerect=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticle,box);
+               // RectTransform articlerect=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticle,box);
 
-                UiArticle articleui= articlerect.gameObject.GetComponent<UiArticle>();
-                articleui.Entity = entity;
+                //UiArticle articleui= articlerect.gameObject.GetComponent<UiArticle>();
+               // articleui.Entity = entity;
 
             }
         }

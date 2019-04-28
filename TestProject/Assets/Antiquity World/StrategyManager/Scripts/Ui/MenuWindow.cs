@@ -75,6 +75,7 @@ namespace GameSystem.Ui
                 BiologicalUiInData uidata = new BiologicalUiInData();
                 uidata.CurPlayer=SystemManager.Get<BiologicalSystem>().GetBiologicalInfo(Define.PlayerBiologicalId);
                 uidata.Biologicals= SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.BiologicalId);
+                //uidata.Entities= SystemManager.Get<>()
 
                 ShowWindowData showWindowData = new ShowWindowData();
                 showWindowData.contextData = uidata;

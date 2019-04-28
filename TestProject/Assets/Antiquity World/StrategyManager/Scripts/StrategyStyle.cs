@@ -17,7 +17,6 @@ public class StrategyStyle : MonoBehaviour
 
     public RectTransform UiFunctionButton;
     public RectTransform UiPersonButton;
-    public RectTransform UiArticle;
     public RectTransform UiArticleBox;
     public RectTransform UiArticleView;
     public RectTransform UiEffectTip;
