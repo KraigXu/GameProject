@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameSystem;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,9 @@ namespace GameSystem
         public Image AvatarImage;
         public Button Button;
         public int Key;
+        public Entity Entity;
 
-        public SingleParameterEvent ClickCallBack;
+        public EntityCallBack ClickCallBack;
 
         void Awake()
         {
@@ -24,7 +26,7 @@ namespace GameSystem
         {
             if (ClickCallBack != null)
             {
-                ClickCallBack.Invoke(Key);
+                ClickCallBack.Invoke(Entity, Key);
             }
 
         }

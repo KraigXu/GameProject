@@ -377,29 +377,12 @@ namespace GameSystem
 
                     }
 
-                    ////Entity entity = entityManager.CreateEntity(BiologicalArchetype);
+                    entityManager.AddComponent(entity, ComponentType.Create<Team>());
+                    entityManager.SetComponentData(entity, new Team
+                    {
+                        TeamBossId = datas[i].TeamId
+                    });
 
-                    //entityManager.SetComponentData(entity, new Element
-                    //{
-                    //    InnerId = datas[i].Id,
-                    //    Type = ElementType.Biological
-                    //});
-
-                    //entityManager.SetComponentData(entity, new Rotation
-                    //{
-                    //    Value = quaternion.identity
-                    //});
-
-                    //entityManager.SetComponentData(entity, new Position
-                    //{
-                    //    Value = 
-                    //});
-
-                    //entityManager.AddComponent(entity, ComponentType.Create<Life>());
-                    //entityManager.SetComponentData(entity, new Life
-                    //{
-                    //    Value = 100,
-                    //});
 
                     //entityManager.AddComponent(entity, ComponentType.Create<Energy>());
                     //entityManager.SetComponentData(entity, new Energy
@@ -421,12 +404,6 @@ namespace GameSystem
                     // biologicalStatus.TargetType = 0;
                     // biologicalStatus.LocationType = (LocationType)datas[i].LocationType;
                     // entityManager.SetComponentData(entity, biologicalStatus);
-
-                    entityManager.AddComponent(entity, ComponentType.Create<Team>());
-                    entityManager.SetComponentData(entity, new Team
-                    {
-                        TeamBossId = datas[i].TeamId
-                    });
 
                     //switch ((LocationType)datas[i].LocationType)
                     //{
