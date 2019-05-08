@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
@@ -11,24 +12,16 @@ namespace GameSystem.Ui
     /// </summary>
     public class BuildingBazaarWindow : UIWindowBase
     {
-
-
-        public Entity Entity;
-
         public EntityContentData EntityData;
-
         [SerializeField]
         private RectTransform _featureseParent;
         [SerializeField]
         private RectTransform _personParent;
 
+        public RectTransform BuyingView;
 
-        private RectTransform _viewmm;
-        private RectTransform _viewyl;
-        private RectTransform _viewdz;
-        private RectTransform _viewfj;
-        
-        
+        public RectTransform CurView;
+
 
         public override void InitWindowOnAwake()
         {
@@ -40,25 +33,10 @@ namespace GameSystem.Ui
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
 
         protected override void InitWindowData()
         {
-
-            _viewmm = (RectTransform)transform.Find("MM").transform;
-            _viewmm.gameObject.SetActive(false);
-
-            _viewyl = (RectTransform)transform.Find("YL").transform;
-            _viewyl.gameObject.SetActive(false);
-
-            _viewdz = (RectTransform)transform.Find("DZ").transform;
-            _viewdz.gameObject.SetActive(false);
-
-            _viewfj = (RectTransform) transform.Find("FJ").transform;
-            _viewfj.gameObject.SetActive(false);
-
-
         }
 
         /// <summary>
@@ -73,57 +51,56 @@ namespace GameSystem.Ui
                 return;
             }
             base.BeforeShowWindow(contextData);
-            BuildingBlacksmithSystem blacksmithSystem = SystemManager.Get<BuildingBlacksmithSystem>();
             EntityData = (EntityContentData)contextData;
+            BuildingBazaarSystem blacksmithSystem = SystemManager.Get<BuildingBazaarSystem>();
 
-            BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(EntityData.Entity);
+            BuildingBazaar bazaar = SystemManager.GetProperty<BuildingBazaar>(EntityData.Entity);
 
-
-            if (buildingBlacksmith.LevelId >= 0)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
-                uiItem.Value = "买卖";
-                uiItem.OnBuildingEnter = YL;
+                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton,_featureseParent);
+                UiBuildingItem buildingItem= item.GetComponent<UiBuildingItem>();
+                buildingItem.Value = "XXXX";
+                buildingItem.OnBuildingEnter = Dealer;
+            }
+
+            {
+                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton,_featureseParent);
+                UiBuildingItem buildingItem=item.GetComponent<UiBuildingItem>();
+                buildingItem.Value = "XXXX";
+                buildingItem.OnBuildingEnter = Dealer;
             }
 
 
-            if (buildingBlacksmith.LevelId >= 1)
+
+            {   //显示人物信息
+                List<Entity> entities = SystemManager.Get<BehaviorSystem>().GetPositionCode(bazaar.PositionCode);
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton, _featureseParent);
+                    BiologicalBaseUi biologicalUi = item.GetComponent<BiologicalBaseUi>();
+                    biologicalUi.Entity = entities[i];
+                }
+            }
+        }
+
+        public void Dealer(Entity buildingEntity)
+        {
+            if (CurView != null)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
-                uiItem.Value = "冶炼";
-                uiItem.OnBuildingEnter = YL;
+                CurView.gameObject.SetActive(false);
             }
 
-            if (buildingBlacksmith.LevelId >= 2)
-            {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
-                uiItem.Value = "锻造";
-                uiItem.OnBuildingEnter = DZ;
-
-            }
-
-            if (buildingBlacksmith.LevelId >= 3)
-            {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
-                UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
-                uiItem.Value = "分解";
-                uiItem.OnBuildingEnter = FJ;
-            }
-
-
-            List<Entity> preson = SystemManager.Get<BehaviorSystem>().GetPositionCode(buildingBlacksmith.PositionCode);
-
-
-            for (int i = 0; i < preson.Count; i++)
-            {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton, _featureseParent);
-                BiologicalBaseUi baseUi = item.GetComponent<BiologicalBaseUi>();
-            }
+            BuyingView.gameObject.SetActive(true);
+            CurView = BuyingView;
 
         }
+
+
+
+
+        
+
+
 
         public override void DestroyWindow()
         {
@@ -139,26 +116,6 @@ namespace GameSystem.Ui
                 WXPoolManager.Pools[Define.GeneratedPool].Despawn(_personParent.GetChild(i));
             }
         }
-
-
-        public void YL(Entity buildingEntity)
-        {
-
-
-
-        }
-
-        public void DZ(Entity buildingEntity)
-        {
-
-        }
-
-        public void FJ(Entity buildingEntity)
-        {
-
-        }
-
-
 
     }
 

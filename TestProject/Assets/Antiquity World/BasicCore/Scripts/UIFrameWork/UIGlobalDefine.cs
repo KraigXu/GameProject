@@ -7,13 +7,20 @@ namespace GameSystem.Ui
     public enum WindowID
     {
         Invaild = 0,
+        //Start////
         ProjectSelectWindow,     //项目选择
         LoadingWindow,           //加载
-        StrategyWindow,  
-        MessageWindow,           //滚动消息窗口
         MessageBoxWindow,        //消息弹出框
-        MenuWindow,
         SettingMenuWindow,
+
+        //Strategy////
+        WorldTimeWindow,          //世界时间
+        PlayerInfoWindow,         //角色信息
+        MessageWindow,            //滚动消息窗口
+        MenuWindow,               //菜单
+        MapWindow,                //地图
+
+        StrategyWindow,
         RestWindow,
         TeamWindow,
         LogWindow,
@@ -21,10 +28,9 @@ namespace GameSystem.Ui
         FixedTitleWindow,
         IntelligenceWindow,
         SocialDialogWindow,
-
         LivingAreaMainWindow,
+        LivingAreaTitleWindow,
         CityWindow,
-
         BuildingWindow,
         BuildingBazaarWindow,
         BuildingBlacksmithWindow,
@@ -33,10 +39,9 @@ namespace GameSystem.Ui
         BuildingHospitalWindow,
         BuildingOfficalWindow,
         BuildingTavernWindow,
-        
+
         ExtendedMenuWindow,
         WxCharacterPanelWindow,
-        MapWindow
     }
 
     public enum UIWindowType
@@ -146,6 +151,11 @@ namespace GameSystem.Ui
             {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
+            {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingAreaTitleWindow" },
+
+            {WindowID.WorldTimeWindow,"UiPrefab/WorldTimeWindow" },
+            {WindowID.PlayerInfoWindow,"UiPrefab/PlayerInfoWindow" },
+
             {WindowID.CityWindow,"UiPrefab/CityWindow" },
             {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
             {WindowID.BuildingBazaarWindow,"UiPrefab/BuildingBazaarWindow" },

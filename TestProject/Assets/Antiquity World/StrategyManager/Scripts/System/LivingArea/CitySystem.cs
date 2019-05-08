@@ -10,7 +10,7 @@ namespace GameSystem
     /// <summary>
     /// 城市
     /// </summary>
-    public class CitySystem : ComponentSystem
+    public class CitySystem : ComponentSystem, LivingAreaFunction
     {
         struct Data
         {
@@ -23,9 +23,13 @@ namespace GameSystem
         [Inject]
         private Data _data;
 
+
+
         protected override void OnUpdate()
         {
         }
+
+
 
         /// <summary>
         /// 进入城市
@@ -41,6 +45,9 @@ namespace GameSystem
                 BuildingEntity = Entity.Null,
             });
         }
+
+
+
 
         public static void CityColliderEnter(GameObject go, Collider other)
         {
@@ -100,6 +107,41 @@ namespace GameSystem
 
 
             UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
+        }
+
+
+        /// <summary>
+        /// 解析数据 往实体上增加建筑信息
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="values"></param>
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                
+            }
+
+            entityManager.AddComponentData(entity, new BuildingBazaar
+            {
+
+            });
+
+            entityManager.AddComponentData(entity,new BuildingBlacksmith
+            {
+
+            });
+
+            entityManager.AddComponentData(entity,new BuidingTavern
+            {
+
+            });
+
+
+
         }
     }
 

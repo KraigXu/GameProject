@@ -135,5 +135,10 @@ namespace GameSystem
             }
 
         }
+
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+
+        }
     }
 }

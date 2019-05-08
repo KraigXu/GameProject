@@ -26,7 +26,7 @@ namespace GameSystem
 
         public bool IsBuilding(Entity entity)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
 
@@ -131,6 +131,11 @@ namespace GameSystem
             {
                 Debuger.LogError("在进入BuildingBlacksmite时发生错误！");
             }
+
+        }
+
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
 
         }
     }

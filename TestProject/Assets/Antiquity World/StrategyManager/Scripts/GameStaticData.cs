@@ -13,7 +13,7 @@ namespace GameSystem
         public static Dictionary<int, string> DistrictName = new Dictionary<int, string>();
         public static Dictionary<int, string> DistrictDescriptione = new Dictionary<int, string>();
         public static Dictionary<int, string> DistrictTypeDsc = new Dictionary<int, string>();
-        public static Dictionary<int, string> DistrictStatusDsc=new Dictionary<int, string>();
+        public static Dictionary<int, string> DistrictStatusDsc = new Dictionary<int, string>();
 
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
@@ -31,11 +31,11 @@ namespace GameSystem
         public static Dictionary<int, string> PrestigeTitle = new Dictionary<int, string>();
 
         public static Dictionary<int, string> BiologicalSex = new Dictionary<int, string>();
+        public static Dictionary<int, Sprite> BiologicalAvatar = new Dictionary<int, Sprite>();
         public static Dictionary<int, string> BiologicalSurnameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalNameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalDescription = new Dictionary<int, string>();
-        public static Dictionary<int, Sprite> BiologicalAvatar = new Dictionary<int, Sprite>();
-
+        
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
         public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();
 

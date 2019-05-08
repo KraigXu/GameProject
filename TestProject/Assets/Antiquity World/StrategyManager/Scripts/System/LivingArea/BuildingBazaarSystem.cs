@@ -17,25 +17,27 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entitys;
-            public BuildingBazaar Bazaars;
+            public ComponentDataArray<BuildingBazaar> Bazaars;
         }
         private Data _data;
-
-        protected override void OnStartRunning()
-        {
-            base.OnStartRunning();
-
-            
-
-        }
 
 
         protected override void OnUpdate()
         {
-
         }
 
-
+        public void AnalysisDataSet(Entity entity,string[] values)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            entityManager.AddComponentData(entity, new BuildingBazaar
+            {
+                LevelId = int.Parse(values[0]),
+                OperateEnd = int.Parse(values[1]),
+                OperateStart = int.Parse(values[2]),
+                PositionCode =int.Parse(values[3]),
+                ShopSeed = int.Parse(values[4])
+            });
+        }
 
         /// <summary>
         /// 获取这个功能的内部方法
@@ -48,7 +50,7 @@ namespace GameSystem
             {
                 BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton).GetComponent<UiBuildingItem>();
-                uiBuildingItem.Value= "TTTT";
+                uiBuildingItem.Value= "市集";
                 uiBuildingItem.OnBuildingEnter = OpenUi;
                 return uiBuildingItem;
             }
@@ -58,58 +60,13 @@ namespace GameSystem
             }
         }
 
-        
-
-        //protected override void OnStartRunning()
-        //{
-        //    base.OnStartRunning();
-        //    BuildingItem = Resources.Load<RectTransform>("UiPrefab/UiItem/LivingAreaBuilding");
-
-        //    FeaturesesEntitys = new[]
-        //    {
-        //        new BuildingBlacksmithFeatures
-        //        {
-        //            Id = 1,
-        //            Name = "ZZ",
-        //            Type = "1",
-        //            CallBack = BuildingBlackZZ
-        //        },
-        //        new BuildingBlacksmithFeatures
-        //        {
-        //            Id = 1,
-        //            Name = "YL",
-        //            Type = "2",
-        //            CallBack = BuildingBlackYL
-        //        }
-        //    };
-
-        //}
-
-
-        //private RectTransform BuildingItem;
-
-
-
-        //public BuildingBlacksmithFeatures[] FeaturesesEntitys;
-
-
-
-        //private void BuildingBlackZZ(Entity entity, int id)
-        //{
-
-        //}
-        //private void BuildingBlackYL(Entity entity, int id)
-        //{
-
-        //}
-
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="value"></param>
-        public  void AddBuildingSystem(Entity entity, BuildingItem item)
+        public void AddBuildingSystem(Entity entity, BuildingItem item)
         {
             BuildingBlacksmith blacksmith = new BuildingBlacksmith();
             blacksmith.LevelId = item.Level;
@@ -119,28 +76,19 @@ namespace GameSystem
             EntityManager.AddComponentData(entity, blacksmith);
         }
 
-
-
-        
-
-
-
-
         /// <summary>
         /// 打开内部
         /// </summary>
         /// <param name="entity"></param>
-        public  void OpenUi(Entity entity)
+        public void OpenUi(Entity entity)
         {
-            if (SystemManager.Contains<BuildingBlacksmith>(entity) == true)
+            if (SystemManager.Contains<BuildingBazaar>(entity) == true)
             {
-                //初始化值
                 ShowWindowData showWindowData = new ShowWindowData();
-
-                BuildingUiInfo uiInfo = new BuildingUiInfo();
-            //    uiInfo.FeaturesUiInfos = FeaturesesEntitys;
-
-                UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBlacksmithWindow, showWindowData);
+                EntityContentData entityContentData=new EntityContentData();
+                entityContentData.Entity = entity;
+                showWindowData.contextData = entityContentData;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBazaarWindow, showWindowData);
 
             }
             else
@@ -152,7 +100,7 @@ namespace GameSystem
 
         public bool IsBuilding(Entity entity)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
 

@@ -19,13 +19,9 @@ namespace GameSystem
         }
 
         private Data _data;
-
         private RectTransform BuildingItem;
 
         public BuildingBlacksmithFeatures[] FeaturesesEntitys;
-
-
-
 
         protected override void OnStartRunning()
         {
@@ -132,8 +128,12 @@ namespace GameSystem
 
         public bool IsBuilding(Entity entity)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+           
+        }
     }
 }

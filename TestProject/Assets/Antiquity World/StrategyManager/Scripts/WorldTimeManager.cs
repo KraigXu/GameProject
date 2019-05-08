@@ -315,6 +315,16 @@ namespace GameSystem
             IsInit = true;
         }
 
+        public string ShiChen
+        {
+            get { return TimeShichen[Shichen]; }
+        }
+
+        public string Season
+        {
+            get { return TimeJijie[Jijie]; }
+        }
+
 
 
 

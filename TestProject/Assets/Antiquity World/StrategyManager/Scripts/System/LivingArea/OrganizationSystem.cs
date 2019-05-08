@@ -8,7 +8,7 @@ namespace GameSystem
     /// <summary>
     /// 组织
     /// </summary>
-    public class OrganizationSystem : ComponentSystem
+    public class OrganizationSystem : ComponentSystem, LivingAreaFunction
     {
 
         struct Data
@@ -35,6 +35,11 @@ namespace GameSystem
         public static void OrganizationColliderExit(GameObject go, Collider other)
         {
 
+        }
+
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+            
         }
     }
 }

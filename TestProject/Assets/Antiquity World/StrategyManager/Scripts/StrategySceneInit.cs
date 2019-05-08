@@ -32,10 +32,6 @@ namespace GameSystem
 
         public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
 
-        public static FixedTitleWindow FixedTitleWindow;
-
-        public static List<BuildingFunction> BuildingSystems=new List<BuildingFunction>();
-
 
         public static void InitializeWithScene()
         {
@@ -52,7 +48,7 @@ namespace GameSystem
                     return;
                 }
             }
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
+            
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
@@ -64,6 +60,9 @@ namespace GameSystem
             BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
+
 
             RelationSystem.SetupComponentData(entityManager);
             SocialDialogSystem.SetupComponentData(entityManager);
@@ -82,6 +81,8 @@ namespace GameSystem
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
                 }
+
+
             }
             #endregion
 
@@ -116,126 +117,13 @@ namespace GameSystem
             //}
             //#endregion
             #region LivingAreaInit
+
             {
-                BuildingSystems.Add(SystemManager.Get<BuildingBazaarSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingBlacksmithSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingDressmakSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingDwellingsSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingHospitalSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingOfficialSystem>());
-                BuildingSystems.Add(SystemManager.Get<BuildingTavernSystem>());
 
-                List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-                for (int i = 0; i < datas.Count; i++)
-                {
-                    Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
-                    entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
-                    entityGo.gameObject.name = datas[i].Name;
-                    ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
+                SystemManager.Get<LivingAreaSystem>().LivingAreaInit(entityManager);
 
-                    Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
-                    entityManager.AddComponentData(entity, new ModelInfo
-                    {
-                        ModelId = datas[i].ModelBaseId
-                    });
-
-                    entityManager.AddComponentData(entity, new LivingArea
-                    {
-                        Id = datas[i].Id,
-                        PersonNumber = datas[i].PersonNumber,
-                        Type = (LivingAreaType)datas[i].LivingAreaType,
-                        Money = datas[i].Money,
-                        MoneyMax = datas[i].MoneyMax,
-                        Iron = datas[i].Iron,
-                        IronMax = datas[i].IronMax,
-                        Wood = datas[i].Wood,
-                        WoodMax = datas[i].WoodMax,
-                        Food = datas[i].Food,
-                        FoodMax = datas[i].FoodMax,
-                        DefenseStrength = datas[i].DefenseStrength,
-                        StableValue = datas[i].StableValue
-                    });
-
-                    entityManager.AddComponentData(entity, new District
-                    {
-                        DistrictCode = i
-                    });
-
-                    entityManager.AddComponentData(entity, new Money
-                    {
-                        Value = datas[i].Money,
-                        Upperlimit = datas[i].MoneyMax
-                    });
-
-                    if (datas[i].LivingAreaType == 1)
-                    {
-                        entityManager.AddComponentData(entity,new Crowd
-                        {
-                            Number = 300000
-                        });
-                        trigger.TriggerEnter = CitySystem.CityColliderEnter;
-                        trigger.TriggerExit = CitySystem.CityColliderExit;
-
-                    }
-                    else if (datas[i].LivingAreaType == 2)
-                    {
-                        entityManager.AddComponentData(entity, new Collective()
-                        {
-                            CollectiveClassId = 1,
-                            Cohesion = 1
-                        });
-
-                        trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
-                        trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
-                    }
-                    else
-                    {
-                    }
-
-                    if (datas[i].IsBazaar == 0)
-                    {
-                        entityManager.AddComponentData(entity,new BuildingBazaar
-                        {
-                            LevelId = 2,
-                            OperateEnd = 9,
-                            OperateStart = 10,
-                            PositionCode = i+2+i,
-                            ShopSeed = 200
-                        });
-                    }
-
-                    if (datas[i].IsBlacksmith == 0)
-                    {
-                        entityManager.AddComponentData(entity,new BuildingBlacksmith
-                        {
-                            LevelId = 3,
-                            OperateEnd = 10,
-                            OperateStart = 10,
-                            PositionCode = i+3+i,
-                            ShopSeed = 100,
-                        });
-                    }
-
-                    //Debug.Log(datas[i].BuildingInfoJson);
-                    //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(datas[i].BuildingInfoJson);
-                    //for (int j = 0; j < jsonData.Item.Count; j++)
-                    //{
-                    //    var item = jsonData.Item[j];
-                    //    if (item.Type == 0)
-                    //    {
-
-                    //    }else if (item.Type == 1)
-                    //    {
-                    //        if (SystemManager.Contains<BuildingBlacksmith>(entity) == false)
-                    //        {
-                    //            SystemManager.Get<BuildingBlacksmithSystem>().AddBuildingSystem(entity,item);
-                    //        }
-                    //    }
-                    //}
-                    GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
-                    GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
-                }
             }
             #endregion
 
@@ -681,11 +569,14 @@ namespace GameSystem
                 }
                 data = null;
 
-                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-                FixedTitleWindow = (FixedTitleWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.FixedTitleWindow);
-                UICenterMasterManager.Instance.ShowWindow(WindowID.StrategyWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+                UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
+               // UICenterMasterManager.Instance.ShowWindow(WindowID.)
+                
                 UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
             }

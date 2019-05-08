@@ -109,11 +109,21 @@ namespace GameSystem.Ui
                 _buildingItems.Clear();
             }
 
-
-
-            //检查功能----------------------------------->>>
+            //检查功能------------------>>>
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+
+            if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
+            {
+                BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                uiBuildingItem.Value = "市集";
+                uiBuildingItem.BuildingEntity = _laEntity;
+                uiBuildingItem.OnBuildingEnter = OpenBazaarWindow;
+
+                _buildingItems.Add(uiBuildingItem);
+            }
 
 
             if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
@@ -126,29 +136,16 @@ namespace GameSystem.Ui
                 _buildingItems.Add(uiBuildingItem);
             }
 
-            if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
-            {
-                BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
-                uiBuildingItem.Value = "SJ";
-                uiBuildingItem.BuildingEntity = _laEntity;
-                uiBuildingItem.OnBuildingEnter = null;
-
-                _buildingItems.Add(uiBuildingItem);
-            }
-
-
             if (entityManager.HasComponent<BuildingTailor>(_laEntity))
             {
                 BuildingTailor buildingTailor = entityManager.GetComponentData<BuildingTailor>(_laEntity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "";
                 uiBuildingItem.BuildingEntity = _laEntity;
-                uiBuildingItem.OnBuildingEnter = null;  //-------
+                uiBuildingItem.OnBuildingEnter = null;  
 
                 _buildingItems.Add(uiBuildingItem);
             }
-
 
             if (entityManager.HasComponent<BuidingTavern>(_laEntity))
             {
@@ -160,6 +157,8 @@ namespace GameSystem.Ui
 
                 _buildingItems.Add(uiBuildingItem);
             }
+
+          
 
             //检查功能------------------------------------<<<
            
@@ -221,9 +220,17 @@ namespace GameSystem.Ui
 
         }
 
+        private void OpenBazaarWindow(Entity entity)
+        {
+            ShowWindowData showWindow=new ShowWindowData();
+            EntityContentData entityWindowData=new EntityContentData();
+            entityWindowData.Entity = entity;
+            showWindow.contextData = entityWindowData;
 
+            UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBazaarWindow, showWindow);
 
-        //--------
+        }
+
 
         private void OpenBlacksmithWindow(Entity entity)
         {

@@ -12,4 +12,6 @@ public interface BuildingFunction
     UiBuildingItem GetBuildingItem(Entity entity);
 
     void OpenUi(Entity entity);
+
+    void AnalysisDataSet(Entity entity, string[] values);
 }

@@ -191,7 +191,6 @@ namespace GameSystem.Ui
             
 
             PonInfoTog3.gameObject.SetActive(true);
-
         }
 
 
@@ -207,12 +206,12 @@ namespace GameSystem.Ui
                 UiListItem uiitem = item.GetComponent<UiListItem>();
                 uiitem.Text.text = GameStaticData.LivingAreaName[factions[i].Id];
                 uiitem.Id = factions[i].Id;
-                //uiitem.ClickCallback = delegate (int id)
-                //{
-                //    // LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
-                //    //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
-                //    //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
-                //};
+                uiitem.ClickCallback = delegate(UiListItem ui)
+                {
+                    //LivingAreaWindowCD livingAreaUi = World.Active.GetExistingManager<LivingAreaSystem>().GetLivingAreaData(id);
+                    //_livingAreaNameTxt.text = GameStaticData.LivingAreaName[livingAreaUi.LivingAreaId];
+                    //_livingAreaDisTxt.text = GameStaticData.LivingAreaDescription[livingAreaUi.LivingAreaId];
+                };
             }
         }
 

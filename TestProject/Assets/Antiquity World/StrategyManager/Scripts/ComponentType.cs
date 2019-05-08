@@ -466,7 +466,9 @@ namespace GameSystem
     public struct Crowd : IComponentData
     {
         public int Number;
-       
+        public int Money;
+        public int Iron;
+
     }
 
 

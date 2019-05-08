@@ -251,5 +251,18 @@ namespace GameSystem
             return new BuildingBlacksmith();
         }
 
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            entityManager.AddComponentData(entity,new BuildingBlacksmith
+            {
+                LevelId = 3,
+                OperateStart = 3,
+                OperateEnd = 3,
+              //  Person = 3,
+                PositionCode = 3,
+                ShopSeed = 3,
+            });
+        }
     }
 }

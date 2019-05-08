@@ -7,25 +7,18 @@ using UnityEngine;
 
 namespace GameSystem
 {
-
     public class BuildingDressmakSystem : ComponentSystem, BuildingFunction
     {
         struct Data
         {
             public readonly int Length;
             public EntityArray Entitys;
-            public BuildingBlacksmith BuildingBlacksmith;
-
+            public ComponentDataArray<BuildingTailor>  Tailors;
         }
-
         private Data _data;
 
-        private RectTransform BuildingItem;
-
         public BuildingBlacksmithFeatures[] FeaturesesEntitys;
-
-
-
+        private RectTransform BuildingItem;
 
         protected override void OnStartRunning()
         {
@@ -65,6 +58,10 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var value = _data.Tailors[i];
+            }
         }
 
 
@@ -110,17 +107,15 @@ namespace GameSystem
         /// 打开内部
         /// </summary>
         /// <param name="entity"></param>
-        public  void OpenUi(Entity entity)
+        public void OpenUi(Entity entity)
         {
-            if (SystemManager.Contains<BuildingBlacksmith>(entity) == true)
+            if (SystemManager.Contains<BuildingTailor>(entity) == true)
             {
-                //初始化值
                 ShowWindowData showWindowData = new ShowWindowData();
-
-                BuildingUiInfo uiInfo = new BuildingUiInfo();
-                uiInfo.FeaturesUiInfos = FeaturesesEntitys;
-
-                UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBlacksmithWindow, showWindowData);
+                EntityContentData contentData=new EntityContentData();
+                contentData.Entity = entity;
+                showWindowData.contextData = contentData;
+                UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingDressmakWindow,showWindowData);
 
             }
             else
@@ -130,9 +125,14 @@ namespace GameSystem
 
         }
 
+        public void AnalysisDataSet(Entity entity, string[] values)
+        {
+
+       }
+
         public bool IsBuilding(Entity entity)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
     }

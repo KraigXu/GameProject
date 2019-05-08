@@ -15,6 +15,8 @@ public class StrategyStyle : MonoBehaviour
     public Transform ModelCityO1;
     public Transform ModelCity02;
 
+    public RectTransform UiLivingAreaTitle;
+
     public RectTransform UiFunctionButton;
     public RectTransform UiPersonButton;
     public RectTransform UiArticleBox;

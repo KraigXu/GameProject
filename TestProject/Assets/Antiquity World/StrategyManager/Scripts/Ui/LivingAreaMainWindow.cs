@@ -45,11 +45,6 @@ namespace GameSystem.Ui
         [SerializeField] private Button _livingAreaExit;
         [SerializeField] private Button _buildingExit;
 
-
-
-
-
-
         private bool _buildingIsShow = false;
 
 
