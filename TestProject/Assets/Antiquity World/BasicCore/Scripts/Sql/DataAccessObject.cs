@@ -440,14 +440,26 @@ namespace DataAccessObject
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS ArticleData ( " +
                                        " Id INTEGER PRIMARY KEY," +
-                                       " Type INTEGER," +
-                                       " Name TEXT," +
-                                       " Description TEXT," +
                                        " AvatarId INTEGER," +
+                                       " Type1 INTEGER," +
+                                       " Type2 INTEGER," +
+                                       " Type3 INTEGER," +
+                                       " Text TEXT," +
+                                       " Value TEXT," +
                                        " Count INTEGER," +
                                        " MaxCount INTEGER," +
-                                       " Weight INTEGER, "+
-                                       " Effect TEXT);");
+                                       " Effect TEXT," +
+                                       " Weight INTEGER," +
+                                       " Bid INTEGER);");
+        }
+        
+        public static void CreateTable_ArticleTypeData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ArticleTypeData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " PId INTEGER," +
+                                       " Text TEXT);");
+
         }
 
         public static void CreateTable_ArticleRecordData(SQLService service)
@@ -1008,23 +1020,41 @@ namespace DataAccessObject
     {
 
         public int Id { get; set; }
-        public int Type { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         public int AvatarId { get; set; }
+        public byte Type1 { get; set; }
+        public byte Type2 { get; set; }
+        public byte Type3 { get; set; }
+        public string Text { get; set; }
+        public string Value { get; set; }          
         public int Count { get; set; }
         public int MaxCount { get; set; }
         public string Effect { get; set; }
         public int Weight { get; set; }
-
+        public int Bid { get; set; }
 
         public override object[] GetValues()
         {
-            object[] objects = { Id,Type,Name,Description,AvatarId,Count,MaxCount,Effect, Weight };
+            object[] objects = { Id, AvatarId, Type1, Type2, Type3, Text, Value, Count, MaxCount, Weight, Bid };
             return objects;
         }
 
     }
+
+    public class ArticleTypeData : BaseData
+    {
+        public int Id { get; set; }
+        public int PId { get; set; }
+        public string Text { get; set; }
+
+
+        public override object[] GetValues()
+        {
+            object[] objects = { Id, PId, Text };
+            return objects;
+        }
+
+    }
+
 
     public class ArticleRecordData : BaseData
     {

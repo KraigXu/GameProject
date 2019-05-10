@@ -48,7 +48,7 @@ namespace GameSystem
                     return;
                 }
             }
-            
+
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
@@ -81,9 +81,38 @@ namespace GameSystem
                 {
                     GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
                 }
+            }
 
+            #region Article
+
+            {
+                //List<ArticleData>
+
+                //List<ArticleTypeData> articleTypeDatas = SQLService.Instance.SimpleQuery<ArticleTypeData>();
+
+
+                List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = new List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>();
+                valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED, "10"));
+                valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_CRIT, "0"));
+                valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_DODGE, "0"));
+                valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_2, "30"));
+                valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_3, "0"));
+                string json = JsonConvert.SerializeObject(valuePairs);
+
+                Debug.Log(JsonConvert.SerializeObject(valuePairs));
+
+                valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(json);
+
+                Debug.Log(JsonConvert.SerializeObject(valuePairs));
 
             }
+
+
+
+            #endregion
+
+
+
             #endregion
 
             //#region DistrictInit
@@ -203,8 +232,6 @@ namespace GameSystem
 
                         StrategyMoveSpeed = 6,
                         FireMoveSpeed = 10,
-
-                        
                     });
 
                     entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
@@ -238,32 +265,32 @@ namespace GameSystem
                         Price = 1233,
                     });
 
-                    entityManager.AddComponentData(entity,new Knapsack
+                    entityManager.AddComponentData(entity, new Knapsack
                     {
                         UpperLimit = 1000000,
                         KnapscakCode = datas[i].Id
                     });
 
-                    //
-                    //List<ArticleRecordData> articleRecordDatas= SQLService.Instance.SimpleQuery<ArticleRecordData>(" Bid=? ",datas[i].Id);
-                    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
-                        "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
-                        datas[i].Id);
+                    ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", datas[i].Id), entity);
+
+                    //    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
+                    //    "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
+                    //    datas[i].Id);
 
 
-                    for (int j = 0; j < articleRecordDatas.Count; j++)
-                    {
-                        Entity articleentity = entityManager.CreateEntity(ArticleArchetype);
+                    //for (int j = 0; j < articleRecordDatas.Count; j++)
+                    //{
+                    //    Entity articleentity = entityManager.CreateEntity(ArticleArchetype);
 
-                        entityManager.SetComponentData(articleentity,new ArticleItem()
-                        {
-                            BiologicalEntity= entity,
-                            Count = articleRecordDatas[j].Count,
-                            MaxCount = articleRecordDatas[j].MaxCount,
-                            Weight = 1,
-                        });
+                    //    entityManager.SetComponentData(articleentity,new ArticleItem()
+                    //    {
+                    //        BiologicalEntity= entity,
+                    //        Count = articleRecordDatas[j].Count,
+                    //        MaxCount = articleRecordDatas[j].MaxCount,
+                    //        Weight = 1,
+                    //    });
 
-                    }
+                    //}
 
                     entityManager.AddComponent(entity, ComponentType.Create<Team>());
                     entityManager.SetComponentData(entity, new Team
@@ -371,111 +398,6 @@ namespace GameSystem
 
             #endregion
 
-            #region Article
-            {
-                //    List<ArticleRecordingData> datas = SQLService.Instance.QueryAll<ArticleRecordingData>();
-                List<ArticleRecordingData> datas = new List<ArticleRecordingData>();
-
-                //datas=new List<ArticleRecordingData>();
-
-                //datas.Add(new ArticleRecordingData
-                //{
-                //    Id = 1,
-                //    Attribute = "0x0A4d2,0x0A4d2,0x0A4d2,0x0B4d2,0x0B4d2,0x0B4d2",
-                //    GuiId = 50295,
-                //    ItemDesc = "SSSSSSSSSSSSSSSSSSSSSS",
-                //    Count = 10,
-                //    MaxCount = 230,
-                //    Type = 3,
-                //    State = 3,
-                //});
-                //datas.Add(new ArticleRecordingData
-                //{
-                //    Id = 2,
-                //    Attribute = "0x0A4d2,0x0A4d2,0x0A4d2,0x0B4d2,0x0B4d2,0x0B4d2",
-                //    GuiId = 50295,
-                //    ItemDesc = "SSSSSSSSSSSSSSSSSSSSSS",
-                //    Count = 10,
-                //    MaxCount = 230,
-                //    Type = 3,
-                //    State = 3,
-                //});
-                //datas.Add(new ArticleRecordingData
-                //{
-                //    Id = 3,
-                //    Attribute = "0x0A4d2,0x0A4d2,0x0A4d2,0x0B4d2,0x0B4d2,0x0B4d2",
-                //    GuiId = 50295,
-                //    ItemDesc = "SSSSSSSSSSSSSSSSSSSSSS",
-                //    Count = 10,
-                //    MaxCount = 230,
-                //    Type = 3,
-                //    State = 3,
-                //});
-                //datas.Add(new ArticleRecordingData
-                //{
-                //    Id = 4,
-                //    Attribute = "0x0A4d2,0x0A4d2,0x0A4d2,0x0B4d2,0x0B4d2,0x0B4d2",
-                //    GuiId = 50295,
-                //    ItemDesc = "SSSSSSSSSSSSSSSSSSSSSS",
-                //    Count = 10,
-                //    MaxCount = 230,
-                //    Type = 3,
-                //    State = 3,
-                //});
-
-
-                //  Convert.ToInt32();
-                //Debug.Log(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE);
-                //Debug.Log(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE.GetHashCode());
-                //  Debug.Log(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE.);
-                //+Convert.ToString(9801, 16)
-
-                int id = Convert.ToInt32("0x0A", 16);
-                //  Debug.Log((ENUM_ITEM_ATTRIBUTE)id);
-                //Debug.Log("0x0B" + Convert.ToString(10, 16));
-                //Debug.Log("0x0B" + Convert.ToString(999, 16));
-                //Debug.Log("0x0B" + Convert.ToString(230, 16));
-                //Debug.Log("0x0B" + Convert.ToString(1234, 16));
-                //Debug.Log(Convert.ToInt32(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE).ToString())+">>"+Convert.ToInt32("89",16).ToString())));
-
-                //datas.Add(new ArticleData(1,"11",ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE+","+,));
-                //datas.Add(new ArticleData(2,"22"));
-                //datas.Add(new ArticleData(3,"33"));
-                //datas.Add(new ArticleData(4,"44"));
-                //datas.Add(new ArticleData(5,"55"));
-
-                for (int i = 0; i < 10; i++)
-                {
-                    Entity entity = entityManager.CreateEntity(ArticleArchetype);
-                    entityManager.SetComponentData(entity, new ArticleItem
-                    {
-                        GuiId = i,
-                        Count = 10,
-                        MaxCount = 99,
-                        ObjectType = ENUM_OBJECT_TYPE.OBJECT_MAIL,
-                        ObjectState = ENUM_OBJECT_STATE.OBJECT_INVALID_STATE,
-                        BiologicalId = 1,
-                        Type = ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK,
-                        Attribute1 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue1 = 10,
-                        Attribute2 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue2 = 10,
-                        Attribute3 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue3 = 10,
-                        Attribute4 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue4 = 10,
-                        Attribute5 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue5 = 10,
-                        Attribute6 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue6 = 10,
-                        Attribute7 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue7 = 10,
-                        Attribute8 = ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED,
-                        AttributeValue8 = 10
-                    });
-                }
-            }
-            #endregion
 
             #region Relation
             {
@@ -575,8 +497,8 @@ namespace GameSystem
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
-               // UICenterMasterManager.Instance.ShowWindow(WindowID.)
-                
+                // UICenterMasterManager.Instance.ShowWindow(WindowID.)
+
                 UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
             }

@@ -681,13 +681,13 @@ namespace GameSystem
         public int Count;
         public int MaxCount;
         public int Weight;
+        public int SpriteId;
+
         public ENUM_OBJECT_TYPE ObjectType;   //对象类型
         public ENUM_OBJECT_STATE ObjectState;  //对象状态
 
         public int BiologicalId;
-
         public ENUM_ITEM_CLASS Type;
-
         public ENUM_ITEM_ATTRIBUTE Attribute1;
         public int AttributeValue1;
         public ENUM_ITEM_ATTRIBUTE Attribute2;
@@ -704,17 +704,6 @@ namespace GameSystem
         public int AttributeValue7;
         public ENUM_ITEM_ATTRIBUTE Attribute8;
         public int AttributeValue8;
-    }
-
-    public enum ArticleType
-    {
-        Flood = 10, //食物
-
-        Coat = 20, //外套
-        Gloves = 21,//手套
-        Pants = 22,
-
-        Weapon = 30,// 武器
     }
 
 

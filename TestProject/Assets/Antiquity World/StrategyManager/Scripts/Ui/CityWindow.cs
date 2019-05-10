@@ -98,6 +98,19 @@ namespace GameSystem.Ui
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
+            _name.text = GameStaticData.LivingAreaName[_livingArea.Id];
+            _money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;
+            _iron.text = _livingArea.Iron + "/" + _livingArea.IronMax;
+            _wood.text = _livingArea.Wood + "/" + _livingArea.WoodMax;
+            _food.text = _livingArea.Food + "/" + _livingArea.FoodMax;
+            _person.text = _livingArea.PersonNumber.ToString();
+            _stable.text = _livingArea.DefenseStrength.ToString();
+            _level.text = GameStaticData.LivingAreaLevel[_livingArea.CurLevel];
+            _type.text = GameStaticData.LivingAreaType[_livingArea.CurLevel];
+
+            //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
+            //_powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
+            //_personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
 
             //初始化选项
             if (_buildingItems.Count > 0)
@@ -169,7 +182,11 @@ namespace GameSystem.Ui
                 bounds.Encapsulate(renderers[i].bounds);
             }
             SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
+            
             return;
+
+
+
 
             //List<UiBuildingItem> buildingItems=SystemManager.Get<LivingAreaSystem>()
             //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
@@ -193,21 +210,12 @@ namespace GameSystem.Ui
             //{
             //    _buildingBilling[i].gameObject.SetActive(false);
             //}
-            //_name.text = GameStaticData.LivingAreaName[livingArea.Id];
-            //_money.text = livingArea.Money + "/" + livingArea.MoneyMax;
-            //_iron.text = livingArea.Iron + "/" + livingArea.IronMax;
-            //_wood.text = livingArea.Wood + "/" + livingArea.WoodMax;
-            //_food.text = livingArea.Food + "/" + livingArea.FoodMax;
-            //_person.text = livingArea.PersonNumber.ToString();
-            //_stable.text = livingArea.DefenseStrength.ToString();
-            //_level.text = GameStaticData.LivingAreaLevel[livingArea.CurLevel];
-            //_type.text = GameStaticData.LivingAreaType[livingArea.TypeId];
+
 
             //Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
-            //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
 
-            //_powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
-            //_personName.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+
+
 
             //List<Entity> entitieBuilding = SystemManager.Get<BuildingSystem>().GetBuildingGroup(livingArea.Id);
 

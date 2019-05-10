@@ -19,6 +19,7 @@ namespace AntiquityWorld.StrategyManager
     };
     public enum ENUM_ITEM_ATTRIBUTE : int
     {
+        ITEM_ATTRIBUTE_NONE=-1,
         ITEM_ATTRIBUTE_MIN_ATTACK = 0x00,    //最小攻击
         ITEM_ATTRIBUTE_MAX_ATTACK = 0x01,    //最大攻击
         ITEM_ATTRIBUTE_PHYSICS_DEFENCE = 0x02,    //物理防御 
@@ -31,8 +32,7 @@ namespace AntiquityWorld.StrategyManager
         ITEM_ATTRIBUTE_HIT = 0x09,    //命中 
         ITEM_ATTRIBUTE_DODGE = 0x0A,    //躲闪 
         ITEM_ATTRIBUTE_RECOVER_LIFE = 0x1F,    //生命回复 
-                                               //ITEM_ATTRIBUTE_RECOVER_LIFE = 0x0B,    //生命回复 
-                                               // ITEM_ATTRIBUTE_RECOVER_MAGIC = 0x0C,    //魔法回复 
+        ITEM_ATTRIBUTE_RECOVER_MAGIC = 0x0C,    //魔法回复 
         ITEM_ATTRIBUTE_SKILL_ATTACK = 0x0D,    //攻击技能 
         ITEM_ATTRIBUTE_SKILL_P_DEFENCE = 0x0E,    //物防技能
         ITEM_ATTRIBUTE_SKILL_M_DEFENCE = 0x0F,    //魔防技能
@@ -73,7 +73,7 @@ namespace AntiquityWorld.StrategyManager
         ITEM_ATTRIBUTE_SYN_NEWID_C_3 = 0x32,    //新BaseID3数量
     };
 
-     public enum ENUM_ITEM_CLASS : int
+    public enum ENUM_ITEM_CLASS : int
     {
         ITEM_CLASS_SKILL_BOOK = 0x00,    //技能书
         ITEM_CLASS_BOX = 0x01,    //盒子(容器)
