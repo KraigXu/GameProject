@@ -73,6 +73,12 @@ namespace AntiquityWorld.StrategyManager
         ITEM_ATTRIBUTE_SYN_NEWID_C_3 = 0x32,    //新BaseID3数量
     };
 
+    public enum ENUM_ITEM_TEXT : int
+    {
+        ITEM_TEXT_NAME = 0,        //名称
+        ITEM_TEXT_EXPAIN = 1,      //说明
+    };
+
     public enum ENUM_ITEM_CLASS : int
     {
         ITEM_CLASS_SKILL_BOOK = 0x00,    //技能书

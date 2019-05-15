@@ -226,6 +226,17 @@ namespace GameSystem
 
     }
 
+    public struct Fighting : IComponentData
+    {
+        public int AttackMin;
+        public int AttackMax;
+        public int PhysicsDefence;
+        public int MagicDefence;
+
+
+
+    }
+
     public struct Life : IComponentData
     {
         public float Value;

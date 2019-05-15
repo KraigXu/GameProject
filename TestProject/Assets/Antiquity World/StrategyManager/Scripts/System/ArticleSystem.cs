@@ -44,156 +44,158 @@ namespace GameSystem
                 var article = _data.Items[i];
 
                 //Check
-
                 if (article.Attribute1 != ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE)
                 {
-                    ITEM_ATTRIBUTE_CHECK(article.Attribute1,article.AttributeValue1,article.BiologicalEntity);
+                    ITEM_ATTRIBUTE_CHECK(article.Attribute1, article.AttributeValue1, article.BiologicalEntity);
                 }
-
-                
-
-
             }
         }
 
 
         #region 公共函数
 
-        public static void ITEM_ATTRIBUTE_CHECK(ENUM_ITEM_ATTRIBUTE type ,int value,Entity entity)
+        public static void ITEM_ATTRIBUTE_CHECK(ENUM_ITEM_ATTRIBUTE type, int value, Entity entity)
         {
 
             switch (type)
             {
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK:
-                {
-                    
-                  
-                }
+                    {
+                      //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                      //  fighting.AttackMin += value;
+                      //  _entityManager.SetComponentData(entity, fighting);
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK:
-                {
-
-                }
+                    {
+                     //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                     //   fighting.AttackMax += value;
+                     //   _entityManager.SetComponentData(entity, fighting);
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_PHYSICS_DEFENCE:
-                {
-
-                }
+                    {
+                     //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                      //  fighting.PhysicsDefence += value;
+                      //  _entityManager.SetComponentData(entity, fighting);
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAGIC_DEFENCE:
-                {
-
-                }
+                    {
+                      //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                      //  fighting.MagicDefence += value;
+                      //  _entityManager.SetComponentData(entity, fighting);
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_LIFE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_POWER:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_CRIT:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_HIT:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_DODGE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_LIFE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RECOVER_MAGIC:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_ATTACK:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_P_DEFENCE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_M_DEFENCE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_CRIT:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_HIT:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_A_SPEED:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_DODGE:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_POSITION:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_CLASS:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_PHOTOID:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_BASEID:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_COUNT:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_1:
-                {
+                    {
 
-                }
+                    }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_2:
-                {
+                    {
 
-                }
+                    }
                     break;
                 default:
                     Debug.Log("未处理");
