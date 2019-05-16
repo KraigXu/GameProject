@@ -22,7 +22,6 @@ namespace GameSystem
         }
 
 
-
         [Inject]
         private Data _data;
 

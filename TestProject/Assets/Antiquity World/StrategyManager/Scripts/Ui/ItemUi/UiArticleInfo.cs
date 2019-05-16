@@ -29,6 +29,9 @@ public class UiArticleInfo : MonoBehaviour
     public Text PriceTxt;
 
     public ArticleData CurData;
+    public GUISkin Skin;
+
+    public Texture Texture;
 
     void Awake()
     {
@@ -61,7 +64,7 @@ public class UiArticleInfo : MonoBehaviour
         valuePairs.Add(5, "1");
         string json = JsonConvert.SerializeObject(valuePairs);
         Debug.Log(json);
-        Dictionary<ENUM_ITEM_ATTRIBUTE,string> v = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_ATTRIBUTE, string>>(json);
+        Dictionary<ENUM_ITEM_ATTRIBUTE, string> v = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_ATTRIBUTE, string>>(json);
 
         Debug.Log(JsonConvert.SerializeObject(v));
         //valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(json);
@@ -79,13 +82,14 @@ public class UiArticleInfo : MonoBehaviour
     public void Change()
     {
 
-
-        Dictionary<ENUM_ITEM_TEXT,string> textDic=JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_TEXT, string>>(CurData.Text);
+        Dictionary<ENUM_ITEM_TEXT, string> textDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_TEXT, string>>(CurData.Text);
         NameTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_NAME];
         ExplainTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_EXPAIN];
 
+        Dictionary<ENUM_ITEM_ATTRIBUTE, string> attributeDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_ATTRIBUTE, string>>(CurData.Value);
 
-        ArticleTypeData typeData= SQLService.Instance.QueryUnique<ArticleTypeData>(" Id=?", CurData.Type1);
+
+        ArticleTypeData typeData = SQLService.Instance.QueryUnique<ArticleTypeData>(" Id=?", CurData.Type1);
         TypeTxt.text = typeData.Text;
 
         switch ((ENUM_ITEM_CLASS)typeData.Id)
@@ -93,12 +97,32 @@ public class UiArticleInfo : MonoBehaviour
             case ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK:
                 ContentRect3.gameObject.SetActive(true);
 
+                ContentRect4.gameObject.SetActive(true);
 
+                ContentRect5.gameObject.SetActive(true);
 
                 break;
             case ENUM_ITEM_CLASS.ITEM_CLASS_BOX:
+
+
                 break;
             case ENUM_ITEM_CLASS.ITEM_CLASS_EQUIPMENT:
+                ContentRect2.gameObject.SetActive(true);
+
+                GameObject item = new GameObject();
+                RectTransform rect1 = (RectTransform)item.transform;
+                rect1.SetParent(ContentRect2);
+                rect1.anchorMin = Vector2.zero;
+                rect1.anchorMax = Vector2.one;
+
+                Text text1 = item.AddComponent<Text>();
+                text1.text = attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK] + "-" + attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK];
+                ContentRect3.gameObject.SetActive(true);
+
+                ContentRect4.gameObject.SetActive(true);
+
+                ContentRect5.gameObject.SetActive(true);
+
                 break;
             case ENUM_ITEM_CLASS.ITEM_CLASS_RESOURCE:
                 break;
@@ -112,6 +136,8 @@ public class UiArticleInfo : MonoBehaviour
                 break;
             case ENUM_ITEM_CLASS.ITEM_CLASS_DRAW:
                 break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON:
+                break;
         }
 
 
@@ -119,13 +145,7 @@ public class UiArticleInfo : MonoBehaviour
         string content1;
         List<KeyValuePair<ENUM_ITEM_TEXT, string>> valuetext = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_TEXT, string>>>(CurData.Text);
 
-
         NameTxt.text = CurData.Text;
-
-
-
-
-
         List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(CurData.Value);
 
 
@@ -136,9 +156,6 @@ public class UiArticleInfo : MonoBehaviour
 
 
         }
-
-
-
     }
 
 
@@ -146,5 +163,41 @@ public class UiArticleInfo : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void OnWindowNew(int id)
+    {
+        GUI.Label(new Rect(0,0,461,72),"摇篮",Skin.GetStyle("label"));
+        GUI.Label(new Rect(0, 72, 461,16),"护符",Skin.GetStyle("normallable"));
+        GUI.Label(new Rect(0,88,461,42),"物理防御999",Skin.GetStyle("lableMax") );
+
+
+        GUI.Label(new Rect(10,130,26,26), Texture);
+
+        GUI.Label(new Rect(42,130,461,26),"+2 智力",Skin.GetStyle("lableblue") );
+        GUI.Label(new Rect(42, 156, 461, 26), "+1 烈火学派", Skin.GetStyle("lableblue"));
+        GUI.Label(new Rect(42, 182, 461, 26), "+2 大气学派", Skin.GetStyle("lableblue"));
+        GUI.Label(new Rect(42, 208, 461, 26), "+1 领袖", Skin.GetStyle("lableblue"));
+        GUI.Label(new Rect(42, 234, 461, 26), "+1 坚毅", Skin.GetStyle("lableblue"));
+
+        GUI.Label(new Rect(10,260,26,26), Texture);
+        GUI.Label(new Rect(42,260,461,26),"等级21",Skin.GetStyle("lableh") );
+
+        GUI.Label(new Rect(10, 286, 26, 26), Texture);
+        GUI.Label(new Rect(42, 286, 461, 26), "巨型火焰威能符文", Skin.GetStyle("lable1"));
+        GUI.Label(new Rect(42, 312, 461, 26), "智力 + 3", Skin.GetStyle("lable1"));
+        GUI.Label(new Rect(42, 338, 461, 26), "暴击率 +12%", Skin.GetStyle("lable1"));
+
+        //  GUI.Label(new Rect(20,), );
+
+        GUI.Label(new Rect(20,411,345,50),"神圣",Skin.GetStyle("lablem") );
+        GUI.Label(new Rect(280,411,65,50),"9999999Y",Skin.GetStyle("lablem") );
+    }
+
+
+    void OnGUI()
+    {
+        var point = Input.mousePosition;
+        GUI.Window(0, new Rect(300, 300, 345, 461), OnWindowNew, "", Skin.GetStyle("window"));
     }
 }

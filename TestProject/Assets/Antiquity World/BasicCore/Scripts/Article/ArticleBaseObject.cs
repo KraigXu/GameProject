@@ -90,6 +90,7 @@ namespace AntiquityWorld.StrategyManager
         ITEM_CLASS_STONE = 0x06,    //石头
         ITEM_CLASS_TASK = 0x07,    //任务道具
         ITEM_CLASS_DRAW = 0x08,    //图纸
+        ITEM_CLASS_WEAPON=0x09,    //武器
     };
 
     public class ArticleBaseObject

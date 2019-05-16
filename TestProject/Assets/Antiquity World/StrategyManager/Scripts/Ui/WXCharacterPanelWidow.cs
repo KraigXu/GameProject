@@ -125,8 +125,8 @@ namespace GameSystem.Ui
                     RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
                     UiArticleBox aiArticleBox= box.gameObject.GetComponent<UiArticleBox>();
                     aiArticleBox.NumberText.text = articleItem.Count.ToString();
-
                     aiArticleBox.Entity = entities[j];
+
                 }
             }
         }
