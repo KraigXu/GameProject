@@ -20,7 +20,7 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public GameObjectArray GameObjects;
+           // public GameObjectArray GameObjects;
             public ComponentDataArray<LivingArea> LivingArea;
         }
         [Inject]
@@ -70,6 +70,10 @@ namespace GameSystem
 
         }
 
+        /// <summary>
+        /// 初始化城市
+        /// </summary>
+        /// <param name="entityManager"></param>
         public void LivingAreaInit(EntityManager entityManager)
         {
 
@@ -78,7 +82,7 @@ namespace GameSystem
             {
                 Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
                 entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
-                entityGo.gameObject.name = datas[i].Name;
+                //entityGo.gameObject.name = datas[i].Name;
                 ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
 
                 Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
@@ -235,7 +239,7 @@ namespace GameSystem
             for (int i = 0; i < _data.Length; i++)
             {
                 var livingArea = _data.LivingArea[i];
-                var node = _data.GameObjects[i];
+                //var node = _data.GameObjects[i];
 
                 _data.LivingArea[i] = livingArea;
                 //StrategySceneInit.FixedTitleWindow.Change(livingArea, node.transform);

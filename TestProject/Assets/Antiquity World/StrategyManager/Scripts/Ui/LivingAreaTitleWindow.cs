@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
+
+    /// <summary>
+    /// 生活区标题
+    /// </summary>
     public class LivingAreaTitleWindow : UIWindowBase
     {
-
         //Sytle Info Data
-       
-
-
         private List<UiLivingAreaTitleItem> _titles=new List<UiLivingAreaTitleItem>();
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
@@ -36,11 +36,24 @@ namespace GameSystem.Ui
             _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
 
-        protected override void BeforeShowWindow(BaseWindowContextData contextData=null)
+        public override void ShowWindow(BaseWindowContextData contextData)
         {
+            base.ShowWindow(contextData);
 
+            
+        }
+
+        void Update()
+        {
+            if (_livingAreaSystem.CurEntityArray.Length != _titles.Count)
+            {
+                TitleSpawn();
+            }
+        }
+
+        private void TitleSpawn()
+        {
             EntityArray entityArray = _livingAreaSystem.CurEntityArray;
-
             for (int i = 0; i < entityArray.Length; i++)
             {
                 var livingArea = _entityManager.GetComponentData<LivingArea>(entityArray[i]);
@@ -50,8 +63,7 @@ namespace GameSystem.Ui
                 RectTransform titleRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiLivingAreaTitle, transform);
                 titleRect.localScale = Vector3.zero;
 
-
-                UiLivingAreaTitleItem titleItem= titleRect.gameObject.GetComponent<UiLivingAreaTitleItem>();
+                UiLivingAreaTitleItem titleItem = titleRect.gameObject.GetComponent<UiLivingAreaTitleItem>();
                 titleItem.ContetntEntity = entityArray[i];
                 titleItem.Data = data;
                 titleItem.Name = data.Name;
@@ -63,64 +75,6 @@ namespace GameSystem.Ui
 
                 _titles.Add(titleItem);
             }
-
-
-            //SystemManager.Get<LivingAreaSystem>().
-
-            // for (int i = 0; i < UPPER; i++)
-            //  {
-
-            // }
-
-            //if(contextData==null)return;
-
-            //base.ShowWindow(contextData);
-            //_data = (FixedTitleWindowData) contextData;
-
-            //List<KeyValuePair<string, Vector3>> kv = _data.Items;
-
-            //if (_items.Count >= kv.Count)
-            //{
-            //    for (int i = 0; i < _items.Count; i++)
-            //    {
-            //        if (i < kv.Count)
-            //        {
-            //            if (_items[i].Content == kv[i].Key && _items[i].Point == kv[i].Value)
-            //            {
-            //                continue;
-            //            }
-
-            //            _items[i].Point = kv[i].Value;
-            //            _items[i].Content = kv[i].Key;
-
-            //        }
-            //        else
-            //        {
-            //            WXPoolManager.Pools[Define.GeneratedPool].Despawn(_items[i].node);
-            //        }
-            //    }
-
-            //    _items.RemoveRange(kv.Count, _items.Count - kv.Count);
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < _items.Count; i++)
-            //    {
-            //        WXPoolManager.Pools[Define.GeneratedPool].Despawn(_items[i].node);
-            //    }
-            //    _items.Clear();
-            //    for (int i = 0; i < kv.Count; i++)
-            //    {
-            //        RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_titlePrefab, transform);
-            //        rectGo.GetComponentInChildren<Text>().text = kv[i].Key;
-            //        FixedTitleTf tf=new FixedTitleTf();
-            //        tf.Content = kv[i].Key;
-            //        tf.Point = kv[i].Value;
-            //        tf.node = rectGo;
-            //        _items.Add(tf);
-            //    }
-
-            //}
         }
 
 

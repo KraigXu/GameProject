@@ -70,11 +70,14 @@ namespace GameSystem
 
             #region Data
             {
+
                 List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
                 for (int i = 0; i < biologicalAvatarDatas.Count; i++)
                 {
                     GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
                 }
+
+                
 
                 List<ModelData> modelDatas = SQLService.Instance.QueryAll<ModelData>();
                 for (int i = 0; i < modelDatas.Count; i++)
@@ -99,7 +102,7 @@ namespace GameSystem
                 valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_SKILL_ATTACK, "1"));
 
                 string json = JsonConvert.SerializeObject(valuePairs);
-                Debug.Log(JsonConvert.SerializeObject(valuePairs));
+               // Debug.Log(JsonConvert.SerializeObject(valuePairs));
 
                 valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(json);
 
@@ -140,17 +143,11 @@ namespace GameSystem
             //            Type = PeriodType.Shichen,
             //        });
             //    }
-
             //}
             //#endregion
             #region LivingAreaInit
-
             {
-
                 SystemManager.Get<LivingAreaSystem>().LivingAreaInit(entityManager);
-
-                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-
             }
             #endregion
 
@@ -356,7 +353,7 @@ namespace GameSystem
                     else if (datas[i].Identity == 1)
                     {
                         entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-                        entityGo.name = "PlayerMain";
+                      //  entityGo.name = "PlayerMain";
                         PlayerEntity = entity;
 
                         SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
@@ -495,7 +492,8 @@ namespace GameSystem
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
-                // UICenterMasterManager.Instance.ShowWindow(WindowID.)
+
+                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
                 UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 

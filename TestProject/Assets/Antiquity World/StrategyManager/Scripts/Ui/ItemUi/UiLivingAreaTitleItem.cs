@@ -5,6 +5,9 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 显示屏幕信息
+/// </summary>
 public class UiLivingAreaTitleItem : MonoBehaviour
 {
 
@@ -28,7 +31,6 @@ public class UiLivingAreaTitleItem : MonoBehaviour
     public Image _usedImag;
 
     public Color color;
-
     void Awake()
     {
         Rect = (RectTransform) transform;
