@@ -357,6 +357,9 @@ namespace GameSystem
                         PlayerEntity = entity;
 
                         SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+
+                        StrategyCameraManager.Instance.SetTarget(entityGo.transform);
+
                     }
 
                     entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
@@ -476,15 +479,15 @@ namespace GameSystem
             #region InitOver
 
             {
-                List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
-                for (int i = 0; i < data.Count; i++)
-                {
-                    if (data[i].Id == Settings.PlayerId)
-                    {
-                        StrategyCameraManager.Instance.SetTarget(new Vector3(data[i].X, data[i].Y, data[i].Z), true);
-                    }
-                }
-                data = null;
+                //List<BiologicalData> data = SQLService.Instance.QueryAll<BiologicalData>();
+                //for (int i = 0; i < data.Count; i++)
+                //{
+                //    if (data[i].Id == Settings.PlayerId)
+                //    {
+                //        StrategyCameraManager.Instance.SetTarget(new Vector3(data[i].X, data[i].Y, data[i].Z), true);
+                //    }
+                //}
+                //data = null;
 
                 UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);

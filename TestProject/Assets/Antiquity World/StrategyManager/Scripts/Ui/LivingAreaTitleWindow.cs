@@ -14,6 +14,7 @@ namespace GameSystem.Ui
     public class LivingAreaTitleWindow : UIWindowBase
     {
         //Sytle Info Data
+        [SerializeField]
         private List<UiLivingAreaTitleItem> _titles=new List<UiLivingAreaTitleItem>();
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
@@ -45,15 +46,21 @@ namespace GameSystem.Ui
 
         void Update()
         {
-            if (_livingAreaSystem.CurEntityArray.Length != _titles.Count)
-            {
-                TitleSpawn();
-            }
+
         }
+        
 
         private void TitleSpawn()
         {
-            EntityArray entityArray = _livingAreaSystem.CurEntityArray;
+            for (int i = 0; i < _titles.Count; i++)
+            {
+                WXPoolManager.Pools[Define.GeneratedPool].Despawn(_titles[i].transform);
+
+            }
+            _titles.Clear();
+
+           EntityArray entityArray = _livingAreaSystem.CurEntityArray;
+            GameObjectArray gameObjectArray = _livingAreaSystem.CuGameObjectArray; 
             for (int i = 0; i < entityArray.Length; i++)
             {
                 var livingArea = _entityManager.GetComponentData<LivingArea>(entityArray[i]);
@@ -64,14 +71,15 @@ namespace GameSystem.Ui
                 titleRect.localScale = Vector3.zero;
 
                 UiLivingAreaTitleItem titleItem = titleRect.gameObject.GetComponent<UiLivingAreaTitleItem>();
+                titleItem.Target = gameObjectArray[i].transform;
                 titleItem.ContetntEntity = entityArray[i];
                 titleItem.Data = data;
                 titleItem.Name = data.Name;
 
                 //更改样式
-                titleItem._effectImag.overrideSprite = null;
-                titleItem._typeImag.overrideSprite = null;
-                titleItem._usedImag.overrideSprite = null;
+                //titleItem._effectImag.overrideSprite = null;
+                //titleItem._typeImag.overrideSprite = null;
+                //titleItem._usedImag.overrideSprite = null;
 
                 _titles.Add(titleItem);
             }
@@ -80,10 +88,15 @@ namespace GameSystem.Ui
 
         void LateUpdate()
         {
+
+            if (_livingAreaSystem.CurEntityArray.Length != _titles.Count)
+            {
+                TitleSpawn();
+            }
             IEnumerator<UiLivingAreaTitleItem> items = _titles.GetEnumerator();
             while (items.MoveNext())
             {
-                Vector3 point = items.Current.Target.position;
+                Vector3 point = items.Current.Target.position+new Vector3(0,3,0);
                 if (Define.IsAPointInACamera(Camera.main, point))
                 {
                     Vector2 tempPos = Camera.main.WorldToScreenPoint(point);

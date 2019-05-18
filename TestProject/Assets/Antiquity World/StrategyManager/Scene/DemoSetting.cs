@@ -8,6 +8,7 @@ public class DemoSetting : MonoBehaviour
 
     public int PlayerId=1;
     public Camera MainCamera;
+    public Camera FixedCamera;
     public Camera UiCamera;
     public GameObject go;
     public float LivingAreaCollisionRadius = 1.0f;

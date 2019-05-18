@@ -20,7 +20,7 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-           // public GameObjectArray GameObjects;
+            public GameObjectArray GameObjects;
             public ComponentDataArray<LivingArea> LivingArea;
         }
         [Inject]
@@ -44,6 +44,12 @@ namespace GameSystem
         {
             get { return _data.Entity; }
         }
+
+        public GameObjectArray CuGameObjectArray
+        {
+            get { return _data.GameObjects; }
+        }
+
 
 
         protected override void OnCreateManager()

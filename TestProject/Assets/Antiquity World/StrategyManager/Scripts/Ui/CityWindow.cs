@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
 using GameSystem;
+using Manager;
 using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
@@ -52,6 +53,8 @@ namespace GameSystem.Ui
         private LivingAreaSystem _livingAreaSystem;
 
 
+        private Bounds _cityBounds;
+
         [Serializable]
         class TogglePanel
         {
@@ -98,15 +101,15 @@ namespace GameSystem.Ui
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
-            _name.text = GameStaticData.LivingAreaName[_livingArea.Id];
-            _money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;
-            _iron.text = _livingArea.Iron + "/" + _livingArea.IronMax;
-            _wood.text = _livingArea.Wood + "/" + _livingArea.WoodMax;
-            _food.text = _livingArea.Food + "/" + _livingArea.FoodMax;
-            _person.text = _livingArea.PersonNumber.ToString();
-            _stable.text = _livingArea.DefenseStrength.ToString();
-            _level.text = GameStaticData.LivingAreaLevel[_livingArea.CurLevel];
-            _type.text = GameStaticData.LivingAreaType[_livingArea.CurLevel];
+          //  _name.text = GameStaticData.LivingAreaName[_livingArea.Id];
+            //_money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;
+            //_iron.text = _livingArea.Iron + "/" + _livingArea.IronMax;
+            //_wood.text = _livingArea.Wood + "/" + _livingArea.WoodMax;
+            //_food.text = _livingArea.Food + "/" + _livingArea.FoodMax;
+            //_person.text = _livingArea.PersonNumber.ToString();
+            //_stable.text = _livingArea.DefenseStrength.ToString();
+            //_level.text = GameStaticData.LivingAreaLevel[_livingArea.CurLevel];
+            //_type.text = GameStaticData.LivingAreaType[_livingArea.CurLevel];
 
             //Biological biological = _entityManager.GetComponentData<Biological>(entityBiological);
             //_powerName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
@@ -176,17 +179,16 @@ namespace GameSystem.Ui
             //检查功能------------------------------------<<<
            
             Renderer[] renderers = StrategyStyle.Instance.ModelCityO1.GetComponentsInChildren<Renderer>();
-            Bounds bounds = renderers[0].bounds;
-            for (int i = 0; i < renderers.Length; i++)
+            _cityBounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
             {
-                bounds.Encapsulate(renderers[i].bounds);
+                _cityBounds.Encapsulate(renderers[i].bounds);
             }
-            SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
-            
-            return;
 
-
-
+            StrategySceneInit.Settings.FixedCamera.enabled = true;
+            //StrategyCameraManager.Instance.SetTarget(_cityBounds.center, true);
+            // StrategyCameraManager.Instance.SetTarget(StrategyStyle.Instance.ModelCityO1.transform);
+            // SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
 
             //List<UiBuildingItem> buildingItems=SystemManager.Get<LivingAreaSystem>()
             //BuildingJsonData jsonData = JsonConvert.DeserializeObject<BuildingJsonData>(_livingAreaData.BuildingInfoJson);
@@ -225,6 +227,13 @@ namespace GameSystem.Ui
             //    _buildingBilling[i].gameObject.SetActive(true);
             //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
             //}
+
+        }
+
+        void OnDrawGizmos()
+        {
+            Gizmos.color=new Color(0,0,1,0.3f);
+            Gizmos.DrawCube(_cityBounds.center, _cityBounds.size);
 
         }
 

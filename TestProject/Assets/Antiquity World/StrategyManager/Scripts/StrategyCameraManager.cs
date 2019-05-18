@@ -47,6 +47,7 @@ namespace Manager
         public LayerMask Layer;
         public Vector3 MousePoint;
         public GameObject MouseTarget;
+        public RtsCamera RtsCamera;
 
         void Awake()
         {
@@ -64,53 +65,53 @@ namespace Manager
         void OnGUI()
         {
 
-            if (GUI.Button(new Rect(0, 0, 160, 60), "战斗测试"))
-            {
-                World.DisposeAllWorlds();
-                WXSceneManager.Load("FightingScene");
-                //SceneManager.LoadScene("FightingScene");
-            }
+            //if (GUI.Button(new Rect(0, 0, 160, 60), "战斗测试"))
+            //{
+            //    World.DisposeAllWorlds();
+            //    WXSceneManager.Load("FightingScene");
+            //    //SceneManager.LoadScene("FightingScene");
+            //}
         }
 
 
         void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-                return;
+            //if (EventSystem.current.IsPointerOverGameObject())
+            //    return;
 
-            if (Input.GetKey(KeyCode.W))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
-            }
+            //if (Input.GetKey(KeyCode.W))
+            //{
+            //    IsFollow = false;
+            //    CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
+            //}
 
-            if (Input.GetKey(KeyCode.S))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.back * Time.deltaTime * Speed;
-            }
+            //if (Input.GetKey(KeyCode.S))
+            //{
+            //    IsFollow = false;
+            //    CameraTf.position += Vector3.back * Time.deltaTime * Speed;
+            //}
 
-            if (Input.GetKey(KeyCode.A))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.left * Time.deltaTime * Speed;
-            }
+            //if (Input.GetKey(KeyCode.A))
+            //{
+            //    IsFollow = false;
+            //    CameraTf.position += Vector3.left * Time.deltaTime * Speed;
+            //}
 
-            if (Input.GetKey(KeyCode.D))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.right * Time.deltaTime * Speed;
-            }
+            //if (Input.GetKey(KeyCode.D))
+            //{
+            //    IsFollow = false;
+            //    CameraTf.position += Vector3.right * Time.deltaTime * Speed;
+            //}
 
-            if (IsFollow == true)
-            {
-                float dt = Time.deltaTime;
-                Quaternion newrotation = Quaternion.Euler(RoationOffset);
-                Vector3 newposition = newrotation * Offset + Target;
+            //if (IsFollow == true)
+            //{
+            //    float dt = Time.deltaTime;
+            //    Quaternion newrotation = Quaternion.Euler(RoationOffset);
+            //    Vector3 newposition = newrotation * Offset + Target;
 
-                CameraTf.rotation = Quaternion.Lerp(CameraTf.rotation, newrotation, dt * Damping);
-                CameraTf.position = Vector3.Lerp(CameraTf.position, newposition, dt * Damping);
-            }
+            //    CameraTf.rotation = Quaternion.Lerp(CameraTf.rotation, newrotation, dt * Damping);
+            //    CameraTf.position = Vector3.Lerp(CameraTf.position, newposition, dt * Damping);
+            //}
 
             MouseMain();
         }
@@ -145,8 +146,14 @@ namespace Manager
 
         public void SetTarget(Vector3 target, bool isfollow = false)
         {
-            Target = target;
-            IsFollow = isfollow;
+            RtsCamera.LookAt = target;
+           // Target = target;
+          //  IsFollow = isfollow;
+        }
+
+        public void SetTarget(Transform target)
+        {
+            RtsCamera.Follow(target,true);
         }
 
         /// <summary>
