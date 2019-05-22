@@ -107,6 +107,16 @@ namespace GameSystem
                 valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(json);
 
 
+                Dictionary<int,string> valjson=new Dictionary<int, string>();
+                valjson.Add(1,"100");
+                valjson.Add(2,"200");
+                valjson.Add(3,"300");
+                Debug.Log(JsonConvert.SerializeObject(valjson));
+
+                string valus = "AAAAA{0},!!!!";
+
+                Debug.Log(string.Format(valus,10.333f));
+
                 //  Debug.Log(JsonConvert.SerializeObject(valuePairs));
 
             }
@@ -227,6 +237,7 @@ namespace GameSystem
 
                         StrategyMoveSpeed = 6,
                         FireMoveSpeed = 10,
+
                     });
 
                     entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
@@ -242,23 +253,19 @@ namespace GameSystem
                         WeaponSecondaryId = -1
                     });
 
-                    entityManager.AddComponent(entity, ComponentType.Create<Techniques>());
-                    entityManager.SetComponentData(entity, new Techniques
-                    {
-                    });
-                    entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
-                    entityManager.SetComponentData(entity, new EquipmentCoat
-                    {
-                        SpriteId = 1,
-                        Type = EquipType.Coat,
-                        Level = EquipLevel.General,
-                        Part = EquipPart.All,
-                        BluntDefense = 19,
-                        SharpDefense = 20,
-                        Operational = 100,
-                        Weight = 3,
-                        Price = 1233,
-                    });
+                    //entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
+                    //entityManager.SetComponentData(entity, new EquipmentCoat
+                    //{
+                    //    SpriteId = 1,
+                    //    Type = EquipType.Coat,
+                    //    Level = EquipLevel.General,
+                    //    Part = EquipPart.All,
+                    //    BluntDefense = 19,
+                    //    SharpDefense = 20,
+                    //    Operational = 100,
+                    //    Weight = 3,
+                    //    Price = 1233,
+                    //});
 
                     entityManager.AddComponentData(entity, new Knapsack
                     {
@@ -266,7 +273,48 @@ namespace GameSystem
                         KnapscakCode = datas[i].Id
                     });
 
+                    entityManager.AddComponent(entity, ComponentType.Create<Team>());
+                    entityManager.SetComponentData(entity, new Team
+                    {
+                        TeamBossId = datas[i].TeamId
+                    });
+
+                    if (datas[i].Identity == 0)
+                    {
+                        entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
+                    }
+                    else if (datas[i].Identity == 1)
+                    {
+                        entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
+                        //  entityGo.name = "PlayerMain";
+                        PlayerEntity = entity;
+
+                        SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+
+                        StrategyCameraManager.Instance.SetTarget(entityGo.transform);
+
+                    }
+
+                    entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
+                    entityManager.SetComponentData(entity, new BehaviorData
+                    {
+                        Target = Vector3.zero,
+                    });
+
+
+                    if (string.IsNullOrEmpty(datas[i].JifaJson) == false)
+                    {
+                        TechniquesSystem.SpawnTechnique(entity, datas[i].JifaJson);
+                    }
+                        
                     ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", datas[i].Id), entity);
+                    
+                    SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
+
+                    GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
+                    GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
+                    GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
+
 
                     //    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
                     //    "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
@@ -286,13 +334,6 @@ namespace GameSystem
                     //    });
 
                     //}
-
-                    entityManager.AddComponent(entity, ComponentType.Create<Team>());
-                    entityManager.SetComponentData(entity, new Team
-                    {
-                        TeamBossId = datas[i].TeamId
-                    });
-
 
                     //entityManager.AddComponent(entity, ComponentType.Create<Energy>());
                     //entityManager.SetComponentData(entity, new Energy
@@ -346,31 +387,7 @@ namespace GameSystem
                     //        break;
                     //}
 
-                    if (datas[i].Identity == 0)
-                    {
-                        entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-                    }
-                    else if (datas[i].Identity == 1)
-                    {
-                        entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-                      //  entityGo.name = "PlayerMain";
-                        PlayerEntity = entity;
 
-                        SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-
-                        StrategyCameraManager.Instance.SetTarget(entityGo.transform);
-
-                    }
-
-                    entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-                    entityManager.SetComponentData(entity, new BehaviorData
-                    {
-                        Target = Vector3.zero,
-                    });
-
-                    GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
-                    GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
-                    GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
 
                     //结合GameObject
                     //entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
@@ -389,7 +406,7 @@ namespace GameSystem
                     //    item.IsInit = true;
                     //}
                     // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-                    SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
+
                 }
 
             }

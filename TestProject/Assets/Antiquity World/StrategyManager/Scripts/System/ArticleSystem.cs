@@ -50,7 +50,6 @@ namespace GameSystem
             }
         }
 
-
         #region 公共函数
 
         public static void ITEM_ATTRIBUTE_CHECK(ENUM_ITEM_ATTRIBUTE type, int value, Entity entity)
@@ -315,7 +314,6 @@ namespace GameSystem
 
 
         #endregion
-
 
         public List<Entity> GetEntities(Entity target)
         {

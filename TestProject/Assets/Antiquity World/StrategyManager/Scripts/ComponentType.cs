@@ -232,9 +232,6 @@ namespace GameSystem
         public int AttackMax;
         public int PhysicsDefence;
         public int MagicDefence;
-
-
-
     }
 
     public struct Life : IComponentData
@@ -375,11 +372,20 @@ namespace GameSystem
 
     public struct Techniques : IComponentData
     {
+        public int BiologicalId;
+        public Entity BiologicalTarget;
+
+        
         public int Id;
         public int ParentId;
-        public int BiologicalId;
+
+        public int Level;
+        
+
         public int TechniquesValue;
         public int Effect;
+        public int Value;
+
     }
 
     public struct Wuxue : IComponentData
@@ -715,6 +721,11 @@ namespace GameSystem
         public int AttributeValue7;
         public ENUM_ITEM_ATTRIBUTE Attribute8;
         public int AttributeValue8;
+    }
+
+    public struct Speciality : IComponentData
+    {
+
     }
 
 

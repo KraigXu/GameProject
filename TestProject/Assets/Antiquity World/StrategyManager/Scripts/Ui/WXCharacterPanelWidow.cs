@@ -9,17 +9,59 @@ using Unity.Entities;
 
 namespace GameSystem.Ui
 {
+
+    /// <summary>
+    /// 显示信息面板
+    /// </summary>
     public class WXCharacterPanelWidow : UIWindowBase
     {
-        [SerializeField] private Transform _personnelParent;
-        [SerializeField] private RectTransform _personnelPrefab;
-
         [Header("Introduction")]
+        public Text Name;
+        public Text Surname;
+        public Text Txt1;
+        public Text Txt2;
+        public Text Txt3;
+        public Text Txt4;
+        public Text Txt5;
+        public Text Txt6;
+        public Text Txt7;
+        public Text Txt8;
+        public Text Txt9;
+        public Text Txt10;
+
+
+        [Header("Property")]
+        public Text Tizhitxt;
+        public Text Lidaotxt;
+        public Text Jingshentxt;
+        public Text Lingdongtxt;
+        public Text Wuxingtxt;
+        public Text Neigongtxt;
+        public Text Waigongtxt;
+        public Text Jingtxt;
+        public Text Qitxt;
+        public Text Shentxt;
+
+        public Text Pro1;
+        public Text Pro2;
+        public Text Pro3;
+        public Text Pro4;
+        public Text Pro5;
+        public Text Pro6;
+        public Text Pro8;
+        public Text Pro9;
+        public Text Pro10;
+        public Text Pro11;
+        public Text Pro12;
+        public Text Pro13;
+
+
+        [SerializeField] private Text _name;
+        [SerializeField] private Text _surname;
         [SerializeField] private Toggle _introductionTog;
         [SerializeField] private GameObject _introductionGo;
         [SerializeField] private Button _exitBtn;
-        [SerializeField] private Text _name;
-        [SerializeField] private Text _surname;
+
 
         [SerializeField] private Toggle _propertyTog;
         [SerializeField] private GameObject _propertyGo;
@@ -31,22 +73,10 @@ namespace GameSystem.Ui
         [SerializeField] private Transform _jiyiGo;
         [SerializeField] private RectTransform _techniquesPrefab;
         [SerializeField] private Transform _jiyiContent;
-        private List<GameObject> _techniquesItems = new List<GameObject>();
+        [SerializeField] private List<GameObject> _techniquesItems = new List<GameObject>();
 
         [SerializeField] private Toggle _tagTog;
         [SerializeField] private GameObject _tagGo;
-
-        [Header("Property")]
-        [SerializeField] private Text _tizhitxt;
-        [SerializeField] private Text _lidaotxt;
-        [SerializeField] private Text _jingshentxt;
-        [SerializeField] private Text _lingdongtxt;
-        [SerializeField] private Text _wuxingtxt;
-        [SerializeField] private Text _neigongtxt;
-        [SerializeField] private Text _waigongtxt;
-        [SerializeField] private Text _jingtxt;
-        [SerializeField] private Text _qitxt;
-        [SerializeField] private Text _shentxt;
 
         [Header("Equipment")]
         [SerializeField] private List<GameObject> _equipmentItems = new List<GameObject>();
@@ -90,45 +120,45 @@ namespace GameSystem.Ui
         {
             _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
 
-            for (int i = 0; i < _entities.Length; i++)
-            {
-                Biological biological = _entityManager.GetComponentData<Biological>(_entities[i]);
+            //for (int i = 0; i < _entities.Length; i++)
+            //{
+            //    Biological biological = _entityManager.GetComponentData<Biological>(_entities[i]);
 
-                RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_personnelPrefab, _personnelParent);
-                UiBiologicalAvatarItem item = rectGo.GetComponent<UiBiologicalAvatarItem>();
-                item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[biological.BiologicalId];
-                item.Key = biological.BiologicalId;
-                item.Entity = _entities[i];
-                item.ClickCallBack = BiologicalChange;
+            //    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_personnelPrefab, _personnelParent);
+            //    UiBiologicalAvatarItem item = rectGo.GetComponent<UiBiologicalAvatarItem>();
+            //    item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[biological.BiologicalId];
+            //    item.Key = biological.BiologicalId;
+            //    item.Entity = _entities[i];
+            //    item.ClickCallBack = BiologicalChange;
 
 
-                if (SystemManager.Contains<PlayerInput>(_entities[i])) 
-                {
-                    _curEntity = _entities[i];
-                    _name.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
-                    _surname.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
+            //    if (SystemManager.Contains<PlayerInput>(_entities[i]))
+            //    {
+            //        _curEntity = _entities[i];
+            //        _name.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+            //        _surname.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
 
-                    ChangeEquipment();
+            //        ChangeEquipment();
 
-                }
-                //显示背包数据
-                Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_entities[i]);
+            //    }
+            //    //显示背包数据
+            //    Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_entities[i]);
 
-                RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleView, _articleParent);
-                UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
-                articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
-                List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_entities[i]);
-                for (int j = 0; j < entities.Count; j++)
-                {
-                    ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
+            //    RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleView, _articleParent);
+            //    UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
+            //    articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
+            //    List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_entities[i]);
+            //    for (int j = 0; j < entities.Count; j++)
+            //    {
+            //        ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
 
-                    RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
-                    UiArticleBox aiArticleBox= box.gameObject.GetComponent<UiArticleBox>();
-                    aiArticleBox.NumberText.text = articleItem.Count.ToString();
-                    aiArticleBox.Entity = entities[j];
+            //        RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
+            //        UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
+            //        aiArticleBox.NumberText.text = articleItem.Count.ToString();
+            //        aiArticleBox.Entity = entities[j];
 
-                }
-            }
+            //    }
+            //}
         }
 
         public void CloseCharater()
