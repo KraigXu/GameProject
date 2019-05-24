@@ -285,6 +285,16 @@ namespace GameSystem
         public int WoodMax;
         public int Food;
         public int FoodMax;
+
+        
+    }
+
+    public struct FactionProperty : IComponentData
+    {
+        public Entity FactionEntity;
+        public int Level;
+        
+
     }
 
     public struct Equipment : IComponentData
@@ -297,13 +307,20 @@ namespace GameSystem
         public int Shoes;
         public int WeaponFirstId;
         public int WeaponSecondaryId;
+
+        public Entity HelmetE;
+        public Entity ClothesE;
+        public Entity BeltE;
+        public Entity HandGuardE;
+        public Entity PantsE;
+        public Entity ShoesE;
+        public Entity WeaponFirstE;
+        public Entity WeaponSecondaryE;
     }
 
     public enum EquipType
     {
         Coat,
-
-
         Underwear,
         Helmets,
         Necklace,

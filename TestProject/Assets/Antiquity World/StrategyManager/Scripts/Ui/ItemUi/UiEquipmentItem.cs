@@ -27,7 +27,6 @@ namespace GameSystem.Ui
             Title.text = _style.Title;
             
         }
-
         void Update()
         {
 

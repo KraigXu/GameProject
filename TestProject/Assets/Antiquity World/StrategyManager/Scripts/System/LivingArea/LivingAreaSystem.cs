@@ -83,10 +83,20 @@ namespace GameSystem
         public void LivingAreaInit(EntityManager entityManager)
         {
 
+            List<LivingAreaModelData> livingAreaModelDatas = SQLService.Instance.QueryAll<LivingAreaModelData>();
+
+
+            for (int i = 0; i < livingAreaModelDatas.Count; i++)
+            {
+               GameStaticData.LivingAreaPrefabDic.Add(livingAreaModelDatas[i].Id,Resources.Load<GameObject>(livingAreaModelDatas[i].Path));
+            }
+
+
+
             List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
             for (int i = 0; i < datas.Count; i++)
             {
-                Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelBaseId].transform);
+                Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.LivingAreaPrefabDic[datas[i].ModelBaseId].transform);
                 entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
                 //entityGo.gameObject.name = datas[i].Name;
                 ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();

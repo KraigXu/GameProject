@@ -104,8 +104,12 @@ public class SQLService
 
         Tables.CreateTable_PlayProject(this);
         Tables.CreateTable_District(this);
+
+        Tables.CreateTable_LivingAreaModelData(this);
         Tables.CreateTable_LivingArea(this);
+
         Tables.CreateTable_BuildingData(this);
+
 
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_FactionData(this);
@@ -118,6 +122,9 @@ public class SQLService
         Tables.CreateTable_Skill(this);
 
         Tables.CreateTable_Avatar(this);
+
+        Tables.CreateTable_BiologicalAvatarData(this);
+        Tables.CreateTable_BiologicalModelData(this);
         Tables.CreateTable_BiologicalAvatarData(this);
         Tables.CreateTable_ModelData(this);
         Tables.CreateTable_ModelMap(this);

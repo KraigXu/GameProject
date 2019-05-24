@@ -8,7 +8,7 @@ namespace GameSystem
     public sealed class GameStaticData
     {
 
-        public static Dictionary<int, GameObject> ModelPrefab = new Dictionary<int, GameObject>();
+        //public static Dictionary<int, GameObject> ModelPrefab = new Dictionary<int, GameObject>();
 
         public static Dictionary<int, string> DistrictName = new Dictionary<int, string>();
         public static Dictionary<int, string> DistrictDescriptione = new Dictionary<int, string>();
@@ -19,6 +19,7 @@ namespace GameSystem
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaDescription = new Dictionary<int, string>();
+        public static Dictionary<int, GameObject> LivingAreaPrefabDic = new Dictionary<int, GameObject>();
 
         public static Dictionary<int, string> BuildingName = new Dictionary<int, string>();
         public static Dictionary<int, string> BuildingDescription = new Dictionary<int, string>();
@@ -35,7 +36,8 @@ namespace GameSystem
         public static Dictionary<int, string> BiologicalSurnameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalNameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalDescription = new Dictionary<int, string>();
-        
+        public static Dictionary<int, GameObject> BiologicalPrefab = new Dictionary<int, GameObject>();
+
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
         public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();
 

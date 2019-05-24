@@ -16,18 +16,13 @@ namespace GameSystem.Ui
     public class WXCharacterPanelWidow : UIWindowBase
     {
         [Header("Introduction")]
-        public Text Name;
-        public Text Surname;
-        public Text Txt1;
-        public Text Txt2;
-        public Text Txt3;
-        public Text Txt4;
-        public Text Txt5;
-        public Text Txt6;
-        public Text Txt7;
-        public Text Txt8;
-        public Text Txt9;
-        public Text Txt10;
+        public Text NameTxt;
+        public Text SurnameTxt;
+        public Text AgeTxt;
+        public Text SexTxt;
+        public Text PrestigeTxt;
+        public Text FamilyTxt;
+        public Text FactionTxt;
 
 
         [Header("Property")]
@@ -36,57 +31,48 @@ namespace GameSystem.Ui
         public Text Jingshentxt;
         public Text Lingdongtxt;
         public Text Wuxingtxt;
-        public Text Neigongtxt;
-        public Text Waigongtxt;
         public Text Jingtxt;
         public Text Qitxt;
         public Text Shentxt;
+        public Text Neigongtxt;
+        public Text Waigongtxt;
 
-        public Text Pro1;
-        public Text Pro2;
-        public Text Pro3;
-        public Text Pro4;
-        public Text Pro5;
-        public Text Pro6;
-        public Text Pro8;
-        public Text Pro9;
-        public Text Pro10;
-        public Text Pro11;
-        public Text Pro12;
-        public Text Pro13;
+        public Text ThoughTxt;
+        public Text NeckTxt;
+        public Text HeartTxt;
+        public Text EyeTxt;
+        public Text EarTxt;
+        public Text LegLeftTxt;
+        public Text LegRightTxt;
+        public Text HandRightTxt;
+        public Text HandLeftTxt;
+        public Text FertilityTxt;
+        public Text AppearanceTxt;
+        public Text DressTxt;
+        public Text SkinTxt;
+        public Text BlodTxt;
+        public Text JingLuoTxt;
 
+        public UiEquipmentBox HelmetBox;
+        public UiEquipmentBox ClothesBox;
+        public UiEquipmentBox BeltBox;
+        public UiEquipmentBox HandGuradBox;
+        public UiEquipmentBox PantsBox;
+        public UiEquipmentBox ShoeaBox;
+        public UiEquipmentBox WeaponFirstBox;
+        public UiEquipmentBox WeaponSecondaryBox;
 
-        [SerializeField] private Text _name;
-        [SerializeField] private Text _surname;
-        [SerializeField] private Toggle _introductionTog;
-        [SerializeField] private GameObject _introductionGo;
-        [SerializeField] private Button _exitBtn;
-
-
-        [SerializeField] private Toggle _propertyTog;
-        [SerializeField] private GameObject _propertyGo;
-
-        [SerializeField] private Toggle _combatTog;
-        [SerializeField] private GameObject _combatGo;
-
-        [SerializeField] private Toggle _jiyiTog;
-        [SerializeField] private Transform _jiyiGo;
-        [SerializeField] private RectTransform _techniquesPrefab;
-        [SerializeField] private Transform _jiyiContent;
-        [SerializeField] private List<GameObject> _techniquesItems = new List<GameObject>();
-
-        [SerializeField] private Toggle _tagTog;
-        [SerializeField] private GameObject _tagGo;
-
-        [Header("Equipment")]
-        [SerializeField] private List<GameObject> _equipmentItems = new List<GameObject>();
+        [Header("Speciality")]
+        public RectTransform SpecialityContentParent;
 
         [Header("Article")]
         private ArticleManager _articleManager = new ArticleManager();
         [SerializeField]
         private RectTransform _articleParent;
 
+        [Header("Info")]
 
+        [SerializeField] private Button _exitBtn;
         //--------------------------------运行时属性
         private Entity _curEntity;
         private EntityArray _entities;
@@ -108,209 +94,277 @@ namespace GameSystem.Ui
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            _exitBtn.onClick.AddListener(CloseCharater);
-            _propertyTog.onValueChanged.AddListener(PropertyTogChange);
-            _combatTog.onValueChanged.AddListener(CombatTogChange);
-            _jiyiTog.onValueChanged.AddListener(JiyiTogChange);
-            _tagTog.onValueChanged.AddListener(TagTogChange);
-
+            _exitBtn.onClick.AddListener(delegate
+            {
+                UICenterMasterManager.Instance.CloseWindow(this.ID);
+            });
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
             _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
 
-            //for (int i = 0; i < _entities.Length; i++)
-            //{
-            //    Biological biological = _entityManager.GetComponentData<Biological>(_entities[i]);
 
-            //    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_personnelPrefab, _personnelParent);
-            //    UiBiologicalAvatarItem item = rectGo.GetComponent<UiBiologicalAvatarItem>();
-            //    item.AvatarImage.sprite = GameStaticData.BiologicalAvatar[biological.BiologicalId];
-            //    item.Key = biological.BiologicalId;
-            //    item.Entity = _entities[i];
-            //    item.ClickCallBack = BiologicalChange;
-
-
-            //    if (SystemManager.Contains<PlayerInput>(_entities[i]))
-            //    {
-            //        _curEntity = _entities[i];
-            //        _name.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
-            //        _surname.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
-
-            //        ChangeEquipment();
-
-            //    }
-            //    //显示背包数据
-            //    Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_entities[i]);
-
-            //    RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleView, _articleParent);
-            //    UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
-            //    articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
-            //    List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_entities[i]);
-            //    for (int j = 0; j < entities.Count; j++)
-            //    {
-            //        ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
-
-            //        RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
-            //        UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
-            //        aiArticleBox.NumberText.text = articleItem.Count.ToString();
-            //        aiArticleBox.Entity = entities[j];
-
-            //    }
-            //}
-        }
-
-        public void CloseCharater()
-        {
-            UICenterMasterManager.Instance.CloseWindow(this.ID);
-        }
-
-        /// <summary>
-        /// 切换人物信息
-        /// </summary>
-        /// <param name="key"></param>
-        private void BiologicalChange(Entity entity, int key)
-        {
-            _curEntity = entity;
-
-            Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
-            _name.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
-            _surname.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
-
-            PropertyTogChange(_propertyTog.isOn);
-            CombatTogChange(_combatTog.isOn);
-            JiyiTogChange(_jiyiTog.isOn);
-            TagTogChange(_tagTog.isOn);
-            ChangeEquipment();
-        }
-
-        private void PropertyTogChange(bool flag)
-        {
-            _propertyGo.gameObject.SetActive(flag);
-            if (flag == true)
+            if (_entities.Length >= 1)
             {
-                //_tizhitxt.text = _curBiological.Tizhi.ToString();
-                //_lidaotxt.text = _curBiological.AgeMax.ToString();
-                //_tizhitxt.text = _curBiological.Tizhi.ToString();
-                //_lidaotxt.text = _curBiological.Lidao.ToString();
-                //_jingshentxt.text = _curBiological.Jingshen.ToString();
-                //_lingdongtxt.text = _curBiological.Lingdong.ToString();
-                //_wuxingtxt.text = _curBiological.Wuxing.ToString();
-                //_jingtxt.text = _curBiological.Jing.ToString();
-                //_qitxt.text = _curBiological.Qi.ToString();
-                //_shentxt.text = _curBiological.Shen.ToString();
-            }
-            else
-            {
-            }
-        }
+                _curEntity = _entities[1];
 
-        private void CombatTogChange(bool flag)
-        {
-            _combatGo.gameObject.SetActive(flag);
-            if (flag == true)
-            {
+                Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
+                NameTxt.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+                SurnameTxt.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
+                AgeTxt.text = GameStaticData.BiologicalSex[biological.Sex];
+                SexTxt.text = biological.Age.ToString();
+                PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
+                FamilyTxt.text = GameStaticData.FamilyName[biological.FamilyId];
+                FactionTxt.text = GameStaticData.FactionName[biological.FactionId];
 
-            }
-            else
-            {
+                //Show body Info
+                BodyProperty bodyPropert = _entityManager.GetComponentData<BodyProperty>(_curEntity);
 
-            }
-        }
-        /// <summary>
-        /// Techniques面板打开 更新和清除
-        /// </summary>
-        /// <param name="flag"></param>
-        private void JiyiTogChange(bool flag)
-        {
-            _jiyiGo.gameObject.SetActive(flag);
+                Tizhitxt.text = biological.Tizhi.ToString();
+                Lidaotxt.text = biological.Lidao.ToString();
+                Jingshentxt.text = biological.Jingshen.ToString();
+                Lingdongtxt.text = biological.Lingdong.ToString();
+                Wuxingtxt.text = biological.Wuxing.ToString();
+                Jingtxt.text = biological.Jing.ToString();
+                Qitxt.text = biological.Qi.ToString();
+                Shentxt.text = biological.Shen.ToString();
+                Neigongtxt.text = (biological.Lidao * 0.5f + 1).ToString();
+                Waigongtxt.text = (biological.Lidao * 0.3f + 1).ToString();
 
-            if (flag == true)
-            {
-                //List<KeyValuePair<int, int>> content = TechniquesSystem.GetTechnique(_curBiological.TechniquesId).Content;
+                ThoughTxt.text = bodyPropert.Thought.ToString();
+                NeckTxt.text = bodyPropert.Neck.ToString();
+                HeartTxt.text = bodyPropert.Heart.ToString();
+                EyeTxt.text = bodyPropert.Eye.ToString();
+                EarTxt.text = bodyPropert.Ear.ToString();
+                LegLeftTxt.text = bodyPropert.LeftLeg.ToString();
+                LegRightTxt.text = bodyPropert.LeftLeg.ToString();
+                HandRightTxt.text = bodyPropert.RightHand.ToString();
+                HandLeftTxt.text = bodyPropert.LeftHand.ToString();
+                FertilityTxt.text = bodyPropert.Fertility.ToString();
+                AppearanceTxt.text = bodyPropert.Appearance.ToString();
+                DressTxt.text = bodyPropert.Dress.ToString();
+                SkinTxt.text = bodyPropert.Skin.ToString();
+                BlodTxt.text = bodyPropert.Blod.ToString();
+                JingLuoTxt.text = bodyPropert.JingLuo.ToString();
 
-                //for (int i = 0; i < content.Count; i++)
-                //{
-                //    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_techniquesPrefab, _jiyiContent);
-                //    rectGo.GetChild(0).GetComponent<Text>().text = GameStaticData.TechniquesName[content[i].Key];
-                //    rectGo.GetChild(1).GetComponent<Text>().text = content[i].Value.ToString();
-                //}
-            }
-            else
-            {
-                for (int i = 0; i < _techniquesItems.Count; i++)
+                Equipment equipment = _entityManager.GetComponentData<Equipment>(_curEntity);
+
+                if (equipment.HelmetE != Entity.Null)
                 {
-                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(_techniquesItems[i].transform);
+                    HelmetBox.Entity = equipment.HelmetE;
+                    //ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(_curEntity);
                 }
-                _techniquesItems.Clear();
-            }
-        }
-        private void TagTogChange(bool flag)
-        {
-            _tagGo.gameObject.SetActive(flag);
-            if (flag == true)
-            {
+                if (equipment.ClothesE != Entity.Null)
+                {
+                    ClothesBox.Entity = equipment.ClothesE;
+                }
+                if (equipment.BeltE != Entity.Null)
+                {
+                    BeltBox.Entity = equipment.BeltE;
+                }
+                if (equipment.HandGuardE != Entity.Null)
+                {
+                    HandGuradBox.Entity = equipment.HandGuardE;
+                }
+                if (equipment.PantsE != Entity.Null)
+                {
+                    PantsBox.Entity = equipment.PantsE;
+                }
+                if (equipment.ShoesE != Entity.Null)
+                {
+                    ShoeaBox.Entity = equipment.ShoesE;
+                }
+                if (equipment.WeaponFirstE != Entity.Null)
+                {
+                    WeaponFirstBox.Entity = equipment.WeaponFirstE;
+                }
+                if (equipment.WeaponSecondaryE != Entity.Null)
+                {
+                    WeaponSecondaryBox.Entity = equipment.WeaponSecondaryE;
+                }
+
+                //Show knpasck Info
+                Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_curEntity);
+
+                RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleView, _articleParent);
+                UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
+                articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
+                List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_curEntity);
+                for (int j = 0; j < entities.Count; j++)
+                {
+                    ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
+
+                    RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
+                    UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
+                    aiArticleBox.NumberText.text = articleItem.Count.ToString();
+                    aiArticleBox.Entity = entities[j];
+
+                }
+
+                //Show
+                List<Entity> specialityEntitys = new List<Entity>();
+
+                for (int i = 0; i < specialityEntitys.Count; i++)
+                {
+                    RectTransform specialityRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiSpeciality, SpecialityContentParent);
+
+                }
+
 
             }
             else
             {
-
+                Debug.Log("用户信息缺失");
             }
+
         }
 
-        /// <summary>
-        /// 更新装备界面
-        /// </summary>
-        private void ChangeEquipment()
-        {
-            //EquipmentCoat equipment = SystemManager.GetProperty<EquipmentCoat>(_curEntity);
+        ///// <summary>
+        ///// 切换人物信息
+        ///// </summary>
+        ///// <param name="key"></param>
+        //private void BiologicalChange(Entity entity, int key)
+        //{
+        //    _curEntity = entity;
 
-            //Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
-            //_showTransform = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategySceneInit.Settings.ArticleInfoPerfab.transform, transform);
+        //    Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
+        //    _name.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
+        //    _surname.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
 
-            //UiEquipmentItem equipment = _showTransform.gameObject.GetComponent<UiEquipmentItem>();
+        //    PropertyTogChange(_propertyTog.isOn);
+        //    CombatTogChange(_combatTog.isOn);
+        //    JiyiTogChange(_jiyiTog.isOn);
+        //    TagTogChange(_tagTog.isOn);
+        //    ChangeEquipment();
+        //}
 
-            //string[] nameValue = go.name.Split('_');  //type_Id
+        //private void PropertyTogChange(bool flag)
+        //{
+        //    _propertyGo.gameObject.SetActive(flag);
+        //    if (flag == true)
+        //    {
+        //        //_tizhitxt.text = _curBiological.Tizhi.ToString();
+        //        //_lidaotxt.text = _curBiological.AgeMax.ToString();
+        //        //_tizhitxt.text = _curBiological.Tizhi.ToString();
+        //        //_lidaotxt.text = _curBiological.Lidao.ToString();
+        //        //_jingshentxt.text = _curBiological.Jingshen.ToString();
+        //        //_lingdongtxt.text = _curBiological.Lingdong.ToString();
+        //        //_wuxingtxt.text = _curBiological.Wuxing.ToString();
+        //        //_jingtxt.text = _curBiological.Jing.ToString();
+        //        //_qitxt.text = _curBiological.Qi.ToString();
+        //        //_shentxt.text = _curBiological.Shen.ToString();
+        //    }
+        //    else
+        //    {
+        //    }
+        //}
 
-            //switch ((ArticleType)int.Parse(nameValue[0]))
-            //{
-            //    case ArticleType.Coat:
-            //        {
-            //            if (SystemManager.Contains<EquipmentCoat>(biologicalEntity))
-            //            {
-            //                UiEquipmentStyle style = new UiEquipmentStyle();
-            //                EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
+        //private void CombatTogChange(bool flag)
+        //{
+        //    _combatGo.gameObject.SetActive(flag);
+        //    if (flag == true)
+        //    {
 
-            //                style.Title = "equipmentCoat";
-            //                style.Level = (int)EquipLevel.General;
-            //                style.conents = new Dictionary<string, List<string>>();
-            //                style.Values = new Dictionary<string, string>();
-            //                style.Values.Add("钝器防御:", equipmentCoat.BluntDefense.ToString());
-            //                style.Values.Add("利器防御:", equipmentCoat.SharpDefense.ToString());
-            //                style.Values.Add("操作性:", equipmentCoat.Operational.ToString());
+        //    }
+        //    else
+        //    {
 
-            //                style.Values.Add("重量:", equipmentCoat.Weight.ToString());
-            //                style.Values.Add("价格:", equipmentCoat.Price.ToString());
-            //                style.Values.Add("耐久:", equipmentCoat.Durable.ToString());
-            //                style.BackgroundId = equipmentCoat.SpriteId;
+        //    }
+        //}
+        ///// <summary>
+        ///// Techniques面板打开 更新和清除
+        ///// </summary>
+        ///// <param name="flag"></param>
+        //private void JiyiTogChange(bool flag)
+        //{
+        //    _jiyiGo.gameObject.SetActive(flag);
+
+        //    if (flag == true)
+        //    {
+        //        //List<KeyValuePair<int, int>> content = TechniquesSystem.GetTechnique(_curBiological.TechniquesId).Content;
+
+        //        //for (int i = 0; i < content.Count; i++)
+        //        //{
+        //        //    RectTransform rectGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_techniquesPrefab, _jiyiContent);
+        //        //    rectGo.GetChild(0).GetComponent<Text>().text = GameStaticData.TechniquesName[content[i].Key];
+        //        //    rectGo.GetChild(1).GetComponent<Text>().text = content[i].Value.ToString();
+        //        //}
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < _techniquesItems.Count; i++)
+        //        {
+        //            WXPoolManager.Pools[Define.GeneratedPool].Despawn(_techniquesItems[i].transform);
+        //        }
+        //        _techniquesItems.Clear();
+        //    }
+        //}
+        //private void TagTogChange(bool flag)
+        //{
+        //    _tagGo.gameObject.SetActive(flag);
+        //    if (flag == true)
+        //    {
+
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //}
+
+        ///// <summary>
+        ///// 更新装备界面
+        ///// </summary>
+        //private void ChangeEquipment()
+        //{
+        //    //EquipmentCoat equipment = SystemManager.GetProperty<EquipmentCoat>(_curEntity);
+
+        //    //Entity biologicalEntity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(_curShowId);
+        //    //_showTransform = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategySceneInit.Settings.ArticleInfoPerfab.transform, transform);
+
+        //    //UiEquipmentItem equipment = _showTransform.gameObject.GetComponent<UiEquipmentItem>();
+
+        //    //string[] nameValue = go.name.Split('_');  //type_Id
+
+        //    //switch ((ArticleType)int.Parse(nameValue[0]))
+        //    //{
+        //    //    case ArticleType.Coat:
+        //    //        {
+        //    //            if (SystemManager.Contains<EquipmentCoat>(biologicalEntity))
+        //    //            {
+        //    //                UiEquipmentStyle style = new UiEquipmentStyle();
+        //    //                EquipmentCoat equipmentCoat = SystemManager.GetProperty<EquipmentCoat>(biologicalEntity);
+
+        //    //                style.Title = "equipmentCoat";
+        //    //                style.Level = (int)EquipLevel.General;
+        //    //                style.conents = new Dictionary<string, List<string>>();
+        //    //                style.Values = new Dictionary<string, string>();
+        //    //                style.Values.Add("钝器防御:", equipmentCoat.BluntDefense.ToString());
+        //    //                style.Values.Add("利器防御:", equipmentCoat.SharpDefense.ToString());
+        //    //                style.Values.Add("操作性:", equipmentCoat.Operational.ToString());
+
+        //    //                style.Values.Add("重量:", equipmentCoat.Weight.ToString());
+        //    //                style.Values.Add("价格:", equipmentCoat.Price.ToString());
+        //    //                style.Values.Add("耐久:", equipmentCoat.Durable.ToString());
+        //    //                style.BackgroundId = equipmentCoat.SpriteId;
 
 
-            //                //equipmentCoat
-            //            }
-            //            else
-            //            {
-            //            }
+        //    //                //equipmentCoat
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //            }
 
-            //        }
-            //        break;
-            //    case ArticleType.Gloves:
-            //        break;
-            //    case ArticleType.Pants:
-            //        break;
-            //}
+        //    //        }
+        //    //        break;
+        //    //    case ArticleType.Gloves:
+        //    //        break;
+        //    //    case ArticleType.Pants:
+        //    //        break;
+        //    //}
 
-            //UICenterMasterManager.Instance.ShowWindow(id:)
-        }
+        //    //UICenterMasterManager.Instance.ShowWindow(id:)
+        //}
     }
 }

@@ -45,6 +45,22 @@ namespace GameSystem
             }
             return "";
         }
+
+        public static string ValueConvertString(int value)
+        {
+            List<PrestigeData> prestigeData = SQLService.Instance.QueryAll<PrestigeData>();
+
+            for (int i = 0; i < prestigeData.Count; i++)
+            {
+                if (prestigeData[i].ValueMax < value && prestigeData[i].ValueMin > value)
+                {
+                    return prestigeData[i].Title;
+                }
+            }
+
+            return prestigeData[0].Title;
+
+        }
     }
 
 }

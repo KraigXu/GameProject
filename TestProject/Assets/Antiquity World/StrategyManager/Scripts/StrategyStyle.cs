@@ -24,7 +24,9 @@ public class StrategyStyle : MonoBehaviour
     public RectTransform UiEffectTip;
     public RectTransform UiLableTip;
     public RectTransform UiImageTips;
-    
+    public RectTransform UiSpeciality;
+
+
 
     void Awake()
     {

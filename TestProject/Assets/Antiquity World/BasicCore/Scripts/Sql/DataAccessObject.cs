@@ -473,6 +473,32 @@ namespace DataAccessObject
         }
 
 
+        /// <summary>
+        /// 模型
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_BiologicalModelData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS BiologicalModelData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type INTEGER," +
+                                       " Path TEXT);");
+        }
+
+        /// <summary>
+        /// 模型
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_LivingAreaModelData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS LivingAreaModelData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type INTEGER," +
+                                       " Path TEXT);");
+        }
+        
     }
     //-----------------------------------------建表语句 -----------------------------------End
 
@@ -835,10 +861,11 @@ namespace DataAccessObject
             return objects;
         }
     }
+
     /// <summary>
     /// 模型信息
     /// </summary>
-    public class ModelData : BaseData
+    public class BiologicalModelData : BaseData
     {
         public int Id { get; set; }
         public string Code { get; set; }
@@ -854,6 +881,26 @@ namespace DataAccessObject
             return objects;
         }
     }
+    /// <summary>
+    /// 模型信息
+    /// </summary>
+    public class LivingAreaModelData : BaseData
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public int Type { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Type,Path
+            };
+            return objects;
+        }
+    }
+    
 
     /// <summary>
     /// 头像数据

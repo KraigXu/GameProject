@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class SpecialitySystem : ComponentSystem
+namespace GameSystem
 {
-    protected override void OnUpdate()
+    public class SpecialitySystem : ComponentSystem
     {
+        protected override void OnUpdate()
+        {
+        }
+
     }
 
 }

@@ -26,12 +26,12 @@ namespace GameSystem
         public static EntityArchetype BiologicalSocialArchetype;
         public static EntityArchetype AncientTombArchetype;
         public static EntityArchetype ArticleArchetype;
+        public static EntityArchetype FactionArchetype;
 
         public static DemoSetting Settings;
         public static Entity PlayerEntity;
 
         public static Dictionary<Entity, GameObject> EcsGameObjectsDic = new Dictionary<Entity, GameObject>();
-
 
         public static void InitializeWithScene()
         {
@@ -60,31 +60,14 @@ namespace GameSystem
             BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
+            FactionArchetype = entityManager.CreateArchetype(typeof(Faction));
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow);
-
 
             RelationSystem.SetupComponentData(entityManager);
             SocialDialogSystem.SetupComponentData(entityManager);
             PrestigeSystem.SetupComponentData(entityManager);
 
-            #region Data
-            {
-
-                List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
-                for (int i = 0; i < biologicalAvatarDatas.Count; i++)
-                {
-                    GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
-                }
-
-                
-
-                List<ModelData> modelDatas = SQLService.Instance.QueryAll<ModelData>();
-                for (int i = 0; i < modelDatas.Count; i++)
-                {
-                    GameStaticData.ModelPrefab.Add(modelDatas[i].Id, Resources.Load<GameObject>(modelDatas[i].Path));
-                }
-            }
 
             #region Article
             {
@@ -123,9 +106,6 @@ namespace GameSystem
             #endregion
 
 
-
-            #endregion
-
             //#region DistrictInit
             //{
             //    List<DistrictData> datas = SQLService.Instance.QueryAll<DistrictData>();
@@ -163,12 +143,23 @@ namespace GameSystem
 
             #region Character 信息初始
             {
+                List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
+                for (int i = 0; i < biologicalAvatarDatas.Count; i++)
+                {
+                    GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
+                }
+
+                List<BiologicalModelData> biologicalModelDatas = SQLService.Instance.QueryAll<BiologicalModelData>();
+                for (int i = 0; i < biologicalModelDatas.Count; i++)
+                {
+                    GameStaticData.BiologicalPrefab.Add(biologicalModelDatas[i].Id, Resources.Load<GameObject>(biologicalModelDatas[i].Path));
+                }
 
                 List<BiologicalData> datas = SQLService.Instance.QueryAll<BiologicalData>();
 
                 for (int i = 0; i < datas.Count; i++)
                 {
-                    Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.ModelPrefab[datas[i].ModelId].transform);
+                    Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
                     entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
 
                     Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
@@ -294,6 +285,15 @@ namespace GameSystem
                         StrategyCameraManager.Instance.SetTarget(entityGo.transform);
 
                     }
+
+                    if (datas[i].FactionId != 0)
+                    {
+                        entityManager.AddComponentData(entity,new FactionProperty
+                        {
+
+                        });
+                    }
+
 
                     entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
                     entityManager.SetComponentData(entity, new BehaviorData
@@ -449,18 +449,21 @@ namespace GameSystem
             }
             #endregion
 
+
             #region FactionData
             {
-                EntityArchetype factionArchetype = entityManager.CreateArchetype(typeof(Faction));
+
                 List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
+
                 for (int i = 0; i < factionDatas.Count; i++)
                 {
-                    Entity faction = entityManager.CreateEntity(factionArchetype);
+                    Entity faction = entityManager.CreateEntity(FactionArchetype);
                     entityManager.SetComponentData(faction, new Faction
                     {
                         Id = factionDatas[i].Id,
                         Level = factionDatas[i].FactionLevel,
                         Type = factionDatas[i].FactionType,
+
                         Food = factionDatas[i].Food,
                         FoodMax = factionDatas[i].FoodMax,
                         Iron = factionDatas[i].Iron,
