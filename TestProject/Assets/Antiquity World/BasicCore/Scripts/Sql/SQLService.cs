@@ -126,7 +126,6 @@ public class SQLService
         Tables.CreateTable_BiologicalAvatarData(this);
         Tables.CreateTable_BiologicalModelData(this);
         Tables.CreateTable_BiologicalAvatarData(this);
-        Tables.CreateTable_ModelData(this);
         Tables.CreateTable_ModelMap(this);
         Tables.CreateTable_SocialDialog(this);
     }

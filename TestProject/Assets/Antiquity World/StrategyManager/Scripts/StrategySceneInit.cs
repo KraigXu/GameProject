@@ -515,8 +515,8 @@ namespace GameSystem
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
                 UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
-
                 UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+
 
                 UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
 
