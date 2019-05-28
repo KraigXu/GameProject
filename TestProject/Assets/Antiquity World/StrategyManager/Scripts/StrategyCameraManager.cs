@@ -28,7 +28,6 @@ namespace Manager
     public class StrategyCameraManager : MonoBehaviour
     {
         public static StrategyCameraManager _instance;
-
         public static StrategyCameraManager Instance
         {
             get { return _instance; }
@@ -38,101 +37,29 @@ namespace Manager
 
         public event TouchInputEventHandler<MouseInfo, MouseEventArgs> SingleStart;
 
-        public Vector3 Target;
-        public Vector3 RoationOffset = new Vector3(50, 0, 0);
-        public float Distance = 10;
-        public Vector3 Offset = new Vector3(0, 1, -15);
-        public float Damping = 3;
-        public float ZoomSpeed;
-
-        public Transform CameraTf;
-        public bool IsFollow;
-        public float Speed = 3.5f;
-
         public LayerMask Layer;
         public Vector3 MousePoint;
         public GameObject MouseTarget;
-        public RtsCamera RtsCamera;
-
         public GameObject TargetOj;
+
+        public OverLookCameraController CameraController;
+
 
         void Awake()
         {
             _instance = this;
-            CameraTf = transform;
+            CameraController = gameObject.GetComponent<OverLookCameraController>();
         }
 
         void Start()
         {
-            StrategySceneInit.InitializeWithScene();
-
-            SetTarget(TargetOj.transform.position,true);
-
+            GameSceneInit.InitializeWithScene();
+            //SetTarget(TargetOj.transform.position,true);
         }
-
-
-        void OnGUI()
-        {
-
-            //if (GUI.Button(new Rect(0, 0, 160, 60), "战斗测试"))
-            //{
-            //    World.DisposeAllWorlds();
-            //    WXSceneManager.Load("FightingScene");
-            //    //SceneManager.LoadScene("FightingScene");
-            //}
-        }
-
-
         void Update()
         {
             if (EventSystem.current.IsPointerOverGameObject())
                 return;
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.back * Time.deltaTime * Speed;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.left * Time.deltaTime * Speed;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                IsFollow = false;
-                CameraTf.position += Vector3.right * Time.deltaTime * Speed;
-            }
-
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                Offset.z -= Input.GetAxis("Mouse ScrollWheel")* Time.deltaTime * ZoomSpeed;
-               // CameraTf.position += CameraTf.forward * Time.deltaTime * Speed;
-            }
-
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-            {
-                Offset.z += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * ZoomSpeed;
-               // CameraTf.position += CameraTf.forward * Time.deltaTime * Speed;
-            }
-
-            if (IsFollow == true)
-            {
-                float dt = Time.deltaTime;
-                Quaternion newrotation = Quaternion.Euler(RoationOffset);
-                Vector3 newposition = newrotation * Offset + Target;
-
-                CameraTf.rotation = Quaternion.Lerp(CameraTf.rotation, newrotation, dt * Damping);
-                CameraTf.position = Vector3.Lerp(CameraTf.position, newposition, dt * Damping);
-            }
 
             MouseMain();
         }
@@ -153,26 +80,21 @@ namespace Manager
             else
             {
 
+
             }
         }
 
 
 
+
         public void Follow(Vector3 target)
         {
-            IsFollow = true;
+
         }
 
         public void SetTarget(Vector3 target, bool isfollow = false)
         {
-           // RtsCamera.LookAt = target;
-            Target = target;
-            IsFollow = isfollow;
-        }
-
-        public void SetTarget(Transform target)
-        {
-            RtsCamera.Follow(target,true);
+            CameraController.m_targetPosition = target;
         }
 
         /// <summary>

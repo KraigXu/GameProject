@@ -30,27 +30,39 @@ namespace GameSystem
         private RelationGroup _group;
 
 
-        public static void SetupComponentData(EntityManager entityManager)
+        public  void SetupComponentData(EntityManager entityManager)
         {
-            List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
+           // List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
 
+            //for (int i = 0; i < relationDatas.Count; i++)
+            //{
+               
+            //    //DoubleKey newKey=new DoubleKey
+            //    //{
+            //    //    Key1 = relationDatas[i].MainId,
+            //    //    Key2 = relationDatas[i].AimsId
+            //    //};
+
+            //    //if (_relationDic.ContainsKey(newKey) == true)
+            //    //{
+            //    //    _relationDic[newKey] = relationDatas[i];
+            //    //}
+            //    //else
+            //    //{
+            //    //    _relationDic.Add(newKey, relationDatas[i]);
+            //    //}
+            //}
+
+            List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
             for (int i = 0; i < relationDatas.Count; i++)
             {
-               
-                //DoubleKey newKey=new DoubleKey
-                //{
-                //    Key1 = relationDatas[i].MainId,
-                //    Key2 = relationDatas[i].AimsId
-                //};
-
-                //if (_relationDic.ContainsKey(newKey) == true)
-                //{
-                //    _relationDic[newKey] = relationDatas[i];
-                //}
-                //else
-                //{
-                //    _relationDic.Add(newKey, relationDatas[i]);
-                //}
+                Entity entity = entityManager.CreateEntity(GameSceneInit.RelationArchetype);
+                entityManager.SetComponentData(entity, new Relation
+                {
+                    ObjectAid = relationDatas[i].ObjectAid,
+                    ObjectBid = relationDatas[i].ObjectBid,
+                    Value = relationDatas[i].Value
+                });
             }
         }
 

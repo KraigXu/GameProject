@@ -48,7 +48,27 @@ namespace GameSystem
         protected override void OnUpdate()
         {
 
+
         }
+
+        public void SetupComponentData(EntityManager entityManager)
+        {
+            List<TechniquesData> techniquesDatas = SQLService.Instance.QueryAll<TechniquesData>();
+            for (int i = 0; i < techniquesDatas.Count; i++)
+            {
+                Entity techniques = entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
+                entityManager.SetComponentData(techniques, new Techniques
+                {
+                    Id = techniquesDatas[i].Id,
+                    ParentId = techniquesDatas[i].ParentId,
+                });
+
+                GameStaticData.TechniquesName.Add(techniquesDatas[i].Id, techniquesDatas[i].Name);
+                GameStaticData.TechniquesDescription.Add(techniquesDatas[i].Id, techniquesDatas[i].Description);
+                GameStaticData.TechniqueSprites.Add(techniquesDatas[i].Id, Resources.Load<Sprite>(techniquesDatas[i].AvatarPath));
+            }
+        }
+
 
         /// <summary>
         /// 获取符合BiologicalId 的数据 ，如果没有则是一个长度为0的集合
@@ -87,7 +107,7 @@ namespace GameSystem
 
                 TechniquesData techniques = SQLService.Instance.QueryUnique<TechniquesData>(" Id=? ", map.Key);
 
-                Entity entity = entityManager.CreateEntity(StrategySceneInit.TechniquesArchetype);
+                Entity entity = entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
 
                 entityManager.SetComponentData(entity, new Techniques
                 {
@@ -96,7 +116,7 @@ namespace GameSystem
                     Level = Int32.Parse(map.Value),
 
                     Id = techniques.Id,
-                    ParentId=techniques.ParentId
+                    ParentId = techniques.ParentId
                 });
 
             }

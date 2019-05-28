@@ -60,13 +60,15 @@ public class OverLookCameraController : MonoBehaviour
 
     public LayerMask m_checkMask;
 
-    #region
+
     public Terrain[] m_terrains;
 
     public float m_detailObjectDistance = 80;
 
     public float m_treeDistance = 500;
-    #endregion
+
+
+
 
     private void Awake()
     {
@@ -86,13 +88,29 @@ public class OverLookCameraController : MonoBehaviour
         m_targetLimit.center = bounds.center;
         m_targetLimit.size = bounds.size;
         m_targetLimit.size=new Vector3(m_targetLimit.size.x,100,m_targetLimit.size.z);
-        //m_targetLimit.size.y = 60;
 
-        //  (m_targetLimit.center, m_targetLimit.size
+        gameObject.AddComponent<BleedBehavior>();
+
+ 
     }
+
+    void Update()
+    {
+
+
+    }
+
+    void OnGUI()
+    {
+
+    }
+
 
     private void LateUpdate()
     {
+
+       
+
         UpdateTargetPosition();
         UpdateCurrentPosition();
         UpdateTransform();

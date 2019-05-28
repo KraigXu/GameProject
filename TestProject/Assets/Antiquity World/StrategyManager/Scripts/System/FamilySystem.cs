@@ -19,7 +19,7 @@ namespace GameSystem
 
         private static Dictionary<int, FamilyData> _familyDatas = new Dictionary<int, FamilyData>();
 
-        public static void SetupComponentData(EntityManager entityManager)
+        public  void SetupComponentData(EntityManager entityManager)
         {
 
             _familyDatas.Clear();
@@ -29,6 +29,17 @@ namespace GameSystem
             {
                 _familyDatas.Add(familyDatas[i].Id, familyDatas[i]);
                 GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
+            }
+
+            EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
+            List<FamilyData> familyData = SQLService.Instance.QueryAll<FamilyData>();
+            for (int i = 0; i < familyData.Count; i++)
+            {
+                Entity family = entityManager.CreateEntity(familyArchetype);
+                entityManager.SetComponentData(family, new Family
+                {
+                    FamilyId = familyData[i].Id
+                });
             }
         }
 

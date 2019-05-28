@@ -23,7 +23,7 @@ namespace GameSystem
         /// 初始化数据
         /// </summary>
         /// <param name="entityManager"></param>
-        public static void SetupComponentData(EntityManager entityManager)
+        public  void SetupComponentData(EntityManager entityManager)
         {
             EntityArchetype  factionArchetype = entityManager.CreateArchetype(typeof(Faction));
             List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();

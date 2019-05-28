@@ -264,7 +264,7 @@ namespace GameSystem
                 Biological = _biologicalData.Biological,
                // BiologicalStatus = _biologicalData.Status,
                 CommandBuffer = _areaEnterBarrier.CreateCommandBuffer(),
-                LivingInfoArchetype=StrategySceneInit.EventInfotype
+                LivingInfoArchetype=GameSceneInit.EventInfotype
             };
             return job.Schedule(this, inputDeps);
         }

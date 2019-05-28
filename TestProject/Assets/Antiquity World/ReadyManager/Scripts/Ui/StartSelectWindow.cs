@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,7 @@ namespace AntiquityWorld.ReadyManager
         private void StartBtnEvent()
         {
 
-            WXSceneManager.Load("DemoScene");
+            GameSceneInit.Load("DemoScene");
 
         }
     }

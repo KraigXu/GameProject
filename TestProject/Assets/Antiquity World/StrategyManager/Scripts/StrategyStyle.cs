@@ -26,8 +26,6 @@ public class StrategyStyle : MonoBehaviour
     public RectTransform UiImageTips;
     public RectTransform UiSpeciality;
 
-
-
     void Awake()
     {
         _instance = this;

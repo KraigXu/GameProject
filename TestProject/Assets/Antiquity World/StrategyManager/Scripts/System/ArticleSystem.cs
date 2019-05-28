@@ -59,30 +59,30 @@ namespace GameSystem
             {
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK:
                     {
-                      //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                      //  fighting.AttackMin += value;
-                      //  _entityManager.SetComponentData(entity, fighting);
+                        //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //  fighting.AttackMin += value;
+                        //  _entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK:
                     {
-                     //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                     //   fighting.AttackMax += value;
-                     //   _entityManager.SetComponentData(entity, fighting);
+                        //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //   fighting.AttackMax += value;
+                        //   _entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_PHYSICS_DEFENCE:
                     {
-                     //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                      //  fighting.PhysicsDefence += value;
-                      //  _entityManager.SetComponentData(entity, fighting);
+                        //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //  fighting.PhysicsDefence += value;
+                        //  _entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAGIC_DEFENCE:
                     {
-                      //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                      //  fighting.MagicDefence += value;
-                      //  _entityManager.SetComponentData(entity, fighting);
+                        //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //  fighting.MagicDefence += value;
+                        //  _entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_LIFE:
@@ -261,7 +261,7 @@ namespace GameSystem
 
         }
 
-        public  void SetupComponentData(EntityManager entityManager)
+        public void SetupComponentData(EntityManager entityManager)
         {
 
             List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = new List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>();
@@ -304,7 +304,6 @@ namespace GameSystem
         /// <param name="targetEntity"></param>
         public static void SpawnArticle(List<ArticleData> articleDatas, Entity targetEntity)
         {
-
             //ArticleData articleData = SQLService.Instance.QueryUnique<ArticleData>(" Id=? ", articleid);
 
             for (int i = 0; i < articleDatas.Count; i++)
@@ -345,9 +344,6 @@ namespace GameSystem
                 });
             }
         }
-
-
-
 
         #endregion
 

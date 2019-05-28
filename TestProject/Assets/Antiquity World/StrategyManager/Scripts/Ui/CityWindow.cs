@@ -185,7 +185,7 @@ namespace GameSystem.Ui
                 _cityBounds.Encapsulate(renderers[i].bounds);
             }
 
-            StrategySceneInit.Settings.FixedCamera.enabled = true;
+            GameSceneInit.Settings.FixedCamera.enabled = true;
             //StrategyCameraManager.Instance.SetTarget(_cityBounds.center, true);
             // StrategyCameraManager.Instance.SetTarget(StrategyStyle.Instance.ModelCityO1.transform);
             // SystemManager.Get<PlayerControlSystem>().Target(bounds.center);

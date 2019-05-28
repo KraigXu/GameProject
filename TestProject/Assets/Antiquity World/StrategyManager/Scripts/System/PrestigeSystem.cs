@@ -13,7 +13,7 @@ namespace GameSystem
     {
         private static List<PrestigeData> _prestigeDatas=new List<PrestigeData>();
 
-        public static void SetupComponentData(EntityManager entityManager)
+        public  void SetupComponentData(EntityManager entityManager)
         {
              _prestigeDatas = SQLService.Instance.QueryAll<PrestigeData>();
 

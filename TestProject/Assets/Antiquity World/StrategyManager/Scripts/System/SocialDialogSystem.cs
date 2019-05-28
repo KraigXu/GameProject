@@ -26,7 +26,7 @@ namespace GameSystem
 
         private static Dictionary<int, DialogData> _dialogDic = new Dictionary<int, DialogData>();
 
-        public static void SetupComponentData(EntityManager entityManager)
+        public  void SetupComponentData(EntityManager entityManager)
         {
             List<SocialDialogData> socialDialogDatas = SQLService.Instance.QueryAll<SocialDialogData>();
 

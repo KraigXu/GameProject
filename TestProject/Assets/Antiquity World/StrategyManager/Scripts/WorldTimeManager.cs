@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Chronos;
-using GameSystem.Ui;
-using Unity.Entities;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GameSystem
 {
