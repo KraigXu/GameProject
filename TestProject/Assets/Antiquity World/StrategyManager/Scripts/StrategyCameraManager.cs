@@ -22,6 +22,9 @@ namespace Manager
         public Vector2 TouchPoint = Vector2.zero;
     }
 
+    /// <summary>
+    /// 全局相机控制
+    /// </summary>
     public class StrategyCameraManager : MonoBehaviour
     {
         public static StrategyCameraManager _instance;
@@ -37,8 +40,10 @@ namespace Manager
 
         public Vector3 Target;
         public Vector3 RoationOffset = new Vector3(50, 0, 0);
+        public float Distance = 10;
         public Vector3 Offset = new Vector3(0, 1, -15);
         public float Damping = 3;
+        public float ZoomSpeed;
 
         public Transform CameraTf;
         public bool IsFollow;
@@ -49,6 +54,8 @@ namespace Manager
         public GameObject MouseTarget;
         public RtsCamera RtsCamera;
 
+        public GameObject TargetOj;
+
         void Awake()
         {
             _instance = this;
@@ -58,7 +65,9 @@ namespace Manager
         void Start()
         {
             StrategySceneInit.InitializeWithScene();
-            
+
+            SetTarget(TargetOj.transform.position,true);
+
         }
 
 
@@ -76,42 +85,54 @@ namespace Manager
 
         void Update()
         {
-            //if (EventSystem.current.IsPointerOverGameObject())
-            //    return;
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
 
-            //if (Input.GetKey(KeyCode.W))
-            //{
-            //    IsFollow = false;
-            //    CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
-            //}
+            if (Input.GetKey(KeyCode.W))
+            {
+                IsFollow = false;
+                CameraTf.position += Vector3.forward * Time.deltaTime * Speed;
+            }
 
-            //if (Input.GetKey(KeyCode.S))
-            //{
-            //    IsFollow = false;
-            //    CameraTf.position += Vector3.back * Time.deltaTime * Speed;
-            //}
+            if (Input.GetKey(KeyCode.S))
+            {
+                IsFollow = false;
+                CameraTf.position += Vector3.back * Time.deltaTime * Speed;
+            }
 
-            //if (Input.GetKey(KeyCode.A))
-            //{
-            //    IsFollow = false;
-            //    CameraTf.position += Vector3.left * Time.deltaTime * Speed;
-            //}
+            if (Input.GetKey(KeyCode.A))
+            {
+                IsFollow = false;
+                CameraTf.position += Vector3.left * Time.deltaTime * Speed;
+            }
 
-            //if (Input.GetKey(KeyCode.D))
-            //{
-            //    IsFollow = false;
-            //    CameraTf.position += Vector3.right * Time.deltaTime * Speed;
-            //}
+            if (Input.GetKey(KeyCode.D))
+            {
+                IsFollow = false;
+                CameraTf.position += Vector3.right * Time.deltaTime * Speed;
+            }
 
-            //if (IsFollow == true)
-            //{
-            //    float dt = Time.deltaTime;
-            //    Quaternion newrotation = Quaternion.Euler(RoationOffset);
-            //    Vector3 newposition = newrotation * Offset + Target;
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                Offset.z -= Input.GetAxis("Mouse ScrollWheel")* Time.deltaTime * ZoomSpeed;
+               // CameraTf.position += CameraTf.forward * Time.deltaTime * Speed;
+            }
 
-            //    CameraTf.rotation = Quaternion.Lerp(CameraTf.rotation, newrotation, dt * Damping);
-            //    CameraTf.position = Vector3.Lerp(CameraTf.position, newposition, dt * Damping);
-            //}
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                Offset.z += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * ZoomSpeed;
+               // CameraTf.position += CameraTf.forward * Time.deltaTime * Speed;
+            }
+
+            if (IsFollow == true)
+            {
+                float dt = Time.deltaTime;
+                Quaternion newrotation = Quaternion.Euler(RoationOffset);
+                Vector3 newposition = newrotation * Offset + Target;
+
+                CameraTf.rotation = Quaternion.Lerp(CameraTf.rotation, newrotation, dt * Damping);
+                CameraTf.position = Vector3.Lerp(CameraTf.position, newposition, dt * Damping);
+            }
 
             MouseMain();
         }
@@ -133,11 +154,9 @@ namespace Manager
             {
 
             }
-
-
-
-
         }
+
+
 
         public void Follow(Vector3 target)
         {
@@ -146,9 +165,9 @@ namespace Manager
 
         public void SetTarget(Vector3 target, bool isfollow = false)
         {
-            RtsCamera.LookAt = target;
-           // Target = target;
-          //  IsFollow = isfollow;
+           // RtsCamera.LookAt = target;
+            Target = target;
+            IsFollow = isfollow;
         }
 
         public void SetTarget(Transform target)

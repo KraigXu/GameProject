@@ -80,7 +80,7 @@ namespace GameSystem
         /// 初始化城市
         /// </summary>
         /// <param name="entityManager"></param>
-        public void LivingAreaInit(EntityManager entityManager)
+        public void SetupComponentData(EntityManager entityManager)
         {
 
             List<LivingAreaModelData> livingAreaModelDatas = SQLService.Instance.QueryAll<LivingAreaModelData>();
@@ -163,7 +163,6 @@ namespace GameSystem
                 GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                 GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
                 
-
             }
 
         }

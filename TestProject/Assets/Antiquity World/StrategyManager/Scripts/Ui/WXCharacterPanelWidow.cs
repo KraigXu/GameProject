@@ -209,6 +209,8 @@ namespace GameSystem.Ui
                 {
                     RectTransform specialityRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiSpeciality, SpecialityContentParent);
 
+
+
                 }
 
 

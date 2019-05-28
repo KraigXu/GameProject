@@ -43,9 +43,14 @@ namespace GameSystem
         private InteractionData _interactionData;
         private EntityManager _entityManager;
 
+        public static Entity PlayerEntity
+        {
+            get { return SystemManager.Get<PlayerControlSystem>().Entitys[0]; }
+        }
+
         public EntityArray Entitys
         {
-            get { return _data.Entity;}
+            get { return _data.Entity; }
         }
 
         public PlayerControlSystem()

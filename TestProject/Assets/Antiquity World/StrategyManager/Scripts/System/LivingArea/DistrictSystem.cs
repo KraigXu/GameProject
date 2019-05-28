@@ -33,6 +33,11 @@ namespace GameSystem
         [Inject]
         private DistrictGroup _district;
 
+        public void SetupComponentData(EntityManager entityManager)
+        {
+
+        }
+
         protected override void OnUpdate()
         {
 
