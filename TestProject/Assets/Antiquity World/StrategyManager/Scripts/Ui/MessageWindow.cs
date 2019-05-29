@@ -12,9 +12,18 @@ namespace GameSystem.Ui
     /// </summary>
     public class MessageWindow : UIWindowBase
     {
+
+        public RectTransform ContentParent;
+        public GameObject Prefab;
         public List<Text> Texts;
 
         public Dictionary<Text, Sequence> TextSequences=new Dictionary<Text, Sequence>();
+
+        public Queue<RectTransform> overflows =new Queue<RectTransform>();
+
+        public int MaxNumber;
+        public float Time=5f;
+
 
         protected override void InitWindowData()
         {
@@ -26,33 +35,25 @@ namespace GameSystem.Ui
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
-            windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
 
         public override void InitWindowOnAwake()
         {
-            for (int i = 0; i < Texts.Count; i++)
-            {
-                //Sequence mySequence = DOTween.Sequence();
-                
-                //mySequence.intId = i;
-                //mySequence.Append(Texts[i].DOFade(0f, 3f).OnStepComplete(() => TextAnimation(Texts[i])).Pause());
-                //TextSequences.Add(Texts[i], mySequence);
-
-            }
         }
 
         void TextAnimation(Text text)
         {
-
             text.gameObject.SetActive(false);
             text.color=Color.black;
             Debug.Log(text.gameObject.name);
         }
 
+        void DestoryText()
+        {
 
+            GameObject.Destroy(overflows.Dequeue().gameObject);
 
-
+        }
 
         public void Log(string value)
         {
@@ -62,7 +63,6 @@ namespace GameSystem.Ui
                 if (Texts[i].gameObject.activeSelf == false)
                 {
                     current = Texts[i];
-                    Debug.Log(i);
                     break;
                 }
             }
@@ -72,11 +72,21 @@ namespace GameSystem.Ui
                 current.text = value;
                 current.gameObject.SetActive(true);
                 current.transform.SetAsLastSibling();
-                current.DOFade(0, 3f).OnComplete(() => TextAnimation(current));
+                current.DOFade(0, Time).OnComplete(() => TextAnimation(current));
             }
-            else  //如何等于NULL 则需要生成新的GO
+            else  
             {
+                GameObject go =  GameObject.Instantiate(Prefab) as GameObject;
+                RectTransform rect= go.GetComponent<RectTransform>();
+                rect.SetParent(ContentParent);
+                overflows.Enqueue(rect);
+                Text text = go.GetComponent<Text>();
+                text.text = value;
+                text.color=Color.black;
 
+
+                text.DOFade(0, Time).OnComplete((() => DestoryText()));
+                go.SetActive(true);
             }
         }
 

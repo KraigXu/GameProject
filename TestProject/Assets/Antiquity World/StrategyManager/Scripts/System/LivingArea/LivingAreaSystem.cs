@@ -91,8 +91,6 @@ namespace GameSystem
                GameStaticData.LivingAreaPrefabDic.Add(livingAreaModelDatas[i].Id,Resources.Load<GameObject>(livingAreaModelDatas[i].Path));
             }
 
-
-
             List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
             for (int i = 0; i < datas.Count; i++)
             {

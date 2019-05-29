@@ -19,7 +19,7 @@ namespace GameSystem
 
         private static Dictionary<int, FamilyData> _familyDatas = new Dictionary<int, FamilyData>();
 
-        public  void SetupComponentData(EntityManager entityManager)
+        public void SetupComponentData(EntityManager entityManager)
         {
 
             _familyDatas.Clear();
@@ -45,6 +45,7 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
+
         }
 
 

@@ -56,6 +56,12 @@ public class StrategyScene : MonoBehaviour
     /// </summary>
     public void RemoveStartUi()
     {
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.WorldTimeWindow);
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.MenuWindow);
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.PlayerInfoWindow);
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.MessageWindow);
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.MapWindow);
+        UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
 
     }
 }

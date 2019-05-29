@@ -56,18 +56,6 @@ namespace GameSystem
         public void InitComponent(GameObject go)
         {
 
-            ComponentGroup group = new ComponentGroup();
-            group.AiCharacter = go.GetComponent<AICharacterControl>();
-            group.Animator = go.GetComponent<Animator>();
-
-            Entity entity= go.GetComponent<GameObjectEntity>().Entity;
-            if (ComponentDic.ContainsKey(entity) == false)
-            {
-                ComponentDic.Add(entity, group);
-            }
-            else
-            {
-            }
         }
         public void SetupComponentData(EntityManager entityManager)
         {
@@ -233,10 +221,17 @@ namespace GameSystem
 
                 SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
 
+                ComponentGroup group = new ComponentGroup();
+                group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
+                group.Animator = entityGo.GetComponent<Animator>();
+                if (ComponentDic.ContainsKey(entity) == false)
+                {
+                    ComponentDic.Add(entity, group);
+                }
+
                 GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
                 GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
                 GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
-
 
                 //    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
                 //    "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",

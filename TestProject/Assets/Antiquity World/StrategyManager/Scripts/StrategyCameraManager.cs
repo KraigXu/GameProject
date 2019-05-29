@@ -80,7 +80,6 @@ namespace Manager
             else
             {
 
-
             }
         }
 

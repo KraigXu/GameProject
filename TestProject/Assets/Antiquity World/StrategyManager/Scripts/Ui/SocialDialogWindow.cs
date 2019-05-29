@@ -9,6 +9,7 @@ namespace GameSystem.Ui
 
     public class SocialDialogWindow : UIWindowBase
     {
+        public Rect Size;
         
         [SerializeField]
         private GameObject _dialogPanel;
@@ -36,6 +37,7 @@ namespace GameSystem.Ui
 
         private SocialDialogWindowData _socialDialogWindowData;
 
+
         protected override void InitWindowData()
         {
             this.ID = WindowID.SocialDialogWindow;
@@ -47,6 +49,12 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
+        }
+
+
+        public struct Data
+        {
+            
         }
 
         public override void InitWindowOnAwake()
