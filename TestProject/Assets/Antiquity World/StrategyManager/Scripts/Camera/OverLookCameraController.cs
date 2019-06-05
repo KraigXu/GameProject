@@ -29,7 +29,6 @@ public class OverLookCameraController : MonoBehaviour
 
     public float m_maxDistance2 = 6000;
 
-
     public float m_maxTiltDistance = 5000f;
 
     public LayerMask m_wallMask;
@@ -37,8 +36,6 @@ public class OverLookCameraController : MonoBehaviour
     public float m_terrainVisibileHeight = 100;
 
     public Bounds m_targetLimit;
-
-    //public Vector3 m_cameraShake;
 
     public float m_zoomVelocity;
 
@@ -60,15 +57,11 @@ public class OverLookCameraController : MonoBehaviour
 
     public LayerMask m_checkMask;
 
-
     public Terrain[] m_terrains;
 
     public float m_detailObjectDistance = 80;
 
     public float m_treeDistance = 500;
-
-
-
 
     private void Awake()
     {
@@ -90,8 +83,6 @@ public class OverLookCameraController : MonoBehaviour
         m_targetLimit.size=new Vector3(m_targetLimit.size.x,100,m_targetLimit.size.z);
 
         gameObject.AddComponent<BleedBehavior>();
-
- 
     }
 
     void Update()

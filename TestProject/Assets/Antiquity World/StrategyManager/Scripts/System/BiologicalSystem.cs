@@ -7,8 +7,9 @@ using Unity.Transforms;
 using UnityEngine;
 using GameSystem.Ui;
 using Newtonsoft.Json;
-using Unity.Rendering;
+
 using UnityStandardAssets.Characters.ThirdPerson;
+
 
 namespace GameSystem
 {
@@ -89,8 +90,10 @@ namespace GameSystem
                     Mobility = 0,
                     OperationalAbility = 0,
                     LogicalThinking = 0,
-                    Disposition = 100,
-                    NeutralValue = 100,
+
+                    Disposition = (byte)datas[i].Disposition,
+                    NeutralValue = (byte)UnityEngine.Random.Range(0,255),
+
                     LuckValue = 100,
                     PrestigeValue = 100,
 
@@ -127,6 +130,7 @@ namespace GameSystem
                     Wuxing = datas[i].Wuxing
                 });
 
+              //  Debug.Log(BiologicalSystem.BiologicalDisposition((byte)UnityEngine.Random.Range(0, 255), (byte)datas[i].Disposition));
                 entityManager.AddComponentData(entity, new BodyProperty
                 {
                     Thought = 100,
@@ -326,6 +330,10 @@ namespace GameSystem
             }
         }
 
+
+
+
+
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
@@ -453,6 +461,73 @@ namespace GameSystem
 
 
 
+        }
+
+        /// <summary>
+        /// 阵营计算
+        /// </summary>
+        /// <param name="x">横轴属性，也是秩序值 越小标识越秩序</param>
+        /// <param name="y">竖轴属性，也是善良值，越小越善良</param>
+        /// <returns></returns>
+        public static string BiologicalDisposition(byte x,byte y)
+        {
+            if (y >= 0 && y <=85)
+            {
+                if (x >= 0 && x <= 85)
+                {
+                    return "守序善良";
+                }
+
+                if (x > 85 && x <= 170)
+                {
+                    return "中立善良";
+                }
+
+                if (x > 170 && x <= 255)
+                {
+                    return "混乱善良";
+                }
+
+            }
+
+            if (y > 85 && y <= 170)
+            {
+                if (x >= 0 && x <= 85)
+                {
+                    return "守序中立";
+                }
+
+                if (x > 85 && x <= 170)
+                {
+                    return "绝对中立";
+                }
+
+                if (x > 170 && x <= 255)
+                {
+                    return "混乱中立";
+                }
+            }
+
+            if (y > 170 && y <= 255)
+            {
+                if (x >= 0 && x <= 85)
+                {
+                    return "守序邪恶";
+                }
+
+                if (x > 85 && x <= 170)
+                {
+                    return "中立邪恶";
+                }
+
+                if (x > 170 && x <= 255)
+                {
+                    return "混乱邪恶";
+                }
+
+            }
+
+            return "混乱邪恶";
         }
 
     }

@@ -56,7 +56,6 @@ namespace GameSystem.Ui
             _Canvas = UIRoot.GetComponent<Canvas>();
             _Camera = _Canvas.worldCamera;
             InitWindowManager();
-            Debug.Log("## UICenterMasterManager is call awake.");
         }
 
         public override UIWindowBase ShowWindow(WindowID id, ShowWindowData showData = null)

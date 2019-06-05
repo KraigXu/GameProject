@@ -27,26 +27,20 @@ public class TestWindowScript : MonoBehaviour
         if (GUI.Button(new Rect(0, 500, 200, 60), "测试Message"))
         {
             UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
-
             //UICenterMasterManager.Instance.GetGameWindowScript<MessageWindow>(WindowID.MessageWindow).Log(inputvalue);
+            //UICenterMasterManager.Instance.get
         }
 
         if (GUI.Button(new Rect(0, 200, 100, 30), "测试SocialDialog"))
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow);
-           // UICenterMasterManager.Instance.GetGameWindowScript<SocialDialogWindow>(WindowID.SocialDialogWindow);
+            // UICenterMasterManager.Instance.GetGameWindowScript<SocialDialogWindow>(WindowID.SocialDialogWindow);
         }
         if (GUI.Button(new Rect(0, 230, 100, 30), "关闭SocialDialog"))
         {

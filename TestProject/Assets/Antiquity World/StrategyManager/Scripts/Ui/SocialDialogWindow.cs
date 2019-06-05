@@ -37,7 +37,8 @@ namespace GameSystem.Ui
 
         private SocialDialogWindowData _socialDialogWindowData;
 
-
+        //private SocialDialog _socialDialog;
+        //private Dictionary<int,string> log=new Dictionary<int, string>();
         protected override void InitWindowData()
         {
             this.ID = WindowID.SocialDialogWindow;
@@ -88,8 +89,7 @@ namespace GameSystem.Ui
             //
         }
 
-        //private SocialDialog _socialDialog;
-        //private Dictionary<int,string> log=new Dictionary<int, string>();
+
 
         public class SocialDialog
         {

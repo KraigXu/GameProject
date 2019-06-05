@@ -130,6 +130,7 @@ namespace DataAccessObject
                                        " IsDebut INTEGER," +
                                        " Location TEXT," +
                                        " LocationType INTEGER," +
+                                       " NeutralValue INTEGER,"+
                                        " X INTEGER," +
                                        " Y INTEGER," +
                                        " Z INTEGER," +
@@ -656,6 +657,7 @@ namespace DataAccessObject
         public string LanguageJson { get; set; }                 // 语言JSON
 
         public int Disposition { get; set; }                    //性格
+        public int NeutralValue { get; set; }
 
         public int PrestigeValue { get; set; }
 
@@ -664,7 +666,7 @@ namespace DataAccessObject
             object[] objects = new object[]
                 {
                     Id,Identity,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,TeamId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
-                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,PrestigeValue
+                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,NeutralValue,PrestigeValue
                 };
             return objects;
         }

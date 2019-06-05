@@ -52,7 +52,6 @@ namespace GameSystem.Ui
         {
 
             GameObject.Destroy(overflows.Dequeue().gameObject);
-
         }
 
         public void Log(string value)
