@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.IO;
+
 
 public class HexMapEditor : MonoBehaviour {
 
-	public Color[] colors;
+	//public Color[] colors;
 
 	public HexGrid hexGrid;
 
 	int activeElevation;
 	int activeWaterLevel;
 
-	Color activeColor;
+	int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
+
+	//Color activeColor;
 
 	int brushSize;
 
@@ -18,22 +22,25 @@ public class HexMapEditor : MonoBehaviour {
 	bool applyElevation = true;
 	bool applyWaterLevel = true;
 
+	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
+
 	enum OptionalToggle {
 		Ignore, Yes, No
 	}
 
-	OptionalToggle riverMode, roadMode;
+	OptionalToggle riverMode, roadMode, walledMode;
 
 	bool isDrag;
 	HexDirection dragDirection;
 	HexCell previousCell;
+    int activeTerrainTypeIndex;
 
-	public void SelectColor (int index) {
-		applyColor = index >= 0;
-		if (applyColor) {
-			activeColor = colors[index];
-		}
-	}
+	//public void SelectColor (int index) {
+	//	applyColor = index >= 0;
+	//	if (applyColor) {
+	//		activeColor = colors[index];
+	//	}
+	//}
 
 	public void SetApplyElevation (bool toggle) {
 		applyElevation = toggle;
@@ -46,8 +53,41 @@ public class HexMapEditor : MonoBehaviour {
 	public void SetApplyWaterLevel (bool toggle) {
 		applyWaterLevel = toggle;
 	}
+
 	public void SetWaterLevel (float level) {
 		activeWaterLevel = (int)level;
+	}
+
+	public void SetApplyUrbanLevel (bool toggle) {
+		applyUrbanLevel = toggle;
+	}
+
+	public void SetUrbanLevel (float level) {
+		activeUrbanLevel = (int)level;
+	}
+
+	public void SetApplyFarmLevel (bool toggle) {
+		applyFarmLevel = toggle;
+	}
+
+	public void SetFarmLevel (float level) {
+		activeFarmLevel = (int)level;
+	}
+
+	public void SetApplyPlantLevel (bool toggle) {
+		applyPlantLevel = toggle;
+	}
+
+	public void SetPlantLevel (float level) {
+		activePlantLevel = (int)level;
+	}
+
+	public void SetApplySpecialIndex (bool toggle) {
+		applySpecialIndex = toggle;
+	}
+
+	public void SetSpecialIndex (float index) {
+		activeSpecialIndex = (int)index;
 	}
 
 	public void SetBrushSize (float size) {
@@ -62,13 +102,22 @@ public class HexMapEditor : MonoBehaviour {
 		roadMode = (OptionalToggle)mode;
 	}
 
+	public void SetWalledMode (int mode) {
+		walledMode = (OptionalToggle)mode;
+	}
+
 	public void ShowUI (bool visible) {
 		hexGrid.ShowUI(visible);
 	}
 
-	void Awake () {
-		SelectColor(0);
-	}
+    public void SetTerrainTypeIndex(int index)
+    {
+        activeTerrainTypeIndex = index;
+    }
+
+	//void Awake () {
+	//	SelectColor(0);
+	//}
 
 	void Update () {
 		if (
@@ -133,20 +182,39 @@ public class HexMapEditor : MonoBehaviour {
 
 	void EditCell (HexCell cell) {
 		if (cell) {
-			if (applyColor) {
-				cell.Color = activeColor;
-			}
+            //if (applyColor) {
+            //	cell.Color = activeColor;
+            //}
+		    if (activeTerrainTypeIndex >= 0)
+		    {
+		        cell.TerrainTypeIndex = activeTerrainTypeIndex;
+		    }
 			if (applyElevation) {
 				cell.Elevation = activeElevation;
 			}
 			if (applyWaterLevel) {
 				cell.WaterLevel = activeWaterLevel;
 			}
+			if (applySpecialIndex) {
+				cell.SpecialIndex = activeSpecialIndex;
+			}
+			if (applyUrbanLevel) {
+				cell.UrbanLevel = activeUrbanLevel;
+			}
+			if (applyFarmLevel) {
+				cell.FarmLevel = activeFarmLevel;
+			}
+			if (applyPlantLevel) {
+				cell.PlantLevel = activePlantLevel;
+			}
 			if (riverMode == OptionalToggle.No) {
 				cell.RemoveRiver();
 			}
 			if (roadMode == OptionalToggle.No) {
 				cell.RemoveRoads();
+			}
+			if (walledMode != OptionalToggle.Ignore) {
+				cell.Walled = walledMode == OptionalToggle.Yes;
 			}
 			if (isDrag) {
 				HexCell otherCell = cell.GetNeighbor(dragDirection.Opposite());
@@ -161,4 +229,26 @@ public class HexMapEditor : MonoBehaviour {
 			}
 		}
 	}
+
+    public void Save()
+    {
+        Debug.Log(Application.persistentDataPath);
+        string path = Path.Combine(Application.persistentDataPath, "test.map");
+        using (
+            BinaryWriter writer =
+                new BinaryWriter(File.Open(path, FileMode.Create))
+        )
+        {
+            hexGrid.Save(writer);
+        }
+    }
+
+    public void Load()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "test.map");
+        using (BinaryReader reader = new BinaryReader(File.OpenRead(path)))
+        {
+            hexGrid.Load(reader);
+        }
+    }
 }

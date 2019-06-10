@@ -35,9 +35,30 @@ public static class HexMetrics {
 
 	public const float waterElevationOffset = -0.5f;
 
+	public const float wallHeight = 4f;
+
+	public const float wallYOffset = -1f;
+
+	public const float wallThickness = 0.75f;
+
+	public const float wallElevationOffset = verticalTerraceStepSize;
+
+	public const float wallTowerThreshold = 0.5f;
+
+	public const float bridgeDesignLength = 7f;
+
 	public const float noiseScale = 0.003f;
 
 	public const int chunkSizeX = 5, chunkSizeZ = 5;
+
+	public const int hashGridSize = 256;
+
+	public const float hashGridScale = 0.25f;
+
+
+    public static Color[] colors;
+
+	static HexHash[] hashGrid;
 
 	static Vector3[] corners = {
 		new Vector3(0f, 0f, outerRadius),
@@ -49,6 +70,12 @@ public static class HexMetrics {
 		new Vector3(0f, 0f, outerRadius)
 	};
 
+	static float[][] featureThresholds = {
+		new float[] {0.0f, 0.0f, 0.4f},
+		new float[] {0.0f, 0.4f, 0.6f},
+		new float[] {0.4f, 0.6f, 0.8f}
+	};
+
 	public static Texture2D noiseSource;
 
 	public static Vector4 SampleNoise (Vector3 position) {
@@ -56,6 +83,32 @@ public static class HexMetrics {
 			position.x * noiseScale,
 			position.z * noiseScale
 		);
+	}
+
+	public static void InitializeHashGrid (int seed) {
+		hashGrid = new HexHash[hashGridSize * hashGridSize];
+		Random.State currentState = Random.state;
+		Random.InitState(seed);
+		for (int i = 0; i < hashGrid.Length; i++) {
+			hashGrid[i] = HexHash.Create();
+		}
+		Random.state = currentState;
+	}
+
+	public static HexHash SampleHashGrid (Vector3 position) {
+		int x = (int)(position.x * hashGridScale) % hashGridSize;
+		if (x < 0) {
+			x += hashGridSize;
+		}
+		int z = (int)(position.z * hashGridScale) % hashGridSize;
+		if (z < 0) {
+			z += hashGridSize;
+		}
+		return hashGrid[x + z * hashGridSize];
+	}
+
+	public static float[] GetFeatureThresholds (int level) {
+		return featureThresholds[level];
 	}
 
 	public static Vector3 GetFirstCorner (HexDirection direction) {
@@ -110,6 +163,23 @@ public static class HexMetrics {
 	public static Color TerraceLerp (Color a, Color b, int step) {
 		float h = step * HexMetrics.horizontalTerraceStepSize;
 		return Color.Lerp(a, b, h);
+	}
+
+	public static Vector3 WallLerp (Vector3 near, Vector3 far) {
+		near.x += (far.x - near.x) * 0.5f;
+		near.z += (far.z - near.z) * 0.5f;
+		float v =
+			near.y < far.y ? wallElevationOffset : (1f - wallElevationOffset);
+		near.y += (far.y - near.y) * v + wallYOffset;
+		return near;
+	}
+
+	public static Vector3 WallThicknessOffset (Vector3 near, Vector3 far) {
+		Vector3 offset;
+		offset.x = far.x - near.x;
+		offset.y = 0f;
+		offset.z = far.z - near.z;
+		return offset.normalized * (wallThickness * 0.5f);
 	}
 
 	public static HexEdgeType GetEdgeType (int elevation1, int elevation2) {
