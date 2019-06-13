@@ -10,7 +10,14 @@ public class HexCell : MonoBehaviour {
 
 	public HexGridChunk chunk;
 
-	public int Elevation {
+	public int Index { get; set; }
+
+    public int ViewElevation
+    {
+        get { return elevation >= waterLevel ? elevation : WaterLevel; }
+    }
+
+    public int Elevation {
 		get {
 			return elevation;
 		}
@@ -18,7 +25,14 @@ public class HexCell : MonoBehaviour {
 			if (elevation == value) {
 				return;
 			}
+
+		    int originalViewElevation = ViewElevation;
 			elevation = value;
+		    if (ViewElevation != originalViewElevation)
+		    {
+		        ShaderData.ViewElevationChanged();
+
+		    }
 			RefreshPosition();
 			ValidateRivers();
 
@@ -41,7 +55,13 @@ public class HexCell : MonoBehaviour {
 				return;
 			}
 			waterLevel = value;
-			ValidateRivers();
+		    int originalViewElevation = ViewElevation;
+		    waterLevel = value;
+		    if (ViewElevation != originalViewElevation)
+		    {
+		        ShaderData.ViewElevationChanged();
+		    }
+            ValidateRivers();
 			Refresh();
 		}
 	}
@@ -210,10 +230,18 @@ public class HexCell : MonoBehaviour {
 		set {
 			if (terrainTypeIndex != value) {
 				terrainTypeIndex = value;
-				Refresh();
+				ShaderData.RefreshTerrain(this);
 			}
 		}
 	}
+
+	public bool IsVisible {
+		get {
+			return visibility > 0;
+		}
+	}
+
+	public bool IsExplored { get; private set; }
 
 	public int Distance {
 		get {
@@ -240,6 +268,8 @@ public class HexCell : MonoBehaviour {
 
 	public HexCell NextWithSamePriority { get; set; }
 
+	public HexCellShaderData ShaderData { get; set; }
+
 	int terrainTypeIndex;
 
 	int elevation = int.MinValue;
@@ -251,6 +281,8 @@ public class HexCell : MonoBehaviour {
 
 	int distance;
 
+	int visibility;
+
 	bool walled;
 
 	bool hasIncomingRiver, hasOutgoingRiver;
@@ -261,6 +293,21 @@ public class HexCell : MonoBehaviour {
 
 	[SerializeField]
 	bool[] roads;
+
+	public void IncreaseVisibility () {
+		visibility += 1;
+		if (visibility == 1) {
+			IsExplored = true;
+			ShaderData.RefreshVisibility(this);
+		}
+	}
+
+	public void DecreaseVisibility () {
+		visibility -= 1;
+		if (visibility == 0) {
+			ShaderData.RefreshVisibility(this);
+		}
+	}
 
 	public HexCell GetNeighbor (HexDirection direction) {
 		return neighbors[(int)direction];
@@ -465,10 +512,12 @@ public class HexCell : MonoBehaviour {
 			}
 		}
 		writer.Write((byte)roadFlags);
+		writer.Write(IsExplored);
 	}
 
-	public void Load (BinaryReader reader) {
+	public void Load (BinaryReader reader, int header) {
 		terrainTypeIndex = reader.ReadByte();
+		ShaderData.RefreshTerrain(this);
 		elevation = reader.ReadByte();
 		RefreshPosition();
 		waterLevel = reader.ReadByte();
@@ -500,6 +549,9 @@ public class HexCell : MonoBehaviour {
 		for (int i = 0; i < roads.Length; i++) {
 			roads[i] = (roadFlags & (1 << i)) != 0;
 		}
+
+		IsExplored = header >= 3 ? reader.ReadBoolean() : false;
+		ShaderData.RefreshVisibility(this);
 	}
 
 	public void SetLabel (string text) {
@@ -517,4 +569,14 @@ public class HexCell : MonoBehaviour {
 		highlight.color = color;
 		highlight.enabled = true;
 	}
+
+
+    public void ResetVisibility()
+    {
+        if (visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
+    }
 }
