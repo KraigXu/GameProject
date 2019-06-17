@@ -12,12 +12,7 @@ public class HexCell : MonoBehaviour {
 
 	public int Index { get; set; }
 
-    public int ViewElevation
-    {
-        get { return elevation >= waterLevel ? elevation : WaterLevel; }
-    }
-
-    public int Elevation {
+	public int Elevation {
 		get {
 			return elevation;
 		}
@@ -25,14 +20,11 @@ public class HexCell : MonoBehaviour {
 			if (elevation == value) {
 				return;
 			}
-
-		    int originalViewElevation = ViewElevation;
+			int originalViewElevation = ViewElevation;
 			elevation = value;
-		    if (ViewElevation != originalViewElevation)
-		    {
-		        ShaderData.ViewElevationChanged();
-
-		    }
+			if (ViewElevation != originalViewElevation) {
+				ShaderData.ViewElevationChanged();
+			}
 			RefreshPosition();
 			ValidateRivers();
 
@@ -54,15 +46,19 @@ public class HexCell : MonoBehaviour {
 			if (waterLevel == value) {
 				return;
 			}
+			int originalViewElevation = ViewElevation;
 			waterLevel = value;
-		    int originalViewElevation = ViewElevation;
-		    waterLevel = value;
-		    if (ViewElevation != originalViewElevation)
-		    {
-		        ShaderData.ViewElevationChanged();
-		    }
-            ValidateRivers();
+			if (ViewElevation != originalViewElevation) {
+				ShaderData.ViewElevationChanged();
+			}
+			ValidateRivers();
 			Refresh();
+		}
+	}
+
+	public int ViewElevation {
+		get {
+			return elevation >= waterLevel ? elevation : waterLevel;
 		}
 	}
 
@@ -237,11 +233,20 @@ public class HexCell : MonoBehaviour {
 
 	public bool IsVisible {
 		get {
-			return visibility > 0;
+			return visibility > 0 && Explorable;
 		}
 	}
 
-	public bool IsExplored { get; private set; }
+	public bool IsExplored {
+		get {
+			return explored && Explorable;
+		}
+		private set {
+			explored = value;
+		}
+	}
+
+	public bool Explorable { get; set; }
 
 	public int Distance {
 		get {
@@ -283,6 +288,8 @@ public class HexCell : MonoBehaviour {
 
 	int visibility;
 
+	bool explored;
+
 	bool walled;
 
 	bool hasIncomingRiver, hasOutgoingRiver;
@@ -305,6 +312,13 @@ public class HexCell : MonoBehaviour {
 	public void DecreaseVisibility () {
 		visibility -= 1;
 		if (visibility == 0) {
+			ShaderData.RefreshVisibility(this);
+		}
+	}
+
+	public void ResetVisibility () {
+		if (visibility > 0) {
+			visibility = 0;
 			ShaderData.RefreshVisibility(this);
 		}
 	}
@@ -483,7 +497,7 @@ public class HexCell : MonoBehaviour {
 
 	public void Save (BinaryWriter writer) {
 		writer.Write((byte)terrainTypeIndex);
-		writer.Write((byte)elevation);
+		writer.Write((byte)(elevation + 127));
 		writer.Write((byte)waterLevel);
 		writer.Write((byte)urbanLevel);
 		writer.Write((byte)farmLevel);
@@ -519,6 +533,9 @@ public class HexCell : MonoBehaviour {
 		terrainTypeIndex = reader.ReadByte();
 		ShaderData.RefreshTerrain(this);
 		elevation = reader.ReadByte();
+		if (header >= 4) {
+			elevation -= 127;
+		}
 		RefreshPosition();
 		waterLevel = reader.ReadByte();
 		urbanLevel = reader.ReadByte();
@@ -569,14 +586,4 @@ public class HexCell : MonoBehaviour {
 		highlight.color = color;
 		highlight.enabled = true;
 	}
-
-
-    public void ResetVisibility()
-    {
-        if (visibility > 0)
-        {
-            visibility = 0;
-            ShaderData.RefreshVisibility(this);
-        }
-    }
 }

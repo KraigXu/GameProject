@@ -8,12 +8,6 @@ public class HexUnit : MonoBehaviour {
 	const float rotationSpeed = 180f;
 	const float travelSpeed = 4f;
 
-
-    public int VisionRange
-    {
-        get { return 3; }
-    }
-
 	public static HexUnit unitPrefab;
 
 	public HexGrid Grid { get; set; }
@@ -49,6 +43,12 @@ public class HexUnit : MonoBehaviour {
 	public int Speed {
 		get {
 			return 24;
+		}
+	}
+
+	public int VisionRange {
+		get {
+			return 3;
 		}
 	}
 
