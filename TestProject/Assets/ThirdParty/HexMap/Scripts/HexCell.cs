@@ -586,4 +586,9 @@ public class HexCell : MonoBehaviour {
 		highlight.color = color;
 		highlight.enabled = true;
 	}
+
+    public void SetMapData(float data)
+    {
+        ShaderData.SetMapData(this,data);
+    }
 }
