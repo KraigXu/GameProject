@@ -8,6 +8,8 @@ public class NewMapMenu : MonoBehaviour {
 
 	bool generateMaps = true;
 
+    bool wrapping=true;
+
 	public void ToggleMapGeneration (bool toggle) {
 		generateMaps = toggle;
 	}
@@ -34,12 +36,17 @@ public class NewMapMenu : MonoBehaviour {
 		CreateMap(80, 60);
 	}
 
+    public void ToggleWrapping(bool toggle)
+    {
+        wrapping = toggle;
+    }
+
 	void CreateMap (int x, int z) {
 		if (generateMaps) {
-			mapGenerator.GenerateMap(x, z);
+			mapGenerator.GenerateMap(x, z,wrapping);
 		}
 		else {
-			hexGrid.CreateMap(x, z);
+			hexGrid.CreateMap(x, z,wrapping);
 		}
 		HexMapCamera.ValidatePosition();
 		Close();

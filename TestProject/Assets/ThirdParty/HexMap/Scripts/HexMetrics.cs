@@ -55,6 +55,9 @@ public static class HexMetrics {
 
 	public const float hashGridScale = 0.25f;
 
+    public const float innerDiameter = innerRadius * 2f;
+
+    
 	static HexHash[] hashGrid;
 
 	static Vector3[] corners = {
@@ -75,11 +78,18 @@ public static class HexMetrics {
 
 	public static Texture2D noiseSource;
 
-	public static Vector4 SampleNoise (Vector3 position) {
-		return noiseSource.GetPixelBilinear(
-			position.x * noiseScale,
-			position.z * noiseScale
-		);
+	public static Vector4 SampleNoise (Vector3 position)
+	{
+        Vector4 sample = noiseSource.GetPixelBilinear(position.x * noiseScale, position.z * noiseScale);
+
+	    if (Wrapping && position.x < innerDiameter*1.5f)
+	    {
+	        Vector4 sample2 = noiseSource.GetPixelBilinear((position.x + wrapSize * innerDiameter) * noiseScale,
+	            position.z * noiseScale);
+	        sample = Vector4.Lerp(sample2, sample, position.x * (1f / innerDiameter)-0.5f);
+	    }
+
+	    return sample;
 	}
 
 	public static void InitializeHashGrid (int seed) {
@@ -196,4 +206,11 @@ public static class HexMetrics {
 		position.z += (sample.z * 2f - 1f) * cellPerturbStrength;
 		return position;
 	}
+
+    public static int wrapSize;
+
+    public static bool Wrapping
+    {
+        get { return wrapSize > 0; }
+    }
 }

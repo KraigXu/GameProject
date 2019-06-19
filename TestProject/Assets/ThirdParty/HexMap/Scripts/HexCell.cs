@@ -11,6 +11,7 @@ public class HexCell : MonoBehaviour {
 	public HexGridChunk chunk;
 
 	public int Index { get; set; }
+    public int ColumnIndex { get; set; }
 
 	public int Elevation {
 		get {
