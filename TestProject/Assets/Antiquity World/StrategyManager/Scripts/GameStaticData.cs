@@ -50,6 +50,9 @@ namespace GameSystem
         public static Dictionary<int, string> TechniquesDescription = new Dictionary<int, string>();
         public static Dictionary<int, Sprite> TechniqueSprites = new Dictionary<int, Sprite>();
 
+
+
+
     }
 }
 

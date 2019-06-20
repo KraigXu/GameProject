@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using GameSystem.Ui;
 using Manager;
+using Unity.Entities;
 using UnityEngine;
 
 public class StrategyScene : MonoBehaviour
 {
-
     private static StrategyScene _instance;
 
     public static StrategyScene Instance
@@ -14,27 +15,106 @@ public class StrategyScene : MonoBehaviour
         get { return _instance; }
     }
 
+    public bool IsInitOver = false;
+
+    public StrategyPlayer Player;
+
+
+    //---------Map
+    public HexGrid hexGrid;
+    public HexMapGenerator mapGenerator;
+   
+    //---------Message
+    public Canvas messageCanvas;
+    public LoadingView loadingViewCom;
+
     void Awake()
     {
         _instance = this;
     }
 
-    // Use this for initialization
     void Start()
     {
-
+        StartCoroutine(StrategySceneInit());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator StrategySceneInit()
     {
 
+        loadingViewCom.Open();
+
+        GameSceneInit.InitializeWithScene();
+
+        InitMapInfo();
+
+        InitGameSystem();
+
+        InitStartUi();
+
+        InitCamera();
+
+        loadingViewCom.Close();
+
+        yield return null;
     }
+
+
+    void InitMapInfo()
+    {
+        
+#if UNITY_EDITOR
+        GameSceneInit.CurOpeningInfo.TestValue();
+#endif
+
+        OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
+
+        hexGrid.seed = openingInfo.Mapseed;
+
+        if (openingInfo.GenerateMaps)
+        {
+            mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+        }
+        else
+        {
+            hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+        }
+        HexMapCamera.ValidatePosition();
+
+    }
+
+    void InitGameSystem()
+    {
+        var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+        SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<LivingAreaSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
+
+        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+
+    }
+
 
     /// <summary>
     /// 生成开局UI
     /// </summary>
-    public void InitStartUi()
+    void InitStartUi()
     {
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
@@ -48,7 +128,11 @@ public class StrategyScene : MonoBehaviour
 
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
+    }
 
+    void InitCamera()
+    {
+       // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
     }
 
     /// <summary>

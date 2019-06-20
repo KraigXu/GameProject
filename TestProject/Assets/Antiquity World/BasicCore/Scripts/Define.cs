@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using DataAccessObject;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public delegate void GameObjectCollider(GameObject go, Collider other);
 public delegate void EntityCallBack(Entity entity, int id);
@@ -77,7 +74,24 @@ public sealed class Define
     public static readonly string GeneratedPool = "GeneratedPool";
     public static readonly string ParticlePool = "ParticlePool";
 
-    
+
+
+
+    /// <summary>
+    /// 分辨率适配
+    /// </summary>
+    public static List<Vector2> ImageResolutionDef = new List<Vector2>()
+    {
+        new Vector2(1024, 768),
+        new Vector2(1152, 864),
+        new Vector2(1280, 1024),
+        new Vector2(1400, 1050),
+        new Vector2(1600, 1200),
+        new Vector2(2048, 1536)
+    };
+
+
+
 
 
     /// <summary>

@@ -14,8 +14,10 @@ namespace GameSystem
         public List<KeyValuePair<int, int>> Content = new List<KeyValuePair<int, int>>();
     }
 
+
     public class TechniquesSystem : ComponentSystem
     {
+
 
         struct TechniquesGroup
         {

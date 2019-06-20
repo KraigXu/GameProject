@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 配置表
+/// </summary>
 public class DemoSetting : MonoBehaviour
 {
   

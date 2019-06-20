@@ -54,10 +54,15 @@ public class HexGrid : MonoBehaviour {
 	public void AddUnit (HexUnit unit, HexCell location, float orientation) {
 		units.Add(unit);
 		unit.Grid = this;
-		unit.transform.SetParent(transform, false);
+	//	unit.transform.SetParent(transform, false);
 		unit.Location = location;
 		unit.Orientation = orientation;
 	}
+
+    public void MakeChildOfColumn(Transform child, int columIndex)
+    {
+        child.SetParent(columns[columIndex],false);
+    }
 
 	public void RemoveUnit (HexUnit unit) {
 		units.Remove(unit);
@@ -150,8 +155,7 @@ public class HexGrid : MonoBehaviour {
 	public HexCell GetCell (Vector3 position) {
 		position = transform.InverseTransformPoint(position);
 		HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-		int index =
-			coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
+		int index =coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
 		return cells[index];
 	}
 
@@ -194,8 +198,16 @@ public class HexGrid : MonoBehaviour {
 	    cell.ColumnIndex = x / HexMetrics.chunkSizeX;
 		cell.ShaderData = cellShaderData;
 
-		cell.Explorable =
-			x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+	    if (wrapping)
+	    {
+	        cell.Explorable = z > 0 && z < cellCountZ - 1;
+	    }
+	    else
+	    {
+	        cell.Explorable =
+	            x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+        }
+
 
 		if (x > 0) {
 			cell.SetNeighbor(HexDirection.W, cells[i - 1]);

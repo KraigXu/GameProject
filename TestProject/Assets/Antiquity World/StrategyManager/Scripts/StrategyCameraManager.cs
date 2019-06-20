@@ -53,7 +53,7 @@ namespace Manager
 
         void Start()
         {
-            GameSceneInit.InitializeWithScene();
+           
             //SetTarget(TargetOj.transform.position,true);
         }
         void Update()

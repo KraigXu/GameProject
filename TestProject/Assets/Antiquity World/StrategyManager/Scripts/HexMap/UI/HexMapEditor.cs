@@ -145,7 +145,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	void CreateUnit () {
 		HexCell cell = GetCellUnderCursor();
-		if (cell && !cell.Unit) {
+		if (cell && !cell.Unit){
 			hexGrid.AddUnit(
 				Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
 			);

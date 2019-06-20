@@ -15,6 +15,34 @@ using Unity.Collections;
 
 namespace GameSystem
 {
+
+
+    /// <summary>
+    /// 开局信息
+    /// </summary>
+    public struct OpeningInfo
+    {
+
+        public int Mapseed;
+        public int Mapx;
+        public int Mapz;
+        public bool GenerateMaps;
+        public bool Wrapping;
+
+
+        public void TestValue()
+        {
+            Mapseed = 1308905299;
+            Mapx = 80;
+            Mapz = 60;
+            GenerateMaps = true;
+            Wrapping = true;
+        }
+
+
+
+    }
+
     public sealed class GameSceneInit
     {
 
@@ -30,6 +58,9 @@ namespace GameSystem
         public static EntityArchetype FactionArchetype;
 
         public static DemoSetting Settings;
+
+        public static OpeningInfo CurOpeningInfo;
+
 
         public static void InitializeWithScene()
         {
@@ -60,32 +91,6 @@ namespace GameSystem
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
             FactionArchetype = entityManager.CreateArchetype(typeof(Faction));
-
-            SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<LivingAreaSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
-
-            SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
-
-            StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
-
-            StrategyScene.Instance.InitStartUi();
 
         }
 
