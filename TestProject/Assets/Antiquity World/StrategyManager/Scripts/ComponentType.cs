@@ -144,6 +144,7 @@ namespace GameSystem
     /// <summary>
     /// 生物属性，其中参数大多是提升入手物体效率
     /// </summary>
+    [Serializable]
     public struct Biological : IComponentData
     {
         public int BiologicalId;
@@ -468,9 +469,12 @@ namespace GameSystem
         }
     }
 
+    [Serializable]
     public struct LivingArea : IComponentData
     {
         public int Id;
+        public byte IsInit;
+
         public int PersonNumber;
         public LivingAreaType Type;
         public int Money;
@@ -512,8 +516,12 @@ namespace GameSystem
     /// </summary>
     public struct Collective : IComponentData
     {
+        public int Id;
         public int CollectiveClassId;
         public int Cohesion;
+
+
+
 
     }
 

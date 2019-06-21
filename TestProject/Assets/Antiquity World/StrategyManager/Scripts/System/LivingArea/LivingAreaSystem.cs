@@ -75,7 +75,6 @@ namespace GameSystem
             BuildingFunctions.Add("Tavern", SystemManager.Get<BuildingTavernSystem>());
 
         }
-
         /// <summary>
         /// 初始化城市
         /// </summary>
@@ -91,6 +90,7 @@ namespace GameSystem
                GameStaticData.LivingAreaPrefabDic.Add(livingAreaModelDatas[i].Id,Resources.Load<GameObject>(livingAreaModelDatas[i].Path));
             }
 
+            return;
             List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
             for (int i = 0; i < datas.Count; i++)
             {
@@ -160,7 +160,6 @@ namespace GameSystem
 
                 GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
                 GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
-                
             }
 
         }

@@ -59,7 +59,7 @@ namespace GameSystem.Ui
             }
             _titles.Clear();
 
-           EntityArray entityArray = _livingAreaSystem.CurEntityArray;
+            EntityArray entityArray = _livingAreaSystem.CurEntityArray;
             GameObjectArray gameObjectArray = _livingAreaSystem.CuGameObjectArray; 
             for (int i = 0; i < entityArray.Length; i++)
             {

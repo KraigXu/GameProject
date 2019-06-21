@@ -21,6 +21,14 @@ namespace GameSystem
         public static Dictionary<int, string> LivingAreaDescription = new Dictionary<int, string>();
         public static Dictionary<int, GameObject> LivingAreaPrefabDic = new Dictionary<int, GameObject>();
 
+
+        public static Dictionary<int,string> CityName=new Dictionary<int, string>();
+        public static Dictionary<int,string> CityDescription=new Dictionary<int, string>();
+
+        public static Dictionary<int, string> OrganizationName = new Dictionary<int, string>();
+        public static Dictionary<int, string> OrganizationDescription = new Dictionary<int, string>();
+
+
         public static Dictionary<int, string> BuildingName = new Dictionary<int, string>();
         public static Dictionary<int, string> BuildingDescription = new Dictionary<int, string>();
         public static Dictionary<int, string> BuildingType = new Dictionary<int, string>();

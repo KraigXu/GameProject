@@ -14,6 +14,13 @@ public class HexGrid : MonoBehaviour {
 	public HexGridChunk chunkPrefab;
 	public HexUnit unitPrefab;
 
+    //[SerializeField]
+    //public struct UnitData
+    //{
+    //    public int Id;
+        
+    //}
+
 	public Texture2D noiseSource;
 
 	public int seed;

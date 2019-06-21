@@ -260,6 +260,10 @@ namespace GameSystem
         public void SetupComponentData(EntityManager entityManager)
         {
 
+            Dictionary<string,string> values =new Dictionary<string, string>();
+            Dictionary<string,string> vaues1=new Dictionary<string, string>();
+
+
             List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = new List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>();
             //valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED, "10"));
             //valuePairs.Add(new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_CRIT, "0"));

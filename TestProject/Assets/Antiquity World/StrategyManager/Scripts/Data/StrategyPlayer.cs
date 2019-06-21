@@ -4,8 +4,4 @@ using UnityEngine;
 
 public struct StrategyPlayer{
     
-    
-
-
-
 }

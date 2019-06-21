@@ -64,7 +64,7 @@ namespace GameSystem
                 Biological = _biologicalData.Biological,
                 BPosition = _biologicalData.Position,
                 BBehviorData = _biologicalData.BehviorData,
-                CollisionRadiusSquared = GameSceneInit.Settings.LivingAreaCollisionRadius*GameSceneInit.Settings.PlayerCollisionRadius,
+                CollisionRadiusSquared = GameSceneInit.LivingAreaCollisionRadius*GameSceneInit.PlayerCollisionRadius,
                 IPosition = _interactionData.Position,
                 Entitys=_interactionData.Entitys
                 

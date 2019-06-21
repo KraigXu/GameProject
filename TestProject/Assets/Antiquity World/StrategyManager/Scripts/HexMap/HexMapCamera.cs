@@ -121,4 +121,11 @@ public class HexMapCamera : MonoBehaviour {
         grid.CenterMap(position.x);
         return position;
     }
+
+    public void SetTarget(Vector3 position)
+    {
+        transform.position = position + new Vector3(0, 3, -8);
+        transform.LookAt(position);
+
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using DataAccessObject;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -28,15 +29,34 @@ namespace GameSystem
         public int Mapz;
         public bool GenerateMaps;
         public bool Wrapping;
+        public bool IsEditMode; //是否编辑模式
+        public int MapFileVersion;
+        public string MapFilePath;
+
+        //Player select Info
+        public string Name;
+        public string SunName;
+        public int    Sex;
+        
 
 
+        
         public void TestValue()
         {
             Mapseed = 1308905299;
-            Mapx = 80;
-            Mapz = 60;
+            Mapx = 60;
+            Mapz = 40;
             GenerateMaps = true;
             Wrapping = true;
+            IsEditMode = false;
+
+            MapFileVersion = 5;
+            MapFilePath= Path.Combine(Application.persistentDataPath, "333.map");
+
+            this.Name = "";
+            this.SunName = "";
+            this.Sex = 1;
+            
         }
 
 
@@ -45,6 +65,9 @@ namespace GameSystem
 
     public sealed class GameSceneInit
     {
+        public static float LivingAreaCollisionRadius = 1.0f;
+        public static float PlayerCollisionRadius = 1.0f;
+        public static  float KeySpeed = 3f;
 
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype TechniquesArchetype;
@@ -57,29 +80,11 @@ namespace GameSystem
         public static EntityArchetype ArticleArchetype;
         public static EntityArchetype FactionArchetype;
 
-        public static DemoSetting Settings;
-
         public static OpeningInfo CurOpeningInfo;
-
 
         public static void InitializeWithScene()
         {
 
-
-            var settingsGo = GameObject.Find("Settings");
-            if (settingsGo == null)
-            {
-                return;
-            }
-            else
-            {
-                Settings = settingsGo?.GetComponent<DemoSetting>();
-                if (!Settings)
-                {
-                    return;
-                }
-            }
-           
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));

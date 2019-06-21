@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using GameSystem;
 using GameSystem.Ui;
 using Manager;
@@ -19,6 +20,13 @@ public class StrategyScene : MonoBehaviour
 
     public StrategyPlayer Player;
 
+    public int PlayerId = 1;
+    public Camera MainCamera;
+    public Camera FixedCamera;
+    public Camera UiCamera;
+    public GameObject go;
+  
+    public GameObject ArticleInfoPerfab;
 
     //---------Map
     public HexGrid hexGrid;
@@ -41,16 +49,16 @@ public class StrategyScene : MonoBehaviour
     IEnumerator StrategySceneInit()
     {
 
-        loadingViewCom.Open();
-
+#if UNITY_EDITOR
+        Debuger.EnableLog = true;
+        GameSceneInit.CurOpeningInfo.TestValue();
+#endif
         GameSceneInit.InitializeWithScene();
 
-        InitMapInfo();
-
         InitGameSystem();
-
+        InitMapInfo();
+        InitPlayer();
         InitStartUi();
-
         InitCamera();
 
         loadingViewCom.Close();
@@ -62,25 +70,56 @@ public class StrategyScene : MonoBehaviour
     void InitMapInfo()
     {
         
-#if UNITY_EDITOR
-        GameSceneInit.CurOpeningInfo.TestValue();
-#endif
-
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
         hexGrid.seed = openingInfo.Mapseed;
 
-        if (openingInfo.GenerateMaps)
+        if (openingInfo.IsEditMode == true)
         {
-            mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            if (openingInfo.GenerateMaps)
+            {
+                mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            }
+            else
+            {
+                hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            }
+            HexMapCamera.ValidatePosition();
         }
         else
         {
-            hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            //加载地图
+            Debuger.Log(openingInfo.MapFilePath);
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(openingInfo.MapFilePath)))
+            {
+                int header = reader.ReadInt32();
+                if (header <= openingInfo.MapFileVersion)
+                {
+                    hexGrid.Load(reader, header);
+                    HexMapCamera.ValidatePosition();
+                }
+                else
+                {
+                    Debug.LogWarning("Unknown map format " + header);
+                }
+            }
         }
-        HexMapCamera.ValidatePosition();
+
+        
 
     }
+
+    void InitPlayer()
+    {
+        //OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
+
+        
+
+
+
+
+    }
+
 
     void InitGameSystem()
     {
@@ -111,6 +150,7 @@ public class StrategyScene : MonoBehaviour
     }
 
 
+
     /// <summary>
     /// 生成开局UI
     /// </summary>
@@ -132,7 +172,7 @@ public class StrategyScene : MonoBehaviour
 
     void InitCamera()
     {
-       // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
+        //StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
     }
 
     /// <summary>

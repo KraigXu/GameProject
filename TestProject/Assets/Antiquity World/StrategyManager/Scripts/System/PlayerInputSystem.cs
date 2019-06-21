@@ -64,22 +64,22 @@ namespace GameSystem
                 Vector2 keyv = Vector2.zero;
                 if (Input.GetKey(KeyCode.W))
                 {
-                    keyv.y += Time.deltaTime * GameSceneInit.Settings.KeySpeed;
+                    keyv.y += Time.deltaTime * GameSceneInit.KeySpeed;
                 }
 
                 if (Input.GetKey(KeyCode.S))
                 {
-                    keyv.y -= Time.deltaTime * GameSceneInit.Settings.KeySpeed;
+                    keyv.y -= Time.deltaTime * GameSceneInit.KeySpeed;
                 }
 
                 if (Input.GetKey(KeyCode.A))
                 {
-                    keyv.x -= Time.deltaTime * GameSceneInit.Settings.KeySpeed;
+                    keyv.x -= Time.deltaTime * GameSceneInit.KeySpeed;
                 }
 
                 if (Input.GetKey(KeyCode.D))
                 {
-                    keyv.x += Time.deltaTime * GameSceneInit.Settings.KeySpeed;
+                    keyv.x += Time.deltaTime * GameSceneInit.KeySpeed;
                 }
 
                 input.ViewMove = keyv;

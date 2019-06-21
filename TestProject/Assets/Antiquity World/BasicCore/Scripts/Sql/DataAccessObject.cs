@@ -130,7 +130,7 @@ namespace DataAccessObject
                                        " IsDebut INTEGER," +
                                        " Location TEXT," +
                                        " LocationType INTEGER," +
-                                       " NeutralValue INTEGER,"+
+                                       " NeutralValue INTEGER," +
                                        " X INTEGER," +
                                        " Y INTEGER," +
                                        " Z INTEGER," +
@@ -441,7 +441,7 @@ namespace DataAccessObject
                                        " Weight INTEGER," +
                                        " Bid INTEGER);");
         }
-        
+
         public static void CreateTable_ArticleTypeData(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS ArticleTypeData ( " +
@@ -487,7 +487,7 @@ namespace DataAccessObject
                                        " Type INTEGER," +
                                        " Path TEXT);");
         }
-        
+
     }
     //-----------------------------------------建表语句 -----------------------------------End
 
@@ -802,6 +802,33 @@ namespace DataAccessObject
         }
     }
 
+    public class OrganizationData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string AvaterPath { get; set; }
+        public int Level { get; set; }
+        public int Permanence { get; set; }
+        public int ResearchValue { get; set; }
+        public int FoodValue { get; set; }
+        public int HandworkValue { get; set; }
+
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id, Name, Description, AvaterPath,Level,Permanence,ResearchValue,FoodValue,HandworkValue
+            };
+            return objects;
+        }
+
+    }
+
+
+
+
     public class DialogData : BaseData
     {
         public int Id { get; set; }
@@ -890,7 +917,7 @@ namespace DataAccessObject
             return objects;
         }
     }
-    
+
 
     /// <summary>
     /// 头像数据
@@ -1006,7 +1033,7 @@ namespace DataAccessObject
 
         public override object[] GetValues()
         {
-            object[] objects = { NId,Name,Note,Content1,Content2 };
+            object[] objects = { NId, Name, Note, Content1, Content2 };
             return objects;
         }
     }
@@ -1062,7 +1089,7 @@ namespace DataAccessObject
         public byte Type2 { get; set; }
         public byte Type3 { get; set; }
         public string Text { get; set; }
-        public string Value { get; set; }          
+        public string Value { get; set; }
         public int Count { get; set; }
         public int MaxCount { get; set; }
         public string Effect { get; set; }

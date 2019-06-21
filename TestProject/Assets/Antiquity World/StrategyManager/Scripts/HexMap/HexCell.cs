@@ -283,7 +283,7 @@ public class HexCell : MonoBehaviour {
 
 	int urbanLevel, farmLevel, plantLevel;
 
-	int specialIndex;
+    int specialIndex;
 
 	int distance;
 
