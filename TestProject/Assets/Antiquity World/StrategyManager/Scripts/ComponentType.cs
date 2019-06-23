@@ -42,6 +42,7 @@ namespace GameSystem
     {
         public int InnerId;
         public ElementType Type;
+
     }
 
     /// <summary>

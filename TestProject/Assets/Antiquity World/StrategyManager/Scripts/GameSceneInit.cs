@@ -44,8 +44,8 @@ namespace GameSystem
         public void TestValue()
         {
             Mapseed = 1308905299;
-            Mapx = 60;
-            Mapz = 40;
+            Mapx = 80;
+            Mapz = 60;
             GenerateMaps = true;
             Wrapping = true;
             IsEditMode = false;
@@ -72,7 +72,7 @@ namespace GameSystem
         public static EntityArchetype DistrictArchetype;
         public static EntityArchetype TechniquesArchetype;
         public static EntityArchetype RelationArchetype;
-        public static EntityArchetype BiologicalArchetype;
+       
         public static EntityArchetype EventInfotype;
         public static EntityArchetype LivingAreaArchetype;
         public static EntityArchetype BiologicalSocialArchetype;
@@ -90,7 +90,7 @@ namespace GameSystem
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
             TechniquesArchetype = entityManager.CreateArchetype(typeof(Techniques));
             RelationArchetype = entityManager.CreateArchetype(typeof(Relation));
-            BiologicalArchetype = entityManager.CreateArchetype(typeof(Element), typeof(Position), typeof(Rotation), typeof(Biological));
+           
             EventInfotype = entityManager.CreateArchetype(typeof(EventInfo));
             BiologicalSocialArchetype = entityManager.CreateArchetype(typeof(BiologicalSocial));
             AncientTombArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation));

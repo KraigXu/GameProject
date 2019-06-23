@@ -7,7 +7,7 @@ using Unity.Transforms;
 using UnityEngine;
 using GameSystem.Ui;
 using Newtonsoft.Json;
-
+using Unity.Mathematics;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 
@@ -37,6 +37,7 @@ namespace GameSystem
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
+        public static EntityArchetype BiologicalArchetype;
         public class ComponentGroup
         {
             public AICharacterControl AiCharacter;
@@ -49,6 +50,7 @@ namespace GameSystem
         public BiologicalSystem()
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            BiologicalArchetype = _entityManager.CreateArchetype(typeof(Element), typeof(Position), typeof(Rotation), typeof(Biological),typeof(BodyProperty),typeof(Equipment),typeof(EquipmentCoat));
         }
 
         /// <summary>
@@ -77,11 +79,25 @@ namespace GameSystem
 
             for (int i = 0; i < datas.Count; i++)
             {
-                Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
-                entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
+                entityManager.CreateEntity(BiologicalArchetype);
 
-                Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                entityManager.AddComponentData(entity, new Biological()
+                //Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
+              //  entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
+
+                // Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
+                Entity entity = entityManager.CreateEntity(BiologicalArchetype);
+
+                entityManager.SetComponentData(entity,new Position
+                {
+                    Value =new float3(0,-6,6)
+                });
+
+                entityManager.SetComponentData(entity,new Rotation
+                {
+                    Value = Quaternion.identity
+                });
+
+                entityManager.SetComponentData(entity, new Biological()
                 {
                     BiologicalId = datas[i].Id,
                     Age = datas[i].Age,
@@ -130,8 +146,7 @@ namespace GameSystem
                     Wuxing = datas[i].Wuxing
                 });
 
-              //  Debug.Log(BiologicalSystem.BiologicalDisposition((byte)UnityEngine.Random.Range(0, 255), (byte)datas[i].Disposition));
-                entityManager.AddComponentData(entity, new BodyProperty
+                entityManager.SetComponentData(entity, new BodyProperty
                 {
                     Thought = 100,
                     Neck = 100,
@@ -152,7 +167,6 @@ namespace GameSystem
 
                 });
 
-                entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
                 entityManager.SetComponentData(entity, new Equipment
                 {
                     HelmetId = -1,
@@ -165,19 +179,18 @@ namespace GameSystem
                     WeaponSecondaryId = -1
                 });
 
-                //entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
-                //entityManager.SetComponentData(entity, new EquipmentCoat
-                //{
-                //    SpriteId = 1,
-                //    Type = EquipType.Coat,
-                //    Level = EquipLevel.General,
-                //    Part = EquipPart.All,
-                //    BluntDefense = 19,
-                //    SharpDefense = 20,
-                //    Operational = 100,
-                //    Weight = 3,
-                //    Price = 1233,
-                //});
+                entityManager.SetComponentData(entity, new EquipmentCoat
+                {
+                    SpriteId = 1,
+                    Type = EquipType.Coat,
+                    Level = EquipLevel.General,
+                    Part = EquipPart.All,
+                    BluntDefense = 19,
+                    SharpDefense = 20,
+                    Operational = 100,
+                    Weight = 3,
+                    Price = 1233,
+                });
 
                 entityManager.AddComponentData(entity, new Knapsack
                 {
@@ -185,11 +198,12 @@ namespace GameSystem
                     KnapscakCode = datas[i].Id
                 });
 
-                entityManager.AddComponent(entity, ComponentType.Create<Team>());
-                entityManager.SetComponentData(entity, new Team
+                entityManager.AddComponentData(entity, new Team
                 {
                     TeamBossId = datas[i].TeamId
                 });
+
+
 
                 if (datas[i].Identity == 0)
                 {
@@ -199,7 +213,7 @@ namespace GameSystem
                 {
                     entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
 
-                    SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+                  //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
                 }
 
                 if (datas[i].FactionId != 0)
@@ -223,15 +237,15 @@ namespace GameSystem
 
                 ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", datas[i].Id), entity);
 
-                SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
+              //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
 
-                ComponentGroup group = new ComponentGroup();
-                group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
-                group.Animator = entityGo.GetComponent<Animator>();
-                if (ComponentDic.ContainsKey(entity) == false)
-                {
-                    ComponentDic.Add(entity, group);
-                }
+             //   ComponentGroup group = new ComponentGroup();
+            //    group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
+              //  group.Animator = entityGo.GetComponent<Animator>();
+                //if (ComponentDic.ContainsKey(entity) == false)
+                //{
+                //    ComponentDic.Add(entity, group);
+                //}
 
                 GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
                 GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);

@@ -93,6 +93,7 @@ public class HexGrid : MonoBehaviour {
 			}
 		}
 
+        Debug.Log(cellCountX+">>"+ cellCountZ);
 		cellCountX = x;
 		cellCountZ = z;
 	    this.wrapping = wrapping;
