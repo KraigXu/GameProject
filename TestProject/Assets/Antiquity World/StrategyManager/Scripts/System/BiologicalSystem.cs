@@ -80,18 +80,8 @@ namespace GameSystem
 
 
             BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
-            //Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 
-            entityManager.SetComponentData(entity, new Position
-            {
-                Value = new float3(0, -6, 6)
-            });
-
-            entityManager.SetComponentData(entity, new Rotation
-            {
-                Value = Quaternion.identity
-            });
-
+            entityManager.AddComponent(entity, ComponentType.Create<Biological>());
             entityManager.SetComponentData(entity, new Biological()
             {
                 BiologicalId = data.Id,
@@ -141,6 +131,7 @@ namespace GameSystem
                 Wuxing = data.Wuxing
             });
 
+            entityManager.AddComponent(entity, ComponentType.Create<BodyProperty>());
             entityManager.SetComponentData(entity, new BodyProperty
             {
                 Thought = 100,
@@ -162,6 +153,7 @@ namespace GameSystem
 
             });
 
+            entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
             entityManager.SetComponentData(entity, new Equipment
             {
                 HelmetId = -1,
@@ -174,6 +166,7 @@ namespace GameSystem
                 WeaponSecondaryId = -1
             });
 
+            entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
             entityManager.SetComponentData(entity, new EquipmentCoat
             {
                 SpriteId = 1,
@@ -187,12 +180,15 @@ namespace GameSystem
                 Price = 1233,
             });
 
+            entityManager.AddComponent(entity, ComponentType.Create<Knapsack>());
             entityManager.AddComponentData(entity, new Knapsack
             {
                 UpperLimit = 1000000,
                 KnapscakCode = data.Id
             });
 
+
+            entityManager.AddComponent(entity, ComponentType.Create<Team>());
             entityManager.AddComponentData(entity, new Team
             {
                 TeamBossId = data.TeamId
@@ -200,37 +196,37 @@ namespace GameSystem
 
 
 
-            if (data.Identity == 0)
-            {
-                entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-            }
-            else if (data.Identity == 1)
-            {
-                entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
+            //if (data.Identity == 0)
+            //{
+            //    entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
+            //}
+            //else if (data.Identity == 1)
+            //{
+            //    entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
 
-                //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-            }
+            //    //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
+            //}
 
-            if (data.FactionId != 0)
-            {
-                entityManager.AddComponentData(entity, new FactionProperty
-                {
+            //if (data.FactionId != 0)
+            //{
+            //    entityManager.AddComponentData(entity, new FactionProperty
+            //    {
 
-                });
-            }
+            //    });
+            //}
 
-            entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-            entityManager.SetComponentData(entity, new BehaviorData
-            {
-                Target = Vector3.zero,
-            });
+            //entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
+            //entityManager.SetComponentData(entity, new BehaviorData
+            //{
+            //    Target = Vector3.zero,
+            //});
 
-            if (string.IsNullOrEmpty(data.JifaJson) == false)
-            {
-                TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
-            }
+            //if (string.IsNullOrEmpty(data.JifaJson) == false)
+            //{
+            //    TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
+            //}
 
-            ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
+            //ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
 
             //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
 
@@ -242,9 +238,9 @@ namespace GameSystem
             //    ComponentDic.Add(entity, group);
             //}
 
-            GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
-            GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
-            GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
+            //GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
+            //GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
+            //GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
 
 
         }
