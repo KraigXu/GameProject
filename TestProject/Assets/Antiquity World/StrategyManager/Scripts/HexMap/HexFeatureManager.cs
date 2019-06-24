@@ -138,7 +138,7 @@ public class HexFeatureManager : MonoBehaviour
                     instance.localPosition = HexMetrics.Perturb(position);
                     instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
                     instance.SetParent(container, false);
-                    CitySystem.AddCity(instance);
+                    CitySystem.AddCity(instance,1);
                 }
 
                 break;

@@ -139,19 +139,17 @@ namespace GameSystem
             entityManager.AddComponentData(entity, new BuidingTavern
             {
 
+
             });
-
-
-
         }
 
 
-        public static void AddCity(Transform node)
+        public static void AddCity(Transform node,int id)
         {
             GameObjectEntity entitygo = node.GetComponent<GameObjectEntity>();
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", GameStaticData.LivingAreaName.Count + 1);
+            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", id);
 
             Entity entity = entitygo.Entity;
 
@@ -179,6 +177,7 @@ namespace GameSystem
 
             entityManager.AddComponentData(entity, new District
             {
+
             });
 
             entityManager.AddComponentData(entity, new Money
@@ -192,47 +191,13 @@ namespace GameSystem
                 Number = 300000
             });
 
-            GameStaticData.CityName.Add(data.Id, data.Name);
-            GameStaticData.CityDescription.Add(data.Id, data.Description);
+            LivingAreaSystem.LivingAreaAddBuilding(entity,data.BuildingInfoJson);
 
-            //  List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-            //  for (int i = 0; i < datas.Count; i++)
-            //  {
-            //      Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.LivingAreaPrefabDic[datas[i].ModelBaseId].transform);
-            //      entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
-            //      //entityGo.gameObject.name = datas[i].Name;
-            //      ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
-
-            //      Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-
-
-            //      if (datas[i].LivingAreaType == 1)
-            //      {
-
-
-            //          trigger.TriggerEnter = CitySystem.CityColliderEnter;
-            //          trigger.TriggerExit = CitySystem.CityColliderExit;
-
-            //      }
-            //      else if (datas[i].LivingAreaType == 2)
-            //      {
-            //          entityManager.AddComponentData(entity, new Collective()
-            //          {
-            //              CollectiveClassId = 1,
-            //              Cohesion = 1
-            //          });
-            //          trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
-            //          trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
-            //      }
-
-            //      LivingAreaAddBuilding(entity, datas[i].BuildingInfoJson);
-
-
-            //  }
-
-            ////  entitygo.
-
-
+            if (GameStaticData.CityName.ContainsKey(data.Id) == false)
+            {
+                GameStaticData.CityName.Add(data.Id, data.Name);
+                GameStaticData.CityDescription.Add(data.Id, data.Description);
+            }
 
         }
     }

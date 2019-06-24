@@ -754,6 +754,10 @@ namespace GameSystem
 
     }
 
+    //public struct TeamColor:IComponentData,IInstanceRenderProperties 
+    //{public float4 Color;
+    //} 
+  //  struct TeamColor : IComponentData, IInstanceRenderProperties { public float4 Color; }
 
 
 }

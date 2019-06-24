@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using DataAccessObject;
 using GameSystem;
 using GameSystem.Ui;
 using Manager;
@@ -125,29 +126,62 @@ public class StrategyScene : MonoBehaviour
     {
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-        SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+        List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
+        for (int i = 0; i < biologicalAvatarDatas.Count; i++)
+        {
+            GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
+        }
 
-        SystemManager.Get<LivingAreaSystem>().SetupComponentData(entityManager);
+        List<BiologicalModelData> biologicalModelDatas = SQLService.Instance.QueryAll<BiologicalModelData>();
+        for (int i = 0; i < biologicalModelDatas.Count; i++)
+        {
+            GameStaticData.BiologicalPrefab.Add(biologicalModelDatas[i].Id, Resources.Load<GameObject>(biologicalModelDatas[i].Path));
+        }
 
-        SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        for (int i = 0; i < 10; i++)
+        {
+            //entityManager.CreateEntity(BiologicalArchetype);
+            GameObject go=new GameObject();
+            go.AddComponent<HexUnit>();
+            go.AddComponent<GameObjectEntity>();
+            Transform entityGo = go.transform;
+            entityGo.position = new Vector3(1, 1,1);
 
-        SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
+            entityGo.gameObject.name = "TestEEE" + i;
 
-        SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+            Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
 
-        SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+            entityManager.AddComponent(entity,typeof(Biological));
+            entityManager.SetComponentData(entity, new Biological());
+            // Entity entity = entityManager.CreateEntity(BiologicalArchetype);
 
-        SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+        }
 
-        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+            //SystemManager.Get<LivingAreaSystem>().SetupComponentData(entityManager);
 
-    }
+            //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
+
+            //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+
+        }
 
 
 

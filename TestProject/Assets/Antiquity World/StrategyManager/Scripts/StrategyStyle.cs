@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Rendering;
 using UnityEngine;
 
 public class StrategyStyle : MonoBehaviour
@@ -14,6 +15,8 @@ public class StrategyStyle : MonoBehaviour
 
     public Transform ModelCityO1;
     public Transform ModelCity02;
+
+    public List<MeshInstanceRenderer> BiologicalRenderers;
 
     public RectTransform UiLivingAreaTitle;
 

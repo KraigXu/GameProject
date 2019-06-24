@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
+using GameSystem;
 
 public class HexMapEditor : MonoBehaviour {
 
@@ -125,6 +126,7 @@ public class HexMapEditor : MonoBehaviour {
 				HandleInput();
 				return;
 			}
+            //按下U 随机生成角色
 			if (Input.GetKeyDown(KeyCode.U)) {
 				if (Input.GetKey(KeyCode.LeftShift)) {
 					DestroyUnit();
@@ -146,11 +148,23 @@ public class HexMapEditor : MonoBehaviour {
 	void CreateUnit () {
 		HexCell cell = GetCellUnderCursor();
 		if (cell && !cell.Unit){
-			hexGrid.AddUnit(
-				Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
-			);
-		}
-	}
+           // GameObject gameObject= 
+
+		    HexUnit hexUnit = Instantiate(HexUnit.unitPrefab);
+
+            hexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
+            BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
+            // GameObject gameObject= Object.Instantiate(HexUnit.unitPrefab);
+		    // Instantiate(HexUnit.unitPrefab)
+
+
+
+
+        }
+
+
+
+    }
 
 	void DestroyUnit () {
 		HexCell cell = GetCellUnderCursor();
