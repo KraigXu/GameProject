@@ -32,9 +32,7 @@ namespace GameSystem.Ui
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
-
         }
-
 
         public override void InitWindowOnAwake()
         {

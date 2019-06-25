@@ -534,6 +534,13 @@ namespace DataAccessObject
     public class LivingAreaData : BaseData
     {
         public int Id { get; set; }                      //编号 
+
+        public int SpecialIndex { get; set; }
+
+        
+
+
+
         public int PowerId { get; set; }
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明

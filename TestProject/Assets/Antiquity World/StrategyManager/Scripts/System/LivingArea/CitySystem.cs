@@ -20,10 +20,18 @@ namespace GameSystem
             public GameObjectArray GameObjects;
             public ComponentDataArray<LivingArea> LivingArea;
             public ComponentDataArray<Crowd> Crowd;
+            public ComponentDataArray<CellMap> Map;
         }
         [Inject]
         private Data _data;
 
+        private EntityManager _entityManager;
+
+        protected override void OnCreateManager()
+        {
+            base.OnCreateManager();
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
 
 
         protected override void OnUpdate()
@@ -144,21 +152,31 @@ namespace GameSystem
         }
 
 
-        public static void AddCity(Transform node,int id)
+        public void AddCity(HexCoordinates coordinates)
         {
-            GameObjectEntity entitygo = node.GetComponent<GameObjectEntity>();
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
+            AddCity(data,coordinates);
+        }
 
-            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", id);
 
-            Entity entity = entitygo.Entity;
-
-            entityManager.AddComponentData(entity, new ModelInfo
+        public void AddCity(LivingAreaData data, HexCoordinates coordinates)
+        {
+            for (int i = 0; i < _data.Length; i++)
             {
-                ModelId = data.ModelBaseId
+                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z== coordinates.Z)
+                {
+                    return;
+                }
+            }
+
+
+            Entity entity = _entityManager.CreateEntity();
+            _entityManager.AddComponentData(entity, new CellMap()
+            {
+                Coordinates = coordinates
             });
 
-            entityManager.AddComponentData(entity, new LivingArea
+            _entityManager.AddComponentData(entity, new LivingArea
             {
                 Id = data.Id,
                 PersonNumber = data.PersonNumber,
@@ -175,23 +193,22 @@ namespace GameSystem
                 StableValue = data.StableValue
             });
 
-            entityManager.AddComponentData(entity, new District
+            _entityManager.AddComponentData(entity, new District
             {
-
             });
 
-            entityManager.AddComponentData(entity, new Money
+            _entityManager.AddComponentData(entity, new Money
             {
                 Value = data.Money,
                 Upperlimit = data.MoneyMax
             });
 
-            entityManager.AddComponentData(entity, new Crowd
+            _entityManager.AddComponentData(entity, new Crowd
             {
                 Number = 300000
             });
 
-            LivingAreaSystem.LivingAreaAddBuilding(entity,data.BuildingInfoJson);
+            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
             if (GameStaticData.CityName.ContainsKey(data.Id) == false)
             {

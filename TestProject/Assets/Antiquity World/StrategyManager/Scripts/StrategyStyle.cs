@@ -18,6 +18,12 @@ public class StrategyStyle : MonoBehaviour
 
     public List<MeshInstanceRenderer> BiologicalRenderers;
 
+
+    public List<HexUnit> HexUnitPrefabs;
+
+    
+
+
     public RectTransform UiLivingAreaTitle;
 
     public RectTransform UiFunctionButton;

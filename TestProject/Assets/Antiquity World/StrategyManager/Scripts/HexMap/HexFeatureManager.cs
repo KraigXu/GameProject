@@ -128,55 +128,25 @@ public class HexFeatureManager : MonoBehaviour
     /// <param name="position"></param>
     public void AddSpecialFeature(HexCell cell, Vector3 position)
     {
+        HexHash hash = HexMetrics.SampleHashGrid(position);
+        Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
+        instance.localPosition = HexMetrics.Perturb(position);
+        instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
+        instance.SetParent(container, false);
 
         switch (cell.SpecialIndex)
         {
-            case 1:    //城市
-                {
-                    HexHash hash = HexMetrics.SampleHashGrid(position);
-                    Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
-                    instance.localPosition = HexMetrics.Perturb(position);
-                    instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
-                    instance.SetParent(container, false);
-                    CitySystem.AddCity(instance,1);
-                }
-
+            case 1:
+                SystemManager.Get<CitySystem>().AddCity(cell.coordinates);
                 break;
             case 2:
-                {
-                    HexHash hash = HexMetrics.SampleHashGrid(position);
-                    Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
-                    instance.localPosition = HexMetrics.Perturb(position);
-                    instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
-                    instance.SetParent(container, false);
-                }
-                break;
             case 3:
-                {
-                    HexHash hash = HexMetrics.SampleHashGrid(position);
-                    Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
-                    instance.localPosition = HexMetrics.Perturb(position);
-                    instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
-                    instance.SetParent(container, false);
-                }
-                break;
             case 4:
-                {
-                    HexHash hash = HexMetrics.SampleHashGrid(position);
-                    Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
-                    instance.localPosition = HexMetrics.Perturb(position);
-                    instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
-                    instance.SetParent(container, false);
-
-                    OrganizationSystem.AddOrganization(instance);
-
-                }
+                SystemManager.Get<OrganizationSystem>().AddOrganization(cell.coordinates);
                 break;
             default:
                 break;
         }
-
-
     }
 
     public void AddWall(

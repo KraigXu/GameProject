@@ -5,11 +5,7 @@ using UnityEngine;
 
 namespace GameSystem
 {
-    public enum TimeSatus
-    {
-        Play,
-        Stop,
-    }
+
 
     public class WorldTimerNode
     {
@@ -19,7 +15,7 @@ namespace GameSystem
         public bool IsStart;
         public DateTime StartTime;
         public Action StartCallback;
-        
+
         public DateTime EndTime;
         public Action EndCallback;
 
@@ -50,6 +46,12 @@ namespace GameSystem
         }
     }
 
+    public enum TimeSatus
+    {
+        Play,
+        Stop,
+    }
+
 
     /// <summary>
     /// 时间管理
@@ -67,14 +69,14 @@ namespace GameSystem
         public bool IsPlay = false;
         public bool IsStart = false;
 
-        public DateTime CurTime= Convert.ToDateTime("1000-01-01 00:00:00");
+        public DateTime CurTime = Convert.ToDateTime("1000-01-01 00:00:00");
         public int Year = 1000;
         public int Month = 1;
         public int Day = 1;
         public int Shichen = 1;
         public int Hour = 0;
 
-        public  int Jijie;
+        public int Jijie;
 
         public byte TimeScalar = 1;           //时间的放大比 如果是0 则是暂停
         public byte ScheduleCell = 5;         //时间节点的大小
@@ -90,13 +92,15 @@ namespace GameSystem
         private int _idCounter;
 
 
-        private  Dictionary<int, string> TimeJijie = new Dictionary<int, string>();
+        private Dictionary<int, string> TimeJijie = new Dictionary<int, string>();
+
+        private Dictionary<int, string> TimeShichen = new Dictionary<int, string>();
+
+
         //        子时 丑时  寅时 卯时  辰时 巳时
         //        23:00 - 00:59 01:00 - 02:59 03:00 - 04:59 05:00 - 06:59 07:00 - 08:59 09:00 - 10:59
         //        午时 未时  申时 酉时  戊时 亥时
         //        11:00 - 12:59 13:00 - 14:59 15:00 - 16:59 17:00 - 18:59 19:00 - 20:59 21:00 - 22:59
-        private  Dictionary<int, string> TimeShichen = new Dictionary<int, string>();
-
 
         void Awake()
         {
@@ -144,9 +148,19 @@ namespace GameSystem
             }
         }
 
+        enum TimePlay
+        {
+            Play, Pause,
+        }
+
+
+        TimeSatus CurTimeSatus;
+        public DateTime Times;
+        
+
         void Update()
         {
-            if (StrategyClock.paused == false|| IsStart == false || IsInit == false)
+            if (StrategyClock.paused == false || IsStart == false || IsInit == false)
             {
                 return;
             }
@@ -170,15 +184,15 @@ namespace GameSystem
                 {
                     ScheduleDay = 0;
                     ScheduleMonth++;
-                  //  AddPeriodValue(PeriodType.Day);
+                    //  AddPeriodValue(PeriodType.Day);
                     if (ScheduleMonth > 31)
                     {
                         ScheduleMonth = 0;
-                       // AddPeriodValue(PeriodType.Month);
+                        // AddPeriodValue(PeriodType.Month);
                         ScheduleYear++;
                         if (ScheduleYear > 12)
                         {
-                          // AddPeriodValue(PeriodType.Year);
+                            // AddPeriodValue(PeriodType.Year);
                             ScheduleYear = 0;
                         }
                     }
@@ -319,10 +333,5 @@ namespace GameSystem
         {
             get { return TimeJijie[Jijie]; }
         }
-
-
-
-
-
     }
 }

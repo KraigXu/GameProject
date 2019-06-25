@@ -22,6 +22,10 @@ namespace GameSystem
     }
     public class BiologicalSystem : ComponentSystem
     {
+
+
+    
+
         struct Data
         {
             public readonly int Length;
@@ -70,7 +74,7 @@ namespace GameSystem
         public static void SpawnRandomBiological(Transform node)
         {
             EntityManager entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            Entity entity = node.gameObject.AddComponent<GameObjectEntity>().Entity;
+            Entity entity = node.gameObject.GetComponent<GameObjectEntity>().Entity;
 
             entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
             entityManager.SetComponentData(entity, new BehaviorData
@@ -181,7 +185,7 @@ namespace GameSystem
             });
 
             entityManager.AddComponent(entity, ComponentType.Create<Knapsack>());
-            entityManager.AddComponentData(entity, new Knapsack
+            entityManager.SetComponentData(entity, new Knapsack
             {
                 UpperLimit = 1000000,
                 KnapscakCode = data.Id
@@ -189,10 +193,13 @@ namespace GameSystem
 
 
             entityManager.AddComponent(entity, ComponentType.Create<Team>());
-            entityManager.AddComponentData(entity, new Team
+            entityManager.SetComponentData(entity, new Team
             {
                 TeamBossId = data.TeamId
             });
+
+
+            entityManager.AddSharedComponentData(entity,StrategyStyle.Instance.BiologicalRenderers[0]);
 
 
 
@@ -245,25 +252,10 @@ namespace GameSystem
 
         }
 
-
-        public static void AddBiological(EntityManager entityManager, int id)
+        public  void AddBiological(BiologicalData data, Entity entity)
         {
 
-
-            BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", id);
-            Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-
-            entityManager.SetComponentData(entity, new Position
-            {
-                Value = new float3(0, -6, 6)
-            });
-
-            entityManager.SetComponentData(entity, new Rotation
-            {
-                Value = Quaternion.identity
-            });
-
-            entityManager.SetComponentData(entity, new Biological()
+            _entityManager.AddComponentData(entity,new Biological()
             {
                 BiologicalId = data.Id,
                 Age = data.Age,
@@ -310,28 +302,34 @@ namespace GameSystem
                 Jingshen = data.Jingshen,
                 Lingdong = data.Lingdong,
                 Wuxing = data.Wuxing
+
             });
 
-            entityManager.SetComponentData(entity, new BodyProperty
+        }
+
+        public static void AddBiological(EntityManager entityManager, int id)
+        {
+
+
+            BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", id);
+            Entity entity = entityManager.CreateEntity(BiologicalArchetype);
+
+            entityManager.SetComponentData(entity, new Position
             {
-                Thought = 100,
-                Neck = 100,
-                Heart = 100,
-                Eye = 100,
-                Ear = 100,
-                LeftLeg = 100,
-                RightLeg = 100,
-                LeftHand = 100,
-                RightHand = 100,
-                Fertility = 100,
-                Appearance = 100,
-                Dress = 100,
-                Skin = 100,
-
-                StrategyMoveSpeed = 6,
-                FireMoveSpeed = 10,
-
+                Value = new float3(0, -6, 6)
             });
+
+            entityManager.SetComponentData(entity, new Rotation
+            {
+                Value = Quaternion.identity
+            });
+
+            entityManager.SetComponentData(entity, new Biological()
+            {
+                
+            });
+
+           
 
             entityManager.SetComponentData(entity, new Equipment
             {
@@ -421,6 +419,64 @@ namespace GameSystem
         }
 
 
+        public void AddBiological(BiologicalData data, HexCoordinates coordinates)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
+                {
+                    return;
+                }
+            }
+
+
+            Entity entity = _entityManager.CreateEntity();
+            _entityManager.AddComponentData(entity, new CellMap()
+            {
+                Coordinates = coordinates
+            });
+
+            _entityManager.AddComponentData(entity, new LivingArea
+            {
+                Id = data.Id,
+                PersonNumber = data.PersonNumber,
+                Type = (LivingAreaType)data.LivingAreaType,
+                Money = data.Money,
+                MoneyMax = data.MoneyMax,
+                Iron = data.Iron,
+                IronMax = data.IronMax,
+                Wood = data.Wood,
+                WoodMax = data.WoodMax,
+                Food = data.Food,
+                FoodMax = data.FoodMax,
+                DefenseStrength = data.DefenseStrength,
+                StableValue = data.StableValue
+            });
+
+            _entityManager.AddComponentData(entity, new District
+            {
+            });
+
+            _entityManager.AddComponentData(entity, new Money
+            {
+                Value = data.Money,
+                Upperlimit = data.MoneyMax
+            });
+
+            _entityManager.AddComponentData(entity, new Crowd
+            {
+                Number = 300000
+            });
+
+            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
+
+            if (GameStaticData.CityName.ContainsKey(data.Id) == false)
+            {
+                GameStaticData.CityName.Add(data.Id, data.Name);
+                GameStaticData.CityDescription.Add(data.Id, data.Description);
+            }
+
+        }
 
         public void SetupComponentData(EntityManager entityManager)
         {
@@ -732,8 +788,8 @@ namespace GameSystem
                 //}
 
             }
-            Debug.Log("111>>>>");
-            Debug.Log(_data.Length+">>>>");
+            //Debug.Log("111>>>>");
+            //Debug.Log(_data.Length+">>>>");
         }
 
 

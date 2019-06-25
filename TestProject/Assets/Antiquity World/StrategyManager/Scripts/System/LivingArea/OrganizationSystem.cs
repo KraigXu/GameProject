@@ -19,10 +19,11 @@ namespace GameSystem
             public GameObjectArray GameObjects;
             //public ComponentDataArray<LivingArea> LivingArea;
             public ComponentDataArray<Collective> Collective;
+            public ComponentDataArray<CellMap> Map;
         }
         [Inject]
         private Data _data;
-
+        private EntityManager _entityManager;
         protected override void OnUpdate()
         {
 
@@ -43,53 +44,73 @@ namespace GameSystem
             
         }
 
-
-        public static void AddOrganization(Transform node)
+        public void AddOrganization(HexCoordinates coordinates)
         {
-            GameObjectEntity entitygo = node.GetComponent<GameObjectEntity>();
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
+            AddOrganization(data, coordinates);
+        }
 
-            OrganizationData data = SQLService.Instance.QueryUnique<OrganizationData>(" Id=? ", GameStaticData.OrganizationName.Count + 1);
 
-            Entity entity = entitygo.Entity;
-
-            entityManager.AddComponentData(entity, new Collective()
+        public void AddOrganization(LivingAreaData data, HexCoordinates coordinates)
+        {
+            for (int i = 0; i < _data.Length; i++)
             {
-                Id=data.Id,
+                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
+                {
+                    return;
+                }
+            }
+
+
+            Entity entity = _entityManager.CreateEntity();
+            _entityManager.AddComponentData(entity, new CellMap()
+            {
+                Coordinates = coordinates
+            });
+
+            _entityManager.AddComponentData(entity, new LivingArea
+            {
+                Id = data.Id,
+                PersonNumber = data.PersonNumber,
+                Type = (LivingAreaType)data.LivingAreaType,
+                Money = data.Money,
+                MoneyMax = data.MoneyMax,
+                Iron = data.Iron,
+                IronMax = data.IronMax,
+                Wood = data.Wood,
+                WoodMax = data.WoodMax,
+                Food = data.Food,
+                FoodMax = data.FoodMax,
+                DefenseStrength = data.DefenseStrength,
+                StableValue = data.StableValue
+            });
+
+            _entityManager.AddComponentData(entity, new District
+            {
+            });
+
+            _entityManager.AddComponentData(entity, new Money
+            {
+                Value = data.Money,
+                Upperlimit = data.MoneyMax
+            });
+
+            _entityManager.AddComponentData(entity, new Collective()
+            {
+                Id = data.Id,
                 CollectiveClassId = 1,
                 Cohesion = 1
 
 
             });
-
-            //entityManager.AddComponentData(entity, new LivingArea
-            //{
-            //    Id = data.Id,
-            //});
-
-
-
-            //entityManager.AddComponentData(entity, new District
-            //{
-            //});
-
-            //entityManager.AddComponentData(entity, new Money
-            //{
-            //    Value = 1000,
-            //    Upperlimit = 19999,
-            //});
-
-
+            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
             GameStaticData.CityName.Add(data.Id, data.Name);
             GameStaticData.CityDescription.Add(data.Id, data.Description);
 
         }
 
-        //public int Level { get; set; }
-        //public int Permanence { get; set; }
-        //public int ResearchValue { get; set; }
-        //public int FoodValue { get; set; }
-        //public int HandworkValue { get; set; }
+
+
 
     }
 }

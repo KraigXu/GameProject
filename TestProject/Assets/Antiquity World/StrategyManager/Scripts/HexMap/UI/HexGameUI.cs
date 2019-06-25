@@ -83,8 +83,7 @@ public class HexGameUI : MonoBehaviour
 
     bool UpdateCurrentCell()
     {
-        HexCell cell =
-            grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+        HexCell cell =grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
         if (cell != currentCell)
         {
             currentCell = cell;

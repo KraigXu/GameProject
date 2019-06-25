@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+
+/// <summary>
+/// 单元元素
+/// </summary>
 public class HexUnit : MonoBehaviour {
 
 	const float rotationSpeed = 180f;

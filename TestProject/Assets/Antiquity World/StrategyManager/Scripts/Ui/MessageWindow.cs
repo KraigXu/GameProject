@@ -17,12 +17,29 @@ namespace GameSystem.Ui
         public GameObject Prefab;
         public List<Text> Texts;
 
-        public Dictionary<Text, Sequence> TextSequences=new Dictionary<Text, Sequence>();
+        public Dictionary<Text, Sequence> TextSequences = new Dictionary<Text, Sequence>();
 
-        public Queue<RectTransform> overflows =new Queue<RectTransform>();
+        public Queue<RectTransform> overflows = new Queue<RectTransform>();
 
         public int MaxNumber;
-        public float Time=5f;
+        public float Time = 5f;
+
+
+        [Header("UI")]
+        public RectTransform CellTypeView;
+
+        public RectTransform CellContentView;
+
+
+        public RectTransform CellUnitView;
+
+        public List<RectTransform> Features;
+
+        // public RectTransform CellUnitView;
+
+
+        private PlayerMapInputSystem _system;
+
 
 
         protected override void InitWindowData()
@@ -39,12 +56,14 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
+            _system = SystemManager.Get<PlayerMapInputSystem>();
+
         }
 
         void TextAnimation(Text text)
         {
             text.gameObject.SetActive(false);
-            text.color=Color.black;
+            text.color = Color.black;
             Debug.Log(text.gameObject.name);
         }
 
@@ -52,6 +71,24 @@ namespace GameSystem.Ui
         {
 
             GameObject.Destroy(overflows.Dequeue().gameObject);
+        }
+
+        void Update()
+        {
+            if (_system == null) { return; }
+            if (_system.CurrentCell == null)
+                return;
+
+            ChangeCellView();
+        }
+
+        void ChangeCellView()
+        {
+            HexCell cell = _system.CurrentCell;
+
+            //  cell.Elevation
+
+
         }
 
         public void Log(string value)
@@ -73,15 +110,15 @@ namespace GameSystem.Ui
                 current.transform.SetAsLastSibling();
                 current.DOFade(0, Time).OnComplete(() => TextAnimation(current));
             }
-            else  
+            else
             {
-                GameObject go =  GameObject.Instantiate(Prefab) as GameObject;
-                RectTransform rect= go.GetComponent<RectTransform>();
+                GameObject go = GameObject.Instantiate(Prefab) as GameObject;
+                RectTransform rect = go.GetComponent<RectTransform>();
                 rect.SetParent(ContentParent);
                 overflows.Enqueue(rect);
                 Text text = go.GetComponent<Text>();
                 text.text = value;
-                text.color=Color.black;
+                text.color = Color.black;
 
 
                 text.DOFade(0, Time).OnComplete((() => DestoryText()));

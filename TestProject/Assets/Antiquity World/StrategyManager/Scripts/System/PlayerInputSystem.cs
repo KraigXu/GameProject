@@ -23,10 +23,14 @@ namespace GameSystem
         [Inject]
         private Data _data;
 
+
+
         protected override void OnUpdate()
         {
             if (EventSystem.current.IsPointerOverGameObject())
                 return;
+
+
             for (int i = 0; i < _data.Length; i++)
             {
                 var input = new PlayerInput();
@@ -86,8 +90,6 @@ namespace GameSystem
                 
                 _data.Input[i] = input;
             }
-
-
         }
 
     }

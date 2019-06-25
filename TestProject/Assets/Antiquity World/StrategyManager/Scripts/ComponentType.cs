@@ -470,6 +470,12 @@ namespace GameSystem
         }
     }
 
+    public struct CellMap : IComponentData
+    {
+        public HexCoordinates Coordinates;
+
+    }
+
     [Serializable]
     public struct LivingArea : IComponentData
     {

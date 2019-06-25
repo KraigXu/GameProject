@@ -148,21 +148,10 @@ public class HexMapEditor : MonoBehaviour {
 	void CreateUnit () {
 		HexCell cell = GetCellUnderCursor();
 		if (cell && !cell.Unit){
-           // GameObject gameObject= 
-
 		    HexUnit hexUnit = Instantiate(HexUnit.unitPrefab);
-
             hexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
             BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
-            // GameObject gameObject= Object.Instantiate(HexUnit.unitPrefab);
-		    // Instantiate(HexUnit.unitPrefab)
-
-
-
-
         }
-
-
 
     }
 

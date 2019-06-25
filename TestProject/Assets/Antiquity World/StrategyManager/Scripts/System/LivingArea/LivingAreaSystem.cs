@@ -22,6 +22,7 @@ namespace GameSystem
             public EntityArray Entity;
             public GameObjectArray GameObjects;
             public ComponentDataArray<LivingArea> LivingArea;
+            public ComponentDataArray<CellMap> Map;
         }
         [Inject]
         private Data _data;
@@ -84,16 +85,18 @@ namespace GameSystem
 
             List<LivingAreaModelData> livingAreaModelDatas = SQLService.Instance.QueryAll<LivingAreaModelData>();
 
-
             for (int i = 0; i < livingAreaModelDatas.Count; i++)
             {
                GameStaticData.LivingAreaPrefabDic.Add(livingAreaModelDatas[i].Id,Resources.Load<GameObject>(livingAreaModelDatas[i].Path));
             }
 
-            return;
             List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
+
+
             for (int i = 0; i < datas.Count; i++)
             {
+
+
                 Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.LivingAreaPrefabDic[datas[i].ModelBaseId].transform);
                 entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
                 //entityGo.gameObject.name = datas[i].Name;
