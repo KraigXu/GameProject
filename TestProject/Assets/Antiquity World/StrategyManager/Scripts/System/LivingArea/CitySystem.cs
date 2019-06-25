@@ -155,6 +155,11 @@ namespace GameSystem
         public void AddCity(HexCoordinates coordinates)
         {
             LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
+            if (data == null)
+            {
+                return;
+            }
+
             AddCity(data,coordinates);
         }
 

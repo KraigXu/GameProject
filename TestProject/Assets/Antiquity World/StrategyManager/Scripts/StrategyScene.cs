@@ -57,8 +57,9 @@ public class StrategyScene : MonoBehaviour
 #endif
         GameSceneInit.InitializeWithScene();
 
-        InitGameSystem();
         InitMapInfo();
+        InitGameSystem();
+       
         InitPlayer();
         InitStartUi();
         InitCamera();
@@ -178,9 +179,6 @@ public class StrategyScene : MonoBehaviour
 
             hexGrid.AddUnit(hexUnit, hexCell,UnityEngine.Random.Range(0f, 360f));
 
-            BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
-
-
             switch (bData.Identity)
             {
                 case 1:
@@ -195,271 +193,6 @@ public class StrategyScene : MonoBehaviour
                 default:
                     break;
             }
-
-            
-
-
-            Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-            // Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-            entityGo.gameObject.AddComponent<HexUnit>();
-
-            ////entityManager.SetComponentData(entity, new Position
-            ////{
-            ////    Value = new float3(0, -6, 6)
-            ////});
-
-            ////entityManager.SetComponentData(entity, new Rotation
-            ////{
-            ////    Value = Quaternion.identity
-            ////});
-            entityManager.AddComponent(entity, typeof(Biological));
-            entityManager.SetComponentData(entity, new Biological()
-            {
-                BiologicalId = datas[i].Id,
-                Age = datas[i].Age,
-                Sex = datas[i].Sex,
-                CharmValue = 0,
-                Mobility = 0,
-                OperationalAbility = 0,
-                LogicalThinking = 0,
-
-                Disposition = (byte)datas[i].Disposition,
-                NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
-
-                LuckValue = 100,
-                PrestigeValue = 100,
-
-                ExpEmptyHand = 9999,
-                ExpLongSoldier = 9999,
-                ExpShortSoldier = 9999,
-                ExpJones = 9999,
-                ExpHiddenWeapone = 9999,
-                ExpMedicine = 9999,
-                ExpArithmetic = 9999,
-                ExpMusic = 9999,
-                ExpWrite = 9999,
-                ExpDrawing = 9999,
-                ExpExchange = 9999,
-                ExpTaoism = 9999,
-                ExpDharma = 9999,
-                ExpPranayama = 9999,
-
-                AvatarId = datas[i].AvatarId,
-                ModelId = datas[i].ModelId,
-                FamilyId = datas[i].FamilyId,
-                FactionId = datas[i].FactionId,
-                TitleId = datas[i].TitleId,
-                TechniquesId = 0,
-                EquipmentId = 0,
-
-                Jing = 100,
-                Qi = 100,
-                Shen = 100,
-                Tizhi = datas[i].Tizhi,
-                Lidao = datas[i].Lidao,
-                Jingshen = datas[i].Jingshen,
-                Lingdong = datas[i].Lingdong,
-                Wuxing = datas[i].Wuxing
-            });
-
-            //entityManager.SetComponentData(entity, new BodyProperty
-            //{
-            //    Thought = 100,
-            //    Neck = 100,
-            //    Heart = 100,
-            //    Eye = 100,
-            //    Ear = 100,
-            //    LeftLeg = 100,
-            //    RightLeg = 100,
-            //    LeftHand = 100,
-            //    RightHand = 100,
-            //    Fertility = 100,
-            //    Appearance = 100,
-            //    Dress = 100,
-            //    Skin = 100,
-
-            //    StrategyMoveSpeed = 6,
-            //    FireMoveSpeed = 10,
-
-            //});
-
-            //entityManager.SetComponentData(entity, new Equipment
-            //{
-            //    HelmetId = -1,
-            //    ClothesId = -1,
-            //    BeltId = -1,
-            //    HandGuard = -1,
-            //    Pants = -1,
-            //    Shoes = -1,
-            //    WeaponFirstId = -1,
-            //    WeaponSecondaryId = -1
-            //});
-
-            //entityManager.SetComponentData(entity, new EquipmentCoat
-            //{
-            //    SpriteId = 1,
-            //    Type = EquipType.Coat,
-            //    Level = EquipLevel.General,
-            //    Part = EquipPart.All,
-            //    BluntDefense = 19,
-            //    SharpDefense = 20,
-            //    Operational = 100,
-            //    Weight = 3,
-            //    Price = 1233,
-            //});
-
-            //entityManager.AddComponentData(entity, new Knapsack
-            //{
-            //    UpperLimit = 1000000,
-            //    KnapscakCode = datas[i].Id
-            //});
-
-            //entityManager.AddComponentData(entity, new Team
-            //{
-            //    TeamBossId = datas[i].TeamId
-            //});
-
-
-
-            //if (datas[i].Identity == 0)
-            //{
-            //    entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-            //}
-            //else if (datas[i].Identity == 1)
-            //{
-            //    entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-
-            //    //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-            //}
-
-            //if (datas[i].FactionId != 0)
-            //{
-            //    entityManager.AddComponentData(entity, new FactionProperty
-            //    {
-
-            //    });
-            //}
-
-            //entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-            //entityManager.SetComponentData(entity, new BehaviorData
-            //{
-            //    Target = Vector3.zero,
-            //});
-
-            //if (string.IsNullOrEmpty(datas[i].JifaJson) == false)
-            //{
-            //    TechniquesSystem.SpawnTechnique(entity, datas[i].JifaJson);
-            //}
-
-            //ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", datas[i].Id), entity);
-
-            ////  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
-
-            ////   ComponentGroup group = new ComponentGroup();
-            ////    group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
-            ////  group.Animator = entityGo.GetComponent<Animator>();
-            ////if (ComponentDic.ContainsKey(entity) == false)
-            ////{
-            ////    ComponentDic.Add(entity, group);
-            ////}
-
-            //entityManager.AddSharedComponentData(entity, StrategyStyle.Instance.BiologicalRenderers[0]);
-
-
-            //GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
-            //GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
-            //GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
-
-            //    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
-            //    "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
-            //    datas[i].Id);
-
-
-            //for (int j = 0; j < articleRecordDatas.Count; j++)
-            //{
-            //    Entity articleentity = entityManager.CreateEntity(ArticleArchetype);
-
-            //    entityManager.SetComponentData(articleentity,new ArticleItem()
-            //    {
-            //        BiologicalEntity= entity,
-            //        Count = articleRecordDatas[j].Count,
-            //        MaxCount = articleRecordDatas[j].MaxCount,
-            //        Weight = 1,
-            //    });
-
-            //}
-
-            //entityManager.AddComponent(entity, ComponentType.Create<Energy>());
-            //entityManager.SetComponentData(entity, new Energy
-            //{
-            //    Value1 = 100,
-            //    Value2 = 300,
-            //});
-
-            //entityManager.AddComponent(entity, ComponentType.Create<BiologicalAvatar>());
-            //entityManager.SetComponentData(entity, new BiologicalAvatar
-            //{
-            //    Id =
-            //});
-            // entityManager.SetComponentData(entity,new Relationship());
-
-            // BiologicalStatus biologicalStatus = new BiologicalStatus();
-            // biologicalStatus.BiologicalIdentity = datas[i].Identity;
-            // biologicalStatus.TargetId = 0;
-            // biologicalStatus.TargetType = 0;
-            // biologicalStatus.LocationType = (LocationType)datas[i].LocationType;
-            // entityManager.SetComponentData(entity, biologicalStatus);
-
-            //switch ((LocationType)datas[i].LocationType)
-            //{
-            //    case LocationType.None:
-            //        break;
-            //    case LocationType.City:
-            //        {
-            //        }
-            //        break;
-            //    case LocationType.Field:
-            //        {
-            //            //entityManager.AddComponent(entity, ComponentType.Create<ModelSpawnData>());
-            //            //entityManager.SetComponentData(entity, new ModelSpawnData
-            //            //{
-            //            //    ModelData = new ModelComponent
-            //            //    {
-            //            //        Id = SystemManager.Get<ModelMoveSystem>().AddModel(GameStaticData.ModelPrefab[datas[i].ModelId], new Vector3(datas[i].X, datas[i].Y, datas[i].Z)),
-            //            //        Target = Vector3.zero,
-            //            //        Speed = 6,
-            //            //    },
-            //            //});
-
-            //            //entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
-            //            //entityManager.SetComponentData(entity, new InteractionElement
-            //            //{
-            //            //    Distance = 1,
-            //            //    ModelCode = 1,
-            //            //});
-            //        }
-            //        break;
-            //}
-
-
-
-            //结合GameObject
-            //entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
-            //entityManager.SetComponentData(entity, new AssociationPropertyData
-            //{
-            //    IsEntityOver = 1,
-            //    IsGameObjectOver = 0,
-            //    IsModelShow = 0,
-            //    Position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
-            //    ModelUid = datas[i].ModelId
-            //});
-            //if (datas[i].Id == 1)
-            //{
-            //    BiologicalItem item = GameObject.Find("TestA").GetComponent<BiologicalItem>();
-            //    item.Entity = entity;
-            //    item.IsInit = true;
-            //}
-            // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
         }
 
 
@@ -469,7 +202,7 @@ public class StrategyScene : MonoBehaviour
 
         SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
+       // SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
 
         SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
 

@@ -191,6 +191,7 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
+            return;
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 if (Input.GetMouseButton(0))

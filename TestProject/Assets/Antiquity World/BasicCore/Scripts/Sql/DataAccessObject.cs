@@ -575,7 +575,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
             {
-                Id,PowerId, Name, Description,ModelBase,ModelBaseId,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
+                Id,SpecialIndex,PowerId, Name, Description,ModelBase,ModelBaseId,ModelMain, PersonNumber,Money,MoneyMax,Iron,IronMax,
                 Wood, WoodMax, Food, FoodMax, LivingAreaLevel,LivingAreaMaxLevel,LivingAreaType,DefenseStrength,StableValue,BuildingInfoJson,PositionX,PositionY,PositionZ
             };
             return objects;

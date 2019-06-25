@@ -419,64 +419,64 @@ namespace GameSystem
         }
 
 
-        public void AddBiological(BiologicalData data, HexCoordinates coordinates)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-                {
-                    return;
-                }
-            }
+        //public void AddBiological(BiologicalData data, HexCoordinates coordinates)
+        //{
+        //    for (int i = 0; i < _data.Length; i++)
+        //    {
+        //        if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
+        //        {
+        //            return;
+        //        }
+        //    }
 
 
-            Entity entity = _entityManager.CreateEntity();
-            _entityManager.AddComponentData(entity, new CellMap()
-            {
-                Coordinates = coordinates
-            });
+        //    Entity entity = _entityManager.CreateEntity();
+        //    _entityManager.AddComponentData(entity, new CellMap()
+        //    {
+        //        Coordinates = coordinates
+        //    });
 
-            _entityManager.AddComponentData(entity, new LivingArea
-            {
-                Id = data.Id,
-                PersonNumber = data.PersonNumber,
-                Type = (LivingAreaType)data.LivingAreaType,
-                Money = data.Money,
-                MoneyMax = data.MoneyMax,
-                Iron = data.Iron,
-                IronMax = data.IronMax,
-                Wood = data.Wood,
-                WoodMax = data.WoodMax,
-                Food = data.Food,
-                FoodMax = data.FoodMax,
-                DefenseStrength = data.DefenseStrength,
-                StableValue = data.StableValue
-            });
+        //    _entityManager.AddComponentData(entity, new LivingArea
+        //    {
+        //        Id = data.Id,
+        //        PersonNumber = data.PersonNumber,
+        //        Type = (LivingAreaType)data.LivingAreaType,
+        //        Money = data.Money,
+        //        MoneyMax = data.MoneyMax,
+        //        Iron = data.Iron,
+        //        IronMax = data.IronMax,
+        //        Wood = data.Wood,
+        //        WoodMax = data.WoodMax,
+        //        Food = data.Food,
+        //        FoodMax = data.FoodMax,
+        //        DefenseStrength = data.DefenseStrength,
+        //        StableValue = data.StableValue
+        //    });
 
-            _entityManager.AddComponentData(entity, new District
-            {
-            });
+        //    _entityManager.AddComponentData(entity, new District
+        //    {
+        //    });
 
-            _entityManager.AddComponentData(entity, new Money
-            {
-                Value = data.Money,
-                Upperlimit = data.MoneyMax
-            });
+        //    _entityManager.AddComponentData(entity, new Money
+        //    {
+        //        Value = data.Money,
+        //        Upperlimit = data.MoneyMax
+        //    });
 
-            _entityManager.AddComponentData(entity, new Crowd
-            {
-                Number = 300000
-            });
+        //    _entityManager.AddComponentData(entity, new Crowd
+        //    {
+        //        Number = 300000
+        //    });
 
-            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
+        //    LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
-            if (GameStaticData.CityName.ContainsKey(data.Id) == false)
-            {
-                GameStaticData.CityName.Add(data.Id, data.Name);
-                GameStaticData.CityDescription.Add(data.Id, data.Description);
-            }
+        //    if (GameStaticData.CityName.ContainsKey(data.Id) == false)
+        //    {
+        //        GameStaticData.CityName.Add(data.Id, data.Name);
+        //        GameStaticData.CityDescription.Add(data.Id, data.Description);
+        //    }
 
-        }
+        //}
 
         public void SetupComponentData(EntityManager entityManager)
         {
