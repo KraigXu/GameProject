@@ -84,9 +84,9 @@ public class StrategyScene : MonoBehaviour
 
         //UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
 
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
