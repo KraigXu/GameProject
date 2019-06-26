@@ -180,7 +180,7 @@ namespace GameSystem.Ui
             PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
             PonName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
             PonSex.text = GameStaticData.BiologicalSex[biological.Sex];
-            PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue, ElementType.Biological);
+           // PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue, ElementType.Biological);
             PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
 
 

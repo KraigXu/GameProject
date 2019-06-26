@@ -149,34 +149,12 @@ namespace GameSystem
     public struct Biological : IComponentData
     {
         public int BiologicalId;
-
         public int Age;
         public int Sex;
         public int CharmValue;
         public float Mobility;
         public float OperationalAbility;
         public float LogicalThinking;
-
-        public byte Disposition;        //性格值
-        public byte NeutralValue;       //中立值
-        public byte LuckValue;          //运气值
-
-        public int PrestigeValue;
-
-        public ushort ExpEmptyHand;          //空手
-        public ushort ExpLongSoldier;        //长兵
-        public ushort ExpShortSoldier;       //短兵
-        public ushort ExpJones;              //奇兵
-        public ushort ExpHiddenWeapone;      //射术
-        public ushort ExpMedicine;           //医学
-        public ushort ExpArithmetic;         //算术
-        public ushort ExpMusic;              //音律
-        public ushort ExpWrite;              //书法
-        public ushort ExpDrawing;            //绘画
-        public ushort ExpExchange;           //交流
-        public ushort ExpTaoism;             //道法
-        public ushort ExpDharma;             //佛法
-        public ushort ExpPranayama;          //心法
 
         public int Jing;
         public int Qi;
@@ -188,6 +166,21 @@ namespace GameSystem
         public int Lingdong;
         public int Wuxing;
 
+
+        public byte Thought;                                                  //思想
+        public byte Neck;                                                     //脖子
+        public byte Heart;                                                    //心脏
+        public byte Eye;                                                      //眼睛
+        public byte Ear;                                                      //耳朵
+        public byte LeftLeg;                                                  //左腿
+        public byte RightLeg;                                                 //右腿
+        public byte LeftHand;                                                 //左手 
+        public byte RightHand;                                                //右手
+        public byte Fertility;                                                //生育
+        public byte Skin;                                                     //皮肤
+        public byte Blod;                                                     //血液
+        public byte JingLuo;                                                  //经络
+
         public int AvatarId;
         public int ModelId;
         public int FamilyId;
@@ -195,31 +188,36 @@ namespace GameSystem
         public int TitleId;
         public int TechniquesId;
         public int EquipmentId;
+
+        public int StrategyMoveSpeed;
+        public int FireMoveSpeed;
     }
+
+
 
     /// <summary>
     /// 身体属性 ，参数大多是提升物品使用效率
     /// </summary>
     public struct BodyProperty : IComponentData
     {
-        
 
-        public byte Thought;   //思想
-        public byte Neck;      //脖子
-        public byte Heart;     //心脏
-        public byte Eye;       //眼睛
-        public byte Ear;       //耳朵
-        public byte LeftLeg;    //左腿
-        public byte RightLeg;   //右腿
-        public byte LeftHand;   //左手 
-        public byte RightHand;  //右手
-        public byte Fertility;  //生育
-        public byte Appearance;  //容貌
-        public byte Dress;      //着装
-        public byte Skin;       //皮肤
 
-        public byte Blod;  //血液
-        public byte JingLuo;  //经络
+        public byte Thought;                //思想
+        public byte Neck;                   //脖子
+        public byte Heart;                  //心脏
+        public byte Eye;                    //眼睛
+        public byte Ear;                    //耳朵
+        public byte LeftLeg;                 //左腿
+        public byte RightLeg;                //右腿
+        public byte LeftHand;                //左手 
+        public byte RightHand;               //右手
+        public byte Fertility;               //生育
+        public byte Appearance;               //容貌
+        public byte Dress;                   //着装
+        public byte Skin;                    //皮肤
+
+        public byte Blod;                   //血液
+        public byte JingLuo;                //经络
 
 
         public int StrategyMoveSpeed;
@@ -234,6 +232,25 @@ namespace GameSystem
         public int AttackMax;
         public int PhysicsDefence;
         public int MagicDefence;
+
+
+        public ushort ExpEmptyHand;                                            //空手
+        public ushort ExpLongSoldier;                                          //长兵
+        public ushort ExpShortSoldier;                                         //短兵
+        public ushort ExpJones;                                                //奇兵
+        public ushort ExpHiddenWeapone;                                        //射术
+        public ushort ExpMedicine;                                             //医学
+        public ushort ExpArithmetic;                                           //算术
+        public ushort ExpMusic;                                                //音律
+        public ushort ExpWrite;                                                //书法
+        public ushort ExpDrawing;                                              //绘画
+        public ushort ExpExchange;                                             //交流
+        public ushort ExpTaoism;                                               //道法
+        public ushort ExpDharma;                                               //佛法
+        public ushort ExpPranayama;                                            //心法
+
+
+
     }
 
     public struct Life : IComponentData
@@ -288,7 +305,13 @@ namespace GameSystem
         public int Food;
         public int FoodMax;
 
-        
+
+        public byte Disposition;                                              //性格值
+        public byte NeutralValue;                                             //中立值
+        public byte LuckValue;                                                //运气值
+
+        public int PrestigeValue;
+
     }
 
     public struct FactionProperty : IComponentData

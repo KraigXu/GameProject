@@ -22,13 +22,21 @@ public class StrategyScene : MonoBehaviour
 
     public StrategyPlayer Player;
 
-    public int PlayerId = 1;
     public Camera MainCamera;
     public Camera FixedCamera;
     public Camera UiCamera;
     public GameObject go;
 
     public GameObject ArticleInfoPerfab;
+
+    public bool IsEdit = false;
+
+    public GameObject EditUi1;
+
+    public GameObject GameUi1;
+    public GameObject GameUi2;
+
+    //--------
 
     //---------Map
     public HexGrid hexGrid;
@@ -58,15 +66,60 @@ public class StrategyScene : MonoBehaviour
         GameSceneInit.InitializeWithScene();
 
         InitMapInfo();
-        InitGameSystem();
-       
-        InitPlayer();
-        InitStartUi();
-        InitCamera();
+        InitGameData();
+
+
+        //----Player
+        Player = new StrategyPlayer()
+        {
+            PlayerId = 1,
+            AvatarSprite = GameStaticData.BiologicalAvatar[1],
+            Entity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1),
+            Name = GameStaticData.BiologicalNameDic[1],
+            SurName = GameStaticData.BiologicalSurnameDic[1],
+        };
+
+        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
+
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
+
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+
+        //StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
 
         loadingViewCom.Close();
 
         yield return null;
+    }
+
+    void Update()
+    {
+
+        if (Input.GetKey(KeyCode.BackQuote))
+        {
+            IsEdit = !IsEdit;
+        }
+
+        if (IsEdit)
+        {
+            EditUi1.SetActive(true);
+
+            GameUi1.SetActive(false);
+            GameUi2.SetActive(false);
+        }
+        else
+        {
+            EditUi1.SetActive(false);
+
+            GameUi1.SetActive(true);
+            GameUi2.SetActive(true);
+        }
+
     }
 
 
@@ -112,13 +165,11 @@ public class StrategyScene : MonoBehaviour
 
     }
 
-    void InitPlayer()
-    {
-        //OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
-    }
 
-
-    void InitGameSystem()
+    /// <summary>
+    /// 初始化数据
+    /// </summary>
+    void InitGameData()
     {
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
         HexCoordinates hexCoordinates;
@@ -133,25 +184,25 @@ public class StrategyScene : MonoBehaviour
             hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
 
             hexCell = hexGrid.GetCell(hexCoordinates);
+            if (hexCell == null)
+                continue;
             hexCell.SpecialIndex = data.SpecialIndex;
 
             switch (data.SpecialIndex)
             {
-                case 1:
+                case 1:  
                     SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
                     break;
                 case 2:
                     SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCoordinates);
                     break;
-                default:
-                    SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
+                case 3:  //Ziggurat
+                    SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
                     break;
             }
             GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
             GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
         }
-
-
         //------------------初始化Biological
         List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
         for (int i = 0; i < biologicalAvatarDatas.Count; i++)
@@ -170,81 +221,54 @@ public class StrategyScene : MonoBehaviour
         for (int i = 0; i < biologicalDatas.Count; i++)
         {
             bData = biologicalDatas[i];
+            hexCoordinates = new HexCoordinates(bData.X, bData.Z);
+            hexCell = hexGrid.GetCell(hexCoordinates);
+            if (hexCell == null)
+                continue;
 
             Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[bData.ModelId].transform);
-
             HexUnit hexUnit = entityGo.GetComponent<HexUnit>();
-            hexCoordinates= new HexCoordinates(bData.X, bData.Z);
-            hexCell = hexGrid.GetCell(hexCoordinates);
 
-            hexGrid.AddUnit(hexUnit, hexCell,UnityEngine.Random.Range(0f, 360f));
+            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
 
             switch (bData.Identity)
             {
                 case 1:
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, hexUnit.GetComponent<GameObjectEntity>().Entity);
                     break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
                 default:
+                    Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
                     break;
+            }
+
+            if (GameStaticData.BiologicalNameDic.ContainsKey(bData.Id) == false)
+            {
+                GameStaticData.BiologicalNameDic.Add(bData.Id, bData.Name);
+                GameStaticData.BiologicalSurnameDic.Add(bData.Id, bData.Surname);
+                GameStaticData.BiologicalDescription.Add(bData.Id, bData.Description);
             }
         }
 
+        //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 
+        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 
+        //SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
 
-       // SystemManager.Get<BiologicalSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
 
-        SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-
-        SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-
-        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-
-        SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
-
-        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
 
     }
 
-
-
-    /// <summary>
-    /// 生成开局UI
-    /// </summary>
-    void InitStartUi()
-    {
-        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-
-    }
-
-    void InitCamera()
-    {
-        //StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
-    }
 
     /// <summary>
     /// 删除开局UI

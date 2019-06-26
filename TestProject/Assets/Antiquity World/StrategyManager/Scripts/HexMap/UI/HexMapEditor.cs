@@ -117,7 +117,7 @@ public class HexMapEditor : MonoBehaviour {
 	void Awake () {
 		terrainMaterial.DisableKeyword("GRID_ON");
 		Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
-		SetEditMode(true);
+		//SetEditMode(true);
 	}
 
 	void Update () {
@@ -150,6 +150,7 @@ public class HexMapEditor : MonoBehaviour {
 		if (cell && !cell.Unit){
 		    HexUnit hexUnit = Instantiate(HexUnit.unitPrefab);
             hexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
+
             BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
         }
 

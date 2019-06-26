@@ -23,26 +23,16 @@ namespace GameSystem
     public class BiologicalSystem : ComponentSystem
     {
 
-
-    
-
         struct Data
         {
             public readonly int Length;
-           // public EntityArray Entitys;
-          //  public GameObjectArray GameObjects;
             public ComponentDataArray<Biological> Biological;
-            
+            public ComponentDataArray<BodyProperty> Body;
             public ComponentArray<HexUnit> HexUnit;
-            public ComponentArray<Transform> Transforms;
-
-            //   public ComponentDataArray<BodyProperty> Body;
-            //   public ComponentDataArray<BehaviorData> Behavior;
         }
 
         [Inject]
         private Data _data;
-
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
@@ -62,31 +52,51 @@ namespace GameSystem
             BiologicalArchetype = _entityManager.CreateArchetype(typeof(Element), typeof(Position), typeof(Rotation), typeof(Biological), typeof(BodyProperty), typeof(Equipment), typeof(EquipmentCoat));
         }
 
-        /// <summary>
-        /// 缓存组件
-        /// </summary>
-        public void InitComponent(GameObject go)
+        protected override void OnUpdate()
         {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var biological = _data.Biological[i];
+                var body = _data.Body[i];
+
+                var unit = _data.HexUnit;
+
+                //var entity = _data.Entitys[i];
+                //var behavior = _data.Behavior[i];
+                biological.Sex = body.Fertility;
+                biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
+                biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
+                biological.OperationalAbility = (3 * (body.RightHand / 100)) + (3 * (body.LeftHand / 100));
+                biological.LogicalThinking = (100 * (body.Thought / 100));
+
+                biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
+                biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
+                biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
+
+                _data.Biological[i] = biological;
+                _data.Body[i] = body;
+
+                //if (behavior.Target != Vector3.zero)
+                //{
+                //    ComponentDic[entity].AiCharacter.SetTarget(behavior.Target);
+                //}
+
+            }
 
         }
 
 
+
         public static void SpawnRandomBiological(Transform node)
         {
-            EntityManager entityManager = World.Active.GetOrCreateManager<EntityManager>();
             Entity entity = node.gameObject.GetComponent<GameObjectEntity>().Entity;
-
-            entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-            entityManager.SetComponentData(entity, new BehaviorData
-            {
-                Target = Vector3.zero,
-            });
-
-
             BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
+            SystemManager.Get<BiologicalSystem>().AddBiological(data,entity);
+        }
 
-            entityManager.AddComponent(entity, ComponentType.Create<Biological>());
-            entityManager.SetComponentData(entity, new Biological()
+        public  void AddBiological(BiologicalData data, Entity entity)
+        {
+            _entityManager.AddComponentData(entity,new Biological()
             {
                 BiologicalId = data.Id,
                 Age = data.Age,
@@ -95,27 +105,6 @@ namespace GameSystem
                 Mobility = 0,
                 OperationalAbility = 0,
                 LogicalThinking = 0,
-
-                Disposition = (byte)data.Disposition,
-                NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
-
-                LuckValue = 100,
-                PrestigeValue = 100,
-
-                ExpEmptyHand = 9999,
-                ExpLongSoldier = 9999,
-                ExpShortSoldier = 9999,
-                ExpJones = 9999,
-                ExpHiddenWeapone = 9999,
-                ExpMedicine = 9999,
-                ExpArithmetic = 9999,
-                ExpMusic = 9999,
-                ExpWrite = 9999,
-                ExpDrawing = 9999,
-                ExpExchange = 9999,
-                ExpTaoism = 9999,
-                ExpDharma = 9999,
-                ExpPranayama = 9999,
 
                 AvatarId = data.AvatarId,
                 ModelId = data.ModelId,
@@ -133,10 +122,10 @@ namespace GameSystem
                 Jingshen = data.Jingshen,
                 Lingdong = data.Lingdong,
                 Wuxing = data.Wuxing
+
             });
 
-            entityManager.AddComponent(entity, ComponentType.Create<BodyProperty>());
-            entityManager.SetComponentData(entity, new BodyProperty
+            _entityManager.AddComponentData(entity, new BodyProperty
             {
                 Thought = 100,
                 Neck = 100,
@@ -154,154 +143,6 @@ namespace GameSystem
 
                 StrategyMoveSpeed = 6,
                 FireMoveSpeed = 10,
-
-            });
-
-            entityManager.AddComponent(entity, ComponentType.Create<Equipment>());
-            entityManager.SetComponentData(entity, new Equipment
-            {
-                HelmetId = -1,
-                ClothesId = -1,
-                BeltId = -1,
-                HandGuard = -1,
-                Pants = -1,
-                Shoes = -1,
-                WeaponFirstId = -1,
-                WeaponSecondaryId = -1
-            });
-
-            entityManager.AddComponent(entity, ComponentType.Create<EquipmentCoat>());
-            entityManager.SetComponentData(entity, new EquipmentCoat
-            {
-                SpriteId = 1,
-                Type = EquipType.Coat,
-                Level = EquipLevel.General,
-                Part = EquipPart.All,
-                BluntDefense = 19,
-                SharpDefense = 20,
-                Operational = 100,
-                Weight = 3,
-                Price = 1233,
-            });
-
-            entityManager.AddComponent(entity, ComponentType.Create<Knapsack>());
-            entityManager.SetComponentData(entity, new Knapsack
-            {
-                UpperLimit = 1000000,
-                KnapscakCode = data.Id
-            });
-
-
-            entityManager.AddComponent(entity, ComponentType.Create<Team>());
-            entityManager.SetComponentData(entity, new Team
-            {
-                TeamBossId = data.TeamId
-            });
-
-
-            entityManager.AddSharedComponentData(entity,StrategyStyle.Instance.BiologicalRenderers[0]);
-
-
-
-            //if (data.Identity == 0)
-            //{
-            //    entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-            //}
-            //else if (data.Identity == 1)
-            //{
-            //    entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-
-            //    //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-            //}
-
-            //if (data.FactionId != 0)
-            //{
-            //    entityManager.AddComponentData(entity, new FactionProperty
-            //    {
-
-            //    });
-            //}
-
-            //entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-            //entityManager.SetComponentData(entity, new BehaviorData
-            //{
-            //    Target = Vector3.zero,
-            //});
-
-            //if (string.IsNullOrEmpty(data.JifaJson) == false)
-            //{
-            //    TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
-            //}
-
-            //ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
-
-            //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
-
-            //   ComponentGroup group = new ComponentGroup();
-            //    group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
-            //  group.Animator = entityGo.GetComponent<Animator>();
-            //if (ComponentDic.ContainsKey(entity) == false)
-            //{
-            //    ComponentDic.Add(entity, group);
-            //}
-
-            //GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
-            //GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
-            //GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
-
-
-        }
-
-        public  void AddBiological(BiologicalData data, Entity entity)
-        {
-
-            _entityManager.AddComponentData(entity,new Biological()
-            {
-                BiologicalId = data.Id,
-                Age = data.Age,
-                Sex = data.Sex,
-                CharmValue = 0,
-                Mobility = 0,
-                OperationalAbility = 0,
-                LogicalThinking = 0,
-
-                Disposition = (byte)data.Disposition,
-                NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
-
-                LuckValue = 100,
-                PrestigeValue = 100,
-
-                ExpEmptyHand = 9999,
-                ExpLongSoldier = 9999,
-                ExpShortSoldier = 9999,
-                ExpJones = 9999,
-                ExpHiddenWeapone = 9999,
-                ExpMedicine = 9999,
-                ExpArithmetic = 9999,
-                ExpMusic = 9999,
-                ExpWrite = 9999,
-                ExpDrawing = 9999,
-                ExpExchange = 9999,
-                ExpTaoism = 9999,
-                ExpDharma = 9999,
-                ExpPranayama = 9999,
-
-                AvatarId = data.AvatarId,
-                ModelId = data.ModelId,
-                FamilyId = data.FamilyId,
-                FactionId = data.FactionId,
-                TitleId = data.TitleId,
-                TechniquesId = 0,
-                EquipmentId = 0,
-
-                Jing = 100,
-                Qi = 100,
-                Shen = 100,
-                Tizhi = data.Tizhi,
-                Lidao = data.Lidao,
-                Jingshen = data.Jingshen,
-                Lingdong = data.Lingdong,
-                Wuxing = data.Wuxing
 
             });
 
@@ -470,11 +311,6 @@ namespace GameSystem
 
         //    LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
-        //    if (GameStaticData.CityName.ContainsKey(data.Id) == false)
-        //    {
-        //        GameStaticData.CityName.Add(data.Id, data.Name);
-        //        GameStaticData.CityDescription.Add(data.Id, data.Description);
-        //    }
 
         //}
 
@@ -517,26 +353,26 @@ namespace GameSystem
                     OperationalAbility = 0,
                     LogicalThinking = 0,
 
-                    Disposition = (byte)datas[i].Disposition,
-                    NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
+                    //Disposition = (byte)datas[i].Disposition,
+                    //NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
 
-                    LuckValue = 100,
-                    PrestigeValue = 100,
+                    //LuckValue = 100,
+                    //PrestigeValue = 100,
 
-                    ExpEmptyHand = 9999,
-                    ExpLongSoldier = 9999,
-                    ExpShortSoldier = 9999,
-                    ExpJones = 9999,
-                    ExpHiddenWeapone = 9999,
-                    ExpMedicine = 9999,
-                    ExpArithmetic = 9999,
-                    ExpMusic = 9999,
-                    ExpWrite = 9999,
-                    ExpDrawing = 9999,
-                    ExpExchange = 9999,
-                    ExpTaoism = 9999,
-                    ExpDharma = 9999,
-                    ExpPranayama = 9999,
+                    //ExpEmptyHand = 9999,
+                    //ExpLongSoldier = 9999,
+                    //ExpShortSoldier = 9999,
+                    //ExpJones = 9999,
+                    //ExpHiddenWeapone = 9999,
+                    //ExpMedicine = 9999,
+                    //ExpArithmetic = 9999,
+                    //ExpMusic = 9999,
+                    //ExpWrite = 9999,
+                    //ExpDrawing = 9999,
+                    //ExpExchange = 9999,
+                    //ExpTaoism = 9999,
+                    //ExpDharma = 9999,
+                    //ExpPranayama = 9999,
 
                     AvatarId = datas[i].AvatarId,
                     ModelId = datas[i].ModelId,
@@ -556,26 +392,7 @@ namespace GameSystem
                     Wuxing = datas[i].Wuxing
                 });
 
-                //entityManager.SetComponentData(entity, new BodyProperty
-                //{
-                //    Thought = 100,
-                //    Neck = 100,
-                //    Heart = 100,
-                //    Eye = 100,
-                //    Ear = 100,
-                //    LeftLeg = 100,
-                //    RightLeg = 100,
-                //    LeftHand = 100,
-                //    RightHand = 100,
-                //    Fertility = 100,
-                //    Appearance = 100,
-                //    Dress = 100,
-                //    Skin = 100,
 
-                //    StrategyMoveSpeed = 6,
-                //    FireMoveSpeed = 10,
-
-                //});
 
                 //entityManager.SetComponentData(entity, new Equipment
                 //{
@@ -761,37 +578,7 @@ namespace GameSystem
 
 
 
-        protected override void OnUpdate()
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                //var biological = _data.Biological[i];
-                //var body = _data.Body[i];
-                //var entity = _data.Entitys[i];
-                //var behavior = _data.Behavior[i];
-                //biological.Sex = body.Fertility;
-                //biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
-                //biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
-                //biological.OperationalAbility = (3 * (body.RightHand / 100)) + (3 * (body.LeftHand / 100));
-                //biological.LogicalThinking = (100 * (body.Thought / 100));
-
-                //biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
-                //biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
-                //biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
-
-                //_data.Biological[i] = biological;
-                //_data.Body[i] = body;
-
-                //if (behavior.Target != Vector3.zero)
-                //{
-                //    ComponentDic[entity].AiCharacter.SetTarget(behavior.Target);
-                //}
-
-            }
-            //Debug.Log("111>>>>");
-            //Debug.Log(_data.Length+">>>>");
-        }
-
+        
 
         /// <summary>
         /// 根据当前状态获取Biologicals

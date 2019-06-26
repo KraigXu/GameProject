@@ -33,14 +33,6 @@ namespace GameSystem
         public int MapFileVersion;
         public string MapFilePath;
 
-        //Player select Info
-        public string Name;
-        public string SunName;
-        public int    Sex;
-        
-
-
-        
         public void TestValue()
         {
             Mapseed = 1308905299;
@@ -53,10 +45,6 @@ namespace GameSystem
             MapFileVersion = 5;
             MapFilePath= Path.Combine(Application.persistentDataPath, "333.map");
 
-            this.Name = "";
-            this.SunName = "";
-            this.Sex = 1;
-            
         }
 
 

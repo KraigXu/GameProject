@@ -44,9 +44,22 @@ namespace GameSystem
             
         }
 
+        protected override void OnCreateManager()
+        {
+            base.OnCreateManager();
+            _entityManager= World.Active.GetOrCreateManager<EntityManager>();
+        }
+
         public void AddOrganization(HexCoordinates coordinates)
         {
             LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
+
+            if (data == null)
+            {
+                Debug.Log(coordinates.X+">>>"+coordinates.Y+">>>>"+coordinates.Z);
+                return;
+            }
+
             AddOrganization(data, coordinates);
         }
 

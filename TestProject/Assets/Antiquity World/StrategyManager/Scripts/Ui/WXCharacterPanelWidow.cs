@@ -114,7 +114,7 @@ namespace GameSystem.Ui
                 SurnameTxt.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
                 AgeTxt.text = GameStaticData.BiologicalSex[biological.Sex];
                 SexTxt.text = biological.Age.ToString();
-                PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
+              //  PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
                 FamilyTxt.text = GameStaticData.FamilyName[biological.FamilyId];
                 FactionTxt.text = GameStaticData.FactionName[biological.FactionId];
 
