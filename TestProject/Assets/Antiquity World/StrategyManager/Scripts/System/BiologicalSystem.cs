@@ -26,6 +26,7 @@ namespace GameSystem
         struct Data
         {
             public readonly int Length;
+            public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BodyProperty> Body;
             public ComponentArray<HexUnit> HexUnit;
@@ -85,14 +86,13 @@ namespace GameSystem
 
         }
 
-
-
         public static void SpawnRandomBiological(Transform node)
         {
             Entity entity = node.gameObject.GetComponent<GameObjectEntity>().Entity;
             BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
             SystemManager.Get<BiologicalSystem>().AddBiological(data,entity);
         }
+
 
         public  void AddBiological(BiologicalData data, Entity entity)
         {
@@ -258,6 +258,8 @@ namespace GameSystem
 
 
         }
+
+
 
 
         //public void AddBiological(BiologicalData data, HexCoordinates coordinates)
@@ -648,13 +650,22 @@ namespace GameSystem
         {
             for (int i = 0; i < _data.Length; i++)
             {
-                //if (id == _data.Biological[i].BiologicalId)
-                //{
-                //    return Entity.Null;
-                //}
+                if (id == _data.Biological[i].BiologicalId)
+                    return _data.Entitys[i];
             }
             return new Entity();
         }
+
+        public HexUnit GetUnit(int id)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (id == _data.Biological[i].BiologicalId)
+                    return _data.HexUnit[i];
+            }
+            return new HexUnit();
+        }
+
         //public void SetBiologicalStatus(int id, BiologicalStatus status)
         //{
         //    for (int i = 0; i < _data.Length; i++)

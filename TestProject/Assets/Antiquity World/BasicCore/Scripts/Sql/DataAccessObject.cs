@@ -488,6 +488,16 @@ namespace DataAccessObject
                                        " Path TEXT);");
         }
 
+        public static void CreateTable_CellTypeData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS CellTypeData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Sprite TEXT);");
+        }
+
+        
+
     }
     //-----------------------------------------建表语句 -----------------------------------End
 
@@ -1138,6 +1148,18 @@ namespace DataAccessObject
         public override object[] GetValues()
         {
             object[] objects = { Bid, ArticleId, Count, MaxCount, Time };
+            return objects;
+        }
+    }
+
+    public class CellTypeData : BaseData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Sprite { get; set; }
+        public override object[] GetValues()
+        {
+            object[] objects = { Id, Name, Sprite };
             return objects;
         }
     }

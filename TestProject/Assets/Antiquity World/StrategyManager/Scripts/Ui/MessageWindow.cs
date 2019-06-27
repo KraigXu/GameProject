@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,22 +25,21 @@ namespace GameSystem.Ui
         public int MaxNumber;
         public float Time = 5f;
 
-
         [Header("UI")]
-        public RectTransform CellTypeView;
+        public Image CellTypeImage;
+        public Text CellTypeTxt;
+        public Text CellUrbanTxt;
+        public Text CellFarmTxt;
+        public Text CellPlantTxt;
 
-        public RectTransform CellContentView;
-
-
-        public RectTransform CellUnitView;
-
-        public List<RectTransform> Features;
-
-        // public RectTransform CellUnitView;
-
+        public RectTransform CellFeaturesParent;
+        public RectTransform CellPersonsParent;
 
         private PlayerMapInputSystem _system;
 
+        private StrategyScene _strategyScene;
+        private StrategyPlayer _player;
+        private HexCell _cell;
 
 
         protected override void InitWindowData()
@@ -52,11 +52,28 @@ namespace GameSystem.Ui
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
+
         }
 
         public override void InitWindowOnAwake()
         {
             _system = SystemManager.Get<PlayerMapInputSystem>();
+            _strategyScene = StrategyScene.Instance;
+            _player = StrategyScene.Instance.Player;
+
+
+
+            if (_cell == _player.Unit.Location)
+                return;
+            //
+            _cell = _player.Unit.Location;
+            int cellType = 3;
+
+            CellTypeImage.overrideSprite = GameStaticData.CellTypeSprite[cellType];
+            CellTypeTxt.text = GameStaticData.CellTypeName[cellType];
+            CellUrbanTxt.text = _cell.UrbanLevel.ToString();
+            CellFarmTxt.text = _cell.FarmLevel.ToString();
+            CellPlantTxt.text = _cell.PlantLevel.ToString();
 
         }
 
@@ -69,26 +86,21 @@ namespace GameSystem.Ui
 
         void DestoryText()
         {
-
             GameObject.Destroy(overflows.Dequeue().gameObject);
         }
+
 
         void Update()
         {
             if (_system == null) { return; }
             if (_system.CurrentCell == null)
                 return;
-
             ChangeCellView();
         }
 
         void ChangeCellView()
         {
             HexCell cell = _system.CurrentCell;
-
-            //  cell.Elevation
-
-
         }
 
         public void Log(string value)

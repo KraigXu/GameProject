@@ -22,6 +22,8 @@ public class StrategyScene : MonoBehaviour
 
     public StrategyPlayer Player;
 
+
+
     public Camera MainCamera;
     public Camera FixedCamera;
     public Camera UiCamera;
@@ -77,20 +79,23 @@ public class StrategyScene : MonoBehaviour
             Entity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1),
             Name = GameStaticData.BiologicalNameDic[1],
             SurName = GameStaticData.BiologicalSurnameDic[1],
+            Unit = SystemManager.Get<BiologicalSystem>().GetUnit(1),
+
         };
 
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
 
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
-        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
-        //StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
+        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
+       // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
 
         loadingViewCom.Close();
 
@@ -177,6 +182,14 @@ public class StrategyScene : MonoBehaviour
 
 
         //------------初始化Living
+        List<CellTypeData> cellTypeDatas = SQLService.Instance.QueryAll<CellTypeData>();
+        for (int i = 0; i < cellTypeDatas.Count; i++)
+        {
+            GameStaticData.CellTypeName.Add(cellTypeDatas[i].Id,cellTypeDatas[i].Name);
+            GameStaticData.CellTypeSprite.Add(cellTypeDatas[i].Id, Resources.Load<Sprite>(cellTypeDatas[i].Sprite));
+        }
+
+
         List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
         for (int i = 0; i < datas.Count; i++)
         {
@@ -246,8 +259,10 @@ public class StrategyScene : MonoBehaviour
                 GameStaticData.BiologicalNameDic.Add(bData.Id, bData.Name);
                 GameStaticData.BiologicalSurnameDic.Add(bData.Id, bData.Surname);
                 GameStaticData.BiologicalDescription.Add(bData.Id, bData.Description);
+                GameStaticData.BiologicalNodes.Add(bData.Id,entityGo.transform);
             }
         }
+
 
         //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 

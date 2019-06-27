@@ -44,6 +44,8 @@ namespace GameSystem
         public static Dictionary<int, string> BiologicalSurnameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalNameDic = new Dictionary<int, string>();
         public static Dictionary<int, string> BiologicalDescription = new Dictionary<int, string>();
+        public static Dictionary<int,Transform> BiologicalNodes=new Dictionary<int, Transform>();
+
         public static Dictionary<int, GameObject> BiologicalPrefab = new Dictionary<int, GameObject>();
 
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
@@ -58,6 +60,9 @@ namespace GameSystem
         public static Dictionary<int, string> TechniquesDescription = new Dictionary<int, string>();
         public static Dictionary<int, Sprite> TechniqueSprites = new Dictionary<int, Sprite>();
 
+
+        public static Dictionary<int,Sprite> CellTypeSprite=new Dictionary<int, Sprite>();
+        public static Dictionary<int,string> CellTypeName=new Dictionary<int, string>();
 
 
 

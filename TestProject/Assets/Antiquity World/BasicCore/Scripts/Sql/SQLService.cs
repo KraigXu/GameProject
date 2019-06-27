@@ -105,6 +105,8 @@ public class SQLService
         Tables.CreateTable_PlayProject(this);
         Tables.CreateTable_District(this);
 
+        Tables.CreateTable_CellTypeData(this);
+
         Tables.CreateTable_LivingAreaModelData(this);
         Tables.CreateTable_LivingArea(this);
 

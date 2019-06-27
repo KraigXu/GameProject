@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,4 +11,6 @@ public class StrategyPlayer
     public string SurName;
     public Sprite AvatarSprite;
     public Entity Entity;
+    public HexUnit Unit;
+
 }

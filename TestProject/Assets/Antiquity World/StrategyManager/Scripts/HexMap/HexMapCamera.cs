@@ -18,7 +18,7 @@ public class HexMapCamera : MonoBehaviour {
 
 	float rotationAngle;
 
-	static HexMapCamera instance;
+   static HexMapCamera instance;
 
 	public static bool Locked {
 		set {
@@ -30,7 +30,13 @@ public class HexMapCamera : MonoBehaviour {
 		instance.AdjustPosition(0f, 0f);
 	}
 
-	void Awake () {
+    public static void ValidatePosition(float x,float z)
+    {
+        instance.AdjustPosition(x,z);
+    }
+
+
+    void Awake () {
 		swivel = transform.GetChild(0);
 		stick = swivel.GetChild(0);
 	}
@@ -122,10 +128,10 @@ public class HexMapCamera : MonoBehaviour {
         return position;
     }
 
-    public void SetTarget(Vector3 position)
+    public static void SetTarget(Vector3 position)
     {
-        transform.position = position + new Vector3(0, 3, -8);
-        transform.LookAt(position);
+        instance.transform.position = position + new Vector3(0, 8, -16);
+        instance.transform.LookAt(position);
 
     }
 }
