@@ -10,7 +10,7 @@ public class TestWindowScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
     }
 

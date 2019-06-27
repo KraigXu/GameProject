@@ -37,7 +37,7 @@ public class HexGameUI : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(1))
                 {
-                    DoMove();
+                    //DoMove();
                 }
                 else
                 {

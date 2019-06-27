@@ -91,6 +91,9 @@ namespace GameSystem
         private List<int> _removalPending = new List<int>();
         private int _idCounter;
 
+        public int AddTime = 0;
+        public float delay = 0;
+
 
         private Dictionary<int, string> TimeJijie = new Dictionary<int, string>();
 
@@ -156,48 +159,79 @@ namespace GameSystem
 
         TimeSatus CurTimeSatus;
         public DateTime Times;
-        
+
+        public string YearS
+        {
+            get { return CurTime.Year.ToString(); }
+        }
+
+
+        public string DayS
+        {
+            get { return CurTime.Day.ToString(); }
+        }
+
+        public string MonthS
+        {
+            get { return CurTime.Month.ToString(); }
+        }
+
 
         void Update()
         {
-            if (StrategyClock.paused == false || IsStart == false || IsInit == false)
+
+            if (AddTime > 0)
             {
-                return;
-            }
+                delay += Time.deltaTime;
 
-            float dt = Time.deltaTime;
-            Schedule += dt * TimeScalar;
-            if (Schedule >= ScheduleCell)   //表示一个时间节点完成
-            {
-                Schedule = 0;
-                CurTime = CurTime.AddHours(2);
-                Year = CurTime.Year;
-                Month = CurTime.Month;
-                Day = CurTime.Day;
-                Shichen = UpdateGuDaiTime(CurTime.Hour);
-                Jijie = UpdateTimeJijie(CurTime.Month);
-                ScheduleDay++;
-
-                //AddPeriodValue(PeriodType.Shichen);
-
-                if (ScheduleDay > 12)
+                if (delay > 1)
                 {
-                    ScheduleDay = 0;
-                    ScheduleMonth++;
-                    //  AddPeriodValue(PeriodType.Day);
-                    if (ScheduleMonth > 31)
-                    {
-                        ScheduleMonth = 0;
-                        // AddPeriodValue(PeriodType.Month);
-                        ScheduleYear++;
-                        if (ScheduleYear > 12)
-                        {
-                            // AddPeriodValue(PeriodType.Year);
-                            ScheduleYear = 0;
-                        }
-                    }
+                    AddTime--;
+                    CurTime = CurTime.AddDays(1);
+                    delay = 0;
                 }
+
             }
+
+
+            //if (StrategyClock.paused == false || IsStart == false || IsInit == false)
+            //{
+            //    return;
+            //}
+
+            //float dt = Time.deltaTime;
+            //Schedule += dt * TimeScalar;
+            //if (Schedule >= ScheduleCell)   //表示一个时间节点完成
+            //{
+            //    Schedule = 0;
+            //    CurTime = CurTime.AddHours(2);
+            //    Year = CurTime.Year;
+            //    Month = CurTime.Month;
+            //    Day = CurTime.Day;
+            //    Shichen = UpdateGuDaiTime(CurTime.Hour);
+            //    Jijie = UpdateTimeJijie(CurTime.Month);
+            //    ScheduleDay++;
+
+            //    //AddPeriodValue(PeriodType.Shichen);
+
+            //    if (ScheduleDay > 12)
+            //    {
+            //        ScheduleDay = 0;
+            //        ScheduleMonth++;
+            //        //  AddPeriodValue(PeriodType.Day);
+            //        if (ScheduleMonth > 31)
+            //        {
+            //            ScheduleMonth = 0;
+            //            // AddPeriodValue(PeriodType.Month);
+            //            ScheduleYear++;
+            //            if (ScheduleYear > 12)
+            //            {
+            //                // AddPeriodValue(PeriodType.Year);
+            //                ScheduleYear = 0;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private int UpdateGuDaiTime(int curHour)
@@ -332,6 +366,11 @@ namespace GameSystem
         public string Season
         {
             get { return TimeJijie[Jijie]; }
+        }
+
+        public static void AddDay(int number)
+        {
+            Instance.AddTime += number;
         }
     }
 }

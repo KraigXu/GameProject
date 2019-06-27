@@ -94,6 +94,7 @@ public class StrategyScene : MonoBehaviour
 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
+       // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";
         HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
        // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
 
@@ -126,7 +127,6 @@ public class StrategyScene : MonoBehaviour
         }
 
     }
-
 
     void InitMapInfo()
     {
@@ -263,8 +263,10 @@ public class StrategyScene : MonoBehaviour
             }
         }
 
+        //---------------------------ArticleSystem
 
-        //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+
+       // SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 
