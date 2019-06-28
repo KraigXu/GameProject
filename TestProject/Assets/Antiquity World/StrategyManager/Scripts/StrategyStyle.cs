@@ -5,25 +5,15 @@ using UnityEngine;
 
 public class StrategyStyle : MonoBehaviour
 {
-
     public static StrategyStyle Instance
     {
-        get { return _instance; }
+        get { return _instance;}
     }
     private static StrategyStyle _instance;
 
-
-    public Transform ModelCityO1;
-    public Transform ModelCity02;
-
     public List<MeshInstanceRenderer> BiologicalRenderers;
 
-
     public List<HexUnit> HexUnitPrefabs;
-
-    
-
-
     public RectTransform UiLivingAreaTitle;
 
     public RectTransform UiFunctionButton;
@@ -35,9 +25,22 @@ public class StrategyStyle : MonoBehaviour
     public RectTransform UiImageTips;
     public RectTransform UiSpeciality;
 
+
+    [SerializeField]
+    private RectTransform _uiCellFeature;
+    public static RectTransform UiCellFeature
+    {
+        get { return _instance._uiCellFeature; }
+    }
+
     void Awake()
     {
         _instance = this;
     }
+
+
+
+
+
 
 }

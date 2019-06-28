@@ -148,7 +148,7 @@ public class HexMapEditor : MonoBehaviour {
 	void CreateUnit () {
 		HexCell cell = GetCellUnderCursor();
 		if (cell && !cell.Unit){
-		    HexUnit hexUnit = Instantiate(HexUnit.unitPrefab);
+		    HexUnit hexUnit = Instantiate(StrategyStyle.Instance.HexUnitPrefabs[1]);
             hexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
 
             BiologicalSystem.SpawnRandomBiological(hexUnit.transform);

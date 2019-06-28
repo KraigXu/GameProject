@@ -56,7 +56,6 @@ namespace GameSystem.Ui
         /// </summary>
         private void ButtonRest()
         {
-            WorldTimeManager.Instance.Pause();
             UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow);
         }
 

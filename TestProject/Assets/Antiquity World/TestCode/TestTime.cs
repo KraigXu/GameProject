@@ -9,24 +9,23 @@ public class TestTime : MonoBehaviour
     public Text txt1;
     public Text txt2;
     public Text txt3;
+    public Text txt4;
 
-
-	// Use this for initialization
-	void Start () {
+    void Start () {
 		
 	}
 	
-	// Update is called once per frame
 	void Update ()
 	{
-	    txt1.text = WorldTimeManager.Instance.YearS;
-	    txt2.text = WorldTimeManager.Instance.MonthS;
-	    txt3.text = WorldTimeManager.Instance.DayS;
+	    txt1.text = WorldTime.Year.ToString();
+	    txt2.text = WorldTime.Month.ToString();
+	    txt3.text = WorldTime.Day.ToString();
+	    txt4.text = WorldTime.ShiChen.ToString();
 	}
 
     public void AddTime()
     {
-        WorldTimeManager.AddDay(10);
+        WorldTime.AddDay(10);
 
     }
 }

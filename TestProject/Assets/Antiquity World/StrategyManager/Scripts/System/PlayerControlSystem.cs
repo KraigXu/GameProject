@@ -1,15 +1,8 @@
-﻿
-using System.Collections.Generic;
-using DataAccessObject;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityStandardAssets.Characters.ThirdPerson;
 using GameSystem.Ui;
-using Invector;
-using Manager;
-using Unity.Rendering;
+
 
 namespace GameSystem
 {

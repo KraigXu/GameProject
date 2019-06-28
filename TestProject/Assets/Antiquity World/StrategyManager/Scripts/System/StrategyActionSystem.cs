@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using GameSystem;
 using GameSystem.Ui;
 using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
-
 
 public class StrategyActionSystem : ComponentSystem
 {
@@ -32,11 +29,6 @@ public class StrategyActionSystem : ComponentSystem
     private TipsWindow _tipsWindow;
 
     public static EntityArchetype BiologicalArchetype;
-    public class ComponentGroup
-    {
-        public AICharacterControl AiCharacter;
-        public Animator Animator;
-    }
 
     private Dictionary<Entity, BiologicalSystem.ComponentGroup> ComponentDic = new Dictionary<Entity, BiologicalSystem.ComponentGroup>();
 

@@ -39,7 +39,9 @@ namespace GameSystem.Ui
 
         private StrategyScene _strategyScene;
         private StrategyPlayer _player;
-        private HexCell _cell;
+        private HexCell _curCell;
+        private HexCell _beforeCell;
+        private HexUnit _unit;
 
 
         protected override void InitWindowData()
@@ -60,20 +62,7 @@ namespace GameSystem.Ui
             _system = SystemManager.Get<PlayerMapInputSystem>();
             _strategyScene = StrategyScene.Instance;
             _player = StrategyScene.Instance.Player;
-
-
-
-            if (_cell == _player.Unit.Location)
-                return;
-            //
-            _cell = _player.Unit.Location;
-            int cellType = 3;
-
-            CellTypeImage.overrideSprite = GameStaticData.CellTypeSprite[cellType];
-            CellTypeTxt.text = GameStaticData.CellTypeName[cellType];
-            CellUrbanTxt.text = _cell.UrbanLevel.ToString();
-            CellFarmTxt.text = _cell.FarmLevel.ToString();
-            CellPlantTxt.text = _cell.PlantLevel.ToString();
+            _unit = _player.Unit;
 
         }
 
@@ -89,18 +78,59 @@ namespace GameSystem.Ui
             GameObject.Destroy(overflows.Dequeue().gameObject);
         }
 
+        public void FeaturesTog(bool flag)
+        {
+            CellFeaturesParent.gameObject.SetActive(flag);
+        }
+
+        public void PersonsTog(bool flag)
+        {
+            CellPersonsParent.gameObject.SetActive(flag);
+        }
+
 
         void Update()
         {
-            if (_system == null) { return; }
-            if (_system.CurrentCell == null)
-                return;
-            ChangeCellView();
-        }
+            if (_curCell != _unit.Location)
+            {
+                while (CellFeaturesParent.childCount>0)
+                {
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellFeaturesParent.GetChild(0));
+                }
 
-        void ChangeCellView()
-        {
-            HexCell cell = _system.CurrentCell;
+                _curCell = _unit.Location;
+
+                int cellType = 3;
+
+                CellTypeImage.overrideSprite = GameStaticData.CellTypeSprite[cellType];
+                CellTypeTxt.text = GameStaticData.CellTypeName[cellType];
+                CellUrbanTxt.text = _unit.Location.UrbanLevel.ToString();
+                CellFarmTxt.text = _unit.Location.FarmLevel.ToString();
+                CellPlantTxt.text = _unit.Location.PlantLevel.ToString();
+
+                if (_unit.Location.SpecialIndex >=0)
+                {
+                     WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent);
+                }
+
+                List<HexUnit> units= SystemManager.Get<BiologicalSystem>().GetPoint(_curCell.coordinates.X, _curCell.coordinates.Z);
+
+                for (int i = 0; i < units.Count; i++)
+                {
+                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellPersonsParent);
+                }
+
+
+
+
+            }
+
+            else
+            {
+
+            }
+
+
         }
 
         public void Log(string value)

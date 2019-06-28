@@ -6,10 +6,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 using GameSystem.Ui;
-using Newtonsoft.Json;
 using Unity.Mathematics;
-using UnityStandardAssets.Characters.ThirdPerson;
-using Object = UnityEngine.Object;
 
 
 namespace GameSystem
@@ -40,7 +37,6 @@ namespace GameSystem
         public static EntityArchetype BiologicalArchetype;
         public class ComponentGroup
         {
-            public AICharacterControl AiCharacter;
             public Animator Animator;
         }
 
@@ -259,6 +255,11 @@ namespace GameSystem
 
         }
 
+
+        public List<HexUnit> GetPoint(int x, int z)
+        {
+            fo
+        }
 
 
 

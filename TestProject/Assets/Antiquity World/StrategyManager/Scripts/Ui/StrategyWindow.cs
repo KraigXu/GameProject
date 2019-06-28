@@ -17,13 +17,6 @@ namespace GameSystem.Ui
     public class StrategyWindow : UIWindowBase
     {
 
-        public Text Year;
-        public Text Month;
-        public Text Day;
-        public Text ShiChen;
-        public Text Season;
-
-        private float _cd;
 
         protected override void InitWindowData()
         {
@@ -42,25 +35,5 @@ namespace GameSystem.Ui
         {
         }
 
-
-        void Update()
-        {
-            UpdateTime();
-        }
-
-
-        public void UpdateTime()
-        {
-            _cd += Time.deltaTime;
-            if (_cd > 1)
-            {
-                Year.text = WorldTimeManager.Instance.Year.ToString();
-                Month.text = WorldTimeManager.Instance.Month.ToString();
-                Day.text = WorldTimeManager.Instance.Day.ToString();
-               // ShiChen.text=   GameStaticData.TimeShichen[WorldTimeManager.Instance.Shichen];
-              //  Season.text = GameStaticData.TimeJijie[WorldTimeManager.Instance.Jijie];
-                _cd = 0;
-            }
-        }
     }
 }

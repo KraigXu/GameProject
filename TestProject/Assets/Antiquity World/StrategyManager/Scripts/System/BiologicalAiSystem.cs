@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Entities;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace  GameSystem
 {
@@ -20,7 +19,6 @@ namespace  GameSystem
             public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<NpcInput> NpcInput;
-            public ComponentArray<AICharacterControl> AiControl;
         }
 
         [Inject] private BiologicalAiGroup _aiGroup;

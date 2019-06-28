@@ -178,12 +178,12 @@ namespace GameSystem.Ui
 
             //检查功能------------------------------------<<<
            
-            Renderer[] renderers = StrategyStyle.Instance.ModelCityO1.GetComponentsInChildren<Renderer>();
-            _cityBounds = renderers[0].bounds;
-            for (int i = 1; i < renderers.Length; i++)
-            {
-                _cityBounds.Encapsulate(renderers[i].bounds);
-            }
+            //Renderer[] renderers = StrategyStyle.Instance.ModelCityO1.GetComponentsInChildren<Renderer>();
+            //_cityBounds = renderers[0].bounds;
+            //for (int i = 1; i < renderers.Length; i++)
+            //{
+            //    _cityBounds.Encapsulate(renderers[i].bounds);
+            //}
 
             StrategyScene.Instance.FixedCamera.enabled = true;
            // GameSceneInit.Settings.FixedCamera.enabled = true;

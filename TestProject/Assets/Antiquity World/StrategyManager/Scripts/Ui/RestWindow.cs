@@ -58,7 +58,6 @@ namespace GameSystem.Ui
 
         protected override void CloseWindow()
         {
-            WorldTimeManager.Instance.Play();
         }
 
 

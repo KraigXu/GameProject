@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-
 /// <summary>
 /// 单元元素
 /// </summary>
@@ -11,8 +10,6 @@ public class HexUnit : MonoBehaviour {
 
 	const float rotationSpeed = 180f;
 	const float travelSpeed = 4f;
-
-	public static HexUnit unitPrefab;
 
 	public HexGrid Grid { get; set; }
 
@@ -95,7 +92,7 @@ public class HexUnit : MonoBehaviour {
 
 
 
-        float t = Time.deltaTime * travelSpeed;
+        float t = WorldTime.RunTime * travelSpeed;
 		for (int i = 1; i < pathToTravel.Count; i++) {
 			currentTravelLocation = pathToTravel[i];
 			a = c;
@@ -125,7 +122,7 @@ public class HexUnit : MonoBehaviour {
 		    c = (b + currentTravelLocation.Position) * 0.5f;
 		    Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
 
-            for (; t < 1f; t += Time.deltaTime * travelSpeed) {
+            for (; t < 1f; t += WorldTime.RunTime * travelSpeed) {
 				transform.localPosition = Bezier.GetPoint(a, b, c, t);
 				Vector3 d = Bezier.GetDerivative(a, b, c, t);
 				d.y = 0f;
@@ -141,7 +138,7 @@ public class HexUnit : MonoBehaviour {
 		b = location.Position;
 		c = b;
 		Grid.IncreaseVisibility(location, VisionRange);
-		for (; t < 1f; t += Time.deltaTime * travelSpeed) {
+		for (; t < 1f; t += WorldTime.RunTime * travelSpeed) {
 			transform.localPosition = Bezier.GetPoint(a, b, c, t);
 			Vector3 d = Bezier.GetDerivative(a, b, c, t);
 			d.y = 0f;
@@ -178,9 +175,9 @@ public class HexUnit : MonoBehaviour {
 		if (angle > 0f) {
 			float speed = rotationSpeed / angle;
 			for (
-				float t = Time.deltaTime * speed;
+				float t = WorldTime.RunTime * speed;
 				t < 1f;
-				t += Time.deltaTime * speed
+				t += WorldTime.RunTime * speed
 			) {
 				transform.localRotation =
 					Quaternion.Slerp(fromRotation, toRotation, t);
@@ -233,9 +230,7 @@ public class HexUnit : MonoBehaviour {
 	public static void Load (BinaryReader reader, HexGrid grid) {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		float orientation = reader.ReadSingle();
-		grid.AddUnit(
-			Instantiate(unitPrefab), grid.GetCell(coordinates), orientation
-		);
+		grid.AddUnit(Instantiate(StrategyStyle.Instance.HexUnitPrefabs[1]), grid.GetCell(coordinates), orientation);
 	}
 
 	void OnEnable () {

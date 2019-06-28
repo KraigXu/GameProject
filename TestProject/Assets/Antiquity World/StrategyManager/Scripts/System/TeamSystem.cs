@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
-
 namespace GameSystem
 {
     /// <summary>
@@ -15,7 +13,6 @@ namespace GameSystem
         public class Modeler
         {
             public GameObject Model;
-            public AICharacterControl Ai;
             public int Id;
         }
 
@@ -50,7 +47,7 @@ namespace GameSystem
             modeler.Id = ++idCounter;
             modeler.Model = go;
 
-            modeler.Ai = go.GetComponent<AICharacterControl>();
+            //modeler.Ai = go.GetComponent<AICharacterControl>();
 
             ModelerArray.Add(modeler);
             go.SetActive(false);
@@ -70,7 +67,7 @@ namespace GameSystem
             modeler.Id = ++idCounter;
             modeler.Model = go;
 
-            modeler.Ai = go.GetComponent<AICharacterControl>();
+          //  modeler.Ai = go.GetComponent<AICharacterControl>();
 
             ModelerArray.Add(modeler);
             go.SetActive(false);
@@ -156,7 +153,7 @@ namespace GameSystem
             {
                 if (ModelerArray[i].Id == id)
                 {
-                    ModelerArray[i].Ai.SetTarget(target);
+                    //ModelerArray[i].Ai.SetTarget(target);
                     return;
                 }
             }

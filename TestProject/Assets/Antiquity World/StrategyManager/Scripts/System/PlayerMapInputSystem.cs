@@ -241,9 +241,9 @@ namespace GameSystem
             HexCell cell = GetCellUnderCursor();
             if (cell && !cell.Unit)
             {
-                HexUnit hexUnit = Object.Instantiate(HexUnit.unitPrefab);
-                HexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
-                BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
+                //HexUnit hexUnit = Object.Instantiate(HexUnit.unitPrefab);
+                //HexGrid.AddUnit(hexUnit, cell, Random.Range(0f, 360f));
+                //BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
             }
 
         }

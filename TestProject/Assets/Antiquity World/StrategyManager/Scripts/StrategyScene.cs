@@ -71,24 +71,13 @@ public class StrategyScene : MonoBehaviour
         InitGameData();
 
 
-        //----Player
-        Player = new StrategyPlayer()
-        {
-            PlayerId = 1,
-            AvatarSprite = GameStaticData.BiologicalAvatar[1],
-            Entity = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1),
-            Name = GameStaticData.BiologicalNameDic[1],
-            SurName = GameStaticData.BiologicalSurnameDic[1],
-            Unit = SystemManager.Get<BiologicalSystem>().GetUnit(1),
-
-        };
 
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
 
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
 
@@ -229,7 +218,7 @@ public class StrategyScene : MonoBehaviour
             GameStaticData.BiologicalPrefab.Add(biologicalModelDatas[i].Id, Resources.Load<GameObject>(biologicalModelDatas[i].Path));
         }
 
-        List<BiologicalData> biologicalDatas = SQLService.Instance.QueryAll<BiologicalData>();
+        List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
         BiologicalData bData;
         for (int i = 0; i < biologicalDatas.Count; i++)
         {
@@ -239,9 +228,7 @@ public class StrategyScene : MonoBehaviour
             if (hexCell == null)
                 continue;
 
-            Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[bData.ModelId].transform);
-            HexUnit hexUnit = entityGo.GetComponent<HexUnit>();
-
+            HexUnit hexUnit = Object.Instantiate(StrategyStyle.Instance.HexUnitPrefabs[bData.ModelId]);
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
 
             switch (bData.Identity)
@@ -259,14 +246,52 @@ public class StrategyScene : MonoBehaviour
                 GameStaticData.BiologicalNameDic.Add(bData.Id, bData.Name);
                 GameStaticData.BiologicalSurnameDic.Add(bData.Id, bData.Surname);
                 GameStaticData.BiologicalDescription.Add(bData.Id, bData.Description);
-                GameStaticData.BiologicalNodes.Add(bData.Id,entityGo.transform);
+                GameStaticData.BiologicalNodes.Add(bData.Id, hexUnit.transform);
             }
         }
+
+        //-----------------------------Player
+        BiologicalData player = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
+
+        hexCoordinates = new HexCoordinates(player.X, player.Z);
+        hexCell = hexGrid.GetCell(hexCoordinates);
+        HexUnit playerUnit = Object.Instantiate(StrategyStyle.Instance.HexUnitPrefabs[player.ModelId]);
+        hexGrid.AddUnit(playerUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
+        Entity pentity = playerUnit.GetComponent<GameObjectEntity>().Entity;
+
+        if (player.Identity == 1)
+        {
+            SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
+        }
+
+        if (GameStaticData.BiologicalNameDic.ContainsKey(player.Id) == false)
+        {
+            GameStaticData.BiologicalNameDic.Add(player.Id, player.Name);
+            GameStaticData.BiologicalSurnameDic.Add(player.Id, player.Surname);
+            GameStaticData.BiologicalDescription.Add(player.Id, player.Description);
+            GameStaticData.BiologicalNodes.Add(player.Id, playerUnit.transform);
+        }
+
+        //----Player
+        Player = new StrategyPlayer()
+        {
+            PlayerId = 1,
+            AvatarSprite = GameStaticData.BiologicalAvatar[1],
+            Entity = pentity,
+            Name = GameStaticData.BiologicalNameDic[1],
+            SurName = GameStaticData.BiologicalSurnameDic[1],
+            Unit = playerUnit
+
+        };
 
         //---------------------------ArticleSystem
 
 
-       // SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+
+
+
+
+        // SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 
@@ -283,6 +308,8 @@ public class StrategyScene : MonoBehaviour
         //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
 
         //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        Debug.Log(">>System Over");
+
 
     }
 
@@ -301,11 +328,4 @@ public class StrategyScene : MonoBehaviour
 
     }
 
-
-    public void SpawnRandomBiological(HexCell cell)
-    {
-        HexUnit hexUnit = Instantiate(HexUnit.unitPrefab);
-        hexGrid.AddUnit(hexUnit, cell, UnityEngine.Random.Range(0f, 360f));
-        BiologicalSystem.SpawnRandomBiological(hexUnit.transform);
-    }
 }
