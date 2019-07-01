@@ -69,9 +69,6 @@ public class StrategyScene : MonoBehaviour
 
         InitMapInfo();
         InitGameData();
-
-
-
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
@@ -80,7 +77,6 @@ public class StrategyScene : MonoBehaviour
          UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-
         // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
        // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";
@@ -119,7 +115,6 @@ public class StrategyScene : MonoBehaviour
 
     void InitMapInfo()
     {
-
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
         hexGrid.seed = openingInfo.Mapseed;

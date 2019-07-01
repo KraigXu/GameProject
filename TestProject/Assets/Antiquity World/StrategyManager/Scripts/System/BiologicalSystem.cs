@@ -256,9 +256,17 @@ namespace GameSystem
         }
 
 
-        public List<HexUnit> GetPoint(int x, int z)
+        public void GetPoint(List<HexUnit> units, int x, int z)
         {
-            fo
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                HexCoordinates coordinates = _data.HexUnit[i].Location.coordinates;
+                if (coordinates.X == x && coordinates.Z == z)
+                {
+                    units.Add(_data.HexUnit[i]);
+                }
+            }
         }
 
 

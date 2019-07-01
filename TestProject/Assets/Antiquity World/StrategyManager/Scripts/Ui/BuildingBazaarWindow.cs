@@ -76,7 +76,7 @@ namespace GameSystem.Ui
                 List<Entity> entities = SystemManager.Get<BehaviorSystem>().GetPositionCode(bazaar.PositionCode);
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton, _featureseParent);
+                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, _featureseParent);
                     BiologicalBaseUi biologicalUi = item.GetComponent<BiologicalBaseUi>();
                     biologicalUi.Entity = entities[i];
                 }

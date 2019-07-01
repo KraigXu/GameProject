@@ -107,7 +107,7 @@ namespace GameSystem.Ui
 
             for (int i = 0; i < preson.Count; i++)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiPersonButton, _featureseParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, _featureseParent);
                 BiologicalBaseUi baseUi = item.GetComponent<BiologicalBaseUi>();
             }
 

@@ -17,7 +17,15 @@ public class StrategyStyle : MonoBehaviour
     public RectTransform UiLivingAreaTitle;
 
     public RectTransform UiFunctionButton;
-    public RectTransform UiPersonButton;
+
+    [SerializeField]
+    private RectTransform _uiPersonButton;
+
+    public static RectTransform UiPersonButton
+    {
+        get { return _instance._uiPersonButton; }
+    }
+
     public RectTransform UiArticleBox;
     public RectTransform UiArticleView;
     public RectTransform UiEffectTip;
@@ -32,6 +40,8 @@ public class StrategyStyle : MonoBehaviour
     {
         get { return _instance._uiCellFeature; }
     }
+
+
 
     void Awake()
     {

@@ -33,8 +33,11 @@ namespace GameSystem.Ui
         public Text CellPlantTxt;
 
         public RectTransform CellFeaturesParent;
-        public RectTransform CellPersonsParent;
 
+        public RectTransform CellPersonsParent;
+        private List<HexUnit> _personUnits=new List<HexUnit>();
+        
+        
         private PlayerMapInputSystem _system;
 
         private StrategyScene _strategyScene;
@@ -42,7 +45,7 @@ namespace GameSystem.Ui
         private HexCell _curCell;
         private HexCell _beforeCell;
         private HexUnit _unit;
-
+        
 
         protected override void InitWindowData()
         {
@@ -96,7 +99,15 @@ namespace GameSystem.Ui
                 while (CellFeaturesParent.childCount>0)
                 {
                     WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellFeaturesParent.GetChild(0));
+                    Debug.Log(">>"+ CellFeaturesParent.GetChild(0).GetInstanceID());
                 }
+
+                while (CellPersonsParent.childCount>0)
+                {
+                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellPersonsParent.GetChild(0));
+                }
+
+                _personUnits.Clear();
 
                 _curCell = _unit.Location;
 
@@ -112,17 +123,12 @@ namespace GameSystem.Ui
                 {
                      WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent);
                 }
+                SystemManager.Get<BiologicalSystem>().GetPoint(_personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
 
-                List<HexUnit> units= SystemManager.Get<BiologicalSystem>().GetPoint(_curCell.coordinates.X, _curCell.coordinates.Z);
-
-                for (int i = 0; i < units.Count; i++)
+                for (int i = 0; i < _personUnits.Count; i++)
                 {
-                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellPersonsParent);
+                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
                 }
-
-
-
-
             }
 
             else
