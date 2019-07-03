@@ -39,6 +39,17 @@ namespace GameSystem
 
         }
 
+        public Sprite Avatar
+        {
+            get { return HeadImg.sprite; }
+            set { HeadImg.overrideSprite = value; }
+        }
+
+        public string PersonName
+        {
+            set { NameTex.text = value; }
+        }
+
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
         

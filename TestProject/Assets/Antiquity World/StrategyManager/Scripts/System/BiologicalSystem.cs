@@ -405,30 +405,7 @@ namespace GameSystem
 
 
 
-                //entityManager.SetComponentData(entity, new Equipment
-                //{
-                //    HelmetId = -1,
-                //    ClothesId = -1,
-                //    BeltId = -1,
-                //    HandGuard = -1,
-                //    Pants = -1,
-                //    Shoes = -1,
-                //    WeaponFirstId = -1,
-                //    WeaponSecondaryId = -1
-                //});
-
-                //entityManager.SetComponentData(entity, new EquipmentCoat
-                //{
-                //    SpriteId = 1,
-                //    Type = EquipType.Coat,
-                //    Level = EquipLevel.General,
-                //    Part = EquipPart.All,
-                //    BluntDefense = 19,
-                //    SharpDefense = 20,
-                //    Operational = 100,
-                //    Weight = 3,
-                //    Price = 1233,
-                //});
+              
 
                 //entityManager.AddComponentData(entity, new Knapsack
                 //{

@@ -9,6 +9,9 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
+/// <summary>
+/// StrategyScene主脚本，控制整个场景的的生命周期
+/// </summary>
 public class StrategyScene : MonoBehaviour
 {
     private static StrategyScene _instance;
@@ -21,8 +24,6 @@ public class StrategyScene : MonoBehaviour
     public bool IsInitOver = false;
 
     public StrategyPlayer Player;
-
-
 
     public Camera MainCamera;
     public Camera FixedCamera;
@@ -225,11 +226,12 @@ public class StrategyScene : MonoBehaviour
 
             HexUnit hexUnit = Object.Instantiate(StrategyStyle.Instance.HexUnitPrefabs[bData.ModelId]);
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
+            Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
             switch (bData.Identity)
             {
                 case 1:
-                    SystemManager.Get<BiologicalSystem>().AddBiological(bData, hexUnit.GetComponent<GameObjectEntity>().Entity);
+                    SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     break;
                 default:
                     Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
@@ -257,6 +259,8 @@ public class StrategyScene : MonoBehaviour
         if (player.Identity == 1)
         {
             SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
+            SystemManager.Get<EquipmentSystem>().AddEquipment(pentity, player.EquipmentJson);
+            SystemManager.Get<ArticleSystem>().AddArticles(pentity, player.ArticleJson);
         }
 
         if (GameStaticData.BiologicalNameDic.ContainsKey(player.Id) == false)
@@ -267,7 +271,6 @@ public class StrategyScene : MonoBehaviour
             GameStaticData.BiologicalNodes.Add(player.Id, playerUnit.transform);
         }
 
-        //----Player
         Player = new StrategyPlayer()
         {
             PlayerId = 1,
@@ -281,12 +284,7 @@ public class StrategyScene : MonoBehaviour
 
         //---------------------------ArticleSystem
 
-
-
-
-
-
-        // SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+         //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
 
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 

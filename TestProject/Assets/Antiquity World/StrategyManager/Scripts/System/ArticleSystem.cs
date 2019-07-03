@@ -361,6 +361,12 @@ namespace GameSystem
             return entities;
         }
 
+
+        public void AddArticles(Entity entity, string json)
+        {
+
+        }
+
     }
 
 }

@@ -37,7 +37,6 @@ namespace GameSystem.Ui
         public RectTransform CellPersonsParent;
         private List<HexUnit> _personUnits=new List<HexUnit>();
         
-        
         private PlayerMapInputSystem _system;
 
         private StrategyScene _strategyScene;
@@ -46,7 +45,6 @@ namespace GameSystem.Ui
         private HexCell _beforeCell;
         private HexUnit _unit;
         
-
         protected override void InitWindowData()
         {
             this.ID = WindowID.MessageWindow;
@@ -91,7 +89,6 @@ namespace GameSystem.Ui
             CellPersonsParent.gameObject.SetActive(flag);
         }
 
-
         void Update()
         {
             if (_curCell != _unit.Location)
@@ -119,15 +116,44 @@ namespace GameSystem.Ui
                 CellFarmTxt.text = _unit.Location.FarmLevel.ToString();
                 CellPlantTxt.text = _unit.Location.PlantLevel.ToString();
 
-                if (_unit.Location.SpecialIndex >=0)
+
+                if (_unit.Location.SpecialIndex >= 0)
                 {
-                     WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent);
+                   
+                    switch (_unit.Location.SpecialIndex)
+                    {
+                        case 1:
+                            
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                    }
+
+
+                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent);
+
                 }
+
+
+
+               
                 SystemManager.Get<BiologicalSystem>().GetPoint(_personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
 
                 for (int i = 0; i < _personUnits.Count; i++)
                 {
-                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
+
+                    GameObjectEntity personEntity = _personUnits[i].gameObject.GetComponent<GameObjectEntity>();
+
+                    Biological biological = SystemManager.GetProperty<Biological>(personEntity.Entity);
+                    
+                    RectTransform personRect=  WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
+
+                    BiologicalBaseUi bui= personRect.GetComponent<BiologicalBaseUi>();
+                    bui.Avatar = GameStaticData.BiologicalAvatar[biological.AvatarId];
+                    bui.PersonName=GameStaticData.BiologicalSurnameDic[biological.BiologicalId]+GameStaticData.BiologicalNameDic[biological.BiologicalId];
+                    
                 }
             }
 
@@ -135,8 +161,6 @@ namespace GameSystem.Ui
             {
 
             }
-
-
         }
 
         public void Log(string value)

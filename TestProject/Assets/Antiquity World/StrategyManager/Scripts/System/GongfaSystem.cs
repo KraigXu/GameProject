@@ -46,18 +46,18 @@ namespace GameSystem
         }
 
 
-        public static EquipmentJsonData GetEquipment(int equipmentId)
-        {
-            if (_equipmentDic.ContainsKey(equipmentId) == true)
-            {
-                return _equipmentDic[equipmentId];
-            }
-            else
-            {
-                return null;
-            }
+        //public static EquipmentJsonData GetEquipment(int equipmentId)
+        //{
+        //    if (_equipmentDic.ContainsKey(equipmentId) == true)
+        //    {
+        //        return _equipmentDic[equipmentId];
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
 
-        }
+        //}
 
         
     }
