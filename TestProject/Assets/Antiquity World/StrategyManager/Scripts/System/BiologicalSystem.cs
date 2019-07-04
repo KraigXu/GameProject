@@ -256,7 +256,7 @@ namespace GameSystem
         }
 
 
-        public void GetPoint(List<HexUnit> units, int x, int z)
+        public void GetPoint(ref List<HexUnit> units, int x, int z)
         {
 
             for (int i = 0; i < _data.Length; i++)

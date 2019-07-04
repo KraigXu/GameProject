@@ -106,7 +106,7 @@ namespace GameSystem.Ui
 
                 _personUnits.Clear();
 
-                _curCell = _unit.Location;
+             
 
                 int cellType = 3;
 
@@ -123,23 +123,19 @@ namespace GameSystem.Ui
                     switch (_unit.Location.SpecialIndex)
                     {
                         case 1:
-                            
+                             SystemManager.Get<CitySystem>().InitSpecial(_unit.Location.coordinates.X,_unit.Location.coordinates.Z, CellFeaturesParent);
                             break;
                         case 2:
                             break;
                         case 3:
                             break;
+                        default:
+                            break;
                     }
-
-
-                    WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent);
-
+                    
                 }
-
-
-
-               
-                SystemManager.Get<BiologicalSystem>().GetPoint(_personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
+                
+                SystemManager.Get<BiologicalSystem>().GetPoint(ref _personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
 
                 for (int i = 0; i < _personUnits.Count; i++)
                 {
@@ -147,14 +143,16 @@ namespace GameSystem.Ui
                     GameObjectEntity personEntity = _personUnits[i].gameObject.GetComponent<GameObjectEntity>();
 
                     Biological biological = SystemManager.GetProperty<Biological>(personEntity.Entity);
-                    
-                    RectTransform personRect=  WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
 
-                    BiologicalBaseUi bui= personRect.GetComponent<BiologicalBaseUi>();
+                    RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
+
+                    BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
                     bui.Avatar = GameStaticData.BiologicalAvatar[biological.AvatarId];
-                    bui.PersonName=GameStaticData.BiologicalSurnameDic[biological.BiologicalId]+GameStaticData.BiologicalNameDic[biological.BiologicalId];
-                    
+                    bui.PersonName = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
+
                 }
+
+                _curCell = _unit.Location;
             }
 
             else

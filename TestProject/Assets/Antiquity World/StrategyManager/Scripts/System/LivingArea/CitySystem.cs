@@ -151,6 +151,31 @@ namespace GameSystem
             });
         }
 
+        /// <summary>
+        /// 根据地图坐标查询上面的功能并生成交互UI
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public void InitSpecial(int x, int z, RectTransform parent)
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var point = _data.Map[i];
+                if (point.Coordinates.X == x && point.Coordinates.Z == z)
+                {
+                    UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, parent).GetComponent<UiCellFeature>();
+                    //featureUi.GetType()
+
+                    // WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature);
+
+
+                }
+            }
+
+        }
+
+
 
         public void AddCity(HexCoordinates coordinates)
         {
@@ -160,7 +185,7 @@ namespace GameSystem
                 return;
             }
 
-            AddCity(data,coordinates);
+            AddCity(data, coordinates);
         }
 
 
@@ -168,7 +193,7 @@ namespace GameSystem
         {
             for (int i = 0; i < _data.Length; i++)
             {
-                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z== coordinates.Z)
+                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
                 {
                     return;
                 }
