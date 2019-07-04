@@ -17,6 +17,18 @@ namespace GameSystem
         Field = 10,
         City = 20,
     }
+
+    public class BiologicalRunData
+    {
+        public string Name;
+        public string SurName;
+        public Sprite Sprite;
+        public string Desciption;
+
+
+    }
+
+
     public class BiologicalSystem : ComponentSystem
     {
 
@@ -265,6 +277,7 @@ namespace GameSystem
                 if (coordinates.X == x && coordinates.Z == z)
                 {
                     units.Add(_data.HexUnit[i]);
+                    Debug.Log("+1");
                 }
             }
         }

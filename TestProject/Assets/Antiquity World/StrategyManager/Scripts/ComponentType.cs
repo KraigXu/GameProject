@@ -502,6 +502,8 @@ namespace GameSystem
     [Serializable]
     public struct LivingArea : IComponentData
     {
+        
+
         public int Id;
         public byte IsInit;
 

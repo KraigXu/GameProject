@@ -488,6 +488,20 @@ namespace DataAccessObject
                                        " Path TEXT);");
         }
 
+        /// <summary>
+        /// 模型
+        /// </summary>
+        /// <param name="service"></param>
+        public static void CreateTable_ModelFileData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS ModelFileData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Code TEXT," +
+                                       " Type INTEGER," +
+                                       " Path TEXT);");
+        }
+
+
         public static void CreateTable_CellTypeData(SQLService service)
         {
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS CellTypeData ( " +
@@ -1160,6 +1174,25 @@ namespace DataAccessObject
         public override object[] GetValues()
         {
             object[] objects = { Id, Name, Sprite };
+            return objects;
+        }
+    }
+
+
+    public class ModelFileData : BaseData
+    {
+        public int Id { get; set; }
+
+        public string Code { get; set; }
+        public int Type { get; set; }
+        public string Path { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+            {
+                Id,Code,Type,Path
+            };
             return objects;
         }
     }

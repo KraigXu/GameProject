@@ -98,6 +98,8 @@ public class SQLService
         Tables.CreateTable_Tips(this);
         Tables.CreateTable_NounsData(this);
 
+        Tables.CreateTable_ModelFileData(this);
+
         Tables.CreateTable_ArticleTypeData(this);
         Tables.CreateTable_ArticleData(this);
         Tables.CreateTable_ArticleRecordData(this);

@@ -8,6 +8,15 @@ using UnityEngine;
 
 namespace GameSystem
 {
+
+    public class CityRunData
+    {
+        public string Name;
+        public string Description;
+        public Sprite Sprite;
+
+    }
+
     /// <summary>
     /// 城市
     /// </summary>
@@ -17,7 +26,6 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public GameObjectArray GameObjects;
             public ComponentDataArray<LivingArea> LivingArea;
             public ComponentDataArray<Crowd> Crowd;
             public ComponentDataArray<CellMap> Map;
@@ -151,30 +159,17 @@ namespace GameSystem
             });
         }
 
-        /// <summary>
-        /// 根据地图坐标查询上面的功能并生成交互UI
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public void InitSpecial(int x, int z, RectTransform parent)
+        public Entity GetEntity(int x, int z)
         {
             for (int i = 0; i < _data.Length; i++)
             {
                 var point = _data.Map[i];
                 if (point.Coordinates.X == x && point.Coordinates.Z == z)
-                {
-                    UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, parent).GetComponent<UiCellFeature>();
-                    //featureUi.GetType()
-
-                    // WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature);
-
-
-                }
+                  return _data.Entity[i];
             }
 
+            return Entity.Null;
         }
-
 
 
         public void AddCity(HexCoordinates coordinates)
@@ -191,15 +186,13 @@ namespace GameSystem
 
         public void AddCity(LivingAreaData data, HexCoordinates coordinates)
         {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-                {
-                    return;
-                }
-            }
-
-
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
+            //    {
+            //        return;
+            //    }
+            //}
             Entity entity = _entityManager.CreateEntity();
             _entityManager.AddComponentData(entity, new CellMap()
             {
@@ -240,10 +233,13 @@ namespace GameSystem
 
             LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
-            if (GameStaticData.CityName.ContainsKey(data.Id) == false)
+            if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
             {
-                GameStaticData.CityName.Add(data.Id, data.Name);
-                GameStaticData.CityDescription.Add(data.Id, data.Description);
+                CityRunData runData=new CityRunData();
+                runData.Name = data.Name;
+                runData.Description = data.Description;
+                runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
+                GameStaticData.CityRunDataDic.Add(data.Id,runData);
             }
 
         }

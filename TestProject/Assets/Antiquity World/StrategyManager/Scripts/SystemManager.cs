@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SystemManager
 {
-
-
     private static EntityManager _instance;
 
     

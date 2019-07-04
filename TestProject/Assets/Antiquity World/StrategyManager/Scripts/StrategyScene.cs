@@ -70,8 +70,10 @@ public class StrategyScene : MonoBehaviour
 
         InitMapInfo();
         InitGameData();
+        InitModel();
+
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
+     //   UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
 
@@ -155,12 +157,26 @@ public class StrategyScene : MonoBehaviour
 
     }
 
+    void InitModel()
+    {
+        //------------ModelController
+
+        List<ModelFileData> modelFileDatas = SQLService.Instance.QueryAll<ModelFileData>();
+
+        ModelController.Instance.ModelFileDatas = modelFileDatas;
+
+        StartCoroutine(ModelController.Instance.ReadModelFileData());
+
+    }
 
     /// <summary>
     /// 初始化数据
     /// </summary>
     void InitGameData()
     {
+
+
+
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
         HexCoordinates hexCoordinates;
         HexCell hexCell;

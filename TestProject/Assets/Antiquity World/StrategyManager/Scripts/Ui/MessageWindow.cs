@@ -35,8 +35,8 @@ namespace GameSystem.Ui
         public RectTransform CellFeaturesParent;
 
         public RectTransform CellPersonsParent;
-        private List<HexUnit> _personUnits=new List<HexUnit>();
-        
+        private List<HexUnit> _personUnits = new List<HexUnit>();
+
         private PlayerMapInputSystem _system;
 
         private StrategyScene _strategyScene;
@@ -44,7 +44,7 @@ namespace GameSystem.Ui
         private HexCell _curCell;
         private HexCell _beforeCell;
         private HexUnit _unit;
-        
+
         protected override void InitWindowData()
         {
             this.ID = WindowID.MessageWindow;
@@ -89,24 +89,23 @@ namespace GameSystem.Ui
             CellPersonsParent.gameObject.SetActive(flag);
         }
 
-        void Update()
+        void LateUpdate()
         {
             if (_curCell != _unit.Location)
             {
-                while (CellFeaturesParent.childCount>0)
+                _curCell = _unit.Location;
+                while (CellFeaturesParent.childCount > 0)
                 {
                     WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellFeaturesParent.GetChild(0));
-                    Debug.Log(">>"+ CellFeaturesParent.GetChild(0).GetInstanceID());
                 }
 
-                while (CellPersonsParent.childCount>0)
+                while (CellPersonsParent.childCount > 0)
                 {
                     WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellPersonsParent.GetChild(0));
                 }
 
                 _personUnits.Clear();
 
-             
 
                 int cellType = 3;
 
@@ -119,22 +118,26 @@ namespace GameSystem.Ui
 
                 if (_unit.Location.SpecialIndex >= 0)
                 {
-                   
                     switch (_unit.Location.SpecialIndex)
                     {
                         case 1:
-                             SystemManager.Get<CitySystem>().InitSpecial(_unit.Location.coordinates.X,_unit.Location.coordinates.Z, CellFeaturesParent);
+                            {
+                                Entity entity = SystemManager.Get<CitySystem>().GetEntity(_unit.Location.coordinates.X, _unit.Location.coordinates.Z);
+                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(entity);
+
+                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
+                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, GameStaticData.CityRunDataDic[livingArea.Id].Sprite, entity, CityOpenEntity);
+                            }
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        default:
+                            {
+
+                            }
                             break;
                     }
-                    
+
                 }
-                
+
                 SystemManager.Get<BiologicalSystem>().GetPoint(ref _personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
 
                 for (int i = 0; i < _personUnits.Count; i++)
@@ -152,13 +155,29 @@ namespace GameSystem.Ui
 
                 }
 
-                _curCell = _unit.Location;
-            }
 
+            }
             else
             {
 
             }
+        }
+
+        /// <summary>
+        /// 打开City实体
+        /// </summary>
+        /// <param name="target"></param>
+        public void CityOpenEntity(Entity target)
+        {
+            // SystemManager.GetProperty<>()
+            //  SystemManager.GetProperty<LivingArea>();
+
+            ModelController.Instance.ShowModel();
+            UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow);
+            UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
+
+
+
         }
 
         public void Log(string value)
@@ -189,7 +208,6 @@ namespace GameSystem.Ui
                 Text text = go.GetComponent<Text>();
                 text.text = value;
                 text.color = Color.black;
-
 
                 text.DOFade(0, Time).OnComplete((() => DestoryText()));
                 go.SetActive(true);

@@ -117,8 +117,6 @@ namespace GameSystem
 
             });
             LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
-            GameStaticData.CityName.Add(data.Id, data.Name);
-            GameStaticData.CityDescription.Add(data.Id, data.Description);
 
         }
 
