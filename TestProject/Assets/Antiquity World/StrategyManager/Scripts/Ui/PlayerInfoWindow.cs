@@ -28,6 +28,9 @@ namespace GameSystem.Ui
 
         HexUnit unit;
 
+        [HideInInspector]
+        public bool Isflag=true;
+
 
         protected override void InitWindowData()
         {
@@ -46,6 +49,8 @@ namespace GameSystem.Ui
             NameText.text = StrategyScene.Instance.Player.SurName + StrategyScene.Instance.Player.Name;
             unit=GameStaticData.BiologicalNodes[1].gameObject.GetComponent<HexUnit>();
             grid = StrategyScene.Instance.hexGrid;
+
+            StrategyScene.Instance.PlayerInfoView = this;
 
         }
 
@@ -100,6 +105,8 @@ namespace GameSystem.Ui
 
         void Update()
         {
+            if (!Isflag) return;
+
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 if (Input.GetMouseButtonDown(0))
@@ -156,6 +163,8 @@ namespace GameSystem.Ui
 
         bool UpdateCurrentCell()
         {
+           
+
             HexCell cell = grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
             if (cell != currentCell)
             {

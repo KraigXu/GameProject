@@ -58,13 +58,4 @@ public class ModelController : MonoBehaviour
         yield return null;
     }
 
-    public void ShowModel()
-    {
-        StrategyScene.Instance.MainCamera.enabled = false;
-        _camera.enabled = false;
-
-        
-
-
-    }
 }

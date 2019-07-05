@@ -155,7 +155,6 @@ namespace GameSystem.Ui
 
                 }
 
-
             }
             else
             {
@@ -164,18 +163,21 @@ namespace GameSystem.Ui
         }
 
         /// <summary>
-        /// 打开City实体
+        /// 打开City实体 ,并且切换场景显示
         /// </summary>
         /// <param name="target"></param>
         public void CityOpenEntity(Entity target)
         {
-            // SystemManager.GetProperty<>()
-            //  SystemManager.GetProperty<LivingArea>();
+            StrategyScene.Instance.ExitMapModel();
+            StrategyScene.Instance.EnterBuildModel();
 
-            ModelController.Instance.ShowModel();
-            UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow);
-            UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
+            ShowWindowData cityWindowData=new ShowWindowData();
+            
+            LivingAreaWindowCD livingAreaWindowCd=new LivingAreaWindowCD();
+            livingAreaWindowCd.LivingAreaEntity = target;
+            cityWindowData.contextData = livingAreaWindowCd;
 
+            UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, cityWindowData);
 
 
         }

@@ -53,7 +53,6 @@ namespace Manager
 
         void Start()
         {
-           
             //SetTarget(TargetOj.transform.position,true);
         }
         void Update()

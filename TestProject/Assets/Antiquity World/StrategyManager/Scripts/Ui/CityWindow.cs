@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using DataAccessObject;
-using GameSystem;
-using Manager;
-using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,8 +47,6 @@ namespace GameSystem.Ui
         private Entity _laEntity;
         private EntityManager _entityManager;
         private LivingAreaSystem _livingAreaSystem;
-
-
         private Bounds _cityBounds;
 
         [Serializable]
@@ -83,12 +77,11 @@ namespace GameSystem.Ui
             _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
         /// <summary>
-        ///  //-----初始化选项
+        /// 初始化选项
         /// </summary>
         /// <param name="contextData"></param>
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-
             if (contextData == null)
             {
                 Debuger.LogError("Enter LivingArea Error");
@@ -101,7 +94,7 @@ namespace GameSystem.Ui
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
 
-          //  _name.text = GameStaticData.LivingAreaName[_livingArea.Id];
+            //_name.text = GameStaticData.LivingAreaName[_livingArea.Id];
             //_money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;
             //_iron.text = _livingArea.Iron + "/" + _livingArea.IronMax;
             //_wood.text = _livingArea.Wood + "/" + _livingArea.WoodMax;
@@ -133,7 +126,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
             {
                 BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "市集";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBazaarWindow;
@@ -145,7 +138,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
             {
                 BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "TTT";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBlacksmithWindow;
@@ -155,7 +148,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingTailor>(_laEntity))
             {
                 BuildingTailor buildingTailor = entityManager.GetComponentData<BuildingTailor>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = null;  
@@ -166,7 +159,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuidingTavern>(_laEntity))
             {
                 BuidingTavern buidingTavern = entityManager.GetComponentData<BuidingTavern>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "JD";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = null;
@@ -174,7 +167,7 @@ namespace GameSystem.Ui
                 _buildingItems.Add(uiBuildingItem);
             }
 
-          
+            
 
             //检查功能------------------------------------<<<
            
@@ -185,8 +178,7 @@ namespace GameSystem.Ui
             //    _cityBounds.Encapsulate(renderers[i].bounds);
             //}
 
-            StrategyScene.Instance.FixedCamera.enabled = true;
-           // GameSceneInit.Settings.FixedCamera.enabled = true;
+            //GameSceneInit.Settings.FixedCamera.enabled = true;
             //StrategyCameraManager.Instance.SetTarget(_cityBounds.center, true);
             // StrategyCameraManager.Instance.SetTarget(StrategyStyle.Instance.ModelCityO1.transform);
             // SystemManager.Get<PlayerControlSystem>().Target(bounds.center);
@@ -216,10 +208,7 @@ namespace GameSystem.Ui
 
 
             //Entity entityBiological = SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(livingArea.PowerId);
-
-
-
-
+            
             //List<Entity> entitieBuilding = SystemManager.Get<BuildingSystem>().GetBuildingGroup(livingArea.Id);
 
             //for (int i = 0; i < entitieBuilding.Count; i++)
@@ -228,15 +217,20 @@ namespace GameSystem.Ui
             //    _buildingBilling[i].gameObject.SetActive(true);
             //    _buildingBilling[i].GetComponentInChildren<Text>().text = GameStaticData.BuildingName[building.BuildingModelId];
             //}
-
         }
 
         void OnDrawGizmos()
         {
             Gizmos.color=new Color(0,0,1,0.3f);
             Gizmos.DrawCube(_cityBounds.center, _cityBounds.size);
-
         }
+
+
+        void Update()
+        {
+            
+        }
+
 
         private void OpenBazaarWindow(Entity entity)
         {
@@ -246,7 +240,6 @@ namespace GameSystem.Ui
             showWindow.contextData = entityWindowData;
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingBazaarWindow, showWindow);
-
         }
 
 
@@ -264,15 +257,11 @@ namespace GameSystem.Ui
         public void BuildingEnter(Entity entity)
         {
 
-
-
-
         }
 
 
         private void ChangeData()
         {
-
             LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             for (int i = 0; i < _buildingBilling.Count; i++)
             {
@@ -300,7 +289,7 @@ namespace GameSystem.Ui
         {
             UiBuildingItem uiBuildingItem = go.GetComponent<UiBuildingItem>();
 
-            // SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
+            //SystemManager.Get<BuildingSystem>().ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
             //BuildingSystem.ShowBuildingInside(uiBuildingItem.BuildingEntity, StrategySceneInit.PlayerEntity, _livingAreaEntity);
             return;
             BuildingiDataItem item = null;
@@ -367,15 +356,6 @@ namespace GameSystem.Ui
 
         }
 
-        void OnUpdate()
-        {
-            //_changeCd += Time.deltaTime;
-            //if (_changeCd > 1)
-            //{
-            //    _changeCd = 0;
-            //    ChangeData();
-            //}
-        }
 
     }
 }

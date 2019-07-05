@@ -69,7 +69,7 @@ namespace GameSystem.Ui
 
             if (buildingBlacksmith.LevelId >= 0)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "买卖";
                 uiItem.OnBuildingEnter = YL;
@@ -78,7 +78,7 @@ namespace GameSystem.Ui
 
             if (buildingBlacksmith.LevelId >= 1)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "冶炼";
                 uiItem.OnBuildingEnter = YL;
@@ -86,7 +86,7 @@ namespace GameSystem.Ui
 
             if (buildingBlacksmith.LevelId >= 2)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "锻造";
                 uiItem.OnBuildingEnter = DZ;
@@ -95,7 +95,7 @@ namespace GameSystem.Ui
 
             if (buildingBlacksmith.LevelId >= 3)
             {
-                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiFunctionButton, _featureseParent);
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _featureseParent);
                 UiBuildingItem uiItem = item.GetComponent<UiBuildingItem>();
                 uiItem.Value = "分解";
                 uiItem.OnBuildingEnter = FJ;

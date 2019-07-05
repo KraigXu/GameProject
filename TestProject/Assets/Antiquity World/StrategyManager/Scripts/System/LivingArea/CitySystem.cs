@@ -45,9 +45,6 @@ namespace GameSystem
         protected override void OnUpdate()
         {
         }
-
-
-
         /// <summary>
         /// 进入城市
         /// </summary>

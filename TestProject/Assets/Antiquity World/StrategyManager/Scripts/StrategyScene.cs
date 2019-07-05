@@ -21,25 +21,16 @@ public class StrategyScene : MonoBehaviour
         get { return _instance; }
     }
 
-    public bool IsInitOver = false;
-
     public StrategyPlayer Player;
 
     public Camera MainCamera;
-    public Camera FixedCamera;
-    public Camera UiCamera;
-    public GameObject go;
+    public Camera BuildCamera;
 
-    public GameObject ArticleInfoPerfab;
+    public GameObject RunTimeUI;
+    public GameObject FixedUI;
+    public GameObject EditUI;
 
     public bool IsEdit = false;
-
-    public GameObject EditUi1;
-
-    public GameObject GameUi1;
-    public GameObject GameUi2;
-
-    //--------
 
     //---------Map
     public HexGrid hexGrid;
@@ -48,6 +39,10 @@ public class StrategyScene : MonoBehaviour
     //---------Message
     public Canvas messageCanvas;
     public LoadingView loadingViewCom;
+
+    //------------Window
+    public PlayerInfoWindow PlayerInfoView;
+
 
     void Awake()
     {
@@ -73,18 +68,17 @@ public class StrategyScene : MonoBehaviour
         InitModel();
 
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
-     //   UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
+        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
 
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-
-         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
         // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
 
-       // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";
-        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
-       // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
+        // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";s
+        // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
 
         loadingViewCom.Close();
 
@@ -101,17 +95,17 @@ public class StrategyScene : MonoBehaviour
 
         if (IsEdit)
         {
-            EditUi1.SetActive(true);
+            EditUI.SetActive(true);
 
-            GameUi1.SetActive(false);
-            GameUi2.SetActive(false);
+            RunTimeUI.SetActive(false);
+            FixedUI.SetActive(false);
         }
         else
         {
-            EditUi1.SetActive(false);
+            EditUI.SetActive(false);
 
-            GameUi1.SetActive(true);
-            GameUi2.SetActive(true);
+            RunTimeUI.SetActive(true);
+            FixedUI.SetActive(true);
         }
 
     }
@@ -335,6 +329,46 @@ public class StrategyScene : MonoBehaviour
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MapWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
 
+    }
+
+
+
+    /// <summary>
+    /// 退出地图模式
+    /// </summary>
+    public void ExitMapModel()
+    {
+        UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
+        Instance.MainCamera.enabled = false;
+
+        PlayerInfoView.Isflag = false;
+
+    }
+
+
+    /// <summary>
+    /// 进入地图模式
+    /// </summary>
+    public void EnterMapModel()
+    {
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+
+        Instance.MainCamera.enabled = true;
+
+        PlayerInfoView.Isflag = true;
+    }
+
+    public void EnterBuildModel()
+    {
+
+        BuildCamera.enabled = true;
+
+    }
+
+    public void ExitBuildModel()
+    {
+        BuildCamera.enabled = false;
     }
 
 }

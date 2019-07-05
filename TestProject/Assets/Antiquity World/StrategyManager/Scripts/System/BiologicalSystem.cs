@@ -268,6 +268,13 @@ namespace GameSystem
         }
 
 
+
+        /// <summary>
+        /// 获取指定平面坐标上的所有单位
+        /// </summary>
+        /// <param name="units"></param>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
         public void GetPoint(ref List<HexUnit> units, int x, int z)
         {
 
@@ -275,10 +282,7 @@ namespace GameSystem
             {
                 HexCoordinates coordinates = _data.HexUnit[i].Location.coordinates;
                 if (coordinates.X == x && coordinates.Z == z)
-                {
                     units.Add(_data.HexUnit[i]);
-                    Debug.Log("+1");
-                }
             }
         }
 

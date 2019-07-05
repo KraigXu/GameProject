@@ -60,8 +60,6 @@ namespace GameSystem
         public static Dictionary<int,Sprite> CellTypeSprite=new Dictionary<int, Sprite>();
         public static Dictionary<int,string> CellTypeName=new Dictionary<int, string>();
 
-
-
     }
 }
 
