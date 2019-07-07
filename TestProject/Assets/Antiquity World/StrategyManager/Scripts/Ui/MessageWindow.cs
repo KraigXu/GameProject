@@ -142,6 +142,8 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < _personUnits.Count; i++)
                 {
+                    if(_personUnits[i]==StrategyScene.Instance.Player.Unit)
+                        continue;
 
                     GameObjectEntity personEntity = _personUnits[i].gameObject.GetComponent<GameObjectEntity>();
 
@@ -152,7 +154,7 @@ namespace GameSystem.Ui
                     BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
                     bui.Avatar = GameStaticData.BiologicalAvatar[biological.AvatarId];
                     bui.PersonName = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
-
+                    bui.Entity = personEntity.Entity;
                 }
 
             }

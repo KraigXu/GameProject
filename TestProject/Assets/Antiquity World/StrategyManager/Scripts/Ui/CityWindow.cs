@@ -139,7 +139,7 @@ namespace GameSystem.Ui
             {
                 BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
                 UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
-                uiBuildingItem.Value = "TTT";
+                uiBuildingItem.Value = "铁匠铺";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBlacksmithWindow;
                 _buildingItems.Add(uiBuildingItem);
