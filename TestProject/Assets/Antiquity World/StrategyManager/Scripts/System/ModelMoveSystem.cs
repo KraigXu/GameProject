@@ -114,7 +114,6 @@ namespace GameSystem
             }
 
             return Vector3.zero;
-
         }
 
         public Vector3 ModelPosition(int id)

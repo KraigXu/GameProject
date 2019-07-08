@@ -54,62 +54,6 @@ public class StrategyScene : MonoBehaviour
         StartCoroutine(StrategySceneInit());
     }
 
-    IEnumerator StrategySceneInit()
-    {
-
-#if UNITY_EDITOR
-        Debuger.EnableLog = true;
-        GameSceneInit.CurOpeningInfo.TestValue();
-#endif
-        GameSceneInit.InitializeWithScene();
-
-        InitMapInfo();
-        InitGameData();
-        InitModel();
-
-        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
-        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
-
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-
-        // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";s
-        // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
-
-        loadingViewCom.Close();
-
-        yield return null;
-    }
-
-    void Update()
-    {
-
-        if (Input.GetKey(KeyCode.BackQuote))
-        {
-            IsEdit = !IsEdit;
-        }
-
-        if (IsEdit)
-        {
-            EditUI.SetActive(true);
-
-            RunTimeUI.SetActive(false);
-            FixedUI.SetActive(false);
-        }
-        else
-        {
-            EditUI.SetActive(false);
-
-            RunTimeUI.SetActive(true);
-            FixedUI.SetActive(true);
-        }
-
-    }
-
     void InitMapInfo()
     {
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
@@ -163,6 +107,7 @@ public class StrategyScene : MonoBehaviour
 
     }
 
+
     /// <summary>
     /// 初始化数据
     /// </summary>
@@ -180,7 +125,7 @@ public class StrategyScene : MonoBehaviour
         List<CellTypeData> cellTypeDatas = SQLService.Instance.QueryAll<CellTypeData>();
         for (int i = 0; i < cellTypeDatas.Count; i++)
         {
-            GameStaticData.CellTypeName.Add(cellTypeDatas[i].Id,cellTypeDatas[i].Name);
+            GameStaticData.CellTypeName.Add(cellTypeDatas[i].Id, cellTypeDatas[i].Name);
             GameStaticData.CellTypeSprite.Add(cellTypeDatas[i].Id, Resources.Load<Sprite>(cellTypeDatas[i].Sprite));
         }
 
@@ -198,7 +143,7 @@ public class StrategyScene : MonoBehaviour
 
             switch (data.SpecialIndex)
             {
-                case 1:  
+                case 1:
                     SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
                     break;
                 case 2:
@@ -242,6 +187,10 @@ public class StrategyScene : MonoBehaviour
             {
                 case 1:
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
+
+
+
+                    //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
                     break;
                 default:
                     Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
@@ -270,7 +219,7 @@ public class StrategyScene : MonoBehaviour
         {
             SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
             SystemManager.Get<EquipmentSystem>().AddEquipment(pentity, player.EquipmentJson);
-            SystemManager.Get<ArticleSystem>().AddArticles(pentity, player.ArticleJson);
+            SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
         }
 
         if (GameStaticData.BiologicalNameDic.ContainsKey(player.Id) == false)
@@ -289,12 +238,11 @@ public class StrategyScene : MonoBehaviour
             Name = GameStaticData.BiologicalNameDic[1],
             SurName = GameStaticData.BiologicalSurnameDic[1],
             Unit = playerUnit
-
         };
 
         //---------------------------ArticleSystem
 
-         //SystemManager.Get<ArticleSystem>().SetupComponentData(entityManager);
+        //
 
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
 
@@ -306,7 +254,7 @@ public class StrategyScene : MonoBehaviour
 
         //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
 
-        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        //
 
         //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
 
@@ -316,6 +264,68 @@ public class StrategyScene : MonoBehaviour
 
     }
 
+
+
+
+
+    IEnumerator StrategySceneInit()
+    {
+
+#if UNITY_EDITOR
+        Debuger.EnableLog = true;
+        GameSceneInit.CurOpeningInfo.TestValue();
+#endif
+        GameSceneInit.InitializeWithScene();
+
+        InitMapInfo();
+        InitGameData();
+        InitModel();
+
+        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+
+
+        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
+
+        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+
+        // 
+        // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
+
+        // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";
+        // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
+
+        loadingViewCom.Close();
+
+        yield return null;
+    }
+
+    void Update()
+    {
+
+        if (Input.GetKey(KeyCode.BackQuote))
+        {
+            IsEdit = !IsEdit;
+        }
+
+        if (IsEdit)
+        {
+            EditUI.SetActive(true);
+
+            RunTimeUI.SetActive(false);
+            FixedUI.SetActive(false);
+        }
+        else
+        {
+            EditUI.SetActive(false);
+
+            RunTimeUI.SetActive(true);
+            FixedUI.SetActive(true);
+        }
+
+    }
 
     /// <summary>
     /// 删除开局UI

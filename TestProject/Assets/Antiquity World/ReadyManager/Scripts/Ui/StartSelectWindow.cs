@@ -8,10 +8,8 @@ namespace AntiquityWorld.ReadyManager
 {
     public class StartSelectWindow : MonoBehaviour
     {
-
         public Button StartBtn;
         public Button ExitBtn;
-
         void Start()
         {
             StartBtn.onClick.AddListener(StartBtnEvent);
@@ -20,7 +18,6 @@ namespace AntiquityWorld.ReadyManager
         {
 
         }
-
         private void StartBtnEvent()
         {
 

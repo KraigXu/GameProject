@@ -81,7 +81,7 @@ namespace GameSystem.Ui
 
         protected override void InitWindowData()
         {
-            this.ID = WindowID.WxCharacterPanelWindow;
+            this.ID = WindowID.WXCharacterPanelWindow;
 
             windowData.windowType = UIWindowType.ForegroundLayer;
             windowData.showMode = UIWindowShowMode.DoNothing;
@@ -100,21 +100,27 @@ namespace GameSystem.Ui
             });
         }
 
+
+
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
+            
 
 
-            if (_entities.Length >= 1)
+
+            if (contextData!=null)
             {
-                _curEntity = _entities[1];
+                BiologicalUiInData uidata = (BiologicalUiInData)contextData;
+
+
+                _curEntity = uidata.Entities[0];
 
                 Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
                 NameTxt.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
                 SurnameTxt.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
                 AgeTxt.text = GameStaticData.BiologicalSex[biological.Sex];
                 SexTxt.text = biological.Age.ToString();
-              //  PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
+                //  PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
                 FamilyTxt.text = GameStaticData.FamilyName[biological.FamilyId];
                 FactionTxt.text = GameStaticData.FactionName[biological.FactionId];
 
@@ -212,6 +218,16 @@ namespace GameSystem.Ui
 
 
                 }
+
+            }
+           
+
+            _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
+
+
+            if (_entities.Length >= 1)
+            {
+                
 
 
             }

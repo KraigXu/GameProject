@@ -4,6 +4,9 @@ using System.Linq.Expressions;
 using Unity.Entities;
 using UnityEngine;
 
+public delegate void ActionDefault();
+
+
 public delegate void GameObjectCollider(GameObject go, Collider other);
 public delegate void EntityCallBack(Entity entity, int id);
 public delegate void EntityGameObjectCallBack(Entity entity,GameObject go, Collision collision);

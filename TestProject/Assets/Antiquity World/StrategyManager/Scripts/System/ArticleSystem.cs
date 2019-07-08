@@ -257,6 +257,61 @@ namespace GameSystem
 
         }
 
+
+        public void SettingArticleFeature(Entity targetEntity, int dataid)
+        {
+
+            //_entityManager.AddComponentData(targetEntity, new Knapsack
+            //{
+            //    UpperLimit = 1000000,
+            //    KnapscakCode = 111,
+            //    CurUpper = 10,
+            //});
+           
+            List<ArticleData> articleDatas = SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", dataid);
+
+            for (int i = 0; i < articleDatas.Count; i++)
+            {
+                var articleData = articleDatas[i];
+                Entity entity = _entityManager.CreateEntity(_articleArchetype);
+                List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(articleData.Value);
+
+                _entityManager.SetComponentData(entity, new ArticleItem
+                {
+                    BiologicalEntity = targetEntity,
+                    GuiId = articleData.Id,
+                    Count = articleData.Count,
+                    MaxCount = articleData.MaxCount,
+                    Weight = articleData.Weight,
+                    SpriteId = articleData.AvatarId,
+                    ObjectType = ENUM_OBJECT_TYPE.OBJECT_ITEM,
+                    ObjectState = ENUM_OBJECT_STATE.OBJECT_INVALID_STATE,
+
+                    Type = (ENUM_ITEM_CLASS)articleData.Type1,
+                    Attribute1 = valuePairs.Count >= 1 ? valuePairs[0].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue1 = valuePairs.Count >= 1 ? Int32.Parse(valuePairs[0].Value) : 0,
+                    Attribute2 = valuePairs.Count >= 2 ? valuePairs[1].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue2 = valuePairs.Count >= 2 ? Int32.Parse(valuePairs[1].Value) : 0,
+                    Attribute3 = valuePairs.Count >= 3 ? valuePairs[2].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue3 = valuePairs.Count >= 3 ? Int32.Parse(valuePairs[2].Value) : 0,
+                    Attribute4 = valuePairs.Count >= 4 ? valuePairs[3].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue4 = valuePairs.Count >= 4 ? Int32.Parse(valuePairs[3].Value) : 0,
+                    Attribute5 = valuePairs.Count >= 5 ? valuePairs[4].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue5 = valuePairs.Count >= 5 ? Int32.Parse(valuePairs[4].Value) : 0,
+                    Attribute6 = valuePairs.Count >= 6 ? valuePairs[5].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue6 = valuePairs.Count >= 6 ? Int32.Parse(valuePairs[5].Value) : 0,
+                    Attribute7 = valuePairs.Count >= 7 ? valuePairs[6].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue7 = valuePairs.Count >= 7 ? Int32.Parse(valuePairs[6].Value) : 0,
+                    Attribute8 = valuePairs.Count >= 8 ? valuePairs[7].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
+                    AttributeValue8 = valuePairs.Count >= 8 ? Int32.Parse(valuePairs[7].Value) : 0,
+                });
+            }
+
+
+        }
+
+
+
         public void SetupComponentData(EntityManager entityManager)
         {
 
@@ -362,10 +417,7 @@ namespace GameSystem
         }
 
 
-        public void AddArticles(Entity entity, string json)
-        {
 
-        }
 
     }
 

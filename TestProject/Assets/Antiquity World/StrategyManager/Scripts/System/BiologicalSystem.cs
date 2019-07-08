@@ -424,11 +424,7 @@ namespace GameSystem
 
               
 
-                //entityManager.AddComponentData(entity, new Knapsack
-                //{
-                //    UpperLimit = 1000000,
-                //    KnapscakCode = datas[i].Id
-                //});
+
 
                 //entityManager.AddComponentData(entity, new Team
                 //{

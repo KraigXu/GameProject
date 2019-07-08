@@ -16,6 +16,12 @@ public class StrategyStyle : MonoBehaviour
     public List<HexUnit> HexUnitPrefabs;
     public RectTransform UiLivingAreaTitle;
 
+
+    [SerializeField]
+    private RectTransform _uiMenuFeatureButton;
+    public static RectTransform UiMenuFeatureButton { get { return  _instance._uiMenuFeatureButton;} }
+
+
     [SerializeField]
     private RectTransform _uiFunctionButton;
     [SerializeField]

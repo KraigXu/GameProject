@@ -371,10 +371,6 @@ namespace GameSystem
     {
         public Entity Entity;
     }
-    public struct Output : IComponentData
-    {
-
-    }
     public struct EquipmentCoat : IComponentData
     {
         public int SpriteId;
@@ -410,8 +406,6 @@ namespace GameSystem
     {
 
     }
-
-
     public struct Techniques : IComponentData
     {
         public int BiologicalId;
@@ -474,6 +468,7 @@ namespace GameSystem
             this.DurableValue = durableValue;
         }
     }
+
 
     public class BuildingJsonData
     {
@@ -649,13 +644,14 @@ namespace GameSystem
  
     }
 
-
     public struct LivingAreaEnterInfo : IComponentData
     {
         public int UiType;
         public Entity LivingAreaEntity;
         public Entity TargetEntity;
     }
+
+    
 
     public struct Building : IComponentData
     {
@@ -673,6 +669,8 @@ namespace GameSystem
 
         public int LoactionId;
         public int LoactionType;
+
+//        public int LoactionUnity;
     }
 
     public struct PrestigeValue : IComponentData

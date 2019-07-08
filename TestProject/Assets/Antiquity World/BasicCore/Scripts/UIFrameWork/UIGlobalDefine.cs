@@ -7,6 +7,11 @@ namespace GameSystem.Ui
     public enum WindowID
     {
         Invaild = 0,
+
+        //Main Scene
+        
+
+
         //Start////
         ProjectSelectWindow,     //项目选择
         LoadingWindow,           //加载
@@ -41,7 +46,7 @@ namespace GameSystem.Ui
         BuildingTavernWindow,
 
         ExtendedMenuWindow,
-        WxCharacterPanelWindow,
+        WXCharacterPanelWindow,
     }
 
     public enum UIWindowType
@@ -147,7 +152,10 @@ namespace GameSystem.Ui
         // maybe your window assetbundle path
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
+
+
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
+            
             {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
@@ -168,7 +176,7 @@ namespace GameSystem.Ui
 
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
-            {WindowID.WxCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
+            {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
             {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
             {WindowID.MessageBoxWindow,"UiPrefab/MessageBoxWindow" },

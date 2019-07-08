@@ -13,20 +13,6 @@ namespace GameSystem.Ui
     /// </summary>
     public class MenuWindow : UIWindowBase
     {
-        [SerializeField]
-        private Button _rest;
-        [SerializeField]
-        private Button _team;
-        [SerializeField]
-        private Button _person;
-        [SerializeField]
-        private Button _log;
-        [SerializeField]
-        private Button _intelligence;
-        [SerializeField]
-        private Button _map;
-        [SerializeField]
-        private Button _option;
 
         protected override void InitWindowData()
         {
@@ -43,23 +29,18 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            this._rest.onClick.AddListener(ButtonRest);
-            this._team.onClick.AddListener(ButtonTeam);
-            this._person.onClick.AddListener(ButtonPerson);
-            this._log.onClick.AddListener(ButtonLog);
-            this._intelligence.onClick.AddListener(ButtonIntelligence);
-            this._map.onClick.AddListener(ButtonMap);
-            this._option.onClick.AddListener(ButtonOption);
+
         }
+
         /// <summary>
         /// 修整按钮
         /// </summary>
-        private void ButtonRest()
+        public void ButtonRest()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.RestWindow);
         }
 
-        private void ButtonTeam()
+        public void ButtonTeam()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.TeamWindow);
         }
@@ -67,20 +48,14 @@ namespace GameSystem.Ui
         /// <summary>
         /// 获取人物信息
         /// </summary>
-        private void ButtonPerson()
+        public void ButtonPerson()
         {
-            if (Define.PlayerBiologicalId != 0)
-            {
-                BiologicalUiInData uidata = new BiologicalUiInData();
-                uidata.CurPlayer=SystemManager.Get<BiologicalSystem>().GetBiologicalInfo(Define.PlayerBiologicalId);
-                uidata.Biologicals= SystemManager.Get<TeamSystem>().TeamIdRetrunBiological(uidata.CurPlayer.BiologicalId);
-                ShowWindowData showWindowData = new ShowWindowData();
-                showWindowData.contextData = uidata;
-                UICenterMasterManager.Instance.ShowWindow(WindowID.WxCharacterPanelWindow, showWindowData);
-            }
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
+
         }
 
-        private void ButtonLog()
+        public void ButtonLog()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.LogWindow);
         }
@@ -88,7 +63,7 @@ namespace GameSystem.Ui
         /// <summary>
         /// Intelligence
         /// </summary>
-        private void ButtonIntelligence()
+        public void ButtonIntelligence()
         {
             
             UICenterMasterManager.Instance.ShowWindow(WindowID.IntelligenceWindow);
@@ -98,14 +73,14 @@ namespace GameSystem.Ui
         /// <summary>
         /// Map
         /// </summary>
-        private void ButtonMap()
+        public void ButtonMap()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
         }
         /// <summary>
         /// Option按钮
         /// </summary>
-        private void ButtonOption()
+        public void ButtonOption()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.SettingMenuWindow);
         }
