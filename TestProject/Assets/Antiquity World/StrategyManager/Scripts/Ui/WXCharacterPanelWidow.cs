@@ -96,17 +96,12 @@ namespace GameSystem.Ui
 
             _exitBtn.onClick.AddListener(delegate
             {
-                UICenterMasterManager.Instance.CloseWindow(this.ID);
+                
             });
         }
 
-
-
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-            
-
-
 
             if (contextData!=null)
             {
@@ -203,9 +198,9 @@ namespace GameSystem.Ui
 
                     RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
                     UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
-                    aiArticleBox.NumberText.text = articleItem.Count.ToString();
+                    aiArticleBox.NumberText.text = GameStaticData.ArticleDictionary[entities[j]].Name;
                     aiArticleBox.Entity = entities[j];
-
+                    aiArticleBox.image.sprite = GameStaticData.ArticleDictionary[entities[j]].Sprite;
                 }
 
                 //Show
@@ -214,9 +209,6 @@ namespace GameSystem.Ui
                 for (int i = 0; i < specialityEntitys.Count; i++)
                 {
                     RectTransform specialityRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiSpeciality, SpecialityContentParent);
-
-
-
                 }
 
             }
@@ -235,6 +227,17 @@ namespace GameSystem.Ui
             {
                 Debug.Log("用户信息缺失");
             }
+
+        }
+
+
+
+        public void ExitButtonClick()
+        {
+
+            UICenterMasterManager.Instance.CloseWindow(this.ID);
+           // UICenterMasterManager.Instance.ShowWindow(WindowID)
+
 
         }
 

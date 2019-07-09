@@ -406,14 +406,28 @@ namespace GameSystem
     {
 
     }
+
+    /// <summary>
+    /// Techniques属性 ，标识这个实体具有Techniques特性
+    /// </summary>
+    public struct TechniquesProperty : IComponentData
+    {
+        /// <summary>
+        /// 增加速率
+        /// </summary>
+        public float IncreaseRate;
+
+        /// <summary>
+        /// 降低速率
+        /// </summary>
+        public float LowerRate;
+
+
+    }
+
     public struct Techniques : IComponentData
     {
-        public int BiologicalId;
         public Entity BiologicalTarget;
-
-        
-        public int Id;
-        public int ParentId;
 
         public int Level;
         
@@ -776,6 +790,19 @@ namespace GameSystem
         public int AttributeValue7;
         public ENUM_ITEM_ATTRIBUTE Attribute8;
         public int AttributeValue8;
+    }
+
+
+    /// <summary>
+    /// ArticleItem的固有属性 
+    /// </summary>
+    public class ArticleItemFixed
+    {
+
+        public string Name;
+        public string Desc;
+        public Sprite Sprite;
+
     }
 
     public struct Speciality : IComponentData

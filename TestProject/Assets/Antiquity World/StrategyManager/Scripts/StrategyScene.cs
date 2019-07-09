@@ -220,6 +220,8 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
             SystemManager.Get<EquipmentSystem>().AddEquipment(pentity, player.EquipmentJson);
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
+            SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
+
         }
 
         if (GameStaticData.BiologicalNameDic.ContainsKey(player.Id) == false)
@@ -240,24 +242,17 @@ public class StrategyScene : MonoBehaviour
             Unit = playerUnit
         };
 
+
+
+
+        
+
         //---------------------------ArticleSystem
-
-        //
-
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-
-        //SystemManager.Get<TechniquesSystem>().SetupComponentData(entityManager);
-
         //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-
         //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-
         //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-
-        //
-
         //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
-
         //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
         Debug.Log(">>System Over");
 

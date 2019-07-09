@@ -24,8 +24,6 @@ namespace GameSystem
         public string SurName;
         public Sprite Sprite;
         public string Desciption;
-
-
     }
 
 
@@ -245,10 +243,10 @@ namespace GameSystem
 
             if (string.IsNullOrEmpty(data.JifaJson) == false)
             {
-                TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
+               // TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
             }
 
-            ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
+           // ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
 
             //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
 

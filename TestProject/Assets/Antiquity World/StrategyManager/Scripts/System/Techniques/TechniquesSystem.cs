@@ -17,16 +17,15 @@ namespace GameSystem
 
     public class TechniquesSystem : ComponentSystem
     {
-
-
         struct TechniquesGroup
         {
             public readonly int Length;
             public ComponentDataArray<Techniques> Techniues;
         }
 
-        [Inject]
-        private TechniquesGroup _techniques;
+        [Inject] private TechniquesGroup _techniques;
+
+        private EntityManager _entityManager;
 
         private static Dictionary<int, TechniqueJsonData> _techniqueDic = new Dictionary<int, TechniqueJsonData>();
 
@@ -46,82 +45,68 @@ namespace GameSystem
         }
 
 
+        protected override void OnCreateManager()
+        {
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        }
+
 
         protected override void OnUpdate()
         {
-
-
         }
 
         public void SetupComponentData(EntityManager entityManager)
         {
-            List<TechniquesData> techniquesDatas = SQLService.Instance.QueryAll<TechniquesData>();
-            for (int i = 0; i < techniquesDatas.Count; i++)
-            {
-                Entity techniques = entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
-                entityManager.SetComponentData(techniques, new Techniques
-                {
-                    Id = techniquesDatas[i].Id,
-                    ParentId = techniquesDatas[i].ParentId,
-                });
+            //List<TechniquesData> techniquesDatas = SQLService.Instance.QueryAll<TechniquesData>();
+            //for (int i = 0; i < techniquesDatas.Count; i++)
+            //{
+            //    Entity techniques = entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
+            //    entityManager.SetComponentData(techniques, new Techniques
+            //    {
+            //        Id = techniquesDatas[i].Id,
+            //        ParentId = techniquesDatas[i].ParentId,
+            //    });
 
-                GameStaticData.TechniquesName.Add(techniquesDatas[i].Id, techniquesDatas[i].Name);
-                GameStaticData.TechniquesDescription.Add(techniquesDatas[i].Id, techniquesDatas[i].Description);
-                GameStaticData.TechniqueSprites.Add(techniquesDatas[i].Id, Resources.Load<Sprite>(techniquesDatas[i].AvatarPath));
-            }
+            //    GameStaticData.TechniquesName.Add(techniquesDatas[i].Id, techniquesDatas[i].Name);
+            //    GameStaticData.TechniquesDescription.Add(techniquesDatas[i].Id, techniquesDatas[i].Description);
+            //    GameStaticData.TechniqueSprites.Add(techniquesDatas[i].Id, Resources.Load<Sprite>(techniquesDatas[i].AvatarPath));
+            //}
         }
-
 
         /// <summary>
-        /// 获取符合BiologicalId 的数据 ，如果没有则是一个长度为0的集合
+        /// 为一个实体增加技术属性
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
-        public List<Techniques> GetIdTechniques(int id)
+        public void SpawnTechnique(Entity target, int id)
         {
-            List<Techniques> techniqueses = new List<Techniques>();
 
-            for (int i = 0; i < _techniques.Length; i++)
+            _entityManager.AddComponent(target, typeof(TechniquesProperty));
+            _entityManager.SetComponentData(target, new TechniquesProperty
             {
-                if (_techniques.Techniues[i].BiologicalId == id)
-                {
-                    techniqueses.Add(_techniques.Techniues[i]);
-                }
-            }
-            return techniqueses;
-        }
+                IncreaseRate = 3,
+                LowerRate = 1
+            });
 
-        public static TechniqueJsonData GetTechnique(int id)
-        {
-            return _techniqueDic[id];
-        }
+            List<TechniquesData> articleDatas = SQLService.Instance.SimpleQuery<TechniquesData>(" Bid=?", id);
 
-        public static void SpawnTechnique(Entity target, string json)
-        {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-            Biological biological = entityManager.GetComponentData<Biological>(target);
-
-            Dictionary<int, string> jsonDic = JsonConvert.DeserializeObject<Dictionary<int, string>>(json);
-
-            foreach (var map in jsonDic)
+            for (int i = 0; i < articleDatas.Count; i++)
             {
 
-                TechniquesData techniques = SQLService.Instance.QueryUnique<TechniquesData>(" Id=? ", map.Key);
+                Entity entity = _entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
 
-                Entity entity = entityManager.CreateEntity(GameSceneInit.TechniquesArchetype);
-
-                entityManager.SetComponentData(entity, new Techniques
+                _entityManager.SetComponentData(entity, new Techniques
                 {
-                    BiologicalId = biological.BiologicalId,
                     BiologicalTarget = target,
-                    Level = Int32.Parse(map.Value),
+                    Level = 3,
 
-                    Id = techniques.Id,
-                    ParentId = techniques.ParentId
+                    TechniquesValue = 300,
+                    Effect = 1,
+                    Value = 1
                 });
 
             }
         }
     }
+
 }
