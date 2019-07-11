@@ -49,7 +49,7 @@ namespace GameSystem
             if (SystemManager.Contains<BuildingBlacksmith>(entity) == true)
             {
                 BuildingBlacksmith buildingBlacksmith = SystemManager.GetProperty<BuildingBlacksmith>(entity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value= "市集";
                 uiBuildingItem.OnBuildingEnter = OpenUi;
                 return uiBuildingItem;

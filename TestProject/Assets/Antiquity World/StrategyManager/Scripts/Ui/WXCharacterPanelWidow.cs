@@ -79,6 +79,9 @@ namespace GameSystem.Ui
         private EntityManager _entityManager;
 
 
+        private Dictionary<GameObject,Entity> _spawnArticleDic=new Dictionary<GameObject, Entity>();
+
+
         protected override void InitWindowData()
         {
             this.ID = WindowID.WXCharacterPanelWindow;
@@ -94,138 +97,132 @@ namespace GameSystem.Ui
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-            _exitBtn.onClick.AddListener(delegate
-            {
-                
-            });
+            _exitBtn.onClick.AddListener(ExitButtonClick);
         }
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
 
-            if (contextData!=null)
+            if (contextData == null)
             {
-                BiologicalUiInData uidata = (BiologicalUiInData)contextData;
-
-
-                _curEntity = uidata.Entities[0];
-
-                Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
-                NameTxt.text = GameStaticData.BiologicalNameDic[biological.BiologicalId];
-                SurnameTxt.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId];
-                AgeTxt.text = GameStaticData.BiologicalSex[biological.Sex];
-                SexTxt.text = biological.Age.ToString();
-                //  PrestigeTxt.text = PrestigeSystem.ValueConvertString(biological.PrestigeValue);
-                FamilyTxt.text = GameStaticData.FamilyName[biological.FamilyId];
-                FactionTxt.text = GameStaticData.FactionName[biological.FactionId];
-
-                //Show body Info
-                BodyProperty bodyPropert = _entityManager.GetComponentData<BodyProperty>(_curEntity);
-
-                Tizhitxt.text = biological.Tizhi.ToString();
-                Lidaotxt.text = biological.Lidao.ToString();
-                Jingshentxt.text = biological.Jingshen.ToString();
-                Lingdongtxt.text = biological.Lingdong.ToString();
-                Wuxingtxt.text = biological.Wuxing.ToString();
-                Jingtxt.text = biological.Jing.ToString();
-                Qitxt.text = biological.Qi.ToString();
-                Shentxt.text = biological.Shen.ToString();
-                Neigongtxt.text = (biological.Lidao * 0.5f + 1).ToString();
-                Waigongtxt.text = (biological.Lidao * 0.3f + 1).ToString();
-
-                ThoughTxt.text = bodyPropert.Thought.ToString();
-                NeckTxt.text = bodyPropert.Neck.ToString();
-                HeartTxt.text = bodyPropert.Heart.ToString();
-                EyeTxt.text = bodyPropert.Eye.ToString();
-                EarTxt.text = bodyPropert.Ear.ToString();
-                LegLeftTxt.text = bodyPropert.LeftLeg.ToString();
-                LegRightTxt.text = bodyPropert.LeftLeg.ToString();
-                HandRightTxt.text = bodyPropert.RightHand.ToString();
-                HandLeftTxt.text = bodyPropert.LeftHand.ToString();
-                FertilityTxt.text = bodyPropert.Fertility.ToString();
-                AppearanceTxt.text = bodyPropert.Appearance.ToString();
-                DressTxt.text = bodyPropert.Dress.ToString();
-                SkinTxt.text = bodyPropert.Skin.ToString();
-                BlodTxt.text = bodyPropert.Blod.ToString();
-                JingLuoTxt.text = bodyPropert.JingLuo.ToString();
-
-                Equipment equipment = _entityManager.GetComponentData<Equipment>(_curEntity);
-
-                if (equipment.HelmetE != Entity.Null)
-                {
-                    HelmetBox.Entity = equipment.HelmetE;
-                    //ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(_curEntity);
-                }
-                if (equipment.ClothesE != Entity.Null)
-                {
-                    ClothesBox.Entity = equipment.ClothesE;
-                }
-                if (equipment.BeltE != Entity.Null)
-                {
-                    BeltBox.Entity = equipment.BeltE;
-                }
-                if (equipment.HandGuardE != Entity.Null)
-                {
-                    HandGuradBox.Entity = equipment.HandGuardE;
-                }
-                if (equipment.PantsE != Entity.Null)
-                {
-                    PantsBox.Entity = equipment.PantsE;
-                }
-                if (equipment.ShoesE != Entity.Null)
-                {
-                    ShoeaBox.Entity = equipment.ShoesE;
-                }
-                if (equipment.WeaponFirstE != Entity.Null)
-                {
-                    WeaponFirstBox.Entity = equipment.WeaponFirstE;
-                }
-                if (equipment.WeaponSecondaryE != Entity.Null)
-                {
-                    WeaponSecondaryBox.Entity = equipment.WeaponSecondaryE;
-                }
-
-                //Show knpasck Info
-                Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_curEntity);
-
-                RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleView, _articleParent);
-                UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
-                articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
-                List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_curEntity);
-                for (int j = 0; j < entities.Count; j++)
-                {
-                    ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
-
-                    RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiArticleBox, articleView.ContentRect);
-                    UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
-                    aiArticleBox.NumberText.text = GameStaticData.ArticleDictionary[entities[j]].Name;
-                    aiArticleBox.Entity = entities[j];
-                    aiArticleBox.image.sprite = GameStaticData.ArticleDictionary[entities[j]].Sprite;
-                }
-
-                //Show
-                List<Entity> specialityEntitys = new List<Entity>();
-
-                for (int i = 0; i < specialityEntitys.Count; i++)
-                {
-                    RectTransform specialityRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiSpeciality, SpecialityContentParent);
-                }
-
-            }
-           
-
-            _entities = SystemManager.Get<PlayerControlSystem>().Entitys;
-
-
-            if (_entities.Length >= 1)
-            {
-                
-
-
+                _curEntity = StrategyScene.Instance.Player.Entity;
             }
             else
             {
-                Debug.Log("用户信息缺失");
+                BiologicalUiInData uidata = (BiologicalUiInData)contextData;
+                _curEntity = uidata.Entities[0];
+            }
+
+            Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
+
+            BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[_curEntity];
+
+
+            NameTxt.text = biologicalFixed.Name;
+            SurnameTxt.text = biologicalFixed.Surname;
+            AgeTxt.text = biological.Age.ToString();
+            SexTxt.text = biologicalFixed.Sex;
+            PrestigeTxt.text = "10000";
+
+            //FamilyTxt.text = GameStaticData.FamilyName[biological.FamilyId];
+            //FactionTxt.text = GameStaticData.FactionName[biological.FactionId];
+
+            //Show body Info
+            BodyProperty bodyPropert = _entityManager.GetComponentData<BodyProperty>(_curEntity);
+
+            Tizhitxt.text = biological.Tizhi.ToString();
+            Lidaotxt.text = biological.Lidao.ToString();
+            Jingshentxt.text = biological.Jingshen.ToString();
+            Lingdongtxt.text = biological.Lingdong.ToString();
+            Wuxingtxt.text = biological.Wuxing.ToString();
+            Jingtxt.text = biological.Jing.ToString();
+            Qitxt.text = biological.Qi.ToString();
+            Shentxt.text = biological.Shen.ToString();
+            Neigongtxt.text = (biological.Lidao * 0.5f + 1).ToString();
+            Waigongtxt.text = (biological.Lidao * 0.3f + 1).ToString();
+
+            ThoughTxt.text = bodyPropert.Thought.ToString();
+            NeckTxt.text = bodyPropert.Neck.ToString();
+            HeartTxt.text = bodyPropert.Heart.ToString();
+            EyeTxt.text = bodyPropert.Eye.ToString();
+            EarTxt.text = bodyPropert.Ear.ToString();
+            LegLeftTxt.text = bodyPropert.LeftLeg.ToString();
+            LegRightTxt.text = bodyPropert.LeftLeg.ToString();
+            HandRightTxt.text = bodyPropert.RightHand.ToString();
+            HandLeftTxt.text = bodyPropert.LeftHand.ToString();
+            FertilityTxt.text = bodyPropert.Fertility.ToString();
+            AppearanceTxt.text = bodyPropert.Appearance.ToString();
+            DressTxt.text = bodyPropert.Dress.ToString();
+            SkinTxt.text = bodyPropert.Skin.ToString();
+            BlodTxt.text = bodyPropert.Blod.ToString();
+            JingLuoTxt.text = bodyPropert.JingLuo.ToString();
+
+
+            //解析 PS暂留 
+
+            Equipment equipment = _entityManager.GetComponentData<Equipment>(_curEntity);
+
+            if (equipment.HelmetE != Entity.Null)
+            {
+                HelmetBox.Entity = equipment.HelmetE;
+                //ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(_curEntity);
+            }
+            if (equipment.ClothesE != Entity.Null)
+            {
+                ClothesBox.Entity = equipment.ClothesE;
+            }
+            if (equipment.BeltE != Entity.Null)
+            {
+                BeltBox.Entity = equipment.BeltE;
+            }
+            if (equipment.HandGuardE != Entity.Null)
+            {
+                HandGuradBox.Entity = equipment.HandGuardE;
+            }
+            if (equipment.PantsE != Entity.Null)
+            {
+                PantsBox.Entity = equipment.PantsE;
+            }
+            if (equipment.ShoesE != Entity.Null)
+            {
+                ShoeaBox.Entity = equipment.ShoesE;
+            }
+            if (equipment.WeaponFirstE != Entity.Null)
+            {
+                WeaponFirstBox.Entity = equipment.WeaponFirstE;
+            }
+            if (equipment.WeaponSecondaryE != Entity.Null)
+            {
+                WeaponSecondaryBox.Entity = equipment.WeaponSecondaryE;
+            }
+            
+            //TeamSystem
+
+            //Show knpasck Info  PS ？？
+            Knapsack knapsack = _entityManager.GetComponentData<Knapsack>(_curEntity);
+            RectTransform itemView = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiArticleView, _articleParent);
+            UiArticleView articleView = itemView.gameObject.GetComponent<UiArticleView>();
+            articleView.Text.text = knapsack.CurUpper + "/" + knapsack.UpperLimit;
+            List<Entity> entities = SystemManager.Get<ArticleSystem>().GetEntities(_curEntity);
+            for (int j = 0; j < entities.Count; j++)
+            {
+                ArticleItem articleItem = _entityManager.GetComponentData<ArticleItem>(entities[j]);
+
+                RectTransform box = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiArticleBox, articleView.ContentRect);
+                UiArticleBox aiArticleBox = box.gameObject.GetComponent<UiArticleBox>();
+                aiArticleBox.NumberText.text = GameStaticData.ArticleDictionary[entities[j]].Name;
+                aiArticleBox.Entity = entities[j];
+                aiArticleBox.image.sprite = StrategyAssetManager.GetArticleSprites(articleItem.SpriteId);
+
+                _spawnArticleDic.Add(box.gameObject,entities[j]);
+            }
+
+            //Show
+            List<Entity> specialityEntitys = new List<Entity>();
+
+            for (int i = 0; i < specialityEntitys.Count; i++)
+            {
+                RectTransform specialityRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiSpeciality, SpecialityContentParent);
             }
 
         }

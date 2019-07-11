@@ -140,7 +140,6 @@ namespace GameSystem
                     AttributeValue8 = valuePairs.Count >= 8 ? Int32.Parse(valuePairs[7].Value) : 0,
                 });
 
-
                 //赋值实时属性
                 GameStaticData.ArticleDictionary.Add(entity,new ArticleItemFixed
                 {

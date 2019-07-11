@@ -39,9 +39,7 @@ namespace GameSystem.Ui
             if (contextData == null) return;
 
             _info = (ExtendedMenuWindowInData)contextData;
-
           //  _contentUi.Init(Camera.main, UICenterMasterManager.Instance._Camera, _info.Point);
-
             if (_info.DistrictEvent != null)
             {
                 _contentMenus.transform.Find("CityIntelligence").GetComponent<Button>().onClick.AddListener(_info.DistrictEvent);

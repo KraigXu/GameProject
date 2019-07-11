@@ -371,7 +371,6 @@ namespace DataAccessObject
 
 
 
-
         /// <summary>
         /// 模型地图
         /// </summary>
@@ -796,6 +795,7 @@ namespace DataAccessObject
     public class TechniquesData : BaseData
     {
         public int Id { get; set; }
+        public int Bid { get; set; }
         public string AvatarPath { get; set; }
         public int ParentId { get; set; }
         public string Name { get; set; }
@@ -809,7 +809,7 @@ namespace DataAccessObject
         {
             object[] objects = new object[]
             {
-                Id,AvatarPath,ParentId,Name,MarkIds,Description,TechniquesValue,Effect
+                Id,Bid,AvatarPath,ParentId,Name,MarkIds,Description,TechniquesValue,Effect
             };
             return objects;
         }
@@ -1151,6 +1151,8 @@ namespace DataAccessObject
     }
 
 
+
+
     public class ArticleRecordData : BaseData
     {
         public int Bid { get; set; }
@@ -1162,18 +1164,6 @@ namespace DataAccessObject
         public override object[] GetValues()
         {
             object[] objects = { Bid, ArticleId, Count, MaxCount, Time };
-            return objects;
-        }
-    }
-
-    public class CellTypeData : BaseData
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Sprite { get; set; }
-        public override object[] GetValues()
-        {
-            object[] objects = { Id, Name, Sprite };
             return objects;
         }
     }

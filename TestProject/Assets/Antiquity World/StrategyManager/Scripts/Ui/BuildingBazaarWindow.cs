@@ -57,14 +57,14 @@ namespace GameSystem.Ui
             BuildingBazaar bazaar = SystemManager.GetProperty<BuildingBazaar>(EntityData.Entity);
 
             {
-                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton,_featureseParent);
+                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton,_featureseParent);
                 UiBuildingItem buildingItem= item.GetComponent<UiBuildingItem>();
                 buildingItem.Value = "XXXX";
                 buildingItem.OnBuildingEnter = Dealer;
             }
 
             {
-                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton,_featureseParent);
+                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton,_featureseParent);
                 UiBuildingItem buildingItem=item.GetComponent<UiBuildingItem>();
                 buildingItem.Value = "XXXX";
                 buildingItem.OnBuildingEnter = Dealer;
@@ -76,7 +76,7 @@ namespace GameSystem.Ui
                 List<Entity> entities = SystemManager.Get<BehaviorSystem>().GetPositionCode(bazaar.PositionCode);
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, _featureseParent);
+                    RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, _featureseParent);
                     BiologicalBaseUi biologicalUi = item.GetComponent<BiologicalBaseUi>();
                     biologicalUi.Entity = entities[i];
                 }
@@ -94,12 +94,6 @@ namespace GameSystem.Ui
             CurView = BuyingView;
 
         }
-
-
-
-
-        
-
 
 
         public override void DestroyWindow()

@@ -8,12 +8,6 @@ namespace GameSystem
     public sealed class GameStaticData
     {
 
-        //public static Dictionary<int, GameObject> ModelPrefab = new Dictionary<int, GameObject>();
-
-        public static Dictionary<int, string> DistrictName = new Dictionary<int, string>();
-        public static Dictionary<int, string> DistrictDescriptione = new Dictionary<int, string>();
-        public static Dictionary<int, string> DistrictTypeDsc = new Dictionary<int, string>();
-        public static Dictionary<int, string> DistrictStatusDsc = new Dictionary<int, string>();
 
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
@@ -21,8 +15,7 @@ namespace GameSystem
         public static Dictionary<int, string> LivingAreaDescription = new Dictionary<int, string>();
         public static Dictionary<int, GameObject> LivingAreaPrefabDic = new Dictionary<int, GameObject>();
 
-        public static Dictionary<int,CityRunData> CityRunDataDic=new Dictionary<int, CityRunData>(); 
-
+     
         public static Dictionary<int, string> OrganizationName = new Dictionary<int, string>();
         public static Dictionary<int, string> OrganizationDescription = new Dictionary<int, string>();
 
@@ -36,14 +29,8 @@ namespace GameSystem
 
         public static Dictionary<int, string> PrestigeTitle = new Dictionary<int, string>();
 
-        public static Dictionary<int, string> BiologicalSex = new Dictionary<int, string>();
-        public static Dictionary<int, Sprite> BiologicalAvatar = new Dictionary<int, Sprite>();
-        public static Dictionary<int, string> BiologicalSurnameDic = new Dictionary<int, string>();
-        public static Dictionary<int, string> BiologicalNameDic = new Dictionary<int, string>();
-        public static Dictionary<int, string> BiologicalDescription = new Dictionary<int, string>();
-        public static Dictionary<int,Transform> BiologicalNodes=new Dictionary<int, Transform>();
-
-        public static Dictionary<int, GameObject> BiologicalPrefab = new Dictionary<int, GameObject>();
+        public static Dictionary<int, CityRunData> CityRunDataDic = new Dictionary<int, CityRunData>();
+        public static Dictionary<Entity, BiologicalFixed> BiologicalDictionary=new Dictionary<Entity, BiologicalFixed>();
 
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
         public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();
@@ -56,9 +43,6 @@ namespace GameSystem
         public static Dictionary<int, string> TechniquesName = new Dictionary<int, string>();
         public static Dictionary<int, string> TechniquesDescription = new Dictionary<int, string>();
         public static Dictionary<int, Sprite> TechniqueSprites = new Dictionary<int, Sprite>();
-
-        public static Dictionary<int,Sprite> CellTypeSprite=new Dictionary<int, Sprite>();
-        public static Dictionary<int,string> CellTypeName=new Dictionary<int, string>();
 
         public static Dictionary<Entity, ArticleItemFixed> ArticleDictionary=new Dictionary<Entity, ArticleItemFixed>();
 

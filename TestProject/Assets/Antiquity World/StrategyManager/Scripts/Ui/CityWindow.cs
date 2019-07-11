@@ -126,7 +126,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
             {
                 BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "市集";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBazaarWindow;
@@ -138,7 +138,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
             {
                 BuildingBlacksmith buildingBlacksmith = entityManager.GetComponentData<BuildingBlacksmith>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "铁匠铺";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBlacksmithWindow;
@@ -148,7 +148,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuildingTailor>(_laEntity))
             {
                 BuildingTailor buildingTailor = entityManager.GetComponentData<BuildingTailor>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = null;  
@@ -159,7 +159,7 @@ namespace GameSystem.Ui
             if (entityManager.HasComponent<BuidingTavern>(_laEntity))
             {
                 BuidingTavern buidingTavern = entityManager.GetComponentData<BuidingTavern>(_laEntity);
-                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
+                UiBuildingItem uiBuildingItem = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _billingParent).GetComponent<UiBuildingItem>();
                 uiBuildingItem.Value = "JD";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = null;

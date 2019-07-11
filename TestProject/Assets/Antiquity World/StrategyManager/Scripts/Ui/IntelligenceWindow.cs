@@ -165,7 +165,7 @@ namespace GameSystem.Ui
                 RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(_listItemPrefab, _listItemParent);
 
                 UiListItem uiitem = item.GetComponent<UiListItem>();
-                uiitem.Text.text = GameStaticData.BiologicalSurnameDic[biologicalIds[i]] + GameStaticData.BiologicalNameDic[biologicalIds[i]];
+              //  uiitem.Text.text = GameStaticData.BiologicalDictionary[biologicalIds[i]] + GameStaticData.BiologicalDictionary[biologicalIds[i]];
                 uiitem.Id = biologicalIds[i];
                 uiitem.ClickCallback = ShowPersonDetailedInfo;
                 _listItems.Add(uiitem);
@@ -177,9 +177,9 @@ namespace GameSystem.Ui
             Entity entity= SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1);
 
             Biological biological = SystemManager.GetProperty<Biological>(entity);
-            PonAvatr.sprite = GameStaticData.BiologicalAvatar[biological.AvatarId];
-            PonName.text = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
-            PonSex.text = GameStaticData.BiologicalSex[biological.Sex];
+            PonAvatr.sprite = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
+         //   PonName.text = GameStaticData.BiologicalDictionary[biological.BiologicalId] + GameStaticData.BiologicalDictionary[biological.BiologicalId];
+         //  PonSex.text = GameStaticData.BiologicalDictionary[biological.Sex];
            // PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue, ElementType.Biological);
             PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
 

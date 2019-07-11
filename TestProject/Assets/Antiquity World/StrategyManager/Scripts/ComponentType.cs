@@ -194,6 +194,35 @@ namespace GameSystem
     }
 
 
+    public class BiologicalFixed
+    {
+        public string Sex;
+        public string Surname;
+        public string Name;
+        public string Description;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// 身体属性 ，参数大多是提升物品使用效率

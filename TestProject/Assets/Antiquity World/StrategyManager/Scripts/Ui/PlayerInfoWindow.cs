@@ -47,9 +47,8 @@ namespace GameSystem.Ui
         {
             AvateImage.overrideSprite = StrategyScene.Instance.Player.AvatarSprite;
             NameText.text = StrategyScene.Instance.Player.SurName + StrategyScene.Instance.Player.Name;
-            unit=GameStaticData.BiologicalNodes[1].gameObject.GetComponent<HexUnit>();
             grid = StrategyScene.Instance.hexGrid;
-
+            unit = StrategyScene.Instance.Player.Unit;
             StrategyScene.Instance.PlayerInfoView = this;
 
         }

@@ -66,7 +66,7 @@ namespace GameSystem.Ui
 
                 var data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", livingArea.Id);
 
-                RectTransform titleRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.Instance.UiLivingAreaTitle, transform);
+                RectTransform titleRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiLivingAreaTitle, transform);
                 titleRect.localScale = Vector3.zero;
 
                 UiLivingAreaTitleItem titleItem = titleRect.gameObject.GetComponent<UiLivingAreaTitleItem>();

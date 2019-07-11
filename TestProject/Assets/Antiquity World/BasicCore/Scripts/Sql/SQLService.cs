@@ -95,43 +95,50 @@ public class SQLService
 
     public void CreateDB()
     {
-        Tables.CreateTable_Tips(this);
-        Tables.CreateTable_NounsData(this);
 
-        Tables.CreateTable_ModelFileData(this);
-
-        Tables.CreateTable_ArticleTypeData(this);
-        Tables.CreateTable_ArticleData(this);
-        Tables.CreateTable_ArticleRecordData(this);
-
-        Tables.CreateTable_PlayProject(this);
-        Tables.CreateTable_District(this);
-
-        Tables.CreateTable_CellTypeData(this);
-
-        Tables.CreateTable_LivingAreaModelData(this);
         Tables.CreateTable_LivingArea(this);
-
-        Tables.CreateTable_BuildingData(this);
-
-
+        Tables.CreateTable_ArticleData(this);
         Tables.CreateTable_Biological(this);
-        Tables.CreateTable_FactionData(this);
-        Tables.CreateTable_FamilyData(this);
-        Tables.CreateTable_RelationData(this);
-        Tables.CreateTable_Prestige(this);
         Tables.CreateTable_Techniques(this);
-        Tables.CreateTable_Gongfa(this);
 
-        Tables.CreateTable_Skill(this);
+        //Tables.CreateTable_Tips(this);
+        //Tables.CreateTable_NounsData(this);
 
-        Tables.CreateTable_Avatar(this);
+        //Tables.CreateTable_ArticleTypeData(this);
+        //Tables.CreateTable_ArticleData(this);
+        //Tables.CreateTable_ArticleRecordData(this);
+        //Tables.CreateTable_PlayProject(this);
+        //Tables.CreateTable_District(this);
+        //// Tables.CreateTable_ModelFileData(this);
 
-        Tables.CreateTable_BiologicalAvatarData(this);
-        Tables.CreateTable_BiologicalModelData(this);
-        Tables.CreateTable_BiologicalAvatarData(this);
-        Tables.CreateTable_ModelMap(this);
-        Tables.CreateTable_SocialDialog(this);
+
+
+
+
+        //Tables.CreateTable_CellTypeData(this);
+
+        //Tables.CreateTable_LivingAreaModelData(this);
+        //Tables.CreateTable_LivingArea(this);
+
+        //Tables.CreateTable_BuildingData(this);
+
+
+        //Tables.CreateTable_Biological(this);
+        //Tables.CreateTable_FactionData(this);
+        //Tables.CreateTable_FamilyData(this);
+        //Tables.CreateTable_RelationData(this);
+        //Tables.CreateTable_Prestige(this);
+        //
+        //Tables.CreateTable_Gongfa(this);
+
+        //Tables.CreateTable_Skill(this);
+
+        //Tables.CreateTable_Avatar(this);
+
+        //Tables.CreateTable_BiologicalAvatarData(this);
+        //Tables.CreateTable_BiologicalModelData(this);
+        //Tables.CreateTable_ModelMap(this);
+        //Tables.CreateTable_SocialDialog(this);
     }
 
     public long InsertOrReplace(BaseData baseModel)

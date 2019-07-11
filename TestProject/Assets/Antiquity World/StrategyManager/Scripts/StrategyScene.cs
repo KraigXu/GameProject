@@ -114,20 +114,9 @@ public class StrategyScene : MonoBehaviour
     void InitGameData()
     {
 
-
-
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
         HexCoordinates hexCoordinates;
         HexCell hexCell;
-
-
-        //------------初始化Living
-        List<CellTypeData> cellTypeDatas = SQLService.Instance.QueryAll<CellTypeData>();
-        for (int i = 0; i < cellTypeDatas.Count; i++)
-        {
-            GameStaticData.CellTypeName.Add(cellTypeDatas[i].Id, cellTypeDatas[i].Name);
-            GameStaticData.CellTypeSprite.Add(cellTypeDatas[i].Id, Resources.Load<Sprite>(cellTypeDatas[i].Sprite));
-        }
 
 
         List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
@@ -153,21 +142,8 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
                     break;
             }
-            GameStaticData.LivingAreaName.Add(datas[i].Id, datas[i].Name);
-            GameStaticData.LivingAreaDescription.Add(datas[i].Id, datas[i].Description);
         }
         //------------------初始化Biological
-        List<BiologicalAvatarData> biologicalAvatarDatas = SQLService.Instance.QueryAll<BiologicalAvatarData>();
-        for (int i = 0; i < biologicalAvatarDatas.Count; i++)
-        {
-            GameStaticData.BiologicalAvatar.Add(biologicalAvatarDatas[i].Id, Resources.Load<Sprite>(biologicalAvatarDatas[i].Path));
-        }
-
-        List<BiologicalModelData> biologicalModelDatas = SQLService.Instance.QueryAll<BiologicalModelData>();
-        for (int i = 0; i < biologicalModelDatas.Count; i++)
-        {
-            GameStaticData.BiologicalPrefab.Add(biologicalModelDatas[i].Id, Resources.Load<GameObject>(biologicalModelDatas[i].Path));
-        }
 
         List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
         BiologicalData bData;
@@ -179,7 +155,7 @@ public class StrategyScene : MonoBehaviour
             if (hexCell == null)
                 continue;
 
-            HexUnit hexUnit = Object.Instantiate(StrategyStyle.Instance.HexUnitPrefabs[bData.ModelId]);
+            HexUnit hexUnit = Object.Instantiate(StrategyAssetManager.GetHexUnitPrefabs(bData.ModelId));
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
             Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
@@ -188,21 +164,11 @@ public class StrategyScene : MonoBehaviour
                 case 1:
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
 
-
-
                     //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
                     break;
                 default:
                     Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
                     break;
-            }
-
-            if (GameStaticData.BiologicalNameDic.ContainsKey(bData.Id) == false)
-            {
-                GameStaticData.BiologicalNameDic.Add(bData.Id, bData.Name);
-                GameStaticData.BiologicalSurnameDic.Add(bData.Id, bData.Surname);
-                GameStaticData.BiologicalDescription.Add(bData.Id, bData.Description);
-                GameStaticData.BiologicalNodes.Add(bData.Id, hexUnit.transform);
             }
         }
 
@@ -211,7 +177,7 @@ public class StrategyScene : MonoBehaviour
 
         hexCoordinates = new HexCoordinates(player.X, player.Z);
         hexCell = hexGrid.GetCell(hexCoordinates);
-        HexUnit playerUnit = Object.Instantiate(StrategyStyle.Instance.HexUnitPrefabs[player.ModelId]);
+        HexUnit playerUnit = Object.Instantiate(StrategyAssetManager.GetHexUnitPrefabs(player.ModelId));
         hexGrid.AddUnit(playerUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
         Entity pentity = playerUnit.GetComponent<GameObjectEntity>().Entity;
 
@@ -224,28 +190,15 @@ public class StrategyScene : MonoBehaviour
 
         }
 
-        if (GameStaticData.BiologicalNameDic.ContainsKey(player.Id) == false)
-        {
-            GameStaticData.BiologicalNameDic.Add(player.Id, player.Name);
-            GameStaticData.BiologicalSurnameDic.Add(player.Id, player.Surname);
-            GameStaticData.BiologicalDescription.Add(player.Id, player.Description);
-            GameStaticData.BiologicalNodes.Add(player.Id, playerUnit.transform);
-        }
-
         Player = new StrategyPlayer()
         {
             PlayerId = 1,
-            AvatarSprite = GameStaticData.BiologicalAvatar[1],
+            AvatarSprite = StrategyAssetManager.GetBiologicalAvatar(1),
             Entity = pentity,
-            Name = GameStaticData.BiologicalNameDic[1],
-            SurName = GameStaticData.BiologicalSurnameDic[1],
+            Name = player.Name,
+            SurName = player.Surname,
             Unit = playerUnit
         };
-
-
-
-
-        
 
         //---------------------------ArticleSystem
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
@@ -276,25 +229,26 @@ public class StrategyScene : MonoBehaviour
         InitGameData();
         InitModel();
 
+        //延时开启Window， 因为可能存在数据未完成的情况
+        StartCoroutine(WindowSyncOpen());
+
+        yield return null;
+    }
+
+
+    IEnumerator WindowSyncOpen()
+    {
+        yield return new  WaitForFixedUpdate();
+
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-
-
-        HexMapCamera.SetTarget(GameStaticData.BiologicalNodes[1].position);
-
         UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-
-        // 
         // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-
-        // GameStaticData.BiologicalNodes[1].gameObject.name="PlayerNode";
-        // StrategyCameraManager.Instance.SetTarget(new Vector3(-54.42019f, 50.3085f, 40.11046f));
+        HexMapCamera.SetTarget(Player.Unit.transform.position);
 
         loadingViewCom.Close();
-
-        yield return null;
     }
 
     void Update()

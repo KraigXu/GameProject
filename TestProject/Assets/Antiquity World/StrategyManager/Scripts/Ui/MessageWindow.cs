@@ -109,8 +109,8 @@ namespace GameSystem.Ui
 
                 int cellType = 3;
 
-                CellTypeImage.overrideSprite = GameStaticData.CellTypeSprite[cellType];
-                CellTypeTxt.text = GameStaticData.CellTypeName[cellType];
+                CellTypeImage.overrideSprite = StrategyAssetManager.GetCellTypeSprites(cellType);
+                CellTypeTxt.text = "山地";
                 CellUrbanTxt.text = _unit.Location.UrbanLevel.ToString();
                 CellFarmTxt.text = _unit.Location.FarmLevel.ToString();
                 CellPlantTxt.text = _unit.Location.PlantLevel.ToString();
@@ -125,8 +125,8 @@ namespace GameSystem.Ui
                                 Entity entity = SystemManager.Get<CitySystem>().GetEntity(_unit.Location.coordinates.X, _unit.Location.coordinates.Z);
                                 LivingArea livingArea = SystemManager.GetProperty<LivingArea>(entity);
 
-                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, GameStaticData.CityRunDataDic[livingArea.Id].Sprite, entity, CityOpenEntity);
+                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
+                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), entity, CityOpenEntity);
                             }
                             break;
                         case 2:
@@ -149,11 +149,14 @@ namespace GameSystem.Ui
 
                     Biological biological = SystemManager.GetProperty<Biological>(personEntity.Entity);
 
-                    RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyStyle.UiPersonButton, CellPersonsParent);
+                    BiologicalFixed biologicalFixed= GameStaticData.BiologicalDictionary[personEntity.Entity];
+
+                    RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
 
                     BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
-                    bui.Avatar = GameStaticData.BiologicalAvatar[biological.AvatarId];
-                    bui.PersonName = GameStaticData.BiologicalSurnameDic[biological.BiologicalId] + GameStaticData.BiologicalNameDic[biological.BiologicalId];
+                    bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
+
+                    bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
                     bui.Entity = personEntity.Entity;
                 }
 

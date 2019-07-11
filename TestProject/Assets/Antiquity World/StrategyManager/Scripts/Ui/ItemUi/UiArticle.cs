@@ -5,6 +5,5 @@ using UnityEngine;
 
 public class UiArticle : MonoBehaviour
 {
-
     public Entity Entity;
 }

@@ -18,15 +18,6 @@ namespace GameSystem
         City = 20,
     }
 
-    public class BiologicalRunData
-    {
-        public string Name;
-        public string SurName;
-        public Sprite Sprite;
-        public string Desciption;
-    }
-
-
     public class BiologicalSystem : ComponentSystem
     {
 
@@ -49,9 +40,6 @@ namespace GameSystem
         {
             public Animator Animator;
         }
-
-        private Dictionary<Entity, ComponentGroup> ComponentDic = new Dictionary<Entity, ComponentGroup>();
-
 
         public BiologicalSystem()
         {
@@ -96,13 +84,13 @@ namespace GameSystem
         {
             Entity entity = node.gameObject.GetComponent<GameObjectEntity>().Entity;
             BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
-            SystemManager.Get<BiologicalSystem>().AddBiological(data,entity);
+            SystemManager.Get<BiologicalSystem>().AddBiological(data, entity);
         }
 
 
-        public  void AddBiological(BiologicalData data, Entity entity)
+        public void AddBiological(BiologicalData data, Entity entity)
         {
-            _entityManager.AddComponentData(entity,new Biological()
+            _entityManager.AddComponentData(entity, new Biological()
             {
                 BiologicalId = data.Id,
                 Age = data.Age,
@@ -152,6 +140,24 @@ namespace GameSystem
 
             });
 
+
+            if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
+            {
+                string sex = data.Sex == 0 ? "男" : "女";
+
+                BiologicalFixed biologicalFixed = new BiologicalFixed
+                {
+                    Description = data.Description,
+                    Surname = data.Surname,
+                    Name = data.Name,
+                    Sex = sex,
+
+                };
+
+                GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
+            }
+
+
         }
 
         public static void AddBiological(EntityManager entityManager, int id)
@@ -173,10 +179,10 @@ namespace GameSystem
 
             entityManager.SetComponentData(entity, new Biological()
             {
-                
+
             });
 
-           
+
 
             entityManager.SetComponentData(entity, new Equipment
             {
@@ -243,10 +249,10 @@ namespace GameSystem
 
             if (string.IsNullOrEmpty(data.JifaJson) == false)
             {
-               // TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
+                // TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
             }
 
-           // ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
+            // ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
 
             //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
 
@@ -258,9 +264,9 @@ namespace GameSystem
             //    ComponentDic.Add(entity, group);
             //}
 
-            GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
-            GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
-            GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
+            //GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
+            //GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
+            //GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
 
 
         }
@@ -349,78 +355,78 @@ namespace GameSystem
 
             for (int i = 0; i < datas.Count; i++)
             {
-                //entityManager.CreateEntity(BiologicalArchetype);
-                Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
-                  entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
-
-               
-
-                Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                // Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-                entityGo.gameObject.AddComponent<HexUnit>();
-
-                ////entityManager.SetComponentData(entity, new Position
-                ////{
-                ////    Value = new float3(0, -6, 6)
-                ////});
-
-                ////entityManager.SetComponentData(entity, new Rotation
-                ////{
-                ////    Value = Quaternion.identity
-                ////});
-                entityManager.AddComponent(entity, typeof(Biological));
-                entityManager.SetComponentData(entity, new Biological()
-                {
-                    BiologicalId = datas[i].Id,
-                    Age = datas[i].Age,
-                    Sex = datas[i].Sex,
-                    CharmValue = 0,
-                    Mobility = 0,
-                    OperationalAbility = 0,
-                    LogicalThinking = 0,
-
-                    //Disposition = (byte)datas[i].Disposition,
-                    //NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
-
-                    //LuckValue = 100,
-                    //PrestigeValue = 100,
-
-                    //ExpEmptyHand = 9999,
-                    //ExpLongSoldier = 9999,
-                    //ExpShortSoldier = 9999,
-                    //ExpJones = 9999,
-                    //ExpHiddenWeapone = 9999,
-                    //ExpMedicine = 9999,
-                    //ExpArithmetic = 9999,
-                    //ExpMusic = 9999,
-                    //ExpWrite = 9999,
-                    //ExpDrawing = 9999,
-                    //ExpExchange = 9999,
-                    //ExpTaoism = 9999,
-                    //ExpDharma = 9999,
-                    //ExpPranayama = 9999,
-
-                    AvatarId = datas[i].AvatarId,
-                    ModelId = datas[i].ModelId,
-                    FamilyId = datas[i].FamilyId,
-                    FactionId = datas[i].FactionId,
-                    TitleId = datas[i].TitleId,
-                    TechniquesId = 0,
-                    EquipmentId = 0,
-
-                    Jing = 100,
-                    Qi = 100,
-                    Shen = 100,
-                    Tizhi = datas[i].Tizhi,
-                    Lidao = datas[i].Lidao,
-                    Jingshen = datas[i].Jingshen,
-                    Lingdong = datas[i].Lingdong,
-                    Wuxing = datas[i].Wuxing
-                });
+                ////entityManager.CreateEntity(BiologicalArchetype);
+                //Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
+                //entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
 
 
 
-              
+                //Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
+                //// Entity entity = entityManager.CreateEntity(BiologicalArchetype);
+                //entityGo.gameObject.AddComponent<HexUnit>();
+
+                //////entityManager.SetComponentData(entity, new Position
+                //////{
+                //////    Value = new float3(0, -6, 6)
+                //////});
+
+                //////entityManager.SetComponentData(entity, new Rotation
+                //////{
+                //////    Value = Quaternion.identity
+                //////});
+                //entityManager.AddComponent(entity, typeof(Biological));
+                //entityManager.SetComponentData(entity, new Biological()
+                //{
+                //    BiologicalId = datas[i].Id,
+                //    Age = datas[i].Age,
+                //    Sex = datas[i].Sex,
+                //    CharmValue = 0,
+                //    Mobility = 0,
+                //    OperationalAbility = 0,
+                //    LogicalThinking = 0,
+
+                //    //Disposition = (byte)datas[i].Disposition,
+                //    //NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
+
+                //    //LuckValue = 100,
+                //    //PrestigeValue = 100,
+
+                //    //ExpEmptyHand = 9999,
+                //    //ExpLongSoldier = 9999,
+                //    //ExpShortSoldier = 9999,
+                //    //ExpJones = 9999,
+                //    //ExpHiddenWeapone = 9999,
+                //    //ExpMedicine = 9999,
+                //    //ExpArithmetic = 9999,
+                //    //ExpMusic = 9999,
+                //    //ExpWrite = 9999,
+                //    //ExpDrawing = 9999,
+                //    //ExpExchange = 9999,
+                //    //ExpTaoism = 9999,
+                //    //ExpDharma = 9999,
+                //    //ExpPranayama = 9999,
+
+                //    AvatarId = datas[i].AvatarId,
+                //    ModelId = datas[i].ModelId,
+                //    FamilyId = datas[i].FamilyId,
+                //    FactionId = datas[i].FactionId,
+                //    TitleId = datas[i].TitleId,
+                //    TechniquesId = 0,
+                //    EquipmentId = 0,
+
+                //    Jing = 100,
+                //    Qi = 100,
+                //    Shen = 100,
+                //    Tizhi = datas[i].Tizhi,
+                //    Lidao = datas[i].Lidao,
+                //    Jingshen = datas[i].Jingshen,
+                //    Lingdong = datas[i].Lingdong,
+                //    Wuxing = datas[i].Wuxing
+                //});
+
+
+
+
 
 
 
@@ -577,7 +583,7 @@ namespace GameSystem
 
 
 
-        
+
 
         /// <summary>
         /// 根据当前状态获取Biologicals

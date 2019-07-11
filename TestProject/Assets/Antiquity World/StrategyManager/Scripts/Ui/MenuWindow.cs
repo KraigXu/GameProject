@@ -50,9 +50,7 @@ namespace GameSystem.Ui
         /// </summary>
         public void ButtonPerson()
         {
-
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
-
         }
 
         public void ButtonLog()

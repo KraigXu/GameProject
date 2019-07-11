@@ -231,7 +231,7 @@ public class HexUnit : MonoBehaviour {
 	public static void Load (BinaryReader reader, HexGrid grid) {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		float orientation = reader.ReadSingle();
-		grid.AddUnit(Instantiate(StrategyStyle.Instance.HexUnitPrefabs[1]), grid.GetCell(coordinates), orientation);
+		grid.AddUnit(Instantiate(StrategyAssetManager.GetHexUnitPrefabs(1)), grid.GetCell(coordinates), orientation);
 	}
 
 	void OnEnable () {
