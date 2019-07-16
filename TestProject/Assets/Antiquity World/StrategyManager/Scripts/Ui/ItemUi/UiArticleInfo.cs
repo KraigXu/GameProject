@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using AntiquityWorld.StrategyManager;
+using GameSystem;
 using Newtonsoft.Json;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,10 +35,128 @@ public class UiArticleInfo : MonoBehaviour
 
     public Texture Texture;
 
+    private Entity _curEntity;
+
+    public Entity CurEntity
+    {
+        get { return _curEntity; }
+        set
+        {
+            _curEntity = value;
+            ChangeEntity();
+        }
+    }
+
     void Awake()
     {
 
     }
+
+    private Text _nameTxt;
+    
+    
+
+
+    /// <summary>
+    /// 更新界面数据
+    /// </summary>
+    void ChangeEntity()
+    {
+        EntityManager entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+        //解析参数
+
+        ArticleItemFixed item = GameStaticData.ArticleDictionary[CurEntity];
+
+        if (item == null)
+        {
+            Debug.LogError("数据错误！");
+            return;
+        }
+
+        int width = 300;
+        int height = 300;
+
+        
+        _nameTxt.text = item.Name;
+
+        Dictionary<ENUM_ITEM_TEXT, string> textDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_TEXT, string>>(CurData.Text);
+        NameTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_NAME];
+        ExplainTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_EXPAIN];
+
+        Dictionary<ENUM_ITEM_ATTRIBUTE, string> attributeDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_ATTRIBUTE, string>>(CurData.Value);
+
+
+        ArticleTypeData typeData = SQLService.Instance.QueryUnique<ArticleTypeData>(" Id=?", CurData.Type1);
+        TypeTxt.text = typeData.Text;
+
+        switch ((ENUM_ITEM_CLASS)typeData.Id)
+        {
+            case ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK:
+                ContentRect3.gameObject.SetActive(true);
+
+                ContentRect4.gameObject.SetActive(true);
+
+                ContentRect5.gameObject.SetActive(true);
+
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_BOX:
+
+
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_EQUIPMENT:
+                ContentRect2.gameObject.SetActive(true);
+
+                //GameObject item = new GameObject();
+                //RectTransform rect1 = (RectTransform)item.transform;
+                //rect1.SetParent(ContentRect2);
+                //rect1.anchorMin = Vector2.zero;
+                //rect1.anchorMax = Vector2.one;
+
+                //Text text1 = item.AddComponent<Text>();
+                //text1.text = attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK] + "-" + attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK];
+                //ContentRect3.gameObject.SetActive(true);
+
+                //ContentRect4.gameObject.SetActive(true);
+
+                //ContentRect5.gameObject.SetActive(true);
+
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_RESOURCE:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_JEWEL:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_RUNE:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_STONE:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_TASK:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_DRAW:
+                break;
+            case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON:
+                break;
+        }
+
+
+
+        string content1;
+        List<KeyValuePair<ENUM_ITEM_TEXT, string>> valuetext = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_TEXT, string>>>(CurData.Text);
+
+        NameTxt.text = CurData.Text;
+        List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(CurData.Value);
+
+
+
+        for (int i = 0; i < valuePairs.Count; i++)
+        {
+
+
+
+        }
+
+    }
+
 
     // Use this for initialization
     void Start()
@@ -78,87 +198,7 @@ public class UiArticleInfo : MonoBehaviour
 
     }
 
-
-    public void Change()
-    {
-
-        Dictionary<ENUM_ITEM_TEXT, string> textDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_TEXT, string>>(CurData.Text);
-        NameTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_NAME];
-        ExplainTxt.text = textDic[ENUM_ITEM_TEXT.ITEM_TEXT_EXPAIN];
-
-        Dictionary<ENUM_ITEM_ATTRIBUTE, string> attributeDic = JsonConvert.DeserializeObject<Dictionary<ENUM_ITEM_ATTRIBUTE, string>>(CurData.Value);
-
-
-        ArticleTypeData typeData = SQLService.Instance.QueryUnique<ArticleTypeData>(" Id=?", CurData.Type1);
-        TypeTxt.text = typeData.Text;
-
-        switch ((ENUM_ITEM_CLASS)typeData.Id)
-        {
-            case ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK:
-                ContentRect3.gameObject.SetActive(true);
-
-                ContentRect4.gameObject.SetActive(true);
-
-                ContentRect5.gameObject.SetActive(true);
-
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_BOX:
-
-
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_EQUIPMENT:
-                ContentRect2.gameObject.SetActive(true);
-
-                GameObject item = new GameObject();
-                RectTransform rect1 = (RectTransform)item.transform;
-                rect1.SetParent(ContentRect2);
-                rect1.anchorMin = Vector2.zero;
-                rect1.anchorMax = Vector2.one;
-
-                Text text1 = item.AddComponent<Text>();
-                text1.text = attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK] + "-" + attributeDic[ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK];
-                ContentRect3.gameObject.SetActive(true);
-
-                ContentRect4.gameObject.SetActive(true);
-
-                ContentRect5.gameObject.SetActive(true);
-
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_RESOURCE:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_JEWEL:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_RUNE:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_STONE:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_TASK:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_DRAW:
-                break;
-            case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON:
-                break;
-        }
-
-
-
-        string content1;
-        List<KeyValuePair<ENUM_ITEM_TEXT, string>> valuetext = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_TEXT, string>>>(CurData.Text);
-
-        NameTxt.text = CurData.Text;
-        List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(CurData.Value);
-
-
-
-        for (int i = 0; i < valuePairs.Count; i++)
-        {
-
-
-
-        }
-    }
-
-
+    
 
     void Update()
     {
@@ -195,9 +235,5 @@ public class UiArticleInfo : MonoBehaviour
     }
 
 
-    void OnGUI()
-    {
-        var point = Input.mousePosition;
-        GUI.Window(0, new Rect(300, 300, 345, 461), OnWindowNew, "", Skin.GetStyle("window"));
-    }
+
 }

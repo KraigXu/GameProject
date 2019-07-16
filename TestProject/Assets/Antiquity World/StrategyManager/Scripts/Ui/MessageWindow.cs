@@ -37,8 +37,6 @@ namespace GameSystem.Ui
         public RectTransform CellPersonsParent;
         private List<HexUnit> _personUnits = new List<HexUnit>();
 
-        private PlayerMapInputSystem _system;
-
         private StrategyScene _strategyScene;
         private StrategyPlayer _player;
         private HexCell _curCell;
@@ -60,7 +58,6 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            _system = SystemManager.Get<PlayerMapInputSystem>();
             _strategyScene = StrategyScene.Instance;
             _player = StrategyScene.Instance.Player;
             _unit = _player.Unit;

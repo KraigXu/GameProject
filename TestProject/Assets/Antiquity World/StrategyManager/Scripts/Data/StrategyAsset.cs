@@ -17,6 +17,8 @@ public class StrategyAsset : ScriptableObject
     public RectTransform UiArticleBox;
     public RectTransform UiArticleView;
     public RectTransform UiArticleInfo;
+    public RectTransform UiArticleLable;
+    public GUISkin UiArticleSkin;
 
     public RectTransform UiFunctionButton;
     public RectTransform UiPersonButton;
@@ -25,5 +27,7 @@ public class StrategyAsset : ScriptableObject
     public RectTransform UiCellFeature;
 
     public RectTransform UiLivingAreaTitle;
+
+
 
 }

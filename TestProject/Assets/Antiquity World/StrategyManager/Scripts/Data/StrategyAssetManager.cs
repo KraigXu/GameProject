@@ -59,10 +59,15 @@ public class StrategyAssetManager : MonoBehaviour
 
     public static RectTransform UiArticleBox { get { return _instance._strategyAsset.UiArticleBox; } }
 
+    public static RectTransform UiArticleLable { get { return _instance._strategyAsset.UiArticleLable; } }
+
+    public static GUISkin UiArticleSkin { get { return _instance._strategyAsset.UiArticleSkin;} }
+
     public static RectTransform UiSpeciality { get { return _instance._strategyAsset.UiSpeciality; } }
 
     public static RectTransform UiLivingAreaTitle { get { return _instance._strategyAsset.UiLivingAreaTitle; } }
 
     public static RectTransform UiArticleInfo { get { return _instance._strategyAsset.UiArticleInfo;} }
+
 
 }

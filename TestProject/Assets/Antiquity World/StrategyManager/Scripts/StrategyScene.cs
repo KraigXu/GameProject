@@ -183,10 +183,12 @@ public class StrategyScene : MonoBehaviour
 
         if (player.Identity == 1)
         {
+
             SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
             SystemManager.Get<EquipmentSystem>().AddEquipment(pentity, player.EquipmentJson);
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
+
 
         }
 

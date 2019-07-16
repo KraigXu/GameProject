@@ -238,6 +238,51 @@ namespace GameSystem.Ui
 
         }
 
+        void OnGUI()
+        {
+            var point = Input.mousePosition;
+            GUISkin skin = StrategyAssetManager.UiArticleSkin;
+            GUI.Window(0, new Rect(300, 300, 345, 461), OnWindowNew, "", skin.GetStyle("window"));
+
+        }
+
+        void OnWindowNew(GUISkin skin)
+        {
+
+            GUI.Label(new Rect(0, 0, 461, 72), "摇篮", skin.GetStyle("label"));
+            GUI.Label(new Rect(0, 72, 461, 16), "护符", skin.GetStyle("normallable"));
+            GUI.Label(new Rect(0, 88, 461, 42), "物理防御999", skin.GetStyle("lableMax"));
+
+
+           // GUI.Label(new Rect(10, 130, 26, 26), Texture);
+
+            GUI.Label(new Rect(42, 130, 461, 26), "+2 智力", skin.GetStyle("lableblue"));
+            GUI.Label(new Rect(42, 156, 461, 26), "+1 烈火学派", skin.GetStyle("lableblue"));
+            GUI.Label(new Rect(42, 182, 461, 26), "+2 大气学派", skin.GetStyle("lableblue"));
+            GUI.Label(new Rect(42, 208, 461, 26), "+1 领袖", skin.GetStyle("lableblue"));
+            GUI.Label(new Rect(42, 234, 461, 26), "+1 坚毅", skin.GetStyle("lableblue"));
+
+          //  GUI.Label(new Rect(10, 260, 26, 26),);
+            GUI.Label(new Rect(42, 260, 461, 26), "等级21", skin.GetStyle("lableh"));
+
+           // GUI.Label(new Rect(10, 286, 26, 26), Texture);
+            GUI.Label(new Rect(42, 286, 461, 26), "巨型火焰威能符文", skin.GetStyle("lable1"));
+            GUI.Label(new Rect(42, 312, 461, 26), "智力 + 3", skin.GetStyle("lable1"));
+            GUI.Label(new Rect(42, 338, 461, 26), "暴击率 +12%", skin.GetStyle("lable1"));
+
+            //  GUI.Label(new Rect(20,), );
+
+            GUI.Label(new Rect(20, 411, 345, 50), "神圣", skin.GetStyle("lablem"));
+            GUI.Label(new Rect(280, 411, 65, 50), "9999999Y", skin.GetStyle("lablem"));
+
+        }
+
+
+        public void OnWindowNew(int id)
+        {
+
+        }
+
         ///// <summary>
         ///// 切换人物信息
         ///// </summary>
