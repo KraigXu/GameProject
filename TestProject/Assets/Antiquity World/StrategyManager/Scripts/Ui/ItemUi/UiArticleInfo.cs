@@ -17,10 +17,13 @@ public class UiArticleInfo : MonoBehaviour
 
 
 
-    public Rec
+    public Text TitleTxt;
+    public Text NameTxt;
+    public Text ExpainTxt;
+
 
     public RectTransform ContentRect1;  //名称
-    public Text NameTxt;
+ //   public Text NameTxt;
 
 
     public RectTransform ContentRect2;  //属性
