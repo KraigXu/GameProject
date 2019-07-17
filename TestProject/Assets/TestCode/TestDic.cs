@@ -5,9 +5,7 @@ using UnityEngine;
 public class TestDic : MonoBehaviour {
 
     public Dictionary<int,int> mRedpointDic=new Dictionary<int, int>();
-
     public List<int> mRedpointActId=new List<int>();
-
     public Dictionary<int, string> mRedpointDic1 = new Dictionary<int, string>();
     // Use this for initialization
     void Start () {

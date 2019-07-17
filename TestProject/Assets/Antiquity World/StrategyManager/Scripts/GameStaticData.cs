@@ -7,8 +7,7 @@ namespace GameSystem
 {
     public sealed class GameStaticData
     {
-
-
+        
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();

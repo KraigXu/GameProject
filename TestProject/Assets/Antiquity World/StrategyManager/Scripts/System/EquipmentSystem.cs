@@ -59,7 +59,6 @@ namespace GameSystem
             }
         }
 
-
         //public static EquipmentJsonData GetEquipment(int equipmentId)
         //{
         //    if (_equipmentDic.ContainsKey(equipmentId) == true)
@@ -105,6 +104,15 @@ namespace GameSystem
             {
 
                 EquipmentJsonData equipmentJson = JsonConvert.DeserializeObject<EquipmentJsonData>(data);
+
+                _entityManager.AddComponentData(entity,new EquipmentHelmet
+                {
+
+
+                });
+
+
+
                 _entityManager.AddComponentData(entity, new Equipment
                 {
                     HelmetId = equipmentJson.HelmetId,

@@ -3,6 +3,9 @@ using UnityEngine;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
+using DataAccessObject;
+using GameSystem;
+using Random = UnityEngine.Random;
 
 public sealed class Debuger
 {
@@ -61,15 +64,53 @@ public sealed class Debuger
         Debug.Log(message);
     }
 
+    public static GUISkin GuiSkin =Resources.Load<GUISkin>("GUISkin");
+
+    public static Font font = Resources.Load<Font>("msyh");
+
     public static bool mainsceneIsflag = false;
     public static bool correlationIsflag = false;
     public static bool assListSceneIsflag = false;
     public static bool inputIsflag = false;
-
     public static string inputValue;
+
+
+    public static bool articleIsflag = false;
+    public static int articleId;
+    public static ArticleData ArticleData;
+    public static Texture ArticleTexture = Resources.Load<Texture>("Debug/image1");
+
+    public enum  ArticleType1
+    {
+        Test1,  //丹药
+        Test2, //物品
+        Test3, //盒子
+        Test4, //通货
+        Test5,//书籍
+        Test6,//长兵
+        Test7,//中兵
+        Test8,//短兵
+        Test9, //手套
+        Test10, //头冠
+        Test11, //衣服
+        Test12, //裤子
+        Test13, //鞋子
+        Test14, //项链
+        Test15, //截至
+        Test16, //面具
+        Test17, //暗器
+        Test18,//远程
+    }
+
+
+    public static string log;
+    
+    
 
     public static void OnDebugWindow(int id)
     {
+
+      //  GUI.skin.label.font = font;
         GUILayout.BeginVertical();
 
         GUILayout.BeginHorizontal();
@@ -81,6 +122,7 @@ public sealed class Debuger
                 correlationIsflag = false;
                 assListSceneIsflag = false;
                 inputIsflag = false;
+                articleIsflag = false;
             }
         }
 
@@ -92,6 +134,7 @@ public sealed class Debuger
                 mainsceneIsflag = false;
                 assListSceneIsflag = false;
                 inputIsflag = false;
+                articleIsflag = false;
             }
         }
 
@@ -103,6 +146,7 @@ public sealed class Debuger
                 mainsceneIsflag = false;
                 correlationIsflag = false;
                 assListSceneIsflag = false;
+                articleIsflag = false;
             }
 
         }
@@ -114,6 +158,20 @@ public sealed class Debuger
                 mainsceneIsflag = false;
                 correlationIsflag = false;
                 inputIsflag = false;
+                articleIsflag = false;
+            }
+        }
+
+        if (GUILayout.Button("Article"))
+        {
+            articleIsflag = !articleIsflag;
+
+            if (articleIsflag)
+            {
+                mainsceneIsflag = false;
+                correlationIsflag = false;
+                inputIsflag = false;
+                assListSceneIsflag = false;
             }
         }
 
@@ -141,6 +199,8 @@ public sealed class Debuger
 
             GUILayout.Button("Test");
             GUILayout.Button("Test12");
+            GUILayout.Button("Test3");
+            GUILayout.Button("Test4");
 
             GUILayout.EndScrollView();
         }
@@ -179,6 +239,111 @@ public sealed class Debuger
             }
         }
 
+        if (articleIsflag)
+        {
+            articleId = int.Parse(GUILayout.TextField(articleId.ToString()));
+            GUILayout.BeginHorizontal();
+            
+
+            if (GUILayout.Button("Init Article to Id"))
+            {
+
+                 ArticleData = SQLService.Instance.QueryUnique<ArticleData>(" Id=?", articleId);
+
+                if (ArticleData != null)
+                {
+
+                   
+                }
+                else
+                {
+                    log += "\n Not this Id :" + articleId;
+                }
+
+
+            }
+            if (GUILayout.Button("Random Article"))
+            {
+                articleId = Random.Range(0, 10);
+                ArticleData = SQLService.Instance.QueryUnique<ArticleData>(" Id=?", articleId);
+
+                if (ArticleData != null)
+                {
+                }
+                else
+                {
+                    log += "\n Not this Id :" + articleId;
+                }
+            }
+
+            GUILayout.EndHorizontal();
+
+
+
+            if (ArticleData != null)
+            {
+
+                //GUI.DrawTexture(new Rect(0,0,461,200), ArticleTexture);
+                
+                //GUI.Label(new Rect(0, 0, 461, 72), ArticleData.Name, GuiSkin.GetStyle("label"));
+                //GUI.Label(new Rect(0, 72, 461, 16), ArticleSystem.ArticleType(ArticleData.Type1, ArticleData.Type2, ArticleData.Type3), GuiSkin.GetStyle("normallable"));
+
+
+                if (ArticleData.Type1 == 1)
+                {
+                    GUILayout.BeginVertical();
+
+                    GUILayout.Label("---------------------------------");
+                    GUILayout.Label("名字"+ArticleData.Name);
+                    GUILayout.Label("类型"+ArticleSystem.ArticleType(ArticleData.Type1, ArticleData.Type2, ArticleData.Type3));
+
+                    GUILayout.Label(ArticleData.Effect);
+                    GUILayout.Label("Bumber:"+ArticleData.Count);
+                    GUILayout.Label(ArticleData.Text);
+
+                    GUILayout.Label("Price:"+ArticleData.Value);
+                    GUILayout.EndVertical();
+
+                 
+
+
+                }
+                else if(ArticleData.Type1==2)
+                {
+                    GUI.Label(new Rect(0, 88, 461, 42), "物理防御999", GuiSkin.GetStyle("lableMax"));
+
+
+                    // GUI.Label(new Rect(10, 130, 26, 26), Texture);
+
+                    GUI.Label(new Rect(42, 130, 461, 26), "+2 智力", GuiSkin.GetStyle("lableblue"));
+                    GUI.Label(new Rect(42, 156, 461, 26), "+1 烈火学派", GuiSkin.GetStyle("lableblue"));
+                    GUI.Label(new Rect(42, 182, 461, 26), "+2 大气学派", GuiSkin.GetStyle("lableblue"));
+                    GUI.Label(new Rect(42, 208, 461, 26), "+1 领袖", GuiSkin.GetStyle("lableblue"));
+                    GUI.Label(new Rect(42, 234, 461, 26), "+1 坚毅", GuiSkin.GetStyle("lableblue"));
+
+                    //  GUI.Label(new Rect(10, 260, 26, 26),);
+                    GUI.Label(new Rect(42, 260, 461, 26), "等级21", GuiSkin.GetStyle("lableh"));
+
+                    // GUI.Label(new Rect(10, 286, 26, 26), Texture);
+                    GUI.Label(new Rect(42, 286, 461, 26), "巨型火焰威能符文", GuiSkin.GetStyle("lable1"));
+                    GUI.Label(new Rect(42, 312, 461, 26), "智力 + 3", GuiSkin.GetStyle("lable1"));
+                    GUI.Label(new Rect(42, 338, 461, 26), "暴击率 +12%", GuiSkin.GetStyle("lable1"));
+
+                    //  GUI.Label(new Rect(20,), );
+
+                    GUI.Label(new Rect(20, 411, 345, 50), "神圣", GuiSkin.GetStyle("lablem"));
+                    GUI.Label(new Rect(280, 411, 65, 50), "9999999Y", GuiSkin.GetStyle("lablem"));
+                }
+            }
+
+           
+        }
+
+        if (GUILayout.Button("Clear Log"))
+        {
+            log = "";
+        }
+        GUILayout.Label(log);
 
         GUILayout.EndVertical();
 

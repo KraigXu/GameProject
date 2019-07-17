@@ -93,6 +93,22 @@ namespace AntiquityWorld.StrategyManager
         ITEM_CLASS_WEAPON=0x09,    //武器
     };
 
+
+
+    //public enum ENUM_ITEM_CLASS1 : int
+    //{
+    //    ITEM_CLASS_SKILL_BOOK = 0x00,    //技能书
+    //    ITEM_CLASS_BOX = 0x01,    //盒子(容器)
+    //    ITEM_CLASS_EQUIPMENT = 0x02,    //装备
+    //    ITEM_CLASS_RESOURCE = 0x03,    //材料
+    //    ITEM_CLASS_JEWEL = 0x04,    //宝石
+    //    ITEM_CLASS_RUNE = 0x05,    //符文 
+    //    ITEM_CLASS_STONE = 0x06,    //石头
+    //    ITEM_CLASS_TASK = 0x07,    //任务道具
+    //    ITEM_CLASS_DRAW = 0x08,    //图纸
+    //    ITEM_CLASS_WEAPON = 0x09,    //武器
+    //};
+
     public class ArticleBaseObject
     {
         private int _guiId; //唯一编号

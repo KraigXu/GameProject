@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class SystemManager
+public sealed class SystemManager
 {
     private static EntityManager _instance;
 
@@ -38,6 +38,12 @@ public class SystemManager
     public static bool Contains<T>(Entity entity) where T : struct, IComponentData
     {
         return World.Active.GetOrCreateManager<EntityManager>().HasComponent<T>(entity);
+    }
+
+
+    public static void AddProperty<T>(Entity entity,T t) where T : struct, IComponentData
+    {
+        return; World.Active.GetOrCreateManager<EntityManager>().AddComponentData(entity,t);
     }
 
 }

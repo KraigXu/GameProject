@@ -15,6 +15,10 @@ using UnityEngine.UI;
 public class UiArticleInfo : MonoBehaviour
 {
 
+
+
+    public Rec
+
     public RectTransform ContentRect1;  //名称
     public Text NameTxt;
 
@@ -37,6 +41,14 @@ public class UiArticleInfo : MonoBehaviour
 
     private Entity _curEntity;
 
+
+    public Vector3 ViewSize;
+
+
+    public Dictionary<ENUM_ITEM_TEXT,string> TextDic=new Dictionary<ENUM_ITEM_TEXT, string>();
+    public List<KeyValuePair<ENUM_ITEM_TEXT, string>> Lables=new List<KeyValuePair<ENUM_ITEM_TEXT, string>>();
+
+
     public Entity CurEntity
     {
         get { return _curEntity; }
@@ -49,7 +61,11 @@ public class UiArticleInfo : MonoBehaviour
 
     void Awake()
     {
-
+        TextDic = new Dictionary<ENUM_ITEM_TEXT, string>()
+        {
+            {ENUM_ITEM_TEXT.ITEM_TEXT_NAME,"XX" },
+            {ENUM_ITEM_TEXT.ITEM_TEXT_EXPAIN,"****************************************************" },
+        };
     }
 
     private Text _nameTxt;
@@ -137,14 +153,22 @@ public class UiArticleInfo : MonoBehaviour
             case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON:
                 break;
         }
-
-
-
         string content1;
         List<KeyValuePair<ENUM_ITEM_TEXT, string>> valuetext = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_TEXT, string>>>(CurData.Text);
 
         NameTxt.text = CurData.Text;
         List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(CurData.Value);
+
+
+        
+
+
+        for (int i = 0; i < Lables.Count; i++)
+        {
+           
+
+
+        }
 
 
 

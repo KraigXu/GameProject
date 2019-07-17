@@ -8,11 +8,6 @@ using Unity.Entities;
 using UnityEngine;
 namespace GameSystem
 {
-
-
-
-
-
     public class ArticleSystem : ComponentSystem
     {
         struct Data
@@ -141,7 +136,7 @@ namespace GameSystem
                 });
 
                 //赋值实时属性
-                GameStaticData.ArticleDictionary.Add(entity,new ArticleItemFixed
+                GameStaticData.ArticleDictionary.Add(entity, new ArticleItemFixed
                 {
                     Desc = articleDatas[i].Text,
                     Name = articleDatas[i].Text,
@@ -187,30 +182,30 @@ namespace GameSystem
             {
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK:
                     {
-                        //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                        //  fighting.AttackMin += value;
-                        //  _entityManager.SetComponentData(entity, fighting);
+                        //var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //fighting.AttackMin += value;
+                        //_entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK:
                     {
-                        //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                        //   fighting.AttackMax += value;
-                        //   _entityManager.SetComponentData(entity, fighting);
+                        //var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //fighting.AttackMax += value;
+                        //_entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_PHYSICS_DEFENCE:
                     {
-                        //   var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                        //  fighting.PhysicsDefence += value;
-                        //  _entityManager.SetComponentData(entity, fighting);
+                        //var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //fighting.PhysicsDefence += value;
+                        //_entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAGIC_DEFENCE:
                     {
-                        //  var fighting = _entityManager.GetComponentData<Fighting>(entity);
-                        //  fighting.MagicDefence += value;
-                        //  _entityManager.SetComponentData(entity, fighting);
+                        //var fighting = _entityManager.GetComponentData<Fighting>(entity);
+                        //fighting.MagicDefence += value;
+                        //_entityManager.SetComponentData(entity, fighting);
                     }
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_LIFE:
@@ -331,6 +326,51 @@ namespace GameSystem
 
 
 
+
+        public static string ArticleType(int type1, int type2, int type3)
+        {
+
+            if (type1 == 1)
+            {
+
+            }
+            else if (type1 == 2)
+            {
+                if (type2 == 1)
+                {
+                    return "头盔";
+                }else if (type2 == 2)
+                {
+                    return "护甲";
+                }else if (type2 == 3)
+                {
+                    return "鞋子";
+                }else if (type2 == 4)
+                {
+                    return "腰带";
+                }else if (type2 == 5)
+                {
+                    return "护腕";
+                }
+                
+
+            }
+            else if (type1 == 3)
+            {
+
+            }
+            else if (type1 == 4)
+            {
+
+            }
+
+
+
+
+
+
+            return null;
+        }
     }
 
 }

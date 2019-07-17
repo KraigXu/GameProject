@@ -1114,13 +1114,15 @@ namespace DataAccessObject
     public class ArticleData : BaseData
     {
 
-        public int Id { get; set; }
-        public int AvatarId { get; set; }
-        public byte Type1 { get; set; }
-        public byte Type2 { get; set; }
-        public byte Type3 { get; set; }
-        public string Text { get; set; }
-        public string Value { get; set; }
+        public int Id { get; set; }                         //1
+        public string Name { get; set; }                    //名称
+        public string Desc { get; set; }                    //说明
+        public int AvatarId { get; set; }                   //图片
+        public byte Type1 { get; set; }                    //类型1
+        public byte Type2 { get; set; }                     //类型2
+        public byte Type3 { get; set; }                     //类型3
+        public string Text { get; set; }                    //文本
+        public string Value { get; set; }                   //
         public int Count { get; set; }
         public int MaxCount { get; set; }
         public string Effect { get; set; }
@@ -1129,7 +1131,7 @@ namespace DataAccessObject
 
         public override object[] GetValues()
         {
-            object[] objects = { Id, AvatarId, Type1, Type2, Type3, Text, Value, Count, MaxCount, Weight, Bid };
+            object[] objects = { Id,Name,Desc, AvatarId, Type1, Type2, Type3, Text, Value, Count, MaxCount, Weight, Bid };
             return objects;
         }
 

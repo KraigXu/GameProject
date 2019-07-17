@@ -372,6 +372,16 @@ namespace GameSystem
         public Entity WeaponSecondaryE;
     }
 
+
+    public struct EquipmentHelmet : IComponentData
+    {
+
+    }
+
+    
+
+
+
     public enum EquipType
     {
         Coat,
