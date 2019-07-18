@@ -77,6 +77,8 @@ public sealed class Define
     public static readonly string GeneratedPool = "GeneratedPool";
     public static readonly string ParticlePool = "ParticlePool";
 
+    public static bool IsEdit;
+
 
 
 
@@ -106,6 +108,7 @@ public sealed class Define
     public static void Initialize()
     {
         SQLService.GetInstance("TD.db");
+        GameObject.Instantiate(Resources.Load<GameObject>("GameRuntimeEdit"));
     }
 
     /// <summary>

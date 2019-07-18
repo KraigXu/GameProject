@@ -19,7 +19,7 @@ namespace AntiquityWorld.StrategyManager
     };
     public enum ENUM_ITEM_ATTRIBUTE : int
     {
-        ITEM_ATTRIBUTE_NONE=-1,
+        ITEM_ATTRIBUTE_NONE = -1,
         ITEM_ATTRIBUTE_MIN_ATTACK = 0x00,    //最小攻击
         ITEM_ATTRIBUTE_MAX_ATTACK = 0x01,    //最大攻击
         ITEM_ATTRIBUTE_PHYSICS_DEFENCE = 0x02,    //物理防御 
@@ -71,12 +71,16 @@ namespace AntiquityWorld.StrategyManager
         ITEM_ATTRIBUTE_SYN_NEWID_C_1 = 0x30,    //新BaseID1数量
         ITEM_ATTRIBUTE_SYN_NEWID_C_2 = 0x31,    //新BaseID2数量
         ITEM_ATTRIBUTE_SYN_NEWID_C_3 = 0x32,    //新BaseID3数量
+        ITEM_ATTRIBUTE_NAME=0x33,
+        ITEM_ATTRIBUTE_EXPAIN= 0x34,
+        ITEM_ATTRIBUTE_TYPE = 0x35
     };
 
     public enum ENUM_ITEM_TEXT : int
     {
         ITEM_TEXT_NAME = 0,        //名称
-        ITEM_TEXT_EXPAIN = 1,      //说明
+        ITEM_TEXT_TITLE = 1,
+        ITEM_TEXT_EXPAIN = 2,      //说明
     };
 
     public enum ENUM_ITEM_CLASS : int
@@ -90,7 +94,26 @@ namespace AntiquityWorld.StrategyManager
         ITEM_CLASS_STONE = 0x06,    //石头
         ITEM_CLASS_TASK = 0x07,    //任务道具
         ITEM_CLASS_DRAW = 0x08,    //图纸
-        ITEM_CLASS_WEAPON=0x09,    //武器
+        ITEM_CLASS_WEAPON = 0x09,    //武器
+        ITEM_CLASS_WEAPON1 = 0x10,     //丹药
+        ITEM_CLASS_WEAPON2 = 0x11,     //物品
+        ITEM_CLASS_WEAPON3 = 0x12,     //盒子
+        ITEM_CLASS_WEAPON4 = 0x13,     //通货
+        ITEM_CLASS_WEAPON5 = 0x14,     //书籍
+        ITEM_CLASS_WEAPON6 = 0x15,     //长兵
+        ITEM_CLASS_WEAPON7 = 0x16,     //中兵
+        ITEM_CLASS_WEAPON8 = 0x17,     //短兵
+        ITEM_CLASS_WEAPON9 = 0x18,     //手套
+        ITEM_CLASS_WEAPON10 = 0x19,    //头冠
+        ITEM_CLASS_WEAPON11 = 0x20,    //衣服
+        ITEM_CLASS_WEAPON12 = 0x21,    //裤子
+        ITEM_CLASS_WEAPON13 = 0x22,    //鞋子
+        ITEM_CLASS_WEAPON14 = 0x23,    //项链
+        ITEM_CLASS_WEAPON15 = 0x24,    //截至
+        ITEM_CLASS_WEAPON16 = 0x25,    //面具
+        ITEM_CLASS_WEAPON17 = 0x26,    //暗器
+        ITEM_CLASS_WEAPON18 = 0x27    //远程
+
     };
 
 

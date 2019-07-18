@@ -842,6 +842,40 @@ namespace GameSystem
         public string Desc;
         public Sprite Sprite;
 
+        public string Expain;
+
+    }
+
+
+    public struct AttackProperty : IComponentData
+    {
+        public int Blunt;
+        public int Sharp;
+        public int Dexterous;
+        public int Parry;
+
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute1;
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute2;
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute3;
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute4;
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute5;
+        public KeyValuePair<ENUM_ITEM_ATTRIBUTE, int> Attribute6;
+
+    }
+
+
+
+    public struct DefenseProperty : IComponentData
+    {
+        public int BaseValue;
+        public int Blunt;
+        public int Sharp;
+
+        public ENUM_ITEM_ATTRIBUTE Attribute1;
+        public ENUM_ITEM_ATTRIBUTE Attribute2;
+        public ENUM_ITEM_ATTRIBUTE Attribute3;
+        public ENUM_ITEM_ATTRIBUTE Attribute4;
+
     }
 
     public struct Speciality : IComponentData

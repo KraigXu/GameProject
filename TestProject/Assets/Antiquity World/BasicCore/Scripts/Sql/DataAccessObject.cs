@@ -1118,6 +1118,9 @@ namespace DataAccessObject
         public string Name { get; set; }                    //名称
         public string Desc { get; set; }                    //说明
         public int AvatarId { get; set; }                   //图片
+
+        public byte Type { get; set; }
+
         public byte Type1 { get; set; }                    //类型1
         public byte Type2 { get; set; }                     //类型2
         public byte Type3 { get; set; }                     //类型3

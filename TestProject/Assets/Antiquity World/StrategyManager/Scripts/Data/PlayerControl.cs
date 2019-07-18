@@ -11,22 +11,12 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	void Update () {
-	    if (Input.GetKeyUp(KeyCode.BackQuote))
-	    {
 
-	        IsEdit = !IsEdit;
-	    }
     }
 
     void OnGUI()
     {
-        if (IsEdit == true)
-        {
-            float windth = Screen.width * 0.6f;
-            float height = Screen.height * 0.4f;
 
-            GUI.Window(0, new Rect(Screen.width - windth, height, windth, height), Debuger.OnDebugWindow, "Debug");
-        }
     }
 
 }

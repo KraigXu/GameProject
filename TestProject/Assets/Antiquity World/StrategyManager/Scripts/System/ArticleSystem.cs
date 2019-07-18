@@ -95,14 +95,13 @@ namespace GameSystem
 
             //  Debug.Log(JsonConvert.SerializeObject(valuePairs));
 
-
-
             List<ArticleData> articleDatas = SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", dataid);
 
             for (int i = 0; i < articleDatas.Count; i++)
             {
                 var articleData = articleDatas[i];
                 Entity entity = _entityManager.CreateEntity(_articleArchetype);
+
                 List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>> valuePairs = JsonConvert.DeserializeObject<List<KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>>>(articleData.Value);
 
                 _entityManager.SetComponentData(entity, new ArticleItem
@@ -134,6 +133,41 @@ namespace GameSystem
                     Attribute8 = valuePairs.Count >= 8 ? valuePairs[7].Key : ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NONE,
                     AttributeValue8 = valuePairs.Count >= 8 ? Int32.Parse(valuePairs[7].Value) : 0,
                 });
+
+
+                switch ((ENUM_ITEM_CLASS)articleData.Type)
+                {
+                    case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON6:
+                        {
+                            AttackProperty attackProperty = JsonConvert.DeserializeObject<AttackProperty>(articleData.Text);
+                            _entityManager.SetComponentData(entity, attackProperty);
+                        }
+                        break;
+                    case ENUM_ITEM_CLASS.ITEM_CLASS_WEAPON7:
+                        {
+                            AttackProperty attackProperty = JsonConvert.DeserializeObject<AttackProperty>(articleData.Text);
+                            _entityManager.SetComponentData(entity, attackProperty);
+                        }
+                        break;
+                    case ENUM_ITEM_CLASS.ITEM_CLASS_SKILL_BOOK:
+                        break;
+                    default:
+                        break;
+                }
+
+
+                _entityManager.SetComponentData(entity, new AttackProperty());
+
+
+                //_entityManager.SetComponentData(entity,new AttackProperty
+                //{
+
+                //});
+
+
+
+
+
 
                 //赋值实时属性
                 GameStaticData.ArticleDictionary.Add(entity, new ArticleItemFixed
@@ -339,20 +373,24 @@ namespace GameSystem
                 if (type2 == 1)
                 {
                     return "头盔";
-                }else if (type2 == 2)
+                }
+                else if (type2 == 2)
                 {
                     return "护甲";
-                }else if (type2 == 3)
+                }
+                else if (type2 == 3)
                 {
                     return "鞋子";
-                }else if (type2 == 4)
+                }
+                else if (type2 == 4)
                 {
                     return "腰带";
-                }else if (type2 == 5)
+                }
+                else if (type2 == 5)
                 {
                     return "护腕";
                 }
-                
+
 
             }
             else if (type1 == 3)
