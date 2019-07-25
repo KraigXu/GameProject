@@ -55,10 +55,9 @@ public class TestWindowScript : MonoBehaviour
 
     void OnGUI()
     {
-
         GUI.skin = Skin;
-        height = ValuePairs1.Count * 18;
-        GUILayout.BeginArea(new Rect(Screen.width / 2, Screen.height / 2, windth, height),Skin.GetStyle("window"));
+        height = ValuePairs1.Count * 30;
+        GUILayout.BeginArea(new Rect(Screen.width / 2, 10, windth, height),Skin.GetStyle("window"));
         GUILayout.BeginVertical();
         
         for (int i = 0; i < ValuePairs1.Count; i++)
@@ -72,22 +71,54 @@ public class TestWindowScript : MonoBehaviour
                     GUILayout.Label(ValuePairs1[i].Value,Skin.GetStyle("articlename"));
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_TYPE:
-                    GUILayout.Label(ValuePairs1[i].Value,Skin.GetStyle("articletype"));
+                    GUILayout.Label(ValuePairs1[i].Value, Skin.GetStyle("articletype"));
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAX_ATTACK:
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MIN_ATTACK:
                     GUILayout.Label("Min Attack"+ValuePairs1[i].Value,Skin.GetStyle("lableh"));
                     break;
                 case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_EXPAIN:
+                    
                     GUILayout.Label(ValuePairs1[i].Value, Skin.GetStyle("normallable"));
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_RANGE:
+                    GUILayout.Label(ValuePairs1[i].Value);
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_HURT:
+                    GUILayout.Label(ValuePairs1[i].Value);
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_NEED:
+                    GUILayout.Label(ValuePairs1[i].Value);
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_VALUE:
+                    GUILayout.Label(ValuePairs1[i].Value);
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_ATTACKSPEED:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_CRIT:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_2:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_DODGE:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_USE_LEVEL:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_3:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_1:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_BASEID:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_MAGIC_DEFENCE:
+                    break;
+                case ENUM_ITEM_ATTRIBUTE.ITEM_ATTRIBUTE_JEWEL_5:
+                    break;
+                default:
                     break;
 
             }
-
         }
         GUILayout.EndVertical();
-
-
 
 
         GUILayout.EndArea();
@@ -159,8 +190,6 @@ public class TestWindowScript : MonoBehaviour
     //        {
     //            //new KeyValuePair<ENUM_ITEM_ATTRIBUTE, string>(ENUM_ITEM_ATTRIBUTE.)
     //        };
-
-
 
 
     //        position = Input.mousePosition;

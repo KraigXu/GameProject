@@ -24,11 +24,7 @@ public class GGPTest : MonoBehaviour
 	            Bounds.Encapsulate(Renderers[i].bounds);
 
 	        }
-
-
 	    }
-
-
 	}
 
     void OnDrawGizmos()

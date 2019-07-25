@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AntiquityWorld;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -260,7 +261,7 @@ namespace Invector.vCharacterController
             RectTransform textRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(damageText, transform);
             Text text = textRect.GetComponent<Text>();
             text.text = damage.damageValue.ToString();
-            Vector2 position = FightingScene.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
+            Vector2 position = FightingController.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
             // position = new Vector2(position.x, Screen.height - position.y);
             textRect.anchoredPosition = position;
             textRect.DOAnchorPosY(position.y + 10, 3);
