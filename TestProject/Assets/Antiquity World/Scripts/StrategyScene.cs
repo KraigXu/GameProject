@@ -117,7 +117,6 @@ public class StrategyScene : MonoBehaviour
         HexCoordinates hexCoordinates;
         HexCell hexCell;
 
-
         List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
         for (int i = 0; i < datas.Count; i++)
         {
@@ -140,7 +139,11 @@ public class StrategyScene : MonoBehaviour
                 case 3:  //Ziggurat
                     SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
                     break;
+                default:
+                    //
+                    break;
             }
+            
         }
         //------------------初始化Biological
 
@@ -185,6 +188,7 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
             SystemManager.Get<FightingSystem>().AddFighting(pentity);
+            
         }
 
         Player = new StrategyPlayer()
@@ -199,13 +203,7 @@ public class StrategyScene : MonoBehaviour
 
         //---------------------------Team
 
-
-
-
         //IsEditTeamSystem playerSystem=SQLService.Instance.QueryUnique<>()
-
-
-
 
         //---------------------------ArticleSystem
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);

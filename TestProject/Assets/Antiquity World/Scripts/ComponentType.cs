@@ -581,6 +581,13 @@ namespace GameSystem
         public byte TitleType;
     }
 
+    public struct City : IComponentData
+    {
+        public int ModelId;
+        public int UniqueCode;
+        
+    }
+
     public struct Crowd : IComponentData
     {
         public int Number;

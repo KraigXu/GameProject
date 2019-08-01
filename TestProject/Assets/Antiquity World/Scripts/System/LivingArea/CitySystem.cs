@@ -26,14 +26,13 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public ComponentDataArray<LivingArea> LivingArea;
-            public ComponentDataArray<Crowd> Crowd;
-            public ComponentDataArray<CellMap> Map;
+            public ComponentDataArray<City> City;
         }
         [Inject]
         private Data _data;
 
         private EntityManager _entityManager;
+        private int _initId = 0;
 
         protected override void OnCreateManager()
         {
@@ -44,6 +43,11 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                
+            }
+            
         }
         /// <summary>
         /// 进入城市
@@ -59,10 +63,6 @@ namespace GameSystem
                 BuildingEntity = Entity.Null,
             });
         }
-
-
-
-
         public static void CityColliderEnter(GameObject go, Collider other)
         {
             Entity thisEntity = go.GetComponent<GameObjectEntity>().Entity;
@@ -98,7 +98,6 @@ namespace GameSystem
                 {
                     EnterCity(targetEntity, thisEntity);
                 }
-
             }
         }
 
@@ -172,49 +171,17 @@ namespace GameSystem
 
         public void AddCity(LivingAreaData data, HexCoordinates coordinates)
         {
-            //for (int i = 0; i < _data.Length; i++)
-            //{
-            //    if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-            //    {
-            //        return;
-            //    }
-            //}
             Entity entity = _entityManager.CreateEntity();
+
             _entityManager.AddComponentData(entity, new CellMap()
             {
                 Coordinates = coordinates
             });
 
-            _entityManager.AddComponentData(entity, new LivingArea
+            _entityManager.AddComponentData(entity,new City
             {
-                Id = data.Id,
-                PersonNumber = data.PersonNumber,
-                Type = (LivingAreaType)data.LivingAreaType,
-                Money = data.Money,
-                MoneyMax = data.MoneyMax,
-                Iron = data.Iron,
-                IronMax = data.IronMax,
-                Wood = data.Wood,
-                WoodMax = data.WoodMax,
-                Food = data.Food,
-                FoodMax = data.FoodMax,
-                DefenseStrength = data.DefenseStrength,
-                StableValue = data.StableValue
-            });
-
-            _entityManager.AddComponentData(entity, new District
-            {
-            });
-
-            _entityManager.AddComponentData(entity, new Money
-            {
-                Value = data.Money,
-                Upperlimit = data.MoneyMax
-            });
-
-            _entityManager.AddComponentData(entity, new Crowd
-            {
-                Number = 300000
+                ModelId = 1,
+                UniqueCode = _initId++,
             });
 
             LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);

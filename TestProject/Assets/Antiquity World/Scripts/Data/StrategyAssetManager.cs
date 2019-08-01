@@ -25,7 +25,6 @@ public class StrategyAssetManager : MonoBehaviour
         Destroy(_instance);
     }
 
-
     public static Sprite GetArticleSprites(int id)
     {
         return _instance._strategyAsset.ArticleSprites[id];
