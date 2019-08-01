@@ -28,6 +28,8 @@ namespace GameSystem.Ui
 
         [Header("UI")]
         public Image CellTypeImage;
+
+        public Text CellTerrainTxt;
         public Text CellTypeTxt;
         public Text CellUrbanTxt;
         public Text CellFarmTxt;
@@ -100,10 +102,57 @@ namespace GameSystem.Ui
 
                 _personUnits.Clear();
 
+                //switch (_curCell.TerrainTypeIndex)
+                //{
+                //    case 0:
+                //        CellTerrainTxt.text = "沙漠";
+                //        break;
+                //    case 1:
+                //        CellTerrainTxt.text = "草地";
+                //        break;
+                //    case 2:
+                //        CellTerrainTxt.text = "湿地";
+                //        break;
+                //    case 3:
+                //        CellTerrainTxt.text = "山地";
+                //        break;
+                //    case 4:
+                //        CellTerrainTxt.text = "雪地";
+                //        break;
+                //    default:
+                //        break;
+                //}
+
+
+                switch (_curCell.Elevation)
+                {
+                        
+                }
+
+                switch (_curCell.FarmLevel)
+                {
+                        
+                }
+
+                switch (_curCell.SpecialIndex)
+                {
+                        
+                }
+
+                switch (_curCell.UrbanLevel)
+                {
+                        
+                }
+
+                
+
 
                 //根据cell显示内容，解析cell
 
-
+                
+                //_curCell.TerrainTypeIndex
+                //_curCell.Elevation
+                //_cur
 
                 int cellType = 3;
 
@@ -115,16 +164,7 @@ namespace GameSystem.Ui
                 switch (_unit.Location.FarmLevel)
                 {
                     case 0:
-                        CellFarmTxt.text = "沙漠";
-                        break;
-                    case 1:
-                        CellFarmTxt.text = "平地";
-                        break;
-                    case 2:
-                        CellFarmTxt.text = "草原";
-                        break;
-                    default:
-                        CellFarmTxt.text = "无";
+                  
                         break;
                 }
 

@@ -46,4 +46,9 @@ public sealed class SystemManager
         return; World.Active.GetOrCreateManager<EntityManager>().AddComponentData(entity,t);
     }
 
+    public static EntityManager ActiveManager
+    {
+        get { return World.Active.GetOrCreateManager<EntityManager>(); }
+    }
+
 }

@@ -136,13 +136,14 @@ public class HexFeatureManager : MonoBehaviour
 
         switch (cell.SpecialIndex)
         {
-            case 1:
-                SystemManager.Get<CitySystem>().AddCity(cell.coordinates);
+            case 1:   //City
+                SystemManager.Get<CitySystem>().AddCity(cell);
                 break;
             case 2:
+                SystemManager.Get<OrganizationSystem>().AddOrganization(cell);
+                break;
             case 3:
-            case 4:
-                SystemManager.Get<OrganizationSystem>().AddOrganization(cell.coordinates);
+                SystemManager.Get<ZigguratSystem>().AddZiggurat(cell);
                 break;
             default:
                 break;

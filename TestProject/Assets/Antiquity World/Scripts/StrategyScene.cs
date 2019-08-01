@@ -32,6 +32,7 @@ public class StrategyScene : MonoBehaviour
 
     public bool IsEdit = false;
 
+
     //---------Map
     public HexGrid hexGrid;
     public HexMapGenerator mapGenerator;
@@ -43,6 +44,7 @@ public class StrategyScene : MonoBehaviour
     //------------Window
     public PlayerInfoWindow PlayerInfoView;
 
+    public IEnumeratorLoad IeEnumeratorLoad;
 
     void Awake()
     {
@@ -51,10 +53,35 @@ public class StrategyScene : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(StrategySceneInit());
+
+#if UNITY_EDITOR
+        Debuger.EnableLog = true;
+        GameSceneInit.CurOpeningInfo.TestValue();
+#endif
+        GameSceneInit.InitializeWithScene();
+
+        IeEnumeratorLoad.AddIEnumerator(InitSystemData());
+        IeEnumeratorLoad.AddIEnumerator(InitMapInfo());
+        IeEnumeratorLoad.AddIEnumerator(InitModel());
+        IeEnumeratorLoad.AddIEnumerator(InitGameData());
+        IeEnumeratorLoad.AddIEnumerator(WindowSyncOpen());
+
     }
 
-    void InitMapInfo()
+    /// <summary>
+    /// 初始化必要的系统数据
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator InitSystemData()
+    {
+
+        FactionSystem.SetupData();
+
+        yield return new WaitForFixedUpdate();
+
+    }
+
+    IEnumerator InitMapInfo()
     {
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
@@ -91,11 +118,11 @@ public class StrategyScene : MonoBehaviour
             }
         }
 
-
+        yield return null;
 
     }
 
-    void InitModel()
+    IEnumerator InitModel()
     {
         //------------ModelController
 
@@ -104,47 +131,50 @@ public class StrategyScene : MonoBehaviour
         ModelController.Instance.ModelFileDatas = modelFileDatas;
 
         StartCoroutine(ModelController.Instance.ReadModelFileData());
-
+        yield return null;
     }
 
     /// <summary>
     /// 初始化数据
     /// </summary>
-    void InitGameData()
+    IEnumerator InitGameData()
     {
+        //-------------------初始化Faction
 
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
         HexCoordinates hexCoordinates;
         HexCell hexCell;
 
-        List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-        for (int i = 0; i < datas.Count; i++)
-        {
-            var data = datas[i];
-            hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
+        //List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
+        //for (int i = 0; i < datas.Count; i++)
+        //{
+        //    var data = datas[i];
+        //    hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
 
-            hexCell = hexGrid.GetCell(hexCoordinates);
-            if (hexCell == null)
-                continue;
-            hexCell.SpecialIndex = data.SpecialIndex;
+        //    hexCell = hexGrid.GetCell(hexCoordinates);
+        //    if (hexCell == null)
+        //        continue;
+        //    hexCell.SpecialIndex = data.SpecialIndex;
 
-            switch (data.SpecialIndex)
-            {
-                case 1:
-                    SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
-                    break;
-                case 2:
-                    SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCoordinates);
-                    break;
-                case 3:  //Ziggurat
-                    SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
-                    break;
-                default:
-                    //
-                    break;
-            }
+        //    switch (data.SpecialIndex)
+        //    {
+        //        case 1:
+        //            SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
+        //            break;
+        //        case 2:
+        //            SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCoordinates);
+        //            break;
+        //        case 3:  //Ziggurat
+        //            SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
+        //            break;
+        //        default:
+        //            break;
+        //    }
             
-        }
+        //}
+
+
         //------------------初始化Biological
 
         List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
@@ -171,6 +201,7 @@ public class StrategyScene : MonoBehaviour
                     break;
             }
         }
+        
 
         //-----------------------------Player
         BiologicalData player = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
@@ -202,7 +233,6 @@ public class StrategyScene : MonoBehaviour
         };
 
         //---------------------------Team
-
         //IsEditTeamSystem playerSystem=SQLService.Instance.QueryUnique<>()
 
         //---------------------------ArticleSystem
@@ -210,33 +240,12 @@ public class StrategyScene : MonoBehaviour
         //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
         //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
         //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<FactionSystem>().SetupComponentData(entityManager);
+     
         //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
         Debug.Log(">>System Over");
-
-
-    }
-
-
-    IEnumerator StrategySceneInit()
-    {
-
-#if UNITY_EDITOR
-        Debuger.EnableLog = true;
-        GameSceneInit.CurOpeningInfo.TestValue();
-#endif
-        GameSceneInit.InitializeWithScene();
-
-        InitMapInfo();
-        InitGameData();
-        InitModel();
-
-        //延时开启Window， 因为可能存在数据未完成的情况
-        StartCoroutine(WindowSyncOpen());
-
         yield return null;
-    }
 
+    }
 
     IEnumerator WindowSyncOpen()
     {

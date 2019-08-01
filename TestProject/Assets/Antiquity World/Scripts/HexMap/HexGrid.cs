@@ -189,7 +189,12 @@ public class HexGrid : MonoBehaviour {
 			chunks[i].ShowUI(visible);
 		}
 	}
-
+    /// <summary>
+    /// 创建单元格
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <param name="i"></param>
 	void CreateCell (int x, int z, int i) {
 		Vector3 position;
 		position.x = (x + z * 0.5f - z / 2) * HexMetrics.innerDiameter;
@@ -246,8 +251,7 @@ public class HexGrid : MonoBehaviour {
 		}
 
 		Text label = Instantiate<Text>(cellLabelPrefab);
-		label.rectTransform.anchoredPosition =
-			new Vector2(position.x, position.z);
+		label.rectTransform.anchoredPosition =new Vector2(position.x, position.z);
 		cell.uiRect = label.rectTransform;
 
 		cell.Elevation = 0;

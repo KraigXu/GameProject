@@ -57,7 +57,7 @@ namespace GameSystem
         {
             base.OnCreateManager();
             LivingAreaFunctions.Add("City", SystemManager.Get<CitySystem>());
-            LivingAreaFunctions.Add("Organization", SystemManager.Get<OrganizationSystem>());
+           // LivingAreaFunctions.Add("Organization", SystemManager.Get<OrganizationSystem>());
 
             BuildingSystems.Add(SystemManager.Get<BuildingBazaarSystem>());
             BuildingSystems.Add(SystemManager.Get<BuildingBlacksmithSystem>());

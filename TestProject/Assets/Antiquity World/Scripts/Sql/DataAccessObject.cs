@@ -509,7 +509,18 @@ namespace DataAccessObject
                                        " Sprite TEXT);");
         }
 
-        
+
+        public static void CreateTable_CampData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS CampData ( " +
+                                       " UniqueCode INTEGER PRIMARY KEY," +
+                                       " Name TEXT," +
+                                       " Description TEXT,"+
+                                       " Icon TEXT,"+
+                                       " Speciality INTEGER);");
+        }
+
+
 
     }
     //-----------------------------------------建表语句 -----------------------------------End
@@ -1192,6 +1203,28 @@ namespace DataAccessObject
         }
     }
 
+
+    public class CampData : BaseData
+    {
+        public int UniqueCode { get; set; }      //唯一标识
+        public string Name { get; set; }         //名称
+        
+        public string Description { get; set; } //说明
+
+        public string Icon { get; set; }     //势力图标路径
+
+        public int Speciality { get; set; }  // 特性值 0-500代表从恶到善
+
+        public override object[] GetValues()
+        {
+
+            object[] objects = new object[]
+            {
+                UniqueCode,Name,Description,Icon,Speciality
+            };
+            return objects;
+        }
+    }
 
 
     //----------------------------------------映射数据库----------------------------------End

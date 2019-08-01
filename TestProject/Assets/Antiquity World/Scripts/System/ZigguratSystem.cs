@@ -19,4 +19,8 @@ public class ZigguratSystem : ComponentSystem
     {
 
     }
+    public void AddZiggurat(HexCell cell)
+    {
+
+    }
 }

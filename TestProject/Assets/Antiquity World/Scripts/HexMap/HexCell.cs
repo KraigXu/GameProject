@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Unity.Entities;
 
 public class HexCell : MonoBehaviour {
 
@@ -303,6 +304,27 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	bool[] roads;
 
+    GameObjectEntity entityCom;
+
+
+    public Entity Entity
+    {
+        get
+        {
+            if (entityCom == null)
+            {
+                entityCom = GetComponent<GameObjectEntity>();
+            }
+
+            return entityCom.Entity;
+        }
+    }
+
+    void Awake()
+    {
+
+    }
+
 	public void IncreaseVisibility () {
 		visibility += 1;
 		if (visibility == 1) {
@@ -592,5 +614,61 @@ public class HexCell : MonoBehaviour {
     public void SetMapData(float data)
     {
         ShaderData.SetMapData(this,data);
+    }
+
+    /// <summary>
+    /// 获取Cell类型
+    /// </summary>
+    /// <returns></returns>
+    public string GetCellType()
+    {
+        //if (terrainTypeIndex == 0)
+        //{
+        //    if (elevation == -1 && )
+        //    {
+
+        //    }else if (elevation == 0)
+        //    {
+
+        //    }else if (elevation == 1)
+        //    {
+
+        //    }else if (elevation == 2)
+        //    {
+
+        //    }else if (elevation == 3)
+        //    {
+
+        //    }
+
+
+
+        //}else if (terrainTypeIndex == 1)
+        //{
+
+        //}else if (terrainTypeIndex == 2)
+        //{
+
+        //}else if (terrainTypeIndex == 3)
+        //{
+
+
+
+        //}else if (terrainTypeIndex == 4)
+        //{
+
+
+        //}
+
+        //if(terrainTypeIndex==0 &&elevation==0)
+
+
+        //terrainTypeIndex,elevation,
+
+
+
+
+        return "";
+
     }
 }

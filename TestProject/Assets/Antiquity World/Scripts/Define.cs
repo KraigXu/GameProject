@@ -110,6 +110,7 @@ public sealed class Define
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Initialize()
     {
+        Debug.Log("场景进入");
         SQLService.GetInstance("TD.db");
         GameObject.Instantiate(Resources.Load<GameObject>("GameRuntimeEdit"));
     }

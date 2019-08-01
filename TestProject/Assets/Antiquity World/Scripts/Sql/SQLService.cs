@@ -96,6 +96,7 @@ public class SQLService
     public void CreateDB()
     {
 
+        Tables.CreateTable_FactionData(this);
         Tables.CreateTable_LivingArea(this);
         Tables.CreateTable_ArticleData(this);
         Tables.CreateTable_Biological(this);

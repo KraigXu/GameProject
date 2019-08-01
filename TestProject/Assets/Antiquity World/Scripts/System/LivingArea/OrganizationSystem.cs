@@ -9,17 +9,14 @@ namespace GameSystem
     /// <summary>
     /// 组织
     /// </summary>
-    public class OrganizationSystem : ComponentSystem, LivingAreaFunction
+    public class OrganizationSystem : ComponentSystem
     {
 
         struct Data
         {
             public readonly int Length;
             public EntityArray Entity;
-            public GameObjectArray GameObjects;
-            //public ComponentDataArray<LivingArea> LivingArea;
-            public ComponentDataArray<Collective> Collective;
-            public ComponentDataArray<CellMap> Map;
+            public ComponentDataArray<FactionProperty> FactionPropertys;
         }
         [Inject]
         private Data _data;
@@ -63,15 +60,33 @@ namespace GameSystem
             AddOrganization(data, coordinates);
         }
 
+        public void AddOrganization(HexCell cell)
+        {
+            
+            //随机从阵营里选一个势力
+
+
+           // Entity factionEntity = SystemManager.Get<FactionSystem>().RandomFaction();
+
+            _entityManager.AddComponentData(cell.Entity,new FactionProperty
+            {
+                //FactionEntity = factionEntity,
+                FactionEntityId=1,
+                Level = Random.Range(0,6),
+            });
+
+        }
+
+
 
         public void AddOrganization(LivingAreaData data, HexCoordinates coordinates)
         {
             for (int i = 0; i < _data.Length; i++)
             {
-                if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-                {
-                    return;
-                }
+                //if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
+                //{
+                //    return;
+                //}
             }
 
 
@@ -113,8 +128,6 @@ namespace GameSystem
                 Id = data.Id,
                 CollectiveClassId = 1,
                 Cohesion = 1
-
-
             });
             LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 

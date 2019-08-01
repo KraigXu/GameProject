@@ -16,6 +16,11 @@ public class HexCellShaderData : MonoBehaviour {
 
 	public bool ImmediateMode { get; set; }
 
+    /// <summary>
+    /// 初始化单元格
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
 	public void Initialize (int x, int z) {
 		if (cellTexture) {
 			cellTexture.Resize(x, z);

@@ -322,6 +322,8 @@ namespace GameSystem
 
     public struct Faction : IComponentData
     {
+
+        //public NativeArray<float> result = new NativeArray<float>(1, Allocator.TempJob);
         public int Id;
         public int Level;
         public int Type;
@@ -335,9 +337,9 @@ namespace GameSystem
         public int FoodMax;
 
 
-        public byte Disposition;                                              //性格值
-        public byte NeutralValue;                                             //中立值
-        public byte LuckValue;                                                //运气值
+        public int Disposition;                                              //性格值
+        public int NeutralValue;                                             //中立值
+        public int LuckValue;                                                //运气值
 
         public int PrestigeValue;
 
@@ -347,7 +349,7 @@ namespace GameSystem
     {
         public Entity FactionEntity;
         public int Level;
-        
+        public int FactionEntityId;
 
     }
 
@@ -585,7 +587,13 @@ namespace GameSystem
     {
         public int ModelId;
         public int UniqueCode;
-        
+
+        public int CityLevel;
+
+        public int Type;
+
+
+
     }
 
     public struct Crowd : IComponentData
@@ -895,6 +903,13 @@ namespace GameSystem
     //} 
   //  struct TeamColor : IComponentData, IInstanceRenderProperties { public float4 Color; }
 
+
+    public struct Camp : IComponentData
+    {
+        public int UniqueCode;
+
+        
+    }
 
 }
 

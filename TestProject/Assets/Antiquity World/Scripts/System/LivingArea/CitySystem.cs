@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DataAccessObject;
 using GameSystem.Ui;
 using Invector;
+using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 
@@ -166,6 +167,47 @@ namespace GameSystem
             }
 
             AddCity(data, coordinates);
+        }
+
+        public void AddCity(HexCell cell)
+        {
+
+            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", cell.coordinates.X, cell.coordinates.Z);
+            if(data==null)
+                return;
+
+            _entityManager.AddComponentData(cell.Entity, new City
+            {
+                ModelId = data.ModelBaseId,
+                UniqueCode = data.Id,
+                CityLevel=data.LivingAreaLevel,
+                Type=data.LivingAreaType,
+            });
+
+
+            //List<BuildingJsonData> jsondatas = JsonConvert.DeserializeObject<List<BuildingJsonData>>(data);
+
+            //for (int i = 0; i < jsondatas.Count; i++)
+            //{
+            //    if (BuildingFunctions.ContainsKey(jsondatas[i].Code))
+            //    {
+            //        BuildingFunctions[jsondatas[i].Code].AnalysisDataSet(entity, jsondatas[i].Values);
+            //    }
+            //    else
+            //    {
+            //        Debuger.Log("???Buillding数据错误，错误:" + jsondatas[i].Code);
+            //    }
+            //}
+           // LivingAreaSystem.LivingAreaAddBuilding(cell.Entity, data.BuildingInfoJson);
+
+            if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
+            {
+                CityRunData runData = new CityRunData();
+                runData.Name = data.Name;
+                runData.Description = data.Description;
+                runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
+                GameStaticData.CityRunDataDic.Add(data.Id, runData);
+            }
         }
 
 

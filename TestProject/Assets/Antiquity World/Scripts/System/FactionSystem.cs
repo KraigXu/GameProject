@@ -6,6 +6,14 @@ using UnityEngine;
 
 namespace GameSystem
 {
+    public class FactionStatic
+    {
+        public Entity entity;
+        public int id;
+        public string Name;
+        public string Description;
+    }
+
     public class FactionSystem: ComponentSystem
     {
         public struct FactionGroup
@@ -18,46 +26,55 @@ namespace GameSystem
         [Inject]
         private FactionGroup _faction;
 
-        private static Dictionary<Entity,FactionData> _factionDatas=new Dictionary<Entity, FactionData>();
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="entityManager"></param>
-        public  void SetupComponentData(EntityManager entityManager)
-        {
-            EntityArchetype  factionArchetype = entityManager.CreateArchetype(typeof(Faction));
-            List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
-            for (int i = 0; i < factionDatas.Count; i++)
-            {
-                Entity faction = entityManager.CreateEntity(factionArchetype);
-                entityManager.SetComponentData(faction, new Faction
-                {
-                    Id = factionDatas[i].Id,
-                    Level = factionDatas[i].FactionLevel,
-                    Food = factionDatas[i].Food,
-                    FoodMax = factionDatas[i].FoodMax,
-                    Iron = factionDatas[i].Iron,
-                    IronMax = factionDatas[i].IronMax,
-                    Money = factionDatas[i].Money,
-                    MoneyMax = factionDatas[i].MoneyMax,
-                    Wood = factionDatas[i].Wood,
-                    WoodMax = factionDatas[i].WoodMax
-                });
-
-                _factionDatas.Add(faction, factionDatas[i]);
-                GameStaticData.FactionName.Add(factionDatas[i].Id, factionDatas[i].Name);
-                GameStaticData.FactionDescription.Add(factionDatas[i].Id, factionDatas[i].Description);
-            }
-        }
 
         protected override void OnUpdate()
         {
 
         }
 
+        public static void SetupData()
+        {
+            EntityArchetype factionArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Faction));
+            Entity faction = SystemManager.ActiveManager.CreateEntity(factionArchetype);
+
+            List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
+
+            for (int i = 0; i < factionDatas.Count; i++)
+            {
+                var factionData = factionDatas[i];
+                SystemManager.ActiveManager.SetComponentData(faction, new Faction
+                {
+                    Id = factionData.Id,
+                    Level = factionData.FactionLevel,
+                    Food = factionData.Food,
+                    FoodMax = factionData.FoodMax,
+                    Iron = factionData.Iron,
+                    IronMax = factionData.IronMax,
+                    Money = factionData.Money,
+                    MoneyMax = factionData.MoneyMax,
+                    Wood = factionData.Wood,
+                    WoodMax = factionData.WoodMax,
+                    Disposition = Random.Range(0, 500),
+                    NeutralValue = Random.Range(0, 500),
+                    LuckValue = Random.Range(0, 500),
+                    PrestigeValue = Random.Range(0, 99999)
+                });
+
+                GameStaticData.FactionName.Add(factionData.Id, factionData.Name);
+                GameStaticData.FactionDescription.Add(factionData.Id, factionData.Description);
+            }
+        }
+
         public ComponentDataArray<Faction> GetFactions()
         {
             return _faction.Faction;
+        }
+
+
+        public Entity RandomFaction()
+        {
+           int index=  Random.Range(0, _faction.Length - 1);
+            return _faction.Entity[index];
         }
 
     }
