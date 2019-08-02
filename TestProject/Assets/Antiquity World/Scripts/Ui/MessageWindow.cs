@@ -61,7 +61,7 @@ namespace GameSystem.Ui
         public override void InitWindowOnAwake()
         {
             _strategyScene = StrategyScene.Instance;
-            _player = StrategyScene.Instance.Player;
+            _player = Define.Player;
             _unit = _player.Unit;
         }
 
@@ -247,7 +247,7 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < _personUnits.Count; i++)
                 {
-                    if (_personUnits[i] == StrategyScene.Instance.Player.Unit)
+                    if (_personUnits[i] == Define.Player.Unit)
                         continue;
 
                     GameObjectEntity personEntity = _personUnits[i].gameObject.GetComponent<GameObjectEntity>();

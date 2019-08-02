@@ -16,8 +16,6 @@ namespace GameSystem.Ui
         //Sytle Info Data
         [SerializeField]
         private List<UiLivingAreaTitleItem> _titles=new List<UiLivingAreaTitleItem>();
-        private EntityManager _entityManager;
-        private LivingAreaSystem _livingAreaSystem;
 
         protected override void InitWindowData()
         {
@@ -32,66 +30,47 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            _livingAreaSystem = SystemManager.Get<LivingAreaSystem>();
         }
 
-        public override void ShowWindow(BaseWindowContextData contextData)
+
+        public void Change(LivingArea livingArea,HexCell cell)
         {
-            base.ShowWindow(contextData);
-
-            
-        }
-
-        void Update()
-        {
-
-        }
-        
-
-        private void TitleSpawn()
-        {
-            for (int i = 0; i < _titles.Count; i++)
+            bool flag = false;
+            int index;
+            for (index = 0; index < _titles.Count; index++)
             {
-                WXPoolManager.Pools[Define.GeneratedPool].Despawn(_titles[i].transform);
+                if (_titles[index].Id == livingArea.Id)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+
+            if (flag)  //说明已有
+            {
+                UiLivingAreaTitleItem item = _titles[index];
 
             }
-            _titles.Clear();
-
-            EntityArray entityArray = _livingAreaSystem.CurEntityArray;
-            GameObjectArray gameObjectArray = _livingAreaSystem.CuGameObjectArray; 
-            for (int i = 0; i < entityArray.Length; i++)
+            else   //没有
             {
-                var livingArea = _entityManager.GetComponentData<LivingArea>(entityArray[i]);
-
                 var data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", livingArea.Id);
-
                 RectTransform titleRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiLivingAreaTitle, transform);
                 titleRect.localScale = Vector3.zero;
 
                 UiLivingAreaTitleItem titleItem = titleRect.gameObject.GetComponent<UiLivingAreaTitleItem>();
-                titleItem.Target = gameObjectArray[i].transform;
-                titleItem.ContetntEntity = entityArray[i];
+                titleItem.Target = cell.transform;
+                titleItem.Id = livingArea.Id;
                 titleItem.Data = data;
                 titleItem.Name = data.Name;
 
-                //更改样式
-                //titleItem._effectImag.overrideSprite = null;
-                //titleItem._typeImag.overrideSprite = null;
-                //titleItem._usedImag.overrideSprite = null;
-
                 _titles.Add(titleItem);
+
             }
         }
 
-
-        void LateUpdate()
+        void Update()
         {
-
-            if (_livingAreaSystem.CurEntityArray.Length != _titles.Count)
-            {
-                TitleSpawn();
-            }
             IEnumerator<UiLivingAreaTitleItem> items = _titles.GetEnumerator();
             while (items.MoveNext())
             {
@@ -108,16 +87,6 @@ namespace GameSystem.Ui
                     items.Current.Rect.localScale = Vector3.zero;
                 }
             }
-        }
-
-        public void ClearItem()
-        {
-            for (int i = 0; i < _titles.Count; i++)
-            {
-                WXPoolManager.Pools[Define.GeneratedPool].Spawn(_titles[i].Rect);
-            }
-            _titles.Clear();
-
         }
     }
 

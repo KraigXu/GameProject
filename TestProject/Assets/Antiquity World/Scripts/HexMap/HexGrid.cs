@@ -355,6 +355,7 @@ public class HexGrid : MonoBehaviour {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
+                Debug.Log(turn+">>Distance?"+current.Distance+">>>"+speed);
 				current.SetLabel(turn.ToString());
 				current.EnableHighlight(Color.white);
 				current = current.PathFrom;

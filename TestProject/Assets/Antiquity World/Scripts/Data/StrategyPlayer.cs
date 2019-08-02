@@ -13,4 +13,7 @@ public class StrategyPlayer
     public Entity Entity;
     public HexUnit Unit;
 
+    public Vector3 MousePoint;
+    
+
 }

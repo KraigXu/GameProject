@@ -1,30 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem.Ui;
+using Unity.Entities;
 using UnityEngine;
 
+/// <summary>
+/// 玩家控制器
+/// </summary>
 public class PlayerControl : MonoBehaviour {
 
     public bool IsEdit = false;
 
-    void Start () {
-		
-	}
+    public StrategyPlayer Player;
+    public PlayerInfoWindow PlayerInfoWin;
 
-	void Update () {
+    private EntityManager _entityManager;
+    void Start()
+    {
+        Player = Define.Player;
+        _entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
+        //if (Player.PlayerId != 0)
+        //{
+        //    PlayerInfoWin=UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow) as PlayerInfoWindow;;
+        //}
     }
 
-    void OnGUI()
+
+
+    
+
+
+
+    void Update()
     {
 
+       // SystemManager.
+
+
     }
+
+
+    ///// <summary>
+    ///// 初始化Player事件
+    ///// </summary>
+    //public void InitPlayerEvent(GameObject go)
+    //{
+
+    //    ColliderTriggerEvent goevent = go.GetComponent<ColliderTriggerEvent>();
+    //    goevent.TriggerEnter = PlayerOnCollisionEnter;
+    //    goevent.TriggerExit = PlayerOnCollisionExit;
+    //}
+
+
 
 }
 
 
-///// <summary>
-///// 玩家控制System
-///// </summary>
+/// <summary>
+/// 玩家控制System
+/// </summary>
 //public class PlayerControlSystem : ComponentSystem
 //{
 //    struct Data
@@ -49,7 +84,7 @@ public class PlayerControl : MonoBehaviour {
 //    private Data _data;
 //    [Inject]
 //    private InteractionData _interactionData;
-//    private EntityManager _entityManager;
+ 
 
 //    public static Entity PlayerEntity
 //    {
@@ -115,209 +150,209 @@ public class PlayerControl : MonoBehaviour {
 
 //        }
 
-//        //for (int i = 0; i < _interactionData.Length; i++)
-//        //{
-//        //    var interaction = _interactionData.Interaction[i];
-//        //    var position = _interactionData.Position[i];
-//        //    var element = _interactionData.Element[i];
-//        //    if (Vector3.Distance(position.Value, input.MousePoint) < interaction.Distance)
-//        //    {
-//        //        switch (element.Type)
-//        //        {
-//        //            case ElementType.None:
-//        //                break;
-//        //            case ElementType.Biological:
-//        //                // Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
-//        //                break;
-//        //            case ElementType.District:
-//        //                break;
-//        //            case ElementType.LivingArea:
-//        //                {
-//        //                    behaviorData.Target = position.Value;
-//        //                }
-//        //                break;
-//        //            case ElementType.Terrain:
-//        //                break;
-//        //            case ElementType.Team:
-//        //                break;
-//        //            default:
-//        //                break;
-//        //        }
-//        //    }
-//        //}
+//        for (int i = 0; i < _interactionData.Length; i++)
+//        {
+//            var interaction = _interactionData.Interaction[i];
+//            var position = _interactionData.Position[i];
+//            var element = _interactionData.Element[i];
+//            if (Vector3.Distance(position.Value, input.MousePoint) < interaction.Distance)
+//            {
+//                switch (element.Type)
+//                {
+//                    case ElementType.None:
+//                        break;
+//                    case ElementType.Biological:
+//                        // Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
+//                        break;
+//                    case ElementType.District:
+//                        break;
+//                    case ElementType.LivingArea:
+//                        {
+//                            behaviorData.Target = position.Value;
+//                        }
+//                        break;
+//                    case ElementType.Terrain:
+//                        break;
+//                    case ElementType.Team:
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
 
-//        //if (EventSystem.current.IsPointerOverGameObject() && _newIsInfo == false)
-//        //    return;
+//        if (EventSystem.current.IsPointerOverGameObject() && _newIsInfo == false)
+//            return;
 
-//        //for (int i = 0; i < _data.Length; i++)
-//        //{
-//        //    if (_data.Status[i].BiologicalIdentity == 0)
-//        //        continue;
+//        for (int i = 0; i < _data.Length; i++)
+//        {
+//            if (_data.Status[i].BiologicalIdentity == 0)
+//                continue;
 
-//        //    var status = _data.Status[i];
-//        //    status.TargetId = _targetId;
-//        //    status.TargetType = _targetType;
-//        //    status.TargetPosition = _targetPosition;
-//        //    status.TargetLocationType = _targetLocationType;
-//        //    _data.Status[i] = status;
-//        //}
-//        //_newIsInfo = false;
+//            var status = _data.Status[i];
+//            status.TargetId = _targetId;
+//            status.TargetType = _targetType;
+//            status.TargetPosition = _targetPosition;
+//            status.TargetLocationType = _targetLocationType;
+//            _data.Status[i] = status;
+//        }
+//        _newIsInfo = false;
 
-//        //for (int i = 0; i < _data.Length; i++)
-//        //{
-//        //    var input = _data.Input[i];
+//        for (int i = 0; i < _data.Length; i++)
+//        {
+//            var input = _data.Input[i];
 
-//        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-//        //    RaycastHit hit;
-//        //    if (Physics.Raycast(ray, out hit))
-//        //    {
-//        //        Debug.DrawLine(ray.origin, hit.point, Color.red);
-//        //        input.MousePoint = hit.point;
+//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//            RaycastHit hit;
+//            if (Physics.Raycast(ray, out hit))
+//            {
+//                Debug.DrawLine(ray.origin, hit.point, Color.red);
+//                input.MousePoint = hit.point;
 
-//        //    }
-//        //    else
-//        //    {
-//        //        input.MousePoint = Vector3.zero;
-//        //    }
-//        //    _data.Input[i] = input;
-//        //}
+//            }
+//            else
+//            {
+//                input.MousePoint = Vector3.zero;
+//            }
+//            _data.Input[i] = input;
+//        }
 
-//        //for (int i = 0; i < m_Players.Length; ++i)
-//        //{
-//        //    PlayerInput input = m_Players.Input[i];
-//        //    Biological biological = m_Players.Biological[i];
-//        //    BiologicalStatus newStatus = m_Players.Status[i];
-//        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-//        //    RaycastHit hit;
-//        //    if (Physics.Raycast(ray, out hit))
-//        //    {
-//        //        Debug.DrawLine(ray.origin, hit.point, Color.blue);
-//        //        input.MousePoint = hit.point;
+//        for (int i = 0; i < m_Players.Length; ++i)
+//        {
+//            PlayerInput input = m_Players.Input[i];
+//            Biological biological = m_Players.Biological[i];
+//            BiologicalStatus newStatus = m_Players.Status[i];
+//            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//            RaycastHit hit;
+//            if (Physics.Raycast(ray, out hit))
+//            {
+//                Debug.DrawLine(ray.origin, hit.point, Color.blue);
+//                input.MousePoint = hit.point;
 
-//        //        if (hit.collider.CompareTag(Define.TagBiological))
-//        //        {
-//        //            Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
-//        //            Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
-//        //            UICenterMasterManager.Instance.GetGameWindowScript<TipsWindow>(WindowID.TipsWindow).
-//        //                SetBiologicalTip(hit.point, tagBiological.BiologicalId);
-//        //        }
+//                if (hit.collider.CompareTag(Define.TagBiological))
+//                {
+//                    Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
+//                    Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
+//                    UICenterMasterManager.Instance.GetGameWindowScript<TipsWindow>(WindowID.TipsWindow).
+//                        SetBiologicalTip(hit.point, tagBiological.BiologicalId);
+//                }
 
-//        //        if (Input.GetMouseButtonUp(0))
-//        //        {
-//        //            if (hit.collider.name.Contains(Define.TagTerrain))
-//        //            {
-//        //                m_Players.AiControl[i].SetTarget(hit.point);
-//        //                newStatus.TargetType = ElementType.Terrain;
-//        //                newStatus.TargetPosition = hit.point;
-//        //                return;
-//        //            }
-//        //            else if (hit.collider.CompareTag(Define.TagLivingArea))
-//        //            {
-//        //                LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
-//        //                m_Players.AiControl[i].SetTarget(livingArea.Position);
-//        //                newStatus.TargetType = ElementType.LivingArea;
-//        //                newStatus.TargetId = livingArea.Id;
+//                if (Input.GetMouseButtonUp(0))
+//                {
+//                    if (hit.collider.name.Contains(Define.TagTerrain))
+//                    {
+//                        m_Players.AiControl[i].SetTarget(hit.point);
+//                        newStatus.TargetType = ElementType.Terrain;
+//                        newStatus.TargetPosition = hit.point;
+//                        return;
+//                    }
+//                    else if (hit.collider.CompareTag(Define.TagLivingArea))
+//                    {
+//                        LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
+//                        m_Players.AiControl[i].SetTarget(livingArea.Position);
+//                        newStatus.TargetType = ElementType.LivingArea;
+//                        newStatus.TargetId = livingArea.Id;
 
-//        //            }
-//        //            else if (hit.collider.CompareTag(Define.TagBiological))
-//        //            {
-//        //                Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
-//        //                Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
+//                    }
+//                    else if (hit.collider.CompareTag(Define.TagBiological))
+//                    {
+//                        Entity entity = hit.collider.GetComponent<GameObjectEntity>().Entity;
+//                        Biological tagBiological = EntityManager.GetComponentData<Biological>(entity);
 
-//        //                newStatus.TargetType = ElementType.Biological;
-//        //                newStatus.TargetId = tagBiological.BiologicalId;
+//                        newStatus.TargetType = ElementType.Biological;
+//                        newStatus.TargetId = tagBiological.BiologicalId;
 
-//        //                m_Players.AiControl[i].SetTarget(hit.collider.transform);
-//        //            }
-//        //        }
+//                        m_Players.AiControl[i].SetTarget(hit.collider.transform);
+//                    }
+//                }
 
-//        //        if (Input.GetMouseButtonUp(1))
-//        //        {
-//        //            if (hit.collider.CompareTag(Define.TagLivingArea))
-//        //            {
-//        //                LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
+//                if (Input.GetMouseButtonUp(1))
+//                {
+//                    if (hit.collider.CompareTag(Define.TagLivingArea))
+//                    {
+//                        LivingArea livingArea = _livingAreaSystem.GetLivingArea(hit.collider.transform);
 
-//        //                ShowWindowData windowData = new ShowWindowData();
-//        //                windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, livingArea.Id);
-//        //                UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, windowData);
-//        //            }
-//        //        }
-//        //    }
-//        //    else
-//        //    {
-//        //        input.MousePoint = Vector3.zero;
-//        //    }
+//                        ShowWindowData windowData = new ShowWindowData();
+//                        windowData.contextData = new ExtendedMenuWindowInData(LivingAreaOnClick, DistrictOnClick, hit.point, livingArea.Id);
+//                        UICenterMasterManager.Instance.ShowWindow(WindowID.ExtendedMenuWindow, windowData);
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                input.MousePoint = Vector3.zero;
+//            }
 
-//        //    m_Players.Input[i] = input;
-//        //    newStatus.Position = m_Players.AiControl[i].transform.position;
+//            m_Players.Input[i] = input;
+//            newStatus.Position = m_Players.AiControl[i].transform.position;
 
 
-//        //    switch (m_Players.Status[i].LocationType)
-//        //    {
-//        //        case LocationType.None:
-//        //            break;
-//        //        case LocationType.Field:
-//        //            {
-//        //                //    newtarget.Target = m_Players.AiControl[i].transform.position;
-//        //            }
-//        //            break;
-//        //        case LocationType.LivingAreaEnter:
-//        //            {
-//        //                //行为
-//        //                //检查当前状态 显示UI信息 
-//        //ShowWindowData windowData = new ShowWindowData();
+//            switch (m_Players.Status[i].LocationType)
+//            {
+//                case LocationType.None:
+//                    break;
+//                case LocationType.Field:
+//                    {
+//                        //    newtarget.Target = m_Players.AiControl[i].transform.position;
+//                    }
+//                    break;
+//                case LocationType.LivingAreaEnter:
+//                    {
+//                        //行为
+//                        //检查当前状态 显示UI信息 
+//                        ShowWindowData windowData = new ShowWindowData();
 
-//        //LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
-//        //livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
-//        //livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
-//        //livingAreaWindowCd.OnExit = LivingAreaOnExit;
-//        //windowData.contextData = livingAreaWindowCd;
+//                        LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+//                        livingAreaWindowCd.LivingAreaId = m_Players.Status[i].TargetId;
+//                        livingAreaWindowCd.OnOpen = LivingAreaOnOpen;
+//                        livingAreaWindowCd.OnExit = LivingAreaOnExit;
+//                        windowData.contextData = livingAreaWindowCd;
 
-//        //SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
-//        //// newtarget.Target = bounds.center;
-//        //newStatus.LocationType = LocationType.LivingAreaIn;
-//        //            }
-//        //            break;
-//        //        case LocationType.LivingAreaIn:
-//        //            {
-//        //            }
-//        //            break;
-//        //        case LocationType.LivingAreaExit:
-//        //            {
-//        //            }
-//        //            break;
-//        //        case LocationType.SocialDialogEnter:
-//        //            {
-//        //                SocialDialogWindowData socialDialogWindowData = new SocialDialogWindowData();
-//        //                socialDialogWindowData.Aid = biological.BiologicalId;
-//        //                socialDialogWindowData.Bid = newStatus.TargetId;
-//        //                socialDialogWindowData.PangBaiId = 1;
-//        //                socialDialogWindowData.StartId = 1;
-//        //                socialDialogWindowData.StartlogId = new int[] { 1 };
-//        //                socialDialogWindowData.DialogEvent = SocialDialogEvent;
-//        //                socialDialogWindowData.Relation = RelationSystem.GetRelationValue(biological.BiologicalId, newStatus.TargetId);
+//                        SystemManager.Get<LivingAreaSystem>().ShowMainWindow(m_Players.Status[i].TargetId, windowData);
+//                        // newtarget.Target = bounds.center;
+//                        newStatus.LocationType = LocationType.LivingAreaIn;
+//                    }
+//                    break;
+//                case LocationType.LivingAreaIn:
+//                    {
+//                    }
+//                    break;
+//                case LocationType.LivingAreaExit:
+//                    {
+//                    }
+//                    break;
+//                case LocationType.SocialDialogEnter:
+//                    {
+//                        SocialDialogWindowData socialDialogWindowData = new SocialDialogWindowData();
+//                        socialDialogWindowData.Aid = biological.BiologicalId;
+//                        socialDialogWindowData.Bid = newStatus.TargetId;
+//                        socialDialogWindowData.PangBaiId = 1;
+//                        socialDialogWindowData.StartId = 1;
+//                        socialDialogWindowData.StartlogId = new int[] { 1 };
+//                        socialDialogWindowData.DialogEvent = SocialDialogEvent;
+//                        socialDialogWindowData.Relation = RelationSystem.GetRelationValue(biological.BiologicalId, newStatus.TargetId);
 
-//        //                ShowWindowData windowData = new ShowWindowData();
-//        //                windowData.contextData = socialDialogWindowData;
-//        //                UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
+//                        ShowWindowData windowData = new ShowWindowData();
+//                        windowData.contextData = socialDialogWindowData;
+//                        UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, windowData);
 
-//        //                newStatus.LocationType = LocationType.SocialDialogIn;
-//        //            }
-//        //            break;
-//        //        case LocationType.SocialDialogIn:
-//        //            {
-//        //            }
-//        //            break;
-//        //        case LocationType.SocialDialogExit:
-//        //            {
-//        //                UICenterMasterManager.Instance.DestroyWindow(WindowID.SocialDialogWindow);
+//                        newStatus.LocationType = LocationType.SocialDialogIn;
+//                    }
+//                    break;
+//                case LocationType.SocialDialogIn:
+//                    {
+//                    }
+//                    break;
+//                case LocationType.SocialDialogExit:
+//                    {
+//                        UICenterMasterManager.Instance.DestroyWindow(WindowID.SocialDialogWindow);
 
-//        //            }
-//        //            break;
-//        //    }
-//        //    // m_Players.Property[i] = newtarget;
-//        //    m_Players.Status[i] = newStatus;
-//        //}
+//                    }
+//                    break;
+//            }
+//            // m_Players.Property[i] = newtarget;
+//            m_Players.Status[i] = newStatus;
+//        }
 //    }
 
 //    private BehaviorData GetNewBehavior(Entity entity, GameObject go, PlayerInput input)
@@ -344,78 +379,69 @@ public class PlayerControl : MonoBehaviour {
 //        }
 
 //        return behavior;
-//        //go.GetComponent<AICharacterControl>().SetTarget(_data.Behavior[i].Target);
+//        go.GetComponent<AICharacterControl>().SetTarget(_data.Behavior[i].Target);
 
-//        //bool flag = false;
-//        //for (int i = 0; i < _interactionData.Length; i++)
-//        //{
-//        //    var interaction = _interactionData.Interaction[i];
-//        //    var position = _interactionData.Position[i];
-//        //    var element = _interactionData.Element[i];
-//        //    if (Vector3.Distance(position.Value, input.ClickPoint) <= interaction.Distance)
-//        //    {
-//        //        flag = true;
-//        //        switch (element.Type)
-//        //        {
-//        //            case ElementType.None:
-//        //                break;
-//        //            case ElementType.Biological:
+//        bool flag = false;
+//        for (int i = 0; i < _interactionData.Length; i++)
+//        {
+//            var interaction = _interactionData.Interaction[i];
+//            var position = _interactionData.Position[i];
+//            var element = _interactionData.Element[i];
+//            if (Vector3.Distance(position.Value, input.ClickPoint) <= interaction.Distance)
+//            {
+//                flag = true;
+//                switch (element.Type)
+//                {
+//                    case ElementType.None:
+//                        break;
+//                    case ElementType.Biological:
 
-//        //                Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
+//                        Biological biological = SystemManager.GetProperty<Biological>(_interactionData.Entity[i]);
 
-//        //                behavior.Target = input.ClickPoint+Vector3.up;
-//        //                behavior.TargetId = biological.BiologicalId;
-//        //                behavior.TargetType = ElementType.Biological;
-//        //                break;
-//        //            case ElementType.District:
+//                        behavior.Target = input.ClickPoint + Vector3.up;
+//                        behavior.TargetId = biological.BiologicalId;
+//                        behavior.TargetType = ElementType.Biological;
+//                        break;
+//                    case ElementType.District:
 
-//        //                break;
-//        //            case ElementType.LivingArea:
-//        //                {
-//        //                    LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_interactionData.Entity[i]);
-//        //                    Position livingareaPos = SystemManager.GetProperty<Position>(_interactionData.Entity[i]);
-//        //                    behavior.Target = livingareaPos.Value;
-//        //                    behavior.TargetType = ElementType.LivingArea;
-//        //                    behavior.TargetId = livingArea.Id;
-//        //                    behavior.TimeToLive = 10;
-//        //                    behavior.TargetEntity = _interactionData.Entity[i];
-//        //                }
-//        //                break;
-//        //            case ElementType.Terrain:
-//        //                {
-//        //                }
-//        //                break;
-//        //            case ElementType.Team:
-//        //                { }
-//        //                break;
-//        //            default:
-//        //                {
-//        //                    behavior.TargetId = -1;
-//        //                    behavior.Target = input.ClickPoint;
-//        //                    behavior.TargetType = ElementType.Terrain;
-//        //                }
-//        //                break;
-//        //        }
-//        //    }
-//        //}
+//                        break;
+//                    case ElementType.LivingArea:
+//                        {
+//                            LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_interactionData.Entity[i]);
+//                            Position livingareaPos = SystemManager.GetProperty<Position>(_interactionData.Entity[i]);
+//                            behavior.Target = livingareaPos.Value;
+//                            behavior.TargetType = ElementType.LivingArea;
+//                            behavior.TargetId = livingArea.Id;
+//                            behavior.TimeToLive = 10;
+//                            behavior.TargetEntity = _interactionData.Entity[i];
+//                        }
+//                        break;
+//                    case ElementType.Terrain:
+//                        {
+//                        }
+//                        break;
+//                    case ElementType.Team:
+//                        { }
+//                        break;
+//                    default:
+//                        {
+//                            behavior.TargetId = -1;
+//                            behavior.Target = input.ClickPoint;
+//                            behavior.TargetType = ElementType.Terrain;
+//                        }
+//                        break;
+//                }
+//            }
+//        }
 
-//        //if (flag == false)
-//        //{
+//        if (flag == false)
+//        {
 
-//        //}
-//        //return behavior;
+//        }
+//        return behavior;
 //    }
 
-//    /// <summary>
-//    /// 初始化Player事件
-//    /// </summary>
-//    public void InitPlayerEvent(GameObject go)
-//    {
 
-//        ColliderTriggerEvent goevent = go.GetComponent<ColliderTriggerEvent>();
-//        goevent.TriggerEnter = PlayerOnCollisionEnter;
-//        goevent.TriggerExit = PlayerOnCollisionExit;
-//    }
 
 
 //    private void Touch(PlayerInput input)

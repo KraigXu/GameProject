@@ -68,5 +68,7 @@ public class StrategyAssetManager : MonoBehaviour
 
     public static RectTransform UiArticleInfo { get { return _instance._strategyAsset.UiArticleInfo;} }
 
+    public static RectTransform UiCityTitle { get { return  _instance._strategyAsset.UiCityTitle;} }
+
 
 }

@@ -36,6 +36,7 @@ namespace GameSystem.Ui
         LivingAreaMainWindow,
         LivingAreaTitleWindow,
         CityWindow,
+        CityTitleWindow,
         BuildingWindow,
         BuildingBazaarWindow,
         BuildingBlacksmithWindow,
@@ -165,6 +166,8 @@ namespace GameSystem.Ui
             {WindowID.PlayerInfoWindow,"UiPrefab/PlayerInfoWindow" },
 
             {WindowID.CityWindow,"UiPrefab/CityWindow" },
+            {WindowID.CityTitleWindow,"UiPrefab/CityTitleWindow" },
+
             {WindowID.BuildingWindow,"UiPrefab/BuildingWindow" },
             {WindowID.BuildingBazaarWindow,"UiPrefab/BuildingBazaarWindow" },
             {WindowID.BuildingBlacksmithWindow,"UiPrefab/BuildingBlacksmithWindow" },

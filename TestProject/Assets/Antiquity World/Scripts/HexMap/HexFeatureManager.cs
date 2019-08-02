@@ -134,20 +134,20 @@ public class HexFeatureManager : MonoBehaviour
         instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
         instance.SetParent(container, false);
 
-        switch (cell.SpecialIndex)
-        {
-            case 1:   //City
-                SystemManager.Get<CitySystem>().AddCity(cell);
-                break;
-            case 2:
-                SystemManager.Get<OrganizationSystem>().AddOrganization(cell);
-                break;
-            case 3:
-                SystemManager.Get<ZigguratSystem>().AddZiggurat(cell);
-                break;
-            default:
-                break;
-        }
+        //switch (cell.SpecialIndex)
+        //{
+        //    case 1:   //City
+        //        SystemManager.Get<CitySystem>().AddCity(cell);
+        //        break;
+        //    case 2:
+        //        SystemManager.Get<OrganizationSystem>().AddOrganization(cell);
+        //        break;
+        //    case 3:
+        //        SystemManager.Get<ZigguratSystem>().AddZiggurat(cell);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     public void AddWall(

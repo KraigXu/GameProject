@@ -189,8 +189,14 @@ namespace GameSystem
         public int TechniquesId;
         public int EquipmentId;
 
+        public int StrategyMoveBasSpeed;
         public int StrategyMoveSpeed;
+
+
         public int FireMoveSpeed;
+
+        public int VisionBaseRange;
+        public int VisionRange;
     }
 
 
@@ -201,23 +207,6 @@ namespace GameSystem
         public string Name;
         public string Description;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -379,11 +368,6 @@ namespace GameSystem
     {
 
     }
-
-    
-
-
-
     public enum EquipType
     {
         Coat,

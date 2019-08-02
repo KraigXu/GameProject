@@ -20,9 +20,8 @@ namespace GameSystem
         {
             public readonly int Length;
             public EntityArray Entity;
-            public GameObjectArray GameObjects;
+            public ComponentArray<HexCell> HexCells;
             public ComponentDataArray<LivingArea> LivingArea;
-            public ComponentDataArray<CellMap> Map;
         }
         [Inject]
         private Data _data;
@@ -36,6 +35,8 @@ namespace GameSystem
         public static Dictionary<string, BuildingFunction> BuildingFunctions = new Dictionary<string, BuildingFunction>();
         public static Dictionary<string, LivingAreaFunction> LivingAreaFunctions = new Dictionary<string, LivingAreaFunction>();
 
+        public LivingAreaTitleWindow LivingAreaTitleWindow;
+
         public Dictionary<Entity, List<Entity>> LivingAreaBuildMap
         {
             get { return _livingAreaBuildMap; }
@@ -46,9 +47,9 @@ namespace GameSystem
             get { return _data.Entity; }
         }
 
-        public GameObjectArray CuGameObjectArray
+        public ComponentArray<HexCell> CuGameObjectArray
         {
-            get { return _data.GameObjects; }
+            get { return _data.HexCells; }
         }
 
 
@@ -76,11 +77,15 @@ namespace GameSystem
             BuildingFunctions.Add("Tavern", SystemManager.Get<BuildingTavernSystem>());
 
         }
+
+        
+
+
         /// <summary>
         /// 初始化城市
         /// </summary>
         /// <param name="entityManager"></param>
-        public void SetupComponentData(EntityManager entityManager)
+        public static void SetupComponentData(EntityManager entityManager,HexGrid grid)
         {
 
             List<LivingAreaModelData> livingAreaModelDatas = SQLService.Instance.QueryAll<LivingAreaModelData>();
@@ -250,15 +255,30 @@ namespace GameSystem
         }
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                var livingArea = _data.LivingArea[i];
-                //var node = _data.GameObjects[i];
+            //if (LivingAreaTitleWindow == null)
+            //{
+            //    if (UICenterMasterManager.Instance.GetGameWindow(WindowID.LivingAreaTitleWindow) == null)
+            //    {
+            //        LivingAreaTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow).GetComponent<LivingAreaTitleWindow>();
+            //    }
+            //    else
+            //    {
+            //        LivingAreaTitleWindow=(LivingAreaTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.LivingAreaTitleWindow);
+            //    }
+            //}
 
-                _data.LivingArea[i] = livingArea;
-                //StrategySceneInit.FixedTitleWindow.Change(livingArea, node.transform);
-            }
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    var livingArea = _data.LivingArea[i];
+
+            //    _data.LivingArea[i] = livingArea;
+            //    LivingAreaTitleWindow.Change(livingArea,_data.HexCells[i]);
+            //}
+
         }
+
+
+
 
         #region  Info
 
@@ -278,19 +298,7 @@ namespace GameSystem
             }
             return names;
         }
-
         #endregion
-
-
-        /// <summary>
-        /// 是否可以进入城市
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public static int IsEnterLivingArea(Entity entity, Entity livingAreaEntity)
-        {
-            return 0;
-        }
 
         /// <summary>
         /// 进入城市

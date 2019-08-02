@@ -44,20 +44,28 @@ public class HexUnit : MonoBehaviour {
 
 	public int Speed {
 		get {
-			return 24;
+			return speed;
 		}
+	    set
+	    {
+	        speed = value;
+	    }
 	}
 
 	public int VisionRange {
 		get {
 			return 3;
 		}
+	    set { visionRange = value; }
 	}
 
 	float orientation;
 
 	List<HexCell> pathToTravel;
 
+    private int speed=4;
+    private int visionRange=3;
+    
 	public void ValidateLocation () {
 		transform.localPosition = location.Position;
 	}
@@ -209,9 +217,9 @@ public class HexUnit : MonoBehaviour {
 		}
 		else {
 			moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
-			moveCost +=
-				toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
+			moveCost +=toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
 		}
+        Debug.Log(moveCost);
 		return moveCost;
 	}
 

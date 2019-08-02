@@ -36,67 +36,24 @@ namespace GameSystem
 
         }
 
-        public void AnalysisDataSet(Entity entity, string[] values)
-        {
-            
-        }
-
         protected override void OnCreateManager()
         {
             base.OnCreateManager();
             _entityManager= World.Active.GetOrCreateManager<EntityManager>();
         }
 
-        public void AddOrganization(HexCoordinates coordinates)
+
+        public void AddOrganization(LivingAreaData data, HexCell cell)
         {
-            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
 
-            if (data == null)
-            {
-                Debug.Log(coordinates.X+">>>"+coordinates.Y+">>>>"+coordinates.Z);
-                return;
-            }
-
-            AddOrganization(data, coordinates);
-        }
-
-        public void AddOrganization(HexCell cell)
-        {
-            
-            //随机从阵营里选一个势力
-
-
-           // Entity factionEntity = SystemManager.Get<FactionSystem>().RandomFaction();
-
-            _entityManager.AddComponentData(cell.Entity,new FactionProperty
+            _entityManager.AddComponentData(cell.Entity, new FactionProperty
             {
                 //FactionEntity = factionEntity,
-                FactionEntityId=1,
-                Level = Random.Range(0,6),
+                FactionEntityId = 1,
+                Level = Random.Range(0, 6),
             });
 
-        }
-
-
-
-        public void AddOrganization(LivingAreaData data, HexCoordinates coordinates)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                //if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-                //{
-                //    return;
-                //}
-            }
-
-
-            Entity entity = _entityManager.CreateEntity();
-            _entityManager.AddComponentData(entity, new CellMap()
-            {
-                Coordinates = coordinates
-            });
-
-            _entityManager.AddComponentData(entity, new LivingArea
+            _entityManager.AddComponentData(cell.Entity, new LivingArea
             {
                 Id = data.Id,
                 PersonNumber = data.PersonNumber,
@@ -113,23 +70,14 @@ namespace GameSystem
                 StableValue = data.StableValue
             });
 
-            _entityManager.AddComponentData(entity, new District
-            {
-            });
-
-            _entityManager.AddComponentData(entity, new Money
-            {
-                Value = data.Money,
-                Upperlimit = data.MoneyMax
-            });
-
-            _entityManager.AddComponentData(entity, new Collective()
+            _entityManager.AddComponentData(cell.Entity, new Collective()
             {
                 Id = data.Id,
                 CollectiveClassId = 1,
                 Cohesion = 1
             });
-            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
+
+            //LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
         }
 

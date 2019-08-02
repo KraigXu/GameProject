@@ -27,6 +27,7 @@ public class StrategyAsset : ScriptableObject
     public RectTransform UiCellFeature;
 
     public RectTransform UiLivingAreaTitle;
+    public RectTransform UiCityTitle;
 
 
 

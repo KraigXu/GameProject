@@ -54,10 +54,8 @@ namespace GameSystem
                 var biological = _data.Biological[i];
                 var body = _data.Body[i];
 
-                var unit = _data.HexUnit;
+                var unit = _data.HexUnit[i];
 
-                //var entity = _data.Entitys[i];
-                //var behavior = _data.Behavior[i];
                 biological.Sex = body.Fertility;
                 biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
                 biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
@@ -68,16 +66,13 @@ namespace GameSystem
                 biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
                 biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
+                unit.Speed = biological.StrategyMoveBasSpeed+biological.StrategyMoveSpeed;
+                unit.VisionRange = biological.VisionRange+biological.VisionBaseRange;
+
                 _data.Biological[i] = biological;
                 _data.Body[i] = body;
-
-                //if (behavior.Target != Vector3.zero)
-                //{
-                //    ComponentDic[entity].AiCharacter.SetTarget(behavior.Target);
-                //}
-
+                
             }
-
         }
 
         public static void SpawnRandomBiological(Transform node)
@@ -115,7 +110,12 @@ namespace GameSystem
                 Lidao = data.Lidao,
                 Jingshen = data.Jingshen,
                 Lingdong = data.Lingdong,
-                Wuxing = data.Wuxing
+                Wuxing = data.Wuxing,
+
+                StrategyMoveSpeed = 6,
+                FireMoveSpeed = 10,
+
+                VisionRange=3,
 
             });
 
@@ -137,6 +137,8 @@ namespace GameSystem
 
                 StrategyMoveSpeed = 6,
                 FireMoveSpeed = 10,
+
+
 
             });
 

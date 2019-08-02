@@ -21,8 +21,6 @@ public class StrategyScene : MonoBehaviour
         get { return _instance; }
     }
 
-    public StrategyPlayer Player;
-
     public Camera MainCamera;
     public Camera BuildCamera;
 
@@ -41,8 +39,6 @@ public class StrategyScene : MonoBehaviour
     public Canvas messageCanvas;
     public LoadingView loadingViewCom;
 
-    //------------Window
-    public PlayerInfoWindow PlayerInfoView;
 
     public IEnumeratorLoad IeEnumeratorLoad;
 
@@ -60,8 +56,8 @@ public class StrategyScene : MonoBehaviour
 #endif
         GameSceneInit.InitializeWithScene();
 
-        IeEnumeratorLoad.AddIEnumerator(InitSystemData());
         IeEnumeratorLoad.AddIEnumerator(InitMapInfo());
+        IeEnumeratorLoad.AddIEnumerator(InitSystemData());
         IeEnumeratorLoad.AddIEnumerator(InitModel());
         IeEnumeratorLoad.AddIEnumerator(InitGameData());
         IeEnumeratorLoad.AddIEnumerator(WindowSyncOpen());
@@ -75,7 +71,11 @@ public class StrategyScene : MonoBehaviour
     IEnumerator InitSystemData()
     {
 
+        EntityManager entityManager = SystemManager.ActiveManager;
+
         FactionSystem.SetupData();
+        //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
+
 
         yield return new WaitForFixedUpdate();
 
@@ -120,6 +120,9 @@ public class StrategyScene : MonoBehaviour
 
         yield return null;
 
+
+
+
     }
 
     IEnumerator InitModel()
@@ -146,35 +149,32 @@ public class StrategyScene : MonoBehaviour
         HexCoordinates hexCoordinates;
         HexCell hexCell;
 
-        //List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-        //for (int i = 0; i < datas.Count; i++)
-        //{
-        //    var data = datas[i];
-        //    hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
+        List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
+        for (int i = 0; i < datas.Count; i++)
+        {
+            var data = datas[i];
+            hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
 
-        //    hexCell = hexGrid.GetCell(hexCoordinates);
-        //    if (hexCell == null)
-        //        continue;
-        //    hexCell.SpecialIndex = data.SpecialIndex;
+            hexCell = hexGrid.GetCell(hexCoordinates);
+            if (hexCell == null)
+                continue;
+            hexCell.SpecialIndex = data.SpecialIndex;
 
-        //    switch (data.SpecialIndex)
-        //    {
-        //        case 1:
-        //            SystemManager.Get<CitySystem>().AddCity(data, hexCoordinates);
-        //            break;
-        //        case 2:
-        //            SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCoordinates);
-        //            break;
-        //        case 3:  //Ziggurat
-        //            SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
-        //            break;
-        //        default:
-        //            break;
-        //    }
-            
-        //}
-
-
+            switch (data.SpecialIndex)
+            {
+                case 1:
+                    SystemManager.Get<CitySystem>().AddCity(data,hexCell);
+                    break;
+                case 2:
+                    SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCell);
+                    break;
+                case 3: 
+                    SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
+                    break;
+                default:
+                    break;
+            }
+        }
         //------------------初始化Biological
 
         List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
@@ -219,45 +219,38 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
             SystemManager.Get<FightingSystem>().AddFighting(pentity);
-            
         }
 
-        Player = new StrategyPlayer()
-        {
-            PlayerId = 1,
-            AvatarSprite = StrategyAssetManager.GetBiologicalAvatar(1),
-            Entity = pentity,
-            Name = player.Name,
-            SurName = player.Surname,
-            Unit = playerUnit
-        };
+
+        Define.Player.PlayerId = 1;
+        Define.Player.AvatarSprite = StrategyAssetManager.GetBiologicalAvatar(1);
+        Define.Player.Entity = pentity;
+        Define.Player.Name = player.Name;
+        Define.Player.SurName = player.Surname;
+        Define.Player.Unit = playerUnit;
+
 
         //---------------------------Team
         //IsEditTeamSystem playerSystem=SQLService.Instance.QueryUnique<>()
-
         //---------------------------ArticleSystem
         //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
         //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
         //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
         //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-     
         //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
         Debug.Log(">>System Over");
         yield return null;
 
     }
-
     IEnumerator WindowSyncOpen()
     {
-        yield return new  WaitForFixedUpdate();
-
+        yield return new WaitForFixedUpdate();
         UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-        // UICenterMasterManager.Instance.ShowWindow(WindowID.MapWindow);
-        HexMapCamera.SetTarget(Player.Unit.transform.position);
+
+        HexMapCamera.SetTarget(Define.Player.Unit.transform.position);
 
         loadingViewCom.Close();
     }
@@ -294,7 +287,7 @@ public class StrategyScene : MonoBehaviour
     {
         UICenterMasterManager.Instance.DestroyWindow(WindowID.WorldTimeWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MenuWindow);
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.PlayerInfoWindow);
+     //   UICenterMasterManager.Instance.DestroyWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MessageWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MapWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
@@ -311,7 +304,7 @@ public class StrategyScene : MonoBehaviour
         UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
         Instance.MainCamera.enabled = false;
 
-        PlayerInfoView.Isflag = false;
+       // PlayerInfoView.Isflag = false;
 
     }
 
@@ -322,11 +315,11 @@ public class StrategyScene : MonoBehaviour
     public void EnterMapModel()
     {
         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+      //  UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
 
         Instance.MainCamera.enabled = true;
 
-        PlayerInfoView.Isflag = true;
+      //  PlayerInfoView.Isflag = true;
     }
 
     public void EnterFightingModel()

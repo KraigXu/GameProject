@@ -19,15 +19,21 @@ namespace GameSystem
     }
 
     /// <summary>
-    /// 城市
+    /// 城市， 固定点生成信息
     /// </summary>
     public class CitySystem : ComponentSystem, LivingAreaFunction
     {
+
+        public CityTitleWindow CityTitleWindow;
+
+
         struct Data
         {
             public readonly int Length;
             public EntityArray Entity;
+            public ComponentArray<HexCell> HexCells;
             public ComponentDataArray<City> City;
+            
         }
         [Inject]
         private Data _data;
@@ -42,13 +48,27 @@ namespace GameSystem
         }
 
 
+
+
         protected override void OnUpdate()
         {
+            if (CityTitleWindow == null)
+            {
+                if (UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow) == null)
+                {
+                    CityTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.CityTitleWindow).GetComponent<CityTitleWindow>();
+                }
+                else
+                {
+                    CityTitleWindow = (CityTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow);
+                }
+            }
+
             for (int i = 0; i < _data.Length; i++)
             {
-                
+                CityTitleWindow.Change(_data.City[i],_data.HexCells[i]);
             }
-            
+
         }
         /// <summary>
         /// 进入城市
@@ -156,49 +176,32 @@ namespace GameSystem
             });
         }
 
-        
-
-        public void AddCity(HexCoordinates coordinates)
+        public void AddCity(LivingAreaData data, HexCell cell)
         {
-            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", coordinates.X, coordinates.Z);
-            if (data == null)
-            {
-                return;
-            }
-
-            AddCity(data, coordinates);
-        }
-
-        public void AddCity(HexCell cell)
-        {
-
-            LivingAreaData data = SQLService.Instance.QueryUnique<LivingAreaData>(" PositionX=? and PositionZ=? ", cell.coordinates.X, cell.coordinates.Z);
-            if(data==null)
-                return;
-
             _entityManager.AddComponentData(cell.Entity, new City
             {
                 ModelId = data.ModelBaseId,
                 UniqueCode = data.Id,
-                CityLevel=data.LivingAreaLevel,
-                Type=data.LivingAreaType,
+                CityLevel = data.LivingAreaLevel,
+                Type = data.LivingAreaType,
             });
 
-
-            //List<BuildingJsonData> jsondatas = JsonConvert.DeserializeObject<List<BuildingJsonData>>(data);
-
-            //for (int i = 0; i < jsondatas.Count; i++)
-            //{
-            //    if (BuildingFunctions.ContainsKey(jsondatas[i].Code))
-            //    {
-            //        BuildingFunctions[jsondatas[i].Code].AnalysisDataSet(entity, jsondatas[i].Values);
-            //    }
-            //    else
-            //    {
-            //        Debuger.Log("???Buillding数据错误，错误:" + jsondatas[i].Code);
-            //    }
-            //}
-           // LivingAreaSystem.LivingAreaAddBuilding(cell.Entity, data.BuildingInfoJson);
+            _entityManager.AddComponentData(cell.Entity, new LivingArea
+            {
+                Id = data.Id,
+                PersonNumber = data.PersonNumber,
+                Type = (LivingAreaType)data.LivingAreaType,
+                Money = data.Money,
+                MoneyMax = data.MoneyMax,
+                Iron = data.Iron,
+                IronMax = data.IronMax,
+                Wood = data.Wood,
+                WoodMax = data.WoodMax,
+                Food = data.Food,
+                FoodMax = data.FoodMax,
+                DefenseStrength = data.DefenseStrength,
+                StableValue = data.StableValue
+            });
 
             if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
             {
@@ -208,34 +211,32 @@ namespace GameSystem
                 runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
                 GameStaticData.CityRunDataDic.Add(data.Id, runData);
             }
-        }
 
 
-        public void AddCity(LivingAreaData data, HexCoordinates coordinates)
-        {
-            Entity entity = _entityManager.CreateEntity();
 
-            _entityManager.AddComponentData(entity, new CellMap()
-            {
-                Coordinates = coordinates
-            });
+            //Entity entity = _entityManager.CreateEntity();
 
-            _entityManager.AddComponentData(entity,new City
-            {
-                ModelId = 1,
-                UniqueCode = _initId++,
-            });
+            //_entityManager.AddComponentData(entity, new CellMap()
+            //{
+            //    Coordinates = coordinates
+            //});
 
-            LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
+            //_entityManager.AddComponentData(entity,new City
+            //{
+            //    ModelId = 1,
+            //    UniqueCode = _initId++,
+            //});
 
-            if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
-            {
-                CityRunData runData=new CityRunData();
-                runData.Name = data.Name;
-                runData.Description = data.Description;
-                runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
-                GameStaticData.CityRunDataDic.Add(data.Id,runData);
-            }
+            //LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
+
+            //if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
+            //{
+            //    CityRunData runData=new CityRunData();
+            //    runData.Name = data.Name;
+            //    runData.Description = data.Description;
+            //    runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
+            //    GameStaticData.CityRunDataDic.Add(data.Id,runData);
+            //}
 
         }
     }

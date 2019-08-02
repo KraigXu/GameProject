@@ -18,7 +18,7 @@ public class UiLivingAreaTitleItem : MonoBehaviour
     }
 
 
-    public Entity ContetntEntity;
+    public int Id;
     public LivingAreaData Data;
 
     public Transform Target;

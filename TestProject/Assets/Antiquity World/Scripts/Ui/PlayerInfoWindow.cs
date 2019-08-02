@@ -45,11 +45,11 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            AvateImage.overrideSprite = StrategyScene.Instance.Player.AvatarSprite;
-            NameText.text = StrategyScene.Instance.Player.SurName + StrategyScene.Instance.Player.Name;
+            AvateImage.overrideSprite =Define.Player.AvatarSprite;
+            NameText.text = Define.Player.SurName + Define.Player.Name;
             grid = StrategyScene.Instance.hexGrid;
-            unit = StrategyScene.Instance.Player.Unit;
-            StrategyScene.Instance.PlayerInfoView = this;
+            unit = Define.Player.Unit;
+            //StrategyScene.Instance.PlayerInfoView = this;
 
         }
 
@@ -162,8 +162,6 @@ namespace GameSystem.Ui
 
         bool UpdateCurrentCell()
         {
-           
-
             HexCell cell = grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
             if (cell != currentCell)
             {

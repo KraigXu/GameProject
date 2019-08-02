@@ -105,7 +105,7 @@ namespace GameSystem.Ui
 
             if (contextData == null)
             {
-                _curEntity = StrategyScene.Instance.Player.Entity;
+                _curEntity = Define.Player.Entity;
             }
             else
             {
@@ -116,7 +116,6 @@ namespace GameSystem.Ui
             Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
 
             BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[_curEntity];
-
 
             NameTxt.text = biologicalFixed.Name;
             SurnameTxt.text = biologicalFixed.Surname;
