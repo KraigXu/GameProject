@@ -7,7 +7,8 @@ using UnityEngine;
 /// <summary>
 /// 玩家控制器
 /// </summary>
-public class PlayerControl : MonoBehaviour {
+public class PlayerControl : MonoBehaviour
+{
 
     public bool IsEdit = false;
 
@@ -28,14 +29,14 @@ public class PlayerControl : MonoBehaviour {
 
 
 
-    
+
 
 
 
     void Update()
     {
 
-       // SystemManager.
+        // SystemManager.
 
 
     }
@@ -84,7 +85,7 @@ public class PlayerControl : MonoBehaviour {
 //    private Data _data;
 //    [Inject]
 //    private InteractionData _interactionData;
- 
+
 
 //    public static Entity PlayerEntity
 //    {

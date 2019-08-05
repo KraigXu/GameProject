@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 
 public class HexGrid : MonoBehaviour {
 
@@ -208,6 +209,8 @@ public class HexGrid : MonoBehaviour {
 	    cell.ColumnIndex = x / HexMetrics.chunkSizeX;
 		cell.ShaderData = cellShaderData;
 
+        //GameObjectEntity entity= cell.GetComponent<GameObjectEntity>();
+
 	    if (wrapping)
 	    {
 	        cell.Explorable = z > 0 && z < cellCountZ - 1;
@@ -355,7 +358,7 @@ public class HexGrid : MonoBehaviour {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
-                Debug.Log(turn+">>Distance?"+current.Distance+">>>"+speed);
+				    //  Debug.Log(turn+">>Distance?"+current.Distance+">>>"+speed);
 				current.SetLabel(turn.ToString());
 				current.EnableHighlight(Color.white);
 				current = current.PathFrom;

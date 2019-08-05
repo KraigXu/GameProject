@@ -19,18 +19,35 @@ namespace  GameSystem
             public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<NpcInput> NpcInput;
+            public ComponentArray<HexUnit> HexUnit;
         }
 
-        [Inject] private BiologicalAiGroup _aiGroup;
+        struct  Data
+        {
+            public readonly int Length;
+            public EntityArray Entitys;
+            public ComponentDataArray<Biological> Biologicals;
+            public ComponentDataArray<NpcInput> Npcinputs;
+            public ComponentArray<HexUnit> HexUnits;
+        }
+
+        [Inject] private Data _data;
 
         protected override void OnUpdate()
         {
             float dt = Time.deltaTime;
+            
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var biological = _data.Biologicals[i];
+
+            }
+
 
             //for (int i = 0; i < _aiGroup.Length; i++)
             //{
             //    Biological biological = _aiGroup.Biological[i];
-            //  //  BiologicalStatus status = _aiGroup.Status[i];
+            //    //  BiologicalStatus status = _aiGroup.Status[i];
 
 
             //    switch (status.TargetType)
@@ -39,7 +56,7 @@ namespace  GameSystem
             //            if (status.LocationType == LocationType.Field)
             //            {
             //                //选择新目标
-            //     /           ChangeAiSystem(_aiGroup.Entitys[i], status, biological, _aiGroup.NpcInput[i]);
+            //                     ChangeAiSystem(_aiGroup.Entitys[i], status, biological, _aiGroup.NpcInput[i]);
             //            }
             //            else
             //            {
@@ -60,106 +77,95 @@ namespace  GameSystem
             //    _aiGroup.Biological[i] = biological;
             //    _aiGroup.Status[i] = status;
 
-            //    //switch ((LocationType)m_Players.Status[i].LocationType)
-            //    //{
-            //    //    case LocationType.None:
-            //    //        break;
-            //    //    case LocationType.Field:
-            //    //        {
-            //    //            newtarget.Target = m_Players.AiControl[i].transform.position;
-            //    //        }
-            //    //        break;
-            //    //    case LocationType.LivingAreaEnter:
-            //    //        {
-            //    //            //检查当前状态 显示UI信息 
+            //    switch ((LocationType)m_Players.Status[i].LocationType)
+            //    {
+            //        case LocationType.None:
+            //            break;
+            //        case LocationType.Field:
+            //            {
+            //                newtarget.Target = m_Players.AiControl[i].transform.position;
+            //            }
+            //            break;
+            //        case LocationType.LivingAreaEnter:
+            //            {
+            //                //检查当前状态 显示UI信息 
 
-            //    //            ShowWindowData windowData = new ShowWindowData();
-            //    //            LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
+            //                ShowWindowData windowData = new ShowWindowData();
+            //                LivingAreaWindowCD uidata = _livingAreaSystem.GetLivingAreaData(m_Players.Status[i].TargetId);
 
-            //    //            uidata.OnOpen = LivingAreaOnOpen;
-            //    //            uidata.OnExit = LivingAreaOnExit;
-            //    //            windowData.contextData = uidata;
-            //    //            UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
+            //                uidata.OnOpen = LivingAreaOnOpen;
+            //                uidata.OnExit = LivingAreaOnExit;
+            //                windowData.contextData = uidata;
+            //                UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaMainWindow, windowData);
 
-            //    //            newStatus.LocationType = (int)LocationType.LivingAreaIn;
-            //    //            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
-            //    //            Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
+            //                newStatus.LocationType = (int)LocationType.LivingAreaIn;
+            //                GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(GameStaticData.LivingAreaModelPath[m_Players.Status[i].TargetId]));
+            //                Renderer[] renderers = go.transform.GetComponentsInChildren<Renderer>();
 
-            //    //            Bounds bounds = renderers[0].bounds;
+            //                Bounds bounds = renderers[0].bounds;
 
-            //    //            for (int j = 1; j < renderers.Length; j++)
-            //    //            {
-            //    //                bounds.Encapsulate(renderers[j].bounds);
-            //    //            }
-            //    //            newtarget.Target = bounds.center;
-            //    //        }
-            //    //        break;
-            //    //    case LocationType.LivingAreaIn:
-            //    //        {
+            //                for (int j = 1; j < renderers.Length; j++)
+            //                {
+            //                    bounds.Encapsulate(renderers[j].bounds);
+            //                }
+            //                newtarget.Target = bounds.center;
+            //            }
+            //            break;
+            //        case LocationType.LivingAreaIn:
+            //            {
 
-            //    //        }
-            //    //        break;
-            //    //    case LocationType.LivingAreaExit:
-            //    //        {
+            //            }
+            //            break;
+            //        case LocationType.LivingAreaExit:
+            //            {
 
-            //    //        }
-            //    //        break;
-            //    //    case LocationType.SocialDialog:
-            //    //        {
-            //    //            Debug.Log("LLsl");
-            //    //        }
-            //    //        break;
-            //    //}
+            //            }
+            //            break;
+            //        case LocationType.SocialDialog:
+            //            {
+            //                Debug.Log("LLsl");
+            //            }
+            //            break;
+            //    }
 
 
-            //    //switch ((TendType)_aiGroup.NpcInput[i].Movetend)
-            //    //{
-            //    //    case TendType.Money:
-            //    //        break;
-            //    //    case TendType.Move:
-            //    //        if (_aiGroup.AiControl[i].IsMove == false)
-            //    //        {
-            //    //            _aiGroup.AiControl[i].SetTarget(new Vector3(Random.Range(1500f, 1700f), 80.7618f, Random.Range(500f, 700f)));
-            //    //        }
-            //    //        break;
-            //    //    default:
-            //    //        break;
-            //    //}
-            //}       
+            //    switch ((TendType)_aiGroup.NpcInput[i].Movetend)
+            //    {
+            //        case TendType.Money:
+            //            break;
+            //        case TendType.Move:
+            //            if (_aiGroup.AiControl[i].IsMove == false)
+            //            {
+            //                _aiGroup.AiControl[i].SetTarget(new Vector3(Random.Range(1500f, 1700f), 80.7618f, Random.Range(500f, 700f)));
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
         }
 
 
-        ///// <summary>
-        ///// 根据属性 选择合适的行为
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <param name="status"></param>
-        ///// <param name="biological"></param>
-        //private void ChangeAiSystem(Entity entity, BiologicalStatus status, Biological biological, NpcInput input)
-        //{
-            
-        //    switch (input.BehaviorPolicy)
-        //    {
-        //        case BehaviorPolicyType.Cruising:
-                    
+        /// <summary>
+        /// 根据属性 选择合适的行为
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="status"></param>
+        /// <param name="biological"></param>
+        private void ChangeAiSystem(Entity entity, Biological biological, NpcInput input)
+        {
 
+            switch (input.BehaviorPolicy)
+            {
+                case BehaviorPolicyType.Cruising:
+                    break;
+            }
+        }
 
-        //            break;
-        //    }
+        private void CheckAi()
+        {
 
-        //}
-
-        //private void ChangeAiSystem(Entity entity, BiologicalStatus status, Biological biological, NpcInput input,
-        //    AICharacterControl aiCharacter)
-        //{
-
-        //}
-
-
-        //private void CheckAi()
-        //{
-
-        //}
+        }
     }
 }
 

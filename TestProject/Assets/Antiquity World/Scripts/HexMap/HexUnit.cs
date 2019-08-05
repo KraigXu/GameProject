@@ -219,7 +219,6 @@ public class HexUnit : MonoBehaviour {
 			moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
 			moveCost +=toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
 		}
-        Debug.Log(moveCost);
 		return moveCost;
 	}
 

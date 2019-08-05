@@ -57,7 +57,7 @@ namespace GameSystem
         protected override void OnCreateManager()
         {
             base.OnCreateManager();
-            LivingAreaFunctions.Add("City", SystemManager.Get<CitySystem>());
+         //   LivingAreaFunctions.Add("City", SystemManager.Get<CitySystem>());
            // LivingAreaFunctions.Add("Organization", SystemManager.Get<OrganizationSystem>());
 
             BuildingSystems.Add(SystemManager.Get<BuildingBazaarSystem>());

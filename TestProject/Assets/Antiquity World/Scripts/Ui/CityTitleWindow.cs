@@ -46,13 +46,14 @@ public class CityTitleWindow : UIWindowBase
             }
         }
 
-
         if (flag)  //说明已有
         {
             var item = _titles[index];
 
             item.TyepImg.sprite = _types[city.Type];
-          //  item.RelationImg.sprite=_types[]
+            item.RelationImg.sprite = _types[city.Type];
+            //item.Id = 10;
+            //  item.RelationImg.sprite=_types[]
             //item._usedImag.sprite = _types[city.UniqueCode];
             //item
         }

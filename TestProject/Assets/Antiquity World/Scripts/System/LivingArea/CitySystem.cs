@@ -21,7 +21,7 @@ namespace GameSystem
     /// <summary>
     /// 城市， 固定点生成信息
     /// </summary>
-    public class CitySystem : ComponentSystem, LivingAreaFunction
+    public class CitySystem : ComponentSystem
     {
 
         public CityTitleWindow CityTitleWindow;
@@ -33,7 +33,7 @@ namespace GameSystem
             public EntityArray Entity;
             public ComponentArray<HexCell> HexCells;
             public ComponentDataArray<City> City;
-            
+
         }
         [Inject]
         private Data _data;
@@ -66,7 +66,7 @@ namespace GameSystem
 
             for (int i = 0; i < _data.Length; i++)
             {
-                CityTitleWindow.Change(_data.City[i],_data.HexCells[i]);
+                CityTitleWindow.Change(_data.City[i], _data.HexCells[i]);
             }
 
         }
@@ -120,6 +120,8 @@ namespace GameSystem
                     EnterCity(targetEntity, thisEntity);
                 }
             }
+
+
         }
 
         public static void CityColliderExit(GameObject go, Collider other)
@@ -144,36 +146,11 @@ namespace GameSystem
         }
 
 
-        /// <summary>
-        /// 解析数据 往实体上增加建筑信息
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="values"></param>
-        public void AnalysisDataSet(Entity entity, string[] values)
+
+        public class CityBuildModel
         {
-            var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-
-            for (int i = 0; i < values.Length; i++)
-            {
-
-            }
-
-            entityManager.AddComponentData(entity, new BuildingBazaar
-            {
-
-            });
-
-            entityManager.AddComponentData(entity, new BuildingBlacksmith
-            {
-
-            });
-
-            entityManager.AddComponentData(entity, new BuidingTavern
-            {
-
-
-            });
+            public string Name;
+            public string Type;
         }
 
         public void AddCity(LivingAreaData data, HexCell cell)
@@ -184,6 +161,7 @@ namespace GameSystem
                 UniqueCode = data.Id,
                 CityLevel = data.LivingAreaLevel,
                 Type = data.LivingAreaType,
+
             });
 
             _entityManager.AddComponentData(cell.Entity, new LivingArea
@@ -203,6 +181,38 @@ namespace GameSystem
                 StableValue = data.StableValue
             });
 
+            //根据City类型追加不同类型的建筑物
+            switch (data.LivingAreaType)
+            {
+                case 0:   //小镇
+                    {
+                        _entityManager.AddComponentData(cell.Entity, new BuidingTavern());
+                    }
+                    break;
+                case 1:  //小城
+                    {
+                        _entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
+                        _entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
+                    }
+                    break;
+                case 2: //皇城
+                    {
+                        _entityManager.AddComponentData(cell.Entity, new BuidingTavern());
+                        _entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
+                        _entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
+                    }
+                    break;
+            }
+
+            //BuildingFunctions.Add("Bazaar", SystemManager.Get<BuildingBazaarSystem>());
+            //BuildingFunctions.Add("Blacksmith", SystemManager.Get<BuildingBlacksmithSystem>());
+            //BuildingFunctions.Add("Dressmak", SystemManager.Get<BuildingDressmakSystem>());
+            //BuildingFunctions.Add("Dwellings", SystemManager.Get<BuildingDwellingsSystem>());
+            //BuildingFunctions.Add("Hospital", SystemManager.Get<BuildingHospitalSystem>());
+            //BuildingFunctions.Add("Official", SystemManager.Get<BuildingOfficialSystem>());
+            //BuildingFunctions.Add("Tavern", SystemManager.Get<BuildingTavernSystem>());
+
+
             if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
             {
                 CityRunData runData = new CityRunData();
@@ -214,29 +224,7 @@ namespace GameSystem
 
 
 
-            //Entity entity = _entityManager.CreateEntity();
 
-            //_entityManager.AddComponentData(entity, new CellMap()
-            //{
-            //    Coordinates = coordinates
-            //});
-
-            //_entityManager.AddComponentData(entity,new City
-            //{
-            //    ModelId = 1,
-            //    UniqueCode = _initId++,
-            //});
-
-            //LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
-
-            //if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
-            //{
-            //    CityRunData runData=new CityRunData();
-            //    runData.Name = data.Name;
-            //    runData.Description = data.Description;
-            //    runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
-            //    GameStaticData.CityRunDataDic.Add(data.Id,runData);
-            //}
 
         }
     }

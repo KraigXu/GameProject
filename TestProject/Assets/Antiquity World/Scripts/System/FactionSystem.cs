@@ -29,7 +29,6 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-
         }
 
         public static void SetupData()

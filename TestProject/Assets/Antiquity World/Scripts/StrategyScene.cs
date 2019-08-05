@@ -171,6 +171,12 @@ public class StrategyScene : MonoBehaviour
                 case 3: 
                     SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
                     break;
+                case 4:
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:
                 default:
                     break;
             }
@@ -220,8 +226,7 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
             SystemManager.Get<FightingSystem>().AddFighting(pentity);
         }
-
-
+        
         Define.Player.PlayerId = 1;
         Define.Player.AvatarSprite = StrategyAssetManager.GetBiologicalAvatar(1);
         Define.Player.Entity = pentity;
@@ -229,15 +234,12 @@ public class StrategyScene : MonoBehaviour
         Define.Player.SurName = player.Surname;
         Define.Player.Unit = playerUnit;
 
-
-        //---------------------------Team
-        //IsEditTeamSystem playerSystem=SQLService.Instance.QueryUnique<>()
-        //---------------------------ArticleSystem
-        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+        SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        
         Debug.Log(">>System Over");
         yield return null;
 

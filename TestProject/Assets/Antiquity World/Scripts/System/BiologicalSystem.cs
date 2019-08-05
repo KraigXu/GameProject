@@ -66,12 +66,12 @@ namespace GameSystem
                 biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
                 biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
-                unit.Speed = biological.StrategyMoveBasSpeed+biological.StrategyMoveSpeed;
-                unit.VisionRange = biological.VisionRange+biological.VisionBaseRange;
+                unit.Speed = biological.StrategyMoveBasSpeed + biological.StrategyMoveSpeed;
+                unit.VisionRange = biological.VisionRange + biological.VisionBaseRange;
 
                 _data.Biological[i] = biological;
                 _data.Body[i] = body;
-                
+
             }
         }
 
@@ -115,7 +115,7 @@ namespace GameSystem
                 StrategyMoveSpeed = 6,
                 FireMoveSpeed = 10,
 
-                VisionRange=3,
+                VisionRange = 3,
 
             });
 
@@ -137,9 +137,6 @@ namespace GameSystem
 
                 StrategyMoveSpeed = 6,
                 FireMoveSpeed = 10,
-
-
-
             });
 
 
@@ -158,7 +155,6 @@ namespace GameSystem
 
                 GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
             }
-
 
         }
 
@@ -183,8 +179,6 @@ namespace GameSystem
             {
 
             });
-
-
 
             entityManager.SetComponentData(entity, new Equipment
             {
@@ -219,7 +213,9 @@ namespace GameSystem
 
             entityManager.AddComponentData(entity, new Team
             {
-                TeamBossId = data.TeamId
+                TeamBossId = data.TeamId,
+                //TeamBossId=data.TeamId
+                
             });
 
 
@@ -239,7 +235,6 @@ namespace GameSystem
             {
                 entityManager.AddComponentData(entity, new FactionProperty
                 {
-
                 });
             }
 
@@ -639,17 +634,6 @@ namespace GameSystem
         }
 
 
-        //public void EnitiyAppendComponent<T>(int id)
-        //{
-        //    for (int i = 0; i < _data.Length; i++)
-        //    {
-        //        if (id == _data.Biological[i].BiologicalId)
-        //        {
-        //            Entity entity = _data.Entitys[i];
-        //            _entityManager.AddComponent(entity, ComponentType.Create<T>());
-        //        }
-        //    }
-        //}
 
         public Entity GetBiologicalEntity(int id)
         {
@@ -671,17 +655,6 @@ namespace GameSystem
             return new HexUnit();
         }
 
-        //public void SetBiologicalStatus(int id, BiologicalStatus status)
-        //{
-        //    for (int i = 0; i < _data.Length; i++)
-        //    {
-        //        if (_data.Biological[i].BiologicalId == id)
-        //        {
-        //            _data.Status[i] = status;
-        //            return;
-        //        }
-        //    }
-        //}
 
 
 

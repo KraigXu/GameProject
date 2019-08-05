@@ -23,15 +23,23 @@ namespace GameSystem
                 
             }
         }
-        struct PrestigeGroup
+
+        struct Data
         {
             public readonly int Length;
-            public ComponentDataArray<PrestigeValue> PrestigeValue;
+            public ComponentDataArray<PrestigeValue> PrestigeValues;
+            public EntityArray Entitys;
         }
+        
+        [Inject]
+        private Data _data; 
+
         protected override void OnUpdate()
         {
-
-
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var prestigevalue = _data.PrestigeValues[i];
+            }
         }
 
         public string CheckValue(int value,ElementType type)
