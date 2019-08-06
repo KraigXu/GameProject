@@ -21,7 +21,6 @@ namespace GameSystem.Ui
         private Vector3 _wordpos = Vector3.zero;
         private Camera _camera3D;
         private Camera _camera2D;
-        private bool _isNeedModelBlockOut = false;
         private TipsInfoWindowData _infodata;
         private List<RectTransform> _initItem = new List<RectTransform>();
         private int _curId;

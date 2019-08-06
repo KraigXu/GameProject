@@ -70,5 +70,8 @@ public class StrategyAssetManager : MonoBehaviour
 
     public static RectTransform UiCityTitle { get { return  _instance._strategyAsset.UiCityTitle;} }
 
+    public static RectTransform UiZigguratTitle { get { return _instance._strategyAsset.UiZigguratTitle;} }
+    public static RectTransform UiOrganizationTitle { get { return _instance._strategyAsset.UiOrganizationTitle;} }
+
 
 }

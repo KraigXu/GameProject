@@ -48,8 +48,6 @@ namespace GameSystem
         }
 
 
-
-
         protected override void OnUpdate()
         {
             if (CityTitleWindow == null)
@@ -200,6 +198,11 @@ namespace GameSystem
                         _entityManager.AddComponentData(cell.Entity, new BuidingTavern());
                         _entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
                         _entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
+                    }
+                    break;
+                case 3:
+                    {
+                        // _entityManager.AddComponentData(cell.Entity,new Dwellings());
                     }
                     break;
             }

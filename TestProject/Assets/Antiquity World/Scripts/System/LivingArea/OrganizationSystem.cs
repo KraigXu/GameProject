@@ -1,6 +1,7 @@
 ﻿using DataAccessObject;
 using System.Collections;
 using System.Collections.Generic;
+using GameSystem.Ui;
 using Unity.Entities;
 using UnityEngine;
 
@@ -17,12 +18,35 @@ namespace GameSystem
             public readonly int Length;
             public EntityArray Entity;
             public ComponentDataArray<FactionProperty> FactionPropertys;
+            public ComponentDataArray<LivingArea> LivingAreas;
+            public ComponentArray<HexCell> HexCells;
         }
         [Inject]
         private Data _data;
         private EntityManager _entityManager;
+
+        private OrganizationTitleWindow _organizationTitleWindow;
+
         protected override void OnUpdate()
         {
+
+            if (_organizationTitleWindow == null)
+            {
+                if (UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow) == null)
+                {
+                    _organizationTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.OrganizationTitleWindow).GetComponent<OrganizationTitleWindow>();
+                }
+                else
+                {
+                    _organizationTitleWindow = (OrganizationTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow);
+                }
+            }
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                _organizationTitleWindow.Change(_data.LivingAreas[i],_data.FactionPropertys[i],_data.HexCells[i]);
+            }
+
 
         }
 

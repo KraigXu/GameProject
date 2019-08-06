@@ -61,7 +61,7 @@ public class WorldTime : MonoBehaviour
 
         CurTime = Convert.ToDateTime("1000-01-01 00:00:00");
         Shichen = UpdateGuDaiTime(CurTime.Hour);
-
+        TargetTimes = CurTime;
         CurTimeSatus = TimeSatus.Play;
 
     }
@@ -70,15 +70,15 @@ public class WorldTime : MonoBehaviour
     void Update()
     {
 
-        if (CurTimeSatus == TimeSatus.Play)
-        {
-            Schedule += Time.deltaTime * _timeScalar;
-            if (Schedule >= ScheduleCell)   //表示一个时间节点完成
-            {
-                Schedule = 0;
-                CurTime = CurTime.AddHours(2);
-            }
-        }
+        //if (CurTimeSatus == TimeSatus.Play)
+        //{
+        //    Schedule += Time.deltaTime * _timeScalar;
+        //    if (Schedule >= ScheduleCell)   //表示一个时间节点完成
+        //    {
+        //        Schedule = 0;
+        //        CurTime = CurTime.AddHours(2);
+        //    }
+        //}
 
        
     }
@@ -217,5 +217,64 @@ public class WorldTime : MonoBehaviour
     {
         Instance._timeAdd = 3;
         Instance._timeScalar = 30;
+    }
+
+    public void AddTimeRange(int time,int id)
+    {
+        Debug.Log(">>增加时间");
+    }
+
+    public DateTime TargetTimes;
+    public float Timeer;
+
+    public List<TimeEvent> Events;
+
+    public class TimeEvent
+    {
+        public DateTime Time;
+
+        public Action Action;
+    }
+
+    public void NextTime(int day)
+    {
+        
+        TargetTimes = CurTime.AddDays(day);
+
+        Debug.Log(CurTime + ">>>>>" + TargetTimes);
+    }
+
+    void LateUpdate()
+    {
+        if (CurTime != TargetTimes)
+        {
+            Debug.Log(CurTime+">>>>>"+TargetTimes);
+            if (Timeer > 5)
+            {
+                Timeer = 0;
+                CurTime = CurTime.AddDays(1);
+                CheckEvent();
+            }
+            else
+            {
+                Timeer += Time.deltaTime;
+            }
+
+        }
+    }
+
+    public void CheckEvent()
+    {
+        for (int i = 0; i < Events.Count; i++)
+        {
+            if (Events[i].Time == CurTime)
+            {
+                Events[i].Action();
+            }
+            else
+            {
+
+            }
+        }
     }
 }

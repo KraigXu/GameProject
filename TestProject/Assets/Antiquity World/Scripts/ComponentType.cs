@@ -339,6 +339,11 @@ namespace GameSystem
         public Entity FactionEntity;
         public int Level;
         public int FactionEntityId;
+        public int Id;
+    }
+
+    public struct Ziggurat : IComponentData
+    {
 
     }
 

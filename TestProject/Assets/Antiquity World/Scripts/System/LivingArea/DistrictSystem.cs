@@ -66,7 +66,6 @@ namespace GameSystem
                     district.Value = district.Type * 1;
                 }
 
-
                 _data.District[i] = district;
             }
 

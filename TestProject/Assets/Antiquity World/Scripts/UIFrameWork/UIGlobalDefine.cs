@@ -37,6 +37,8 @@ namespace GameSystem.Ui
         LivingAreaTitleWindow,
         CityWindow,
         CityTitleWindow,
+        OrganizationTitleWindow,
+        ZigguratTitleWindow,
         BuildingWindow,
         BuildingBazaarWindow,
         BuildingBlacksmithWindow,
@@ -161,6 +163,7 @@ namespace GameSystem.Ui
             {WindowID.SocialDialogWindow,"UiPrefab/SocialDialogWindow"},
             {WindowID.LivingAreaMainWindow,"UiPrefab/LivingAreaMainWindow"},
             {WindowID.LivingAreaTitleWindow,"UiPrefab/LivingAreaTitleWindow" },
+            {WindowID.OrganizationTitleWindow,"UiPrefab/OrganizationTitleWindow" },
 
             {WindowID.WorldTimeWindow,"UiPrefab/WorldTimeWindow" },
             {WindowID.PlayerInfoWindow,"UiPrefab/PlayerInfoWindow" },
@@ -177,6 +180,7 @@ namespace GameSystem.Ui
             {WindowID.BuildingOfficalWindow,"UiPrefab/BuildingOfficalWindow" },
             {WindowID.BuildingTavernWindow,"UiPrefab/BuildingTavernWindow" },
 
+            {WindowID.ZigguratTitleWindow,"UiPrefab/ZigguratTitleWindow" },
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},

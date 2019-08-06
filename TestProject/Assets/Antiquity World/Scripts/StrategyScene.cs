@@ -169,14 +169,18 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCell);
                     break;
                 case 3: 
-                    SystemManager.Get<ZigguratSystem>().AddOrganization(hexCoordinates);
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 4:
                     break;
                 case 5:
+                    break;
                 case 6:
+                    break;
                 case 7:
+                    break;
                 case 8:
+                    break;
                 default:
                     break;
             }
@@ -202,6 +206,10 @@ public class StrategyScene : MonoBehaviour
                 case 1:
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     break;
+                case 2:
+                    break;
+                case 3:
+                    break;
                 default:
                     Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
                     break;
@@ -225,6 +233,7 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
             SystemManager.Get<FightingSystem>().AddFighting(pentity);
+
         }
         
         Define.Player.PlayerId = 1;
