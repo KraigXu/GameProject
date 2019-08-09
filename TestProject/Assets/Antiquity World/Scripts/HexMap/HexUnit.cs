@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Entities;
 
 /// <summary>
 /// 单元元素
@@ -12,6 +13,26 @@ public class HexUnit : MonoBehaviour {
 	const float travelSpeed = 4f;
 
 	public HexGrid Grid { get; set; }
+
+
+    public Entity Entity
+    {
+        get
+        {
+            if (_gameObjectEntity == null)
+            {
+                _gameObjectEntity = GetComponent<GameObjectEntity>();
+                return _gameObjectEntity.Entity;
+            }
+            else
+            {
+                return _gameObjectEntity.Entity;
+            }
+
+        }
+    }
+
+    private GameObjectEntity _gameObjectEntity;
 
 	public HexCell Location {
 		get {

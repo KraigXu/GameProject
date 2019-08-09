@@ -49,30 +49,21 @@ public class ZigguratSystem : ComponentSystem
 
         for (int i = 0; i < _data.Length; i++)
         {
+            var livingArea = _data.LivingAreas[i];
+            var ziggurat = _data.Ziggurats[i];
+            var hexcell = _data.HexCells[i];
+
             _zigguratTitleWindow.Change(_data.LivingAreas[i], _data.Ziggurats[i], _data.HexCells[i]);
         }
 
-
     }
-
-    public static void OrganizationColliderEnter(GameObject go, Collider other)
-    {
-
-    }
-
-    public static void OrganizationColliderExit(GameObject go, Collider other)
-    {
-
-    }
-
-
-
 
     public void AddZiggurat(LivingAreaData data, HexCell cell)
     {
 
         _entityManager.AddComponentData(cell.Entity, new Ziggurat
         {
+            Time = 30,
         });
 
         _entityManager.AddComponentData(cell.Entity, new LivingArea
@@ -98,6 +89,8 @@ public class ZigguratSystem : ComponentSystem
             CollectiveClassId = 1,
             Cohesion = 1
         });
+
+        //_entityManager.AddComponentData(cell.Entity, );
 
         //LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 

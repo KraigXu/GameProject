@@ -52,6 +52,7 @@ public class CityTitleWindow : UIWindowBase
 
             item.TyepImg.sprite = _types[city.Type];
             item.RelationImg.sprite = _types[city.Type];
+            //
             //item.Id = 10;
             //  item.RelationImg.sprite=_types[]
             //item._usedImag.sprite = _types[city.UniqueCode];
@@ -85,7 +86,6 @@ public class CityTitleWindow : UIWindowBase
                 Vector2 tempPos = Camera.main.WorldToScreenPoint(point);
                 _titles[i].RectTF .position = tempPos;
                 _titles[i].RectTF.localScale = Vector3.one;
-
             }
             else
             {

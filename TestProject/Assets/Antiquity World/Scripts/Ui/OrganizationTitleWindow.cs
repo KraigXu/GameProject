@@ -5,6 +5,9 @@ using GameSystem;
 using GameSystem.Ui;
 using UnityEngine;
 
+/// <summary>
+/// 标题窗口
+/// </summary>
 public class OrganizationTitleWindow : UIWindowBase
 {
     [SerializeField]
@@ -45,6 +48,7 @@ public class OrganizationTitleWindow : UIWindowBase
         if (flag)  //说明已有
         {
             var item = _titles[index];
+            
         }
         else   //没有
         {

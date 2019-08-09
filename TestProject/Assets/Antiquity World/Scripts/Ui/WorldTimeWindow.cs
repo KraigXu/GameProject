@@ -16,10 +16,10 @@ namespace GameSystem.Ui
     {
         public Text Year;
         public Text Month;
-        public Text Day;
+
         public Text ShiChen;
         public Text Season;
-
+        public Slider SliderDay;
         private float _cd;
 
 
@@ -65,22 +65,27 @@ namespace GameSystem.Ui
         }
 
 
-        void Update()
+        public void AddFloat(int year,int month,int season,float dayvalue)
         {
-            _cd += Time.deltaTime;
-            if (_cd > 1)
-            {
-                Year.text = WorldTime.Year.ToString();
-                Month.text = WorldTime.Month.ToString();
-                Day.text = WorldTime.Day.ToString();
-                ShiChen.text = TimeShichen[WorldTime.ShiChen];
-                //Season.text = _timeManager.Season;
-                _cd = 0;
-            }
+            Year.text = year.ToString();
+            Month.text = month.ToString();
 
+            SliderDay.value = dayvalue;
+
+            //_worldTimeWindow.Year.text = Ye
+
+            //_cd += Time.deltaTime;
+            //if (_cd > 1)
+            //{
+            //    Year.text = WorldTime.Year.ToString();
+            //    Month.text = WorldTime.Month.ToString();
+            //    Day.text = WorldTime.Day.ToString();
+            //    ShiChen.text = TimeShichen[WorldTime.ShiChen];
+            //    //Season.text = _timeManager.Season;
+            //    _cd = 0;
+            //}
+            //SliderDay.valu
         }
-
-
 
 
     }

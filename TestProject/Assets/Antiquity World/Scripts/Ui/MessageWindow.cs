@@ -102,27 +102,6 @@ namespace GameSystem.Ui
 
                 _personUnits.Clear();
 
-                //switch (_curCell.TerrainTypeIndex)
-                //{
-                //    case 0:
-                //        CellTerrainTxt.text = "沙漠";
-                //        break;
-                //    case 1:
-                //        CellTerrainTxt.text = "草地";
-                //        break;
-                //    case 2:
-                //        CellTerrainTxt.text = "湿地";
-                //        break;
-                //    case 3:
-                //        CellTerrainTxt.text = "山地";
-                //        break;
-                //    case 4:
-                //        CellTerrainTxt.text = "雪地";
-                //        break;
-                //    default:
-                //        break;
-                //}
-
 
                 switch (_curCell.Elevation)
                 {
@@ -199,18 +178,20 @@ namespace GameSystem.Ui
                     {
                         case 1:  //城市
                             {
-                                Entity entity = SystemManager.Get<MapCellSystem>().GetEntity(_unit.Location.coordinates.X, _unit.Location.coordinates.Z);
-                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(entity);
+
+                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_unit.Location.Entity);
 
                                 UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), entity, CityOpenEntity);
+                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _unit.Location.Entity, CityOpenEntity);
                             }
                             break;
                         case 2: //帮派
                             {
-                                Entity entity = SystemManager.Get<MapCellSystem>().GetEntity(_unit.Location.coordinates.X, _unit.Location.coordinates.Z);
 
-                                Collective collective = SystemManager.GetProperty<Collective>(entity);
+                                Collective collective = SystemManager.GetProperty<Collective>(_unit.Location.Entity);
+
+                                UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellFeaturesParent).GetComponent<UiCellFeature>();
+                                //featureUi.Init(GameStaticData.CityRunDataDic);
 
                                 //UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellPersonsParent).GetComponent<UiCellFeature>();
                                 //featureUi.Init(GameStaticData.);
@@ -250,21 +231,23 @@ namespace GameSystem.Ui
                     if (_personUnits[i] == Define.Player.Unit)
                         continue;
 
-                    GameObjectEntity personEntity = _personUnits[i].gameObject.GetComponent<GameObjectEntity>();
+                    Entity entity = _personUnits[i].Entity;
 
-                    Biological biological = SystemManager.GetProperty<Biological>(personEntity.Entity);
+                    if (SystemManager.Contains<Biological>(entity))
+                    {
+                        Biological biological = SystemManager.GetProperty<Biological>(entity);
+                        BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[entity];
 
-                    BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[personEntity.Entity];
+                        
+                        RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
+                        BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
+                        bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
 
-                    RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
+                        bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
+                        bui.Entity = entity;
+                    }
 
-                    BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
-                    bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
-
-                    bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
-                    bui.Entity = personEntity.Entity;
                 }
-
             }
             else
             {
@@ -288,7 +271,6 @@ namespace GameSystem.Ui
             cityWindowData.contextData = livingAreaWindowCd;
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, cityWindowData);
-
 
         }
 

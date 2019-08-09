@@ -92,10 +92,7 @@ namespace GameSystem.Ui
             if (_slider.value >= 1)
             {
                 UICenterMasterManager.Instance.DestroyWindow(this.ID);
-                if (Callback != null)
-                {
-                    Callback();
-                }
+                Callback?.Invoke();
 
             }
         }

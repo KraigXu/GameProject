@@ -83,10 +83,6 @@ namespace GameSystem.Ui
         {
             OptionBtns.gameObject.SetActive(toggle);
         }
-
-       
-
-
         public void SetEditMode(bool toggle)
         {
             enabled = !toggle;

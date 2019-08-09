@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using Unity.Entities;
 
 public class HexGrid : MonoBehaviour {
@@ -209,7 +210,12 @@ public class HexGrid : MonoBehaviour {
 	    cell.ColumnIndex = x / HexMetrics.chunkSizeX;
 		cell.ShaderData = cellShaderData;
 
-        //GameObjectEntity entity= cell.GetComponent<GameObjectEntity>();
+        //赋予单元特性
+        SystemManager.ActiveManager.AddComponentData(cell.Entity,new Timer()
+        {
+            TimeType = 1,
+            TimeAdd=0,
+        });
 
 	    if (wrapping)
 	    {
@@ -217,8 +223,7 @@ public class HexGrid : MonoBehaviour {
 	    }
 	    else
 	    {
-	        cell.Explorable =
-	            x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+	        cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
         }
 
 

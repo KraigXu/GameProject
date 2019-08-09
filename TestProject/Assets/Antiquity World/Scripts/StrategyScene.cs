@@ -76,6 +76,7 @@ public class StrategyScene : MonoBehaviour
         FactionSystem.SetupData();
         //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
 
+        SystemManager.Get<WorldTimeSystem>().SetupValue(true);
 
         yield return new WaitForFixedUpdate();
 
@@ -134,6 +135,7 @@ public class StrategyScene : MonoBehaviour
         ModelController.Instance.ModelFileDatas = modelFileDatas;
 
         StartCoroutine(ModelController.Instance.ReadModelFileData());
+
         yield return null;
     }
 
@@ -207,6 +209,7 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     break;
                 case 2:
+                   // SystemManager.Get<>()
                     break;
                 case 3:
                     break;
@@ -216,7 +219,6 @@ public class StrategyScene : MonoBehaviour
             }
         }
         
-
         //-----------------------------Player
         BiologicalData player = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
 
@@ -233,7 +235,6 @@ public class StrategyScene : MonoBehaviour
             SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
             SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
             SystemManager.Get<FightingSystem>().AddFighting(pentity);
-
         }
         
         Define.Player.PlayerId = 1;
@@ -261,6 +262,10 @@ public class StrategyScene : MonoBehaviour
         UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
         UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
 
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
+        
         HexMapCamera.SetTarget(Define.Player.Unit.transform.position);
 
         loadingViewCom.Close();
@@ -296,7 +301,7 @@ public class StrategyScene : MonoBehaviour
     /// </summary>
     public void RemoveStartUi()
     {
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.WorldTimeWindow);
+       // UICenterMasterManager.Instance.DestroyWindow(WindowID.WorldTimeWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MenuWindow);
      //   UICenterMasterManager.Instance.DestroyWindow(WindowID.PlayerInfoWindow);
         UICenterMasterManager.Instance.DestroyWindow(WindowID.MessageWindow);

@@ -33,7 +33,15 @@ public class ModelController : MonoBehaviour
         
     }
 
+    void Update()
+    {
 
+    }
+
+    void OnDisable()
+    {
+
+    }
 
     //下载
     public IEnumerator ReadModelFileData()
@@ -57,5 +65,8 @@ public class ModelController : MonoBehaviour
 
         yield return null;
     }
+
+
+
 
 }

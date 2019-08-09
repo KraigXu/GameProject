@@ -344,6 +344,8 @@ namespace GameSystem
 
     public struct Ziggurat : IComponentData
     {
+        public float Time;
+
 
     }
 
@@ -898,6 +900,14 @@ namespace GameSystem
         public int UniqueCode;
 
         
+    }
+
+    public struct Timer : IComponentData
+    {
+        public int TimeType;   //1地形 //2生物 
+        public float TimeAdd;
+
+
     }
 
 }

@@ -8,6 +8,9 @@ namespace GameSystem
     public sealed class GameStaticData
     {
         
+
+        
+
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();
@@ -29,6 +32,9 @@ namespace GameSystem
         public static Dictionary<int, string> PrestigeTitle = new Dictionary<int, string>();
 
         public static Dictionary<int, CityRunData> CityRunDataDic = new Dictionary<int, CityRunData>();
+
+        
+
         public static Dictionary<Entity, BiologicalFixed> BiologicalDictionary=new Dictionary<Entity, BiologicalFixed>();
 
         public static Dictionary<Entity, FactionStatic> FactionStatics= new Dictionary<Entity, FactionStatic>();
