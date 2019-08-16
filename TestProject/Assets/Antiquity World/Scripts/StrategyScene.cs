@@ -9,6 +9,13 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
+public enum StrategySceneModel
+{
+    Map,
+    LivingArea,
+    Fighting
+}
+
 /// <summary>
 /// StrategyScene主脚本，控制整个场景的的生命周期
 /// </summary>
@@ -41,6 +48,8 @@ public class StrategyScene : MonoBehaviour
 
 
     public IEnumeratorLoad IeEnumeratorLoad;
+
+    public StrategySceneModel SceneModel = StrategySceneModel.Map;
 
     void Awake()
     {
@@ -118,12 +127,7 @@ public class StrategyScene : MonoBehaviour
                 }
             }
         }
-
         yield return null;
-
-
-
-
     }
 
     IEnumerator InitModel()
@@ -174,21 +178,26 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 4:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 5:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 6:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 7:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 case 8:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
                 default:
+                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
                     break;
             }
         }
         //------------------初始化Biological
-
         List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
         BiologicalData bData;
         for (int i = 0; i < biologicalDatas.Count; i++)
@@ -199,7 +208,7 @@ public class StrategyScene : MonoBehaviour
             if (hexCell == null)
                 continue;
 
-            HexUnit hexUnit = Object.Instantiate(StrategyAssetManager.GetHexUnitPrefabs(bData.ModelId));
+            HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(bData.ModelId));
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
             Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
@@ -209,7 +218,8 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     break;
                 case 2:
-                   // SystemManager.Get<>()
+                    
+                    //SystemManager.Get<BiologicalSystem>()
                     break;
                 case 3:
                     break;
@@ -224,7 +234,7 @@ public class StrategyScene : MonoBehaviour
 
         hexCoordinates = new HexCoordinates(player.X, player.Z);
         hexCell = hexGrid.GetCell(hexCoordinates);
-        HexUnit playerUnit = Object.Instantiate(StrategyAssetManager.GetHexUnitPrefabs(player.ModelId));
+        HexUnit playerUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(player.ModelId));
         hexGrid.AddUnit(playerUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
         Entity pentity = playerUnit.GetComponent<GameObjectEntity>().Entity;
 
@@ -348,6 +358,41 @@ public class StrategyScene : MonoBehaviour
 
     public void EnitFightingModel()
     {
+
+    }
+
+
+    /// <summary>
+    /// 切换模式
+    /// </summary>
+    public void ChangeModel(StrategySceneModel model)
+    {
+        if (SceneModel == model)
+        {
+            return;
+        }
+
+        switch (SceneModel)
+        {
+            case StrategySceneModel.Map:
+               // UICenterMasterManager.Instance.CloseWindow(WindowID.CityTitleWindow);
+               // UICenterMasterManager.Instance.Cl
+                break;
+            case StrategySceneModel.Fighting:
+                break;
+            case StrategySceneModel.LivingArea:
+                break;
+        }
+
+        switch (model)
+        {
+            case StrategySceneModel.Fighting:
+                break;
+            case StrategySceneModel.LivingArea:
+                break;
+            case StrategySceneModel.Map:
+                break;
+        }
 
     }
 

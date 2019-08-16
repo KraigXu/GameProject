@@ -9,7 +9,6 @@ namespace GameSystem.Ui
         Invaild = 0,
 
         ProjectSelectWindow,     //项目选择
-        LoadingWindow,           //加载
         MessageBoxWindow,        //消息弹出框
         SettingMenuWindow,
 
@@ -190,7 +189,6 @@ namespace GameSystem.Ui
             {WindowID.LogWindow,"UiPrefab/LogWindow" },
             {WindowID.IntelligenceWindow,"UiPrefab/IntelligenceWindow" },
             {WindowID.FixedTitleWindow,"UiPrefab/FixedTitleWindow" },
-            {WindowID.LoadingWindow,"UiPrefab/LoadingWindow" },
             {WindowID.CombatReadyWindow,"UiPrefab/CombatReadyWindow" }
         };
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameSystem;
 using GameSystem.Ui;
 using Unity.Entities;
 using UnityEngine;
@@ -21,16 +22,12 @@ public class PlayerControl : MonoBehaviour
         Player = Define.Player;
         _entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
+        
         //if (Player.PlayerId != 0)
         //{
         //    PlayerInfoWin=UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow) as PlayerInfoWindow;;
         //}
     }
-
-
-
-
-
 
 
     void Update()
@@ -54,6 +51,19 @@ public class PlayerControl : MonoBehaviour
     //}
 
 
+
+    //------------------------------------PlayerEvent
+
+    /// <summary>
+    /// 打开城市窗口
+    /// </summary>
+    public void OpenCityWindow()
+    {
+        if(Player.Unit.Location==null)
+            return;
+
+        CitySystem.ShowCityWindow(Player.Unit.Location.Entity,Player.Entity);
+    }
 
 }
 

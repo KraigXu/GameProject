@@ -156,9 +156,6 @@ public class WorldTimeSystem : ComponentSystem
     }
 
 
-
-
-
     public void AddTimeRange(int time, int id)
     {
         Debug.Log(">>增加时间");

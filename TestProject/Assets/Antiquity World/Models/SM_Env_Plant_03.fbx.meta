@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: bc9f0d654476ce645968209327fd33b4
-timeCreated: 1484280468
+guid: d8d00dcc561d357479ac4f7c86916888
+timeCreated: 1493087601
 licenseType: Store
 ModelImporter:
   serializedVersion: 18
@@ -30,7 +30,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 0
@@ -46,11 +46,11 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 0
+    normalSmoothAngle: 5
     splitTangentsAcrossUV: 0
     normalImportMode: 1
     tangentImportMode: 1
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []

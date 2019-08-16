@@ -26,11 +26,12 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
+
         }
 
         public List<Entity> GetPositionCode(int posCode)
         {
-            List<Entity> values=new List<Entity>();
+            List<Entity> values = new List<Entity>();
             for (int i = 0; i < _data.Length; i++)
             {
                 if (_data.Behaviors[i].CreantePositionCode == posCode)
@@ -39,13 +40,12 @@ namespace GameSystem
 
                 }
             }
-
             return values;
 
         }
 
 
-         
+
     }
 
 }

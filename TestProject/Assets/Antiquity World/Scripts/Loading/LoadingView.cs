@@ -6,14 +6,19 @@ using GameSystem.Ui;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 场景的加载UI
+/// </summary>
 public class LoadingView : MonoBehaviour
 {
-
     public delegate void OnLoadingOverCallback();
 
     public OnLoadingOverCallback Callback;
+    [SerializeField]
     private GameObject _fullMask;
+    [SerializeField]
     private GameObject _icon;
+    
     private Sequence _sequence;
     private Slider _slider;
 
@@ -22,25 +27,29 @@ public class LoadingView : MonoBehaviour
     private Text _tipsContent;
     private int _currentPage = 0;
     private int _maxPage = 0;
-
     public Text loadingText;
-
     private float loadingSpeed = 1;
-
     private float targetValue;
-
     private AsyncOperation operation;
-
     private List<TipsData> _tipsDatas;
     [Range(0.00f, 1.00f)]
     public float value;
 
+    private static LoadingView _instance;
+
+    public static LoadingView Instance
+    {
+        get { return _instance; }
+    }
+
 
     void Awake()
     {
-        this._fullMask = transform.Find("FullMake").gameObject;
+        _instance = this;
 
+        this._fullMask = transform.Find("FullMake").gameObject;
         this._icon = transform.Find("Icon").gameObject;
+
         _sequence = DOTween.Sequence();
         _sequence.Append(_icon.transform.DORotate(new Vector3(0, 0, 180), 2));
         _sequence.Append(_icon.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), 1));
@@ -58,12 +67,10 @@ public class LoadingView : MonoBehaviour
         _tipsDatas = SQLService.Instance.SimpleQuery<TipsData>(" TipsType=? ", new object[] { "1" });
         _maxPage = _tipsDatas.Count;
         _tipsTitle.text = _currentPage + "/" + _maxPage;
-
         _tipsContent.text = _tipsDatas[_currentPage].Content;
         _maxPage = _tipsDatas.Count;
         _tipsTitle.text = _tipsDatas[_currentPage].ContentTitle;
         _tipsContent.text = _tipsDatas[_currentPage].Content;
-
     }
 
 

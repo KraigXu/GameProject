@@ -23,9 +23,9 @@ namespace GameSystem
     /// </summary>
     public class CitySystem : ComponentSystem
     {
-
         public CityTitleWindow CityTitleWindow;
 
+        private CityWindow _cityWin;
 
         struct Data
         {
@@ -45,6 +45,7 @@ namespace GameSystem
         {
             base.OnCreateManager();
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+            
         }
 
 
@@ -93,12 +94,11 @@ namespace GameSystem
 
                 if (thisEntity == behaviorData.TargetEntity)
                 {
-
                     other.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Hide"));
 
                     EnterCity(targetEntity, thisEntity);
 
-                    ShowCityInside(thisEntity);
+                  //  ShowCityInside(thisEntity);
 
                     ShowWindowData showWindowData = new ShowWindowData();
 
@@ -132,24 +132,42 @@ namespace GameSystem
         /// 打开城市内景
         /// </summary>
         /// <param name="cityEntity"></param>
-        public static void ShowCityInside(Entity cityEntity)
+        public static void ShowCityInside(Entity cityEntity,Entity targetEntity)
         {
             ShowWindowData windowData = new ShowWindowData();
             LivingAreaWindowCD windowCd = new LivingAreaWindowCD();
 
-            UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow, windowData);
 
 
-            UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
+
+            //UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow, windowData);
+            //UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
         }
 
-
-
-        public class CityBuildModel
+        public static void ShowCityWindow(Entity cityEntity, Entity targetEntity)
         {
-            public string Name;
-            public string Type;
+            EntityManager entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            entityManager.GetComponentData<City>(cityEntity);
+
+            ShowWindowData cityWindowData = new ShowWindowData();
+
+            LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
+            livingAreaWindowCd.LivingAreaEntity = cityEntity;
+            cityWindowData.contextData = livingAreaWindowCd;
+
+            CityWindow cityWindow= (CityWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow);
+
+           // LivingAreaWindowCD livingAreaWindowCd =new LivingAreaWindowCD();
+           // livingAreaWindowCd.
+
+           ////cityWindow.
+
+
+            StrategyScene.Instance.ChangeModel(StrategySceneModel.LivingArea);
+
         }
+
 
         public void AddCity(LivingAreaData data, HexCell cell)
         {
@@ -158,8 +176,7 @@ namespace GameSystem
                 ModelId = data.ModelBaseId,
                 UniqueCode = data.Id,
                 CityLevel = data.LivingAreaLevel,
-                Type = data.LivingAreaType,
-
+                Type = data.LivingAreaType
             });
 
             _entityManager.AddComponentData(cell.Entity, new LivingArea

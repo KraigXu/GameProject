@@ -71,7 +71,6 @@ namespace GameSystem.Skill
                 // controller
                 //SkillData skillData = WXSkillController.instance.GetSkillData(EffectId);
                 //WXPoolManager.Pools[Define.PoolName].Spawn(skillData.Prefab);
-
                 return true;
             }
             return false;

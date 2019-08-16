@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 场景资源读取管理
+/// </summary>
 public class StrategyAssetManager : MonoBehaviour
 {
 
@@ -71,6 +74,7 @@ public class StrategyAssetManager : MonoBehaviour
     public static RectTransform UiCityTitle { get { return  _instance._strategyAsset.UiCityTitle;} }
 
     public static RectTransform UiZigguratTitle { get { return _instance._strategyAsset.UiZigguratTitle;} }
+
     public static RectTransform UiOrganizationTitle { get { return _instance._strategyAsset.UiOrganizationTitle;} }
 
 
