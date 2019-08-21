@@ -95,6 +95,11 @@ namespace Manager
             CameraController.m_targetPosition = target;
         }
 
+        public void SetDownClick(Vector3 target, bool isfollow = false)
+        {
+
+        }
+
         /// <summary>
         /// 更新鼠标点位置
         /// </summary>

@@ -18,9 +18,9 @@ public class Test3 : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    text1.text = WorldTime.Instance.CurTime.Year.ToString();
-	    text2.text = WorldTime.Instance.CurTime.Month.ToString();
-	    text3.text = WorldTime.Instance.CurTime.Day.ToString();
+	    //text1.text = WorldTime.Instance.CurTime.Year.ToString();
+	    //text2.text = WorldTime.Instance.CurTime.Month.ToString();
+	    //text3.text = WorldTime.Instance.CurTime.Day.ToString();
 
 	}
 }

@@ -33,8 +33,15 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
 
-        // SystemManager.
+    }
 
+    void OnDisable()
+    {
+
+    }
+
+    void OnEnable()
+    {
 
     }
 

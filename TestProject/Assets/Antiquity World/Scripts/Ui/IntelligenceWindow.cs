@@ -64,10 +64,6 @@ namespace GameSystem.Ui
         public RectTransform BulidingView;
         public Toggle AnnualHistoryTog;              
         public RectTransform AnnualHistoryView;
-        public Text LaNameTxt;
-        public Text LaDescriptionTxt;
-        public Text LaTypeTxt;
-        public Text LaLevelTxt;
 
         protected override void InitWindowData()
         {
@@ -80,6 +76,7 @@ namespace GameSystem.Ui
             windowData.closeModel = UIWindowCloseModel.Destory;
             windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
+            windowData.animationType = UIWindowAnimationType.FadesOut;
         }
 
 
@@ -192,8 +189,6 @@ namespace GameSystem.Ui
 
             PonInfoTog3.gameObject.SetActive(true);
         }
-
-
         #region  Faction
         private void ChangeFactionInfo()
         {

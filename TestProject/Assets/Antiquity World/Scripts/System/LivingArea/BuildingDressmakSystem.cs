@@ -58,10 +58,6 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                var value = _data.Tailors[i];
-            }
         }
 
 

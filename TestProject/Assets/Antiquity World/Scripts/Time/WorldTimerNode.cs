@@ -34,7 +34,7 @@
             {
                 EndCallback.Invoke();
                 IsActive = false;
-                WorldTime.Instance.RemoveTimer(Id);
+                SystemManager.Get<WorldTimeSystem>().RemoveTimer(Id);
             }
         }
     }

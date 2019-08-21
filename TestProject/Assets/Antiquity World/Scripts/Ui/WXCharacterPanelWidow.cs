@@ -140,21 +140,21 @@ namespace GameSystem.Ui
             Neigongtxt.text = (biological.Lidao * 0.5f + 1).ToString();
             Waigongtxt.text = (biological.Lidao * 0.3f + 1).ToString();
 
-            ThoughTxt.text = bodyPropert.Thought.ToString();
-            NeckTxt.text = bodyPropert.Neck.ToString();
-            HeartTxt.text = bodyPropert.Heart.ToString();
-            EyeTxt.text = bodyPropert.Eye.ToString();
-            EarTxt.text = bodyPropert.Ear.ToString();
-            LegLeftTxt.text = bodyPropert.LeftLeg.ToString();
-            LegRightTxt.text = bodyPropert.LeftLeg.ToString();
-            HandRightTxt.text = bodyPropert.RightHand.ToString();
-            HandLeftTxt.text = bodyPropert.LeftHand.ToString();
-            FertilityTxt.text = bodyPropert.Fertility.ToString();
-            AppearanceTxt.text = bodyPropert.Appearance.ToString();
-            DressTxt.text = bodyPropert.Dress.ToString();
-            SkinTxt.text = bodyPropert.Skin.ToString();
-            BlodTxt.text = bodyPropert.Blod.ToString();
-            JingLuoTxt.text = bodyPropert.JingLuo.ToString();
+            //ThoughTxt.text = bodyPropert.Thought.ToString();
+            //NeckTxt.text = bodyPropert.Neck.ToString();
+            //HeartTxt.text = bodyPropert.Heart.ToString();
+            //EyeTxt.text = bodyPropert.Eye.ToString();
+            //EarTxt.text = bodyPropert.Ear.ToString();
+            //LegLeftTxt.text = bodyPropert.LeftLeg.ToString();
+            //LegRightTxt.text = bodyPropert.LeftLeg.ToString();
+            //HandRightTxt.text = bodyPropert.RightHand.ToString();
+            //HandLeftTxt.text = bodyPropert.LeftHand.ToString();
+            //FertilityTxt.text = bodyPropert.Fertility.ToString();
+            //AppearanceTxt.text = bodyPropert.Appearance.ToString();
+            //DressTxt.text = bodyPropert.Dress.ToString();
+            //SkinTxt.text = bodyPropert.Skin.ToString();
+            //BlodTxt.text = bodyPropert.Blod.ToString();
+            //JingLuoTxt.text = bodyPropert.JingLuo.ToString();
 
 
             //解析 PS暂留 

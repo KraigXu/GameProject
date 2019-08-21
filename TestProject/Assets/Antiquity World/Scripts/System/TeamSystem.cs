@@ -17,6 +17,8 @@ namespace GameSystem
         }
 
 
+
+
         struct TeamGroup
         {
             public readonly int Length;
@@ -102,9 +104,6 @@ namespace GameSystem
                     //        ModelTarget(team.RunModelCode, status.TargetPosition);
                     //        break;
                     //}
-
-
-
                 }
                 else
                 {

@@ -21,7 +21,6 @@ namespace GameSystem
         public static void SetupComponentData(EntityManager entityManager)
         {
 
-
         }
 
         protected override void OnUpdate()

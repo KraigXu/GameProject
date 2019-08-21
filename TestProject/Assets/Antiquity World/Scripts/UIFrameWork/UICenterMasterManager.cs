@@ -9,7 +9,6 @@ namespace GameSystem.Ui
     ///         Control all the "Big Parent" window:UIRank,UIShop,UIGame,UIMainMenu and so on.
     ///         UIRankManager: control the rank window logic (UIRankDetail sub window)
     ///         May be UIShopManager:control the UIShopDetailWindow or UIShopSubTwoWindow
-    /// 
     /// 枢纽中心，控制整个大界面的显示逻辑UIRank，UIMainMenu等
     ///         UIRank排行榜界面可能也会有自己的Manager用来管理Rank系统中自己的子界面，这些子界面不交给"老大"UICenterMasterManager管理
     ///         分而治之，不是中央集权
@@ -549,6 +548,7 @@ namespace GameSystem.Ui
                 }
                 backData.CloseTargetWindow = targetWindow;
                 backData.backShowTargets = navHiddenWindows;
+                
                 backSequence.Push(backData);
                 Debug.Log("<color=#2a5caa>### !!!Push new Navigation data!!! ###</color>");
             }

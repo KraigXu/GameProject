@@ -122,7 +122,7 @@ public class HexUnit : MonoBehaviour {
 
 
 
-        float t = WorldTime.RunTime * travelSpeed;
+        float t = WorldTimeSystem.TimeClip * travelSpeed;
 		for (int i = 1; i < pathToTravel.Count; i++) {
 			currentTravelLocation = pathToTravel[i];
 			a = c;
@@ -152,7 +152,7 @@ public class HexUnit : MonoBehaviour {
 		    c = (b + currentTravelLocation.Position) * 0.5f;
 		    Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
 
-            for (; t < 1f; t += WorldTime.RunTime * travelSpeed) {
+            for (; t < 1f; t += WorldTimeSystem.TimeClip * travelSpeed) {
 				transform.localPosition = Bezier.GetPoint(a, b, c, t);
 				Vector3 d = Bezier.GetDerivative(a, b, c, t);
 				d.y = 0f;
@@ -168,7 +168,7 @@ public class HexUnit : MonoBehaviour {
 		b = location.Position;
 		c = b;
 		Grid.IncreaseVisibility(location, VisionRange);
-		for (; t < 1f; t += WorldTime.RunTime * travelSpeed) {
+		for (; t < 1f; t += WorldTimeSystem.TimeClip * travelSpeed) {
 			transform.localPosition = Bezier.GetPoint(a, b, c, t);
 			Vector3 d = Bezier.GetDerivative(a, b, c, t);
 			d.y = 0f;
@@ -205,9 +205,9 @@ public class HexUnit : MonoBehaviour {
 		if (angle > 0f) {
 			float speed = rotationSpeed / angle;
 			for (
-				float t = WorldTime.RunTime * speed;
+				float t = WorldTimeSystem.TimeClip * speed;
 				t < 1f;
-				t += WorldTime.RunTime * speed
+				t += WorldTimeSystem.TimeClip * speed
 			) {
 				transform.localRotation =
 					Quaternion.Slerp(fromRotation, toRotation, t);

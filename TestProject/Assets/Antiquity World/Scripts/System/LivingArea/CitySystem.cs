@@ -99,7 +99,6 @@ namespace GameSystem
                     EnterCity(targetEntity, thisEntity);
 
                   //  ShowCityInside(thisEntity);
-
                     ShowWindowData showWindowData = new ShowWindowData();
 
                     LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();

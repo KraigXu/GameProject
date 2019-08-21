@@ -96,7 +96,6 @@ namespace GameSystem.Ui
                 UIManagerBase baseManager = this.gameObject.GetComponent<UIManagerBase>();
                 return baseManager;
             }
-            private set { }
         }
 
         protected virtual void Awake()
@@ -105,6 +104,7 @@ namespace GameSystem.Ui
             _RectTransform = UGUIGraphControl.GetObjectRectTransform(gameObject);
             InitWindowData();
             InitWindowOnAwake();
+            
         }
 
         /// <summary>

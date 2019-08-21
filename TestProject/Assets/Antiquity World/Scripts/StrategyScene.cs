@@ -267,10 +267,12 @@ public class StrategyScene : MonoBehaviour
     IEnumerator WindowSyncOpen()
     {
         yield return new WaitForFixedUpdate();
-        UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
-        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+        World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
+
+        World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
+        //World.Active.GetOrCreateManager<MainAssetWindow>
+        
+        //UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
 
         //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
         //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);

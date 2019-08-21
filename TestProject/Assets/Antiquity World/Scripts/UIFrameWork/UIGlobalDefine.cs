@@ -11,6 +11,7 @@ namespace GameSystem.Ui
         ProjectSelectWindow,     //项目选择
         MessageBoxWindow,        //消息弹出框
         SettingMenuWindow,
+        
 
         //Strategy////
         WorldTimeWindow,          //世界时间
@@ -45,6 +46,7 @@ namespace GameSystem.Ui
         ExtendedMenuWindow,
         WXCharacterPanelWindow,
         CombatReadyWindow,
+        MainAssetWindow,
     }
 
     public enum UIWindowType
@@ -189,7 +191,8 @@ namespace GameSystem.Ui
             {WindowID.LogWindow,"UiPrefab/LogWindow" },
             {WindowID.IntelligenceWindow,"UiPrefab/IntelligenceWindow" },
             {WindowID.FixedTitleWindow,"UiPrefab/FixedTitleWindow" },
-            {WindowID.CombatReadyWindow,"UiPrefab/CombatReadyWindow" }
+            {WindowID.CombatReadyWindow,"UiPrefab/CombatReadyWindow" },
+            {WindowID.MainAssetWindow,"UiPrefab/MainAssetWindow" }
         };
     }
 }

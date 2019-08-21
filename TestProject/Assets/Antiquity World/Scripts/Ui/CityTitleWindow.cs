@@ -52,11 +52,6 @@ public class CityTitleWindow : UIWindowBase
 
             item.TyepImg.sprite = _types[city.Type];
             item.RelationImg.sprite = _types[city.Type];
-            //
-            //item.Id = 10;
-            //  item.RelationImg.sprite=_types[]
-            //item._usedImag.sprite = _types[city.UniqueCode];
-            //item
         }
         else   //没有
         {

@@ -56,18 +56,18 @@ namespace GameSystem
 
                 var unit = _data.HexUnit[i];
 
-                biological.Sex = body.Fertility;
-                biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
-                biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
-                biological.OperationalAbility = (3 * (body.RightHand / 100)) + (3 * (body.LeftHand / 100));
-                biological.LogicalThinking = (100 * (body.Thought / 100));
+                //biological.Sex = body.Fertility;
+                //biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
+                //biological.Mobility = (3 * (body.RightLeg / 100)) + (3 * (body.LeftLeg / 100));
+                //biological.OperationalAbility = (3 * (body.RightHand / 100)) + (3 * (body.LeftHand / 100));
+                //biological.LogicalThinking = (100 * (body.Thought / 100));
 
-                biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
-                biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
-                biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
+                //biological.Jing = Convert.ToInt16(biological.Tizhi + (biological.Wuxing * 0.3f) + (biological.Lidao * 0.5f));
+                //biological.Qi = Convert.ToInt16(biological.Jingshen + (biological.Tizhi * 0.5f) + (biological.Wuxing * 0.5f));
+                //biological.Shen = Convert.ToInt16(biological.Wuxing + biological.Lidao * 0.3);
 
-                unit.Speed = biological.StrategyMoveBasSpeed + biological.StrategyMoveSpeed;
-                unit.VisionRange = biological.VisionRange + biological.VisionBaseRange;
+                //unit.Speed = biological.StrategyMoveBasSpeed + biological.StrategyMoveSpeed;
+                //unit.VisionRange = biological.VisionRange + biological.VisionBaseRange;
 
                 _data.Biological[i] = biological;
                 _data.Body[i] = body;
@@ -119,25 +119,17 @@ namespace GameSystem
 
             });
 
+
             _entityManager.AddComponentData(entity, new BodyProperty
             {
-                Thought = 100,
-                Neck = 100,
-                Heart = 100,
-                Eye = 100,
-                Ear = 100,
-                LeftLeg = 100,
-                RightLeg = 100,
-                LeftHand = 100,
-                RightHand = 100,
-                Fertility = 100,
-                Appearance = 100,
-                Dress = 100,
-                Skin = 100,
-
-                StrategyMoveSpeed = 6,
-                FireMoveSpeed = 10,
+                Tizhi = data.Tizhi,
+                Lidao = data.Lidao,
+                Jingshen = data.Jingshen,
+                Lingdong = data.Lingdong,
+                Wuxing = data.Wuxing
             });
+
+            _entityManager.AddComponentData(entity,new ExternalProperty());
 
 
             if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
@@ -155,12 +147,10 @@ namespace GameSystem
 
                 GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
             }
-
         }
 
         public static void AddBiological(EntityManager entityManager, int id)
         {
-
 
             BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", id);
             Entity entity = entityManager.CreateEntity(BiologicalArchetype);

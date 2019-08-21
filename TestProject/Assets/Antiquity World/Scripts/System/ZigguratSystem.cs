@@ -91,7 +91,6 @@ public class ZigguratSystem : ComponentSystem
         });
 
         //_entityManager.AddComponentData(cell.Entity, );
-
         //LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
 
     }

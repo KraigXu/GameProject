@@ -49,6 +49,8 @@ namespace GameSystem.Ui
         private LivingAreaSystem _livingAreaSystem;
         private Bounds _cityBounds;
 
+
+
         [Serializable]
         class TogglePanel
         {
@@ -93,6 +95,8 @@ namespace GameSystem.Ui
             _laEntity = _livingAreaWindowCd.LivingAreaEntity;
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
+           
+
 
             //_name.text = GameStaticData.LivingAreaName[_livingArea.Id];
             //_money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;

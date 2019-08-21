@@ -74,9 +74,45 @@ public class LoadingView : MonoBehaviour
     }
 
 
-    void Update()
+    //void Update()
+    //{
+    //    Define.LoadingValue = value;
+    //}
+
+    //void LateUpdate()
+    //{
+    //    _slider.value = Define.LoadingValue;
+
+    //    if (_slider.value >= 1)
+    //    {
+    //        gameObject.SetActive(false);
+
+    //        if (Callback != null)
+    //        {
+    //            Callback();
+    //        }
+
+    //        GameObject.Destroy(this.gameObject);
+
+    //    }
+    //}
+
+    void FixedUpdate()
     {
-        Define.LoadingValue = value;
+        _slider.value = value;
+
+        if (_slider.value >= 1)
+        {
+            gameObject.SetActive(false);
+            if (Callback != null)
+            {
+                Callback();
+            }
+
+            gameObject.SetActive(false);
+            //this.enabled = false;
+        }
+        
     }
 
     public void Open()
@@ -90,23 +126,6 @@ public class LoadingView : MonoBehaviour
     }
 
 
-    void LateUpdate()
-    {
-        _slider.value = Define.LoadingValue;
-
-        if (_slider.value >= 1)
-        {
-            gameObject.SetActive(false);
-
-            if (Callback != null)
-            {
-                Callback();
-            }
-
-           GameObject.Destroy(this.gameObject);
-
-        }
-    }
 
     public float Schedule
     {

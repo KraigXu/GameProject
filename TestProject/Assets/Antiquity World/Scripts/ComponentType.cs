@@ -219,29 +219,11 @@ namespace GameSystem
     public struct BodyProperty : IComponentData
     {
 
-
-        public byte Thought;                //思想
-        public byte Neck;                   //脖子
-        public byte Heart;                  //心脏
-        public byte Eye;                    //眼睛
-        public byte Ear;                    //耳朵
-        public byte LeftLeg;                 //左腿
-        public byte RightLeg;                //右腿
-        public byte LeftHand;                //左手 
-        public byte RightHand;               //右手
-        public byte Fertility;               //生育
-        public byte Appearance;               //容貌
-        public byte Dress;                   //着装
-        public byte Skin;                    //皮肤
-
-        public byte Blod;                   //血液
-        public byte JingLuo;                //经络
-
-
-        public int StrategyMoveSpeed;
-        public int FireMoveSpeed;
-
-
+        public int Tizhi;
+        public int Lidao;
+        public int Jingshen;
+        public int Lingdong;
+        public int Wuxing;
     }
 
     public struct Fighting : IComponentData
@@ -270,6 +252,35 @@ namespace GameSystem
 
 
     }
+
+    public struct ExternalProperty :IComponentData
+    {
+
+        public int Tizhi;
+        public int Lidao;
+        public int Jingshen;
+        public int Lingdong;
+        public int Wuxing;
+
+    }
+
+    
+
+    public struct FixedProperty : IComponentData
+    {
+    }
+
+    public struct FightingProperty : IComponentData
+    {
+
+    }
+
+    public struct NormalProperty : IComponentData
+    {
+
+    }
+
+    
 
     public struct Life : IComponentData
     {
@@ -907,6 +918,11 @@ namespace GameSystem
         public int TimeType;   //1地形 //2生物 
         public float TimeAdd;
 
+
+    }
+
+    public struct RotationSpeed : IComponentData
+    {
 
     }
 

@@ -39,6 +39,10 @@ public class WorldTimeSystem : ComponentSystem
     public DateTime Times;
 
     private WorldTimeWindow _worldTimeWindow;
+    public static float TimeClip=3;
+
+
+    
 
     public void SetupValue(bool isShowUi)
     {

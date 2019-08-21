@@ -55,6 +55,7 @@ public class StrategyAssetManager : MonoBehaviour
 
     public static RectTransform UiFunctionButton { get { return _instance._strategyAsset.UiFunctionButton; } }
     public static RectTransform UiPersonButton { get { return _instance._strategyAsset.UiPersonButton; } }
+
     public static RectTransform UiCellFeature { get { return _instance._strategyAsset.UiCellFeature; } }
 
     public static RectTransform UiArticleView { get { return _instance._strategyAsset.UiArticleView; } }
