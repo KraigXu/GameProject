@@ -63,8 +63,6 @@ namespace GameSystem.Ui
             TimeShichen.Add(11, "戊时");
             TimeShichen.Add(12, "亥时");
         }
-
-
         public void AddFloat(int year,int month,int season,float dayvalue)
         {
             Year.text = year.ToString();

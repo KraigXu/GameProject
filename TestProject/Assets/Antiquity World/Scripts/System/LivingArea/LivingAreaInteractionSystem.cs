@@ -9,14 +9,15 @@ using UnityEngine;
 namespace GameSystem
 {
     public class LiningAreaEnterBarrier : BarrierSystem
-    { }
-    class LivingAreaInteractionSystem : JobComponentSystem
+    {
+    }
+
+    public class LivingAreaInteractionSystem : JobComponentSystem
     {
         struct BiologicalData
         {
             public readonly int Length;
-            [ReadOnly] public ComponentDataArray<Biological> Biological;
-          //  [ReadOnly] public ComponentDataArray<BiologicalStatus> Status;
+            public ComponentDataArray<Biological> Biological;
         }
         [Inject]
         BiologicalData _biologicalData;
@@ -28,13 +29,13 @@ namespace GameSystem
         {
             [ReadOnly]
             public ComponentDataArray<Biological> Biological;
-           // [ReadOnly]
-           // public ComponentDataArray<BiologicalStatus> BiologicalStatus;
-           
+            //[ReadOnly]
+            //public ComponentDataArray<BiologicalStatus> BiologicalStatus;
             [ReadOnly]
             public EntityCommandBuffer CommandBuffer;
             public EntityArchetype LivingInfoArchetype;
-            public void Execute(ref LivingArea livingArea,ref InteractionElement interaction)
+            
+            public void Execute(ref LivingArea livingArea, ref InteractionElement interaction)
             {
                 //for (int i = 0; i < BiologicalStatus.Length; i++)
                 //{
@@ -44,31 +45,27 @@ namespace GameSystem
                 //        && status.TargetType == interaction.Type
                 //    )
                 //    {
-                        
-                //        //LivingAreaEnterInfo info=new LivingAreaEnterInfo();
-                //        //EventInfo eventInfo=new EventInfo();
-                //        //eventInfo.Aid = Biological[i].BiologicalId;
-                //        //eventInfo.Bid = livingArea.Id;
-
-                //        //eventInfo.EventCode = 100;
-                //        //CommandBuffer.CreateEntity(LivingInfoArchetype);
-                //        //CommandBuffer.SetComponent(eventInfo);
-
-                //        //if (status)
-                //        //if (status.BiologicalIdentity == 0)
-                //        //{
-                //        //    status.LocationType = LocationType.City;
-                //        //    status.LocationId = livingArea.Id;
-                //        //    //BiologicalStatus[i] = status;
-                //        //}
-                //        //else if (status.BiologicalIdentity == 1)
-                //        //{
-                //        //    EventInfo eventInfo = new EventInfo();
-                //        //    eventInfo.Aid = Biological[i].BiologicalId;
-                //        //    eventInfo.Bid = livingArea.Id;
-                //        //}
+                //        LivingAreaEnterInfo info = new LivingAreaEnterInfo();
+                //        EventInfo eventInfo = new EventInfo();
+                //        eventInfo.Aid = Biological[i].BiologicalId;
+                //        eventInfo.Bid = livingArea.Id;
+                //        eventInfo.EventCode = 100;
+                //        CommandBuffer.CreateEntity(LivingInfoArchetype);
+                //        CommandBuffer.SetComponent(eventInfo);
+                //        if (status)
+                //            if (status.BiologicalIdentity == 0)
+                //            {
+                //                status.LocationType = LocationType.City;
+                //                status.LocationId = livingArea.Id;
+                //                //BiologicalStatus[i] = status;
+                //            }
+                //            else if (status.BiologicalIdentity == 1)
+                //            {
+                //                EventInfo eventInfo = new EventInfo();
+                //                eventInfo.Aid = Biological[i].BiologicalId;
+                //                eventInfo.Bid = livingArea.Id;
+                //            }
                 //    }
-
                 //}
             }
 
@@ -86,7 +83,7 @@ namespace GameSystem
             //            status.TargetType = 0;
             //            BiologicalStatus[index] = status;
             //        }
-                    
+
             //    }
 
             //    //var biologicalIndex = Biological[index];
@@ -119,7 +116,6 @@ namespace GameSystem
             //    //}else if (biologicalIndex.LocationType == LocationType.LivingAreaIn)
             //    //{
             //    //    float3 receiverPos = Positions[index].Value;
-                   
             //    //}
 
             //    //var b = Biological[index];
@@ -259,16 +255,18 @@ namespace GameSystem
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
+
+
             var job = new LivingAreaCollision()
             {
                 Biological = _biologicalData.Biological,
-               // BiologicalStatus = _biologicalData.Status,
+                // BiologicalStatus = _biologicalData.Status,
                 CommandBuffer = _areaEnterBarrier.CreateCommandBuffer(),
-                LivingInfoArchetype=GameSceneInit.EventInfotype
+                LivingInfoArchetype = GameSceneInit.EventInfotype
             };
             return job.Schedule(this, inputDeps);
         }
-        
+
     }
 
 }

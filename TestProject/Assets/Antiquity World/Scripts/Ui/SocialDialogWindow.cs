@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace GameSystem.Ui
 {
-
     public class SocialDialogWindow : UIWindowBase
     {
         public Rect Size;
@@ -37,8 +36,6 @@ namespace GameSystem.Ui
 
         private SocialDialogWindowData _socialDialogWindowData;
 
-        //private SocialDialog _socialDialog;
-        //private Dictionary<int,string> log=new Dictionary<int, string>();
         protected override void InitWindowData()
         {
             this.ID = WindowID.SocialDialogWindow;
@@ -48,18 +45,41 @@ namespace GameSystem.Ui
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
             windowData.closeModel = UIWindowCloseModel.Destory;
-            windowData.animationType = UIWindowAnimationType.None;
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
         }
-
-
-        public struct Data
+        public override void InitWindowOnAwake()
         {
+             // SQLService.Instance
+        }
+
+        public class SocialDialogInfo
+        {
+            
             
         }
 
-        public override void InitWindowOnAwake()
+        public class SocialDialog
         {
+            public int Aid;
+            public int Bid;
+
+            public int StartId;
+            public int[] StartlogId;
+            public SocialDialogEvent DialogEvent;
+        }
+
+        public override void ShowWindow(BaseWindowContextData contextData)
+        {
+            if (contextData == null)
+            {
+                return;
+            }
+              
+            base.ShowWindow(contextData);
+
+            _socialDialogWindowData = (SocialDialogWindowData) contextData;
+            Change();
+
             //_socialDialog=new SocialDialog();
 
             //_socialDialog.Aid = 1;
@@ -87,28 +107,6 @@ namespace GameSystem.Ui
             //_startTxt.text = string.Format(log[_socialDialog.StartId]);
             //_currentItem = _socialDialog.StartlogId;
             //
-        }
-
-
-
-        public class SocialDialog
-        {
-            public int Aid;
-            public int Bid;
-
-            public int StartId;
-            public int[] StartlogId;
-            public SocialDialogEvent DialogEvent;
-        }
-
-        public override void ShowWindow(BaseWindowContextData contextData)
-        {
-            if(contextData==null)return;
-            base.ShowWindow(contextData);
-
-            _socialDialogWindowData = (SocialDialogWindowData) contextData;
-
-            Change();
         }
 
         public void ItemOnClick(GameObject go)

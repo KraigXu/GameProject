@@ -198,7 +198,7 @@ public class StrategyScene : MonoBehaviour
             }
         }
         //------------------初始化Biological
-        List<BiologicalData> biologicalDatas = SQLService.Instance.SimpleQuery<BiologicalData>(" Id<>?", 1);
+        List<BiologicalData> biologicalDatas = SQLService.Instance.QueryAll<BiologicalData>();
         BiologicalData bData;
         for (int i = 0; i < biologicalDatas.Count; i++)
         {
@@ -212,47 +212,30 @@ public class StrategyScene : MonoBehaviour
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
             Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
+            SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
+
             switch (bData.Identity)
             {
+                case 0:
+                    break;
                 case 1:
-                    SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
+                    SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
+                    SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, bData.Id);
+                    SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, bData.Id);
+                    SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entity);
+
+                    StrategyPlayer.PlayerInit(1,bData.Name,bData.Surname, StrategyAssetManager.GetBiologicalAvatar(1),entity,hexUnit);
+
                     break;
                 case 2:
-                    
-                    //SystemManager.Get<BiologicalSystem>()
-                    break;
-                case 3:
+                    SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
+
                     break;
                 default:
                     Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
                     break;
             }
         }
-        
-        //-----------------------------Player
-        BiologicalData player = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", 1);
-
-        hexCoordinates = new HexCoordinates(player.X, player.Z);
-        hexCell = hexGrid.GetCell(hexCoordinates);
-        HexUnit playerUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(player.ModelId));
-        hexGrid.AddUnit(playerUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
-        Entity pentity = playerUnit.GetComponent<GameObjectEntity>().Entity;
-
-        if (player.Identity == 1)
-        {
-            SystemManager.Get<BiologicalSystem>().AddBiological(player, pentity);
-            SystemManager.Get<EquipmentSystem>().AddEquipment(pentity, player.EquipmentJson);
-            SystemManager.Get<ArticleSystem>().SettingArticleFeature(pentity, player.Id);
-            SystemManager.Get<TechniquesSystem>().SpawnTechnique(pentity,player.Id);
-            SystemManager.Get<FightingSystem>().AddFighting(pentity);
-        }
-        
-        Define.Player.PlayerId = 1;
-        Define.Player.AvatarSprite = StrategyAssetManager.GetBiologicalAvatar(1);
-        Define.Player.Entity = pentity;
-        Define.Player.Name = player.Name;
-        Define.Player.SurName = player.Surname;
-        Define.Player.Unit = playerUnit;
 
         SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
         SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
@@ -260,7 +243,6 @@ public class StrategyScene : MonoBehaviour
         SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
         SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
         
-        Debug.Log(">>System Over");
         yield return null;
 
     }
@@ -278,7 +260,7 @@ public class StrategyScene : MonoBehaviour
         //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
         //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
         
-        HexMapCamera.SetTarget(Define.Player.Unit.transform.position);
+        HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
 
         loadingViewCom.Close();
     }

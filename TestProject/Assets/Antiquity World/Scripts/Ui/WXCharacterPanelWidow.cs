@@ -102,10 +102,9 @@ namespace GameSystem.Ui
 
         protected override void BeforeShowWindow(BaseWindowContextData contextData = null)
         {
-
             if (contextData == null)
             {
-                _curEntity = Define.Player.Entity;
+                _curEntity = StrategyPlayer.Entity;
             }
             else
             {
@@ -155,8 +154,6 @@ namespace GameSystem.Ui
             //SkinTxt.text = bodyPropert.Skin.ToString();
             //BlodTxt.text = bodyPropert.Blod.ToString();
             //JingLuoTxt.text = bodyPropert.JingLuo.ToString();
-
-
             //解析 PS暂留 
 
             Equipment equipment = _entityManager.GetComponentData<Equipment>(_curEntity);

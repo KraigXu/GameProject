@@ -12,45 +12,16 @@ using UnityEngine;
 namespace GameSystem
 {
 
-    /// <summary>
-    /// 元素类型
-    /// </summary>
-    public enum ElementType
-    {
-        None = 0,
-        Terrain = 1,
-        Biological = 2,
-        District = 3,
-        LivingArea = 4,
-        Team= 5,
-    }
+    //---------------------------LivingArea
 
 
-    public enum TendType
-    {
-        None = 0, //无
-        Patrol = 1,  //巡逻
 
-    }
-
-    public enum BehaviorPolicyType
-    {
-        Cruising,
-    }
-
-    public struct Element : IComponentData
-    {
-        public int InnerId;
-        public ElementType Type;
-
-    }
 
     /// <summary>
     /// 悬浮信息
     /// </summary>
     public struct FloatingInfo : IComponentData
     {
-
     }
 
     /// <summary>
@@ -59,7 +30,6 @@ namespace GameSystem
     public struct BehaviorData : IComponentData
     {
         public Vector3 Target;
-        public ElementType TargetType;
         public int TargetId;
         public float TimeToLive;
         public Entity TargetEntity;
@@ -69,7 +39,7 @@ namespace GameSystem
         public Vector3 NextPoint;
         public uint BehaviourType;
 
-
+        public HexCoordinates Target1;
     }
 
 
@@ -96,11 +66,9 @@ namespace GameSystem
     /// </summary>
     public struct NpcInput : IComponentData
     {
-        //趋向
-        public TendType Movetend;
 
         public int RandomSeed;
-        public BehaviorPolicyType BehaviorPolicy;
+
         public float BehaviorTime;
     }
 
@@ -111,6 +79,14 @@ namespace GameSystem
         public Vector3 ClickPoint;
         public Vector2 ViewMove;
         public Entity MouseEntity;
+    }
+
+    /// <summary>
+    /// 玩家成员
+    /// </summary>
+    public struct PlayerMember : IComponentData
+    {
+
     }
 
     public struct District : IComponentData
@@ -262,6 +238,42 @@ namespace GameSystem
         public int Lingdong;
         public int Wuxing;
 
+        public int HelmetProperty1;
+        public int HelmetProperty2;
+        public int HelmetProperty3;
+
+
+        public byte Thought;                                                
+        public byte Neck;                                                   
+        public byte Heart;                                                  
+        public byte Eye;                                                    
+        public byte Ear;                                                    
+        public byte LeftLeg;                                                
+        public byte RightLeg;                                               
+        public byte LeftHand;                                               
+        public byte RightHand;                                              
+        public byte Fertility;                                              
+        public byte Skin;                                                   
+        public byte Blod;                                                   
+        public byte JingLuo;                                                
+
+        public int AvatarId;
+        public int ModelId;
+        public int FamilyId;
+        public int FactionId;
+        public int TitleId;
+        public int TechniquesId;
+        public int EquipmentId;
+
+        public int StrategyMoveBasSpeed;
+        public int StrategyMoveSpeed;
+
+
+        public int FireMoveSpeed;
+
+        public int VisionBaseRange;
+        public int VisionRange;
+
     }
 
     
@@ -279,9 +291,6 @@ namespace GameSystem
     {
 
     }
-
-    
-
     public struct Life : IComponentData
     {
         public float Value;
@@ -297,7 +306,6 @@ namespace GameSystem
     {
         public int Id;
     }
-
 
     public struct ModelComponent: IComponentData
     {
@@ -384,6 +392,10 @@ namespace GameSystem
 
     public struct EquipmentHelmet : IComponentData
     {
+        public int Property1;
+        public int Property2;
+        public int Property3;
+        public int Property4;
 
     }
     public enum EquipType
@@ -551,14 +563,10 @@ namespace GameSystem
 
     }
 
-    [Serializable]
     public struct LivingArea : IComponentData
     {
-        
-
         public int Id;
         public byte IsInit;
-
         public int PersonNumber;
         public LivingAreaType Type;
         public int Money;
@@ -571,17 +579,13 @@ namespace GameSystem
         public int FoodMax;
         public int DefenseStrength;
         public int StableValue;
-
         public int PowerId;
         public int ModelBaseId;
         public int ModelId;
-      
         public int TitleUiId;
         public int BuildGroupId;
-
         public int CurLevel;
         public int MaxLevel;
-
         public byte TitleType;
     }
 
@@ -593,8 +597,10 @@ namespace GameSystem
         public int CityLevel;
 
         public int Type;
+    }
 
-
+    public struct CityMass : IComponentData
+    {
 
     }
 
@@ -616,10 +622,6 @@ namespace GameSystem
         public int Id;
         public int CollectiveClassId;
         public int Cohesion;
-
-
-
-
     }
 
     public struct ModelInfo : IComponentData
@@ -909,15 +911,16 @@ namespace GameSystem
     public struct Camp : IComponentData
     {
         public int UniqueCode;
-
-        
     }
 
     public struct Timer : IComponentData
     {
-        public int TimeType;   //1地形 //2生物 
-        public float TimeAdd;
+       // public int TimeType;   //1地形 //2生物 
+       // public float TimeAdd;
+       
 
+        public int ExpendDay;
+        public int DayEnd;
 
     }
 

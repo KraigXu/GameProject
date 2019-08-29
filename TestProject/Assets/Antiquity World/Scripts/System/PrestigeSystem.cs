@@ -42,17 +42,17 @@ namespace GameSystem
             }
         }
 
-        public string CheckValue(int value,ElementType type)
-        {
-            for (int i = 0; i < _prestigeDatas.Count; i++)
-            {
-                if (_prestigeDatas[i].Type == (int) type && value >= _prestigeDatas[i].ValueMin && value <= _prestigeDatas[i].ValueMax)
-                {
-                    return _prestigeDatas[i].Title;
-                }
-            }
-            return "";
-        }
+        //public string CheckValue(int value,ElementType type)
+        //{
+        //    for (int i = 0; i < _prestigeDatas.Count; i++)
+        //    {
+        //        if (_prestigeDatas[i].Type == (int) type && value >= _prestigeDatas[i].ValueMin && value <= _prestigeDatas[i].ValueMax)
+        //        {
+        //            return _prestigeDatas[i].Title;
+        //        }
+        //    }
+        //    return "";
+        //}
 
         public static string ValueConvertString(int value)
         {

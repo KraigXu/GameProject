@@ -80,7 +80,10 @@ public sealed class Define
     public static bool IsEdit;
 
 
-    public static StrategyPlayer Player=new StrategyPlayer();
+
+
+
+
 
 
 

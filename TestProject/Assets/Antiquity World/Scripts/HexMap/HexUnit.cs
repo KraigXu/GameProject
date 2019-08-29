@@ -101,8 +101,13 @@ public class HexUnit : MonoBehaviour {
 		location = path[path.Count - 1];
 		location.Unit = this;
 		pathToTravel = path;
+        Debug.Log(pathToTravel.Count);
 		StopAllCoroutines();
-		StartCoroutine(TravelPath());
+	    if (pathToTravel.Count > 1)
+	    {
+	        StartCoroutine(TravelPath());
+        }
+		
 	}
 
 	IEnumerator TravelPath () {

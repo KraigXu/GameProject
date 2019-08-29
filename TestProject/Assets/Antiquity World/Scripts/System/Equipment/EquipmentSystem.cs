@@ -22,6 +22,15 @@ namespace GameSystem
 
     public class EquipmentSystem : ComponentSystem
     {
+        struct Data
+        {
+            public readonly int Length;
+            public EntityArray Entitys;
+            public ComponentDataArray<Equipment> Equipment;
+        }
+
+
+
         struct EquipmentGroup
         {
             public readonly int Length;
@@ -41,6 +50,9 @@ namespace GameSystem
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
         }
+
+
+
         public static void SetData(EquipmentJsonData jsonData)
         {
             if (_equipmentDic.ContainsKey(jsonData.Id) == true)
@@ -54,9 +66,7 @@ namespace GameSystem
         }
         protected override void OnUpdate()
         {
-            for (int i = 0; i < _equipmentInfo.Length; i++)
-            {
-            }
+            
         }
 
         //public static EquipmentJsonData GetEquipment(int equipmentId)
@@ -69,7 +79,6 @@ namespace GameSystem
         //    {
         //        return null;
         //    }
-
         //}
 
         public void AddEquipment(Entity entity, string data)
@@ -110,8 +119,6 @@ namespace GameSystem
 
 
                 });
-
-
 
                 _entityManager.AddComponentData(entity, new Equipment
                 {

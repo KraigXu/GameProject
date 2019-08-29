@@ -23,7 +23,6 @@ public class PlayerCityUiSystem : ComponentSystem
     }
     protected override void OnUpdate()
     {
-        
     }
 
 

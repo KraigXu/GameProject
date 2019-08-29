@@ -210,13 +210,6 @@ public class HexGrid : MonoBehaviour {
 	    cell.ColumnIndex = x / HexMetrics.chunkSizeX;
 		cell.ShaderData = cellShaderData;
 
-        //赋予单元特性
-        SystemManager.ActiveManager.AddComponentData(cell.Entity,new Timer()
-        {
-            TimeType = 1,
-            TimeAdd=0,
-        });
-
 	    if (wrapping)
 	    {
 	        cell.Explorable = z > 0 && z < cellCountZ - 1;

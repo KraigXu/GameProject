@@ -8,12 +8,18 @@ using UnityEngine.UI;
 
 namespace GameSystem
 {
+
+    
+
     public class BiologicalBaseUi : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, 
         IPointerDownHandler, IDragHandler
     {
+        public delegate void BiologicalInfoEvent(Entity entity);
 
         public Entity Entity;
 
+
+        public BiologicalInfoEvent OnClickEvent;
 
         public Text NameTex;
         public Image HeadImg;
@@ -74,12 +80,21 @@ namespace GameSystem
         {
             if (eventData.pointerId == -1)
             {
+                
+
                 Debug.Log("Left Mouse Clicked.");
             }
             else if (eventData.pointerId == -2)
             {
                 Debug.Log("Right Mouse Clicked.");
             }
+
+            if (OnClickEvent != null)
+            {
+                OnClickEvent(Entity);
+            }
+
+
         }
     }
 

@@ -45,11 +45,10 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            AvateImage.overrideSprite =Define.Player.AvatarSprite;
-            NameText.text = Define.Player.SurName + Define.Player.Name;
+            AvateImage.overrideSprite = StrategyPlayer.AvatarSprite;
+            NameText.text = StrategyPlayer.SurName + StrategyPlayer.Name;
             grid = StrategyScene.Instance.hexGrid;
-            unit = Define.Player.Unit;
-            //StrategyScene.Instance.PlayerInfoView = this;
+            unit = StrategyPlayer.Unit;
 
         }
 
@@ -143,6 +142,7 @@ namespace GameSystem.Ui
                 else
                 {
                     grid.ClearPath();
+                    //grid.ClearPath();
                 }
             }
         }

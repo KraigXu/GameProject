@@ -10,54 +10,41 @@ using UnityEngine;
 /// </summary>
 public class PlayerControl : MonoBehaviour
 {
-
     public bool IsEdit = false;
 
-    public StrategyPlayer Player;
+
     public PlayerInfoWindow PlayerInfoWin;
 
     private EntityManager _entityManager;
     void Start()
     {
-        Player = Define.Player;
-        _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
         
-        //if (Player.PlayerId != 0)
-        //{
-        //    PlayerInfoWin=UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow) as PlayerInfoWindow;;
-        //}
+        _entityManager = World.Active.GetOrCreateManager<EntityManager>();
+        if (StrategyPlayer.PlayerId != 0)
+        {
+            PlayerInfoWin = UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow) as PlayerInfoWindow; ;
+        }
+
     }
 
 
     void Update()
     {
+        if (Input.GetKeyUp(KeyCode.K))
+        {
 
+            _entityManager.AddComponentData(StrategyPlayer.Entity,new Timer()
+            {
+                //StartTime = SystemManager.Get<WorldTimeSystem>().CurTime,
+                //OverTime = SystemManager.Get<WorldTimeSystem>().GetDayExpend(3),
+                DayEnd = 0,
+                ExpendDay =3,
+            });
+
+        }
+
+        
     }
-
-    void OnDisable()
-    {
-
-    }
-
-    void OnEnable()
-    {
-
-    }
-
-
-    ///// <summary>
-    ///// 初始化Player事件
-    ///// </summary>
-    //public void InitPlayerEvent(GameObject go)
-    //{
-
-    //    ColliderTriggerEvent goevent = go.GetComponent<ColliderTriggerEvent>();
-    //    goevent.TriggerEnter = PlayerOnCollisionEnter;
-    //    goevent.TriggerExit = PlayerOnCollisionExit;
-    //}
-
-
 
     //------------------------------------PlayerEvent
 
@@ -66,14 +53,12 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     public void OpenCityWindow()
     {
-        if(Player.Unit.Location==null)
+        if(StrategyPlayer.Unit.Location==null)
             return;
 
-        CitySystem.ShowCityWindow(Player.Unit.Location.Entity,Player.Entity);
+        CitySystem.ShowCityWindow(StrategyPlayer.Unit.Location.Entity, StrategyPlayer.Entity);
     }
-
 }
-
 
 /// <summary>
 /// 玩家控制System
@@ -114,11 +99,7 @@ public class PlayerControl : MonoBehaviour
 //        get { return _data.Entity; }
 //    }
 
-//    public PlayerControlSystem()
-//    {
-//        _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-//    }
-
+    
 //    protected override void OnUpdate()
 //    {
 //        for (int i = 0; i < _data.Length; i++)

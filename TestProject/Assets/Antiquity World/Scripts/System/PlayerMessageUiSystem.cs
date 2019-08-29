@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class PlayerMessageUiSystem : ComponentSystem
 {
-
     struct Data
     {
         public readonly int Length;
@@ -24,7 +23,6 @@ public class PlayerMessageUiSystem : ComponentSystem
         _playerInfoWindow = (PlayerInfoWindow) UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
         _menuWindow = (MenuWindow) UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
     }
-
     protected override void OnUpdate()
     {
         //Update Data

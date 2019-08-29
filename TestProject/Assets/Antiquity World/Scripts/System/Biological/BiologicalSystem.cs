@@ -35,7 +35,7 @@ namespace GameSystem
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
-        public static EntityArchetype BiologicalArchetype;
+      
         public class ComponentGroup
         {
             public Animator Animator;
@@ -44,7 +44,6 @@ namespace GameSystem
         public BiologicalSystem()
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            BiologicalArchetype = _entityManager.CreateArchetype(typeof(Element), typeof(Position), typeof(Rotation), typeof(Biological), typeof(BodyProperty), typeof(Equipment), typeof(EquipmentCoat));
         }
 
         protected override void OnUpdate()
@@ -119,7 +118,6 @@ namespace GameSystem
 
             });
 
-
             _entityManager.AddComponentData(entity, new BodyProperty
             {
                 Tizhi = data.Tizhi,
@@ -129,8 +127,22 @@ namespace GameSystem
                 Wuxing = data.Wuxing
             });
 
-            _entityManager.AddComponentData(entity,new ExternalProperty());
+            _entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
+            _entityManager.SetComponentData(entity, new BehaviorData
+            {
+                Target = Vector3.zero,
+                
+                BehaviourType = 1,
+                CreantePositionCode = 1,
+                NextPoint = Vector3.back,
+                SelfPoint = Vector3.back,
+                TargetEntity = Entity.Null,
+                TargetId = 1,
+              
+                TimeToLive = 1,
+            });
 
+            _entityManager.AddComponentData(entity,new ExternalProperty());
 
             if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
             {
@@ -144,121 +156,9 @@ namespace GameSystem
                     Sex = sex,
 
                 };
-
                 GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
             }
         }
-
-        public static void AddBiological(EntityManager entityManager, int id)
-        {
-
-            BiologicalData data = SQLService.Instance.QueryUnique<BiologicalData>(" Id=?", id);
-            Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-
-            entityManager.SetComponentData(entity, new Position
-            {
-                Value = new float3(0, -6, 6)
-            });
-
-            entityManager.SetComponentData(entity, new Rotation
-            {
-                Value = Quaternion.identity
-            });
-
-            entityManager.SetComponentData(entity, new Biological()
-            {
-
-            });
-
-            entityManager.SetComponentData(entity, new Equipment
-            {
-                HelmetId = -1,
-                ClothesId = -1,
-                BeltId = -1,
-                HandGuard = -1,
-                Pants = -1,
-                Shoes = -1,
-                WeaponFirstId = -1,
-                WeaponSecondaryId = -1
-            });
-
-            entityManager.SetComponentData(entity, new EquipmentCoat
-            {
-                SpriteId = 1,
-                Type = EquipType.Coat,
-                Level = EquipLevel.General,
-                Part = EquipPart.All,
-                BluntDefense = 19,
-                SharpDefense = 20,
-                Operational = 100,
-                Weight = 3,
-                Price = 1233,
-            });
-
-            entityManager.AddComponentData(entity, new Knapsack
-            {
-                UpperLimit = 1000000,
-                KnapscakCode = data.Id
-            });
-
-            entityManager.AddComponentData(entity, new Team
-            {
-                TeamBossId = data.TeamId,
-                //TeamBossId=data.TeamId
-                
-            });
-
-
-
-            if (data.Identity == 0)
-            {
-                entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-            }
-            else if (data.Identity == 1)
-            {
-                entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-
-                //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-            }
-
-            if (data.FactionId != 0)
-            {
-                entityManager.AddComponentData(entity, new FactionProperty
-                {
-                });
-            }
-
-            entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-            entityManager.SetComponentData(entity, new BehaviorData
-            {
-                Target = Vector3.zero,
-            });
-
-            if (string.IsNullOrEmpty(data.JifaJson) == false)
-            {
-                // TechniquesSystem.SpawnTechnique(entity, data.JifaJson);
-            }
-
-            // ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", data.Id), entity);
-
-            //  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
-
-            //   ComponentGroup group = new ComponentGroup();
-            //    group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
-            //  group.Animator = entityGo.GetComponent<Animator>();
-            //if (ComponentDic.ContainsKey(entity) == false)
-            //{
-            //    ComponentDic.Add(entity, group);
-            //}
-
-            //GameStaticData.BiologicalNameDic.Add(data.Id, data.Name);
-            //GameStaticData.BiologicalSurnameDic.Add(data.Id, data.Surname);
-            //GameStaticData.BiologicalDescription.Add(data.Id, data.Description);
-
-
-        }
-
-
 
         /// <summary>
         /// 获取指定平面坐标上的所有单位
@@ -276,300 +176,6 @@ namespace GameSystem
                     units.Add(_data.HexUnit[i]);
             }
         }
-
-
-
-        //public void AddBiological(BiologicalData data, HexCoordinates coordinates)
-        //{
-        //    for (int i = 0; i < _data.Length; i++)
-        //    {
-        //        if (_data.Map[i].Coordinates.X == coordinates.X && _data.Map[i].Coordinates.Z == coordinates.Z)
-        //        {
-        //            return;
-        //        }
-        //    }
-
-
-        //    Entity entity = _entityManager.CreateEntity();
-        //    _entityManager.AddComponentData(entity, new CellMap()
-        //    {
-        //        Coordinates = coordinates
-        //    });
-
-        //    _entityManager.AddComponentData(entity, new LivingArea
-        //    {
-        //        Id = data.Id,
-        //        PersonNumber = data.PersonNumber,
-        //        Type = (LivingAreaType)data.LivingAreaType,
-        //        Money = data.Money,
-        //        MoneyMax = data.MoneyMax,
-        //        Iron = data.Iron,
-        //        IronMax = data.IronMax,
-        //        Wood = data.Wood,
-        //        WoodMax = data.WoodMax,
-        //        Food = data.Food,
-        //        FoodMax = data.FoodMax,
-        //        DefenseStrength = data.DefenseStrength,
-        //        StableValue = data.StableValue
-        //    });
-
-        //    _entityManager.AddComponentData(entity, new District
-        //    {
-        //    });
-
-        //    _entityManager.AddComponentData(entity, new Money
-        //    {
-        //        Value = data.Money,
-        //        Upperlimit = data.MoneyMax
-        //    });
-
-        //    _entityManager.AddComponentData(entity, new Crowd
-        //    {
-        //        Number = 300000
-        //    });
-
-        //    LivingAreaSystem.LivingAreaAddBuilding(entity, data.BuildingInfoJson);
-
-
-        //}
-
-        public void SetupComponentData(EntityManager entityManager)
-        {
-
-
-
-            List<BiologicalData> datas = SQLService.Instance.QueryAll<BiologicalData>();
-
-            for (int i = 0; i < datas.Count; i++)
-            {
-                ////entityManager.CreateEntity(BiologicalArchetype);
-                //Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.BiologicalPrefab[datas[i].ModelId].transform);
-                //entityGo.position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z);
-
-
-
-                //Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
-                //// Entity entity = entityManager.CreateEntity(BiologicalArchetype);
-                //entityGo.gameObject.AddComponent<HexUnit>();
-
-                //////entityManager.SetComponentData(entity, new Position
-                //////{
-                //////    Value = new float3(0, -6, 6)
-                //////});
-
-                //////entityManager.SetComponentData(entity, new Rotation
-                //////{
-                //////    Value = Quaternion.identity
-                //////});
-                //entityManager.AddComponent(entity, typeof(Biological));
-                //entityManager.SetComponentData(entity, new Biological()
-                //{
-                //    BiologicalId = datas[i].Id,
-                //    Age = datas[i].Age,
-                //    Sex = datas[i].Sex,
-                //    CharmValue = 0,
-                //    Mobility = 0,
-                //    OperationalAbility = 0,
-                //    LogicalThinking = 0,
-
-                //    //Disposition = (byte)datas[i].Disposition,
-                //    //NeutralValue = (byte)UnityEngine.Random.Range(0, 255),
-
-                //    //LuckValue = 100,
-                //    //PrestigeValue = 100,
-
-                //    //ExpEmptyHand = 9999,
-                //    //ExpLongSoldier = 9999,
-                //    //ExpShortSoldier = 9999,
-                //    //ExpJones = 9999,
-                //    //ExpHiddenWeapone = 9999,
-                //    //ExpMedicine = 9999,
-                //    //ExpArithmetic = 9999,
-                //    //ExpMusic = 9999,
-                //    //ExpWrite = 9999,
-                //    //ExpDrawing = 9999,
-                //    //ExpExchange = 9999,
-                //    //ExpTaoism = 9999,
-                //    //ExpDharma = 9999,
-                //    //ExpPranayama = 9999,
-
-                //    AvatarId = datas[i].AvatarId,
-                //    ModelId = datas[i].ModelId,
-                //    FamilyId = datas[i].FamilyId,
-                //    FactionId = datas[i].FactionId,
-                //    TitleId = datas[i].TitleId,
-                //    TechniquesId = 0,
-                //    EquipmentId = 0,
-
-                //    Jing = 100,
-                //    Qi = 100,
-                //    Shen = 100,
-                //    Tizhi = datas[i].Tizhi,
-                //    Lidao = datas[i].Lidao,
-                //    Jingshen = datas[i].Jingshen,
-                //    Lingdong = datas[i].Lingdong,
-                //    Wuxing = datas[i].Wuxing
-                //});
-
-
-
-
-
-
-
-                //entityManager.AddComponentData(entity, new Team
-                //{
-                //    TeamBossId = datas[i].TeamId
-                //});
-
-
-
-                //if (datas[i].Identity == 0)
-                //{
-                //    entityManager.AddComponent(entity, ComponentType.Create<NpcInput>());
-                //}
-                //else if (datas[i].Identity == 1)
-                //{
-                //    entityManager.AddComponent(entity, ComponentType.Create<PlayerInput>());
-
-                //    //  SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-                //}
-
-                //if (datas[i].FactionId != 0)
-                //{
-                //    entityManager.AddComponentData(entity, new FactionProperty
-                //    {
-
-                //    });
-                //}
-
-                //entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
-                //entityManager.SetComponentData(entity, new BehaviorData
-                //{
-                //    Target = Vector3.zero,
-                //});
-
-                //if (string.IsNullOrEmpty(datas[i].JifaJson) == false)
-                //{
-                //    TechniquesSystem.SpawnTechnique(entity, datas[i].JifaJson);
-                //}
-
-                //ArticleSystem.SpawnArticle(SQLService.Instance.SimpleQuery<ArticleData>(" Bid=?", datas[i].Id), entity);
-
-                ////  SystemManager.Get<BiologicalSystem>().InitComponent(entityGo.gameObject);
-
-                ////   ComponentGroup group = new ComponentGroup();
-                ////    group.AiCharacter = entityGo.GetComponent<AICharacterControl>();
-                ////  group.Animator = entityGo.GetComponent<Animator>();
-                ////if (ComponentDic.ContainsKey(entity) == false)
-                ////{
-                ////    ComponentDic.Add(entity, group);
-                ////}
-
-                //entityManager.AddSharedComponentData(entity, StrategyStyle.Instance.BiologicalRenderers[0]);
-
-
-                //GameStaticData.BiologicalNameDic.Add(datas[i].Id, datas[i].Name);
-                //GameStaticData.BiologicalSurnameDic.Add(datas[i].Id, datas[i].Surname);
-                //GameStaticData.BiologicalDescription.Add(datas[i].Id, datas[i].Description);
-
-                //    List<ArticleRecordData> articleRecordDatas= SQLService.Instance.Query<ArticleRecordData>(
-                //    "select * from ArticleData ad INNER JOIN ArticleRecordData ard ON ad.Id=ard.ArticleId WHERE ard.Bid=?",
-                //    datas[i].Id);
-
-
-                //for (int j = 0; j < articleRecordDatas.Count; j++)
-                //{
-                //    Entity articleentity = entityManager.CreateEntity(ArticleArchetype);
-
-                //    entityManager.SetComponentData(articleentity,new ArticleItem()
-                //    {
-                //        BiologicalEntity= entity,
-                //        Count = articleRecordDatas[j].Count,
-                //        MaxCount = articleRecordDatas[j].MaxCount,
-                //        Weight = 1,
-                //    });
-
-                //}
-
-                //entityManager.AddComponent(entity, ComponentType.Create<Energy>());
-                //entityManager.SetComponentData(entity, new Energy
-                //{
-                //    Value1 = 100,
-                //    Value2 = 300,
-                //});
-
-                //entityManager.AddComponent(entity, ComponentType.Create<BiologicalAvatar>());
-                //entityManager.SetComponentData(entity, new BiologicalAvatar
-                //{
-                //    Id =
-                //});
-                // entityManager.SetComponentData(entity,new Relationship());
-
-                // BiologicalStatus biologicalStatus = new BiologicalStatus();
-                // biologicalStatus.BiologicalIdentity = datas[i].Identity;
-                // biologicalStatus.TargetId = 0;
-                // biologicalStatus.TargetType = 0;
-                // biologicalStatus.LocationType = (LocationType)datas[i].LocationType;
-                // entityManager.SetComponentData(entity, biologicalStatus);
-
-                //switch ((LocationType)datas[i].LocationType)
-                //{
-                //    case LocationType.None:
-                //        break;
-                //    case LocationType.City:
-                //        {
-                //        }
-                //        break;
-                //    case LocationType.Field:
-                //        {
-                //            //entityManager.AddComponent(entity, ComponentType.Create<ModelSpawnData>());
-                //            //entityManager.SetComponentData(entity, new ModelSpawnData
-                //            //{
-                //            //    ModelData = new ModelComponent
-                //            //    {
-                //            //        Id = SystemManager.Get<ModelMoveSystem>().AddModel(GameStaticData.ModelPrefab[datas[i].ModelId], new Vector3(datas[i].X, datas[i].Y, datas[i].Z)),
-                //            //        Target = Vector3.zero,
-                //            //        Speed = 6,
-                //            //    },
-                //            //});
-
-                //            //entityManager.AddComponent(entity, ComponentType.Create<InteractionElement>());
-                //            //entityManager.SetComponentData(entity, new InteractionElement
-                //            //{
-                //            //    Distance = 1,
-                //            //    ModelCode = 1,
-                //            //});
-                //        }
-                //        break;
-                //}
-
-
-
-                //结合GameObject
-                //entityManager.AddComponent(entity, ComponentType.Create<AssociationPropertyData>());
-                //entityManager.SetComponentData(entity, new AssociationPropertyData
-                //{
-                //    IsEntityOver = 1,
-                //    IsGameObjectOver = 0,
-                //    IsModelShow = 0,
-                //    Position = new Vector3(datas[i].X, datas[i].Y, datas[i].Z),
-                //    ModelUid = datas[i].ModelId
-                //});
-                //if (datas[i].Id == 1)
-                //{
-                //    BiologicalItem item = GameObject.Find("TestA").GetComponent<BiologicalItem>();
-                //    item.Entity = entity;
-                //    item.IsInit = true;
-                //}
-                // SystemManager.Get<PlayerControlSystem>().InitPlayerEvent(entityGo.gameObject);
-            }
-        }
-
-
-
-
-
 
 
         /// <summary>
@@ -645,19 +251,6 @@ namespace GameSystem
             return new HexUnit();
         }
 
-
-
-
-        /// <summary>
-        /// Biological状态改变
-        /// </summary>
-        /// <param name="info"></param>
-        public void BiologicalStatusChange(EventInfo info)
-        {
-
-
-
-        }
 
         /// <summary>
         /// 阵营计算

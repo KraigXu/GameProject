@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewGameSettingWindow : MonoBehaviour {
-
-    
-
+public class RealSceneControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

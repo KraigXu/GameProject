@@ -33,7 +33,6 @@ namespace GameSystem
             public EntityArray Entity;
             public ComponentArray<HexCell> HexCells;
             public ComponentDataArray<City> City;
-
         }
         [Inject]
         private Data _data;
@@ -45,7 +44,7 @@ namespace GameSystem
         {
             base.OnCreateManager();
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
-            
+
         }
 
 
@@ -98,7 +97,7 @@ namespace GameSystem
 
                     EnterCity(targetEntity, thisEntity);
 
-                  //  ShowCityInside(thisEntity);
+                    //  ShowCityInside(thisEntity);
                     ShowWindowData showWindowData = new ShowWindowData();
 
                     LivingAreaWindowCD livingAreaWindowCd = new LivingAreaWindowCD();
@@ -117,13 +116,6 @@ namespace GameSystem
                     EnterCity(targetEntity, thisEntity);
                 }
             }
-
-
-        }
-
-        public static void CityColliderExit(GameObject go, Collider other)
-        {
-
         }
 
 
@@ -131,13 +123,10 @@ namespace GameSystem
         /// 打开城市内景
         /// </summary>
         /// <param name="cityEntity"></param>
-        public static void ShowCityInside(Entity cityEntity,Entity targetEntity)
+        public static void ShowCityInside(Entity cityEntity, Entity targetEntity)
         {
             ShowWindowData windowData = new ShowWindowData();
             LivingAreaWindowCD windowCd = new LivingAreaWindowCD();
-
-
-
 
             //UICenterMasterManager.Instance.ShowWindow(WindowID.LoadingWindow, windowData);
             //UICenterMasterManager.Instance.DestroyWindow(WindowID.LoadingWindow);
@@ -155,14 +144,7 @@ namespace GameSystem
             livingAreaWindowCd.LivingAreaEntity = cityEntity;
             cityWindowData.contextData = livingAreaWindowCd;
 
-            CityWindow cityWindow= (CityWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow);
-
-           // LivingAreaWindowCD livingAreaWindowCd =new LivingAreaWindowCD();
-           // livingAreaWindowCd.
-
-           ////cityWindow.
-
-
+            CityWindow cityWindow = (CityWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow);
             StrategyScene.Instance.ChangeModel(StrategySceneModel.LivingArea);
 
         }
@@ -195,6 +177,11 @@ namespace GameSystem
                 StableValue = data.StableValue
             });
 
+
+
+
+            // _entityManager.AddComponentData(cell.Entity,new Vector3());
+
             //根据City类型追加不同类型的建筑物
             switch (data.LivingAreaType)
             {
@@ -218,6 +205,8 @@ namespace GameSystem
                     break;
                 case 3:
                     {
+
+
                         // _entityManager.AddComponentData(cell.Entity,new Dwellings());
                     }
                     break;
@@ -240,12 +229,28 @@ namespace GameSystem
                 runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
                 GameStaticData.CityRunDataDic.Add(data.Id, runData);
             }
+        }
 
+        public void CityMass(Entity cityEntity, Entity massEntity)
+        {
+            if (cityEntity != Entity.Null)
+            {
+                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(cityEntity);
 
+                if (SystemManager.Contains<CityMass>(massEntity) == false)
+                {
+                    _entityManager.AddComponentData(massEntity,new CityMass
+                    {
 
+                    });
+
+                }
+
+            }
 
 
         }
+
     }
 
 }

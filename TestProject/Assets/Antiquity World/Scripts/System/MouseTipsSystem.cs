@@ -20,7 +20,7 @@ namespace GameSystem
             public readonly int Length;
             public ComponentDataArray<Position> Position;
             public ComponentDataArray<InteractionElement> Interaction;
-            public ComponentDataArray<Element> Element;
+          
             public EntityArray Entity;
         }
 
@@ -57,36 +57,36 @@ namespace GameSystem
             {
                 var interaction = _data.Interaction[i];
                 var position = _data.Position[i];
-                var element = _data.Element[i];
-                if (Vector3.Distance(position.Value, _point) < interaction.Distance)
-                {
-                    switch (element.Type)
-                    {
-                        case ElementType.None:
-                            break;
-                        case ElementType.Biological:
-                            //Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
-                            break;
-                        case ElementType.District:
-                            break;
-                        case ElementType.LivingArea:
-                            {
-                                tipsInfo.IsShow = true;
+                //var element = _data.Element[i];
+                //if (Vector3.Distance(position.Value, _point) < interaction.Distance)
+                //{
+                //    switch (element.Type)
+                //    {
+                //        case ElementType.None:
+                //            break;
+                //        case ElementType.Biological:
+                //            //Biological biological=_entityManager.GetComponentData<Biological>(_data.Entity[i]);
+                //            break;
+                //        case ElementType.District:
+                //            break;
+                //        case ElementType.LivingArea:
+                //            {
+                //                tipsInfo.IsShow = true;
                                 
-                                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_data.Entity[i]);
-                                List<TipsInfoItemData> infoItemDatas = new List<TipsInfoItemData>();
-                                infoItemDatas.Add(new TipsInfoItemData("名称:", GameStaticData.LivingAreaName[livingArea.Id]));
-                                infoItemDatas.Add(new TipsInfoItemData("介绍:", GameStaticData.LivingAreaDescription[livingArea.Id]));
-                                tipsInfo.InfoItemDatas = infoItemDatas;
-                                tipsInfo.Id = livingArea.Id;
-                            }
-                            break;
-                        case ElementType.Terrain:
-                            break;
-                        case ElementType.Team:
-                            break;
-                    }
-                }
+                //                LivingArea livingArea = _entityManager.GetComponentData<LivingArea>(_data.Entity[i]);
+                //                List<TipsInfoItemData> infoItemDatas = new List<TipsInfoItemData>();
+                //                infoItemDatas.Add(new TipsInfoItemData("名称:", GameStaticData.LivingAreaName[livingArea.Id]));
+                //                infoItemDatas.Add(new TipsInfoItemData("介绍:", GameStaticData.LivingAreaDescription[livingArea.Id]));
+                //                tipsInfo.InfoItemDatas = infoItemDatas;
+                //                tipsInfo.Id = livingArea.Id;
+                //            }
+                //            break;
+                //        case ElementType.Terrain:
+                //            break;
+                //        case ElementType.Team:
+                //            break;
+                //    }
+                //}
 
             }
 

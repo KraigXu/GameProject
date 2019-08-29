@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
-
-
 namespace GameSystem
 {
-    public class GongfaJsonData
-    {
-        public int Id;
-
-    }
-
     public class GongfaSystem : ComponentSystem
     {
         struct EquipmentGroup
@@ -44,21 +36,6 @@ namespace GameSystem
                 
             }
         }
-
-
-        //public static EquipmentJsonData GetEquipment(int equipmentId)
-        //{
-        //    if (_equipmentDic.ContainsKey(equipmentId) == true)
-        //    {
-        //        return _equipmentDic[equipmentId];
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-
-        //}
-
         
     }
 

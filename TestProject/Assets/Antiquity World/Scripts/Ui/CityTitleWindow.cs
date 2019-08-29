@@ -26,6 +26,7 @@ public class CityTitleWindow : UIWindowBase
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
+    
     }
 
     public override void InitWindowOnAwake()
@@ -46,14 +47,14 @@ public class CityTitleWindow : UIWindowBase
             }
         }
 
-        if (flag)  //说明已有
+        if (flag)   //说明已有
         {
             var item = _titles[index];
 
             item.TyepImg.sprite = _types[city.Type];
             item.RelationImg.sprite = _types[city.Type];
         }
-        else   //没有
+        else        //没有
         {
             var data = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", city.UniqueCode);
             RectTransform titleRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCityTitle, transform);
@@ -65,7 +66,6 @@ public class CityTitleWindow : UIWindowBase
             titleItem.TyepImg.sprite = _types[data.LivingAreaType];
             titleItem.Target = cell.transform;
             _titles.Add(titleItem);
-
         }
     }
 

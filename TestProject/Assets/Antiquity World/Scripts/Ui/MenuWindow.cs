@@ -16,16 +16,10 @@ namespace GameSystem.Ui
 
         protected override void InitWindowData()
         {
-            this.ID = WindowID.MenuWindow;
-
-            windowData.windowType = UIWindowType.NormalLayer;
-            windowData.showMode = UIWindowShowMode.DoNothing;
-            windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
-            windowData.colliderMode = UIWindowColliderMode.None;
-            windowData.closeModel = UIWindowCloseModel.Destory;
-            windowData.animationType = UIWindowAnimationType.None;
+            ID = WindowID.MenuWindow;
+            windowData.windowType = UIWindowType.BackgroundLayer;
+            windowData.closeModel = UIWindowCloseModel.Hide;
         }
-
 
         public override void InitWindowOnAwake()
         {
@@ -53,6 +47,7 @@ namespace GameSystem.Ui
             UICenterMasterManager.Instance.ShowWindow(WindowID.WXCharacterPanelWindow);
         }
 
+        
         public void ButtonLog()
         {
             UICenterMasterManager.Instance.ShowWindow(WindowID.LogWindow);

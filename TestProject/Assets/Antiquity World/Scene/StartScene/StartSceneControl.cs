@@ -8,9 +8,6 @@ namespace AntiquityWorld
     {
 
         public StartSelectWindow StartSelectWindow;
-
-        public NewGameSettingWindow NewGameSettingWindow;
-
         // Use this for initialization
         void Start()
         {

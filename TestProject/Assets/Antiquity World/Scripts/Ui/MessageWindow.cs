@@ -34,17 +34,15 @@ namespace GameSystem.Ui
         public Text CellUrbanTxt;
         public Text CellFarmTxt;
         public Text CellPlantTxt;
+        public Text CellPlauTxt;
 
         public RectTransform CellFeaturesParent;
 
         public RectTransform CellPersonsParent;
         private List<HexUnit> _personUnits = new List<HexUnit>();
 
-        private StrategyScene _strategyScene;
-        private StrategyPlayer _player;
         private HexCell _curCell;
         private HexCell _beforeCell;
-        private HexUnit _unit;
 
         protected override void InitWindowData()
         {
@@ -60,9 +58,7 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-            _strategyScene = StrategyScene.Instance;
-            _player = Define.Player;
-            _unit = _player.Unit;
+
         }
 
         void TextAnimation(Text text)
@@ -85,23 +81,33 @@ namespace GameSystem.Ui
         {
             CellPersonsParent.gameObject.SetActive(flag);
         }
+
+        /// <summary>
+        /// 清空未更新的内容
+        /// </summary>
+        public void Clear()
+        {
+            while (CellFeaturesParent.childCount > 0)
+            {
+                WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellFeaturesParent.GetChild(0));
+            }
+
+            while (CellPersonsParent.childCount > 0)
+            {
+                WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellPersonsParent.GetChild(0));
+            }
+
+            _personUnits.Clear();
+        }
+
+
         void LateUpdate()
         {
-            if (_curCell != _unit.Location)
+            if (_curCell != StrategyPlayer.Unit.Location)
             {
-                _curCell = _unit.Location;
-                while (CellFeaturesParent.childCount > 0)
-                {
-                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellFeaturesParent.GetChild(0));
-                }
-
-                while (CellPersonsParent.childCount > 0)
-                {
-                    WXPoolManager.Pools[Define.GeneratedPool].Despawn(CellPersonsParent.GetChild(0));
-                }
-
-                _personUnits.Clear();
-
+                Clear();
+                _curCell = StrategyPlayer.Unit.Location;
+              
 
                 switch (_curCell.Elevation)
                 {
@@ -123,24 +129,14 @@ namespace GameSystem.Ui
                         
                 }
 
-                
-
-
-                //根据cell显示内容，解析cell
-
-                
-                //_curCell.TerrainTypeIndex
-                //_curCell.Elevation
-                //_cur
-
                 int cellType = 3;
 
                 CellTypeImage.overrideSprite = StrategyAssetManager.GetCellTypeSprites(cellType);
                 CellTypeTxt.text = "";
-                CellUrbanTxt.text = _unit.Location.UrbanLevel.ToString();
-                CellFarmTxt.text = _unit.Location.FarmLevel.ToString();
+                CellUrbanTxt.text = _curCell.UrbanLevel.ToString();
+                CellFarmTxt.text = _curCell.FarmLevel.ToString();
 
-                switch (_unit.Location.FarmLevel)
+                switch (_curCell.FarmLevel)
                 {
                     case 0:
                   
@@ -148,7 +144,7 @@ namespace GameSystem.Ui
                 }
 
 
-                switch (_unit.Location.PlantLevel)
+                switch (_curCell.PlantLevel)
                 {
                     case 0:
                         CellPlantTxt.text = "树木稀少";
@@ -169,26 +165,27 @@ namespace GameSystem.Ui
                         break;
                 }
 
-                CellPlantTxt.text = _unit.Location.PlantLevel.ToString();
+                CellPlantTxt.text = _curCell.PlantLevel.ToString();
 
 
-                if (_unit.Location.SpecialIndex >= 0)
+                if (_curCell.SpecialIndex >= 0)
                 {
-                    switch (_unit.Location.SpecialIndex)
+                    switch (_curCell.SpecialIndex)
                     {
                         case 1:  //城市
                             {
 
-                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_unit.Location.Entity);
-
+                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_curCell.Entity);
                                 UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _unit.Location.Entity, CityOpenEntity);
+                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
+                                
+
                             }
                             break;
                         case 2: //帮派
                             {
 
-                                Collective collective = SystemManager.GetProperty<Collective>(_unit.Location.Entity);
+                                Collective collective = SystemManager.GetProperty<Collective>(_curCell.Entity);
 
                                 UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellFeaturesParent).GetComponent<UiCellFeature>();
                                 //featureUi.Init(GameStaticData.CityRunDataDic);
@@ -228,7 +225,7 @@ namespace GameSystem.Ui
 
                 for (int i = 0; i < _personUnits.Count; i++)
                 {
-                    if (_personUnits[i] == Define.Player.Unit)
+                    if (_personUnits[i] == StrategyPlayer.Unit)
                         continue;
 
                     Entity entity = _personUnits[i].Entity;
@@ -238,13 +235,13 @@ namespace GameSystem.Ui
                         Biological biological = SystemManager.GetProperty<Biological>(entity);
                         BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[entity];
 
-                        
                         RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
                         BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
                         bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
-
+                        bui.OnClickEvent += BiologicalEvent;
                         bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
                         bui.Entity = entity;
+
                     }
 
                 }
@@ -255,8 +252,9 @@ namespace GameSystem.Ui
             }
         }
 
+
         /// <summary>
-        /// 打开City实体 ,并且切换场景显示
+        /// 打开City实体 ,并且切换场景显示 ---City
         /// </summary>
         /// <param name="target"></param>
         public void CityOpenEntity(Entity target)
@@ -272,6 +270,19 @@ namespace GameSystem.Ui
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, cityWindowData);
 
+            SystemManager.Get<CitySystem>().CityMass(target,StrategyPlayer.Entity);
+            
+        }
+
+        public void BiologicalEvent(Entity entity)
+        {
+            ShowWindowData showWindowData = new ShowWindowData();
+
+            SocialDialogWindowData socialDialogWindowData=new SocialDialogWindowData();
+
+
+            showWindowData.contextData = socialDialogWindowData;
+             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, showWindowData);
         }
 
         public void Log(string value)

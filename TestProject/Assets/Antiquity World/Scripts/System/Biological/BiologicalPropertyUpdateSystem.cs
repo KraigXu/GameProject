@@ -12,15 +12,22 @@ using UnityEngine;
 
 public class BiologicalPropertyUpdateSystem : JobComponentSystem
 {
+
+    struct Data
+    {
+        public readonly int Legth;
+    }
+
+
     struct BiologicalExternalProperty : IJobProcessComponentData<Biological, BodyProperty, ExternalProperty>
     {
         public void Execute(ref Biological biological,[ReadOnly]ref BodyProperty body,[ReadOnly]ref ExternalProperty externalProperty)
         {
-            biological.Tizhi = body.Tizhi+ externalProperty.Tizhi;
-            biological.Lidao = body.Lidao+ externalProperty.Lidao;
-            biological.Jingshen =body.Jingshen+ externalProperty.Jingshen;
-            biological.Lingdong =body.Lingdong+ externalProperty.Lingdong;
-            biological.Wuxing =body.Wuxing+ externalProperty.Wuxing;
+            biological.Tizhi = body.Tizhi * externalProperty.Tizhi;
+            biological.Lidao = body.Lidao * externalProperty.Lidao;
+            biological.Jingshen =body.Jingshen * externalProperty.Jingshen;
+            biological.Lingdong =body.Lingdong * externalProperty.Lingdong;
+            biological.Wuxing =body.Wuxing* externalProperty.Wuxing;
         }
     }
     protected override JobHandle OnUpdate(JobHandle inputDeps)

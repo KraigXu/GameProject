@@ -44,6 +44,11 @@ namespace GameSystem
             return jsonData.Id;
         }
 
+        public static void SetupData(string json)
+        {
+
+        }
+
 
         protected override void OnCreateManager()
         {

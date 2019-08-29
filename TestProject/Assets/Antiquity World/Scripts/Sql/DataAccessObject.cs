@@ -146,6 +146,9 @@ namespace DataAccessObject
                                        " LanguageJson TEXT);");
         }
 
+      
+        
+
         /// <summary>
         /// 阵营,派系，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
         /// </summary>
@@ -571,10 +574,6 @@ namespace DataAccessObject
 
         public int SpecialIndex { get; set; }
 
-        
-
-
-
         public int PowerId { get; set; }
         public string Name { get; set; }                //名称
         public string Description { get; set; }         //说明
@@ -652,6 +651,9 @@ namespace DataAccessObject
         }
     }
 
+
+
+
     /// <summary>
     /// 生物信息
     /// </summary>
@@ -712,6 +714,9 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+
+
     /// <summary>
     /// 派系
     /// </summary>

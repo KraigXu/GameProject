@@ -106,13 +106,25 @@ namespace GameSystem
 
             List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
 
+            //List<LivingAreaData> datas1 = SQLService.Instance.QueryAll<LivingAreaData>();
+
+            //for (int i = 0; i < datas1.Count; i++)
+            //{
+
+            //    Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool]
+            //        .Spawn(GameStaticData.LivingAreaPrefabDic[datas1[i].ModelBaseId].transform);
+
+            //    entityGo.position=new Vector3(10,30,0);
+            //    entityGo.position = entityGo.GetComponent<GameObjectEntity>().Entity;
+            //}
+
 
             for (int i = 0; i < datas.Count; i++)
             {
                 Transform entityGo = WXPoolManager.Pools[Define.GeneratedPool].Spawn(GameStaticData.LivingAreaPrefabDic[datas[i].ModelBaseId].transform);
                 entityGo.position = new float3(datas[i].PositionX, datas[i].PositionY, datas[i].PositionZ);
                 //entityGo.gameObject.name = datas[i].Name;
-                ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
+             //   ColliderTriggerEvent trigger = entityGo.gameObject.GetComponent<ColliderTriggerEvent>();
 
                 Entity entity = entityGo.GetComponent<GameObjectEntity>().Entity;
 
@@ -135,12 +147,19 @@ namespace GameSystem
                     Food = datas[i].Food,
                     FoodMax = datas[i].FoodMax,
                     DefenseStrength = datas[i].DefenseStrength,
-                    StableValue = datas[i].StableValue
+                    StableValue = datas[i].StableValue,
+                    
                 });
-
                 entityManager.AddComponentData(entity, new District
                 {
-                    DistrictCode = i
+                    DistrictCode = i,
+                    GId = 10,
+                    GrowingModulus = 100,
+                    Id = 20,
+                    ProsperityLevel = 10,
+                    SecurityModulus = 10,
+                    Type = 1,
+                    Value = 1
                 });
 
                 entityManager.AddComponentData(entity, new Money
@@ -156,8 +175,8 @@ namespace GameSystem
                         Number = 300000
                     });
 
-                    trigger.TriggerEnter = CitySystem.CityColliderEnter;
-                    trigger.TriggerExit = CitySystem.CityColliderExit;
+                 //   trigger.TriggerEnter = CitySystem.CityColliderEnter;
+                  //  trigger.TriggerExit = CitySystem.CityColliderExit;
 
                 }
                 else if (datas[i].LivingAreaType == 2)
@@ -167,8 +186,8 @@ namespace GameSystem
                         CollectiveClassId = 1,
                         Cohesion = 1
                     });
-                    trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
-                    trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
+                  //  trigger.TriggerEnter = OrganizationSystem.OrganizationColliderEnter;
+                 //   trigger.TriggerExit = OrganizationSystem.OrganizationColliderExit;
                 }
 
                 LivingAreaAddBuilding(entity, datas[i].BuildingInfoJson);

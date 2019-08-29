@@ -19,13 +19,17 @@ public class WorldTimeSystem : ComponentSystem
     private Data _data;
     private EntityManager _entityManager;
 
+
+//    public static DateTime GlobalTime=
+
+
     public DateTime CurTime = Convert.ToDateTime("1000-01-01 00:00:00");
     public int Shichen = 1;
     [SerializeField]
     private byte _timeScalar = 10;           //时间的放大比 如果是0 则是暂停  //10  //50  //100
     private byte _timeAdd = 1;
     public byte ScheduleCell = 5;         //时间节点的大小
-    public float Schedule = 0;             //一个时间节点的进度
+    public float Schedule = 0;    //一个时间节点的进度
 
     public List<WorldTimerNode> WorldTimerNodes = new List<WorldTimerNode>();
 
@@ -41,12 +45,8 @@ public class WorldTimeSystem : ComponentSystem
     private WorldTimeWindow _worldTimeWindow;
     public static float TimeClip=3;
 
-
-    
-
     public void SetupValue(bool isShowUi)
     {
-
         CurTime = Convert.ToDateTime("1000-01-01 00:00:00");
         Shichen = UpdateGuDaiTime(CurTime.Hour);
         TargetTimes = CurTime.AddDays(30);
@@ -56,7 +56,6 @@ public class WorldTimeSystem : ComponentSystem
             _worldTimeWindow = (WorldTimeWindow)UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
             _worldTimeWindow.AddFloat(CurTime.Year, CurTime.Month, CurTime.Hour, CurTime.Day / (float)DateTime.DaysInMonth(CurTime.Year,CurTime.Month));
         }
-       
     }
 
     private int UpdateGuDaiTime(int curHour)
@@ -112,6 +111,11 @@ public class WorldTimeSystem : ComponentSystem
         }
     }
 
+    public DateTime GetDayExpend(int day)
+    {
+        return CurTime.AddDays(day);
+    }
+
     /// <summary>
     /// 创建新的时间序列
     /// </summary>
@@ -164,8 +168,6 @@ public class WorldTimeSystem : ComponentSystem
     {
         Debug.Log(">>增加时间");
 
-
-
     }
 
     public DateTime TargetTimes;
@@ -178,12 +180,6 @@ public class WorldTimeSystem : ComponentSystem
         public DateTime Time;
 
         public Action Action;
-    }
-
-    public void NextTime(int day)
-    {
-        TargetTimes = CurTime.AddDays(day);
-
     }
 
 
@@ -202,63 +198,27 @@ public class WorldTimeSystem : ComponentSystem
         }
     }
 
+    /// <summary>
+    /// 增加时间节点
+    /// </summary>
+    /// <param name="entity"></param>
+    public static void AddTimer(EntityManager entityManager, Entity entity)
+    {
+        entityManager.AddComponentData(entity,new Timer
+        {
+           //TimeType = 1,
+            
+        });
+    }
+
     protected override void OnUpdate()
     {
         bool isAdd = false;
 
         if (CurTime != TargetTimes)
         {
-            if (Timeer > 5)
-            {
-                Timeer = 0;
-                CurTime = CurTime.AddDays(1);
-              //  CheckEvent();
-                isAdd = true;
-            }
-            else
-            {
-                Timeer += Time.deltaTime;
-            }
 
-            for (int i = 0; i < _data.Length; i++)
-            {
-                var timer = _data.Timers[i];
-
-                if (isAdd == true)
-                {
-                    timer.TimeAdd += 1;
-                }
-
-                if (timer.TimeType == 1)
-                {
-                }
-                else if (timer.TimeType == 2)
-                {
-                }
-                _data.Timers[i] = timer;
-
-            }
-            
-
-            if (_worldTimeWindow)
-            {
-                _worldTimeWindow.AddFloat(CurTime.Year,CurTime.Month,CurTime.Hour, CurTime.Day/(float)DateTime.DaysInMonth(CurTime.Year, CurTime.Month));
-              //  _worldTimeWindow.ad
-            }
            
-
-           // _worldTimeWindow.Year.text=Ye
-
-            //_cd += Time.deltaTime;
-            //if (_cd > 1)
-            //{
-            //    Year.text = WorldTime.Year.ToString();
-            //    Month.text = WorldTime.Month.ToString();
-            //    Day.text = WorldTime.Day.ToString();
-            //    ShiChen.text = TimeShichen[WorldTime.ShiChen];
-            //    //Season.text = _timeManager.Season;
-            //    _cd = 0;
-            //}
         }
         else
         {
@@ -266,9 +226,44 @@ public class WorldTimeSystem : ComponentSystem
 
 
         }
+        if (Timeer > 5)
+        {
+            Timeer = 0;
+            CurTime = CurTime.AddDays(1);
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                var timer = _data.Timers[i];
+                var entity = _data.Entity[i];
+                if (timer.ExpendDay > 0)
+                {
+                    timer.DayEnd = 1;
+                    Debug.Log("11");
+                }
+                _data.Timers[i] = timer;
 
 
-        
+                if (timer.ExpendDay ==0 && timer.DayEnd==0)
+                {
+                    Debug.Log(">>>>11");
+                    SystemManager.Get<EntityManager>().RemoveComponent<Timer>(entity);
+                }
+
+               
+
+            }
+            if (_worldTimeWindow)
+            {
+                _worldTimeWindow.AddFloat(CurTime.Year, CurTime.Month, CurTime.Hour, CurTime.Day / (float)DateTime.DaysInMonth(CurTime.Year, CurTime.Month));
+            }
+        }
+        else
+        {
+            Timeer += Time.deltaTime;
+        }
+
+
+
     }
 
 

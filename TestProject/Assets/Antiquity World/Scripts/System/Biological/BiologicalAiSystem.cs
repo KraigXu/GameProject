@@ -155,11 +155,11 @@ namespace  GameSystem
         private void ChangeAiSystem(Entity entity, Biological biological, NpcInput input)
         {
 
-            switch (input.BehaviorPolicy)
-            {
-                case BehaviorPolicyType.Cruising:
-                    break;
-            }
+            //switch (input.BehaviorPolicy)
+            //{
+            //    case BehaviorPolicyType.Cruising:
+            //        break;
+            //}
         }
 
         private void CheckAi()
