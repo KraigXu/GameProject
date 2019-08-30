@@ -58,7 +58,6 @@ namespace GameSystem.Ui
 
         public override void InitWindowOnAwake()
         {
-
         }
 
         void TextAnimation(Text text)
@@ -107,27 +106,13 @@ namespace GameSystem.Ui
             {
                 Clear();
                 _curCell = StrategyPlayer.Unit.Location;
-              
 
-                switch (_curCell.Elevation)
-                {
-                        
-                }
+                //Debug.Log(_curCell.Elevation);
 
-                switch (_curCell.FarmLevel)
-                {
-                        
-                }
+                //Debug.Log(_curCell.FarmLevel);
 
-                switch (_curCell.SpecialIndex)
-                {
-                        
-                }
-
-                switch (_curCell.UrbanLevel)
-                {
-                        
-                }
+                //Debug.Log(_curCell.SpecialIndex);
+                //Debug.Log(_curCell.UrbanLevel);
 
                 int cellType = 3;
 
@@ -139,7 +124,7 @@ namespace GameSystem.Ui
                 switch (_curCell.FarmLevel)
                 {
                     case 0:
-                  
+
                         break;
                 }
 
@@ -178,7 +163,7 @@ namespace GameSystem.Ui
                                 LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_curCell.Entity);
                                 UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
                                 featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
-                                
+
 
                             }
                             break;
@@ -187,7 +172,7 @@ namespace GameSystem.Ui
 
                                 Collective collective = SystemManager.GetProperty<Collective>(_curCell.Entity);
 
-                                UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellFeaturesParent).GetComponent<UiCellFeature>();
+                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
                                 //featureUi.Init(GameStaticData.CityRunDataDic);
 
                                 //UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellPersonsParent).GetComponent<UiCellFeature>();
@@ -270,19 +255,61 @@ namespace GameSystem.Ui
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, cityWindowData);
 
-            SystemManager.Get<CitySystem>().CityMass(target,StrategyPlayer.Entity);
-            
+            SystemManager.Get<CitySystem>().CityMass(target, StrategyPlayer.Entity);
+
         }
 
         public void BiologicalEvent(Entity entity)
         {
+
+            SocialDialogWindowData socialDialogWindowData = new SocialDialogWindowData();
+            socialDialogWindowData.SceneId = 1;
+            socialDialogWindowData.Aside = "流窜的山贼用贪婪的眼神看着你，威胁你交出身上{0}金钱";
+            socialDialogWindowData.OnSelfEntity = StrategyPlayer.Entity;
+            socialDialogWindowData.OnSelf = new List<DialogNode>();
+            DialogNode onselfs1 = new DialogNode();
+            onselfs1.Id = 1;
+            onselfs1.Content = "攻击对方";
+            onselfs1.EventCode = 99;
+            socialDialogWindowData.OnSelf.Add(onselfs1);
+
+            DialogNode onselfs2 = new DialogNode();
+            onselfs2.Id = 2;
+            onselfs2.Content = "偷窃";
+            onselfs2.EventCode = 98;
+            socialDialogWindowData.OnSelf.Add(onselfs2);
+
+            DialogNode onselfs3 = new DialogNode();
+            onselfs3.Id = 3;
+            onselfs3.Content = "交流";
+            onselfs3.EventCode = 97;
+            socialDialogWindowData.OnSelf.Add(onselfs3);
+
+            socialDialogWindowData.OtherEntity = entity;
+            socialDialogWindowData.Other = new List<DialogNode>();
+            DialogNode dialogOther1 = new DialogNode();
+            dialogOther1.Id = 4;
+            dialogOther1.Content = "交出{0}金钱。";
+            dialogOther1.EventCode = 80;
+            socialDialogWindowData.Other.Add(dialogOther1);
+
+            DialogNode dialogOther2 = new DialogNode();
+            dialogOther2.Id = 5;
+            dialogOther2.Content = "恐吓对方";
+            dialogOther2.EventCode = 70;
+            socialDialogWindowData.Other.Add(dialogOther2);
+
+            DialogNode dialogOther4 = new DialogNode();
+            dialogOther4.Id = 5;
+            dialogOther4.Content = "[口才>10]说服对方";
+            dialogOther4.EventCode = 60;
+            socialDialogWindowData.Other.Add(dialogOther4);
+
+
             ShowWindowData showWindowData = new ShowWindowData();
-
-            SocialDialogWindowData socialDialogWindowData=new SocialDialogWindowData();
-
-
             showWindowData.contextData = socialDialogWindowData;
-             UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, showWindowData);
+
+            UICenterMasterManager.Instance.ShowWindow(WindowID.SocialDialogWindow, showWindowData);
         }
 
         public void Log(string value)

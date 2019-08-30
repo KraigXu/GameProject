@@ -8,32 +8,15 @@ namespace GameSystem.Ui
 {
     public class SocialDialogWindow : UIWindowBase
     {
-        public Rect Size;
-        
-        [SerializeField]
-        private GameObject _dialogPanel;
+        public RectTransform QuizzerParent;
+        public RectTransform ReplierParent;
+
+        public int CurDialogId=0;
+        public Text AsideTxt;
 
         [SerializeField]
-        private Text _aText;
-        [SerializeField]
-        private Image _aAvatar;
-
-        [SerializeField]
-        private Text _bText;
-        [SerializeField]
-        private Image _bAvatar;
-
-        [SerializeField]
-        private Text _startTxt;
-        [SerializeField]
-        private Text _relationText;
-
-        [SerializeField]
-        private List<GameObject> _items;
-
-        [SerializeField]
-        private int[] _currentItem;
-
+        private RectTransform  _dialogParent;
+        private List<RectTransform> _curDialogItem;
         private SocialDialogWindowData _socialDialogWindowData;
 
         protected override void InitWindowData()
@@ -49,23 +32,6 @@ namespace GameSystem.Ui
         }
         public override void InitWindowOnAwake()
         {
-             // SQLService.Instance
-        }
-
-        public class SocialDialogInfo
-        {
-            
-            
-        }
-
-        public class SocialDialog
-        {
-            public int Aid;
-            public int Bid;
-
-            public int StartId;
-            public int[] StartlogId;
-            public SocialDialogEvent DialogEvent;
         }
 
         public override void ShowWindow(BaseWindowContextData contextData)
@@ -76,78 +42,134 @@ namespace GameSystem.Ui
             }
               
             base.ShowWindow(contextData);
-
             _socialDialogWindowData = (SocialDialogWindowData) contextData;
-            Change();
 
-            //_socialDialog=new SocialDialog();
-
-            //_socialDialog.Aid = 1;
-            //_socialDialog.Bid = 2;
-
-            //_socialDialog.StartId = 2;
-            //_socialDialog.StartlogId =new int[]{1,2,3};
-
-            //_socialDialog.DialogEvent = SocialDialogCallBack;
-            //log =new Dictionary<int, string>();
-            //log.Add(1,"A{0}");
-            //log.Add(2,"B1");
-            //log.Add(3,"B2");
-            //log.Add(4,"B3");
-            //log.Add(5,"B4");
-            //log.Add(6, "C1");
-            //log.Add(7, "C2");
-            //log.Add(8, "C3");
-
-
-            //_dialogPanel.SetActive(true);
-            //_aText.text = "A";
-            //_bText.text = "B";
-
-            //_startTxt.text = string.Format(log[_socialDialog.StartId]);
-            //_currentItem = _socialDialog.StartlogId;
-            //
-        }
-
-        public void ItemOnClick(GameObject go)
-        {
-            int id =Int32.Parse( go.name);
-           _currentItem= _socialDialogWindowData.DialogEvent(id, _socialDialogWindowData.Aid, _socialDialogWindowData.Bid);
-            Change();
-        }
-
-        public void Change()
-        {
-            _relationText.text = _socialDialogWindowData.Relation.ToString();
-
-            for (int i = 0; i < _items.Count; i++)
+            if (SystemManager.Contains<Biological>(_socialDialogWindowData.OnSelfEntity))
             {
-                _items[i].SetActive(false);
+                Biological biologicalOnSelf = SystemManager.GetProperty<Biological>(_socialDialogWindowData.OnSelfEntity);
+                BiologicalFixed biologicalosFixed = GameStaticData.BiologicalDictionary[_socialDialogWindowData.OnSelfEntity];
+
+                RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, QuizzerParent);
+                BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
+                bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biologicalOnSelf.AvatarId);
+                bui.PersonName = biologicalosFixed.Surname + biologicalosFixed.Name;
+                bui.Entity = _socialDialogWindowData.OnSelfEntity;
             }
-           
 
-            for (int i = 0; i < _currentItem.Length; i++)
+            if (SystemManager.Contains<Biological>(_socialDialogWindowData.OtherEntity))
             {
-                _items[i].gameObject.name = _socialDialogWindowData.StartlogId[i].ToString();
-                
-                _items[i].GetComponentInChildren<Text>().text = string.Format(GameStaticData.SocialDialogNarration[_currentItem[i]],"张三"); 
-                UIEventTriggerListener.Get(_items[i]).onClick = ItemOnClick;
+                Biological biologicalReplier = SystemManager.GetProperty<Biological>(_socialDialogWindowData.OtherEntity);
+                BiologicalFixed biologicalFixedRr = GameStaticData.BiologicalDictionary[_socialDialogWindowData.OtherEntity];
+
+                RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, ReplierParent);
+                BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
+                bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biologicalReplier.AvatarId);
+                bui.PersonName = biologicalFixedRr.Surname + biologicalFixedRr.Name;
+                bui.Entity = _socialDialogWindowData.OtherEntity;
+            }
+
+            AsideTxt.text = _socialDialogWindowData.Aside;
+
+            for (int i = 0; i < _socialDialogWindowData.Other.Count; i++)
+            {
+                var node = _socialDialogWindowData.Other[i];
+
+                var rect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiDialogNodeItem, _dialogParent);
+
+
+                UiDialogNodeItem item = rect.GetComponent<UiDialogNodeItem>();
+                item.ContentTxt.text = node.Content;
+                item.EventBtn.onClick.AddListener(delegate () { DialogIdEvent(node.Id); });
+
+                _curDialogItem.Add(rect);
+            }
+
+            for (int i = 0; i < _socialDialogWindowData.OnSelf.Count; i++)
+            {
+                var node = _socialDialogWindowData.OnSelf[i];
+
+                var rect=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiDialogNodeItem, _dialogParent);
+
+                UiDialogNodeItem item= rect.GetComponent<UiDialogNodeItem>();
+                item.ContentTxt.text = node.Content;
+                item.EventBtn.onClick.AddListener(delegate() { DialogIdEvent(node.Id); });
+
+                _curDialogItem.Add(rect);
             }
         }
 
-        public int[] SocialDialogCallBack(int id)
+        public void DialogIdEvent(int id)
         {
-            int[] ids = null;
-            if (id == 1)
+            DialogNode dialogNode=null;
+            for (int i = 0; i < _socialDialogWindowData.OnSelf.Count; i++)
             {
-                ids=new int[]{3,4,5};
-            }
-            else
-            {
-                ids=new int[]{6};
+                for (int j = 0; j < _socialDialogWindowData.OnSelf[i].Child.Count; j++)
+                {
+                    if (id == _socialDialogWindowData.OnSelf[i].Child[j].Id)
+                    {
+                        dialogNode = _socialDialogWindowData.OnSelf[i].Child[j];
+                    }
+                }
             }
 
-            return ids;
+            for (int i = 0; i < _socialDialogWindowData.Other.Count; i++)
+            {
+                for (int j = 0; j < _socialDialogWindowData.Other[i].Child.Count; j++)
+                {
+                    if (id == _socialDialogWindowData.Other[i].Child[j].Id)
+                    {
+                        dialogNode = _socialDialogWindowData.Other[i].Child[j];
+                    }
+                }
+            }
+
+
+            if (dialogNode != null)
+            {
+                AsideTxt.text = dialogNode.Content;
+
+                for (int i = 0; i < dialogNode.Child.Count; i++)
+                {
+                    var node = dialogNode.Child[i];
+
+                    var rect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiDialogNodeItem, _dialogParent);
+
+
+                    UiDialogNodeItem item = rect.GetComponent<UiDialogNodeItem>();
+                    item.ContentTxt.text = node.Content;
+                    item.EventBtn.onClick.AddListener(delegate () { DialogIdEvent(node.Id); });
+
+                    _curDialogItem.Add(rect);
+                }
+            }
+            else  //执行EventCode
+            {
+                Debug.Log("EventCode");
+
+                switch (dialogNode.EventCode)
+                {
+                    case 99:
+
+
+
+                        break;
+                    case 98:
+                        break;
+                    case 97:
+                        break;
+                    case 80:
+                        break;
+                    case 70:
+                        break;
+                    case 60:
+                        break;
+                    default:
+                        break;
+                }
+
+
+            }
+
         }
     }
 }

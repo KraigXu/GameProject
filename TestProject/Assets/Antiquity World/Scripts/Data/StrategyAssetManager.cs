@@ -64,19 +64,21 @@ public class StrategyAssetManager : MonoBehaviour
 
     public static RectTransform UiArticleLable { get { return _instance._strategyAsset.UiArticleLable; } }
 
-    public static GUISkin UiArticleSkin { get { return _instance._strategyAsset.UiArticleSkin;} }
+    public static GUISkin UiArticleSkin { get { return _instance._strategyAsset.UiArticleSkin; } }
 
     public static RectTransform UiSpeciality { get { return _instance._strategyAsset.UiSpeciality; } }
 
     public static RectTransform UiLivingAreaTitle { get { return _instance._strategyAsset.UiLivingAreaTitle; } }
 
-    public static RectTransform UiArticleInfo { get { return _instance._strategyAsset.UiArticleInfo;} }
+    public static RectTransform UiArticleInfo { get { return _instance._strategyAsset.UiArticleInfo; } }
 
-    public static RectTransform UiCityTitle { get { return  _instance._strategyAsset.UiCityTitle;} }
+    public static RectTransform UiCityTitle { get { return _instance._strategyAsset.UiCityTitle; } }
 
-    public static RectTransform UiZigguratTitle { get { return _instance._strategyAsset.UiZigguratTitle;} }
+    public static RectTransform UiZigguratTitle { get { return _instance._strategyAsset.UiZigguratTitle; } }
 
-    public static RectTransform UiOrganizationTitle { get { return _instance._strategyAsset.UiOrganizationTitle;} }
+    public static RectTransform UiOrganizationTitle { get { return _instance._strategyAsset.UiOrganizationTitle; } }
+
+    public static RectTransform UiDialogNodeItem { get { return _instance._strategyAsset.UiDialogNodeItem; } }
 
 
 }

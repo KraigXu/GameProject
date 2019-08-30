@@ -32,6 +32,8 @@ public class StrategyAsset : ScriptableObject
     public RectTransform UiZigguratTitle;
     public RectTransform UiOrganizationTitle;
 
+    public RectTransform UiDialogNodeItem;
+
 
 
 }

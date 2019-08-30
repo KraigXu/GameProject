@@ -32,17 +32,6 @@ public class ModelController : MonoBehaviour
         _instance = this;
         
     }
-
-    void Update()
-    {
-
-    }
-
-    void OnDisable()
-    {
-
-    }
-
     //下载
     public IEnumerator ReadModelFileData()
     {

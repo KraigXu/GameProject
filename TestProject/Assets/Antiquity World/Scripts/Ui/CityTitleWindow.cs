@@ -12,7 +12,7 @@ public class CityTitleWindow : UIWindowBase
     private List<UiCityTitleItem> _titles = new List<UiCityTitleItem>();
 
     [SerializeField]
-    private List<Sprite> _types=new List<Sprite>();
+    private List<Sprite> _types = new List<Sprite>();
 
     [SerializeField]
     private List<Sprite> _relations = new List<Sprite>();
@@ -26,7 +26,7 @@ public class CityTitleWindow : UIWindowBase
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
-    
+
     }
 
     public override void InitWindowOnAwake()
@@ -79,7 +79,7 @@ public class CityTitleWindow : UIWindowBase
             if (Define.IsAPointInACamera(Camera.main, point))
             {
                 Vector2 tempPos = Camera.main.WorldToScreenPoint(point);
-                _titles[i].RectTF .position = tempPos;
+                _titles[i].RectTF.position = tempPos;
                 _titles[i].RectTF.localScale = Vector3.one;
             }
             else

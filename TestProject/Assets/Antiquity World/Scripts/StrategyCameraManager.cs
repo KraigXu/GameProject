@@ -82,14 +82,6 @@ namespace Manager
             }
         }
 
-
-
-
-        public void Follow(Vector3 target)
-        {
-
-        }
-
         public void SetTarget(Vector3 target, bool isfollow = false)
         {
             CameraController.m_targetPosition = target;

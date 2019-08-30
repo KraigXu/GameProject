@@ -20,9 +20,6 @@ public static class StrategyPlayer
     public static Entity Entity3;
     public static Entity Entity4;
     
-
-
-
     public static void PlayerInit(int id, string name, string surname, Sprite avatar, Entity entity, HexUnit unit)
     {
         PlayerId = id;

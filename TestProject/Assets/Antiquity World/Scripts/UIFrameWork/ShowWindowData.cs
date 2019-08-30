@@ -14,14 +14,14 @@ namespace GameSystem.Ui
         public bool forceResetWindow = false;
         // force clear the navigation data
         public bool forceClearBackSeqData = false;
-        // Object (pass data to target showed window)
-        public BaseWindowContextData contextData;
         // Execute the navigation logic
         public bool executeNavLogic = true;
         // Check navigation 
         public bool checkNavigation = false;
         // force ignore add nav data
         public bool ignoreAddNavData = false;
+        // Object (pass data to target showed window)
+        public BaseWindowContextData contextData;
     }
 
     // Base window data context for Refresh window or show window
@@ -106,17 +106,32 @@ namespace GameSystem.Ui
         public EntityCallBack CallBack;
     }
 
+    public class DialogNode
+    {
+        public int Id;
+        public int ParentId;
+        public string Content;
+        public int EventCode;
 
+        public IList<DialogNode> Child = new List<DialogNode>();
+
+
+        public void AddChild(DialogNode dialogNode)
+        {
+            this.Child.Add(dialogNode);
+        }
+    }
 
     public class SocialDialogWindowData : BaseWindowContextData
     {
-        public int Aid;
-        public int Bid;
-        public int PangBaiId;
-        public int StartId;
-        public int[] StartlogId;
-        public int Relation;
-        public SocialDialogEvent DialogEvent;
+
+        public int SceneId;
+        public string Aside;
+        public List<DialogNode> OnSelf = new List<DialogNode>();
+        public List<DialogNode> Other = new List<DialogNode>();
+
+        public Entity OnSelfEntity;
+        public Entity OtherEntity;
     }
 
     public class FixedTitleWindowData : BaseWindowContextData
