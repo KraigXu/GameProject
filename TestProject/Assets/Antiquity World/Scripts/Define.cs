@@ -113,8 +113,7 @@ public sealed class Define
     public static void Initialize()
     {
         Debug.Log("场景进入");
-        SQLService.GetInstance("TD.db");
-        GameObject.Instantiate(Resources.Load<GameObject>("GameRuntimeEdit"));
+
     }
 
     /// <summary>
@@ -126,6 +125,11 @@ public sealed class Define
 
 
     }
+
+
+
+
+
 
 
 

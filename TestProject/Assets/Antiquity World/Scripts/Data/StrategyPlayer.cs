@@ -29,5 +29,13 @@ public static class StrategyPlayer
         Entity = entity;
         Unit = unit;
     }
+    public static void PlayerInit(int id, string name, string surname, Sprite avatar, Entity entity)
+    {
+        PlayerId = id;
+        Name = name;
+        SurName = surname;
+        AvatarSprite = avatar;
+        Entity = entity;
+    }
 
 }
