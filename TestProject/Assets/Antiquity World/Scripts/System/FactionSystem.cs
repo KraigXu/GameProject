@@ -37,7 +37,7 @@ namespace GameSystem
             Entity faction = SystemManager.ActiveManager.CreateEntity(factionArchetype);
 
             List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
-
+            
             for (int i = 0; i < factionDatas.Count; i++)
             {
                 var factionData = factionDatas[i];

@@ -29,6 +29,9 @@ namespace GameSystem
 
         public static Dictionary<int, CityRunData> CityRunDataDic = new Dictionary<int, CityRunData>();
         public static Dictionary<Entity, BiologicalFixed> BiologicalDictionary=new Dictionary<Entity, BiologicalFixed>();
+
+
+
         public static Dictionary<Entity, FactionStatic> FactionStatics= new Dictionary<Entity, FactionStatic>();
         public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
         public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();

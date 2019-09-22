@@ -53,17 +53,17 @@ namespace GameSystem
             //    //}
             //}
 
-            List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
-            for (int i = 0; i < relationDatas.Count; i++)
-            {
-                Entity entity = entityManager.CreateEntity(GameSceneInit.RelationArchetype);
-                entityManager.SetComponentData(entity, new Relation
-                {
-                    ObjectAid = relationDatas[i].ObjectAid,
-                    ObjectBid = relationDatas[i].ObjectBid,
-                    Value = relationDatas[i].Value
-                });
-            }
+            //List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
+            //for (int i = 0; i < relationDatas.Count; i++)
+            //{
+            //    Entity entity = entityManager.CreateEntity(GameSceneInit.RelationArchetype);
+            //    entityManager.SetComponentData(entity, new Relation
+            //    {
+            //        ObjectAid = relationDatas[i].ObjectAid,
+            //        ObjectBid = relationDatas[i].ObjectBid,
+            //        Value = relationDatas[i].Value
+            //    });
+            //}
         }
 
         public static int GetRelationValue(int mainId, int targetId)

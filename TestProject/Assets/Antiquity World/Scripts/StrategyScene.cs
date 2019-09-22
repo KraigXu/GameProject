@@ -85,7 +85,7 @@ public class StrategyScene : MonoBehaviour
         FactionSystem.SetupData();
         //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
 
-        SystemManager.Get<WorldTimeSystem>().SetupValue(true);
+        //SystemManager.Get<WorldTimeSystem>().SetupValue(true);
 
         yield return new WaitForFixedUpdate();
 
@@ -134,9 +134,9 @@ public class StrategyScene : MonoBehaviour
     {
         //------------ModelController
 
-        List<ModelFileData> modelFileDatas = SQLService.Instance.QueryAll<ModelFileData>();
+        //List<ModelFileData> modelFileDatas = SQLService.Instance.QueryAll<ModelFileData>();
 
-        ModelController.Instance.ModelFileDatas = modelFileDatas;
+        //ModelController.Instance.ModelFileDatas = modelFileDatas;
 
         StartCoroutine(ModelController.Instance.ReadModelFileData());
 
@@ -212,55 +212,74 @@ public class StrategyScene : MonoBehaviour
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
             Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
-            SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
-
             switch (bData.Identity)
             {
                 case 0:
-                    break;
                 case 1:
+                case 2:
+                default:
+                    SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
                     SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, bData.Id);
                     SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, bData.Id);
-                    SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entity);
-
-                    StrategyPlayer.PlayerInit(1,bData.Name,bData.Surname, StrategyAssetManager.GetBiologicalAvatar(1),entity,hexUnit);
-
-                    break;
-                case 2:
-                    SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
-
-                    break;
-                default:
-                    Debug.Log("Index 为" + bData.Identity + ">>>>的种类未增加");
                     break;
             }
         }
 
-        SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-        SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-        SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-        SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
-        
+        //------------------初始化玩家模板
+        List<PlayerData> playerDatas = SQLService.Instance.QueryAll<PlayerData>();
+        PlayerData pData;
+        for (int i = 0; i < playerDatas.Count; i++)
+        {
+            if (playerDatas[i].Identity == 1)
+            {
+                pData = playerDatas[i];
+                hexCoordinates = new HexCoordinates(pData.X, pData.Z);
+                hexCell = hexGrid.GetCell(hexCoordinates);
+                if (hexCell == null)
+                    continue;
+
+                HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(pData.ModelId));
+                hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
+                Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
+
+                switch (pData.Identity)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                    default:
+                        SystemManager.Get<BiologicalSystem>().AddBiological(pData, entity);
+                        SystemManager.Get<EquipmentSystem>().AddEquipment(entity, pData.EquipmentJson);
+                        SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, pData.Id);
+                        SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, pData.Id);
+                        Debug.Log(">>11");
+                        StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
+                        SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entity);
+                        break;
+                }
+
+            }
+        }
+
+        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+
         yield return null;
 
     }
     IEnumerator WindowSyncOpen()
     {
         yield return new WaitForFixedUpdate();
-        World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
-
-        World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
-        //World.Active.GetOrCreateManager<MainAssetWindow>
-        
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.WorldTimeWindow);
-
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.LivingAreaTitleWindow);
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
-        //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
-        
+        Debug.Log(">>22");
         HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
+
+        //todo :目前先不初始UI
+        //  World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
+        //  World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
 
         loadingViewCom.Close();
     }
@@ -295,12 +314,7 @@ public class StrategyScene : MonoBehaviour
     /// </summary>
     public void RemoveStartUi()
     {
-       // UICenterMasterManager.Instance.DestroyWindow(WindowID.WorldTimeWindow);
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.MenuWindow);
-     //   UICenterMasterManager.Instance.DestroyWindow(WindowID.PlayerInfoWindow);
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.MessageWindow);
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.MapWindow);
-        UICenterMasterManager.Instance.DestroyWindow(WindowID.LivingAreaTitleWindow);
+
 
     }
 
@@ -313,8 +327,6 @@ public class StrategyScene : MonoBehaviour
     {
         UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
         Instance.MainCamera.enabled = false;
-
-       // PlayerInfoView.Isflag = false;
 
     }
 

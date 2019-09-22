@@ -100,6 +100,7 @@ public class SQLService
         Tables.CreateTable_ArticleData(this);
         Tables.CreateTable_Biological(this);
         Tables.CreateTable_Techniques(this);
+        Tables.CreateTable_PlayerData(this);
 
         //Tables.CreateTable_Tips(this);
         //Tables.CreateTable_NounsData(this);

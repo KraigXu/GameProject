@@ -102,6 +102,15 @@ namespace GameSystem.Ui
 
         void LateUpdate()
         {
+            if (StrategyPlayer.Unit == null)
+            {
+                return;
+            }
+
+            if (StrategyPlayer.Unit.Location == null)
+            {
+                return;
+            }
             if (_curCell != StrategyPlayer.Unit.Location)
             {
                 Clear();

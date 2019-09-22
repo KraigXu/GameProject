@@ -81,6 +81,85 @@ namespace GameSystem
             SystemManager.Get<BiologicalSystem>().AddBiological(data, entity);
         }
 
+        public void AddBiological(PlayerData data, Entity entity)
+        {
+            _entityManager.AddComponentData(entity, new Biological()
+            {
+                BiologicalId = data.Id,
+                Age = data.Age,
+                Sex = data.Sex,
+                CharmValue = 0,
+                Mobility = 0,
+                OperationalAbility = 0,
+                LogicalThinking = 0,
+
+                AvatarId = data.AvatarId,
+                ModelId = data.ModelId,
+                FamilyId = data.FamilyId,
+                FactionId = data.FactionId,
+                TitleId = data.TitleId,
+                TechniquesId = 0,
+                EquipmentId = 0,
+
+                Jing = 100,
+                Qi = 100,
+                Shen = 100,
+                Tizhi = data.Tizhi,
+                Lidao = data.Lidao,
+                Jingshen = data.Jingshen,
+                Lingdong = data.Lingdong,
+                Wuxing = data.Wuxing,
+
+                StrategyMoveSpeed = 6,
+                FireMoveSpeed = 10,
+
+                VisionRange = 3,
+
+            });
+
+            _entityManager.AddComponentData(entity, new BodyProperty
+            {
+                Tizhi = data.Tizhi,
+                Lidao = data.Lidao,
+                Jingshen = data.Jingshen,
+                Lingdong = data.Lingdong,
+                Wuxing = data.Wuxing
+            });
+
+            _entityManager.AddComponent(entity, ComponentType.Create<BehaviorData>());
+            _entityManager.SetComponentData(entity, new BehaviorData
+            {
+                Target = Vector3.zero,
+
+                BehaviourType = 1,
+                CreantePositionCode = 1,
+                NextPoint = Vector3.back,
+                SelfPoint = Vector3.back,
+                TargetEntity = Entity.Null,
+                TargetId = 1,
+
+                TimeToLive = 1,
+            });
+
+            _entityManager.AddComponentData(entity, new ExternalProperty());
+
+            if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
+            {
+                string sex = data.Sex == 0 ? "男" : "女";
+
+                BiologicalFixed biologicalFixed = new BiologicalFixed
+                {
+                    Description = data.Description,
+                    Surname = data.Surname,
+                    Name = data.Name,
+                    Sex = sex,
+
+                };
+                GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
+            }
+
+        }
+
 
         public void AddBiological(BiologicalData data, Entity entity)
         {
@@ -144,20 +223,7 @@ namespace GameSystem
 
             _entityManager.AddComponentData(entity,new ExternalProperty());
 
-            if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
-            {
-                string sex = data.Sex == 0 ? "男" : "女";
-
-                BiologicalFixed biologicalFixed = new BiologicalFixed
-                {
-                    Description = data.Description,
-                    Surname = data.Surname,
-                    Name = data.Name,
-                    Sex = sex,
-
-                };
-                GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
-            }
+            
         }
 
         /// <summary>

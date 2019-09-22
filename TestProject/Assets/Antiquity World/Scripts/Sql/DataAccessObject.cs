@@ -146,8 +146,46 @@ namespace DataAccessObject
                                        " LanguageJson TEXT);");
         }
 
-      
-        
+        public static void CreateTable_PlayerData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS PlayerData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " Surname TEXT," +
+                                       " Name TEXT," +
+                                       " AvatarId INTEGER," +
+                                       " ModelId INTEGER," +
+                                       " PrestigeId INTEGER," +
+                                       " FamilyId INTEGER," +
+                                       " FactionId INTEGER," +
+                                       " TitleId INTEGER," +
+                                       " Description TEXT," +
+                                       " Sex INTEGER," +
+                                       " Age INTEGER," +
+                                       " AgeMax INTEGER," +
+                                       " TimeAppearance TEXT," +
+                                       " TimeEnd TEXT," +
+                                       " FeatureIds TEXT," +
+                                       " IsDebut INTEGER," +
+                                       " Location TEXT," +
+                                       " LocationType INTEGER," +
+                                       " NeutralValue INTEGER," +
+                                       " X INTEGER," +
+                                       " Y INTEGER," +
+                                       " Z INTEGER," +
+                                       " Tizhi INTEGER," +
+                                       " Lidao INTEGER," +
+                                       " Jingshen INTEGER," +
+                                       " Lingdong INTEGER," +
+                                       " Wuxing INTEGER, " +
+                                       " ArticleJson INTEGER," +
+                                       " EquipmentJson INTEGER," +
+                                       " GongfaJson INTEGER," +
+                                       " JifaJson INTEGER," +
+                                       " LanguageJson TEXT);");
+        }
+
+
+
 
         /// <summary>
         /// 阵营,派系，不同阵营有不同属性,同时阵营也有 多方混合(如 国家阵营和某些党派阵营的关系向来交好)  帮派  山贼 山庄 党派 国家 
@@ -714,6 +752,67 @@ namespace DataAccessObject
             return objects;
         }
     }
+
+    /// <summary>
+    /// 生物信息
+    /// </summary>
+    public class PlayerData : BaseData
+    {
+        public int Id { get; set; }                              //ID
+        public int Identity { get; set; }
+        public string Surname { get; set; }                      //姓
+        public string Name { get; set; }                         //名 
+
+        public int AvatarId { get; set; }           //头像ID
+        public int ModelId { get; set; }            //模型ID
+
+        public int FamilyId { get; set; }               //家族ID
+        public int FactionId { get; set; }              //派系ID
+        public int TitleId { get; set; }                //称号ID
+        public int TeamId { get; set; }
+
+        public string Description { get; set; }                  //说明
+        public int Sex { get; set; }                             // 性别
+        public int Age { get; set; }                             // 当前年龄
+        public int AgeMax { get; set; }                          // 最大年龄
+        public DateTime TimeAppearance { get; set; }             //出生时间
+        public DateTime TimeEnd { get; set; }                    //死亡时间
+        public string FeatureIds { get; set; }                   //特征ID
+        public int IsDebut { get; set; }                         //是否登场
+        public string Location { get; set; }                        //所处地方 地区编号
+        public int LocationType { get; set; }                       //所处类型 
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+
+        public int Tizhi { get; set; }
+        public int Lidao { get; set; }
+        public int Jingshen { get; set; }
+        public int Lingdong { get; set; }
+        public int Wuxing { get; set; }
+
+        public string ArticleJson { get; set; }                  // 物品JSON
+        public string EquipmentJson { get; set; }                // 装备JSON
+        public string GongfaJson { get; set; }                   //功法JSON
+        public string JifaJson { get; set; }                     //技法JSON
+        public string LanguageJson { get; set; }                 // 语言JSON
+
+        public int Disposition { get; set; }                    //性格
+        public int NeutralValue { get; set; }
+
+        public int PrestigeValue { get; set; }
+
+        public override object[] GetValues()
+        {
+            object[] objects = new object[]
+                {
+                    Id,Identity,Surname,Name,AvatarId,ModelId,FamilyId,FactionId,TitleId,TeamId,Description,Sex,Age,AgeMax,TimeAppearance,TimeEnd,FeatureIds,IsDebut,Location,
+                    LocationType,X,Y,Z,Tizhi,Lidao,Jingshen,Lingdong,Wuxing,ArticleJson,EquipmentJson, GongfaJson,JifaJson,LanguageJson,Disposition,NeutralValue,PrestigeValue
+                };
+            return objects;
+        }
+    }
+
 
 
 
