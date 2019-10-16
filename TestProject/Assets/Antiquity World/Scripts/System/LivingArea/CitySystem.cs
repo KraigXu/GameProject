@@ -148,11 +148,15 @@ namespace GameSystem
             StrategyScene.Instance.ChangeModel(StrategySceneModel.LivingArea);
 
         }
-
-
-        public void AddCity(LivingAreaData data, HexCell cell)
+        /// <summary>
+        /// 生成城市
+        /// </summary>
+        /// <param name="entityManager"></param>
+        /// <param name="data"></param>
+        /// <param name="cell"></param>
+        public static void AddCity(EntityManager entityManager, LivingAreaData data, HexCell cell)
         {
-            _entityManager.AddComponentData(cell.Entity, new City
+            entityManager.AddComponentData(cell.Entity, new City
             {
                 ModelId = data.ModelBaseId,
                 UniqueCode = data.Id,
@@ -160,7 +164,7 @@ namespace GameSystem
                 Type = data.LivingAreaType
             });
 
-            _entityManager.AddComponentData(cell.Entity, new LivingArea
+            entityManager.AddComponentData(cell.Entity, new LivingArea
             {
                 Id = data.Id,
                 PersonNumber = data.PersonNumber,
@@ -179,6 +183,15 @@ namespace GameSystem
 
 
 
+            if (GameStaticData.CityRunDataDic.ContainsKey(cell.Entity) == false)
+            {
+                CityRunData runData = new CityRunData();
+                runData.Name = data.Name;
+                runData.Description = data.Description;
+                runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
+                GameStaticData.CityRunDataDic.Add(cell.Entity, runData);
+            }
+
 
             // _entityManager.AddComponentData(cell.Entity,new Vector3());
 
@@ -187,26 +200,24 @@ namespace GameSystem
             {
                 case 0:   //小镇
                     {
-                        _entityManager.AddComponentData(cell.Entity, new BuidingTavern());
+                        entityManager.AddComponentData(cell.Entity, new BuidingTavern());
                     }
                     break;
                 case 1:  //小城
                     {
-                        _entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
-                        _entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
+                        entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
+                        entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
                     }
                     break;
                 case 2: //皇城
                     {
-                        _entityManager.AddComponentData(cell.Entity, new BuidingTavern());
-                        _entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
-                        _entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
+                        entityManager.AddComponentData(cell.Entity, new BuidingTavern());
+                        entityManager.AddComponentData(cell.Entity, new BuildingBazaar());
+                        entityManager.AddComponentData(cell.Entity, new BuildingBlacksmith());
                     }
                     break;
                 case 3:
                     {
-
-
                         // _entityManager.AddComponentData(cell.Entity,new Dwellings());
                     }
                     break;
@@ -221,14 +232,6 @@ namespace GameSystem
             //BuildingFunctions.Add("Tavern", SystemManager.Get<BuildingTavernSystem>());
 
 
-            if (GameStaticData.CityRunDataDic.ContainsKey(data.Id) == false)
-            {
-                CityRunData runData = new CityRunData();
-                runData.Name = data.Name;
-                runData.Description = data.Description;
-                runData.Sprite = Resources.Load<Sprite>("Atlas/1 (6)");
-                GameStaticData.CityRunDataDic.Add(data.Id, runData);
-            }
         }
 
         public void CityMass(Entity cityEntity, Entity massEntity)

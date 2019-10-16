@@ -67,17 +67,17 @@ namespace GameSystem
         }
 
 
-        public void AddOrganization(LivingAreaData data, HexCell cell)
+        public static void AddOrganization(EntityManager entityManager, LivingAreaData data, HexCell cell)
         {
 
-            _entityManager.AddComponentData(cell.Entity, new FactionProperty
+            entityManager.AddComponentData(cell.Entity, new FactionProperty
             {
                 //FactionEntity = factionEntity,
                 FactionEntityId = 1,
                 Level = Random.Range(0, 6),
             });
 
-            _entityManager.AddComponentData(cell.Entity, new LivingArea
+            entityManager.AddComponentData(cell.Entity, new LivingArea
             {
                 Id = data.Id,
                 PersonNumber = data.PersonNumber,
@@ -94,7 +94,7 @@ namespace GameSystem
                 StableValue = data.StableValue
             });
 
-            _entityManager.AddComponentData(cell.Entity, new Collective()
+            entityManager.AddComponentData(cell.Entity, new Collective()
             {
                 Id = data.Id,
                 CollectiveClassId = 1,

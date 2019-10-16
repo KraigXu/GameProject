@@ -114,7 +114,7 @@ namespace GameSystem.Ui
 
             Biological biological = _entityManager.GetComponentData<Biological>(_curEntity);
 
-            BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[_curEntity];
+            BiologicalFixed biologicalFixed = BiologicalSystem.GetBiologicalFixedByKey(_curEntity);
 
             NameTxt.text = biologicalFixed.Name;
             SurnameTxt.text = biologicalFixed.Surname;

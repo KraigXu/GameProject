@@ -19,9 +19,7 @@ namespace GameSystem.Ui
         private RectTransform _personParent;
 
         public RectTransform BuyingView;
-
         public RectTransform CurView;
-
 
         public override void InitWindowOnAwake()
         {
@@ -57,15 +55,15 @@ namespace GameSystem.Ui
             BuildingBazaar bazaar = SystemManager.GetProperty<BuildingBazaar>(EntityData.Entity);
 
             {
-                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton,_featureseParent);
-                UiBuildingItem buildingItem= item.GetComponent<UiBuildingItem>();
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _featureseParent);
+                UiBuildingItem buildingItem = item.GetComponent<UiBuildingItem>();
                 buildingItem.Value = "XXXX";
                 buildingItem.OnBuildingEnter = Dealer;
             }
 
             {
-                RectTransform item=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton,_featureseParent);
-                UiBuildingItem buildingItem=item.GetComponent<UiBuildingItem>();
+                RectTransform item = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiFunctionButton, _featureseParent);
+                UiBuildingItem buildingItem = item.GetComponent<UiBuildingItem>();
                 buildingItem.Value = "XXXX";
                 buildingItem.OnBuildingEnter = Dealer;
             }

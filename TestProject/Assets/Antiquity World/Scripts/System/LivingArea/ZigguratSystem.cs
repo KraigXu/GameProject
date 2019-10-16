@@ -58,15 +58,15 @@ public class ZigguratSystem : ComponentSystem
 
     }
 
-    public void AddZiggurat(LivingAreaData data, HexCell cell)
+    public static void AddZiggurat(EntityManager entityManager, LivingAreaData data, HexCell cell)
     {
 
-        _entityManager.AddComponentData(cell.Entity, new Ziggurat
+        entityManager.AddComponentData(cell.Entity, new Ziggurat
         {
             Time = 30,
         });
 
-        _entityManager.AddComponentData(cell.Entity, new LivingArea
+        entityManager.AddComponentData(cell.Entity, new LivingArea
         {
             Id = data.Id,
             PersonNumber = data.PersonNumber,
@@ -83,7 +83,7 @@ public class ZigguratSystem : ComponentSystem
             StableValue = data.StableValue
         });
 
-        _entityManager.AddComponentData(cell.Entity, new Collective()
+        entityManager.AddComponentData(cell.Entity, new Collective()
         {
             Id = data.Id,
             CollectiveClassId = 1,

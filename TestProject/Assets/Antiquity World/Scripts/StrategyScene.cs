@@ -46,10 +46,15 @@ public class StrategyScene : MonoBehaviour
     public Canvas messageCanvas;
     public LoadingView loadingViewCom;
 
-
     public IEnumeratorLoad IeEnumeratorLoad;
 
     public StrategySceneModel SceneModel = StrategySceneModel.Map;
+
+
+    private EntityManager entityManager;
+    private HexCoordinates hexCoordinates;
+    private HexCell hexCell;
+
 
     void Awake()
     {
@@ -59,101 +64,56 @@ public class StrategyScene : MonoBehaviour
     void Start()
     {
 
+        GameSceneInit.InitializeWithScene();
+
 #if UNITY_EDITOR
         Debuger.EnableLog = true;
         GameSceneInit.CurOpeningInfo.TestValue();
+
 #endif
-        GameSceneInit.InitializeWithScene();
 
-        IeEnumeratorLoad.AddIEnumerator(InitMapInfo());
-        IeEnumeratorLoad.AddIEnumerator(InitSystemData());
-        IeEnumeratorLoad.AddIEnumerator(InitModel());
-        IeEnumeratorLoad.AddIEnumerator(InitGameData());
-        IeEnumeratorLoad.AddIEnumerator(WindowSyncOpen());
-
-    }
-
-    /// <summary>
-    /// 初始化必要的系统数据
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator InitSystemData()
-    {
-
-        EntityManager entityManager = SystemManager.ActiveManager;
-
-        FactionSystem.SetupData();
-        //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
-
-        //SystemManager.Get<WorldTimeSystem>().SetupValue(true);
-
-        yield return new WaitForFixedUpdate();
-
-    }
-
-    IEnumerator InitMapInfo()
-    {
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
-        hexGrid.seed = openingInfo.Mapseed;
-
-        if (openingInfo.IsEditMode == true)
+        if (openingInfo.IsEditMode == false)
         {
-            if (openingInfo.GenerateMaps)
-            {
-                mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
-            }
-            else
-            {
-                hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
-            }
-            HexMapCamera.ValidatePosition();
+            entityManager = World.Active.GetOrCreateManager<EntityManager>();
+
+            //初始地图信息
+            IeEnumeratorLoad.AddIEnumerator(InitMapInfo(openingInfo.MapFilePath, openingInfo.MapFileVersion, openingInfo.Mapseed));
+            //初始生物信息
+            IeEnumeratorLoad.AddIEnumerator(InitBiologicalData());
+            //初始玩家信息
+            IeEnumeratorLoad.AddIEnumerator(InitPlayerData());
         }
         else
         {
-            //加载地图
-            Debuger.Log(openingInfo.MapFilePath);
-            using (BinaryReader reader = new BinaryReader(File.OpenRead(openingInfo.MapFilePath)))
+            IeEnumeratorLoad.AddIEnumerator(InitEdit(openingInfo));
+        }
+
+    }
+    #region  正常开始流程
+
+    IEnumerator InitMapInfo(string filePath, int version, int seed)
+    {
+        hexGrid.seed = seed;
+        //加载地图
+        using (BinaryReader reader = new BinaryReader(File.OpenRead(filePath)))
+        {
+            int header = reader.ReadInt32();
+            if (header <= version)
             {
-                int header = reader.ReadInt32();
-                if (header <= openingInfo.MapFileVersion)
-                {
-                    hexGrid.Load(reader, header);
-                    HexMapCamera.ValidatePosition();
-                }
-                else
-                {
-                    Debug.LogWarning("Unknown map format " + header);
-                }
+                hexGrid.Load(reader, header);
+                HexMapCamera.ValidatePosition();
+            }
+            else
+            {
+                Debug.LogWarning("Unknown map format " + header);
             }
         }
-        yield return null;
-    }
 
-    IEnumerator InitModel()
-    {
-        //------------ModelController
+        yield return new WaitForFixedUpdate();
 
-        //List<ModelFileData> modelFileDatas = SQLService.Instance.QueryAll<ModelFileData>();
-
-        //ModelController.Instance.ModelFileDatas = modelFileDatas;
-
-        StartCoroutine(ModelController.Instance.ReadModelFileData());
-
-        yield return null;
-    }
-
-    /// <summary>
-    /// 初始化数据
-    /// </summary>
-    IEnumerator InitGameData()
-    {
-        //-------------------初始化Faction
-
-        var entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
-        HexCoordinates hexCoordinates;
-        HexCell hexCell;
+        yield return ModelController.Instance.ReadModelFileData();
 
         List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
         for (int i = 0; i < datas.Count; i++)
@@ -169,34 +129,26 @@ public class StrategyScene : MonoBehaviour
             switch (data.SpecialIndex)
             {
                 case 1:
-                    SystemManager.Get<CitySystem>().AddCity(data,hexCell);
+                    CitySystem.AddCity(entityManager, data, hexCell);
                     break;
                 case 2:
-                    SystemManager.Get<OrganizationSystem>().AddOrganization(data, hexCell);
+                    OrganizationSystem.AddOrganization(entityManager, data, hexCell);
                     break;
-                case 3: 
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
-                    break;
-                case 4:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
-                    break;
-                case 5:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
-                    break;
-                case 6:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
-                    break;
-                case 7:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
-                    break;
-                case 8:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
+                case 3:
+                    ZigguratSystem.AddZiggurat(entityManager,data, hexCell);
                     break;
                 default:
-                    SystemManager.Get<ZigguratSystem>().AddZiggurat(data,hexCell);
+                    Debug.Log( string.Format("{0}功能尚未完善",data.SpecialIndex));
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// 初始化生物数据
+    /// </summary>
+    IEnumerator InitBiologicalData()
+    {
         //------------------初始化Biological
         List<BiologicalData> biologicalDatas = SQLService.Instance.QueryAll<BiologicalData>();
         BiologicalData bData;
@@ -222,9 +174,32 @@ public class StrategyScene : MonoBehaviour
                     SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
                     SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, bData.Id);
                     SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, bData.Id);
+
                     break;
             }
         }
+
+
+
+        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+
+        yield return new WaitForFixedUpdate();
+
+      //  EntityManager entityManager = SystemManager.ActiveManager;
+
+        FactionSystem.SetupData();
+        //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
+
+        //SystemManager.Get<WorldTimeSystem>().SetupValue(true);
+
+    }
+
+    IEnumerator InitPlayerData()
+    {
 
         //------------------初始化玩家模板
         List<PlayerData> playerDatas = SQLService.Instance.QueryAll<PlayerData>();
@@ -253,40 +228,57 @@ public class StrategyScene : MonoBehaviour
                         SystemManager.Get<EquipmentSystem>().AddEquipment(entity, pData.EquipmentJson);
                         SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, pData.Id);
                         SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, pData.Id);
-                        Debug.Log(">>11");
                         StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
                         SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entity);
                         break;
                 }
-
             }
         }
 
-        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
-
-        yield return null;
-
-    }
-    IEnumerator WindowSyncOpen()
-    {
         yield return new WaitForFixedUpdate();
-        Debug.Log(">>22");
         HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
-
         //todo :目前先不初始UI
         //  World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
         //  World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
 
         loadingViewCom.Close();
+
     }
+
+    #endregion
+
+    #region 编辑开始流传
+    IEnumerator InitEdit(OpeningInfo openingInfo)
+    {
+
+        if (openingInfo.IsEditMode == true)
+        {
+            if (openingInfo.GenerateMaps)
+            {
+                mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            }
+            else
+            {
+                hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+            }
+            HexMapCamera.ValidatePosition();
+        }
+        else
+        {
+
+        }
+
+        yield return 0;
+    }
+
+    #endregion
+
+
+
+
 
     void Update()
     {
-
         if (Input.GetKey(KeyCode.BackQuote))
         {
             IsEdit = !IsEdit;
@@ -309,15 +301,6 @@ public class StrategyScene : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// 删除开局UI
-    /// </summary>
-    public void RemoveStartUi()
-    {
-
-
-    }
-
 
 
     /// <summary>
@@ -337,11 +320,11 @@ public class StrategyScene : MonoBehaviour
     public void EnterMapModel()
     {
         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
-      //  UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
+        //  UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
 
         Instance.MainCamera.enabled = true;
 
-      //  PlayerInfoView.Isflag = true;
+        //  PlayerInfoView.Isflag = true;
     }
 
     public void EnterFightingModel()
@@ -371,8 +354,8 @@ public class StrategyScene : MonoBehaviour
         switch (SceneModel)
         {
             case StrategySceneModel.Map:
-               // UICenterMasterManager.Instance.CloseWindow(WindowID.CityTitleWindow);
-               // UICenterMasterManager.Instance.Cl
+                // UICenterMasterManager.Instance.CloseWindow(WindowID.CityTitleWindow);
+                // UICenterMasterManager.Instance.Cl
                 break;
             case StrategySceneModel.Fighting:
                 break;

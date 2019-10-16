@@ -14,6 +14,7 @@ public class UiBuildingItem : MonoBehaviour
     public Toggle ToggleCom;
 
 
+    private Vector2 _size=new Vector2(130,170);
 
     public string Value
     {
@@ -31,6 +32,13 @@ public class UiBuildingItem : MonoBehaviour
     private Text Textval;
     [SerializeField]
     private Button EnterButton;
+
+    void Awake()
+    {
+        Rect = transform as RectTransform;
+        Rect.sizeDelta = _size;
+
+    }
 
     void Start()
     {

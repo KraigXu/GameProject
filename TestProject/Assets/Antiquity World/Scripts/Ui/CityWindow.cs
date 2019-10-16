@@ -50,7 +50,6 @@ namespace GameSystem.Ui
         private Bounds _cityBounds;
 
 
-
         [Serializable]
         class TogglePanel
         {
@@ -96,8 +95,6 @@ namespace GameSystem.Ui
             _livingArea = SystemManager.GetProperty<LivingArea>(_livingAreaWindowCd.LivingAreaEntity);
             _livingAreaData = SQLService.Instance.QueryUnique<LivingAreaData>(" Id=? ", _livingArea.Id);
            
-
-
             //_name.text = GameStaticData.LivingAreaName[_livingArea.Id];
             //_money.text = _livingArea.Money + "/" + _livingArea.MoneyMax;
             //_iron.text = _livingArea.Iron + "/" + _livingArea.IronMax;
@@ -126,7 +123,6 @@ namespace GameSystem.Ui
 
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
 
-
             if (entityManager.HasComponent<BuildingBazaar>(_laEntity))
             {
                 BuildingBazaar buildingBazaar = entityManager.GetComponentData<BuildingBazaar>(_laEntity);
@@ -134,9 +130,11 @@ namespace GameSystem.Ui
                 uiBuildingItem.Value = "市集";
                 uiBuildingItem.BuildingEntity = _laEntity;
                 uiBuildingItem.OnBuildingEnter = OpenBazaarWindow;
-
+                
                 _buildingItems.Add(uiBuildingItem);
             }
+
+            
 
 
             if (entityManager.HasComponent<BuildingBlacksmith>(_laEntity))
@@ -170,8 +168,6 @@ namespace GameSystem.Ui
 
                 _buildingItems.Add(uiBuildingItem);
             }
-
-            
 
             //检查功能------------------------------------<<<
            

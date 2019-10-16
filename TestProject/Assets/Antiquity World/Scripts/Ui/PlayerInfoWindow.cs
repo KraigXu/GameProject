@@ -24,13 +24,20 @@ namespace GameSystem.Ui
 
         public HexGrid grid;
 
+        //mouseInfo view
+
+        
+        public RectTransform mouseview;
+        public RectTransform PrefabItem;
+        
+
         HexCell currentCell;
 
         HexUnit unit;
 
         [HideInInspector]
         public bool Isflag=true;
-
+       
 
         protected override void InitWindowData()
         {
@@ -105,7 +112,7 @@ namespace GameSystem.Ui
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                   // DoSelection();
+                    DoSelection();
                 }
                 else if (unit)
                 {
@@ -127,7 +134,34 @@ namespace GameSystem.Ui
             UpdateCurrentCell();
             if (currentCell)
             {
-                unit = currentCell.Unit;
+                //显示地形信息//解析地形信息 //todo:增加地区事件 描述
+
+                //for (int i = 0; i < currentCell.; i++)
+                //{
+                    
+                //}
+
+
+                //if (currentCell.Unit == null)
+                //{
+                //   
+
+
+                //}
+                //else
+                //{
+                //    //如果当前选中了目标
+                //    if (unit == StrategyPlayer.Unit)
+                //    {
+
+                //    }
+                //    else //r
+                //    {
+
+                //    }
+
+                //}
+                //unit = currentCell.Unit;
             }
         }
 
@@ -138,11 +172,12 @@ namespace GameSystem.Ui
                 if (currentCell && unit.IsValidDestination(currentCell))
                 {
                     grid.FindPath(unit.Location, currentCell, unit);
+
+                    
                 }
                 else
                 {
                     grid.ClearPath();
-                    //grid.ClearPath();
                 }
             }
         }

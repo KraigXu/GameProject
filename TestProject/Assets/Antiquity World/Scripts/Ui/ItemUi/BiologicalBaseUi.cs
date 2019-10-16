@@ -36,7 +36,7 @@ namespace GameSystem
         {
             Biological biological = SystemManager.GetProperty<Biological>(Entity);
 
-            NameTex.text = GameStaticData.BiologicalDictionary[Entity].Name;
+            NameTex.text = BiologicalSystem.GetBiologicalFixedByKey(Entity).Name;
             HeadImg.overrideSprite = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
         }
 

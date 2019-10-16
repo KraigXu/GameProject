@@ -35,11 +35,27 @@ namespace GameSystem
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
+
+        private Dictionary<Entity, BiologicalFixed> _biologicalFixedDic=new Dictionary<Entity, BiologicalFixed>();
       
         public class ComponentGroup
         {
             public Animator Animator;
         }
+
+        public static BiologicalFixed GetBiologicalFixedByKey(Entity entity)
+        {
+            if (World.Active.GetExistingManager<BiologicalSystem>()._biologicalFixedDic.ContainsKey(entity))
+            {
+                return World.Active.GetExistingManager<BiologicalSystem>()._biologicalFixedDic[entity];
+            }
+            else
+            {
+                return new BiologicalFixed();
+            }
+        }
+
+
 
         public BiologicalSystem()
         {
@@ -143,7 +159,7 @@ namespace GameSystem
 
             _entityManager.AddComponentData(entity, new ExternalProperty());
 
-            if (GameStaticData.BiologicalDictionary.ContainsKey(entity) == false)
+            if (_biologicalFixedDic.ContainsKey(entity) == false)
             {
                 string sex = data.Sex == 0 ? "男" : "女";
 
@@ -155,7 +171,7 @@ namespace GameSystem
                     Sex = sex,
 
                 };
-                GameStaticData.BiologicalDictionary.Add(entity, biologicalFixed);
+                _biologicalFixedDic.Add(entity, biologicalFixed);
             }
 
         }

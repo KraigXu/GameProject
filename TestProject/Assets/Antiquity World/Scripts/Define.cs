@@ -80,13 +80,6 @@ public sealed class Define
     public static bool IsEdit;
 
 
-
-
-
-
-
-
-
     /// <summary>
     /// 分辨率适配
     /// </summary>
@@ -99,8 +92,6 @@ public sealed class Define
         new Vector2(1600, 1200),
         new Vector2(2048, 1536)
     };
-
-
 
 
 
@@ -128,12 +119,6 @@ public sealed class Define
 
 
     }
-
-
-
-
-
-
 
 
     public static bool IsAPointInACamera(Camera camera ,Vector3 position,bool isNeedModelBlockOut=false)
@@ -182,7 +167,6 @@ public sealed class Define
     
 
     //-------------------------Fighting
-    //public static int
 
   
 }

@@ -47,7 +47,7 @@ namespace GameSystem.Ui
             if (SystemManager.Contains<Biological>(_socialDialogWindowData.OnSelfEntity))
             {
                 Biological biologicalOnSelf = SystemManager.GetProperty<Biological>(_socialDialogWindowData.OnSelfEntity);
-                BiologicalFixed biologicalosFixed = GameStaticData.BiologicalDictionary[_socialDialogWindowData.OnSelfEntity];
+                BiologicalFixed biologicalosFixed =BiologicalSystem.GetBiologicalFixedByKey(_socialDialogWindowData.OnSelfEntity);
 
                 RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, QuizzerParent);
                 BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
@@ -59,7 +59,7 @@ namespace GameSystem.Ui
             if (SystemManager.Contains<Biological>(_socialDialogWindowData.OtherEntity))
             {
                 Biological biologicalReplier = SystemManager.GetProperty<Biological>(_socialDialogWindowData.OtherEntity);
-                BiologicalFixed biologicalFixedRr = GameStaticData.BiologicalDictionary[_socialDialogWindowData.OtherEntity];
+                BiologicalFixed biologicalFixedRr = BiologicalSystem.GetBiologicalFixedByKey(_socialDialogWindowData.OtherEntity);
 
                 RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, ReplierParent);
                 BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();

@@ -170,8 +170,8 @@ namespace GameSystem.Ui
                             {
 
                                 LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_curCell.Entity);
-                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                                featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
+                               // UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
+                               // featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
 
 
                             }
@@ -227,7 +227,7 @@ namespace GameSystem.Ui
                     if (SystemManager.Contains<Biological>(entity))
                     {
                         Biological biological = SystemManager.GetProperty<Biological>(entity);
-                        BiologicalFixed biologicalFixed = GameStaticData.BiologicalDictionary[entity];
+                        BiologicalFixed biologicalFixed = BiologicalSystem.GetBiologicalFixedByKey(entity) ;
 
                         RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
                         BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();

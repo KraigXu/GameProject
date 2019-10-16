@@ -7,8 +7,7 @@ using UnityEngine;
 public class HexFeatureManager : MonoBehaviour
 {
 
-    public HexFeatureCollection[]
-        urbanCollections, farmCollections, plantCollections;
+    public HexFeatureCollection[] urbanCollections, farmCollections, plantCollections;
 
     public HexMesh walls;
 
@@ -69,6 +68,7 @@ public class HexFeatureManager : MonoBehaviour
 
     public void AddFeature(HexCell cell, Vector3 position)
     {
+
         if (cell.IsSpecial)
         {
             return;
@@ -129,10 +129,17 @@ public class HexFeatureManager : MonoBehaviour
     public void AddSpecialFeature(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
-        Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
+        //生成特性
+        Transform instance = GameObject.Instantiate(special[cell.SpecialIndex - 1]);
         instance.localPosition = HexMetrics.Perturb(position);
         instance.localRotation = Quaternion.Euler(0f, 360f * hash.e, 0f);
         instance.SetParent(container, false);
+
+        //随机特性
+
+
+
+
 
         //switch (cell.SpecialIndex)
         //{

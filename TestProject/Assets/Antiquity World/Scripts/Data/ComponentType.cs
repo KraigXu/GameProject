@@ -142,7 +142,6 @@ namespace GameSystem
         public int Lingdong;
         public int Wuxing;
 
-
         public byte Thought;                                                  //思想
         public byte Neck;                                                     //脖子
         public byte Heart;                                                    //心脏
@@ -183,11 +182,6 @@ namespace GameSystem
         public string Name;
         public string Description;
     }
-
-
-
-
-
 
     /// <summary>
     /// 身体属性 ，参数大多是提升物品使用效率
@@ -593,6 +587,7 @@ namespace GameSystem
     {
         public int ModelId;
         public int UniqueCode;
+        
 
         public int CityLevel;
 

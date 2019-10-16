@@ -17,7 +17,6 @@ public class StrategyAssetManager : MonoBehaviour
     }
     private static StrategyAssetManager _instance;
 
-
     void Awake()
     {
         _instance = this;

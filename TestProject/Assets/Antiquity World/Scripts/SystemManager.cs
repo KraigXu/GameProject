@@ -5,9 +5,40 @@ using UnityEngine;
 
 public sealed class SystemManager
 {
-    private static EntityManager _instance;
+    private static SystemManager _instance;
+    private static object _lock = new object();
 
-    
+    private SystemManager() { }
+
+    private EntityManager _curEManager;
+
+    public static EntityManager ActiveManager
+    {
+        get
+        {
+            if (GetInstance()._curEManager == null)
+            {
+                GetInstance()._curEManager= World.Active.GetOrCreateManager<EntityManager>();
+            }
+
+            return GetInstance()._curEManager;
+        }
+    }
+
+    public static SystemManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = new SystemManager();
+                }
+            }
+        }
+        return _instance;
+    }
     /// <summary>
     /// 获取指定系统
     /// </summary>
@@ -46,9 +77,5 @@ public sealed class SystemManager
         return; World.Active.GetOrCreateManager<EntityManager>().AddComponentData(entity,t);
     }
 
-    public static EntityManager ActiveManager
-    {
-        get { return World.Active.GetOrCreateManager<EntityManager>(); }
-    }
 
 }

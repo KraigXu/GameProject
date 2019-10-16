@@ -5,6 +5,7 @@ using SQLite4Unity3d;
 using System.IO;
 using DataAccessObject;
 using System;
+
 public class SQLService
 {
     public SQLiteConnection connection;
@@ -12,7 +13,7 @@ public class SQLService
     private int currentVersion = 1;
     private string databaseName;
     private string versionPath = Application.dataPath + "//version.txt";
-
+    
     public static SQLService GetInstance(string databaseName)
     {
         if (sqlService == null)
