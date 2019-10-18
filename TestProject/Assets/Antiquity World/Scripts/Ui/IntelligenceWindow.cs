@@ -178,7 +178,7 @@ namespace GameSystem.Ui
          //   PonName.text = GameStaticData.BiologicalDictionary[biological.BiologicalId] + GameStaticData.BiologicalDictionary[biological.BiologicalId];
          //  PonSex.text = GameStaticData.BiologicalDictionary[biological.Sex];
            // PonPrestige.text = World.Active.GetExistingManager<PrestigeSystem>().CheckValue(biological.PrestigeValue, ElementType.Biological);
-            PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
+           // PonFamily.text = GameStaticData.FamilyName[biological.FamilyId];
 
 
             PonInfoTog1.gameObject.SetActive(true);

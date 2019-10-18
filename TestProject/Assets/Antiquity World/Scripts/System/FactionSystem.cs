@@ -12,9 +12,19 @@ namespace GameSystem
         public int id;
         public string Name;
         public string Description;
+
+        public FactionStatic(Entity entity, int id, string name,string desc)
+        {
+            this.entity = entity;
+            this.id = id;
+            this.Name = name;
+            this.Description = desc;
+        }
+
     }
 
-    public class FactionSystem: ComponentSystem
+
+    public class FactionSystem : ComponentSystem
     {
         public struct FactionGroup
         {
@@ -37,7 +47,7 @@ namespace GameSystem
             Entity faction = SystemManager.ActiveManager.CreateEntity(factionArchetype);
 
             List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
-            
+
             for (int i = 0; i < factionDatas.Count; i++)
             {
                 var factionData = factionDatas[i];
@@ -59,8 +69,10 @@ namespace GameSystem
                     PrestigeValue = Random.Range(0, 99999)
                 });
 
-                GameStaticData.FactionName.Add(factionData.Id, factionData.Name);
-                GameStaticData.FactionDescription.Add(factionData.Id, factionData.Description);
+
+               // GameStaticData.FactionStatics.Add(factionData.Id,new FactionStatic());
+             ////   GameStaticData.FactionName.Add(factionData.Id, factionData.Name);
+             //   GameStaticData.FactionDescription.Add(factionData.Id, factionData.Description);
             }
         }
 
@@ -72,8 +84,46 @@ namespace GameSystem
 
         public Entity RandomFaction()
         {
-           int index=  Random.Range(0, _faction.Length - 1);
+            int index = Random.Range(0, _faction.Length - 1);
             return _faction.Entity[index];
+        }
+
+
+        public static void CreateFaction(EntityManager entityManager,Entity entity, FactionData factionData)
+        {
+            entityManager.SetComponentData(entity,new Faction
+            {
+                Id = factionData.Id,
+                Level = factionData.FactionLevel,
+                Food = factionData.Food,
+                FoodMax = factionData.FoodMax,
+                Iron = factionData.Iron,
+                IronMax = factionData.IronMax,
+                Money = factionData.Money,
+                MoneyMax = factionData.MoneyMax,
+                Wood = factionData.Wood,
+                WoodMax = factionData.WoodMax,
+                Disposition = Random.Range(0, 500),
+                NeutralValue = Random.Range(0, 500),
+                LuckValue = Random.Range(0, 500),
+                PrestigeValue = Random.Range(0, 99999)
+
+            });
+            GameStaticData.FactionStatics.Add(entity, new FactionStatic(entity,factionData.Id,factionData.Name,factionData.Description));
+        }
+        public static void AddFactionCom(EntityManager entityManager, Entity factionEntity,Entity targetEntity)
+        {
+            if (entityManager.HasComponent<FactionProperty>(targetEntity) == false)
+            {
+                entityManager.SetComponentData(targetEntity, new FactionProperty()
+                {
+                    FactionEntity = factionEntity,
+                    FactionEntityId = 1,
+                    Id = 2,
+                    Level = 3
+
+                });
+            }
         }
 
     }

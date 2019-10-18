@@ -11,7 +11,7 @@ namespace GameSystem
         /// <summary>
         /// key 为biological ID，
         /// </summary>
-        private static Dictionary<DoubleKey,RelationData> _relationDic =new Dictionary<DoubleKey, RelationData>();
+        private static Dictionary<DoubleKey, RelationData> _relationDic = new Dictionary<DoubleKey, RelationData>();
 
         struct DoubleKey
         {
@@ -25,18 +25,18 @@ namespace GameSystem
             public ComponentDataArray<Relation> Relation;
 
         }
-        
+
         [Inject]
         private RelationGroup _group;
 
 
-        public  void SetupComponentData(EntityManager entityManager)
+        public void SetupComponentData(EntityManager entityManager)
         {
-           // List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
+            // List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
 
             //for (int i = 0; i < relationDatas.Count; i++)
             //{
-               
+
             //    //DoubleKey newKey=new DoubleKey
             //    //{
             //    //    Key1 = relationDatas[i].MainId,
@@ -96,11 +96,20 @@ namespace GameSystem
         }
 
 
+
+        public static List<RealtionRunData> RealtionRunDatas = new List<RealtionRunData>();
+
+        public static void AddRealtionValue(Entity aEntity, Entity bEntity)
+        {
+            RealtionRunDatas.Add(new RealtionRunData(aEntity, bEntity,20,20,RealtionType.Friend));
+        }
+
+
         protected override void OnUpdate()
         {
             for (int i = 0; i < _group.Length; i++)
             {
-                
+
             }
         }
 

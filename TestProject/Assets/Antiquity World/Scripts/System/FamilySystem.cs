@@ -6,6 +6,21 @@ using UnityEngine;
 
 namespace GameSystem
 {
+
+    public class FamilyRunData
+    {
+        public Sprite FamilyIcon;
+        public string Name;
+        public string Desc;
+
+        public FamilyRunData(string name, string desc, Sprite icon)
+        {
+            this.Name = name;
+            this.Desc = desc;
+            this.FamilyIcon = icon;
+        }
+    }
+
     public class FamilySystem : ComponentSystem
     {
         struct Data
@@ -28,7 +43,7 @@ namespace GameSystem
             for (int i = 0; i < familyDatas.Count; i++)
             {
                 _familyDatas.Add(familyDatas[i].Id, familyDatas[i]);
-                GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
+                //GameStaticData.FamilyName.Add(familyDatas[i].Id, familyDatas[i].Name);
             }
 
             EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
@@ -38,13 +53,33 @@ namespace GameSystem
                 Entity family = entityManager.CreateEntity(familyArchetype);
                 entityManager.SetComponentData(family, new Family
                 {
-                    FamilyId = familyData[i].Id
+                   // FamilyId = familyData[i].Id
                 });
             }
         }
 
         protected override void OnUpdate()
         {
+
+        }
+
+        public static void CreateFamily(EntityManager entityManager, Entity entity, FamilyData familyData)
+        {
+            entityManager.SetComponentData(entity,new Family()
+            {
+            });
+
+            GameStaticData.FamilyRunDatas.Add(entity,new FamilyRunData(familyData.Name,familyData.Description,null));
+
+        }
+
+        public static void AddFamilyCom(EntityManager entityManager, Entity familyEntity, Entity targetEntity)
+        {
+            entityManager.SetComponentData(targetEntity, new FamilyProperty()
+            {
+                TargetEntity = familyEntity,
+
+            });
 
         }
 

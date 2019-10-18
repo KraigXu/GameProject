@@ -907,6 +907,8 @@ namespace DataAccessObject
         }
     }
 
+  
+
     public class TechniquesData : BaseData
     {
         public int Id { get; set; }

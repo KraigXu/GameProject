@@ -59,6 +59,14 @@ namespace GameSystem.Ui
             this.Id = id;
         }
     }
+
+    public class WindowDataRelationMap : BaseWindowContextData
+    {
+        public List<RealtionRunData> Datas;
+
+    }
+
+
     public class BiologicalUiInData : BaseWindowContextData
     {
         public Biological CurPlayer;

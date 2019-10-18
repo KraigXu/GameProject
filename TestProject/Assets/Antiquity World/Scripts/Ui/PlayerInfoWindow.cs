@@ -57,6 +57,17 @@ namespace GameSystem.Ui
             grid = StrategyScene.Instance.hexGrid;
             unit = StrategyPlayer.Unit;
 
+
+            transform.Find("Relation").GetComponent<Button>().onClick.AddListener(OpenRelation);
+
+
+        }
+
+        public void OpenRelation()
+        {
+            //UICenterMasterManager.Instance.ShowWindow(WindowID.)
+
+
         }
 
         public void SetRestTog(bool toggle)

@@ -7,6 +7,16 @@ namespace GameSystem
 {
     public sealed class GameStaticData
     {
+
+        public static Dictionary<Entity, BiologicalFixed> BiologicalRunDic = new Dictionary<Entity, BiologicalFixed>();
+
+        public static Dictionary<Entity,FamilyRunData> FamilyRunDatas=new Dictionary<Entity, FamilyRunData>();
+        public static Dictionary<Entity, FactionStatic> FactionStatics = new Dictionary<Entity, FactionStatic>();
+        public static Dictionary<Entity, CityRunData> CityRunDataDic = new Dictionary<Entity, CityRunData>();
+
+
+
+
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();
@@ -26,12 +36,12 @@ namespace GameSystem
 
         public static Dictionary<int, string> PrestigeTitle = new Dictionary<int, string>();
 
-        public static Dictionary<Entity,CityRunData> CityRunDataDic=new Dictionary<Entity, CityRunData>();
+      
 
-        public static Dictionary<Entity, FactionStatic> FactionStatics= new Dictionary<Entity, FactionStatic>();
-        public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
-        public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();
-        public static Dictionary<int, string> FamilyName = new Dictionary<int, string>();
+       
+        //public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
+        //public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();
+       // public static Dictionary<int, string> FamilyName = new Dictionary<int, string>();
         public static Dictionary<int, string> SocialDialogNarration = new Dictionary<int, string>();
         public static Dictionary<int, string> SocialDialogInfo = new Dictionary<int, string>();
 

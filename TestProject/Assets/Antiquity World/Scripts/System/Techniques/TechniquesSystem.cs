@@ -60,6 +60,8 @@ namespace GameSystem
         {
         }
 
+
+       
         public void SetupComponentData(EntityManager entityManager)
         {
             //List<TechniquesData> techniquesDatas = SQLService.Instance.QueryAll<TechniquesData>();

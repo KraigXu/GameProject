@@ -318,9 +318,14 @@ namespace GameSystem
 
     public struct Family : IComponentData
     {
-        public int FamilyId;
-        public int ThisId;
+        public Entity FamilyBoss;
     }
+
+    public struct FamilyProperty : IComponentData
+    {
+        public Entity TargetEntity;
+    }
+
 
     public struct Faction : IComponentData
     {
@@ -773,6 +778,48 @@ namespace GameSystem
         public int Value;
 
     }
+    public enum RealtionType
+    {
+        Friend=0,
+        Parents=1,
+        Companion=2,
+        Enemy=3,
+
+        
+    }
+
+
+    public class RealtionRunData
+    {
+        public int ida;
+        public int idb;
+
+        public Entity AEntity;
+        public byte AValue;
+        public Entity BEntity;
+        public byte BValue;
+        public RealtionType Type;
+
+
+        public RealtionRunData(Entity a, Entity b, byte avalue, byte bvalue, RealtionType type)
+        {
+            this.AEntity = a;
+            this.BEntity = b;
+            this.AValue = avalue;
+            this.BValue = bvalue;
+            this.Type = type;
+        }
+        public RealtionRunData(int a, int b, byte avalue, byte bvalue, RealtionType type)
+        {
+            this.ida = a;
+            this.idb = b;
+            this.AValue = avalue;
+            this.BValue = bvalue;
+            this.Type = type;
+        }
+
+    }
+
 
     public struct Sound : IComponentData
     {

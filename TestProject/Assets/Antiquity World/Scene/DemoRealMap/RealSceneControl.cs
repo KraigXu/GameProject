@@ -235,7 +235,7 @@ public class RealSceneControl : MonoBehaviour {
         SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
         SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
         SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
 
         yield return null;
 

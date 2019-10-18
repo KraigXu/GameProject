@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using DataAccessObject;
 using GameSystem;
 using GameSystem.Ui;
-using Manager;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -135,10 +135,10 @@ public class StrategyScene : MonoBehaviour
                     OrganizationSystem.AddOrganization(entityManager, data, hexCell);
                     break;
                 case 3:
-                    ZigguratSystem.AddZiggurat(entityManager,data, hexCell);
+                    ZigguratSystem.AddZiggurat(entityManager, data, hexCell);
                     break;
                 default:
-                    Debug.Log( string.Format("{0}功能尚未完善",data.SpecialIndex));
+                    Debug.Log(string.Format("{0}功能尚未完善", data.SpecialIndex));
                     break;
             }
         }
@@ -149,6 +149,35 @@ public class StrategyScene : MonoBehaviour
     /// </summary>
     IEnumerator InitBiologicalData()
     {
+        Dictionary<int, Entity> factionIdMap = new Dictionary<int, Entity>();
+        Dictionary<int, Entity> biologicalIdMap = new Dictionary<int, Entity>();
+        Dictionary<int, Entity> familyIdMap = new Dictionary<int, Entity>();
+
+        //--------------------FamilyI
+
+        EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
+        List<FamilyData> familyData = SQLService.Instance.QueryAll<FamilyData>();
+        for (int i = 0; i < familyData.Count; i++)
+        {
+            Entity family = entityManager.CreateEntity(familyArchetype);
+            FamilySystem.CreateFamily(entityManager, family, familyData[i]);
+            factionIdMap.Add(familyData[i].Id, family);
+        }
+        familyData.Clear();
+        yield return new WaitForFixedUpdate();
+        //----------------------生成Fatction
+        EntityArchetype factionArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Faction));
+        List<FactionData> factionDatas = SQLService.Instance.QueryAll<FactionData>();
+
+        for (int i = 0; i < factionDatas.Count; i++)
+        {
+            Entity faction = SystemManager.ActiveManager.CreateEntity(factionArchetype);
+            FactionSystem.CreateFaction(entityManager, faction, factionDatas[i]);
+            factionIdMap.Add(factionDatas[i].Id, faction);
+        }
+        factionDatas.Clear();
+        yield return new WaitForFixedUpdate();
+
         //------------------初始化Biological
         List<BiologicalData> biologicalDatas = SQLService.Instance.QueryAll<BiologicalData>();
         BiologicalData bData;
@@ -164,43 +193,68 @@ public class StrategyScene : MonoBehaviour
             hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
             Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
 
+            BiologicalSystem.CreateBiological(entityManager, entity, bData);
+            
             switch (bData.Identity)
             {
                 case 0:
                 case 1:
                 case 2:
                 default:
-                    SystemManager.Get<BiologicalSystem>().AddBiological(bData, entity);
                     SystemManager.Get<EquipmentSystem>().AddEquipment(entity, bData.EquipmentJson);
                     SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, bData.Id);
                     SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, bData.Id);
-
                     break;
             }
+
+            if (bData.FamilyId != 0)
+            {
+                FamilySystem.AddFamilyCom(entityManager, familyIdMap[bData.FamilyId], entity);
+            }
+
+            if (bData.FactionId != 0)
+            {
+                FactionSystem.AddFactionCom(entityManager, factionIdMap[bData.FactionId], entity);
+            }
+
+
+            biologicalIdMap.Add(biologicalDatas[i].Id, entity);
+
         }
-
-
-
-        //SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<FamilySystem>().SetupComponentData(entityManager);
+        biologicalDatas.Clear();
+        bData = null;
 
         yield return new WaitForFixedUpdate();
+        GC.Collect();
 
-      //  EntityManager entityManager = SystemManager.ActiveManager;
+        List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
+        for (int i = 0; i < relationDatas.Count; i++)
+        {
+            RelationSystem.AddRealtionValue(biologicalIdMap[relationDatas[i].ObjectAid], biologicalIdMap[relationDatas[i].ObjectBid]);
+        }
 
-        FactionSystem.SetupData();
+        relationDatas.Clear();
+        yield return new WaitForFixedUpdate();
+
+      //  SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
+        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+       // SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+
         //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
 
         //SystemManager.Get<WorldTimeSystem>().SetupValue(true);
+
+        factionIdMap.Clear();
+        biologicalIdMap.Clear();
+        familyIdMap.Clear();
+        GC.Collect();
+
 
     }
 
     IEnumerator InitPlayerData()
     {
-
         //------------------初始化玩家模板
         List<PlayerData> playerDatas = SQLService.Instance.QueryAll<PlayerData>();
         PlayerData pData;
@@ -244,7 +298,6 @@ public class StrategyScene : MonoBehaviour
         loadingViewCom.Close();
 
     }
-
     #endregion
 
     #region 编辑开始流传

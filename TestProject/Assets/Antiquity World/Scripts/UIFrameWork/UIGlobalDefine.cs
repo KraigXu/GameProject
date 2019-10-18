@@ -11,7 +11,7 @@ namespace GameSystem.Ui
         ProjectSelectWindow,     //项目选择
         MessageBoxWindow,        //消息弹出框
         SettingMenuWindow,
-        
+
 
         //Strategy////
         WorldTimeWindow,          //世界时间
@@ -20,6 +20,7 @@ namespace GameSystem.Ui
         MenuWindow,               //菜单
         MapWindow,                //地图
 
+        RelationMapWindow,
         StrategyWindow,
         RestWindow,
         TeamWindow,
@@ -153,7 +154,6 @@ namespace GameSystem.Ui
         public static Dictionary<WindowID, string> windowPrefabPath = new Dictionary<WindowID, string>()
         {
 
-
             {WindowID.StrategyWindow,"UiPrefab/StrategyWindow"},
             
             {WindowID.ProjectSelectWindow,"UiPrefab/ProjectSelectWindow" },
@@ -176,6 +176,7 @@ namespace GameSystem.Ui
             {WindowID.BuildingHospitalWindow,"UiPrefab/BuildingHospitalWindow" },
             {WindowID.BuildingOfficalWindow,"UiPrefab/BuildingOfficalWindow" },
             {WindowID.BuildingTavernWindow,"UiPrefab/BuildingTavernWindow" },
+            {WindowID.RelationMapWindow,"UiPrefab/RelationMapWindow" },
 
             {WindowID.ZigguratTitleWindow,"UiPrefab/ZigguratTitleWindow" },
             {WindowID.SettingMenuWindow,"UiPrefab/SettingMenuWindow" },

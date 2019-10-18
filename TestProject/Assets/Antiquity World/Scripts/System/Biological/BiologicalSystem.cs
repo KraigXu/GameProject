@@ -36,7 +36,7 @@ namespace GameSystem
         private TipsWindow _tipsWindow;
 
 
-        private Dictionary<Entity, BiologicalFixed> _biologicalFixedDic=new Dictionary<Entity, BiologicalFixed>();
+      
       
         public class ComponentGroup
         {
@@ -45,9 +45,9 @@ namespace GameSystem
 
         public static BiologicalFixed GetBiologicalFixedByKey(Entity entity)
         {
-            if (World.Active.GetExistingManager<BiologicalSystem>()._biologicalFixedDic.ContainsKey(entity))
+            if (GameStaticData.BiologicalRunDic.ContainsKey(entity))
             {
-                return World.Active.GetExistingManager<BiologicalSystem>()._biologicalFixedDic[entity];
+                return GameStaticData.BiologicalRunDic[entity];
             }
             else
             {
@@ -159,7 +159,7 @@ namespace GameSystem
 
             _entityManager.AddComponentData(entity, new ExternalProperty());
 
-            if (_biologicalFixedDic.ContainsKey(entity) == false)
+            if (GameStaticData.BiologicalRunDic.ContainsKey(entity) == false)
             {
                 string sex = data.Sex == 0 ? "男" : "女";
 
@@ -171,7 +171,7 @@ namespace GameSystem
                     Sex = sex,
 
                 };
-                _biologicalFixedDic.Add(entity, biologicalFixed);
+                GameStaticData.BiologicalRunDic.Add(entity, biologicalFixed);
             }
 
         }
@@ -332,6 +332,87 @@ namespace GameSystem
             }
             return new HexUnit();
         }
+
+        public static void CreateBiological(EntityManager entityManager,Entity biologicalEntity,BiologicalData data) 
+        {
+
+            entityManager.AddComponentData(biologicalEntity, new Biological()
+            {
+                BiologicalId = data.Id,
+                Age = data.Age,
+                Sex = data.Sex,
+                CharmValue = 0,
+                Mobility = 0,
+                OperationalAbility = 0,
+                LogicalThinking = 0,
+
+                AvatarId = data.AvatarId,
+                ModelId = data.ModelId,
+                FamilyId = data.FamilyId,
+                FactionId = data.FactionId,
+                TitleId = data.TitleId,
+                TechniquesId = 0,
+                EquipmentId = 0,
+
+                Jing = 100,
+                Qi = 100,
+                Shen = 100,
+                Tizhi = data.Tizhi,
+                Lidao = data.Lidao,
+                Jingshen = data.Jingshen,
+                Lingdong = data.Lingdong,
+                Wuxing = data.Wuxing,
+
+                StrategyMoveSpeed = 6,
+                FireMoveSpeed = 10,
+
+                VisionRange = 3,
+
+            });
+
+            entityManager.AddComponentData(biologicalEntity, new BodyProperty
+            {
+                Tizhi = data.Tizhi,
+                Lidao = data.Lidao,
+                Jingshen = data.Jingshen,
+                Lingdong = data.Lingdong,
+                Wuxing = data.Wuxing
+            });
+
+            entityManager.AddComponent(biologicalEntity, ComponentType.Create<BehaviorData>());
+            entityManager.SetComponentData(biologicalEntity, new BehaviorData
+            {
+                Target = Vector3.zero,
+
+                BehaviourType = 1,
+                CreantePositionCode = 1,
+                NextPoint = Vector3.back,
+                SelfPoint = Vector3.back,
+                TargetEntity = Entity.Null,
+                TargetId = 1,
+
+                TimeToLive = 1,
+            });
+
+            entityManager.AddComponentData(biologicalEntity, new ExternalProperty());
+
+            if (GameStaticData.BiologicalRunDic.ContainsKey(biologicalEntity) == false)
+            {
+                string sex = data.Sex == 0 ? "男" : "女";
+
+                BiologicalFixed biologicalFixed = new BiologicalFixed
+                {
+                    Description = data.Description,
+                    Surname = data.Surname,
+                    Name = data.Name,
+                    Sex = sex,
+
+                };
+                GameStaticData.BiologicalRunDic.Add(biologicalEntity, biologicalFixed);
+            }
+        }
+
+
 
 
         /// <summary>
