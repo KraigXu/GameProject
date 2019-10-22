@@ -115,13 +115,12 @@ namespace GameSystem
         {
             if (entityManager.HasComponent<FactionProperty>(targetEntity) == false)
             {
-                entityManager.SetComponentData(targetEntity, new FactionProperty()
+                entityManager.AddComponentData(targetEntity,new FactionProperty()
                 {
                     FactionEntity = factionEntity,
                     FactionEntityId = 1,
                     Id = 2,
                     Level = 3
-
                 });
             }
         }

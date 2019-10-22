@@ -149,10 +149,9 @@ public class StrategyScene : MonoBehaviour
     /// </summary>
     IEnumerator InitBiologicalData()
     {
+        Dictionary<int, Entity> familyIdMap = new Dictionary<int, Entity>();
         Dictionary<int, Entity> factionIdMap = new Dictionary<int, Entity>();
         Dictionary<int, Entity> biologicalIdMap = new Dictionary<int, Entity>();
-        Dictionary<int, Entity> familyIdMap = new Dictionary<int, Entity>();
-
         //--------------------FamilyI
 
         EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
@@ -161,7 +160,7 @@ public class StrategyScene : MonoBehaviour
         {
             Entity family = entityManager.CreateEntity(familyArchetype);
             FamilySystem.CreateFamily(entityManager, family, familyData[i]);
-            factionIdMap.Add(familyData[i].Id, family);
+            familyIdMap.Add(familyData[i].Id, family);
         }
         familyData.Clear();
         yield return new WaitForFixedUpdate();
