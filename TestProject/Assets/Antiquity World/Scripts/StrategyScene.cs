@@ -82,8 +82,6 @@ public class StrategyScene : MonoBehaviour
             IeEnumeratorLoad.AddIEnumerator(InitMapInfo(openingInfo.MapFilePath, openingInfo.MapFileVersion, openingInfo.Mapseed));
             //初始生物信息
             IeEnumeratorLoad.AddIEnumerator(InitBiologicalData());
-            //初始玩家信息
-            IeEnumeratorLoad.AddIEnumerator(InitPlayerData());
         }
         else
         {
@@ -183,17 +181,9 @@ public class StrategyScene : MonoBehaviour
         for (int i = 0; i < biologicalDatas.Count; i++)
         {
             bData = biologicalDatas[i];
-            hexCoordinates = new HexCoordinates(bData.X, bData.Z);
-            hexCell = hexGrid.GetCell(hexCoordinates);
-            if (hexCell == null)
-                continue;
-
-            HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(bData.ModelId));
-            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
-            Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
-
+            Entity entity = entityManager.CreateEntity();
             BiologicalSystem.CreateBiological(entityManager, entity, bData);
-            
+
             switch (bData.Identity)
             {
                 case 0:
@@ -207,15 +197,13 @@ public class StrategyScene : MonoBehaviour
             }
 
             if (bData.FamilyId != 0)
-            {
                 FamilySystem.AddFamilyCom(entityManager, familyIdMap[bData.FamilyId], entity);
-            }
 
             if (bData.FactionId != 0)
-            {
                 FactionSystem.AddFactionCom(entityManager, factionIdMap[bData.FactionId], entity);
-            }
-
+            
+            if(bData.TeamId!=0)
+                TeamSystem.SetupData(entityManager, entity);
 
             biologicalIdMap.Add(biologicalDatas[i].Id, entity);
 
@@ -224,82 +212,78 @@ public class StrategyScene : MonoBehaviour
         bData = null;
 
         yield return new WaitForFixedUpdate();
-        GC.Collect();
 
         List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
         for (int i = 0; i < relationDatas.Count; i++)
         {
-            RelationSystem.AddRealtionValue(biologicalIdMap[relationDatas[i].ObjectAid], biologicalIdMap[relationDatas[i].ObjectBid]);
+            RelationSystem.AddRealtionValue(biologicalIdMap[relationDatas[i].MainId], biologicalIdMap[relationDatas[i].AimsId]);
         }
 
         relationDatas.Clear();
+
         yield return new WaitForFixedUpdate();
 
-      //  SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<RelationSystem>().SetupComponentData(entityManager);
-        //SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
-       // SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+        List<CampData> campDatas = SQLService.Instance.QueryAll<CampData>();
+        CampData camp;
+        for (int i = 0; i < campDatas.Capacity; i++)
+        {
+            camp = campDatas[i];
 
-        //LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
+            hexCoordinates = new HexCoordinates(camp.X, camp.Y);
+            hexCell = hexGrid.GetCell(hexCoordinates);
+            if (hexCell == null)
+                continue;
+
+            HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(camp.ModelId));
+            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
+            Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
+            int[] bioid;
+            campDatas[i].Ids.Split(',');
+
+            TeamSystem.SetupData(entityManager,entity);
+        }
+        campDatas.Clear();
+
+        yield return new WaitForFixedUpdate();
+
+        //初始玩家信息
+        OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
+        if (biologicalIdMap.ContainsKey(openingInfo.PlayerId))
+        {
+            Entity playerEntity = biologicalIdMap[openingInfo.PlayerId];
+            PlayerControlSystem.SetupComponentData(entityManager,playerEntity);
+            //StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
+        }
+        else
+        {
+            Debug.Log("异常错误");
+        }
+
+
+        yield return new WaitForFixedUpdate();
+
+        //  SystemManager.Get<DistrictSystem>().SetupComponentData(entityManager);
+        // SystemManager.Get<SocialDialogSystem>().SetupComponentData(entityManager);
+        // SystemManager.Get<PrestigeSystem>().SetupComponentData(entityManager);
+
+        // LivingAreaSystem.SetupComponentData(entityManager, hexGrid);
 
         //SystemManager.Get<WorldTimeSystem>().SetupValue(true);
 
+        // HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
+        //  todo :目前先不初始UI
+        //  World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
+        //  World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
         factionIdMap.Clear();
         biologicalIdMap.Clear();
         familyIdMap.Clear();
         GC.Collect();
 
-
-    }
-
-    IEnumerator InitPlayerData()
-    {
-        //------------------初始化玩家模板
-        List<PlayerData> playerDatas = SQLService.Instance.QueryAll<PlayerData>();
-        PlayerData pData;
-        for (int i = 0; i < playerDatas.Count; i++)
-        {
-            if (playerDatas[i].Identity == 1)
-            {
-                pData = playerDatas[i];
-                hexCoordinates = new HexCoordinates(pData.X, pData.Z);
-                hexCell = hexGrid.GetCell(hexCoordinates);
-                if (hexCell == null)
-                    continue;
-
-                HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(pData.ModelId));
-                hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
-                Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
-
-                switch (pData.Identity)
-                {
-                    case 0:
-                    case 1:
-                    case 2:
-                    default:
-                        SystemManager.Get<BiologicalSystem>().AddBiological(pData, entity);
-                        SystemManager.Get<EquipmentSystem>().AddEquipment(entity, pData.EquipmentJson);
-                        SystemManager.Get<ArticleSystem>().SettingArticleFeature(entity, pData.Id);
-                        SystemManager.Get<TechniquesSystem>().SpawnTechnique(entity, pData.Id);
-                        StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
-                        SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entity);
-                        break;
-                }
-            }
-        }
-
-        yield return new WaitForFixedUpdate();
-        HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
-        //todo :目前先不初始UI
-        //  World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
-        //  World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
-
         loadingViewCom.Close();
-
     }
     #endregion
 
-    #region 编辑开始流传
+    #region 编辑开始流程
     IEnumerator InitEdit(OpeningInfo openingInfo)
     {
 

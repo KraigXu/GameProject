@@ -86,6 +86,7 @@ namespace GameSystem
     /// </summary>
     public struct PlayerMember : IComponentData
     {
+        public int Id;
 
     }
 
@@ -181,6 +182,7 @@ namespace GameSystem
         public string Surname;
         public string Name;
         public string Description;
+        public Sprite Sprite;
     }
 
     /// <summary>
@@ -312,6 +314,8 @@ namespace GameSystem
     public struct Team : IComponentData
     {
         public int TeamBossId;
+
+
     }
 
     public enum TargetType { None, City, Field, Biological }

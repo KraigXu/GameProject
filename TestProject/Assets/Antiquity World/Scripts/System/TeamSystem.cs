@@ -16,25 +16,29 @@ namespace GameSystem
             public int Id;
         }
 
-
-
-
-        struct TeamGroup
+        struct Data
         {
             public readonly int Length;
-          //  public ComponentDataArray<BiologicalStatus> Status;
-            public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<Team> Team;
         }
 
-        [Inject] private TeamGroup _data;
+        [Inject] private Data _data;
+
 
         private int idCounter;
         private Transform _modelParent;
 
-
         public List<Modeler> ModelerArray = new List<Modeler>();
-        
+
+        private Dictionary<int,Entity> _dictionary=new Dictionary<int, Entity>();
+
+        public static void SetupData(EntityManager entityManager,Entity entity)
+        {
+            entityManager.AddComponentData(entity, new Team()
+            {
+                
+            });
+        }
 
         public int AddModel(GameObject prefab, Vector3 point)
         {
@@ -76,16 +80,14 @@ namespace GameSystem
             return modeler.Id;
         }
 
-
-
         protected override void OnUpdate()
         {
             for (int i = 0; i < _data.Length; i++)
             {
                 var team = _data.Team[i];
                //var status = _data.Status[i];
-                var biological = _data.Biological[i];
-                if (team.TeamBossId == biological.BiologicalId)
+                //var biological = _data.Biological[i];
+               // if (team.TeamBossId == biological.BiologicalId)
                 {
                     //switch (status.LocationType)
                     //{
@@ -105,14 +107,14 @@ namespace GameSystem
                     //        break;
                     //}
                 }
-                else
+                //else
                 {
 
                 }
 
                 //status.Position = ModelPosition(team.TeamBossId);
 
-                _data.Biological[i] = biological;
+                //_data.Biological[i] = biological;
               //  _data.Status[i] = status;
             }
         }
@@ -125,7 +127,7 @@ namespace GameSystem
             {
                 if (_data.Team[i].TeamBossId == biologicalId)
                 {
-                    biologicals.Add(_data.Biological[i]);
+                  //  biologicals.Add(_data.Biological[i]);
                 }
             }
             return biologicals;

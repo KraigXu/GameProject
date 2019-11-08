@@ -10,10 +10,12 @@ namespace GameSystem
     public class UiBiologicalAvatarItem : MonoBehaviour
     {
 
+        public Text Text;
         public Image AvatarImage;
         public Button Button;
         public int Key;
         public Entity Entity;
+        public bool IsEnable;
 
         public EntityCallBack ClickCallBack;
 
@@ -30,6 +32,29 @@ namespace GameSystem
             }
 
         }
+
+        public void SetupData(Entity entity)
+        {
+            this.Entity = entity;
+
+
+        }
+
+        public void Change()
+        {
+            BiologicalFixed biologicalFixed = GameStaticData.BiologicalRunDic[Entity];
+            Text.text = string.Format("{0}.{1}", biologicalFixed.Name,biologicalFixed.Surname);
+            AvatarImage.sprite = biologicalFixed.Sprite;
+
+
+
+
+        }
+
+
+
+
+
 
     }
 

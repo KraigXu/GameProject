@@ -75,10 +75,9 @@ namespace GameSystem
 
         public static void AddFamilyCom(EntityManager entityManager, Entity familyEntity, Entity targetEntity)
         {
-            entityManager.SetComponentData(targetEntity, new FamilyProperty()
+            entityManager.AddComponentData(targetEntity,new FamilyProperty()
             {
                 TargetEntity = familyEntity,
-
             });
 
         }

@@ -102,148 +102,148 @@ namespace GameSystem.Ui
 
         void LateUpdate()
         {
-            if (StrategyPlayer.Unit == null)
-            {
-                return;
-            }
+            //if (StrategyPlayer.Unit == null)
+            //{
+            //    return;
+            //}
 
-            if (StrategyPlayer.Unit.Location == null)
-            {
-                return;
-            }
-            if (_curCell != StrategyPlayer.Unit.Location)
-            {
-                Clear();
-                _curCell = StrategyPlayer.Unit.Location;
+            //if (StrategyPlayer.Unit.Location == null)
+            //{
+            //    return;
+            //}
+            //if (_curCell != StrategyPlayer.Unit.Location)
+            //{
+            //    Clear();
+            //    _curCell = StrategyPlayer.Unit.Location;
 
-                //Debug.Log(_curCell.Elevation);
+            //    //Debug.Log(_curCell.Elevation);
 
-                //Debug.Log(_curCell.FarmLevel);
+            //    //Debug.Log(_curCell.FarmLevel);
 
-                //Debug.Log(_curCell.SpecialIndex);
-                //Debug.Log(_curCell.UrbanLevel);
+            //    //Debug.Log(_curCell.SpecialIndex);
+            //    //Debug.Log(_curCell.UrbanLevel);
 
-                int cellType = 3;
+            //    int cellType = 3;
 
-                CellTypeImage.overrideSprite = StrategyAssetManager.GetCellTypeSprites(cellType);
-                CellTypeTxt.text = "";
-                CellUrbanTxt.text = _curCell.UrbanLevel.ToString();
-                CellFarmTxt.text = _curCell.FarmLevel.ToString();
+            //    CellTypeImage.overrideSprite = StrategyAssetManager.GetCellTypeSprites(cellType);
+            //    CellTypeTxt.text = "";
+            //    CellUrbanTxt.text = _curCell.UrbanLevel.ToString();
+            //    CellFarmTxt.text = _curCell.FarmLevel.ToString();
 
-                switch (_curCell.FarmLevel)
-                {
-                    case 0:
+            //    switch (_curCell.FarmLevel)
+            //    {
+            //        case 0:
 
-                        break;
-                }
-
-
-                switch (_curCell.PlantLevel)
-                {
-                    case 0:
-                        CellPlantTxt.text = "树木稀少";
-                        break;
-                    case 1:
-                        CellPlantTxt.text = "草原";
-                        break;
-                    case 2:
-                        CellPlantTxt.text = "树林";
-                        break;
-                    case 3:
-                        CellPlantTxt.text = "森林";
-                        break;
-                    case 4:
-                        CellPlantTxt.text = "丛林";
-                        break;
-                    default:
-                        break;
-                }
-
-                CellPlantTxt.text = _curCell.PlantLevel.ToString();
+            //            break;
+            //    }
 
 
-                if (_curCell.SpecialIndex >= 0)
-                {
-                    switch (_curCell.SpecialIndex)
-                    {
-                        case 1:  //城市
-                            {
+            //    switch (_curCell.PlantLevel)
+            //    {
+            //        case 0:
+            //            CellPlantTxt.text = "树木稀少";
+            //            break;
+            //        case 1:
+            //            CellPlantTxt.text = "草原";
+            //            break;
+            //        case 2:
+            //            CellPlantTxt.text = "树林";
+            //            break;
+            //        case 3:
+            //            CellPlantTxt.text = "森林";
+            //            break;
+            //        case 4:
+            //            CellPlantTxt.text = "丛林";
+            //            break;
+            //        default:
+            //            break;
+            //    }
 
-                                LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_curCell.Entity);
-                               // UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                               // featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
-
-
-                            }
-                            break;
-                        case 2: //帮派
-                            {
-
-                                Collective collective = SystemManager.GetProperty<Collective>(_curCell.Entity);
-
-                                UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
-                                //featureUi.Init(GameStaticData.CityRunDataDic);
-
-                                //UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellPersonsParent).GetComponent<UiCellFeature>();
-                                //featureUi.Init(GameStaticData.);
-
-                            }
-                            break;
-                        case 3:  //遗迹
-                            {
-
-                            }
-                            break;
-                        case 4: //事件
-                            {
-
-                            }
-                            break;
-                        case 5: //奖励
-                            {
-
-                            }
-                            break;
-                        case 6: //修炼地
-                            {
-                            }
-                            break;
+            //    CellPlantTxt.text = _curCell.PlantLevel.ToString();
 
 
+            //    if (_curCell.SpecialIndex >= 0)
+            //    {
+            //        switch (_curCell.SpecialIndex)
+            //        {
+            //            case 1:  //城市
+            //                {
 
-                    }
+            //                    LivingArea livingArea = SystemManager.GetProperty<LivingArea>(_curCell.Entity);
+            //                   // UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
+            //                   // featureUi.Init(GameStaticData.CityRunDataDic[livingArea.Id].Name, StrategyAssetManager.GetCellFeatureSpt(livingArea.ModelId), _curCell.Entity, CityOpenEntity);
 
-                }
 
-                SystemManager.Get<BiologicalSystem>().GetPoint(ref _personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
+            //                }
+            //                break;
+            //            case 2: //帮派
+            //                {
 
-                for (int i = 0; i < _personUnits.Count; i++)
-                {
-                    if (_personUnits[i] == StrategyPlayer.Unit)
-                        continue;
+            //                    Collective collective = SystemManager.GetProperty<Collective>(_curCell.Entity);
 
-                    Entity entity = _personUnits[i].Entity;
+            //                    UiCellFeature featureUi = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature, CellFeaturesParent).GetComponent<UiCellFeature>();
+            //                    //featureUi.Init(GameStaticData.CityRunDataDic);
 
-                    if (SystemManager.Contains<Biological>(entity))
-                    {
-                        Biological biological = SystemManager.GetProperty<Biological>(entity);
-                        BiologicalFixed biologicalFixed = BiologicalSystem.GetBiologicalFixedByKey(entity) ;
+            //                    //UiCellFeature featureUi=WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiCellFeature,CellPersonsParent).GetComponent<UiCellFeature>();
+            //                    //featureUi.Init(GameStaticData.);
 
-                        RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
-                        BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
-                        bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
-                        bui.OnClickEvent += BiologicalEvent;
-                        bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
-                        bui.Entity = entity;
+            //                }
+            //                break;
+            //            case 3:  //遗迹
+            //                {
 
-                    }
+            //                }
+            //                break;
+            //            case 4: //事件
+            //                {
 
-                }
-            }
-            else
-            {
+            //                }
+            //                break;
+            //            case 5: //奖励
+            //                {
 
-            }
+            //                }
+            //                break;
+            //            case 6: //修炼地
+            //                {
+            //                }
+            //                break;
+
+
+
+            //        }
+
+            //    }
+
+            //    SystemManager.Get<BiologicalSystem>().GetPoint(ref _personUnits, _curCell.coordinates.X, _curCell.coordinates.Z);
+
+            //    for (int i = 0; i < _personUnits.Count; i++)
+            //    {
+            //        if (_personUnits[i] == StrategyPlayer.Unit)
+            //            continue;
+
+            //        Entity entity = _personUnits[i].Entity;
+
+            //        if (SystemManager.Contains<Biological>(entity))
+            //        {
+            //            Biological biological = SystemManager.GetProperty<Biological>(entity);
+            //            BiologicalFixed biologicalFixed = BiologicalSystem.GetBiologicalFixedByKey(entity) ;
+
+            //            RectTransform personRect = WXPoolManager.Pools[Define.GeneratedPool].Spawn(StrategyAssetManager.UiPersonButton, CellPersonsParent);
+            //            BiologicalBaseUi bui = personRect.GetComponent<BiologicalBaseUi>();
+            //            bui.Avatar = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
+            //            bui.OnClickEvent += BiologicalEvent;
+            //            bui.PersonName = biologicalFixed.Surname + biologicalFixed.Name;
+            //            bui.Entity = entity;
+
+            //        }
+
+            //    }
+            //}
+            //else
+            //{
+
+            //}
         }
 
 
@@ -264,7 +264,7 @@ namespace GameSystem.Ui
 
             UICenterMasterManager.Instance.ShowWindow(WindowID.CityWindow, cityWindowData);
 
-            SystemManager.Get<CitySystem>().CityMass(target, StrategyPlayer.Entity);
+          //  SystemManager.Get<CitySystem>().CityMass(target, StrategyPlayer.Entity);
 
         }
 
@@ -274,7 +274,7 @@ namespace GameSystem.Ui
             SocialDialogWindowData socialDialogWindowData = new SocialDialogWindowData();
             socialDialogWindowData.SceneId = 1;
             socialDialogWindowData.Aside = "流窜的山贼用贪婪的眼神看着你，威胁你交出身上{0}金钱";
-            socialDialogWindowData.OnSelfEntity = StrategyPlayer.Entity;
+            //socialDialogWindowData.OnSelfEntity = StrategyPlayer.Entity;
             socialDialogWindowData.OnSelf = new List<DialogNode>();
             DialogNode onselfs1 = new DialogNode();
             onselfs1.Id = 1;

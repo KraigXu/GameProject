@@ -14,9 +14,6 @@ namespace GameSystem
         public static Dictionary<Entity, FactionStatic> FactionStatics = new Dictionary<Entity, FactionStatic>();
         public static Dictionary<Entity, CityRunData> CityRunDataDic = new Dictionary<Entity, CityRunData>();
 
-
-
-
         public static Dictionary<int, string> LivingAreaLevel = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaType = new Dictionary<int, string>();
         public static Dictionary<int, string> LivingAreaName = new Dictionary<int, string>();

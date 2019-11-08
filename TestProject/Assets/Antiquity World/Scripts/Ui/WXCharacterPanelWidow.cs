@@ -104,7 +104,7 @@ namespace GameSystem.Ui
         {
             if (contextData == null)
             {
-                _curEntity = StrategyPlayer.Entity;
+                //_curEntity = StrategyPlayer.Entity;
             }
             else
             {

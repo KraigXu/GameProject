@@ -12,6 +12,12 @@ namespace GameSystem.Ui
 {
     public class PlayerInfoWindow : UIWindowBase
     {
+
+
+        public UiBiologicalAvatarItem[] Items;
+        public int PlayNumber;
+
+
         public Image AvateImage;
         public Text NameText;
 
@@ -23,13 +29,8 @@ namespace GameSystem.Ui
         public RectTransform OptionBtns;
 
         public HexGrid grid;
-
-        //mouseInfo view
-
-        
         public RectTransform mouseview;
         public RectTransform PrefabItem;
-        
 
         HexCell currentCell;
 
@@ -37,8 +38,6 @@ namespace GameSystem.Ui
 
         [HideInInspector]
         public bool Isflag=true;
-       
-
         protected override void InitWindowData()
         {
             this.ID = WindowID.PlayerInfoWindow;
@@ -47,28 +46,54 @@ namespace GameSystem.Ui
             windowData.showMode = UIWindowShowMode.DoNothing;
             windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
             windowData.colliderMode = UIWindowColliderMode.None;
-            windowData.closeModel = UIWindowCloseModel.Destory;
+            windowData.closeModel = UIWindowCloseModel.Hide;
         }
 
         public override void InitWindowOnAwake()
         {
-            AvateImage.overrideSprite = StrategyPlayer.AvatarSprite;
-            NameText.text = StrategyPlayer.SurName + StrategyPlayer.Name;
-            grid = StrategyScene.Instance.hexGrid;
-            unit = StrategyPlayer.Unit;
-
-
+            //AvateImage.overrideSprite = StrategyPlayer.AvatarSprite;
+            //NameText.text = StrategyPlayer.SurName + StrategyPlayer.Name;
+            //grid = StrategyScene.Instance.hexGrid;
+            //unit = StrategyPlayer.Unit;
             transform.Find("Relation").GetComponent<Button>().onClick.AddListener(OpenRelation);
-
-
         }
 
         public void OpenRelation()
         {
             //UICenterMasterManager.Instance.ShowWindow(WindowID.)
-
-
         }
+
+        public void ChangePlayer(Entity entity)
+        {
+            int index = -1;
+            for (int i = 0; i < Items.Length; i++)
+            {
+                if (Items[i].Entity == entity)
+                {
+
+                    index = i;
+                }
+            }
+
+            if (index == -1)
+            {
+                for (int i = 0; i < Items.Length; i++)
+                {
+                    if (Items[i].IsEnable == false)
+                    {
+                        Items[i].SetupData(entity);
+                    }
+
+                    index = i;
+                }                
+            }
+            Items[index].Change();
+        }
+
+        
+
+        
+
 
         public void SetRestTog(bool toggle)
         {

@@ -201,9 +201,9 @@ public class RealSceneControl : MonoBehaviour {
                     SystemManager.Get<EquipmentSystem>().AddEquipment(entitygo.Entity, item.EquipmentJson);
                     SystemManager.Get<ArticleSystem>().SettingArticleFeature(entitygo.Entity, item.Id);
                     SystemManager.Get<TechniquesSystem>().SpawnTechnique(entitygo.Entity, item.Id);
-                    SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entitygo.Entity);
+                //    SystemManager.Get<PlayerControlSystem>().SetupComponentData(entityManager, entitygo.Entity);
 
-                    StrategyPlayer.PlayerInit(1, item.Name, item.Surname, StrategyAssetManager.GetBiologicalAvatar(1),entitygo.Entity);
+                    //StrategyPlayer.PlayerInit(1, item.Name, item.Surname, StrategyAssetManager.GetBiologicalAvatar(1),entitygo.Entity);
                     break;
                 case 2:
 
@@ -254,7 +254,7 @@ public class RealSceneControl : MonoBehaviour {
         //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
         //UICenterMasterManager.Instance.ShowWindow(WindowID.BuildingWindow);
 
-        HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
+      //  HexMapCamera.SetTarget(StrategyPlayer.Unit.transform.position);
 
         loadingViewCom.Close();
     }

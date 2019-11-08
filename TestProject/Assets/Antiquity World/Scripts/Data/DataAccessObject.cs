@@ -558,8 +558,14 @@ namespace DataAccessObject
                                        " Name TEXT," +
                                        " Description TEXT,"+
                                        " Icon TEXT,"+
-                                       " Speciality INTEGER);");
+                                       " Speciality INTEGER," +
+                                       " X INTEGER," +
+                                       " Y INTEGER,"+
+                                       " Ids TEXT," +
+                                       " ModelId INTEGER);");
         }
+
+
 
 
 
@@ -709,7 +715,7 @@ namespace DataAccessObject
         public int FamilyId { get; set; }               //家族ID
         public int FactionId { get; set; }              //派系ID
         public int TitleId { get; set; }                //称号ID
-        public int TeamId { get; set; }
+        public int TeamId { get; set; }                 //队伍ID
 
         public string Description { get; set; }                  //说明
         public int Sex { get; set; }                             // 性别
@@ -893,15 +899,17 @@ namespace DataAccessObject
     public class RelationData : BaseData
     {
 
-        public int ObjectAid { get; set; }
-        public int ObjectBid { get; set; }
-        public int Value { get; set; }
+        public int MainId { get; set; }
+        public int AimsId { get; set; }
+        public int RelationshipValue { get; set; }
+
+        public int RalationType { get; set; }
 
         public override object[] GetValues()
         {
             object[] objects = new object[]
             {
-                ObjectAid,ObjectBid,Value
+                MainId,AimsId,RelationshipValue,RalationType
             };
             return objects;
         }
@@ -1321,12 +1329,22 @@ namespace DataAccessObject
 
         public int Speciality { get; set; }  // 特性值 0-500代表从恶到善
 
+        public int X { get; set; }
+
+        public int Y { get; set; }
+
+        public string Ids { get; set; }
+
+        public int ModelId { get; set; }
+        
+        
+
         public override object[] GetValues()
         {
 
             object[] objects = new object[]
             {
-                UniqueCode,Name,Description,Icon,Speciality
+                UniqueCode,Name,Description,Icon,Speciality,X,Y,Ids,ModelId
             };
             return objects;
         }

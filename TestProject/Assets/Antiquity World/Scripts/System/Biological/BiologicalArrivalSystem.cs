@@ -20,6 +20,7 @@ namespace GameSystem
             public readonly int Length;
             public ComponentDataArray<Biological> Biological;
             //public ComponentDataArray<BiologicalStatus> Status;
+            
             public EntityArray Entitys;
         }
 

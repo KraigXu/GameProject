@@ -33,6 +33,9 @@ namespace GameSystem
         public int MapFileVersion;
         public string MapFilePath;
 
+
+        public int PlayerId;
+
         public void TestValue()
         {
             Mapseed = 1308905299;
@@ -45,6 +48,7 @@ namespace GameSystem
             MapFileVersion = 5;
             MapFilePath= Path.Combine(Application.persistentDataPath, "333.map");
 
+            PlayerId = 19;
         }
 
 
