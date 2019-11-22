@@ -27,7 +27,6 @@ public class StrategyScene : MonoBehaviour
     {
         get { return _instance; }
     }
-
     public Camera MainCamera;
     public Camera BuildCamera;
 
@@ -36,7 +35,6 @@ public class StrategyScene : MonoBehaviour
     public GameObject EditUI;
 
     public bool IsEdit = false;
-
 
     //---------Map
     public HexGrid hexGrid;
@@ -225,22 +223,31 @@ public class StrategyScene : MonoBehaviour
 
         List<CampData> campDatas = SQLService.Instance.QueryAll<CampData>();
         CampData camp;
-        for (int i = 0; i < campDatas.Capacity; i++)
+        for (int i = 0; i < campDatas.Count; i++)
         {
             camp = campDatas[i];
-
             hexCoordinates = new HexCoordinates(camp.X, camp.Y);
             hexCell = hexGrid.GetCell(hexCoordinates);
             if (hexCell == null)
                 continue;
 
-            HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(camp.ModelId));
-            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
-            Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
-            int[] bioid;
-            campDatas[i].Ids.Split(',');
+            GameObject go=new GameObject();
+            HexUnit hexUnit= go.AddComponent<HexUnit>();
+            Entity entity = go.AddComponent<GameObjectEntity>().Entity;
+         
+            if (camp.ModelId != 0)
+            {
+                ModelSpawnSystem.SetupComponentData(entity,go);
+            }
+
+            //HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(camp.ModelId));
+            
+            //Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
+            //int[] bioid;
+            //campDatas[i].Ids.Split(',');
 
             TeamSystem.SetupData(entityManager,entity);
+            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
         }
         campDatas.Clear();
 

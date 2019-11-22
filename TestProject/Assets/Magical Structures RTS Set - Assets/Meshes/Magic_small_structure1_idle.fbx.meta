@@ -1,0 +1,287 @@
+fileFormatVersion: 2
+guid: 962b80693ed380449ac622256ff6bff3
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: magic_shield2:Crystal1
+    100002: magic_shield2:pCube100
+    100004: magic_shield2:pCube101
+    100006: magic_shield2:pCube102
+    100008: magic_shield2:pCube103
+    100010: magic_shield2:pCube104
+    100012: magic_shield2:pCube97
+    100014: magic_shield2:pCube99
+    100016: magic_shield2:polySurface1
+    100018: magic_shield2:polySurface39
+    100020: magic_shield2:polySurface4
+    100022: magic_shield2:polySurface40
+    100024: magic_shield2:polySurface44
+    100026: magic_shield2:polySurface45
+    100028: magic_shield2:polySurface5
+    100030: magic_shield2:polySurface8
+    100032: magic_shield2:polySurface9
+    100034: //RootNode
+    100036: pCube100
+    100038: pCube101
+    100040: pCube102
+    100042: pCube103
+    100044: pCube74
+    100046: pCube97
+    100048: pCube98
+    100050: pCube99
+    100052: polySurface36
+    100054: polySurface37
+    100056: polySurface38
+    100058: polySurface39
+    100060: polySurface40
+    100062: polySurface44
+    100064: magic_shield2:Civilian_structure_1_base
+    400000: magic_shield2:Crystal1
+    400002: magic_shield2:pCube100
+    400004: magic_shield2:pCube101
+    400006: magic_shield2:pCube102
+    400008: magic_shield2:pCube103
+    400010: magic_shield2:pCube104
+    400012: magic_shield2:pCube97
+    400014: magic_shield2:pCube99
+    400016: magic_shield2:polySurface1
+    400018: magic_shield2:polySurface39
+    400020: magic_shield2:polySurface4
+    400022: magic_shield2:polySurface40
+    400024: magic_shield2:polySurface44
+    400026: magic_shield2:polySurface45
+    400028: magic_shield2:polySurface5
+    400030: magic_shield2:polySurface8
+    400032: magic_shield2:polySurface9
+    400034: //RootNode
+    400036: pCube100
+    400038: pCube101
+    400040: pCube102
+    400042: pCube103
+    400044: pCube74
+    400046: pCube97
+    400048: pCube98
+    400050: pCube99
+    400052: polySurface36
+    400054: polySurface37
+    400056: polySurface38
+    400058: polySurface39
+    400060: polySurface40
+    400062: polySurface44
+    400064: magic_shield2:Civilian_structure_1_base
+    2300000: magic_shield2:Crystal1
+    2300002: magic_shield2:pCube100
+    2300004: magic_shield2:pCube101
+    2300006: magic_shield2:pCube102
+    2300008: magic_shield2:pCube103
+    2300010: magic_shield2:pCube104
+    2300012: magic_shield2:pCube97
+    2300014: magic_shield2:pCube99
+    2300016: magic_shield2:polySurface1
+    2300018: magic_shield2:polySurface39
+    2300020: magic_shield2:polySurface4
+    2300022: magic_shield2:polySurface40
+    2300024: magic_shield2:polySurface44
+    2300026: magic_shield2:polySurface45
+    2300028: magic_shield2:polySurface5
+    2300030: magic_shield2:polySurface8
+    2300032: magic_shield2:polySurface9
+    2300034: pCube100
+    2300036: pCube101
+    2300038: pCube102
+    2300040: pCube103
+    2300042: pCube74
+    2300044: pCube97
+    2300046: pCube98
+    2300048: pCube99
+    2300050: polySurface36
+    2300052: polySurface37
+    2300054: polySurface38
+    2300056: polySurface39
+    2300058: polySurface40
+    2300060: polySurface44
+    2300062: magic_shield2:Civilian_structure_1_base
+    3300000: magic_shield2:Crystal1
+    3300002: magic_shield2:pCube100
+    3300004: magic_shield2:pCube101
+    3300006: magic_shield2:pCube102
+    3300008: magic_shield2:pCube103
+    3300010: magic_shield2:pCube104
+    3300012: magic_shield2:pCube97
+    3300014: magic_shield2:pCube99
+    3300016: magic_shield2:polySurface1
+    3300018: magic_shield2:polySurface39
+    3300020: magic_shield2:polySurface4
+    3300022: magic_shield2:polySurface40
+    3300024: magic_shield2:polySurface44
+    3300026: magic_shield2:polySurface45
+    3300028: magic_shield2:polySurface5
+    3300030: magic_shield2:polySurface8
+    3300032: magic_shield2:polySurface9
+    3300034: pCube100
+    3300036: pCube101
+    3300038: pCube102
+    3300040: pCube103
+    3300042: pCube74
+    3300044: pCube97
+    3300046: pCube98
+    3300048: pCube99
+    3300050: polySurface36
+    3300052: polySurface37
+    3300054: polySurface38
+    3300056: polySurface39
+    3300058: polySurface40
+    3300060: polySurface44
+    3300062: magic_shield2:Civilian_structure_1_base
+    4300000: pCube74
+    4300002: polySurface38
+    4300004: polySurface37
+    4300006: polySurface36
+    4300008: pCube97
+    4300010: polySurface39
+    4300012: polySurface40
+    4300014: pCube98
+    4300016: pCube99
+    4300018: pCube100
+    4300020: pCube101
+    4300022: pCube102
+    4300024: pCube103
+    4300026: polySurface44
+    4300028: magic_shield2:polySurface1
+    4300030: magic_shield2:pCube100
+    4300032: magic_shield2:pCube99
+    4300034: magic_shield2:polySurface4
+    4300036: magic_shield2:polySurface5
+    4300038: magic_shield2:pCube101
+    4300040: magic_shield2:polySurface8
+    4300042: magic_shield2:Crystal1
+    4300044: magic_shield2:polySurface9
+    4300046: magic_shield2:pCube102
+    4300048: magic_shield2:polySurface40
+    4300050: magic_shield2:polySurface39
+    4300052: magic_shield2:polySurface44
+    4300054: magic_shield2:pCube103
+    4300056: magic_shield2:pCube104
+    4300058: magic_shield2:pCube97
+    4300060: magic_shield2:polySurface45
+    4300062: magic_shield2:Civilian_structure_1_base
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 128
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: magic_shield2:Civilian_structure_1_base
+        weight: 1
+      - path: magic_shield2:Crystal1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

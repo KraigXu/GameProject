@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using UnityEngine;
 
 namespace GameSystem
 {
@@ -38,6 +39,17 @@ namespace GameSystem
                 //    em.AddSharedComponent(shotEntity, TwoStickBootstrap.EnemyShotLook);
                 //}
             }
+        }
+
+        /// <summary>
+        /// 新增模型
+        /// </summary>
+        public static void SetupComponentData(Entity entity,GameObject go )
+        {
+
+           // StrategyAssetManager.Instance.s
+
+
         }
     }
 

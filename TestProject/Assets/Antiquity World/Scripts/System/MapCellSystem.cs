@@ -24,7 +24,14 @@ namespace AntiquityWorld
 
         protected override void OnUpdate()
         {
+           
         }
+
+
+        //public void SetupData()
+        //{
+        //    GameObject hexgrid=GameObject.Find("");
+        //}
 
     }
 

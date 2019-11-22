@@ -26,10 +26,10 @@ namespace GameSystem
         {
             for (int i = 0; i < _data.Length; i++)
             {
-                Entity entity = _data.Entitys[i];
-                Biological biological = _data.Biologicals[i];
+             //   Entity entity = _data.Entitys[i];
+             //   Biological biological = _data.Biologicals[i];
 
-                _infoWin.ChangePlayer(entity);
+             //   _infoWin.ChangePlayer(entity);
                 //GameStaticData.BiologicalRunDic[entity]
             }
         }
