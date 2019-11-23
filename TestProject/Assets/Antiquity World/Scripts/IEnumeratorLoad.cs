@@ -13,7 +13,7 @@ public class IEnumeratorLoad : MonoBehaviour
     public List<IEnumeratorBase> _runing = new List<IEnumeratorBase>();
 
     private IEnumerator _curRuningIe = null;
-    private int _limit=50;                    //下载上限
+    private int _limit=10;                    //下载上限
     private bool IsShowLoad = false;
     private int index=0;
 

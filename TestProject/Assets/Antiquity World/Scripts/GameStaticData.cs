@@ -7,7 +7,6 @@ namespace GameSystem
 {
     public sealed class GameStaticData
     {
-
         public static Dictionary<Entity, BiologicalFixed> BiologicalRunDic = new Dictionary<Entity, BiologicalFixed>();
 
         public static Dictionary<Entity,FamilyRunData> FamilyRunDatas=new Dictionary<Entity, FamilyRunData>();
@@ -32,9 +31,6 @@ namespace GameSystem
         public static Dictionary<int, string> FeaturesName = new Dictionary<int, string>();
 
         public static Dictionary<int, string> PrestigeTitle = new Dictionary<int, string>();
-
-      
-
        
         //public static Dictionary<int, string> FactionName = new Dictionary<int, string>();
         //public static Dictionary<int, string> FactionDescription = new Dictionary<int, string>();

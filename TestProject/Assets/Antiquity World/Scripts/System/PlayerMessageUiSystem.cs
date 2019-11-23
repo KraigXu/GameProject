@@ -86,8 +86,6 @@ public class PlayerMessageUiSystem : ComponentSystem
 
         //            break;
         //    }
-
-
         //    switch (_unit.Location.PlantLevel)
         //    {
         //        case 0:

@@ -54,7 +54,7 @@ namespace GameSystem.Ui
         }
 
         /// <summary>
-        /// Intelligence
+        /// Intelligence ,情报窗口
         /// </summary>
         public void ButtonIntelligence()
         {

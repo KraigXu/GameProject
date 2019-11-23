@@ -12,8 +12,6 @@ namespace GameSystem.Ui
 {
     public class PlayerInfoWindow : UIWindowBase
     {
-
-
         public UiBiologicalAvatarItem[] Items;
         public int PlayNumber;
 

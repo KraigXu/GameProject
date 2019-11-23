@@ -54,6 +54,12 @@ public class StrategyScene : MonoBehaviour
     private HexCell hexCell;
 
 
+    public static HexGrid MainGrid
+    {
+        get { return _instance.hexGrid; }
+    }
+
+
     void Awake()
     {
         _instance = this;
@@ -85,6 +91,10 @@ public class StrategyScene : MonoBehaviour
         {
             IeEnumeratorLoad.AddIEnumerator(InitEdit(openingInfo));
         }
+
+
+        UICenterMasterManager.Instance.ShowWindow(WindowID.MenuWindow);
+
 
     }
     #region  正常开始流程
@@ -254,17 +264,24 @@ public class StrategyScene : MonoBehaviour
         yield return new WaitForFixedUpdate();
 
         //初始玩家信息
+
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
         if (biologicalIdMap.ContainsKey(openingInfo.PlayerId))
         {
             Entity playerEntity = biologicalIdMap[openingInfo.PlayerId];
             PlayerControlSystem.SetupComponentData(entityManager,playerEntity);
             //StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
+
         }
         else
         {
             Debug.Log("异常错误");
         }
+
+        ////初始玩家操作
+        //GameObject playgo=new GameObject("PlayerController");
+        //playgo.AddComponent<PlayerMouseControl>();
+        UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
 
 
         yield return new WaitForFixedUpdate();

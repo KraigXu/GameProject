@@ -103,29 +103,18 @@ public class SQLService
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_PlayerData(this);
         Tables.CreateTable_CampData(this);
-
         //Tables.CreateTable_Tips(this);
         //Tables.CreateTable_NounsData(this);
-
         //Tables.CreateTable_ArticleTypeData(this);
         //Tables.CreateTable_ArticleData(this);
         //Tables.CreateTable_ArticleRecordData(this);
         //Tables.CreateTable_PlayProject(this);
         //Tables.CreateTable_District(this);
-        //// Tables.CreateTable_ModelFileData(this);
-
-
-
-
-
+        //// Tables.CreateTable_ModelFileData(this);       
         //Tables.CreateTable_CellTypeData(this);
-
         //Tables.CreateTable_LivingAreaModelData(this);
         //Tables.CreateTable_LivingArea(this);
-
         //Tables.CreateTable_BuildingData(this);
-
-
         //Tables.CreateTable_Biological(this);
         //Tables.CreateTable_FactionData(this);
         //Tables.CreateTable_FamilyData(this);
