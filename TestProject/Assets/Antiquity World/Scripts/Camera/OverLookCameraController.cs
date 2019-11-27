@@ -55,15 +55,13 @@ public class OverLookCameraController : MonoBehaviour
 
     public RaycastHit m_hit;
 
-    public LayerMask m_checkMask;
-
     public Terrain[] m_terrains;
 
     public float m_detailObjectDistance = 80;
 
     public float m_treeDistance = 500;
 
-    private void Awake()
+    void Awake()
     {
         m_camera = GetComponent<Camera>();
 
@@ -71,44 +69,24 @@ public class OverLookCameraController : MonoBehaviour
         this.m_originalFarPlane = this.m_camera.farClipPlane;
     }
 
-    private void Start()
+    void Start()
     {
         m_terrains = Terrain.activeTerrains;
         Bounds bounds = m_terrains[0].terrainData.bounds;
-        for (int i = 0; i < m_terrains.Length; i++)
-        {
-        }
         m_targetLimit.center = bounds.center;
         m_targetLimit.size = bounds.size;
-        m_targetLimit.size=new Vector3(m_targetLimit.size.x,100,m_targetLimit.size.z);
-
-        gameObject.AddComponent<BleedBehavior>();
+        m_targetLimit.size = new Vector3(m_targetLimit.size.x, 100, m_targetLimit.size.z);
+        //  gameObject.AddComponent<BleedBehavior>();
     }
-
-    void Update()
+    void LateUpdate()
     {
-
-
-    }
-
-    void OnGUI()
-    {
-
-    }
-
-
-    private void LateUpdate()
-    {
-
-       
-
         UpdateTargetPosition();
         UpdateCurrentPosition();
         UpdateTransform();
         //UpdateTransformLate();
         if (Check())
         {
-           
+
             Switch2Inside();
         }
         SetTerrainProperty();
@@ -127,20 +105,6 @@ public class OverLookCameraController : MonoBehaviour
             //    bleed.FadeIn();
             //}
         }
-    }
-
-    private void FadeInFinished()
-    {
-
-        //ApplicationMain.instance.SelectNavigationMode(ApplicationMain.NAVIGATION_MODE.GLOBE);
-        //BleedBehavior bleed = GameObject.Find("Globe/GlobeCamera").GetComponent<BleedBehavior>();
-        //bleed.enabled = true;
-        //bleed.FadeOut();
-
-        //m_targetSize = 100;
-        //m_currentSize = 100;
-        //m_maxDistance = m_maxDistanceSave;
-
     }
 
     private void OnDrawGizmos()
@@ -452,14 +416,6 @@ public class OverLookCameraController : MonoBehaviour
         return null;
     }
 
-}
-
-public class RayHitComparer : IComparer
-{
-    public int Compare(object x, object y)
-    {
-        return ((RaycastHit)x).distance.CompareTo(((RaycastHit)y).distance);
-    }
 }
 
 

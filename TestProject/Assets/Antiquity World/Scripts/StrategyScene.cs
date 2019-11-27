@@ -6,7 +6,6 @@ using DataAccessObject;
 using GameSystem;
 using GameSystem.Ui;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 public enum StrategySceneModel
@@ -22,43 +21,20 @@ public enum StrategySceneModel
 public class StrategyScene : MonoBehaviour
 {
     private static StrategyScene _instance;
-
     public static StrategyScene Instance
     {
         get { return _instance; }
     }
-    public Camera MainCamera;
-    public Camera BuildCamera;
-
-    public GameObject RunTimeUI;
-    public GameObject FixedUI;
-    public GameObject EditUI;
 
     public bool IsEdit = false;
 
-    //---------Map
-    public HexGrid hexGrid;
-    public HexMapGenerator mapGenerator;
-
     //---------Message
-    public Canvas messageCanvas;
-    public LoadingView loadingViewCom;
+    public LoadingView LoadingViewCom;
 
     public IEnumeratorLoad IeEnumeratorLoad;
-
     public StrategySceneModel SceneModel = StrategySceneModel.Map;
 
-
-    private EntityManager entityManager;
-    private HexCoordinates hexCoordinates;
-    private HexCell hexCell;
-
-
-    public static HexGrid MainGrid
-    {
-        get { return _instance.hexGrid; }
-    }
-
+    private EntityManager _entityManager;
 
     void Awake()
     {
@@ -78,12 +54,12 @@ public class StrategyScene : MonoBehaviour
 
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
+        
         if (openingInfo.IsEditMode == false)
         {
-            entityManager = World.Active.GetOrCreateManager<EntityManager>();
-
+            _entityManager = World.Active.GetOrCreateManager<EntityManager>();
             //初始地图信息
-            IeEnumeratorLoad.AddIEnumerator(InitMapInfo(openingInfo.MapFilePath, openingInfo.MapFileVersion, openingInfo.Mapseed));
+          //  IeEnumeratorLoad.AddIEnumerator(InitMapInfo(openingInfo.MapFilePath, openingInfo.MapFileVersion, openingInfo.Mapseed));
             //初始生物信息
             IeEnumeratorLoad.AddIEnumerator(InitBiologicalData());
         }
@@ -99,56 +75,56 @@ public class StrategyScene : MonoBehaviour
     }
     #region  正常开始流程
 
-    IEnumerator InitMapInfo(string filePath, int version, int seed)
-    {
-        hexGrid.seed = seed;
-        //加载地图
-        using (BinaryReader reader = new BinaryReader(File.OpenRead(filePath)))
-        {
-            int header = reader.ReadInt32();
-            if (header <= version)
-            {
-                hexGrid.Load(reader, header);
-                HexMapCamera.ValidatePosition();
-            }
-            else
-            {
-                Debug.LogWarning("Unknown map format " + header);
-            }
-        }
+    //IEnumerator InitMapInfo(string filePath, int version, int seed)
+    //{
+    //    hexGrid.seed = seed;
+    //    //加载地图
+    //    using (BinaryReader reader = new BinaryReader(File.OpenRead(filePath)))
+    //    {
+    //        int header = reader.ReadInt32();
+    //        if (header <= version)
+    //        {
+    //            hexGrid.Load(reader, header);
+    //            HexMapCamera.ValidatePosition();
+    //        }
+    //        else
+    //        {
+    //            Debug.LogWarning("Unknown map format " + header);
+    //        }
+    //    }
 
-        yield return new WaitForFixedUpdate();
+    //    yield return new WaitForFixedUpdate();
 
-        yield return ModelController.Instance.ReadModelFileData();
+    //    yield return ModelController.Instance.ReadModelFileData();
 
-        List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
-        for (int i = 0; i < datas.Count; i++)
-        {
-            var data = datas[i];
-            hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
+    //    List<LivingAreaData> datas = SQLService.Instance.QueryAll<LivingAreaData>();
+    //    for (int i = 0; i < datas.Count; i++)
+    //    {
+    //        var data = datas[i];
+    //        hexCoordinates = new HexCoordinates(data.PositionX, data.PositionZ);
 
-            hexCell = hexGrid.GetCell(hexCoordinates);
-            if (hexCell == null)
-                continue;
-            hexCell.SpecialIndex = data.SpecialIndex;
+    //        hexCell = hexGrid.GetCell(hexCoordinates);
+    //        if (hexCell == null)
+    //            continue;
+    //        hexCell.SpecialIndex = data.SpecialIndex;
 
-            switch (data.SpecialIndex)
-            {
-                case 1:
-                    CitySystem.AddCity(entityManager, data, hexCell);
-                    break;
-                case 2:
-                    OrganizationSystem.AddOrganization(entityManager, data, hexCell);
-                    break;
-                case 3:
-                    ZigguratSystem.AddZiggurat(entityManager, data, hexCell);
-                    break;
-                default:
-                    Debug.Log(string.Format("{0}功能尚未完善", data.SpecialIndex));
-                    break;
-            }
-        }
-    }
+    //        switch (data.SpecialIndex)
+    //        {
+    //            case 1:
+    //                CitySystem.AddCity(_entityManager, data, hexCell);
+    //                break;
+    //            case 2:
+    //                OrganizationSystem.AddOrganization(_entityManager, data, hexCell);
+    //                break;
+    //            case 3:
+    //                ZigguratSystem.AddZiggurat(_entityManager, data, hexCell);
+    //                break;
+    //            default:
+    //                Debug.Log(string.Format("{0}功能尚未完善", data.SpecialIndex));
+    //                break;
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// 初始化生物数据
@@ -160,12 +136,12 @@ public class StrategyScene : MonoBehaviour
         Dictionary<int, Entity> biologicalIdMap = new Dictionary<int, Entity>();
         //--------------------FamilyI
 
-        EntityArchetype familyArchetype = entityManager.CreateArchetype(typeof(Family));
+        EntityArchetype familyArchetype = _entityManager.CreateArchetype(typeof(Family));
         List<FamilyData> familyData = SQLService.Instance.QueryAll<FamilyData>();
         for (int i = 0; i < familyData.Count; i++)
         {
-            Entity family = entityManager.CreateEntity(familyArchetype);
-            FamilySystem.CreateFamily(entityManager, family, familyData[i]);
+            Entity family = _entityManager.CreateEntity(familyArchetype);
+            FamilySystem.CreateFamily(_entityManager, family, familyData[i]);
             familyIdMap.Add(familyData[i].Id, family);
         }
         familyData.Clear();
@@ -177,7 +153,7 @@ public class StrategyScene : MonoBehaviour
         for (int i = 0; i < factionDatas.Count; i++)
         {
             Entity faction = SystemManager.ActiveManager.CreateEntity(factionArchetype);
-            FactionSystem.CreateFaction(entityManager, faction, factionDatas[i]);
+            FactionSystem.CreateFaction(_entityManager, faction, factionDatas[i]);
             factionIdMap.Add(factionDatas[i].Id, faction);
         }
         factionDatas.Clear();
@@ -189,8 +165,8 @@ public class StrategyScene : MonoBehaviour
         for (int i = 0; i < biologicalDatas.Count; i++)
         {
             bData = biologicalDatas[i];
-            Entity entity = entityManager.CreateEntity();
-            BiologicalSystem.CreateBiological(entityManager, entity, bData);
+            Entity entity = _entityManager.CreateEntity();
+            BiologicalSystem.CreateBiological(_entityManager, entity, bData);
 
             switch (bData.Identity)
             {
@@ -205,13 +181,13 @@ public class StrategyScene : MonoBehaviour
             }
 
             if (bData.FamilyId != 0)
-                FamilySystem.AddFamilyCom(entityManager, familyIdMap[bData.FamilyId], entity);
+                FamilySystem.AddFamilyCom(_entityManager, familyIdMap[bData.FamilyId], entity);
 
             if (bData.FactionId != 0)
-                FactionSystem.AddFactionCom(entityManager, factionIdMap[bData.FactionId], entity);
+                FactionSystem.AddFactionCom(_entityManager, factionIdMap[bData.FactionId], entity);
             
             if(bData.TeamId!=0)
-                TeamSystem.SetupData(entityManager, entity);
+                TeamSystem.SetupData(_entityManager, entity);
 
             biologicalIdMap.Add(biologicalDatas[i].Id, entity);
 
@@ -236,10 +212,10 @@ public class StrategyScene : MonoBehaviour
         for (int i = 0; i < campDatas.Count; i++)
         {
             camp = campDatas[i];
-            hexCoordinates = new HexCoordinates(camp.X, camp.Y);
-            hexCell = hexGrid.GetCell(hexCoordinates);
-            if (hexCell == null)
-                continue;
+            //hexCoordinates = new HexCoordinates(camp.X, camp.Y);
+            //hexCell = hexGrid.GetCell(hexCoordinates);
+            //if (hexCell == null)
+            //    continue;
 
             GameObject go=new GameObject();
             HexUnit hexUnit= go.AddComponent<HexUnit>();
@@ -256,8 +232,8 @@ public class StrategyScene : MonoBehaviour
             //int[] bioid;
             //campDatas[i].Ids.Split(',');
 
-            TeamSystem.SetupData(entityManager,entity);
-            hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
+            TeamSystem.SetupData(_entityManager,entity);
+           // hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
         }
         campDatas.Clear();
 
@@ -269,7 +245,7 @@ public class StrategyScene : MonoBehaviour
         if (biologicalIdMap.ContainsKey(openingInfo.PlayerId))
         {
             Entity playerEntity = biologicalIdMap[openingInfo.PlayerId];
-            PlayerControlSystem.SetupComponentData(entityManager,playerEntity);
+            PlayerControlSystem.SetupComponentData(_entityManager,playerEntity);
             //StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
 
         }
@@ -303,7 +279,7 @@ public class StrategyScene : MonoBehaviour
         familyIdMap.Clear();
         GC.Collect();
 
-        loadingViewCom.Close();
+        LoadingViewCom.Close();
     }
     #endregion
 
@@ -315,11 +291,11 @@ public class StrategyScene : MonoBehaviour
         {
             if (openingInfo.GenerateMaps)
             {
-                mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+                //mapGenerator.GenerateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
             }
             else
             {
-                hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
+                //hexGrid.CreateMap(openingInfo.Mapx, openingInfo.Mapz, openingInfo.Wrapping);
             }
             HexMapCamera.ValidatePosition();
         }
@@ -344,21 +320,6 @@ public class StrategyScene : MonoBehaviour
             IsEdit = !IsEdit;
         }
 
-        if (IsEdit)
-        {
-            EditUI.SetActive(true);
-
-            RunTimeUI.SetActive(false);
-            FixedUI.SetActive(false);
-        }
-        else
-        {
-            EditUI.SetActive(false);
-
-            RunTimeUI.SetActive(true);
-            FixedUI.SetActive(true);
-        }
-
     }
 
 
@@ -369,7 +330,7 @@ public class StrategyScene : MonoBehaviour
     public void ExitMapModel()
     {
         UICenterMasterManager.Instance.CloseWindow(WindowID.MessageWindow);
-        Instance.MainCamera.enabled = false;
+     //   Instance.MainCamera.enabled = false;
 
     }
 
@@ -382,7 +343,7 @@ public class StrategyScene : MonoBehaviour
         UICenterMasterManager.Instance.ShowWindow(WindowID.MessageWindow);
         //  UICenterMasterManager.Instance.ShowWindow(WindowID.PlayerInfoWindow);
 
-        Instance.MainCamera.enabled = true;
+        //Instance.MainCamera.enabled = true;
 
         //  PlayerInfoView.Isflag = true;
     }
@@ -440,13 +401,13 @@ public class StrategyScene : MonoBehaviour
     public void EnterBuildModel()
     {
 
-        BuildCamera.enabled = true;
+     //  BuildCamera.enabled = true;
 
     }
 
     public void ExitBuildModel()
     {
-        BuildCamera.enabled = false;
+      //  BuildCamera.enabled = false;
     }
 
 }

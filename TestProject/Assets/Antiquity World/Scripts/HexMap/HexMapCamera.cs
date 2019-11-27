@@ -107,8 +107,7 @@ public class HexMapCamera : MonoBehaviour {
 
     Vector3 WrapPosition(Vector3 position)
     {
-       // float xMax = (grid.cellCountX - 0.5f) * HexMetrics.innerDiameter;
-       // position.x = Mathf.Clamp(position.x, 0f, xMax);
+
 
         float width = grid.cellCountX * HexMetrics.innerDiameter;
         while (position.x<0f)

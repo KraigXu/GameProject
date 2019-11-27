@@ -21,10 +21,14 @@ namespace MapMagicDemo
 
 	public class GuiController : MonoBehaviour 
 	{
-		private CharController _charController; public CharController charController { get{ if (_charController==null) _charController=FindObjectOfType<CharController>(); return _charController; }}
-		private FlybyController _demoController; public FlybyController demoController { get{ if (_demoController==null) _demoController=FindObjectOfType<FlybyController>(); return _demoController; }}
-		private CameraController _cameraController; public CameraController cameraController { get{ if (_cameraController==null) _cameraController=FindObjectOfType<CameraController>(); return _cameraController; }}
-		private MapMagic.MapMagic _mapMagic; public MapMagic.MapMagic mapMagic { get{ if (_mapMagic==null) _mapMagic=FindObjectOfType<MapMagic.MapMagic>(); return _mapMagic; }}
+		private CharController _charController;
+	    public CharController charController { get{ if (_charController==null) _charController=FindObjectOfType<CharController>(); return _charController; }}
+		private FlybyController _demoController;
+	    public FlybyController demoController { get{ if (_demoController==null) _demoController=FindObjectOfType<FlybyController>(); return _demoController; }}
+		private CameraController _cameraController;
+	    public CameraController cameraController { get{ if (_cameraController==null) _cameraController=FindObjectOfType<CameraController>(); return _cameraController; }}
+		private MapMagic.MapMagic _mapMagic;
+	    public MapMagic.MapMagic mapMagic { get{ if (_mapMagic==null) _mapMagic=FindObjectOfType<MapMagic.MapMagic>(); return _mapMagic; }}
 
 		private int oldScreenWidth = 0;
 		private int oldScreenHeight = 0;

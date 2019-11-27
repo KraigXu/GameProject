@@ -68,7 +68,7 @@ namespace GameSystem.Ui
         {
             _camera3D = Camera.main;
             _camera2D = UICenterMasterManager.Instance._Camera;
-            _grid = StrategyScene.MainGrid;
+            //_grid = StrategyScene.MainGrid;
             _canvasRect= UICenterMasterManager.Instance._Canvas.GetComponent<RectTransform>();
         }
 

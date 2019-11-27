@@ -142,9 +142,10 @@ namespace MapMagic
 					Rect terrainRect = new Rect(oldCoord.x*MapMagic.instance.terrainSize, oldCoord.z*MapMagic.instance.terrainSize, MapMagic.instance.terrainSize, MapMagic.instance.terrainSize);
 						//using oldCoords because instances are bound to old coordinates
 					MapMagic.instance.objectsPool.ClearAllRect(terrainRect);
+                    MapMagic.instance.livingAreaPool.ClearAllRect(terrainRect);
 
-				//	foreach (KeyValuePair<Transform,ObjectPool> kvp in MapMagic.pools) kvp.Value.ClearAllRect(terrainRect);
-				}
+                //	foreach (KeyValuePair<Transform,ObjectPool> kvp in MapMagic.pools) kvp.Value.ClearAllRect(terrainRect);
+        }
 
 				public void OnRemove () 
 				{ 
@@ -160,10 +161,10 @@ namespace MapMagic
 					//clearing pools
 					Rect terrainRect = new Rect(coord.x*MapMagic.instance.terrainSize, coord.z*MapMagic.instance.terrainSize, MapMagic.instance.terrainSize, MapMagic.instance.terrainSize);
 					MapMagic.instance.objectsPool.ClearAllRect(terrainRect);
-
-				//	foreach (KeyValuePair<Transform,ObjectPool> kvp in MapMagic.pools)
-				//		kvp.Value.ClearAllRect(terrainRect);
-				}
+                    MapMagic.instance.livingAreaPool.ClearAllRect(terrainRect);
+                    //	foreach (KeyValuePair<Transform,ObjectPool> kvp in MapMagic.pools)
+                    //		kvp.Value.ClearAllRect(terrainRect);
+        }
 			#endregion
 
 			#region Neighbors

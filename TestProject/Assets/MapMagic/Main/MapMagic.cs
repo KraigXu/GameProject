@@ -22,9 +22,10 @@ namespace MapMagic
 		public GeneratorsAsset gens;
 		//public static Dictionary<Transform,ObjectPool> pools = new Dictionary<Transform, ObjectPool>(); //serialized with a callback
 		[SerializeField] public ObjectPool objectsPool = new ObjectPool();
+        [SerializeField] public LivingAreaPool livingAreaPool=new LivingAreaPool();
 
-		//main parameters
-		public int seed = 12345;
+        //main parameters
+        public int seed = 12345;
 		public bool changeSeed = false;
 		public int terrainSize = 1000; //should be int to avoid terrain start between pixels
 		public int terrainHeight = 200;
@@ -417,9 +418,10 @@ public bool guiInstantUpdateEnabled = false;
 //				if (pools.Count != 0) pools.Clear();
 //				for (int i=0; i<serializedPools.Length; i++) pools.Add(serializedPools[i].prefab, serializedPools[i]);
 				objectsPool.OnAfterDeserialize();
+			    livingAreaPool.OnAfterDeserialize();
 
-				//initializing workers
-				foreach (Chunk chunk in chunks.All()) chunk.InitWorker();
+                //initializing workers
+                 foreach (Chunk chunk in chunks.All()) chunk.InitWorker();
 
 				//loading non-asset data if no generators
 				if (gens == null) TryLoadOldNonAssetData();

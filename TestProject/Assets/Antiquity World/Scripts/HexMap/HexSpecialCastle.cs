@@ -9,30 +9,13 @@ using UnityEngine.UI;
 /// </summary>
 public class HexSpecialCastle : MonoBehaviour
 {
-
     public string CastleName;
     public string CastleDesc;
-
     public int Isopen;
-
     public string Name;
     public int Speed;
-
     public int Value;
 
     public Transform[] Builds;
     
-
-    
-
-	// Use this for initialization
-	void Start () {
-	    
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
