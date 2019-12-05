@@ -5,6 +5,7 @@ using System.IO;
 using DataAccessObject;
 using GameSystem;
 using GameSystem.Ui;
+using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
 
@@ -54,7 +55,6 @@ public class StrategyScene : MonoBehaviour
 
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
 
-        
         if (openingInfo.IsEditMode == false)
         {
             _entityManager = World.Active.GetOrCreateManager<EntityManager>();
@@ -134,6 +134,7 @@ public class StrategyScene : MonoBehaviour
         Dictionary<int, Entity> familyIdMap = new Dictionary<int, Entity>();
         Dictionary<int, Entity> factionIdMap = new Dictionary<int, Entity>();
         Dictionary<int, Entity> biologicalIdMap = new Dictionary<int, Entity>();
+       
         //--------------------FamilyI
 
         EntityArchetype familyArchetype = _entityManager.CreateArchetype(typeof(Family));
@@ -187,7 +188,7 @@ public class StrategyScene : MonoBehaviour
                 FactionSystem.AddFactionCom(_entityManager, factionIdMap[bData.FactionId], entity);
             
             if(bData.TeamId!=0)
-                TeamSystem.SetupData(_entityManager, entity);
+               // TeamSystem.SetupData(_entityManager, entity);
 
             biologicalIdMap.Add(biologicalDatas[i].Id, entity);
 
@@ -200,7 +201,17 @@ public class StrategyScene : MonoBehaviour
         List<RelationData> relationDatas = SQLService.Instance.QueryAll<RelationData>();
         for (int i = 0; i < relationDatas.Count; i++)
         {
-            RelationSystem.AddRealtionValue(biologicalIdMap[relationDatas[i].MainId], biologicalIdMap[relationDatas[i].AimsId]);
+            if (biologicalIdMap.ContainsKey(relationDatas[i].MainId) &&
+                biologicalIdMap.ContainsKey(relationDatas[i].AimsId))
+            {
+                RelationSystem.AddRealtionValue(biologicalIdMap[relationDatas[i].MainId], biologicalIdMap[relationDatas[i].AimsId]);
+            }
+            else
+            {
+                Debug.Log(relationDatas[i].MainId+"-----"+relationDatas[i].AimsId);
+            }
+
+            
         }
 
         relationDatas.Clear();
@@ -227,27 +238,71 @@ public class StrategyScene : MonoBehaviour
             }
 
             //HexUnit hexUnit = Instantiate(StrategyAssetManager.GetHexUnitPrefabs(camp.ModelId));
-            
             //Entity entity = hexUnit.GetComponent<GameObjectEntity>().Entity;
             //int[] bioid;
             //campDatas[i].Ids.Split(',');
 
-            TeamSystem.SetupData(_entityManager,entity);
+           // TeamSystem.SetupData(_entityManager,entity);
            // hexGrid.AddUnit(hexUnit, hexCell, UnityEngine.Random.Range(0f, 360f));
         }
         campDatas.Clear();
 
         yield return new WaitForFixedUpdate();
+        Dictionary<int,GameObject>  teamMap=new Dictionary<int, GameObject>();
+        List<TeamData> teamDatas = SQLService.Instance.QueryAll<TeamData>();
+        GameObject teamPrefab=new GameObject("TeamModel");
+        teamPrefab.transform.position=Vector3.zero;
+    
+        for (int i = 0; i < teamDatas.Count; i++)
+        {
+
+            GameObject itemgo = Instantiate(StrategyAssetManager.TemeModelPrefabs);
+            
+            GameObjectEntity entityCom = itemgo.gameObject.GetComponent <GameObjectEntity>();
+            
+            TeamSystem.SetupData(_entityManager,entityCom.Entity,teamDatas[i]);
+
+            string[] memberIds = teamDatas[i].MemberIds.Split(';');
+
+            StatusInfo statusInfo = JsonConvert.DeserializeObject<StatusInfo>(teamDatas[i].StatusInfo);
+            itemgo.transform.position = statusInfo.Position;
+            itemgo.transform.rotation =Quaternion.Euler( statusInfo.Face);
+            itemgo.transform.SetParent(teamPrefab.transform);
+
+            TeamFixed teamFixed=new TeamFixed();
+            teamFixed.Id = teamDatas[i].Id;
+            teamFixed.Transform = itemgo.transform;
+
+            for (int j = 0; j < memberIds.Length; j++)
+            {
+                int memberId=  int.Parse(memberIds[j]);
+                if (biologicalIdMap.ContainsKey(memberId))
+                {
+                    teamFixed.Members.Add(biologicalIdMap[memberId]);
+                }
+            }
+
+            GameStaticData.TeamRunDic.Add(entityCom.Entity,teamFixed);
+            teamMap.Add(teamDatas[i].Id,itemgo);
+        }
+
+        yield return new WaitForFixedUpdate();
+
 
         //初始玩家信息
-
         OpeningInfo openingInfo = GameSceneInit.CurOpeningInfo;
         if (biologicalIdMap.ContainsKey(openingInfo.PlayerId))
         {
             Entity playerEntity = biologicalIdMap[openingInfo.PlayerId];
             PlayerControlSystem.SetupComponentData(_entityManager,playerEntity);
-            //StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
 
+            OverLookCameraController overLookCamera= Camera.main.gameObject.GetComponent<OverLookCameraController>();
+            overLookCamera.m_targetPosition = teamMap[openingInfo.TeamId].transform.position;
+
+            PlayerController.Instance.PlayerGo = teamMap[openingInfo.TeamId];
+
+            //TeamId
+            //StrategyPlayer.PlayerInit(1, pData.Name, pData.Surname, StrategyAssetManager.GetBiologicalAvatar(1), entity, hexUnit);
         }
         else
         {
@@ -258,7 +313,6 @@ public class StrategyScene : MonoBehaviour
         //GameObject playgo=new GameObject("PlayerController");
         //playgo.AddComponent<PlayerMouseControl>();
         UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow);
-
 
         yield return new WaitForFixedUpdate();
 
@@ -279,7 +333,7 @@ public class StrategyScene : MonoBehaviour
         familyIdMap.Clear();
         GC.Collect();
 
-        LoadingViewCom.Close();
+        //LoadingViewCom.Close();
     }
     #endregion
 

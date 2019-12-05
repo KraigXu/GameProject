@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class UiArticleBox : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-
-
     [SerializeField]
     private Image _articlePicture;
     [SerializeField]
@@ -61,7 +59,7 @@ public class UiArticleBox : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (Entity != Entity.Null)
         {
-            StrategyMouseInfo.Instance.PutObject(gameObject);
+            //StrategyMouseInfo.Instance.PutObject(gameObject);
         }
     }
 

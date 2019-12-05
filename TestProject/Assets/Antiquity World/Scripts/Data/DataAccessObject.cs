@@ -556,14 +556,24 @@ namespace DataAccessObject
             service.connection.Execute(" CREATE TABLE IF NOT EXISTS CampData ( " +
                                        " UniqueCode INTEGER PRIMARY KEY," +
                                        " Name TEXT," +
-                                       " Description TEXT,"+
-                                       " Icon TEXT,"+
+                                       " Description TEXT," +
+                                       " Icon TEXT," +
                                        " Speciality INTEGER," +
                                        " X INTEGER," +
-                                       " Y INTEGER,"+
+                                       " Y INTEGER," +
                                        " Ids TEXT," +
                                        " ModelId INTEGER);");
         }
+
+
+        public static void CreateTable_TeamData(SQLService service)
+        {
+            service.connection.Execute(" CREATE TABLE IF NOT EXISTS TeamData ( " +
+                                       " Id INTEGER PRIMARY KEY," +
+                                       " MemberIds TEXT," +
+                                       " StatusInfo TEXT);");
+        }
+
 
 
 
@@ -915,7 +925,11 @@ namespace DataAccessObject
         }
     }
 
-  
+
+
+
+
+
 
     public class TechniquesData : BaseData
     {
@@ -1345,6 +1359,23 @@ namespace DataAccessObject
             object[] objects = new object[]
             {
                 UniqueCode,Name,Description,Icon,Speciality,X,Y,Ids,ModelId
+            };
+            return objects;
+        }
+    }
+
+    public class TeamData : BaseData
+    {
+        public int Id { get; set; }
+        public string MemberIds { get; set; }
+        public string StatusInfo { get; set; }
+        
+        public override object[] GetValues()
+        {
+
+            object[] objects = new object[]
+            {
+              Id,MemberIds,StatusInfo,
             };
             return objects;
         }

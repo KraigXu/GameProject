@@ -112,9 +112,10 @@ namespace MapMagic
 					terrain.terrainData = terrainData;
 					terrainCollider.terrainData = terrainData;
 					terrainData.size = new Vector3(mapMagic.terrainSize, mapMagic.terrainHeight, mapMagic.terrainSize);
-					
-					//settings
-					SetSettings();
+
+				    go.AddComponent<NavMeshSourceTag>();
+                    //settings
+                    SetSettings();
 
 					InitWorker();
 					worker.name = "MMChunk " + coord.x + "," + coord.z;
@@ -314,8 +315,9 @@ namespace MapMagic
 				{
 					GameObject go = terrain.gameObject;
 					go.layer = MapMagic.instance.gameObject.layer;
-					go.isStatic = MapMagic.instance.gameObject.isStatic;
-					try { go.tag = MapMagic.instance.gameObject.tag; } catch { Debug.LogError("MapMagic: could not copy object tag"); }
+                //go.isStatic = MapMagic.instance.gameObject.isStatic;
+				    go.isStatic =true;
+                try { go.tag = MapMagic.instance.gameObject.tag; } catch { Debug.LogError("MapMagic: could not copy object tag"); }
 				}
 				if (MapMagic.instance.copyComponents)
 				{

@@ -103,6 +103,8 @@ public class SQLService
         Tables.CreateTable_Techniques(this);
         Tables.CreateTable_PlayerData(this);
         Tables.CreateTable_CampData(this);
+        Tables.CreateTable_TeamData(this);
+
         //Tables.CreateTable_Tips(this);
         //Tables.CreateTable_NounsData(this);
         //Tables.CreateTable_ArticleTypeData(this);

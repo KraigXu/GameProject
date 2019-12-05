@@ -44,8 +44,6 @@ namespace MapMagicDemo
 					Vector3 fPoint = SphereCast(point, point-new Vector3(0,1000,0), sphereRadius);
 
 					if (fPoint.y < lowestPoint.y) lowestPoint = fPoint;
-
-
 				}
 			}
 

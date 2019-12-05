@@ -168,11 +168,18 @@ namespace GameSystem
         public int StrategyMoveBasSpeed;
         public int StrategyMoveSpeed;
 
-
         public int FireMoveSpeed;
 
         public int VisionBaseRange;
         public int VisionRange;
+
+        public Entity Feature1;
+        public Entity Feature2;
+        public Entity Feature3;
+        public Entity Feature4;
+        public Entity Feature5;
+        public Entity Feature6;
+
     }
 
 
@@ -183,6 +190,15 @@ namespace GameSystem
         public string Name;
         public string Description;
         public Sprite Sprite;
+    }
+
+    public class TeamFixed
+    {
+        public int Id;
+
+        public string Name;
+        public Transform Transform;
+        public List<Entity> Members = new List<Entity>();
     }
 
     /// <summary>
@@ -225,7 +241,7 @@ namespace GameSystem
 
     }
 
-    public struct ExternalProperty :IComponentData
+    public struct ExternalProperty : IComponentData
     {
 
         public int Tizhi;
@@ -238,20 +254,19 @@ namespace GameSystem
         public int HelmetProperty2;
         public int HelmetProperty3;
 
-
-        public byte Thought;                                                
-        public byte Neck;                                                   
-        public byte Heart;                                                  
-        public byte Eye;                                                    
-        public byte Ear;                                                    
-        public byte LeftLeg;                                                
-        public byte RightLeg;                                               
-        public byte LeftHand;                                               
-        public byte RightHand;                                              
-        public byte Fertility;                                              
-        public byte Skin;                                                   
-        public byte Blod;                                                   
-        public byte JingLuo;                                                
+        public byte Thought;
+        public byte Neck;
+        public byte Heart;
+        public byte Eye;
+        public byte Ear;
+        public byte LeftLeg;
+        public byte RightLeg;
+        public byte LeftHand;
+        public byte RightHand;
+        public byte Fertility;
+        public byte Skin;
+        public byte Blod;
+        public byte JingLuo;
 
         public int AvatarId;
         public int ModelId;
@@ -263,16 +278,14 @@ namespace GameSystem
 
         public int StrategyMoveBasSpeed;
         public int StrategyMoveSpeed;
-
-
+        
         public int FireMoveSpeed;
-
         public int VisionBaseRange;
         public int VisionRange;
 
     }
 
-    
+
 
     public struct FixedProperty : IComponentData
     {
@@ -280,7 +293,39 @@ namespace GameSystem
 
     public struct FightingProperty : IComponentData
     {
+        public int Strength;
+        public int Skill;
+        public int Defense;
+        public int Magic;
+        public int Luck;
+        public int Charm;
+        public int Mobility;
+        public int Speed;
 
+        public ushort ExpEmptyHand;                                            //空手
+        public ushort ExpLongSoldier;                                          //长兵
+        public ushort ExpShortSoldier;                                         //短兵
+        public ushort ExpJones;                                                //奇兵
+        public ushort ExpHiddenWeapone;                                        //射术
+        public ushort ExpMedicine;                                             //医学
+        public ushort ExpArithmetic;                                           //算术
+        public ushort ExpMusic;                                                //音律
+        public ushort ExpWrite;                                                //书法
+        public ushort ExpDrawing;                                              //绘画
+        public ushort ExpExchange;                                             //交流
+        public ushort ExpTaoism;                                               //道法
+        public ushort ExpDharma;                                               //佛法
+        public ushort ExpPranayama;                                            //心法
+
+        public Entity Skill1;
+        public Entity Skill2;
+        public Entity Skill3;
+        public Entity Skill4;
+        public Entity Skill5;
+        public Entity Skill6;
+        public Entity Skill7;
+        public Entity Skill8;
+        public Entity Skill9;
     }
 
     public struct NormalProperty : IComponentData
@@ -303,7 +348,7 @@ namespace GameSystem
         public int Id;
     }
 
-    public struct ModelComponent: IComponentData
+    public struct ModelComponent : IComponentData
     {
         public float Speed;
         public Vector3 Target;
@@ -314,7 +359,7 @@ namespace GameSystem
     public struct Team : IComponentData
     {
         public int TeamBossId;
-
+        public int Member;
 
     }
 
@@ -412,17 +457,17 @@ namespace GameSystem
 
     public enum EquipLevel
     {
-        General=1
+        General = 1
     }
 
     public enum EquipPart
     {
-        All=0,
-        Head =1,
-        Neck=2,
-        Chest=3,
-        Ring=4,
-        Leg=5,
+        All = 0,
+        Head = 1,
+        Neck = 2,
+        Chest = 3,
+        Ring = 4,
+        Leg = 5,
     }
 
     public struct Belong : IComponentData
@@ -488,7 +533,7 @@ namespace GameSystem
         public Entity BiologicalTarget;
 
         public int Level;
-        
+
 
         public int TechniquesValue;
         public int Effect;
@@ -503,10 +548,10 @@ namespace GameSystem
 
     public enum LivingAreaType
     {
-        SingleRoom=1,  //独房
-        Sect=2,       //门派
-        Village=3,    //村庄
-        City=4,       //城市
+        SingleRoom = 1,  //独房
+        Sect = 2,       //门派
+        Village = 3,    //村庄
+        City = 4,       //城市
     }
 
     public class BuildingItem
@@ -596,7 +641,7 @@ namespace GameSystem
     {
         public int ModelId;
         public int UniqueCode;
-        
+
 
         public int CityLevel;
 
@@ -717,7 +762,7 @@ namespace GameSystem
 
     public struct BuildingFlock : IComponentData
     {
- 
+
     }
 
     public struct LivingAreaEnterInfo : IComponentData
@@ -727,7 +772,7 @@ namespace GameSystem
         public Entity TargetEntity;
     }
 
-    
+
 
     public struct Building : IComponentData
     {
@@ -746,7 +791,7 @@ namespace GameSystem
         public int LoactionId;
         public int LoactionType;
 
-//        public int LoactionUnity;
+        //        public int LoactionUnity;
     }
 
     public struct PrestigeValue : IComponentData
@@ -758,7 +803,7 @@ namespace GameSystem
     /// 可交互物
     /// </summary>
     public struct InteractionElement : IComponentData
-    {      
+    {
         public int Distance;
         public int ModelCode;
 
@@ -784,12 +829,12 @@ namespace GameSystem
     }
     public enum RealtionType
     {
-        Friend=0,
-        Parents=1,
-        Companion=2,
-        Enemy=3,
+        Friend = 0,
+        Parents = 1,
+        Companion = 2,
+        Enemy = 3,
 
-        
+
     }
 
 
@@ -951,7 +996,7 @@ namespace GameSystem
     //public struct TeamColor:IComponentData,IInstanceRenderProperties 
     //{public float4 Color;
     //} 
-  //  struct TeamColor : IComponentData, IInstanceRenderProperties { public float4 Color; }
+    //  struct TeamColor : IComponentData, IInstanceRenderProperties { public float4 Color; }
 
 
     public struct Camp : IComponentData
@@ -961,9 +1006,9 @@ namespace GameSystem
 
     public struct Timer : IComponentData
     {
-       // public int TimeType;   //1地形 //2生物 
-       // public float TimeAdd;
-       
+        // public int TimeType;   //1地形 //2生物 
+        // public float TimeAdd;
+
 
         public int ExpendDay;
         public int DayEnd;

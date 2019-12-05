@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Reflection;
 using DataAccessObject;
 using GameSystem;
+using Newtonsoft.Json;
 using Random = UnityEngine.Random;
 
 
@@ -14,9 +15,13 @@ public class GameRuntimeEdit : MonoBehaviour
     private float f_LastInterval;
     private int i_Frames = 0;
     private float f_Fps;
+
+    public GameObject Target;
+
+
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+       // DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -24,10 +29,28 @@ public class GameRuntimeEdit : MonoBehaviour
         f_LastInterval = Time.realtimeSinceStartup;
 
         i_Frames = 0;
+
+
     }
 
     void Update()
     {
+        if (Input.GetKeyUp(KeyCode.Alpha0))
+        {
+            //---------------- 获取目标状态
+            StatusInfo suInfo = new StatusInfo()
+            {
+                Face =  Target.transform.eulerAngles,
+                Position = Target.transform.position
+
+            };
+
+            Debug.Log(JsonConvert.SerializeObject(suInfo));
+
+
+            //-------------
+
+        }
 
         if (Input.GetKey(KeyCode.BackQuote) && Input.GetKeyUp(KeyCode.K))
         {
@@ -48,6 +71,9 @@ public class GameRuntimeEdit : MonoBehaviour
 
             f_LastInterval = Time.realtimeSinceStartup;
         }
+
+
+
 
 
     }

@@ -76,7 +76,6 @@ public class OverLookCameraController : MonoBehaviour
         m_targetLimit.center = bounds.center;
         m_targetLimit.size = bounds.size;
         m_targetLimit.size = new Vector3(m_targetLimit.size.x, 100, m_targetLimit.size.z);
-        //  gameObject.AddComponent<BleedBehavior>();
     }
     void LateUpdate()
     {
@@ -107,7 +106,7 @@ public class OverLookCameraController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+     void OnDrawGizmos()
     {
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
         Gizmos.DrawSphere(m_targetPosition, 10);
@@ -218,14 +217,14 @@ public class OverLookCameraController : MonoBehaviour
 #endif
             if (zero.magnitude > 0.05f && Cursor.visible)
             {
-                Cursor.visible = !Cursor.visible;
-                Cursor.lockState = CursorLockMode.Locked;
+               // Cursor.visible = !Cursor.visible;
+               // Cursor.lockState = CursorLockMode.Locked;
             }
         }
         else if (!Cursor.visible)
         {
-            Cursor.visible = !Cursor.visible;
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = !Cursor.visible;
+            //Cursor.lockState = CursorLockMode.None;
         }
         this.m_angleVelocity += zero * (12f * this.m_mouseSensitivity * multiplier);
 
@@ -377,6 +376,7 @@ public class OverLookCameraController : MonoBehaviour
 
     private void SetTerrainProperty()
     {
+        
         //for (int i = 0; i < m_terrains.Length; i++)
         //{
         //    m_terrains[i].detailObjectDistance = Mathf.Clamp(m_detailObjectDistance - transform.position.y, 0, m_detailObjectDistance);

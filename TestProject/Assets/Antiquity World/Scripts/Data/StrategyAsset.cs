@@ -14,6 +14,8 @@ public class StrategyAsset : ScriptableObject
 
     public List<Sprite> BiologicalAvatar;
 
+    public GameObject TemeModelPrefabs;
+
     public RectTransform UiArticleBox;
     public RectTransform UiArticleView;
     public RectTransform UiArticleInfo;

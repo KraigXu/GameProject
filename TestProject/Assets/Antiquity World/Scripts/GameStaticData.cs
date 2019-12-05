@@ -9,6 +9,8 @@ namespace GameSystem
     {
         public static Dictionary<Entity, BiologicalFixed> BiologicalRunDic = new Dictionary<Entity, BiologicalFixed>();
 
+        public static Dictionary<Entity,TeamFixed> TeamRunDic=new Dictionary<Entity, TeamFixed>();
+
         public static Dictionary<Entity,FamilyRunData> FamilyRunDatas=new Dictionary<Entity, FamilyRunData>();
         public static Dictionary<Entity, FactionStatic> FactionStatics = new Dictionary<Entity, FactionStatic>();
         public static Dictionary<Entity, CityRunData> CityRunDataDic = new Dictionary<Entity, CityRunData>();

@@ -127,6 +127,7 @@ public sealed class Define
 
     public static bool IsAPointInACamera(Camera camera ,Vector3 position,bool isNeedModelBlockOut=false)
     {
+        Debug.Log(position);
         // 是否在视野内
         bool result1 = false;
         Vector3 posViewport = camera.WorldToViewportPoint(position);

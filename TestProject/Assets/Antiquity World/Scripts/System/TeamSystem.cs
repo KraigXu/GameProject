@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DataAccessObject;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -19,12 +20,11 @@ namespace GameSystem
         struct Data
         {
             public readonly int Length;
-            public ComponentDataArray<Team> Team;
+            public EntityArray Entitys;
+            public ComponentDataArray<Team> Teams;
         }
 
         [Inject] private Data _data;
-
-
         private int idCounter;
         private Transform _modelParent;
 
@@ -32,13 +32,23 @@ namespace GameSystem
 
         private Dictionary<int,Entity> _dictionary=new Dictionary<int, Entity>();
 
-        public static void SetupData(EntityManager entityManager,Entity entity)
+      //  private Dictionary<int, TeamBaseInfo> _teamBaseInfos=new Dictionary<int, TeamBaseInfo>();
+
+
+        //public Dictionary<int, TeamBaseInfo> TeamBaseInfos
+        //{
+        //    get { return _teamBaseInfos; }
+        //}
+
+        public static void SetupData(EntityManager entityManager,Entity entity,TeamData teamData)
         {
             entityManager.AddComponentData(entity, new Team()
             {
-                
+                TeamBossId = 0,
+                Member = 6,
             });
         }
+
 
         public int AddModel(GameObject prefab, Vector3 point)
         {
@@ -47,7 +57,6 @@ namespace GameSystem
                 GameObject modelparentgo=new GameObject("TeamModel");
                 _modelParent = modelparentgo.transform;
             }
-
             GameObject go = GameObject.Instantiate(prefab, point, Quaternion.identity, _modelParent);
             Modeler modeler = new Modeler();
             modeler.Id = ++idCounter;
@@ -84,10 +93,32 @@ namespace GameSystem
         {
             for (int i = 0; i < _data.Length; i++)
             {
-                var team = _data.Team[i];
-               //var status = _data.Status[i];
+                var team = _data.Teams[i];
+                var entity = _data.Entitys[i];
+                //  var compoent = _data.TeamComs[i];
+
+                team.Member= GameStaticData.TeamRunDic[entity].Members.Count;
+
+                //TeamBaseInfo info;
+                //if (GameStaticData.TeamRunDic.ContainsKey(entity) == false)
+                //{
+                //    info = new TeamBaseInfo();
+                //   _teamBaseInfos.Add(compoent.Id, info);
+                //}
+                //else
+                //{
+                //    info = _teamBaseInfos[compoent.Id];
+                //}
+
+             //   info.Name = compoent.Name;
+             //   info.Member = team.Member;
+             //   info.Point = compoent.transform.position;
+                //_teamBaseInfos[compoent.Id] = info;
+
+
+                //var status = _data.Status[i];
                 //var biological = _data.Biological[i];
-               // if (team.TeamBossId == biological.BiologicalId)
+                // if (team.TeamBossId == biological.BiologicalId)
                 {
                     //switch (status.LocationType)
                     //{
@@ -125,7 +156,7 @@ namespace GameSystem
 
             for (int i = 0; i < _data.Length; i++)
             {
-                if (_data.Team[i].TeamBossId == biologicalId)
+                if (_data.Teams[i].TeamBossId == biologicalId)
                 {
                   //  biologicals.Add(_data.Biological[i]);
                 }

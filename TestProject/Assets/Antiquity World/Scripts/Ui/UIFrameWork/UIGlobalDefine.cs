@@ -20,12 +20,18 @@ namespace GameSystem.Ui
         MenuWindow,               //菜单
         MapWindow,                //地图
 
+
+        TipsWindow,
+        StrategyTeamTipsWindow,      
+
+
+
         RelationMapWindow,
         StrategyWindow,
         RestWindow,
         TeamWindow,
         LogWindow,
-        TipsWindow,
+        
         FixedTitleWindow,
         IntelligenceWindow,
         SocialDialogWindow,
@@ -183,6 +189,7 @@ namespace GameSystem.Ui
             {WindowID.ExtendedMenuWindow,"UiPrefab/ExtendedMenuWindow"},
             {WindowID.WXCharacterPanelWindow,"UiPrefab/WXCharacterPanelWidow"},
             {WindowID.TipsWindow,"UiPrefab/TipsWindow" },
+            {WindowID.StrategyTeamTipsWindow,"UiPrefab/TeamUI/StrategyTeamTipsWindow" },
             {WindowID.MessageWindow,"UiPrefab/MessageWindow" },
             {WindowID.MessageBoxWindow,"UiPrefab/MessageBoxWindow" },
             {WindowID.MenuWindow,"UiPrefab/MenuWindow" },

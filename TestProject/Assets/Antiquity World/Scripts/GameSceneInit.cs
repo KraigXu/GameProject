@@ -35,6 +35,7 @@ namespace GameSystem
 
 
         public int PlayerId;
+        public int TeamId;
 
         public void TestValue()
         {
@@ -49,6 +50,7 @@ namespace GameSystem
             MapFilePath= Path.Combine(Application.persistentDataPath, "333.map");
 
             PlayerId = 19;
+            TeamId = 2;
         }
 
 

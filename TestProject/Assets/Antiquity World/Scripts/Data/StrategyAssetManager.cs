@@ -52,6 +52,8 @@ public class StrategyAssetManager : MonoBehaviour
         return _instance._strategyAsset.CellTypeSprites[id];
     }
 
+    public static GameObject TemeModelPrefabs { get { return _instance._strategyAsset.TemeModelPrefabs; } }
+
     public static RectTransform UiFunctionButton { get { return _instance._strategyAsset.UiFunctionButton; } }
     public static RectTransform UiPersonButton { get { return _instance._strategyAsset.UiPersonButton; } }
 

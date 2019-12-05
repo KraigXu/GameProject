@@ -20,14 +20,12 @@ namespace GameSystem
 
     public class BiologicalSystem : ComponentSystem
     {
-
         struct Data
         {
             public readonly int Length;
             public EntityArray Entitys;
             public ComponentDataArray<Biological> Biological;
             public ComponentDataArray<BodyProperty> Body;
-            public ComponentArray<HexUnit> HexUnit;
         }
 
         [Inject]
@@ -35,9 +33,6 @@ namespace GameSystem
         private EntityManager _entityManager;
         private TipsWindow _tipsWindow;
 
-
-      
-      
         public class ComponentGroup
         {
             public Animator Animator;
@@ -69,7 +64,7 @@ namespace GameSystem
                 var biological = _data.Biological[i];
                 var body = _data.Body[i];
 
-                var unit = _data.HexUnit[i];
+               // var unit = _data.HexUnit[i];
 
                 //biological.Sex = body.Fertility;
                 //biological.CharmValue = (20 * (body.Appearance / 100)) + (10 * (body.Dress / 100)) + (30 * (body.Skin / 100));
@@ -251,12 +246,12 @@ namespace GameSystem
         public void GetPoint(ref List<HexUnit> units, int x, int z)
         {
 
-            for (int i = 0; i < _data.Length; i++)
-            {
-                HexCoordinates coordinates = _data.HexUnit[i].Location.coordinates;
-                if (coordinates.X == x && coordinates.Z == z)
-                    units.Add(_data.HexUnit[i]);
-            }
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    HexCoordinates coordinates = _data.HexUnit[i].Location.coordinates;
+            //    if (coordinates.X == x && coordinates.Z == z)
+            //        units.Add(_data.HexUnit[i]);
+            //}
         }
 
 
@@ -325,11 +320,11 @@ namespace GameSystem
 
         public HexUnit GetUnit(int id)
         {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (id == _data.Biological[i].BiologicalId)
-                    return _data.HexUnit[i];
-            }
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    if (id == _data.Biological[i].BiologicalId)
+            //        return _data.HexUnit[i];
+            //}
             return new HexUnit();
         }
 
