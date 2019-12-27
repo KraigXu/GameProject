@@ -12,6 +12,12 @@ using UnityEngine;
 namespace GameSystem
 {
 
+    public struct StatusInfo : IComponentData
+    {
+        public Vector3 Position;
+        public Vector3 Face;
+    }
+
     //---------------------------LivingArea
 
 
@@ -286,6 +292,12 @@ namespace GameSystem
     }
 
 
+    public struct PositionInfo : IComponentData
+    {
+        public Vector3 Position;
+        public Vector3 Rotation;
+    }
+
 
     public struct FixedProperty : IComponentData
     {
@@ -353,14 +365,16 @@ namespace GameSystem
         public float Speed;
         public Vector3 Target;
         public int Id;
-        public int Status;
+      
+        public float MoveSpeed;
     }
+
 
     public struct Team : IComponentData
     {
         public int TeamBossId;
         public int Member;
-
+        public int Status;
     }
 
     public enum TargetType { None, City, Field, Biological }

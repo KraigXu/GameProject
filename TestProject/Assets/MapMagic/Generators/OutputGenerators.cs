@@ -2184,7 +2184,7 @@ namespace MapMagic
             Noise noise = new Noise(12345, permutationCount: 128); //to pick objects based on biome
 
             //preparing output
-            Dictionary<Transform, List<LivingAreaPool.Transition>> transitions = new Dictionary<Transform, List<LivingAreaPool.Transition>>();
+            Dictionary<Transform, List<LivingAreaPool.AreaInfo>> transitions = new Dictionary<Transform, List<LivingAreaPool.AreaInfo>>();
 
             //find all of the biome masks - they will be used to determine object probability
             List<TupleSet<CityOutput, Matrix>> allGensMasks = new List<TupleSet<CityOutput, Matrix>>();
@@ -2230,10 +2230,10 @@ namespace MapMagic
                     if (hash == null) continue;
 
                     //finding/creating proper transitions list
-                    List<LivingAreaPool.Transition> transitionsList;
+                    List<LivingAreaPool.AreaInfo> transitionsList;
                     if (!transitions.ContainsKey(layer.prefab))
                     {
-                        transitionsList = new List<LivingAreaPool.Transition>();
+                        transitionsList = new List<LivingAreaPool.AreaInfo>();
                         transitions.Add(layer.prefab, transitionsList);
                     }
                     else
@@ -2329,7 +2329,13 @@ namespace MapMagic
                             if (biomeVal < 0.001f) continue;
                             scale *= biomeVal;
                         }
-                        transitionsList.Add(new LivingAreaPool.Transition() { pos = position, rotation = rotation, scale = scale });
+                        transitionsList.Add(new LivingAreaPool.AreaInfo()
+                        {
+                            pos = position,
+                            rotation = rotation,
+                            scale = scale,
+                            TextSpeed = (int)(position.x+rotation.x*scale.x+1)
+                        });
                     }
                 }
             }
@@ -2371,16 +2377,16 @@ namespace MapMagic
 
         public static IEnumerator Apply(CoordRect rect, Terrain terrain, object dataBox, Func<float, bool> stop = null)
         {
-            Dictionary<Transform, List<LivingAreaPool.Transition>> transitions = (Dictionary<Transform, List<LivingAreaPool.Transition>>)dataBox;
+            Dictionary<Transform, List<LivingAreaPool.AreaInfo>> transitions = (Dictionary<Transform, List<LivingAreaPool.AreaInfo>>)dataBox;
 
             float pixelSize = 1f * MapMagic.instance.terrainSize / MapMagic.instance.resolution;
             Rect terrainRect = new Rect(rect.offset.x * pixelSize, rect.offset.z * pixelSize, rect.size.x * pixelSize, rect.size.z * pixelSize);
 
             //adding
-            foreach (KeyValuePair<Transform, List<LivingAreaPool.Transition>> kvp in transitions)
+            foreach (KeyValuePair<Transform, List<LivingAreaPool.AreaInfo>> kvp in transitions)
             {
                 Transform prefab = kvp.Key;
-                List<LivingAreaPool.Transition> transitionsList = kvp.Value;
+                List<LivingAreaPool.AreaInfo> transitionsList = kvp.Value;
 
                 IEnumerator e = MapMagic.instance.livingAreaPool.RepositionCoroutine(
                     prefab,

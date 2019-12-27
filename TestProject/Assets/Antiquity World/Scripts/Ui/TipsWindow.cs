@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using DataAccessObject;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,11 +24,7 @@ namespace GameSystem.Ui
         private RectTransform _mouseView;
         [SerializeField]
         private Text _contenText;
-
         
-
-
-
         private Vector3 _wordpos = Vector3.zero;
         private Camera _camera3D;
         private Camera _camera2D;
@@ -222,17 +217,6 @@ namespace GameSystem.Ui
 
                 //}
 
-
-
-
-
-
-                // _contentstr.AppendFormat()
-
-
-
-
-                // Debug.Log(_currentCell.Position);
                 _contenText.text = _contentstr.ToString();
             }
             else
@@ -245,22 +229,6 @@ namespace GameSystem.Ui
                 Debug.Log("Setting anchored positiont to: " + outVec);
                 _mouseView.anchoredPosition = outVec;
             }
-
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    DoSelection();
-            //}
-            //else if (_currentUnit)
-            //{
-            //    if (Input.GetMouseButtonDown(1))
-            //    {
-            //        DoMove();
-            //    }
-            //    else
-            //    {
-            //        DoPathfinding();
-            //    }
-            //}
         }
 
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using DataAccessObject;
+
 using Unity.Entities;
 using UnityEngine;
 using GameSystem.Ui;

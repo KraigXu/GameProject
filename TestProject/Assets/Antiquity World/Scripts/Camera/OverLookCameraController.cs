@@ -6,9 +6,7 @@ using UnityEngine.EventSystems;
 public class OverLookCameraController : MonoBehaviour
 {
     public float m_defaultInertia;
-
     public Vector2 m_targetAngle = new Vector2(-28f, 20f);
-
     public Vector2 m_currentAngle = new Vector2(-28f, 20f);
 
     public Vector3 m_targetPosition = new Vector3(450f, 110f, -610f);
@@ -54,35 +52,26 @@ public class OverLookCameraController : MonoBehaviour
     public Ray m_ray;
 
     public RaycastHit m_hit;
-
-    public Terrain[] m_terrains;
-
     public float m_detailObjectDistance = 80;
-
     public float m_treeDistance = 500;
 
     void Awake()
     {
         m_camera = GetComponent<Camera>();
-
         this.m_originalNearPlane = this.m_camera.nearClipPlane;
         this.m_originalFarPlane = this.m_camera.farClipPlane;
     }
 
     void Start()
     {
-        m_terrains = Terrain.activeTerrains;
-        Bounds bounds = m_terrains[0].terrainData.bounds;
-        m_targetLimit.center = bounds.center;
-        m_targetLimit.size = bounds.size;
-        m_targetLimit.size = new Vector3(m_targetLimit.size.x, 100, m_targetLimit.size.z);
+
     }
     void LateUpdate()
     {
         UpdateTargetPosition();
         UpdateCurrentPosition();
         UpdateTransform();
-        //UpdateTransformLate();
+
         if (Check())
         {
 
@@ -92,7 +81,6 @@ public class OverLookCameraController : MonoBehaviour
         if (Mathf.Abs(m_maxDistance - m_currentSize) < 0.1f)
         {
             m_maxDistance = m_maxDistance2;
-            //m_defaultInertia = 0.05f;
         }
         if (Mathf.Abs(m_maxDistance2 - m_currentSize) < 0.1f)
         {
@@ -106,7 +94,7 @@ public class OverLookCameraController : MonoBehaviour
         }
     }
 
-     void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
         Gizmos.DrawSphere(m_targetPosition, 10);
@@ -217,8 +205,8 @@ public class OverLookCameraController : MonoBehaviour
 #endif
             if (zero.magnitude > 0.05f && Cursor.visible)
             {
-               // Cursor.visible = !Cursor.visible;
-               // Cursor.lockState = CursorLockMode.Locked;
+                // Cursor.visible = !Cursor.visible;
+                // Cursor.lockState = CursorLockMode.Locked;
             }
         }
         else if (!Cursor.visible)
@@ -347,7 +335,6 @@ public class OverLookCameraController : MonoBehaviour
         {
             position.y = height + m_camera.nearClipPlane * 1.414f;
         }
-        //position = GetWallPoint(position);
         return position;
     }
 
@@ -367,7 +354,7 @@ public class OverLookCameraController : MonoBehaviour
     private bool Check()
     {
         m_ray = new Ray(transform.position, Vector3.down);
-        if (transform.position.y < 20f && Physics.Raycast(m_ray, out m_hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("GuanLang")))
+        if (transform.position.y < 20f && Physics.Raycast(m_ray, out m_hit, Mathf.Infinity))
         {
             return true;
         }
@@ -376,30 +363,13 @@ public class OverLookCameraController : MonoBehaviour
 
     private void SetTerrainProperty()
     {
-        
-        //for (int i = 0; i < m_terrains.Length; i++)
-        //{
-        //    m_terrains[i].detailObjectDistance = Mathf.Clamp(m_detailObjectDistance - transform.position.y, 0, m_detailObjectDistance);
-        //    m_terrains[i].treeDistance = Mathf.Clamp(m_treeDistance - transform.position.y * 10, 0, m_treeDistance);
-        //}
-        //if (m_maxDistance != m_maxDistance2)
-        //{
-        //    RenderSettings.fogStartDistance = m_camera.farClipPlane / 2;
-        //    RenderSettings.fogEndDistance = m_camera.farClipPlane - 100f;
-        //}
-        //else
-        //{
-        //    RenderSettings.fogStartDistance = Mathf.Clamp(m_maxDistance2 - m_currentSize, 0, m_camera.farClipPlane / 2);
-        //    if (RenderSettings.fogStartDistance > RenderSettings.fogEndDistance - 10)
-        //    {
-        //        RenderSettings.fogEndDistance = RenderSettings.fogStartDistance + 10;
-        //    }
-        //}
         RenderSettings.fogEndDistance = m_camera.farClipPlane;
-        for (int i = 0; i < m_terrains.Length; i++)
+        for (int i = 0; i < Terrain.activeTerrains.Length; i++)
         {
-            m_terrains[i].detailObjectDistance = Mathf.Clamp(m_detailObjectDistance - transform.position.y, 0, m_detailObjectDistance);
-            m_terrains[i].treeDistance = m_treeDistance;
+            Terrain terrain = Terrain.activeTerrains[i];
+            terrain.detailObjectDistance = Mathf.Clamp(m_detailObjectDistance - transform.position.y, 0, m_detailObjectDistance);
+            terrain.treeDistance = m_treeDistance;
+            m_targetLimit.Encapsulate(terrain.terrainData.bounds);
         }
     }
 

@@ -18,6 +18,16 @@ public static class SignalCenter
     public static MouseSignal MouseOnEnterView = new MouseSignal();
     public static MouseSignal MouseOnScrollWheel = new MouseSignal();
 
+    //Data
+
+    public static DataLoad GameDataLoadOver =new DataLoad();
+
+    //SystemData
+    public static BiologicalEntityData BiologicalDataChange=new BiologicalEntityData();
+
+
+
+
 
 
 }

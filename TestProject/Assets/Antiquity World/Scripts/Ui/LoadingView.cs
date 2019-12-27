@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
 using DG.Tweening;
+using GameSystem;
 using GameSystem.Ui;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,8 +72,7 @@ public class LoadingView : MonoBehaviour
         _tipsTitle.text = _tipsDatas[_currentPage].ContentTitle;
         _tipsContent.text = _tipsDatas[_currentPage].Content;
     }
-
-
+    
     //void Update()
     //{
     //    Define.LoadingValue = value;
@@ -91,9 +90,7 @@ public class LoadingView : MonoBehaviour
     //        {
     //            Callback();
     //        }
-
     //        GameObject.Destroy(this.gameObject);
-
     //    }
     //}
 
@@ -108,11 +105,9 @@ public class LoadingView : MonoBehaviour
             {
                 Callback();
             }
-
             gameObject.SetActive(false);
             //this.enabled = false;
         }
-        
     }
 
     public void Open()

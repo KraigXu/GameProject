@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
+
 using GameSystem;
 using GameSystem.Ui;
 using UnityEngine;
@@ -26,7 +26,6 @@ public class CityTitleWindow : UIWindowBase
         windowData.navigationMode = UIWindowNavigationMode.IgnoreNavigation;
         windowData.colliderMode = UIWindowColliderMode.None;
         windowData.closeModel = UIWindowCloseModel.Destory;
-
     }
 
     public override void InitWindowOnAwake()

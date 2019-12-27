@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
 using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
 using GameSystem.Ui;
+using Newtonsoft.Json;
 using Unity.Mathematics;
 
 
@@ -51,6 +50,10 @@ namespace GameSystem
         }
 
 
+        public static void SetupComponentData(EntityManager entityManager)
+        {
+        }
+
 
         public BiologicalSystem()
         {
@@ -83,6 +86,8 @@ namespace GameSystem
                 _data.Body[i] = body;
 
             }
+            
+            SignalCenter.BiologicalDataChange.Dispatch(_data.Entitys);
         }
 
         public static void SpawnRandomBiological(Transform node)
@@ -233,46 +238,10 @@ namespace GameSystem
             });
 
             _entityManager.AddComponentData(entity,new ExternalProperty());
-
-            
-        }
-
-        /// <summary>
-        /// 获取指定平面坐标上的所有单位
-        /// </summary>
-        /// <param name="units"></param>
-        /// <param name="x"></param>
-        /// <param name="z"></param>
-        public void GetPoint(ref List<HexUnit> units, int x, int z)
-        {
-
-            //for (int i = 0; i < _data.Length; i++)
-            //{
-            //    HexCoordinates coordinates = _data.HexUnit[i].Location.coordinates;
-            //    if (coordinates.X == x && coordinates.Z == z)
-            //        units.Add(_data.HexUnit[i]);
-            //}
         }
 
 
-        /// <summary>
-        /// 根据当前状态获取Biologicals
-        /// </summary>
-        /// <param name="type">本地状态</param>
-        /// <param name="id">本地ID</param>
-        /// <returns>Entity 集合，使用ECS获取所需数据</returns>
-        public List<Entity> GetBiologicalOnLocation(LocationType type, int id)
-        {
-            List<Entity> entities = new List<Entity>();
-            for (int i = 0; i < _data.Length; i++)
-            {
-                //if (_data.Status[i].LocationType == type && _data.Status[i].LocationId == id)
-                //{
-                //    entities.Add(_data.Entitys[i]);
-                //}
-            }
-            return entities;
-        }
+
         /// <summary>
         /// 获取所有生物名字
         /// </summary>
@@ -288,25 +257,6 @@ namespace GameSystem
             return result;
         }
 
-        /// <summary>
-        /// 获取指定ID的信息
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Biological GetBiologicalInfo(int id)
-        {
-            for (int i = 0; i < _data.Length; i++)
-            {
-                //if (id == _data.Biological[i].BiologicalId)
-                //{
-                //    return new Biological();
-                //   / return _data.Biological[i];
-                //}
-            }
-            return new Biological();
-        }
-
-
 
         public Entity GetBiologicalEntity(int id)
         {
@@ -317,16 +267,7 @@ namespace GameSystem
             }
             return new Entity();
         }
-
-        public HexUnit GetUnit(int id)
-        {
-            //for (int i = 0; i < _data.Length; i++)
-            //{
-            //    if (id == _data.Biological[i].BiologicalId)
-            //        return _data.HexUnit[i];
-            //}
-            return new HexUnit();
-        }
+        
 
         public static void CreateBiological(EntityManager entityManager,Entity biologicalEntity,BiologicalData data) 
         {
@@ -373,6 +314,9 @@ namespace GameSystem
                 Lingdong = data.Lingdong,
                 Wuxing = data.Wuxing
             });
+
+            entityManager.AddComponentData(biologicalEntity, JsonConvert.DeserializeObject<StatusInfo>(data.Location));
+            
 
             entityManager.AddComponent(biologicalEntity, ComponentType.Create<BehaviorData>());
             entityManager.SetComponentData(biologicalEntity, new BehaviorData

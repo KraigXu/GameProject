@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
+
 using GameSystem;
 using GameSystem.Ui;
 using Unity.Entities;
@@ -29,14 +29,13 @@ public class RealSceneControl : MonoBehaviour {
     public Canvas messageCanvas;
     public LoadingView loadingViewCom;
 
-
-    public IEnumeratorLoad IeEnumeratorLoad;
+   
 
     public StrategySceneModel SceneModel = StrategySceneModel.Map;
 
     [SerializeField] private GameObjectEntity _biologicalPrefab;
-   
 
+    private IEnumeratorLoad _iLoad;
 
     void Awake()
     {
@@ -46,17 +45,21 @@ public class RealSceneControl : MonoBehaviour {
     void Start()
     {
 
+        _iLoad = gameObject.AddComponent<IEnumeratorLoad>();
+
+
+
 #if UNITY_EDITOR
         Debuger.EnableLog = true;
         GameSceneInit.CurOpeningInfo.TestValue();
 #endif
         GameSceneInit.InitializeWithScene();
 
-        IeEnumeratorLoad.AddIEnumerator(InitMapInfo());
-        IeEnumeratorLoad.AddIEnumerator(InitSystemData());
-        IeEnumeratorLoad.AddIEnumerator(InitModel());
-        IeEnumeratorLoad.AddIEnumerator(InitGameData());
-        IeEnumeratorLoad.AddIEnumerator(WindowSyncOpen());
+        _iLoad.AddIEnumerator(InitMapInfo());
+        _iLoad.AddIEnumerator(InitSystemData());
+        _iLoad.AddIEnumerator(InitModel());
+        _iLoad.AddIEnumerator(InitGameData());
+        _iLoad.AddIEnumerator(WindowSyncOpen());
 
     }
 
@@ -243,7 +246,7 @@ public class RealSceneControl : MonoBehaviour {
     IEnumerator WindowSyncOpen()
     {
         yield return new WaitForFixedUpdate();
-        World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
+       // World.Active.GetOrCreateManager<PlayerMessageUiSystem>().SetupGameObjects();
 
         World.Active.GetOrCreateManager<WorldTimeSystem>().SetupValue(true);
         //World.Active.GetOrCreateManager<MainAssetWindow>

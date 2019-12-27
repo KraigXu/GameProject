@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using AntiquityWorld.StrategyManager;
-using DataAccessObject;
+using GameSystem;
 using GameSystem.Ui;
 using UnityEngine;
 using UnityEngine.EventSystems;

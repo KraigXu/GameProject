@@ -78,8 +78,7 @@ namespace GameSystem.Ui
             windowData.playAnimationModel = UIWindowPlayAnimationModel.Stretching;
             windowData.animationType = UIWindowAnimationType.FadesOut;
         }
-
-
+        
         public override void InitWindowOnAwake()
         {
             _exitBtn.onClick.AddListener(delegate ()
@@ -123,8 +122,6 @@ namespace GameSystem.Ui
                     ChangeLivingAreaInfo();
                 }
             });
-
-
             StatusTog.onValueChanged.AddListener(delegate(bool flag)
             {
                 StatusView.gameObject.SetActive(flag);
@@ -139,7 +136,6 @@ namespace GameSystem.Ui
             {
                 AnnualHistoryView.gameObject.SetActive(flag);
             });
-
             StatusTog.isOn = true;
         }
 
@@ -172,7 +168,6 @@ namespace GameSystem.Ui
         private void ShowPersonDetailedInfo(UiListItem item)
         {
             Entity entity= SystemManager.Get<BiologicalSystem>().GetBiologicalEntity(1);
-
             Biological biological = SystemManager.GetProperty<Biological>(entity);
             PonAvatr.sprite = StrategyAssetManager.GetBiologicalAvatar(biological.AvatarId);
          //   PonName.text = GameStaticData.BiologicalDictionary[biological.BiologicalId] + GameStaticData.BiologicalDictionary[biological.BiologicalId];

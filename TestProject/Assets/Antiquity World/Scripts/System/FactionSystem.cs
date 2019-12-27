@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
+
 using Unity.Entities;
 using UnityEngine;
 
@@ -107,10 +107,16 @@ namespace GameSystem
                 NeutralValue = Random.Range(0, 500),
                 LuckValue = Random.Range(0, 500),
                 PrestigeValue = Random.Range(0, 99999)
-
             });
             GameStaticData.FactionStatics.Add(entity, new FactionStatic(entity,factionData.Id,factionData.Name,factionData.Description));
         }
+
+        /// <summary>
+        /// 增加Faction属性
+        /// </summary>
+        /// <param name="entityManager"></param>
+        /// <param name="factionEntity"></param>
+        /// <param name="targetEntity"></param>
         public static void AddFactionCom(EntityManager entityManager, Entity factionEntity,Entity targetEntity)
         {
             if (entityManager.HasComponent<FactionProperty>(targetEntity) == false)

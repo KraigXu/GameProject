@@ -8,17 +8,13 @@ namespace MapMagic
 	public class LivingAreaPool : ISerializationCallbackReceiver
 	{
 		[System.Serializable]
-		public struct Transition
+		public struct AreaInfo
 		{
 			public Vector3 pos;
 			public Vector3 scale;
 			public Quaternion rotation;
-
-			public Transition (float x, float y, float z) { this.pos = new Vector3(x,y,z); this.scale = new Vector3(1,1,1); this.rotation = Quaternion.identity; }
-			public Transition (Vector3 pos) { this.pos = pos; this.scale = new Vector3(1,1,1); this.rotation = Quaternion.identity; }
-			public Transition (Vector3 pos, Vector3 scale, Quaternion rot) { this.pos = pos; this.scale = scale; this.rotation = rot; }
-
-
+		    public int TextSpeed;      
+            
 
 		}
 
@@ -52,7 +48,7 @@ namespace MapMagic
 			return result;
 		}}
 
-		public Instance Instantiate (Transform prefab, Transition draft, Transform parent=null, Vector3 prefabScale=new Vector3(), Quaternion prefabRotation = new Quaternion())
+		public Instance Instantiate (Transform prefab, AreaInfo draft, Transform parent=null, Vector3 prefabScale=new Vector3(), Quaternion prefabRotation = new Quaternion())
 		{
 			if (prefab == null) return new Instance() { transform=null, x=draft.pos.x, z=draft.pos.z };
 			
@@ -85,10 +81,49 @@ namespace MapMagic
 			if (parent != null)
 			    tfm.parent = parent;
 
-            //Todo LivingAreaValueInit
-		    LivingAreaInfo info= tfm.gameObject.AddComponent<LivingAreaInfo>();
+
+            //string name = "";
+            //string[] _crabofirstName = new string[]{
+            //    "°×","±Ï","±å","²Ì","²Ü","á¯","³£","³µ","³Â","³É" ,"³Ì","³Ø","µË","¶¡","·¶","·½","·®","ãÆ","Äß","ÖÜ",
+            //    "·Ñ","·ë","·û","Ôª","Ô¬","ÔÀ","ÔÆ","Ôø","Õ²","ÕÅ","ÕÂ","ÕÔ","Ö£" ,"ÖÓ","ÖÜ","×Ş","Öì","ñÒ","×¯","×¿"
+            //    ,"¸µ","¸Ê","¸ß","¸ğ","¹¨","¹Å","¹Ø","¹ù","º«","ºÎ" ,"ºØ","ºé","ºî","ºú","»ª","»Æ","»ô","¼§","¼ò","½­"
+            //    ,"½ª","½¯","½ğ","¿µ","¿Â","¿×","Àµ","ÀÉ","ÀÖ","À×" ,"Àè","Àî","Á¬","Á®","Áº","ÁÎ","ÁÖ","Áè","Áõ","Áø"
+            //    ,"Áú","Â¬","Â³","Â½","Â·","ÂÀ","ÂŞ","Âæ","Âí","Ã·" ,"ÃÏ","Äª","Ä¸","ÄÂ","Äß","Äş","Å·","Çø","ÅË","Åí"
+            //    ,"ÆÑ","Æ¤","Æë","Æİ","Ç®","Ç¿","ÇØ","Çğ","Çñ","ÈÄ" ,"ÈÎ","Éò","Ê¢","Ê©","Ê¯","Ê±","Ê·","Ë¾Í½","ËÕ","Ëï"
+            //    ,"Ì·","ÌÀ","ÌÆ","ÌÕ","Ìï","Í¯","Í¿","Íõ","Î£","Î¤" ,"ÎÀ","Îº","ÎÂ","ÎÄ","ÎÌ","Î×","Úù","Îâ","Îé","Îä"
+            //    ,"Ï¯","ÏÄ","Ïô","Ğ»","ĞÁ","ĞÏ","Ğì","Ğí","Ñ¦","ÑÏ" ,"ÑÕ","Ñî","Ò¶","Ò×","Òó","ÓÈ","ÓÚ","Óà","Óá","Óİ"
+            //};
+
+            //string _lastName = "ÕğÄÏÂåèò¼Î¹âè¡äìÎÅÅôÓî±óÍşºº»ğ¿Æ¼¼ÃÎç÷ÒäÁøÖ®ÕÙÌÚ·ÉÄ½ÇàÎÊÀ¼¶ûá°ÔªÏã³õÏÄÅæİÕ°ÁÉºÂüÎÄÀÖÁâ³ÕÉººŞÓñÏ§Ïãº®ĞÂÈáÓïÈØº£°²Ò¹ÈØº­°ØË®ÌÒ×íÀ¶´ºÓïÇÙ´ÓÍ®" +
+            //                   "°ÁÇçÓïÁâ±ÌÍ®ÔªËªÁ¯ÃÎ×Ïº®ÃîÍ®ÂüÒ×ÄÏÁ«×Ï´äÓêº®Ò×ÑÌÈçİæÈôÄÏÑ°ÕæÏşÒàÏòÉºÄ½ÁéÒÔÈïÑ°ÑãÓ³Ò×Ñ©Áø¹Âá°Ğ¦Ëªº£ÔÆÄıÌìÅæÉºº®ÔÆ±ùĞıÍğ¶ù" +
+            //                   "ÂÌÕæÅÎÏşËª±Ì·²ÏÄİÕÂüÏãÈôÑÌ°ëÃÎÑÅÂÌ±ùÀ¶Áé»±Æ½°²Êé´ä´ä·çÏãÇÉ´úÔÆÃÎÂüÓ×´äÓÑÇÉÌıº®ÃÎ°Ø×íÒ×·ÃĞıÒàÓñÁèİæ·Ã»Ü»³ÒàĞ¦À¶´º´ä¾¸°ØÒ¹ÀÙ" +
+            //                   "±ùÏÄÃÎËÉÊéÑ©ÀÖ·ãÄîŞ±¾¸ÑãÑ°´ººŞÉ½´Óº®ÒäÏãÃÙ²¨¾²Âü·²ĞıÒÔÒàÄîÂ¶ÜÆÀÙÇ§Ë§ĞÂ²¨´úÕæĞÂÀÙÑãÓñÀä»Ü×ÏÇ§ÇÙºŞÌì°ÁÜ½ÅÎÉ½»³µû±ùÉ½°Ø´äİæºŞËÉÎÊĞı" +
+            //                   "ÄÏ°×Ò×ÎÊóŞÈçËª°ëÇÛµ¤Õä±ùÍ®Òàº®º®ÑãÁ¯ÔÆÑ°ÎÄÀÖµ¤´äÈá¹ÈÉ½Ö®Ñş±ùÂ¶¶ûÕä¹ÈÑ©ÀÖİæº­İÕº£Á«°ÁÀÙÇà»±Âå¶¬Ò×ÃÎÏ§Ñ©Íğº£Ö®ÈáÏÄÇàÃîİÕ´ºÖñ³ÕÃÎ×ÏÀ¶ÏşÇÉ»Ã°Ø" +
+            //                   "Ôª·ç±ù·ã·ÃÈïÄÏ´ºÜÆÈï·²ÀÙ·²Èá°²ÀÙÌìºÉº¬ÓñÊéÑÅÇÙÊéÑş´ºÑã´Ó°²ÏÄ»±ÄîÇÛ»³Æ¼´úÂü»ÃÉº¹ÈË¿Çï´ä°×Ççº£Â¶´úºÉº¬ÓñÊéÀÙÌı·ÃÇÙÁéÑãÇï´ºÑ©ÇàÀÖÑşº¬ÑÌº­Ë«" +
+            //                   "Æ½µûÑÅÈï°ÁÖ®ÁéŞ±ÂÌ´ºº¬ÀÙÃÎÈØ³õµ¤ÌıÌıÈØÓïÜ½ÏÄÍ®ÁèÑşÒä´ä»ÃÁéÁ¯İÕ×ÏÄÏÒÀÉºÃîÖñ·ÃÑÌÁ¯ÀÙÓ³º®ÓÑÂÌ±ùÆ¼Ï§ËªÁèÏãÜÆÀÙÑã»ÜÓ­ÃÎÔª°Ø´úİæ×ÏÕæÇ§ÇàÁèº®" +
+            //                   "×Ï°²º®°²»³ÈïÇïºÉº­ÑãÒÔÉ½·²Ã·ÅÎÂü´äÍ®¹ÈĞÂÇÉÀä°²Ç§Æ¼±ùÑÌÑÅÓÑÂÌÄÏËÉÊ«ÔÆ·É·ç¼ÄÁéÊéÇÛÓ×ÈØÒÔÀ¶Ğ¦º®Òäº®ÇïÑÌÜÆÇÉË®ÏãÓ³Ö®×í²¨»ÃÁ«Ò¹É½ÜÆ»ÜÏòÍ®Ğ¡ÓñÓ×";
+
+            //name = _crabofirstName[Random.Range(0, _crabofirstName.Length - 1)] + _lastName[Random.Range(0, _lastName.Length - 1)] + _lastName[Random.Range(0, _lastName.Length - 1)];
+
+		    int seed = Mathf.Abs(draft.TextSpeed);
+
+            string firstName = "ÕğÄÏÂåèò¼Î¹âè¡äìÎÅÅôÓî±óÍşºº»ğ¿Æ¼¼ÃÎç÷ÒäÁøÖ®ÕÙÌÚ·ÉÄ½ÇàÎÊÀ¼¶ûá°ÔªÏã³õÏÄÅæİÕ°ÁÉºÂüÎÄÀÖÁâ³ÕÉººŞÓñÏ§Ïãº®ĞÂÈáÓïÈØº£°²Ò¹ÈØº­°ØË®ÌÒ×íÀ¶´ºÓïÇÙ´ÓÍ®" +
+		                      "°ÁÇçÓïÁâ±ÌÍ®ÔªËªÁ¯ÃÎ×Ïº®ÃîÍ®ÂüÒ×ÄÏÁ«×Ï´äÓêº®Ò×ÑÌÈçİæÈôÄÏÑ°ÕæÏşÒàÏòÉºÄ½ÁéÒÔÈïÑ°ÑãÓ³Ò×Ñ©Áø¹Âá°Ğ¦Ëªº£ÔÆÄıÌìÅæÉºº®ÔÆ±ùĞıÍğ¶ù" +
+		                      "ÂÌÕæÅÎÏşËª±Ì·²ÏÄİÕÂüÏãÈôÑÌ°ëÃÎÑÅÂÌ±ùÀ¶Áé»±Æ½°²Êé´ä´ä·çÏãÇÉ´úÔÆÃÎÂüÓ×´äÓÑÇÉÌıº®ÃÎ°Ø×íÒ×·ÃĞıÒàÓñÁèİæ·Ã»Ü»³ÒàĞ¦À¶´º´ä¾¸°ØÒ¹ÀÙ" +
+		                      "±ùÏÄÃÎËÉÊéÑ©ÀÖ·ãÄîŞ±¾¸ÑãÑ°´ººŞÉ½´Óº®ÒäÏãÃÙ²¨¾²Âü·²ĞıÒÔÒàÄîÂ¶ÜÆÀÙÇ§Ë§ĞÂ²¨´úÕæĞÂÀÙÑãÓñÀä»Ü×ÏÇ§ÇÙºŞÌì°ÁÜ½ÅÎÉ½»³µû±ùÉ½°Ø´äİæºŞËÉÎÊĞı" +
+		                      "ÄÏ°×Ò×ÎÊóŞÈçËª°ëÇÛµ¤Õä±ùÍ®Òàº®º®ÑãÁ¯ÔÆÑ°ÎÄÀÖµ¤´äÈá¹ÈÉ½Ö®Ñş±ùÂ¶¶ûÕä¹ÈÑ©ÀÖİæº­İÕº£Á«°ÁÀÙÇà»±Âå¶¬Ò×ÃÎÏ§Ñ©Íğº£Ö®ÈáÏÄÇàÃîİÕ´ºÖñ³ÕÃÎ×ÏÀ¶ÏşÇÉ»Ã°Ø" +
+		                      "Ôª·ç±ù·ã·ÃÈïÄÏ´ºÜÆÈï·²ÀÙ·²Èá°²ÀÙÌìºÉº¬ÓñÊéÑÅÇÙÊéÑş´ºÑã´Ó°²ÏÄ»±ÄîÇÛ»³Æ¼´úÂü»ÃÉº¹ÈË¿Çï´ä°×Ççº£Â¶´úºÉº¬ÓñÊéÀÙÌı·ÃÇÙÁéÑãÇï´ºÑ©ÇàÀÖÑşº¬ÑÌº­Ë«" +
+		                      "Æ½µûÑÅÈï°ÁÖ®ÁéŞ±ÂÌ´ºº¬ÀÙÃÎÈØ³õµ¤ÌıÌıÈØÓïÜ½ÏÄÍ®ÁèÑşÒä´ä»ÃÁéÁ¯İÕ×ÏÄÏÒÀÉºÃîÖñ·ÃÑÌÁ¯ÀÙÓ³º®ÓÑÂÌ±ùÆ¼Ï§ËªÁèÏãÜÆÀÙÑã»ÜÓ­ÃÎÔª°Ø´úİæ×ÏÕæÇ§ÇàÁèº®" +
+		                      "×Ï°²º®°²»³ÈïÇïºÉº­ÑãÒÔÉ½·²Ã·ÅÎÂü´äÍ®¹ÈĞÂÇÉÀä°²Ç§Æ¼±ùÑÌÑÅÓÑÂÌÄÏËÉÊ«ÔÆ·É·ç¼ÄÁéÊéÇÛÓ×ÈØÒÔÀ¶Ğ¦º®Òäº®ÇïÑÌÜÆÇÉË®ÏãÓ³Ö®×í²¨»ÃÁ«Ò¹É½ÜÆ»ÜÏòÍ®Ğ¡ÓñÓ×";
+
+
+		    string name=""+firstName[Random.Range(0, firstName.Length - 1)]+ firstName[Random.Range(0, firstName.Length - 1)]+"³Ç";
+
+            //Todo LivingAreaValueInit  //½âÎö draftĞÅÏ¢
+            LivingAreaInfo info = tfm.gameObject.AddComponent<LivingAreaInfo>();
 		    info.Level = 10;
-		    info.Name = "XXXX";
+		    info.TextSpeed = draft.TextSpeed;
+            info.Name = name;
 		    info.PowerName = "SSSS";
             created++;
 
@@ -168,7 +203,7 @@ namespace MapMagic
 			}
 		}
 
-		public void ClearAllRectBut (Rect rect, Dictionary<Transform, List<Transition>> usedPrefabs) //just to avoid converting transitions dict to hashset
+		public void ClearAllRectBut (Rect rect, Dictionary<Transform, List<AreaInfo>> usedPrefabs) //just to avoid converting transitions dict to hashset
 		{
 			foreach (KeyValuePair<Transform,List<Instance>> kvp in instances)
 			{
@@ -199,7 +234,7 @@ namespace MapMagic
 		}
 
        
-		public IEnumerator RepositionCoroutine (Transform prefab, Rect rect, List<Transition> transitions, Transform parent=null, Transform root=null, int objsPerFrame=100)
+		public IEnumerator RepositionCoroutine (Transform prefab, Rect rect, List<AreaInfo> transitions, Transform parent=null, Transform root=null, int objsPerFrame=100)
 		//objects will be parented to parent, but will be aligned in root cordinates
 		{
 			if (prefab == null) yield break;
@@ -284,7 +319,6 @@ namespace MapMagic
 				{
 					instance.transform.localPosition += root.transform.position;
 				    //instance.transform.gameObject.AddComponent<LineRenderer>();
-                   
 				}
 
 				counter++;
@@ -292,7 +326,7 @@ namespace MapMagic
 			}
 		}
 
-		public void RepositionNow (Transform prefab, Rect rect, List<Transition> transitions, bool regardRotation=false, bool regardScale=false, Transform parent=null)
+		public void RepositionNow (Transform prefab, Rect rect, List<AreaInfo> transitions, bool regardRotation=false, bool regardScale=false, Transform parent=null)
 		{
 			IEnumerator e = RepositionCoroutine(prefab, rect, transitions, parent:parent, objsPerFrame:1000000000);
 			while (e.MoveNext()) { }

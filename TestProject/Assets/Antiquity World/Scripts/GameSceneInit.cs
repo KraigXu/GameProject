@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.IO;
-using DataAccessObject;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 using Unity.Rendering;
 using Unity.Transforms;
-using GameSystem.Ui;
-using Manager;
-using Newtonsoft.Json;
-using AntiquityWorld.StrategyManager;
-using Unity.Collections;
-
 
 namespace GameSystem
 {
@@ -76,9 +67,9 @@ namespace GameSystem
 
         public static OpeningInfo CurOpeningInfo;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void InitializeWithScene()
         {
-
             var entityManager = World.Active.GetOrCreateManager<EntityManager>();
             DistrictArchetype = entityManager.CreateArchetype(typeof(District));
             LivingAreaArchetype = entityManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
@@ -91,6 +82,14 @@ namespace GameSystem
             ArticleArchetype = entityManager.CreateArchetype(typeof(ArticleItem));
             FactionArchetype = entityManager.CreateArchetype(typeof(Faction));
 
+
+            BiologicalSystem.SetupComponentData(entityManager);
+            FamilySystem.SetupComponentData(entityManager);
+            TeamSystem.SetupComponentData(entityManager);
+            CurOpeningInfo= new OpeningInfo();
+            CurOpeningInfo.TestValue();
+
+            Debuger.EnableLog = true;
         }
 
         private static MeshInstanceRenderer GetLookFromPrototype(string protoName)

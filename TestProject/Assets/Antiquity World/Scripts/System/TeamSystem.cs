@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
+
+
 namespace GameSystem
 {
     /// <summary>
@@ -11,12 +12,6 @@ namespace GameSystem
     /// </summary>
     public class TeamSystem : ComponentSystem
     {
-        public class Modeler
-        {
-            public GameObject Model;
-            public int Id;
-        }
-
         struct Data
         {
             public readonly int Length;
@@ -24,21 +19,8 @@ namespace GameSystem
             public ComponentDataArray<Team> Teams;
         }
 
-        [Inject] private Data _data;
-        private int idCounter;
-        private Transform _modelParent;
-
-        public List<Modeler> ModelerArray = new List<Modeler>();
-
-        private Dictionary<int,Entity> _dictionary=new Dictionary<int, Entity>();
-
-      //  private Dictionary<int, TeamBaseInfo> _teamBaseInfos=new Dictionary<int, TeamBaseInfo>();
-
-
-        //public Dictionary<int, TeamBaseInfo> TeamBaseInfos
-        //{
-        //    get { return _teamBaseInfos; }
-        //}
+        [Inject]
+        private Data _data;
 
         public static void SetupData(EntityManager entityManager,Entity entity,TeamData teamData)
         {
@@ -46,48 +28,18 @@ namespace GameSystem
             {
                 TeamBossId = 0,
                 Member = 6,
+                Status = 1,
             });
+
+
+
         }
 
-
-        public int AddModel(GameObject prefab, Vector3 point)
+        public static void SetupComponentData(EntityManager entityManager)
         {
-            if (_modelParent == null)
-            {
-                GameObject modelparentgo=new GameObject("TeamModel");
-                _modelParent = modelparentgo.transform;
-            }
-            GameObject go = GameObject.Instantiate(prefab, point, Quaternion.identity, _modelParent);
-            Modeler modeler = new Modeler();
-            modeler.Id = ++idCounter;
-            modeler.Model = go;
 
-            //modeler.Ai = go.GetComponent<AICharacterControl>();
-
-            ModelerArray.Add(modeler);
-            go.SetActive(false);
-            return modeler.Id;
         }
 
-        public int AddModel(GameObject prefab)
-        {
-            if (_modelParent == null)
-            {
-                GameObject modelparentgo = new GameObject("TeamModel");
-                _modelParent = modelparentgo.transform;
-            }
-
-            GameObject go = GameObject.Instantiate(prefab,Vector3.zero , Quaternion.identity, _modelParent);
-            Modeler modeler = new Modeler();
-            modeler.Id = ++idCounter;
-            modeler.Model = go;
-
-          //  modeler.Ai = go.GetComponent<AICharacterControl>();
-
-            ModelerArray.Add(modeler);
-            go.SetActive(false);
-            return modeler.Id;
-        }
 
         protected override void OnUpdate()
         {
@@ -148,59 +100,6 @@ namespace GameSystem
                 //_data.Biological[i] = biological;
               //  _data.Status[i] = status;
             }
-        }
-
-        public List<Biological> TeamIdRetrunBiological(int biologicalId)
-        {
-            List<Biological> biologicals = new List<Biological>();
-
-            for (int i = 0; i < _data.Length; i++)
-            {
-                if (_data.Teams[i].TeamBossId == biologicalId)
-                {
-                  //  biologicals.Add(_data.Biological[i]);
-                }
-            }
-            return biologicals;
-        }
-
-        public void ModelStatus(int id, bool flag)
-        {
-            for (int i = 0; i < ModelerArray.Count; i++)
-            {
-                if (ModelerArray[i].Id == id)
-                {
-                    if (ModelerArray[i].Model.activeSelf != flag)
-                    {
-                        ModelerArray[i].Model.SetActive(flag);
-                    }
-                    return;
-                }
-            }
-        }
-
-        public void ModelTarget(int id, Vector3 target)
-        {
-            for (int i = 0; i < ModelerArray.Count; i++)
-            {
-                if (ModelerArray[i].Id == id)
-                {
-                    //ModelerArray[i].Ai.SetTarget(target);
-                    return;
-                }
-            }
-        }
-
-        public Vector3 ModelPosition(int id)
-        {
-            for (int i = 0; i < ModelerArray.Count; i++)
-            {
-                if (ModelerArray[i].Id == id)
-                {
-                    return ModelerArray[i].Model.transform.position;
-                }
-            }
-            return Vector3.zero;
         }
     }
 

@@ -71,6 +71,7 @@ namespace GameSystem
 
         public void AddEquipment(Entity entity, string data)
         {
+            
             if (string.IsNullOrEmpty(data))
             {
                 _entityManager.AddComponentData(entity, new Equipment

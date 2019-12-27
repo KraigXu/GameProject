@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAccessObject;
+
 using Unity.Entities;
 
 namespace GameSystem

@@ -63,7 +63,6 @@ public class MouseInput : MonoBehaviour
         }
         else
         {
-            Debug.Log("TouchPoint为NULL");
             touchPoint=Vector3.zero;
             touchObject = null;
         }

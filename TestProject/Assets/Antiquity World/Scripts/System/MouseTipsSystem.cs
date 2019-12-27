@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using DataAccessObject;
+
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -89,7 +89,6 @@ namespace GameSystem
                 //}
 
             }
-
             UICenterMasterManager.Instance.ShowWindow(WindowID.TipsWindow, showWindowData);
         }
     }

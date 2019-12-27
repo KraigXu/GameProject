@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace DataAccessObject
+namespace GameSystem
 {
     //-------------------------------------------------建表语句--------------------------------Start
     public static class Tables

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DataAccessObject;
+
 using GameSystem;
 using GameSystem.Skill;
 using Unity.Entities;
@@ -37,7 +37,8 @@ public sealed class SkillSystem
         Instance.RegisterTriggerFactory("AppendSpeed", new SkillTriggerFactory<AppendSpeedTrigger>());
         Instance.RegisterTriggerFactory("AppendHealth", new SkillTriggerFactory<AppendHealthTrigger>());
 
-        ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
+        Debug.Log("暂时屏蔽");
+        //ParseScript(Application.streamingAssetsPath + "/SkillScript.txt");
     }
     private static SkillSystem _instance;
 
@@ -204,6 +205,7 @@ public sealed class SkillSystem
 
     public SkillTrigger CreateTrigger(string type, string args)
     {
+        
         Type t = DicSkillTriggerRegister[type];
         object o = Activator.CreateInstance(t);  //创建实例
         System.Reflection.MethodInfo mi = t.GetMethod("Init");

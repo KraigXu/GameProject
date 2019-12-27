@@ -19,7 +19,6 @@ public class LocalNavMeshBuilder : MonoBehaviour
     NavMeshDataInstance m_Instance;
     List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
 
-
     void Awake()
     {
         if (m_Tracked == null)

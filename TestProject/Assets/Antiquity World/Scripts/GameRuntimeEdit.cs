@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Reflection;
-using DataAccessObject;
+
 using GameSystem;
 using Newtonsoft.Json;
 using Random = UnityEngine.Random;
@@ -17,7 +17,7 @@ public class GameRuntimeEdit : MonoBehaviour
     private float f_Fps;
 
     public GameObject Target;
-
+    public bool IsEdit = false;
 
     void Awake()
     {
@@ -35,6 +35,14 @@ public class GameRuntimeEdit : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.BackQuote))
+        {
+            IsEdit = !IsEdit;
+        }
+
+        if(IsEdit==false)
+            return;
+
         if (Input.GetKeyUp(KeyCode.Alpha0))
         {
             //---------------- 获取目标状态

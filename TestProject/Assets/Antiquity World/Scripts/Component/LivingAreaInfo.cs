@@ -9,4 +9,5 @@ public class LivingAreaInfo : MonoBehaviour
     public string Name;
     public string PowerName;
     public int Level;
+    public int TextSpeed;
 }

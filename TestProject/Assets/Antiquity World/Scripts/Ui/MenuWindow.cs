@@ -1,10 +1,4 @@
-﻿using DataAccessObject;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Entities;
-using UnityEngine;
-using UnityEngine.UI;
-
+﻿
 namespace GameSystem.Ui
 {
 

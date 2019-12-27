@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using AntiquityWorld.StrategyManager;
-using DataAccessObject;
+
 using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;

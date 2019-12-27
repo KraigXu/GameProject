@@ -23,9 +23,7 @@ namespace GameSystem.Ui
 
         TipsWindow,
         StrategyTeamTipsWindow,      
-
-
-
+        
         RelationMapWindow,
         StrategyWindow,
         RestWindow,
