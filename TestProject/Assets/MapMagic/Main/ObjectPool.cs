@@ -189,10 +189,6 @@ namespace MapMagic
 				instances.Remove(prefabsToRemove[i]);
 		}
 
-
-
-
-
 		public IEnumerator RepositionCoroutine (Transform prefab, Rect rect, List<Transition> transitions, Transform parent=null, Transform root=null, int objsPerFrame=100)
 		//objects will be parented to parent, but will be aligned in root cordinates
 		{
@@ -325,7 +321,6 @@ namespace MapMagic
 
 					for (int j=0; j<listCount; j++)
 						instanceHolder.list[j] = list[j];
-					
 					i++;
 				}
 			}

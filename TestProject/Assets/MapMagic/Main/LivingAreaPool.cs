@@ -14,8 +14,6 @@ namespace MapMagic
 			public Vector3 scale;
 			public Quaternion rotation;
 		    public int TextSpeed;      
-            
-
 		}
 
 		[System.Serializable]
