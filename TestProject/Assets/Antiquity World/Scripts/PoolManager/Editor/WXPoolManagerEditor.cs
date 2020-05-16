@@ -3,16 +3,17 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Forge3D;
 
-[CustomEditor(typeof(WXPoolManager))]
+[CustomEditor(typeof(F3DPoolManager))]
 [CanEditMultipleObjects()]
 [Serializable]
 public class F3DPoolManagerEditor : Editor
 {
-    [MenuItem("Antiquity World/Pool Manager")]
+    [MenuItem("FORGE3D/Pool Manager")]
     public static void OpenPoolManager()
     {
-        WXPoolManager manager = GameObject.FindObjectOfType<WXPoolManager>();
+        F3DPoolManager manager = GameObject.FindObjectOfType<F3DPoolManager>();
         if (manager != null)
         {
             Selection.activeGameObject = manager.gameObject;
@@ -20,15 +21,14 @@ public class F3DPoolManagerEditor : Editor
         else
         {
             GameObject newManager = new GameObject("PoolManager");
-            newManager.AddComponent<WXPoolManager>();
+            newManager.AddComponent<F3DPoolManager>();
             Selection.activeGameObject = newManager;
         }
     }
 
-    WXPoolManager menu; // Menu script that we have to attach somewhere 
-    List<WXPoolContainer> pools = new List<WXPoolContainer>(); //our local pools.  
-    public Dictionary<string, WXPoolContainer> poolsDict = new Dictionary<string, WXPoolContainer>(); //dicti 
-    [SerializeField]
+    F3DPoolManager menu; // Menu script that we have to attach somewhere 
+    List<F3DPoolContainer> pools = new List<F3DPoolContainer>(); //our local pools.  
+    public Dictionary<string, F3DPoolContainer> poolsDict = new Dictionary<string, F3DPoolContainer>(); //dicti 
     public ScriptableObject database;
     private string databaseName;
     public string[] poolNames = new string[0];
@@ -50,15 +50,15 @@ public class F3DPoolManagerEditor : Editor
     bool unClickedTemplates = false;
 
     string lastLoadedDatabaseName = "";
-    // Assets/Antiquity World/Resources/PoolManagerCache/PoolDefaultData.asset failed.
-    private string assetPath = "Assets/Antiquity World/Resources/PoolManagerCache/";
+
+    private string assetPath = "Assets/FORGE3D/Resources/F3DPoolManagerCache/";
 
     /// <summary>
     /// Update info and data
     /// </summary>
     void OnEnable()
     {
-        menu = (WXPoolManager)target;
+        menu = (F3DPoolManager)target;
         databaseName = menu.databaseName;
         index = menu.selectedItem;
         haveToShow = menu.haveToShowArr;
@@ -72,7 +72,7 @@ public class F3DPoolManagerEditor : Editor
         if (Application.isPlaying)
             return;
         pools.Clear();
-        WXPoolManagerDB myManager = database as WXPoolManagerDB;
+        F3DPoolManagerDB myManager = database as F3DPoolManagerDB;
         if (myManager != null)
         {
             databaseName = myManager.namer;
@@ -81,7 +81,7 @@ public class F3DPoolManagerEditor : Editor
             {
                 string[] poolNamesTemp = new string[myManager.pools.Count];
                 int n = 0;
-                foreach (WXPoolContainer cont in myManager.pools)
+                foreach (F3DPoolContainer cont in myManager.pools)
                 {
                     pools.Add(cont);
                     poolNamesTemp[n] = cont.poolName;
@@ -99,10 +99,10 @@ public class F3DPoolManagerEditor : Editor
     {
         if (Application.isPlaying)
             return;
-        WXPoolManagerDB newManager = ScriptableObject.CreateInstance<WXPoolManagerDB>();
+        F3DPoolManagerDB newManager = ScriptableObject.CreateInstance<F3DPoolManagerDB>();
         newManager.pools = pools;
         if (databaseName == "")
-            databaseName = "PoolDefaultData";
+            databaseName = "DefaultDatabase";
         if (lastLoadedDatabaseName != "")
         {
             if (lastLoadedDatabaseName != databaseName)
@@ -142,7 +142,7 @@ public class F3DPoolManagerEditor : Editor
                 }
             }
         }
-        WXPoolContainer newCont = new WXPoolContainer();
+        F3DPoolContainer newCont = new F3DPoolContainer();
         newCont.poolName = newName + addingPrefix;
         currentPoolName = newName + addingPrefix;
         pools.Add(newCont);
@@ -174,8 +174,8 @@ public class F3DPoolManagerEditor : Editor
     {
         if (Application.isPlaying)
             return;
-        WXPoolManagerDB newManager = ScriptableObject.CreateInstance<WXPoolManagerDB>();
-        newManager.pools = new List<WXPoolContainer>();
+        F3DPoolManagerDB newManager = ScriptableObject.CreateInstance<F3DPoolManagerDB>();
+        newManager.pools = new List<F3DPoolContainer>();
         string namer = currentDatabaseName;
         if (namer == "")
         {
@@ -190,7 +190,7 @@ public class F3DPoolManagerEditor : Editor
             newManager.namer = databaseName;
             AssetDatabase.CreateAsset(newManager, assetPath + databaseName + ".asset");
             AssetDatabase.SaveAssets();
-            pools = new List<WXPoolContainer>();
+            pools = new List<F3DPoolContainer>();
             database = newManager;
             LoadPools();
         }
@@ -235,7 +235,7 @@ public class F3DPoolManagerEditor : Editor
             newManager.namer = databaseName;
             AssetDatabase.CreateAsset(newManager, assetPath + databaseName + ".asset");
             AssetDatabase.SaveAssets();
-            pools = new List<WXPoolContainer>();
+            pools = new List<F3DPoolContainer>();
             database = newManager;
             LoadPools();
         }
@@ -260,7 +260,7 @@ public class F3DPoolManagerEditor : Editor
     /// </summary>
     void LoadDatabase()
     {
-        WXPoolManagerDB newManager = Resources.Load("PoolManagerCache/" + databaseName) as WXPoolManagerDB;
+        F3DPoolManagerDB newManager = Resources.Load("F3DPoolManagerCache/" + databaseName) as F3DPoolManagerDB;
         if (newManager != null)
         {
             database = newManager;
@@ -975,7 +975,7 @@ public class F3DPoolManagerEditor : Editor
     /// Checking inputed data of local pools
     /// </summary>
     /// <param name="pool">Selected pool</param>
-    void CheckForArraysData(WXPoolContainer pool)
+    void CheckForArraysData(F3DPoolContainer pool)
     {
         int i;
 
@@ -1035,7 +1035,7 @@ public class F3DPoolManagerEditor : Editor
     /// Checking length of pool's arrays
     /// </summary>
     /// <param name="pool">Selected pool</param>
-    void CheckForArraysLength(WXPoolContainer pool)
+    void CheckForArraysLength(F3DPoolContainer pool)
     {
         int i;
         if (pool.templates.Length != pool.poolLength.Length)
@@ -1084,12 +1084,12 @@ public class F3DPoolManagerEditor : Editor
     /// </summary>
     /// <param name="pool">Selected pool</param>
     /// <param name="count">New count</param>
-    void SetItemsCount(WXPoolContainer pool, int count)
+    void SetItemsCount(F3DPoolContainer pool, int count)
     {
         int i;
         if (pool == null)
         {
-            pool = new WXPoolContainer();
+            pool = new F3DPoolContainer();
         }
         Transform[] newTemplates = new Transform[count];
         for (i = 0; i < count; i++)
