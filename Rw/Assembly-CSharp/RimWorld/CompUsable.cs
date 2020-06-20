@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Verse;
+using Verse.AI;
+
+namespace RimWorld
+{
+	// Token: 0x02000D76 RID: 3446
+	public class CompUsable : ThingComp
+	{
+		// Token: 0x17000EF4 RID: 3828
+		// (get) Token: 0x06005403 RID: 21507 RVA: 0x001C0E19 File Offset: 0x001BF019
+		public CompProperties_Usable Props
+		{
+			get
+			{
+				return (CompProperties_Usable)this.props;
+			}
+		}
+
+		// Token: 0x06005404 RID: 21508 RVA: 0x001C0E26 File Offset: 0x001BF026
+		protected virtual string FloatMenuOptionLabel(Pawn pawn)
+		{
+			return this.Props.useLabel;
+		}
+
+		// Token: 0x06005405 RID: 21509 RVA: 0x001C0E33 File Offset: 0x001BF033
+		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn myPawn)
+		{
+			string text;
+			if (!this.CanBeUsedBy(myPawn, out text))
+			{
+				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + ((text != null) ? (" (" + text + ")") : ""), null, MenuOptionPriority.Default, null, null, 0f, null, null);
+			}
+			else if (!myPawn.CanReach(this.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+			{
+				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+			}
+			else if (!myPawn.CanReserve(this.parent, 1, -1, null, false))
+			{
+				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "Reserved".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+			}
+			else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+			{
+				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "Incapable".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+			}
+			else
+			{
+				FloatMenuOption floatMenuOption = new FloatMenuOption(this.FloatMenuOptionLabel(myPawn), delegate
+				{
+					if (myPawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
+					{
+						using (IEnumerator<CompUseEffect> enumerator = this.parent.GetComps<CompUseEffect>().GetEnumerator())
+						{
+							while (enumerator.MoveNext())
+							{
+								if (enumerator.Current.SelectedUseOption(myPawn))
+								{
+									return;
+								}
+							}
+						}
+						this.TryStartUseJob(myPawn, LocalTargetInfo.Invalid);
+					}
+				}, MenuOptionPriority.Default, null, null, 0f, null, null);
+				yield return floatMenuOption;
+			}
+			yield break;
+		}
+
+		// Token: 0x06005406 RID: 21510 RVA: 0x001C0E4C File Offset: 0x001BF04C
+		public virtual void TryStartUseJob(Pawn pawn, LocalTargetInfo extraTarget)
+		{
+			CompUsable.<>c__DisplayClass4_0 <>c__DisplayClass4_ = new CompUsable.<>c__DisplayClass4_0();
+			<>c__DisplayClass4_.extraTarget = extraTarget;
+			<>c__DisplayClass4_.<>4__this = this;
+			<>c__DisplayClass4_.pawn = pawn;
+			if (!<>c__DisplayClass4_.pawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
+			{
+				return;
+			}
+			string text;
+			if (!this.CanBeUsedBy(<>c__DisplayClass4_.pawn, out text))
+			{
+				return;
+			}
+			StringBuilder stringBuilder = new StringBuilder();
+			foreach (CompUseEffect compUseEffect in this.parent.GetComps<CompUseEffect>())
+			{
+				TaggedString taggedString = compUseEffect.ConfirmMessage(<>c__DisplayClass4_.pawn);
+				if (!taggedString.NullOrEmpty())
+				{
+					if (stringBuilder.Length != 0)
+					{
+						stringBuilder.AppendLine();
+					}
+					stringBuilder.AppendTagged(taggedString);
+				}
+			}
+			string str = stringBuilder.ToString();
+			if (str.NullOrEmpty())
+			{
+				<>c__DisplayClass4_.<TryStartUseJob>g__StartJob|0();
+				return;
+			}
+			Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(str, delegate
+			{
+				Job job = <>c__DisplayClass4_.extraTarget.IsValid ? JobMaker.MakeJob(<>c__DisplayClass4_.<>4__this.Props.useJob, <>c__DisplayClass4_.<>4__this.parent, <>c__DisplayClass4_.extraTarget) : JobMaker.MakeJob(<>c__DisplayClass4_.<>4__this.Props.useJob, <>c__DisplayClass4_.<>4__this.parent);
+				<>c__DisplayClass4_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+			}, false, null));
+		}
+
+		// Token: 0x06005407 RID: 21511 RVA: 0x001C0F54 File Offset: 0x001BF154
+		public void UsedBy(Pawn p)
+		{
+			string text;
+			if (!this.CanBeUsedBy(p, out text))
+			{
+				return;
+			}
+			foreach (CompUseEffect compUseEffect in from x in this.parent.GetComps<CompUseEffect>()
+			orderby x.OrderPriority descending
+			select x)
+			{
+				try
+				{
+					compUseEffect.DoEffect(p);
+				}
+				catch (Exception arg)
+				{
+					Log.Error("Error in CompUseEffect: " + arg, false);
+				}
+			}
+		}
+
+		// Token: 0x06005408 RID: 21512 RVA: 0x001C0FF8 File Offset: 0x001BF1F8
+		private bool CanBeUsedBy(Pawn p, out string failReason)
+		{
+			List<ThingComp> allComps = this.parent.AllComps;
+			for (int i = 0; i < allComps.Count; i++)
+			{
+				CompUseEffect compUseEffect = allComps[i] as CompUseEffect;
+				if (compUseEffect != null && !compUseEffect.CanBeUsedBy(p, out failReason))
+				{
+					return false;
+				}
+			}
+			failReason = null;
+			return true;
+		}
+	}
+}

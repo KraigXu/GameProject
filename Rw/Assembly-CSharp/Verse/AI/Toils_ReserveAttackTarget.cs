@@ -1,0 +1,26 @@
+﻿using System;
+
+namespace Verse.AI
+{
+	// Token: 0x02000537 RID: 1335
+	public static class Toils_ReserveAttackTarget
+	{
+		// Token: 0x0600263C RID: 9788 RVA: 0x000E1ACC File Offset: 0x000DFCCC
+		public static Toil TryReserve(TargetIndex ind)
+		{
+			Toil toil = new Toil();
+			toil.initAction = delegate
+			{
+				Pawn actor = toil.actor;
+				IAttackTarget attackTarget = actor.CurJob.GetTarget(ind).Thing as IAttackTarget;
+				if (attackTarget != null)
+				{
+					actor.Map.attackTargetReservationManager.Reserve(actor, toil.actor.CurJob, attackTarget);
+				}
+			};
+			toil.defaultCompleteMode = ToilCompleteMode.Instant;
+			toil.atomicWithPrevious = true;
+			return toil;
+		}
+	}
+}
