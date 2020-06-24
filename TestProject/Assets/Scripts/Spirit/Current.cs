@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace Spirit
 		private static Root _root;
 
 		private static ProgramState _programState;
+
+		private static World _creatingWorldInt;
 
 		public static Root Root
 		{
@@ -42,6 +45,17 @@ namespace Spirit
 			set
 			{
 				Current._programState = value;
+			}
+		}
+		public static World CreatingWorld
+		{
+			get
+			{
+				return Current._creatingWorldInt;
+			}
+			set
+			{
+				Current._creatingWorldInt = value;
 			}
 		}
 

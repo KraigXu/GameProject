@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 using Verse.Noise;
+using Spirit;
 
 namespace RimWorld.Planet
 {
 	// Token: 0x02001205 RID: 4613
 	public sealed class World : IThingHolder, IExposable, IIncidentTarget, ILoadReferenceable
 	{
-		// Token: 0x170011DD RID: 4573
-		// (get) Token: 0x06006AA9 RID: 27305 RVA: 0x00253215 File Offset: 0x00251415
+		
 		public float PlanetCoverage
 		{
 			get

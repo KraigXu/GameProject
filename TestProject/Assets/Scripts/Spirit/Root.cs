@@ -22,7 +22,7 @@ namespace Spirit
 		//public UIRoot uiRoot;
 
 
-		protected virtual void Start()
+		public virtual void Start()
         {
 			//try
 			//{
@@ -74,7 +74,7 @@ namespace Spirit
 			//	Log.Error("Critical error in root Start(): " + arg, false);
 			//}
 		}
-		protected virtual void Update()
+		public virtual void Update()
 		{
 			try
 			{

@@ -5,15 +5,50 @@ using System.Text;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using Spirit;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200129E RID: 4766
+
 	[StaticConstructorOnStartup]
 	public class WorldRoutePlanner
 	{
-		// Token: 0x170012FC RID: 4860
-		// (get) Token: 0x06007057 RID: 28759 RVA: 0x00272BF7 File Offset: 0x00270DF7
+
+	
+		private bool active;
+
+
+		private CaravanTicksPerMoveUtility.CaravanInfo? caravanInfoFromFormCaravanDialog;
+
+		private Dialog_FormCaravan currentFormCaravanDialog;
+
+		private List<WorldPath> paths = new List<WorldPath>();
+
+		private List<int> cachedTicksToWaypoint = new List<int>();
+
+
+		public List<RoutePlannerWaypoint> waypoints = new List<RoutePlannerWaypoint>();
+
+
+		private bool cantRemoveFirstWaypoint;
+
+		private const int MaxCount = 25;
+
+		private static readonly Texture2D ButtonTex = ContentFinder<Texture2D>.Get("UI/Misc/WorldRoutePlanner", true);
+
+
+		private static readonly Texture2D MouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/WaypointMouseAttachment", true);
+
+
+		private static readonly Vector2 BottomWindowSize = new Vector2(500f, 95f);
+
+		private static readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
+
+		private const float BottomWindowBotMargin = 45f;
+
+		private const float BottomWindowEntryExtraBotMargin = 22f;
+
+
 		public bool Active
 		{
 			get
@@ -22,8 +57,6 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012FD RID: 4861
-		// (get) Token: 0x06007058 RID: 28760 RVA: 0x00272BFF File Offset: 0x00270DFF
 		public bool FormingCaravan
 		{
 			get
@@ -32,8 +65,6 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012FE RID: 4862
-		// (get) Token: 0x06007059 RID: 28761 RVA: 0x00272C14 File Offset: 0x00270E14
 		private bool ShouldStop
 		{
 			get
@@ -42,8 +73,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012FF RID: 4863
-		// (get) Token: 0x0600705A RID: 28762 RVA: 0x00272C40 File Offset: 0x00270E40
+
 		private int CaravanTicksPerMove
 		{
 			get
@@ -57,8 +87,6 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001300 RID: 4864
-		// (get) Token: 0x0600705B RID: 28763 RVA: 0x00272C84 File Offset: 0x00270E84
 		private CaravanTicksPerMoveUtility.CaravanInfo? CaravanInfo
 		{
 			get
@@ -508,46 +536,6 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x0400450F RID: 17679
-		private bool active;
 
-		// Token: 0x04004510 RID: 17680
-		private CaravanTicksPerMoveUtility.CaravanInfo? caravanInfoFromFormCaravanDialog;
-
-		// Token: 0x04004511 RID: 17681
-		private Dialog_FormCaravan currentFormCaravanDialog;
-
-		// Token: 0x04004512 RID: 17682
-		private List<WorldPath> paths = new List<WorldPath>();
-
-		// Token: 0x04004513 RID: 17683
-		private List<int> cachedTicksToWaypoint = new List<int>();
-
-		// Token: 0x04004514 RID: 17684
-		public List<RoutePlannerWaypoint> waypoints = new List<RoutePlannerWaypoint>();
-
-		// Token: 0x04004515 RID: 17685
-		private bool cantRemoveFirstWaypoint;
-
-		// Token: 0x04004516 RID: 17686
-		private const int MaxCount = 25;
-
-		// Token: 0x04004517 RID: 17687
-		private static readonly Texture2D ButtonTex = ContentFinder<Texture2D>.Get("UI/Misc/WorldRoutePlanner", true);
-
-		// Token: 0x04004518 RID: 17688
-		private static readonly Texture2D MouseAttachment = ContentFinder<Texture2D>.Get("UI/Overlays/WaypointMouseAttachment", true);
-
-		// Token: 0x04004519 RID: 17689
-		private static readonly Vector2 BottomWindowSize = new Vector2(500f, 95f);
-
-		// Token: 0x0400451A RID: 17690
-		private static readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
-
-		// Token: 0x0400451B RID: 17691
-		private const float BottomWindowBotMargin = 45f;
-
-		// Token: 0x0400451C RID: 17692
-		private const float BottomWindowEntryExtraBotMargin = 22f;
 	}
 }

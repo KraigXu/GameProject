@@ -6,17 +6,14 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001233 RID: 4659
 	public static class CaravanExitMapUtility
 	{
-		// Token: 0x06006C6B RID: 27755 RVA: 0x0025CB1C File Offset: 0x0025AD1C
 		public static Caravan ExitMapAndCreateCaravan(IEnumerable<Pawn> pawns, Faction faction, int exitFromTile, Direction8Way dir, int destinationTile, bool sendMessage = true)
 		{
 			int directionTile = CaravanExitMapUtility.FindRandomStartingTileBasedOnExitDir(exitFromTile, dir);
 			return CaravanExitMapUtility.ExitMapAndCreateCaravan(pawns, faction, exitFromTile, directionTile, destinationTile, sendMessage);
 		}
 
-		// Token: 0x06006C6C RID: 27756 RVA: 0x0025CB40 File Offset: 0x0025AD40
 		public static Caravan ExitMapAndCreateCaravan(IEnumerable<Pawn> pawns, Faction faction, int exitFromTile, int directionTile, int destinationTile, bool sendMessage = true)
 		{
 			if (!GenWorldClosest.TryFindClosestPassableTile(exitFromTile, out exitFromTile))

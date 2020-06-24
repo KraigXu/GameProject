@@ -6,12 +6,10 @@ using Spirit;
 
 namespace Heroic
 {
-    // Token: 0x02001252 RID: 4690
     [StaticConstructorOnStartup]
     public class MapParent : WorldObject, IThingHolder
     {
-        // Token: 0x17001243 RID: 4675
-        // (get) Token: 0x06006D5D RID: 27997 RVA: 0x0026454E File Offset: 0x0026274E
+
         public bool HasMap
         {
             get
