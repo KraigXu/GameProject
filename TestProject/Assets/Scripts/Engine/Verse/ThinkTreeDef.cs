@@ -4,10 +4,9 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x020000F8 RID: 248
 	public class ThinkTreeDef : Def
 	{
-		// Token: 0x060006DE RID: 1758 RVA: 0x0001FAE4 File Offset: 0x0001DCE4
+
 		public override void ResolveReferences()
 		{
 			this.thinkRoot.ResolveSubnodesAndRecur();
@@ -19,13 +18,9 @@ namespace Verse
 			this.ResolveParentNodes(this.thinkRoot);
 		}
 
-		// Token: 0x060006DF RID: 1759 RVA: 0x0001FB60 File Offset: 0x0001DD60
+
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
-			{
-				yield return text;
-			}
 			IEnumerator<string> enumerator = null;
 			HashSet<int> usedKeys = new HashSet<int>();
 			HashSet<ThinkNode> instances = new HashSet<ThinkNode>();
@@ -62,10 +57,8 @@ namespace Verse
 					usedKeys.Add(key);
 				}
 				instances.Add(node);
-				node = null;
+				
 			}
-			IEnumerator<ThinkNode> enumerator2 = null;
-			yield break;
 			yield break;
 		}
 

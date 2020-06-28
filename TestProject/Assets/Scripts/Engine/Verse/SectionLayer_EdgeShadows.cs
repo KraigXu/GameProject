@@ -16,13 +16,11 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B85 RID: 2949 RVA: 0x0003F2E0 File Offset: 0x0003D4E0
 		public SectionLayer_EdgeShadows(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.Buildings;
 		}
 
-		// Token: 0x06000B86 RID: 2950 RVA: 0x0003F2F0 File Offset: 0x0003D4F0
 		public override void Regenerate()
 		{
 			Building[] innerArray = base.Map.edificeGrid.InnerArray;
@@ -38,8 +36,7 @@ namespace Verse
 			bool[] array2 = new bool[4];
 			bool[] array3 = new bool[4];
 			CellIndices cellIndices = base.Map.cellIndices;
-			Action<int> <>9__0;
-			Action <>9__1;
+
 			for (int i = cellRect.minX; i <= cellRect.maxX; i++)
 			{
 				for (int j = cellRect.minZ; j <= cellRect.maxZ; j++)
@@ -111,32 +108,25 @@ namespace Verse
 							}
 						}
 						Action<int> action;
-						if ((action = <>9__0) == null)
+						action = delegate (int idx)
 						{
-							action = (<>9__0 = delegate(int idx)
-							{
-								sm.tris.Add(sm.verts.Count - 2);
-								sm.tris.Add(idx);
-								sm.tris.Add(sm.verts.Count - 1);
-								sm.tris.Add(sm.verts.Count - 1);
-								sm.tris.Add(idx);
-								sm.tris.Add(idx + 1);
-							});
-						}
+							sm.tris.Add(sm.verts.Count - 2);
+							sm.tris.Add(idx);
+							sm.tris.Add(sm.verts.Count - 1);
+							sm.tris.Add(sm.verts.Count - 1);
+							sm.tris.Add(idx);
+							sm.tris.Add(idx + 1);
+						};
 						Action<int> action2 = action;
-						Action action3;
-						if ((action3 = <>9__1) == null)
+						Action action3 = delegate
 						{
-							action3 = (<>9__1 = delegate
-							{
-								sm.colors.Add(SectionLayer_EdgeShadows.Shadowed);
-								sm.colors.Add(SectionLayer_EdgeShadows.Lit);
-								sm.colors.Add(SectionLayer_EdgeShadows.Lit);
-								sm.tris.Add(sm.verts.Count - 3);
-								sm.tris.Add(sm.verts.Count - 2);
-								sm.tris.Add(sm.verts.Count - 1);
-							});
-						}
+							sm.colors.Add(SectionLayer_EdgeShadows.Shadowed);
+							sm.colors.Add(SectionLayer_EdgeShadows.Lit);
+							sm.colors.Add(SectionLayer_EdgeShadows.Lit);
+							sm.tris.Add(sm.verts.Count - 3);
+							sm.tris.Add(sm.verts.Count - 2);
+							sm.tris.Add(sm.verts.Count - 1);
+						};
 						Action action4 = action3;
 						int count2 = sm.verts.Count;
 						if (array[0])

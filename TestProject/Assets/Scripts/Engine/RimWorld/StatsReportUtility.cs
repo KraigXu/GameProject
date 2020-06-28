@@ -134,12 +134,7 @@ namespace RimWorld
 			{
 				StatRequest statRequest = StatRequest.For(eDef, stuff, QualityCategory.Normal);
 				IEnumerable<StatDef> allDefs = DefDatabase<StatDef>.AllDefs;
-				Func<StatDef, bool> predicate;
-				Func<StatDef, bool> <>9__0;
-				if ((predicate = <>9__0) == null)
-				{
-					predicate = (<>9__0 = ((StatDef st) => st.Worker.ShouldShowFor(statRequest)));
-				}
+				Func<StatDef, bool> predicate= st=> st.Worker.ShouldShowFor(statRequest);
 				foreach (StatDef statDef in allDefs.Where(predicate))
 				{
 					yield return new StatDrawEntry(statDef.category, statDef, eDef.GetStatValueAbstract(statDef, stuff), StatRequest.For(eDef, stuff, QualityCategory.Normal), ToStringNumberSense.Undefined, null, false);
@@ -170,12 +165,8 @@ namespace RimWorld
 			yield return StatsReportUtility.DescriptionEntry(def);
 			StatRequest statRequest = StatRequest.For(def);
 			IEnumerable<StatDef> allDefs = DefDatabase<StatDef>.AllDefs;
-			Func<StatDef, bool> <>9__0;
-			Func<StatDef, bool> predicate;
-			if ((predicate = <>9__0) == null)
-			{
-				predicate = (<>9__0 = ((StatDef st) => st.Worker.ShouldShowFor(statRequest)));
-			}
+			Func<StatDef, bool> predicate=st=> st.Worker.ShouldShowFor(statRequest);
+
 			foreach (StatDef statDef in allDefs.Where(predicate))
 			{
 				yield return new StatDrawEntry(statDef.category, statDef, def.GetStatValueAbstract(statDef), StatRequest.For(def), ToStringNumberSense.Undefined, null, false);
@@ -195,12 +186,8 @@ namespace RimWorld
 				yield return statDrawEntry;
 			}
 			IEnumerable<StatDef> allDefs = DefDatabase<StatDef>.AllDefs;
-			Func<StatDef, bool> <>9__0;
-			Func<StatDef, bool> predicate;
-			if ((predicate = <>9__0) == null)
-			{
-				predicate = (<>9__0 = ((StatDef st) => st.Worker.ShouldShowFor(StatRequest.For(thing))));
-			}
+			Func<StatDef, bool> predicate= st => st.Worker.ShouldShowFor(StatRequest.For(thing));
+
 			foreach (StatDef statDef in allDefs.Where(predicate))
 			{
 				if (!statDef.Worker.IsDisabledFor(thing))

@@ -1068,10 +1068,7 @@ namespace Verse
 		// Token: 0x060006C9 RID: 1737 RVA: 0x0001F744 File Offset: 0x0001D944
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.label.NullOrEmpty())
 			{
@@ -1108,7 +1105,7 @@ namespace Verse
 						}
 					}
 				}
-				List<StatModifier>.Enumerator enumerator2 = default(List<StatModifier>.Enumerator);
+				
 			}
 			if (!BeautyUtility.BeautyRelevant(this.category) && this.StatBaseDefined(StatDefOf.Beauty))
 			{
@@ -1203,7 +1200,7 @@ namespace Verse
 						}
 					}
 				}
-				List<DamageMultiplier>.Enumerator enumerator4 = default(List<DamageMultiplier>.Enumerator);
+			
 			}
 			if (this.Fillage == FillCategory.Full && !this.IsEdifice())
 			{
@@ -1336,26 +1333,26 @@ namespace Verse
 			}
 			if (this.race != null && this.tools != null)
 			{
-				ThingDef.<>c__DisplayClass269_3 <>c__DisplayClass269_3 = new ThingDef.<>c__DisplayClass269_3();
-				<>c__DisplayClass269_3.<>4__this = this;
-				<>c__DisplayClass269_3.i = 0;
-				while (<>c__DisplayClass269_3.i < this.tools.Count)
-				{
-					if (this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup != null && !this.race.body.AllParts.Any((BodyPartRecord part) => part.groups.Contains(<>c__DisplayClass269_3.<>4__this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup)))
-					{
-						yield return string.Concat(new object[]
-						{
-							"has tool with linkedBodyPartsGroup ",
-							this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup,
-							" but body ",
-							this.race.body,
-							" has no parts with that group."
-						});
-					}
-					int num = <>c__DisplayClass269_3.i;
-					<>c__DisplayClass269_3.i = num + 1;
-				}
-				<>c__DisplayClass269_3 = null;
+				//ThingDef.<>c__DisplayClass269_3 <>c__DisplayClass269_3 = new ThingDef.<>c__DisplayClass269_3();
+				//<>c__DisplayClass269_3.<>4__this = this;
+				//<>c__DisplayClass269_3.i = 0;
+				//while (<>c__DisplayClass269_3.i < this.tools.Count)
+				//{
+				//	if (this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup != null && !this.race.body.AllParts.Any((BodyPartRecord part) => part.groups.Contains(<>c__DisplayClass269_3.<>4__this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup)))
+				//	{
+				//		yield return string.Concat(new object[]
+				//		{
+				//			"has tool with linkedBodyPartsGroup ",
+				//			this.tools[<>c__DisplayClass269_3.i].linkedBodyPartsGroup,
+				//			" but body ",
+				//			this.race.body,
+				//			" has no parts with that group."
+				//		});
+				//	}
+				//	int num = <>c__DisplayClass269_3.i;
+				//	<>c__DisplayClass269_3.i = num + 1;
+				//}
+				//<>c__DisplayClass269_3 = null;
 			}
 			if (this.ingestible != null)
 			{
@@ -1439,10 +1436,7 @@ namespace Verse
 		// Token: 0x060006CD RID: 1741 RVA: 0x0001F7D1 File Offset: 0x0001D9D1
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			foreach (StatDrawEntry statDrawEntry in this.<>n__1(req))
-			{
-				yield return statDrawEntry;
-			}
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (this.apparel != null)
 			{
@@ -1573,20 +1567,20 @@ namespace Verse
 				bool multiple = enumerable.Count<RecipeDef>() >= 2;
 				foreach (RecipeDef recipeDef in enumerable)
 				{
-					ThingDef.<>c__DisplayClass274_0 <>c__DisplayClass274_ = new ThingDef.<>c__DisplayClass274_0();
+					//ThingDef.<>c__DisplayClass274_0 <>c__DisplayClass274_ = new ThingDef.<>c__DisplayClass274_0();
 					string extraLabelPart = multiple ? (" (" + recipeDef.addsHediff.label + ")") : "";
-					<>c__DisplayClass274_.diff = recipeDef.addsHediff;
-					if (<>c__DisplayClass274_.diff.addedPartProps != null)
-					{
-						yield return new StatDrawEntry(StatCategoryDefOf.Basics, "BodyPartEfficiency".Translate() + extraLabelPart, <>c__DisplayClass274_.diff.addedPartProps.partEfficiency.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Absolute), "Stat_Thing_BodyPartEfficiency_Desc".Translate(), 4000, null, null, false);
-					}
-					foreach (StatDrawEntry statDrawEntry7 in <>c__DisplayClass274_.diff.SpecialDisplayStats(StatRequest.ForEmpty()))
-					{
-						statDrawEntry7.category = StatCategoryDefOf.Implant;
-						yield return statDrawEntry7;
-					}
+					//<>c__DisplayClass274_.diff = recipeDef.addsHediff;
+					//if (<>c__DisplayClass274_.diff.addedPartProps != null)
+					//{
+					//	yield return new StatDrawEntry(StatCategoryDefOf.Basics, "BodyPartEfficiency".Translate() + extraLabelPart, <>c__DisplayClass274_.diff.addedPartProps.partEfficiency.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Absolute), "Stat_Thing_BodyPartEfficiency_Desc".Translate(), 4000, null, null, false);
+					//}
+					//foreach (StatDrawEntry statDrawEntry7 in <>c__DisplayClass274_.diff.SpecialDisplayStats(StatRequest.ForEmpty()))
+					//{
+					//	statDrawEntry7.category = StatCategoryDefOf.Implant;
+					//	yield return statDrawEntry7;
+					//}
 					enumerator = null;
-					HediffCompProperties_VerbGiver hediffCompProperties_VerbGiver = <>c__DisplayClass274_.diff.CompProps<HediffCompProperties_VerbGiver>();
+					HediffCompProperties_VerbGiver hediffCompProperties_VerbGiver = recipeDef.addsHediff.CompProps<HediffCompProperties_VerbGiver>();
 					if (hediffCompProperties_VerbGiver != null)
 					{
 						if (!hediffCompProperties_VerbGiver.verbs.NullOrEmpty<VerbProperties>())
@@ -1637,12 +1631,11 @@ namespace Verse
 							}
 						}
 					}
-					ThoughtDef thoughtDef = DefDatabase<ThoughtDef>.AllDefs.FirstOrDefault((ThoughtDef x) => x.hediff == <>c__DisplayClass274_.diff);
+					ThoughtDef thoughtDef = DefDatabase<ThoughtDef>.AllDefs.FirstOrDefault((ThoughtDef x) => x.hediff == recipeDef.addsHediff);
 					if (thoughtDef != null && thoughtDef.stages != null && thoughtDef.stages.Any<ThoughtStage>())
 					{
 						yield return new StatDrawEntry(StatCategoryDefOf.Basics, "MoodChange".Translate() + extraLabelPart, thoughtDef.stages.First<ThoughtStage>().baseMoodEffect.ToStringByStyle(ToStringStyle.Integer, ToStringNumberSense.Offset), "Stat_Thing_MoodChange_Desc".Translate(), 3500, null, null, false);
 					}
-					<>c__DisplayClass274_ = null;
 					extraLabelPart = null;
 				}
 				IEnumerator<RecipeDef> enumerator2 = null;

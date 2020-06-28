@@ -115,12 +115,8 @@ namespace RimWorld
 			{
 				StockGenerator stock = parms.traderDef.stockGenerators[i];
 				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-				Func<ThingDef, bool> predicate;
-				Func<ThingDef, bool> <>9__0;
-				if ((predicate = <>9__0) == null)
-				{
-					predicate = (<>9__0 = ((ThingDef x) => x.tradeability.TraderCanSell() && stock.HandlesThingDef(x)));
-				}
+				Func<ThingDef, bool> predicate= x => x.tradeability.TraderCanSell() && stock.HandlesThingDef(x);
+
 				foreach (ThingDef thingDef in allDefs.Where(predicate))
 				{
 					yield return thingDef;

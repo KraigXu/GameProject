@@ -569,7 +569,7 @@ namespace RimWorld
 			return MainTabWindow_Research.techprintsInfoCached[key];
 		}
 
-		// Token: 0x06005CC6 RID: 23750 RVA: 0x0020311C File Offset: 0x0020131C
+
 		private float DrawResearchBenchRequirements(ResearchProjectDef project, Rect rect)
 		{
 			float xMin = rect.xMin;
@@ -578,15 +578,11 @@ namespace RimWorld
 			{
 				bool present = false;
 				List<Map> maps = Find.Maps;
-				Predicate<Building> <>9__0;
 				for (int i = 0; i < maps.Count; i++)
 				{
 					List<Building> allBuildingsColonist = maps[i].listerBuildings.allBuildingsColonist;
-					Predicate<Building> match;
-					if ((match = <>9__0) == null)
-					{
-						match = (<>9__0 = ((Building x) => x.def == project.requiredResearchBuilding));
-					}
+					Predicate<Building> match=x => x.def == project.requiredResearchBuilding;
+
 					if (allBuildingsColonist.Find(match) != null)
 					{
 						present = true;
@@ -748,22 +744,21 @@ namespace RimWorld
 		// Token: 0x06005CCD RID: 23757 RVA: 0x00203744 File Offset: 0x00201944
 		private float GetResearchBenchRequirementsScore(Building_ResearchBench bench, List<ThingDef> requiredFacilities)
 		{
-			MainTabWindow_Research.<>c__DisplayClass63_0 <>c__DisplayClass63_ = new MainTabWindow_Research.<>c__DisplayClass63_0();
-			<>c__DisplayClass63_.requiredFacilities = requiredFacilities;
+
 			float num = 0f;
 			int i;
 			int j;
-			for (i = 0; i < <>c__DisplayClass63_.requiredFacilities.Count; i = j + 1)
+			for (i = 0; i < requiredFacilities.Count; i = j + 1)
 			{
 				CompAffectedByFacilities benchComp = bench.GetComp<CompAffectedByFacilities>();
 				if (benchComp != null)
 				{
 					List<Thing> linkedFacilitiesListForReading = benchComp.LinkedFacilitiesListForReading;
-					if (linkedFacilitiesListForReading.Find((Thing x) => x.def == <>c__DisplayClass63_.requiredFacilities[i] && benchComp.IsFacilityActive(x)) != null)
+					if (linkedFacilitiesListForReading.Find((Thing x) => x.def == requiredFacilities[i] && benchComp.IsFacilityActive(x)) != null)
 					{
 						num += 1f;
 					}
-					else if (linkedFacilitiesListForReading.Find((Thing x) => x.def == <>c__DisplayClass63_.requiredFacilities[i]) != null)
+					else if (linkedFacilitiesListForReading.Find((Thing x) => x.def == requiredFacilities[i]) != null)
 					{
 						num += 0.6f;
 					}

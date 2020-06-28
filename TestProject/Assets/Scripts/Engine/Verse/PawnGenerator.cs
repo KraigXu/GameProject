@@ -909,48 +909,40 @@ namespace Verse
 				Trait trait = new Trait(TraitDefOf.Gay, PawnGenerator.RandomTraitDegree(TraitDefOf.Gay), false);
 				pawn.story.traits.GainTrait(trait);
 			}
-			Func<TraitDef, float> <>9__0;
-			Predicate<SkillDef> <>9__2;
-			while (pawn.story.traits.allTraits.Count < num)
-			{
-				PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_2 = new PawnGenerator.<>c__DisplayClass24_1();
-				PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_3 = <>c__DisplayClass24_2;
-				IEnumerable<TraitDef> allDefsListForReading = DefDatabase<TraitDef>.AllDefsListForReading;
-				Func<TraitDef, float> weightSelector;
-				if ((weightSelector = <>9__0) == null)
-				{
-					weightSelector = (<>9__0 = ((TraitDef tr) => tr.GetGenderSpecificCommonality(pawn.gender)));
-				}
-				<>c__DisplayClass24_3.newTraitDef = allDefsListForReading.RandomElementByWeight(weightSelector);
-				if (!pawn.story.traits.HasTrait(<>c__DisplayClass24_2.newTraitDef) && (request.KindDef.disallowedTraits == null || !request.KindDef.disallowedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.KindDef.requiredWorkTags == WorkTags.None || (<>c__DisplayClass24_2.newTraitDef.disabledWorkTags & request.KindDef.requiredWorkTags) == WorkTags.None) && (<>c__DisplayClass24_2.newTraitDef != TraitDefOf.Gay || (request.AllowGay && !LovePartnerRelationUtility.HasAnyLovePartnerOfTheOppositeGender(pawn) && !LovePartnerRelationUtility.HasAnyExLovePartnerOfTheOppositeGender(pawn))) && (request.ProhibitedTraits == null || !request.ProhibitedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.Faction == null || Faction.OfPlayerSilentFail == null || !request.Faction.HostileTo(Faction.OfPlayer) || <>c__DisplayClass24_2.newTraitDef.allowOnHostileSpawn) && !pawn.story.traits.allTraits.Any((Trait tr) => <>c__DisplayClass24_2.newTraitDef.ConflictsWith(tr)) && (<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes == null || !pawn.OneOfWorkTypesIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes)) && !pawn.WorkTagIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTags))
-				{
-					if (<>c__DisplayClass24_2.newTraitDef.forcedPassions != null && pawn.workSettings != null)
-					{
-						List<SkillDef> forcedPassions = <>c__DisplayClass24_2.newTraitDef.forcedPassions;
-						Predicate<SkillDef> predicate;
-						if ((predicate = <>9__2) == null)
-						{
-							predicate = (<>9__2 = ((SkillDef p) => p.IsDisabled(pawn.story.DisabledWorkTagsBackstoryAndTraits, pawn.GetDisabledWorkTypes(true))));
-						}
-						if (forcedPassions.Any(predicate))
-						{
-							continue;
-						}
-					}
-					int degree = PawnGenerator.RandomTraitDegree(<>c__DisplayClass24_2.newTraitDef);
-					if (!pawn.story.childhood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree) && (pawn.story.adulthood == null || !pawn.story.adulthood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree)))
-					{
-						Trait trait2 = new Trait(<>c__DisplayClass24_2.newTraitDef, degree, false);
-						if (pawn.mindState == null || pawn.mindState.mentalBreaker == null || (pawn.mindState.mentalBreaker.BreakThresholdMinor + trait2.OffsetOfStat(StatDefOf.MentalBreakThreshold)) * trait2.MultiplierOfStat(StatDefOf.MentalBreakThreshold) <= 0.5f)
-						{
-							pawn.story.traits.GainTrait(trait2);
-						}
-					}
-				}
-			}
+			
+			//while (pawn.story.traits.allTraits.Count < num)
+			//{
+			//	PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_2 = new PawnGenerator.<>c__DisplayClass24_1();
+			//	PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_3 = <>c__DisplayClass24_2;
+			//	IEnumerable<TraitDef> allDefsListForReading = DefDatabase<TraitDef>.AllDefsListForReading;
+			//	Func<TraitDef, float> weightSelector=tr=> tr.GetGenderSpecificCommonality(pawn.gender);
+
+			//	<>c__DisplayClass24_3.newTraitDef = allDefsListForReading.RandomElementByWeight(weightSelector);
+			//	if (!pawn.story.traits.HasTrait(<>c__DisplayClass24_2.newTraitDef) && (request.KindDef.disallowedTraits == null || !request.KindDef.disallowedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.KindDef.requiredWorkTags == WorkTags.None || (<>c__DisplayClass24_2.newTraitDef.disabledWorkTags & request.KindDef.requiredWorkTags) == WorkTags.None) && (<>c__DisplayClass24_2.newTraitDef != TraitDefOf.Gay || (request.AllowGay && !LovePartnerRelationUtility.HasAnyLovePartnerOfTheOppositeGender(pawn) && !LovePartnerRelationUtility.HasAnyExLovePartnerOfTheOppositeGender(pawn))) && (request.ProhibitedTraits == null || !request.ProhibitedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.Faction == null || Faction.OfPlayerSilentFail == null || !request.Faction.HostileTo(Faction.OfPlayer) || <>c__DisplayClass24_2.newTraitDef.allowOnHostileSpawn) && !pawn.story.traits.allTraits.Any((Trait tr) => <>c__DisplayClass24_2.newTraitDef.ConflictsWith(tr)) && (<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes == null || !pawn.OneOfWorkTypesIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes)) && !pawn.WorkTagIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTags))
+			//	{
+			//		if (<>c__DisplayClass24_2.newTraitDef.forcedPassions != null && pawn.workSettings != null)
+			//		{
+			//			List<SkillDef> forcedPassions = <>c__DisplayClass24_2.newTraitDef.forcedPassions;
+			//			Predicate<SkillDef> predicate=p=> p.IsDisabled(pawn.story.DisabledWorkTagsBackstoryAndTraits, pawn.GetDisabledWorkTypes(true));
+			//			if (forcedPassions.Any(predicate))
+			//			{
+			//				continue;
+			//			}
+			//		}
+			//		int degree = PawnGenerator.RandomTraitDegree(<>c__DisplayClass24_2.newTraitDef);
+			//		if (!pawn.story.childhood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree) && (pawn.story.adulthood == null || !pawn.story.adulthood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree)))
+			//		{
+			//			Trait trait2 = new Trait(<>c__DisplayClass24_2.newTraitDef, degree, false);
+			//			if (pawn.mindState == null || pawn.mindState.mentalBreaker == null || (pawn.mindState.mentalBreaker.BreakThresholdMinor + trait2.OffsetOfStat(StatDefOf.MentalBreakThreshold)) * trait2.MultiplierOfStat(StatDefOf.MentalBreakThreshold) <= 0.5f)
+			//			{
+			//				pawn.story.traits.GainTrait(trait2);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 
-		// Token: 0x06001264 RID: 4708 RVA: 0x0006A91C File Offset: 0x00068B1C
+
 		private static void GenerateBodyType(Pawn pawn)
 		{
 			if (pawn.story.adulthood != null)
@@ -966,7 +958,7 @@ namespace Verse
 			pawn.story.bodyType = ((pawn.gender == Gender.Female) ? BodyTypeDefOf.Female : BodyTypeDefOf.Male);
 		}
 
-		// Token: 0x06001265 RID: 4709 RVA: 0x0006A998 File Offset: 0x00068B98
+		
 		private static void GenerateSkills(Pawn pawn)
 		{
 			List<SkillDef> allDefsListForReading = DefDatabase<SkillDef>.AllDefsListForReading;

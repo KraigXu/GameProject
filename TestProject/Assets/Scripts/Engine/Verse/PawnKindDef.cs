@@ -55,19 +55,15 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060005C2 RID: 1474 RVA: 0x0001C0E0 File Offset: 0x0001A2E0
+		
 		public float GetAnimalPointsToHuntOrSlaughter()
 		{
 			return this.combatPower * 5f * (1f + this.RaceProps.manhunterOnDamageChance * 0.5f) * (1f + this.RaceProps.manhunterOnTameFailChance * 0.2f) * (1f + this.RaceProps.wildness) + this.race.BaseMarketValue;
 		}
 
-		// Token: 0x060005C3 RID: 1475 RVA: 0x0001C147 File Offset: 0x0001A347
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.backstoryFilters != null && this.backstoryFiltersOverride != null)
 			{
@@ -158,9 +154,8 @@ namespace Verse
 						}
 					}
 				}
-				List<AlternateGraphic>.Enumerator enumerator2 = default(List<AlternateGraphic>.Enumerator);
+
 			}
-			yield break;
 			yield break;
 		}
 

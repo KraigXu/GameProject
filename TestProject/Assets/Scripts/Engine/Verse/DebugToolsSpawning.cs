@@ -175,64 +175,49 @@ namespace Verse
 			foreach (float num in DebugToolsSpawning.PointsMechCluster())
 			{
 				float localPoints = num;
-				Action <>9__1;
-				Action <>9__2;
-				Action <>9__3;
-				Action <>9__4;
+
 				list.Add(new DebugMenuOption(num + " points", DebugMenuOptionMode.Action, delegate
 				{
 					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
 					List<DebugMenuOption> list3 = list2;
 					string label = "In pods, click place";
 					DebugMenuOptionMode mode = DebugMenuOptionMode.Tool;
-					Action method;
-					if ((method = <>9__1) == null)
+					Action method = delegate
 					{
-						method = (<>9__1 = delegate
-						{
-							MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
-							MechClusterUtility.SpawnCluster(UI.MouseCell(), Find.CurrentMap, sketch, true, false, null);
-						});
-					}
+						MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
+						MechClusterUtility.SpawnCluster(UI.MouseCell(), Find.CurrentMap, sketch, true, false, null);
+					};
+
 					list3.Add(new DebugMenuOption(label, mode, method));
 					List<DebugMenuOption> list4 = list2;
 					string label2 = "In pods, autoplace";
 					DebugMenuOptionMode mode2 = DebugMenuOptionMode.Action;
-					Action method2;
-					if ((method2 = <>9__2) == null)
+					Action method2= delegate
 					{
-						method2 = (<>9__2 = delegate
-						{
-							MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
-							MechClusterUtility.SpawnCluster(MechClusterUtility.FindClusterPosition(Find.CurrentMap, sketch, 100, 0f), Find.CurrentMap, sketch, true, false, null);
-						});
-					}
+						MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
+						MechClusterUtility.SpawnCluster(MechClusterUtility.FindClusterPosition(Find.CurrentMap, sketch, 100, 0f), Find.CurrentMap, sketch, true, false, null);
+					};
+	
 					list4.Add(new DebugMenuOption(label2, mode2, method2));
 					List<DebugMenuOption> list5 = list2;
 					string label3 = "Direct spawn, click place";
 					DebugMenuOptionMode mode3 = DebugMenuOptionMode.Tool;
-					Action method3;
-					if ((method3 = <>9__3) == null)
+					Action method3 = delegate
 					{
-						method3 = (<>9__3 = delegate
-						{
-							MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
-							MechClusterUtility.SpawnCluster(UI.MouseCell(), Find.CurrentMap, sketch, false, false, null);
-						});
-					}
+						MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
+						MechClusterUtility.SpawnCluster(UI.MouseCell(), Find.CurrentMap, sketch, false, false, null);
+					};
+
 					list5.Add(new DebugMenuOption(label3, mode3, method3));
 					List<DebugMenuOption> list6 = list2;
 					string label4 = "Direct spawn, autoplace";
 					DebugMenuOptionMode mode4 = DebugMenuOptionMode.Action;
-					Action method4;
-					if ((method4 = <>9__4) == null)
+					Action method4= delegate
 					{
-						method4 = (<>9__4 = delegate
-						{
-							MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
-							MechClusterUtility.SpawnCluster(MechClusterUtility.FindClusterPosition(Find.CurrentMap, sketch, 100, 0f), Find.CurrentMap, sketch, false, false, null);
-						});
-					}
+						MechClusterSketch sketch = MechClusterGenerator.GenerateClusterSketch(localPoints, Find.CurrentMap, true);
+						MechClusterUtility.SpawnCluster(MechClusterUtility.FindClusterPosition(Find.CurrentMap, sketch, 100, 0f), Find.CurrentMap, sketch, false, false, null);
+					};
+
 					list6.Add(new DebugMenuOption(label4, mode4, method4));
 					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
 				}));
@@ -283,12 +268,8 @@ namespace Verse
 			{
 				List<DebugMenuOption> list2 = new List<DebugMenuOption>();
 				IEnumerable<PawnKindDef> allDefs = DefDatabase<PawnKindDef>.AllDefs;
-				Func<PawnKindDef, bool> <>9__1;
-				Func<PawnKindDef, bool> predicate;
-				if ((predicate = <>9__1) == null)
-				{
-					predicate = (<>9__1 = ((PawnKindDef x) => x.race == p.def));
-				}
+				Func<PawnKindDef, bool> predicate=x => x.race == p.def;
+
 				foreach (PawnKindDef kLocal2 in allDefs.Where(predicate))
 				{
 					PawnKindDef kLocal = kLocal2;
@@ -472,36 +453,32 @@ namespace Verse
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnSite()
 		{
-			DebugToolsSpawning.<>c__DisplayClass20_0 <>c__DisplayClass20_ = new DebugToolsSpawning.<>c__DisplayClass20_0();
-			<>c__DisplayClass20_.tile = GenWorld.MouseTile(false);
-			if (<>c__DisplayClass20_.tile < 0 || Find.World.Impassable(<>c__DisplayClass20_.tile))
+			int tile = GenWorld.MouseTile(false);
+			if (tile < 0 || Find.World.Impassable(tile))
 			{
 				Messages.Message("Impassable", MessageTypeDefOf.RejectInput, false);
 				return;
 			}
+
 			List<SitePartDef> parts = new List<SitePartDef>();
 			Action addPart = null;
-			Action <>9__1;
 			addPart = delegate
 			{
 				List<DebugMenuOption> list = new List<DebugMenuOption>();
 				List<DebugMenuOption> list2 = list;
 				string label = "-Done (" + parts.Count + " parts)-";
 				DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
-				Action method;
-				if ((method = <>9__1) == null)
+				Action method= delegate
 				{
-					method = (<>9__1 = delegate
+					Site site = SiteMaker.TryMakeSite(parts, tile, true, null, true, null);
+					if (site == null)
 					{
-						Site site = SiteMaker.TryMakeSite(parts, <>c__DisplayClass20_.tile, true, null, true, null);
-						if (site == null)
-						{
-							Messages.Message("Could not find any valid faction for this site.", MessageTypeDefOf.RejectInput, false);
-							return;
-						}
-						Find.WorldObjects.Add(site);
-					});
-				}
+						Messages.Message("Could not find any valid faction for this site.", MessageTypeDefOf.RejectInput, false);
+						return;
+					}
+					Find.WorldObjects.Add(site);
+				};
+
 				list2.Add(new DebugMenuOption(label, mode, method));
 				foreach (SitePartDef sitePartDef in DefDatabase<SitePartDef>.AllDefs)
 				{
@@ -532,45 +509,40 @@ namespace Verse
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnSiteWithPoints()
 		{
-			DebugToolsSpawning.<>c__DisplayClass22_0 <>c__DisplayClass22_ = new DebugToolsSpawning.<>c__DisplayClass22_0();
-			<>c__DisplayClass22_.tile = GenWorld.MouseTile(false);
-			if (<>c__DisplayClass22_.tile < 0 || Find.World.Impassable(<>c__DisplayClass22_.tile))
+			int tile = GenWorld.MouseTile(false);
+			if (tile < 0 || Find.World.Impassable(tile))
 			{
 				Messages.Message("Impassable", MessageTypeDefOf.RejectInput, false);
 				return;
 			}
 			List<SitePartDef> parts = new List<SitePartDef>();
 			Action addPart = null;
-			Action <>9__1;
 			addPart = delegate
 			{
 				List<DebugMenuOption> list = new List<DebugMenuOption>();
 				List<DebugMenuOption> list2 = list;
 				string label = "-Done (" + parts.Count + " parts)-";
 				DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
-				Action method;
-				if ((method = <>9__1) == null)
+				Action method= delegate
 				{
-					method = (<>9__1 = delegate
+					List<DebugMenuOption> list3 = new List<DebugMenuOption>();
+					foreach (float localPoints2 in DebugActionsUtility.PointsOptions(true))
 					{
-						List<DebugMenuOption> list3 = new List<DebugMenuOption>();
-						foreach (float localPoints2 in DebugActionsUtility.PointsOptions(true))
+						float localPoints = localPoints2;
+						list3.Add(new DebugMenuOption(localPoints2.ToString("F0"), DebugMenuOptionMode.Action, delegate
 						{
-							float localPoints = localPoints2;
-							list3.Add(new DebugMenuOption(localPoints2.ToString("F0"), DebugMenuOptionMode.Action, delegate
+							Site site = SiteMaker.TryMakeSite(parts,tile, true, null, true, new float?(localPoints));
+							if (site == null)
 							{
-								Site site = SiteMaker.TryMakeSite(parts, <>c__DisplayClass22_.tile, true, null, true, new float?(localPoints));
-								if (site == null)
-								{
-									Messages.Message("Could not find any valid faction for this site.", MessageTypeDefOf.RejectInput, false);
-									return;
-								}
-								Find.WorldObjects.Add(site);
-							}));
-						}
-						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
-					});
-				}
+								Messages.Message("Could not find any valid faction for this site.", MessageTypeDefOf.RejectInput, false);
+								return;
+							}
+							Find.WorldObjects.Add(site);
+						}));
+					}
+					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
+				};
+
 				list2.Add(new DebugMenuOption(label, mode, method));
 				foreach (SitePartDef sitePartDef in DefDatabase<SitePartDef>.AllDefs)
 				{

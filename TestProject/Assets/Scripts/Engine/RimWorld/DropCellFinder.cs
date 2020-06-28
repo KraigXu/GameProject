@@ -78,79 +78,80 @@ namespace RimWorld
 			return CellFinderLoose.RandomCellWith(validator, map, 1000);
 		}
 
-		// Token: 0x06005F73 RID: 24435 RVA: 0x00210608 File Offset: 0x0020E808
+
 		public static IntVec3 TryFindSafeLandingSpotCloseToColony(Map map, IntVec2 size, Faction faction = null, int borderWidth = 2)
 		{
-			DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_ = new DropCellFinder.<>c__DisplayClass3_0();
-			<>c__DisplayClass3_.map = map;
-			<>c__DisplayClass3_.size = size;
-			<>c__DisplayClass3_.faction = faction;
-			DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_2 = <>c__DisplayClass3_;
-			<>c__DisplayClass3_2.size.x = <>c__DisplayClass3_2.size.x + borderWidth;
-			DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_3 = <>c__DisplayClass3_;
-			<>c__DisplayClass3_3.size.z = <>c__DisplayClass3_3.size.z + borderWidth;
-			DropCellFinder.tmpColonyBuildings.Clear();
-			DropCellFinder.tmpColonyBuildings.AddRange(<>c__DisplayClass3_.map.listerBuildings.allBuildingsColonist);
-			if (!DropCellFinder.tmpColonyBuildings.Any<Building>())
-			{
-				return CellFinderLoose.RandomCellWith(delegate(IntVec3 c)
-				{
-					if (!DropCellFinder.SkyfallerCanLandAt(c, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
-					{
-						return false;
-					}
-					if (ModsConfig.RoyaltyActive)
-					{
-						List<Thing> list = <>c__DisplayClass3_.map.listerThings.ThingsOfDef(ThingDefOf.ActivatorProximity);
-						for (int j = 0; j < list.Count; j++)
-						{
-							if (list[j].Faction != null && list[j].Faction.HostileTo(<>c__DisplayClass3_.faction))
-							{
-								CompSendSignalOnPawnProximity compSendSignalOnPawnProximity = list[j].TryGetComp<CompSendSignalOnPawnProximity>();
-								if (compSendSignalOnPawnProximity != null && c.InHorDistOf(list[j].Position, compSendSignalOnPawnProximity.Props.radius + 10f))
-								{
-									return false;
-								}
-							}
-						}
-					}
-					return true;
-				}, <>c__DisplayClass3_.map, 1000);
-			}
-			DropCellFinder.tmpColonyBuildings.Shuffle<Building>();
-			for (int i = 0; i < DropCellFinder.tmpColonyBuildings.Count; i++)
-			{
-				IntVec3 intVec;
-				if (DropCellFinder.TryFindDropSpotNear(DropCellFinder.tmpColonyBuildings[i].Position, <>c__DisplayClass3_.map, out intVec, false, false, false, new IntVec2?(<>c__DisplayClass3_.size)) && DropCellFinder.SkyfallerCanLandAt(intVec, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
-				{
-					DropCellFinder.tmpColonyBuildings.Clear();
-					return intVec;
-				}
-			}
-			DropCellFinder.tmpColonyBuildings.Clear();
-			return CellFinderLoose.RandomCellWith(delegate(IntVec3 c)
-			{
-				if (!DropCellFinder.SkyfallerCanLandAt(c, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
-				{
-					return false;
-				}
-				if (ModsConfig.RoyaltyActive)
-				{
-					List<Thing> list = <>c__DisplayClass3_.map.listerThings.ThingsOfDef(ThingDefOf.ActivatorProximity);
-					for (int j = 0; j < list.Count; j++)
-					{
-						if (list[j].Faction != null && list[j].Faction.HostileTo(<>c__DisplayClass3_.faction))
-						{
-							CompSendSignalOnPawnProximity compSendSignalOnPawnProximity = list[j].TryGetComp<CompSendSignalOnPawnProximity>();
-							if (compSendSignalOnPawnProximity != null && c.InHorDistOf(list[j].Position, compSendSignalOnPawnProximity.Props.radius + 10f))
-							{
-								return false;
-							}
-						}
-					}
-				}
-				return true;
-			}, <>c__DisplayClass3_.map, 1000);
+			return default;
+			//DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_ = new DropCellFinder.<>c__DisplayClass3_0();
+			//<>c__DisplayClass3_.map = map;
+			//<>c__DisplayClass3_.size = size;
+			//<>c__DisplayClass3_.faction = faction;
+			//DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_2 = <>c__DisplayClass3_;
+			//<>c__DisplayClass3_2.size.x = <>c__DisplayClass3_2.size.x + borderWidth;
+			//DropCellFinder.<>c__DisplayClass3_0 <>c__DisplayClass3_3 = <>c__DisplayClass3_;
+			//<>c__DisplayClass3_3.size.z = <>c__DisplayClass3_3.size.z + borderWidth;
+			//DropCellFinder.tmpColonyBuildings.Clear();
+			//DropCellFinder.tmpColonyBuildings.AddRange(<>c__DisplayClass3_.map.listerBuildings.allBuildingsColonist);
+			//if (!DropCellFinder.tmpColonyBuildings.Any<Building>())
+			//{
+			//	return CellFinderLoose.RandomCellWith(delegate(IntVec3 c)
+			//	{
+			//		if (!DropCellFinder.SkyfallerCanLandAt(c, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
+			//		{
+			//			return false;
+			//		}
+			//		if (ModsConfig.RoyaltyActive)
+			//		{
+			//			List<Thing> list = <>c__DisplayClass3_.map.listerThings.ThingsOfDef(ThingDefOf.ActivatorProximity);
+			//			for (int j = 0; j < list.Count; j++)
+			//			{
+			//				if (list[j].Faction != null && list[j].Faction.HostileTo(<>c__DisplayClass3_.faction))
+			//				{
+			//					CompSendSignalOnPawnProximity compSendSignalOnPawnProximity = list[j].TryGetComp<CompSendSignalOnPawnProximity>();
+			//					if (compSendSignalOnPawnProximity != null && c.InHorDistOf(list[j].Position, compSendSignalOnPawnProximity.Props.radius + 10f))
+			//					{
+			//						return false;
+			//					}
+			//				}
+			//			}
+			//		}
+			//		return true;
+			//	}, <>c__DisplayClass3_.map, 1000);
+			//}
+			//DropCellFinder.tmpColonyBuildings.Shuffle<Building>();
+			//for (int i = 0; i < DropCellFinder.tmpColonyBuildings.Count; i++)
+			//{
+			//	IntVec3 intVec;
+			//	if (DropCellFinder.TryFindDropSpotNear(DropCellFinder.tmpColonyBuildings[i].Position, <>c__DisplayClass3_.map, out intVec, false, false, false, new IntVec2?(<>c__DisplayClass3_.size)) && DropCellFinder.SkyfallerCanLandAt(intVec, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
+			//	{
+			//		DropCellFinder.tmpColonyBuildings.Clear();
+			//		return intVec;
+			//	}
+			//}
+			//DropCellFinder.tmpColonyBuildings.Clear();
+			//return CellFinderLoose.RandomCellWith(delegate(IntVec3 c)
+			//{
+			//	if (!DropCellFinder.SkyfallerCanLandAt(c, <>c__DisplayClass3_.map, <>c__DisplayClass3_.size, <>c__DisplayClass3_.faction))
+			//	{
+			//		return false;
+			//	}
+			//	if (ModsConfig.RoyaltyActive)
+			//	{
+			//		List<Thing> list = <>c__DisplayClass3_.map.listerThings.ThingsOfDef(ThingDefOf.ActivatorProximity);
+			//		for (int j = 0; j < list.Count; j++)
+			//		{
+			//			if (list[j].Faction != null && list[j].Faction.HostileTo(<>c__DisplayClass3_.faction))
+			//			{
+			//				CompSendSignalOnPawnProximity compSendSignalOnPawnProximity = list[j].TryGetComp<CompSendSignalOnPawnProximity>();
+			//				if (compSendSignalOnPawnProximity != null && c.InHorDistOf(list[j].Position, compSendSignalOnPawnProximity.Props.radius + 10f))
+			//				{
+			//					return false;
+			//				}
+			//			}
+			//		}
+			//	}
+			//	return true;
+			//}, <>c__DisplayClass3_.map, 1000);
 		}
 
 		// Token: 0x06005F74 RID: 24436 RVA: 0x00210738 File Offset: 0x0020E938
@@ -219,63 +220,65 @@ namespace RimWorld
 		// Token: 0x06005F76 RID: 24438 RVA: 0x002108DC File Offset: 0x0020EADC
 		public static bool TryFindDropSpotNear(IntVec3 center, Map map, out IntVec3 result, bool allowFogged, bool canRoofPunch, bool allowIndoors = true, IntVec2? size = null)
 		{
-			DropCellFinder.<>c__DisplayClass7_0 <>c__DisplayClass7_ = new DropCellFinder.<>c__DisplayClass7_0();
-			<>c__DisplayClass7_.size = size;
-			<>c__DisplayClass7_.map = map;
-			<>c__DisplayClass7_.allowFogged = allowFogged;
-			<>c__DisplayClass7_.canRoofPunch = canRoofPunch;
-			<>c__DisplayClass7_.allowIndoors = allowIndoors;
-			<>c__DisplayClass7_.center = center;
-			if (DebugViewSettings.drawDestSearch)
-			{
-				<>c__DisplayClass7_.map.debugDrawer.FlashCell(<>c__DisplayClass7_.center, 1f, "center", 50);
-			}
-			<>c__DisplayClass7_.centerRoom = <>c__DisplayClass7_.center.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable);
-			<>c__DisplayClass7_.validator = delegate(IntVec3 c)
-			{
-				if (<>c__DisplayClass7_.size != null)
-				{
-					using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c, Rot4.North, <>c__DisplayClass7_.size.Value).GetEnumerator())
-					{
-						while (enumerator.MoveNext())
-						{
-							if (!DropCellFinder.IsGoodDropSpot(enumerator.Current, <>c__DisplayClass7_.map, <>c__DisplayClass7_.allowFogged, <>c__DisplayClass7_.canRoofPunch, <>c__DisplayClass7_.allowIndoors))
-							{
-								return false;
-							}
-						}
-						goto IL_93;
-					}
-				}
-				if (!DropCellFinder.IsGoodDropSpot(c, <>c__DisplayClass7_.map, <>c__DisplayClass7_.allowFogged, <>c__DisplayClass7_.canRoofPunch, <>c__DisplayClass7_.allowIndoors))
-				{
-					return false;
-				}
-				IL_93:
-				return <>c__DisplayClass7_.map.reachability.CanReach(<>c__DisplayClass7_.center, c, PathEndMode.OnCell, TraverseMode.PassDoors, Danger.Deadly);
-			};
-			if ((<>c__DisplayClass7_.allowIndoors & <>c__DisplayClass7_.canRoofPunch) && <>c__DisplayClass7_.centerRoom != null && !<>c__DisplayClass7_.centerRoom.PsychologicallyOutdoors)
-			{
-				Predicate<IntVec3> v = (IntVec3 c) => <>c__DisplayClass7_.validator(c) && c.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable) == <>c__DisplayClass7_.centerRoom;
-				if (<>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(v, out result))
-				{
-					return true;
-				}
-				Predicate<IntVec3> v2 = delegate(IntVec3 c)
-				{
-					if (!<>c__DisplayClass7_.validator(c))
-					{
-						return false;
-					}
-					Room room = c.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable);
-					return room != null && !room.PsychologicallyOutdoors;
-				};
-				if (<>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(v2, out result))
-				{
-					return true;
-				}
-			}
-			return <>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(<>c__DisplayClass7_.validator, out result);
+            result = default;
+            //DropCellFinder.<>c__DisplayClass7_0 <>c__DisplayClass7_ = new DropCellFinder.<>c__DisplayClass7_0();
+            //<>c__DisplayClass7_.size = size;
+            //<>c__DisplayClass7_.map = map;
+            //<>c__DisplayClass7_.allowFogged = allowFogged;
+            //<>c__DisplayClass7_.canRoofPunch = canRoofPunch;
+            //<>c__DisplayClass7_.allowIndoors = allowIndoors;
+            //<>c__DisplayClass7_.center = center;
+            //if (DebugViewSettings.drawDestSearch)
+            //{
+            //	<>c__DisplayClass7_.map.debugDrawer.FlashCell(<>c__DisplayClass7_.center, 1f, "center", 50);
+            //}
+            //<>c__DisplayClass7_.centerRoom = <>c__DisplayClass7_.center.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable);
+            //<>c__DisplayClass7_.validator = delegate(IntVec3 c)
+            //{
+            //	if (<>c__DisplayClass7_.size != null)
+            //	{
+            //		using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c, Rot4.North, <>c__DisplayClass7_.size.Value).GetEnumerator())
+            //		{
+            //			while (enumerator.MoveNext())
+            //			{
+            //				if (!DropCellFinder.IsGoodDropSpot(enumerator.Current, <>c__DisplayClass7_.map, <>c__DisplayClass7_.allowFogged, <>c__DisplayClass7_.canRoofPunch, <>c__DisplayClass7_.allowIndoors))
+            //				{
+            //					return false;
+            //				}
+            //			}
+            //			goto IL_93;
+            //		}
+            //	}
+            //	if (!DropCellFinder.IsGoodDropSpot(c, <>c__DisplayClass7_.map, <>c__DisplayClass7_.allowFogged, <>c__DisplayClass7_.canRoofPunch, <>c__DisplayClass7_.allowIndoors))
+            //	{
+            //		return false;
+            //	}
+            //	IL_93:
+            //	return <>c__DisplayClass7_.map.reachability.CanReach(<>c__DisplayClass7_.center, c, PathEndMode.OnCell, TraverseMode.PassDoors, Danger.Deadly);
+            //};
+            //if ((<>c__DisplayClass7_.allowIndoors & <>c__DisplayClass7_.canRoofPunch) && <>c__DisplayClass7_.centerRoom != null && !<>c__DisplayClass7_.centerRoom.PsychologicallyOutdoors)
+            //{
+            //	Predicate<IntVec3> v = (IntVec3 c) => <>c__DisplayClass7_.validator(c) && c.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable) == <>c__DisplayClass7_.centerRoom;
+            //	if (<>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(v, out result))
+            //	{
+            //		return true;
+            //	}
+            //	Predicate<IntVec3> v2 = delegate(IntVec3 c)
+            //	{
+            //		if (!<>c__DisplayClass7_.validator(c))
+            //		{
+            //			return false;
+            //		}
+            //		Room room = c.GetRoom(<>c__DisplayClass7_.map, RegionType.Set_Passable);
+            //		return room != null && !room.PsychologicallyOutdoors;
+            //	};
+            //	if (<>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(v2, out result))
+            //	{
+            //		return true;
+            //	}
+            //}
+            //return <>c__DisplayClass7_.<TryFindDropSpotNear>g__TryFindCell|1(<>c__DisplayClass7_.validator, out result);
+            return true;
 		}
 
 		// Token: 0x06005F77 RID: 24439 RVA: 0x002109D4 File Offset: 0x0020EBD4
@@ -389,7 +392,6 @@ namespace RimWorld
 				return RCellFinder.TryFindRandomCellNearTheCenterOfTheMapWith((IntVec3 x) => DropCellFinder.CanPhysicallyDropInto(x, map, canRoofPunch, allowIndoors) && !x.Fogged(map) && x.Standable(map), map, out spot);
 			}
 			int num = 0;
-			Predicate<IntVec3> <>9__1;
 			for (;;)
 			{
 				IntVec3 root = IntVec3.Invalid;
@@ -421,11 +423,8 @@ namespace RimWorld
 					}
 					if (!root.IsValid)
 					{
-						Predicate<IntVec3> validator;
-						if ((validator = <>9__1) == null)
-						{
-							validator = (<>9__1 = ((IntVec3 x) => DropCellFinder.CanPhysicallyDropInto(x, map, canRoofPunch, allowIndoors) && !x.Fogged(map) && x.Standable(map)));
-						}
+						Predicate<IntVec3> validator=x=> DropCellFinder.CanPhysicallyDropInto(x, map, canRoofPunch, allowIndoors) && !x.Fogged(map) && x.Standable(map);
+
 						RCellFinder.TryFindRandomCellNearTheCenterOfTheMapWith(validator, map, out root);
 					}
 				}
@@ -450,12 +449,8 @@ namespace RimWorld
 			}
 			return true;
 			Block_13:
-			Predicate<IntVec3> <>9__2;
-			Predicate<IntVec3> validator2;
-			if ((validator2 = <>9__2) == null)
-			{
-				validator2 = (<>9__2 = ((IntVec3 c) => DropCellFinder.CanPhysicallyDropInto(c, map, canRoofPunch, allowIndoors)));
-			}
+			Predicate<IntVec3> validator2=c=> DropCellFinder.CanPhysicallyDropInto(c, map, canRoofPunch, allowIndoors);
+
 			spot = CellFinderLoose.RandomCellWith(validator2, map, 1000);
 			return false;
 		}
@@ -506,93 +501,94 @@ namespace RimWorld
 			}
 			return true;
 		}
-
-		// Token: 0x06005F7E RID: 24446 RVA: 0x00210F58 File Offset: 0x0020F158
 		private static bool IsSafeDropSpot(IntVec3 cell, Map map, Faction faction, IntVec2? size = null, int distToEdge = 25, int distToHostiles = 35, int distToFires = 15)
 		{
-			DropCellFinder.<>c__DisplayClass15_0 <>c__DisplayClass15_ = new DropCellFinder.<>c__DisplayClass15_0();
-			<>c__DisplayClass15_.map = map;
-			<>c__DisplayClass15_.cell = cell;
-			Faction factionBaseFaction = <>c__DisplayClass15_.map.ParentFaction ?? Faction.OfPlayer;
-			if (size != null)
-			{
-				using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(<>c__DisplayClass15_.cell, Rot4.North, size.Value).GetEnumerator())
-				{
-					while (enumerator.MoveNext())
-					{
-						if (!DropCellFinder.IsGoodDropSpot(enumerator.Current, <>c__DisplayClass15_.map, false, false, false))
-						{
-							return false;
-						}
-					}
-					goto IL_A4;
-				}
-			}
-			if (!DropCellFinder.IsGoodDropSpot(<>c__DisplayClass15_.cell, <>c__DisplayClass15_.map, false, false, false))
-			{
-				return false;
-			}
-			IL_A4:
-			if (distToEdge > 0 && <>c__DisplayClass15_.cell.CloseToEdge(<>c__DisplayClass15_.map, distToEdge))
-			{
-				return false;
-			}
-			if (faction != null)
-			{
-				foreach (IAttackTarget attackTarget in <>c__DisplayClass15_.map.attackTargetsCache.TargetsHostileToFaction(faction))
-				{
-					if (!attackTarget.ThreatDisabled(null) && attackTarget.Thing.Position.InHorDistOf(<>c__DisplayClass15_.cell, (float)distToHostiles))
-					{
-						return false;
-					}
-				}
-			}
-			if (!<>c__DisplayClass15_.map.reachability.CanReachFactionBase(<>c__DisplayClass15_.cell, factionBaseFaction))
-			{
-				return false;
-			}
-			if (size != null)
-			{
-				using (IEnumerator<IntVec3> enumerator3 = CellRect.CenteredOn(<>c__DisplayClass15_.cell, size.Value.x, size.Value.z).Cells.GetEnumerator())
-				{
-					while (enumerator3.MoveNext())
-					{
-						IntVec3 c = enumerator3.Current;
-						if (<>c__DisplayClass15_.<IsSafeDropSpot>g__CellHasCrops|0(c))
-						{
-							return false;
-						}
-					}
-					goto IL_1CC;
-				}
-			}
-			if (<>c__DisplayClass15_.<IsSafeDropSpot>g__CellHasCrops|0(<>c__DisplayClass15_.cell))
-			{
-				return false;
-			}
-			IL_1CC:
-			<>c__DisplayClass15_.minDistToFiresSq = (float)(distToFires * distToFires);
-			<>c__DisplayClass15_.closestDistSq = float.MaxValue;
-			<>c__DisplayClass15_.firesCount = 0;
-			RegionTraverser.BreadthFirstTraverse(<>c__DisplayClass15_.cell, <>c__DisplayClass15_.map, (Region from, Region to) => true, delegate(Region x)
-			{
-				List<Thing> list = x.ListerThings.ThingsInGroup(ThingRequestGroup.Fire);
-				for (int i = 0; i < list.Count; i++)
-				{
-					float num = (float)<>c__DisplayClass15_.cell.DistanceToSquared(list[i].Position);
-					if (num <= <>c__DisplayClass15_.minDistToFiresSq)
-					{
-						if (num < <>c__DisplayClass15_.closestDistSq)
-						{
-							<>c__DisplayClass15_.closestDistSq = num;
-						}
-						int firesCount = <>c__DisplayClass15_.firesCount;
-						<>c__DisplayClass15_.firesCount = firesCount + 1;
-					}
-				}
-				return <>c__DisplayClass15_.closestDistSq <= <>c__DisplayClass15_.minDistToFiresSq && <>c__DisplayClass15_.firesCount >= 5;
-			}, 15, RegionType.Set_Passable);
-			return <>c__DisplayClass15_.closestDistSq > <>c__DisplayClass15_.minDistToFiresSq || <>c__DisplayClass15_.firesCount < 5;
+
+
+			//DropCellFinder.<>c__DisplayClass15_0 <>c__DisplayClass15_ = new DropCellFinder.<>c__DisplayClass15_0();
+			//<>c__DisplayClass15_.map = map;
+			//<>c__DisplayClass15_.cell = cell;
+			//Faction factionBaseFaction = <>c__DisplayClass15_.map.ParentFaction ?? Faction.OfPlayer;
+			//if (size != null)
+			//{
+			//	using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(<>c__DisplayClass15_.cell, Rot4.North, size.Value).GetEnumerator())
+			//	{
+			//		while (enumerator.MoveNext())
+			//		{
+			//			if (!DropCellFinder.IsGoodDropSpot(enumerator.Current, <>c__DisplayClass15_.map, false, false, false))
+			//			{
+			//				return false;
+			//			}
+			//		}
+			//		goto IL_A4;
+			//	}
+			//}
+			//if (!DropCellFinder.IsGoodDropSpot(<>c__DisplayClass15_.cell, <>c__DisplayClass15_.map, false, false, false))
+			//{
+			//	return false;
+			//}
+			//IL_A4:
+			//if (distToEdge > 0 && <>c__DisplayClass15_.cell.CloseToEdge(<>c__DisplayClass15_.map, distToEdge))
+			//{
+			//	return false;
+			//}
+			//if (faction != null)
+			//{
+			//	foreach (IAttackTarget attackTarget in <>c__DisplayClass15_.map.attackTargetsCache.TargetsHostileToFaction(faction))
+			//	{
+			//		if (!attackTarget.ThreatDisabled(null) && attackTarget.Thing.Position.InHorDistOf(<>c__DisplayClass15_.cell, (float)distToHostiles))
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//}
+			//if (!<>c__DisplayClass15_.map.reachability.CanReachFactionBase(<>c__DisplayClass15_.cell, factionBaseFaction))
+			//{
+			//	return false;
+			//}
+			//if (size != null)
+			//{
+			//	using (IEnumerator<IntVec3> enumerator3 = CellRect.CenteredOn(<>c__DisplayClass15_.cell, size.Value.x, size.Value.z).Cells.GetEnumerator())
+			//	{
+			//		while (enumerator3.MoveNext())
+			//		{
+			//			IntVec3 c = enumerator3.Current;
+			//			if (<>c__DisplayClass15_.<IsSafeDropSpot>g__CellHasCrops|0(c))
+			//			{
+			//				return false;
+			//			}
+			//		}
+			//		goto IL_1CC;
+			//	}
+			//}
+			//if (<>c__DisplayClass15_.<IsSafeDropSpot>g__CellHasCrops|0(<>c__DisplayClass15_.cell))
+			//{
+			//	return false;
+			//}
+			//IL_1CC:
+			//<>c__DisplayClass15_.minDistToFiresSq = (float)(distToFires * distToFires);
+			//<>c__DisplayClass15_.closestDistSq = float.MaxValue;
+			//<>c__DisplayClass15_.firesCount = 0;
+			//RegionTraverser.BreadthFirstTraverse(<>c__DisplayClass15_.cell, <>c__DisplayClass15_.map, (Region from, Region to) => true, delegate(Region x)
+			//{
+			//	List<Thing> list = x.ListerThings.ThingsInGroup(ThingRequestGroup.Fire);
+			//	for (int i = 0; i < list.Count; i++)
+			//	{
+			//		float num = (float)<>c__DisplayClass15_.cell.DistanceToSquared(list[i].Position);
+			//		if (num <= <>c__DisplayClass15_.minDistToFiresSq)
+			//		{
+			//			if (num < <>c__DisplayClass15_.closestDistSq)
+			//			{
+			//				<>c__DisplayClass15_.closestDistSq = num;
+			//			}
+			//			int firesCount = <>c__DisplayClass15_.firesCount;
+			//			<>c__DisplayClass15_.firesCount = firesCount + 1;
+			//		}
+			//	}
+			//	return <>c__DisplayClass15_.closestDistSq <= <>c__DisplayClass15_.minDistToFiresSq && <>c__DisplayClass15_.firesCount >= 5;
+			//}, 15, RegionType.Set_Passable);
+			//return <>c__DisplayClass15_.closestDistSq > <>c__DisplayClass15_.minDistToFiresSq || <>c__DisplayClass15_.firesCount < 5;
+			return true;
 		}
 
 		// Token: 0x040033D3 RID: 13267

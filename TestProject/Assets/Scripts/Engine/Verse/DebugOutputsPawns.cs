@@ -1157,15 +1157,10 @@ namespace Verse
 			foreach (string catInner2 in enumerable)
 			{
 				string catInner = catInner2;
-				Func<PawnBio, bool> <>9__2;
 				FloatMenuOption item = new FloatMenuOption(catInner, delegate
 				{
 					IEnumerable<PawnBio> allBios = SolidBioDatabase.allBios;
-					Func<PawnBio, bool> predicate;
-					if ((predicate = <>9__2) == null)
-					{
-						predicate = (<>9__2 = ((PawnBio b) => b.adulthood.spawnCategories.Contains(catInner)));
-					}
+					Func<PawnBio, bool> predicate= ((PawnBio b) => b.adulthood.spawnCategories.Contains(catInner));
 					IEnumerable<PawnBio> enumerable2 = allBios.Where(predicate);
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.AppendLine(string.Concat(new object[]

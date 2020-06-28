@@ -81,26 +81,27 @@ namespace Verse
 				{
 					Log.Warning("Some descriptionHyperlinks in " + this.defName + " had null def.", false);
 				}
-				Def.<>c__DisplayClass19_0 <>c__DisplayClass19_ = new Def.<>c__DisplayClass19_0();
-				<>c__DisplayClass19_.<>4__this = this;
-				<>c__DisplayClass19_.i = this.descriptionHyperlinks.Count - 1;
-				while (<>c__DisplayClass19_.i > 0)
-				{
-					if (this.descriptionHyperlinks.FirstIndexOf((DefHyperlink h) => h.def == <>c__DisplayClass19_.<>4__this.descriptionHyperlinks[<>c__DisplayClass19_.i].def) < <>c__DisplayClass19_.i)
-					{
-						yield return string.Concat(new string[]
-						{
-							"Hyperlink to ",
-							this.descriptionHyperlinks[<>c__DisplayClass19_.i].def.defName,
-							" more than once on ",
-							this.defName,
-							" description"
-						});
-					}
-					int num = <>c__DisplayClass19_.i;
-					<>c__DisplayClass19_.i = num - 1;
-				}
-				<>c__DisplayClass19_ = null;
+
+				//Def.<>c__DisplayClass19_0 <>c__DisplayClass19_ = new Def.<>c__DisplayClass19_0();
+				//<>c__DisplayClass19_.<>4__this = this;
+				//<>c__DisplayClass19_.i = this.descriptionHyperlinks.Count - 1;
+				//while (<>c__DisplayClass19_.i > 0)
+				//{
+				//	if (this.descriptionHyperlinks.FirstIndexOf((DefHyperlink h) => h.def == <>c__DisplayClass19_.<>4__this.descriptionHyperlinks[<>c__DisplayClass19_.i].def) < <>c__DisplayClass19_.i)
+				//	{
+				//		yield return string.Concat(new string[]
+				//		{
+				//			"Hyperlink to ",
+				//			this.descriptionHyperlinks[<>c__DisplayClass19_.i].def.defName,
+				//			" more than once on ",
+				//			this.defName,
+				//			" description"
+				//		});
+				//	}
+				//	int num = <>c__DisplayClass19_.i;
+				//	<>c__DisplayClass19_.i = num - 1;
+				//}
+				//<>c__DisplayClass19_ = null;
 			}
 			yield break;
 			yield break;

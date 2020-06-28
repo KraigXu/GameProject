@@ -8,12 +8,11 @@ using Verse.Sound;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200129E RID: 4766
+
 	[StaticConstructorOnStartup]
 	public class WorldRoutePlanner
 	{
-		// Token: 0x170012FC RID: 4860
-		// (get) Token: 0x06007057 RID: 28759 RVA: 0x00272BF7 File Offset: 0x00270DF7
+
 		public bool Active
 		{
 			get
@@ -22,8 +21,6 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012FD RID: 4861
-		// (get) Token: 0x06007058 RID: 28760 RVA: 0x00272BFF File Offset: 0x00270DFF
 		public bool FormingCaravan
 		{
 			get
@@ -225,63 +222,63 @@ namespace RimWorld.Planet
 		// Token: 0x06007062 RID: 28770 RVA: 0x00273038 File Offset: 0x00271238
 		private void DoRouteDetailsBox()
 		{
-			WorldRoutePlanner.<>c__DisplayClass31_0 <>c__DisplayClass31_ = new WorldRoutePlanner.<>c__DisplayClass31_0();
-			<>c__DisplayClass31_.<>4__this = this;
-			<>c__DisplayClass31_.rect = new Rect(((float)UI.screenWidth - WorldRoutePlanner.BottomWindowSize.x) / 2f, (float)UI.screenHeight - WorldRoutePlanner.BottomWindowSize.y - 45f, WorldRoutePlanner.BottomWindowSize.x, WorldRoutePlanner.BottomWindowSize.y);
-			if (Current.ProgramState == ProgramState.Entry)
-			{
-				WorldRoutePlanner.<>c__DisplayClass31_0 <>c__DisplayClass31_2 = <>c__DisplayClass31_;
-				<>c__DisplayClass31_2.rect.y = <>c__DisplayClass31_2.rect.y - 22f;
-			}
-			Find.WindowStack.ImmediateWindow(1373514241, <>c__DisplayClass31_.rect, WindowLayer.Dialog, delegate
-			{
-				if (!<>c__DisplayClass31_.<>4__this.active)
-				{
-					return;
-				}
-				GUI.color = Color.white;
-				Text.Anchor = TextAnchor.UpperCenter;
-				Text.Font = GameFont.Small;
-				float num = 6f;
-				if (<>c__DisplayClass31_.<>4__this.waypoints.Count >= 2)
-				{
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerEstTimeToFinalDest".Translate(<>c__DisplayClass31_.<>4__this.GetTicksToWaypoint(<>c__DisplayClass31_.<>4__this.waypoints.Count - 1).ToStringTicksToDays("0.#")));
-				}
-				else if (<>c__DisplayClass31_.<>4__this.cantRemoveFirstWaypoint)
-				{
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerAddOneOrMoreWaypoints".Translate());
-				}
-				else
-				{
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerAddTwoOrMoreWaypoints".Translate());
-				}
-				num += 20f;
-				if (<>c__DisplayClass31_.<>4__this.CaravanInfo == null || !<>c__DisplayClass31_.<>4__this.CaravanInfo.Value.pawns.Any<Pawn>())
-				{
-					GUI.color = new Color(0.8f, 0.6f, 0.6f);
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerUsingAverageTicksPerMoveWarning".Translate());
-				}
-				else if (<>c__DisplayClass31_.<>4__this.currentFormCaravanDialog == null && <>c__DisplayClass31_.<>4__this.CaravanAtTheFirstWaypoint != null)
-				{
-					GUI.color = Color.gray;
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerUsingTicksPerMoveOfCaravan".Translate(<>c__DisplayClass31_.<>4__this.CaravanAtTheFirstWaypoint.LabelCap));
-				}
-				num += 20f;
-				GUI.color = Color.gray;
-				Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressRMBToAddAndRemoveWaypoints".Translate());
-				num += 20f;
-				if (<>c__DisplayClass31_.<>4__this.currentFormCaravanDialog != null)
-				{
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressEscapeToReturnToCaravanFormationDialog".Translate());
-				}
-				else
-				{
-					Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressEscapeToExit".Translate());
-				}
-				num += 20f;
-				GUI.color = Color.white;
-				Text.Anchor = TextAnchor.UpperLeft;
-			}, true, false, 1f);
+			//WorldRoutePlanner.<>c__DisplayClass31_0 <>c__DisplayClass31_ = new WorldRoutePlanner.<>c__DisplayClass31_0();
+			//<>c__DisplayClass31_.<>4__this = this;
+			//<>c__DisplayClass31_.rect = new Rect(((float)UI.screenWidth - WorldRoutePlanner.BottomWindowSize.x) / 2f, (float)UI.screenHeight - WorldRoutePlanner.BottomWindowSize.y - 45f, WorldRoutePlanner.BottomWindowSize.x, WorldRoutePlanner.BottomWindowSize.y);
+			//if (Current.ProgramState == ProgramState.Entry)
+			//{
+			//	WorldRoutePlanner.<>c__DisplayClass31_0 <>c__DisplayClass31_2 = <>c__DisplayClass31_;
+			//	<>c__DisplayClass31_2.rect.y = <>c__DisplayClass31_2.rect.y - 22f;
+			//}
+			//Find.WindowStack.ImmediateWindow(1373514241, <>c__DisplayClass31_.rect, WindowLayer.Dialog, delegate
+			//{
+			//	if (!<>c__DisplayClass31_.<>4__this.active)
+			//	{
+			//		return;
+			//	}
+			//	GUI.color = Color.white;
+			//	Text.Anchor = TextAnchor.UpperCenter;
+			//	Text.Font = GameFont.Small;
+			//	float num = 6f;
+			//	if (<>c__DisplayClass31_.<>4__this.waypoints.Count >= 2)
+			//	{
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerEstTimeToFinalDest".Translate(<>c__DisplayClass31_.<>4__this.GetTicksToWaypoint(<>c__DisplayClass31_.<>4__this.waypoints.Count - 1).ToStringTicksToDays("0.#")));
+			//	}
+			//	else if (<>c__DisplayClass31_.<>4__this.cantRemoveFirstWaypoint)
+			//	{
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerAddOneOrMoreWaypoints".Translate());
+			//	}
+			//	else
+			//	{
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerAddTwoOrMoreWaypoints".Translate());
+			//	}
+			//	num += 20f;
+			//	if (<>c__DisplayClass31_.<>4__this.CaravanInfo == null || !<>c__DisplayClass31_.<>4__this.CaravanInfo.Value.pawns.Any<Pawn>())
+			//	{
+			//		GUI.color = new Color(0.8f, 0.6f, 0.6f);
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerUsingAverageTicksPerMoveWarning".Translate());
+			//	}
+			//	else if (<>c__DisplayClass31_.<>4__this.currentFormCaravanDialog == null && <>c__DisplayClass31_.<>4__this.CaravanAtTheFirstWaypoint != null)
+			//	{
+			//		GUI.color = Color.gray;
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerUsingTicksPerMoveOfCaravan".Translate(<>c__DisplayClass31_.<>4__this.CaravanAtTheFirstWaypoint.LabelCap));
+			//	}
+			//	num += 20f;
+			//	GUI.color = Color.gray;
+			//	Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressRMBToAddAndRemoveWaypoints".Translate());
+			//	num += 20f;
+			//	if (<>c__DisplayClass31_.<>4__this.currentFormCaravanDialog != null)
+			//	{
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressEscapeToReturnToCaravanFormationDialog".Translate());
+			//	}
+			//	else
+			//	{
+			//		Widgets.Label(new Rect(0f, num, <>c__DisplayClass31_.rect.width, 25f), "RoutePlannerPressEscapeToExit".Translate());
+			//	}
+			//	num += 20f;
+			//	GUI.color = Color.white;
+			//	Text.Anchor = TextAnchor.UpperLeft;
+			//}, true, false, 1f);
 		}
 
 		// Token: 0x06007063 RID: 28771 RVA: 0x002730E8 File Offset: 0x002712E8

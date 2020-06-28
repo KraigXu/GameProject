@@ -24,16 +24,14 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x06006733 RID: 26419 RVA: 0x00241D88 File Offset: 0x0023FF88
+
 		private bool TrySetVars(Slate slate)
 		{
 			float points = slate.Get<float>("points", 0f, false);
 			Faction faction = slate.Get<Faction>("enemyFaction", null, false);
 			Pawn asker = slate.Get<Pawn>("asker", null, false);
 			Thing mustBeHostileToFactionOfResolved = this.mustBeHostileToFactionOf.GetValue(slate);
-			Func<SitePartDef, bool> <>9__3;
-			Func<string, IEnumerable<SitePartDef>> <>9__1;
-			Predicate<Faction> <>9__2;
+
 			for (int i = 0; i < 2; i++)
 			{
 				QuestNode_GetSitePartDefsByTagsAndFaction.tmpTags.Clear();
@@ -47,34 +45,22 @@ namespace RimWorld.QuestGen
 				IEnumerable<string> source = from x in QuestNode_GetSitePartDefsByTagsAndFaction.tmpTags
 				where x != null
 				select x;
-				Func<string, IEnumerable<SitePartDef>> selector;
-				if ((selector = <>9__1) == null)
+				Func<string, IEnumerable<SitePartDef>> selector= delegate (string x)
 				{
-					selector = (<>9__1 = delegate(string x)
+					IEnumerable<SitePartDef> enumerable = SiteMakerHelper.SitePartDefsWithTag(x);
+					IEnumerable<SitePartDef> source2 = enumerable;
+					Func<SitePartDef, bool> predicate=y => points >= y.minThreatPoints;
+					IEnumerable<SitePartDef> enumerable2 = source2.Where(predicate);
+					if (!enumerable2.Any<SitePartDef>())
 					{
-						IEnumerable<SitePartDef> enumerable = SiteMakerHelper.SitePartDefsWithTag(x);
-						IEnumerable<SitePartDef> source2 = enumerable;
-						Func<SitePartDef, bool> predicate;
-						if ((predicate = <>9__3) == null)
-						{
-							predicate = (<>9__3 = ((SitePartDef y) => points >= y.minThreatPoints));
-						}
-						IEnumerable<SitePartDef> enumerable2 = source2.Where(predicate);
-						if (!enumerable2.Any<SitePartDef>())
-						{
-							return enumerable;
-						}
-						return enumerable2;
-					});
-				}
+						return enumerable;
+					}
+					return enumerable2;
+				};
 				IEnumerable<IEnumerable<SitePartDef>> sitePartsCandidates = source.Select(selector);
 				Faction factionToUse = faction;
 				bool disallowNonHostileFactions = true;
-				Predicate<Faction> extraFactionValidator;
-				if ((extraFactionValidator = <>9__2) == null)
-				{
-					extraFactionValidator = (<>9__2 = ((Faction x) => (asker == null || asker.Faction == null || asker.Faction != x) && (mustBeHostileToFactionOfResolved == null || mustBeHostileToFactionOfResolved.Faction == null || (x != mustBeHostileToFactionOfResolved.Faction && x.HostileTo(mustBeHostileToFactionOfResolved.Faction)))));
-				}
+				Predicate<Faction> extraFactionValidator=x=> (asker == null || asker.Faction == null || asker.Faction != x) && (mustBeHostileToFactionOfResolved == null || mustBeHostileToFactionOfResolved.Faction == null || (x != mustBeHostileToFactionOfResolved.Faction && x.HostileTo(mustBeHostileToFactionOfResolved.Faction)));
 				List<SitePartDef> list;
 				Faction var;
 				if (SiteMakerHelper.TryFindSiteParams_MultipleSiteParts(sitePartsCandidates, out list, out var, factionToUse, disallowNonHostileFactions, extraFactionValidator))

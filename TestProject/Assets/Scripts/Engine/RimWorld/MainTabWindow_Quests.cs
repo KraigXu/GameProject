@@ -1102,7 +1102,6 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005CA6 RID: 23718 RVA: 0x00201800 File Offset: 0x001FFA00
 		private string GetAcceptedAgoByString(Quest quest)
 		{
 			string value = quest.TicksSinceAccepted.ToStringTicksToPeriod(true, false, true, true);
@@ -1113,7 +1112,7 @@ namespace RimWorld
 			return "AcceptedAgo".Translate(value);
 		}
 
-		// Token: 0x06005CA7 RID: 23719 RVA: 0x00201860 File Offset: 0x001FFA60
+
 		private string GetAcceptedOnByString(Quest quest)
 		{
 			Vector2 locForDates = QuestUtility.GetLocForDates();
@@ -1125,7 +1124,7 @@ namespace RimWorld
 			return "AcceptedOn".Translate(value);
 		}
 
-		// Token: 0x06005CA8 RID: 23720 RVA: 0x002018CC File Offset: 0x001FFACC
+
 		private void AcceptQuestByInterface(Action preAcceptAction = null, bool requiresAccepter = false)
 		{
 			MainTabWindow_Quests.<>c__DisplayClass66_0 <>c__DisplayClass66_ = new MainTabWindow_Quests.<>c__DisplayClass66_0();

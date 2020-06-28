@@ -6,9 +6,11 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x0200043E RID: 1086
 	public static class GenClosest
 	{
+
+		private const int DefaultLocalTraverseRegionsBeforeGlobal = 30;
+
 		// Token: 0x06002077 RID: 8311 RVA: 0x000C5FB8 File Offset: 0x000C41B8
 		private static bool EarlyOutSearch(IntVec3 start, Map map, ThingRequest thingReq, IEnumerable<Thing> customGlobalSearchSet, Predicate<Thing> validator)
 		{
@@ -130,7 +132,7 @@ namespace Verse
 				int regionsSeenScan;
 				if (RegionTraverser.ShouldCountRegion(r))
 				{
-					regionsSeenScan = regionsSeenScan;
+					//regionsSeenScan = regionsSeenScan;
 					regionsSeenScan++;
 				}
 				if (!r.IsDoorway && !r.Allows(traverseParams, true))
@@ -166,118 +168,118 @@ namespace Verse
 			return closestThing;
 		}
 
-		// Token: 0x0600207B RID: 8315 RVA: 0x000C63A8 File Offset: 0x000C45A8
 		public static Thing ClosestThing_Global(IntVec3 center, IEnumerable searchSet, float maxDistance = 99999f, Predicate<Thing> validator = null, Func<Thing, float> priorityGetter = null)
 		{
-			GenClosest.<>c__DisplayClass5_0 <>c__DisplayClass5_;
-			<>c__DisplayClass5_.center = center;
-			<>c__DisplayClass5_.priorityGetter = priorityGetter;
-			<>c__DisplayClass5_.validator = validator;
-			if (searchSet == null)
-			{
-				return null;
-			}
-			<>c__DisplayClass5_.closestDistSquared = 2.14748365E+09f;
-			<>c__DisplayClass5_.chosen = null;
-			<>c__DisplayClass5_.bestPrio = float.MinValue;
-			<>c__DisplayClass5_.maxDistanceSquared = maxDistance * maxDistance;
-			IList<Thing> list;
-			IList<Pawn> list2;
-			IList<Building> list3;
-			IList<IAttackTarget> list4;
-			if ((list = (searchSet as IList<Thing>)) != null)
-			{
-				for (int i = 0; i < list.Count; i++)
-				{
-					GenClosest.<ClosestThing_Global>g__Process|5_0(list[i], ref <>c__DisplayClass5_);
-				}
-			}
-			else if ((list2 = (searchSet as IList<Pawn>)) != null)
-			{
-				for (int j = 0; j < list2.Count; j++)
-				{
-					GenClosest.<ClosestThing_Global>g__Process|5_0(list2[j], ref <>c__DisplayClass5_);
-				}
-			}
-			else if ((list3 = (searchSet as IList<Building>)) != null)
-			{
-				for (int k = 0; k < list3.Count; k++)
-				{
-					GenClosest.<ClosestThing_Global>g__Process|5_0(list3[k], ref <>c__DisplayClass5_);
-				}
-			}
-			else if ((list4 = (searchSet as IList<IAttackTarget>)) != null)
-			{
-				for (int l = 0; l < list4.Count; l++)
-				{
-					GenClosest.<ClosestThing_Global>g__Process|5_0((Thing)list4[l], ref <>c__DisplayClass5_);
-				}
-			}
-			else
-			{
-				foreach (object obj in searchSet)
-				{
-					GenClosest.<ClosestThing_Global>g__Process|5_0((Thing)obj, ref <>c__DisplayClass5_);
-				}
-			}
-			return <>c__DisplayClass5_.chosen;
+			//GenClosest.<>c__DisplayClass5_0 <>c__DisplayClass5_;
+			//<>c__DisplayClass5_.center = center;
+			//<>c__DisplayClass5_.priorityGetter = priorityGetter;
+			//<>c__DisplayClass5_.validator = validator;
+			//if (searchSet == null)
+			//{
+			//	return null;
+			//}
+			//<>c__DisplayClass5_.closestDistSquared = 2.14748365E+09f;
+			//<>c__DisplayClass5_.chosen = null;
+			//<>c__DisplayClass5_.bestPrio = float.MinValue;
+			//<>c__DisplayClass5_.maxDistanceSquared = maxDistance * maxDistance;
+			//IList<Thing> list;
+			//IList<Pawn> list2;
+			//IList<Building> list3;
+			//IList<IAttackTarget> list4;
+			//if ((list = (searchSet as IList<Thing>)) != null)
+			//{
+			//	for (int i = 0; i < list.Count; i++)
+			//	{
+			//		GenClosest.<ClosestThing_Global>g__Process|5_0(list[i], ref <>c__DisplayClass5_);
+			//	}
+			//}
+			//else if ((list2 = (searchSet as IList<Pawn>)) != null)
+			//{
+			//	for (int j = 0; j < list2.Count; j++)
+			//	{
+			//		GenClosest.<ClosestThing_Global>g__Process|5_0(list2[j], ref <>c__DisplayClass5_);
+			//	}
+			//}
+			//else if ((list3 = (searchSet as IList<Building>)) != null)
+			//{
+			//	for (int k = 0; k < list3.Count; k++)
+			//	{
+			//		GenClosest.<ClosestThing_Global>g__Process|5_0(list3[k], ref <>c__DisplayClass5_);
+			//	}
+			//}
+			//else if ((list4 = (searchSet as IList<IAttackTarget>)) != null)
+			//{
+			//	for (int l = 0; l < list4.Count; l++)
+			//	{
+			//		GenClosest.<ClosestThing_Global>g__Process|5_0((Thing)list4[l], ref <>c__DisplayClass5_);
+			//	}
+			//}
+			//else
+			//{
+			//	foreach (object obj in searchSet)
+			//	{
+			//		GenClosest.<ClosestThing_Global>g__Process|5_0((Thing)obj, ref <>c__DisplayClass5_);
+			//	}
+			//}
+			//return <>c__DisplayClass5_.chosen;
+			return default;
 		}
 
 		// Token: 0x0600207C RID: 8316 RVA: 0x000C651C File Offset: 0x000C471C
 		public static Thing ClosestThing_Global_Reachable(IntVec3 center, Map map, IEnumerable<Thing> searchSet, PathEndMode peMode, TraverseParms traverseParams, float maxDistance = 9999f, Predicate<Thing> validator = null, Func<Thing, float> priorityGetter = null)
 		{
-			GenClosest.<>c__DisplayClass6_0 <>c__DisplayClass6_;
-			<>c__DisplayClass6_.center = center;
-			<>c__DisplayClass6_.priorityGetter = priorityGetter;
-			<>c__DisplayClass6_.map = map;
-			<>c__DisplayClass6_.peMode = peMode;
-			<>c__DisplayClass6_.traverseParams = traverseParams;
-			<>c__DisplayClass6_.validator = validator;
-			if (searchSet == null)
-			{
-				return null;
-			}
-			<>c__DisplayClass6_.debug_changeCount = 0;
-			<>c__DisplayClass6_.debug_scanCount = 0;
-			<>c__DisplayClass6_.bestThing = null;
-			<>c__DisplayClass6_.bestPrio = float.MinValue;
-			<>c__DisplayClass6_.maxDistanceSquared = maxDistance * maxDistance;
-			<>c__DisplayClass6_.closestDistSquared = 2.14748365E+09f;
-			IList<Thing> list;
-			IList<Pawn> list2;
-			IList<Building> list3;
-			if ((list = (searchSet as IList<Thing>)) != null)
-			{
-				for (int i = 0; i < list.Count; i++)
-				{
-					GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list[i], ref <>c__DisplayClass6_);
-				}
-			}
-			else if ((list2 = (searchSet as IList<Pawn>)) != null)
-			{
-				for (int j = 0; j < list2.Count; j++)
-				{
-					GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list2[j], ref <>c__DisplayClass6_);
-				}
-			}
-			else if ((list3 = (searchSet as IList<Building>)) != null)
-			{
-				for (int k = 0; k < list3.Count; k++)
-				{
-					GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list3[k], ref <>c__DisplayClass6_);
-				}
-			}
-			else
-			{
-				foreach (Thing t in searchSet)
-				{
-					GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(t, ref <>c__DisplayClass6_);
-				}
-			}
-			return <>c__DisplayClass6_.bestThing;
+			//GenClosest.<>c__DisplayClass6_0 <>c__DisplayClass6_;
+			//<>c__DisplayClass6_.center = center;
+			//<>c__DisplayClass6_.priorityGetter = priorityGetter;
+			//<>c__DisplayClass6_.map = map;
+			//<>c__DisplayClass6_.peMode = peMode;
+			//<>c__DisplayClass6_.traverseParams = traverseParams;
+			//<>c__DisplayClass6_.validator = validator;
+			//if (searchSet == null)
+			//{
+			//	return null;
+			//}
+			//<>c__DisplayClass6_.debug_changeCount = 0;
+			//<>c__DisplayClass6_.debug_scanCount = 0;
+			//<>c__DisplayClass6_.bestThing = null;
+			//<>c__DisplayClass6_.bestPrio = float.MinValue;
+			//<>c__DisplayClass6_.maxDistanceSquared = maxDistance * maxDistance;
+			//<>c__DisplayClass6_.closestDistSquared = 2.14748365E+09f;
+			//IList<Thing> list;
+			//IList<Pawn> list2;
+			//IList<Building> list3;
+			//if ((list = (searchSet as IList<Thing>)) != null)
+			//{
+			//	for (int i = 0; i < list.Count; i++)
+			//	{
+			//		GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list[i], ref <>c__DisplayClass6_);
+			//	}
+			//}
+			//else if ((list2 = (searchSet as IList<Pawn>)) != null)
+			//{
+			//	for (int j = 0; j < list2.Count; j++)
+			//	{
+			//		GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list2[j], ref <>c__DisplayClass6_);
+			//	}
+			//}
+			//else if ((list3 = (searchSet as IList<Building>)) != null)
+			//{
+			//	for (int k = 0; k < list3.Count; k++)
+			//	{
+			//		GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(list3[k], ref <>c__DisplayClass6_);
+			//	}
+			//}
+			//else
+			//{
+			//	foreach (Thing t in searchSet)
+			//	{
+			//		GenClosest.<ClosestThing_Global_Reachable>g__Process|6_0(t, ref <>c__DisplayClass6_);
+			//	}
+			//}
+			//return <>c__DisplayClass6_.bestThing;
+			return default;
 		}
 
-		// Token: 0x040013CF RID: 5071
-		private const int DefaultLocalTraverseRegionsBeforeGlobal = 30;
+
 	}
 }

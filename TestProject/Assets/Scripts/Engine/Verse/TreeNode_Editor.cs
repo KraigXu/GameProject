@@ -265,7 +265,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B6C RID: 7020 RVA: 0x000A8020 File Offset: 0x000A6220
+
 		public void RebuildChildNodes()
 		{
 			if (this.obj == null)
@@ -285,12 +285,7 @@ namespace Verse
 				return;
 			}
 			IEnumerable<FieldInfo> fields = this.obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-			Func<FieldInfo, int> <>9__0;
-			Func<FieldInfo, int> keySelector;
-			if ((keySelector = <>9__0) == null)
-			{
-				keySelector = (<>9__0 = ((FieldInfo f) => this.InheritanceDistanceBetween(objType, f.DeclaringType)));
-			}
+			Func<FieldInfo, int> keySelector=f=> this.InheritanceDistanceBetween(objType, f.DeclaringType);
 			foreach (FieldInfo fieldInfo in fields.OrderByDescending(keySelector))
 			{
 				if (fieldInfo.GetCustomAttributes(typeof(UnsavedAttribute), true).Length == 0 && fieldInfo.GetCustomAttributes(typeof(EditorHiddenAttribute), true).Length == 0)

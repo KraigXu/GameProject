@@ -442,7 +442,6 @@ namespace Verse.AI
 				{
 					Thing primaryTarget = curJob.GetTarget(primaryTargetInd).Thing;
 					bool hasSpareItems = actor.carryTracker.CarriedThing.stackCount > GenConstruct.AmountNeededByOf((IConstructible)primaryTarget, actor.carryTracker.CarriedThing.def);
-					Predicate<ThingDefCountClass> <>9__4;
 					Predicate<Thing> validator = delegate(Thing th)
 					{
 						if (!GenConstruct.CanConstruct(th, actor, false, false))
@@ -450,11 +449,7 @@ namespace Verse.AI
 							return false;
 						}
 						List<ThingDefCountClass> list = ((IConstructible)th).MaterialsNeeded();
-						Predicate<ThingDefCountClass> predicate;
-						if ((predicate = <>9__4) == null)
-						{
-							predicate = (<>9__4 = ((ThingDefCountClass need) => need.thingDef == actor.carryTracker.CarriedThing.def));
-						}
+						Predicate<ThingDefCountClass> predicate= need => need.thingDef == actor.carryTracker.CarriedThing.def;
 						return list.Any(predicate) && (th == primaryTarget || hasSpareItems);
 					};
 					Thing nextTarget = GenClosest.ClosestThing_Global_Reachable(actor.Position, actor.Map, from targ in curJob.targetQueueB
@@ -470,7 +465,6 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025AD RID: 9645 RVA: 0x000DF458 File Offset: 0x000DD658
 		public static Toil TakeToInventory(TargetIndex ind, int count)
 		{
 			return Toils_Haul.TakeToInventory(ind, () => count);
