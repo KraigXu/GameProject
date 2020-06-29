@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Thought_DecreeUnmet : Thought_Situational
 	{
 		
-		// (get) Token: 0x060034C9 RID: 13513 RVA: 0x00120E40 File Offset: 0x0011F040
+		
 		public override string LabelCap
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060034CA RID: 13514 RVA: 0x00120E9C File Offset: 0x0011F09C
+		
 		public override string Description
 		{
 			get

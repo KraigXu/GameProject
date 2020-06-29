@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		{
 			ResolveParams resolveParams = rp;
 			resolveParams.singleThingToSpawn = rp.conditionCauser;
-			BaseGen.symbolStack.Push("thing", resolveParams, null);
+			BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 		}
 	}
 }

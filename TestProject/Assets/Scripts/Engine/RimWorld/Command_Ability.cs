@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Command_Ability : Command
 	{
 		
-		// (get) Token: 0x06004170 RID: 16752 RVA: 0x0015DE32 File Offset: 0x0015C032
+		
 		public override Texture2D BGTexture
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004171 RID: 16753 RVA: 0x0015DE39 File Offset: 0x0015C039
+		
 		public virtual string Tooltip
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_Lovin : JobDriver
 	{
 		
-		// (get) Token: 0x06002CB2 RID: 11442 RVA: 0x000FE278 File Offset: 0x000FC478
+		
 		private Pawn Partner
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CB3 RID: 11443 RVA: 0x000FE295 File Offset: 0x000FC495
+		
 		private Building_Bed Bed
 		{
 			get

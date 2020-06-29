@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompSchedule : ThingComp
 	{
 		
-		// (get) Token: 0x06003F8C RID: 16268 RVA: 0x00151C59 File Offset: 0x0014FE59
+		
 		public CompProperties_Schedule Props
 		{
 			get
@@ -17,8 +17,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F8D RID: 16269 RVA: 0x00151C66 File Offset: 0x0014FE66
-		// (set) Token: 0x06003F8E RID: 16270 RVA: 0x00151C6E File Offset: 0x0014FE6E
+		
+		
 		public bool Allowed
 		{
 			get

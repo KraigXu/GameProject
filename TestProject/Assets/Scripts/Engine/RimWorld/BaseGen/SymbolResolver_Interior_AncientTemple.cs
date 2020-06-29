@@ -15,7 +15,7 @@ namespace RimWorld.BaseGen
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingToSpawn = list[i];
-				BaseGen.symbolStack.Push("thing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 			}
 			if (!Find.Storyteller.difficulty.peacefulTemples)
 			{
@@ -23,18 +23,18 @@ namespace RimWorld.BaseGen
 				{
 					ResolveParams resolveParams2 = rp;
 					resolveParams2.mechanoidsCount = new int?(rp.mechanoidsCount ?? SymbolResolver_Interior_AncientTemple.MechanoidCountRange.RandomInRange);
-					BaseGen.symbolStack.Push("randomMechanoidGroup", resolveParams2, null);
+					BaseGenCore.symbolStack.Push("randomMechanoidGroup", resolveParams2, null);
 				}
 				else
 				{
 					ResolveParams resolveParams3 = rp;
 					resolveParams3.hivesCount = new int?(rp.hivesCount ?? SymbolResolver_Interior_AncientTemple.HivesCountRange.RandomInRange);
-					BaseGen.symbolStack.Push("hives", resolveParams3, null);
+					BaseGenCore.symbolStack.Push("hives", resolveParams3, null);
 				}
 			}
 			if (rp.rect.Width >= SymbolResolver_Interior_AncientTemple.MinSizeForShrines.x && rp.rect.Height >= SymbolResolver_Interior_AncientTemple.MinSizeForShrines.z)
 			{
-				BaseGen.symbolStack.Push("ancientShrinesGroup", rp, null);
+				BaseGenCore.symbolStack.Push("ancientShrinesGroup", rp, null);
 			}
 		}
 

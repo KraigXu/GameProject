@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_RemoveApparel : JobDriver
 	{
 		
-		// (get) Token: 0x06002DD5 RID: 11733 RVA: 0x001020F4 File Offset: 0x001002F4
+		
 		private Apparel Apparel
 		{
 			get

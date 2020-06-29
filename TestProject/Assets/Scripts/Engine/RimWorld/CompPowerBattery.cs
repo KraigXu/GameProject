@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompPowerBattery : CompPower
 	{
 		
-		// (get) Token: 0x06003F11 RID: 16145 RVA: 0x0014FA84 File Offset: 0x0014DC84
+		
 		public float AmountCanAccept
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F12 RID: 16146 RVA: 0x0014FABF File Offset: 0x0014DCBF
+		
 		public float StoredEnergy
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F13 RID: 16147 RVA: 0x0014FAC7 File Offset: 0x0014DCC7
+		
 		public float StoredEnergyPct
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F14 RID: 16148 RVA: 0x0014FADB File Offset: 0x0014DCDB
+		
 		public new CompProperties_Battery Props
 		{
 			get

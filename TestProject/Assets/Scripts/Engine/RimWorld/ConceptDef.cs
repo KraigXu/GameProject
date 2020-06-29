@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ConceptDef : Def
 	{
 		
-		// (get) Token: 0x06003766 RID: 14182 RVA: 0x00129B0E File Offset: 0x00127D0E
+		
 		public bool TriggeredDirect
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003767 RID: 14183 RVA: 0x00129B20 File Offset: 0x00127D20
+		
 		public string HelpTextAdjusted
 		{
 			get
@@ -30,9 +30,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.priority > 9999999f)

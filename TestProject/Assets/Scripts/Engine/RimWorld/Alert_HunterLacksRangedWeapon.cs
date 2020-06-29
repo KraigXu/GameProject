@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_HunterLacksRangedWeapon : Alert
 	{
 		
-		// (get) Token: 0x0600565A RID: 22106 RVA: 0x001CA168 File Offset: 0x001C8368
+		
 		private List<Pawn> HuntersWithoutRangedWeapon
 		{
 			get

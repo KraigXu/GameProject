@@ -19,7 +19,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002584 RID: 9604 RVA: 0x000DE5DC File Offset: 0x000DC7DC
+		
 		public IBillGiver BillGiver
 		{
 			get

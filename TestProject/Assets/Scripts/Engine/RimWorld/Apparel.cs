@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Apparel : ThingWithComps
 	{
 		
-		// (get) Token: 0x06004E17 RID: 19991 RVA: 0x001A46E4 File Offset: 0x001A28E4
+		
 		public Pawn Wearer
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E18 RID: 19992 RVA: 0x001A4708 File Offset: 0x001A2908
+		
 		public bool WornByCorpse
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E19 RID: 19993 RVA: 0x001A4710 File Offset: 0x001A2910
+		
 		public override string DescriptionDetailed
 		{
 			get

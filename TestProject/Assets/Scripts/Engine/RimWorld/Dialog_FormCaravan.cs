@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Dialog_FormCaravan : Window
 	{
 		
-		// (get) Token: 0x0600588D RID: 22669 RVA: 0x001D66EC File Offset: 0x001D48EC
+		
 		public int CurrentTile
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600588E RID: 22670 RVA: 0x001D66F9 File Offset: 0x001D48F9
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600588F RID: 22671 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005890 RID: 22672 RVA: 0x001D670B File Offset: 0x001D490B
+		
 		private bool AutoStripSpawnedCorpses
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005891 RID: 22673 RVA: 0x001D670B File Offset: 0x001D490B
+		
 		private bool ListPlayerPawnsInventorySeparately
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005892 RID: 22674 RVA: 0x001D6713 File Offset: 0x001D4913
+		
 		private BiomeDef Biome
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005893 RID: 22675 RVA: 0x001D6720 File Offset: 0x001D4920
+		
 		private bool MustChooseRoute
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005894 RID: 22676 RVA: 0x001D674C File Offset: 0x001D494C
+		
 		private bool ShowCancelButton
 		{
 			get
@@ -108,7 +108,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005895 RID: 22677 RVA: 0x001D67AF File Offset: 0x001D49AF
+		
 		private IgnorePawnsInventoryMode IgnoreInventoryMode
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005896 RID: 22678 RVA: 0x001D67BC File Offset: 0x001D49BC
+		
 		public float MassUsage
 		{
 			get
@@ -137,7 +137,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005897 RID: 22679 RVA: 0x001D67F4 File Offset: 0x001D49F4
+		
 		public float MassCapacity
 		{
 			get
@@ -154,7 +154,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005898 RID: 22680 RVA: 0x001D683C File Offset: 0x001D4A3C
+		
 		private float TilesPerDay
 		{
 			get
@@ -171,7 +171,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005899 RID: 22681 RVA: 0x001D689C File Offset: 0x001D4A9C
+		
 		private Pair<float, float> DaysWorthOfFood
 		{
 			get
@@ -183,7 +183,7 @@ namespace RimWorld
 					float second;
 					if (this.destinationTile != -1)
 					{
-						using (WorldPath worldPath = Find.WorldPathFinder.FindPath(this.CurrentTile, this.destinationTile, null, null))
+						WorldPath worldPath = Find.WorldPathFinder.FindPath(this.CurrentTile, this.destinationTile, null, null);
 						{
 							int ticksPerMove = CaravanTicksPerMoveUtility.GetTicksPerMove(new CaravanTicksPerMoveUtility.CaravanInfo(this), null);
 							first = DaysWorthOfFoodCalculator.ApproxDaysWorthOfFood(this.transferables, this.CurrentTile, this.IgnoreInventoryMode, Faction.OfPlayer, worldPath, 0f, ticksPerMove);
@@ -201,7 +201,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600589A RID: 22682 RVA: 0x001D69A8 File Offset: 0x001D4BA8
+		
 		private Pair<ThingDef, float> ForagedFoodPerDay
 		{
 			get
@@ -218,7 +218,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600589B RID: 22683 RVA: 0x001D69FC File Offset: 0x001D4BFC
+		
 		private float Visibility
 		{
 			get
@@ -235,7 +235,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600589C RID: 22684 RVA: 0x001D6A44 File Offset: 0x001D4C44
+		
 		private int TicksToArrive
 		{
 			get
@@ -247,7 +247,7 @@ namespace RimWorld
 				if (this.ticksToArriveDirty)
 				{
 					this.ticksToArriveDirty = false;
-					using (WorldPath worldPath = Find.WorldPathFinder.FindPath(this.CurrentTile, this.destinationTile, null, null))
+					WorldPath worldPath = Find.WorldPathFinder.FindPath(this.CurrentTile, this.destinationTile, null, null);
 					{
 						this.cachedTicksToArrive = CaravanArrivalTimeEstimator.EstimatedTicksToArrive(this.CurrentTile, this.destinationTile, worldPath, 0f, CaravanTicksPerMoveUtility.GetTicksPerMove(new CaravanTicksPerMoveUtility.CaravanInfo(this), null), Find.TickManager.TicksAbs);
 					}
@@ -257,7 +257,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600589D RID: 22685 RVA: 0x001D6ADC File Offset: 0x001D4CDC
+		
 		private bool MostFoodWillRotSoon
 		{
 			get
@@ -642,7 +642,7 @@ namespace RimWorld
 					}
 				}
 			}
-			//Action<Thing, IThingHolder> 9__3;
+			//
 			//for (int l = 0; l < this.transferables.Count; l++)
 			//{
 			//	if (!(this.transferables[l].AnyThing is Corpse))
@@ -652,7 +652,7 @@ namespace RimWorld
 			//		Action<Thing, IThingHolder> transferred;
 			//		if ((transferred ) == null)
 			//		{
-			//			transferred = (9__3 = delegate(Thing splitPiece, IThingHolder originalHolder)
+			//			transferred = ( delegate(Thing splitPiece, IThingHolder originalHolder)
 			//			{
 			//				Thing item = splitPiece.TryMakeMinified();
 			//				CaravanInventoryUtility.FindPawnToMoveInventoryTo(item, pawns, null, null).inventory.innerContainer.TryAdd(item, true);
@@ -661,7 +661,7 @@ namespace RimWorld
 			//		TransferableUtility.Transfer(things, countToTransfer, transferred);
 			//	}
 			//}
-			//Action<Thing, int> 9__4;
+			//
 			//for (int m = 0; m < this.transferables.Count; m++)
 			//{
 			//	if (this.transferables[m].AnyThing is Corpse)
@@ -671,7 +671,7 @@ namespace RimWorld
 			//		Action<Thing, int> transfer;
 			//		if ((transfer ) == null)
 			//		{
-			//			transfer = (9__4 = delegate(Thing originalThing, int numToTake)
+			//			transfer = ( delegate(Thing originalThing, int numToTake)
 			//			{
 			//				if (this.AutoStripSpawnedCorpses)
 			//				{

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_RefiringUniqueQuest : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D44 RID: 15684 RVA: 0x0013B2B7 File Offset: 0x001394B7
+		
 		private int IntervalsPassed
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D45 RID: 15685 RVA: 0x00143C8A File Offset: 0x00141E8A
+		
 		private StorytellerCompProperties_RefiringUniqueQuest Props
 		{
 			get

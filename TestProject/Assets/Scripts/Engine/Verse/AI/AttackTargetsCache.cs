@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class AttackTargetsCache
 	{
 		
-		// (get) Token: 0x06002911 RID: 10513 RVA: 0x000F23E6 File Offset: 0x000F05E6
+		
 		public HashSet<IAttackTarget> TargetsHostileToColony
 		{
 			get

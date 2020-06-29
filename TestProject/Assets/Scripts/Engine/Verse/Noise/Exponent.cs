@@ -24,8 +24,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600236D RID: 9069 RVA: 0x000D56AF File Offset: 0x000D38AF
-		// (set) Token: 0x0600236E RID: 9070 RVA: 0x000D56B7 File Offset: 0x000D38B7
+		
+		
 		public double Value
 		{
 			get

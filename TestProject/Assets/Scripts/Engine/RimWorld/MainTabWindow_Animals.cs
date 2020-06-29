@@ -10,7 +10,7 @@ namespace RimWorld
 	public class MainTabWindow_Animals : MainTabWindow_PawnTable
 	{
 		
-		// (get) Token: 0x06005C40 RID: 23616 RVA: 0x001FDBB7 File Offset: 0x001FBDB7
+		
 		protected override PawnTableDef PawnTableDef
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C41 RID: 23617 RVA: 0x001FDBBE File Offset: 0x001FBDBE
+		
 		protected override IEnumerable<Pawn> Pawns
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_ConditionCauser : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003ED7 RID: 16087 RVA: 0x0014E131 File Offset: 0x0014C331
+		
 		public override int SeedPart
 		{
 			get
@@ -45,9 +45,9 @@ namespace RimWorld
 			resolveParams.rect = rect;
 			resolveParams.faction = faction;
 			resolveParams.conditionCauser = sitePart.conditionCauser;
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("conditionCauserRoom", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("conditionCauserRoom", resolveParams, null);
+			BaseGenCore.Generate();
 		}
 
 		

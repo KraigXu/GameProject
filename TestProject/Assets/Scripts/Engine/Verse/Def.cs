@@ -9,7 +9,7 @@ namespace Verse
 	public class Def : Editable
 	{
 		
-		// (get) Token: 0x06000457 RID: 1111 RVA: 0x00016D1D File Offset: 0x00014F1D
+		
 		public TaggedString LabelCap
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse
 				{
 					foreach (string text in this.modExtensions[i].ConfigErrors())
 					{
-						yield return text;
+						
 					}
 					IEnumerator<string> enumerator = null;
 					num = i + 1;

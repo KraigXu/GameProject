@@ -99,16 +99,16 @@ namespace RimWorld
 				}
 			}
 			JoyGiver_SocialRelax.nurseableDrugs.Shuffle<ThingDef>();
-			Predicate<Thing> 9__0;
+
 			for (int j = 0; j < JoyGiver_SocialRelax.nurseableDrugs.Count; j++)
 			{
 				List<Thing> list = ingester.Map.listerThings.ThingsOfDef(JoyGiver_SocialRelax.nurseableDrugs[j]);
 				if (list.Count > 0)
 				{
 					Predicate<Thing> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__0 = ((Thing t) => ingester.CanReserve(t, 1, -1, null, false) && !t.IsForbidden(ingester)));
+						predicate = ( ((Thing t) => ingester.CanReserve(t, 1, -1, null, false) && !t.IsForbidden(ingester)));
 					}
 					Predicate<Thing> validator = predicate;
 					ingestible = GenClosest.ClosestThing_Global_Reachable(center, ingester.Map, list, PathEndMode.OnCell, TraverseParms.For(ingester, Danger.Deadly, TraverseMode.ByPawn, false), 40f, validator, null);

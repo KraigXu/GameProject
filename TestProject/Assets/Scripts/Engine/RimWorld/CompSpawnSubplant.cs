@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompSpawnSubplant : ThingComp
 	{
 		
-		// (get) Token: 0x06005376 RID: 21366 RVA: 0x001BED1E File Offset: 0x001BCF1E
+		
 		public CompProperties_SpawnSubplant Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005377 RID: 21367 RVA: 0x001BED2B File Offset: 0x001BCF2B
+		
 		public List<Thing> SubplantsForReading
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 				{
 					bool flag = false;
 					List<Thing> thingList = intVec.GetThingList(this.parent.Map);
-					using (List<Thing>.Enumerator enumerator = thingList.GetEnumerator())
+					List<Thing>.Enumerator enumerator = thingList.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

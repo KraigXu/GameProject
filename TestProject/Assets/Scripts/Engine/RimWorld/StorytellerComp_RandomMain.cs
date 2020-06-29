@@ -9,7 +9,7 @@ namespace RimWorld
 	public class StorytellerComp_RandomMain : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D39 RID: 15673 RVA: 0x00143AB9 File Offset: 0x00141CB9
+		
 		protected StorytellerCompProperties_RandomMain Props
 		{
 			get

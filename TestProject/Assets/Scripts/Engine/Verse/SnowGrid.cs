@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class SnowGrid : IExposable
 	{
 		
-		// (get) Token: 0x06000A83 RID: 2691 RVA: 0x000380C3 File Offset: 0x000362C3
+		
 		internal float[] DepthGridDirect_Unsafe
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A84 RID: 2692 RVA: 0x000380CB File Offset: 0x000362CB
+		
 		public float TotalDepth
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public static class DebugSoundEventsLog
 	{
 		
-		// (get) Token: 0x0600248F RID: 9359 RVA: 0x000D96A8 File Offset: 0x000D78A8
+		
 		public static string EventsListingDebugString
 		{
 			get

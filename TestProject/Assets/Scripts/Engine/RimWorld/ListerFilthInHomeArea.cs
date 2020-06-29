@@ -9,7 +9,7 @@ namespace RimWorld
 	public class ListerFilthInHomeArea
 	{
 		
-		// (get) Token: 0x06003DF2 RID: 15858 RVA: 0x00146942 File Offset: 0x00144B42
+		
 		public List<Thing> FilthInHomeArea
 		{
 			get

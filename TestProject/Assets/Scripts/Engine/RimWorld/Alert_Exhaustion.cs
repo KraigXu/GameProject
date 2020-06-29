@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005666 RID: 22118 RVA: 0x001CA520 File Offset: 0x001C8720
+		
 		private List<Pawn> ExhaustedColonists
 		{
 			get

@@ -191,19 +191,19 @@ namespace Verse
 		public static int HashCombine<T>(int seed, T obj)
 		{
 			int num = (obj == null) ? 0 : obj.GetHashCode();
-			return (int)((long)seed ^ (long)num + (long)((ulong)-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			return (int)((long)seed ^ (long)num + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
 		}
 
 		
 		public static int HashCombineStruct<T>(int seed, T obj) where T : struct
 		{
-			return (int)((long)seed ^ (long)obj.GetHashCode() + (long)((ulong)-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			return (int)((long)seed ^ (long)obj.GetHashCode() + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
 		}
 
 		
 		public static int HashCombineInt(int seed, int value)
 		{
-			return (int)((long)seed ^ (long)value + (long)((ulong)-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			return (int)((long)seed ^ (long)value + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
 		}
 
 		

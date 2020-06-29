@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class FormCaravanComp : WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006EE5 RID: 28389 RVA: 0x0026A889 File Offset: 0x00268A89
+		
 		public WorldObjectCompProperties_FormCaravan Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006EE6 RID: 28390 RVA: 0x0026A896 File Offset: 0x00268A96
+		
 		private MapParent MapParent
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006EE7 RID: 28391 RVA: 0x0026A8A3 File Offset: 0x00268AA3
+		
 		public bool Reform
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006EE8 RID: 28392 RVA: 0x0026A8C8 File Offset: 0x00268AC8
+		
 		public bool CanFormOrReformCaravanNow
 		{
 			get

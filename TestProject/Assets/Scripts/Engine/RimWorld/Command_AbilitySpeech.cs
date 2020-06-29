@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Command_AbilitySpeech : Command_Ability
 	{
 		
-		// (get) Token: 0x06004178 RID: 16760 RVA: 0x0015E0A8 File Offset: 0x0015C2A8
+		
 		public override string Tooltip
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_ThingsProduced : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003A05 RID: 14853 RVA: 0x00133FE4 File Offset: 0x001321E4
+		
 		public override string DescriptionPart
 		{
 			get
@@ -24,15 +24,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A06 RID: 14854 RVA: 0x00134044 File Offset: 0x00132244
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__0())
-				{
-					yield return hyperlink;
-				}
+
+
 				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 				yield return new Dialog_InfoCard.Hyperlink(this.def, -1);
 				yield break;

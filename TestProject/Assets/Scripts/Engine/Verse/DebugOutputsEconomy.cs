@@ -525,9 +525,9 @@ namespace Verse
 			list.Add(new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName));
 			list.Add(new TableDataGetter<ThingDef>("market\nvalue", (ThingDef d) => d.BaseMarketValue.ToString("F1")));
 			List<TableDataGetter<ThingDef>> list2 = list;
-			using (IEnumerator<string> enumerator = (from d in DefDatabase<ThingDef>.AllDefs
+			IEnumerator<string> enumerator = (from d in DefDatabase<ThingDef>.AllDefs
 			where d.thingSetMakerTags != null
-			select d).SelectMany((ThingDef d) => d.thingSetMakerTags).Distinct<string>().GetEnumerator())
+			select d).SelectMany((ThingDef d) => d.thingSetMakerTags).Distinct<string>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -666,14 +666,14 @@ namespace Verse
 			//TerrainDef terrainDef = b as TerrainDef;
 			//if (d != null)
 			//{
-			//	Predicate<ThingDefCountClass> 9__1;
+
 			//	if (DefDatabase<RecipeDef>.AllDefs.Any(delegate(RecipeDef r)
 			//	{
 			//		List<ThingDefCountClass> products = r.products;
 			//		Predicate<ThingDefCountClass> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__1 = ((ThingDefCountClass pr) => pr.thingDef == d));
+			//			predicate = ( ((ThingDefCountClass pr) => pr.thingDef == d));
 			//		}
 			//		return products.Any(predicate);
 			//	}))
@@ -831,7 +831,7 @@ namespace Verse
 		{
 			if (def.costList != null)
 			{
-				using (List<ThingDefCountClass>.Enumerator enumerator = def.costList.GetEnumerator())
+				List<ThingDefCountClass>.Enumerator enumerator = def.costList.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

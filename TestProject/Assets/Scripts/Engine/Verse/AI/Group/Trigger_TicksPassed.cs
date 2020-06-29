@@ -7,7 +7,7 @@ namespace Verse.AI.Group
 	public class Trigger_TicksPassed : Trigger
 	{
 		
-		// (get) Token: 0x060029FA RID: 10746 RVA: 0x000F5E21 File Offset: 0x000F4021
+		
 		protected TriggerData_TicksPassed Data
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x060029FB RID: 10747 RVA: 0x000F5E2E File Offset: 0x000F402E
+		
 		public int TicksLeft
 		{
 			get

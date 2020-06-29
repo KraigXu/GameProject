@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007059 RID: 28761 RVA: 0x00272C14 File Offset: 0x00270E14
+		
 		private bool ShouldStop
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600705A RID: 28762 RVA: 0x00272C40 File Offset: 0x00270E40
+		
 		private int CaravanTicksPerMove
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600705B RID: 28763 RVA: 0x00272C84 File Offset: 0x00270E84
+		
 		private CaravanTicksPerMoveUtility.CaravanInfo? CaravanInfo
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600705C RID: 28764 RVA: 0x00272CBF File Offset: 0x00270EBF
+		
 		private Caravan CaravanAtTheFirstWaypoint
 		{
 			get

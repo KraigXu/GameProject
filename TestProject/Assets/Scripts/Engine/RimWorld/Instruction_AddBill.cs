@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_AddBill : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E6B RID: 24171 RVA: 0x0020AE98 File Offset: 0x00209098
+		
 		protected override float ProgressPercent
 		{
 			get

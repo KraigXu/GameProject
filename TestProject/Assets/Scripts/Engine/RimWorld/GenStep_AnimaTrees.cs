@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_AnimaTrees : GenStep
 	{
 		
-		// (get) Token: 0x06003E31 RID: 15921 RVA: 0x001478BB File Offset: 0x00145ABB
+		
 		public override int SeedPart
 		{
 			get
@@ -28,15 +28,12 @@ namespace RimWorld
 			}
 			int i = GenStep_AnimaTrees.DesiredTreeCountForMap(map);
 			int num = 0;
-			Predicate<IntVec3> 9__0;
+
 			while (i > 0)
 			{
 				int minEdgeDistance = 25;
-				Predicate<IntVec3> validator;
-				if ((validator ) == null)
-				{
-					validator = (9__0 = ((IntVec3 x) => GenStep_AnimaTrees.CanSpawnAt(x, map, 0, 50, 22, 10)));
-				}
+				Predicate<IntVec3> validator = (((IntVec3 x) => GenStep_AnimaTrees.CanSpawnAt(x, map, 0, 50, 22, 10)));
+
 				IntVec3 cell;
 				if (!CellFinderLoose.TryFindRandomNotEdgeCellWith(minEdgeDistance, validator, map, out cell))
 				{

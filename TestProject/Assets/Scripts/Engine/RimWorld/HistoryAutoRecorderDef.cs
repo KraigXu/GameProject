@@ -8,7 +8,7 @@ namespace RimWorld
 	public class HistoryAutoRecorderDef : Def
 	{
 		
-		// (get) Token: 0x0600362E RID: 13870 RVA: 0x00125DCE File Offset: 0x00123FCE
+		
 		public HistoryAutoRecorderWorker Worker
 		{
 			get

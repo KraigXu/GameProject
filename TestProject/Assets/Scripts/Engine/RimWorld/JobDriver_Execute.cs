@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Execute : JobDriver
 	{
 		
-		// (get) Token: 0x06002D6B RID: 11627 RVA: 0x000FA2DB File Offset: 0x000F84DB
+		
 		protected Pawn Victim
 		{
 			get

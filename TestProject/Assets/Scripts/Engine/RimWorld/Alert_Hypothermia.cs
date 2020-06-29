@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005603 RID: 22019 RVA: 0x001C8490 File Offset: 0x001C6690
+		
 		private List<Pawn> HypothermiaDangerColonists
 		{
 			get

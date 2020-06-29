@@ -25,8 +25,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023A3 RID: 9123 RVA: 0x000D5CC6 File Offset: 0x000D3EC6
-		// (set) Token: 0x060023A4 RID: 9124 RVA: 0x000D5CCE File Offset: 0x000D3ECE
+		
+		
 		public double Bias
 		{
 			get
@@ -40,8 +40,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023A5 RID: 9125 RVA: 0x000D5CD7 File Offset: 0x000D3ED7
-		// (set) Token: 0x060023A6 RID: 9126 RVA: 0x000D5CDF File Offset: 0x000D3EDF
+		
+		
 		public double Scale
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompCreatesInfestations : ThingComp
 	{
 		
-		// (get) Token: 0x060050D9 RID: 20697 RVA: 0x001B2338 File Offset: 0x001B0538
+		
 		public bool CanCreateInfestationNow
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050DA RID: 20698 RVA: 0x001B2373 File Offset: 0x001B0573
+		
 		public bool CantFireBecauseCreatedInfestationRecently
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050DB RID: 20699 RVA: 0x001B2390 File Offset: 0x001B0590
+		
 		public bool CantFireBecauseSomethingElseCreatedInfestationRecently
 		{
 			get

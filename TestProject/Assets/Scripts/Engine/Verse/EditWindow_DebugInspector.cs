@@ -16,7 +16,7 @@ namespace Verse
 	public class EditWindow_DebugInspector : EditWindow
 	{
 		
-		// (get) Token: 0x060017AE RID: 6062 RVA: 0x000864F0 File Offset: 0x000846F0
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017AF RID: 6063 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class MainTabWindow_PawnTable : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005C7C RID: 23676 RVA: 0x001FF25B File Offset: 0x001FD45B
+		
 		protected virtual float ExtraBottomSpace
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C7D RID: 23677 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected virtual float ExtraTopSpace
 		{
 			get
@@ -29,11 +29,11 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C7E RID: 23678
+		
 		protected abstract PawnTableDef PawnTableDef { get; }
 
 		
-		// (get) Token: 0x06005C7F RID: 23679 RVA: 0x001FF262 File Offset: 0x001FD462
+		
 		protected override float Margin
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C80 RID: 23680 RVA: 0x001FF26C File Offset: 0x001FD46C
+		
 		public override Vector2 RequestedTabSize
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C81 RID: 23681 RVA: 0x001FF2D4 File Offset: 0x001FD4D4
+		
 		protected virtual IEnumerable<Pawn> Pawns
 		{
 			get

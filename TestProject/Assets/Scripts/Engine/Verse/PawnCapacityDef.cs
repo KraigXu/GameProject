@@ -6,7 +6,7 @@ namespace Verse
 	public class PawnCapacityDef : Def
 	{
 		
-		// (get) Token: 0x060005B6 RID: 1462 RVA: 0x0001BEEC File Offset: 0x0001A0EC
+		
 		public PawnCapacityWorker Worker
 		{
 			get

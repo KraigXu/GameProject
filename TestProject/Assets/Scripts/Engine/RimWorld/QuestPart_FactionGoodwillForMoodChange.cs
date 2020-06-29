@@ -10,7 +10,7 @@ namespace RimWorld
 	public class QuestPart_FactionGoodwillForMoodChange : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003880 RID: 14464 RVA: 0x0012E417 File Offset: 0x0012C617
+		
 		public override string ExpiryInfoPart
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003881 RID: 14465 RVA: 0x0012E44C File Offset: 0x0012C64C
+		
 		public override string ExpiryInfoPartTip
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003882 RID: 14466 RVA: 0x0012E4B0 File Offset: 0x0012C6B0
+		
 		private float AveragePawnMoodPercent
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003883 RID: 14467 RVA: 0x0012E538 File Offset: 0x0012C738
+		
 		private float MovingAveragePawnMoodPercent
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003884 RID: 14468 RVA: 0x0012E592 File Offset: 0x0012C792
+		
 		public int SampleSize
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class ExitMapGrid : ICellBoolGiver
 	{
 		
-		// (get) Token: 0x06000A47 RID: 2631 RVA: 0x00037674 File Offset: 0x00035874
+		
 		public bool MapUsesExitGrid
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A48 RID: 2632 RVA: 0x000376DC File Offset: 0x000358DC
+		
 		public CellBoolDrawer Drawer
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A49 RID: 2633 RVA: 0x00037745 File Offset: 0x00035945
+		
 		public BoolGrid Grid
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A4A RID: 2634 RVA: 0x00037765 File Offset: 0x00035965
+		
 		public Color Color
 		{
 			get

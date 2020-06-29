@@ -9,7 +9,7 @@ namespace RimWorld
 	public class StatDef : Def
 	{
 		
-		// (get) Token: 0x060036FD RID: 14077 RVA: 0x001289DC File Offset: 0x00126BDC
+		
 		public StatWorker Worker
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060036FE RID: 14078 RVA: 0x00128A49 File Offset: 0x00126C49
+		
 		public ToStringStyle ToStringStyleUnfinalized
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060036FF RID: 14079 RVA: 0x00128A6A File Offset: 0x00126C6A
+		
 		public string LabelForFullStatList
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003700 RID: 14080 RVA: 0x00128A86 File Offset: 0x00126C86
+		
 		public string LabelForFullStatListCap
 		{
 			get
@@ -71,14 +71,14 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.capacityFactors != null)
 			{
-				using (List<PawnCapacityFactor>.Enumerator enumerator2 = this.capacityFactors.GetEnumerator())
+				List<PawnCapacityFactor>.Enumerator enumerator2 = this.capacityFactors.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{
@@ -88,7 +88,7 @@ namespace RimWorld
 						}
 					}
 				}
-				List<PawnCapacityFactor>.Enumerator enumerator2 = default(List<PawnCapacityFactor>.Enumerator);
+				//List<PawnCapacityFactor>.Enumerator enumerator2 = default(List<PawnCapacityFactor>.Enumerator);
 			}
 			if (this.parts != null)
 			{

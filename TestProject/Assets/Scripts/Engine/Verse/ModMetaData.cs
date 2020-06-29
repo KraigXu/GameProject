@@ -16,7 +16,7 @@ namespace Verse
 	public class ModMetaData : WorkshopUploadable
 	{
 		
-		// (get) Token: 0x06000E4E RID: 3662 RVA: 0x00052278 File Offset: 0x00050478
+		
 		public Texture2D PreviewImage
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E4F RID: 3663 RVA: 0x000522D2 File Offset: 0x000504D2
+		
 		public string FolderName
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E50 RID: 3664 RVA: 0x000522DF File Offset: 0x000504DF
+		
 		public DirectoryInfo RootDir
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E51 RID: 3665 RVA: 0x000522E7 File Offset: 0x000504E7
+		
 		public bool IsCoreMod
 		{
 			get
@@ -66,8 +66,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E52 RID: 3666 RVA: 0x000522F5 File Offset: 0x000504F5
-		// (set) Token: 0x06000E53 RID: 3667 RVA: 0x000522FD File Offset: 0x000504FD
+		
+		
 		public bool Active
 		{
 			get
@@ -81,7 +81,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E54 RID: 3668 RVA: 0x00052306 File Offset: 0x00050506
+		
 		public bool VersionCompatible
 		{
 			get
@@ -95,7 +95,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E55 RID: 3669 RVA: 0x00052341 File Offset: 0x00050541
+		
 		public bool MadeForNewerVersion
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E56 RID: 3670 RVA: 0x0005237C File Offset: 0x0005057C
+		
 		public ExpansionDef Expansion
 		{
 			get
@@ -119,7 +119,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E57 RID: 3671 RVA: 0x0005238C File Offset: 0x0005058C
+		
 		public string Name
 		{
 			get
@@ -134,7 +134,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E58 RID: 3672 RVA: 0x000523B8 File Offset: 0x000505B8
+		
 		public string Description
 		{
 			get
@@ -149,7 +149,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E59 RID: 3673 RVA: 0x000523FB File Offset: 0x000505FB
+		
 		public string Author
 		{
 			get
@@ -159,7 +159,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5A RID: 3674 RVA: 0x00052408 File Offset: 0x00050608
+		
 		public string Url
 		{
 			get
@@ -169,7 +169,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5B RID: 3675 RVA: 0x00052415 File Offset: 0x00050615
+		
 		public int SteamAppId
 		{
 			get
@@ -179,7 +179,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5C RID: 3676 RVA: 0x00052424 File Offset: 0x00050624
+		
 		[Obsolete("Deprecated, will be removed in the future. Use SupportedVersions instead")]
 		public string TargetVersion
 		{
@@ -195,7 +195,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5D RID: 3677 RVA: 0x00052476 File Offset: 0x00050676
+		
 		public List<System.Version> SupportedVersionsReadOnly
 		{
 			get
@@ -205,7 +205,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5E RID: 3678 RVA: 0x00052483 File Offset: 0x00050683
+		
 		IEnumerable<System.Version> WorkshopUploadable.SupportedVersions
 		{
 			get
@@ -215,7 +215,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E5F RID: 3679 RVA: 0x0005248C File Offset: 0x0005068C
+		
 		public string PreviewImagePath
 		{
 			get
@@ -232,7 +232,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E60 RID: 3680 RVA: 0x000524E2 File Offset: 0x000506E2
+		
 		public bool Official
 		{
 			get
@@ -242,7 +242,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E61 RID: 3681 RVA: 0x000524F7 File Offset: 0x000506F7
+		
 		public ContentSource Source
 		{
 			get
@@ -252,7 +252,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E62 RID: 3682 RVA: 0x000524FF File Offset: 0x000506FF
+		
 		public string PackageId
 		{
 			get
@@ -266,7 +266,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E63 RID: 3683 RVA: 0x00052520 File Offset: 0x00050720
+		
 		public string PackageIdNonUnique
 		{
 			get
@@ -276,7 +276,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E64 RID: 3684 RVA: 0x00052528 File Offset: 0x00050728
+		
 		public string PackageIdPlayerFacing
 		{
 			get
@@ -286,7 +286,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E65 RID: 3685 RVA: 0x00052535 File Offset: 0x00050735
+		
 		public List<ModDependency> Dependencies
 		{
 			get
@@ -296,7 +296,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E66 RID: 3686 RVA: 0x00052542 File Offset: 0x00050742
+		
 		public List<string> LoadBefore
 		{
 			get
@@ -306,7 +306,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E67 RID: 3687 RVA: 0x0005254F File Offset: 0x0005074F
+		
 		public List<string> LoadAfter
 		{
 			get
@@ -316,7 +316,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E68 RID: 3688 RVA: 0x0005255C File Offset: 0x0005075C
+		
 		public List<string> IncompatibleWith
 		{
 			get
@@ -341,13 +341,13 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E6A RID: 3690 RVA: 0x000525C6 File Offset: 0x000507C6
-		// (set) Token: 0x06000E6B RID: 3691 RVA: 0x000525CE File Offset: 0x000507CE
+		
+		
 		public bool HadIncorrectlyFormattedVersionInMetadata { get; private set; }
 
 		
-		// (get) Token: 0x06000E6C RID: 3692 RVA: 0x000525D7 File Offset: 0x000507D7
-		// (set) Token: 0x06000E6D RID: 3693 RVA: 0x000525DF File Offset: 0x000507DF
+		
+		
 		public bool HadIncorrectlyFormattedPackageId { get; private set; }
 
 		
@@ -442,7 +442,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E75 RID: 3701 RVA: 0x00052871 File Offset: 0x00050A71
+		
 		public bool OnSteamWorkshop
 		{
 			get
@@ -452,7 +452,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E76 RID: 3702 RVA: 0x0005287C File Offset: 0x00050A7C
+		
 		private string PublishedFileIdPath
 		{
 			get
@@ -638,8 +638,8 @@ namespace Verse
 		private class ModMetaDataInternal
 		{
 			
-			// (get) Token: 0x060078F1 RID: 30961 RVA: 0x00294D51 File Offset: 0x00292F51
-			// (set) Token: 0x060078F2 RID: 30962 RVA: 0x00294D59 File Offset: 0x00292F59
+			
+			
 			public List<System.Version> SupportedVersions { get; private set; }
 
 			
@@ -788,7 +788,7 @@ namespace Verse
 				{
 					if (!char.IsLetterOrDigit(c) || c >= '\u0080')
 					{
-						c = c % '\u0019' + 'A';
+						//c = c % '\u0019' + 'A';
 					}
 					stringBuilder.Append(c);
 				}

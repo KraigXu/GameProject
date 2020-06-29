@@ -9,7 +9,7 @@ namespace RimWorld
 	public class FoodRestrictionDatabase : IExposable
 	{
 		
-		// (get) Token: 0x06003786 RID: 14214 RVA: 0x0012A2E7 File Offset: 0x001284E7
+		
 		public List<FoodRestriction> AllFoodRestrictions
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_BrawlerHasRangedWeapon : Alert
 	{
 		
-		// (get) Token: 0x060056AC RID: 22188 RVA: 0x001CBC70 File Offset: 0x001C9E70
+		
 		private List<Pawn> BrawlersWithRangedWeapon
 		{
 			get

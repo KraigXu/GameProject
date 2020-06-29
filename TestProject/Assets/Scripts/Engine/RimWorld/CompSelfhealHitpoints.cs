@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompSelfhealHitpoints : ThingComp
 	{
 		
-		// (get) Token: 0x060052C3 RID: 21187 RVA: 0x001BA6F8 File Offset: 0x001B88F8
+		
 		public CompProperties_SelfhealHitpoints Props
 		{
 			get

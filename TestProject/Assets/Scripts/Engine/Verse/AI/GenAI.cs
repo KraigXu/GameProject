@@ -31,14 +31,14 @@ namespace Verse.AI
 		{
 			Region root = pawn.GetRegion(RegionType.Set_Passable);
 			bool found = false;
-			Predicate<Thing> 9__2;
+
 			RegionTraverser.BreadthFirstTraverse(root, (Region r1, Region r2) => r2.Room == root.Room, delegate(Region r)
 			{
 				List<Thing> list = r.ListerThings.ThingsInGroup(ThingRequestGroup.Pawn);
 				Predicate<Thing> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__2 = delegate(Thing t)
+					predicate = ( delegate(Thing t)
 					{
 						Pawn pawn2 = t as Pawn;
 						if (pawn2 != null && !pawn2.Downed && (float)(pawn.Position - pawn2.Position).LengthHorizontalSquared < 144f && pawn2.HostileTo(pawn.Faction))

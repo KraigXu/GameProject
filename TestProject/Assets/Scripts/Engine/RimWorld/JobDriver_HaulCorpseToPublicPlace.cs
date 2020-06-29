@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_HaulCorpseToPublicPlace : JobDriver
 	{
 		
-		// (get) Token: 0x06002C73 RID: 11379 RVA: 0x000FD7F0 File Offset: 0x000FB9F0
+		
 		private Corpse Corpse
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C74 RID: 11380 RVA: 0x000FD818 File Offset: 0x000FBA18
+		
 		private Building_Grave Grave
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C75 RID: 11381 RVA: 0x000FD83E File Offset: 0x000FBA3E
+		
 		private bool InGrave
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C76 RID: 11382 RVA: 0x000FD849 File Offset: 0x000FBA49
+		
 		private Thing Target
 		{
 			get

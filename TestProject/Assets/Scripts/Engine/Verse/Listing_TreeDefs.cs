@@ -10,7 +10,7 @@ namespace Verse
 	public class Listing_TreeDefs : Listing_Tree
 	{
 		
-		// (get) Token: 0x06001B52 RID: 6994 RVA: 0x000A7370 File Offset: 0x000A5570
+		
 		protected override float LabelWidth
 		{
 			get

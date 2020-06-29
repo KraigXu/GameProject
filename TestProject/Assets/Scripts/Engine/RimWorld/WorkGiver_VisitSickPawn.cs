@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_VisitSickPawn : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600317E RID: 12670 RVA: 0x0010FDBF File Offset: 0x0010DFBF
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600317F RID: 12671 RVA: 0x0010F64C File Offset: 0x0010D84C
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get

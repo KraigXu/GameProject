@@ -8,7 +8,7 @@ namespace Verse
 	public class MathEvaluatorCustomVariable : IXsltContextVariable
 	{
 		
-		// (get) Token: 0x06000335 RID: 821 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool IsLocal
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000336 RID: 822 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool IsParam
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000337 RID: 823 RVA: 0x000107FF File Offset: 0x0000E9FF
+		
 		public XPathResultType VariableType
 		{
 			get

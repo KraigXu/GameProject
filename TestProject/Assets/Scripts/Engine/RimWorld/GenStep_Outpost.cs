@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_Outpost : GenStep
 	{
 		
-		// (get) Token: 0x06003EEB RID: 16107 RVA: 0x0014E7AA File Offset: 0x0014C9AA
+		
 		public override int SeedPart
 		{
 			get
@@ -57,11 +57,11 @@ namespace RimWorld
 			{
 				resolveParams.settlementPawnGroupPoints = new float?(this.defaultPawnGroupPointsRange.RandomInRange);
 			}
-			BaseGen.globalSettings.map = map;
-			BaseGen.globalSettings.minBuildings = 1;
-			BaseGen.globalSettings.minBarracks = 1;
-			BaseGen.symbolStack.Push("settlement", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.globalSettings.minBuildings = 1;
+			BaseGenCore.globalSettings.minBarracks = 1;
+			BaseGenCore.symbolStack.Push("settlement", resolveParams, null);
+			BaseGenCore.Generate();
 			list.Add(resolveParams.rect);
 		}
 

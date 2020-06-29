@@ -7,11 +7,11 @@ namespace RimWorld
 	public abstract class Instruction_ExpandArea : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005EAA RID: 24234
+		
 		protected abstract Area MyArea { get; }
 
 		
-		// (get) Token: 0x06005EAB RID: 24235 RVA: 0x0020BD0C File Offset: 0x00209F0C
+		
 		protected override float ProgressPercent
 		{
 			get

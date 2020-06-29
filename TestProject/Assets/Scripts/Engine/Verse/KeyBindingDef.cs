@@ -8,7 +8,7 @@ namespace Verse
 	public class KeyBindingDef : Def
 	{
 		
-		// (get) Token: 0x06000597 RID: 1431 RVA: 0x0001B92C File Offset: 0x00019B2C
+		
 		public KeyCode MainKey
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000598 RID: 1432 RVA: 0x0001B96C File Offset: 0x00019B6C
+		
 		public string MainKeyLabel
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000599 RID: 1433 RVA: 0x0001B97C File Offset: 0x00019B7C
+		
 		public bool KeyDownEvent
 		{
 			get
@@ -51,7 +51,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600059A RID: 1434 RVA: 0x0001BA24 File Offset: 0x00019C24
+		
 		public bool IsDownEvent
 		{
 			get
@@ -62,7 +62,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600059B RID: 1435 RVA: 0x0001BB68 File Offset: 0x00019D68
+		
 		public bool JustPressed
 		{
 			get
@@ -73,7 +73,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600059C RID: 1436 RVA: 0x0001BBA8 File Offset: 0x00019DA8
+		
 		public bool IsDown
 		{
 			get

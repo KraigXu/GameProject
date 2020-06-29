@@ -9,7 +9,7 @@ namespace RimWorld
 	public class NameBank
 	{
 		
-		// (get) Token: 0x060042C0 RID: 17088 RVA: 0x00166361 File Offset: 0x00164561
+		
 		private IEnumerable<List<string>> AllNameLists
 		{
 			get

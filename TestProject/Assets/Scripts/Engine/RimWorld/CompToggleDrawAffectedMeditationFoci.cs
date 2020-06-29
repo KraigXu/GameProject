@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompToggleDrawAffectedMeditationFoci : ThingComp
 	{
 		
-		// (get) Token: 0x060053C8 RID: 21448 RVA: 0x001BFD47 File Offset: 0x001BDF47
+		
 		public bool Enabled
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053C9 RID: 21449 RVA: 0x001BFD4F File Offset: 0x001BDF4F
+		
 		public CompProperties_ToggleDrawAffectedMeditationFoci Props
 		{
 			get

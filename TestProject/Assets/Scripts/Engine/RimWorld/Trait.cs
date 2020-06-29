@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Trait : IExposable
 	{
 		
-		// (get) Token: 0x060047E9 RID: 18409 RVA: 0x00185C28 File Offset: 0x00183E28
+		
 		public int Degree
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047EA RID: 18410 RVA: 0x00185C30 File Offset: 0x00183E30
+		
 		public TraitDegreeData CurrentData
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047EB RID: 18411 RVA: 0x00185C43 File Offset: 0x00183E43
+		
 		public string Label
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047EC RID: 18412 RVA: 0x00185C50 File Offset: 0x00183E50
+		
 		public string LabelCap
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047ED RID: 18413 RVA: 0x00185C5D File Offset: 0x00183E5D
+		
 		public bool ScenForced
 		{
 			get

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using RimWorld;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Steamworks;
 using UnityEngine;
 

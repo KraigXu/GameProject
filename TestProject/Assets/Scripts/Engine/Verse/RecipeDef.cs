@@ -10,7 +10,7 @@ namespace Verse
 	public class RecipeDef : Def
 	{
 		
-		// (get) Token: 0x060005E2 RID: 1506 RVA: 0x0001C5DB File Offset: 0x0001A7DB
+		
 		public RecipeWorker Worker
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E3 RID: 1507 RVA: 0x0001C60D File Offset: 0x0001A80D
+		
 		public RecipeWorkerCounter WorkerCounter
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E4 RID: 1508 RVA: 0x0001C63F File Offset: 0x0001A83F
+		
 		public IngredientValueGetter IngredientValueGetter
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E5 RID: 1509 RVA: 0x0001C668 File Offset: 0x0001A868
+		
 		public bool AvailableNow
 		{
 			get
@@ -82,7 +82,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E6 RID: 1510 RVA: 0x0001C6FC File Offset: 0x0001A8FC
+		
 		public string MinSkillString
 		{
 			get
@@ -113,7 +113,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E7 RID: 1511 RVA: 0x0001C7B4 File Offset: 0x0001A9B4
+		
 		public IEnumerable<ThingDef> AllRecipeUsers
 		{
 			get
@@ -141,7 +141,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E8 RID: 1512 RVA: 0x0001C7C4 File Offset: 0x0001A9C4
+		
 		public bool UsesUnfinishedThing
 		{
 			get
@@ -151,7 +151,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005E9 RID: 1513 RVA: 0x0001C7D0 File Offset: 0x0001A9D0
+		
 		public bool IsSurgery
 		{
 			get
@@ -159,7 +159,7 @@ namespace Verse
 				if (this.isSurgeryCached == null)
 				{
 					this.isSurgeryCached = new bool?(false);
-					using (IEnumerator<ThingDef> enumerator = this.AllRecipeUsers.GetEnumerator())
+					IEnumerator<ThingDef> enumerator = this.AllRecipeUsers.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -176,7 +176,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005EA RID: 1514 RVA: 0x0001C850 File Offset: 0x0001AA50
+		
 		public ThingDef ProducedThingDef
 		{
 			get
@@ -265,9 +265,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.workerClass == null)

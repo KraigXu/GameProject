@@ -7,7 +7,7 @@ namespace Verse
 	public class JitterHandler
 	{
 		
-		// (get) Token: 0x06001597 RID: 5527 RVA: 0x0007E120 File Offset: 0x0007C320
+		
 		public Vector3 CurrentOffset
 		{
 			get

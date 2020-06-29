@@ -8,8 +8,8 @@ namespace RimWorld.Planet
 	public class DebugWorldLine
 	{
 		
-		// (get) Token: 0x060069F7 RID: 27127 RVA: 0x0024FDD4 File Offset: 0x0024DFD4
-		// (set) Token: 0x060069F8 RID: 27128 RVA: 0x0024FDDC File Offset: 0x0024DFDC
+		
+		
 		public int TicksLeft
 		{
 			get

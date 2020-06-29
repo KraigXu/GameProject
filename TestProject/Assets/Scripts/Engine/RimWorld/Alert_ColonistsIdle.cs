@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_ColonistsIdle : Alert
 	{
 		
-		// (get) Token: 0x06005676 RID: 22134 RVA: 0x001CAAB4 File Offset: 0x001C8CB4
+		
 		private List<Pawn> IdleColonists
 		{
 			get

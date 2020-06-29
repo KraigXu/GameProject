@@ -32,7 +32,7 @@ namespace RimWorld
 				{
 					yield return RecipeDefGenerator.CreateRecipeDefFromMaker(def, def.recipeMaker.bulkRecipeCount);
 				}
-				def = null;
+			
 			}
 			IEnumerator<ThingDef> enumerator = null;
 			yield break;

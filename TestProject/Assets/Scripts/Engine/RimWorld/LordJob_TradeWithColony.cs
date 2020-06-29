@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordJob_TradeWithColony : LordJob
 	{
 		
-		// (get) Token: 0x060031FA RID: 12794 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get

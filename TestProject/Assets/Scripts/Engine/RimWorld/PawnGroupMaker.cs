@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PawnGroupMaker
 	{
 		
-		// (get) Token: 0x060042FD RID: 17149 RVA: 0x00168BBC File Offset: 0x00166DBC
+		
 		public float MinPointsToGenerateAnything
 		{
 			get

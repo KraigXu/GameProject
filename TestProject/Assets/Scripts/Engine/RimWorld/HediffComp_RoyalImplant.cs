@@ -7,7 +7,7 @@ namespace RimWorld
 	public class HediffComp_RoyalImplant : HediffComp
 	{
 		
-		// (get) Token: 0x06006432 RID: 25650 RVA: 0x0022B5DD File Offset: 0x002297DD
+		
 		public HediffCompProperties_RoyalImplant Props
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Trigger_WoundedGuestPresent : Trigger
 	{
 		
-		// (get) Token: 0x0600333D RID: 13117 RVA: 0x0011BF4D File Offset: 0x0011A14D
+		
 		private TriggerData_PawnCycleInd Data
 		{
 			get

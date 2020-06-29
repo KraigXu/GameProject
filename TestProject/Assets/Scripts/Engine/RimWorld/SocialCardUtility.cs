@@ -472,15 +472,15 @@ namespace RimWorld
 			//		stringBuilder.AppendLine();
 			//		IEnumerable<Pawn> allPawnsSpawned = pawn.Map.mapPawns.AllPawnsSpawned;
 			//		Func<Pawn, bool> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__5 = ((Pawn x) => x.def == pawn.def));
+			//			predicate = ( ((Pawn x) => x.def == pawn.def));
 			//		}
 			//		IEnumerable<Pawn> source = allPawnsSpawned.Where(predicate);
 			//		Func<Pawn, float> keySelector;
 			//		if ((keySelector ) == null)
 			//		{
-			//			keySelector = (9__6 = ((Pawn x) => pawn.relations.SecondaryRomanceChanceFactor(x)));
+			//			keySelector = ( ((Pawn x) => pawn.relations.SecondaryRomanceChanceFactor(x)));
 			//		}
 			//		foreach (Pawn pawn2 in source.OrderByDescending(keySelector))
 			//		{
@@ -514,15 +514,15 @@ namespace RimWorld
 			//		stringBuilder.AppendLine();
 			//		IEnumerable<Pawn> allPawnsSpawned = pawn.Map.mapPawns.AllPawnsSpawned;
 			//		Func<Pawn, bool> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__7 = ((Pawn x) => x.def == pawn.def));
+			//			predicate = ( ((Pawn x) => x.def == pawn.def));
 			//		}
 			//		IEnumerable<Pawn> source = allPawnsSpawned.Where(predicate);
 			//		Func<Pawn, float> keySelector;
 			//		if ((keySelector ) == null)
 			//		{
-			//			keySelector = (9__8 = ((Pawn x) => pawn.relations.CompatibilityWith(x)));
+			//			keySelector = ( ((Pawn x) => pawn.relations.CompatibilityWith(x)));
 			//		}
 			//		foreach (Pawn pawn2 in source.OrderByDescending(keySelector))
 			//		{
@@ -550,7 +550,7 @@ namespace RimWorld
 			//			stringBuilder.AppendLine("(selected pawn is the initiator)");
 			//			stringBuilder.AppendLine("(\"fight chance\" is the chance that the receiver will start social fight)");
 			//			stringBuilder.AppendLine("Interaction chance (real chance, not just weights):");
-			//			using (IEnumerator<Pawn> enumerator = (from x in pawn.Map.mapPawns.AllPawnsSpawned
+			//			IEnumerator<Pawn> enumerator = (from x in pawn.Map.mapPawns.AllPawnsSpawned
 			//			where x.RaceProps.Humanlike
 			//			select x).OrderBy(delegate(Pawn x)
 			//			{
@@ -559,7 +559,7 @@ namespace RimWorld
 			//					return x.Faction.loadID;
 			//				}
 			//				return -1;
-			//			}).GetEnumerator())
+			//			}).GetEnumerator();
 			//			{
 			//				while (enumerator.MoveNext())
 			//				{

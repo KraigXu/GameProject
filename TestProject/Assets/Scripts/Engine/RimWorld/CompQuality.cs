@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompQuality : ThingComp
 	{
 		
-		// (get) Token: 0x0600541B RID: 21531 RVA: 0x001C15D5 File Offset: 0x001BF7D5
+		
 		public QualityCategory Quality
 		{
 			get

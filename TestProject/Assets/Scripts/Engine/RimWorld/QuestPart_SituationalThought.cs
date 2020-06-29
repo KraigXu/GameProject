@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_SituationalThought : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060039EF RID: 14831 RVA: 0x0013395A File Offset: 0x00131B5A
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.pawn != null)
 				{

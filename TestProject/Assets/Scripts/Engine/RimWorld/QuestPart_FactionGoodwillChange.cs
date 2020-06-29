@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_FactionGoodwillChange : QuestPart
 	{
 		
-		// (get) Token: 0x06003A67 RID: 14951 RVA: 0x00135557 File Offset: 0x00133757
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				yield return this.lookTarget;
 				yield break;
@@ -27,12 +25,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A68 RID: 14952 RVA: 0x00135567 File Offset: 0x00133767
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
+
 				{
 					yield return faction;
 				}

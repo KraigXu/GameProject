@@ -4,7 +4,7 @@ using System.Reflection;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public static class SlateRefUtility
@@ -79,26 +79,26 @@ namespace RimWorld.QuestGen
 			{
 				return false;
 			}
-			if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef))
-			{
-				Type type = fi.DeclaringType.GetGenericArguments()[0];
-				if (type.IsGenericType)
-				{
-					Type genericTypeDefinition = type.GetGenericTypeDefinition();
-					if (genericTypeDefinition == typeof(IEnumerable) || genericTypeDefinition == typeof(IList) || genericTypeDefinition == typeof(List))
-					{
-						type = type.GetGenericArguments()[0];
-					}
-				}
-				if (type != typeof(string) && type != typeof(object) && type != typeof(RulePack))
-				{
-					return false;
-				}
-				if (type == typeof(object) && (!slateRef.Contains(" ") || (ConvertHelper.IsXml(slateRef) && !slateRef.Contains("<rulesStrings>"))))
-				{
-					return false;
-				}
-			}
+			//if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef))
+			//{
+			//	Type type = fi.DeclaringType.GetGenericArguments()[0];
+			//	if (type.IsGenericType)
+			//	{
+			//		Type genericTypeDefinition = type.GetGenericTypeDefinition();
+			//		//if (genericTypeDefinition == typeof(IEnumerable) || genericTypeDefinition == typeof(IList) || genericTypeDefinition == typeof(List))
+			//		//{
+			//		//	type = type.GetGenericArguments()[0];
+			//		//}
+			//	}
+			//	if (type != typeof(string) && type != typeof(object) && type != typeof(RulePack))
+			//	{
+			//		return false;
+			//	}
+			//	if (type == typeof(object) && (!slateRef.Contains(" ") || (ConvertHelper.IsXml(slateRef) && !slateRef.Contains("<rulesStrings>"))))
+			//	{
+			//		return false;
+			//	}
+			//}
 			return true;
 		}
 	}

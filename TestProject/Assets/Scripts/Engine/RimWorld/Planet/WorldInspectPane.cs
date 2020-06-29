@@ -11,8 +11,8 @@ namespace RimWorld.Planet
 	public class WorldInspectPane : Window, IInspectPane
 	{
 		
-		// (get) Token: 0x06007033 RID: 28723 RVA: 0x0027256A File Offset: 0x0027076A
-		// (set) Token: 0x06007034 RID: 28724 RVA: 0x00272572 File Offset: 0x00270772
+		
+		
 		public Type OpenTabType
 		{
 			get
@@ -26,8 +26,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007035 RID: 28725 RVA: 0x0027257B File Offset: 0x0027077B
-		// (set) Token: 0x06007036 RID: 28726 RVA: 0x00272583 File Offset: 0x00270783
+		
+		
 		public float RecentHeight
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007037 RID: 28727 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007038 RID: 28728 RVA: 0x001FEF3B File Offset: 0x001FD13B
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007039 RID: 28729 RVA: 0x0027258C File Offset: 0x0027078C
+		
 		private List<WorldObject> Selected
 		{
 			get
@@ -71,7 +71,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703A RID: 28730 RVA: 0x00272598 File Offset: 0x00270798
+		
 		private int NumSelectedObjects
 		{
 			get
@@ -81,7 +81,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703B RID: 28731 RVA: 0x002725A4 File Offset: 0x002707A4
+		
 		public float PaneTopY
 		{
 			get
@@ -96,7 +96,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703C RID: 28732 RVA: 0x002725CF File Offset: 0x002707CF
+		
 		public bool AnythingSelected
 		{
 			get
@@ -106,7 +106,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703D RID: 28733 RVA: 0x00250E5E File Offset: 0x0024F05E
+		
 		private int SelectedTile
 		{
 			get
@@ -116,7 +116,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703E RID: 28734 RVA: 0x002725DB File Offset: 0x002707DB
+		
 		private bool SelectedSingleObjectOrTile
 		{
 			get
@@ -126,7 +126,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600703F RID: 28735 RVA: 0x002725FE File Offset: 0x002707FE
+		
 		public bool ShouldShowSelectNextInCellButton
 		{
 			get
@@ -136,7 +136,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007040 RID: 28736 RVA: 0x002725FE File Offset: 0x002707FE
+		
 		public bool ShouldShowPaneContents
 		{
 			get
@@ -146,7 +146,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007041 RID: 28737 RVA: 0x00272606 File Offset: 0x00270806
+		
 		public IEnumerable<InspectTabBase> CurTabs
 		{
 			get
@@ -164,7 +164,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007042 RID: 28738 RVA: 0x0027263C File Offset: 0x0027083C
+		
 		private string TileInspectString
 		{
 			get

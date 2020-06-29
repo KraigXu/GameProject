@@ -117,15 +117,15 @@ namespace RimWorld
 			for (int m = 0; m < num3; m++)
 			{
 				IntVec2 intVec3 = new IntVec2(Rand.RangeInclusive(0, length - 1), Rand.RangeInclusive(0, length2 - 1));
-				foreach (IntVec3 intVec4 in GenRadial.RadialPatternInRadius((float)Mathf.Max(Mathf.RoundToInt((float)(Mathf.Max(length, length2) / 2) * num9), 1)))
-				{
-					intVec4.x += intVec3.x;
-					intVec4.z += intVec3.z;
-					if (intVec4.x >= 0 && intVec4.x < length && intVec4.z >= 0 && intVec4.z < length2)
-					{
-						grid[intVec4.x, intVec4.z] = true;
-					}
-				}
+				//foreach (IntVec3 intVec4 in GenRadial.RadialPatternInRadius((float)Mathf.Max(Mathf.RoundToInt((float)(Mathf.Max(length, length2) / 2) * num9), 1)))
+				//{
+				//	intVec4.x += intVec3.x;
+				//	intVec4.z += intVec3.z;
+				//	if (intVec4.x >= 0 && intVec4.x < length && intVec4.z >= 0 && intVec4.z < length2)
+				//	{
+				//		grid[intVec4.x, intVec4.z] = true;
+				//	}
+				//}
 			}
 			for (int n = 0; n < num6; n++)
 			{
@@ -211,15 +211,15 @@ namespace RimWorld
 			if (wipedCircleRadiusPct > 0f)
 			{
 				IntVec2 intVec11 = new IntVec2(length / 2, length2 / 2);
-				foreach (IntVec3 intVec12 in GenRadial.RadialPatternInRadius((float)Mathf.FloorToInt((float)Mathf.Min(length, length2) * wipedCircleRadiusPct)))
-				{
-					intVec12.x += intVec11.x;
-					intVec12.z += intVec11.z;
-					if (intVec12.x >= 0 && intVec12.x < length && intVec12.z >= 0 && intVec12.z < length2)
-					{
-						grid[intVec12.x, intVec12.z] = false;
-					}
-				}
+				//foreach (IntVec3 intVec12 in GenRadial.RadialPatternInRadius((float)Mathf.FloorToInt((float)Mathf.Min(length, length2) * wipedCircleRadiusPct)))
+				//{
+				//	intVec12.x += intVec11.x;
+				//	intVec12.z += intVec11.z;
+				//	if (intVec12.x >= 0 && intVec12.x < length && intVec12.z >= 0 && intVec12.z < length2)
+				//	{
+				//		grid[intVec12.x, intVec12.z] = false;
+				//	}
+				//}
 			}
 			if (horizontalSymmetry)
 			{

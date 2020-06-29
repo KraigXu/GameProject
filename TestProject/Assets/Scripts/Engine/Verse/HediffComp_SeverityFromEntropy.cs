@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_SeverityFromEntropy : HediffComp
 	{
 		
-		// (get) Token: 0x060010B6 RID: 4278 RVA: 0x0005EFFB File Offset: 0x0005D1FB
+		
 		private float EntropyAmount
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010B7 RID: 4279 RVA: 0x0005F020 File Offset: 0x0005D220
+		
 		public override bool CompShouldRemove
 		{
 			get

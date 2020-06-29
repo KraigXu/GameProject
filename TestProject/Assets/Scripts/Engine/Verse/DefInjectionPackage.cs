@@ -1006,7 +1006,7 @@ namespace Verse
 		public class DefInjection
 		{
 			
-			// (get) Token: 0x060076AA RID: 30378 RVA: 0x0028F598 File Offset: 0x0028D798
+			
 			public bool IsFullListInjection
 			{
 				get
@@ -1016,7 +1016,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x060076AB RID: 30379 RVA: 0x0028F5A3 File Offset: 0x0028D7A3
+			
 			public string DefName
 			{
 				get

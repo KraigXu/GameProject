@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompAbilityEffect_GiveMentalState : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x06004193 RID: 16787 RVA: 0x0015EC2F File Offset: 0x0015CE2F
+		
 		public new CompProperties_AbilityGiveMentalState Props
 		{
 			get

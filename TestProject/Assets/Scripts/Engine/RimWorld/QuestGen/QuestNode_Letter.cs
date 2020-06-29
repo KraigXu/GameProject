@@ -4,7 +4,7 @@ using RimWorld.Planet;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_Letter : QuestNode

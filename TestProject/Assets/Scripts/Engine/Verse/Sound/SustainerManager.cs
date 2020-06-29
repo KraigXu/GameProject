@@ -7,7 +7,7 @@ namespace Verse.Sound
 	public class SustainerManager
 	{
 		
-		// (get) Token: 0x06002508 RID: 9480 RVA: 0x000DBAE0 File Offset: 0x000D9CE0
+		
 		public List<Sustainer> AllSustainers
 		{
 			get

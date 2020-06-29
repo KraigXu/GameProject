@@ -242,7 +242,7 @@ namespace RimWorld
 		private class CachedSocialThoughts
 		{
 			
-			// (get) Token: 0x06009ADD RID: 39645 RVA: 0x002F3B4E File Offset: 0x002F1D4E
+			
 			public bool Expired
 			{
 				get
@@ -252,7 +252,7 @@ namespace RimWorld
 			}
 
 			
-			// (get) Token: 0x06009ADE RID: 39646 RVA: 0x002F3B6B File Offset: 0x002F1D6B
+			
 			public bool ShouldRecalculateState
 			{
 				get

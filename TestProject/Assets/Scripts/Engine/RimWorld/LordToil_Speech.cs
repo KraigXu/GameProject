@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordToil_Speech : LordToil_Gathering
 	{
 		
-		// (get) Token: 0x06003305 RID: 13061 RVA: 0x0011B5A9 File Offset: 0x001197A9
+		
 		public LordToilData_Speech Data
 		{
 			get

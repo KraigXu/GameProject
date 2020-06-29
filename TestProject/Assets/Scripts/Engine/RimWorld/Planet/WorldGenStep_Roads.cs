@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WorldGenStep_Roads : WorldGenStep
 	{
 		
-		// (get) Token: 0x06006B1B RID: 27419 RVA: 0x00255E2F File Offset: 0x0025402F
+		
 		public override int SeedPart
 		{
 			get
@@ -98,11 +98,9 @@ namespace RimWorld.Planet
 				int found = 0;
 				Find.WorldPathFinder.FloodPathsWithCost(list, (int src, int dst) => Caravan_PathFollower.CostToMove(3300, src, dst, null, true, null, null), null, delegate(int tile, float distance)
 				{
-					int found;
 					if (tile != srcTile && c__DisplayClass14_.tileToIndexLookup.ContainsKey(tile))
 					{
 						found++;
-						found = found;
 						c__DisplayClass14_.linkProspective.Add(new WorldGenStep_Roads.Link
 						{
 							distance = distance,

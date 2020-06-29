@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_CameraJump : QuestPart
 	{
 		
-		// (get) Token: 0x06003910 RID: 14608 RVA: 0x00130121 File Offset: 0x0012E321
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
 				if (globalTargetInfo2.IsValid)

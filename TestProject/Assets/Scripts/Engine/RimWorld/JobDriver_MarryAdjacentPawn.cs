@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_MarryAdjacentPawn : JobDriver
 	{
 		
-		// (get) Token: 0x06002BBB RID: 11195 RVA: 0x000FBA78 File Offset: 0x000F9C78
+		
 		private Pawn OtherFiance
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002BBC RID: 11196 RVA: 0x000FBA9E File Offset: 0x000F9C9E
+		
 		public int TicksLeftToMarry
 		{
 			get

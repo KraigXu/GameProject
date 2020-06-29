@@ -9,7 +9,7 @@ namespace Verse
 	public class Gizmo_RoomStats : Gizmo
 	{
 		
-		// (get) Token: 0x060014A1 RID: 5281 RVA: 0x00079D3E File Offset: 0x00077F3E
+		
 		private Room Room
 		{
 			get

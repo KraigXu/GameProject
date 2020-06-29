@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_Multi : Graphic
 	{
 		
-		// (get) Token: 0x0600153C RID: 5436 RVA: 0x0007CB48 File Offset: 0x0007AD48
+		
 		public string GraphicPath
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600153D RID: 5437 RVA: 0x0007CB50 File Offset: 0x0007AD50
+		
 		public override Material MatSingle
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600153E RID: 5438 RVA: 0x0007CB58 File Offset: 0x0007AD58
+		
 		public override Material MatWest
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600153F RID: 5439 RVA: 0x0007CB62 File Offset: 0x0007AD62
+		
 		public override Material MatSouth
 		{
 			get
@@ -47,7 +47,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001540 RID: 5440 RVA: 0x0007CB6C File Offset: 0x0007AD6C
+		
 		public override Material MatEast
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001541 RID: 5441 RVA: 0x0007CB76 File Offset: 0x0007AD76
+		
 		public override Material MatNorth
 		{
 			get
@@ -67,7 +67,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001542 RID: 5442 RVA: 0x0007CB80 File Offset: 0x0007AD80
+		
 		public override bool WestFlipped
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001543 RID: 5443 RVA: 0x0007CB88 File Offset: 0x0007AD88
+		
 		public override bool EastFlipped
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001544 RID: 5444 RVA: 0x0007CB90 File Offset: 0x0007AD90
+		
 		public override bool ShouldDrawRotated
 		{
 			get
@@ -97,7 +97,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001545 RID: 5445 RVA: 0x0007CBCF File Offset: 0x0007ADCF
+		
 		public override float DrawRotatedExtraAngleOffset
 		{
 			get

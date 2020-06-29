@@ -9,7 +9,7 @@ namespace Verse
 	public struct ShootLine
 	{
 		
-		// (get) Token: 0x060021C3 RID: 8643 RVA: 0x000CDA00 File Offset: 0x000CBC00
+		
 		public IntVec3 Source
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021C4 RID: 8644 RVA: 0x000CDA08 File Offset: 0x000CBC08
+		
 		public IntVec3 Dest
 		{
 			get

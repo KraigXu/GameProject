@@ -54,11 +54,11 @@ namespace Verse
 			Dictionary<string, FileInfo> allFilesForMod = ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<T>(), new Func<string, bool>(ModContentLoader<T>.IsAcceptableExtension), null);
 			foreach (KeyValuePair<string, FileInfo> keyValuePair in allFilesForMod)
 			{
-				LoadedContentItem<T> loadedContentItem = ModContentLoader<T>.LoadItem(keyValuePair.Value);
-				if (loadedContentItem != null)
-				{
-					yield return new Pair<string, LoadedContentItem<T>>(keyValuePair.Key, loadedContentItem);
-				}
+				//LoadedContentItem<T> loadedContentItem = ModContentLoader<T>.LoadItem(keyValuePair.Value);
+				//if (loadedContentItem != null)
+				//{
+				//	yield return new Pair<string, LoadedContentItem<T>>(keyValuePair.Key, loadedContentItem);
+				//}
 			}
 			Dictionary<string, FileInfo>.Enumerator enumerator = default(Dictionary<string, FileInfo>.Enumerator);
 			DeepProfiler.End();
@@ -86,14 +86,14 @@ namespace Verse
 						DeepProfiler.Start("Loading file " + file);
 					}
 					IDisposable extraDisposable = null;
-					T t;
+					T t=default;
 					try
 					{
 						bool doStream = ModContentLoader<T>.ShouldStreamAudioClipFromFile(file);
 						Stream stream = file.CreateReadStream();
 						try
 						{
-							t = (T)((object)Manager.Load(stream, ModContentLoader<T>.GetFormat(file.Name), file.Name, doStream, true, true));
+							//t = (T)((object)Manager.Load(stream, ModContentLoader<T>.GetFormat(file.Name), file.Name, doStream, true, true));
 						}
 						catch (Exception)
 						{

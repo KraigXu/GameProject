@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_CookFillHopper : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003085 RID: 12421 RVA: 0x0010FFFA File Offset: 0x0010E1FA
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003086 RID: 12422 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		public override PathEndMode PathEndMode
 		{
 			get

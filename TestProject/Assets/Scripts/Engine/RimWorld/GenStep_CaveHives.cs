@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_CaveHives : GenStep
 	{
 		
-		// (get) Token: 0x06003E38 RID: 15928 RVA: 0x00147B4E File Offset: 0x00145D4E
+		
 		public override int SeedPart
 		{
 			get
@@ -95,9 +95,9 @@ namespace RimWorld
 			{
 				IEnumerable<IntVec3> source = this.possibleSpawnCells;
 				Func<IntVec3, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__0 = ((IntVec3 x) => x.Standable(map) && x.GetFirstItem(map) == null && x.GetFirstBuilding(map) == null && x.GetFirstPawn(map) == null));
+					predicate = ( ((IntVec3 x) => x.Standable(map) && x.GetFirstItem(map) == null && x.GetFirstBuilding(map) == null && x.GetFirstPawn(map) == null));
 				}
 				IntVec3 intVec2;
 				if (!source.Where(predicate).TryRandomElement(out intVec2))

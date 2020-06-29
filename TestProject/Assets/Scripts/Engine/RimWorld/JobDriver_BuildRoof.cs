@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_BuildRoof : JobDriver_AffectRoof
 	{
 		
-		// (get) Token: 0x06002B63 RID: 11107 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		protected override PathEndMode PathEndMode
 		{
 			get
@@ -24,10 +24,7 @@ namespace RimWorld
 			this.FailOn(() => !base.Map.areaManager.BuildRoof[base.Cell]);
 			this.FailOn(() => !RoofCollapseUtility.WithinRangeOfRoofHolder(base.Cell, base.Map, false));
 			this.FailOn(() => !RoofCollapseUtility.ConnectedToRoofHolder(base.Cell, base.Map, true));
-			foreach (Toil toil in this.n__0())
-			{
-				yield return toil;
-			}
+
 			IEnumerator<Toil> enumerator = null;
 			yield break;
 			yield break;

@@ -10,7 +10,7 @@ namespace Verse
 	public class HediffSet : IExposable
 	{
 		
-		// (get) Token: 0x06001140 RID: 4416 RVA: 0x0006148A File Offset: 0x0005F68A
+		
 		public float PainTotal
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001141 RID: 4417 RVA: 0x000614AB File Offset: 0x0005F6AB
+		
 		public float BleedRateTotal
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001142 RID: 4418 RVA: 0x000614CC File Offset: 0x0005F6CC
+		
 		public bool HasHead
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001143 RID: 4419 RVA: 0x0006152A File Offset: 0x0005F72A
+		
 		public float HungerRateFactor
 		{
 			get
@@ -62,7 +62,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001144 RID: 4420 RVA: 0x00061534 File Offset: 0x0005F734
+		
 		public float RestFallFactor
 		{
 			get
@@ -710,7 +710,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001167 RID: 4455 RVA: 0x00062458 File Offset: 0x00060658
+		
 		public bool AnyHediffMakesSickThought
 		{
 			get

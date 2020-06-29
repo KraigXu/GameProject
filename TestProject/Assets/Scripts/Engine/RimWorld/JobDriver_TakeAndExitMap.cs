@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_TakeAndExitMap : JobDriver
 	{
 		
-		// (get) Token: 0x06002D0A RID: 11530 RVA: 0x000FEE2C File Offset: 0x000FD02C
+		
 		protected Thing Item
 		{
 			get

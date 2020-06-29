@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_HypothermicAnimals : Alert
 	{
 		
-		// (get) Token: 0x06005625 RID: 22053 RVA: 0x001C8D00 File Offset: 0x001C6F00
+		
 		private List<Pawn> HypothermicAnimals
 		{
 			get

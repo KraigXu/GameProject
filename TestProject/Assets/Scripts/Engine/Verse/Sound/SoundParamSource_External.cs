@@ -6,7 +6,7 @@ namespace Verse.Sound
 	public class SoundParamSource_External : SoundParamSource
 	{
 		
-		// (get) Token: 0x06002451 RID: 9297 RVA: 0x000D8DCD File Offset: 0x000D6FCD
+		
 		public override string Label
 		{
 			get

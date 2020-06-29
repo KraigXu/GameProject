@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Dialog_RewardPrefsConfig : Window
 	{
 		
-		// (get) Token: 0x06004D62 RID: 19810 RVA: 0x0019F8BB File Offset: 0x0019DABB
+		
 		public override Vector2 InitialSize
 		{
 			get

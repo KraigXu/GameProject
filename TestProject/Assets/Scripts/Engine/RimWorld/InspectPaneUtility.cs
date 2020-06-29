@@ -66,7 +66,7 @@ namespace RimWorld
 		public static string AdjustedLabelFor(List<object> selected, Rect rect)
 		{
 			Zone zone;
-			string text;
+			string text="";
 			if ((zone = (selected[0] as Zone)) != null)
 			{
 				if (selected.Count == 1)
@@ -94,7 +94,7 @@ namespace RimWorld
 					{
 						text = "VariousLabel".Translate();
 					}
-					text = text + " x" + selected.Count;
+					//text = text + " x" + selected.Count;
 				}
 			}
 			else
@@ -328,7 +328,7 @@ namespace RimWorld
 			//	}
 			//	else
 			//	{
-			//		using (IEnumerator<InspectTabBase> enumerator = mainTabWindow_Inspect.CurTabs.GetEnumerator())
+			//		IEnumerator<InspectTabBase> enumerator = mainTabWindow_Inspect.CurTabs.GetEnumerator();
 			//		{
 			//			while (enumerator.MoveNext())
 			//			{

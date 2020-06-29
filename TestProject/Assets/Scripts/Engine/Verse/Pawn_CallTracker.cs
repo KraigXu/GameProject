@@ -7,7 +7,7 @@ namespace Verse
 	public class Pawn_CallTracker
 	{
 		
-		// (get) Token: 0x060012DC RID: 4828 RVA: 0x0006C25C File Offset: 0x0006A45C
+		
 		private bool PawnAggressive
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012DD RID: 4829 RVA: 0x0006C2EC File Offset: 0x0006A4EC
+		
 		private float IdleCallVolumeFactor
 		{
 			get

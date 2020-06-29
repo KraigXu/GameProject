@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Thought_Dumb : Thought
 	{
 		
-		// (get) Token: 0x060047B1 RID: 18353 RVA: 0x0018522B File Offset: 0x0018342B
+		
 		public override int CurStageIndex
 		{
 			get

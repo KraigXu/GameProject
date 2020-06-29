@@ -9,7 +9,7 @@ namespace Verse
 	public class SectionLayer_TerrainScatter : SectionLayer
 	{
 		
-		// (get) Token: 0x06000BA5 RID: 2981 RVA: 0x000414B0 File Offset: 0x0003F6B0
+		
 		public override bool Visible
 		{
 			get
@@ -91,7 +91,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x06007790 RID: 30608 RVA: 0x00291600 File Offset: 0x0028F800
+			
 			public bool IsOnValidTerrain
 			{
 				get

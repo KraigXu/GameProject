@@ -7,7 +7,7 @@ namespace Verse
 	public interface ICellBoolGiver
 	{
 		
-		// (get) Token: 0x0600097E RID: 2430
+		
 		Color Color { get; }
 
 		

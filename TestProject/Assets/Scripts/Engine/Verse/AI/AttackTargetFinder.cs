@@ -133,7 +133,7 @@ namespace Verse.AI
 				else
 				{
 					bool flag2 = false;
-					using (CellRect.Enumerator enumerator = thing.OccupiedRect().GetEnumerator())
+					CellRect.Enumerator enumerator = thing.OccupiedRect().GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -498,9 +498,9 @@ namespace Verse.AI
 			{
 				IEnumerable<IntVec3> source = line.Points().Concat(line.Dest);
 				Func<IntVec3, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__3 = ((IntVec3 pos) => pos.CanBeSeenOverFast(map)));
+					predicate = ( ((IntVec3 pos) => pos.CanBeSeenOverFast(map)));
 				}
 				return source.TakeWhile(predicate);
 			}).Distinct<IntVec3>();

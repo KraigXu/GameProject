@@ -10,7 +10,7 @@ namespace RimWorld
 	public class PawnColumnWorker_CopyPasteTimetable : PawnColumnWorker_CopyPaste
 	{
 		
-		// (get) Token: 0x06005D18 RID: 23832 RVA: 0x0020441F File Offset: 0x0020261F
+		
 		protected override bool AnythingInClipboard
 		{
 			get

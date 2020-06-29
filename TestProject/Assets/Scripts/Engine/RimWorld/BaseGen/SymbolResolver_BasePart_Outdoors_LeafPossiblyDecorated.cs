@@ -11,10 +11,10 @@ namespace RimWorld.BaseGen
 		{
 			if (rp.rect.Width >= 10 && rp.rect.Height >= 10 && Rand.Chance(0.25f))
 			{
-				BaseGen.symbolStack.Push("basePart_outdoors_leafDecorated", rp, null);
+				BaseGenCore.symbolStack.Push("basePart_outdoors_leafDecorated", rp, null);
 				return;
 			}
-			BaseGen.symbolStack.Push("basePart_outdoors_leaf", rp, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors_leaf", rp, null);
 		}
 	}
 }

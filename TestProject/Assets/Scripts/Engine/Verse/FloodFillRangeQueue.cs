@@ -6,7 +6,7 @@ namespace Verse
 	public class FloodFillRangeQueue
 	{
 		
-		// (get) Token: 0x06000C08 RID: 3080 RVA: 0x00044267 File Offset: 0x00042467
+		
 		public int Count
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C09 RID: 3081 RVA: 0x0004426F File Offset: 0x0004246F
+		
 		public FloodFillRange First
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C0A RID: 3082 RVA: 0x00044284 File Offset: 0x00042484
+		
 		public string PerfDebugString
 		{
 			get

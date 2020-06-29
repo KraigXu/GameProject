@@ -7,7 +7,7 @@ namespace Verse
 	public class SectionLayer_FogOfWar : SectionLayer
 	{
 		
-		// (get) Token: 0x06000B88 RID: 2952 RVA: 0x0003FC73 File Offset: 0x0003DE73
+		
 		public override bool Visible
 		{
 			get

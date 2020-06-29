@@ -7,7 +7,7 @@ namespace Verse
 	public class CompLifespan : ThingComp
 	{
 		
-		// (get) Token: 0x06001761 RID: 5985 RVA: 0x000859C8 File Offset: 0x00083BC8
+		
 		public CompProperties_Lifespan Props
 		{
 			get

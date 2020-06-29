@@ -10,7 +10,7 @@ namespace RimWorld
 	public class WildPlantSpawner : IExposable
 	{
 		
-		// (get) Token: 0x06004103 RID: 16643 RVA: 0x0015C285 File Offset: 0x0015A485
+		
 		public float CurrentPlantDensity
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004104 RID: 16644 RVA: 0x0015C2B0 File Offset: 0x0015A4B0
+		
 		public float CurrentWholeMapNumDesiredPlants
 		{
 			get
@@ -37,14 +37,14 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004105 RID: 16645 RVA: 0x0015C324 File Offset: 0x0015A524
+		
 		public int CurrentWholeMapNumNonZeroFertilityCells
 		{
 			get
 			{
 				CellRect cellRect = CellRect.WholeMap(this.map);
 				int num = 0;
-				using (CellRect.Enumerator enumerator = cellRect.GetEnumerator())
+				CellRect.Enumerator enumerator = cellRect.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004106 RID: 16646 RVA: 0x0015C398 File Offset: 0x0015A598
+		
 		public float CavePlantsCommonalitiesSum
 		{
 			get

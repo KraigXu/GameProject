@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_WorldObjectTimeout : QuestPart_Delay
 	{
 		
-		// (get) Token: 0x060038D2 RID: 14546 RVA: 0x0012F4CE File Offset: 0x0012D6CE
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.worldObject != null)
 				{

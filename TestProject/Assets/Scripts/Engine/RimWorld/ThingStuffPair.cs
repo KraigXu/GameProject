@@ -9,7 +9,7 @@ namespace RimWorld
 	public struct ThingStuffPair : IEquatable<ThingStuffPair>
 	{
 		
-		// (get) Token: 0x0600643C RID: 25660 RVA: 0x0022B7D5 File Offset: 0x002299D5
+		
 		public float Price
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600643D RID: 25661 RVA: 0x0022B7DD File Offset: 0x002299DD
+		
 		public float InsulationCold
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600643E RID: 25662 RVA: 0x0022B7E5 File Offset: 0x002299E5
+		
 		public float InsulationHeat
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600643F RID: 25663 RVA: 0x0022B7F0 File Offset: 0x002299F0
+		
 		public float Commonality
 		{
 			get

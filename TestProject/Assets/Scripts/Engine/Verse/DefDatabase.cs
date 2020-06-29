@@ -5,11 +5,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	
+	public static class DefDatabase
+    {
+
+    }
+
+
 	public static class DefDatabase<T> where T : Def
 	{
 		
-		// (get) Token: 0x0600042F RID: 1071 RVA: 0x00015989 File Offset: 0x00013B89
+		
 		public static IEnumerable<T> AllDefs
 		{
 			get
@@ -19,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000430 RID: 1072 RVA: 0x00015989 File Offset: 0x00013B89
+		
 		public static List<T> AllDefsListForReading
 		{
 			get
@@ -29,7 +34,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000431 RID: 1073 RVA: 0x00015990 File Offset: 0x00013B90
+		
 		public static int DefCount
 		{
 			get

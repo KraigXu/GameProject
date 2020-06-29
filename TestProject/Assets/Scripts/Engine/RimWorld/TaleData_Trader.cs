@@ -10,7 +10,7 @@ namespace RimWorld
 	public class TaleData_Trader : TaleData
 	{
 		
-		// (get) Token: 0x06004A7E RID: 19070 RVA: 0x00192FA9 File Offset: 0x001911A9
+		
 		private bool IsPawn
 		{
 			get

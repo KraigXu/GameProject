@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Selector
 	{
 		
-		// (get) Token: 0x06005BF4 RID: 23540 RVA: 0x001FC247 File Offset: 0x001FA447
+		
 		private bool ShiftIsHeld
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BF5 RID: 23541 RVA: 0x001FC261 File Offset: 0x001FA461
+		
 		public List<object> SelectedObjects
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BF6 RID: 23542 RVA: 0x001FC261 File Offset: 0x001FA461
+		
 		public List<object> SelectedObjectsListForReading
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BF7 RID: 23543 RVA: 0x001FC269 File Offset: 0x001FA469
+		
 		public Thing SingleSelectedThing
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BF8 RID: 23544 RVA: 0x001FC2A1 File Offset: 0x001FA4A1
+		
 		public object FirstSelectedObject
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BF9 RID: 23545 RVA: 0x001FC2BE File Offset: 0x001FA4BE
+		
 		public object SingleSelectedObject
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BFA RID: 23546 RVA: 0x001FC2DC File Offset: 0x001FA4DC
+		
 		public int NumSelected
 		{
 			get
@@ -99,8 +99,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BFB RID: 23547 RVA: 0x001FC2E9 File Offset: 0x001FA4E9
-		// (set) Token: 0x06005BFC RID: 23548 RVA: 0x001FC30B File Offset: 0x001FA50B
+		
+		
 		public Zone SelectedZone
 		{
 			get
@@ -354,12 +354,12 @@ namespace RimWorld
 			List<Thing> boxThings = ThingSelectionUtility.MultiSelectableThingsInScreenRectDistinct(this.dragBox.ScreenRect).ToList<Thing>();
 			Func<Predicate<Thing>, bool> func = delegate(Predicate<Thing> predicate)
 			{
-				IEnumerable<Thing> boxThings = boxThings;
-				
+				IEnumerable<Thing> boxThings = default;
+
 				Func<Thing, bool> predicate2;
-				if ((predicate2 ) == null)
+				if ((predicate2=default ) == null)
 				{
-					predicate2 = (9__6 = ((Thing t) => predicate(t)));
+					predicate2 = ( ((Thing t) => predicate(t)));
 				}
 				foreach (Thing obj2 in boxThings.Where(predicate2))
 				{
@@ -531,7 +531,7 @@ namespace RimWorld
 						this.Select(list[num], true, true);
 						return;
 					}
-					using (List<object>.Enumerator enumerator = list.GetEnumerator())
+					List<object>.Enumerator enumerator = list.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

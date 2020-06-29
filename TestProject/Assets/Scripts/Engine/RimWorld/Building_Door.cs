@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Building_Door : Building
 	{
 		
-		// (get) Token: 0x06004C96 RID: 19606 RVA: 0x0019B2F9 File Offset: 0x001994F9
+		
 		public bool Open
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C97 RID: 19607 RVA: 0x0019B301 File Offset: 0x00199501
+		
 		public bool HoldOpen
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C98 RID: 19608 RVA: 0x0019B309 File Offset: 0x00199509
+		
 		public bool FreePassage
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C99 RID: 19609 RVA: 0x0019B328 File Offset: 0x00199528
+		
 		public int TicksTillFullyOpened
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9A RID: 19610 RVA: 0x0019B34C File Offset: 0x0019954C
+		
 		public bool WillCloseSoon
 		{
 			get
@@ -103,7 +103,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9B RID: 19611 RVA: 0x0019B464 File Offset: 0x00199664
+		
 		public bool BlockedOpenMomentary
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9C RID: 19612 RVA: 0x0019B4BB File Offset: 0x001996BB
+		
 		public bool DoorPowerOn
 		{
 			get
@@ -132,7 +132,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9D RID: 19613 RVA: 0x0019B4D2 File Offset: 0x001996D2
+		
 		public bool SlowsPawns
 		{
 			get
@@ -142,7 +142,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9E RID: 19614 RVA: 0x0019B4E8 File Offset: 0x001996E8
+		
 		public int TicksToOpenNow
 		{
 			get
@@ -157,7 +157,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C9F RID: 19615 RVA: 0x0019B51E File Offset: 0x0019971E
+		
 		private bool CanTryCloseAutomatically
 		{
 			get
@@ -167,7 +167,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CA0 RID: 19616 RVA: 0x0019B533 File Offset: 0x00199733
+		
 		private bool FriendlyTouchedRecently
 		{
 			get
@@ -177,7 +177,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CA1 RID: 19617 RVA: 0x0019B54A File Offset: 0x0019974A
+		
 		public override bool FireBulwark
 		{
 			get

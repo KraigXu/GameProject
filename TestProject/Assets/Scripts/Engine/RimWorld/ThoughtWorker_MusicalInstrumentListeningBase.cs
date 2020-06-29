@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class ThoughtWorker_MusicalInstrumentListeningBase : ThoughtWorker
 	{
 		
-		// (get) Token: 0x060034BD RID: 13501
+		
 		protected abstract ThingDef InstrumentDef { get; }
 
 		

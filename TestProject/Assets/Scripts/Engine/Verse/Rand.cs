@@ -11,7 +11,7 @@ namespace Verse
 	public static class Rand
 	{
 		
-		// (set) Token: 0x06000341 RID: 833 RVA: 0x00010E61 File Offset: 0x0000F061
+		
 		public static int Seed
 		{
 			set
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000342 RID: 834 RVA: 0x00010E8B File Offset: 0x0000F08B
+		
 		public static float Value
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000343 RID: 835 RVA: 0x00010EBA File Offset: 0x0000F0BA
+		
 		public static bool Bool
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000344 RID: 836 RVA: 0x00010EC8 File Offset: 0x0000F0C8
+		
 		public static int Sign
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000345 RID: 837 RVA: 0x00010ED4 File Offset: 0x0000F0D4
+		
 		public static int Int
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000346 RID: 838 RVA: 0x00010EF0 File Offset: 0x0000F0F0
+		
 		public static Vector3 UnitVector3
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000347 RID: 839 RVA: 0x00010F38 File Offset: 0x0000F138
+		
 		public static Vector2 UnitVector2
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000348 RID: 840 RVA: 0x00010F70 File Offset: 0x0000F170
+		
 		public static Vector2 InsideUnitCircle
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000349 RID: 841 RVA: 0x00010FB4 File Offset: 0x0000F1B4
+		
 		public static Vector3 InsideUnitCircleVec3
 		{
 			get
@@ -117,8 +117,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600034A RID: 842 RVA: 0x00010FDD File Offset: 0x0000F1DD
-		// (set) Token: 0x0600034B RID: 843 RVA: 0x00010FEF File Offset: 0x0000F1EF
+		
+		
 		private static ulong StateCompressed
 		{
 			get
@@ -127,8 +127,8 @@ namespace Verse
 			}
 			set
 			{
-				Rand.seed = (uint)(value & (ulong)-1);
-				Rand.iterations = (uint)(value >> 32 & (ulong)-1);
+				//Rand.seed = (uint)(value & (ulong)-1);
+			//	Rand.iterations = (uint)(value >> 32 & (ulong)-1);
 			}
 		}
 

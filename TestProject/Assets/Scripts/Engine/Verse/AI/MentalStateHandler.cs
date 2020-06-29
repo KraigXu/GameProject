@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class MentalStateHandler : IExposable
 	{
 		
-		// (get) Token: 0x0600268D RID: 9869 RVA: 0x000E31B9 File Offset: 0x000E13B9
+		
 		public bool InMentalState
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600268E RID: 9870 RVA: 0x000E31C4 File Offset: 0x000E13C4
+		
 		public MentalStateDef CurStateDef
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600268F RID: 9871 RVA: 0x000E31DB File Offset: 0x000E13DB
+		
 		public MentalState CurState
 		{
 			get

@@ -12,7 +12,7 @@ namespace Verse
 	public class Window_DebugTable : Window
 	{
 		
-		// (get) Token: 0x06001A5E RID: 6750 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
+		
 		public override Vector2 InitialSize
 		{
 			get

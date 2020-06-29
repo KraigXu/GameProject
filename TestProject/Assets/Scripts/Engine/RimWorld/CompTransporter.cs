@@ -13,7 +13,7 @@ namespace RimWorld
 	public class CompTransporter : ThingComp, IThingHolder
 	{
 		
-		// (get) Token: 0x060053D1 RID: 21457 RVA: 0x001BFDB9 File Offset: 0x001BDFB9
+		
 		public CompProperties_Transporter Props
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D2 RID: 21458 RVA: 0x001BFDC6 File Offset: 0x001BDFC6
+		
 		public Map Map
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D3 RID: 21459 RVA: 0x001BFDD3 File Offset: 0x001BDFD3
+		
 		public bool AnythingLeftToLoad
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D4 RID: 21460 RVA: 0x001BFDDE File Offset: 0x001BDFDE
+		
 		public bool LoadingInProgressOrReadyToLaunch
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D5 RID: 21461 RVA: 0x001BFDEC File Offset: 0x001BDFEC
+		
 		public bool AnyInGroupHasAnythingLeftToLoad
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D6 RID: 21462 RVA: 0x001BFDF7 File Offset: 0x001BDFF7
+		
 		public CompLaunchable Launchable
 		{
 			get
@@ -77,7 +77,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D7 RID: 21463 RVA: 0x001BFE18 File Offset: 0x001BE018
+		
 		public CompShuttle Shuttle
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D8 RID: 21464 RVA: 0x001BFE3C File Offset: 0x001BE03C
+		
 		public Thing FirstThingLeftToLoad
 		{
 			get
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053D9 RID: 21465 RVA: 0x001BFEA4 File Offset: 0x001BE0A4
+		
 		public Thing FirstThingLeftToLoadInGroup
 		{
 			get
@@ -131,7 +131,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053DA RID: 21466 RVA: 0x001BFEE8 File Offset: 0x001BE0E8
+		
 		public bool AnyInGroupNotifiedCantLoadMore
 		{
 			get
@@ -149,7 +149,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053DB RID: 21467 RVA: 0x001BFF2C File Offset: 0x001BE12C
+		
 		public bool AnyPawnCanLoadAnythingNow
 		{
 			get

@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Page_ScenarioEditor : Page
 	{
 		
-		// (get) Token: 0x06005AA0 RID: 23200 RVA: 0x001ED7CA File Offset: 0x001EB9CA
+		
 		public override string PageTitle
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005AA1 RID: 23201 RVA: 0x001ED7DB File Offset: 0x001EB9DB
+		
 		public Scenario EditingScenario
 		{
 			get

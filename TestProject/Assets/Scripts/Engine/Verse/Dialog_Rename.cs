@@ -8,7 +8,7 @@ namespace Verse
 	public abstract class Dialog_Rename : Window
 	{
 		
-		// (get) Token: 0x06001D48 RID: 7496 RVA: 0x000B4147 File Offset: 0x000B2347
+		
 		private bool AcceptsInput
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D49 RID: 7497 RVA: 0x000B4159 File Offset: 0x000B2359
+		
 		protected virtual int MaxNameLength
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D4A RID: 7498 RVA: 0x000B415D File Offset: 0x000B235D
+		
 		public override Vector2 InitialSize
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class Blueprint : ThingWithComps, IConstructible
 	{
 		
-		// (get) Token: 0x06004B09 RID: 19209 RVA: 0x00195450 File Offset: 0x00193650
+		
 		public override string Label
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B0A RID: 19210
+		
 		protected abstract float WorkTotal { get; }
 
 		

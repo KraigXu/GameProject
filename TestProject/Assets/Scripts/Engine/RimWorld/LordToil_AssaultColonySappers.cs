@@ -10,7 +10,7 @@ namespace RimWorld
 	public class LordToil_AssaultColonySappers : LordToil
 	{
 		
-		// (get) Token: 0x06003278 RID: 12920 RVA: 0x00118D77 File Offset: 0x00116F77
+		
 		private LordToilData_AssaultColonySappers Data
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003279 RID: 12921 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600327A RID: 12922 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool ForceHighStoryDanger
 		{
 			get

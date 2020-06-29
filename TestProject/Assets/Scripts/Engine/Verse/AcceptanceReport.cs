@@ -6,7 +6,7 @@ namespace Verse
 	public struct AcceptanceReport
 	{
 		
-		// (get) Token: 0x06001E7F RID: 7807 RVA: 0x000BE42D File Offset: 0x000BC62D
+		
 		public string Reason
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E80 RID: 7808 RVA: 0x000BE435 File Offset: 0x000BC635
+		
 		public bool Accepted
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E81 RID: 7809 RVA: 0x000BE440 File Offset: 0x000BC640
+		
 		public static AcceptanceReport WasAccepted
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E82 RID: 7810 RVA: 0x000BE464 File Offset: 0x000BC664
+		
 		public static AcceptanceReport WasRejected
 		{
 			get

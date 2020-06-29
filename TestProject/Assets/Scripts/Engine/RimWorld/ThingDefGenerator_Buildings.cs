@@ -26,7 +26,7 @@ namespace RimWorld
 					yield return ThingDefGenerator_Buildings.NewBlueprintDef_Thing(def, true, blueprint);
 				}
 				blueprint = null;
-				def = null;
+				
 			}
 			List<ThingDef>.Enumerator enumerator = default(List<ThingDef>.Enumerator);
 			foreach (TerrainDef terrDef in DefDatabase<TerrainDef>.AllDefs)
@@ -35,7 +35,7 @@ namespace RimWorld
 				{
 					yield return ThingDefGenerator_Buildings.NewBlueprintDef_Terrain(terrDef);
 					yield return ThingDefGenerator_Buildings.NewFrameDef_Terrain(terrDef);
-					terrDef = null;
+				
 				}
 			}
 			IEnumerator<TerrainDef> enumerator2 = null;

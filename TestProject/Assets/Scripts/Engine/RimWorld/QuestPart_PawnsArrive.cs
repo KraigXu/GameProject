@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_PawnsArrive : QuestPart
 	{
 		
-		// (get) Token: 0x06003A8F RID: 14991 RVA: 0x00135F6C File Offset: 0x0013416C
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+	
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{
@@ -35,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A90 RID: 14992 RVA: 0x00135F7C File Offset: 0x0013417C
+		
 		public override bool IncreasesPopulation
 		{
 			get

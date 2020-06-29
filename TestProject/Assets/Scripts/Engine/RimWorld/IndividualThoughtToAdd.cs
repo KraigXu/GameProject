@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct IndividualThoughtToAdd
 	{
 		
-		// (get) Token: 0x0600429D RID: 17053 RVA: 0x00163DA4 File Offset: 0x00161FA4
+		
 		public string LabelCap
 		{
 			get

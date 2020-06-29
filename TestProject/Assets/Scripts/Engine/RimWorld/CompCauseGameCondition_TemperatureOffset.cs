@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompCauseGameCondition_TemperatureOffset : CompCauseGameCondition
 	{
 		
-		// (get) Token: 0x06005006 RID: 20486 RVA: 0x001AFA4F File Offset: 0x001ADC4F
+		
 		public new CompProperties_CausesGameCondition_ClimateAdjuster Props
 		{
 			get

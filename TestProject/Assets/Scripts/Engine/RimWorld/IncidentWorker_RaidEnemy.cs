@@ -60,7 +60,7 @@ namespace RimWorld
 				return;
 			}
 			Map map = (Map)parms.target;
-			Predicate<PawnsArrivalModeDef> 9__2;
+
 			RaidStrategyDef raidStrategy;
 			DefDatabase<RaidStrategyDef>.AllDefs.Where(delegate(RaidStrategyDef d)
 			{
@@ -76,9 +76,9 @@ namespace RimWorld
 				{
 					List<PawnsArrivalModeDef> arriveModes = d.arriveModes;
 					Predicate<PawnsArrivalModeDef> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__2 = ((PawnsArrivalModeDef x) => x.Worker.CanUseWith(parms)));
+						predicate = ( ((PawnsArrivalModeDef x) => x.Worker.CanUseWith(parms)));
 					}
 					return arriveModes.Any(predicate);
 				}

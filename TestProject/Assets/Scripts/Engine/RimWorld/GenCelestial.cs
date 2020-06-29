@@ -9,7 +9,7 @@ namespace RimWorld
 	public static class GenCelestial
 	{
 		
-		// (get) Token: 0x06005FC3 RID: 24515 RVA: 0x00214838 File Offset: 0x00212A38
+		
 		private static int TicksAbsForSunPosInWorldSpace
 		{
 			get

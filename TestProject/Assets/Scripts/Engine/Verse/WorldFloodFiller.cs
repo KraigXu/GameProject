@@ -84,7 +84,7 @@ namespace Verse
 				}
 				goto IL_261;
 			}
-			using (IEnumerator<int> enumerator = extraRootTiles.GetEnumerator())
+			IEnumerator<int> enumerator = extraRootTiles.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -375,9 +375,9 @@ namespace Verse
 						{
 							IntVec3 second = UI.MouseCell();
 							CellRect rect = CellRect.FromLimits(firstCorner, second).ClipInsideMap(Find.CurrentMap);
-							RimWorld.BaseGen.BaseGen.globalSettings.map = Find.CurrentMap;
-							RimWorld.BaseGen.BaseGen.symbolStack.Push(localSymbol, rect, null);
-							RimWorld.BaseGen.BaseGen.Generate();
+							RimWorld.BaseGen.BaseGenCore.globalSettings.map = Find.CurrentMap;
+							RimWorld.BaseGen.BaseGenCore.symbolStack.Push(localSymbol, rect, null);
+							RimWorld.BaseGen.BaseGenCore.Generate();
 							DebugTools.curTool = tool;
 						};
 						DebugTools.curTool = new DebugTool(label, clickAction, firstCorner);
@@ -409,7 +409,7 @@ namespace Verse
 							RimWorld.SketchGen.ResolveParams parms = default(RimWorld.SketchGen.ResolveParams);
 							parms.sketch = new Sketch();
 							parms.monumentSize = new IntVec2?(new IntVec2(localIndex, localIndex));
-							RimWorld.SketchGen.SketchGen.Generate(localResolver, parms).Spawn(Find.CurrentMap, UI.MouseCell(), null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, true, null, null);
+							RimWorld.SketchGen.SketchGenCore.Generate(localResolver, parms).Spawn(Find.CurrentMap, UI.MouseCell(), null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, true, null, null);
 						}));
 					}
 					list.Add(new DebugMenuOption(sketchResolverDef.defName, DebugMenuOptionMode.Action, delegate
@@ -423,7 +423,7 @@ namespace Verse
 					{
 						RimWorld.SketchGen.ResolveParams parms = default(RimWorld.SketchGen.ResolveParams);
 						parms.sketch = new Sketch();
-						RimWorld.SketchGen.SketchGen.Generate(localResolver, parms).Spawn(Find.CurrentMap, UI.MouseCell(), null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, true, null, null);
+						RimWorld.SketchGen.SketchGenCore.Generate(localResolver, parms).Spawn(Find.CurrentMap, UI.MouseCell(), null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, true, null, null);
 					}));
 				}
 			}

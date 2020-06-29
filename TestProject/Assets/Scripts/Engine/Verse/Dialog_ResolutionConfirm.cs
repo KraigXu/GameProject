@@ -8,7 +8,7 @@ namespace Verse
 	public class Dialog_ResolutionConfirm : Window
 	{
 		
-		// (get) Token: 0x06001D56 RID: 7510 RVA: 0x000B44AE File Offset: 0x000B26AE
+		
 		private float TimeUntilRevert
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D57 RID: 7511 RVA: 0x000B44C2 File Offset: 0x000B26C2
+		
 		public override Vector2 InitialSize
 		{
 			get

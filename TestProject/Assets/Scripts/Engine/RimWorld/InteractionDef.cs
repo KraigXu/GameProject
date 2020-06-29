@@ -9,7 +9,7 @@ namespace RimWorld
 	public class InteractionDef : Def
 	{
 		
-		// (get) Token: 0x06003651 RID: 13905 RVA: 0x00126979 File Offset: 0x00124B79
+		
 		public InteractionWorker Worker
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003652 RID: 13906 RVA: 0x001269AB File Offset: 0x00124BAB
+		
 		public Texture2D Symbol
 		{
 			get

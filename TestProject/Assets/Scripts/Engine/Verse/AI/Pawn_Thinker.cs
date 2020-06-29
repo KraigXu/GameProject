@@ -6,7 +6,7 @@ namespace Verse.AI
 	public class Pawn_Thinker
 	{
 		
-		// (get) Token: 0x06002812 RID: 10258 RVA: 0x000ECDDC File Offset: 0x000EAFDC
+		
 		public ThinkTreeDef MainThinkTree
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002813 RID: 10259 RVA: 0x000ECDEE File Offset: 0x000EAFEE
+		
 		public ThinkNode MainThinkNodeRoot
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002814 RID: 10260 RVA: 0x000ECE05 File Offset: 0x000EB005
+		
 		public ThinkTreeDef ConstantThinkTree
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002815 RID: 10261 RVA: 0x000ECE17 File Offset: 0x000EB017
+		
 		public ThinkNode ConstantThinkNodeRoot
 		{
 			get

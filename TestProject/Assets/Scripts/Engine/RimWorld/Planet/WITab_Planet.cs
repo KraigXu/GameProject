@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WITab_Planet : WITab
 	{
 		
-		// (get) Token: 0x0600701C RID: 28700 RVA: 0x00271AE6 File Offset: 0x0026FCE6
+		
 		public override bool IsVisible
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600701D RID: 28701 RVA: 0x00271AF4 File Offset: 0x0026FCF4
+		
 		private string Desc
 		{
 			get

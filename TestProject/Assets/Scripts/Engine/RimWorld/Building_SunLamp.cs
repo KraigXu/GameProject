@@ -10,7 +10,7 @@ namespace RimWorld
 	internal class Building_SunLamp : Building
 	{
 		
-		// (get) Token: 0x06004D21 RID: 19745 RVA: 0x0019D4E0 File Offset: 0x0019B6E0
+		
 		public IEnumerable<IntVec3> GrowableCells
 		{
 			get

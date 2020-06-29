@@ -168,16 +168,13 @@ namespace Verse
 				CellFinder.workingRegions.Add(r);
 				return false;
 			}, maxRegions, RegionType.Set_Passable);
-			Predicate<IntVec3> 9__3;
+
 			while (CellFinder.workingRegions.Count > 0)
 			{
 				Region region2 = CellFinder.workingRegions.RandomElementByWeight((Region r) => (float)r.CellCount);
 				Region reg = region2;
-				Predicate<IntVec3> validator;
-				if ((validator ) == null)
-				{
-					validator = (9__3 = ((IntVec3 c) => (float)(c - root).LengthHorizontalSquared <= radSquared && (cellValidator == null || cellValidator(c))));
-				}
+				Predicate<IntVec3> validator = (((IntVec3 c) => (float)(c - root).LengthHorizontalSquared <= radSquared && (cellValidator == null || cellValidator(c))));
+
 				if (reg.TryFindRandomCellInRegion(validator, out result))
 				{
 					CellFinder.workingRegions.Clear();
@@ -485,64 +482,53 @@ namespace Verse
 			int num = -1;
 			float radius = 10f;
 			
-			Predicate<Thing> 9__2;
+
 			
 			for (;;)
 			{
 				CellFinder.tmpDistances.Clear();
 				CellFinder.tmpParents.Clear();
 				IntVec3 position = forPawn.Position;
-				Func<IntVec3, IEnumerable<IntVec3>> neighborsGetter;
-				if ((neighborsGetter ) == null)
+				Func<IntVec3, IEnumerable<IntVec3>> neighborsGetter = (((IntVec3 x) => CellFinder.GetAdjacentCardinalCellsForBestStandCell(x, radius, forPawn)));
+				
+				Func<IntVec3, IntVec3, float> distanceGetter = (delegate (IntVec3 from, IntVec3 to)
 				{
-					neighborsGetter = (9__0 = ((IntVec3 x) => CellFinder.GetAdjacentCardinalCellsForBestStandCell(x, radius, forPawn)));
-				}
-				Func<IntVec3, IntVec3, float> distanceGetter;
-				if ((distanceGetter ) == null)
-				{
-					distanceGetter = (9__1 = delegate(IntVec3 from, IntVec3 to)
+					float num4 = 1f;
+					if (from.x != to.x && from.z != to.z)
 					{
-						float num4 = 1f;
-						if (from.x != to.x && from.z != to.z)
+						num4 = 1.41421354f;
+					}
+					if (!to.Standable(forPawn.Map))
+					{
+						num4 += 3f;
+					}
+					if (PawnUtility.AnyPawnBlockingPathAt(to, forPawn, false, false, false))
+					{
+						List<Thing> thingList = to.GetThingList(forPawn.Map);
+						Predicate<Thing> match = (((Thing x) => x is Pawn && x.HostileTo(forPawn))); 
+						if (thingList.Find(match) != null)
 						{
-							num4 = 1.41421354f;
+							num4 += 40f;
 						}
-						if (!to.Standable(forPawn.Map))
+						else
 						{
-							num4 += 3f;
+							num4 += 15f;
 						}
-						if (PawnUtility.AnyPawnBlockingPathAt(to, forPawn, false, false, false))
+					}
+					Building_Door building_Door = to.GetEdifice(forPawn.Map) as Building_Door;
+					if (building_Door != null && !building_Door.FreePassage)
+					{
+						if (building_Door.PawnCanOpen(forPawn))
 						{
-							List<Thing> thingList = to.GetThingList(forPawn.Map);
-							Predicate<Thing> match;
-							if ((match ) == null)
-							{
-								match = (9__2 = ((Thing x) => x is Pawn && x.HostileTo(forPawn)));
-							}
-							if (thingList.Find(match) != null)
-							{
-								num4 += 40f;
-							}
-							else
-							{
-								num4 += 15f;
-							}
+							num4 += 6f;
 						}
-						Building_Door building_Door = to.GetEdifice(forPawn.Map) as Building_Door;
-						if (building_Door != null && !building_Door.FreePassage)
+						else
 						{
-							if (building_Door.PawnCanOpen(forPawn))
-							{
-								num4 += 6f;
-							}
-							else
-							{
-								num4 += 50f;
-							}
+							num4 += 50f;
 						}
-						return num4;
-					});
-				}
+					}
+					return num4;
+				});
 				Dijkstra<IntVec3>.Run(position, neighborsGetter, distanceGetter, CellFinder.tmpDistances, CellFinder.tmpParents);
 				if (CellFinder.tmpDistances.Count == num)
 				{
@@ -656,17 +642,14 @@ namespace Verse
 			}
 			bool rootFogged = root.Fogged(map);
 			int num = firstTryWithRadius;
-			Predicate<IntVec3> 9__0;
+
 			for (int i = 0; i < 3; i++)
 			{
 				Map map2 = map;
 				float radius = (float)num;
 				TraverseParms traverseParms = TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false);
-				Predicate<IntVec3> cellValidator;
-				if ((cellValidator ) == null)
-				{
-					cellValidator = (9__0 = ((IntVec3 c) => c.Standable(map) && (rootFogged || !c.Fogged(map)) && c.GetFirstPawn(map) == null));
-				}
+				Predicate<IntVec3> cellValidator = (((IntVec3 c) => c.Standable(map) && (rootFogged || !c.Fogged(map)) && c.GetFirstPawn(map) == null));
+
 				if (CellFinder.TryFindRandomReachableCellNear(root, map2, radius, traverseParms, cellValidator, null, out result, 999999))
 				{
 					return true;

@@ -2,7 +2,7 @@
 using System.Linq;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_GetSameQuestsCount : QuestNode

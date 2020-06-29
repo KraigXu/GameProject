@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_OnOffCycle : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D34 RID: 15668 RVA: 0x00143982 File Offset: 0x00141B82
+		
 		protected StorytellerCompProperties_OnOffCycle Props
 		{
 			get

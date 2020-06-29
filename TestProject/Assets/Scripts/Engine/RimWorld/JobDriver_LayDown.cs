@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_LayDown : JobDriver
 	{
 		
-		// (get) Token: 0x06002D9D RID: 11677 RVA: 0x00100DCC File Offset: 0x000FEFCC
+		
 		public Building_Bed Bed
 		{
 			get

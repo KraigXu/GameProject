@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 using Verse;
 
@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompLongRangeMineralScanner : CompScanner
 	{
 		
-		// (get) Token: 0x06005457 RID: 21591 RVA: 0x001C2857 File Offset: 0x001C0A57
+		
 		public new CompProperties_LongRangeMineralScanner Props
 		{
 			get

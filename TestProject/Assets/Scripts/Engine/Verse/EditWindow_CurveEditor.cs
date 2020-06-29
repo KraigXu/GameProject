@@ -9,7 +9,7 @@ namespace Verse
 	public class EditWindow_CurveEditor : EditWindow
 	{
 		
-		// (get) Token: 0x06001A2C RID: 6700 RVA: 0x000A0E5C File Offset: 0x0009F05C
+		
 		private bool DraggingView
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A2D RID: 6701 RVA: 0x000A0E6A File Offset: 0x0009F06A
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A2E RID: 6702 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

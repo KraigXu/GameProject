@@ -8,8 +8,8 @@ namespace Verse
 	public class Pawn_EquipmentTracker : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x060012F6 RID: 4854 RVA: 0x0006C88C File Offset: 0x0006AA8C
-		// (set) Token: 0x060012F7 RID: 4855 RVA: 0x0006C8D8 File Offset: 0x0006AAD8
+		
+		
 		public ThingWithComps Primary
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012F8 RID: 4856 RVA: 0x0006C954 File Offset: 0x0006AB54
+		
 		public CompEquippable PrimaryEq
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012F9 RID: 4857 RVA: 0x0006C96B File Offset: 0x0006AB6B
+		
 		public List<ThingWithComps> AllEquipmentListForReading
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012FA RID: 4858 RVA: 0x0006C978 File Offset: 0x0006AB78
+		
 		public IEnumerable<Verb> AllEquipmentVerbs
 		{
 			get
@@ -98,7 +98,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012FB RID: 4859 RVA: 0x0006C988 File Offset: 0x0006AB88
+		
 		public IThingHolder ParentHolder
 		{
 			get

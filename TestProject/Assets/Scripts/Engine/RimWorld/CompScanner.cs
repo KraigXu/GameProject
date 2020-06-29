@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class CompScanner : ThingComp
 	{
 		
-		// (get) Token: 0x06005444 RID: 21572 RVA: 0x001C22B3 File Offset: 0x001C04B3
+		
 		public CompProperties_Scanner Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005445 RID: 21573 RVA: 0x001C22C0 File Offset: 0x001C04C0
+		
 		public bool CanUseNow
 		{
 			get

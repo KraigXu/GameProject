@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_SingleInteraction : JobDriver
 	{
 		
-		// (get) Token: 0x06002CFF RID: 11519 RVA: 0x000FED24 File Offset: 0x000FCF24
+		
 		private Pawn OtherPawn
 		{
 			get

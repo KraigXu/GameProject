@@ -8,8 +8,8 @@ namespace Ionic.Zlib
 	public class GZipStream : Stream
 	{
 		
-		// (get) Token: 0x06007123 RID: 28963 RVA: 0x00277894 File Offset: 0x00275A94
-		// (set) Token: 0x06007124 RID: 28964 RVA: 0x0027789C File Offset: 0x00275A9C
+		
+		
 		public string Comment
 		{
 			get
@@ -27,8 +27,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007125 RID: 28965 RVA: 0x002778B8 File Offset: 0x00275AB8
-		// (set) Token: 0x06007126 RID: 28966 RVA: 0x002778C0 File Offset: 0x00275AC0
+		
+		
 		public string FileName
 		{
 			get
@@ -62,7 +62,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007127 RID: 28967 RVA: 0x0027795F File Offset: 0x00275B5F
+		
 		public int Crc32
 		{
 			get
@@ -93,8 +93,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600712C RID: 28972 RVA: 0x002779A8 File Offset: 0x00275BA8
-		// (set) Token: 0x0600712D RID: 28973 RVA: 0x002779B5 File Offset: 0x00275BB5
+		
+		
 		public virtual FlushType FlushMode
 		{
 			get
@@ -112,8 +112,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600712E RID: 28974 RVA: 0x002779D6 File Offset: 0x00275BD6
-		// (set) Token: 0x0600712F RID: 28975 RVA: 0x002779E4 File Offset: 0x00275BE4
+		
+		
 		public int BufferSize
 		{
 			get
@@ -139,7 +139,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007130 RID: 28976 RVA: 0x00277A50 File Offset: 0x00275C50
+		
 		public virtual long TotalIn
 		{
 			get
@@ -149,7 +149,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007131 RID: 28977 RVA: 0x00277A62 File Offset: 0x00275C62
+		
 		public virtual long TotalOut
 		{
 			get
@@ -180,7 +180,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007133 RID: 28979 RVA: 0x00277AD4 File Offset: 0x00275CD4
+		
 		public override bool CanRead
 		{
 			get
@@ -194,7 +194,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007134 RID: 28980 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanSeek
 		{
 			get
@@ -204,7 +204,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007135 RID: 28981 RVA: 0x00277AF9 File Offset: 0x00275CF9
+		
 		public override bool CanWrite
 		{
 			get
@@ -228,7 +228,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007137 RID: 28983 RVA: 0x000255BF File Offset: 0x000237BF
+		
 		public override long Length
 		{
 			get
@@ -238,8 +238,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007138 RID: 28984 RVA: 0x00277B40 File Offset: 0x00275D40
-		// (set) Token: 0x06007139 RID: 28985 RVA: 0x000255BF File Offset: 0x000237BF
+		
+		
 		public override long Position
 		{
 			get
@@ -357,7 +357,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressString(string s)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new GZipStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressString(s, compressor);
@@ -370,7 +370,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressBuffer(byte[] b)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new GZipStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressBuffer(b, compressor);
@@ -383,7 +383,7 @@ namespace Ionic.Zlib
 		public static string UncompressString(byte[] compressed)
 		{
 			string result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new GZipStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressString(compressed, decompressor);
@@ -395,7 +395,7 @@ namespace Ionic.Zlib
 		public static byte[] UncompressBuffer(byte[] compressed)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new GZipStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressBuffer(compressed, decompressor);

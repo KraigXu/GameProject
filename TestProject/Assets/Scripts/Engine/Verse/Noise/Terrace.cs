@@ -26,7 +26,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023BB RID: 9147 RVA: 0x000D6039 File Offset: 0x000D4239
+		
 		public int ControlPointCount
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023BC RID: 9148 RVA: 0x000D6046 File Offset: 0x000D4246
+		
 		public List<double> ControlPoints
 		{
 			get
@@ -46,8 +46,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023BD RID: 9149 RVA: 0x000D604E File Offset: 0x000D424E
-		// (set) Token: 0x060023BE RID: 9150 RVA: 0x000D6056 File Offset: 0x000D4256
+		
+		
 		public bool IsInverted
 		{
 			get

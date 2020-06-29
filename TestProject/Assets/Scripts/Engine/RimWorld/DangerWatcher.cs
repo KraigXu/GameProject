@@ -10,7 +10,7 @@ namespace RimWorld
 	public class DangerWatcher
 	{
 		
-		// (get) Token: 0x06003DC9 RID: 15817 RVA: 0x00145F8F File Offset: 0x0014418F
+		
 		public StoryDanger DangerRating
 		{
 			get

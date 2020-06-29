@@ -10,7 +10,7 @@ namespace RimWorld
 	public sealed class TaleManager : IExposable
 	{
 		
-		// (get) Token: 0x06004A86 RID: 19078 RVA: 0x001931B5 File Offset: 0x001913B5
+		
 		public List<Tale> AllTalesListForReading
 		{
 			get
@@ -360,12 +360,9 @@ namespace RimWorld
 			where def.usableForArt
 			select def;
 			
-			Func<TaleDef, float> keySelector;
-			if ((keySelector ) == null)
-			{
-				keySelector = (9__6 = ((TaleDef def) => defInterest(def)));
-			}
-			using (IEnumerator<TaleDef> enumerator = source.OrderByDescending(keySelector).GetEnumerator())
+			Func<TaleDef, float> keySelector = (((TaleDef def) => defInterest(def)));
+
+			IEnumerator<TaleDef> enumerator = source.OrderByDescending(keySelector).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

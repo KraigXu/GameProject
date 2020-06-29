@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public static class CaravanMergeUtility
 	{
 		
-		// (get) Token: 0x06006CA3 RID: 27811 RVA: 0x0025E9D4 File Offset: 0x0025CBD4
+		
 		public static bool ShouldShowMergeCommand
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006CA4 RID: 27812 RVA: 0x0025E9E4 File Offset: 0x0025CBE4
+		
 		public static bool CanMergeAnySelectedCaravans
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006CA5 RID: 27813 RVA: 0x0025EA60 File Offset: 0x0025CC60
+		
 		public static bool AnySelectedCaravanCloseToAnyOtherMergeableCaravan
 		{
 			get

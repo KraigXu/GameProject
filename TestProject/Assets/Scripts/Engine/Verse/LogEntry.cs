@@ -11,7 +11,7 @@ namespace Verse
 	public abstract class LogEntry : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x060007B3 RID: 1971 RVA: 0x00023F50 File Offset: 0x00022150
+		
 		public int Age
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007B4 RID: 1972 RVA: 0x00023F63 File Offset: 0x00022163
+		
 		public int Tick
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007B5 RID: 1973 RVA: 0x00023F6B File Offset: 0x0002216B
+		
 		public int LogID
 		{
 			get
@@ -41,7 +41,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007B6 RID: 1974 RVA: 0x00023F63 File Offset: 0x00022163
+		
 		public int Timestamp
 		{
 			get

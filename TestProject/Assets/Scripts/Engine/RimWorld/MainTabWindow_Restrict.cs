@@ -9,7 +9,7 @@ namespace RimWorld
 	public class MainTabWindow_Restrict : MainTabWindow_PawnTable
 	{
 		
-		// (get) Token: 0x06005CD1 RID: 23761 RVA: 0x002038D7 File Offset: 0x00201AD7
+		
 		protected override PawnTableDef PawnTableDef
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public class MoteSplash : Mote
 	{
 		
-		// (get) Token: 0x060015CB RID: 5579 RVA: 0x0007EDA9 File Offset: 0x0007CFA9
+		
 		protected override bool EndOfLife
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015CC RID: 5580 RVA: 0x0007EDC4 File Offset: 0x0007CFC4
+		
 		public override float Alpha
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class DragBox
 	{
 		
-		// (get) Token: 0x06005B30 RID: 23344 RVA: 0x001F6326 File Offset: 0x001F4526
+		
 		public float LeftX
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B31 RID: 23345 RVA: 0x001F6342 File Offset: 0x001F4542
+		
 		public float RightX
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B32 RID: 23346 RVA: 0x001F635E File Offset: 0x001F455E
+		
 		public float BotZ
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B33 RID: 23347 RVA: 0x001F637A File Offset: 0x001F457A
+		
 		public float TopZ
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B34 RID: 23348 RVA: 0x001F6398 File Offset: 0x001F4598
+		
 		public Rect ScreenRect
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B35 RID: 23349 RVA: 0x001F6450 File Offset: 0x001F4650
+		
 		public bool IsValid
 		{
 			get
@@ -88,7 +88,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B36 RID: 23350 RVA: 0x001F647C File Offset: 0x001F467C
+		
 		public bool IsValidAndActive
 		{
 			get

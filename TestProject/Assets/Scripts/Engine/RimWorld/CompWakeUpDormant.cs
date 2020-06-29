@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompWakeUpDormant : ThingComp
 	{
 		
-		// (get) Token: 0x06005412 RID: 21522 RVA: 0x001C1284 File Offset: 0x001BF484
+		
 		private CompProperties_WakeUpDormant Props
 		{
 			get
@@ -110,14 +110,14 @@ namespace RimWorld
 		}
 
 		
-		public override void Notify_SignalReceived(Signal signal)
-		{
-			if (string.IsNullOrEmpty(this.Props.wakeUpSignalTag))
-			{
-				return;
-			}
-			this.sentSignal = true;
-		}
+		//public override void Notify_SignalReceived(Signal signal)
+		//{
+		//	if (string.IsNullOrEmpty(this.Props.wakeUpSignalTag))
+		//	{
+		//		return;
+		//	}
+		//	this.sentSignal = true;
+		//}
 
 		
 		public override void PostExposeData()

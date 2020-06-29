@@ -9,7 +9,7 @@ namespace RimWorld
 	public class QuestPart_MoodBelow : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060038A4 RID: 14500 RVA: 0x0012EC98 File Offset: 0x0012CE98
+		
 		public override AlertReport AlertReport
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038A5 RID: 14501 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool AlertCritical
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038A6 RID: 14502 RVA: 0x0012ED14 File Offset: 0x0012CF14
+		
 		public override string AlertLabel
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038A7 RID: 14503 RVA: 0x0012ED28 File Offset: 0x0012CF28
+		
 		public override string AlertExplanation
 		{
 			get

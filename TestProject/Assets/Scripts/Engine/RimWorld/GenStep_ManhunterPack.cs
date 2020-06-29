@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_ManhunterPack : GenStep
 	{
 		
-		// (get) Token: 0x06003EE3 RID: 16099 RVA: 0x0014E4DE File Offset: 0x0014C6DE
+		
 		public override int SeedPart
 		{
 			get

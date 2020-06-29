@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompProperties_SpawnerItems : CompProperties
 	{
 		
-		// (get) Token: 0x0600534E RID: 21326 RVA: 0x001BE039 File Offset: 0x001BC239
+		
 		public IEnumerable<ThingDef> MatchingItems
 		{
 			get

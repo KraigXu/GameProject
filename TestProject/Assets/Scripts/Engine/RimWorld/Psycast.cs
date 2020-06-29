@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Psycast : Ability
 	{
 		
-		// (get) Token: 0x060041DD RID: 16861 RVA: 0x0015FD90 File Offset: 0x0015DF90
+		
 		public override bool CanCast
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		{
 			if (this.CanApplyPsycastTo(target))
 			{
-				using (IEnumerator<CompAbilityEffect> enumerator = effects.GetEnumerator())
+				IEnumerator<CompAbilityEffect> enumerator = effects.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

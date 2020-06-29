@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_PlaceChairsNearTables.tables.Clear();
 			foreach (IntVec3 c in rp.rect)
 			{
@@ -53,7 +53,7 @@ namespace RimWorld.BaseGen
 						resolveParams.singleThingDef = ThingDefOf.DiningChair;
 						resolveParams.singleThingStuff = (rp.singleThingStuff ?? ThingDefOf.WoodLog);
 						resolveParams.thingRot = new Rot4?(value);
-						BaseGen.symbolStack.Push("thing", resolveParams, null);
+						BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 						flag = true;
 					}
 				}

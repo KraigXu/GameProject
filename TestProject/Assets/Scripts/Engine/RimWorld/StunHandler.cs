@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StunHandler : IExposable
 	{
 		
-		// (get) Token: 0x06004E4F RID: 20047 RVA: 0x001A524A File Offset: 0x001A344A
+		
 		public bool Stunned
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E50 RID: 20048 RVA: 0x001A5258 File Offset: 0x001A3458
+		
 		private int EMPAdaptationTicksDuration
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E51 RID: 20049 RVA: 0x001A5288 File Offset: 0x001A3488
+		
 		private bool AffectedByEMP
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E52 RID: 20050 RVA: 0x001A52B4 File Offset: 0x001A34B4
+		
 		public int StunTicksLeft
 		{
 			get

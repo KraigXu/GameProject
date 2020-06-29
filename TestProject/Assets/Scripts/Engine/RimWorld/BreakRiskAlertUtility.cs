@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class BreakRiskAlertUtility
 	{
 		
-		// (get) Token: 0x060056D8 RID: 22232 RVA: 0x001CCB64 File Offset: 0x001CAD64
+		
 		public static List<Pawn> PawnsAtRiskExtreme
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056D9 RID: 22233 RVA: 0x001CCBE4 File Offset: 0x001CADE4
+		
 		public static List<Pawn> PawnsAtRiskMajor
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056DA RID: 22234 RVA: 0x001CCC64 File Offset: 0x001CAE64
+		
 		public static List<Pawn> PawnsAtRiskMinor
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056DB RID: 22235 RVA: 0x001CCCE4 File Offset: 0x001CAEE4
+		
 		public static string AlertLabel
 		{
 			get
@@ -97,7 +97,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056DC RID: 22236 RVA: 0x001CCD68 File Offset: 0x001CAF68
+		
 		public static string AlertExplanation
 		{
 			get

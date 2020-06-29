@@ -12,7 +12,7 @@ namespace RimWorld
 	public sealed class Autosaver
 	{
 		
-		// (get) Token: 0x06005F4F RID: 24399 RVA: 0x0020E9B4 File Offset: 0x0020CBB4
+		
 		private float AutosaveIntervalDays
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005F50 RID: 24400 RVA: 0x0020E9E7 File Offset: 0x0020CBE7
+		
 		private int AutosaveIntervalTicks
 		{
 			get

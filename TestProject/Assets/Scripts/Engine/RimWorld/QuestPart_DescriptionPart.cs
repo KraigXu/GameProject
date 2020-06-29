@@ -7,7 +7,7 @@ namespace RimWorld
 	public class QuestPart_DescriptionPart : QuestPartActivable
 	{
 		
-		// (get) Token: 0x0600392C RID: 14636 RVA: 0x00130855 File Offset: 0x0012EA55
+		
 		public override string DescriptionPart
 		{
 			get

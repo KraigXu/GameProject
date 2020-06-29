@@ -206,7 +206,7 @@ namespace Verse
 		private class Watcher
 		{
 			
-			// (get) Token: 0x060084B8 RID: 33976 RVA: 0x002B0A04 File Offset: 0x002AEC04
+			
 			public double ElapsedMilliseconds
 			{
 				get
@@ -216,7 +216,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x060084B9 RID: 33977 RVA: 0x002B0A24 File Offset: 0x002AEC24
+			
 			public string Label
 			{
 				get
@@ -226,7 +226,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x060084BA RID: 33978 RVA: 0x002B0A2C File Offset: 0x002AEC2C
+			
 			public Stopwatch Watch
 			{
 				get
@@ -236,7 +236,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x060084BB RID: 33979 RVA: 0x002B0A34 File Offset: 0x002AEC34
+			
 			public List<ThreadLocalDeepProfiler.Watcher> Children
 			{
 				get

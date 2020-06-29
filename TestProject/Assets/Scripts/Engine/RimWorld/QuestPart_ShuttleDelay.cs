@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_ShuttleDelay : QuestPart_Delay
 	{
 		
-		// (get) Token: 0x060038B8 RID: 14520 RVA: 0x0012F166 File Offset: 0x0012D366
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+				
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				int num;
 				for (int i = 0; i < this.lodgers.Count; i = num + 1)

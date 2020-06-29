@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class JobDriver_GatherAnimalBodyResources : JobDriver
 	{
 		
-		// (get) Token: 0x06002AEF RID: 10991
+		
 		protected abstract float WorkTotal { get; }
 
 		

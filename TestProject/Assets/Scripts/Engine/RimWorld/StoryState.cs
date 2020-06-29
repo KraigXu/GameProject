@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StoryState : IExposable
 	{
 		
-		// (get) Token: 0x06003D78 RID: 15736 RVA: 0x001451D8 File Offset: 0x001433D8
+		
 		public IIncidentTarget Target
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D79 RID: 15737 RVA: 0x001451E0 File Offset: 0x001433E0
+		
 		public List<QuestScriptDef> RecentRandomQuests
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D7A RID: 15738 RVA: 0x001451E8 File Offset: 0x001433E8
+		
 		public List<QuestScriptDef> RecentRandomDecrees
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D7B RID: 15739 RVA: 0x001451F0 File Offset: 0x001433F0
+		
 		public int LastRoyalFavorQuestTick
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D7C RID: 15740 RVA: 0x001451F8 File Offset: 0x001433F8
+		
 		public int LastThreatBigTick
 		{
 			get

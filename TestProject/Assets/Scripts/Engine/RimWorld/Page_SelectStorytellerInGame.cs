@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Page_SelectStorytellerInGame : Page
 	{
 		
-		// (get) Token: 0x06005AD5 RID: 23253 RVA: 0x001EF0BE File Offset: 0x001ED2BE
+		
 		public override string PageTitle
 		{
 			get

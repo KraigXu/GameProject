@@ -9,7 +9,7 @@ namespace RimWorld
 	public class ThoughtDef : Def
 	{
 		
-		// (get) Token: 0x06003734 RID: 14132 RVA: 0x001292A4 File Offset: 0x001274A4
+		
 		public string Label
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003735 RID: 14133 RVA: 0x00129342 File Offset: 0x00127542
+		
 		public int DurationTicks
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003736 RID: 14134 RVA: 0x00129354 File Offset: 0x00127554
+		
 		public bool IsMemory
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003737 RID: 14135 RVA: 0x001293A1 File Offset: 0x001275A1
+		
 		public bool IsSituational
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003738 RID: 14136 RVA: 0x001293AC File Offset: 0x001275AC
+		
 		public bool IsSocial
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003739 RID: 14137 RVA: 0x001293C3 File Offset: 0x001275C3
+		
 		public bool RequiresSpecificTraitsDegree
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600373A RID: 14138 RVA: 0x001293D5 File Offset: 0x001275D5
+		
 		public ThoughtWorker Worker
 		{
 			get
@@ -104,7 +104,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600373B RID: 14139 RVA: 0x00129415 File Offset: 0x00127615
+		
 		public Type ThoughtClass
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600373C RID: 14140 RVA: 0x00129449 File Offset: 0x00127649
+		
 		public Texture2D Icon
 		{
 			get
@@ -142,9 +142,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.stages.NullOrEmpty<ThoughtStage>())

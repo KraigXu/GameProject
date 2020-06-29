@@ -9,7 +9,7 @@ namespace Verse
 	public static class ThingCategoryNodeDatabase
 	{
 		
-		// (get) Token: 0x06001BB9 RID: 7097 RVA: 0x000A9ADA File Offset: 0x000A7CDA
+		
 		public static TreeNode_ThingCategory RootNode
 		{
 			get

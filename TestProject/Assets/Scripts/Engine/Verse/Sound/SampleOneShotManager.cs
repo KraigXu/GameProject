@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public class SampleOneShotManager
 	{
 		
-		// (get) Token: 0x060024B6 RID: 9398 RVA: 0x000DA058 File Offset: 0x000D8258
+		
 		public IEnumerable<SampleOneShot> PlayingOneShots
 		{
 			get

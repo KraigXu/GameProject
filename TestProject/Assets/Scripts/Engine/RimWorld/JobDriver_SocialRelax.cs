@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_SocialRelax : JobDriver
 	{
 		
-		// (get) Token: 0x06002C14 RID: 11284 RVA: 0x000FCB74 File Offset: 0x000FAD74
+		
 		private Thing GatherSpotParent
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C15 RID: 11285 RVA: 0x000FCB98 File Offset: 0x000FAD98
+		
 		private bool HasChair
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C16 RID: 11286 RVA: 0x000FCBBC File Offset: 0x000FADBC
+		
 		private bool HasDrink
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C17 RID: 11287 RVA: 0x000FCBE0 File Offset: 0x000FADE0
+		
 		private IntVec3 ClosestGatherSpotParentCell
 		{
 			get

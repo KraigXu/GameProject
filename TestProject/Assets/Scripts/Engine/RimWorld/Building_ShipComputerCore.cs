@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Building_ShipComputerCore : Building
 	{
 		
-		// (get) Token: 0x06004BD9 RID: 19417 RVA: 0x00198B03 File Offset: 0x00196D03
+		
 		private bool CanLaunchNow
 		{
 			get

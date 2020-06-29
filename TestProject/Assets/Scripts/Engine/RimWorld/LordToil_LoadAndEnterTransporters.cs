@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordToil_LoadAndEnterTransporters : LordToil
 	{
 		
-		// (get) Token: 0x060032B5 RID: 12981 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get

@@ -10,7 +10,7 @@ namespace Verse
 	public abstract class Command : Gizmo
 	{
 		
-		// (get) Token: 0x06001AC7 RID: 6855 RVA: 0x000A4A43 File Offset: 0x000A2C43
+		
 		public virtual string Label
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001AC8 RID: 6856 RVA: 0x000A4A4B File Offset: 0x000A2C4B
+		
 		public virtual string LabelCap
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001AC9 RID: 6857 RVA: 0x000A4A58 File Offset: 0x000A2C58
+		
 		public virtual string Desc
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACA RID: 6858 RVA: 0x000A4A60 File Offset: 0x000A2C60
+		
 		public virtual Color IconDrawColor
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACB RID: 6859 RVA: 0x000A4A68 File Offset: 0x000A2C68
+		
 		public virtual SoundDef CurActivateSound
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACC RID: 6860 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool DoTooltip
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACD RID: 6861 RVA: 0x000A4A70 File Offset: 0x000A2C70
+		
 		public virtual string HighlightTag
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACE RID: 6862 RVA: 0x000A4A70 File Offset: 0x000A2C70
+		
 		public virtual string TutorTagSelect
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ACF RID: 6863 RVA: 0x000A4A78 File Offset: 0x000A2C78
+		
 		public virtual Texture2D BGTexture
 		{
 			get

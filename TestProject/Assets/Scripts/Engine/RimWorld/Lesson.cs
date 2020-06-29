@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Lesson : IExposable
 	{
 		
-		// (get) Token: 0x06005EE0 RID: 24288 RVA: 0x0020C5B4 File Offset: 0x0020A7B4
+		
 		protected float AgeSeconds
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EE1 RID: 24289 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual ConceptDef Concept
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EE2 RID: 24290 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual InstructionDef Instruction
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EE3 RID: 24291 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float MessagesYOffset
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EEC RID: 24300 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string DefaultRejectInputMessage
 		{
 			get

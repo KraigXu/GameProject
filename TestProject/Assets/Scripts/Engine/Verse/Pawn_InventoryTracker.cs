@@ -8,8 +8,8 @@ namespace Verse
 	public class Pawn_InventoryTracker : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x06001335 RID: 4917 RVA: 0x0006EB82 File Offset: 0x0006CD82
-		// (set) Token: 0x06001336 RID: 4918 RVA: 0x0006EB94 File Offset: 0x0006CD94
+		
+		
 		public bool UnloadEverything
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001337 RID: 4919 RVA: 0x0006EBB0 File Offset: 0x0006CDB0
+		
 		private bool HasAnyUnloadableThing
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001338 RID: 4920 RVA: 0x0006EBD4 File Offset: 0x0006CDD4
+		
 		public ThingCount FirstUnloadableThing
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001339 RID: 4921 RVA: 0x0006EE22 File Offset: 0x0006D022
+		
 		public IThingHolder ParentHolder
 		{
 			get

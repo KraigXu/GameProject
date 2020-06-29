@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompPlantHarmRadius : ThingComp
 	{
 		
-		// (get) Token: 0x0600522A RID: 21034 RVA: 0x001B748E File Offset: 0x001B568E
+		
 		protected CompProperties_PlantHarmRadius PropsPlantHarmRadius
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600522B RID: 21035 RVA: 0x001B749B File Offset: 0x001B569B
+		
 		public float AgeDays
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600522C RID: 21036 RVA: 0x001B74AA File Offset: 0x001B56AA
+		
 		public float CurrentRadius
 		{
 			get

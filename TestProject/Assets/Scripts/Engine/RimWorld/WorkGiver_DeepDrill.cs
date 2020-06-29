@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_DeepDrill : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600308A RID: 12426 RVA: 0x00110262 File Offset: 0x0010E462
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600308B RID: 12427 RVA: 0x0010FDBF File Offset: 0x0010DFBF
+		
 		public override PathEndMode PathEndMode
 		{
 			get

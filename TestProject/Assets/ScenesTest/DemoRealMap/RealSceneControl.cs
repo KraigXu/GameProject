@@ -102,7 +102,7 @@ public class RealSceneControl : MonoBehaviour {
         //{
         //    //加载地图
         //    Debuger.Log(openingInfo.MapFilePath);
-        //    using (BinaryReader reader = new BinaryReader(File.OpenRead(openingInfo.MapFilePath)))
+        //    BinaryReader reader = new BinaryReader(File.OpenRead(openingInfo.MapFilePath)))
         //    {
         //        int header = reader.ReadInt32();
         //        if (header <= openingInfo.MapFileVersion)

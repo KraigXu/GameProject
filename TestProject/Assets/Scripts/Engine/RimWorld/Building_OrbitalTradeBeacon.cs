@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Building_OrbitalTradeBeacon : Building
 	{
 		
-		// (get) Token: 0x06004D06 RID: 19718 RVA: 0x0019D09F File Offset: 0x0019B29F
+		
 		public IEnumerable<IntVec3> TradeableCells
 		{
 			get

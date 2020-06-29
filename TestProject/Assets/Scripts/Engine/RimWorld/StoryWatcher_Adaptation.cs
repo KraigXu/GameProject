@@ -10,7 +10,7 @@ namespace RimWorld
 	public class StoryWatcher_Adaptation : IExposable
 	{
 		
-		// (get) Token: 0x06003D8C RID: 15756 RVA: 0x001457C7 File Offset: 0x001439C7
+		
 		public float TotalThreatPointsFactor
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D8D RID: 15757 RVA: 0x001457DF File Offset: 0x001439DF
+		
 		public float AdaptDays
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D8E RID: 15758 RVA: 0x001457E7 File Offset: 0x001439E7
+		
 		private int Population
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D8F RID: 15759 RVA: 0x00144F07 File Offset: 0x00143107
+		
 		private StorytellerDef StorytellerDef
 		{
 			get

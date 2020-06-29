@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WITab_Caravan_Gear : WITab
 	{
 		
-		// (get) Token: 0x06006FDA RID: 28634 RVA: 0x0026F60A File Offset: 0x0026D80A
+		
 		private List<Pawn> Pawns
 		{
 			get

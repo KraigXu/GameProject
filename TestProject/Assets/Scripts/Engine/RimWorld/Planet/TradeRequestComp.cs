@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class TradeRequestComp : WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006F13 RID: 28435 RVA: 0x0026AE59 File Offset: 0x00269059
+		
 		public bool ActiveRequest
 		{
 			get

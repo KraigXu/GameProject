@@ -19,7 +19,7 @@ namespace RimWorld
 				return false;
 			}
 			CellRect rectWithMargin = spectateRect.ExpandedBy(margin).ClipInsideMap(map);
-			Predicate<Thing> 9__1;
+
 			Predicate<IntVec3> predicate = delegate(IntVec3 x)
 			{
 				if (!x.InBounds(map))
@@ -52,11 +52,8 @@ namespace RimWorld
 					return false;
 				}
 				List<Thing> thingList = x.GetThingList(map);
-				Predicate<Thing> match;
-				if ((match ) == null)
-				{
-					match = (9__1 = ((Thing y) => y is Pawn && y != p));
-				}
+				Predicate<Thing> match = (((Thing y) => y is Pawn && y != p));
+
 				if (thingList.Find(match) != null)
 				{
 					return false;

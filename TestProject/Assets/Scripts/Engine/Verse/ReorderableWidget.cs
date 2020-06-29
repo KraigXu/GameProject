@@ -314,7 +314,7 @@ namespace Verse
 		private struct ReorderableGroup
 		{
 			
-			// (get) Token: 0x0600844A RID: 33866 RVA: 0x002AFC96 File Offset: 0x002ADE96
+			
 			public bool DrawLineExactlyBetween
 			{
 				get

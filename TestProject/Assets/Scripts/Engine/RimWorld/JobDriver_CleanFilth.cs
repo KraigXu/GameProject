@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_CleanFilth : JobDriver
 	{
 		
-		// (get) Token: 0x06002C4D RID: 11341 RVA: 0x000FD464 File Offset: 0x000FB664
+		
 		private Filth Filth
 		{
 			get

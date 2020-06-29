@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ScenPart_StartingThing_Defined : ScenPart_ThingCount
 	{
 		
-		// (get) Token: 0x06004A3B RID: 19003 RVA: 0x001916F8 File Offset: 0x0018F8F8
+		
 		public static string PlayerStartWithIntro
 		{
 			get

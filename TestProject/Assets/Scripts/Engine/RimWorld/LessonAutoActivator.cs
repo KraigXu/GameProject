@@ -11,7 +11,7 @@ namespace RimWorld
 	public static class LessonAutoActivator
 	{
 		
-		// (get) Token: 0x06005E5B RID: 24155 RVA: 0x0020A936 File Offset: 0x00208B36
+		
 		private static float SecondsSinceLesson
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E5C RID: 24156 RVA: 0x0020A93D File Offset: 0x00208B3D
+		
 		private static float RelaxDesire
 		{
 			get

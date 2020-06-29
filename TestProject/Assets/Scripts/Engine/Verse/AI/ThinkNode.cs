@@ -7,7 +7,7 @@ namespace Verse.AI
 	public abstract class ThinkNode
 	{
 		
-		// (get) Token: 0x060028B5 RID: 10421 RVA: 0x000EF80C File Offset: 0x000EDA0C
+		
 		public int UniqueSaveKey
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028B6 RID: 10422 RVA: 0x000EF814 File Offset: 0x000EDA14
+		
 		public IEnumerable<ThinkNode> ThisAndChildrenRecursive
 		{
 			get
@@ -34,7 +34,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028B7 RID: 10423 RVA: 0x000EF824 File Offset: 0x000EDA24
+		
 		public IEnumerable<ThinkNode> ChildrenRecursive
 		{
 			get

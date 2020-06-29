@@ -9,7 +9,7 @@ namespace RimWorld
 	public class TaleData_Surroundings : TaleData
 	{
 		
-		// (get) Token: 0x06004A73 RID: 19059 RVA: 0x00192C99 File Offset: 0x00190E99
+		
 		public bool Outdoors
 		{
 			get

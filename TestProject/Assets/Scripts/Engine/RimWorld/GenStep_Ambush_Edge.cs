@@ -7,7 +7,7 @@ namespace RimWorld
 	public class GenStep_Ambush_Edge : GenStep_Ambush
 	{
 		
-		// (get) Token: 0x06003ED0 RID: 16080 RVA: 0x0014E0C7 File Offset: 0x0014C2C7
+		
 		public override int SeedPart
 		{
 			get

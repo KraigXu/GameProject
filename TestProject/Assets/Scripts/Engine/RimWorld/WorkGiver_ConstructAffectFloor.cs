@@ -9,11 +9,11 @@ namespace RimWorld
 	public abstract class WorkGiver_ConstructAffectFloor : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003017 RID: 12311
+		
 		protected abstract DesignationDef DesDef { get; }
 
 		
-		// (get) Token: 0x06003018 RID: 12312 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

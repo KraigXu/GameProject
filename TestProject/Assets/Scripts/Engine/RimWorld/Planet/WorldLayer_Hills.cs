@@ -11,10 +11,8 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
-			{
-				yield return obj;
-			}
+
+
 			IEnumerator enumerator = null;
 			Rand.PushState();
 			Rand.Seed = Find.World.info.Seed;

@@ -9,7 +9,7 @@ namespace Verse
 	public class Dialog_DebugOutputMenu : Dialog_DebugOptionLister
 	{
 		
-		// (get) Token: 0x06001A1C RID: 6684 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

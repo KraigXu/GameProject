@@ -10,7 +10,7 @@ namespace Verse
 	public class ThingFilter : IExposable
 	{
 		
-		// (get) Token: 0x060021E8 RID: 8680 RVA: 0x000CE6EC File Offset: 0x000CC8EC
+		
 		public string Summary
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021E9 RID: 8681 RVA: 0x000CE954 File Offset: 0x000CCB54
+		
 		public ThingRequest BestThingRequest
 		{
 			get
@@ -71,7 +71,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021EA RID: 8682 RVA: 0x000CE9F4 File Offset: 0x000CCBF4
+		
 		public ThingDef AnyAllowedDef
 		{
 			get
@@ -81,7 +81,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021EB RID: 8683 RVA: 0x000CEA01 File Offset: 0x000CCC01
+		
 		public IEnumerable<ThingDef> AllowedThingDefs
 		{
 			get
@@ -91,7 +91,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021EC RID: 8684 RVA: 0x000CEA09 File Offset: 0x000CCC09
+		
 		private static IEnumerable<ThingDef> AllStorableThingDefs
 		{
 			get
@@ -103,7 +103,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021ED RID: 8685 RVA: 0x000CEA34 File Offset: 0x000CCC34
+		
 		public int AllowedDefCount
 		{
 			get
@@ -113,8 +113,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021EE RID: 8686 RVA: 0x000CEA41 File Offset: 0x000CCC41
-		// (set) Token: 0x060021EF RID: 8687 RVA: 0x000CEA49 File Offset: 0x000CCC49
+		
+		
 		public FloatRange AllowedHitPointsPercents
 		{
 			get
@@ -136,8 +136,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021F0 RID: 8688 RVA: 0x000CEA74 File Offset: 0x000CCC74
-		// (set) Token: 0x060021F1 RID: 8689 RVA: 0x000CEA7C File Offset: 0x000CCC7C
+		
+		
 		public QualityRange AllowedQualityLevels
 		{
 			get
@@ -159,8 +159,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021F2 RID: 8690 RVA: 0x000CEAA7 File Offset: 0x000CCCA7
-		// (set) Token: 0x060021F3 RID: 8691 RVA: 0x000CEACB File Offset: 0x000CCCCB
+		
+		
 		public TreeNode_ThingCategory DisplayRootCategory
 		{
 			get
@@ -448,7 +448,7 @@ namespace Verse
 				}
 				if (!flag && flag2)
 				{
-					object lockObject = lockObject;
+
 					lock (lockObject)
 					{
 						if (index > lastFoundCategory)
@@ -702,7 +702,7 @@ namespace Verse
 			this.allowedDefs.Clear();
 			if (parentFilter != null)
 			{
-				using (HashSet<ThingDef>.Enumerator enumerator = parentFilter.allowedDefs.GetEnumerator())
+				HashSet<ThingDef>.Enumerator enumerator = parentFilter.allowedDefs.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -714,7 +714,7 @@ namespace Verse
 			}
 			if (includeNonStorable)
 			{
-				using (IEnumerator<ThingDef> enumerator2 = DefDatabase<ThingDef>.AllDefs.GetEnumerator())
+				IEnumerator<ThingDef> enumerator2 = DefDatabase<ThingDef>.AllDefs.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{

@@ -19,7 +19,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600235C RID: 9052 RVA: 0x000D53BC File Offset: 0x000D35BC
+		
 		public int ControlPointCount
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600235D RID: 9053 RVA: 0x000D53C9 File Offset: 0x000D35C9
+		
 		public List<KeyValuePair<double, double>> ControlPoints
 		{
 			get

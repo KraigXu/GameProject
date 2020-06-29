@@ -8,8 +8,8 @@ namespace RimWorld
 	public class ActiveDropPodInfo : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x06004F0D RID: 20237 RVA: 0x001A9C4A File Offset: 0x001A7E4A
-		// (set) Token: 0x06004F0E RID: 20238 RVA: 0x001A9C80 File Offset: 0x001A7E80
+		
+		
 		public Thing SingleContainedThing
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F0F RID: 20239 RVA: 0x001A9C9B File Offset: 0x001A7E9B
+		
 		public IThingHolder ParentHolder
 		{
 			get

@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_KillAfterDays : HediffComp
 	{
 		
-		// (get) Token: 0x0600109A RID: 4250 RVA: 0x0005EB40 File Offset: 0x0005CD40
+		
 		public HediffCompProperties_KillAfterDays Props
 		{
 			get

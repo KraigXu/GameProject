@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Instruction_MineSteel : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005EBC RID: 24252 RVA: 0x0020BF28 File Offset: 0x0020A128
+		
 		protected override float ProgressPercent
 		{
 			get

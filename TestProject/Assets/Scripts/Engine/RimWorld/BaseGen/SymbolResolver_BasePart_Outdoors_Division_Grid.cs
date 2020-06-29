@@ -132,7 +132,7 @@ namespace RimWorld.BaseGen
 		
 		private void ResolveOption(int roomsPerRowX, int pathwayWidthX, int roomsPerRowZ, int pathwayWidthZ, ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			int roomSize = this.GetRoomSize(roomsPerRowX, pathwayWidthX, rp.rect.Width);
 			int roomSize2 = this.GetRoomSize(roomsPerRowZ, pathwayWidthZ, rp.rect.Height);
 			ThingDef thingDef = null;
@@ -156,7 +156,7 @@ namespace RimWorld.BaseGen
 				resolveParams.rect = rect;
 				resolveParams.floorDef = floorDef;
 				resolveParams.streetHorizontal = new bool?(false);
-				BaseGen.symbolStack.Push("street", resolveParams, null);
+				BaseGenCore.symbolStack.Push("street", resolveParams, null);
 				num += roomSize + pathwayWidthX;
 			}
 			int num2 = roomSize2;
@@ -167,7 +167,7 @@ namespace RimWorld.BaseGen
 				resolveParams2.rect = rect2;
 				resolveParams2.floorDef = floorDef;
 				resolveParams2.streetHorizontal = new bool?(true);
-				BaseGen.symbolStack.Push("street", resolveParams2, null);
+				BaseGenCore.symbolStack.Push("street", resolveParams2, null);
 				num2 += roomSize2 + pathwayWidthZ;
 			}
 			num = 0;
@@ -199,12 +199,12 @@ namespace RimWorld.BaseGen
 						ResolveParams resolveParams3 = rp;
 						resolveParams3.rect = CellRect.SingleCell(c);
 						resolveParams3.singleThingDef = thingDef;
-						BaseGen.symbolStack.Push("thing", resolveParams3, null);
+						BaseGenCore.symbolStack.Push("thing", resolveParams3, null);
 					}
 				}
 				ResolveParams resolveParams4 = rp;
 				resolveParams4.rect = this.children[m].rect;
-				BaseGen.symbolStack.Push("basePart_outdoors", resolveParams4, null);
+				BaseGenCore.symbolStack.Push("basePart_outdoors", resolveParams4, null);
 			}
 		}
 

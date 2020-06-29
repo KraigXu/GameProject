@@ -9,7 +9,7 @@ namespace RimWorld
 	public class StorytellerComp_ClassicIntro : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D1D RID: 15645 RVA: 0x0013B2B7 File Offset: 0x001394B7
+		
 		protected int IntervalsPassed
 		{
 			get
@@ -78,12 +78,12 @@ namespace RimWorld
 					yield return new FiringIncident(incidentDef3, this, null)
 					{
 						parms = this.GenerateParms(incidentDef3.category, target),
-						parms = 
-						{
-							points = 40f,
-							raidForceOneIncap = true,
-							raidNeverFleeIndividual = true
-						}
+						//parms = 
+						//{
+						//	points = 40f,
+						//	raidForceOneIncap = true,
+						//	raidNeverFleeIndividual = true
+						//}
 					};
 				}
 			}

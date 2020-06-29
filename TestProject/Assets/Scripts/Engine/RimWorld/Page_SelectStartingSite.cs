@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Page_SelectStartingSite : Page
 	{
 		
-		// (get) Token: 0x06005AC0 RID: 23232 RVA: 0x001EE790 File Offset: 0x001EC990
+		
 		public override string PageTitle
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005AC1 RID: 23233 RVA: 0x001EE7AB File Offset: 0x001EC9AB
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005AC2 RID: 23234 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

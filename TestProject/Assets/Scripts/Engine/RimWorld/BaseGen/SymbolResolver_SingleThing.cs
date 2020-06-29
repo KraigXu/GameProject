@@ -38,7 +38,7 @@ namespace RimWorld.BaseGen
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singlePawnToSpawn = (Pawn)rp.singleThingToSpawn;
-				BaseGen.symbolStack.Push("pawn", resolveParams, null);
+				BaseGenCore.symbolStack.Push("pawn", resolveParams, null);
 				return;
 			}
 			if (rp.singleThingToSpawn != null && rp.singleThingToSpawn.Spawned)
@@ -129,7 +129,7 @@ namespace RimWorld.BaseGen
 			{
 				BaseGenUtility.CheckSpawnBridgeUnder(thing.def, intVec, thingRot.Value);
 			}
-			thing = GenSpawn.Spawn(thing, intVec, BaseGen.globalSettings.map, thingRot.Value, WipeMode.Vanish, false);
+			thing = GenSpawn.Spawn(thing, intVec, BaseGenCore.globalSettings.map, thingRot.Value, WipeMode.Vanish, false);
 			if (thing != null && thing.def.category == ThingCategory.Item)
 			{
 				thing.SetForbidden(true, false);
@@ -143,7 +143,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryFindSpawnCellForItem(CellRect rect, out IntVec3 result)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			return CellFinder.TryFindRandomCellInsideWith(rect, delegate(IntVec3 c)
 			{
 				if (c.GetFirstItem(map) != null)
@@ -199,7 +199,7 @@ namespace RimWorld.BaseGen
 		
 		private IntVec3 FindBestSpawnCellForNonItem(CellRect rect, ThingDef thingDef, Rot4 rot, out bool hasToWipeBuilding, out bool doesntFit)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (thingDef.category == ThingCategory.Building)
 			{
 				foreach (IntVec3 intVec in rect.Cells.InRandomOrder(null))
@@ -268,7 +268,7 @@ namespace RimWorld.BaseGen
 		
 		private bool AnyNonStandableCellOrAnyBuildingInside(CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			foreach (IntVec3 c in rect)
 			{
 				if (!c.Standable(map) || c.GetEdifice(map) != null)

@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060030E5 RID: 12517 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get

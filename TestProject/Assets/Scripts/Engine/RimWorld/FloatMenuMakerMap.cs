@@ -909,7 +909,7 @@ namespace RimWorld
 		//			opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("TradeWith".Translate(pTarg.LabelShort + ", " + pTarg.TraderKind.label) + t3, action5, MenuOptionPriority.InitiateSocial, null, dest3.Thing, 0f, null, null), c__DisplayClass5_.pawn, pTarg, "ReservedBy"));
 		//		}
 		//	}
-		//	using (IEnumerator<LocalTargetInfo> enumerator = GenUI.TargetsAt(clickPos, TargetingParameters.ForOpen(c__DisplayClass5_.pawn), true).GetEnumerator())
+		//	IEnumerator<LocalTargetInfo> enumerator = GenUI.TargetsAt(clickPos, TargetingParameters.ForOpen(c__DisplayClass5_.pawn), true).GetEnumerator();
 		//	{
 		//		while (enumerator.MoveNext())
 		//		{
@@ -1298,7 +1298,7 @@ namespace RimWorld
 			//		Action action;
 			//		if ((action ) == null)
 			//		{
-			//			action = (9__0 = delegate
+			//			action = ( delegate
 			//			{
 			//				IntVec3 intVec = RCellFinder.BestOrderedGotoDestNear(curLoc, pawn);
 			//				Job job = JobMaker.MakeJob(JobDefOf.Goto, intVec);

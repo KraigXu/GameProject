@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Skyfaller : Thing, IThingHolder
 	{
 		
-		// (get) Token: 0x06004F1A RID: 20250 RVA: 0x001AA244 File Offset: 0x001A8444
+		
 		public override Graphic Graphic
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F1B RID: 20251 RVA: 0x001AA274 File Offset: 0x001A8474
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F1C RID: 20252 RVA: 0x001AA350 File Offset: 0x001A8550
+		
 		private Material ShadowMaterial
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F1D RID: 20253 RVA: 0x001AA3A8 File Offset: 0x001A85A8
+		
 		private float TimeInAnimation
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F1E RID: 20254 RVA: 0x001AA3E0 File Offset: 0x001A85E0
+		
 		private float CurrentSpeed
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004F1F RID: 20255 RVA: 0x001AA43C File Offset: 0x001A863C
+		
 		private bool SpawnTimedMotes
 		{
 			get

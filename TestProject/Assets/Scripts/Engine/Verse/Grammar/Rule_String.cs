@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 
 namespace Verse.Grammar
 {
@@ -8,7 +8,7 @@ namespace Verse.Grammar
 	public class Rule_String : Rule
 	{
 		
-		// (get) Token: 0x0600240C RID: 9228 RVA: 0x000D7DBD File Offset: 0x000D5FBD
+		
 		public override float BaseSelectionWeight
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.Grammar
 		}
 
 		
-		// (get) Token: 0x0600240D RID: 9229 RVA: 0x000D7DC5 File Offset: 0x000D5FC5
+		
 		public override float Priority
 		{
 			get

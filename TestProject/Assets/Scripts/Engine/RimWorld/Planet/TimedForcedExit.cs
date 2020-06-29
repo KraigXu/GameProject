@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class TimedForcedExit : WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006EFD RID: 28413 RVA: 0x0026AADA File Offset: 0x00268CDA
+		
 		public bool ForceExitAndRemoveMapCountdownActive
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006EFE RID: 28414 RVA: 0x0026AAE8 File Offset: 0x00268CE8
+		
 		public string ForceExitAndRemoveMapCountdownTimeLeftString
 		{
 			get

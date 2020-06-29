@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Pawn_TimetableTracker : IExposable
 	{
 		
-		// (get) Token: 0x060046C4 RID: 18116 RVA: 0x0017EF2C File Offset: 0x0017D12C
+		
 		public TimeAssignmentDef CurrentAssignment
 		{
 			get

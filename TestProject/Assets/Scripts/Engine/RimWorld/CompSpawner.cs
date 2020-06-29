@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompSpawner : ThingComp
 	{
 		
-		// (get) Token: 0x06005326 RID: 21286 RVA: 0x001BD21C File Offset: 0x001BB41C
+		
 		public CompProperties_Spawner PropsSpawner
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005327 RID: 21287 RVA: 0x001BD22C File Offset: 0x001BB42C
+		
 		private bool PowerOn
 		{
 			get

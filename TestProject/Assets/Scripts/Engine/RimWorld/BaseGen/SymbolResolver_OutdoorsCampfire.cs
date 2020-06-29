@@ -23,13 +23,13 @@ namespace RimWorld.BaseGen
 			}
 			Thing thing = ThingMaker.MakeThing(ThingDefOf.Campfire, null);
 			thing.SetFaction(rp.faction, null);
-			GenSpawn.Spawn(thing, loc, BaseGen.globalSettings.map, WipeMode.Vanish);
+			GenSpawn.Spawn(thing, loc, BaseGenCore.globalSettings.map, WipeMode.Vanish);
 		}
 
 		
 		private bool TryFindSpawnCell(CellRect rect, out IntVec3 result)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			return CellFinder.TryFindRandomCellInsideWith(rect, delegate(IntVec3 c)
 			{
 				if (c.Standable(map) && !c.Roofed(map) && !BaseGenUtility.AnyDoorAdjacentCardinalTo(c, map) && c.GetFirstItem(map) == null)

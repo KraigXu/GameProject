@@ -10,7 +10,7 @@ namespace RimWorld
 	public class BuildingProperties
 	{
 		
-		// (get) Token: 0x060034F7 RID: 13559 RVA: 0x0012228A File Offset: 0x0012048A
+		
 		public bool SupportsPlants
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060034F8 RID: 13560 RVA: 0x00122295 File Offset: 0x00120495
+		
 		public bool IsTurret
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060034F9 RID: 13561 RVA: 0x001222A0 File Offset: 0x001204A0
+		
 		public bool IsDeconstructible
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060034FA RID: 13562 RVA: 0x001222BC File Offset: 0x001204BC
+		
 		public bool IsMortar
 		{
 			get

@@ -11,7 +11,7 @@ namespace Verse
 	public sealed class Region
 	{
 		
-		// (get) Token: 0x06000C35 RID: 3125 RVA: 0x0004573C File Offset: 0x0004393C
+		
 		public Map Map
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C36 RID: 3126 RVA: 0x00045759 File Offset: 0x00043959
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C37 RID: 3127 RVA: 0x0004576C File Offset: 0x0004396C
+		
 		public int CellCount
 		{
 			get
@@ -76,7 +76,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C38 RID: 3128 RVA: 0x000457FD File Offset: 0x000439FD
+		
 		public IEnumerable<Region> Neighbors
 		{
 			get
@@ -101,7 +101,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C39 RID: 3129 RVA: 0x0004580D File Offset: 0x00043A0D
+		
 		public IEnumerable<Region> NeighborsOfSameType
 		{
 			get
@@ -126,8 +126,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C3A RID: 3130 RVA: 0x0004581D File Offset: 0x00043A1D
-		// (set) Token: 0x06000C3B RID: 3131 RVA: 0x00045825 File Offset: 0x00043A25
+		
+		
 		public Room Room
 		{
 			get
@@ -153,7 +153,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C3C RID: 3132 RVA: 0x00045860 File Offset: 0x00043A60
+		
 		public IntVec3 RandomCell
 		{
 			get
@@ -174,7 +174,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C3D RID: 3133 RVA: 0x000458B8 File Offset: 0x00043AB8
+		
 		public IntVec3 AnyCell
 		{
 			get
@@ -195,7 +195,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C3E RID: 3134 RVA: 0x00045954 File Offset: 0x00043B54
+		
 		public string DebugString
 		{
 			get
@@ -226,7 +226,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C3F RID: 3135 RVA: 0x00045B14 File Offset: 0x00043D14
+		
 		public bool DebugIsNew
 		{
 			get
@@ -236,7 +236,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C40 RID: 3136 RVA: 0x00045B2B File Offset: 0x00043D2B
+		
 		public ListerThings ListerThings
 		{
 			get
@@ -246,7 +246,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C41 RID: 3137 RVA: 0x00045B33 File Offset: 0x00043D33
+		
 		public bool IsDoorway
 		{
 			get

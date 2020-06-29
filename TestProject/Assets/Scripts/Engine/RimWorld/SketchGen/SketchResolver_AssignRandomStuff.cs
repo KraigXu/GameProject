@@ -32,7 +32,7 @@ namespace RimWorld.SketchGen
 				}
 			}
 			this.visited.Clear();
-			using (List<SketchThing>.Enumerator enumerator = parms.sketch.Things.GetEnumerator())
+			List<SketchThing>.Enumerator enumerator = parms.sketch.Things.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

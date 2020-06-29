@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_Stage : LordToil
 	{
 		
-		// (get) Token: 0x060032DE RID: 13022 RVA: 0x0011AE95 File Offset: 0x00119095
+		
 		public override IntVec3 FlagLoc
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032DF RID: 13023 RVA: 0x0011AEA2 File Offset: 0x001190A2
+		
 		private LordToilData_Stage Data
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032E0 RID: 13024 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool ForceHighStoryDanger
 		{
 			get

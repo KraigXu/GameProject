@@ -381,7 +381,7 @@ namespace Verse
 		
 		public static T FirstOrFallback<T>(this IEnumerable<T> source, T fallback = default(T))
 		{
-			using (IEnumerator<T> enumerator = source.GetEnumerator())
+			IEnumerator<T> enumerator = source.GetEnumerator();
 			{
 				if (enumerator.MoveNext())
 				{
@@ -419,7 +419,7 @@ namespace Verse
 				throw new ArgumentNullException("comparer");
 			}
 			TSource result;
-			using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
 			{
 				if (!enumerator.MoveNext())
 				{
@@ -464,7 +464,7 @@ namespace Verse
 				throw new ArgumentNullException("comparer");
 			}
 			TSource result;
-			using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
 			{
 				if (!enumerator.MoveNext())
 				{
@@ -512,7 +512,7 @@ namespace Verse
 				throw new ArgumentNullException("comparer");
 			}
 			bool result;
-			using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
 			{
 				if (!enumerator.MoveNext())
 				{
@@ -562,7 +562,7 @@ namespace Verse
 				throw new ArgumentNullException("comparer");
 			}
 			TSource result;
-			using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
 			{
 				if (!enumerator.MoveNext())
 				{
@@ -607,7 +607,7 @@ namespace Verse
 				throw new ArgumentNullException("comparer");
 			}
 			bool result;
-			using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
 			{
 				if (!enumerator.MoveNext())
 				{
@@ -913,7 +913,7 @@ namespace Verse
 			IList list = e as IList;
 			if (list == null)
 			{
-				using (IEnumerator enumerator = e.GetEnumerator())
+				IEnumerator enumerator = e.GetEnumerator();
 				{
 					if (enumerator.MoveNext())
 					{

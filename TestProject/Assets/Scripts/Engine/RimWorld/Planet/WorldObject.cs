@@ -12,7 +12,7 @@ namespace RimWorld.Planet
 	public class WorldObject : IExposable, ILoadReferenceable, ISelectable
 	{
 		
-		// (get) Token: 0x06006E89 RID: 28297 RVA: 0x0026970A File Offset: 0x0026790A
+		
 		public List<WorldObjectComp> AllComps
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E8A RID: 28298 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool ShowRelatedQuests
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E8B RID: 28299 RVA: 0x00269712 File Offset: 0x00267912
+		
 		public bool Destroyed
 		{
 			get
@@ -42,8 +42,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E8C RID: 28300 RVA: 0x0026971A File Offset: 0x0026791A
-		// (set) Token: 0x06006E8D RID: 28301 RVA: 0x00269722 File Offset: 0x00267922
+		
+		
 		public int Tile
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E8E RID: 28302 RVA: 0x0026975E File Offset: 0x0026795E
+		
 		public bool Spawned
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E8F RID: 28303 RVA: 0x0026976B File Offset: 0x0026796B
+		
 		public virtual Vector3 DrawPos
 		{
 			get
@@ -85,7 +85,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E90 RID: 28304 RVA: 0x0026977D File Offset: 0x0026797D
+		
 		public Faction Faction
 		{
 			get
@@ -95,7 +95,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E91 RID: 28305 RVA: 0x00269785 File Offset: 0x00267985
+		
 		public virtual string Label
 		{
 			get
@@ -105,7 +105,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E92 RID: 28306 RVA: 0x00269792 File Offset: 0x00267992
+		
 		public string LabelCap
 		{
 			get
@@ -115,7 +115,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E93 RID: 28307 RVA: 0x002697A5 File Offset: 0x002679A5
+		
 		public virtual string LabelShort
 		{
 			get
@@ -125,7 +125,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E94 RID: 28308 RVA: 0x002697AD File Offset: 0x002679AD
+		
 		public virtual string LabelShortCap
 		{
 			get
@@ -135,7 +135,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E95 RID: 28309 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool HasName
 		{
 			get
@@ -145,7 +145,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E96 RID: 28310 RVA: 0x002697C0 File Offset: 0x002679C0
+		
 		public virtual Material Material
 		{
 			get
@@ -155,7 +155,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E97 RID: 28311 RVA: 0x002697CD File Offset: 0x002679CD
+		
 		public virtual bool SelectableNow
 		{
 			get
@@ -165,7 +165,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E98 RID: 28312 RVA: 0x002697DA File Offset: 0x002679DA
+		
 		public virtual bool NeverMultiSelect
 		{
 			get
@@ -175,7 +175,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E99 RID: 28313 RVA: 0x002697E7 File Offset: 0x002679E7
+		
 		public virtual Texture2D ExpandingIcon
 		{
 			get
@@ -185,7 +185,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9A RID: 28314 RVA: 0x00269808 File Offset: 0x00267A08
+		
 		public virtual Color ExpandingIconColor
 		{
 			get
@@ -195,7 +195,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9B RID: 28315 RVA: 0x00269815 File Offset: 0x00267A15
+		
 		public virtual float ExpandingIconPriority
 		{
 			get
@@ -205,7 +205,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9C RID: 28316 RVA: 0x00269822 File Offset: 0x00267A22
+		
 		public virtual bool ExpandMore
 		{
 			get
@@ -215,7 +215,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9D RID: 28317 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool AppendFactionToInspectString
 		{
 			get
@@ -225,7 +225,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9E RID: 28318 RVA: 0x0026982F File Offset: 0x00267A2F
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -239,7 +239,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E9F RID: 28319 RVA: 0x00269840 File Offset: 0x00267A40
+		
 		public virtual IEnumerable<StatDrawEntry> SpecialDisplayStats
 		{
 			get
@@ -249,7 +249,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006EA0 RID: 28320 RVA: 0x00269849 File Offset: 0x00267A49
+		
 		public BiomeDef Biome
 		{
 			get
@@ -587,7 +587,7 @@ namespace RimWorld.Planet
 			{
 				foreach (FloatMenuOption floatMenuOption in this.comps[i].GetFloatMenuOptions(caravan))
 				{
-					yield return floatMenuOption;
+					
 				}
 				IEnumerator<FloatMenuOption> enumerator = null;
 				num = i + 1;
@@ -604,7 +604,7 @@ namespace RimWorld.Planet
 			{
 				foreach (FloatMenuOption floatMenuOption in this.comps[i].GetTransportPodsFloatMenuOptions(pods, representative))
 				{
-					yield return floatMenuOption;
+					
 				}
 				IEnumerator<FloatMenuOption> enumerator = null;
 				num = i;

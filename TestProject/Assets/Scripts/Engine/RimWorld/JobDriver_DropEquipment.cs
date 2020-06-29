@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_DropEquipment : JobDriver
 	{
 		
-		// (get) Token: 0x06002DCF RID: 11727 RVA: 0x00102088 File Offset: 0x00100288
+		
 		private ThingWithComps TargetEquipment
 		{
 			get

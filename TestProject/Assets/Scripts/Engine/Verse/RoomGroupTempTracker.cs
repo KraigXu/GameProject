@@ -9,7 +9,7 @@ namespace Verse
 	public sealed class RoomGroupTempTracker
 	{
 		
-		// (get) Token: 0x06000D01 RID: 3329 RVA: 0x00049C68 File Offset: 0x00047E68
+		
 		private Map Map
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000D02 RID: 3330 RVA: 0x00049C75 File Offset: 0x00047E75
+		
 		private float ThinRoofCoverage
 		{
 			get
@@ -29,8 +29,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000D03 RID: 3331 RVA: 0x00049C8A File Offset: 0x00047E8A
-		// (set) Token: 0x06000D04 RID: 3332 RVA: 0x00049C92 File Offset: 0x00047E92
+		
+		
 		public float Temperature
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class GenStep_Ambush_Hidden : GenStep_Ambush
 	{
 		
-		// (get) Token: 0x06003ED3 RID: 16083 RVA: 0x0014E0E8 File Offset: 0x0014C2E8
+		
 		public override int SeedPart
 		{
 			get

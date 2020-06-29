@@ -9,7 +9,7 @@ namespace Verse.Sound
 	public abstract class Sample
 	{
 		
-		// (get) Token: 0x06002499 RID: 9369 RVA: 0x000D9926 File Offset: 0x000D7B26
+		
 		public float AgeRealTime
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x0600249A RID: 9370 RVA: 0x000D9934 File Offset: 0x000D7B34
+		
 		public int AgeTicks
 		{
 			get
@@ -33,27 +33,27 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x0600249B RID: 9371
+		
 		public abstract float ParentStartRealTime { get; }
 
 		
-		// (get) Token: 0x0600249C RID: 9372
+		
 		public abstract float ParentStartTick { get; }
 
 		
-		// (get) Token: 0x0600249D RID: 9373
+		
 		public abstract float ParentHashCode { get; }
 
 		
-		// (get) Token: 0x0600249E RID: 9374
+		
 		public abstract SoundParams ExternalParams { get; }
 
 		
-		// (get) Token: 0x0600249F RID: 9375
+		
 		public abstract SoundInfo Info { get; }
 
 		
-		// (get) Token: 0x060024A0 RID: 9376 RVA: 0x000D9960 File Offset: 0x000D7B60
+		
 		public Map Map
 		{
 			get
@@ -63,7 +63,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A1 RID: 9377 RVA: 0x000D9983 File Offset: 0x000D7B83
+		
 		protected bool TestPlaying
 		{
 			get
@@ -73,7 +73,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A2 RID: 9378 RVA: 0x000D9990 File Offset: 0x000D7B90
+		
 		protected float MappedVolumeMultiplier
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A3 RID: 9379 RVA: 0x000D99EC File Offset: 0x000D7BEC
+		
 		protected float ContextVolumeMultiplier
 		{
 			get
@@ -102,7 +102,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A4 RID: 9380 RVA: 0x000D9A14 File Offset: 0x000D7C14
+		
 		protected virtual float Volume
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A5 RID: 9381 RVA: 0x000D9A70 File Offset: 0x000D7C70
+		
 		public float SanitizedVolume
 		{
 			get
@@ -126,7 +126,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A6 RID: 9382 RVA: 0x000D9A88 File Offset: 0x000D7C88
+		
 		protected virtual float Pitch
 		{
 			get
@@ -141,7 +141,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024A7 RID: 9383 RVA: 0x000D9ADF File Offset: 0x000D7CDF
+		
 		public float SanitizedPitch
 		{
 			get

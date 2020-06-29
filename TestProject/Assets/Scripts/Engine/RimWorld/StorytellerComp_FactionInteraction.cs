@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_FactionInteraction : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D2D RID: 15661 RVA: 0x001438E8 File Offset: 0x00141AE8
+		
 		private StorytellerCompProperties_FactionInteraction Props
 		{
 			get

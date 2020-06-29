@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompMeditationFocus : CompStatOffsetBase
 	{
 		
-		// (get) Token: 0x060051BC RID: 20924 RVA: 0x001B5C61 File Offset: 0x001B3E61
+		
 		public new CompProperties_MeditationFocus Props
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		public bool WillBeAffectedBy(ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(pos, rotation, def.size);
-			using (List<FocusStrengthOffset>.Enumerator enumerator = this.Props.offsets.GetEnumerator())
+			List<FocusStrengthOffset>.Enumerator enumerator = this.Props.offsets.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

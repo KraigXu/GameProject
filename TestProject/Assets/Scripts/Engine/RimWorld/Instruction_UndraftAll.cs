@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_UndraftAll : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005ED6 RID: 24278 RVA: 0x0020C36F File Offset: 0x0020A56F
+		
 		protected override float ProgressPercent
 		{
 			get

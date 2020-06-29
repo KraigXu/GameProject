@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class Dialog_OptionLister : Window
 	{
 		
-		// (get) Token: 0x06001D88 RID: 7560 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D89 RID: 7561 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

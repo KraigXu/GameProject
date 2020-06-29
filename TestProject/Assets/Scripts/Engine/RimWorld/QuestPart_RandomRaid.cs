@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_RandomRaid : QuestPart
 	{
 		
-		// (get) Token: 0x06003AB1 RID: 15025 RVA: 0x00136BF8 File Offset: 0x00134DF8
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{
@@ -29,12 +27,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003AB2 RID: 15026 RVA: 0x00136C08 File Offset: 0x00134E08
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
+
 				{
 					yield return faction;
 				}

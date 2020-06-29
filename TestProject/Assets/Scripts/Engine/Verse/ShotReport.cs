@@ -10,7 +10,7 @@ namespace Verse
 	public struct ShotReport
 	{
 		
-		// (get) Token: 0x060021CB RID: 8651 RVA: 0x000CDE28 File Offset: 0x000CC028
+		
 		private float FactorFromPosture
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021CC RID: 8652 RVA: 0x000CDE78 File Offset: 0x000CC078
+		
 		private float FactorFromExecution
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021CD RID: 8653 RVA: 0x000CDEC6 File Offset: 0x000CC0C6
+		
 		private float FactorFromCoveringGas
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021CE RID: 8654 RVA: 0x000CDEEC File Offset: 0x000CC0EC
+		
 		public float AimOnTargetChance_StandardTarget
 		{
 			get
@@ -75,7 +75,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021CF RID: 8655 RVA: 0x000CDF2B File Offset: 0x000CC12B
+		
 		public float AimOnTargetChance_IgnoringPosture
 		{
 			get
@@ -85,7 +85,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021D0 RID: 8656 RVA: 0x000CDF3A File Offset: 0x000CC13A
+		
 		public float AimOnTargetChance
 		{
 			get
@@ -95,7 +95,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021D1 RID: 8657 RVA: 0x000CDF49 File Offset: 0x000CC149
+		
 		public float PassCoverChance
 		{
 			get
@@ -105,7 +105,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021D2 RID: 8658 RVA: 0x000CDF57 File Offset: 0x000CC157
+		
 		public float TotalEstimatedHitChance
 		{
 			get
@@ -115,7 +115,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021D3 RID: 8659 RVA: 0x000CDF6B File Offset: 0x000CC16B
+		
 		public ShootLine ShootLine
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 			shotReport.coveringGas = null;
 			if (verb.TryFindShootLineFromTo(verb.caster.Position, target, out shotReport.shootLine))
 			{
-				using (IEnumerator<IntVec3> enumerator = shotReport.shootLine.Points().GetEnumerator())
+				IEnumerator<IntVec3> enumerator = shotReport.shootLine.Points().GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

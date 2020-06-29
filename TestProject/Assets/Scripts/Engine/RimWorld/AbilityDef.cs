@@ -10,7 +10,7 @@ namespace RimWorld
 	public class AbilityDef : Def
 	{
 		
-		// (get) Token: 0x060035A4 RID: 13732 RVA: 0x00123E3E File Offset: 0x0012203E
+		
 		public float EntropyGain
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035A5 RID: 13733 RVA: 0x00123E55 File Offset: 0x00122055
+		
 		public float PsyfocusCost
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035A6 RID: 13734 RVA: 0x00123E6C File Offset: 0x0012206C
+		
 		public float EffectRadius
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035A7 RID: 13735 RVA: 0x00123E83 File Offset: 0x00122083
+		
 		public float EffectDuration
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035A8 RID: 13736 RVA: 0x00123E9A File Offset: 0x0012209A
+		
 		public bool HasAreaOfEffect
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035A9 RID: 13737 RVA: 0x00123EA9 File Offset: 0x001220A9
+		
 		public float DetectionChance
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035AA RID: 13738 RVA: 0x00123ECC File Offset: 0x001220CC
+		
 		public int RequiredPsyfocusBand
 		{
 			get
@@ -97,7 +97,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035AB RID: 13739 RVA: 0x00123F2D File Offset: 0x0012212D
+		
 		public IEnumerable<string> StatSummary
 		{
 			get
@@ -159,7 +159,7 @@ namespace RimWorld
 					RoyalTitleDef currentTitle = pawn.royalty.GetCurrentTitle(first);
 					if (minTitleForImplant != null && (currentTitle == null || currentTitle.seniority < minTitleForImplant.seniority) && this.DetectionChance > 0f)
 					{
-						return this.cachedTooltip + "\n\n" + "PsycastIsIllegal".Translate(pawn.Named("PAWN"), minTitleForImplant.GetLabelCapFor(pawn).Named("TITLE")).Colorize(ColoredText.WarningColor);
+						//return this.cachedTooltip + "\n\n" + "PsycastIsIllegal".Translate(pawn.Named("PAWN"), minTitleForImplant.GetLabelCapFor(pawn).Named("TITLE")).Colorize(ColoredText.WarningColor);
 					}
 				}
 			}
@@ -224,7 +224,7 @@ namespace RimWorld
 			}
 			if (this.statBases != null)
 			{
-				using (List<StatModifier>.Enumerator enumerator2 = this.statBases.GetEnumerator())
+				List<StatModifier>.Enumerator enumerator2 = this.statBases.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{
@@ -235,7 +235,7 @@ namespace RimWorld
 						}
 					}
 				}
-				List<StatModifier>.Enumerator enumerator2 = default(List<StatModifier>.Enumerator);
+				//List<StatModifier>.Enumerator enumerator2 = default(List<StatModifier>.Enumerator);
 			}
 			int num;
 			for (int i = 0; i < this.comps.Count; i = num + 1)

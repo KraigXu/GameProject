@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ArchivedDialog : IArchivable, IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x060037A2 RID: 14242 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		Texture IArchivable.ArchivedIcon
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A3 RID: 14243 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		Color IArchivable.ArchivedIconColor
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A4 RID: 14244 RVA: 0x0012AD59 File Offset: 0x00128F59
+		
 		string IArchivable.ArchivedLabel
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A5 RID: 14245 RVA: 0x0012AD66 File Offset: 0x00128F66
+		
 		string IArchivable.ArchivedTooltip
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A6 RID: 14246 RVA: 0x0012AD6E File Offset: 0x00128F6E
+		
 		int IArchivable.CreatedTicksGame
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A7 RID: 14247 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		bool IArchivable.CanCullArchivedNow
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037A8 RID: 14248 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		LookTargets IArchivable.LookTargets
 		{
 			get

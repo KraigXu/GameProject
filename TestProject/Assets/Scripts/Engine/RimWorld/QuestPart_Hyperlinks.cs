@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_Hyperlinks : QuestPart
 	{
 		
-		// (get) Token: 0x0600396B RID: 14699 RVA: 0x00131637 File Offset: 0x0012F837
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get

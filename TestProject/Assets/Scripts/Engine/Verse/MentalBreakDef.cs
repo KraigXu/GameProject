@@ -9,7 +9,7 @@ namespace Verse
 	public class MentalBreakDef : Def
 	{
 		
-		// (get) Token: 0x060005A8 RID: 1448 RVA: 0x0001BD36 File Offset: 0x00019F36
+		
 		public MentalBreakWorker Worker
 		{
 			get

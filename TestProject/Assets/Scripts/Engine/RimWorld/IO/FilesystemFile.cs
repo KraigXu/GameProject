@@ -7,7 +7,7 @@ namespace RimWorld.IO
 	internal class FilesystemFile : VirtualFile
 	{
 		
-		// (get) Token: 0x0600709D RID: 28829 RVA: 0x00274614 File Offset: 0x00272814
+		
 		public override string Name
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x0600709E RID: 28830 RVA: 0x00274621 File Offset: 0x00272821
+		
 		public override string FullPath
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x0600709F RID: 28831 RVA: 0x0027462E File Offset: 0x0027282E
+		
 		public override bool Exists
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070A0 RID: 28832 RVA: 0x0027463B File Offset: 0x0027283B
+		
 		public override long Length
 		{
 			get

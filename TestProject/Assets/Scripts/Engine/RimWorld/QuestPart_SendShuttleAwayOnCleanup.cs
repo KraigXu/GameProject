@@ -9,7 +9,7 @@ namespace RimWorld
 	public class QuestPart_SendShuttleAwayOnCleanup : QuestPart
 	{
 		
-		// (get) Token: 0x060039E1 RID: 14817 RVA: 0x0013370F File Offset: 0x0013190F
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get

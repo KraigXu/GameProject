@@ -146,7 +146,7 @@ namespace RimWorld
 		//						Action confirmedAct;
 		//						if ((confirmedAct = c__DisplayClass14_7.9__6) == null)
 		//						{
-		//							confirmedAct = (c__DisplayClass14_7.9__6 = delegate
+		//							confirmedAct = (c__DisplayClass14_7. delegate
 		//							{
 		//								c__DisplayClass14_7.CS$8__locals2.pawn.royalty.SetTitle(c__DisplayClass14_7.title.faction, null, false, false, true);
 		//							});
@@ -285,7 +285,7 @@ namespace RimWorld
 		//	c__DisplayClass14_2.curY = 72f;
 		//	if (c__DisplayClass14_2.CS$8__locals1.pawn.royalty != null && c__DisplayClass14_2.CS$8__locals1.pawn.royalty.AllTitlesForReading.Count > 0)
 		//	{
-		//		using (List<RoyalTitle>.Enumerator enumerator2 = c__DisplayClass14_2.CS$8__locals1.pawn.royalty.AllTitlesForReading.GetEnumerator())
+		//		List<RoyalTitle>.Enumerator enumerator2 = c__DisplayClass14_2.CS$8__locals1.pawn.royalty.AllTitlesForReading.GetEnumerator();
 		//		{
 		//			while (enumerator2.MoveNext())
 		//			{
@@ -789,7 +789,7 @@ namespace RimWorld
 		
 		private static Color GetDisabledWorkTagLabelColor(Pawn pawn, WorkTags workTag)
 		{
-			using (List<object>.Enumerator enumerator = CharacterCardUtility.GetWorkTypeDisableCauses(pawn, workTag).GetEnumerator())
+			List<object>.Enumerator enumerator = CharacterCardUtility.GetWorkTypeDisableCauses(pawn, workTag).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

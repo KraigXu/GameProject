@@ -12,15 +12,15 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			CellRect cellRect = CellRect.Empty;
-			ResolveParams resolveParams = default(ResolveParams);
-			resolveParams.sketch = new Sketch();
-			resolveParams.monumentOpen = new bool?(false);
-			resolveParams.monumentSize = new IntVec2?(new IntVec2(rp.rect.Width, rp.rect.Height));
-			resolveParams.allowMonumentDoors = new bool?(false);
-			resolveParams.allowWood = new bool?(false);
-			resolveParams.allowFlammableWalls = new bool?(false);
+			ResolveParams resolveParams = default;
+			//resolveParams.sketch = new Sketch();
+			//resolveParams.monumentOpen = new bool?(false);
+			//resolveParams.monumentSize = new IntVec2?(new IntVec2(rp.rect.Width, rp.rect.Height));
+			//resolveParams.allowMonumentDoors = new bool?(false);
+			//resolveParams.allowWood = new bool?(false);
+			//resolveParams.allowFlammableWalls = new bool?(false);
 			if (rp.allowedMonumentThings != null)
 			{
 				resolveParams.allowedMonumentThings = rp.allowedMonumentThings;
@@ -31,7 +31,8 @@ namespace RimWorld.BaseGen
 				resolveParams.allowedMonumentThings.SetAllowAll(null, true);
 			}
 			resolveParams.allowedMonumentThings.SetAllow(ThingDefOf.Drape, false);
-			Sketch sketch = SketchGen.Generate(SketchResolverDefOf.Monument, resolveParams);
+			//Sketch sketch = SketchGen.Generate(SketchResolverDefOf.Monument, resolveParams);\
+			Sketch sketch = default;
 			sketch.Spawn(map, rp.rect.CenterCell, null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, true, true, null, false, true, null, null);
 			CellRect rect = SketchGenUtility.FindBiggestRect(sketch, delegate(IntVec3 x)
 			{
@@ -73,7 +74,7 @@ namespace RimWorld.BaseGen
 				{
 					resolveParams2.allowedMonumentThings.SetAllow(ThingDefOf.Drape, false);
 				}
-				BaseGen.symbolStack.Push("interior_ancientTemple", resolveParams2, null);
+				BaseGenCore.symbolStack.Push("interior_ancientTemple", resolveParams2, null);
 			}
 			if (rp.makeWarningLetter != null && rp.makeWarningLetter.Value)
 			{

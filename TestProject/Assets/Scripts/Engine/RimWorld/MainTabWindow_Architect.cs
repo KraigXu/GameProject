@@ -12,7 +12,7 @@ namespace RimWorld
 	public class MainTabWindow_Architect : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005C44 RID: 23620 RVA: 0x001FDC18 File Offset: 0x001FBE18
+		
 		public float WinHeight
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C45 RID: 23621 RVA: 0x001FDC46 File Offset: 0x001FBE46
+		
 		public override Vector2 RequestedTabSize
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C46 RID: 23622 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

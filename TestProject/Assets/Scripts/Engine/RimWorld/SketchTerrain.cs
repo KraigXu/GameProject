@@ -9,7 +9,7 @@ namespace RimWorld
 	public class SketchTerrain : SketchBuildable
 	{
 		
-		// (get) Token: 0x0600406F RID: 16495 RVA: 0x0015847B File Offset: 0x0015667B
+		
 		public override BuildableDef Buildable
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004070 RID: 16496 RVA: 0x00158483 File Offset: 0x00156683
+		
 		public override ThingDef Stuff
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004071 RID: 16497 RVA: 0x0015848B File Offset: 0x0015668B
+		
 		public override CellRect OccupiedRect
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004072 RID: 16498 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public override float SpawnOrder
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004073 RID: 16499 RVA: 0x00158498 File Offset: 0x00156698
+		
 		public override string Label
 		{
 			get

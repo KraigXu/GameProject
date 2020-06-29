@@ -9,7 +9,7 @@ namespace RimWorld
 	public static class SeasonUtility
 	{
 		
-		// (get) Token: 0x06006038 RID: 24632 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public static Season FirstSeason
 		{
 			get

@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Page_SelectScenario : Page
 	{
 		
-		// (get) Token: 0x06005AAF RID: 23215 RVA: 0x001EDE35 File Offset: 0x001EC035
+		
 		public override string PageTitle
 		{
 			get

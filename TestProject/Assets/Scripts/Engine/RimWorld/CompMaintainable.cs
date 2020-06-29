@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompMaintainable : ThingComp
 	{
 		
-		// (get) Token: 0x060051A8 RID: 20904 RVA: 0x001B59AA File Offset: 0x001B3BAA
+		
 		public CompProperties_Maintainable Props
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060051A9 RID: 20905 RVA: 0x001B59B7 File Offset: 0x001B3BB7
+		
 		public MaintainableStage CurStage
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060051AA RID: 20906 RVA: 0x001B59F0 File Offset: 0x001B3BF0
+		
 		private bool Active
 		{
 			get

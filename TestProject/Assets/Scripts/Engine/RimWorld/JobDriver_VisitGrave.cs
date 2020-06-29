@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobDriver_VisitGrave : JobDriver_VisitJoyThing
 	{
 		
-		// (get) Token: 0x06002C21 RID: 11297 RVA: 0x000FCD70 File Offset: 0x000FAF70
+		
 		private Building_Grave Grave
 		{
 			get

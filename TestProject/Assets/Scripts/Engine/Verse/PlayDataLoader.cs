@@ -4,7 +4,7 @@ using System.Linq;
 using RimWorld;
 using RimWorld.BaseGen;
 using RimWorld.IO;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse.AI;
 
 namespace Verse
@@ -13,7 +13,7 @@ namespace Verse
 	public static class PlayDataLoader
 	{
 		
-		// (get) Token: 0x06000446 RID: 1094 RVA: 0x000161C8 File Offset: 0x000143C8
+		
 		public static bool Loaded
 		{
 			get
@@ -207,7 +207,7 @@ namespace Verse
 				GraphicDatabaseHeadRecords.Reset();
 				DateReadout.Reset();
 				ResearchProjectDef.GenerateNonOverlappingCoordinates();
-				BaseGen.Reset();
+				BaseGenCore.Reset();
 				ResourceCounter.ResetDefs();
 				ApparelProperties.ResetStaticData();
 				WildPlantSpawner.ResetStaticData();

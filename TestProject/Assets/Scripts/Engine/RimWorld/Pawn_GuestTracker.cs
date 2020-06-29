@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Pawn_GuestTracker : IExposable
 	{
 		
-		// (get) Token: 0x060044EE RID: 17646 RVA: 0x001743D0 File Offset: 0x001725D0
+		
 		public Faction HostFaction
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044EF RID: 17647 RVA: 0x001743D8 File Offset: 0x001725D8
+		
 		public bool CanBeBroughtFood
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F0 RID: 17648 RVA: 0x00174403 File Offset: 0x00172603
+		
 		public bool IsPrisoner
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F1 RID: 17649 RVA: 0x0017440B File Offset: 0x0017260B
+		
 		public bool ScheduledForInteraction
 		{
 			get
@@ -48,8 +48,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F2 RID: 17650 RVA: 0x00174444 File Offset: 0x00172644
-		// (set) Token: 0x060044F3 RID: 17651 RVA: 0x0017444C File Offset: 0x0017264C
+		
+		
 		public bool Released
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F4 RID: 17652 RVA: 0x0017446C File Offset: 0x0017266C
+		
 		public bool PrisonerIsSecure
 		{
 			get
@@ -101,7 +101,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F5 RID: 17653 RVA: 0x001744EC File Offset: 0x001726EC
+		
 		public bool ShouldWaitInsteadOfEscaping
 		{
 			get
@@ -116,7 +116,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044F6 RID: 17654 RVA: 0x00174535 File Offset: 0x00172735
+		
 		public float Resistance
 		{
 			get

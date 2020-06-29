@@ -9,7 +9,7 @@ namespace RimWorld
 	public class PawnBio
 	{
 		
-		// (get) Token: 0x0600449D RID: 17565 RVA: 0x00172F57 File Offset: 0x00171157
+		
 		public PawnBioType BioType
 		{
 			get

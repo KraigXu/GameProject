@@ -7,7 +7,7 @@ namespace Verse
 	public class PlayLog : IExposable
 	{
 		
-		// (get) Token: 0x060007CD RID: 1997 RVA: 0x00024335 File Offset: 0x00022535
+		
 		public List<LogEntry> AllEntries
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007CE RID: 1998 RVA: 0x0002433D File Offset: 0x0002253D
+		
 		public int LastTick
 		{
 			get

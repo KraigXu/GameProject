@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_CavesTerrain : GenStep
 	{
 		
-		// (get) Token: 0x06003E4E RID: 15950 RVA: 0x00148B7B File Offset: 0x00146D7B
+		
 		public override int SeedPart
 		{
 			get

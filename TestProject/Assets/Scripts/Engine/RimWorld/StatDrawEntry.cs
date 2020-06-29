@@ -10,7 +10,7 @@ namespace RimWorld
 	public class StatDrawEntry
 	{
 		
-		// (get) Token: 0x060059C0 RID: 22976 RVA: 0x001E5754 File Offset: 0x001E3954
+		
 		public bool ShouldDisplay
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059C1 RID: 22977 RVA: 0x001E5779 File Offset: 0x001E3979
+		
 		public string LabelCap
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059C2 RID: 22978 RVA: 0x001E57A0 File Offset: 0x001E39A0
+		
 		public string ValueString
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059C3 RID: 22979 RVA: 0x001E5804 File Offset: 0x001E3A04
+		
 		public int DisplayPriorityWithinCategory
 		{
 			get

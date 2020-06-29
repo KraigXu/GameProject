@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class TutorSystem
 	{
 		
-		// (get) Token: 0x06005F1D RID: 24349 RVA: 0x0020D221 File Offset: 0x0020B421
+		
 		public static bool TutorialMode
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005F1E RID: 24350 RVA: 0x0020D247 File Offset: 0x0020B447
+		
 		public static bool AdaptiveTrainingEnabled
 		{
 			get

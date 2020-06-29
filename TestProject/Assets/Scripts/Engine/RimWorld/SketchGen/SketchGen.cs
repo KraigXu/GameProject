@@ -4,17 +4,17 @@ using Verse;
 namespace RimWorld.SketchGen
 {
 	
-	public static class SketchGen
+	public static class SketchGenCore
 	{
 		
 		public static Sketch Generate(SketchResolverDef root, ResolveParams parms)
 		{
-			if (SketchGen.working)
+			if (SketchGenCore.working)
 			{
 				Log.Error("Cannot call Generate() while already generating. Nested calls are not allowed.", false);
 				return parms.sketch;
 			}
-			SketchGen.working = true;
+			SketchGenCore.working = true;
 			Sketch sketch;
 			try
 			{
@@ -28,7 +28,7 @@ namespace RimWorld.SketchGen
 			}
 			finally
 			{
-				SketchGen.working = false;
+				SketchGenCore.working = false;
 			}
 			return sketch;
 		}

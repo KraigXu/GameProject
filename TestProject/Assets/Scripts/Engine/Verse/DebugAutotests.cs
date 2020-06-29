@@ -175,9 +175,9 @@ namespace Verse
 		private static void TestTimeToDown()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (IEnumerator<PawnKindDef> enumerator = (from kd in DefDatabase<PawnKindDef>.AllDefs
+			IEnumerator<PawnKindDef> enumerator = (from kd in DefDatabase<PawnKindDef>.AllDefs
 			orderby kd.defName
-			select kd).GetEnumerator())
+			select kd).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -250,7 +250,7 @@ namespace Verse
 				DebugAutotests.pawnKindsForDamageTypeBattleRoyale = new List<PawnKindDef>();
 				foreach (PawnKindDef pawnKindDef in array)
 				{
-					using (IEnumerator<ToolCapacityDef> enumerator = enumerable.GetEnumerator())
+					IEnumerator<ToolCapacityDef> enumerator = enumerable.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

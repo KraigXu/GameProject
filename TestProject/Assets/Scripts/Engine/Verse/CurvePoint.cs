@@ -7,7 +7,7 @@ namespace Verse
 	public struct CurvePoint
 	{
 		
-		// (get) Token: 0x06000095 RID: 149 RVA: 0x000045BA File Offset: 0x000027BA
+		
 		public Vector2 Loc
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000096 RID: 150 RVA: 0x000045C2 File Offset: 0x000027C2
+		
 		public float x
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000097 RID: 151 RVA: 0x000045CF File Offset: 0x000027CF
+		
 		public float y
 		{
 			get

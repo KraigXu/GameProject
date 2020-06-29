@@ -12,7 +12,7 @@ namespace RimWorld
 	public class GenStep_Roads : GenStep
 	{
 		
-		// (get) Token: 0x06003E75 RID: 15989 RVA: 0x0014A07A File Offset: 0x0014827A
+		
 		public override int SeedPart
 		{
 			get
@@ -446,7 +446,7 @@ namespace RimWorld
 			input = new List<IntVec3>(input);
 			if ((double)num > 1.75)
 			{
-				using (PawnPath pawnPath3 = map.pathFinder.FindPath(start, input[num2], TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false), PathEndMode.OnCell))
+				PawnPath pawnPath3 = map.pathFinder.FindPath(start, input[num2], TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false), PathEndMode.OnCell);
 				{
 					input.RemoveRange(num2, input.Count - num2);
 					input.AddRange(pawnPath3.NodesReversed);

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Dialog_FactionDuringLanding : Window
 	{
 		
-		// (get) Token: 0x0600588A RID: 22666 RVA: 0x001270D1 File Offset: 0x001252D1
+		
 		public override Vector2 InitialSize
 		{
 			get

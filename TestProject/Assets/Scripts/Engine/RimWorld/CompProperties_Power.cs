@@ -10,10 +10,8 @@ namespace RimWorld
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__0(req))
-			{
-				yield return statDrawEntry;
-			}
+
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (this.basePowerConsumption > 0f)
 			{

@@ -203,9 +203,9 @@ namespace Verse
 			}
 			try
 			{
-				using (StreamReader streamReader = new StreamReader(file.FullName))
+				StreamReader streamReader = new StreamReader(file.FullName);
 				{
-					using (XmlTextReader xmlTextReader = new XmlTextReader(streamReader))
+					XmlTextReader xmlTextReader = new XmlTextReader(streamReader);
 					{
 						if (ScribeMetaHeaderUtility.ReadToMetaElement(xmlTextReader) && xmlTextReader.ReadToDescendant("gameVersion"))
 						{

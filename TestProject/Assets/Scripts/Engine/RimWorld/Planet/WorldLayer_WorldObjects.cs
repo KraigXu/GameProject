@@ -15,10 +15,8 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
-			{
-				yield return obj;
-			}
+
+
 			IEnumerator enumerator = null;
 			List<WorldObject> allWorldObjects = Find.WorldObjects.AllWorldObjects;
 			for (int i = 0; i < allWorldObjects.Count; i++)

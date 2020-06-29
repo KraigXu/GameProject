@@ -10,7 +10,7 @@ namespace Verse
 	public static class LoadedModManager
 	{
 		
-		// (get) Token: 0x06000DF0 RID: 3568 RVA: 0x0004F809 File Offset: 0x0004DA09
+		
 		public static List<ModContentPack> RunningModsListForReading
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DF1 RID: 3569 RVA: 0x0004F809 File Offset: 0x0004DA09
+		
 		public static IEnumerable<ModContentPack> RunningMods
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DF2 RID: 3570 RVA: 0x0004F810 File Offset: 0x0004DA10
+		
 		public static List<Def> PatchedDefsForReading
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DF3 RID: 3571 RVA: 0x0004F817 File Offset: 0x0004DA17
+		
 		public static IEnumerable<Mod> ModHandles
 		{
 			get
@@ -245,7 +245,7 @@ namespace Verse
 		
 		public static void CreateModClasses()
 		{
-			using (IEnumerator<Type> enumerator = typeof(Mod).InstantiableDescendantsAndSelf().GetEnumerator())
+			IEnumerator<Type> enumerator = typeof(Mod).InstantiableDescendantsAndSelf().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

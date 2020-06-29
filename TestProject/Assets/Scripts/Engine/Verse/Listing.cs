@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class Listing
 	{
 		
-		// (get) Token: 0x06001B72 RID: 7026 RVA: 0x000A83B6 File Offset: 0x000A65B6
+		
 		public float CurHeight
 		{
 			get
@@ -17,8 +17,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B74 RID: 7028 RVA: 0x000A83CE File Offset: 0x000A65CE
-		// (set) Token: 0x06001B73 RID: 7027 RVA: 0x000A83BE File Offset: 0x000A65BE
+		
+		
 		public float ColumnWidth
 		{
 			get

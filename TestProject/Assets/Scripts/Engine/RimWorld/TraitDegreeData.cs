@@ -8,7 +8,7 @@ namespace RimWorld
 	public class TraitDegreeData
 	{
 		
-		// (get) Token: 0x06003752 RID: 14162 RVA: 0x00129797 File Offset: 0x00127997
+		
 		public string LabelCap
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003753 RID: 14163 RVA: 0x001297B8 File Offset: 0x001279B8
+		
 		public TraitMentalStateGiver MentalStateGiver
 		{
 			get

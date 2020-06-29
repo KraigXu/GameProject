@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Quest : IExposable, ILoadReferenceable, ISignalReceiver
 	{
 		
-		// (get) Token: 0x060037F9 RID: 14329 RVA: 0x0012C466 File Offset: 0x0012A666
+		
 		public List<QuestPart> PartsListForReading
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FA RID: 14330 RVA: 0x0012C46E File Offset: 0x0012A66E
+		
 		public int TicksSinceAppeared
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FB RID: 14331 RVA: 0x0012C481 File Offset: 0x0012A681
+		
 		public int TicksSinceAccepted
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FC RID: 14332 RVA: 0x0012C49F File Offset: 0x0012A69F
+		
 		public int TicksSinceCleanup
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FD RID: 14333 RVA: 0x0012C4BC File Offset: 0x0012A6BC
+		
 		public string AccepterPawnLabelCap
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FE RID: 14334 RVA: 0x0012C4D8 File Offset: 0x0012A6D8
+		
 		public string InitiateSignal
 		{
 			get
@@ -83,7 +83,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037FF RID: 14335 RVA: 0x0012C4F4 File Offset: 0x0012A6F4
+		
 		public bool EverAccepted
 		{
 			get
@@ -93,7 +93,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003800 RID: 14336 RVA: 0x0012C50C File Offset: 0x0012A70C
+		
 		public Pawn AccepterPawn
 		{
 			get
@@ -103,7 +103,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003801 RID: 14337 RVA: 0x0012C514 File Offset: 0x0012A714
+		
 		public bool RequiresAccepter
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003802 RID: 14338 RVA: 0x0012C550 File Offset: 0x0012A750
+		
 		public QuestState State
 		{
 			get
@@ -157,7 +157,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003803 RID: 14339 RVA: 0x0012C59E File Offset: 0x0012A79E
+		
 		public IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
@@ -167,7 +167,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003804 RID: 14340 RVA: 0x0012C5CF File Offset: 0x0012A7CF
+		
 		public IEnumerable<GlobalTargetInfo> QuestSelectTargets
 		{
 			get
@@ -177,7 +177,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003805 RID: 14341 RVA: 0x0012C600 File Offset: 0x0012A800
+		
 		public IEnumerable<Faction> InvolvedFactions
 		{
 			get
@@ -187,7 +187,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003806 RID: 14342 RVA: 0x0012C631 File Offset: 0x0012A831
+		
 		public IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
@@ -197,7 +197,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003807 RID: 14343 RVA: 0x0012C662 File Offset: 0x0012A862
+		
 		public bool Historical
 		{
 			get
@@ -207,7 +207,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003808 RID: 14344 RVA: 0x0012C67C File Offset: 0x0012A87C
+		
 		public bool IncreasesPopulation
 		{
 			get

@@ -9,7 +9,7 @@ namespace Verse
 	public class CompEquippable : ThingComp, IVerbOwner
 	{
 		
-		// (get) Token: 0x06001749 RID: 5961 RVA: 0x000856AC File Offset: 0x000838AC
+		
 		private Pawn Holder
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174A RID: 5962 RVA: 0x000856B9 File Offset: 0x000838B9
+		
 		public List<Verb> AllVerbs
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174B RID: 5963 RVA: 0x000856C6 File Offset: 0x000838C6
+		
 		public Verb PrimaryVerb
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174C RID: 5964 RVA: 0x000856D3 File Offset: 0x000838D3
+		
 		public VerbTracker VerbTracker
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174D RID: 5965 RVA: 0x000856DB File Offset: 0x000838DB
+		
 		public List<VerbProperties> VerbProperties
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174E RID: 5966 RVA: 0x000856ED File Offset: 0x000838ED
+		
 		public List<Tool> Tools
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600174F RID: 5967 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		Thing IVerbOwner.ConstantCaster
 		{
 			get
@@ -79,7 +79,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001750 RID: 5968 RVA: 0x000856FF File Offset: 0x000838FF
+		
 		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public class MoteLeaf : Mote
 	{
 		
-		// (get) Token: 0x060015C3 RID: 5571 RVA: 0x0007EB39 File Offset: 0x0007CD39
+		
 		protected override bool EndOfLife
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015C4 RID: 5572 RVA: 0x0007EB6B File Offset: 0x0007CD6B
+		
 		private float FallTime
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015C5 RID: 5573 RVA: 0x0007EB80 File Offset: 0x0007CD80
+		
 		public override float Alpha
 		{
 			get

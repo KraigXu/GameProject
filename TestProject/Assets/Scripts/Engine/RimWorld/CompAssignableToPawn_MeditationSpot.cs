@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompAssignableToPawn_MeditationSpot : CompAssignableToPawn
 	{
 		
-		// (get) Token: 0x06005052 RID: 20562 RVA: 0x001B0D8E File Offset: 0x001AEF8E
+		
 		public override IEnumerable<Pawn> AssigningCandidates
 		{
 			get

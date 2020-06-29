@@ -203,9 +203,9 @@ namespace RimWorld
 			{
 				IEnumerable<Thing> source = list2;
 				Func<Thing, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__4 = ((Thing x) => x.MarketValue * (float)x.stackCount <= requestedCaravanValue * 2f));
+					predicate = ( ((Thing x) => x.MarketValue * (float)x.stackCount <= requestedCaravanValue * 2f));
 				}
 				Thing thing;
 				if (!source.Where(predicate).TryRandomElementByWeight((Thing x) => Mathf.Pow(x.MarketValue / x.GetStatValue(StatDefOf.Mass, true), 2f), out thing))

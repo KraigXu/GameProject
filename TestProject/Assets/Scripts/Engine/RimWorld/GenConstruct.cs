@@ -517,7 +517,7 @@ namespace RimWorld
 		
 		public static bool TerrainCanSupport(CellRect rect, Map map, ThingDef thing)
 		{
-			using (CellRect.Enumerator enumerator = rect.GetEnumerator())
+			CellRect.Enumerator enumerator = rect.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -37,7 +37,7 @@ namespace RimWorld.SketchGen
 					}
 				}
 				SketchResolver_FloorFill.tmpVisited.Clear();
-				using (CellRect.Enumerator enumerator = cellRect.GetEnumerator())
+				CellRect.Enumerator enumerator = cellRect.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

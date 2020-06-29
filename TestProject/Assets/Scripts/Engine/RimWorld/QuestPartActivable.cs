@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class QuestPartActivable : QuestPart
 	{
 		
-		// (get) Token: 0x06003A2C RID: 14892 RVA: 0x00134400 File Offset: 0x00132600
+		
 		public QuestPartState State
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A2D RID: 14893 RVA: 0x00134408 File Offset: 0x00132608
+		
 		public int EnableTick
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A2E RID: 14894 RVA: 0x0013441C File Offset: 0x0013261C
+		
 		public string OutSignalEnabled
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A2F RID: 14895 RVA: 0x00134470 File Offset: 0x00132670
+		
 		public string OutSignalCompleted
 		{
 			get
@@ -66,15 +66,15 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A30 RID: 14896 RVA: 0x001344C1 File Offset: 0x001326C1
+		
 		public virtual string ExpiryInfoPart { get; }
 
 		
-		// (get) Token: 0x06003A31 RID: 14897 RVA: 0x001344C9 File Offset: 0x001326C9
+		
 		public virtual string ExpiryInfoPartTip { get; }
 
 		
-		// (get) Token: 0x06003A32 RID: 14898 RVA: 0x001344D1 File Offset: 0x001326D1
+		
 		public virtual AlertReport AlertReport
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A33 RID: 14899 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string AlertLabel
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A34 RID: 14900 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string AlertExplanation
 		{
 			get
@@ -104,7 +104,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A35 RID: 14901 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool AlertCritical
 		{
 			get
@@ -114,7 +114,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A36 RID: 14902 RVA: 0x001344D8 File Offset: 0x001326D8
+		
 		public bool AlertDirty
 		{
 			get
@@ -124,7 +124,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A37 RID: 14903 RVA: 0x00134518 File Offset: 0x00132718
+		
 		public Alert CachedAlert
 		{
 			get

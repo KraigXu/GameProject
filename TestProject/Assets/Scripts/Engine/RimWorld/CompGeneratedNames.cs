@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompGeneratedNames : ThingComp
 	{
 		
-		// (get) Token: 0x06005162 RID: 20834 RVA: 0x001B4867 File Offset: 0x001B2A67
+		
 		public CompProperties_GeneratedName Props
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class PawnColumnWorker_AllowedArea : PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06005D60 RID: 23904 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected override GameFont DefaultHeaderFont
 		{
 			get

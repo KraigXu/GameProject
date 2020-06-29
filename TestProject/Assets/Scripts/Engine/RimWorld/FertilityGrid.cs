@@ -8,7 +8,7 @@ namespace RimWorld
 	public sealed class FertilityGrid
 	{
 		
-		// (get) Token: 0x06003DCF RID: 15823 RVA: 0x001461CC File Offset: 0x001443CC
+		
 		public CellBoolDrawer Drawer
 		{
 			get

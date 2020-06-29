@@ -9,8 +9,8 @@ namespace RimWorld
 	public class Tradeable : Transferable
 	{
 		
-		// (get) Token: 0x0600555C RID: 21852 RVA: 0x001C5BFD File Offset: 0x001C3DFD
-		// (set) Token: 0x0600555D RID: 21853 RVA: 0x001C5C05 File Offset: 0x001C3E05
+		
+		
 		public override int CountToTransfer
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600555E RID: 21854 RVA: 0x001C5C1A File Offset: 0x001C3E1A
+		
 		public Thing FirstThingColony
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600555F RID: 21855 RVA: 0x001C5C37 File Offset: 0x001C3E37
+		
 		public Thing FirstThingTrader
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005560 RID: 21856 RVA: 0x001C5C54 File Offset: 0x001C3E54
+		
 		public override string Label
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005561 RID: 21857 RVA: 0x001C5C61 File Offset: 0x001C3E61
+		
 		public virtual float BaseMarketValue
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005562 RID: 21858 RVA: 0x001C5C6E File Offset: 0x001C3E6E
+		
 		public override bool Interactive
 		{
 			get
@@ -83,7 +83,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005563 RID: 21859 RVA: 0x001C5C88 File Offset: 0x001C3E88
+		
 		public virtual bool TraderWillTrade
 		{
 			get
@@ -93,7 +93,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005564 RID: 21860 RVA: 0x001C5C9F File Offset: 0x001C3E9F
+		
 		public override bool HasAnyThing
 		{
 			get
@@ -103,7 +103,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005565 RID: 21861 RVA: 0x001C5CB4 File Offset: 0x001C3EB4
+		
 		public override Thing AnyThing
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005566 RID: 21862 RVA: 0x001C5D00 File Offset: 0x001C3F00
+		
 		public override ThingDef ThingDef
 		{
 			get
@@ -136,7 +136,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005567 RID: 21863 RVA: 0x001C5D17 File Offset: 0x001C3F17
+		
 		public ThingDef StuffDef
 		{
 			get
@@ -150,7 +150,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005568 RID: 21864 RVA: 0x001C5D2E File Offset: 0x001C3F2E
+		
 		public override string TipDescription
 		{
 			get
@@ -164,7 +164,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005569 RID: 21865 RVA: 0x001C5D49 File Offset: 0x001C3F49
+		
 		public TradeAction ActionToDo
 		{
 			get
@@ -182,7 +182,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600556A RID: 21866 RVA: 0x001C5D61 File Offset: 0x001C3F61
+		
 		public virtual bool IsCurrency
 		{
 			get
@@ -192,7 +192,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600556B RID: 21867 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool IsFavor
 		{
 			get
@@ -208,7 +208,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600556D RID: 21869 RVA: 0x001C5D82 File Offset: 0x001C3F82
+		
 		public override TransferablePositiveCountDirection PositiveCountDirection
 		{
 			get
@@ -222,7 +222,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600556E RID: 21870 RVA: 0x001C5D95 File Offset: 0x001C3F95
+		
 		public float CurTotalCurrencyCostForSource
 		{
 			get
@@ -236,7 +236,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600556F RID: 21871 RVA: 0x001C5DB9 File Offset: 0x001C3FB9
+		
 		public float CurTotalCurrencyCostForDestination
 		{
 			get
@@ -250,7 +250,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005570 RID: 21872 RVA: 0x001C5DDD File Offset: 0x001C3FDD
+		
 		public virtual Window NewInfoDialog
 		{
 			get
@@ -260,7 +260,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005571 RID: 21873 RVA: 0x001C5DEA File Offset: 0x001C3FEA
+		
 		private bool Bugged
 		{
 			get

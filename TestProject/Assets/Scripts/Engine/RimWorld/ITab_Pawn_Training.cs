@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_Pawn_Training : ITab
 	{
 		
-		// (get) Token: 0x06005BD4 RID: 23508 RVA: 0x001FB564 File Offset: 0x001F9764
+		
 		public override bool IsVisible
 		{
 			get

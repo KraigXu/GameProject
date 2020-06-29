@@ -8,8 +8,8 @@ namespace RimWorld
 	public class SkillRecord : IExposable
 	{
 		
-		// (get) Token: 0x06004710 RID: 18192 RVA: 0x00180A30 File Offset: 0x0017EC30
-		// (set) Token: 0x06004711 RID: 18193 RVA: 0x00180A42 File Offset: 0x0017EC42
+		
+		
 		public int Level
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004712 RID: 18194 RVA: 0x00180A53 File Offset: 0x0017EC53
+		
 		public float XpRequiredForLevelUp
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004713 RID: 18195 RVA: 0x00180A60 File Offset: 0x0017EC60
+		
 		public float XpProgressPercent
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004714 RID: 18196 RVA: 0x00180A70 File Offset: 0x0017EC70
+		
 		public float XpTotalEarned
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004715 RID: 18197 RVA: 0x00180A9E File Offset: 0x0017EC9E
+		
 		public bool TotallyDisabled
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004716 RID: 18198 RVA: 0x00180AC4 File Offset: 0x0017ECC4
+		
 		public string LevelDescriptor
 		{
 			get
@@ -132,7 +132,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004717 RID: 18199 RVA: 0x00180C8C File Offset: 0x0017EE8C
+		
 		public bool LearningSaturatedToday
 		{
 			get
@@ -285,7 +285,7 @@ namespace RimWorld
 					return;
 				}
 			}
-			goto IL_188;
+			//goto IL_188;
 		}
 
 		

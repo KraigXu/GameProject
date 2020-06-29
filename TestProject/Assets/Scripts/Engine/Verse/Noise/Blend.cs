@@ -19,8 +19,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002349 RID: 9033 RVA: 0x000D5168 File Offset: 0x000D3368
-		// (set) Token: 0x0600234A RID: 9034 RVA: 0x000D5172 File Offset: 0x000D3372
+		
+		
 		public ModuleBase Controller
 		{
 			get

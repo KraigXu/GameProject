@@ -9,7 +9,7 @@ namespace RimWorld
 	public static class AmbientSoundManager
 	{
 		
-		// (get) Token: 0x06004A49 RID: 19017 RVA: 0x00191C70 File Offset: 0x0018FE70
+		
 		private static bool WorldAmbientSoundCreated
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A4A RID: 19018 RVA: 0x00191C86 File Offset: 0x0018FE86
+		
 		private static bool AltitudeWindSoundCreated
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_ConstructSmoothWall : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003040 RID: 12352 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

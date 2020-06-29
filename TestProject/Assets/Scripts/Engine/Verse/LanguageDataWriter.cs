@@ -25,7 +25,7 @@ namespace Verse
 			XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
 			xmlWriterSettings.Indent = true;
 			xmlWriterSettings.IndentChars = "\t";
-			using (XmlWriter xmlWriter = XmlWriter.Create(GenFilePaths.BackstoryOutputFilePath, xmlWriterSettings))
+			XmlWriter xmlWriter = XmlWriter.Create(GenFilePaths.BackstoryOutputFilePath, xmlWriterSettings);
 			{
 				xmlWriter.WriteStartDocument();
 				xmlWriter.WriteStartElement("BackstoryTranslations");

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompCauseGameCondition_PsychicEmanation : CompCauseGameCondition
 	{
 		
-		// (get) Token: 0x06004FEE RID: 20462 RVA: 0x001AF5E5 File Offset: 0x001AD7E5
+		
 		public new CompProperties_CausesGameCondition_PsychicEmanation Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FEF RID: 20463 RVA: 0x001AF5F2 File Offset: 0x001AD7F2
+		
 		public PsychicDroneLevel Level
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FF0 RID: 20464 RVA: 0x001AF5FA File Offset: 0x001AD7FA
+		
 		private bool DroneLevelIncreases
 		{
 			get

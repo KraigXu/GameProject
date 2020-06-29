@@ -885,11 +885,11 @@ namespace Verse
 		}
 
 		
-		// (Invoke) Token: 0x06008431 RID: 33841
+		
 		public delegate void StackElementDrawer<T>(Rect rect, T element);
 
 		
-		// (Invoke) Token: 0x06008435 RID: 33845
+		
 		public delegate float StackElementWidthGetter<T>(T element);
 	}
 }

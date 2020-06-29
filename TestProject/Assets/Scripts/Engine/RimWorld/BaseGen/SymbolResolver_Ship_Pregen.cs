@@ -209,7 +209,7 @@ namespace RimWorld.BaseGen
 				{
 					compHibernatable.State = HibernatableStateDefOf.Hibernating;
 				}
-				GenSpawn.Spawn(thing, centerCell + b + spawnDescriptor.offset, BaseGen.globalSettings.map, spawnDescriptor.rot, WipeMode.Vanish, false);
+				GenSpawn.Spawn(thing, centerCell + b + spawnDescriptor.offset, BaseGenCore.globalSettings.map, spawnDescriptor.rot, WipeMode.Vanish, false);
 			}
 		}
 

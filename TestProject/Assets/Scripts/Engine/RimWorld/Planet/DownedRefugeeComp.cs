@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public class DownedRefugeeComp : ImportantPawnComp, IThingHolder
 	{
 		
-		// (get) Token: 0x06006ED0 RID: 28368 RVA: 0x0026A60A File Offset: 0x0026880A
+		
 		protected override string PawnSaveKey
 		{
 			get

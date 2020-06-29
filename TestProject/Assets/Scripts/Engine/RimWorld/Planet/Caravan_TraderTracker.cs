@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class Caravan_TraderTracker : IExposable
 	{
 		
-		// (get) Token: 0x06006D48 RID: 27976 RVA: 0x00264104 File Offset: 0x00262304
+		
 		public TraderKindDef TraderKind
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D49 RID: 27977 RVA: 0x00264154 File Offset: 0x00262354
+		
 		public IEnumerable<Thing> Goods
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D4A RID: 27978 RVA: 0x00264164 File Offset: 0x00262364
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D4B RID: 27979 RVA: 0x0026417B File Offset: 0x0026237B
+		
 		public string TraderName
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D4C RID: 27980 RVA: 0x00264188 File Offset: 0x00262388
+		
 		public bool CanTradeNow
 		{
 			get

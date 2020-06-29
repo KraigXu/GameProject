@@ -9,8 +9,8 @@ namespace RimWorld
 	public class CompPowerTrader : CompPower
 	{
 		
-		// (get) Token: 0x06003F79 RID: 16249 RVA: 0x00151759 File Offset: 0x0014F959
-		// (set) Token: 0x06003F7A RID: 16250 RVA: 0x00151761 File Offset: 0x0014F961
+		
+		
 		public float PowerOutput
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F7B RID: 16251 RVA: 0x00151792 File Offset: 0x0014F992
+		
 		public float EnergyOutputPerTick
 		{
 			get
@@ -42,8 +42,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F7C RID: 16252 RVA: 0x001517A0 File Offset: 0x0014F9A0
-		// (set) Token: 0x06003F7D RID: 16253 RVA: 0x001517A8 File Offset: 0x0014F9A8
+		
+		
 		public bool PowerOn
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F7E RID: 16254 RVA: 0x00151924 File Offset: 0x0014FB24
+		
 		public string DebugString
 		{
 			get

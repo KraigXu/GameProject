@@ -12,7 +12,7 @@ namespace RimWorld
 	public static class RestUtility
 	{
 		
-		// (get) Token: 0x06003358 RID: 13144 RVA: 0x0011C8B1 File Offset: 0x0011AAB1
+		
 		public static List<ThingDef> AllBedDefBestToWorst
 		{
 			get
@@ -46,10 +46,10 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (traveler.HasReserved(building_Bed, new LocalTargetInfo?(sleeper), null, null))
-			{
-				return false;
-			}
+			//if (traveler.HasReserved(building_Bed, new LocalTargetInfo?(sleeper), null, null))
+			//{
+			//	return false;
+			//}
 			if (!RestUtility.CanUseBedEver(sleeper, building_Bed.def))
 			{
 				return false;
@@ -188,7 +188,6 @@ namespace RimWorld
 			for (int k = 0; k < 2; k++)
 			{
 				Danger maxDanger = (k == 0) ? Danger.None : Danger.Deadly;
-				Predicate<Thing> 9__1;
 				for (int l = 0; l < RestUtility.bedDefsBestToWorst_RestEffectiveness.Count; l++)
 				{
 					ThingDef thingDef2 = RestUtility.bedDefsBestToWorst_RestEffectiveness[l];
@@ -200,11 +199,8 @@ namespace RimWorld
 						PathEndMode peMode = PathEndMode.OnCell;
 						TraverseParms traverseParams = TraverseParms.For(traveler, Danger.Deadly, TraverseMode.ByPawn, false);
 						float maxDistance = 9999f;
-						Predicate<Thing> validator;
-						if ((validator ) == null)
-						{
-							validator = (9__1 = ((Thing b) => !((Building_Bed)b).Medical && b.Position.GetDangerFor(sleeper, sleeper.Map) <= maxDanger && RestUtility.IsValidBedFor(b, sleeper, traveler, sleeperWillBePrisoner, checkSocialProperness, false, ignoreOtherReservations)));
-						}
+						Predicate<Thing> validator = (((Thing b) => !((Building_Bed)b).Medical && b.Position.GetDangerFor(sleeper, sleeper.Map) <= maxDanger && RestUtility.IsValidBedFor(b, sleeper, traveler, sleeperWillBePrisoner, checkSocialProperness, false, ignoreOtherReservations)));
+
 						Building_Bed building_Bed2 = (Building_Bed)GenClosest.ClosestThingReachable(position, map, thingReq, peMode, traverseParams, maxDistance, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 						if (building_Bed2 != null)
 						{

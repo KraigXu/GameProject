@@ -4,7 +4,7 @@ using RimWorld.SketchGen;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_GetMonumentSketch : QuestNode
@@ -59,7 +59,7 @@ namespace RimWorld.QuestGen
 			resolveParams.allowedMonumentThings = new ThingFilter();
 			resolveParams.allowedMonumentThings.SetAllowAll(null, true);
 			resolveParams.allowedMonumentThings.SetAllow(ThingDefOf.Urn, false);
-			Sketch sketch = SketchGen.Generate(SketchResolverDefOf.Monument, resolveParams);
+			Sketch sketch = SketchGenCore.Generate(SketchResolverDefOf.Monument, resolveParams);
 			if (this.clearStuff.GetValue(slate) ?? true)
 			{
 				List<SketchThing> things = sketch.Things;

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompSnowExpand : ThingComp
 	{
 		
-		// (get) Token: 0x0600531F RID: 21279 RVA: 0x001BCF0D File Offset: 0x001BB10D
+		
 		public CompProperties_SnowExpand Props
 		{
 			get

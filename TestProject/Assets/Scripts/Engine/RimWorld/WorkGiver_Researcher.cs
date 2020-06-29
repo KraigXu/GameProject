@@ -8,7 +8,7 @@ namespace RimWorld
 	public class WorkGiver_Researcher : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600313F RID: 12607 RVA: 0x00113376 File Offset: 0x00111576
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003140 RID: 12608 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool Prioritized
 		{
 			get

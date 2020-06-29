@@ -8,7 +8,7 @@ namespace Verse
 	public class BodyDef : Def
 	{
 		
-		// (get) Token: 0x06000470 RID: 1136 RVA: 0x00017012 File Offset: 0x00015212
+		
 		public List<BodyPartRecord> AllParts
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000471 RID: 1137 RVA: 0x0001701A File Offset: 0x0001521A
+		
 		public List<BodyPartRecord> AllPartsVulnerableToFrostbite
 		{
 			get
@@ -98,10 +98,7 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.cachedPartsVulnerableToFrostbite.NullOrEmpty<BodyPartRecord>())
 			{

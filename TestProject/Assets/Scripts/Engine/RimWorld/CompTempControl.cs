@@ -11,7 +11,7 @@ namespace RimWorld
 	public class CompTempControl : ThingComp
 	{
 		
-		// (get) Token: 0x06005390 RID: 21392 RVA: 0x001BF266 File Offset: 0x001BD466
+		
 		public CompProperties_TempControl Props
 		{
 			get

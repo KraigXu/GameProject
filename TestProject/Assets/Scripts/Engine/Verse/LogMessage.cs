@@ -7,7 +7,7 @@ namespace Verse
 	public class LogMessage
 	{
 		
-		// (get) Token: 0x060002FA RID: 762 RVA: 0x0000F4E0 File Offset: 0x0000D6E0
+		
 		public Color Color
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002FB RID: 763 RVA: 0x0000F51F File Offset: 0x0000D71F
+		
 		public string StackTrace
 		{
 			get

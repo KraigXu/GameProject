@@ -9,7 +9,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingDef thingDef;
 			if (rp.singleThingDef != null)
 			{
@@ -58,7 +58,7 @@ namespace RimWorld.BaseGen
 					resolveParams.singleThingDef = thingDef;
 					resolveParams.singleThingStuff = singleThingStuff;
 					resolveParams.thingRot = new Rot4?(rot);
-					BaseGen.symbolStack.Push("bed", resolveParams, null);
+					BaseGenCore.symbolStack.Push("bed", resolveParams, null);
 				}
 			}
 		}

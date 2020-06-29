@@ -8,8 +8,8 @@ namespace Verse
 	public class RegionAndRoomUpdater
 	{
 		
-		// (get) Token: 0x06000C5B RID: 3163 RVA: 0x00046632 File Offset: 0x00044832
-		// (set) Token: 0x06000C5C RID: 3164 RVA: 0x0004663A File Offset: 0x0004483A
+		
+		
 		public bool Enabled
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C5D RID: 3165 RVA: 0x00046643 File Offset: 0x00044843
+		
 		public bool AnythingToRebuild
 		{
 			get

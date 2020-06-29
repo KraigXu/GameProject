@@ -6,7 +6,7 @@ namespace Verse.AI
 	public struct ThinkResult : IEquatable<ThinkResult>
 	{
 		
-		// (get) Token: 0x060028A8 RID: 10408 RVA: 0x000EF668 File Offset: 0x000ED868
+		
 		public Job Job
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028A9 RID: 10409 RVA: 0x000EF670 File Offset: 0x000ED870
+		
 		public ThinkNode SourceNode
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028AA RID: 10410 RVA: 0x000EF678 File Offset: 0x000ED878
+		
 		public JobTag? Tag
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028AB RID: 10411 RVA: 0x000EF680 File Offset: 0x000ED880
+		
 		public bool FromQueue
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028AC RID: 10412 RVA: 0x000EF688 File Offset: 0x000ED888
+		
 		public bool IsValid
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060028AD RID: 10413 RVA: 0x000EF694 File Offset: 0x000ED894
+		
 		public static ThinkResult NoJob
 		{
 			get

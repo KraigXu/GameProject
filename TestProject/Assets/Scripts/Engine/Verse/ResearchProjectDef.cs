@@ -10,7 +10,7 @@ namespace Verse
 	public class ResearchProjectDef : Def
 	{
 		
-		// (get) Token: 0x06000609 RID: 1545 RVA: 0x0001CFD5 File Offset: 0x0001B1D5
+		
 		public float ResearchViewX
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060A RID: 1546 RVA: 0x0001CFDD File Offset: 0x0001B1DD
+		
 		public float ResearchViewY
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060B RID: 1547 RVA: 0x0001CFE5 File Offset: 0x0001B1E5
+		
 		public float CostApparent
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060C RID: 1548 RVA: 0x0001D003 File Offset: 0x0001B203
+		
 		public float ProgressReal
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060D RID: 1549 RVA: 0x0001D010 File Offset: 0x0001B210
+		
 		public float ProgressApparent
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060E RID: 1550 RVA: 0x0001D02E File Offset: 0x0001B22E
+		
 		public float ProgressPercent
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600060F RID: 1551 RVA: 0x0001D042 File Offset: 0x0001B242
+		
 		public bool IsFinished
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000610 RID: 1552 RVA: 0x0001D055 File Offset: 0x0001B255
+		
 		public bool CanStartNow
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000611 RID: 1553 RVA: 0x0001D084 File Offset: 0x0001B284
+		
 		public bool PrerequisitesCompleted
 		{
 			get
@@ -120,7 +120,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000612 RID: 1554 RVA: 0x0001D0F8 File Offset: 0x0001B2F8
+		
 		public int TechprintsApplied
 		{
 			get
@@ -130,7 +130,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000613 RID: 1555 RVA: 0x0001D105 File Offset: 0x0001B305
+		
 		public bool TechprintRequirementMet
 		{
 			get
@@ -140,7 +140,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000614 RID: 1556 RVA: 0x0001D128 File Offset: 0x0001B328
+		
 		public ThingDef Techprint
 		{
 			get
@@ -166,7 +166,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000615 RID: 1557 RVA: 0x0001D190 File Offset: 0x0001B390
+		
 		public List<Def> UnlockedDefs
 		{
 			get
@@ -194,7 +194,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000616 RID: 1558 RVA: 0x0001D2DC File Offset: 0x0001B4DC
+		
 		public List<Dialog_InfoCard.Hyperlink> InfoCardHyperlinks
 		{
 			get
@@ -216,7 +216,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000617 RID: 1559 RVA: 0x0001D338 File Offset: 0x0001B538
+		
 		private bool PlayerHasAnyAppropriateResearchBench
 		{
 			get

@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Building_TurretGun : Building_Turret
 	{
 		
-		// (get) Token: 0x06004BA4 RID: 19364 RVA: 0x00197A1C File Offset: 0x00195C1C
+		
 		public bool Active
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BA5 RID: 19365 RVA: 0x00197A6A File Offset: 0x00195C6A
+		
 		public CompEquippable GunCompEq
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BA6 RID: 19366 RVA: 0x00197A77 File Offset: 0x00195C77
+		
 		public override LocalTargetInfo CurrentTarget
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BA7 RID: 19367 RVA: 0x00197A7F File Offset: 0x00195C7F
+		
 		private bool WarmingUp
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BA8 RID: 19368 RVA: 0x00197A8A File Offset: 0x00195C8A
+		
 		public override Verb AttackVerb
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BA9 RID: 19369 RVA: 0x00197A97 File Offset: 0x00195C97
+		
 		public bool IsMannable
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAA RID: 19370 RVA: 0x00197AA2 File Offset: 0x00195CA2
+		
 		private bool PlayerControlled
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAB RID: 19371 RVA: 0x00197AC4 File Offset: 0x00195CC4
+		
 		private bool CanSetForcedTarget
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAC RID: 19372 RVA: 0x00197AD6 File Offset: 0x00195CD6
+		
 		private bool CanToggleHoldFire
 		{
 			get
@@ -104,7 +104,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAD RID: 19373 RVA: 0x00197ADE File Offset: 0x00195CDE
+		
 		private bool IsMortar
 		{
 			get
@@ -114,7 +114,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAE RID: 19374 RVA: 0x00197AF0 File Offset: 0x00195CF0
+		
 		private bool IsMortarOrProjectileFliesOverhead
 		{
 			get
@@ -124,7 +124,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BAF RID: 19375 RVA: 0x00197B08 File Offset: 0x00195D08
+		
 		private bool CanExtractShell
 		{
 			get
@@ -139,7 +139,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BB0 RID: 19376 RVA: 0x00197B36 File Offset: 0x00195D36
+		
 		private bool MannedByColonist
 		{
 			get
@@ -149,7 +149,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BB1 RID: 19377 RVA: 0x00197B66 File Offset: 0x00195D66
+		
 		private bool MannedByNonColonist
 		{
 			get

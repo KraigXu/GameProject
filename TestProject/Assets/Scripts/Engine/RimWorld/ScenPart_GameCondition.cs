@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ScenPart_GameCondition : ScenPart
 	{
 		
-		// (get) Token: 0x0600495E RID: 18782 RVA: 0x0018E7F7 File Offset: 0x0018C9F7
+		
 		public override string Label
 		{
 			get

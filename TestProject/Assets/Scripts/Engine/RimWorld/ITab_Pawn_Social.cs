@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_Pawn_Social : ITab
 	{
 		
-		// (get) Token: 0x06005BD0 RID: 23504 RVA: 0x001FB4A4 File Offset: 0x001F96A4
+		
 		public override bool IsVisible
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BD1 RID: 23505 RVA: 0x001FB4B8 File Offset: 0x001F96B8
+		
 		private Pawn SelPawnForSocialInfo
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompSpawnerFilth : ThingComp
 	{
 		
-		// (get) Token: 0x06005335 RID: 21301 RVA: 0x001BD74E File Offset: 0x001BB94E
+		
 		private CompProperties_SpawnerFilth Props
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005336 RID: 21302 RVA: 0x001BD75C File Offset: 0x001BB95C
+		
 		private bool CanSpawnFilth
 		{
 			get

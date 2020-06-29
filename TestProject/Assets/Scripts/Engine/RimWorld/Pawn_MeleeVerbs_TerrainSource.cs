@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Pawn_MeleeVerbs_TerrainSource : IExposable, IVerbOwner
 	{
 		
-		// (get) Token: 0x06004623 RID: 17955 RVA: 0x0017AEEE File Offset: 0x001790EE
+		
 		public VerbTracker VerbTracker
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004624 RID: 17956 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public List<VerbProperties> VerbProperties
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004625 RID: 17957 RVA: 0x0017AEF6 File Offset: 0x001790F6
+		
 		public List<Tool> Tools
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004626 RID: 17958 RVA: 0x0017AF03 File Offset: 0x00179103
+		
 		Thing IVerbOwner.ConstantCaster
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004627 RID: 17959 RVA: 0x0017AF10 File Offset: 0x00179110
+		
 		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordToil_Party : LordToil_Gathering
 	{
 		
-		// (get) Token: 0x06003300 RID: 13056 RVA: 0x0011B445 File Offset: 0x00119645
+		
 		private LordToilData_Party Data
 		{
 			get

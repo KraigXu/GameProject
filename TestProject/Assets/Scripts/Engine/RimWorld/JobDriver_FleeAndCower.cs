@@ -21,10 +21,7 @@ namespace RimWorld
 		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			foreach (Toil toil in this.n__0())
-			{
-				yield return toil;
-			}
+
 			IEnumerator<Toil> enumerator = null;
 			yield return new Toil
 			{

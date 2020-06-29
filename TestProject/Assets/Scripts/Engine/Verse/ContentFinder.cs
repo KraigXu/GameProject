@@ -106,11 +106,11 @@ namespace Verse
 			T[] array = null;
 			if (typeof(T) == typeof(Texture2D))
 			{
-				array = (T[])Resources.LoadAll<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + folderPath);
+				//array = (T[])Resources.LoadAll<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + folderPath);
 			}
 			if (typeof(T) == typeof(AudioClip))
 			{
-				array = (T[])Resources.LoadAll<AudioClip>(GenFilePaths.ContentPath<AudioClip>() + folderPath);
+				//array = (T[])Resources.LoadAll<AudioClip>(GenFilePaths.ContentPath<AudioClip>() + folderPath);
 			}
 			if (array != null)
 			{

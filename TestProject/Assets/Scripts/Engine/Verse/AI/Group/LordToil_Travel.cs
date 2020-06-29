@@ -7,7 +7,7 @@ namespace Verse.AI.Group
 	public class LordToil_Travel : LordToil
 	{
 		
-		// (get) Token: 0x060029B4 RID: 10676 RVA: 0x000F4F9C File Offset: 0x000F319C
+		
 		public override IntVec3 FlagLoc
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x060029B5 RID: 10677 RVA: 0x000F4FA9 File Offset: 0x000F31A9
+		
 		private LordToilData_Travel Data
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x060029B6 RID: 10678 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x060029B7 RID: 10679 RVA: 0x000F4FB6 File Offset: 0x000F31B6
+		
 		protected virtual float AllArrivedCheckRadius
 		{
 			get

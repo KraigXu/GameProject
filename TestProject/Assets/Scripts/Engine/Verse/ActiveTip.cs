@@ -8,7 +8,7 @@ namespace Verse
 	public class ActiveTip
 	{
 		
-		// (get) Token: 0x06001C1D RID: 7197 RVA: 0x000AB110 File Offset: 0x000A9310
+		
 		private string FinalText
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C1E RID: 7198 RVA: 0x000AB178 File Offset: 0x000A9378
+		
 		public Rect TipRect
 		{
 			get

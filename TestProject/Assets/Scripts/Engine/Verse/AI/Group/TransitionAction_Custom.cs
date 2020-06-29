@@ -6,10 +6,10 @@ namespace Verse.AI.Group
 	public class TransitionAction_Custom : TransitionAction
 	{
 		
-		public TransitionAction_Custom(Action action)
-		{
-			this.action = action;
-		}
+		//public TransitionAction_Custom(Action action)
+		//{
+		//	this.action = action;
+		//}
 
 		
 		public TransitionAction_Custom(Action<Transition> actionWithArg)

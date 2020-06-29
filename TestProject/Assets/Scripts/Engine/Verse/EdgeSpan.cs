@@ -7,7 +7,7 @@ namespace Verse
 	public struct EdgeSpan
 	{
 		
-		// (get) Token: 0x06000C80 RID: 3200 RVA: 0x000479DC File Offset: 0x00045BDC
+		
 		public bool IsValid
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C81 RID: 3201 RVA: 0x000479E7 File Offset: 0x00045BE7
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get

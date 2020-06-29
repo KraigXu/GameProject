@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_Dialog : QuestPart
 	{
 		
-		// (get) Token: 0x06003942 RID: 14658 RVA: 0x00130BF0 File Offset: 0x0012EDF0
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+				
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
 				if (globalTargetInfo2.IsValid)
@@ -30,15 +28,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003943 RID: 14659 RVA: 0x00130C00 File Offset: 0x0012EE00
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
-				{
-					yield return faction;
-				}
+
+		
 				IEnumerator<Faction> enumerator = null;
 				if (this.relatedFaction != null)
 				{

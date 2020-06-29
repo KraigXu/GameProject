@@ -7,7 +7,7 @@ namespace Verse.AI.Group
 	public class LordToil_ExitMapNear : LordToil
 	{
 		
-		// (get) Token: 0x060029B0 RID: 10672 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x060029B1 RID: 10673 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSelfTend
 		{
 			get

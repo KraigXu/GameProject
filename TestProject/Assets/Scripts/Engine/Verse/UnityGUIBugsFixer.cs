@@ -8,7 +8,7 @@ namespace Verse
 	public static class UnityGUIBugsFixer
 	{
 		
-		// (get) Token: 0x06001CAD RID: 7341 RVA: 0x000AF1DC File Offset: 0x000AD3DC
+		
 		public static List<Resolution> ScreenResolutionsWithoutDuplicates
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001CAE RID: 7342 RVA: 0x000AF27F File Offset: 0x000AD47F
+		
 		public static Vector2 CurrentEventDelta
 		{
 			get

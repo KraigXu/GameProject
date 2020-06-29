@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class JoyGiver_InteractBuilding : JoyGiver
 	{
 		
-		// (get) Token: 0x06002F0E RID: 12046 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected virtual bool CanDoDuringGathering
 		{
 			get

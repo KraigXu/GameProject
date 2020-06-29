@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public abstract class QuestNode_RaceProperty : QuestNode

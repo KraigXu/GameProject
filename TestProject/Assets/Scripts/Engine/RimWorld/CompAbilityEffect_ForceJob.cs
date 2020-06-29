@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompAbilityEffect_ForceJob : CompAbilityEffect_WithDest
 	{
 		
-		// (get) Token: 0x0600418A RID: 16778 RVA: 0x0015E9E3 File Offset: 0x0015CBE3
+		
 		public new CompProperties_AbilityForceJob Props
 		{
 			get

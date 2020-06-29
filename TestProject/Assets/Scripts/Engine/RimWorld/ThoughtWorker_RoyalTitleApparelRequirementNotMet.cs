@@ -53,7 +53,7 @@ namespace RimWorld
 						num = i;
 					}
 				}
-				t = null;
+				
 			}
 			List<RoyalTitle>.Enumerator enumerator = default(List<RoyalTitle>.Enumerator);
 			yield return "ApparelRequirementAnyPrestigeArmor".Translate();

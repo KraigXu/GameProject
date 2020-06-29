@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public static class QuestGen
 	{
-		
-		// (get) Token: 0x060065BD RID: 26045 RVA: 0x0023A42B File Offset: 0x0023862B
+	
 		public static QuestScriptDef Root
 		{
 			get
@@ -19,7 +18,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065BE RID: 26046 RVA: 0x0023A432 File Offset: 0x00238632
+		
 		public static bool Working
 		{
 			get
@@ -29,7 +28,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065BF RID: 26047 RVA: 0x0023A439 File Offset: 0x00238639
+		
 		public static List<Rule> QuestDescriptionRulesReadOnly
 		{
 			get
@@ -39,7 +38,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065C0 RID: 26048 RVA: 0x0023A440 File Offset: 0x00238640
+		
 		public static Dictionary<string, string> QuestDescriptionConstantsReadOnly
 		{
 			get
@@ -49,7 +48,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065C1 RID: 26049 RVA: 0x0023A447 File Offset: 0x00238647
+		
 		public static List<Rule> QuestNameRulesReadOnly
 		{
 			get
@@ -59,7 +58,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065C2 RID: 26050 RVA: 0x0023A44E File Offset: 0x0023864E
+		
 		public static Dictionary<string, string> QuestNameConstantsReadOnly
 		{
 			get
@@ -69,7 +68,7 @@ namespace RimWorld.QuestGen
 		}
 
 		
-		// (get) Token: 0x060065C3 RID: 26051 RVA: 0x0023A455 File Offset: 0x00238655
+		
 		public static List<QuestTextRequest> TextRequestsReadOnly
 		{
 			get

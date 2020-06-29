@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class Dialog_FileList : Window
 	{
 		
-		// (get) Token: 0x06005954 RID: 22868 RVA: 0x001DE1AF File Offset: 0x001DC3AF
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005955 RID: 22869 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected virtual bool ShouldDoTypeInField
 		{
 			get

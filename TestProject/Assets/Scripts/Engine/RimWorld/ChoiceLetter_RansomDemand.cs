@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ChoiceLetter_RansomDemand : ChoiceLetter
 	{
 		
-		// (get) Token: 0x06005B25 RID: 23333 RVA: 0x001F6029 File Offset: 0x001F4229
+		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B26 RID: 23334 RVA: 0x001F6039 File Offset: 0x001F4239
+		
 		public override bool CanShowInLetterStack
 		{
 			get

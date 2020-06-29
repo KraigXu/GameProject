@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Pawn_FilthTracker : IExposable
 	{
 		
-		// (get) Token: 0x06004605 RID: 17925 RVA: 0x0017A1A4 File Offset: 0x001783A4
+		
 		public string FilthReport
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004606 RID: 17926 RVA: 0x0017A23A File Offset: 0x0017843A
+		
 		private FilthSourceFlags AdditionalFilthSourceFlags
 		{
 			get

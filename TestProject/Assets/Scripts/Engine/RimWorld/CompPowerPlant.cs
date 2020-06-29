@@ -6,7 +6,7 @@ namespace RimWorld
 	public class CompPowerPlant : CompPowerTrader
 	{
 		
-		// (get) Token: 0x06003F4D RID: 16205 RVA: 0x0015078F File Offset: 0x0014E98F
+		
 		protected virtual float DesiredPowerOutput
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_MotePulse : Graphic_Mote
 	{
 		
-		// (get) Token: 0x06001534 RID: 5428 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool ForcePropertyBlock
 		{
 			get

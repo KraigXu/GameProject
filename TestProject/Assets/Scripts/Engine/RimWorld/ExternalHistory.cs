@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ExternalHistory : IExposable
 	{
 		
-		// (get) Token: 0x060037B6 RID: 14262 RVA: 0x0012AEB4 File Offset: 0x001290B4
+		
 		public string AllInformation
 		{
 			get

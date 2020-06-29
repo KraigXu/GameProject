@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Need_Joy : Need
 	{
 		
-		// (get) Token: 0x06004579 RID: 17785 RVA: 0x00177540 File Offset: 0x00175740
+		
 		public JoyCategory CurCategory
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600457A RID: 17786 RVA: 0x0017759C File Offset: 0x0017579C
+		
 		private float FallPerInterval
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600457B RID: 17787 RVA: 0x001775F9 File Offset: 0x001757F9
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600457C RID: 17788 RVA: 0x00177610 File Offset: 0x00175810
+		
 		private bool GainingJoy
 		{
 			get

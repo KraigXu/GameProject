@@ -10,7 +10,7 @@ namespace Verse
 	public class PawnKindDef : Def
 	{
 		
-		// (get) Token: 0x060005BE RID: 1470 RVA: 0x0001C01A File Offset: 0x0001A21A
+		
 		public RaceProperties RaceProps
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 			}
 			if (this.alternateGraphics != null)
 			{
-				using (List<AlternateGraphic>.Enumerator enumerator2 = this.alternateGraphics.GetEnumerator())
+				List<AlternateGraphic>.Enumerator enumerator2 = this.alternateGraphics.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{

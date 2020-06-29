@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_Infecter : HediffComp
 	{
 		
-		// (get) Token: 0x0600108C RID: 4236 RVA: 0x0005E729 File Offset: 0x0005C929
+		
 		public HediffCompProperties_Infecter Props
 		{
 			get

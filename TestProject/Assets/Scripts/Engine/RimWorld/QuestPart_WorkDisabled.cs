@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_WorkDisabled : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060038D9 RID: 14553 RVA: 0x0012F5DA File Offset: 0x0012D7DA
+		
 		public IEnumerable<WorkTypeDef> DisabledWorkTypes
 		{
 			get

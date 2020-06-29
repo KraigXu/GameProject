@@ -7,7 +7,7 @@ namespace RimWorld
 	public class OrbitalStrike : ThingWithComps
 	{
 		
-		// (get) Token: 0x06004DA7 RID: 19879 RVA: 0x001A194C File Offset: 0x0019FB4C
+		
 		protected int TicksPassed
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DA8 RID: 19880 RVA: 0x001A195F File Offset: 0x0019FB5F
+		
 		protected int TicksLeft
 		{
 			get

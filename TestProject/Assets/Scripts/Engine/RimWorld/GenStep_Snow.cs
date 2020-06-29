@@ -7,7 +7,7 @@ namespace RimWorld
 	public class GenStep_Snow : GenStep
 	{
 		
-		// (get) Token: 0x06003EA9 RID: 16041 RVA: 0x0014C458 File Offset: 0x0014A658
+		
 		public override int SeedPart
 		{
 			get

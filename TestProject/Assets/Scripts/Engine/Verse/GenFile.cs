@@ -31,9 +31,9 @@ namespace Verse
 		public static string GetTextWithoutBOM(TextAsset textAsset)
 		{
 			string result = null;
-			using (MemoryStream memoryStream = new MemoryStream(textAsset.bytes))
+			MemoryStream memoryStream = new MemoryStream(textAsset.bytes);
 			{
-				using (StreamReader streamReader = new StreamReader(memoryStream, true))
+				StreamReader streamReader = new StreamReader(memoryStream, true);
 				{
 					result = streamReader.ReadToEnd();
 				}

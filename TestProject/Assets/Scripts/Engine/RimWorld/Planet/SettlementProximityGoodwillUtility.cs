@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public static class SettlementProximityGoodwillUtility
 	{
 		
-		// (get) Token: 0x0600690E RID: 26894 RVA: 0x0024B378 File Offset: 0x00249578
+		
 		public static int MaxDist
 		{
 			get

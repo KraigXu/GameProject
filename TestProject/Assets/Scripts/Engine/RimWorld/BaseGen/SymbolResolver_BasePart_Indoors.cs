@@ -12,10 +12,10 @@ namespace RimWorld.BaseGen
 			bool flag = rp.rect.Width > 13 || rp.rect.Height > 13 || ((rp.rect.Width >= 9 || rp.rect.Height >= 9) && Rand.Chance(0.3f));
 			if (flag)
 			{
-				BaseGen.symbolStack.Push("basePart_indoors_division", rp, null);
+				BaseGenCore.symbolStack.Push("basePart_indoors_division", rp, null);
 				return;
 			}
-			BaseGen.symbolStack.Push("basePart_indoors_leaf", rp, null);
+			BaseGenCore.symbolStack.Push("basePart_indoors_leaf", rp, null);
 		}
 	}
 }

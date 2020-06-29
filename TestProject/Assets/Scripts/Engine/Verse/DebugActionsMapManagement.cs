@@ -92,30 +92,30 @@ namespace Verse
 				Map map = maps[i];
 				if (map != Find.CurrentMap)
 				{
-					Predicate<IntVec3> 9__1;
+
 					list.Add(new DebugMenuOption(map.ToString(), DebugMenuOptionMode.Action, delegate
 					{
 						for (int j = 0; j < toTransfer.Count; j++)
 						{
-							Map map;
-							IntVec3 center = map.Center;
-							map = map;
-							int squareRadius = Mathf.Max(map.Size.x, map.Size.z);
-							Predicate<IntVec3> validator;
-							if ((validator ) == null)
-							{
-								validator = (9__1 = ((IntVec3 x) => !x.Fogged(map) && x.Standable(map)));
-							}
-							IntVec3 center2;
-							if (CellFinder.TryFindRandomCellNear(center, map, squareRadius, validator, out center2, -1))
-							{
-								toTransfer[j].DeSpawn(DestroyMode.Vanish);
-								GenPlace.TryPlaceThing(toTransfer[j], center2, map, ThingPlaceMode.Near, null, null, default(Rot4));
-							}
-							else
-							{
-								Log.Error("Could not find spawn cell.", false);
-							}
+							//Map map;
+							//IntVec3 center = map.Center;
+							//map = map;
+							//int squareRadius = Mathf.Max(map.Size.x, map.Size.z);
+							//Predicate<IntVec3> validator;
+							//if ((validator ) == null)
+							//{
+							//	validator = ( ((IntVec3 x) => !x.Fogged(map) && x.Standable(map)));
+							//}
+							//IntVec3 center2;
+							//if (CellFinder.TryFindRandomCellNear(center, map, squareRadius, validator, out center2, -1))
+							//{
+							//	toTransfer[j].DeSpawn(DestroyMode.Vanish);
+							//	GenPlace.TryPlaceThing(toTransfer[j], center2, map, ThingPlaceMode.Near, null, null, default(Rot4));
+							//}
+							//else
+							//{
+							//	Log.Error("Could not find spawn cell.", false);
+							//}
 						}
 					}));
 				}
@@ -181,7 +181,7 @@ namespace Verse
 		private static void RunMapGenerator()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (List<MapGeneratorDef>.Enumerator enumerator = DefDatabase<MapGeneratorDef>.AllDefsListForReading.GetEnumerator())
+			List<MapGeneratorDef>.Enumerator enumerator = DefDatabase<MapGeneratorDef>.AllDefsListForReading.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

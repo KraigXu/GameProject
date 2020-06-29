@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class JobDriver_InteractAnimal : JobDriver
 	{
 		
-		// (get) Token: 0x06002AF5 RID: 10997 RVA: 0x000FA2DB File Offset: 0x000F84DB
+		
 		protected Pawn Animal
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002AF6 RID: 10998 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanInteractNow
 		{
 			get

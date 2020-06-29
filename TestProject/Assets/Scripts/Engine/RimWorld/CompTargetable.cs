@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class CompTargetable : CompUseEffect
 	{
 		
-		// (get) Token: 0x06005474 RID: 21620 RVA: 0x001C317E File Offset: 0x001C137E
+		
 		public CompProperties_Targetable Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005475 RID: 21621
+		
 		protected abstract bool PlayerChoosesTarget { get; }
 
 		

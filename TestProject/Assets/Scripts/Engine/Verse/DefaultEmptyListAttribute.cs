@@ -19,10 +19,10 @@ namespace Verse
 			{
 				return false;
 			}
-			if (obj.GetType().GetGenericTypeDefinition() != typeof(List))
-			{
-				return false;
-			}
+			//if (obj.GetType().GetGenericTypeDefinition() != typeof(List))
+			//{
+			//	return false;
+			//}
 			Type[] genericArguments = obj.GetType().GetGenericArguments();
 			return genericArguments.Length == 1 && !(genericArguments[0] != (Type)this.value) && (int)obj.GetType().GetProperty("Count").GetValue(obj, null) == 0;
 		}

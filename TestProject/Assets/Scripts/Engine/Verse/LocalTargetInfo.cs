@@ -8,7 +8,7 @@ namespace Verse
 	public struct LocalTargetInfo : IEquatable<LocalTargetInfo>
 	{
 		
-		// (get) Token: 0x06001EB6 RID: 7862 RVA: 0x000BEBAE File Offset: 0x000BCDAE
+		
 		public bool IsValid
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EB7 RID: 7863 RVA: 0x000BEBC5 File Offset: 0x000BCDC5
+		
 		public bool HasThing
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EB8 RID: 7864 RVA: 0x000BEBD0 File Offset: 0x000BCDD0
+		
 		public Thing Thing
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EB9 RID: 7865 RVA: 0x000BEBD8 File Offset: 0x000BCDD8
+		
 		public Pawn Pawn
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EBA RID: 7866 RVA: 0x000BEBE5 File Offset: 0x000BCDE5
+		
 		public bool ThingDestroyed
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EBB RID: 7867 RVA: 0x000BEBFC File Offset: 0x000BCDFC
+		
 		public static LocalTargetInfo Invalid
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EBC RID: 7868 RVA: 0x000BEC08 File Offset: 0x000BCE08
+		
 		public string Label
 		{
 			get
@@ -82,7 +82,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EBD RID: 7869 RVA: 0x000BEC2D File Offset: 0x000BCE2D
+		
 		public IntVec3 Cell
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001EBE RID: 7870 RVA: 0x000BEC4C File Offset: 0x000BCE4C
+		
 		public Vector3 CenterVector3
 		{
 			get

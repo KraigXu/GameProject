@@ -31,25 +31,21 @@ namespace RimWorld.BaseGen
 
 		public void AttemptToPlace(ThingDef thingDef, CellRect rect, Rot4 rotation, Faction faction)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			Thing thing;
 			IntVec3 loc = rect.Cells.InRandomOrder(null).Where(delegate(IntVec3 cell)
 			{
 				if (GenConstruct.CanPlaceBlueprintAt(thingDef, cell, rotation, map, false, null, null, null).Accepted)
 				{
 					IEnumerable<IntVec3> adjacentCellsCardinal = GenAdj.OccupiedRect(cell, rotation, thingDef.Size).AdjacentCellsCardinal;
-					Func<IntVec3, bool> predicate;
-					//if ((predicate ) == null)
-					//{
-					//	predicate = (9__1 = delegate(IntVec3 edgeCell)
-					//	{
-					//		if (edgeCell.InBounds(map))
-					//		{
-					//			return edgeCell.GetThingList(map).Any((Thing thing) => thing.def == ThingDefOf.Ship_Beam);
-					//		}
-					//		return false;
-					//	});
-					//}
+					Func<IntVec3, bool> predicate = (delegate (IntVec3 edgeCell)
+					{
+						if (edgeCell.InBounds(map))
+						{
+							return edgeCell.GetThingList(map).Any((Thing thing) => thing.def == ThingDefOf.Ship_Beam);
+						}
+						return false;
+					});
 					return adjacentCellsCardinal.Any(predicate);
 				}
 				return false;
@@ -63,7 +59,7 @@ namespace RimWorld.BaseGen
 				{
 					compHibernatable.State = HibernatableStateDefOf.Hibernating;
 				}
-				GenSpawn.Spawn(thing, loc, BaseGen.globalSettings.map, rotation, WipeMode.Vanish, false);
+				GenSpawn.Spawn(thing, loc, BaseGenCore.globalSettings.map, rotation, WipeMode.Vanish, false);
 			}
 		}
 	}

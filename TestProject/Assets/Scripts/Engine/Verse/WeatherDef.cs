@@ -8,7 +8,7 @@ namespace Verse
 	public class WeatherDef : Def
 	{
 		
-		// (get) Token: 0x060006EA RID: 1770 RVA: 0x0001FCFE File Offset: 0x0001DEFE
+		
 		public WeatherWorker Worker
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class StorageSettings : IExposable
 	{
 		
-		// (get) Token: 0x06004C22 RID: 19490 RVA: 0x0019929F File Offset: 0x0019749F
+		
 		private IHaulDestination HaulDestinationOwner
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C23 RID: 19491 RVA: 0x001992AC File Offset: 0x001974AC
+		
 		private ISlotGroupParent SlotGroupParentOwner
 		{
 			get
@@ -27,8 +27,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C24 RID: 19492 RVA: 0x001992B9 File Offset: 0x001974B9
-		// (set) Token: 0x06004C25 RID: 19493 RVA: 0x001992C4 File Offset: 0x001974C4
+		
+		
 		public StoragePriority Priority
 		{
 			get

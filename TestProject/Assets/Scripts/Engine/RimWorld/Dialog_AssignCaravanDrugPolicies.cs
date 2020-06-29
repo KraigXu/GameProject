@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Dialog_AssignCaravanDrugPolicies : Window
 	{
 		
-		// (get) Token: 0x06005886 RID: 22662 RVA: 0x001D644C File Offset: 0x001D464C
+		
 		public override Vector2 InitialSize
 		{
 			get

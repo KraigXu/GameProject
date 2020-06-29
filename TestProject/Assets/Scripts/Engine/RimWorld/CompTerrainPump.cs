@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class CompTerrainPump : ThingComp
 	{
 		
-		// (get) Token: 0x060053A8 RID: 21416 RVA: 0x001BF6E4 File Offset: 0x001BD8E4
+		
 		private CompProperties_TerrainPump Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053A9 RID: 21417 RVA: 0x001BF6F1 File Offset: 0x001BD8F1
+		
 		private float ProgressDays
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053AA RID: 21418 RVA: 0x001BF700 File Offset: 0x001BD900
+		
 		private float CurrentRadius
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053AB RID: 21419 RVA: 0x001BF730 File Offset: 0x001BD930
+		
 		private bool Working
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053AC RID: 21420 RVA: 0x001BF748 File Offset: 0x001BD948
+		
 		private int TicksUntilRadiusInteger
 		{
 			get

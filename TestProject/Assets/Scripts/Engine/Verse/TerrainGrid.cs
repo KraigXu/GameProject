@@ -9,7 +9,7 @@ namespace Verse
 	public sealed class TerrainGrid : IExposable
 	{
 		
-		// (get) Token: 0x06000A92 RID: 2706 RVA: 0x000383E4 File Offset: 0x000365E4
+		
 		public CellBoolDrawer Drawer
 		{
 			get

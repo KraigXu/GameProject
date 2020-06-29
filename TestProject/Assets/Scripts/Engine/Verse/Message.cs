@@ -9,7 +9,7 @@ namespace Verse
 	public class Message : IArchivable, IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06001BC8 RID: 7112 RVA: 0x000A9D7A File Offset: 0x000A7F7A
+		
 		protected float Age
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BC9 RID: 7113 RVA: 0x000A9D88 File Offset: 0x000A7F88
+		
 		protected float TimeLeft
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCA RID: 7114 RVA: 0x000A9D96 File Offset: 0x000A7F96
+		
 		public bool Expired
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCB RID: 7115 RVA: 0x000A9DA8 File Offset: 0x000A7FA8
+		
 		public float Alpha
 		{
 			get
@@ -53,7 +53,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCC RID: 7116 RVA: 0x000A9DCC File Offset: 0x000A7FCC
+		
 		private static bool ShouldDrawBackground
 		{
 			get
@@ -75,7 +75,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCD RID: 7117 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		Texture IArchivable.ArchivedIcon
 		{
 			get
@@ -85,7 +85,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCE RID: 7118 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		Color IArchivable.ArchivedIconColor
 		{
 			get
@@ -95,7 +95,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BCF RID: 7119 RVA: 0x000A9E0B File Offset: 0x000A800B
+		
 		string IArchivable.ArchivedLabel
 		{
 			get
@@ -105,7 +105,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BD0 RID: 7120 RVA: 0x000A9E18 File Offset: 0x000A8018
+		
 		string IArchivable.ArchivedTooltip
 		{
 			get
@@ -115,7 +115,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BD1 RID: 7121 RVA: 0x000A9E20 File Offset: 0x000A8020
+		
 		int IArchivable.CreatedTicksGame
 		{
 			get
@@ -125,7 +125,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BD2 RID: 7122 RVA: 0x000A9E28 File Offset: 0x000A8028
+		
 		bool IArchivable.CanCullArchivedNow
 		{
 			get
@@ -135,7 +135,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BD3 RID: 7123 RVA: 0x000A9E33 File Offset: 0x000A8033
+		
 		LookTargets IArchivable.LookTargets
 		{
 			get
@@ -211,7 +211,7 @@ namespace Verse
 			{
 				Text.Font = GameFont.Small;
 				Text.Anchor = TextAnchor.MiddleLeft;
-				Rect rect = rect.AtZero();
+				//Rect rect = rect.AtZero();
 				float alpha = this.Alpha;
 				GUI.color = new Color(1f, 1f, 1f, alpha);
 				if (Message.ShouldDrawBackground)

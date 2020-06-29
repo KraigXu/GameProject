@@ -8,7 +8,7 @@ namespace RimWorld
 	public sealed class MemoryThoughtHandler : IExposable
 	{
 		
-		// (get) Token: 0x06004774 RID: 18292 RVA: 0x00183E64 File Offset: 0x00182064
+		
 		public List<Thought_Memory> Memories
 		{
 			get

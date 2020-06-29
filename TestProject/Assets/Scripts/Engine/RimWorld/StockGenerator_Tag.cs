@@ -19,9 +19,9 @@ namespace RimWorld
 			{
 				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
 				Func<ThingDef, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__0 = ((ThingDef d) => this.HandlesThingDef(d) && d.tradeability.TraderCanSell() && (this.excludedThingDefs == null || !this.excludedThingDefs.Contains(d)) && !generatedDefs.Contains(d)));
+					predicate = ( ((ThingDef d) => this.HandlesThingDef(d) && d.tradeability.TraderCanSell() && (this.excludedThingDefs == null || !this.excludedThingDefs.Contains(d)) && !generatedDefs.Contains(d)));
 				}
 				ThingDef chosenThingDef;
 				if (!allDefs.Where(predicate).TryRandomElement(out chosenThingDef))

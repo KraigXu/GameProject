@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct EventPack
 	{
 		
-		// (get) Token: 0x06005EEE RID: 24302 RVA: 0x0020C602 File Offset: 0x0020A802
+		
 		public string Tag
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EEF RID: 24303 RVA: 0x0020C60A File Offset: 0x0020A80A
+		
 		public IntVec3 Cell
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EF0 RID: 24304 RVA: 0x0020C612 File Offset: 0x0020A812
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get

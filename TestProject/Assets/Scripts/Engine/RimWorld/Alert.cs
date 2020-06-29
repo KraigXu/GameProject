@@ -12,7 +12,7 @@ namespace RimWorld
 	public abstract class Alert
 	{
 		
-		// (get) Token: 0x060055DA RID: 21978 RVA: 0x001C7BC6 File Offset: 0x001C5DC6
+		
 		public virtual AlertPriority Priority
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055DB RID: 21979 RVA: 0x001C7BCE File Offset: 0x001C5DCE
+		
 		protected virtual Color BGColor
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055DC RID: 21980 RVA: 0x001C7BD5 File Offset: 0x001C5DD5
+		
 		public bool Active
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055DD RID: 21981 RVA: 0x001C7BDD File Offset: 0x001C5DDD
+		
 		public string Label
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055DE RID: 21982 RVA: 0x001C7BF3 File Offset: 0x001C5DF3
+		
 		public float Height
 		{
 			get

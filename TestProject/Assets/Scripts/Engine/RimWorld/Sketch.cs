@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Sketch : IExposable
 	{
 		
-		// (get) Token: 0x06004020 RID: 16416 RVA: 0x001566DA File Offset: 0x001548DA
+		
 		public List<SketchEntity> Entities
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004021 RID: 16417 RVA: 0x001566E2 File Offset: 0x001548E2
+		
 		public List<SketchThing> Things
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004022 RID: 16418 RVA: 0x001566EA File Offset: 0x001548EA
+		
 		public List<SketchTerrain> Terrain
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004023 RID: 16419 RVA: 0x001566F2 File Offset: 0x001548F2
+		
 		public List<SketchBuildable> Buildables
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004024 RID: 16420 RVA: 0x001566FC File Offset: 0x001548FC
+		
 		public CellRect OccupiedRect
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004025 RID: 16421 RVA: 0x001567E0 File Offset: 0x001549E0
+		
 		public IntVec2 OccupiedSize
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004026 RID: 16422 RVA: 0x00156810 File Offset: 0x00154A10
+		
 		public IntVec3 OccupiedCenter
 		{
 			get
@@ -99,7 +99,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004027 RID: 16423 RVA: 0x0015682B File Offset: 0x00154A2B
+		
 		public bool Empty
 		{
 			get
@@ -454,7 +454,7 @@ namespace RimWorld
 					}
 					else
 					{
-						using (CellRect.Enumerator enumerator = sketchThing.OccupiedRect.GetEnumerator())
+						CellRect.Enumerator enumerator = sketchThing.OccupiedRect.GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{
@@ -810,7 +810,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			using (IEnumerator<SketchThing> enumerator = this.ThingsAt(pos).GetEnumerator())
+			IEnumerator<SketchThing> enumerator = this.ThingsAt(pos).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -829,7 +829,7 @@ namespace RimWorld
 			IntVec3 offset = this.GetOffset(pos, posType);
 			Map currentMap = Find.CurrentMap;
 			bool flag = false;
-			using (List<SketchEntity>.Enumerator enumerator = this.Entities.GetEnumerator())
+			List<SketchEntity>.Enumerator enumerator = this.Entities.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -900,7 +900,7 @@ namespace RimWorld
 				}
 				goto IL_23E;
 			}
-			using (IEnumerator<IntVec3> enumerator = extraRoots.GetEnumerator())
+			IEnumerator<IntVec3> enumerator = extraRoots.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

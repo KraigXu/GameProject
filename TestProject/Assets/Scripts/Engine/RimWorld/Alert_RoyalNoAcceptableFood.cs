@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600568E RID: 22158 RVA: 0x001CB2DC File Offset: 0x001C94DC
+		
 		public List<Pawn> Targets
 		{
 			get
@@ -61,8 +61,8 @@ namespace RimWorld
 				array[1] = " (";
 				array[2] = mostSeniorTitle.def.GetLabelFor(t.gender);
 				array[3] = "):\n";
-				array[4] = (from m in mostSeniorTitle.def.SatisfyingMeals(false)
-				select m.LabelCap).ToLineList("- ", false);
+				//array[4] = (from m in mostSeniorTitle.def.SatisfyingMeals(false)
+				//select m.LabelCap).ToLineList("- ", false);
 				return string.Concat(array);
 			}).ToLineList("\n", false);
 		}

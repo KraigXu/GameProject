@@ -2,7 +2,7 @@
 using System.Linq;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestPart_Filter_DecreeNotPossible : QuestPart_Filter

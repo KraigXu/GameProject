@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompShipLandingBeacon : ThingComp
 	{
 		
-		// (get) Token: 0x060052F0 RID: 21232 RVA: 0x001BB020 File Offset: 0x001B9220
+		
 		public CompProperties_ShipLandingBeacon Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052F1 RID: 21233 RVA: 0x001BB02D File Offset: 0x001B922D
+		
 		public List<ShipLandingArea> LandingAreas
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052F2 RID: 21234 RVA: 0x001BB038 File Offset: 0x001B9238
+		
 		public bool Active
 		{
 			get
@@ -71,12 +71,12 @@ namespace RimWorld
 					}
 				}
 			}
-			using (List<CompShipLandingBeacon>.Enumerator enumerator2 = list.GetEnumerator())
+			List<CompShipLandingBeacon>.Enumerator enumerator2 = list.GetEnumerator();
 			{
 				while (enumerator2.MoveNext())
 				{
 					CompShipLandingBeacon h = enumerator2.Current;
-					using (List<CompShipLandingBeacon>.Enumerator enumerator3 = list2.GetEnumerator())
+					List<CompShipLandingBeacon>.Enumerator enumerator3 = list2.GetEnumerator();
 					{
 						while (enumerator3.MoveNext())
 						{
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 			for (int i = this.landingAreas.Count - 1; i >= 0; i--)
 			{
-				using (List<CompShipLandingBeacon>.Enumerator enumerator2 = this.landingAreas[i].beacons.GetEnumerator())
+				List<CompShipLandingBeacon>.Enumerator enumerator2 = this.landingAreas[i].beacons.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{

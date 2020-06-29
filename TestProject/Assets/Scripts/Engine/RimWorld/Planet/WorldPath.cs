@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldPath : IDisposable
 	{
 		
-		// (get) Token: 0x060068D0 RID: 26832 RVA: 0x00249A85 File Offset: 0x00247C85
+		
 		public bool Found
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D1 RID: 26833 RVA: 0x00249A97 File Offset: 0x00247C97
+		
 		public float TotalCost
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D2 RID: 26834 RVA: 0x00249A9F File Offset: 0x00247C9F
+		
 		public int NodesLeftCount
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D3 RID: 26835 RVA: 0x00249AA9 File Offset: 0x00247CA9
+		
 		public List<int> NodesReversed
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D4 RID: 26836 RVA: 0x00249AB1 File Offset: 0x00247CB1
+		
 		public int FirstNode
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D5 RID: 26837 RVA: 0x00249ACB File Offset: 0x00247CCB
+		
 		public int LastNode
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060068D6 RID: 26838 RVA: 0x00249AD9 File Offset: 0x00247CD9
+		
 		public static WorldPath NotFound
 		{
 			get

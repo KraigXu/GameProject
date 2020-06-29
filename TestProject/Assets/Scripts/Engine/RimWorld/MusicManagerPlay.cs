@@ -12,7 +12,7 @@ namespace RimWorld
 	public class MusicManagerPlay
 	{
 		
-		// (get) Token: 0x06004A54 RID: 19028 RVA: 0x00191EFB File Offset: 0x001900FB
+		
 		private float CurTime
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A55 RID: 19029 RVA: 0x00191F04 File Offset: 0x00190104
+		
 		private bool DangerMusicMode
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A56 RID: 19030 RVA: 0x00191F40 File Offset: 0x00190140
+		
 		private float CurVolume
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A57 RID: 19031 RVA: 0x00191F87 File Offset: 0x00190187
+		
 		public float CurSanitizedVolume
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A58 RID: 19032 RVA: 0x00191F99 File Offset: 0x00190199
+		
 		public bool IsPlaying
 		{
 			get

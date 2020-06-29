@@ -9,7 +9,7 @@ namespace Verse
 	public class SimpleCurveView
 	{
 		
-		// (get) Token: 0x06000163 RID: 355 RVA: 0x00006632 File Offset: 0x00004832
+		
 		public IEnumerable<float> DebugInputValues
 		{
 			get

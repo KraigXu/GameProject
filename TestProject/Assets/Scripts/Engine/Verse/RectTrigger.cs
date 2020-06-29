@@ -8,8 +8,8 @@ namespace Verse
 	public class RectTrigger : Thing
 	{
 		
-		// (get) Token: 0x060014DD RID: 5341 RVA: 0x0007B324 File Offset: 0x00079524
-		// (set) Token: 0x060014DE RID: 5342 RVA: 0x0007B32C File Offset: 0x0007952C
+		
+		
 		public CellRect Rect
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 		
 		public void ActivatedBy(Pawn p)
 		{
-			Find.SignalManager.SendSignal(new Signal(this.signalTag, p.Named("SUBJECT")));
+			//Find.SignalManager.SendSignal(new Signal(this.signalTag, p.Named("SUBJECT")));
 			if (!base.Destroyed)
 			{
 				this.Destroy(DestroyMode.Vanish);

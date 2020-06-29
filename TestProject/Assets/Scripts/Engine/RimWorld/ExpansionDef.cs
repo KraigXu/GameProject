@@ -10,7 +10,7 @@ namespace RimWorld
 	public class ExpansionDef : Def
 	{
 		
-		// (get) Token: 0x060035DB RID: 13787 RVA: 0x00124C9F File Offset: 0x00122E9F
+		
 		public Texture2D Icon
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035DC RID: 13788 RVA: 0x00124CC7 File Offset: 0x00122EC7
+		
 		public Texture2D BackgroundImage
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035DD RID: 13789 RVA: 0x00124CEF File Offset: 0x00122EEF
+		
 		public string StoreURL
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035DE RID: 13790 RVA: 0x00124D0B File Offset: 0x00122F0B
+		
 		public ExpansionStatus Status
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035DF RID: 13791 RVA: 0x00124D38 File Offset: 0x00122F38
+		
 		public string StatusDescription
 		{
 			get
@@ -98,9 +98,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.linkedMod, false);

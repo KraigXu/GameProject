@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public abstract class WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006F1E RID: 28446 RVA: 0x0026B1E5 File Offset: 0x002693E5
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F1F RID: 28447 RVA: 0x0026B1F4 File Offset: 0x002693F4
+		
 		public bool ParentHasMap
 		{
 			get

@@ -9,7 +9,7 @@ namespace Verse
 	public static class GenThreading
 	{
 		
-		// (get) Token: 0x060020F1 RID: 8433 RVA: 0x000C99CC File Offset: 0x000C7BCC
+		
 		public static int ProcessorCount
 		{
 			get
@@ -86,7 +86,7 @@ namespace Verse
 			int count = list.Count;
 			long tasksDone = 0L;
 			AutoResetEvent taskDoneEvent = new AutoResetEvent(false);
-			using (List<List<T>>.Enumerator enumerator = GenThreading.SliceWork<T>(list, maxDegreeOfParallelism).GetEnumerator())
+			List<List<T>>.Enumerator enumerator = GenThreading.SliceWork<T>(list, maxDegreeOfParallelism).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -128,7 +128,7 @@ namespace Verse
 			int num = toExclusive - fromInclusive;
 			long tasksDone = 0L;
 			AutoResetEvent taskDoneEvent = new AutoResetEvent(false);
-			using (List<GenThreading.Slice>.Enumerator enumerator = GenThreading.SliceWork(fromInclusive, toExclusive, maxDegreeOfParallelism).GetEnumerator())
+			List<GenThreading.Slice>.Enumerator enumerator = GenThreading.SliceWork(fromInclusive, toExclusive, maxDegreeOfParallelism).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

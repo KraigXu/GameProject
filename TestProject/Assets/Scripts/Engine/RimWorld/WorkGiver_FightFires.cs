@@ -8,7 +8,7 @@ namespace RimWorld
 	internal class WorkGiver_FightFires : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x060030AF RID: 12463 RVA: 0x00111457 File Offset: 0x0010F657
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060030B0 RID: 12464 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

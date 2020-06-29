@@ -43,13 +43,13 @@ namespace RimWorld.BaseGen
 			ResolveParams rp2 = rp;
 			rp2.rect = rect;
 			rp2.thingRot = new Rot4?(value);
-			BaseGen.symbolStack.Push("mannedMortar", rp2, null);
+			BaseGenCore.symbolStack.Push("mannedMortar", rp2, null);
 		}
 
 
 		private bool TryFindRandomInnerRectTouchingEdge(CellRect rect, out CellRect mortarRect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			IntVec2 size = new IntVec2(3, 3);
 			return rect.TryFindRandomInnerRectTouchingEdge(size, out mortarRect, delegate(CellRect x)
 			{

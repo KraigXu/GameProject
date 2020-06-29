@@ -10,7 +10,7 @@ namespace Verse
 	public class Command_VerbTarget : Command
 	{
 		
-		// (get) Token: 0x06001AEC RID: 6892 RVA: 0x000A56D2 File Offset: 0x000A38D2
+		
 		public override Color IconDrawColor
 		{
 			get

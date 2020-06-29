@@ -10,7 +10,7 @@ namespace Verse
 	public class UIRoot_Entry : UIRoot
 	{
 		
-		// (get) Token: 0x06001AA4 RID: 6820 RVA: 0x000A3E00 File Offset: 0x000A2000
+		
 		private bool ShouldDoMainMenu
 		{
 			get

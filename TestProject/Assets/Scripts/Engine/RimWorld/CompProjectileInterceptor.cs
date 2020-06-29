@@ -12,7 +12,7 @@ namespace RimWorld
 	public class CompProjectileInterceptor : ThingComp
 	{
 		
-		// (get) Token: 0x06005238 RID: 21048 RVA: 0x001B776B File Offset: 0x001B596B
+		
 		public CompProperties_ProjectileInterceptor Props
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005239 RID: 21049 RVA: 0x001B7778 File Offset: 0x001B5978
+		
 		public bool Active
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523A RID: 21050 RVA: 0x001B77A2 File Offset: 0x001B59A2
+		
 		public bool OnCooldown
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523B RID: 21051 RVA: 0x001B77C2 File Offset: 0x001B59C2
+		
 		public bool Charging
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523C RID: 21052 RVA: 0x001B77E1 File Offset: 0x001B59E1
+		
 		public int ChargeCycleStartTick
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523D RID: 21053 RVA: 0x001B77F4 File Offset: 0x001B59F4
+		
 		public int ChargingTicksLeft
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523E RID: 21054 RVA: 0x001B781E File Offset: 0x001B5A1E
+		
 		public int CooldownTicksLeft
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600523F RID: 21055 RVA: 0x001B7847 File Offset: 0x001B5A47
+		
 		public bool ReactivatedThisTick
 		{
 			get

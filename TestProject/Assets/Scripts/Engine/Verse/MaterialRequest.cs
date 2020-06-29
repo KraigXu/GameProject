@@ -8,7 +8,7 @@ namespace Verse
 	public struct MaterialRequest : IEquatable<MaterialRequest>
 	{
 		
-		// (set) Token: 0x06001392 RID: 5010 RVA: 0x000704C9 File Offset: 0x0006E6C9
+		
 		public string BaseTexPath
 		{
 			set

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_PanicFlee : LordToil
 	{
 		
-		// (get) Token: 0x060032BA RID: 12986 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032BB RID: 12987 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSelfTend
 		{
 			get

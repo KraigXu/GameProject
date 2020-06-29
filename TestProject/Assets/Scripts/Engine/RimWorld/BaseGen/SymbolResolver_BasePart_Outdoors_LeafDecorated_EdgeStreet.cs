@@ -10,10 +10,10 @@ namespace RimWorld.BaseGen
 		{
 			ResolveParams resolveParams = rp;
 			resolveParams.floorDef = (rp.pathwayFloorDef ?? BaseGenUtility.RandomBasicFloorDef(rp.faction, false));
-			BaseGen.symbolStack.Push("edgeStreet", resolveParams, null);
+			BaseGenCore.symbolStack.Push("edgeStreet", resolveParams, null);
 			ResolveParams resolveParams2 = rp;
 			resolveParams2.rect = rp.rect.ContractedBy(1);
-			BaseGen.symbolStack.Push("basePart_outdoors_leaf", resolveParams2, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors_leaf", resolveParams2, null);
 		}
 	}
 }

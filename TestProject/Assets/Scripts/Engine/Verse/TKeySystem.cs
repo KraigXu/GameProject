@@ -238,7 +238,7 @@ namespace Verse
         }
 
         
-        // (Invoke) Token: 0x06007928 RID: 31016
+        
         private delegate bool PathMatcher(string path, out string match);
     }
 }

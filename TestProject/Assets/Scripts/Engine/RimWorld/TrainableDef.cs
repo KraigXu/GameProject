@@ -9,7 +9,7 @@ namespace RimWorld
 	public class TrainableDef : Def
 	{
 		
-		// (get) Token: 0x0600374D RID: 14157 RVA: 0x001296ED File Offset: 0x001278ED
+		
 		public Texture2D Icon
 		{
 			get
@@ -42,9 +42,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.difficulty < 0f)

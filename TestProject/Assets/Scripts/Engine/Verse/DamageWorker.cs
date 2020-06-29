@@ -279,7 +279,7 @@ namespace Verse
 		public class DamageResult
 		{
 			
-			// (get) Token: 0x06007469 RID: 29801 RVA: 0x0028495B File Offset: 0x00282B5B
+			
 			public BodyPartRecord LastHitPart
 			{
 				get

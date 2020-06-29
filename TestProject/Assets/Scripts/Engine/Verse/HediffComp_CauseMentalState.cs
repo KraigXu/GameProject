@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_CauseMentalState : HediffComp
 	{
 		
-		// (get) Token: 0x06001020 RID: 4128 RVA: 0x0005CD6C File Offset: 0x0005AF6C
+		
 		public HediffCompProperties_CauseMentalState Props
 		{
 			get

@@ -10,7 +10,7 @@ namespace Verse
 	public class Building : ThingWithComps
 	{
 		
-		// (get) Token: 0x0600148D RID: 5261 RVA: 0x000794FD File Offset: 0x000776FD
+		
 		public CompPower PowerComp
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600148E RID: 5262 RVA: 0x00079508 File Offset: 0x00077708
+		
 		public virtual bool TransmitsPowerNow
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (set) Token: 0x0600148F RID: 5263 RVA: 0x0007952C File Offset: 0x0007772C
+		
 		public override int HitPoints
 		{
 			set

@@ -435,7 +435,7 @@ namespace Verse.Grammar
 		private class RuleEntry
 		{
 			
-			// (get) Token: 0x060085C7 RID: 34247 RVA: 0x002B3475 File Offset: 0x002B1675
+			
 			public float SelectionWeight
 			{
 				get
@@ -445,7 +445,7 @@ namespace Verse.Grammar
 			}
 
 			
-			// (get) Token: 0x060085C8 RID: 34248 RVA: 0x002B3498 File Offset: 0x002B1698
+			
 			public float Priority
 			{
 				get

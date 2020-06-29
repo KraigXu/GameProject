@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 
 namespace Verse
 {
@@ -78,7 +78,7 @@ namespace Verse
 						{
 							IEnumerable enumerable = (IEnumerable)value;
 							int num = 0;
-							using (IEnumerator enumerator2 = enumerable.GetEnumerator())
+							IEnumerator enumerator2 = enumerable.GetEnumerator();
 							{
 								while (enumerator2.MoveNext())
 								{
@@ -155,7 +155,7 @@ namespace Verse
 		}
 
 		
-		// (Invoke) Token: 0x060076B3 RID: 30387
+		
 		public delegate void PossibleDefInjectionTraverser(string suggestedPath, string normalizedPath, bool isCollection, string currentValue, IEnumerable<string> currentValueCollection, bool translationAllowed, bool fullListTranslationAllowed, FieldInfo fieldInfo, Def def);
 	}
 }

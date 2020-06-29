@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_ApplyTechprint : JobDriver
 	{
 		
-		// (get) Token: 0x06002C3A RID: 11322 RVA: 0x000FD228 File Offset: 0x000FB428
+		
 		protected Building_ResearchBench ResearchBench
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C3B RID: 11323 RVA: 0x000FD250 File Offset: 0x000FB450
+		
 		protected Thing Techprint
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C3C RID: 11324 RVA: 0x000FD271 File Offset: 0x000FB471
+		
 		protected CompTechprint TechprintComp
 		{
 			get

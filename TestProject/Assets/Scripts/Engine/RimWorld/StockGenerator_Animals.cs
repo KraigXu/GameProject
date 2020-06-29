@@ -21,16 +21,13 @@ namespace RimWorld
 			{
 				IEnumerable<PawnKindDef> allDefs = DefDatabase<PawnKindDef>.AllDefs;
 				Func<PawnKindDef, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__0 = ((PawnKindDef k) => !kinds.Contains(k) && this.PawnKindAllowed(k, forTile)));
+					predicate = ( ((PawnKindDef k) => !kinds.Contains(k) && this.PawnKindAllowed(k, forTile)));
 				}
 				IEnumerable<PawnKindDef> source = allDefs.Where(predicate);
-				Func<PawnKindDef, float> weightSelector;
-				if ((weightSelector ) == null)
-				{
-					weightSelector = (9__1 = ((PawnKindDef k) => this.SelectionChance(k)));
-				}
+				Func<PawnKindDef, float> weightSelector = (((PawnKindDef k) => this.SelectionChance(k)));
+
 				PawnKindDef item;
 				if (!source.TryRandomElementByWeight(weightSelector, out item))
 				{
@@ -105,11 +102,11 @@ namespace RimWorld
 			new StockGenerator_Animals
 			{
 				tradeTagsSell = new List<string>(),
-				tradeTagsSell = 
-				{
-					"AnimalCommon",
-					"AnimalUncommon"
-				}
+				//tradeTagsSell = 
+				//{
+				//	"AnimalCommon",
+				//	"AnimalUncommon"
+				//}
 			}.LogAnimalChances();
 		}
 

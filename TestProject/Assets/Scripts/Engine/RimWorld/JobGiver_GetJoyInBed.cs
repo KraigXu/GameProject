@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobGiver_GetJoyInBed : JobGiver_GetJoy
 	{
 		
-		// (get) Token: 0x06002F32 RID: 12082 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanDoDuringMedicalRest
 		{
 			get

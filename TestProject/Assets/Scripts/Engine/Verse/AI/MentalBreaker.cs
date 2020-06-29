@@ -11,7 +11,7 @@ namespace Verse.AI
 	public class MentalBreaker : IExposable
 	{
 		
-		// (get) Token: 0x06002661 RID: 9825 RVA: 0x000E23E8 File Offset: 0x000E05E8
+		
 		public float BreakThresholdExtreme
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002662 RID: 9826 RVA: 0x000E2401 File Offset: 0x000E0601
+		
 		public float BreakThresholdMajor
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002663 RID: 9827 RVA: 0x000E241A File Offset: 0x000E061A
+		
 		public float BreakThresholdMinor
 		{
 			get
@@ -41,7 +41,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002664 RID: 9828 RVA: 0x000E242D File Offset: 0x000E062D
+		
 		private bool CanDoRandomMentalBreaks
 		{
 			get
@@ -51,7 +51,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002665 RID: 9829 RVA: 0x000E245D File Offset: 0x000E065D
+		
 		public bool BreakExtremeIsImminent
 		{
 			get
@@ -61,7 +61,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002666 RID: 9830 RVA: 0x000E247C File Offset: 0x000E067C
+		
 		public bool BreakMajorIsImminent
 		{
 			get
@@ -71,7 +71,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002667 RID: 9831 RVA: 0x000E24A3 File Offset: 0x000E06A3
+		
 		public bool BreakMinorIsImminent
 		{
 			get
@@ -81,7 +81,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002668 RID: 9832 RVA: 0x000E24D2 File Offset: 0x000E06D2
+		
 		public bool BreakExtremeIsApproaching
 		{
 			get
@@ -91,7 +91,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002669 RID: 9833 RVA: 0x000E24FF File Offset: 0x000E06FF
+		
 		public float CurMood
 		{
 			get
@@ -105,7 +105,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600266A RID: 9834 RVA: 0x000E252E File Offset: 0x000E072E
+		
 		private IEnumerable<MentalBreakDef> CurrentPossibleMoodBreaks
 		{
 			get
@@ -117,9 +117,9 @@ namespace Verse.AI
 				{
 					IEnumerable<MentalBreakDef> allDefsListForReading = DefDatabase<MentalBreakDef>.AllDefsListForReading;
 					Func<MentalBreakDef, bool> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__0 = ((MentalBreakDef d) => d.intensity == intensity && d.Worker.BreakCanOccur(this.pawn)));
+						predicate = ( ((MentalBreakDef d) => d.intensity == intensity && d.Worker.BreakCanOccur(this.pawn)));
 					}
 					IEnumerable<MentalBreakDef> enumerable = allDefsListForReading.Where(predicate);
 					bool flag = false;
@@ -141,7 +141,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600266B RID: 9835 RVA: 0x000E253E File Offset: 0x000E073E
+		
 		private MentalBreakIntensity CurrentDesiredMoodBreakIntensity
 		{
 			get

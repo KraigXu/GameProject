@@ -42,9 +42,9 @@ namespace RimWorld
 				{
 					IEnumerable<PawnKindDef> source = list2;
 					Func<PawnKindDef, bool> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__2 = ((PawnKindDef def) => def.combatPower <= pawnPointsLeft));
+						predicate = ( ((PawnKindDef def) => def.combatPower <= pawnPointsLeft));
 					}
 					PawnKindDef pawnKindDef;
 					if (!source.Where(predicate).TryRandomElement(out pawnKindDef))
@@ -56,7 +56,7 @@ namespace RimWorld
 				}
 				num -= num2 - pawnPointsLeft;
 			}
-			Sketch buildingsSketch = SketchGen.Generate(SketchResolverDefOf.MechCluster, new ResolveParams
+			Sketch buildingsSketch = SketchGenCore.Generate(SketchResolverDefOf.MechCluster, new ResolveParams
 			{
 				points = new float?(num),
 				totalPoints = new float?(points),
@@ -73,24 +73,24 @@ namespace RimWorld
 					MechClusterSketch.Mech pawn = list[i];
 					IEnumerable<IntVec3> source2 = buildingsSketch.OccupiedRect;
 					Func<IntVec3, bool> predicate2;
-					if ((predicate2 ) == null)
+					if ((predicate2=default ) == null)
 					{
-						predicate2 = (9__3 = ((IntVec3 c) => !buildingsSketch.ThingsAt(c).Any<SketchThing>() && !pawnUsedSpots.Contains(c)));
+						predicate2 = ( ((IntVec3 c) => !buildingsSketch.ThingsAt(c).Any<SketchThing>() && !pawnUsedSpots.Contains(c)));
 					}
 					IntVec3 intVec;
 					if (!source2.Where(predicate2).TryRandomElement(out intVec))
 					{
 						CellRect cellRect = buildingsSketch.OccupiedRect;
 						IEnumerable<IntVec3> source3;
-						Func<IntVec3, bool> predicate3;
+						Func<IntVec3, bool> predicate3=default;
 						
 						do
 						{
 							cellRect = cellRect.ExpandedBy(1);
 							source3 = cellRect;
-							if ((predicate3 ) == null)
+							if ((predicate2=default ) == null)
 							{
-								predicate3 = (9__4 = ((IntVec3 x) => !buildingsSketch.WouldCollide(pawn.kindDef.race, x, Rot4.North) && !pawnUsedSpots.Contains(x)));
+								predicate3 = ( ((IntVec3 x) => !buildingsSketch.WouldCollide(pawn.kindDef.race, x, Rot4.North) && !pawnUsedSpots.Contains(x)));
 							}
 						}
 						while (!source3.Where(predicate3).TryRandomElement(out intVec));
@@ -244,9 +244,9 @@ namespace RimWorld
 			{
 				IEnumerable<ThingDef> source = list2;
 				Func<ThingDef, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__6 = ((ThingDef x) => x.building.combatPower <= pointsLeft && x.building.buildingTags.Contains("MechClusterCombatThreat")));
+					predicate = ( ((ThingDef x) => x.building.combatPower <= pointsLeft && x.building.buildingTags.Contains("MechClusterCombatThreat")));
 				}
 				if (!source.Where(predicate).TryRandomElement(out thingDef2))
 				{

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompHatcher : ThingComp
 	{
 		
-		// (get) Token: 0x06005177 RID: 20855 RVA: 0x001B4BD1 File Offset: 0x001B2DD1
+		
 		public CompProperties_Hatcher Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005178 RID: 20856 RVA: 0x001B4BDE File Offset: 0x001B2DDE
+		
 		private CompTemperatureRuinable FreezerComp
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005179 RID: 20857 RVA: 0x001B4BEB File Offset: 0x001B2DEB
+		
 		public bool TemperatureDamaged
 		{
 			get

@@ -10,7 +10,7 @@ namespace Verse.AI
 	public class Pawn_JobTracker : IExposable
 	{
 		
-		// (get) Token: 0x060027D3 RID: 10195 RVA: 0x000E9E84 File Offset: 0x000E8084
+		
 		public bool HandlingFacing
 		{
 			get
@@ -689,7 +689,7 @@ namespace Verse.AI
 				}
 			}
 			flag = true;
-			goto IL_50;
+		//	goto IL_50;
 		}
 
 		

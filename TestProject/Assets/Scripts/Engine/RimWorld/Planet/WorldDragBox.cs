@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class WorldDragBox
 	{
 		
-		// (get) Token: 0x06007025 RID: 28709 RVA: 0x002722A9 File Offset: 0x002704A9
+		
 		public float LeftX
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007026 RID: 28710 RVA: 0x002722C5 File Offset: 0x002704C5
+		
 		public float RightX
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007027 RID: 28711 RVA: 0x002722E1 File Offset: 0x002704E1
+		
 		public float BotZ
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007028 RID: 28712 RVA: 0x002722FD File Offset: 0x002704FD
+		
 		public float TopZ
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007029 RID: 28713 RVA: 0x00272319 File Offset: 0x00270519
+		
 		public Rect ScreenRect
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600702A RID: 28714 RVA: 0x00272348 File Offset: 0x00270548
+		
 		public float Diagonal
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600702B RID: 28715 RVA: 0x00272381 File Offset: 0x00270581
+		
 		public bool IsValid
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600702C RID: 28716 RVA: 0x00272390 File Offset: 0x00270590
+		
 		public bool IsValidAndActive
 		{
 			get

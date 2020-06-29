@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		public override void Resolve(ResolveParams rp)
 		{
 			ThingDef ship_Beam = ThingDefOf.Ship_Beam;
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (rp.thingRot == null && rp.thrustAxis == null)
 			{
 				rp.thrustAxis = new Rot4?(Rot4.Random);
@@ -77,7 +77,7 @@ namespace RimWorld.BaseGen
 			}
 			if (rp.allowPlacementOffEdge ?? true)
 			{
-				BaseGen.symbolStack.Push("ship_populate", rp, null);
+				BaseGenCore.symbolStack.Push("ship_populate", rp, null);
 			}
 			CellRect rect;
 			Rot4 value;
@@ -107,7 +107,7 @@ namespace RimWorld.BaseGen
 				resolveParams.rect = rect;
 				resolveParams.thingRot = new Rot4?(value);
 				resolveParams.allowPlacementOffEdge = new bool?(false);
-				BaseGen.symbolStack.Push("ship_spine", resolveParams, null);
+				BaseGenCore.symbolStack.Push("ship_spine", resolveParams, null);
 			}
 			if ((rp.allowPlacementOffEdge ?? true) || Rand.Value < 0.3f)
 			{
@@ -115,11 +115,11 @@ namespace RimWorld.BaseGen
 				resolveParams2.rect = rect2;
 				resolveParams2.thingRot = new Rot4?(value2);
 				resolveParams2.allowPlacementOffEdge = new bool?(false);
-				BaseGen.symbolStack.Push("ship_spine", resolveParams2, null);
+				BaseGenCore.symbolStack.Push("ship_spine", resolveParams2, null);
 			}
 			ResolveParams resolveParams3 = rp;
 			resolveParams3.floorDef = TerrainDefOf.Concrete;
-			BaseGen.symbolStack.Push("floor", resolveParams3, null);
+			BaseGenCore.symbolStack.Push("floor", resolveParams3, null);
 		}
 	}
 }

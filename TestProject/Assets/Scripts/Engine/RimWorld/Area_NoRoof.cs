@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Area_NoRoof : Area
 	{
 		
-		// (get) Token: 0x06003DB8 RID: 15800 RVA: 0x00145E97 File Offset: 0x00144097
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DB9 RID: 15801 RVA: 0x00145EA8 File Offset: 0x001440A8
+		
 		public override Color Color
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DBA RID: 15802 RVA: 0x00145EBE File Offset: 0x001440BE
+		
 		public override int ListPriority
 		{
 			get

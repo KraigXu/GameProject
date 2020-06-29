@@ -10,7 +10,7 @@ namespace Verse
 	public class MentalStateDef : Def
 	{
 		
-		// (get) Token: 0x060005AC RID: 1452 RVA: 0x0001BD9E File Offset: 0x00019F9E
+		
 		public MentalStateWorker Worker
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005AD RID: 1453 RVA: 0x0001BDDE File Offset: 0x00019FDE
+		
 		public bool IsAggro
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060005AE RID: 1454 RVA: 0x0001BDEC File Offset: 0x00019FEC
+		
 		public bool IsExtreme
 		{
 			get

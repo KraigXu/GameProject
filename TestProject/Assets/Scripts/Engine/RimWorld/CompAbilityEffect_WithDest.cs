@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class CompAbilityEffect_WithDest : CompAbilityEffect, ITargetingSource
 	{
 		
-		// (get) Token: 0x060041C3 RID: 16835 RVA: 0x0015F918 File Offset: 0x0015DB18
+		
 		public new CompProperties_EffectWithDest Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C4 RID: 16836 RVA: 0x0015F925 File Offset: 0x0015DB25
+		
 		public TargetingParameters targetParams
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C5 RID: 16837 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool MultiSelect
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C6 RID: 16838 RVA: 0x0015F933 File Offset: 0x0015DB33
+		
 		public Thing Caster
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C7 RID: 16839 RVA: 0x0015F933 File Offset: 0x0015DB33
+		
 		public Pawn CasterPawn
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C8 RID: 16840 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public Verb GetVerb
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041C9 RID: 16841 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool CasterIsPawn
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041CA RID: 16842 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool IsMeleeAttack
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041CB RID: 16843 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool Targetable
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041CC RID: 16844 RVA: 0x0015F940 File Offset: 0x0015DB40
+		
 		public Texture2D UIIcon
 		{
 			get
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041CD RID: 16845 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public ITargetingSource DestinationSelector
 		{
 			get

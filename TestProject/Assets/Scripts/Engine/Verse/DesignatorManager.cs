@@ -9,7 +9,7 @@ namespace Verse
 	public class DesignatorManager
 	{
 		
-		// (get) Token: 0x060017F6 RID: 6134 RVA: 0x00088ABD File Offset: 0x00086CBD
+		
 		public Designator SelectedDesignator
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017F7 RID: 6135 RVA: 0x00088AC5 File Offset: 0x00086CC5
+		
 		public DesignationDragger Dragger
 		{
 			get

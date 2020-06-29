@@ -7,7 +7,7 @@ namespace Verse
 	public static class SimplePool<T> where T : new()
 	{
 		
-		// (get) Token: 0x06000376 RID: 886 RVA: 0x000126A6 File Offset: 0x000108A6
+		
 		public static int FreeItemsCount
 		{
 			get

@@ -14,7 +14,7 @@ namespace RimWorld
 	public class MonumentMarker : Thing
 	{
 		
-		// (get) Token: 0x06004D83 RID: 19843 RVA: 0x001A03AC File Offset: 0x0019E5AC
+		
 		public override CellRect? CustomRectForSelector
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D84 RID: 19844 RVA: 0x001A03EC File Offset: 0x0019E5EC
+		
 		public bool AllDone
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D85 RID: 19845 RVA: 0x001A0470 File Offset: 0x0019E670
+		
 		public IntVec2 Size
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D86 RID: 19846 RVA: 0x001A0480 File Offset: 0x0019E680
+		
 		public Thing FirstDisallowedBuilding
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D87 RID: 19847 RVA: 0x001A05BF File Offset: 0x0019E7BF
+		
 		public bool AnyDisallowedBuilding
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D88 RID: 19848 RVA: 0x001A05CC File Offset: 0x0019E7CC
+		
 		public SketchEntity FirstEntityWithMissingBlueprint
 		{
 			get

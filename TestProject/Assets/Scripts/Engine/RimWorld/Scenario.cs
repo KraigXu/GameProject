@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Scenario : IExposable, WorkshopUploadable
 	{
 		
-		// (get) Token: 0x06004923 RID: 18723 RVA: 0x0018D67D File Offset: 0x0018B87D
+		
 		public IEnumerable<System.Version> SupportedVersions
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004924 RID: 18724 RVA: 0x0018D686 File Offset: 0x0018B886
+		
 		public FileInfo File
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004925 RID: 18725 RVA: 0x0018D698 File Offset: 0x0018B898
+		
 		public IEnumerable<ScenPart> AllParts
 		{
 			get
@@ -51,8 +51,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004926 RID: 18726 RVA: 0x0018D6A8 File Offset: 0x0018B8A8
-		// (set) Token: 0x06004927 RID: 18727 RVA: 0x0018D6C9 File Offset: 0x0018B8C9
+		
+		
 		public ScenarioCategory Category
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 			{
 				foreach (string text in scenPart.ConfigErrors())
 				{
-					yield return text;
+					
 				}
 				IEnumerator<string> enumerator2 = null;
 			}
@@ -212,7 +212,7 @@ namespace RimWorld
 		
 		public bool AllowPlayerStartingPawn(Pawn pawn, bool tryingToRedress, PawnGenerationRequest req)
 		{
-			using (IEnumerator<ScenPart> enumerator = this.AllParts.GetEnumerator())
+			IEnumerator<ScenPart> enumerator = this.AllParts.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

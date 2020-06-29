@@ -12,7 +12,7 @@ namespace Verse
 	public class LoadedLanguage
 	{
 		
-		// (get) Token: 0x0600090C RID: 2316 RVA: 0x0002F91B File Offset: 0x0002DB1B
+		
 		public string DisplayName
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600090D RID: 2317 RVA: 0x0002F928 File Offset: 0x0002DB28
+		
 		public string FriendlyNameNative
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600090E RID: 2318 RVA: 0x0002F956 File Offset: 0x0002DB56
+		
 		public string FriendlyNameEnglish
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600090F RID: 2319 RVA: 0x0002F984 File Offset: 0x0002DB84
+		
 		public IEnumerable<Tuple<VirtualDirectory, ModContentPack, string>> AllDirectories
 		{
 			get
@@ -75,7 +75,7 @@ namespace Verse
 						}
 					}
 					List<string>.Enumerator enumerator2 = default(List<string>.Enumerator);
-					mod = null;
+					
 				}
 				IEnumerator<ModContentPack> enumerator = null;
 				yield break;
@@ -84,7 +84,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000910 RID: 2320 RVA: 0x0002F994 File Offset: 0x0002DB94
+		
 		public LanguageWorker Worker
 		{
 			get
@@ -98,7 +98,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000911 RID: 2321 RVA: 0x0002F9BF File Offset: 0x0002DBBF
+		
 		public string LegacyFolderName
 		{
 			get
@@ -348,7 +348,7 @@ namespace Verse
 			List<string> list2;
 			if (this.stringFiles.TryGetValue(text2, out list2))
 			{
-				using (List<string>.Enumerator enumerator2 = list.GetEnumerator())
+				List<string>.Enumerator enumerator2 = list.GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{
@@ -436,7 +436,7 @@ namespace Verse
 		
 		private void EnsureAllDefTypesHaveDefInjectionPackage()
 		{
-			using (IEnumerator<Type> enumerator = GenDefDatabase.AllDefTypesWithDatabases().GetEnumerator())
+			IEnumerator<Type> enumerator = GenDefDatabase.AllDefTypesWithDatabases().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

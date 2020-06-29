@@ -249,9 +249,9 @@ namespace RimWorld
 			{
 				IEnumerable<ThingStuffPair> source = PawnApparelGenerator.usableApparel;
 				Func<ThingStuffPair, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__4 = ((ThingStuffPair pa) => PawnApparelGenerator.CanUseStuff(pawn, pa)));
+					predicate = ( ((ThingStuffPair pa) => PawnApparelGenerator.CanUseStuff(pawn, pa)));
 				}
 				ThingStuffPair pair3;
 				if (!source.Where(predicate).TryRandomElementByWeight((ThingStuffPair pa) => pa.Commonality, out pair3))
@@ -525,7 +525,7 @@ namespace RimWorld
 		private class PossibleApparelSet
 		{
 			
-			// (get) Token: 0x06009896 RID: 39062 RVA: 0x002EDA9C File Offset: 0x002EBC9C
+			
 			public int Count
 			{
 				get
@@ -535,7 +535,7 @@ namespace RimWorld
 			}
 
 			
-			// (get) Token: 0x06009897 RID: 39063 RVA: 0x002EDAA9 File Offset: 0x002EBCA9
+			
 			public float TotalPrice
 			{
 				get
@@ -545,7 +545,7 @@ namespace RimWorld
 			}
 
 			
-			// (get) Token: 0x06009898 RID: 39064 RVA: 0x002EDAD5 File Offset: 0x002EBCD5
+			
 			public float TotalInsulationCold
 			{
 				get
@@ -555,7 +555,7 @@ namespace RimWorld
 			}
 
 			
-			// (get) Token: 0x06009899 RID: 39065 RVA: 0x002EDB01 File Offset: 0x002EBD01
+			
 			public List<ThingStuffPair> ApparelsForReading
 			{
 				get

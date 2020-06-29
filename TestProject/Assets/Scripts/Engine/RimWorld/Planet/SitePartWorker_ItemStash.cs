@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse;
 using Verse.Grammar;
 
@@ -26,7 +26,7 @@ namespace RimWorld.Planet
 				if (enumerable != null)
 				{
 					list = new List<Thing>();
-					using (IEnumerator<ThingDef> enumerator = enumerable.GetEnumerator())
+					IEnumerator<ThingDef> enumerator = enumerable.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

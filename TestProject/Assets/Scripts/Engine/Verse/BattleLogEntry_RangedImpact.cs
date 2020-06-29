@@ -10,7 +10,7 @@ namespace Verse
 	public class BattleLogEntry_RangedImpact : LogEntry_DamageResult
 	{
 		
-		// (get) Token: 0x0600075B RID: 1883 RVA: 0x00021CD8 File Offset: 0x0001FED8
+		
 		private string InitiatorName
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600075C RID: 1884 RVA: 0x00021D07 File Offset: 0x0001FF07
+		
 		private string RecipientName
 		{
 			get

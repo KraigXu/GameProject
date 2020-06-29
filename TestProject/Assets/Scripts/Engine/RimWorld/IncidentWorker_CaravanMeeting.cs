@@ -70,7 +70,7 @@ namespace RimWorld
 			//	Action action;
 			//	if ((action ) == null)
 			//	{
-			//		action = (9__5 = delegate
+			//		action = ( delegate
 			//		{
 			//			Pawn t = caravan.PawnsListForReading[0];
 			//			faction.TrySetRelationKind(Faction.OfPlayer, FactionRelationKind.Hostile, true, "GoodwillChangedReason_AttackedCaravan".Translate(), new GlobalTargetInfo?(t));

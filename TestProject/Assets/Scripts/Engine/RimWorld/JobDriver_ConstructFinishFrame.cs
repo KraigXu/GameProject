@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_ConstructFinishFrame : JobDriver
 	{
 		
-		// (get) Token: 0x06002B6D RID: 11117 RVA: 0x000FB20C File Offset: 0x000F940C
+		
 		private Frame Frame
 		{
 			get

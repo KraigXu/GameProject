@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompCanBeDormant : ThingComp
 	{
 		
-		// (get) Token: 0x060050BB RID: 20667 RVA: 0x001B1D1A File Offset: 0x001AFF1A
+		
 		private CompProperties_CanBeDormant Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050BC RID: 20668 RVA: 0x001B1D27 File Offset: 0x001AFF27
+		
 		private bool WaitingToWakeUp
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050BD RID: 20669 RVA: 0x001B1D39 File Offset: 0x001AFF39
+		
 		public bool Awake
 		{
 			get
@@ -181,19 +181,19 @@ namespace RimWorld
 		}
 
 		
-		public override void Notify_SignalReceived(Signal signal)
-		{
-			if (string.IsNullOrEmpty(this.wakeUpSignalTag) || this.Awake)
-			{
-				return;
-			}
-			Thing thing;
-			Faction faction;
-			if ((signal.tag == this.wakeUpSignalTag || (this.wakeUpSignalTags != null && this.wakeUpSignalTags.Contains(signal.tag))) && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= this.Props.maxDistAwakenByOther && (!signal.args.TryGetArg<Faction>("FACTION", out faction) || faction == null || faction == this.parent.Faction) && (this.Props.canWakeUpFogged || !this.parent.Fogged()) && !this.WaitingToWakeUp)
-			{
-				this.WakeUpWithDelay();
-			}
-		}
+		//public override void Notify_SignalReceived(Signal signal)
+		//{
+		//	if (string.IsNullOrEmpty(this.wakeUpSignalTag) || this.Awake)
+		//	{
+		//		return;
+		//	}
+		//	Thing thing;
+		//	Faction faction;
+		//	if ((signal.tag == this.wakeUpSignalTag || (this.wakeUpSignalTags != null && this.wakeUpSignalTags.Contains(signal.tag))) && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= this.Props.maxDistAwakenByOther && (!signal.args.TryGetArg<Faction>("FACTION", out faction) || faction == null || faction == this.parent.Faction) && (this.Props.canWakeUpFogged || !this.parent.Fogged()) && !this.WaitingToWakeUp)
+		//	{
+		//		this.WakeUpWithDelay();
+		//	}
+		//}
 
 		
 		public override void PostExposeData()

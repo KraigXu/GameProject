@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class JobQueue : IExposable, IEnumerable<QueuedJob>, IEnumerable
 	{
 		
-		// (get) Token: 0x06002645 RID: 9797 RVA: 0x000E1BAC File Offset: 0x000DFDAC
+		
 		public int Count
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002647 RID: 9799 RVA: 0x000E1BC8 File Offset: 0x000DFDC8
+		
 		public bool AnyPlayerForced
 		{
 			get

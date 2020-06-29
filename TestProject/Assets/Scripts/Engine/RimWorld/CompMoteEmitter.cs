@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompMoteEmitter : ThingComp
 	{
 		
-		// (get) Token: 0x060051FF RID: 20991 RVA: 0x001B6626 File Offset: 0x001B4826
+		
 		private CompProperties_MoteEmitter Props
 		{
 			get

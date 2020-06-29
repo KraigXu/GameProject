@@ -85,34 +85,21 @@ namespace RimWorld.Planet
 		public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(CompLaunchable representative, IEnumerable<IThingHolder> pods, Site site)
 		{
 			
-			Func<FloatMenuAcceptanceReport> acceptanceReportGetter;
-			if ((acceptanceReportGetter ) == null)
-			{
-				acceptanceReportGetter = (9__0 = (() => TransportPodsArrivalAction_VisitSite.CanVisit(pods, site)));
-			}
-			
-			Func<TransportPodsArrivalAction_VisitSite> arrivalActionGetter;
-			if ((arrivalActionGetter ) == null)
-			{
-				arrivalActionGetter = (9__1 = (() => new TransportPodsArrivalAction_VisitSite(site, PawnsArrivalModeDefOf.EdgeDrop)));
-			}
+			Func<FloatMenuAcceptanceReport> acceptanceReportGetter = ((() => TransportPodsArrivalAction_VisitSite.CanVisit(pods, site)));
+
+			Func<TransportPodsArrivalAction_VisitSite> arrivalActionGetter = ((() => new TransportPodsArrivalAction_VisitSite(site, PawnsArrivalModeDefOf.EdgeDrop)));
+
 			foreach (FloatMenuOption floatMenuOption in TransportPodsArrivalActionUtility.GetFloatMenuOptions<TransportPodsArrivalAction_VisitSite>(acceptanceReportGetter, arrivalActionGetter, "DropAtEdge".Translate(), representative, site.Tile, null))
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			
-			Func<FloatMenuAcceptanceReport> acceptanceReportGetter2;
-			if ((acceptanceReportGetter2 ) == null)
-			{
-				acceptanceReportGetter2 = (9__2 = (() => TransportPodsArrivalAction_VisitSite.CanVisit(pods, site)));
-			}
+			Func<FloatMenuAcceptanceReport> acceptanceReportGetter2 = ((() => TransportPodsArrivalAction_VisitSite.CanVisit(pods, site)));
+
 			
-			Func<TransportPodsArrivalAction_VisitSite> arrivalActionGetter2;
-			if ((arrivalActionGetter2 ) == null)
-			{
-				arrivalActionGetter2 = (9__3 = (() => new TransportPodsArrivalAction_VisitSite(site, PawnsArrivalModeDefOf.CenterDrop)));
-			}
+			Func<TransportPodsArrivalAction_VisitSite> arrivalActionGetter2 = ((() => new TransportPodsArrivalAction_VisitSite(site, PawnsArrivalModeDefOf.CenterDrop)));
+
 			foreach (FloatMenuOption floatMenuOption2 in TransportPodsArrivalActionUtility.GetFloatMenuOptions<TransportPodsArrivalAction_VisitSite>(acceptanceReportGetter2, arrivalActionGetter2, "DropInCenter".Translate(), representative, site.Tile, null))
 			{
 				yield return floatMenuOption2;

@@ -7,7 +7,7 @@ namespace Verse.AI.Group
 	public class LordToil_DefendPoint : LordToil
 	{
 		
-		// (get) Token: 0x06002994 RID: 10644 RVA: 0x000F4B13 File Offset: 0x000F2D13
+		
 		protected LordToilData_DefendPoint Data
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002995 RID: 10645 RVA: 0x000F4B20 File Offset: 0x000F2D20
+		
 		public override IntVec3 FlagLoc
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002996 RID: 10646 RVA: 0x000F4B2D File Offset: 0x000F2D2D
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get

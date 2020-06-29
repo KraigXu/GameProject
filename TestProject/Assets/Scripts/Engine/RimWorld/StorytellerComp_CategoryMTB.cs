@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_CategoryMTB : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D17 RID: 15639 RVA: 0x00143749 File Offset: 0x00141949
+		
 		protected StorytellerCompProperties_CategoryMTB Props
 		{
 			get

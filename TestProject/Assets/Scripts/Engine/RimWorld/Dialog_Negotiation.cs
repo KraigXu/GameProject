@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Dialog_Negotiation : Dialog_NodeTree
 	{
 		
-		// (get) Token: 0x0600593D RID: 22845 RVA: 0x001DC964 File Offset: 0x001DAB64
+		
 		public override Vector2 InitialSize
 		{
 			get

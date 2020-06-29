@@ -11,7 +11,7 @@ namespace RimWorld
 	public class WorkGiver_DoBill : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003091 RID: 12433 RVA: 0x0010FDBF File Offset: 0x0010DFBF
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003093 RID: 12435 RVA: 0x00110378 File Offset: 0x0010E578
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -85,17 +85,13 @@ namespace RimWorld
 		
 		private static UnfinishedThing ClosestUnfinishedThingForBill(Pawn pawn, Bill_ProductionWithUft bill)
 		{
-			Predicate<Thing> 9__1;
+
 			Predicate<Thing> validator = delegate(Thing t)
 			{
 				if (!t.IsForbidden(pawn) && ((UnfinishedThing)t).Recipe == bill.recipe && ((UnfinishedThing)t).Creator == pawn)
 				{
 					List<Thing> ingredients = ((UnfinishedThing)t).ingredients;
-					Predicate<Thing> match;
-					if ((match ) == null)
-					{
-						match = (9__1 = ((Thing x) => bill.IsFixedOrAllowedIngredient(x.def)));
-					}
+					Predicate<Thing> match = (((Thing x) => bill.IsFixedOrAllowedIngredient(x.def))); ;
 					if (ingredients.TrueForAll(match))
 					{
 						return pawn.CanReserve(t, 1, -1, null, false);
@@ -343,9 +339,7 @@ namespace RimWorld
 						WorkGiver_DoBill.processedThings.Add(thing);
 					}
 				}
-				int regionsProcessed;
 				regionsProcessed++;
-				regionsProcessed = regionsProcessed;
 				if (WorkGiver_DoBill.newRelevantThings.Count > 0 && regionsProcessed > adjacentRegionsAvailable)
 				{
 					WorkGiver_DoBill.relevantThings.AddRange(WorkGiver_DoBill.newRelevantThings);
@@ -580,7 +574,7 @@ namespace RimWorld
 		private class DefCountList
 		{
 			
-			// (get) Token: 0x06008DC5 RID: 36293 RVA: 0x002CFA8C File Offset: 0x002CDC8C
+			
 			public int Count
 			{
 				get

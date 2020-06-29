@@ -11,7 +11,7 @@ namespace RimWorld
 	public class ITab_Pawn_FormingCaravan : ITab
 	{
 		
-		// (get) Token: 0x06005B94 RID: 23444 RVA: 0x001F87EF File Offset: 0x001F69EF
+		
 		public override bool IsVisible
 		{
 			get

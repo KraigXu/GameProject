@@ -10,7 +10,7 @@ namespace RimWorld
 	public sealed class WeatherManager : IExposable
 	{
 		
-		// (get) Token: 0x060040DA RID: 16602 RVA: 0x0015B650 File Offset: 0x00159850
+		
 		public float TransitionLerpFactor
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040DB RID: 16603 RVA: 0x0015B67A File Offset: 0x0015987A
+		
 		public float RainRate
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040DC RID: 16604 RVA: 0x0015B69D File Offset: 0x0015989D
+		
 		public float SnowRate
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040DD RID: 16605 RVA: 0x0015B6C0 File Offset: 0x001598C0
+		
 		public float CurWindSpeedFactor
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040DE RID: 16606 RVA: 0x0015B6E3 File Offset: 0x001598E3
+		
 		public float CurWindSpeedOffset
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040DF RID: 16607 RVA: 0x0015B706 File Offset: 0x00159906
+		
 		public float CurMoveSpeedMultiplier
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040E0 RID: 16608 RVA: 0x0015B729 File Offset: 0x00159929
+		
 		public float CurWeatherAccuracyMultiplier
 		{
 			get
@@ -85,7 +85,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040E1 RID: 16609 RVA: 0x0015B74C File Offset: 0x0015994C
+		
 		public WeatherDef CurWeatherPerceived
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040E2 RID: 16610 RVA: 0x0015B7D9 File Offset: 0x001599D9
+		
 		public WeatherDef CurWeatherLerped
 		{
 			get

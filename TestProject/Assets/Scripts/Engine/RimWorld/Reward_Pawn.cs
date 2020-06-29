@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RimWorld.Planet;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse;
 using Verse.Grammar;
 
@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_Pawn : Reward
 	{
 		
-		// (get) Token: 0x0600616D RID: 24941 RVA: 0x0021D1F3 File Offset: 0x0021B3F3
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get
@@ -41,8 +41,8 @@ namespace RimWorld
 		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
-			Slate slate = QuestGen.slate;
-			QuestGen.AddToGeneratedPawns(this.pawn);
+			//Slate slate = QuestGen.slate;
+		//	QuestGen.AddToGeneratedPawns(this.pawn);
 			if (!this.pawn.IsWorldPawn())
 			{
 				Find.WorldPawns.PassToWorld(this.pawn, PawnDiscardDecideMode.Decide);
@@ -51,31 +51,31 @@ namespace RimWorld
 			{
 				yield return new QuestPart_GiveToCaravan
 				{
-					inSignal = slate.Get<string>("inSignal", null, false),
+					//inSignal = slate.Get<string>("inSignal", null, false),
 					Things = Gen.YieldSingle<Pawn>(this.pawn)
 				};
 			}
 			else
 			{
 				QuestPart_PawnsArrive pawnsArrive = new QuestPart_PawnsArrive();
-				pawnsArrive.inSignal = slate.Get<string>("inSignal", null, false);
+				//pawnsArrive.inSignal = slate.Get<string>("inSignal", null, false);
 				pawnsArrive.pawns.Add(this.pawn);
 				pawnsArrive.arrivalMode = ((this.arrivalMode == Reward_Pawn.ArrivalMode.DropPod) ? PawnsArrivalModeDefOf.CenterDrop : PawnsArrivalModeDefOf.EdgeWalkIn);
 				pawnsArrive.joinPlayer = true;
-				pawnsArrive.mapParent = slate.Get<Map>("map", null, false).Parent;
+				//pawnsArrive.mapParent = slate.Get<Map>("map", null, false).Parent;
 				if (!customLetterLabel.NullOrEmpty() || customLetterLabelRules != null)
 				{
-					QuestGen.AddTextRequest("root", delegate(string x)
-					{
-						pawnsArrive.customLetterLabel = x;
-					}, QuestGenUtility.MergeRules(customLetterLabelRules, customLetterLabel, "root"));
+					//QuestGen.AddTextRequest("root", delegate(string x)
+					//{
+					//	pawnsArrive.customLetterLabel = x;
+					//}, QuestGenUtility.MergeRules(customLetterLabelRules, customLetterLabel, "root"));
 				}
 				if (!customLetterText.NullOrEmpty() || customLetterTextRules != null)
 				{
-					QuestGen.AddTextRequest("root", delegate(string x)
-					{
-						pawnsArrive.customLetterText = x;
-					}, QuestGenUtility.MergeRules(customLetterTextRules, customLetterText, "root"));
+					//QuestGen.AddTextRequest("root", delegate(string x)
+					//{
+					//	pawnsArrive.customLetterText = x;
+					//}, QuestGenUtility.MergeRules(customLetterTextRules, customLetterText, "root"));
 				}
 				yield return pawnsArrive;
 			}

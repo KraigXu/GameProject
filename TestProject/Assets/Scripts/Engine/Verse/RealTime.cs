@@ -8,7 +8,7 @@ namespace Verse
 	public static class RealTime
 	{
 		
-		// (get) Token: 0x06002110 RID: 8464 RVA: 0x000CAFCF File Offset: 0x000C91CF
+		
 		public static float LastRealTime
 		{
 			get

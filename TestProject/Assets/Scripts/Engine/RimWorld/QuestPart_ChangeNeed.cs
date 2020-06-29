@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_ChangeNeed : QuestPart
 	{
 		
-		// (get) Token: 0x06003916 RID: 14614 RVA: 0x00130289 File Offset: 0x0012E489
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+		
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.pawn != null)
 				{

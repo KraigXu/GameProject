@@ -9,15 +9,12 @@ namespace RimWorld
 	public class QuestPart_DropMonumentMarkerCopy : QuestPart
 	{
 		
-		// (get) Token: 0x06003955 RID: 14677 RVA: 0x00131149 File Offset: 0x0012F349
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{

@@ -13,7 +13,7 @@ namespace RimWorld
 	public class ITab_Pawn_Gear : ITab
 	{
 		
-		// (get) Token: 0x06005BA6 RID: 23462 RVA: 0x001F9474 File Offset: 0x001F7674
+		
 		public override bool IsVisible
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BA7 RID: 23463 RVA: 0x001F94A4 File Offset: 0x001F76A4
+		
 		private bool CanControl
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BA8 RID: 23464 RVA: 0x001F952D File Offset: 0x001F772D
+		
 		private bool CanControlColonist
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BA9 RID: 23465 RVA: 0x001F9544 File Offset: 0x001F7744
+		
 		private Pawn SelPawnForGear
 		{
 			get

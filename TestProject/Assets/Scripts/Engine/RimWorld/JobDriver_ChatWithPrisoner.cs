@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_ChatWithPrisoner : JobDriver
 	{
 		
-		// (get) Token: 0x06002D64 RID: 11620 RVA: 0x000FA2DB File Offset: 0x000F84DB
+		
 		protected Pawn Talkee
 		{
 			get

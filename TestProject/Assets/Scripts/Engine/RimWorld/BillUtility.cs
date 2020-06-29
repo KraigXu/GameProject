@@ -54,7 +54,7 @@ namespace RimWorld
 					}
 				}
 				enumerator2 = default(List<Thing>.Enumerator);
-				map = null;
+				
 			}
 			List<Map>.Enumerator enumerator = default(List<Map>.Enumerator);
 			foreach (Caravan caravan in Find.WorldObjects.Caravans)

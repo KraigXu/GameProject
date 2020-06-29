@@ -13,7 +13,7 @@ namespace Verse
 	public static class LongEventHandler
 	{
 		
-		// (get) Token: 0x06000304 RID: 772 RVA: 0x0000F67B File Offset: 0x0000D87B
+		
 		public static bool ShouldWaitForEvent
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000305 RID: 773 RVA: 0x0000F6AC File Offset: 0x0000D8AC
+		
 		public static bool AnyEventNowOrWaiting
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000306 RID: 774 RVA: 0x0000F6C4 File Offset: 0x0000D8C4
+		
 		public static bool AnyEventWhichDoesntUseStandardWindowNowOrWaiting
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000307 RID: 775 RVA: 0x0000F70D File Offset: 0x0000D90D
+		
 		public static bool ForcePause
 		{
 			get
@@ -278,11 +278,11 @@ namespace Verse
 		{
 			if (LongEventHandler.eventThread == null)
 			{
-				LongEventHandler.eventThread = new Thread(delegate
-				{
-					LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
-				});
-				LongEventHandler.eventThread.Start();
+				//LongEventHandler.eventThread = new Thread(delegate
+				//{
+				//	LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
+				//});
+				//LongEventHandler.eventThread.Start();
 				return;
 			}
 			if (!LongEventHandler.eventThread.IsAlive)
@@ -483,7 +483,7 @@ namespace Verse
 		private class QueuedLongEvent
 		{
 			
-			// (get) Token: 0x06007389 RID: 29577 RVA: 0x00282437 File Offset: 0x00280637
+			
 			public bool UseAnimatedDots
 			{
 				get
@@ -493,7 +493,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x0600738A RID: 29578 RVA: 0x0028244C File Offset: 0x0028064C
+			
 			public bool ShouldWaitUntilDisplayed
 			{
 				get
@@ -503,7 +503,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x0600738B RID: 29579 RVA: 0x0028246E File Offset: 0x0028066E
+			
 			public bool UseStandardWindow
 			{
 				get

@@ -9,7 +9,7 @@ namespace Verse
 	public abstract class Letter : IArchivable, IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06001B22 RID: 6946 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool CanShowInLetterStack
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B23 RID: 6947 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool CanDismissWithRightClick
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B24 RID: 6948 RVA: 0x000A6948 File Offset: 0x000A4B48
+		
 		public bool ArchivedOnly
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B25 RID: 6949 RVA: 0x000A695D File Offset: 0x000A4B5D
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B26 RID: 6950 RVA: 0x000A6964 File Offset: 0x000A4B64
+		
 		Texture IArchivable.ArchivedIcon
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B27 RID: 6951 RVA: 0x000A6971 File Offset: 0x000A4B71
+		
 		Color IArchivable.ArchivedIconColor
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B28 RID: 6952 RVA: 0x000A697E File Offset: 0x000A4B7E
+		
 		string IArchivable.ArchivedLabel
 		{
 			get
@@ -79,7 +79,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B29 RID: 6953 RVA: 0x000A698B File Offset: 0x000A4B8B
+		
 		string IArchivable.ArchivedTooltip
 		{
 			get
@@ -89,7 +89,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B2A RID: 6954 RVA: 0x000A6993 File Offset: 0x000A4B93
+		
 		int IArchivable.CreatedTicksGame
 		{
 			get
@@ -99,7 +99,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B2B RID: 6955 RVA: 0x000A6948 File Offset: 0x000A4B48
+		
 		bool IArchivable.CanCullArchivedNow
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B2C RID: 6956 RVA: 0x000A699B File Offset: 0x000A4B9B
+		
 		LookTargets IArchivable.LookTargets
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Area_Home : Area
 	{
 		
-		// (get) Token: 0x06003DAA RID: 15786 RVA: 0x00145DCC File Offset: 0x00143FCC
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DAB RID: 15787 RVA: 0x00145DDD File Offset: 0x00143FDD
+		
 		public override Color Color
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DAC RID: 15788 RVA: 0x00145DF3 File Offset: 0x00143FF3
+		
 		public override int ListPriority
 		{
 			get

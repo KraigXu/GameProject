@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public class SoundParamSource_Perlin : SoundParamSource
 	{
 		
-		// (get) Token: 0x06002463 RID: 9315 RVA: 0x000D8EF2 File Offset: 0x000D70F2
+		
 		public override string Label
 		{
 			get

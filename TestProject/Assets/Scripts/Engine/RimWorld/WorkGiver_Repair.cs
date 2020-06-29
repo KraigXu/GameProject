@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_Repair : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600312F RID: 12591 RVA: 0x001117B5 File Offset: 0x0010F9B5
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003130 RID: 12592 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

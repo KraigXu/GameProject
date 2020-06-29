@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Thought_WantToSleepWithSpouseOrLover : Thought_Situational
 	{
 		
-		// (get) Token: 0x06003428 RID: 13352 RVA: 0x0011EE44 File Offset: 0x0011D044
+		
 		public override string LabelCap
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003429 RID: 13353 RVA: 0x0011EEBD File Offset: 0x0011D0BD
+		
 		protected override float BaseMoodOffset
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_Ingest : JobDriver
 	{
 		
-		// (get) Token: 0x06002D87 RID: 11655 RVA: 0x00100734 File Offset: 0x000FE934
+		
 		private Thing IngestibleSource
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002D88 RID: 11656 RVA: 0x00100758 File Offset: 0x000FE958
+		
 		private float ChewDurationMultiplier
 		{
 			get

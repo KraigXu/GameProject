@@ -72,7 +72,7 @@ namespace Ionic.Zlib
 				short[] bl_count2 = s.bl_count;
 				int num6 = i;
 				bl_count2[num6] -= 1;
-				s.bl_count[i + 1] = s.bl_count[i + 1] + 2;
+				s.bl_count[i + 1] = (short)(s.bl_count[i + 1] + 2);
 				short[] bl_count3 = s.bl_count;
 				int num7 = maxLength;
 				bl_count3[num7] -= 1;
@@ -163,7 +163,7 @@ namespace Ionic.Zlib
 				num2 = s.heap_max - 1;
 				s.heap_max = num2;
 				heap6[num2] = num5;
-				array[num3 * 2] = array[i * 2] + array[num5 * 2];
+				array[num3 * 2] = (short)(array[i * 2] + array[num5 * 2]);
 				s.depth[num3] = (sbyte)(Math.Max((byte)s.depth[i], (byte)s.depth[num5]) + 1);
 				array[i * 2 + 1] = (array[num5 * 2 + 1] = (short)num3);
 				s.heap[1] = num3++;
@@ -196,7 +196,7 @@ namespace Ionic.Zlib
 					short[] array2 = array;
 					int num4 = num2;
 					short num5 = array2[num4];
-					array2[num4] = num5 + 1;
+					array2[num4] = (short)(num5 + 1);
 					tree[num3] = (short)Tree.bi_reverse((int)num5, num2);
 				}
 			}

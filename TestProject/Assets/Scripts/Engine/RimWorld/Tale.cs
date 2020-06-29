@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Tale : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06004AA2 RID: 19106 RVA: 0x00194017 File Offset: 0x00192217
+		
 		public int AgeTicks
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA3 RID: 19107 RVA: 0x0019402A File Offset: 0x0019222A
+		
 		public int Uses
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA4 RID: 19108 RVA: 0x00194032 File Offset: 0x00192232
+		
 		public bool Unused
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA5 RID: 19109 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual Pawn DominantPawn
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA6 RID: 19110 RVA: 0x00194040 File Offset: 0x00192240
+		
 		public float InterestLevel
 		{
 			get
@@ -81,7 +81,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA7 RID: 19111 RVA: 0x001940D5 File Offset: 0x001922D5
+		
 		public bool Expired
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AA8 RID: 19112 RVA: 0x0019410B File Offset: 0x0019230B
+		
 		public virtual string ShortSummary
 		{
 			get

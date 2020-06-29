@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Page_CreateWorldParams : Page
 	{
 		
-		// (get) Token: 0x06005A83 RID: 23171 RVA: 0x001EBA2C File Offset: 0x001E9C2C
+		
 		public override string PageTitle
 		{
 			get

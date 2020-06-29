@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic_Mote : Graphic_Single
 	{
 		
-		// (get) Token: 0x0600152E RID: 5422 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected virtual bool ForcePropertyBlock
 		{
 			get

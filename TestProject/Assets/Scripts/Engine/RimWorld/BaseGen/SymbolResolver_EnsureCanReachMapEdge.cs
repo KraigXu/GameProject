@@ -23,7 +23,7 @@ namespace RimWorld.BaseGen
 		
 		private void TryMakeAllCellsReachable(bool canPathThroughNonStandable, ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_EnsureCanReachMapEdge.visited.Clear();
 			for (int i = 0; i < SymbolResolver_EnsureCanReachMapEdge.cellsInRandomOrder.Count; i++)
 			{
@@ -78,7 +78,7 @@ namespace RimWorld.BaseGen
 		
 		private void ReconstructPathAndDestroyWalls(IntVec3 foundDest, Room room, ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			map.floodFiller.ReconstructLastFloodFillPath(foundDest, SymbolResolver_EnsureCanReachMapEdge.path);
 			while (SymbolResolver_EnsureCanReachMapEdge.path.Count >= 2 && SymbolResolver_EnsureCanReachMapEdge.path[0].AdjacentToCardinal(room) && SymbolResolver_EnsureCanReachMapEdge.path[1].AdjacentToCardinal(room))
 			{
@@ -132,7 +132,7 @@ namespace RimWorld.BaseGen
 		
 		private bool CanTraverse(IntVec3 c, bool canPathThroughNonStandable)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			Building edifice = c.GetEdifice(map);
 			return this.IsWallOrRock(edifice) || ((canPathThroughNonStandable || c.Standable(map)) && !c.Impassable(map));
 		}

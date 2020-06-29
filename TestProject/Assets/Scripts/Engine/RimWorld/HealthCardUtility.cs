@@ -213,7 +213,7 @@ namespace RimWorld
 							{
 								if (recipeDef.targetsBodyPart)
 								{
-									using (IEnumerator<BodyPartRecord> enumerator2 = recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).GetEnumerator())
+									IEnumerator<BodyPartRecord> enumerator2 = recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).GetEnumerator();
 									{
 										while (enumerator2.MoveNext())
 										{
@@ -780,7 +780,7 @@ namespace RimWorld
 		private static bool CanEntryBeClicked(IEnumerable<Hediff> diffs, Pawn pawn)
 		{
 			//LogEntry combatLogEntry;
-			//Predicate<LogEntry> 9__1;
+
 			//TaggedString taggedString;
 			//return HealthCardUtility.GetCombatLogInfo(diffs, out taggedString, out combatLogEntry) && combatLogEntry != null && Find.BattleLog.Battles.Any(delegate(Battle b)
 			//{
@@ -788,9 +788,9 @@ namespace RimWorld
 			//	{
 			//		List<LogEntry> entries = b.Entries;
 			//		Predicate<LogEntry> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__1 = ((LogEntry e) => e == combatLogEntry));
+			//			predicate = ( ((LogEntry e) => e == combatLogEntry));
 			//		}
 			//		return entries.Any(predicate);
 			//	}
@@ -808,16 +808,16 @@ namespace RimWorld
 			//{
 			//	return;
 			//}
-			//Predicate<LogEntry> 9__1;
+
 			//if (!Find.BattleLog.Battles.Any(delegate(Battle b)
 			//{
 			//	if (b.Concerns(pawn))
 			//	{
 			//		List<LogEntry> entries = b.Entries;
 			//		Predicate<LogEntry> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__1 = ((LogEntry e) => e == combatLogEntry));
+			//			predicate = ( ((LogEntry e) => e == combatLogEntry));
 			//		}
 			//		return entries.Any(predicate);
 			//	}

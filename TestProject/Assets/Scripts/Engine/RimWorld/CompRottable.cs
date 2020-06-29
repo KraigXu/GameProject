@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompRottable : ThingComp
 	{
 		
-		// (get) Token: 0x060052A7 RID: 21159 RVA: 0x001B9E3F File Offset: 0x001B803F
+		
 		public CompProperties_Rottable PropsRot
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052A8 RID: 21160 RVA: 0x001B9E4C File Offset: 0x001B804C
+		
 		public float RotProgressPct
 		{
 			get
@@ -29,8 +29,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052A9 RID: 21161 RVA: 0x001B9E61 File Offset: 0x001B8061
-		// (set) Token: 0x060052AA RID: 21162 RVA: 0x001B9E69 File Offset: 0x001B8069
+		
+		
 		public float RotProgress
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052AB RID: 21163 RVA: 0x001B9E86 File Offset: 0x001B8086
+		
 		public RotStage Stage
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052AC RID: 21164 RVA: 0x001B9EB8 File Offset: 0x001B80B8
+		
 		public int TicksUntilRotAtCurrentTemp
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052AD RID: 21165 RVA: 0x001B9EE0 File Offset: 0x001B80E0
+		
 		public bool Active
 		{
 			get

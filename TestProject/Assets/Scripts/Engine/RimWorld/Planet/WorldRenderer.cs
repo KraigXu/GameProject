@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class WorldRenderer
 	{
 		
-		// (get) Token: 0x06006A67 RID: 27239 RVA: 0x00251B00 File Offset: 0x0024FD00
+		
 		private bool ShouldRegenerateDirtyLayersInLongEvent
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld.Planet
 			{
 				if (this.layers[i].Dirty)
 				{
-					using (IEnumerator enumerator = this.layers[i].Regenerate().GetEnumerator())
+					IEnumerator enumerator = this.layers[i].Regenerate().GetEnumerator();
 					{
 						for (;;)
 						{
@@ -94,7 +94,6 @@ namespace RimWorld.Planet
 						}
 					}
 					yield return null;
-					IEnumerator enumerator = null;
 				}
 				num = i;
 			}

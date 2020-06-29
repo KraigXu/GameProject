@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public abstract class FeatureWorker_Cluster : FeatureWorker
 	{
 		
-		// (get) Token: 0x06006919 RID: 26905 RVA: 0x0024B811 File Offset: 0x00249A11
+		
 		protected virtual int MinRootGroupsInCluster
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600691A RID: 26906 RVA: 0x0024B81E File Offset: 0x00249A1E
+		
 		protected virtual int MinRootGroupSize
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600691B RID: 26907 RVA: 0x0024B82B File Offset: 0x00249A2B
+		
 		protected virtual int MaxRootGroupSize
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600691C RID: 26908 RVA: 0x0024B838 File Offset: 0x00249A38
+		
 		protected virtual int MinOverallSize
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600691D RID: 26909 RVA: 0x0024B845 File Offset: 0x00249A45
+		
 		protected virtual int MaxOverallSize
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600691E RID: 26910 RVA: 0x0024B852 File Offset: 0x00249A52
+		
 		protected virtual int MaxSpaceBetweenRootGroups
 		{
 			get
@@ -131,7 +131,7 @@ namespace RimWorld.Planet
 			//FeatureWorker.ClearVisited();
 			//FeatureWorker.ClearGroupSizes();
 			//FeatureWorker.ClearGroupIDs();
-			//Predicate<int> 9__0;
+
 			//for (int i = 0; i < this.roots.Count; i++)
 			//{
 			//	int num = this.roots[i];
@@ -144,7 +144,7 @@ namespace RimWorld.Planet
 			//		Predicate<int> passCheck;
 			//		if ((passCheck ) == null)
 			//		{
-			//			passCheck = (9__0 = ((int x) => this.rootsSet.Contains(x)));
+			//			passCheck = ( ((int x) => this.rootsSet.Contains(x)));
 			//		}
 			//		worldFloodFiller2.FloodFill(rootTile, passCheck, delegate(int x)
 			//		{
@@ -167,11 +167,11 @@ namespace RimWorld.Planet
 			//	}
 			//}
 			//FeatureWorker.ClearVisited();
-			//Predicate<int> 9__2;
-			//Action<int> 9__3;
-			//Predicate<int> 9__4;
-			//Predicate<int> 9__5;
-			//Predicate<int> 9__6;
+
+			//
+
+
+
 			//for (int k = 0; k < this.roots.Count; k++)
 			//{
 			//	int num2 = this.roots[k];
@@ -184,7 +184,7 @@ namespace RimWorld.Planet
 			//		Predicate<int> passCheck2;
 			//		if ((passCheck2 ) == null)
 			//		{
-			//			passCheck2 = (9__2 = delegate(int x)
+			//			passCheck2 = ( delegate(int x)
 			//			{
 			//				bool flag2;
 			//				return this.rootsWithAreaInBetweenSet.Contains(x) && this.CanTraverse(x, out flag2) && (!flag2 || !this.rootsSet.Contains(x) || (FeatureWorker.groupSize[x] >= minRootGroupSize && FeatureWorker.groupSize[x] <= maxRootGroupSize));
@@ -193,7 +193,7 @@ namespace RimWorld.Planet
 			//		Action<int> processor;
 			//		if ((processor ) == null)
 			//		{
-			//			processor = (9__3 = delegate(int x)
+			//			processor = ( delegate(int x)
 			//			{
 			//				FeatureWorker.visited[x] = true;
 			//				this.currentGroup.Add(x);
@@ -210,9 +210,9 @@ namespace RimWorld.Planet
 			//			{
 			//				List<int> list = this.currentGroup;
 			//				Predicate<int> predicate;
-			//				if ((predicate ) == null)
+			//				if ((predicate=default ) == null)
 			//				{
-			//					predicate = (9__4 = ((int x) => worldGrid.IsOnEdge(x)));
+			//					predicate = ( ((int x) => worldGrid.IsOnEdge(x)));
 			//				}
 			//				if (list.Any(predicate))
 			//				{
@@ -233,9 +233,9 @@ namespace RimWorld.Planet
 			//			{
 			//				List<int> list2 = this.currentGroup;
 			//				Predicate<int> predicate2;
-			//				if ((predicate2 ) == null)
+			//				if ((predicate2=default ) == null)
 			//				{
-			//					predicate2 = (9__5 = ((int x) => worldGrid[x].feature == null));
+			//					predicate2 = ( ((int x) => worldGrid[x].feature == null));
 			//				}
 			//				if (list2.Any(predicate2))
 			//				{
@@ -243,7 +243,7 @@ namespace RimWorld.Planet
 			//					Predicate<int> match;
 			//					if ((match ) == null)
 			//					{
-			//						match = (9__6 = ((int x) => worldGrid[x].feature != null));
+			//						match = ( ((int x) => worldGrid[x].feature != null));
 			//					}
 			//					list3.RemoveAll(match);
 			//				}

@@ -70,7 +70,7 @@ namespace Verse
 				string defName = ((Def)obj).defName;
 				xelement2.Add(new XText(defName));
 			}
-			else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List))
+			else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
 			{
 				Type expectedType2 = type.GetGenericArguments()[0];
 				int num = (int)type.GetProperty("Count").GetValue(obj, null);
@@ -90,7 +90,7 @@ namespace Verse
 				{
 					Type expectedType3 = type.GetGenericArguments()[0];
 					Type expectedType4 = type.GetGenericArguments()[1];
-					using (IEnumerator enumerator = (obj as IEnumerable).GetEnumerator())
+					IEnumerator enumerator = (obj as IEnumerable).GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

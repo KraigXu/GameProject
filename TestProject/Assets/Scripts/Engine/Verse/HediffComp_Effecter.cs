@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_Effecter : HediffComp
 	{
 		
-		// (get) Token: 0x06001064 RID: 4196 RVA: 0x0005DD81 File Offset: 0x0005BF81
+		
 		public HediffCompProperties_Effecter Props
 		{
 			get

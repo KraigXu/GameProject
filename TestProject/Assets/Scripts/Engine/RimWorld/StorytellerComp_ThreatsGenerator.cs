@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_ThreatsGenerator : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D5B RID: 15707 RVA: 0x00143E9B File Offset: 0x0014209B
+		
 		protected StorytellerCompProperties_ThreatsGenerator Props
 		{
 			get

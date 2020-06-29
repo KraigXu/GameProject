@@ -77,7 +77,7 @@ namespace Verse.Sound
 		private struct MouseoverRegionCall
 		{
 			
-			// (get) Token: 0x06008630 RID: 34352 RVA: 0x002B59B7 File Offset: 0x002B3BB7
+			
 			public bool IsValid
 			{
 				get
@@ -87,7 +87,7 @@ namespace Verse.Sound
 			}
 
 			
-			// (get) Token: 0x06008631 RID: 34353 RVA: 0x002B59D0 File Offset: 0x002B3BD0
+			
 			public static MouseoverSounds.MouseoverRegionCall Invalid
 			{
 				get

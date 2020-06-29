@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class GenDate
 	{
 		
-		// (get) Token: 0x06005FD2 RID: 24530 RVA: 0x00214F25 File Offset: 0x00213125
+		
 		private static int TicksGame
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD3 RID: 24531 RVA: 0x00214F31 File Offset: 0x00213131
+		
 		public static int DaysPassed
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD4 RID: 24532 RVA: 0x00214F3D File Offset: 0x0021313D
+		
 		public static float DaysPassedFloat
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD5 RID: 24533 RVA: 0x00214F4B File Offset: 0x0021314B
+		
 		public static int TwelfthsPassed
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD6 RID: 24534 RVA: 0x00214F57 File Offset: 0x00213157
+		
 		public static float TwelfthsPassedFloat
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD7 RID: 24535 RVA: 0x00214F65 File Offset: 0x00213165
+		
 		public static int YearsPassed
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005FD8 RID: 24536 RVA: 0x00214F71 File Offset: 0x00213171
+		
 		public static float YearsPassedFloat
 		{
 			get

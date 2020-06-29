@@ -9,7 +9,7 @@ namespace Verse
 	public class BattleLogEntry_RangedFire : LogEntry
 	{
 		
-		// (get) Token: 0x0600074E RID: 1870 RVA: 0x00021878 File Offset: 0x0001FA78
+		
 		private string InitiatorName
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600074F RID: 1871 RVA: 0x00021893 File Offset: 0x0001FA93
+		
 		private string RecipientName
 		{
 			get

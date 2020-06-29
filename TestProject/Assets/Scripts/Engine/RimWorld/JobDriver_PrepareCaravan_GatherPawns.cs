@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_PrepareCaravan_GatherPawns : JobDriver
 	{
 		
-		// (get) Token: 0x06002B40 RID: 11072 RVA: 0x000FAE44 File Offset: 0x000F9044
+		
 		private Pawn AnimalOrSlave
 		{
 			get

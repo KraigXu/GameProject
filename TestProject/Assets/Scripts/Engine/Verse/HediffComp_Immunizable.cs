@@ -10,7 +10,7 @@ namespace Verse
 	public class HediffComp_Immunizable : HediffComp_SeverityPerDay
 	{
 		
-		// (get) Token: 0x060010E2 RID: 4322 RVA: 0x0005FA54 File Offset: 0x0005DC54
+		
 		public HediffCompProperties_Immunizable Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010E3 RID: 4323 RVA: 0x0005FA61 File Offset: 0x0005DC61
+		
 		public override string CompLabelInBracketsExtra
 		{
 			get
@@ -34,7 +34,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010E4 RID: 4324 RVA: 0x0005FA7C File Offset: 0x0005DC7C
+		
 		public override string CompTipStringExtra
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010E5 RID: 4325 RVA: 0x0005FADA File Offset: 0x0005DCDA
+		
 		public float Immunity
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010E6 RID: 4326 RVA: 0x0005FAF7 File Offset: 0x0005DCF7
+		
 		public bool FullyImmune
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010E7 RID: 4327 RVA: 0x0005FB09 File Offset: 0x0005DD09
+		
 		public override TextureAndColor CompStateIcon
 		{
 			get

@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060037BB RID: 14267 RVA: 0x0012B090 File Offset: 0x00129290
+		
 		public static IEnumerable<FileInfo> Files
 		{
 			get

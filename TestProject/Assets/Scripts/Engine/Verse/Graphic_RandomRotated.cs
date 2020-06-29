@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_RandomRotated : Graphic
 	{
 		
-		// (get) Token: 0x06001554 RID: 5460 RVA: 0x0007D0EE File Offset: 0x0007B2EE
+		
 		public override Material MatSingle
 		{
 			get

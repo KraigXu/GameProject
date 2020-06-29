@@ -7,7 +7,7 @@ namespace Verse
 	public class LoadFolder : IEquatable<LoadFolder>
 	{
 		
-		// (get) Token: 0x06000E86 RID: 3718 RVA: 0x00052A01 File Offset: 0x00050C01
+		
 		public bool ShouldLoad
 		{
 			get

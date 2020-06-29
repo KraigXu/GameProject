@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Archive : IExposable
 	{
 		
-		// (get) Token: 0x06003797 RID: 14231 RVA: 0x0012AAB6 File Offset: 0x00128CB6
+		
 		public List<IArchivable> ArchivablesListForReading
 		{
 			get

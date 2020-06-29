@@ -7,7 +7,7 @@ namespace Verse
 	public class NameTriple : Name
 	{
 		
-		// (get) Token: 0x060011A3 RID: 4515 RVA: 0x00063817 File Offset: 0x00061A17
+		
 		public string First
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A4 RID: 4516 RVA: 0x0006381F File Offset: 0x00061A1F
+		
 		public string Nick
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A5 RID: 4517 RVA: 0x00063827 File Offset: 0x00061A27
+		
 		public string Last
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A6 RID: 4518 RVA: 0x00063830 File Offset: 0x00061A30
+		
 		public override string ToStringFull
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A7 RID: 4519 RVA: 0x0006381F File Offset: 0x00061A1F
+		
 		public override string ToStringShort
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A8 RID: 4520 RVA: 0x000638B0 File Offset: 0x00061AB0
+		
 		public override bool IsValid
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011A9 RID: 4521 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool Numerical
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011AA RID: 4522 RVA: 0x000638CF File Offset: 0x00061ACF
+		
 		public static NameTriple Invalid
 		{
 			get

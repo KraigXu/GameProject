@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompAssignableToPawn : ThingComp
 	{
 		
-		// (get) Token: 0x06005075 RID: 20597 RVA: 0x001B132C File Offset: 0x001AF52C
+		
 		public CompProperties_AssignableToPawn Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005076 RID: 20598 RVA: 0x001B1339 File Offset: 0x001AF539
+		
 		public int MaxAssignedPawnsCount
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005077 RID: 20599 RVA: 0x001B1348 File Offset: 0x001AF548
+		
 		public bool PlayerCanSeeAssignments
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005078 RID: 20600 RVA: 0x001B13B2 File Offset: 0x001AF5B2
+		
 		public virtual IEnumerable<Pawn> AssigningCandidates
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005079 RID: 20601 RVA: 0x001B13DC File Offset: 0x001AF5DC
+		
 		public List<Pawn> AssignedPawnsForReading
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600507A RID: 20602 RVA: 0x001B13DC File Offset: 0x001AF5DC
+		
 		public IEnumerable<Pawn> AssignedPawns
 		{
 			get
@@ -85,7 +85,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600507B RID: 20603 RVA: 0x001B13E4 File Offset: 0x001AF5E4
+		
 		public bool HasFreeSlot
 		{
 			get

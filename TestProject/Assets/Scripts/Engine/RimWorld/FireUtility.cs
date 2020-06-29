@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 			if (!(t.def.size == IntVec2.One))
 			{
-				using (CellRect.Enumerator enumerator = t.OccupiedRect().GetEnumerator())
+				CellRect.Enumerator enumerator = t.OccupiedRect().GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

@@ -89,7 +89,7 @@ namespace RimWorld
 					yield return creditsEntry;
 				}
 				List<CreditsEntry>.Enumerator enumerator2 = default(List<CreditsEntry>.Enumerator);
-				lang = null;
+			
 			}
 			IEnumerator<LoadedLanguage> enumerator = null;
 			yield break;

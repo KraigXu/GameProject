@@ -7,7 +7,7 @@ namespace Verse
 	public class PawnDownedWiggler
 	{
 		
-		// (get) Token: 0x06000F2B RID: 3883 RVA: 0x000566E0 File Offset: 0x000548E0
+		
 		private static float RandomDownedAngle
 		{
 			get

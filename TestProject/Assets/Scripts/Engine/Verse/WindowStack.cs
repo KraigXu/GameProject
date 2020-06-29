@@ -10,7 +10,7 @@ namespace Verse
 	public class WindowStack
 	{
 		
-		// (get) Token: 0x06001DD0 RID: 7632 RVA: 0x000B715C File Offset: 0x000B535C
+		
 		public int Count
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD2 RID: 7634 RVA: 0x000B7177 File Offset: 0x000B5377
+		
 		public IList<Window> Windows
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD3 RID: 7635 RVA: 0x000B7184 File Offset: 0x000B5384
+		
 		public FloatMenu FloatMenu
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD4 RID: 7636 RVA: 0x000B718C File Offset: 0x000B538C
+		
 		public bool WindowsForcePause
 		{
 			get
@@ -66,7 +66,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD5 RID: 7637 RVA: 0x000B71C8 File Offset: 0x000B53C8
+		
 		public bool WindowsPreventCameraMotion
 		{
 			get
@@ -83,7 +83,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD6 RID: 7638 RVA: 0x000B7204 File Offset: 0x000B5404
+		
 		public bool WindowsPreventDrawTutor
 		{
 			get
@@ -100,7 +100,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD7 RID: 7639 RVA: 0x000B723D File Offset: 0x000B543D
+		
 		public float SecondsSinceClosedGameStartDialog
 		{
 			get
@@ -118,7 +118,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD8 RID: 7640 RVA: 0x000B726C File Offset: 0x000B546C
+		
 		public bool MouseObscuredNow
 		{
 			get
@@ -128,7 +128,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DD9 RID: 7641 RVA: 0x000B7284 File Offset: 0x000B5484
+		
 		public bool CurrentWindowGetsInput
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DDA RID: 7642 RVA: 0x000B7294 File Offset: 0x000B5494
+		
 		public bool NonImmediateDialogWindowOpen
 		{
 			get

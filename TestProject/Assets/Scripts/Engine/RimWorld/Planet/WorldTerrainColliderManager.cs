@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class WorldTerrainColliderManager
 	{
 		
-		// (get) Token: 0x06006A7C RID: 27260 RVA: 0x002522F0 File Offset: 0x002504F0
+		
 		public static GameObject GameObject
 		{
 			get

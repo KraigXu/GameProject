@@ -22,17 +22,14 @@ namespace RimWorld.SketchGen
 			this.processed.Clear();
 			try
 			{
-				Predicate<IntVec3> 9__1;
+
 				foreach (IntVec3 c in cellRect.Cells.InRandomOrder(null))
 				{
 					CellRect outerRect = cellRect;
 					Sketch sketch = parms.sketch;
 					HashSet<IntVec3> hashSet = this.processed;
-					Predicate<IntVec3> canTraverse;
-					if ((canTraverse ) == null)
-					{
-						canTraverse = (9__1 = ((IntVec3 x) => !parms.sketch.ThingsAt(x).Any<SketchThing>() && (!requireFloor || (parms.sketch.TerrainAt(x) != null && parms.sketch.TerrainAt(x).layerable))));
-					}
+					Predicate<IntVec3> canTraverse = (((IntVec3 x) => !parms.sketch.ThingsAt(x).Any<SketchThing>() && (!requireFloor || (parms.sketch.TerrainAt(x) != null && parms.sketch.TerrainAt(x).layerable)))); ;
+
 					CellRect cellRect4 = SketchGenUtility.FindBiggestRectAt(c, outerRect, sketch, hashSet, canTraverse);
 					if (cellRect4.Width >= cellRect2.Width && cellRect4.Height >= cellRect2.Height && cellRect4.Width >= cellRect3.Width && cellRect4.Height >= cellRect3.Height && Rand.Chance(0.2f))
 					{
@@ -77,29 +74,29 @@ namespace RimWorld.SketchGen
 		
 		private bool CanPlaceAt(CellRect rect, Rot4 dir, Sketch sketch)
 		{
-			foreach (IntVec3 pos in rect.GetEdgeCells(dir))
-			{
-				if (dir == Rot4.North)
-				{
-					pos.z++;
-				}
-				else if (dir == Rot4.South)
-				{
-					pos.z++;
-				}
-				else if (dir == Rot4.East)
-				{
-					pos.x++;
-				}
-				else
-				{
-					pos.x--;
-				}
-				if (!sketch.ThingsAt(pos).Any((SketchThing x) => x.def == ThingDefOf.Wall))
-				{
-					return false;
-				}
-			}
+			//foreach (IntVec3 pos in rect.GetEdgeCells(dir))
+			//{
+			//	if (dir == Rot4.North)
+			//	{
+			//		pos.z++;
+			//	}
+			//	else if (dir == Rot4.South)
+			//	{
+			//		pos.z++;
+			//	}
+			//	else if (dir == Rot4.East)
+			//	{
+			//		pos.x++;
+			//	}
+			//	else
+			//	{
+			//		pos.x--;
+			//	}
+			//	if (!sketch.ThingsAt(pos).Any((SketchThing x) => x.def == ThingDefOf.Wall))
+			//	{
+			//		return false;
+			//	}
+			//}
 			return true;
 		}
 

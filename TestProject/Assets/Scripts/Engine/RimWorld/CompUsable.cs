@@ -11,7 +11,7 @@ namespace RimWorld
 	public class CompUsable : ThingComp
 	{
 		
-		// (get) Token: 0x06005403 RID: 21507 RVA: 0x001C0E19 File Offset: 0x001BF019
+		
 		public CompProperties_Usable Props
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 				{
 					if (myPawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
 					{
-						using (IEnumerator<CompUseEffect> enumerator = this.parent.GetComps<CompUseEffect>().GetEnumerator())
+						IEnumerator<CompUseEffect> enumerator = this.parent.GetComps<CompUseEffect>().GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{
@@ -65,7 +65,7 @@ namespace RimWorld
 						this.TryStartUseJob(myPawn, LocalTargetInfo.Invalid);
 					}
 				}, MenuOptionPriority.Default, null, null, 0f, null, null);
-				yield return floatMenuOption;
+				
 			}
 			yield break;
 		}

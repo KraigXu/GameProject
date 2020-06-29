@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ChoiceLetter_ChoosePawn : ChoiceLetter
 	{
 		
-		// (get) Token: 0x06005B1F RID: 23327 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanDismissWithRightClick
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B20 RID: 23328 RVA: 0x001F5EF4 File Offset: 0x001F40F4
+		
 		public override bool CanShowInLetterStack
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B21 RID: 23329 RVA: 0x001F5F4A File Offset: 0x001F414A
+		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get

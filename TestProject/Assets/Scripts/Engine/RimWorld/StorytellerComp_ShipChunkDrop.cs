@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_ShipChunkDrop : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D4B RID: 15691 RVA: 0x00143D18 File Offset: 0x00141F18
+		
 		private float ShipChunkDropMTBDays
 		{
 			get

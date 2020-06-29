@@ -8,23 +8,23 @@ namespace RimWorld
 	public abstract class Transferable : IExposable
 	{
 		
-		// (get) Token: 0x060059EC RID: 23020
+		
 		public abstract Thing AnyThing { get; }
 
 		
-		// (get) Token: 0x060059ED RID: 23021
+		
 		public abstract ThingDef ThingDef { get; }
 
 		
-		// (get) Token: 0x060059EE RID: 23022
+		
 		public abstract bool Interactive { get; }
 
 		
-		// (get) Token: 0x060059EF RID: 23023
+		
 		public abstract bool HasAnyThing { get; }
 
 		
-		// (get) Token: 0x060059F0 RID: 23024 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool IsThing
 		{
 			get
@@ -34,11 +34,11 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059F1 RID: 23025
+		
 		public abstract string Label { get; }
 
 		
-		// (get) Token: 0x060059F2 RID: 23026 RVA: 0x001E6B93 File Offset: 0x001E4D93
+		
 		public string LabelCap
 		{
 			get
@@ -48,20 +48,20 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059F3 RID: 23027
+		
 		public abstract string TipDescription { get; }
 
 		
-		// (get) Token: 0x060059F4 RID: 23028
+		
 		public abstract TransferablePositiveCountDirection PositiveCountDirection { get; }
 
 		
-		// (get) Token: 0x060059F5 RID: 23029
-		// (set) Token: 0x060059F6 RID: 23030
+		
+		
 		public abstract int CountToTransfer { get; protected set; }
 
 		
-		// (get) Token: 0x060059F7 RID: 23031 RVA: 0x001E6BA6 File Offset: 0x001E4DA6
+		
 		public int CountToTransferToSource
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059F8 RID: 23032 RVA: 0x001E6BBE File Offset: 0x001E4DBE
+		
 		public int CountToTransferToDestination
 		{
 			get
@@ -89,8 +89,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060059F9 RID: 23033 RVA: 0x001E6BD6 File Offset: 0x001E4DD6
-		// (set) Token: 0x060059FA RID: 23034 RVA: 0x001E6BDE File Offset: 0x001E4DDE
+		
+		
 		public string EditBuffer
 		{
 			get

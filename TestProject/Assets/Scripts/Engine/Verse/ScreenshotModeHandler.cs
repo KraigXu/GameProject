@@ -8,7 +8,7 @@ namespace Verse
 	public class ScreenshotModeHandler
 	{
 		
-		// (get) Token: 0x06001BF2 RID: 7154 RVA: 0x000AA8F7 File Offset: 0x000A8AF7
+		
 		public bool Active
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BF3 RID: 7155 RVA: 0x000AA900 File Offset: 0x000A8B00
+		
 		public bool FiltersCurrentEvent
 		{
 			get

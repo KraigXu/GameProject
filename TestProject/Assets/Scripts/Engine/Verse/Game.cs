@@ -12,8 +12,8 @@ namespace Verse
 	public class Game : IExposable
 	{
 		
-		// (get) Token: 0x06000775 RID: 1909 RVA: 0x0002269C File Offset: 0x0002089C
-		// (set) Token: 0x06000776 RID: 1910 RVA: 0x000226A4 File Offset: 0x000208A4
+		
+		
 		public Scenario Scenario
 		{
 			get
@@ -27,8 +27,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000777 RID: 1911 RVA: 0x000226AD File Offset: 0x000208AD
-		// (set) Token: 0x06000778 RID: 1912 RVA: 0x000226B5 File Offset: 0x000208B5
+		
+		
 		public World World
 		{
 			get
@@ -46,8 +46,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000779 RID: 1913 RVA: 0x000226C8 File Offset: 0x000208C8
-		// (set) Token: 0x0600077A RID: 1914 RVA: 0x000226E8 File Offset: 0x000208E8
+		
+		
 		public Map CurrentMap
 		{
 			get
@@ -84,7 +84,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600077B RID: 1915 RVA: 0x0002273C File Offset: 0x0002093C
+		
 		public Map AnyPlayerHomeMap
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600077C RID: 1916 RVA: 0x00022780 File Offset: 0x00020980
+		
 		public Map RandomPlayerHomeMap
 		{
 			get
@@ -135,7 +135,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600077D RID: 1917 RVA: 0x000227F8 File Offset: 0x000209F8
+		
 		public List<Map> Maps
 		{
 			get
@@ -145,8 +145,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600077E RID: 1918 RVA: 0x00022800 File Offset: 0x00020A00
-		// (set) Token: 0x0600077F RID: 1919 RVA: 0x00022808 File Offset: 0x00020A08
+		
+		
 		public GameInitData InitData
 		{
 			get
@@ -160,7 +160,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000780 RID: 1920 RVA: 0x00022811 File Offset: 0x00020A11
+		
 		public GameInfo Info
 		{
 			get
@@ -170,7 +170,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000781 RID: 1921 RVA: 0x00022819 File Offset: 0x00020A19
+		
 		public GameRules Rules
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Building_PowerSwitch : Building
 	{
 		
-		// (get) Token: 0x06004B70 RID: 19312 RVA: 0x0019710F File Offset: 0x0019530F
+		
 		public override bool TransmitsPowerNow
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B71 RID: 19313 RVA: 0x00197117 File Offset: 0x00195317
+		
 		public override Graphic Graphic
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse.Steam
 	public class WorkshopItem
 	{
 		
-		// (get) Token: 0x06002297 RID: 8855 RVA: 0x000D2DA9 File Offset: 0x000D0FA9
+		
 		public DirectoryInfo Directory
 		{
 			get
@@ -18,8 +18,8 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x06002298 RID: 8856 RVA: 0x000D2DB1 File Offset: 0x000D0FB1
-		// (set) Token: 0x06002299 RID: 8857 RVA: 0x000D2DB9 File Offset: 0x000D0FB9
+		
+		
 		public virtual PublishedFileId_t PublishedFileId
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Designator_AreaBuildRoof : Designator_Area
 	{
 		
-		// (get) Token: 0x0600573B RID: 22331 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600573C RID: 22332 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DragDrawMeasurements
 		{
 			get

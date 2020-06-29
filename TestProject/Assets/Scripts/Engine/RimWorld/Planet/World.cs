@@ -49,7 +49,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006AAE RID: 27310 RVA: 0x00253234 File Offset: 0x00251434
+		
 		public float PlayerWealthForStoryteller
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006AAF RID: 27311 RVA: 0x0025329E File Offset: 0x0025149E
+		
 		public IEnumerable<Pawn> PlayerPawnsForStoryteller
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006AB0 RID: 27312 RVA: 0x0003AE82 File Offset: 0x00039082
+		
 		public FloatRange IncidentPointsRandomFactorRange
 		{
 			get
@@ -399,7 +399,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006AC3 RID: 27331 RVA: 0x00253A07 File Offset: 0x00251C07
+		
 		public int ConstantRandSeed
 		{
 			get

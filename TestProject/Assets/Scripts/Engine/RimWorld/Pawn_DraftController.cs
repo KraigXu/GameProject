@@ -10,8 +10,8 @@ namespace RimWorld
 	public class Pawn_DraftController : IExposable
 	{
 		
-		// (get) Token: 0x060044B1 RID: 17585 RVA: 0x0017333F File Offset: 0x0017153F
-		// (set) Token: 0x060044B2 RID: 17586 RVA: 0x00173348 File Offset: 0x00171548
+		
+		
 		public bool Drafted
 		{
 			get
@@ -57,8 +57,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044B3 RID: 17587 RVA: 0x001734A4 File Offset: 0x001716A4
-		// (set) Token: 0x060044B4 RID: 17588 RVA: 0x001734AC File Offset: 0x001716AC
+		
+		
 		public bool FireAtWill
 		{
 			get

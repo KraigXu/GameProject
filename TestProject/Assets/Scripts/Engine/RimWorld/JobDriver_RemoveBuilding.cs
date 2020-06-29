@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class JobDriver_RemoveBuilding : JobDriver
 	{
 		
-		// (get) Token: 0x06002B82 RID: 11138 RVA: 0x000DF68D File Offset: 0x000DD88D
+		
 		protected Thing Target
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B83 RID: 11139 RVA: 0x000FB46A File Offset: 0x000F966A
+		
 		protected Building Building
 		{
 			get
@@ -29,11 +29,11 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B84 RID: 11140
+		
 		protected abstract DesignationDef Designation { get; }
 
 		
-		// (get) Token: 0x06002B85 RID: 11141
+		
 		protected abstract float TotalNeededWork { get; }
 
 		

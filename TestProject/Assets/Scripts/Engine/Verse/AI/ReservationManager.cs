@@ -12,7 +12,7 @@ namespace Verse.AI
 	public sealed class ReservationManager : IExposable
 	{
 		
-		// (get) Token: 0x0600282D RID: 10285 RVA: 0x000ED660 File Offset: 0x000EB860
+		
 		public List<ReservationManager.Reservation> ReservationsReadOnly
 		{
 			get
@@ -604,7 +604,7 @@ namespace Verse.AI
 		public class Reservation : IExposable
 		{
 			
-			// (get) Token: 0x060087FF RID: 34815 RVA: 0x002BBC3C File Offset: 0x002B9E3C
+			
 			public Pawn Claimant
 			{
 				get
@@ -614,7 +614,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008800 RID: 34816 RVA: 0x002BBC44 File Offset: 0x002B9E44
+			
 			public Job Job
 			{
 				get
@@ -624,7 +624,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008801 RID: 34817 RVA: 0x002BBC4C File Offset: 0x002B9E4C
+			
 			public LocalTargetInfo Target
 			{
 				get
@@ -634,7 +634,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008802 RID: 34818 RVA: 0x002BBC54 File Offset: 0x002B9E54
+			
 			public ReservationLayerDef Layer
 			{
 				get
@@ -644,7 +644,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008803 RID: 34819 RVA: 0x002BBC5C File Offset: 0x002B9E5C
+			
 			public int MaxPawns
 			{
 				get
@@ -654,7 +654,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008804 RID: 34820 RVA: 0x002BBC64 File Offset: 0x002B9E64
+			
 			public int StackCount
 			{
 				get
@@ -664,7 +664,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x06008805 RID: 34821 RVA: 0x002BBC6C File Offset: 0x002B9E6C
+			
 			public Faction Faction
 			{
 				get

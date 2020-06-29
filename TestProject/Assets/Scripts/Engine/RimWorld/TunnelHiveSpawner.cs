@@ -99,9 +99,9 @@ namespace RimWorld
 							}
 							IEnumerable<PawnKindDef> spawnablePawnKinds = Hive.spawnablePawnKinds;
 							Func<PawnKindDef, bool> predicate;
-							if ((predicate ) == null)
+							if ((predicate=default ) == null)
 							{
-								predicate = (9__1 = ((PawnKindDef x) => x.combatPower <= pointsLeft));
+								predicate = ( ((PawnKindDef x) => x.combatPower <= pointsLeft));
 							}
 							PawnKindDef pawnKindDef;
 							if (!spawnablePawnKinds.Where(predicate).TryRandomElement(out pawnKindDef))

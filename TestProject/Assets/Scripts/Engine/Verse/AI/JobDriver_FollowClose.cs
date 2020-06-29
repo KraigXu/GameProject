@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class JobDriver_FollowClose : JobDriver
 	{
 		
-		// (get) Token: 0x06002547 RID: 9543 RVA: 0x000DD65C File Offset: 0x000DB85C
+		
 		private Pawn Followee
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002548 RID: 9544 RVA: 0x000DD682 File Offset: 0x000DB882
+		
 		private bool CurrentlyWalkingToFollowee
 		{
 			get

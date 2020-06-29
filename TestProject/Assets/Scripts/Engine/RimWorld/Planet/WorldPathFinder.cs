@@ -169,7 +169,7 @@ namespace RimWorld.Planet
 				this.ResetStatuses();
 			}
 			this.openList.Clear();
-			using (List<int>.Enumerator enumerator = startTiles.GetEnumerator())
+			List<int>.Enumerator enumerator = startTiles.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

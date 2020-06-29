@@ -74,7 +74,7 @@ namespace Verse
 					foreach (DiaOptionMold diaOptionMold in diaNodeMold2.optionList)
 					{
 						bool flag = false;
-						using (List<string>.Enumerator enumerator4 = diaOptionMold.ChildNodeNames.GetEnumerator())
+						List<string>.Enumerator enumerator4 = diaOptionMold.ChildNodeNames.GetEnumerator();
 						{
 							while (enumerator4.MoveNext())
 							{

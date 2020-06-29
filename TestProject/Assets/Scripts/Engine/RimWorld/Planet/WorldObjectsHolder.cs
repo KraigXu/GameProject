@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class WorldObjectsHolder : IExposable
 	{
 		
-		// (get) Token: 0x06006F33 RID: 28467 RVA: 0x0026B2F4 File Offset: 0x002694F4
+		
 		public List<WorldObject> AllWorldObjects
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F34 RID: 28468 RVA: 0x0026B2FC File Offset: 0x002694FC
+		
 		public List<Caravan> Caravans
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F35 RID: 28469 RVA: 0x0026B304 File Offset: 0x00269504
+		
 		public List<Settlement> Settlements
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F36 RID: 28470 RVA: 0x0026B30C File Offset: 0x0026950C
+		
 		public List<TravelingTransportPods> TravelingTransportPods
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F37 RID: 28471 RVA: 0x0026B314 File Offset: 0x00269514
+		
 		public List<Settlement> SettlementBases
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F38 RID: 28472 RVA: 0x0026B31C File Offset: 0x0026951C
+		
 		public List<DestroyedSettlement> DestroyedSettlements
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F39 RID: 28473 RVA: 0x0026B324 File Offset: 0x00269524
+		
 		public List<RoutePlannerWaypoint> RoutePlannerWaypoints
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3A RID: 28474 RVA: 0x0026B32C File Offset: 0x0026952C
+		
 		public List<MapParent> MapParents
 		{
 			get
@@ -88,7 +88,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3B RID: 28475 RVA: 0x0026B334 File Offset: 0x00269534
+		
 		public List<Site> Sites
 		{
 			get
@@ -98,7 +98,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3C RID: 28476 RVA: 0x0026B33C File Offset: 0x0026953C
+		
 		public List<PeaceTalks> PeaceTalks
 		{
 			get
@@ -108,7 +108,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3D RID: 28477 RVA: 0x0026B344 File Offset: 0x00269544
+		
 		public int WorldObjectsCount
 		{
 			get
@@ -118,7 +118,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3E RID: 28478 RVA: 0x0026B351 File Offset: 0x00269551
+		
 		public int CaravansCount
 		{
 			get
@@ -128,7 +128,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F3F RID: 28479 RVA: 0x0026B35E File Offset: 0x0026955E
+		
 		public int RoutePlannerWaypointsCount
 		{
 			get
@@ -138,7 +138,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F40 RID: 28480 RVA: 0x0026B36C File Offset: 0x0026956C
+		
 		public int PlayerControlledCaravansCount
 		{
 			get

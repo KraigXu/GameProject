@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_RescueDowned : WorkGiver_TakeToBed
 	{
 		
-		// (get) Token: 0x06003137 RID: 12599 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003139 RID: 12601 RVA: 0x0010F64C File Offset: 0x0010D84C
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class LordJob_Steal : LordJob
 	{
 		
-		// (get) Token: 0x060031F7 RID: 12791 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool GuiltyOnDowned
 		{
 			get

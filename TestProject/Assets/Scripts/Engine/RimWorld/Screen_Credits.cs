@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Screen_Credits : Window
 	{
 		
-		// (get) Token: 0x06005ADA RID: 23258 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005ADB RID: 23259 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005ADC RID: 23260 RVA: 0x001EF835 File Offset: 0x001EDA35
+		
 		private float ViewWidth
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005ADD RID: 23261 RVA: 0x001EF83C File Offset: 0x001EDA3C
+		
 		private float ViewHeight
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005ADE RID: 23262 RVA: 0x001EF878 File Offset: 0x001EDA78
+		
 		private float MaxScrollPosition
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005ADF RID: 23263 RVA: 0x001EF898 File Offset: 0x001EDA98
+		
 		private float AutoScrollRate
 		{
 			get

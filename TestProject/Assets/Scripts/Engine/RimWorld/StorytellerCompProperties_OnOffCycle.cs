@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerCompProperties_OnOffCycle : StorytellerCompProperties
 	{
 		
-		// (get) Token: 0x06003D31 RID: 15665 RVA: 0x00143933 File Offset: 0x00141B33
+		
 		public IncidentCategoryDef IncidentCategory
 		{
 			get

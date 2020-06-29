@@ -7,7 +7,7 @@ namespace RimWorld
 	public class StoryWatcher_PopAdaptation : IExposable
 	{
 		
-		// (get) Token: 0x06003D96 RID: 15766 RVA: 0x00145A50 File Offset: 0x00143C50
+		
 		public float AdaptDays
 		{
 			get

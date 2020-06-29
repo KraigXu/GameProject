@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompTechprint : ThingComp
 	{
 		
-		// (get) Token: 0x0600538D RID: 21389 RVA: 0x001BF242 File Offset: 0x001BD442
+		
 		public CompProperties_Techprint Props
 		{
 			get

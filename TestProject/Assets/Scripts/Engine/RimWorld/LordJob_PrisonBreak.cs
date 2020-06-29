@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordJob_PrisonBreak : LordJob
 	{
 		
-		// (get) Token: 0x060031D8 RID: 12760 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool NeverInRestraints
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031D9 RID: 12761 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get

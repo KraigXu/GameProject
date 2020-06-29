@@ -11,7 +11,7 @@ namespace RimWorld
 	public class CompPowerPlantWind : CompPowerPlant
 	{
 		
-		// (get) Token: 0x06003F6E RID: 16238 RVA: 0x0015110C File Offset: 0x0014F30C
+		
 		protected override float DesiredPowerOutput
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F6F RID: 16239 RVA: 0x00151114 File Offset: 0x0014F314
+		
 		private float PowerPercent
 		{
 			get

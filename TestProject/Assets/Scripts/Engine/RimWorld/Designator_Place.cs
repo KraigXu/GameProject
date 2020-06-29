@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class Designator_Place : Designator
 	{
 		
-		// (get) Token: 0x06005837 RID: 22583
+		
 		public abstract BuildableDef PlacingDef { get; }
 
 		

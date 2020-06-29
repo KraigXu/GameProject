@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_PasteDispenserNeedsHopper : Alert
 	{
 		
-		// (get) Token: 0x0600566D RID: 22125 RVA: 0x001CA774 File Offset: 0x001C8974
+		
 		private List<Thing> BadDispensers
 		{
 			get

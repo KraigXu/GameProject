@@ -11,7 +11,7 @@ namespace RimWorld
 	public class BiomeDef : Def
 	{
 		
-		// (get) Token: 0x060035C2 RID: 13762 RVA: 0x001242D5 File Offset: 0x001224D5
+		
 		public BiomeWorker Worker
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C3 RID: 13763 RVA: 0x001242FC File Offset: 0x001224FC
+		
 		public Material DrawMaterial
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C4 RID: 13764 RVA: 0x00124398 File Offset: 0x00122598
+		
 		public List<ThingDef> AllWildPlants
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C5 RID: 13765 RVA: 0x00124420 File Offset: 0x00122620
+		
 		public int MaxWildAndCavePlantsClusterRadius
 		{
 			get
@@ -106,7 +106,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C6 RID: 13766 RVA: 0x00124510 File Offset: 0x00122710
+		
 		public float LowestWildAndCavePlantOrder
 		{
 			get
@@ -133,7 +133,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C7 RID: 13767 RVA: 0x001245F2 File Offset: 0x001227F2
+		
 		public IEnumerable<PawnKindDef> AllWildAnimals
 		{
 			get
@@ -152,7 +152,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C8 RID: 13768 RVA: 0x00124602 File Offset: 0x00122802
+		
 		public float PlantCommonalitiesSum
 		{
 			get
@@ -163,7 +163,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035C9 RID: 13769 RVA: 0x00124610 File Offset: 0x00122810
+		
 		public float TreeDensity
 		{
 			get
@@ -314,14 +314,14 @@ namespace RimWorld
 
 		public override IEnumerable<string> ConfigErrors()
 		{
-			//foreach (string text in this.n__0())
+
 			//{
-			//	yield return text;
+			//	
 			//}
 			//IEnumerator<string> enumerator = null;
 			//if (Prefs.DevMode)
 			//{
-			//	using (List<BiomeAnimalRecord>.Enumerator enumerator2 = this.wildAnimals.GetEnumerator())
+			//	List<BiomeAnimalRecord>.Enumerator enumerator2 = this.wildAnimals.GetEnumerator();
 			//	{
 			//		while (enumerator2.MoveNext())
 			//		{

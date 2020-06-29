@@ -950,8 +950,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060070FA RID: 28922 RVA: 0x00276B0A File Offset: 0x00274D0A
-		// (set) Token: 0x060070FB RID: 28923 RVA: 0x00276B12 File Offset: 0x00274D12
+		
+		
 		internal bool WantRfc1950HeaderBytes
 		{
 			get
@@ -1506,7 +1506,7 @@ namespace Ionic.Zlib
 		private bool _WantRfc1950HeaderBytes = true;
 
 		
-		// (Invoke) Token: 0x0600B1BB RID: 45499
+		
 		internal delegate BlockState CompressFunc(FlushType flush);
 
 		

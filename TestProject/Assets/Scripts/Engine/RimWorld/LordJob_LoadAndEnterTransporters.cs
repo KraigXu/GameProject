@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordJob_LoadAndEnterTransporters : LordJob
 	{
 		
-		// (get) Token: 0x060031C2 RID: 12738 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowStartNewGatherings
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031C3 RID: 12739 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get

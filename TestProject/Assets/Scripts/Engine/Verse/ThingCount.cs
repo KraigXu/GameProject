@@ -6,7 +6,7 @@ namespace Verse
 	public struct ThingCount : IEquatable<ThingCount>, IExposable
 	{
 		
-		// (get) Token: 0x06001F58 RID: 8024 RVA: 0x000C0E6E File Offset: 0x000BF06E
+		
 		public Thing Thing
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F59 RID: 8025 RVA: 0x000C0E76 File Offset: 0x000BF076
+		
 		public int Count
 		{
 			get

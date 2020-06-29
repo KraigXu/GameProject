@@ -14,7 +14,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600324D RID: 12877 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get

@@ -55,7 +55,7 @@ namespace Verse.Noise
 		
 		internal static double GradientNoise3D(double fx, double fy, double fz, int ix, int iy, int iz, long seed)
 		{
-			long num = (long)(1619 * ix + 31337 * iy + 6971 * iz) + 1013L * seed & (long)((ulong)-1);
+			long num = (long)(1619 * ix + 31337 * iy + 6971 * iz) + 1013L * seed & (long)(-1);
 			num ^= num >> 8;
 			num &= 255L;
 			double num2;

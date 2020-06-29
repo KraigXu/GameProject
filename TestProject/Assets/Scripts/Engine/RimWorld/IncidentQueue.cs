@@ -10,7 +10,7 @@ namespace RimWorld
 	public class IncidentQueue : IExposable
 	{
 		
-		// (get) Token: 0x06003BDC RID: 15324 RVA: 0x0013BBBF File Offset: 0x00139DBF
+		
 		public int Count
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003BDD RID: 15325 RVA: 0x0013BBCC File Offset: 0x00139DCC
+		
 		public string DebugQueueReadout
 		{
 			get

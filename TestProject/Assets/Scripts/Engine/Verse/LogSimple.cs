@@ -41,7 +41,7 @@ namespace Verse
 			}
 			string value = LogSimple.CompiledLog();
 			string path = GenFilePaths.SaveDataFolderPath + Path.DirectorySeparatorChar.ToString() + "LogSimple.txt";
-			using (StreamWriter streamWriter = new StreamWriter(path, false))
+			StreamWriter streamWriter = new StreamWriter(path, false);
 			{
 				streamWriter.Write(value);
 			}

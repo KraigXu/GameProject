@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompCauseGameCondition : ThingComp
 	{
 		
-		// (get) Token: 0x06004FCC RID: 20428 RVA: 0x001AEE5C File Offset: 0x001AD05C
+		
 		public CompProperties_CausesGameCondition Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FCD RID: 20429 RVA: 0x001AEE69 File Offset: 0x001AD069
+		
 		public GameConditionDef ConditionDef
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FCE RID: 20430 RVA: 0x001AEE76 File Offset: 0x001AD076
+		
 		public IEnumerable<GameCondition> CausedConditions
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FCF RID: 20431 RVA: 0x001AEE83 File Offset: 0x001AD083
+		
 		public bool Active
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004FD0 RID: 20432 RVA: 0x001AEE9A File Offset: 0x001AD09A
+		
 		public int MyTile
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompAbilityEffect_GiveHediff : CompAbilityEffect_WithDuration
 	{
 		
-		// (get) Token: 0x0600418E RID: 16782 RVA: 0x0015EAE6 File Offset: 0x0015CCE6
+		
 		public new CompProperties_AbilityGiveHediff Props
 		{
 			get

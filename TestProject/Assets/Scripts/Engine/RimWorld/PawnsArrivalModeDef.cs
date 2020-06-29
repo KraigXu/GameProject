@@ -7,7 +7,7 @@ namespace RimWorld
 	public class PawnsArrivalModeDef : Def
 	{
 		
-		// (get) Token: 0x060036AE RID: 13998 RVA: 0x00127EF6 File Offset: 0x001260F6
+		
 		public PawnsArrivalModeWorker Worker
 		{
 			get

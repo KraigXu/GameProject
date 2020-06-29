@@ -10,7 +10,7 @@ namespace Verse
 	public static class GenFilePaths
 	{
 		
-		// (get) Token: 0x060020AE RID: 8366 RVA: 0x000C8024 File Offset: 0x000C6224
+		
 		public static string SaveDataFolderPath
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020AF RID: 8367 RVA: 0x000C813C File Offset: 0x000C633C
+		
 		public static string ScenarioPreviewImagePath
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B0 RID: 8368 RVA: 0x000C818D File Offset: 0x000C638D
+		
 		private static DirectoryInfo ExecutableDir
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B1 RID: 8369 RVA: 0x000C819E File Offset: 0x000C639E
+		
 		public static string ModsFolderPath
 		{
 			get
@@ -102,7 +102,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B2 RID: 8370 RVA: 0x000C81BB File Offset: 0x000C63BB
+		
 		public static string OfficialModsFolderPath
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B3 RID: 8371 RVA: 0x000C81D8 File Offset: 0x000C63D8
+		
 		public static string ConfigFolderPath
 		{
 			get
@@ -126,7 +126,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B4 RID: 8372 RVA: 0x000C81E4 File Offset: 0x000C63E4
+		
 		private static string SavedGamesFolderPath
 		{
 			get
@@ -136,7 +136,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B5 RID: 8373 RVA: 0x000C81F0 File Offset: 0x000C63F0
+		
 		private static string ScenariosFolderPath
 		{
 			get
@@ -146,7 +146,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B6 RID: 8374 RVA: 0x000C81FC File Offset: 0x000C63FC
+		
 		private static string ExternalHistoryFolderPath
 		{
 			get
@@ -156,7 +156,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B7 RID: 8375 RVA: 0x000C8208 File Offset: 0x000C6408
+		
 		public static string ScreenshotFolderPath
 		{
 			get
@@ -166,7 +166,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B8 RID: 8376 RVA: 0x000C8214 File Offset: 0x000C6414
+		
 		public static string DevOutputFolderPath
 		{
 			get
@@ -176,7 +176,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020B9 RID: 8377 RVA: 0x000C8220 File Offset: 0x000C6420
+		
 		public static string ModsConfigFilePath
 		{
 			get
@@ -186,7 +186,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BA RID: 8378 RVA: 0x000C8231 File Offset: 0x000C6431
+		
 		public static string ConceptKnowledgeFilePath
 		{
 			get
@@ -196,7 +196,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BB RID: 8379 RVA: 0x000C8242 File Offset: 0x000C6442
+		
 		public static string PrefsFilePath
 		{
 			get
@@ -206,7 +206,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BC RID: 8380 RVA: 0x000C8253 File Offset: 0x000C6453
+		
 		public static string KeyPrefsFilePath
 		{
 			get
@@ -216,7 +216,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BD RID: 8381 RVA: 0x000C8264 File Offset: 0x000C6464
+		
 		public static string LastPlayedVersionFilePath
 		{
 			get
@@ -226,7 +226,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BE RID: 8382 RVA: 0x000C8275 File Offset: 0x000C6475
+		
 		public static string DevModePermanentlyDisabledFilePath
 		{
 			get
@@ -236,7 +236,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020BF RID: 8383 RVA: 0x000C8286 File Offset: 0x000C6486
+		
 		public static string BackstoryOutputFilePath
 		{
 			get
@@ -246,7 +246,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020C0 RID: 8384 RVA: 0x000C8297 File Offset: 0x000C6497
+		
 		public static string TempFolderPath
 		{
 			get
@@ -256,7 +256,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020C1 RID: 8385 RVA: 0x000C82A0 File Offset: 0x000C64A0
+		
 		public static IEnumerable<FileInfo> AllSavedGameFiles
 		{
 			get
@@ -274,7 +274,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020C2 RID: 8386 RVA: 0x000C8314 File Offset: 0x000C6514
+		
 		public static IEnumerable<FileInfo> AllCustomScenarioFiles
 		{
 			get
@@ -292,7 +292,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020C3 RID: 8387 RVA: 0x000C8388 File Offset: 0x000C6588
+		
 		public static IEnumerable<FileInfo> AllExternalHistoryFiles
 		{
 			get

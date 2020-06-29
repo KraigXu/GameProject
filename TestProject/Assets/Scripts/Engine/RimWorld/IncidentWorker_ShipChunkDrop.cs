@@ -8,7 +8,7 @@ namespace RimWorld
 	public class IncidentWorker_ShipChunkDrop : IncidentWorker
 	{
 		
-		// (get) Token: 0x06003C89 RID: 15497 RVA: 0x0013FDEC File Offset: 0x0013DFEC
+		
 		private int RandomCountToDrop
 		{
 			get

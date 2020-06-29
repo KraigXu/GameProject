@@ -42,7 +42,7 @@ public  class LoadingControl : MonoBehaviour
 
 
     
-    // (set) Token: 0x06000003 RID: 3 RVA: 0x000020E9 File Offset: 0x000002E9
+    
     public bool IsNeedFullMask
     {
         set

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class InspirationHandler : IExposable
 	{
 		
-		// (get) Token: 0x06002AC8 RID: 10952 RVA: 0x000F9BD1 File Offset: 0x000F7DD1
+		
 		public bool Inspired
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002AC9 RID: 10953 RVA: 0x000F9BDC File Offset: 0x000F7DDC
+		
 		public Inspiration CurState
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002ACA RID: 10954 RVA: 0x000F9BE4 File Offset: 0x000F7DE4
+		
 		public InspirationDef CurStateDef
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002ACB RID: 10955 RVA: 0x000F9BFC File Offset: 0x000F7DFC
+		
 		private float StartInspirationMTBDays
 		{
 			get

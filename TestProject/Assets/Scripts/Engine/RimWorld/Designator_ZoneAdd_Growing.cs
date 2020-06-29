@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Designator_ZoneAdd_Growing : Designator_ZoneAdd
 	{
 		
-		// (get) Token: 0x0600585B RID: 22619 RVA: 0x001D529D File Offset: 0x001D349D
+		
 		protected override string NewZoneLabel
 		{
 			get

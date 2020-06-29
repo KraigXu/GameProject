@@ -9,7 +9,7 @@ namespace RimWorld
 	public class SketchThing : SketchBuildable
 	{
 		
-		// (get) Token: 0x06004081 RID: 16513 RVA: 0x00158947 File Offset: 0x00156B47
+		
 		public override BuildableDef Buildable
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004082 RID: 16514 RVA: 0x0015894F File Offset: 0x00156B4F
+		
 		public override ThingDef Stuff
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004083 RID: 16515 RVA: 0x00158957 File Offset: 0x00156B57
+		
 		public override string Label
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004084 RID: 16516 RVA: 0x00158970 File Offset: 0x00156B70
+		
 		public override CellRect OccupiedRect
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004085 RID: 16517 RVA: 0x0015898E File Offset: 0x00156B8E
+		
 		public override float SpawnOrder
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004086 RID: 16518 RVA: 0x00158995 File Offset: 0x00156B95
+		
 		public int MaxHitPoints
 		{
 			get

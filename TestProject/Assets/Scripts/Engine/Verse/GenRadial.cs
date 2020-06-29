@@ -8,7 +8,7 @@ namespace Verse
 	public static class GenRadial
 	{
 		
-		// (get) Token: 0x0600023E RID: 574 RVA: 0x0000AC36 File Offset: 0x00008E36
+		
 		public static float MaxRadialPatternRadius
 		{
 			get

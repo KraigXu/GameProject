@@ -8,11 +8,11 @@ namespace Verse.Grammar
 	public abstract class Rule
 	{
 		
-		// (get) Token: 0x06002404 RID: 9220
+		
 		public abstract float BaseSelectionWeight { get; }
 
 		
-		// (get) Token: 0x06002405 RID: 9221 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float Priority
 		{
 			get

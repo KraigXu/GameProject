@@ -13,7 +13,7 @@ namespace Verse
 	public class Hediff : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06000F94 RID: 3988 RVA: 0x0005AA52 File Offset: 0x00058C52
+		
 		public virtual string LabelBase
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F95 RID: 3989 RVA: 0x0005AA5F File Offset: 0x00058C5F
+		
 		public string LabelBaseCap
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F96 RID: 3990 RVA: 0x0005AA74 File Offset: 0x00058C74
+		
 		public virtual string Label
 		{
 			get
@@ -44,7 +44,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F97 RID: 3991 RVA: 0x0005AAB2 File Offset: 0x00058CB2
+		
 		public string LabelCap
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F98 RID: 3992 RVA: 0x0005AAC5 File Offset: 0x00058CC5
+		
 		public virtual Color LabelColor
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F99 RID: 3993 RVA: 0x0005AAD2 File Offset: 0x00058CD2
+		
 		public virtual string LabelInBrackets
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9A RID: 3994 RVA: 0x0005AAFB File Offset: 0x00058CFB
+		
 		public virtual string SeverityLabel
 		{
 			get
@@ -92,7 +92,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9B RID: 3995 RVA: 0x0005AB28 File Offset: 0x00058D28
+		
 		public virtual int UIGroupKey
 		{
 			get
@@ -102,7 +102,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9C RID: 3996 RVA: 0x0005AB38 File Offset: 0x00058D38
+		
 		public virtual string TipStringExtra
 		{
 			get
@@ -120,7 +120,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9D RID: 3997 RVA: 0x0005ABB8 File Offset: 0x00058DB8
+		
 		public virtual HediffStage CurStage
 		{
 			get
@@ -134,7 +134,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9E RID: 3998 RVA: 0x0005ABE4 File Offset: 0x00058DE4
+		
 		public virtual bool ShouldRemove
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F9F RID: 3999 RVA: 0x0005ABF6 File Offset: 0x00058DF6
+		
 		public virtual bool Visible
 		{
 			get
@@ -154,7 +154,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA0 RID: 4000 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float BleedRate
 		{
 			get
@@ -164,7 +164,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA1 RID: 4001 RVA: 0x0005AC1C File Offset: 0x00058E1C
+		
 		public bool Bleeding
 		{
 			get
@@ -174,7 +174,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA2 RID: 4002 RVA: 0x0005AC2B File Offset: 0x00058E2B
+		
 		public virtual float PainOffset
 		{
 			get
@@ -188,7 +188,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA3 RID: 4003 RVA: 0x0005AC4E File Offset: 0x00058E4E
+		
 		public virtual float PainFactor
 		{
 			get
@@ -202,7 +202,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA4 RID: 4004 RVA: 0x0005AC69 File Offset: 0x00058E69
+		
 		public List<PawnCapacityModifier> CapMods
 		{
 			get
@@ -216,7 +216,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA5 RID: 4005 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float SummaryHealthPercentImpact
 		{
 			get
@@ -226,7 +226,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA6 RID: 4006 RVA: 0x0005AC80 File Offset: 0x00058E80
+		
 		public virtual float TendPriority
 		{
 			get
@@ -248,7 +248,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA7 RID: 4007 RVA: 0x0005ACED File Offset: 0x00058EED
+		
 		public virtual TextureAndColor StateIcon
 		{
 			get
@@ -258,7 +258,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA8 RID: 4008 RVA: 0x0005ACF4 File Offset: 0x00058EF4
+		
 		public virtual int CurStageIndex
 		{
 			get
@@ -281,8 +281,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FA9 RID: 4009 RVA: 0x0005AD48 File Offset: 0x00058F48
-		// (set) Token: 0x06000FAA RID: 4010 RVA: 0x0005AD50 File Offset: 0x00058F50
+		
+		
 		public virtual float Severity
 		{
 			get
@@ -312,8 +312,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FAB RID: 4011 RVA: 0x0005AE60 File Offset: 0x00059060
-		// (set) Token: 0x06000FAC RID: 4012 RVA: 0x0005AE68 File Offset: 0x00059068
+		
+		
 		public BodyPartRecord Part
 		{
 			get

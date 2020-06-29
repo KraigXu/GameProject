@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class StorytellerUtilityPopulation
 	{
 		
-		// (get) Token: 0x06003D6F RID: 15727 RVA: 0x00144F07 File Offset: 0x00143107
+		
 		private static StorytellerDef StorytellerDef
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D70 RID: 15728 RVA: 0x00144F13 File Offset: 0x00143113
+		
 		public static float PopulationIntent
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D71 RID: 15729 RVA: 0x00144F33 File Offset: 0x00143133
+		
 		public static float PopulationIntentForQuest
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D72 RID: 15730 RVA: 0x00144F53 File Offset: 0x00143153
+		
 		public static float AdjustedPopulation
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D73 RID: 15731 RVA: 0x00144F80 File Offset: 0x00143180
+		
 		public static float AdjustedPopulationIncludingQuests
 		{
 			get

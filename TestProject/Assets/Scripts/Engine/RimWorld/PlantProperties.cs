@@ -10,7 +10,7 @@ namespace RimWorld
 	public class PlantProperties
 	{
 		
-		// (get) Token: 0x0600356C RID: 13676 RVA: 0x001238A7 File Offset: 0x00121AA7
+		
 		public bool Sowable
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600356D RID: 13677 RVA: 0x001238B7 File Offset: 0x00121AB7
+		
 		public bool Harvestable
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600356E RID: 13678 RVA: 0x001238C6 File Offset: 0x00121AC6
+		
 		public bool HarvestDestroys
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600356F RID: 13679 RVA: 0x001238D8 File Offset: 0x00121AD8
+		
 		public bool IsTree
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003570 RID: 13680 RVA: 0x001238EA File Offset: 0x00121AEA
+		
 		public float LifespanDays
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003571 RID: 13681 RVA: 0x001238F9 File Offset: 0x00121AF9
+		
 		public int LifespanTicks
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003572 RID: 13682 RVA: 0x00123908 File Offset: 0x00121B08
+		
 		public bool LimitedLifespan
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003573 RID: 13683 RVA: 0x00123917 File Offset: 0x00121B17
+		
 		public bool Blightable
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003574 RID: 13684 RVA: 0x00123934 File Offset: 0x00121B34
+		
 		public bool GrowsInClusters
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct StatRequest : IEquatable<StatRequest>
 	{
 		
-		// (get) Token: 0x06006278 RID: 25208 RVA: 0x00221DDB File Offset: 0x0021FFDB
+		
 		public Thing Thing
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006279 RID: 25209 RVA: 0x00221DE3 File Offset: 0x0021FFE3
+		
 		public Def Def
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627A RID: 25210 RVA: 0x00221DEB File Offset: 0x0021FFEB
+		
 		public BuildableDef BuildableDef
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627B RID: 25211 RVA: 0x00221DF8 File Offset: 0x0021FFF8
+		
 		public AbilityDef AbilityDef
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627C RID: 25212 RVA: 0x00221E05 File Offset: 0x00220005
+		
 		public Faction Faction
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627D RID: 25213 RVA: 0x00221E0D File Offset: 0x0022000D
+		
 		public Pawn Pawn
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627E RID: 25214 RVA: 0x00221E15 File Offset: 0x00220015
+		
 		public bool ForAbility
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600627F RID: 25215 RVA: 0x00221E25 File Offset: 0x00220025
+		
 		public List<StatModifier> StatBases
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006280 RID: 25216 RVA: 0x00221E4B File Offset: 0x0022004B
+		
 		public ThingDef StuffDef
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006281 RID: 25217 RVA: 0x00221E53 File Offset: 0x00220053
+		
 		public QualityCategory QualityCategory
 		{
 			get
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006282 RID: 25218 RVA: 0x00221E5B File Offset: 0x0022005B
+		
 		public bool HasThing
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006283 RID: 25219 RVA: 0x00221E66 File Offset: 0x00220066
+		
 		public bool Empty
 		{
 			get

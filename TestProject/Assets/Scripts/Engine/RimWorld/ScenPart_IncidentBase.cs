@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class ScenPart_IncidentBase : ScenPart
 	{
 		
-		// (get) Token: 0x060049E5 RID: 18917 RVA: 0x00190322 File Offset: 0x0018E522
+		
 		public IncidentDef Incident
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060049E6 RID: 18918
+		
 		protected abstract string IncidentTag { get; }
 
 		

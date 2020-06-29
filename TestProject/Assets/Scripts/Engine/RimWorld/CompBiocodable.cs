@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompBiocodable : ThingComp
 	{
 		
-		// (get) Token: 0x0600508F RID: 20623 RVA: 0x001B16E4 File Offset: 0x001AF8E4
+		
 		public bool Biocoded
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005090 RID: 20624 RVA: 0x001B16EC File Offset: 0x001AF8EC
+		
 		public Pawn CodedPawn
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005091 RID: 20625 RVA: 0x001B16F4 File Offset: 0x001AF8F4
+		
 		public string CodedPawnLabel
 		{
 			get

@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_Disappears : HediffComp
 	{
 		
-		// (get) Token: 0x0600103F RID: 4159 RVA: 0x0005D4BC File Offset: 0x0005B6BC
+		
 		public HediffCompProperties_Disappears Props
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001040 RID: 4160 RVA: 0x0005D4C9 File Offset: 0x0005B6C9
+		
 		public override bool CompShouldRemove
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001041 RID: 4161 RVA: 0x0005D4E4 File Offset: 0x0005B6E4
+		
 		public override string CompLabelInBracketsExtra
 		{
 			get

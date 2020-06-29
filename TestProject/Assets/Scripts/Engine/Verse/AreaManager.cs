@@ -9,7 +9,7 @@ namespace Verse
 	public class AreaManager : IExposable
 	{
 		
-		// (get) Token: 0x06000969 RID: 2409 RVA: 0x000334D5 File Offset: 0x000316D5
+		
 		public List<Area> AllAreas
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600096A RID: 2410 RVA: 0x000334DD File Offset: 0x000316DD
+		
 		public Area_Home Home
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600096B RID: 2411 RVA: 0x000334E5 File Offset: 0x000316E5
+		
 		public Area_BuildRoof BuildRoof
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600096C RID: 2412 RVA: 0x000334ED File Offset: 0x000316ED
+		
 		public Area_NoRoof NoRoof
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600096D RID: 2413 RVA: 0x000334F5 File Offset: 0x000316F5
+		
 		public Area_SnowClear SnowClear
 		{
 			get

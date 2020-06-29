@@ -10,7 +10,7 @@ namespace Verse
 	public class RaceProperties
 	{
 		
-		// (get) Token: 0x060004F6 RID: 1270 RVA: 0x0001912B File Offset: 0x0001732B
+		
 		public bool Humanlike
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004F7 RID: 1271 RVA: 0x00019139 File Offset: 0x00017339
+		
 		public bool ToolUser
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004F8 RID: 1272 RVA: 0x00019147 File Offset: 0x00017347
+		
 		public bool Animal
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004F9 RID: 1273 RVA: 0x00019159 File Offset: 0x00017359
+		
 		public bool EatsFood
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FA RID: 1274 RVA: 0x00019164 File Offset: 0x00017364
+		
 		public float FoodLevelPercentageWantEat
 		{
 			get
@@ -76,7 +76,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FB RID: 1275 RVA: 0x000191C4 File Offset: 0x000173C4
+		
 		public DietCategory ResolvedDietCategory
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FC RID: 1276 RVA: 0x00019218 File Offset: 0x00017418
+		
 		public DeathActionWorker DeathActionWorker
 		{
 			get
@@ -130,7 +130,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FD RID: 1277 RVA: 0x00019264 File Offset: 0x00017464
+		
 		public FleshTypeDef FleshType
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FE RID: 1278 RVA: 0x0001927A File Offset: 0x0001747A
+		
 		public bool IsMechanoid
 		{
 			get
@@ -154,7 +154,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004FF RID: 1279 RVA: 0x00019289 File Offset: 0x00017489
+		
 		public bool IsFlesh
 		{
 			get
@@ -164,7 +164,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000500 RID: 1280 RVA: 0x0001929B File Offset: 0x0001749B
+		
 		public ThingDef BloodDef
 		{
 			get
@@ -182,7 +182,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000501 RID: 1281 RVA: 0x000192BB File Offset: 0x000174BB
+		
 		public bool CanDoHerdMigration
 		{
 			get
@@ -192,7 +192,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000502 RID: 1282 RVA: 0x000192D0 File Offset: 0x000174D0
+		
 		public PawnKindDef AnyPawnKind
 		{
 			get
@@ -290,7 +290,7 @@ namespace Verse
 			{
 				foreach (string text in this.litterSizeCurve.ConfigErrors("litterSizeCurve"))
 				{
-					yield return text;
+					
 				}
 				IEnumerator<string> enumerator = null;
 			}

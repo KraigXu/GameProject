@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GameCondition_PsychicEmanation : GameCondition
 	{
 		
-		// (get) Token: 0x06003B65 RID: 15205 RVA: 0x00139F54 File Offset: 0x00138154
+		
 		public override string Label
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B66 RID: 15206 RVA: 0x0013A018 File Offset: 0x00138218
+		
 		public override string LetterText
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B67 RID: 15207 RVA: 0x0013A095 File Offset: 0x00138295
+		
 		public override string Description
 		{
 			get

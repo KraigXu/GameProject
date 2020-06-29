@@ -45,7 +45,7 @@ namespace Verse
 				if (!loadedAssetNames.Contains(text))
 				{
 					loadedAssetNames.Add(text);
-					yield return text;
+					
 				}
 			}
 			array = null;

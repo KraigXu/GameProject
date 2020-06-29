@@ -11,7 +11,7 @@ namespace RimWorld
 	public class JobDriver_GiveSpeech : JobDriver
 	{
 		
-		// (get) Token: 0x06002BB2 RID: 11186 RVA: 0x000FB93A File Offset: 0x000F9B3A
+		
 		private Building_Throne Throne
 		{
 			get

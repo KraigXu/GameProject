@@ -15,7 +15,7 @@ namespace RimWorld.BaseGen
 			Lord lord = rp.singlePawnLord;
 			if (lord == null && num > 0)
 			{
-				Map map = BaseGen.globalSettings.map;
+				Map map = BaseGenCore.globalSettings.map;
 				IntVec3 point;
 				LordJob lordJob;
 				if (Rand.Bool && (from x in rp.rect.Cells
@@ -43,7 +43,7 @@ namespace RimWorld.BaseGen
 				resolveParams.singlePawnKindDef = pawnKindDef;
 				resolveParams.singlePawnLord = lord;
 				resolveParams.faction = Faction.OfMechanoids;
-				BaseGen.symbolStack.Push("pawn", resolveParams, null);
+				BaseGenCore.symbolStack.Push("pawn", resolveParams, null);
 			}
 		}
 

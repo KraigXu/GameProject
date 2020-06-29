@@ -9,7 +9,7 @@ namespace Verse
 	public class StuffProperties
 	{
 		
-		// (get) Token: 0x06000531 RID: 1329 RVA: 0x0001A310 File Offset: 0x00018510
+		
 		public ThingDef SourceNaturalRock
 		{
 			get

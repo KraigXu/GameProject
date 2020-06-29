@@ -6,7 +6,7 @@ namespace Verse
 	public class BodyPartGroupDef : Def
 	{
 		
-		// (get) Token: 0x06000487 RID: 1159 RVA: 0x000174C5 File Offset: 0x000156C5
+		
 		public string LabelShort
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000488 RID: 1160 RVA: 0x000174E1 File Offset: 0x000156E1
+		
 		public string LabelShortCap
 		{
 			get

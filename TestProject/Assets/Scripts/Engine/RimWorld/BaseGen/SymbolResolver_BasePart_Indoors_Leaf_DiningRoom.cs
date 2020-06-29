@@ -8,13 +8,13 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			return base.CanResolve(rp) && BaseGen.globalSettings.basePart_barracksResolved >= BaseGen.globalSettings.minBarracks;
+			return base.CanResolve(rp) && BaseGenCore.globalSettings.basePart_barracksResolved >= BaseGenCore.globalSettings.minBarracks;
 		}
 
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("diningRoom", rp, null);
+			BaseGenCore.symbolStack.Push("diningRoom", rp, null);
 		}
 	}
 }

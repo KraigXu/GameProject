@@ -11,7 +11,7 @@ namespace RimWorld
 	public abstract class JobDriver_PlantWork : JobDriver
 	{
 		
-		// (get) Token: 0x06002D52 RID: 11602 RVA: 0x000FFD38 File Offset: 0x000FDF38
+		
 		protected Plant Plant
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002D53 RID: 11603 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		protected virtual DesignationDef RequiredDesignation
 		{
 			get

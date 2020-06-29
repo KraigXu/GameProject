@@ -101,8 +101,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002326 RID: 8998 RVA: 0x000D46CB File Offset: 0x000D28CB
-		// (set) Token: 0x06002327 RID: 8999 RVA: 0x000D46D3 File Offset: 0x000D28D3
+		
+		
 		public float Border
 		{
 			get
@@ -116,8 +116,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002328 RID: 9000 RVA: 0x000D46DC File Offset: 0x000D28DC
-		// (set) Token: 0x06002329 RID: 9001 RVA: 0x000D46E4 File Offset: 0x000D28E4
+		
+		
 		public ModuleBase Generator
 		{
 			get
@@ -131,7 +131,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600232A RID: 9002 RVA: 0x000D46ED File Offset: 0x000D28ED
+		
 		public int Height
 		{
 			get
@@ -141,7 +141,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600232B RID: 9003 RVA: 0x000D46F5 File Offset: 0x000D28F5
+		
 		public int Width
 		{
 			get
@@ -421,7 +421,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600233A RID: 9018 RVA: 0x000D4FB5 File Offset: 0x000D31B5
+		
 		public bool IsDisposed
 		{
 			get

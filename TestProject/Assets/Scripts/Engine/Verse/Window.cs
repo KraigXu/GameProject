@@ -9,7 +9,7 @@ namespace Verse
 	public abstract class Window
 	{
 		
-		// (get) Token: 0x06001DBA RID: 7610 RVA: 0x000B6823 File Offset: 0x000B4A23
+		
 		public virtual Vector2 InitialSize
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DBB RID: 7611 RVA: 0x000B6A2F File Offset: 0x000B4C2F
+		
 		protected virtual float Margin
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DBC RID: 7612 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool IsDebug
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DBD RID: 7613 RVA: 0x000B6A36 File Offset: 0x000B4C36
+		
 		public bool IsOpen
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public static class Mouse
 	{
 		
-		// (get) Token: 0x06001C8B RID: 7307 RVA: 0x000AD9E4 File Offset: 0x000ABBE4
+		
 		public static bool IsInputBlockedNow
 		{
 			get

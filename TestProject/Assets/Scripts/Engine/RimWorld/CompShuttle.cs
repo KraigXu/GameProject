@@ -13,7 +13,7 @@ namespace RimWorld
 	public class CompShuttle : ThingComp
 	{
 		
-		// (get) Token: 0x06005303 RID: 21251 RVA: 0x001BBD28 File Offset: 0x001B9F28
+		
 		public bool Autoload
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005304 RID: 21252 RVA: 0x001BBD30 File Offset: 0x001B9F30
+		
 		public bool LoadingInProgressOrReadyToLaunch
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005305 RID: 21253 RVA: 0x001BBD3D File Offset: 0x001B9F3D
+		
 		public List<CompTransporter> TransportersInGroup
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005306 RID: 21254 RVA: 0x001BBD55 File Offset: 0x001B9F55
+		
 		public CompTransporter Transporter
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005307 RID: 21255 RVA: 0x001BBD76 File Offset: 0x001B9F76
+		
 		public bool ShowLoadingGizmos
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005308 RID: 21256 RVA: 0x001BBD9C File Offset: 0x001B9F9C
+		
 		public bool AnyInGroupIsUnderRoof
 		{
 			get
@@ -85,7 +85,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005309 RID: 21257 RVA: 0x001BBDE8 File Offset: 0x001B9FE8
+		
 		private bool Autoloadable
 		{
 			get
@@ -116,7 +116,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600530A RID: 21258 RVA: 0x001BBEC4 File Offset: 0x001BA0C4
+		
 		public bool AllRequiredThingsLoaded
 		{
 			get
@@ -183,7 +183,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600530B RID: 21259 RVA: 0x001BC0B8 File Offset: 0x001BA2B8
+		
 		public TaggedString RequiredThingsLabel
 		{
 			get

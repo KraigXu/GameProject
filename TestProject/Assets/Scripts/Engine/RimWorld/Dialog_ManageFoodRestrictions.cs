@@ -9,8 +9,8 @@ namespace RimWorld
 	public class Dialog_ManageFoodRestrictions : Window
 	{
 		
-		// (get) Token: 0x0600590E RID: 22798 RVA: 0x001DB995 File Offset: 0x001D9B95
-		// (set) Token: 0x0600590F RID: 22799 RVA: 0x001DB99D File Offset: 0x001D9B9D
+		
+		
 		private FoodRestriction SelectedFoodRestriction
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005910 RID: 22800 RVA: 0x001DB9AC File Offset: 0x001D9BAC
+		
 		public override Vector2 InitialSize
 		{
 			get

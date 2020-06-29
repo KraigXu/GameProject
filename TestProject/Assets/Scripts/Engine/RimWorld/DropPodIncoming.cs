@@ -8,8 +8,8 @@ namespace RimWorld
 	public class DropPodIncoming : Skyfaller, IActiveDropPod, IThingHolder
 	{
 		
-		// (get) Token: 0x06004F02 RID: 20226 RVA: 0x001A993D File Offset: 0x001A7B3D
-		// (set) Token: 0x06004F03 RID: 20227 RVA: 0x001A9955 File Offset: 0x001A7B55
+		
+		
 		public ActiveDropPodInfo Contents
 		{
 			get

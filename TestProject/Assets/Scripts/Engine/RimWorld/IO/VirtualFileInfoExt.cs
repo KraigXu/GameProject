@@ -12,7 +12,7 @@ namespace RimWorld.IO
 		public static XDocument LoadAsXDocument(this VirtualFile file)
 		{
 			XDocument result;
-			using (Stream stream = file.CreateReadStream())
+			Stream stream = file.CreateReadStream();
 			{
 				result = XDocument.Load(XmlReader.Create(stream), LoadOptions.SetLineInfo);
 			}

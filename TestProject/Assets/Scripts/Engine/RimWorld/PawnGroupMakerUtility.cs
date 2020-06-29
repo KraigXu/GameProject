@@ -156,11 +156,7 @@ namespace RimWorld
 				{
 					break;
 				}
-				Func<PawnGenOption, float> func;
-				if ((func ) == null)
-				{
-					func = (9__0 = ((PawnGenOption gr) => gr.selectionWeight * PawnGroupMakerUtility.PawnWeightFactorByMostExpensivePawnCostFractionCurve.Evaluate(gr.Cost / highestCost)));
-				}
+				Func<PawnGenOption, float> func = (((PawnGenOption gr) => gr.selectionWeight * PawnGroupMakerUtility.PawnWeightFactorByMostExpensivePawnCostFractionCurve.Evaluate(gr.Cost / highestCost)));
 				Func<PawnGenOption, float> weightSelector = func;
 				PawnGenOption pawnGenOption2 = list.RandomElementByWeight(weightSelector);
 				list2.Add(pawnGenOption2);

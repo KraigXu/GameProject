@@ -8,7 +8,7 @@ namespace Verse
 	public static class ScreenFader
 	{
 		
-		// (get) Token: 0x060021A9 RID: 8617 RVA: 0x000CD05C File Offset: 0x000CB25C
+		
 		private static float CurTime
 		{
 			get

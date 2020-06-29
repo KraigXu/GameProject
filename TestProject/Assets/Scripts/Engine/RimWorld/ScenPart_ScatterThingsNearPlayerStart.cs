@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ScenPart_ScatterThingsNearPlayerStart : ScenPart_ScatterThings
 	{
 		
-		// (get) Token: 0x06004A37 RID: 18999 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool NearPlayerStart
 		{
 			get

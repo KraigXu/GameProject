@@ -9,7 +9,7 @@ namespace Verse
 	public static class EnvironmentStatsDrawer
 	{
 		
-		// (get) Token: 0x06001AAF RID: 6831 RVA: 0x000A4114 File Offset: 0x000A2314
+		
 		private static int DisplayedRoomStatsCount
 		{
 			get

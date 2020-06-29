@@ -89,7 +89,7 @@ namespace Verse
 						this.settables[j].SetPlantDefToGrow(plantDef);
 						if (flag && plantDef.plant.interferesWithRoof)
 						{
-							using (IEnumerator<IntVec3> enumerator2 = this.settables[j].Cells.GetEnumerator())
+							IEnumerator<IntVec3> enumerator2 = this.settables[j].Cells.GetEnumerator();
 							{
 								while (enumerator2.MoveNext())
 								{

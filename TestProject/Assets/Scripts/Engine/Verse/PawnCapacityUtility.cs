@@ -89,9 +89,9 @@ namespace Verse
 				{
 					IEnumerable<Hediff_AddedPart> hediffs = diffSet.GetHediffs<Hediff_AddedPart>();
 					Func<Hediff_AddedPart, bool> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__0 = ((Hediff_AddedPart x) => x.Part == rec));
+						predicate = ( ((Hediff_AddedPart x) => x.Part == rec));
 					}
 					Hediff_AddedPart hediff_AddedPart = hediffs.Where(predicate).First<Hediff_AddedPart>();
 					if (impactors != null)
@@ -271,11 +271,8 @@ namespace Verse
 					float a = num4;
 					float num5 = num4;
 					IEnumerable<BodyPartRecord> childParts = bodyPartRecord.GetChildParts(limbDigitTag);
-					Func<BodyPartRecord, float> selector;
-					if ((selector ) == null)
-					{
-						selector = (9__0 = ((BodyPartRecord digitPart) => PawnCapacityUtility.CalculateImmediatePartEfficiencyAndRecord(diffSet, digitPart, impactors)));
-					}
+					Func<BodyPartRecord, float> selector = (((BodyPartRecord digitPart) => PawnCapacityUtility.CalculateImmediatePartEfficiencyAndRecord(diffSet, digitPart, impactors)));
+
 					num4 = Mathf.Lerp(a, num5 * childParts.Average(selector), appendageWeight);
 				}
 				num += num4;
@@ -298,7 +295,7 @@ namespace Verse
 		public abstract class CapacityImpactor
 		{
 			
-			// (get) Token: 0x06007A18 RID: 31256 RVA: 0x0001028D File Offset: 0x0000E48D
+			
 			public virtual bool IsDirect
 			{
 				get
@@ -328,7 +325,7 @@ namespace Verse
 		public class CapacityImpactorCapacity : PawnCapacityUtility.CapacityImpactor
 		{
 			
-			// (get) Token: 0x06007A1D RID: 31261 RVA: 0x00010306 File Offset: 0x0000E506
+			
 			public override bool IsDirect
 			{
 				get
@@ -364,7 +361,7 @@ namespace Verse
 		public class CapacityImpactorPain : PawnCapacityUtility.CapacityImpactor
 		{
 			
-			// (get) Token: 0x06007A22 RID: 31266 RVA: 0x00010306 File Offset: 0x0000E506
+			
 			public override bool IsDirect
 			{
 				get

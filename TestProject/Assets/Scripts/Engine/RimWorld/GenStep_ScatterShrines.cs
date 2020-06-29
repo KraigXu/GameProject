@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_ScatterShrines : GenStep_ScatterRuinsSimple
 	{
 		
-		// (get) Token: 0x06003EA1 RID: 16033 RVA: 0x0014C2A7 File Offset: 0x0014A4A7
+		
 		public override int SeedPart
 		{
 			get
@@ -60,9 +60,9 @@ namespace RimWorld
 			resolveParams.disableSinglePawn = new bool?(true);
 			resolveParams.disableHives = new bool?(true);
 			resolveParams.makeWarningLetter = new bool?(true);
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("ancientTemple", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("ancientTemple", resolveParams, null);
+			BaseGenCore.Generate();
 		}
 
 		

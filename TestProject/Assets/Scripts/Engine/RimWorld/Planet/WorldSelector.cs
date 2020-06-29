@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class WorldSelector
 	{
 		
-		// (get) Token: 0x06007076 RID: 28790 RVA: 0x001FC247 File Offset: 0x001FA447
+		
 		private bool ShiftIsHeld
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007077 RID: 28791 RVA: 0x00273AFF File Offset: 0x00271CFF
+		
 		public List<WorldObject> SelectedObjects
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007078 RID: 28792 RVA: 0x00273B07 File Offset: 0x00271D07
+		
 		public WorldObject SingleSelectedObject
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007079 RID: 28793 RVA: 0x00273B25 File Offset: 0x00271D25
+		
 		public WorldObject FirstSelectedObject
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600707A RID: 28794 RVA: 0x00273B42 File Offset: 0x00271D42
+		
 		public int NumSelectedObjects
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600707B RID: 28795 RVA: 0x00273B4F File Offset: 0x00271D4F
+		
 		public bool AnyObjectOrTileSelected
 		{
 			get
@@ -369,7 +369,7 @@ namespace RimWorld.Planet
 						this.SelectFirstOrNextFrom(list, tile);
 						return;
 					}
-					using (List<WorldObject>.Enumerator enumerator = list.GetEnumerator())
+					List<WorldObject>.Enumerator enumerator = list.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

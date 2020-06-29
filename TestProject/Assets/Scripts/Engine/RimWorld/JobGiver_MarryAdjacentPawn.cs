@@ -15,17 +15,17 @@ namespace RimWorld
 			{
 				return null;
 			}
-			Predicate<Thing> 9__0;
+
 			for (int i = 0; i < 4; i++)
 			{
 				IntVec3 c = pawn.Position + GenAdj.CardinalDirections[i];
 				if (c.InBounds(pawn.Map))
 				{
 					List<Thing> thingList = c.GetThingList(pawn.Map);
-					Predicate<Thing> match;
+					Predicate<Thing> match = (((Thing x) => x is Pawn && this.CanMarry(pawn, (Pawn)x)));
 					if ((match ) == null)
 					{
-						match = (9__0 = ((Thing x) => x is Pawn && this.CanMarry(pawn, (Pawn)x)));
+						
 					}
 					Thing thing = thingList.Find(match);
 					if (thing != null)

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GameCondition_PsychicSuppression : GameCondition
 	{
 		
-		// (get) Token: 0x06003BA6 RID: 15270 RVA: 0x0013AEFD File Offset: 0x001390FD
+		
 		public override string LetterText
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003BA7 RID: 15271 RVA: 0x0013AF25 File Offset: 0x00139125
+		
 		public override string Description
 		{
 			get

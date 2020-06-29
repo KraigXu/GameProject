@@ -9,7 +9,7 @@ namespace Verse
 	public class DesignationCategoryDef : Def
 	{
 		
-		// (get) Token: 0x0600055E RID: 1374 RVA: 0x0001AFF0 File Offset: 0x000191F0
+		
 		public IEnumerable<Designator> ResolvedAllowedDesignators
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600055F RID: 1375 RVA: 0x0001B000 File Offset: 0x00019200
+		
 		public List<Designator> AllResolvedDesignators
 		{
 			get

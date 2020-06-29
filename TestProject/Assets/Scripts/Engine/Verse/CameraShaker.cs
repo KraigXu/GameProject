@@ -7,8 +7,8 @@ namespace Verse
 	public class CameraShaker
 	{
 		
-		// (get) Token: 0x0600041D RID: 1053 RVA: 0x00015706 File Offset: 0x00013906
-		// (set) Token: 0x0600041E RID: 1054 RVA: 0x0001570E File Offset: 0x0001390E
+		
+		
 		public float CurShakeMag
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600041F RID: 1055 RVA: 0x00015728 File Offset: 0x00013928
+		
 		public Vector3 ShakeOffset
 		{
 			get

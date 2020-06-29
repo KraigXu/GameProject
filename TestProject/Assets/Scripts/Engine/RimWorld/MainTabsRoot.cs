@@ -10,7 +10,7 @@ namespace RimWorld
 	public class MainTabsRoot
 	{
 		
-		// (get) Token: 0x06005C3A RID: 23610 RVA: 0x001FD9E8 File Offset: 0x001FBBE8
+		
 		public MainButtonDef OpenTab
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompDestroyAfterDelay : ThingComp
 	{
 		
-		// (get) Token: 0x060050F0 RID: 20720 RVA: 0x001B2979 File Offset: 0x001B0B79
+		
 		public CompProperties_DestroyAfterDelay Props
 		{
 			get

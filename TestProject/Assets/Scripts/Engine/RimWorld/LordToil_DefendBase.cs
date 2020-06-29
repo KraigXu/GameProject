@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_DefendBase : LordToil
 	{
 		
-		// (get) Token: 0x06003288 RID: 12936 RVA: 0x00119209 File Offset: 0x00117409
+		
 		public override IntVec3 FlagLoc
 		{
 			get

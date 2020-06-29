@@ -9,7 +9,7 @@ namespace Verse
 	public class WidgetRow
 	{
 		
-		// (get) Token: 0x06001CB5 RID: 7349 RVA: 0x000AF43D File Offset: 0x000AD63D
+		
 		public float FinalX
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001CB6 RID: 7350 RVA: 0x000AF445 File Offset: 0x000AD645
+		
 		public float FinalY
 		{
 			get

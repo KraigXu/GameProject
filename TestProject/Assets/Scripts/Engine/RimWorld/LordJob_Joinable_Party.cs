@@ -10,7 +10,7 @@ namespace RimWorld
 	public class LordJob_Joinable_Party : LordJob_Joinable_Gathering
 	{
 		
-		// (get) Token: 0x06003233 RID: 12851 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowStartNewGatherings
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003234 RID: 12852 RVA: 0x00117D27 File Offset: 0x00115F27
+		
 		protected virtual ThoughtDef AttendeeThought
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003235 RID: 12853 RVA: 0x00117D2E File Offset: 0x00115F2E
+		
 		protected virtual TaleDef AttendeeTale
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003236 RID: 12854 RVA: 0x00117D27 File Offset: 0x00115F27
+		
 		protected virtual ThoughtDef OrganizerThought
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003237 RID: 12855 RVA: 0x00117D2E File Offset: 0x00115F2E
+		
 		protected virtual TaleDef OrganizerTale
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003238 RID: 12856 RVA: 0x00117D35 File Offset: 0x00115F35
+		
 		public int DurationTicks
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Alert_CaravanIdle : Alert
 	{
 		
-		// (get) Token: 0x0600567A RID: 22138 RVA: 0x001CAC64 File Offset: 0x001C8E64
+		
 		private List<Caravan> IdleCaravans
 		{
 			get

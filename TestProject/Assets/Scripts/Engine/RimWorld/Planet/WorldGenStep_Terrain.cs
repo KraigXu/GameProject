@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WorldGenStep_Terrain : WorldGenStep
 	{
 		
-		// (get) Token: 0x06006B25 RID: 27429 RVA: 0x002563AF File Offset: 0x002545AF
+		
 		public override int SeedPart
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006B26 RID: 27430 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		private static float FreqMultiplier
 		{
 			get

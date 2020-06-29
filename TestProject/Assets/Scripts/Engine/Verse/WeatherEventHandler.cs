@@ -7,7 +7,7 @@ namespace Verse
 	public class WeatherEventHandler
 	{
 		
-		// (get) Token: 0x06000DB0 RID: 3504 RVA: 0x0004E4A1 File Offset: 0x0004C6A1
+		
 		public List<WeatherEvent> LiveEventsListForReading
 		{
 			get

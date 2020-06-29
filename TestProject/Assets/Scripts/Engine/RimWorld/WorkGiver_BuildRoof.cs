@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003011 RID: 12305 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003012 RID: 12306 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool AllowUnreachable
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_FixBrokenDownBuilding : JobDriver
 	{
 		
-		// (get) Token: 0x06002B79 RID: 11129 RVA: 0x000FB324 File Offset: 0x000F9524
+		
 		private Building Building
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B7A RID: 11130 RVA: 0x000FB34C File Offset: 0x000F954C
+		
 		private Thing Components
 		{
 			get

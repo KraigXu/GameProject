@@ -13,7 +13,7 @@ namespace RimWorld
 	public class JobDriver_PrepareCaravan_GatherItems : JobDriver
 	{
 		
-		// (get) Token: 0x06002B29 RID: 11049 RVA: 0x000FA958 File Offset: 0x000F8B58
+		
 		public Thing ToHaul
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B2A RID: 11050 RVA: 0x000FA97C File Offset: 0x000F8B7C
+		
 		public Pawn Carrier
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B2B RID: 11051 RVA: 0x000FA9A2 File Offset: 0x000F8BA2
+		
 		private List<TransferableOneWay> Transferables
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B2C RID: 11052 RVA: 0x000FA9C0 File Offset: 0x000F8BC0
+		
 		private TransferableOneWay Transferable
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompSendSignalOnCountdown : ThingComp
 	{
 		
-		// (get) Token: 0x060052C8 RID: 21192 RVA: 0x001BA796 File Offset: 0x001B8996
+		
 		private CompProperties_SendSignalOnCountdown Props
 		{
 			get
@@ -94,14 +94,14 @@ namespace RimWorld
 		}
 
 		
-		public override void Notify_SignalReceived(Signal signal)
-		{
-			Thing thing;
-			if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
-			{
-				this.ticksLeft = 0;
-			}
-		}
+		//public override void Notify_SignalReceived(Signal signal)
+		//{
+		//	Thing thing;
+		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
+		//	{
+		//		this.ticksLeft = 0;
+		//	}
+		//}
 
 		
 		public override void PostExposeData()

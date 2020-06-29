@@ -26,7 +26,7 @@ namespace RimWorld
 				{
 					yield return p;
 				}
-				p = null;
+				
 			}
 			IEnumerator<Pawn> enumerator = null;
 			yield break;

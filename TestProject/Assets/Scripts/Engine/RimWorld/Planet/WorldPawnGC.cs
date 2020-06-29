@@ -89,9 +89,9 @@ namespace RimWorld.Planet
 			IEnumerable<Pawn> allMapsWorldAndTemporary_Alive = PawnsFinder.AllMapsWorldAndTemporary_Alive;
 			
 			Func<Pawn, bool> predicate;
-			if ((predicate ) == null)
+			if ((predicate=default ) == null)
 			{
-				predicate = (9__0 = ((Pawn pawn) => this.AllowedAsStoryPawn(pawn) && !keptPawns.ContainsKey(pawn)));
+				predicate = ( ((Pawn pawn) => this.AllowedAsStoryPawn(pawn) && !keptPawns.ContainsKey(pawn)));
 			}
 			foreach (Pawn key in (from pawn in allMapsWorldAndTemporary_Alive.Where(predicate)
 			orderby pawn.records.StoryRelevance descending

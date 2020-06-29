@@ -11,7 +11,7 @@ namespace RimWorld
 	public abstract class Bill : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06002A60 RID: 10848 RVA: 0x000F71C4 File Offset: 0x000F53C4
+		
 		public Map Map
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A61 RID: 10849 RVA: 0x000F71D6 File Offset: 0x000F53D6
+		
 		public virtual string Label
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A62 RID: 10850 RVA: 0x000F71E3 File Offset: 0x000F53E3
+		
 		public virtual string LabelCap
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A63 RID: 10851 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool CheckIngredientsIfSociallyProper
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A64 RID: 10852 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool CompletableEver
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A65 RID: 10853 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		protected virtual string StatusString
 		{
 			get
@@ -71,7 +71,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A66 RID: 10854 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected virtual float StatusLineMinHeight
 		{
 			get
@@ -81,7 +81,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A67 RID: 10855 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanCopy
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A68 RID: 10856 RVA: 0x000F71F8 File Offset: 0x000F53F8
+		
 		public bool DeletedOrDereferenced
 		{
 			get

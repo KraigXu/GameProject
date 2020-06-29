@@ -10,8 +10,8 @@ namespace RimWorld
 	public class QuestPart_AddContentsToShuttle : QuestPart
 	{
 		
-		// (get) Token: 0x060038E3 RID: 14563 RVA: 0x0012F78C File Offset: 0x0012D98C
-		// (set) Token: 0x060038E4 RID: 14564 RVA: 0x0012F7A4 File Offset: 0x0012D9A4
+		
+		
 		public IEnumerable<Thing> Things
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038E5 RID: 14565 RVA: 0x0012F844 File Offset: 0x0012DA44
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
@@ -67,15 +67,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038E6 RID: 14566 RVA: 0x0012F854 File Offset: 0x0012DA54
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__1())
-				{
-					yield return globalTargetInfo;
-				}
+
+		
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
 				{

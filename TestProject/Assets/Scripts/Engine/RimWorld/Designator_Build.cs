@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Build : Designator_Place
 	{
 		
-		// (get) Token: 0x0600580C RID: 22540 RVA: 0x001D34A3 File Offset: 0x001D16A3
+		
 		public override BuildableDef PlacingDef
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600580D RID: 22541 RVA: 0x001D34AC File Offset: 0x001D16AC
+		
 		public override string Label
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600580E RID: 22542 RVA: 0x001D350A File Offset: 0x001D170A
+		
 		public override string Desc
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600580F RID: 22543 RVA: 0x001D3517 File Offset: 0x001D1717
+		
 		public override Color IconDrawColor
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005810 RID: 22544 RVA: 0x001D3540 File Offset: 0x001D1740
+		
 		public override bool Visible
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 				}
 				if (this.entDef.PlaceWorkers != null)
 				{
-					using (List<PlaceWorker>.Enumerator enumerator = this.entDef.PlaceWorkers.GetEnumerator())
+					List<PlaceWorker>.Enumerator enumerator = this.entDef.PlaceWorkers.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005811 RID: 22545 RVA: 0x001D366C File Offset: 0x001D186C
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -122,7 +122,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005812 RID: 22546 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DragDrawMeasurements
 		{
 			get
@@ -132,7 +132,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005813 RID: 22547 RVA: 0x001D3679 File Offset: 0x001D1879
+		
 		public override float PanelReadoutTitleExtraRightMargin
 		{
 			get
@@ -142,7 +142,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005814 RID: 22548 RVA: 0x001D3680 File Offset: 0x001D1880
+		
 		public override string HighlightTag
 		{
 			get
@@ -285,7 +285,7 @@ namespace RimWorld
 					ThingDef localStuffDef = thingDef2;
 					list.Add(new FloatMenuOption(GenLabel.ThingLabel(this.entDef, localStuffDef, 1).CapitalizeFirst(), delegate
 					{
-						this.n__0(ev);
+						//this.n__0(ev);
 						Find.DesignatorManager.Select(this);
 						this.stuffDef = localStuffDef;
 						this.writeStuff = true;

@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public static class OverallTemperatureUtility
 	{
 		
-		// (get) Token: 0x060069C3 RID: 27075 RVA: 0x0024E5A3 File Offset: 0x0024C7A3
+		
 		public static int EnumValuesCount
 		{
 			get

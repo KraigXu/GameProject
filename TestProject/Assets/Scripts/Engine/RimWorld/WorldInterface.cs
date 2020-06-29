@@ -8,8 +8,8 @@ namespace RimWorld
 	public class WorldInterface
 	{
 		
-		// (get) Token: 0x06005F39 RID: 24377 RVA: 0x0020E1E9 File Offset: 0x0020C3E9
-		// (set) Token: 0x06005F3A RID: 24378 RVA: 0x0020E1F6 File Offset: 0x0020C3F6
+		
+		
 		public int SelectedTile
 		{
 			get

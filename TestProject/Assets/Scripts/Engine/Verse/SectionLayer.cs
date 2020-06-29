@@ -8,7 +8,7 @@ namespace Verse
 	public abstract class SectionLayer
 	{
 		
-		// (get) Token: 0x06000B66 RID: 2918 RVA: 0x0003DACA File Offset: 0x0003BCCA
+		
 		protected Map Map
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B67 RID: 2919 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool Visible
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class NewQuestLetter : ChoiceLetter
 	{
 		
-		// (get) Token: 0x06001B3F RID: 6975 RVA: 0x000A6F6B File Offset: 0x000A516B
+		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get

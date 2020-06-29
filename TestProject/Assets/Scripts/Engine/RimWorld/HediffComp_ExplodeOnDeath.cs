@@ -7,7 +7,7 @@ namespace RimWorld
 	public class HediffComp_ExplodeOnDeath : HediffComp
 	{
 		
-		// (get) Token: 0x06006421 RID: 25633 RVA: 0x0022B0CA File Offset: 0x002292CA
+		
 		public HediffCompProperties_ExplodeOnDeath Props
 		{
 			get

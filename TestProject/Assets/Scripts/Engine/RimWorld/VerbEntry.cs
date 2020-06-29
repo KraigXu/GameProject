@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct VerbEntry
 	{
 		
-		// (get) Token: 0x0600461E RID: 17950 RVA: 0x0017AE6E File Offset: 0x0017906E
+		
 		public bool IsMeleeAttack
 		{
 			get

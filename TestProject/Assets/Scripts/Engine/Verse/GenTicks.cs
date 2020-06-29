@@ -8,7 +8,7 @@ namespace Verse
 	public static class GenTicks
 	{
 		
-		// (get) Token: 0x060020F7 RID: 8439 RVA: 0x000C9C90 File Offset: 0x000C7E90
+		
 		public static int TicksAbs
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020F8 RID: 8440 RVA: 0x000C9CDD File Offset: 0x000C7EDD
+		
 		public static int TicksGame
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060020F9 RID: 8441 RVA: 0x000C9CFC File Offset: 0x000C7EFC
+		
 		public static int ConfiguredTicksAbsAtGameStart
 		{
 			get

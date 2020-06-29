@@ -41,13 +41,13 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600716A RID: 29034 RVA: 0x0027B4DF File Offset: 0x002796DF
-		// (set) Token: 0x0600716B RID: 29035 RVA: 0x0027B4E7 File Offset: 0x002796E7
+		
+		
 		public CompressionStrategy Strategy { get; private set; }
 
 		
-		// (get) Token: 0x0600716C RID: 29036 RVA: 0x0027B4F0 File Offset: 0x002796F0
-		// (set) Token: 0x0600716D RID: 29037 RVA: 0x0027B4F8 File Offset: 0x002796F8
+		
+		
 		public int MaxBufferPairs
 		{
 			get
@@ -65,8 +65,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600716E RID: 29038 RVA: 0x0027B515 File Offset: 0x00279715
-		// (set) Token: 0x0600716F RID: 29039 RVA: 0x0027B51D File Offset: 0x0027971D
+		
+		
 		public int BufferSize
 		{
 			get
@@ -84,7 +84,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007170 RID: 29040 RVA: 0x0027B53E File Offset: 0x0027973E
+		
 		public int Crc32
 		{
 			get
@@ -94,7 +94,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007171 RID: 29041 RVA: 0x0027B546 File Offset: 0x00279746
+		
 		public long BytesProcessed
 		{
 			get
@@ -485,7 +485,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600717F RID: 29055 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanSeek
 		{
 			get
@@ -495,7 +495,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007180 RID: 29056 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanRead
 		{
 			get
@@ -505,7 +505,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007181 RID: 29057 RVA: 0x0027BDB4 File Offset: 0x00279FB4
+		
 		public override bool CanWrite
 		{
 			get
@@ -515,7 +515,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007182 RID: 29058 RVA: 0x0027BDC1 File Offset: 0x00279FC1
+		
 		public override long Length
 		{
 			get
@@ -525,8 +525,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007183 RID: 29059 RVA: 0x0027BDC8 File Offset: 0x00279FC8
-		// (set) Token: 0x06007184 RID: 29060 RVA: 0x0027BDC1 File Offset: 0x00279FC1
+		
+		
 		public override long Position
 		{
 			get

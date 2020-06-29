@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_Infestation : QuestPart
 	{
 		
-		// (get) Token: 0x06003AA8 RID: 15016 RVA: 0x0013695A File Offset: 0x00134B5A
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+		
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{
@@ -33,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003AA9 RID: 15017 RVA: 0x0013696A File Offset: 0x00134B6A
+		
 		public override string QuestSelectTargetsLabel
 		{
 			get
@@ -43,15 +41,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003AAA RID: 15018 RVA: 0x0013697B File Offset: 0x00134B7B
+		
 		public override IEnumerable<GlobalTargetInfo> QuestSelectTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__1())
-				{
-					yield return globalTargetInfo;
-				}
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null && this.mapParent.HasMap)
 				{
@@ -88,8 +83,8 @@ namespace RimWorld
 						this.loc = thing.Position;
 						if (this.sendStandardLetter)
 						{
-							TaggedString label = this.customLetterLabel.NullOrEmpty() ? IncidentDefOf.Infestation.letterLabel : this.customLetterLabel.Formatted(IncidentDefOf.Infestation.letterLabel.Named("BASELABEL"));
-							TaggedString text = this.customLetterText.NullOrEmpty() ? IncidentDefOf.Infestation.letterText : this.customLetterText.Formatted(IncidentDefOf.Infestation.letterText.Named("BASETEXT"));
+							TaggedString label = customLetterLabel.NullOrEmpty() ? IncidentDefOf.Infestation.letterLabel : this.customLetterLabel.Formatted(IncidentDefOf.Infestation.letterLabel.Named("BASELABEL"));
+							TaggedString text = customLetterText.NullOrEmpty() ? IncidentDefOf.Infestation.letterText : this.customLetterText.Formatted(IncidentDefOf.Infestation.letterText.Named("BASETEXT"));
 							Find.LetterStack.ReceiveLetter(label, text, this.customLetterDef ?? IncidentDefOf.Infestation.letterDef, new TargetInfo(this.loc, this.mapParent.Map, false), null, this.quest, null, null);
 						}
 					}

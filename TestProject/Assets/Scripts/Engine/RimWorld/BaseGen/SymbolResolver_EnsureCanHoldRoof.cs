@@ -22,20 +22,20 @@ namespace RimWorld.BaseGen
 		
 		private void CalculateRoofsAboutToCollapse(CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_EnsureCanHoldRoof.roofsAboutToCollapse.Clear();
 			SymbolResolver_EnsureCanHoldRoof.visited.Clear();
-			Predicate<IntVec3> 9__0;
+
 			foreach (IntVec3 intVec in rect)
 			{
 				if (intVec.Roofed(map) && !RoofCollapseCellsFinder.ConnectsToRoofHolder(intVec, map, SymbolResolver_EnsureCanHoldRoof.visited))
 				{
 					FloodFiller floodFiller = map.floodFiller;
 					IntVec3 root = intVec;
-					Predicate<IntVec3> passCheck;
+					Predicate<IntVec3> passCheck = (((IntVec3 x) => x.Roofed(map)));
 					if ((passCheck ) == null)
 					{
-						passCheck = (9__0 = ((IntVec3 x) => x.Roofed(map)));
+						
 					}
 					floodFiller.FloodFill(root, passCheck, delegate(IntVec3 x)
 					{
@@ -77,7 +77,7 @@ namespace RimWorld.BaseGen
 			{
 				return false;
 			}
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			IntVec3 bestCell = IntVec3.Invalid;
 			float bestScore = 0f;
 			map.floodFiller.FloodFill(IntVec3.Invalid, (IntVec3 x) => SymbolResolver_EnsureCanHoldRoof.roofsAboutToCollapse.Contains(x), delegate(IntVec3 x)
@@ -102,7 +102,7 @@ namespace RimWorld.BaseGen
 		
 		private float GetPillarSpawnScore(IntVec3 c)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (c.Impassable(map) || c.GetFirstBuilding(map) != null || c.GetFirstItem(map) != null || c.GetFirstPawn(map) != null)
 			{
 				return 0f;

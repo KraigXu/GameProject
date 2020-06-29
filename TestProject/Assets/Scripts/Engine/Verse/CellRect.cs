@@ -12,7 +12,7 @@ namespace Verse
 	public struct CellRect : IEquatable<CellRect>, IEnumerable<IntVec3>, IEnumerable
 	{
 		
-		// (get) Token: 0x06000044 RID: 68 RVA: 0x00002FC0 File Offset: 0x000011C0
+		
 		public static CellRect Empty
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000045 RID: 69 RVA: 0x00002FCB File Offset: 0x000011CB
+		
 		public bool IsEmpty
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000046 RID: 70 RVA: 0x00002FE4 File Offset: 0x000011E4
+		
 		public int Area
 		{
 			get
@@ -42,8 +42,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000047 RID: 71 RVA: 0x00002FF3 File Offset: 0x000011F3
-		// (set) Token: 0x06000048 RID: 72 RVA: 0x00003014 File Offset: 0x00001214
+		
+		
 		public int Width
 		{
 			get
@@ -61,8 +61,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000049 RID: 73 RVA: 0x0000302C File Offset: 0x0000122C
-		// (set) Token: 0x0600004A RID: 74 RVA: 0x0000304D File Offset: 0x0000124D
+		
+		
 		public int Height
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600004B RID: 75 RVA: 0x00003065 File Offset: 0x00001265
+		
 		public IEnumerable<IntVec3> Corners
 		{
 			get
@@ -114,7 +114,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600004D RID: 77 RVA: 0x00003087 File Offset: 0x00001287
+		
 		public IntVec3 BottomLeft
 		{
 			get
@@ -124,7 +124,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600004E RID: 78 RVA: 0x0000309B File Offset: 0x0000129B
+		
 		public IntVec3 TopRight
 		{
 			get
@@ -134,7 +134,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600004F RID: 79 RVA: 0x000030AF File Offset: 0x000012AF
+		
 		public IntVec3 RandomCell
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000050 RID: 80 RVA: 0x000030D9 File Offset: 0x000012D9
+		
 		public IntVec3 CenterCell
 		{
 			get
@@ -154,7 +154,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000051 RID: 81 RVA: 0x000030FF File Offset: 0x000012FF
+		
 		public Vector3 CenterVector3
 		{
 			get
@@ -164,7 +164,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000052 RID: 82 RVA: 0x00003135 File Offset: 0x00001335
+		
 		public Vector3 RandomVector3
 		{
 			get
@@ -174,7 +174,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000053 RID: 83 RVA: 0x00003173 File Offset: 0x00001373
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get
@@ -194,7 +194,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000054 RID: 84 RVA: 0x00003188 File Offset: 0x00001388
+		
 		public IEnumerable<IntVec2> Cells2D
 		{
 			get
@@ -214,7 +214,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000055 RID: 85 RVA: 0x0000319D File Offset: 0x0000139D
+		
 		public IEnumerable<IntVec3> EdgeCells
 		{
 			get
@@ -261,7 +261,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000056 RID: 86 RVA: 0x000031B2 File Offset: 0x000013B2
+		
 		public int EdgeCellsCount
 		{
 			get
@@ -279,7 +279,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000057 RID: 87 RVA: 0x000031DC File Offset: 0x000013DC
+		
 		public IEnumerable<IntVec3> AdjacentCellsCardinal
 		{
 			get
@@ -306,7 +306,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000058 RID: 88 RVA: 0x000031F1 File Offset: 0x000013F1
+		
 		public IEnumerable<IntVec3> AdjacentCells
 		{
 			get
@@ -879,7 +879,7 @@ namespace Verse
 		public struct Enumerator : IEnumerator<IntVec3>, IEnumerator, IDisposable
 		{
 			
-			// (get) Token: 0x0600721A RID: 29210 RVA: 0x0027E2C4 File Offset: 0x0027C4C4
+			
 			public IntVec3 Current
 			{
 				get
@@ -889,7 +889,7 @@ namespace Verse
 			}
 
 			
-			// (get) Token: 0x0600721B RID: 29211 RVA: 0x0027E2D8 File Offset: 0x0027C4D8
+			
 			object IEnumerator.Current
 			{
 				get
@@ -945,7 +945,7 @@ namespace Verse
 		public struct CellRectIterator
 		{
 			
-			// (get) Token: 0x06007220 RID: 29216 RVA: 0x0027E39D File Offset: 0x0027C59D
+			
 			public IntVec3 Current
 			{
 				get

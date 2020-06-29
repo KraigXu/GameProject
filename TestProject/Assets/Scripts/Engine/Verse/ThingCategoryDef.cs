@@ -8,7 +8,7 @@ namespace Verse
 	public class ThingCategoryDef : Def
 	{
 		
-		// (get) Token: 0x06000671 RID: 1649 RVA: 0x0001E646 File Offset: 0x0001C846
+		
 		public IEnumerable<ThingCategoryDef> Parents
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000672 RID: 1650 RVA: 0x0001E656 File Offset: 0x0001C856
+		
 		public IEnumerable<ThingCategoryDef> ThisAndChildCategoryDefs
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000673 RID: 1651 RVA: 0x0001E666 File Offset: 0x0001C866
+		
 		public IEnumerable<ThingDef> DescendantThingDefs
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000674 RID: 1652 RVA: 0x0001E676 File Offset: 0x0001C876
+		
 		public IEnumerable<SpecialThingFilterDef> DescendantSpecialThingFilterDefs
 		{
 			get
@@ -89,7 +89,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000675 RID: 1653 RVA: 0x0001E686 File Offset: 0x0001C886
+		
 		public IEnumerable<SpecialThingFilterDef> ParentsSpecialThingFilterDefs
 		{
 			get

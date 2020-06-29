@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_CannotBeUsedRoofed : Alert
 	{
 		
-		// (get) Token: 0x060056B9 RID: 22201 RVA: 0x001CC138 File Offset: 0x001CA338
+		
 		private List<Thing> UnusableBuildings
 		{
 			get

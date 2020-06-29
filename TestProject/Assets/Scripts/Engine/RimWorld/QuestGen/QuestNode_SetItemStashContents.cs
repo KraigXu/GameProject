@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_SetItemStashContents : QuestNode
@@ -37,7 +37,7 @@ namespace RimWorld.QuestGen
 			List<QuestNode_SetItemStashContents.ThingCategoryCount> value2 = this.categories.GetValue(slate);
 			if (value2 != null)
 			{
-				//using (List<QuestNode_SetItemStashContents.ThingCategoryCount>.Enumerator enumerator2 = value2.GetEnumerator())
+				//List<QuestNode_SetItemStashContents.ThingCategoryCount>.Enumerator enumerator2 = value2.GetEnumerator();
 				//{
 				//	while (enumerator2.MoveNext())
 				//	{
@@ -53,7 +53,7 @@ namespace RimWorld.QuestGen
 				//				Func<ThingDef, bool> predicate;
 				//				if ((predicate = c__DisplayClass6_.9__0) == null)
 				//				{
-				//					predicate = (c__DisplayClass6_.9__0 = ((ThingDef x) => x.thingCategories != null && x.thingCategories.Contains(c__DisplayClass6_.c.category) && (c__DisplayClass6_.c.allowDuplicates || !QuestNode_SetItemStashContents.tmpItems.Contains(x))));
+				//					predicate = (c__DisplayClass6_. ((ThingDef x) => x.thingCategories != null && x.thingCategories.Contains(c__DisplayClass6_.c.category) && (c__DisplayClass6_.c.allowDuplicates || !QuestNode_SetItemStashContents.tmpItems.Contains(x))));
 				//				}
 				//				ThingDef thingDef2;
 				//				if (allDefs.Where(predicate).TryRandomElement(out thingDef2))

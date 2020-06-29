@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_NoWorldObject : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060038AE RID: 14510 RVA: 0x0012EFAA File Offset: 0x0012D1AA
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+		
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.worldObject != null)
 				{

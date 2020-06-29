@@ -30,7 +30,7 @@ namespace RimWorld
 		public static IEnumerable<string> LaunchFailReasons(Building rootBuilding)
 		{
 			List<Building> shipParts = ShipUtility.ShipBuildingsAttachedTo(rootBuilding).ToList<Building>();
-			using (Dictionary<ThingDef, int>.Enumerator enumerator = ShipUtility.RequiredParts().GetEnumerator())
+			Dictionary<ThingDef, int>.Enumerator enumerator = ShipUtility.RequiredParts().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -49,7 +49,6 @@ namespace RimWorld
 					}
 				}
 			}
-			Dictionary<ThingDef, int>.Enumerator enumerator = default(Dictionary<ThingDef, int>.Enumerator);
 			bool fullPodFound = false;
 			foreach (Building building in shipParts)
 			{

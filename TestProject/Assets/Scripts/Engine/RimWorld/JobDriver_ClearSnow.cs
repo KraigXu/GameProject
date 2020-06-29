@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobDriver_ClearSnow : JobDriver
 	{
 		
-		// (get) Token: 0x06002C52 RID: 11346 RVA: 0x000FD515 File Offset: 0x000FB715
+		
 		private float TotalNeededWork
 		{
 			get

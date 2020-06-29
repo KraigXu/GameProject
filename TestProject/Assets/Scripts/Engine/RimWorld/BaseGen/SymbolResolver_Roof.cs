@@ -13,7 +13,7 @@ namespace RimWorld.BaseGen
 			{
 				return;
 			}
-			RoofGrid roofGrid = BaseGen.globalSettings.map.roofGrid;
+			RoofGrid roofGrid = BaseGenCore.globalSettings.map.roofGrid;
 			RoofDef def = rp.roofDef ?? RoofDefOf.RoofConstructed;
 			foreach (IntVec3 c in rp.rect)
 			{

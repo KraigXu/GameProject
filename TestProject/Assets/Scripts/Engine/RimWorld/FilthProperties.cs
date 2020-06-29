@@ -7,7 +7,7 @@ namespace RimWorld
 	public class FilthProperties
 	{
 		
-		// (get) Token: 0x0600354E RID: 13646 RVA: 0x001232D5 File Offset: 0x001214D5
+		
 		public bool TerrainSourced
 		{
 			get

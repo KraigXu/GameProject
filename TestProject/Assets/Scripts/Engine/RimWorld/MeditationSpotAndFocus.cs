@@ -7,7 +7,7 @@ namespace RimWorld
 	public struct MeditationSpotAndFocus
 	{
 		
-		// (get) Token: 0x06002F7C RID: 12156 RVA: 0x0010B763 File Offset: 0x00109963
+		
 		public bool IsValid
 		{
 			get

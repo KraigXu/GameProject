@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Tale_DoublePawn : Tale
 	{
 		
-		// (get) Token: 0x06004AB5 RID: 19125 RVA: 0x00194343 File Offset: 0x00192543
+		
 		public override Pawn DominantPawn
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AB6 RID: 19126 RVA: 0x00194350 File Offset: 0x00192550
+		
 		public override string ShortSummary
 		{
 			get

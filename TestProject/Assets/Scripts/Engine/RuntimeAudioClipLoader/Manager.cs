@@ -313,7 +313,7 @@ namespace RuntimeAudioClipLoader
 		private class AudioInstance
 		{
 			
-			// (get) Token: 0x06007213 RID: 29203 RVA: 0x0027E274 File Offset: 0x0027C474
+			
 			public int channels
 			{
 				get
@@ -323,7 +323,7 @@ namespace RuntimeAudioClipLoader
 			}
 
 			
-			// (get) Token: 0x06007214 RID: 29204 RVA: 0x0027E286 File Offset: 0x0027C486
+			
 			public int sampleRate
 			{
 				get

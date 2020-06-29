@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class RoutePlannerWaypoint : WorldObject
 	{
 		
-		// (get) Token: 0x06006D90 RID: 28048 RVA: 0x00265224 File Offset: 0x00263424
+		
 		public override string Label
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class Alert_Thought : Alert
 	{
 		
-		// (get) Token: 0x060056CD RID: 22221
+		
 		protected abstract ThoughtDef Thought { get; }
 
 		
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056CF RID: 22223 RVA: 0x001CC938 File Offset: 0x001CAB38
+		
 		private List<Pawn> AffectedPawns
 		{
 			get

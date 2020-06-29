@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class Dialog_SplitCaravan : Window
 	{
 		
-		// (get) Token: 0x06006F91 RID: 28561 RVA: 0x001D66F9 File Offset: 0x001D48F9
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F92 RID: 28562 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F93 RID: 28563 RVA: 0x0026D565 File Offset: 0x0026B765
+		
 		private BiomeDef Biome
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F94 RID: 28564 RVA: 0x0026D572 File Offset: 0x0026B772
+		
 		private float SourceMassUsage
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F95 RID: 28565 RVA: 0x0026D5A0 File Offset: 0x0026B7A0
+		
 		private float SourceMassCapacity
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F96 RID: 28566 RVA: 0x0026D5E8 File Offset: 0x0026B7E8
+		
 		private float SourceTilesPerDay
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F97 RID: 28567 RVA: 0x0026D66C File Offset: 0x0026B86C
+		
 		private Pair<float, float> SourceDaysWorthOfFood
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld.Planet
 					float second;
 					if (this.caravan.pather.Moving)
 					{
-						using (Find.WorldPathFinder.FindPath(this.caravan.Tile, this.caravan.pather.Destination, null, null))
+						Find.WorldPathFinder.FindPath(this.caravan.Tile, this.caravan.pather.Destination, null, null);
 						{
 							first = DaysWorthOfFoodCalculator.ApproxDaysWorthOfFoodLeftAfterTransfer(this.transferables, this.caravan.Tile, IgnorePawnsInventoryMode.Ignore, this.caravan.Faction, this.caravan.pather.curPath, this.caravan.pather.nextTileCostLeft, this.caravan.TicksPerMove);
 							second = DaysUntilRotCalculator.ApproxDaysUntilRotLeftAfterTransfer(this.transferables, this.caravan.Tile, IgnorePawnsInventoryMode.Ignore, this.caravan.pather.curPath, this.caravan.pather.nextTileCostLeft, this.caravan.TicksPerMove);
@@ -119,7 +119,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F98 RID: 28568 RVA: 0x0026D7DC File Offset: 0x0026B9DC
+		
 		private Pair<ThingDef, float> SourceForagedFoodPerDay
 		{
 			get
@@ -136,7 +136,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F99 RID: 28569 RVA: 0x0026D830 File Offset: 0x0026BA30
+		
 		private float SourceVisibility
 		{
 			get
@@ -153,7 +153,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9A RID: 28570 RVA: 0x0026D876 File Offset: 0x0026BA76
+		
 		private float DestMassUsage
 		{
 			get
@@ -168,7 +168,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9B RID: 28571 RVA: 0x0026D8A4 File Offset: 0x0026BAA4
+		
 		private float DestMassCapacity
 		{
 			get
@@ -185,7 +185,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9C RID: 28572 RVA: 0x0026D8EC File Offset: 0x0026BAEC
+		
 		private float DestTilesPerDay
 		{
 			get
@@ -202,7 +202,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9D RID: 28573 RVA: 0x0026D970 File Offset: 0x0026BB70
+		
 		private Pair<float, float> DestDaysWorthOfFood
 		{
 			get
@@ -229,7 +229,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9E RID: 28574 RVA: 0x0026DA9C File Offset: 0x0026BC9C
+		
 		private Pair<ThingDef, float> DestForagedFoodPerDay
 		{
 			get
@@ -246,7 +246,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F9F RID: 28575 RVA: 0x0026DAF0 File Offset: 0x0026BCF0
+		
 		private float DestVisibility
 		{
 			get
@@ -263,7 +263,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006FA0 RID: 28576 RVA: 0x0026DB36 File Offset: 0x0026BD36
+		
 		private int TicksToArrive
 		{
 			get

@@ -38,8 +38,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023D1 RID: 9169 RVA: 0x000D6405 File Offset: 0x000D4605
-		// (set) Token: 0x060023D2 RID: 9170 RVA: 0x000D6412 File Offset: 0x000D4612
+		
+		
 		public double Frequency
 		{
 			get
@@ -55,8 +55,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023D3 RID: 9171 RVA: 0x000D6438 File Offset: 0x000D4638
-		// (set) Token: 0x060023D4 RID: 9172 RVA: 0x000D6440 File Offset: 0x000D4640
+		
+		
 		public double Power
 		{
 			get
@@ -70,8 +70,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023D5 RID: 9173 RVA: 0x000D6449 File Offset: 0x000D4649
-		// (set) Token: 0x060023D6 RID: 9174 RVA: 0x000D6456 File Offset: 0x000D4656
+		
+		
 		public int Roughness
 		{
 			get
@@ -87,8 +87,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023D7 RID: 9175 RVA: 0x000D647C File Offset: 0x000D467C
-		// (set) Token: 0x060023D8 RID: 9176 RVA: 0x000D6489 File Offset: 0x000D4689
+		
+		
 		public int Seed
 		{
 			get

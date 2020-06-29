@@ -10,7 +10,7 @@ namespace Verse
 	public sealed class TickManager : IExposable
 	{
 		
-		// (get) Token: 0x060007ED RID: 2029 RVA: 0x00024D31 File Offset: 0x00022F31
+		
 		public int TicksGame
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007EE RID: 2030 RVA: 0x00024D39 File Offset: 0x00022F39
+		
 		public int TicksAbs
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007EF RID: 2031 RVA: 0x00024D67 File Offset: 0x00022F67
+		
 		public int StartingYear
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007F0 RID: 2032 RVA: 0x00024D70 File Offset: 0x00022F70
+		
 		public float TickRateMultiplier
 		{
 			get
@@ -92,7 +92,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007F1 RID: 2033 RVA: 0x00024E16 File Offset: 0x00023016
+		
 		private float CurTimePerTick
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007F2 RID: 2034 RVA: 0x00024E3D File Offset: 0x0002303D
+		
 		public bool Paused
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007F3 RID: 2035 RVA: 0x00024E5A File Offset: 0x0002305A
+		
 		public bool NotPlaying
 		{
 			get
@@ -126,8 +126,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007F4 RID: 2036 RVA: 0x00024E70 File Offset: 0x00023070
-		// (set) Token: 0x060007F5 RID: 2037 RVA: 0x00024E78 File Offset: 0x00023078
+		
+		
 		public TimeSpeed CurTimeSpeed
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public static class UnityData
 	{
 		
-		// (get) Token: 0x060002E0 RID: 736 RVA: 0x0000EF09 File Offset: 0x0000D109
+		
 		public static bool IsInMainThread
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002E1 RID: 737 RVA: 0x0000EF1C File Offset: 0x0000D11C
+		
 		public static bool Is32BitBuild
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002E2 RID: 738 RVA: 0x0000EF26 File Offset: 0x0000D126
+		
 		public static bool Is64BitBuild
 		{
 			get

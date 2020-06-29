@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ScenPartDef : Def
 	{
 		
-		// (get) Token: 0x060036DF RID: 14047 RVA: 0x00128605 File Offset: 0x00126805
+		
 		public bool PlayerAddRemovable
 		{
 			get
@@ -20,9 +20,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.scenPartClass == null)

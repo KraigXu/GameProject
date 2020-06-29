@@ -10,7 +10,7 @@ namespace RimWorld
 	public class LordToil_ExitMapAndEscortCarriers : LordToil
 	{
 		
-		// (get) Token: 0x06003298 RID: 12952 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003299 RID: 12953 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSelfTend
 		{
 			get

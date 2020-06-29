@@ -11,8 +11,8 @@ namespace RimWorld
 	public class Dialog_ManageDrugPolicies : Window
 	{
 		
-		// (get) Token: 0x06005900 RID: 22784 RVA: 0x001DAED0 File Offset: 0x001D90D0
-		// (set) Token: 0x06005901 RID: 22785 RVA: 0x001DAED8 File Offset: 0x001D90D8
+		
+		
 		private DrugPolicy SelectedPolicy
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005902 RID: 22786 RVA: 0x001DAEE7 File Offset: 0x001D90E7
+		
 		public override Vector2 InitialSize
 		{
 			get

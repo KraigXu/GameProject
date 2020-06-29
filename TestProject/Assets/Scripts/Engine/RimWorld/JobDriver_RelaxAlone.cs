@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_RelaxAlone : JobDriver
 	{
 		
-		// (get) Token: 0x06002BFB RID: 11259 RVA: 0x000FC750 File Offset: 0x000FA950
+		
 		private bool FromBed
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002BFC RID: 11260 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanSleep
 		{
 			get

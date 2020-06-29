@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Area_SnowClear : Area
 	{
 		
-		// (get) Token: 0x06003DBE RID: 15806 RVA: 0x00145EE1 File Offset: 0x001440E1
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DBF RID: 15807 RVA: 0x00145EF2 File Offset: 0x001440F2
+		
 		public override Color Color
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DC0 RID: 15808 RVA: 0x0013A1CF File Offset: 0x001383CF
+		
 		public override int ListPriority
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordJob_Joinable_Concert : LordJob_Joinable_Party
 	{
 		
-		// (get) Token: 0x06003204 RID: 12804 RVA: 0x00116E84 File Offset: 0x00115084
+		
 		protected override ThoughtDef AttendeeThought
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003205 RID: 12805 RVA: 0x00116E8B File Offset: 0x0011508B
+		
 		protected override TaleDef AttendeeTale
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003206 RID: 12806 RVA: 0x00116E92 File Offset: 0x00115092
+		
 		protected override ThoughtDef OrganizerThought
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003207 RID: 12807 RVA: 0x00116E99 File Offset: 0x00115099
+		
 		protected override TaleDef OrganizerTale
 		{
 			get

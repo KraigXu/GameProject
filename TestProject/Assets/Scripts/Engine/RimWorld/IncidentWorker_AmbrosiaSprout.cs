@@ -30,17 +30,14 @@ namespace RimWorld
 			}
 			Thing thing = null;
 			int randomInRange = IncidentWorker_AmbrosiaSprout.CountRange.RandomInRange;
-			Predicate<IntVec3> 9__0;
+
 			for (int i = 0; i < randomInRange; i++)
 			{
 				IntVec3 root = intVec;
 				Map map2 = map;
 				int radius = 6;
-				Predicate<IntVec3> extraValidator;
-				if ((extraValidator ) == null)
-				{
-					extraValidator = (9__0 = ((IntVec3 x) => this.CanSpawnAt(x, map)));
-				}
+				Predicate<IntVec3> extraValidator = (((IntVec3 x) => this.CanSpawnAt(x, map)));
+
 				IntVec3 intVec2;
 				if (!CellFinder.TryRandomClosewalkCellNear(root, map2, radius, out intVec2, extraValidator))
 				{

@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class ScenarioFiles
 	{
 		
-		// (get) Token: 0x0600494B RID: 18763 RVA: 0x0018E196 File Offset: 0x0018C396
+		
 		public static IEnumerable<Scenario> AllScenariosLocal
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600494C RID: 18764 RVA: 0x0018E19D File Offset: 0x0018C39D
+		
 		public static IEnumerable<Scenario> AllScenariosWorkshop
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		public static void RecacheData()
 		{
 			ScenarioFiles.scenariosLocal.Clear();
-			using (IEnumerator<FileInfo> enumerator = GenFilePaths.AllCustomScenarioFiles.GetEnumerator())
+			IEnumerator<FileInfo> enumerator = GenFilePaths.AllCustomScenarioFiles.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

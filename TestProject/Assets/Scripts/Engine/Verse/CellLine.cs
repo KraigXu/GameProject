@@ -6,7 +6,7 @@ namespace Verse
 	public struct CellLine
 	{
 		
-		// (get) Token: 0x06001E45 RID: 7749 RVA: 0x000BC887 File Offset: 0x000BAA87
+		
 		public float ZIntercept
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E46 RID: 7750 RVA: 0x000BC88F File Offset: 0x000BAA8F
+		
 		public float Slope
 		{
 			get

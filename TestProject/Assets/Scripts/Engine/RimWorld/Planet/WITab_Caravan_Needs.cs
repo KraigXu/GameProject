@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WITab_Caravan_Needs : WITab
 	{
 		
-		// (get) Token: 0x06007009 RID: 28681 RVA: 0x0027133F File Offset: 0x0026F53F
+		
 		private float SpecificNeedsTabWidth
 		{
 			get

@@ -16,11 +16,11 @@ namespace RimWorld
 			IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
 			
 			Func<ThingDef, bool> predicate;
-			if ((predicate ) == null)
+			if ((predicate=default ) == null)
 			{
-				predicate = (9__1 = ((ThingDef td) => isWeapon(td)));
+				predicate = ( ((ThingDef td) => isWeapon(td)));
 			}
-			using (IEnumerator<ThingDef> enumerator = allDefs.Where(predicate).GetEnumerator())
+			IEnumerator<ThingDef> enumerator = allDefs.Where(predicate).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

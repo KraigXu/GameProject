@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Designator_Uninstall : Designator
 	{
 		
-		// (get) Token: 0x06005803 RID: 22531 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005804 RID: 22532 RVA: 0x000FB6CA File Offset: 0x000F98CA
+		
 		protected override DesignationDef Designation
 		{
 			get

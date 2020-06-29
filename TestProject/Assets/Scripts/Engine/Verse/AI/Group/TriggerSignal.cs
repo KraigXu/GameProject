@@ -8,7 +8,7 @@ namespace Verse.AI.Group
 	public struct TriggerSignal
 	{
 		
-		// (get) Token: 0x06002A46 RID: 10822 RVA: 0x000F6AA8 File Offset: 0x000F4CA8
+		
 		public Pawn Pawn
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002A48 RID: 10824 RVA: 0x000F6B07 File Offset: 0x000F4D07
+		
 		public static TriggerSignal ForTick
 		{
 			get

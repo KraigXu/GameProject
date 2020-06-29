@@ -13,7 +13,7 @@ namespace RimWorld.BaseGen
 			ResolveParams resolveParams = rp;
 			resolveParams.singleThingDef = singleThingDef;
 			resolveParams.skipSingleThingIfHasToWipeBuildingOrDoesntFit = new bool?(rp.skipSingleThingIfHasToWipeBuildingOrDoesntFit ?? true);
-			BaseGen.symbolStack.Push("thing", resolveParams, null);
+			BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class CompUseEffect : ThingComp
 	{
 		
-		// (get) Token: 0x060054AB RID: 21675 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float OrderPriority
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054AC RID: 21676 RVA: 0x001C397A File Offset: 0x001C1B7A
+		
 		private CompProperties_UseEffect Props
 		{
 			get

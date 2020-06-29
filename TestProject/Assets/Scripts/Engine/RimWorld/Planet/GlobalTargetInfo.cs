@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public struct GlobalTargetInfo : IEquatable<GlobalTargetInfo>
 	{
 		
-		// (get) Token: 0x0600699E RID: 27038 RVA: 0x0024DA19 File Offset: 0x0024BC19
+		
 		public bool IsValid
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600699F RID: 27039 RVA: 0x0024DA46 File Offset: 0x0024BC46
+		
 		public bool IsMapTarget
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A0 RID: 27040 RVA: 0x0024DA5D File Offset: 0x0024BC5D
+		
 		public bool IsWorldTarget
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A1 RID: 27041 RVA: 0x0024DA75 File Offset: 0x0024BC75
+		
 		public bool HasThing
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A2 RID: 27042 RVA: 0x0024DA80 File Offset: 0x0024BC80
+		
 		public Thing Thing
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A3 RID: 27043 RVA: 0x0024DA88 File Offset: 0x0024BC88
+		
 		public bool ThingDestroyed
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A4 RID: 27044 RVA: 0x0024DA9F File Offset: 0x0024BC9F
+		
 		public bool HasWorldObject
 		{
 			get
@@ -77,7 +77,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A5 RID: 27045 RVA: 0x0024DAAA File Offset: 0x0024BCAA
+		
 		public WorldObject WorldObject
 		{
 			get
@@ -87,7 +87,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A6 RID: 27046 RVA: 0x0024DAB2 File Offset: 0x0024BCB2
+		
 		public static GlobalTargetInfo Invalid
 		{
 			get
@@ -97,7 +97,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A7 RID: 27047 RVA: 0x0024DAC0 File Offset: 0x0024BCC0
+		
 		public string Label
 		{
 			get
@@ -115,7 +115,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A8 RID: 27048 RVA: 0x0024DAF9 File Offset: 0x0024BCF9
+		
 		public IntVec3 Cell
 		{
 			get
@@ -129,7 +129,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069A9 RID: 27049 RVA: 0x0024DB15 File Offset: 0x0024BD15
+		
 		public Map Map
 		{
 			get
@@ -143,7 +143,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069AA RID: 27050 RVA: 0x0024DB34 File Offset: 0x0024BD34
+		
 		public int Tile
 		{
 			get

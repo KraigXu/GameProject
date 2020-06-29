@@ -7,7 +7,7 @@ namespace Verse
 	public class ImmediateWindow : Window
 	{
 		
-		// (get) Token: 0x06001DB6 RID: 7606 RVA: 0x000B69C0 File Offset: 0x000B4BC0
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DB7 RID: 7607 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

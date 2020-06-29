@@ -10,7 +10,7 @@ namespace Verse
 	public class Dialog_PawnTableTest : Window
 	{
 		
-		// (get) Token: 0x06001A24 RID: 6692 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A25 RID: 6693 RVA: 0x000A0AFB File Offset: 0x0009ECFB
+		
 		private List<Pawn> Pawns
 		{
 			get

@@ -6,7 +6,7 @@ namespace Verse
 	public struct TaggedString
 	{
 		
-		// (get) Token: 0x06001BF6 RID: 7158 RVA: 0x000AA983 File Offset: 0x000A8B83
+		
 		public string RawText
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BF8 RID: 7160 RVA: 0x000AA999 File Offset: 0x000A8B99
+		
 		public int Length
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BF9 RID: 7161 RVA: 0x000AA9A6 File Offset: 0x000A8BA6
+		
 		public int StrippedLength
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BFA RID: 7162 RVA: 0x000AA9B8 File Offset: 0x000A8BB8
+		
 		public static TaggedString Empty
 		{
 			get

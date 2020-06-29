@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompUseEffect_FixWorstHealthCondition : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054BD RID: 21693 RVA: 0x001C3B3D File Offset: 0x001C1D3D
+		
 		private float HandCoverageAbsWithChildren
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class Pawn_DrawTracker
 	{
 		
-		// (get) Token: 0x06000EFD RID: 3837 RVA: 0x000554B0 File Offset: 0x000536B0
+		
 		public Vector3 DrawPos
 		{
 			get

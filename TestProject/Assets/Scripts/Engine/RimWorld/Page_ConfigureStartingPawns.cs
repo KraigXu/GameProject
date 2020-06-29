@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Page_ConfigureStartingPawns : Page
 	{
 		
-		// (get) Token: 0x06005A72 RID: 23154 RVA: 0x001EAED6 File Offset: 0x001E90D6
+		
 		public override string PageTitle
 		{
 			get
@@ -263,7 +263,7 @@ namespace RimWorld
 					return false;
 				}
 			}
-			using (List<Pawn>.Enumerator enumerator = Find.GameInitData.startingAndOptionalPawns.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = Find.GameInitData.startingAndOptionalPawns.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

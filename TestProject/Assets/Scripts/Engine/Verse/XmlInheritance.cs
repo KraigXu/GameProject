@@ -291,7 +291,7 @@ namespace Verse
 					{
 						current.RemoveChild(current.FirstChild);
 					}
-					using (IEnumerator enumerator = child.GetEnumerator())
+					IEnumerator enumerator = child.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -344,7 +344,7 @@ namespace Verse
 					if (!list.Any<XmlElement>())
 					{
 						bool flag = false;
-						using (IEnumerator enumerator = current.ChildNodes.GetEnumerator())
+						IEnumerator enumerator = current.ChildNodes.GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{
@@ -359,11 +359,11 @@ namespace Verse
 						{
 							goto IL_2F0;
 						}
-						using (IEnumerator enumerator = current.ChildNodes.GetEnumerator())
+						IEnumerator enumerator1 = current.ChildNodes.GetEnumerator();
 						{
-							while (enumerator.MoveNext())
+							while (enumerator1.MoveNext())
 							{
-								object obj3 = enumerator.Current;
+								object obj3 = enumerator1.Current;
 								XmlNode xmlNode4 = (XmlNode)obj3;
 								if (xmlNode4.NodeType != XmlNodeType.Attribute)
 								{

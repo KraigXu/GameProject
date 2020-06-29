@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 			foreach (string text in this.scenario.ConfigErrors())
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			yield break;

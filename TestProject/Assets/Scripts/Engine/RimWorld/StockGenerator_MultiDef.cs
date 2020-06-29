@@ -29,9 +29,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors(TraderKindDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			int num;

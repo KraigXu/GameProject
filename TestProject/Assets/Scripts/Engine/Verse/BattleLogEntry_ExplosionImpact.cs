@@ -10,7 +10,7 @@ namespace Verse
 	public class BattleLogEntry_ExplosionImpact : LogEntry_DamageResult
 	{
 		
-		// (get) Token: 0x06000730 RID: 1840 RVA: 0x00020EB2 File Offset: 0x0001F0B2
+		
 		private string InitiatorName
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000731 RID: 1841 RVA: 0x00020EE1 File Offset: 0x0001F0E1
+		
 		private string RecipientName
 		{
 			get

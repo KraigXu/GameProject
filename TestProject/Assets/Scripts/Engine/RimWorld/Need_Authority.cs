@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Need_Authority : Need
 	{
 		
-		// (get) Token: 0x06004532 RID: 17714 RVA: 0x001761CE File Offset: 0x001743CE
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004533 RID: 17715 RVA: 0x001761F0 File Offset: 0x001743F0
+		
 		public AuthorityCategory CurCategory
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004534 RID: 17716 RVA: 0x00176244 File Offset: 0x00174444
+		
 		public bool IsActive
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004535 RID: 17717 RVA: 0x001762A3 File Offset: 0x001744A3
+		
 		protected override bool IsFrozen
 		{
 			get
@@ -77,7 +77,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004536 RID: 17718 RVA: 0x001762D8 File Offset: 0x001744D8
+		
 		public float FallPerDay
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004537 RID: 17719 RVA: 0x001763B0 File Offset: 0x001745B0
+		
 		public override bool ShowOnNeedList
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004538 RID: 17720 RVA: 0x001763B8 File Offset: 0x001745B8
+		
 		public bool IsCurrentlyReigning
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004539 RID: 17721 RVA: 0x001763CC File Offset: 0x001745CC
+		
 		public bool IsCurrentlyGivingSpeech
 		{
 			get

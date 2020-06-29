@@ -71,6 +71,8 @@ using System.Collections.Generic;
 /// Base concrete form for a Signal with no parameters
 public class Signal : BaseSignal
 {
+    internal string tag;
+
     public event Action Listener = delegate { };
     public event Action OnceListener = delegate { };
     public void AddListener(Action callback) { Listener += callback; }

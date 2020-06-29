@@ -1,7 +1,7 @@
 ﻿using System;
 using RimWorld.Planet;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_WorldObjectTimeout : QuestNode_Delay

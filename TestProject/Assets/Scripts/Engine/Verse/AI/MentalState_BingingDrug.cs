@@ -9,7 +9,7 @@ namespace Verse.AI
 	public class MentalState_BingingDrug : MentalState_Binging
 	{
 		
-		// (get) Token: 0x060026DC RID: 9948 RVA: 0x000E44EA File Offset: 0x000E26EA
+		
 		public override string InspectLine
 		{
 			get

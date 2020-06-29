@@ -12,7 +12,7 @@ namespace RimWorld
 	public static class StatsReportUtility
 	{
 		
-		// (get) Token: 0x060059CC RID: 22988 RVA: 0x001E5BC0 File Offset: 0x001E3DC0
+		
 		public static int SelectedStatIndex
 		{
 			get

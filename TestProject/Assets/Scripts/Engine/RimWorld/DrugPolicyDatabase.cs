@@ -9,7 +9,7 @@ namespace RimWorld
 	public class DrugPolicyDatabase : IExposable
 	{
 		
-		// (get) Token: 0x0600377F RID: 14207 RVA: 0x00129FF2 File Offset: 0x001281F2
+		
 		public List<DrugPolicy> AllPolicies
 		{
 			get

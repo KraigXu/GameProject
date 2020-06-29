@@ -219,7 +219,7 @@ namespace RimWorld
 		{
 			groupUpLoc = IntVec3.Invalid;
 			Map map = escapingPrisoners[0].Map;
-			using (PawnPath pawnPath = map.pathFinder.FindPath(escapingPrisoners[0].Position, exitPoint, TraverseParms.For(escapingPrisoners[0], Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell))
+			PawnPath pawnPath = map.pathFinder.FindPath(escapingPrisoners[0].Position, exitPoint, TraverseParms.For(escapingPrisoners[0], Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
 			{
 				if (!pawnPath.Found)
 				{
@@ -237,9 +237,9 @@ namespace RimWorld
 						{
 							IEnumerable<IntVec3> cells = room.Cells;
 							Func<IntVec3, bool> predicate;
-							if ((predicate ) == null)
+							if ((predicate=default ) == null)
 							{
-								predicate = (9__0 = ((IntVec3 x) => x.Standable(map)));
+								predicate = ( ((IntVec3 x) => x.Standable(map)));
 							}
 							if (cells.Count(predicate) < 5)
 							{
@@ -272,7 +272,7 @@ namespace RimWorld
 				return false;
 			}
 			bool result;
-			using (PawnPath pawnPath = a.Map.pathFinder.FindPath(anyCell, anyCell2, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false), PathEndMode.OnCell))
+			PawnPath pawnPath = a.Map.pathFinder.FindPath(anyCell, anyCell2, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false), PathEndMode.OnCell);
 			{
 				if (!pawnPath.Found)
 				{

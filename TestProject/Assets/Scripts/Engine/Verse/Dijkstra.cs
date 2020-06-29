@@ -39,7 +39,7 @@ namespace Verse
 				}
 				goto IL_183;
 			}
-			using (IEnumerator<T> enumerator = startingNodes.GetEnumerator())
+			IEnumerator<T> enumerator = startingNodes.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -8,7 +8,7 @@ namespace Verse
 	public struct Rot4 : IEquatable<Rot4>
 	{
 		
-		// (get) Token: 0x0600012B RID: 299 RVA: 0x0000597D File Offset: 0x00003B7D
+		
 		public bool IsValid
 		{
 			get
@@ -18,8 +18,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600012C RID: 300 RVA: 0x00005989 File Offset: 0x00003B89
-		// (set) Token: 0x0600012D RID: 301 RVA: 0x00005991 File Offset: 0x00003B91
+		
+		
 		public byte AsByte
 		{
 			get
@@ -33,8 +33,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600012E RID: 302 RVA: 0x00005989 File Offset: 0x00003B89
-		// (set) Token: 0x0600012F RID: 303 RVA: 0x0000599D File Offset: 0x00003B9D
+		
+		
 		public int AsInt
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000130 RID: 304 RVA: 0x000059B8 File Offset: 0x00003BB8
+		
 		public float AsAngle
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000131 RID: 305 RVA: 0x00005A04 File Offset: 0x00003C04
+		
 		public SpectateRectSide AsSpectateSide
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000132 RID: 306 RVA: 0x00005A3C File Offset: 0x00003C3C
+		
 		public Quaternion AsQuat
 		{
 			get
@@ -119,7 +119,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000133 RID: 307 RVA: 0x00005AB0 File Offset: 0x00003CB0
+		
 		public Vector2 AsVector2
 		{
 			get
@@ -141,7 +141,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000134 RID: 308 RVA: 0x00005B0E File Offset: 0x00003D0E
+		
 		public bool IsHorizontal
 		{
 			get
@@ -151,7 +151,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000135 RID: 309 RVA: 0x00005B24 File Offset: 0x00003D24
+		
 		public static Rot4 North
 		{
 			get
@@ -161,7 +161,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000136 RID: 310 RVA: 0x00005B2C File Offset: 0x00003D2C
+		
 		public static Rot4 East
 		{
 			get
@@ -171,7 +171,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000137 RID: 311 RVA: 0x00005B34 File Offset: 0x00003D34
+		
 		public static Rot4 South
 		{
 			get
@@ -181,7 +181,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000138 RID: 312 RVA: 0x00005B3C File Offset: 0x00003D3C
+		
 		public static Rot4 West
 		{
 			get
@@ -191,7 +191,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000139 RID: 313 RVA: 0x00005B44 File Offset: 0x00003D44
+		
 		public static Rot4 Random
 		{
 			get
@@ -201,7 +201,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600013A RID: 314 RVA: 0x00005B54 File Offset: 0x00003D54
+		
 		public static Rot4 Invalid
 		{
 			get
@@ -226,7 +226,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600013D RID: 317 RVA: 0x00005B80 File Offset: 0x00003D80
+		
 		public IntVec3 FacingCell
 		{
 			get
@@ -248,7 +248,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600013E RID: 318 RVA: 0x00005BDC File Offset: 0x00003DDC
+		
 		public IntVec3 RighthandCell
 		{
 			get
@@ -270,7 +270,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600013F RID: 319 RVA: 0x00005C38 File Offset: 0x00003E38
+		
 		public Rot4 Opposite
 		{
 			get

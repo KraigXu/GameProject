@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_GetsPermanent : HediffComp
 	{
 		
-		// (get) Token: 0x0600106C RID: 4204 RVA: 0x0005DEBB File Offset: 0x0005C0BB
+		
 		public HediffCompProperties_GetsPermanent Props
 		{
 			get
@@ -16,8 +16,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600106D RID: 4205 RVA: 0x0005DEC8 File Offset: 0x0005C0C8
-		// (set) Token: 0x0600106E RID: 4206 RVA: 0x0005DED0 File Offset: 0x0005C0D0
+		
+		
 		public bool IsPermanent
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600106F RID: 4207 RVA: 0x0005DF35 File Offset: 0x0005C135
+		
 		public PainCategory PainCategory
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001070 RID: 4208 RVA: 0x0005DF3D File Offset: 0x0005C13D
+		
 		public float PainFactor
 		{
 			get

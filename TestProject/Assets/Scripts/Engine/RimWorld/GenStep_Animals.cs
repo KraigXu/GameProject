@@ -7,7 +7,7 @@ namespace RimWorld
 	public class GenStep_Animals : GenStep
 	{
 		
-		// (get) Token: 0x06003E2E RID: 15918 RVA: 0x00147866 File Offset: 0x00145A66
+		
 		public override int SeedPart
 		{
 			get

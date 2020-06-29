@@ -375,7 +375,7 @@ namespace RimWorld
 		
 		public static bool BedroomSatisfiesRequirements(Room room, RoyalTitle title)
 		{
-			using (List<RoomRequirement>.Enumerator enumerator = title.def.bedroomRequirements.GetEnumerator())
+			List<RoomRequirement>.Enumerator enumerator = title.def.bedroomRequirements.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -26,9 +26,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (parentDef.tickerType != TickerType.Normal)

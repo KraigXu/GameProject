@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600316A RID: 12650 RVA: 0x0010E01A File Offset: 0x0010C21A
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get

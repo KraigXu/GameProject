@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class SkyOverlay
 	{
 		
-		// (set) Token: 0x06000DA1 RID: 3489 RVA: 0x0004E21B File Offset: 0x0004C41B
+		
 		public Color OverlayColor
 		{
 			set

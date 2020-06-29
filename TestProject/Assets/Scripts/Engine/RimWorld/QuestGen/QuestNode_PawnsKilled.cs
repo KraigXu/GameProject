@@ -2,7 +2,7 @@
 using RimWorld.Planet;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_PawnsKilled : QuestNode

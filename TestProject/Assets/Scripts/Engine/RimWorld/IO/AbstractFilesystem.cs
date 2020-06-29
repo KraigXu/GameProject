@@ -37,7 +37,7 @@ namespace RimWorld.IO
 					{
 						string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(text3);
 						bool flag = false;
-						using (List<VirtualDirectory>.Enumerator enumerator = list.GetEnumerator())
+						List<VirtualDirectory>.Enumerator enumerator = list.GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{

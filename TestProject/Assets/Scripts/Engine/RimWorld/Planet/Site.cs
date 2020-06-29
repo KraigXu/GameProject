@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class Site : MapParent
 	{
 		
-		// (get) Token: 0x06006DEB RID: 28139 RVA: 0x00266808 File Offset: 0x00264A08
+		
 		public override string Label
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DEC RID: 28140 RVA: 0x0026687D File Offset: 0x00264A7D
+		
 		public override Texture2D ExpandingIcon
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DED RID: 28141 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool HandlesConditionCausers
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DEE RID: 28142 RVA: 0x0026688C File Offset: 0x00264A8C
+		
 		public override Material Material
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DEF RID: 28143 RVA: 0x002668F7 File Offset: 0x00264AF7
+		
 		public override bool AppendFactionToInspectString
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF0 RID: 28144 RVA: 0x00266914 File Offset: 0x00264B14
+		
 		private SitePart MainSitePart
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF1 RID: 28145 RVA: 0x002669AA File Offset: 0x00264BAA
+		
 		private SitePartDef MainSitePartDef
 		{
 			get
@@ -112,15 +112,12 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF2 RID: 28146 RVA: 0x002669B7 File Offset: 0x00264BB7
+		
 		public override IEnumerable<GenStepWithParams> ExtraGenStepDefs
 		{
 			get
 			{
-				foreach (GenStepWithParams genStepWithParams in this.n__0())
-				{
-					yield return genStepWithParams;
-				}
+
 				IEnumerator<GenStepWithParams> enumerator = null;
 				int num;
 				for (int i = 0; i < this.parts.Count; i = num + 1)
@@ -143,7 +140,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF3 RID: 28147 RVA: 0x002669C8 File Offset: 0x00264BC8
+		
 		public string ApproachOrderString
 		{
 			get
@@ -153,7 +150,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF4 RID: 28148 RVA: 0x00266A20 File Offset: 0x00264C20
+		
 		public string ApproachingReportString
 		{
 			get
@@ -163,7 +160,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF5 RID: 28149 RVA: 0x00266A78 File Offset: 0x00264C78
+		
 		public float ActualThreatPoints
 		{
 			get
@@ -178,7 +175,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF6 RID: 28150 RVA: 0x00266ABC File Offset: 0x00264CBC
+		
 		public bool IncreasesPopulation
 		{
 			get
@@ -199,7 +196,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF7 RID: 28151 RVA: 0x00266B1C File Offset: 0x00264D1C
+		
 		public bool BadEvenIfNoMap
 		{
 			get
@@ -216,7 +213,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF8 RID: 28152 RVA: 0x00266B5A File Offset: 0x00264D5A
+		
 		public bool HasWorldObjectTimeout
 		{
 			get
@@ -226,7 +223,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DF9 RID: 28153 RVA: 0x00266B68 File Offset: 0x00264D68
+		
 		public int WorldObjectTimeoutTicksLeft
 		{
 			get
@@ -389,9 +386,9 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__1(caravan))
+
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (!base.HasMap)
@@ -409,10 +406,12 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetTransportPodsFloatMenuOptions(IEnumerable<IThingHolder> pods, CompLaunchable representative)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__2(pods, representative))
+
 			{
-				yield return floatMenuOption;
+				
 			}
+			
+
 			IEnumerator<FloatMenuOption> enumerator = null;
 			foreach (FloatMenuOption floatMenuOption2 in TransportPodsArrivalAction_VisitSite.GetFloatMenuOptions(representative, pods, this))
 			{
@@ -426,10 +425,7 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.n__3())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (base.HasMap && Find.WorldSelector.SingleSelectedObject == this)
 			{

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Thought_Situational : Thought
 	{
 		
-		// (get) Token: 0x060047DB RID: 18395 RVA: 0x00185996 File Offset: 0x00183B96
+		
 		public bool Active
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047DC RID: 18396 RVA: 0x001859A4 File Offset: 0x00183BA4
+		
 		public override int CurStageIndex
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047DD RID: 18397 RVA: 0x001859AC File Offset: 0x00183BAC
+		
 		public override string LabelCap
 		{
 			get

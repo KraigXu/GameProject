@@ -10,7 +10,7 @@ namespace Verse
 	public class WindManager
 	{
 		
-		// (get) Token: 0x06000D99 RID: 3481 RVA: 0x0004DEE4 File Offset: 0x0004C0E4
+		
 		public float WindSpeed
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic_Flicker : Graphic_Collection
 	{
 		
-		// (get) Token: 0x0600151A RID: 5402 RVA: 0x0007BCD4 File Offset: 0x00079ED4
+		
 		public override Material MatSingle
 		{
 			get

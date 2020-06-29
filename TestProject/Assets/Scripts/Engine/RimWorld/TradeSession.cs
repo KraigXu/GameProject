@@ -7,7 +7,7 @@ namespace RimWorld
 	public static class TradeSession
 	{
 		
-		// (get) Token: 0x060055A9 RID: 21929 RVA: 0x001C70FB File Offset: 0x001C52FB
+		
 		public static bool Active
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055AA RID: 21930 RVA: 0x001C7105 File Offset: 0x001C5305
+		
 		public static TradeCurrency TradeCurrency
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class RoyalTitlePermitWorker_CallAid : RoyalTitlePermitWorker, ITargetingSource
 	{
 		
-		// (get) Token: 0x0600639D RID: 25501 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool CasterIsPawn
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600639E RID: 25502 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool IsMeleeAttack
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600639F RID: 25503 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool Targetable
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A0 RID: 25504 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool MultiSelect
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A1 RID: 25505 RVA: 0x00228DC2 File Offset: 0x00226FC2
+		
 		public Thing Caster
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A2 RID: 25506 RVA: 0x00228DC2 File Offset: 0x00226FC2
+		
 		public Pawn CasterPawn
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A3 RID: 25507 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public Verb GetVerb
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A4 RID: 25508 RVA: 0x00228DCA File Offset: 0x00226FCA
+		
 		public Texture2D UIIcon
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A5 RID: 25509 RVA: 0x00228DD1 File Offset: 0x00226FD1
+		
 		public TargetingParameters targetParams
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060063A6 RID: 25510 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public ITargetingSource DestinationSelector
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class TemperatureMemory : IExposable
 	{
 		
-		// (get) Token: 0x060040B9 RID: 16569 RVA: 0x0015AD66 File Offset: 0x00158F66
+		
 		public bool GrowthSeasonOutdoorsNow
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040BA RID: 16570 RVA: 0x0015AD7A File Offset: 0x00158F7A
+		
 		public bool GrowthSeasonOutdoorsNowForSowing
 		{
 			get

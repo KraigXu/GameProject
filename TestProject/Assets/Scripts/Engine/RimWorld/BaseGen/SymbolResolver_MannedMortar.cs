@@ -13,13 +13,13 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (!base.CanResolve(rp))
 			{
 				return false;
 			}
 			int num = 0;
-			using (CellRect.Enumerator enumerator = rp.rect.GetEnumerator())
+			CellRect.Enumerator enumerator = rp.rect.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -34,7 +34,7 @@ namespace RimWorld.BaseGen
 
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			Faction faction;
 			if ((faction = rp.faction) == null)
 			{
@@ -65,7 +65,7 @@ namespace RimWorld.BaseGen
 				resolveParams.singlePawnGenerationRequest = new PawnGenerationRequest?(value);
 				resolveParams.rect = CellRect.SingleCell(c);
 				resolveParams.singlePawnLord = singlePawnLord;
-				BaseGen.symbolStack.Push("pawn", resolveParams, null);
+				BaseGenCore.symbolStack.Push("pawn", resolveParams, null);
 			}
 			ThingDef thingDef3 = TurretGunUtility.TryFindRandomShellDef(thingDef2, false, true, faction2.def.techLevel, false, 250f);
 			if (thingDef3 != null)
@@ -74,19 +74,19 @@ namespace RimWorld.BaseGen
 				resolveParams2.faction = faction2;
 				resolveParams2.singleThingDef = thingDef3;
 				resolveParams2.singleThingStackCount = new int?(Rand.RangeInclusive(5, Mathf.Min(8, thingDef3.stackLimit)));
-				BaseGen.symbolStack.Push("thing", resolveParams2, null);
+				BaseGenCore.symbolStack.Push("thing", resolveParams2, null);
 			}
 			ResolveParams resolveParams3 = rp;
 			resolveParams3.faction = faction2;
 			resolveParams3.singleThingDef = thingDef2;
 			resolveParams3.rect = CellRect.SingleCell(intVec);
 			resolveParams3.thingRot = new Rot4?(rot);
-			BaseGen.symbolStack.Push("thing", resolveParams3, null);
+			BaseGenCore.symbolStack.Push("thing", resolveParams3, null);
 		}
 
 		private bool TryFindMortarSpawnCell(CellRect rect, Rot4 rot, ThingDef mortarDef, out IntVec3 cell)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			Predicate<CellRect> edgeTouchCheck;
 			if (rot == Rot4.North)
 			{

@@ -158,9 +158,9 @@ namespace RimWorld
 		
 		public static IEnumerable<ThingDef> ValidPlantTypesForGrowers(List<IPlantToGrowSettable> sel)
 		{
-			using (IEnumerator<ThingDef> enumerator = (from def in DefDatabase<ThingDef>.AllDefs
+			IEnumerator<ThingDef> enumerator = (from def in DefDatabase<ThingDef>.AllDefs
 			where def.category == ThingCategory.Plant
-			select def).GetEnumerator())
+			select def).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -171,7 +171,7 @@ namespace RimWorld
 					}
 				}
 			}
-			IEnumerator<ThingDef> enumerator = null;
+			
 			yield break;
 			yield break;
 		}

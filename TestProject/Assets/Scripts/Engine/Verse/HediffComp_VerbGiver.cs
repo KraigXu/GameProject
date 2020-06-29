@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffComp_VerbGiver : HediffComp, IVerbOwner
 	{
 		
-		// (get) Token: 0x060010D6 RID: 4310 RVA: 0x0005F939 File Offset: 0x0005DB39
+		
 		public HediffCompProperties_VerbGiver Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010D7 RID: 4311 RVA: 0x0005F946 File Offset: 0x0005DB46
+		
 		public VerbTracker VerbTracker
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010D8 RID: 4312 RVA: 0x0005F94E File Offset: 0x0005DB4E
+		
 		public List<VerbProperties> VerbProperties
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010D9 RID: 4313 RVA: 0x0005F95B File Offset: 0x0005DB5B
+		
 		public List<Tool> Tools
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010DA RID: 4314 RVA: 0x0005F968 File Offset: 0x0005DB68
+		
 		Thing IVerbOwner.ConstantCaster
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010DB RID: 4315 RVA: 0x0005F970 File Offset: 0x0005DB70
+		
 		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
 		{
 			get

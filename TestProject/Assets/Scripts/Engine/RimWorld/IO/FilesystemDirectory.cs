@@ -8,7 +8,7 @@ namespace RimWorld.IO
 	internal class FilesystemDirectory : VirtualDirectory
 	{
 		
-		// (get) Token: 0x06007094 RID: 28820 RVA: 0x00274563 File Offset: 0x00272763
+		
 		public override string Name
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x06007095 RID: 28821 RVA: 0x00274570 File Offset: 0x00272770
+		
 		public override string FullPath
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x06007096 RID: 28822 RVA: 0x0027457D File Offset: 0x0027277D
+		
 		public override bool Exists
 		{
 			get

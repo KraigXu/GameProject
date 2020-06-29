@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_DisableTradeRequest : QuestPart
 	{
 		
-		// (get) Token: 0x0600394D RID: 14669 RVA: 0x00131033 File Offset: 0x0012F233
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+				
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.settlement != null)
 				{
@@ -30,15 +28,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600394E RID: 14670 RVA: 0x00131043 File Offset: 0x0012F243
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
-				{
-					yield return faction;
-				}
+
+		
 				IEnumerator<Faction> enumerator = null;
 				if (this.settlement.Faction != null)
 				{

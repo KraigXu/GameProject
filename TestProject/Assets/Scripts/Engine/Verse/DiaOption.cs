@@ -9,7 +9,7 @@ namespace Verse
 	public class DiaOption
 	{
 		
-		// (get) Token: 0x06001DA6 RID: 7590 RVA: 0x000B6469 File Offset: 0x000B4669
+		
 		public static DiaOption DefaultOK
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DA7 RID: 7591 RVA: 0x000B6486 File Offset: 0x000B4686
+		
 		protected Dialog_NodeTree OwningDialog
 		{
 			get

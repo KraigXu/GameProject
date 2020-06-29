@@ -8,7 +8,7 @@ namespace Verse
 	internal class SectionLayer_Zones : SectionLayer
 	{
 		
-		// (get) Token: 0x06000BBB RID: 3003 RVA: 0x000428F8 File Offset: 0x00040AF8
+		
 		public override bool Visible
 		{
 			get

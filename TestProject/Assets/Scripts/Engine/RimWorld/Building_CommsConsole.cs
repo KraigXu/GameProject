@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Building_CommsConsole : Building
 	{
 		
-		// (get) Token: 0x06004C84 RID: 19588 RVA: 0x0019ADDE File Offset: 0x00198FDE
+		
 		public bool CanUseCommsNow
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 				FloatMenuOption floatMenuOption = communicable.CommFloatMenuOption(this, myPawn);
 				if (floatMenuOption != null)
 				{
-					yield return floatMenuOption;
+					
 				}
 			}
 			IEnumerator<ICommunicable> enumerator = null;

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_UnforbidStartingResources : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005EDA RID: 24282 RVA: 0x0020C434 File Offset: 0x0020A634
+		
 		protected override float ProgressPercent
 		{
 			get

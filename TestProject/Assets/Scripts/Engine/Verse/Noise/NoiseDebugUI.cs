@@ -9,7 +9,7 @@ namespace Verse.Noise
 	public static class NoiseDebugUI
 	{
 		
-		// (set) Token: 0x060022CA RID: 8906 RVA: 0x000D328F File Offset: 0x000D148F
+		
 		public static IntVec2 RenderSize
 		{
 			set
@@ -224,7 +224,7 @@ namespace Verse.Noise
 		private class Noise2D
 		{
 			
-			// (get) Token: 0x060085B8 RID: 34232 RVA: 0x002B33A3 File Offset: 0x002B15A3
+			
 			public Texture2D Texture
 			{
 				get

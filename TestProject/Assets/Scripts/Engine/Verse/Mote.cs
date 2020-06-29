@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class Mote : Thing
 	{
 		
-		// (set) Token: 0x060015A5 RID: 5541 RVA: 0x0007E3B5 File Offset: 0x0007C5B5
+		
 		public float Scale
 		{
 			set
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015A6 RID: 5542 RVA: 0x0007E3C9 File Offset: 0x0007C5C9
+		
 		public float AgeSecs
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015A7 RID: 5543 RVA: 0x0007E402 File Offset: 0x0007C602
+		
 		protected float SolidTime
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015A8 RID: 5544 RVA: 0x0007E428 File Offset: 0x0007C628
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -55,7 +55,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015A9 RID: 5545 RVA: 0x0007E430 File Offset: 0x0007C630
+		
 		protected virtual bool EndOfLife
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015AA RID: 5546 RVA: 0x0007E450 File Offset: 0x0007C650
+		
 		public virtual float Alpha
 		{
 			get

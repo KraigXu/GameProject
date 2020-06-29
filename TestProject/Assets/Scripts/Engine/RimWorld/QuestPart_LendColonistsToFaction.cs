@@ -11,7 +11,7 @@ namespace RimWorld
 	public class QuestPart_LendColonistsToFaction : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003990 RID: 14736 RVA: 0x00131FD8 File Offset: 0x001301D8
+		
 		public List<Thing> LentColonistsListForReading
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 			CompTransporter compTransporter = this.shuttle.TryGetComp<CompTransporter>();
 			if (this.lendColonistsToFaction != null && compTransporter != null)
 			{
-				using (IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)compTransporter.innerContainer).GetEnumerator())
+				IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)compTransporter.innerContainer).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003992 RID: 14738 RVA: 0x00132074 File Offset: 0x00130274
+		
 		public override string DescriptionPart
 		{
 			get

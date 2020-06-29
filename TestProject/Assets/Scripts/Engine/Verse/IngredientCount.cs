@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class IngredientCount
 	{
 		
-		// (get) Token: 0x06001F4F RID: 8015 RVA: 0x000C0D9B File Offset: 0x000BEF9B
+		
 		public bool IsFixedIngredient
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F50 RID: 8016 RVA: 0x000C0DAB File Offset: 0x000BEFAB
+		
 		public ThingDef FixedIngredient
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F51 RID: 8017 RVA: 0x000C0DD1 File Offset: 0x000BEFD1
+		
 		public string Summary
 		{
 			get

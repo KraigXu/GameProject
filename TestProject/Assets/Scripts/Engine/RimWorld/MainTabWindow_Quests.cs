@@ -16,7 +16,7 @@ namespace RimWorld
 	public class MainTabWindow_Quests : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005C8A RID: 23690 RVA: 0x001FDEDF File Offset: 0x001FC0DF
+		
 		public override Vector2 RequestedTabSize
 		{
 			get
@@ -1147,7 +1147,7 @@ namespace RimWorld
 			//	return;
 			//}
 			//List<FloatMenuOption> list = new List<FloatMenuOption>();
-			//using (List<Pawn>.Enumerator enumerator = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep.GetEnumerator())
+			//List<Pawn>.Enumerator enumerator = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep.GetEnumerator();
 			//{
 			//	while (enumerator.MoveNext())
 			//	{

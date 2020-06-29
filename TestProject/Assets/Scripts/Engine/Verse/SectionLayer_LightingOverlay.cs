@@ -8,7 +8,7 @@ namespace Verse
 	public class SectionLayer_LightingOverlay : SectionLayer
 	{
 		
-		// (get) Token: 0x06000B8F RID: 2959 RVA: 0x000402B4 File Offset: 0x0003E4B4
+		
 		public override bool Visible
 		{
 			get

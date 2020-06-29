@@ -8,15 +8,15 @@ namespace RimWorld
 	public abstract class Building_Turret : Building, IAttackTarget, ILoadReferenceable, IAttackTargetSearcher
 	{
 		
-		// (get) Token: 0x06004B94 RID: 19348
+		
 		public abstract LocalTargetInfo CurrentTarget { get; }
 
 		
-		// (get) Token: 0x06004B95 RID: 19349
+		
 		public abstract Verb AttackVerb { get; }
 
 		
-		// (get) Token: 0x06004B96 RID: 19350 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IAttackTarget.Thing
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B97 RID: 19351 RVA: 0x00197878 File Offset: 0x00195A78
+		
 		public LocalTargetInfo TargetCurrentlyAimingAt
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B98 RID: 19352 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IAttackTargetSearcher.Thing
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B99 RID: 19353 RVA: 0x00197880 File Offset: 0x00195A80
+		
 		public Verb CurrentEffectiveVerb
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B9A RID: 19354 RVA: 0x00197888 File Offset: 0x00195A88
+		
 		public LocalTargetInfo LastAttackedTarget
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B9B RID: 19355 RVA: 0x00197890 File Offset: 0x00195A90
+		
 		public int LastAttackTargetTick
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B9C RID: 19356 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public float TargetPriorityFactor
 		{
 			get

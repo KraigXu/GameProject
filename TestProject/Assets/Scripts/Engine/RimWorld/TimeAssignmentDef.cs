@@ -8,7 +8,7 @@ namespace RimWorld
 	public class TimeAssignmentDef : Def
 	{
 		
-		// (get) Token: 0x06003741 RID: 14145 RVA: 0x001294F3 File Offset: 0x001276F3
+		
 		public Texture2D ColorTexture
 		{
 			get

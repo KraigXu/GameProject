@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Building_Bed : Building
 	{
 		
-		// (get) Token: 0x06004C45 RID: 19525 RVA: 0x00199D03 File Offset: 0x00197F03
+		
 		public List<Pawn> OwnersForReading
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C46 RID: 19526 RVA: 0x00199D10 File Offset: 0x00197F10
+		
 		public CompAssignableToPawn CompAssignableToPawn
 		{
 			get
@@ -33,8 +33,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C47 RID: 19527 RVA: 0x00199D18 File Offset: 0x00197F18
-		// (set) Token: 0x06004C48 RID: 19528 RVA: 0x00199D20 File Offset: 0x00197F20
+		
+		
 		public bool ForPrisoners
 		{
 			get
@@ -60,8 +60,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C49 RID: 19529 RVA: 0x00199D8C File Offset: 0x00197F8C
-		// (set) Token: 0x06004C4A RID: 19530 RVA: 0x00199D94 File Offset: 0x00197F94
+		
+		
 		public bool Medical
 		{
 			get
@@ -87,7 +87,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C4B RID: 19531 RVA: 0x00199DFB File Offset: 0x00197FFB
+		
 		public bool AnyUnownedSleepingSlot
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C4C RID: 19532 RVA: 0x00199E24 File Offset: 0x00198024
+		
 		public bool AnyUnoccupiedSleepingSlot
 		{
 			get
@@ -119,7 +119,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C4D RID: 19533 RVA: 0x00199E4E File Offset: 0x0019804E
+		
 		public IEnumerable<Pawn> CurOccupants
 		{
 			get
@@ -139,7 +139,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C4E RID: 19534 RVA: 0x00199E5E File Offset: 0x0019805E
+		
 		public override Color DrawColor
 		{
 			get
@@ -153,7 +153,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C4F RID: 19535 RVA: 0x00199E7C File Offset: 0x0019807C
+		
 		public override Color DrawColorTwo
 		{
 			get
@@ -185,7 +185,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C50 RID: 19536 RVA: 0x00199EE5 File Offset: 0x001980E5
+		
 		public int SleepingSlotsCount
 		{
 			get
@@ -195,7 +195,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C51 RID: 19537 RVA: 0x00199EF7 File Offset: 0x001980F7
+		
 		private bool PlayerCanSeeOwners
 		{
 			get

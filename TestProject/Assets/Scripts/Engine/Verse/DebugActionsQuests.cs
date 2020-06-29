@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 
 namespace Verse
@@ -187,175 +187,175 @@ namespace Verse
 		public static void QuestRewardsSampled()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (List<QuestScriptDef>.Enumerator enumerator = DefDatabase<QuestScriptDef>.AllDefsListForReading.GetEnumerator())
-			{
-				while (enumerator.MoveNext())
-				{
-					DebugActionsQuests.c__DisplayClass8_0 c__DisplayClass8_ = new DebugActionsQuests.c__DisplayClass8_0();
-					c__DisplayClass8_.quest = enumerator.Current;
-					if (c__DisplayClass8_.quest.IsRootAny)
-					{
-						QuestScriptDef localQuest = c__DisplayClass8_.quest;
-						list.Add(new DebugMenuOption(c__DisplayClass8_.quest.defName, DebugMenuOptionMode.Action, delegate
-						{
-							Dictionary<float, int> numQuestsRating1 = new Dictionary<float, int>();
-							Dictionary<float, int> numQuestsRating2 = new Dictionary<float, int>();
-							Dictionary<float, int> numQuestsRating3 = new Dictionary<float, int>();
-							Dictionary<float, float> rewardRating1min = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating1max = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating1accumulated = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating2min = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating2max = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating2accumulated = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating3min = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating3max = new Dictionary<float, float>();
-							Dictionary<float, float> rewardRating3accumulated = new Dictionary<float, float>();
-							foreach (float num in DebugActionsQuests.QuestRewardDebugPointLevels)
-							{
-								if (num >= c__DisplayClass8_.quest.rootMinPoints)
-								{
-									numQuestsRating1.Add(num, 0);
-									numQuestsRating2.Add(num, 0);
-									numQuestsRating3.Add(num, 0);
-									Slate slate = new Slate();
-									slate.Set<float>("points", num, false);
-									slate.Set<bool>("debugDontGenerateRewardThings", true, false);
-									rewardRating1min.Add(num, 9999999f);
-									rewardRating2min.Add(num, 9999999f);
-									rewardRating3min.Add(num, 9999999f);
-									rewardRating1max.Add(num, -9999999f);
-									rewardRating2max.Add(num, -9999999f);
-									rewardRating3max.Add(num, -9999999f);
-									rewardRating1accumulated.Add(num, 0f);
-									rewardRating2accumulated.Add(num, 0f);
-									rewardRating3accumulated.Add(num, 0f);
-									for (int j = 0; j < 20; j++)
-									{
-										DebugActionsQuests.lastQuestGeneratedRewardValue = 0f;
-										Quest quest = QuestGen.Generate(localQuest, slate.DeepCopy());
-										float num2 = DebugActionsQuests.lastQuestGeneratedRewardValue;
-										if (quest.challengeRating == 1)
-										{
-											Dictionary<float, int> numQuestsRating = numQuestsRating1;
-											float key = num;
-											int num3 = numQuestsRating[key];
-											numQuestsRating[key] = num3 + 1;
-											rewardRating1min[num] = Mathf.Min(rewardRating1min[num], num2);
-											rewardRating1max[num] = Mathf.Max(rewardRating1max[num], num2);
-											Dictionary<float, float> dictionary = rewardRating1accumulated;
-											key = num;
-											dictionary[key] += num2;
-										}
-										else if (quest.challengeRating == 2)
-										{
-											Dictionary<float, int> numQuestsRating4 = numQuestsRating2;
-											float key = num;
-											int num3 = numQuestsRating4[key];
-											numQuestsRating4[key] = num3 + 1;
-											rewardRating2min[num] = Mathf.Min(rewardRating2min[num], num2);
-											rewardRating2max[num] = Mathf.Max(rewardRating2max[num], num2);
-											Dictionary<float, float> dictionary = rewardRating2accumulated;
-											key = num;
-											dictionary[key] += num2;
-										}
-										else if (quest.challengeRating == 3)
-										{
-											Dictionary<float, int> numQuestsRating5 = numQuestsRating3;
-											float key = num;
-											int num3 = numQuestsRating5[key];
-											numQuestsRating5[key] = num3 + 1;
-											rewardRating3min[num] = Mathf.Min(rewardRating3min[num], num2);
-											rewardRating3max[num] = Mathf.Max(rewardRating3max[num], num2);
-											Dictionary<float, float> dictionary = rewardRating3accumulated;
-											key = num;
-											dictionary[key] += num2;
-										}
-									}
-								}
-							}
-							IEnumerable<float> questRewardDebugPointLevels2 = DebugActionsQuests.QuestRewardDebugPointLevels;
-							TableDataGetter<float>[] array = new TableDataGetter<float>[13];
-							array[0] = new TableDataGetter<float>("points", (float v) => v.ToString());
-							array[1] = new TableDataGetter<float>("rating 1\nquest count\nof " + 20, (float v) => numQuestsRating1[v].ToString());
-							array[2] = new TableDataGetter<float>("rating 1\nrewardValue\nmin", delegate(float v)
-							{
-								if (rewardRating1min[v] != 9999999f)
-								{
-									return ((int)rewardRating1min[v]).ToString();
-								}
-								return "-";
-							});
-							array[3] = new TableDataGetter<float>("rating 1\nrewardValue\navg", delegate(float v)
-							{
-								if (rewardRating1accumulated[v] > 0f)
-								{
-									return ((int)(rewardRating1accumulated[v] / (float)numQuestsRating1[v])).ToString();
-								}
-								return "-";
-							});
-							array[4] = new TableDataGetter<float>("rating 1\nrewardValue\nmax", delegate(float v)
-							{
-								if (rewardRating1max[v] != -9999999f)
-								{
-									return ((int)rewardRating1max[v]).ToString();
-								}
-								return "-";
-							});
-							array[5] = new TableDataGetter<float>("rating 2\nquest count\nof " + 20, (float v) => numQuestsRating2[v].ToString());
-							array[6] = new TableDataGetter<float>("rating 2\nrewardValue\nmin", delegate(float v)
-							{
-								if (rewardRating2min[v] != 9999999f)
-								{
-									return ((int)rewardRating2min[v]).ToString();
-								}
-								return "-";
-							});
-							array[7] = new TableDataGetter<float>("rating 2\nrewardValue\navg", delegate(float v)
-							{
-								if (rewardRating2accumulated[v] > 0f)
-								{
-									return ((int)(rewardRating2accumulated[v] / (float)numQuestsRating2[v])).ToString();
-								}
-								return "-";
-							});
-							array[8] = new TableDataGetter<float>("rating 2\nrewardValue\nmax", delegate(float v)
-							{
-								if (rewardRating2max[v] != -9999999f)
-								{
-									return ((int)rewardRating2max[v]).ToString();
-								}
-								return "-";
-							});
-							array[9] = new TableDataGetter<float>("rating 3\nquest count\nof " + 20, (float v) => numQuestsRating3[v].ToString());
-							array[10] = new TableDataGetter<float>("rating 3\nrewardValue\nmin", delegate(float v)
-							{
-								if (rewardRating3min[v] != 9999999f)
-								{
-									return ((int)rewardRating3min[v]).ToString();
-								}
-								return "-";
-							});
-							array[11] = new TableDataGetter<float>("rating 3\nrewardValue\navg", delegate(float v)
-							{
-								if (rewardRating3accumulated[v] > 0f)
-								{
-									return ((int)(rewardRating3accumulated[v] / (float)numQuestsRating3[v])).ToString();
-								}
-								return "-";
-							});
-							array[12] = new TableDataGetter<float>("rating 3\nrewardValue\nmax", delegate(float v)
-							{
-								if (rewardRating3max[v] != -9999999f)
-								{
-									return ((int)rewardRating3max[v]).ToString();
-								}
-								return "-";
-							});
-							DebugTables.MakeTablesDialog<float>(questRewardDebugPointLevels2, array);
-						}));
-					}
-				}
-			}
+			//List<QuestScriptDef>.Enumerator enumerator = DefDatabase<QuestScriptDef>.AllDefsListForReading.GetEnumerator();
+			//{
+			//	while (enumerator.MoveNext())
+			//	{
+			//		DebugActionsQuests.c__DisplayClass8_0 c__DisplayClass8_ = new DebugActionsQuests.c__DisplayClass8_0();
+			//		c__DisplayClass8_.quest = enumerator.Current;
+			//		if (c__DisplayClass8_.quest.IsRootAny)
+			//		{
+			//			QuestScriptDef localQuest = c__DisplayClass8_.quest;
+			//			list.Add(new DebugMenuOption(c__DisplayClass8_.quest.defName, DebugMenuOptionMode.Action, delegate
+			//			{
+			//				Dictionary<float, int> numQuestsRating1 = new Dictionary<float, int>();
+			//				Dictionary<float, int> numQuestsRating2 = new Dictionary<float, int>();
+			//				Dictionary<float, int> numQuestsRating3 = new Dictionary<float, int>();
+			//				Dictionary<float, float> rewardRating1min = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating1max = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating1accumulated = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating2min = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating2max = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating2accumulated = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating3min = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating3max = new Dictionary<float, float>();
+			//				Dictionary<float, float> rewardRating3accumulated = new Dictionary<float, float>();
+			//				foreach (float num in DebugActionsQuests.QuestRewardDebugPointLevels)
+			//				{
+			//					if (num >= c__DisplayClass8_.quest.rootMinPoints)
+			//					{
+			//						numQuestsRating1.Add(num, 0);
+			//						numQuestsRating2.Add(num, 0);
+			//						numQuestsRating3.Add(num, 0);
+			//						Slate slate = new Slate();
+			//						slate.Set<float>("points", num, false);
+			//						slate.Set<bool>("debugDontGenerateRewardThings", true, false);
+			//						rewardRating1min.Add(num, 9999999f);
+			//						rewardRating2min.Add(num, 9999999f);
+			//						rewardRating3min.Add(num, 9999999f);
+			//						rewardRating1max.Add(num, -9999999f);
+			//						rewardRating2max.Add(num, -9999999f);
+			//						rewardRating3max.Add(num, -9999999f);
+			//						rewardRating1accumulated.Add(num, 0f);
+			//						rewardRating2accumulated.Add(num, 0f);
+			//						rewardRating3accumulated.Add(num, 0f);
+			//						for (int j = 0; j < 20; j++)
+			//						{
+			//							DebugActionsQuests.lastQuestGeneratedRewardValue = 0f;
+			//							Quest quest = QuestGen.Generate(localQuest, slate.DeepCopy());
+			//							float num2 = DebugActionsQuests.lastQuestGeneratedRewardValue;
+			//							if (quest.challengeRating == 1)
+			//							{
+			//								Dictionary<float, int> numQuestsRating = numQuestsRating1;
+			//								float key = num;
+			//								int num3 = numQuestsRating[key];
+			//								numQuestsRating[key] = num3 + 1;
+			//								rewardRating1min[num] = Mathf.Min(rewardRating1min[num], num2);
+			//								rewardRating1max[num] = Mathf.Max(rewardRating1max[num], num2);
+			//								Dictionary<float, float> dictionary = rewardRating1accumulated;
+			//								key = num;
+			//								dictionary[key] += num2;
+			//							}
+			//							else if (quest.challengeRating == 2)
+			//							{
+			//								Dictionary<float, int> numQuestsRating4 = numQuestsRating2;
+			//								float key = num;
+			//								int num3 = numQuestsRating4[key];
+			//								numQuestsRating4[key] = num3 + 1;
+			//								rewardRating2min[num] = Mathf.Min(rewardRating2min[num], num2);
+			//								rewardRating2max[num] = Mathf.Max(rewardRating2max[num], num2);
+			//								Dictionary<float, float> dictionary = rewardRating2accumulated;
+			//								key = num;
+			//								dictionary[key] += num2;
+			//							}
+			//							else if (quest.challengeRating == 3)
+			//							{
+			//								Dictionary<float, int> numQuestsRating5 = numQuestsRating3;
+			//								float key = num;
+			//								int num3 = numQuestsRating5[key];
+			//								numQuestsRating5[key] = num3 + 1;
+			//								rewardRating3min[num] = Mathf.Min(rewardRating3min[num], num2);
+			//								rewardRating3max[num] = Mathf.Max(rewardRating3max[num], num2);
+			//								Dictionary<float, float> dictionary = rewardRating3accumulated;
+			//								key = num;
+			//								dictionary[key] += num2;
+			//							}
+			//						}
+			//					}
+			//				}
+			//				IEnumerable<float> questRewardDebugPointLevels2 = DebugActionsQuests.QuestRewardDebugPointLevels;
+			//				TableDataGetter<float>[] array = new TableDataGetter<float>[13];
+			//				array[0] = new TableDataGetter<float>("points", (float v) => v.ToString());
+			//				array[1] = new TableDataGetter<float>("rating 1\nquest count\nof " + 20, (float v) => numQuestsRating1[v].ToString());
+			//				array[2] = new TableDataGetter<float>("rating 1\nrewardValue\nmin", delegate(float v)
+			//				{
+			//					if (rewardRating1min[v] != 9999999f)
+			//					{
+			//						return ((int)rewardRating1min[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[3] = new TableDataGetter<float>("rating 1\nrewardValue\navg", delegate(float v)
+			//				{
+			//					if (rewardRating1accumulated[v] > 0f)
+			//					{
+			//						return ((int)(rewardRating1accumulated[v] / (float)numQuestsRating1[v])).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[4] = new TableDataGetter<float>("rating 1\nrewardValue\nmax", delegate(float v)
+			//				{
+			//					if (rewardRating1max[v] != -9999999f)
+			//					{
+			//						return ((int)rewardRating1max[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[5] = new TableDataGetter<float>("rating 2\nquest count\nof " + 20, (float v) => numQuestsRating2[v].ToString());
+			//				array[6] = new TableDataGetter<float>("rating 2\nrewardValue\nmin", delegate(float v)
+			//				{
+			//					if (rewardRating2min[v] != 9999999f)
+			//					{
+			//						return ((int)rewardRating2min[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[7] = new TableDataGetter<float>("rating 2\nrewardValue\navg", delegate(float v)
+			//				{
+			//					if (rewardRating2accumulated[v] > 0f)
+			//					{
+			//						return ((int)(rewardRating2accumulated[v] / (float)numQuestsRating2[v])).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[8] = new TableDataGetter<float>("rating 2\nrewardValue\nmax", delegate(float v)
+			//				{
+			//					if (rewardRating2max[v] != -9999999f)
+			//					{
+			//						return ((int)rewardRating2max[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[9] = new TableDataGetter<float>("rating 3\nquest count\nof " + 20, (float v) => numQuestsRating3[v].ToString());
+			//				array[10] = new TableDataGetter<float>("rating 3\nrewardValue\nmin", delegate(float v)
+			//				{
+			//					if (rewardRating3min[v] != 9999999f)
+			//					{
+			//						return ((int)rewardRating3min[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[11] = new TableDataGetter<float>("rating 3\nrewardValue\navg", delegate(float v)
+			//				{
+			//					if (rewardRating3accumulated[v] > 0f)
+			//					{
+			//						return ((int)(rewardRating3accumulated[v] / (float)numQuestsRating3[v])).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				array[12] = new TableDataGetter<float>("rating 3\nrewardValue\nmax", delegate(float v)
+			//				{
+			//					if (rewardRating3max[v] != -9999999f)
+			//					{
+			//						return ((int)rewardRating3max[v]).ToString();
+			//					}
+			//					return "-";
+			//				});
+			//				DebugTables.MakeTablesDialog<float>(questRewardDebugPointLevels2, array);
+			//			}));
+			//		}
+			//	}
+			//}
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 

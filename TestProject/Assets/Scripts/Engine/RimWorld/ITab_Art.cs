@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_Art : ITab
 	{
 		
-		// (get) Token: 0x06005B70 RID: 23408 RVA: 0x001F7804 File Offset: 0x001F5A04
+		
 		private CompArt SelectedCompArt
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B71 RID: 23409 RVA: 0x001F7838 File Offset: 0x001F5A38
+		
 		public override bool IsVisible
 		{
 			get

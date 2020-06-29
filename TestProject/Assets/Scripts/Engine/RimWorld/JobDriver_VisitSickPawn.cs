@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_VisitSickPawn : JobDriver
 	{
 		
-		// (get) Token: 0x06002C2B RID: 11307 RVA: 0x000FCE34 File Offset: 0x000FB034
+		
 		private Pawn Patient
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C2C RID: 11308 RVA: 0x000FCE5C File Offset: 0x000FB05C
+		
 		private Thing Chair
 		{
 			get

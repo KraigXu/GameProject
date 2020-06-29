@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_ItemStash : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003EDF RID: 16095 RVA: 0x0014E2F4 File Offset: 0x0014C4F4
+		
 		public override int SeedPart
 		{
 			get
@@ -79,9 +79,9 @@ namespace RimWorld
 					resolveParams.thingSetMakerDef = (this.thingSetMakerDef ?? ThingSetMakerDefOf.MapGen_DefaultStockpile);
 				}
 			}
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("storage", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("storage", resolveParams, null);
+			BaseGenCore.Generate();
 			MapGenerator.SetVar<CellRect>("RectOfInterest", cellRect);
 			list.Add(cellRect);
 		}

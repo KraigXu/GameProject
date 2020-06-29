@@ -4,7 +4,7 @@ using System.Linq;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_SpawnMechCluster : QuestNode

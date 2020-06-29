@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class JobDriver_HaulToContainer : JobDriver
 	{
 		
-		// (get) Token: 0x0600259A RID: 9626 RVA: 0x000DEE22 File Offset: 0x000DD022
+		
 		public Thing ThingToCarry
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600259B RID: 9627 RVA: 0x000DEE35 File Offset: 0x000DD035
+		
 		public Thing Container
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600259C RID: 9628 RVA: 0x000DEE48 File Offset: 0x000DD048
+		
 		private int Duration
 		{
 			get

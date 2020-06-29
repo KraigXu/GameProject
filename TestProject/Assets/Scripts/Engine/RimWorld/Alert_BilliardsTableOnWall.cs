@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_BilliardsTableOnWall : Alert
 	{
 		
-		// (get) Token: 0x060056B6 RID: 22198 RVA: 0x001CC054 File Offset: 0x001CA254
+		
 		private List<Thing> BadTables
 		{
 			get

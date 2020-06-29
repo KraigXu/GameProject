@@ -10,8 +10,8 @@ namespace RimWorld
 	public class QuestPart_DropPods : QuestPart
 	{
 		
-		// (get) Token: 0x06003A59 RID: 14937 RVA: 0x00134C24 File Offset: 0x00132E24
-		// (set) Token: 0x06003A5A RID: 14938 RVA: 0x00134C3C File Offset: 0x00132E3C
+		
+		
 		public IEnumerable<Thing> Things
 		{
 			get
@@ -48,15 +48,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A5B RID: 14939 RVA: 0x00134CDC File Offset: 0x00132EDC
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{
@@ -77,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A5C RID: 14940 RVA: 0x00134CEC File Offset: 0x00132EEC
+		
 		public override bool IncreasesPopulation
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_FinishConstruction : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005EB4 RID: 24244 RVA: 0x0020BD9C File Offset: 0x00209F9C
+		
 		protected override float ProgressPercent
 		{
 			get

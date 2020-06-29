@@ -8,7 +8,7 @@ namespace RimWorld
 	public class OutfitForcedHandler : IExposable
 	{
 		
-		// (get) Token: 0x060045C7 RID: 17863 RVA: 0x00178F85 File Offset: 0x00177185
+		
 		public bool SomethingIsForced
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045C8 RID: 17864 RVA: 0x00178F95 File Offset: 0x00177195
+		
 		public List<Apparel> ForcedApparel
 		{
 			get

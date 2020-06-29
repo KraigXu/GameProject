@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Pawn_RelationsTracker : IExposable
 	{
 		
-		// (get) Token: 0x06004742 RID: 18242 RVA: 0x00181DF9 File Offset: 0x0017FFF9
+		
 		public List<DirectPawnRelation> DirectRelations
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004743 RID: 18243 RVA: 0x00181E01 File Offset: 0x00180001
+		
 		public IEnumerable<Pawn> Children
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004744 RID: 18244 RVA: 0x00181E11 File Offset: 0x00180011
+		
 		public int ChildrenCount
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004745 RID: 18245 RVA: 0x00181E1E File Offset: 0x0018001E
+		
 		public bool RelatedToAnyoneOrAnyoneRelatedToMe
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004746 RID: 18246 RVA: 0x00181E3C File Offset: 0x0018003C
+		
 		public IEnumerable<Pawn> FamilyByBlood
 		{
 			get
@@ -88,7 +88,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004747 RID: 18247 RVA: 0x00181EC0 File Offset: 0x001800C0
+		
 		private IEnumerable<Pawn> FamilyByBlood_Internal
 		{
 			get
@@ -165,7 +165,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004748 RID: 18248 RVA: 0x00181ED0 File Offset: 0x001800D0
+		
 		public IEnumerable<Pawn> PotentiallyRelatedPawns
 		{
 			get
@@ -223,7 +223,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004749 RID: 18249 RVA: 0x00181EE0 File Offset: 0x001800E0
+		
 		public IEnumerable<Pawn> RelatedPawns
 		{
 			get
@@ -443,9 +443,9 @@ namespace RimWorld
 				}), false);
 				return false;
 			}
-			Predicate<DirectPawnRelation> 9__1;
-			Predicate<DirectPawnRelation> 9__2;
-			Predicate<DirectPawnRelation> 9__0;
+
+
+
 			for (int i = 0; i < this.directRelations.Count; i++)
 			{
 				if (this.directRelations[i].def == def && this.directRelations[i].otherPawn == otherPawn)
@@ -453,18 +453,12 @@ namespace RimWorld
 					if (def.reflexive)
 					{
 						List<DirectPawnRelation> list = otherPawn.relations.directRelations;
-						Predicate<DirectPawnRelation> match;
-						if ((match ) == null)
-						{
-							match = (9__1 = ((DirectPawnRelation x) => x.def == def && x.otherPawn == this.pawn));
-						}
+						Predicate<DirectPawnRelation> match = (((DirectPawnRelation x) => x.def == def && x.otherPawn == this.pawn));
+
 						DirectPawnRelation item = list.Find(match);
 						list.Remove(item);
-						Predicate<DirectPawnRelation> match2;
-						if ((match2 ) == null)
-						{
-							match2 = (9__2 = ((DirectPawnRelation x) => x.otherPawn == this.pawn));
-						}
+						Predicate<DirectPawnRelation> match2 = (((DirectPawnRelation x) => x.otherPawn == this.pawn));
+
 						if (list.Find(match2) == null)
 						{
 							this.pawnsWithDirectRelationsWithMe.Remove(otherPawn);
@@ -472,11 +466,8 @@ namespace RimWorld
 					}
 					this.directRelations.RemoveAt(i);
 					List<DirectPawnRelation> list2 = this.directRelations;
-					Predicate<DirectPawnRelation> match3;
-					if ((match3 ) == null)
-					{
-						match3 = (9__0 = ((DirectPawnRelation x) => x.otherPawn == otherPawn));
-					}
+					Predicate<DirectPawnRelation> match3 = (((DirectPawnRelation x) => x.otherPawn == otherPawn));
+
 					if (list2.Find(match3) == null)
 					{
 						otherPawn.relations.pawnsWithDirectRelationsWithMe.Remove(this.pawn);

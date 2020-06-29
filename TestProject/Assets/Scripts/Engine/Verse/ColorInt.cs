@@ -127,7 +127,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000092 RID: 146 RVA: 0x00004490 File Offset: 0x00002690
+		
 		public Color ToColor
 		{
 			get
@@ -143,7 +143,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000093 RID: 147 RVA: 0x000044F8 File Offset: 0x000026F8
+		
 		public Color32 ToColor32
 		{
 			get

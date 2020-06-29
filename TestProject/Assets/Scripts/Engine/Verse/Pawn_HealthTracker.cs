@@ -13,7 +13,7 @@ namespace Verse
 	public class Pawn_HealthTracker : IExposable
 	{
 		
-		// (get) Token: 0x06001310 RID: 4880 RVA: 0x0006CDC6 File Offset: 0x0006AFC6
+		
 		public PawnHealthState State
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001311 RID: 4881 RVA: 0x0006CDCE File Offset: 0x0006AFCE
+		
 		public bool Downed
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001312 RID: 4882 RVA: 0x0006CDD9 File Offset: 0x0006AFD9
+		
 		public bool Dead
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001313 RID: 4883 RVA: 0x0006CDE4 File Offset: 0x0006AFE4
+		
 		public float LethalDamageThreshold
 		{
 			get
@@ -53,7 +53,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001314 RID: 4884 RVA: 0x0006CDF7 File Offset: 0x0006AFF7
+		
 		public bool InPainShock
 		{
 			get

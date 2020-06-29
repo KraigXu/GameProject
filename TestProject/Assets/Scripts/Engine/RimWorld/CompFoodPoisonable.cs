@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompFoodPoisonable : ThingComp
 	{
 		
-		// (get) Token: 0x0600513B RID: 20795 RVA: 0x001B4082 File Offset: 0x001B2282
+		
 		public float PoisonPercent
 		{
 			get

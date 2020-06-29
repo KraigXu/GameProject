@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_ScatterRuinsSimple : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003E9A RID: 16026 RVA: 0x0014C05E File Offset: 0x0014A25E
+		
 		public override int SeedPart
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 				ResolveParams parms2 = default(ResolveParams);
 				parms2.sketch = new Sketch();
 				parms2.monumentSize = new IntVec2?(new IntVec2(rect.Width, rect.Height));
-				SketchGen.Generate(SketchResolverDefOf.MonumentRuin, parms2).Spawn(map, rect.CenterCell, null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, false, delegate(SketchEntity entity, IntVec3 cell)
+				SketchGenCore.Generate(SketchResolverDefOf.MonumentRuin, parms2).Spawn(map, rect.CenterCell, null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, false, delegate(SketchEntity entity, IntVec3 cell)
 				{
 					bool result = false;
 					foreach (IntVec3 b in entity.OccupiedRect.AdjacentCells)

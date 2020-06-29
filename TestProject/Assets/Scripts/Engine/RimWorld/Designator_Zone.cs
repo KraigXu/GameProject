@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Designator_Zone : Designator
 	{
 		
-		// (get) Token: 0x06005842 RID: 22594 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005843 RID: 22595 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DragDrawMeasurements
 		{
 			get

@@ -10,8 +10,8 @@ namespace RimWorld
 	public class MinifiedThing : ThingWithComps, IThingHolder
 	{
 		
-		// (get) Token: 0x06004AED RID: 19181 RVA: 0x00194D0C File Offset: 0x00192F0C
-		// (set) Token: 0x06004AEE RID: 19182 RVA: 0x00194D2C File Offset: 0x00192F2C
+		
+		
 		public Thing InnerThing
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AEF RID: 19183 RVA: 0x00194DD0 File Offset: 0x00192FD0
+		
 		public override Graphic Graphic
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AF0 RID: 19184 RVA: 0x00194EDD File Offset: 0x001930DD
+		
 		public override string LabelNoCount
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AF1 RID: 19185 RVA: 0x00194EEA File Offset: 0x001930EA
+		
 		public override string DescriptionDetailed
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004AF2 RID: 19186 RVA: 0x00194EF7 File Offset: 0x001930F7
+		
 		public override string DescriptionFlavor
 		{
 			get

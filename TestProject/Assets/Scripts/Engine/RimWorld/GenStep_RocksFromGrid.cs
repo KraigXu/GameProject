@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_RocksFromGrid : GenStep
 	{
 		
-		// (get) Token: 0x06003E8D RID: 16013 RVA: 0x0014B947 File Offset: 0x00149B47
+		
 		public override int SeedPart
 		{
 			get
@@ -83,8 +83,8 @@ namespace RimWorld
 			}
 			BoolGrid visited = new BoolGrid(map);
 			List<IntVec3> toRemove = new List<IntVec3>();
-			//Predicate<IntVec3> 9__0;
-			//Action<IntVec3> 9__1;
+
+			//
 			//foreach (IntVec3 intVec2 in map.AllCells)
 			//{
 			//	if (!visited[intVec2] && this.IsNaturalRoofAt(intVec2, map))
@@ -95,12 +95,12 @@ namespace RimWorld
 			//		Predicate<IntVec3> passCheck;
 			//		if ((passCheck ) == null)
 			//		{
-			//			passCheck = (9__0 = ((IntVec3 x) => this.IsNaturalRoofAt(x, map)));
+			//			passCheck = ( ((IntVec3 x) => this.IsNaturalRoofAt(x, map)));
 			//		}
 			//		Action<IntVec3> processor;
 			//		if ((processor ) == null)
 			//		{
-			//			processor = (9__1 = delegate(IntVec3 x)
+			//			processor = ( delegate(IntVec3 x)
 			//			{
 			//				visited[x] = true;
 			//				toRemove.Add(x);

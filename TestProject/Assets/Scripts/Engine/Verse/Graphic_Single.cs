@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_Single : Graphic
 	{
 		
-		// (get) Token: 0x0600155E RID: 5470 RVA: 0x0007D300 File Offset: 0x0007B500
+		
 		public override Material MatSingle
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600155F RID: 5471 RVA: 0x0007D300 File Offset: 0x0007B500
+		
 		public override Material MatWest
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001560 RID: 5472 RVA: 0x0007D300 File Offset: 0x0007B500
+		
 		public override Material MatSouth
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001561 RID: 5473 RVA: 0x0007D300 File Offset: 0x0007B500
+		
 		public override Material MatEast
 		{
 			get
@@ -47,7 +47,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001562 RID: 5474 RVA: 0x0007D300 File Offset: 0x0007B500
+		
 		public override Material MatNorth
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001563 RID: 5475 RVA: 0x0007D308 File Offset: 0x0007B508
+		
 		public override bool ShouldDrawRotated
 		{
 			get

@@ -14,7 +14,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C6F RID: 19567 RVA: 0x0019AAC6 File Offset: 0x00198CC6
+		
 		public bool HasAnyContents
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C70 RID: 19568 RVA: 0x0019AAD6 File Offset: 0x00198CD6
+		
 		public Thing ContainedThing
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C71 RID: 19569 RVA: 0x0019AAF3 File Offset: 0x00198CF3
+		
 		public bool CanOpen
 		{
 			get

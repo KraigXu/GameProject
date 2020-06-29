@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Instruction_ChopWood : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E9B RID: 24219 RVA: 0x0020B844 File Offset: 0x00209A44
+		
 		protected override float ProgressPercent
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Hunt : Designator
 	{
 		
-		// (get) Token: 0x060057A1 RID: 22433 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057A2 RID: 22434 RVA: 0x001D198E File Offset: 0x001CFB8E
+		
 		protected override DesignationDef Designation
 		{
 			get
@@ -88,8 +88,8 @@ namespace RimWorld
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();
-			using (IEnumerator<PawnKindDef> enumerator = (from p in this.justDesignated
-			select p.kindDef).Distinct<PawnKindDef>().GetEnumerator())
+			IEnumerator<PawnKindDef> enumerator = (from p in this.justDesignated
+			select p.kindDef).Distinct<PawnKindDef>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

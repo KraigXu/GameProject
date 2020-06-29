@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Designator_Haul : Designator
 	{
 		
-		// (get) Token: 0x06005799 RID: 22425 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600579A RID: 22426 RVA: 0x001D1800 File Offset: 0x001CFA00
+		
 		protected override DesignationDef Designation
 		{
 			get

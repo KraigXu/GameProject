@@ -9,7 +9,7 @@ namespace Verse.AI
 	public abstract class JobDriver : IExposable, IJobEndable
 	{
 		
-		// (get) Token: 0x060025B0 RID: 9648 RVA: 0x000DF4D0 File Offset: 0x000DD6D0
+		
 		protected Toil CurToil
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B1 RID: 9649 RVA: 0x000DF592 File Offset: 0x000DD792
+		
 		protected bool HaveCurToil
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B2 RID: 9650 RVA: 0x000DF5D0 File Offset: 0x000DD7D0
+		
 		private bool CanStartNextToilInBusyStance
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B3 RID: 9651 RVA: 0x000DF607 File Offset: 0x000DD807
+		
 		public int CurToilIndex
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B4 RID: 9652 RVA: 0x000DF60F File Offset: 0x000DD80F
+		
 		public bool OnLastToil
 		{
 			get
@@ -79,7 +79,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B5 RID: 9653 RVA: 0x000DF626 File Offset: 0x000DD826
+		
 		public SkillDef ActiveSkill
 		{
 			get
@@ -93,7 +93,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B6 RID: 9654 RVA: 0x000DF64F File Offset: 0x000DD84F
+		
 		public bool HandlingFacing
 		{
 			get
@@ -103,7 +103,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B7 RID: 9655 RVA: 0x000DF666 File Offset: 0x000DD866
+		
 		protected LocalTargetInfo TargetA
 		{
 			get
@@ -113,7 +113,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B8 RID: 9656 RVA: 0x000DF673 File Offset: 0x000DD873
+		
 		protected LocalTargetInfo TargetB
 		{
 			get
@@ -123,7 +123,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025B9 RID: 9657 RVA: 0x000DF680 File Offset: 0x000DD880
+		
 		protected LocalTargetInfo TargetC
 		{
 			get
@@ -133,8 +133,8 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025BA RID: 9658 RVA: 0x000DF68D File Offset: 0x000DD88D
-		// (set) Token: 0x060025BB RID: 9659 RVA: 0x000DF69F File Offset: 0x000DD89F
+		
+		
 		protected Thing TargetThingA
 		{
 			get
@@ -148,8 +148,8 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025BC RID: 9660 RVA: 0x000DF6B2 File Offset: 0x000DD8B2
-		// (set) Token: 0x060025BD RID: 9661 RVA: 0x000DF6C4 File Offset: 0x000DD8C4
+		
+		
 		protected Thing TargetThingB
 		{
 			get
@@ -163,7 +163,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025BE RID: 9662 RVA: 0x000DF6D7 File Offset: 0x000DD8D7
+		
 		protected IntVec3 TargetLocA
 		{
 			get
@@ -173,7 +173,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060025BF RID: 9663 RVA: 0x000DF6E9 File Offset: 0x000DD8E9
+		
 		protected Map Map
 		{
 			get

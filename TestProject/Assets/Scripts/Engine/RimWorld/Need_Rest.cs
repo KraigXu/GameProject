@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Rest : Need
 	{
 		
-		// (get) Token: 0x06004592 RID: 17810 RVA: 0x00177EEA File Offset: 0x001760EA
+		
 		public RestCategory CurCategory
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004593 RID: 17811 RVA: 0x00177F1C File Offset: 0x0017611C
+		
 		public float RestFallPerTick
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004594 RID: 17812 RVA: 0x00177F93 File Offset: 0x00176193
+		
 		private float RestFallFactor
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004595 RID: 17813 RVA: 0x00177FAA File Offset: 0x001761AA
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -77,7 +77,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004596 RID: 17814 RVA: 0x00177FB7 File Offset: 0x001761B7
+		
 		public int TicksAtZero
 		{
 			get
@@ -87,7 +87,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004597 RID: 17815 RVA: 0x00177FBF File Offset: 0x001761BF
+		
 		private bool Resting
 		{
 			get

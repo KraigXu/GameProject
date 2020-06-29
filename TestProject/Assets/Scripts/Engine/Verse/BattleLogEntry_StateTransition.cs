@@ -10,7 +10,7 @@ namespace Verse
 	public class BattleLogEntry_StateTransition : LogEntry
 	{
 		
-		// (get) Token: 0x0600076A RID: 1898 RVA: 0x00022355 File Offset: 0x00020555
+		
 		private string SubjectName
 		{
 			get

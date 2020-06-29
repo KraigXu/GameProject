@@ -9,7 +9,7 @@ namespace Verse
 	public class SoundDef : Def
 	{
 		
-		// (get) Token: 0x06000652 RID: 1618 RVA: 0x0001DED4 File Offset: 0x0001C0D4
+		
 		private bool HasSubSoundsOnCamera
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000653 RID: 1619 RVA: 0x0001DF10 File Offset: 0x0001C110
+		
 		public bool HasSubSoundsInWorld
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000654 RID: 1620 RVA: 0x0001DF49 File Offset: 0x0001C149
+		
 		public int MaxSimultaneousSamples
 		{
 			get

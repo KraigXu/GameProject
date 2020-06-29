@@ -11,8 +11,8 @@ namespace Verse
 	public class Corpse : ThingWithComps, IThingHolder, IThoughtGiver, IStrippable, IBillGiver
 	{
 		
-		// (get) Token: 0x060014A9 RID: 5289 RVA: 0x0007A1AE File Offset: 0x000783AE
-		// (set) Token: 0x060014AA RID: 5290 RVA: 0x0007A1CC File Offset: 0x000783CC
+		
+		
 		public Pawn InnerPawn
 		{
 			get
@@ -40,8 +40,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014AB RID: 5291 RVA: 0x0007A21A File Offset: 0x0007841A
-		// (set) Token: 0x060014AC RID: 5292 RVA: 0x0007A22D File Offset: 0x0007842D
+		
+		
 		public int Age
 		{
 			get
@@ -55,7 +55,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014AD RID: 5293 RVA: 0x0007A244 File Offset: 0x00078444
+		
 		public override string LabelNoCount
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014AE RID: 5294 RVA: 0x0007A299 File Offset: 0x00078499
+		
 		public override bool IngestibleNow
 		{
 			get
@@ -85,7 +85,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014AF RID: 5295 RVA: 0x0007A2DC File Offset: 0x000784DC
+		
 		public RotDrawMode CurRotDrawMode
 		{
 			get
@@ -107,7 +107,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014B0 RID: 5296 RVA: 0x0007A30C File Offset: 0x0007850C
+		
 		private bool ShouldVanish
 		{
 			get
@@ -117,7 +117,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014B1 RID: 5297 RVA: 0x0007A37C File Offset: 0x0007857C
+		
 		public BillStack BillStack
 		{
 			get
@@ -127,7 +127,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014B2 RID: 5298 RVA: 0x0007A384 File Offset: 0x00078584
+		
 		public IEnumerable<IntVec3> IngredientStackCells
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014B3 RID: 5299 RVA: 0x0007A394 File Offset: 0x00078594
+		
 		public bool Bugged
 		{
 			get
@@ -417,10 +417,7 @@ namespace Verse
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__0())
-			{
-				yield return statDrawEntry;
-			}
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (this.GetRotStage() == RotStage.Fresh)
 			{

@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class PawnColumnWorker_CopyPaste : PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06005D11 RID: 23825
+		
 		protected abstract bool AnythingInClipboard { get; }
 
 		

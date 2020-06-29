@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class DebugTile
 	{
 		
-		// (get) Token: 0x060069F0 RID: 27120 RVA: 0x0024FB90 File Offset: 0x0024DD90
+		
 		private Vector2 ScreenPos
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069F1 RID: 27121 RVA: 0x0024FBA8 File Offset: 0x0024DDA8
+		
 		private bool VisibleForCamera
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069F2 RID: 27122 RVA: 0x0024FBE0 File Offset: 0x0024DDE0
+		
 		public float DistanceToCamera
 		{
 			get

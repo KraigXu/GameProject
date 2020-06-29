@@ -12,7 +12,7 @@ namespace RimWorld
 	public class ShieldBelt : Apparel
 	{
 		
-		// (get) Token: 0x06004EE6 RID: 20198 RVA: 0x001A8FB5 File Offset: 0x001A71B5
+		
 		private float EnergyMax
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EE7 RID: 20199 RVA: 0x001A8FC3 File Offset: 0x001A71C3
+		
 		private float EnergyGainPerTick
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EE8 RID: 20200 RVA: 0x001A8FD7 File Offset: 0x001A71D7
+		
 		public float Energy
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EE9 RID: 20201 RVA: 0x001A8FDF File Offset: 0x001A71DF
+		
 		public ShieldState ShieldState
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EEA RID: 20202 RVA: 0x001A8FF0 File Offset: 0x001A71F0
+		
 		private bool ShouldDisplay
 		{
 			get

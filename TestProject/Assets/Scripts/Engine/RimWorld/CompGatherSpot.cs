@@ -8,8 +8,8 @@ namespace RimWorld
 	public class CompGatherSpot : ThingComp
 	{
 		
-		// (get) Token: 0x06005155 RID: 20821 RVA: 0x001B46E2 File Offset: 0x001B28E2
-		// (set) Token: 0x06005156 RID: 20822 RVA: 0x001B46EC File Offset: 0x001B28EC
+		
+		
 		public bool Active
 		{
 			get

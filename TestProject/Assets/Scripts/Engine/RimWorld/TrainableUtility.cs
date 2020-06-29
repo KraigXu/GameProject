@@ -11,7 +11,7 @@ namespace RimWorld
 	public static class TrainableUtility
 	{
 		
-		// (get) Token: 0x06004802 RID: 18434 RVA: 0x0018649E File Offset: 0x0018469E
+		
 		public static List<TrainableDef> TrainableDefsInListOrder
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 				}, MenuOptionPriority.Default, null, null, 0f, null, null),
 				payload = null
 			};
-			using (List<Pawn>.Enumerator enumerator = PawnsFinder.AllMaps_FreeColonistsSpawned.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = PawnsFinder.AllMaps_FreeColonistsSpawned.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -125,7 +125,7 @@ namespace RimWorld
 					};
 				}
 			}
-			List<Pawn>.Enumerator enumerator = default(List<Pawn>.Enumerator);
+			
 			yield break;
 			yield break;
 		}

@@ -9,7 +9,7 @@ namespace Verse
 	public static class DirectXmlCrossRefLoader
 	{
 		
-		// (get) Token: 0x060013B8 RID: 5048 RVA: 0x000713DD File Offset: 0x0006F5DD
+		
 		public static bool LoadingInProgress
 		{
 			get
@@ -197,11 +197,11 @@ namespace Verse
 				{
 					if (wantedRef.TryResolve(failReportMode))
 					{
-						object resolvedRefsLock = resolvedRefsLock;
-						lock (resolvedRefsLock)
-						{
-							resolvedRefs.Add(wantedRef);
-						}
+						//object resolvedRefsLock = resolvedRefsLock;
+						//lock (resolvedRefsLock)
+						//{
+						//	resolvedRefs.Add(wantedRef);
+						//}
 					}
 				}, -1);
 				foreach (DirectXmlCrossRefLoader.WantedRef wantedRef2 in resolvedRefs)
@@ -242,7 +242,7 @@ namespace Verse
 		private class WantedRefForObject : DirectXmlCrossRefLoader.WantedRef
 		{
 			
-			// (get) Token: 0x06007AD7 RID: 31447 RVA: 0x00299404 File Offset: 0x00297604
+			
 			private bool BadCrossRefAllowed
 			{
 				get

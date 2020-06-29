@@ -8,7 +8,7 @@ namespace Verse
 	public struct IntVec2 : IEquatable<IntVec2>
 	{
 		
-		// (get) Token: 0x060000C6 RID: 198 RVA: 0x00004A06 File Offset: 0x00002C06
+		
 		public bool IsInvalid
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000C7 RID: 199 RVA: 0x00004A15 File Offset: 0x00002C15
+		
 		public bool IsValid
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000C8 RID: 200 RVA: 0x00004A27 File Offset: 0x00002C27
+		
 		public static IntVec2 Zero
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000C9 RID: 201 RVA: 0x00004A30 File Offset: 0x00002C30
+		
 		public static IntVec2 One
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CA RID: 202 RVA: 0x00004A39 File Offset: 0x00002C39
+		
 		public static IntVec2 Two
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CB RID: 203 RVA: 0x00004A42 File Offset: 0x00002C42
+		
 		public static IntVec2 North
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CC RID: 204 RVA: 0x00004A4B File Offset: 0x00002C4B
+		
 		public static IntVec2 East
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CD RID: 205 RVA: 0x00004A54 File Offset: 0x00002C54
+		
 		public static IntVec2 South
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CE RID: 206 RVA: 0x00004A5D File Offset: 0x00002C5D
+		
 		public static IntVec2 West
 		{
 			get
@@ -98,7 +98,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000CF RID: 207 RVA: 0x00004A66 File Offset: 0x00002C66
+		
 		public float Magnitude
 		{
 			get
@@ -108,7 +108,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000D0 RID: 208 RVA: 0x00004A89 File Offset: 0x00002C89
+		
 		public int MagnitudeManhattan
 		{
 			get
@@ -118,7 +118,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000D1 RID: 209 RVA: 0x00004AA2 File Offset: 0x00002CA2
+		
 		public int Area
 		{
 			get
@@ -200,7 +200,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000DA RID: 218 RVA: 0x00004C00 File Offset: 0x00002E00
+		
 		public static IntVec2 Invalid
 		{
 			get
@@ -240,7 +240,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000E0 RID: 224 RVA: 0x00004CA2 File Offset: 0x00002EA2
+		
 		public IntVec3 ToIntVec3
 		{
 			get

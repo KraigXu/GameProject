@@ -8,7 +8,7 @@ namespace RimWorld
 	public class DrugPolicy : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x060044C0 RID: 17600 RVA: 0x001736A0 File Offset: 0x001718A0
+		
 		public int Count
 		{
 			get

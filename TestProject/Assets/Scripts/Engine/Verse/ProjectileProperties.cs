@@ -10,7 +10,7 @@ namespace Verse
 	public class ProjectileProperties
 	{
 		
-		// (get) Token: 0x060004E2 RID: 1250 RVA: 0x00018C24 File Offset: 0x00016E24
+		
 		public float StoppingPower
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004E3 RID: 1251 RVA: 0x00018C53 File Offset: 0x00016E53
+		
 		public float SpeedTilesPerTick
 		{
 			get

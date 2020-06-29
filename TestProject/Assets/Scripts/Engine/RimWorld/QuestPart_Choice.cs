@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_Choice : QuestPart
 	{
 		
-		// (get) Token: 0x0600391D RID: 14621 RVA: 0x001303B0 File Offset: 0x0012E5B0
+		
 		public override bool PreventsAutoAccept
 		{
 			get

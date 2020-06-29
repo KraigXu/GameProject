@@ -15,15 +15,15 @@ namespace RimWorld.BaseGen
 			{
 				return false;
 			}
-			if (BaseGen.globalSettings.basePart_buildingsResolved < BaseGen.globalSettings.minBuildings)
+			if (BaseGenCore.globalSettings.basePart_buildingsResolved < BaseGenCore.globalSettings.minBuildings)
 			{
 				return false;
 			}
-			if (BaseGen.globalSettings.basePart_emptyNodesResolved < BaseGen.globalSettings.minEmptyNodes)
+			if (BaseGenCore.globalSettings.basePart_emptyNodesResolved < BaseGenCore.globalSettings.minEmptyNodes)
 			{
 				return false;
 			}
-			if (BaseGen.globalSettings.basePart_powerPlantsCoverage + (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area >= 0.09f)
+			if (BaseGenCore.globalSettings.basePart_powerPlantsCoverage + (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area >= 0.09f)
 			{
 				return false;
 			}
@@ -47,24 +47,24 @@ namespace RimWorld.BaseGen
 			{
 				return;
 			}
-			BaseGen.symbolStack.Push("refuel", rp, null);
+			BaseGenCore.symbolStack.Push("refuel", rp, null);
 			ThingDef thingDef = SymbolResolver_BasePart_Outdoors_Leaf_PowerPlant.availablePowerPlants.RandomElement<ThingDef>();
 			ResolveParams resolveParams = rp;
 			resolveParams.singleThingDef = thingDef;
 			resolveParams.fillWithThingsPadding = new int?(rp.fillWithThingsPadding ?? Mathf.Max(5 - thingDef.size.x, 1));
-			BaseGen.symbolStack.Push("fillWithThings", resolveParams, null);
-			BaseGen.globalSettings.basePart_powerPlantsCoverage += (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area;
+			BaseGenCore.symbolStack.Push("fillWithThings", resolveParams, null);
+			BaseGenCore.globalSettings.basePart_powerPlantsCoverage += (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area;
 		}
 
 		
 		private void CalculateAvailablePowerPlants(CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_BasePart_Outdoors_Leaf_PowerPlant.availablePowerPlants.Clear();
 			if (rect.Width >= ThingDefOf.SolarGenerator.size.x && rect.Height >= ThingDefOf.SolarGenerator.size.z)
 			{
 				int num = 0;
-				using (CellRect.Enumerator enumerator = rect.GetEnumerator())
+				CellRect.Enumerator enumerator = rect.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

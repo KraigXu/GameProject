@@ -9,7 +9,7 @@ namespace RimWorld
 	public sealed class OutfitDatabase : IExposable
 	{
 		
-		// (get) Token: 0x060037E9 RID: 14313 RVA: 0x0012BC33 File Offset: 0x00129E33
+		
 		public List<Outfit> AllOutfits
 		{
 			get

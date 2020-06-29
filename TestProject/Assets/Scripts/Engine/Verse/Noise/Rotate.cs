@@ -25,8 +25,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600238E RID: 9102 RVA: 0x000D596F File Offset: 0x000D3B6F
-		// (set) Token: 0x0600238F RID: 9103 RVA: 0x000D5977 File Offset: 0x000D3B77
+		
+		
 		public double X
 		{
 			get
@@ -40,8 +40,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002390 RID: 9104 RVA: 0x000D598C File Offset: 0x000D3B8C
-		// (set) Token: 0x06002391 RID: 9105 RVA: 0x000D5994 File Offset: 0x000D3B94
+		
+		
 		public double Y
 		{
 			get
@@ -55,8 +55,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002392 RID: 9106 RVA: 0x000D596F File Offset: 0x000D3B6F
-		// (set) Token: 0x06002393 RID: 9107 RVA: 0x000D59A9 File Offset: 0x000D3BA9
+		
+		
 		public double Z
 		{
 			get

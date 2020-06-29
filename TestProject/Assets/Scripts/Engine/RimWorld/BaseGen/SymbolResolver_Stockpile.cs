@@ -11,7 +11,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (rp.stockpileConcreteContents != null)
 			{
 				this.CalculateFreeCells(rp.rect, 0f);
@@ -56,13 +56,13 @@ namespace RimWorld.BaseGen
 			ResolveParams rp2 = rp;
 			rp2.thingSetMakerDef = thingSetMakerDef;
 			rp2.thingSetMakerParams = new ThingSetMakerParams?(value);
-			BaseGen.symbolStack.Push("thingSet", rp2, null);
+			BaseGenCore.symbolStack.Push("thingSet", rp2, null);
 		}
 
 		
 		private void CalculateFreeCells(CellRect rect, float freeCellsFraction)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			this.cells.Clear();
 			foreach (IntVec3 intVec in rect)
 			{

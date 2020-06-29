@@ -9,7 +9,7 @@ namespace Verse
 	public class Tool
 	{
 		
-		// (get) Token: 0x06001793 RID: 6035 RVA: 0x00085C3B File Offset: 0x00083E3B
+		
 		public string LabelCap
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001794 RID: 6036 RVA: 0x00085C5C File Offset: 0x00083E5C
+		
 		public IEnumerable<ManeuverDef> Maneuvers
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001795 RID: 6037 RVA: 0x00085C74 File Offset: 0x00083E74
+		
 		public IEnumerable<VerbProperties> VerbsProperties
 		{
 			get

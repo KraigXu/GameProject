@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_IsPrisoner : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003897 RID: 14487 RVA: 0x0012E987 File Offset: 0x0012CB87
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.pawn != null)
 				{

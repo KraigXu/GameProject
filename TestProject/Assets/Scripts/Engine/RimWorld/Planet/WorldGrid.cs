@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WorldGrid : IExposable
 	{
 		
-		// (get) Token: 0x06006B36 RID: 27446 RVA: 0x00256F6F File Offset: 0x0025516F
+		
 		public int TilesCount
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006B37 RID: 27447 RVA: 0x00256F7C File Offset: 0x0025517C
+		
 		public Vector3 NorthPolePos
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006B39 RID: 27449 RVA: 0x00256FAD File Offset: 0x002551AD
+		
 		public bool HasWorldData
 		{
 			get

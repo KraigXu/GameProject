@@ -8,7 +8,7 @@ namespace Verse
 	public static class SolidColorMaterials
 	{
 		
-		// (get) Token: 0x06002148 RID: 8520 RVA: 0x000CC29E File Offset: 0x000CA49E
+		
 		public static int SimpleColorMatCount
 		{
 			get

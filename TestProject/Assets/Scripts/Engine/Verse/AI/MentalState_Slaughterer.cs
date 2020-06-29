@@ -7,7 +7,7 @@ namespace Verse.AI
 	public class MentalState_Slaughterer : MentalState
 	{
 		
-		// (get) Token: 0x060026D0 RID: 9936 RVA: 0x000E43F0 File Offset: 0x000E25F0
+		
 		public bool SlaughteredRecently
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060026D1 RID: 9937 RVA: 0x000E4415 File Offset: 0x000E2615
+		
 		protected override bool CanEndBeforeMaxDurationNow
 		{
 			get

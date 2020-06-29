@@ -8,7 +8,7 @@ namespace Verse
 	public class ReverseDesignatorDatabase
 	{
 		
-		// (get) Token: 0x060017FF RID: 6143 RVA: 0x00088CCE File Offset: 0x00086ECE
+		
 		public List<Designator> AllDesignators
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_BuildRoomDoor : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E81 RID: 24193 RVA: 0x0020B21C File Offset: 0x0020941C
+		
 		private CellRect RoomRect
 		{
 			get

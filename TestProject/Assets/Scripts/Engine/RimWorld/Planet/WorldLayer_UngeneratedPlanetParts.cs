@@ -12,10 +12,8 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
-			{
-				yield return obj;
-			}
+
+
 			IEnumerator enumerator = null;
 			Vector3 viewCenter = Find.WorldGrid.viewCenter;
 			float viewAngle = Find.WorldGrid.viewAngle;

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Bill_Medical : Bill
 	{
 		
-		// (get) Token: 0x06004211 RID: 16913 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CheckIngredientsIfSociallyProper
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004212 RID: 16914 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected override bool CanCopy
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004213 RID: 16915 RVA: 0x00161154 File Offset: 0x0015F354
+		
 		public override bool CompletableEver
 		{
 			get
@@ -40,8 +40,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004214 RID: 16916 RVA: 0x0016118F File Offset: 0x0015F38F
-		// (set) Token: 0x06004215 RID: 16917 RVA: 0x00161197 File Offset: 0x0015F397
+		
+		
 		public BodyPartRecord Part
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004216 RID: 16918 RVA: 0x001611BC File Offset: 0x0015F3BC
+		
 		public Pawn GiverPawn
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004217 RID: 16919 RVA: 0x00161204 File Offset: 0x0015F404
+		
 		public override string Label
 		{
 			get

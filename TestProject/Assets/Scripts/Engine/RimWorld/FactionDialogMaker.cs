@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse;
 using Verse.AI;
 
@@ -316,16 +316,16 @@ namespace RimWorld
 			//RoyalTitleDef currentTitle = negotiator.royalty.GetCurrentTitle(faction);
 			//Pawn heir = negotiator.royalty.GetHeir(faction);
 			//DiaOption diaOption = new DiaOption((heir != null) ? "RequestChangeRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE"), heir.Named("HEIR")) : "RequestSetRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE")));
-			//Predicate<QuestPart> 9__1;
+
 			//bool flag = Find.QuestManager.QuestsListForReading.Any(delegate(Quest q)
 			//{
 			//	if (q.root == QuestScriptDefOf.ChangeRoyalHeir && q.State == QuestState.Ongoing)
 			//	{
 			//		List<QuestPart> partsListForReading = q.PartsListForReading;
 			//		Predicate<QuestPart> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__1 = delegate(QuestPart p)
+			//			predicate = ( delegate(QuestPart p)
 			//			{
 			//				QuestPart_ChangeHeir questPart_ChangeHeir = p as QuestPart_ChangeHeir;
 			//				return questPart_ChangeHeir != null && !questPart_ChangeHeir.done && questPart_ChangeHeir.holder == negotiator;

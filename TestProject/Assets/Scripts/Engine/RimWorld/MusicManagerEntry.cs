@@ -8,7 +8,7 @@ namespace RimWorld
 	public class MusicManagerEntry
 	{
 		
-		// (get) Token: 0x06004A4F RID: 19023 RVA: 0x00191DA5 File Offset: 0x0018FFA5
+		
 		private float CurVolume
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004A50 RID: 19024 RVA: 0x00191DB7 File Offset: 0x0018FFB7
+		
 		public float CurSanitizedVolume
 		{
 			get

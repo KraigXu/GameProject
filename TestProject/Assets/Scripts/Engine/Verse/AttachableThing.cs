@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class AttachableThing : Thing
 	{
 		
-		// (get) Token: 0x06001487 RID: 5255 RVA: 0x0007940D File Offset: 0x0007760D
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001488 RID: 5256
+		
 		public abstract string InspectStringAddon { get; }
 
 		

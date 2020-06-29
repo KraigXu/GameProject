@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Bill_Production : Bill, IExposable
 	{
 		
-		// (get) Token: 0x06004D2F RID: 19759 RVA: 0x0019D87F File Offset: 0x0019BA7F
+		
 		protected override string StatusString
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D30 RID: 19760 RVA: 0x0019D8A8 File Offset: 0x0019BAA8
+		
 		protected override float StatusLineMinHeight
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D31 RID: 19761 RVA: 0x0019D8C0 File Offset: 0x0019BAC0
+		
 		public string RepeatInfoText
 		{
 			get

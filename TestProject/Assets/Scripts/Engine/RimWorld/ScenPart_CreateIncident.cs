@@ -10,7 +10,7 @@ namespace RimWorld
 	internal class ScenPart_CreateIncident : ScenPart_IncidentBase
 	{
 		
-		// (get) Token: 0x060049D5 RID: 18901 RVA: 0x0018FEBE File Offset: 0x0018E0BE
+		
 		protected override string IncidentTag
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060049D6 RID: 18902 RVA: 0x0018FEC5 File Offset: 0x0018E0C5
+		
 		private float IntervalTicks
 		{
 			get

@@ -38,16 +38,16 @@ namespace RimWorld
 			Faction faction = organizer.Faction;
 			LordJob lordJob2 = lordJob;
 			Map map2 = organizer.Map;
-			object startingPawns;
-			if (!lordJob.OrganizerIsStartingPawn)
-			{
-				startingPawns = null;
-			}
-			else
-			{
-				(startingPawns = new Pawn[1])[0] = organizer;
-			}
-			LordMaker.MakeNewLord(faction, lordJob2, map2, startingPawns);
+			//object startingPawns;
+			//if (!lordJob.OrganizerIsStartingPawn)
+			//{
+			//	startingPawns = null;
+			//}
+			//else
+			//{
+			//	(startingPawns = new Pawn[1])[0] = organizer;
+			//}
+			//LordMaker.MakeNewLord(faction, lordJob2, map2, startingPawns);
 			this.SendLetter(spot, organizer);
 			return true;
 		}

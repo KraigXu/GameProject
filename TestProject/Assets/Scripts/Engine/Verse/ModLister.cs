@@ -12,7 +12,7 @@ namespace Verse
 	public static class ModLister
 	{
 		
-		// (get) Token: 0x06000E3E RID: 3646 RVA: 0x00051B1C File Offset: 0x0004FD1C
+		
 		public static IEnumerable<ModMetaData> AllInstalledMods
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E3F RID: 3647 RVA: 0x00051B24 File Offset: 0x0004FD24
+		
 		public static IEnumerable<DirectoryInfo> AllActiveModDirs
 		{
 			get
@@ -34,7 +34,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E40 RID: 3648 RVA: 0x00051B80 File Offset: 0x0004FD80
+		
 		public static List<ExpansionDef> AllExpansions
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E41 RID: 3649 RVA: 0x00051BD1 File Offset: 0x0004FDD1
+		
 		public static bool RoyaltyInstalled
 		{
 			get
@@ -62,7 +62,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E42 RID: 3650 RVA: 0x00051BE4 File Offset: 0x0004FDE4
+		
 		public static bool ShouldLogIssues
 		{
 			get
@@ -217,7 +217,7 @@ namespace Verse
 		
 		public static bool AnyFromListActive(List<string> mods)
 		{
-			using (List<string>.Enumerator enumerator = mods.GetEnumerator())
+			List<string>.Enumerator enumerator = mods.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

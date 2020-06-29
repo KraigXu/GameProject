@@ -21,7 +21,7 @@ namespace RimWorld.BaseGen
 			int num4 = Rand.RangeInclusive(0, rp.rect.Height - num2);
 			ResolveParams resolveParams = rp;
 			resolveParams.rect = new CellRect(rp.rect.minX + num3, rp.rect.minZ + num4, num, num2);
-			BaseGen.symbolStack.Push("basePart_outdoors_leaf", resolveParams, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors_leaf", resolveParams, null);
 		}
 
 		

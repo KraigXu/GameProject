@@ -9,7 +9,7 @@ namespace RimWorld
 	public class IngestibleProperties
 	{
 		
-		// (get) Token: 0x06003556 RID: 13654 RVA: 0x001235E2 File Offset: 0x001217E2
+		
 		public JoyKindDef JoyKind
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003557 RID: 13655 RVA: 0x001235F8 File Offset: 0x001217F8
+		
 		public bool HumanEdible
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003558 RID: 13656 RVA: 0x00123609 File Offset: 0x00121809
+		
 		public bool IsMeal
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003559 RID: 13657 RVA: 0x00123623 File Offset: 0x00121823
+		
 		public float CachedNutrition
 		{
 			get

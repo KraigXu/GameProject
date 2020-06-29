@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Claim : Designator
 	{
 		
-		// (get) Token: 0x0600576B RID: 22379 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get

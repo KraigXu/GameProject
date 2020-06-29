@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class Tile
 	{
 		
-		// (get) Token: 0x06006A81 RID: 27265 RVA: 0x002523D7 File Offset: 0x002505D7
+		
 		public bool WaterCovered
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A82 RID: 27266 RVA: 0x002523E9 File Offset: 0x002505E9
+		
 		public List<Tile.RoadLink> Roads
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A83 RID: 27267 RVA: 0x00252400 File Offset: 0x00250600
+		
 		public List<Tile.RiverLink> Rivers
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class QuadrumUtility
 	{
 		
-		// (get) Token: 0x0600602F RID: 24623 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public static Quadrum FirstQuadrum
 		{
 			get

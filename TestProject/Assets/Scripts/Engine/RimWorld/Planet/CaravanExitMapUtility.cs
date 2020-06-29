@@ -145,8 +145,8 @@ namespace RimWorld.Planet
 			World world = Find.World;
 			WorldGrid grid = world.grid;
 			grid.GetTileNeighbors(currentTileID, CaravanExitMapUtility.tmpNeighbors);
-			Predicate<IntVec3> 9__1;
-			Predicate<IntVec3> 9__2;
+
+
 			for (int i = 0; i < CaravanExitMapUtility.tmpNeighbors.Count; i++)
 			{
 				int num = CaravanExitMapUtility.tmpNeighbors[i];
@@ -158,11 +158,8 @@ namespace RimWorld.Planet
 					IntVec3 intVec;
 					if (rot != Rot4.Invalid)
 					{
-						Predicate<IntVec3> validator;
-						if ((validator ) == null)
-						{
-							validator = (9__1 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
-						}
+						Predicate<IntVec3> validator = (((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
+
 						if (CellFinder.TryFindRandomEdgeCellWith(validator, map, rot, CellFinder.EdgeRoadChance_Ignore, out intVec))
 						{
 							goto IL_10E;
@@ -172,11 +169,8 @@ namespace RimWorld.Planet
 					{
 						goto IL_126;
 					}
-					Predicate<IntVec3> validator2;
-					if ((validator2 ) == null)
-					{
-						validator2 = (9__2 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
-					}
+					Predicate<IntVec3> validator2 = (((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
+
 					if (!CellFinder.TryFindRandomEdgeCellWith(validator2, map, rot2, CellFinder.EdgeRoadChance_Ignore, out intVec))
 					{
 						goto IL_126;
@@ -262,7 +256,7 @@ namespace RimWorld.Planet
 		public static int BestExitTileToGoTo(int destinationTile, Map from)
 		{
 			int num = -1;
-			using (WorldPath worldPath = Find.WorldPathFinder.FindPath(from.Tile, destinationTile, null, null))
+			WorldPath worldPath = Find.WorldPathFinder.FindPath(from.Tile, destinationTile, null, null);
 			{
 				if (worldPath.Found && worldPath.NodesLeftCount >= 2)
 				{

@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003FB9 RID: 16313 RVA: 0x00153256 File Offset: 0x00151456
+		
 		public List<PowerNet> AllNetsListForReading
 		{
 			get
@@ -130,7 +130,7 @@ namespace RimWorld
 						}), false);
 					}
 					delayedAction.compPower.SetUpPowerVars();
-					using (IEnumerator<IntVec3> enumerator = GenAdj.CellsAdjacentCardinal(parent).GetEnumerator())
+					IEnumerator<IntVec3> enumerator = GenAdj.CellsAdjacentCardinal(parent).GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

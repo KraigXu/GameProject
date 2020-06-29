@@ -21,9 +21,9 @@ namespace RimWorld
 			}
 			catch (Exception arg)
 			{
-				Exception arg2;
-				Log.Error(string.Format("Failed to create tale object {0} with parameters {1}: {2}", def, (from arg in args
-				select arg.ToStringSafe<object>()).ToCommaList(false), arg2), false);
+				Exception arg2=default;
+				//Log.Error(string.Format("Failed to create tale object {0} with parameters {1}: {2}", def, (from arg in args
+				//select arg.ToStringSafe<object>()).ToCommaList(false), arg2), false);
 				result = null;
 			}
 			return result;

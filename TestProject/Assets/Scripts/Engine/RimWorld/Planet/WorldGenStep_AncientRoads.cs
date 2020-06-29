@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldGenStep_AncientRoads : WorldGenStep
 	{
 		
-		// (get) Token: 0x06006AF4 RID: 27380 RVA: 0x002551D4 File Offset: 0x002533D4
+		
 		public override int SeedPart
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld.Planet
 					{
 						float num = Find.WorldGrid.ApproxDistanceInTiles(list[i][j], list[i][j + 1]) * this.maximumSegmentCurviness;
 						float costCutoff = num * 12000f;
-						using (WorldPath worldPath = Find.WorldPathFinder.FindPath(list[i][j], list[i][j + 1], null, (float cost) => cost > costCutoff))
+						WorldPath worldPath = Find.WorldPathFinder.FindPath(list[i][j], list[i][j + 1], null, (float cost) => cost > costCutoff);
 						{
 							if (worldPath != null && worldPath != WorldPath.NotFound)
 							{

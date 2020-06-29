@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Thought_MemoryObservation : Thought_Memory
 	{
 		
-		// (set) Token: 0x060047C3 RID: 18371 RVA: 0x001855A0 File Offset: 0x001837A0
+		
 		public Thing Target
 		{
 			set

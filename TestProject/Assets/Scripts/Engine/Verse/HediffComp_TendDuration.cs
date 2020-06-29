@@ -10,7 +10,7 @@ namespace Verse
 	public class HediffComp_TendDuration : HediffComp_SeverityPerDay
 	{
 		
-		// (get) Token: 0x060010C4 RID: 4292 RVA: 0x0005F1D1 File Offset: 0x0005D3D1
+		
 		public HediffCompProperties_TendDuration TProps
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C5 RID: 4293 RVA: 0x0005F1DE File Offset: 0x0005D3DE
+		
 		public override bool CompShouldRemove
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C6 RID: 4294 RVA: 0x0005F211 File Offset: 0x0005D411
+		
 		public bool IsTended
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C7 RID: 4295 RVA: 0x0005F226 File Offset: 0x0005D426
+		
 		public bool AllowTend
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C8 RID: 4296 RVA: 0x0005F254 File Offset: 0x0005D454
+		
 		public override string CompTipStringExtra
 		{
 			get
@@ -120,7 +120,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C9 RID: 4297 RVA: 0x0005F4D4 File Offset: 0x0005D6D4
+		
 		public override TextureAndColor CompStateIcon
 		{
 			get

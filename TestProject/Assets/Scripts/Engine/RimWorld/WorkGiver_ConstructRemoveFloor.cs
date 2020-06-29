@@ -8,7 +8,7 @@ namespace RimWorld
 	public class WorkGiver_ConstructRemoveFloor : WorkGiver_ConstructAffectFloor
 	{
 		
-		// (get) Token: 0x06003020 RID: 12320 RVA: 0x000FAF7C File Offset: 0x000F917C
+		
 		protected override DesignationDef DesDef
 		{
 			get

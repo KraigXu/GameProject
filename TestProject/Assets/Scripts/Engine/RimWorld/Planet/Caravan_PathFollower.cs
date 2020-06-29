@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class Caravan_PathFollower : IExposable
 	{
 		
-		// (get) Token: 0x06006C23 RID: 27683 RVA: 0x0025AECC File Offset: 0x002590CC
+		
 		public int Destination
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006C24 RID: 27684 RVA: 0x0025AED4 File Offset: 0x002590D4
+		
 		public bool Moving
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006C25 RID: 27685 RVA: 0x0025AEEB File Offset: 0x002590EB
+		
 		public bool MovingNow
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006C26 RID: 27686 RVA: 0x0025AF0D File Offset: 0x0025910D
+		
 		public CaravanArrivalAction ArrivalAction
 		{
 			get
@@ -54,8 +54,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006C27 RID: 27687 RVA: 0x0025AF1F File Offset: 0x0025911F
-		// (set) Token: 0x06006C28 RID: 27688 RVA: 0x0025AF34 File Offset: 0x00259134
+		
+		
 		public bool Paused
 		{
 			get

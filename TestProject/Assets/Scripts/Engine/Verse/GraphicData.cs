@@ -9,7 +9,7 @@ namespace Verse
 	public class GraphicData
 	{
 		
-		// (get) Token: 0x060004D4 RID: 1236 RVA: 0x0001887D File Offset: 0x00016A7D
+		
 		public bool Linked
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060004D5 RID: 1237 RVA: 0x00018888 File Offset: 0x00016A88
+		
 		public Graphic Graphic
 		{
 			get

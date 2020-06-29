@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Designator_SmoothSurface : Designator
 	{
 		
-		// (get) Token: 0x060057DC RID: 22492 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057DD RID: 22493 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DragDrawMeasurements
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class WorldLayer_SettleTile : WorldLayer_SingleTile
 	{
 		
-		// (get) Token: 0x06006A2E RID: 27182 RVA: 0x00250E74 File Offset: 0x0024F074
+		
 		protected override int Tile
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A2F RID: 27183 RVA: 0x002503DA File Offset: 0x0024E5DA
+		
 		protected override Material Material
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A30 RID: 27184 RVA: 0x00250EB4 File Offset: 0x0024F0B4
+		
 		protected override float Alpha
 		{
 			get

@@ -10,8 +10,8 @@ namespace Verse
 	public class Pawn_AgeTracker : IExposable
 	{
 		
-		// (get) Token: 0x060012BE RID: 4798 RVA: 0x0006BB0F File Offset: 0x00069D0F
-		// (set) Token: 0x060012BF RID: 4799 RVA: 0x0006BB17 File Offset: 0x00069D17
+		
+		
 		public long BirthAbsTicks
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C0 RID: 4800 RVA: 0x0006BB20 File Offset: 0x00069D20
+		
 		public int AgeBiologicalYears
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C1 RID: 4801 RVA: 0x0006BB30 File Offset: 0x00069D30
+		
 		public float AgeBiologicalYearsFloat
 		{
 			get
@@ -45,8 +45,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C2 RID: 4802 RVA: 0x0006BB3F File Offset: 0x00069D3F
-		// (set) Token: 0x060012C3 RID: 4803 RVA: 0x0006BB47 File Offset: 0x00069D47
+		
+		
 		public long AgeBiologicalTicks
 		{
 			get
@@ -61,8 +61,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C4 RID: 4804 RVA: 0x0006BB57 File Offset: 0x00069D57
-		// (set) Token: 0x060012C5 RID: 4805 RVA: 0x0006BB66 File Offset: 0x00069D66
+		
+		
 		public long AgeChronologicalTicks
 		{
 			get
@@ -76,7 +76,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C6 RID: 4806 RVA: 0x0006BB76 File Offset: 0x00069D76
+		
 		public int AgeChronologicalYears
 		{
 			get
@@ -86,7 +86,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C7 RID: 4807 RVA: 0x0006BB86 File Offset: 0x00069D86
+		
 		public float AgeChronologicalYearsFloat
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C8 RID: 4808 RVA: 0x0006BB95 File Offset: 0x00069D95
+		
 		public int BirthYear
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012C9 RID: 4809 RVA: 0x0006BBA7 File Offset: 0x00069DA7
+		
 		public int BirthDayOfSeasonZeroBased
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CA RID: 4810 RVA: 0x0006BBB9 File Offset: 0x00069DB9
+		
 		public int BirthDayOfYear
 		{
 			get
@@ -126,7 +126,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CB RID: 4811 RVA: 0x0006BBCB File Offset: 0x00069DCB
+		
 		public Quadrum BirthQuadrum
 		{
 			get
@@ -136,7 +136,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CC RID: 4812 RVA: 0x0006BBE0 File Offset: 0x00069DE0
+		
 		public string AgeNumberString
 		{
 			get
@@ -157,7 +157,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CD RID: 4813 RVA: 0x0006BC38 File Offset: 0x00069E38
+		
 		public string AgeTooltipString
 		{
 			get
@@ -185,7 +185,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CE RID: 4814 RVA: 0x0006BD88 File Offset: 0x00069F88
+		
 		public int CurLifeStageIndex
 		{
 			get
@@ -199,7 +199,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012CF RID: 4815 RVA: 0x0006BD9F File Offset: 0x00069F9F
+		
 		public LifeStageDef CurLifeStage
 		{
 			get
@@ -209,7 +209,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012D0 RID: 4816 RVA: 0x0006BDAC File Offset: 0x00069FAC
+		
 		public LifeStageAge CurLifeStageRace
 		{
 			get
@@ -219,7 +219,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012D1 RID: 4817 RVA: 0x0006BDCC File Offset: 0x00069FCC
+		
 		public PawnKindLifeStage CurKindLifeStage
 		{
 			get

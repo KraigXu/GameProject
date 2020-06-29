@@ -7,7 +7,7 @@ namespace RimWorld
 	public abstract class ScenPart_ScatterThings : ScenPart_ThingCount
 	{
 		
-		// (get) Token: 0x06004A30 RID: 18992
+		
 		protected abstract bool NearPlayerStart { get; }
 
 		

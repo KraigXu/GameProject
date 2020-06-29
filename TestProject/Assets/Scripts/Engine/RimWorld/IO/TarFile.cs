@@ -8,7 +8,7 @@ namespace RimWorld.IO
 	internal class TarFile : VirtualFile
 	{
 		
-		// (get) Token: 0x060070BC RID: 28860 RVA: 0x00274E76 File Offset: 0x00273076
+		
 		public override string Name
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070BD RID: 28861 RVA: 0x00274E7E File Offset: 0x0027307E
+		
 		public override string FullPath
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070BE RID: 28862 RVA: 0x00274E86 File Offset: 0x00273086
+		
 		public override bool Exists
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070BF RID: 28863 RVA: 0x00274E91 File Offset: 0x00273091
+		
 		public override long Length
 		{
 			get
@@ -90,9 +90,9 @@ namespace RimWorld.IO
 		{
 			this.CheckAccess();
 			List<string> list = new List<string>();
-			using (MemoryStream memoryStream = new MemoryStream(this.data))
+			MemoryStream memoryStream = new MemoryStream(this.data);
 			{
-				using (StreamReader streamReader = new StreamReader(memoryStream, true))
+				StreamReader streamReader = new StreamReader(memoryStream, true);
 				{
 					while (!streamReader.EndOfStream)
 					{
@@ -108,9 +108,9 @@ namespace RimWorld.IO
 		{
 			this.CheckAccess();
 			string result;
-			using (MemoryStream memoryStream = new MemoryStream(this.data))
+			MemoryStream memoryStream = new MemoryStream(this.data);
 			{
-				using (StreamReader streamReader = new StreamReader(memoryStream, true))
+				StreamReader streamReader = new StreamReader(memoryStream, true);
 				{
 					result = streamReader.ReadToEnd();
 				}

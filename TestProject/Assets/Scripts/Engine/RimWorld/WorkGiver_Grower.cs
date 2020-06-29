@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class WorkGiver_Grower : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x060030C7 RID: 12487 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool AllowUnreachable
 		{
 			get

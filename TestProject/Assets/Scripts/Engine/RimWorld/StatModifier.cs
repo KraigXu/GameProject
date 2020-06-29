@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StatModifier
 	{
 		
-		// (get) Token: 0x06003587 RID: 13703 RVA: 0x00123BFC File Offset: 0x00121DFC
+		
 		public string ValueToStringAsOffset
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003588 RID: 13704 RVA: 0x00123C16 File Offset: 0x00121E16
+		
 		public string ToStringAsFactor
 		{
 			get

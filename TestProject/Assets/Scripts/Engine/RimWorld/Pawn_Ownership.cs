@@ -8,8 +8,8 @@ namespace RimWorld
 	public class Pawn_Ownership : IExposable
 	{
 		
-		// (get) Token: 0x0600463D RID: 17981 RVA: 0x0017B210 File Offset: 0x00179410
-		// (set) Token: 0x0600463E RID: 17982 RVA: 0x0017B218 File Offset: 0x00179418
+		
+		
 		public Building_Bed OwnedBed
 		{
 			get
@@ -27,22 +27,22 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600463F RID: 17983 RVA: 0x0017B235 File Offset: 0x00179435
-		// (set) Token: 0x06004640 RID: 17984 RVA: 0x0017B23D File Offset: 0x0017943D
+		
+		
 		public Building_Grave AssignedGrave { get; private set; }
 
 		
-		// (get) Token: 0x06004641 RID: 17985 RVA: 0x0017B246 File Offset: 0x00179446
-		// (set) Token: 0x06004642 RID: 17986 RVA: 0x0017B24E File Offset: 0x0017944E
+		
+		
 		public Building_Throne AssignedThrone { get; private set; }
 
 		
-		// (get) Token: 0x06004643 RID: 17987 RVA: 0x0017B257 File Offset: 0x00179457
-		// (set) Token: 0x06004644 RID: 17988 RVA: 0x0017B25F File Offset: 0x0017945F
+		
+		
 		public Building AssignedMeditationSpot { get; private set; }
 
 		
-		// (get) Token: 0x06004645 RID: 17989 RVA: 0x0017B268 File Offset: 0x00179468
+		
 		public Room OwnedRoom
 		{
 			get

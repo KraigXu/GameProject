@@ -10,7 +10,7 @@ namespace Ionic.Zlib
 	public sealed class ZlibCodec
 	{
 		
-		// (get) Token: 0x060071B6 RID: 29110 RVA: 0x0027D3A4 File Offset: 0x0027B5A4
+		
 		public int Adler32
 		{
 			get

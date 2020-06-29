@@ -63,7 +63,7 @@ namespace Verse.AI
 			if (this.job.attackDoorIfTargetLost)
 			{
 				Thing thing;
-				using (PawnPath pawnPath = base.Map.pathFinder.FindPath(this.pawn.Position, base.TargetA.Cell, TraverseParms.For(this.pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell))
+				PawnPath pawnPath = base.Map.pathFinder.FindPath(this.pawn.Position, base.TargetA.Cell, TraverseParms.For(this.pawn, Danger.Deadly, TraverseMode.PassDoors, false), PathEndMode.OnCell);
 				{
 					if (!pawnPath.Found)
 					{

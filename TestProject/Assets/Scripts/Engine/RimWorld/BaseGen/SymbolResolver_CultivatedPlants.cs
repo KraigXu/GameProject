@@ -18,7 +18,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingDef thingDef = rp.cultivatedPlantDef ?? SymbolResolver_CultivatedPlants.DeterminePlantDef(rp.rect);
 			if (thingDef == null)
 			{
@@ -43,7 +43,7 @@ namespace RimWorld.BaseGen
 		
 		public static ThingDef DeterminePlantDef(CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (map.mapTemperature.OutdoorTemp < 0f || map.mapTemperature.OutdoorTemp > 58f)
 			{
 				return null;
@@ -76,7 +76,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryDestroyBlockingThingsAt(IntVec3 c)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_CultivatedPlants.tmpThings.Clear();
 			SymbolResolver_CultivatedPlants.tmpThings.AddRange(c.GetThingList(map));
 			for (int i = 0; i < SymbolResolver_CultivatedPlants.tmpThings.Count; i++)

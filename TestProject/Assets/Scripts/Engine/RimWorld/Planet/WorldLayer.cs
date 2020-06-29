@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class WorldLayer
 	{
 		
-		// (get) Token: 0x06006A02 RID: 27138 RVA: 0x002500DF File Offset: 0x0024E2DF
+		
 		public virtual bool ShouldRegenerate
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A03 RID: 27139 RVA: 0x002500E7 File Offset: 0x0024E2E7
+		
 		protected virtual int Layer
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A04 RID: 27140 RVA: 0x002500EE File Offset: 0x0024E2EE
+		
 		protected virtual Quaternion Rotation
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A05 RID: 27141 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		protected virtual float Alpha
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A06 RID: 27142 RVA: 0x002500DF File Offset: 0x0024E2DF
+		
 		public bool Dirty
 		{
 			get

@@ -55,12 +55,12 @@ namespace RimWorld
 										atTop = false;
 									}
 									yield return new ITab_Pawn_Log_Utility.LogLineDisplayableLog(entry, pawn);
-									entry = null;
+									
 								}
 							}
 						}
 						List<LogEntry>.Enumerator enumerator2 = default(List<LogEntry>.Enumerator);
-						battle = null;
+						
 					}
 				}
 				List<Battle>.Enumerator enumerator = default(List<Battle>.Enumerator);

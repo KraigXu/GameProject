@@ -39,7 +39,7 @@ namespace Verse
                 "Miss",
                 "Dodge"
             };
-            //using (IEnumerator<Pair<ManeuverDef, int>> enumerator =  c__DisplayClass0_.maneuvers.Concat(null).Cross(Enumerable.Range(0, array2.Length)).GetEnumerator())
+            //IEnumerator<Pair<ManeuverDef, int>> enumerator =  c__DisplayClass0_.maneuvers.Concat(null).Cross(Enumerable.Range(0, array2.Length)).GetEnumerator();
             //{
             //    while (enumerator.MoveNext())
             //    {
@@ -50,7 +50,7 @@ namespace Verse
             //            Action<Action<List<BodyPartRecord>, List<bool>>> callback;
             //            if ((callback =  9__9) == null)
             //            {
-            //                callback = ( 9__9 = delegate (Action<List<BodyPartRecord>, List<bool>> bodyPartCreator)
+            //                callback = (  delegate (Action<List<BodyPartRecord>, List<bool>> bodyPartCreator)
             //                 {
             //                     StringBuilder stringBuilder = new StringBuilder();
             //                     for (int i = 0; i < 100; i++)
@@ -180,9 +180,9 @@ namespace Verse
                     Log.Message(stringBuilder.ToString(), false);
                 });
             }));
-            using (IEnumerator<RulePackDef> enumerator2 = (from def in DefDatabase<RulePackDef>.AllDefsListForReading
+            IEnumerator<RulePackDef> enumerator2 = (from def in DefDatabase<RulePackDef>.AllDefsListForReading
                                                            where def.defName.Contains("Transition") && !def.defName.Contains("Include")
-                                                           select def).GetEnumerator())
+                                                           select def).GetEnumerator();
             {
                 while (enumerator2.MoveNext())
                 {
@@ -203,13 +203,13 @@ namespace Verse
                     }));
                 }
             }
-            using (IEnumerator<RulePackDef> enumerator2 = (from def in DefDatabase<RulePackDef>.AllDefsListForReading
+            IEnumerator<RulePackDef> enumerator3= (from def in DefDatabase<RulePackDef>.AllDefsListForReading
                                                            where def.defName.Contains("DamageEvent") && !def.defName.Contains("Include")
-                                                           select def).GetEnumerator())
+                                                           select def).GetEnumerator();
             {
-                while (enumerator2.MoveNext())
+                while (enumerator3.MoveNext())
                 {
-                    RulePackDef damageEvent = enumerator2.Current;
+                    RulePackDef damageEvent = enumerator3.Current;
                     list.Add(new DebugMenuOption(damageEvent.defName, DebugMenuOptionMode.Action, delegate
                     {
                         Action<Action<List<BodyPartRecord>, List<bool>>> callback = delegate (Action<List<BodyPartRecord>, List<bool>> bodyPartCreator)
@@ -260,7 +260,7 @@ namespace Verse
             List<DebugMenuOption> list = new List<DebugMenuOption>();
             IEnumerable<int> damagedes = Enumerable.Range(0, 5);
             IEnumerable<int> destroyedes = Enumerable.Range(0, 5);
-            using (IEnumerator<Pair<int, int>> enumerator = damagedes.Concat(-1).Cross(destroyedes.Concat(-1)).GetEnumerator())
+            IEnumerator<Pair<int, int>> enumerator = damagedes.Concat(-1).Cross(destroyedes.Concat(-1)).GetEnumerator();
             {
                 while (enumerator.MoveNext())
                 {
@@ -411,7 +411,7 @@ namespace Verse
         public static void InteractionLogs()
         {
             List<DebugMenuOption> list = new List<DebugMenuOption>();
-            using (List<InteractionDef>.Enumerator enumerator = DefDatabase<InteractionDef>.AllDefsListForReading.GetEnumerator())
+            List<InteractionDef>.Enumerator enumerator = DefDatabase<InteractionDef>.AllDefsListForReading.GetEnumerator();
             {
                 while (enumerator.MoveNext())
                 {

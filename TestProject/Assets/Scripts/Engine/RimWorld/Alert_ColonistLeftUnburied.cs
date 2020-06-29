@@ -14,7 +14,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005657 RID: 22103 RVA: 0x001CA05C File Offset: 0x001C825C
+		
 		private List<Thing> UnburiedColonistCorpses
 		{
 			get

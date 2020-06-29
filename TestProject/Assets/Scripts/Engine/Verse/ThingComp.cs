@@ -8,7 +8,6 @@ namespace Verse
 	public abstract class ThingComp
 	{
 		
-		// (get) Token: 0x0600176E RID: 5998 RVA: 0x00085B7D File Offset: 0x00083D7D
 		public IThingHolder ParentHolder
 		{
 			get

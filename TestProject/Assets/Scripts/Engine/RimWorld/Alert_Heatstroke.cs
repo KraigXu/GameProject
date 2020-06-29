@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600566A RID: 22122 RVA: 0x001CA658 File Offset: 0x001C8858
+		
 		private List<Pawn> HeatstrokePawns
 		{
 			get

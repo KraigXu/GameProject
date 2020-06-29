@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class Mod
 	{
 		
-		// (get) Token: 0x06000E04 RID: 3588 RVA: 0x000504C8 File Offset: 0x0004E6C8
+		
 		public ModContentPack Content
 		{
 			get

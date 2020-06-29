@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Dialog_SaveFileList_Save : Dialog_SaveFileList
 	{
 		
-		// (get) Token: 0x06005965 RID: 22885 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool ShouldDoTypeInField
 		{
 			get

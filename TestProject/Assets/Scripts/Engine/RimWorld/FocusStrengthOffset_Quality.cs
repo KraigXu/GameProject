@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060051D6 RID: 20950 RVA: 0x001B60AA File Offset: 0x001B42AA
+		
 		protected override string ExplanationKey
 		{
 			get

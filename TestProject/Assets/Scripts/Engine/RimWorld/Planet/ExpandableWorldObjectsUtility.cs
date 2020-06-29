@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class ExpandableWorldObjectsUtility
 	{
 		
-		// (get) Token: 0x06006A55 RID: 27221 RVA: 0x002510BF File Offset: 0x0024F2BF
+		
 		public static float TransitionPct
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A56 RID: 27222 RVA: 0x002510D8 File Offset: 0x0024F2D8
+		
 		public static float ExpandMoreTransitionPct
 		{
 			get

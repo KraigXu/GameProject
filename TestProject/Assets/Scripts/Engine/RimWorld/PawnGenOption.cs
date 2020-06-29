@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PawnGenOption
 	{
 		
-		// (get) Token: 0x060035E8 RID: 13800 RVA: 0x00124DFF File Offset: 0x00122FFF
+		
 		public float Cost
 		{
 			get

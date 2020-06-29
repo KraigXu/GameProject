@@ -8,7 +8,7 @@ namespace Verse
 	public abstract class EditWindow : Window
 	{
 		
-		// (get) Token: 0x06001DB2 RID: 7602 RVA: 0x000B6823 File Offset: 0x000B4A23
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001DB3 RID: 7603 RVA: 0x000B6834 File Offset: 0x000B4A34
+		
 		protected override float Margin
 		{
 			get

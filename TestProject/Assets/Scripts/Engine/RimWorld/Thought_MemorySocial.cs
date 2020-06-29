@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Thought_MemorySocial : Thought_Memory, ISocialThought
 	{
 		
-		// (get) Token: 0x060047CB RID: 18379 RVA: 0x00185705 File Offset: 0x00183905
+		
 		public override bool ShouldDiscard
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047CC RID: 18380 RVA: 0x00185724 File Offset: 0x00183924
+		
 		public override bool VisibleInNeedsTab
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047CD RID: 18381 RVA: 0x00185740 File Offset: 0x00183940
+		
 		private float AgePct
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047CE RID: 18382 RVA: 0x00185756 File Offset: 0x00183956
+		
 		private float AgeFactor
 		{
 			get

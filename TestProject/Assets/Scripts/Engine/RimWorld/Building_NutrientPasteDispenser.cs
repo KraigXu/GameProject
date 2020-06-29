@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Building_NutrientPasteDispenser : Building
 	{
 		
-		// (get) Token: 0x06004CF8 RID: 19704 RVA: 0x0019CCB9 File Offset: 0x0019AEB9
+		
 		public bool CanDispenseNow
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CF9 RID: 19705 RVA: 0x0019CCD0 File Offset: 0x0019AED0
+		
 		public List<IntVec3> AdjCellsCardinalInBounds
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CFA RID: 19706 RVA: 0x0019CD02 File Offset: 0x0019AF02
+		
 		public virtual ThingDef DispensableDef
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CFB RID: 19707 RVA: 0x0019CD09 File Offset: 0x0019AF09
+		
 		public override Color DrawColor
 		{
 			get

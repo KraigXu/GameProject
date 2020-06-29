@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Blueprint_Build : Blueprint
 	{
 		
-		// (get) Token: 0x06004B18 RID: 19224 RVA: 0x001956E4 File Offset: 0x001938E4
+		
 		public override string Label
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B19 RID: 19225 RVA: 0x00195754 File Offset: 0x00193954
+		
 		protected override float WorkTotal
 		{
 			get

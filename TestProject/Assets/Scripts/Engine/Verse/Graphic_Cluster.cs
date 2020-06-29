@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic_Cluster : Graphic_Collection
 	{
 		
-		// (get) Token: 0x06001511 RID: 5393 RVA: 0x0007BCD4 File Offset: 0x00079ED4
+		
 		public override Material MatSingle
 		{
 			get

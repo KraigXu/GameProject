@@ -12,7 +12,7 @@ namespace RimWorld
 	public class CompAffectedByFacilities : ThingComp
 	{
 		
-		// (get) Token: 0x06005016 RID: 20502 RVA: 0x001AFC8E File Offset: 0x001ADE8E
+		
 		public List<Thing> LinkedFacilitiesListForReading
 		{
 			get
@@ -288,7 +288,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005028 RID: 20520 RVA: 0x001B024E File Offset: 0x001AE44E
+		
 		private IEnumerable<Thing> ThingsICanLinkTo
 		{
 			get

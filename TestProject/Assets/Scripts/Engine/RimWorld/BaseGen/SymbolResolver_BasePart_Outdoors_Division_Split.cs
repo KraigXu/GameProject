@@ -44,7 +44,7 @@ namespace RimWorld.BaseGen
 				resolveParams.rect = new CellRect(rp.rect.minX, rp.rect.minZ + num, rp.rect.Width, num2);
 				resolveParams.floorDef = floorDef;
 				resolveParams.streetHorizontal = new bool?(true);
-				BaseGen.symbolStack.Push("street", resolveParams, null);
+				BaseGenCore.symbolStack.Push("street", resolveParams, null);
 				ResolveParams resolveParams2 = rp;
 				resolveParams2.rect = new CellRect(rp.rect.minX, rp.rect.minZ, rp.rect.Width, num);
 				resolveParams3 = resolveParams2;
@@ -58,7 +58,7 @@ namespace RimWorld.BaseGen
 				resolveParams6.rect = new CellRect(rp.rect.minX + num, rp.rect.minZ, num2, rp.rect.Height);
 				resolveParams6.floorDef = floorDef;
 				resolveParams6.streetHorizontal = new bool?(false);
-				BaseGen.symbolStack.Push("street", resolveParams6, null);
+				BaseGenCore.symbolStack.Push("street", resolveParams6, null);
 				ResolveParams resolveParams7 = rp;
 				resolveParams7.rect = new CellRect(rp.rect.minX, rp.rect.minZ, num, rp.rect.Height);
 				resolveParams3 = resolveParams7;
@@ -68,12 +68,12 @@ namespace RimWorld.BaseGen
 			}
 			if (Rand.Bool)
 			{
-				BaseGen.symbolStack.Push("basePart_outdoors", resolveParams3, null);
-				BaseGen.symbolStack.Push("basePart_outdoors", resolveParams5, null);
+				BaseGenCore.symbolStack.Push("basePart_outdoors", resolveParams3, null);
+				BaseGenCore.symbolStack.Push("basePart_outdoors", resolveParams5, null);
 				return;
 			}
-			BaseGen.symbolStack.Push("basePart_outdoors", resolveParams5, null);
-			BaseGen.symbolStack.Push("basePart_outdoors", resolveParams3, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors", resolveParams5, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors", resolveParams3, null);
 		}
 
 		

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Alert_QuestExpiresSoon : Alert
 	{
 		
-		// (get) Token: 0x06005630 RID: 22064 RVA: 0x001C8FC4 File Offset: 0x001C71C4
+		
 		private Quest QuestExpiring
 		{
 			get

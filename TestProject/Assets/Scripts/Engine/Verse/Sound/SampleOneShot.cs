@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public class SampleOneShot : Sample
 	{
 		
-		// (get) Token: 0x060024AF RID: 9391 RVA: 0x000D9DE2 File Offset: 0x000D7FE2
+		
 		public override float ParentStartRealTime
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024B0 RID: 9392 RVA: 0x000D9DEA File Offset: 0x000D7FEA
+		
 		public override float ParentStartTick
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024B1 RID: 9393 RVA: 0x000D9DF3 File Offset: 0x000D7FF3
+		
 		public override float ParentHashCode
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024B2 RID: 9394 RVA: 0x000D9DFC File Offset: 0x000D7FFC
+		
 		public override SoundParams ExternalParams
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024B3 RID: 9395 RVA: 0x000D9E04 File Offset: 0x000D8004
+		
 		public override SoundInfo Info
 		{
 			get

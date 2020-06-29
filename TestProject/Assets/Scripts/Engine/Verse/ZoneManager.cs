@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class ZoneManager : IExposable
 	{
 		
-		// (get) Token: 0x06000DE2 RID: 3554 RVA: 0x0004F2DC File Offset: 0x0004D4DC
+		
 		public List<Zone> AllZones
 		{
 			get

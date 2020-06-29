@@ -10,7 +10,7 @@ namespace Verse
 	public class TreeNode_Editor : TreeNode
 	{
 		
-		// (get) Token: 0x06001B5B RID: 7003 RVA: 0x000A7B10 File Offset: 0x000A5D10
+		
 		public object ParentObj
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B5C RID: 7004 RVA: 0x000A7B24 File Offset: 0x000A5D24
+		
 		public Type ObjectType
 		{
 			get
@@ -42,8 +42,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B5D RID: 7005 RVA: 0x000A7B80 File Offset: 0x000A5D80
-		// (set) Token: 0x06001B5E RID: 7006 RVA: 0x000A7BF0 File Offset: 0x000A5DF0
+		
+		
 		public object Value
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B5F RID: 7007 RVA: 0x000A7C5A File Offset: 0x000A5E5A
+		
 		public bool IsListItem
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B60 RID: 7008 RVA: 0x000A7C68 File Offset: 0x000A5E68
+		
 		private object ListRootObject
 		{
 			get
@@ -98,7 +98,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B61 RID: 7009 RVA: 0x000A7C70 File Offset: 0x000A5E70
+		
 		public override bool Openable
 		{
 			get
@@ -108,7 +108,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B62 RID: 7010 RVA: 0x000A7CC6 File Offset: 0x000A5EC6
+		
 		public bool HasContentLines
 		{
 			get
@@ -118,7 +118,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B63 RID: 7011 RVA: 0x000A7CD4 File Offset: 0x000A5ED4
+		
 		public bool HasNewButton
 		{
 			get
@@ -128,7 +128,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B64 RID: 7012 RVA: 0x000A7D0B File Offset: 0x000A5F0B
+		
 		public bool HasDeleteButton
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B65 RID: 7013 RVA: 0x000A7D3C File Offset: 0x000A5F3C
+		
 		public string ExtraInfoText
 		{
 			get
@@ -151,7 +151,7 @@ namespace Verse
 				{
 					return this.obj.GetType().Name;
 				}
-				if (this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List))
+				if (this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
 				{
 					int num = (int)this.obj.GetType().GetProperty("Count").GetValue(this.obj, null);
 					return string.Concat(new string[]
@@ -168,7 +168,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B66 RID: 7014 RVA: 0x000A7E1D File Offset: 0x000A601D
+		
 		public string LabelText
 		{
 			get
@@ -247,7 +247,7 @@ namespace Verse
 		
 		private void InitiallyCacheData()
 		{
-			if (this.obj != null && this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List))
+			if (this.obj != null && this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
 			{
 				this.nodeType = EditTreeNodeType.ListRoot;
 			}
@@ -274,7 +274,7 @@ namespace Verse
 			}
 			this.children = new List<TreeNode>();
 			Type objType = this.obj.GetType();
-			if (objType.IsGenericType && objType.GetGenericTypeDefinition() == typeof(List))
+			if (objType.IsGenericType && objType.GetGenericTypeDefinition() == typeof(List<>))
 			{
 				int num = (int)objType.GetProperty("Count").GetValue(this.obj, null);
 				for (int i = 0; i < num; i++)

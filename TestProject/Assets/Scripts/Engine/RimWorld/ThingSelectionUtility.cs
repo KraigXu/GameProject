@@ -25,7 +25,7 @@ namespace RimWorld
 			{
 				return !t.Position.Fogged(t.Map);
 			}
-			using (CellRect.Enumerator enumerator = t.OccupiedRect().GetEnumerator())
+			CellRect.Enumerator enumerator = t.OccupiedRect().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -9,8 +9,8 @@ namespace RimWorld
 	public class Instruction_BuildRoomWalls : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E89 RID: 24201 RVA: 0x0020B21C File Offset: 0x0020941C
-		// (set) Token: 0x06005E8A RID: 24202 RVA: 0x0020B3A5 File Offset: 0x002095A5
+		
+		
 		private CellRect RoomRect
 		{
 			get
@@ -24,14 +24,14 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E8B RID: 24203 RVA: 0x0020B3B4 File Offset: 0x002095B4
+		
 		protected override float ProgressPercent
 		{
 			get
 			{
 				int num = 0;
 				int num2 = 0;
-				using (IEnumerator<IntVec3> enumerator = this.RoomRect.EdgeCells.GetEnumerator())
+				IEnumerator<IntVec3> enumerator = this.RoomRect.EdgeCells.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

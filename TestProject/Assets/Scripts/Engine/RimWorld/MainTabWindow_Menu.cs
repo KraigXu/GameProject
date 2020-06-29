@@ -10,7 +10,7 @@ namespace RimWorld
 	public class MainTabWindow_Menu : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005C76 RID: 23670 RVA: 0x001FF1F7 File Offset: 0x001FD3F7
+		
 		public override Vector2 RequestedTabSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C77 RID: 23671 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override MainTabWindowAnchor Anchor
 		{
 			get

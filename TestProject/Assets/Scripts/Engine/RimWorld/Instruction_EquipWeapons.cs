@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Instruction_EquipWeapons : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005EA4 RID: 24228 RVA: 0x0020BB9C File Offset: 0x00209D9C
+		
 		protected override float ProgressPercent
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EA5 RID: 24229 RVA: 0x0020BBF5 File Offset: 0x00209DF5
+		
 		private IEnumerable<Thing> Weapons
 		{
 			get

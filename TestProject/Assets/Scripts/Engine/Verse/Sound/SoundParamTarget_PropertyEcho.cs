@@ -7,7 +7,7 @@ namespace Verse.Sound
 	public class SoundParamTarget_PropertyEcho : SoundParamTarget
 	{
 		
-		// (get) Token: 0x0600247F RID: 9343 RVA: 0x000D91CE File Offset: 0x000D73CE
+		
 		public override string Label
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x06002480 RID: 9344 RVA: 0x000D91E5 File Offset: 0x000D73E5
+		
 		public override Type NeededFilterType
 		{
 			get

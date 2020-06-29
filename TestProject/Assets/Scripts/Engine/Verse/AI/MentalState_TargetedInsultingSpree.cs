@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class MentalState_TargetedInsultingSpree : MentalState_InsultingSpree
 	{
 		
-		// (get) Token: 0x060026A6 RID: 9894 RVA: 0x000E3984 File Offset: 0x000E1B84
+		
 		public override string InspectLine
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060026A7 RID: 9895 RVA: 0x000E39A1 File Offset: 0x000E1BA1
+		
 		protected override bool CanEndBeforeMaxDurationNow
 		{
 			get

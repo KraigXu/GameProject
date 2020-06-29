@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompInitiatable : ThingComp
 	{
 		
-		// (get) Token: 0x060054A4 RID: 21668 RVA: 0x001C3868 File Offset: 0x001C1A68
+		
 		public bool Initiated
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054A5 RID: 21669 RVA: 0x001C389C File Offset: 0x001C1A9C
+		
 		private int Delay
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054A6 RID: 21670 RVA: 0x001C38B9 File Offset: 0x001C1AB9
+		
 		private CompProperties_Initiatable Props
 		{
 			get

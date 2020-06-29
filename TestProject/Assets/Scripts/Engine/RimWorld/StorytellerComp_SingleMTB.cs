@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_SingleMTB : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D50 RID: 15696 RVA: 0x00143DE3 File Offset: 0x00141FE3
+		
 		private StorytellerCompProperties_SingleMTB Props
 		{
 			get

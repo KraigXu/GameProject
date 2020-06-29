@@ -7,7 +7,7 @@ namespace Verse
 	public class DamageFlasher
 	{
 		
-		// (get) Token: 0x06000F23 RID: 3875 RVA: 0x000565F9 File Offset: 0x000547F9
+		
 		private int DamageFlashTicksLeft
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F24 RID: 3876 RVA: 0x0005660F File Offset: 0x0005480F
+		
 		public bool FlashingNowOrRecently
 		{
 			get

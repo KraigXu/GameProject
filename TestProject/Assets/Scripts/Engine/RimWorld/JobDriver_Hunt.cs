@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Hunt : JobDriver
 	{
 		
-		// (get) Token: 0x06002C88 RID: 11400 RVA: 0x000FDC68 File Offset: 0x000FBE68
+		
 		public Pawn Victim
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C89 RID: 11401 RVA: 0x000FDCA0 File Offset: 0x000FBEA0
+		
 		private Corpse Corpse
 		{
 			get

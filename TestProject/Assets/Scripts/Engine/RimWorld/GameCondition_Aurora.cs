@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GameCondition_Aurora : GameCondition
 	{
 		
-		// (get) Token: 0x06003B3E RID: 15166 RVA: 0x001395CD File Offset: 0x001377CD
+		
 		public Color CurrentColor
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B3F RID: 15167 RVA: 0x001395FA File Offset: 0x001377FA
+		
 		private int TransitionDurationTicks
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B40 RID: 15168 RVA: 0x00139610 File Offset: 0x00137810
+		
 		private bool BrightInAllMaps
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B41 RID: 15169 RVA: 0x000FAF75 File Offset: 0x000F9175
+		
 		public override int TransitionTicks
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class PawnColumnWorker_Slaughter : PawnColumnWorker_Designator
 	{
 		
-		// (get) Token: 0x06005D07 RID: 23815 RVA: 0x001D243B File Offset: 0x001D063B
+		
 		protected override DesignationDef DesignationType
 		{
 			get

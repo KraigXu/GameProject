@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class Slate
 	{
 		
-		// (get) Token: 0x060068A5 RID: 26789 RVA: 0x00248DF9 File Offset: 0x00246FF9
+		
 		public string CurrentPrefix
 		{
 			get

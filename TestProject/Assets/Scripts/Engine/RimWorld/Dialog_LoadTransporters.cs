@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Dialog_LoadTransporters : Window
 	{
 		
-		// (get) Token: 0x060058D3 RID: 22739 RVA: 0x001D9293 File Offset: 0x001D7493
+		
 		public bool CanChangeAssignedThingsAfterStarting
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D4 RID: 22740 RVA: 0x001D92AB File Offset: 0x001D74AB
+		
 		public bool LoadingInProgressOrReadyToLaunch
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D5 RID: 22741 RVA: 0x001D66F9 File Offset: 0x001D48F9
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D6 RID: 22742 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D7 RID: 22743 RVA: 0x001D92C0 File Offset: 0x001D74C0
+		
 		private float MassCapacity
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D8 RID: 22744 RVA: 0x001D9304 File Offset: 0x001D7504
+		
 		private float CaravanMassCapacity
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D9 RID: 22745 RVA: 0x001D934C File Offset: 0x001D754C
+		
 		private string TransportersLabel
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DA RID: 22746 RVA: 0x001D93A9 File Offset: 0x001D75A9
+		
 		private string TransportersLabelCap
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DB RID: 22747 RVA: 0x001D93B6 File Offset: 0x001D75B6
+		
 		private BiomeDef Biome
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DC RID: 22748 RVA: 0x001D93C3 File Offset: 0x001D75C3
+		
 		private float MassUsage
 		{
 			get
@@ -135,7 +135,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DD RID: 22749 RVA: 0x001D93EE File Offset: 0x001D75EE
+		
 		public float CaravanMassUsage
 		{
 			get
@@ -150,7 +150,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DE RID: 22750 RVA: 0x001D941C File Offset: 0x001D761C
+		
 		private float TilesPerDay
 		{
 			get
@@ -167,7 +167,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058DF RID: 22751 RVA: 0x001D947C File Offset: 0x001D767C
+		
 		private Pair<float, float> DaysWorthOfFood
 		{
 			get
@@ -183,7 +183,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058E0 RID: 22752 RVA: 0x001D94F4 File Offset: 0x001D76F4
+		
 		private Pair<ThingDef, float> ForagedFoodPerDay
 		{
 			get
@@ -200,7 +200,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058E1 RID: 22753 RVA: 0x001D9548 File Offset: 0x001D7748
+		
 		private float Visibility
 		{
 			get
@@ -525,9 +525,9 @@ namespace RimWorld
 							}
 							IEnumerable<Thing> innerContainer = this.transporters[k].innerContainer;
 							Func<Thing, bool> predicate;
-							if ((predicate ) == null)
+							if ((predicate=default ) == null)
 							{
-								predicate = (9__0 = ((Thing x) => TransferableUtility.TransferAsOne(this.transferables[i].AnyThing, x, TransferAsOneMode.PodsOrCaravanPacking)));
+								predicate = ( ((Thing x) => TransferableUtility.TransferAsOne(this.transferables[i].AnyThing, x, TransferAsOneMode.PodsOrCaravanPacking)));
 							}
 							Thing thing = innerContainer.FirstOrDefault(predicate);
 							if (thing != null)

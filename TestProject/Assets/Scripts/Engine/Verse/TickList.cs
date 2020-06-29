@@ -7,7 +7,7 @@ namespace Verse
 	public class TickList
 	{
 		
-		// (get) Token: 0x060007E5 RID: 2021 RVA: 0x0002492C File Offset: 0x00022B2C
+		
 		private int TickInterval
 		{
 			get

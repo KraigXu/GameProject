@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class RegionGrid
 	{
 		
-		// (get) Token: 0x06000C75 RID: 3189 RVA: 0x00047648 File Offset: 0x00045848
+		
 		public Region[] DirectGrid
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C76 RID: 3190 RVA: 0x0004769A File Offset: 0x0004589A
+		
 		public IEnumerable<Region> AllRegions_NoRebuild_InvalidAllowed
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C77 RID: 3191 RVA: 0x000476AA File Offset: 0x000458AA
+		
 		public IEnumerable<Region> AllRegions
 		{
 			get

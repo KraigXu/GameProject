@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompDeepDrill : ThingComp
 	{
 		
-		// (get) Token: 0x060050DF RID: 20703 RVA: 0x001B245D File Offset: 0x001B065D
+		
 		[Obsolete("Use WorkPerPortionBase constant directly.")]
 		public static float WorkPerPortionCurrentDifficulty
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050E0 RID: 20704 RVA: 0x001B2464 File Offset: 0x001B0664
+		
 		public float ProgressToNextPortionPercent
 		{
 			get

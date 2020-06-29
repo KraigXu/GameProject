@@ -8,8 +8,8 @@ namespace RimWorld
 	public class TurretTop
 	{
 		
-		// (get) Token: 0x06004BD2 RID: 19410 RVA: 0x00198888 File Offset: 0x00196A88
-		// (set) Token: 0x06004BD3 RID: 19411 RVA: 0x00198890 File Offset: 0x00196A90
+		
+		
 		private float CurRotation
 		{
 			get

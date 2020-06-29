@@ -7,7 +7,7 @@ namespace Verse
 	public class CompHeatPusherPowered : CompHeatPusher
 	{
 		
-		// (get) Token: 0x0600175E RID: 5982 RVA: 0x00085920 File Offset: 0x00083B20
+		
 		protected override bool ShouldPushHeatNow
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class CompAbilityEffect : AbilityComp
 	{
 		
-		// (get) Token: 0x0600417D RID: 16765 RVA: 0x0015E3FB File Offset: 0x0015C5FB
+		
 		public CompProperties_AbilityEffect Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600417E RID: 16766 RVA: 0x0015E408 File Offset: 0x0015C608
+		
 		protected bool SendLetter
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class SkillRequirement
 	{
 		
-		// (get) Token: 0x060005DA RID: 1498 RVA: 0x0001C4AD File Offset: 0x0001A6AD
+		
 		public string Summary
 		{
 			get

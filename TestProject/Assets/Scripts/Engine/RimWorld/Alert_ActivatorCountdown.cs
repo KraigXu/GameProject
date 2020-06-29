@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005671 RID: 22129 RVA: 0x001CA8F0 File Offset: 0x001C8AF0
+		
 		private List<Thing> ActivatorCountdowns
 		{
 			get

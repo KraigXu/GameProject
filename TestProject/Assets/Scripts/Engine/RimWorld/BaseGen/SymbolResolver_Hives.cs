@@ -29,7 +29,7 @@ namespace RimWorld.BaseGen
 			{
 				hive.CompDormant.ToSleep();
 			}
-			hive = (Hive)GenSpawn.Spawn(hive, loc, BaseGen.globalSettings.map, WipeMode.Vanish);
+			hive = (Hive)GenSpawn.Spawn(hive, loc, BaseGenCore.globalSettings.map, WipeMode.Vanish);
 			for (int i = 0; i < num - 1; i++)
 			{
 				Hive hive2;
@@ -43,7 +43,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryFindFirstHivePos(CellRect rect, out IntVec3 pos)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			return (from mc in rect.Cells
 			where mc.Standable(map)
 			select mc).TryRandomElement(out pos);

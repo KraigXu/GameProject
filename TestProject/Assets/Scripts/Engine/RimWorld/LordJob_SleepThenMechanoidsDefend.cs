@@ -11,7 +11,7 @@ namespace RimWorld
 	public class LordJob_SleepThenMechanoidsDefend : LordJob_MechanoidDefendBase
 	{
 		
-		// (get) Token: 0x060031ED RID: 12781 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool GuiltyOnDowned
 		{
 			get

@@ -79,7 +79,7 @@ namespace Verse
 			}
 			if (newThing.def.category == ThingCategory.Item)
 			{
-				Predicate<IntVec3> 9__0;
+
 				foreach (IntVec3 intVec in occupiedRect)
 				{
 					foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -91,11 +91,8 @@ namespace Verse
 							IntVec3 center = intVec;
 							ThingPlaceMode mode = ThingPlaceMode.Near;
 							Action<Thing, int> placedAction = null;
-							Predicate<IntVec3> nearPlaceValidator;
-							if ((nearPlaceValidator ) == null)
-							{
-								nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
-							}
+							Predicate<IntVec3> nearPlaceValidator = (((IntVec3 x) => !occupiedRect.Contains(x)));
+
 							if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 							{
 								thing.Destroy(DestroyMode.Vanish);
@@ -220,7 +217,7 @@ namespace Verse
 		public static void WipeAndRefundExistingThings(IntVec3 thingPos, Rot4 thingRot, BuildableDef thingDef, Map map)
 		{
 			CellRect occupiedRect = GenAdj.OccupiedRect(thingPos, thingRot, thingDef.Size);
-			Predicate<IntVec3> 9__0;
+
 			foreach (IntVec3 intVec in occupiedRect)
 			{
 				foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -234,10 +231,10 @@ namespace Verse
 							IntVec3 center = intVec;
 							ThingPlaceMode mode = ThingPlaceMode.Near;
 							Action<Thing, int> placedAction = null;
-							Predicate<IntVec3> nearPlaceValidator;
+							Predicate<IntVec3> nearPlaceValidator = (((IntVec3 x) => !occupiedRect.Contains(x)));
 							if ((nearPlaceValidator ) == null)
 							{
-								nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
+								
 							}
 							if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 							{
@@ -261,7 +258,7 @@ namespace Verse
 				return;
 			}
 			CellRect occupiedRect = GenAdj.OccupiedRect(thingPos, thingRot, thingDef.Size);
-			Predicate<IntVec3> 9__0;
+
 			foreach (IntVec3 intVec in occupiedRect)
 			{
 				foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -273,11 +270,8 @@ namespace Verse
 						IntVec3 center = intVec;
 						ThingPlaceMode mode = ThingPlaceMode.Near;
 						Action<Thing, int> placedAction = null;
-						Predicate<IntVec3> nearPlaceValidator;
-						if ((nearPlaceValidator ) == null)
-						{
-							nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
-						}
+						Predicate<IntVec3> nearPlaceValidator = (((IntVec3 x) => !occupiedRect.Contains(x)));
+
 						if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 						{
 							thing.Destroy(DestroyMode.Vanish);

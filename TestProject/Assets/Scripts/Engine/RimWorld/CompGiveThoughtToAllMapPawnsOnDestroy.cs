@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompGiveThoughtToAllMapPawnsOnDestroy : ThingComp
 	{
 		
-		// (get) Token: 0x06005168 RID: 20840 RVA: 0x001B4927 File Offset: 0x001B2B27
+		
 		private CompProperties_GiveThoughtToAllMapPawnsOnDestroy Props
 		{
 			get

@@ -11,7 +11,7 @@ namespace RimWorld
 	public sealed class GameConditionManager : IExposable
 	{
 		
-		// (get) Token: 0x06003B83 RID: 15235 RVA: 0x0013A59F File Offset: 0x0013879F
+		
 		public List<GameCondition> ActiveConditions
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B84 RID: 15236 RVA: 0x0013A5A7 File Offset: 0x001387A7
+		
 		public GameConditionManager Parent
 		{
 			get
@@ -35,12 +35,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B85 RID: 15237 RVA: 0x0013A5C0 File Offset: 0x001387C0
+		
 		public bool ElectricityDisabled
 		{
 			get
 			{
-				using (List<GameCondition>.Enumerator enumerator = this.activeConditions.GetEnumerator())
+				List<GameCondition>.Enumerator enumerator = this.activeConditions.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

@@ -7,7 +7,7 @@ namespace RimWorld
 	internal struct StrikeRecord : IExposable
 	{
 		
-		// (get) Token: 0x06003F05 RID: 16133 RVA: 0x0014F658 File Offset: 0x0014D858
+		
 		public bool Expired
 		{
 			get

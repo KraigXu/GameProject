@@ -11,7 +11,7 @@ namespace RimWorld
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
 			IEnumerable<BodyPartRecord> notMissingParts = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
-			using (IEnumerator<BodyPartRecord> enumerator = notMissingParts.GetEnumerator())
+			IEnumerator<BodyPartRecord> enumerator = notMissingParts.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -30,7 +30,7 @@ namespace RimWorld
 					}
 				}
 			}
-			IEnumerator<BodyPartRecord> enumerator = null;
+			
 			yield break;
 			yield break;
 		}

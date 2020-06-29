@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Tornado : ThingWithComps
 	{
 		
-		// (get) Token: 0x06004DC2 RID: 19906 RVA: 0x001A2184 File Offset: 0x001A0384
+		
 		private float FadeInOutFactor
 		{
 			get

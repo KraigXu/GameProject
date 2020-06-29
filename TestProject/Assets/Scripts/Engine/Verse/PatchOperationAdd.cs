@@ -18,7 +18,7 @@ namespace Verse
 				XmlNode xmlNode = obj as XmlNode;
 				if (this.order == PatchOperationAdd.Order.Append)
 				{
-					using (IEnumerator enumerator2 = node.ChildNodes.GetEnumerator())
+					IEnumerator enumerator2 = node.ChildNodes.GetEnumerator();
 					{
 						while (enumerator2.MoveNext())
 						{

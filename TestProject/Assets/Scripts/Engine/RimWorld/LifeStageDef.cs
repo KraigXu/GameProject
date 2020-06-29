@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LifeStageDef : Def
 	{
 		
-		// (get) Token: 0x0600365E RID: 13918 RVA: 0x00126B7B File Offset: 0x00124D7B
+		
 		public string Adjective
 		{
 			get

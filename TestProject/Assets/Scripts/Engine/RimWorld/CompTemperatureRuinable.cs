@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompTemperatureRuinable : ThingComp
 	{
 		
-		// (get) Token: 0x0600539C RID: 21404 RVA: 0x001BF495 File Offset: 0x001BD695
+		
 		public CompProperties_TemperatureRuinable Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600539D RID: 21405 RVA: 0x001BF4A2 File Offset: 0x001BD6A2
+		
 		public bool Ruined
 		{
 			get

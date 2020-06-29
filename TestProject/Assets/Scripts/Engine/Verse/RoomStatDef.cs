@@ -8,7 +8,7 @@ namespace Verse
 	public class RoomStatDef : Def
 	{
 		
-		// (get) Token: 0x06000636 RID: 1590 RVA: 0x0001DADF File Offset: 0x0001BCDF
+		
 		public RoomStatWorker Worker
 		{
 			get

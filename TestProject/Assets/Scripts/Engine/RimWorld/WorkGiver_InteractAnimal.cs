@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class WorkGiver_InteractAnimal : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06002FF6 RID: 12278 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get

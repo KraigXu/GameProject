@@ -7,7 +7,7 @@ namespace RimWorld
 	public class StorytellerComp_Triggered : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D5F RID: 15711 RVA: 0x00143EDF File Offset: 0x001420DF
+		
 		private StorytellerCompProperties_Triggered Props
 		{
 			get

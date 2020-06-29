@@ -9,7 +9,7 @@ namespace RimWorld
 	public class SectionLayer_BridgeProps : SectionLayer
 	{
 		
-		// (get) Token: 0x06003E1D RID: 15901 RVA: 0x000414B0 File Offset: 0x0003F6B0
+		
 		public override bool Visible
 		{
 			get

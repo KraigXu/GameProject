@@ -9,7 +9,7 @@ namespace RimWorld
 	public class ArchitectCategoryTab
 	{
 		
-		// (get) Token: 0x06005B2C RID: 23340 RVA: 0x001F61F6 File Offset: 0x001F43F6
+		
 		public static Rect InfoRect
 		{
 			get

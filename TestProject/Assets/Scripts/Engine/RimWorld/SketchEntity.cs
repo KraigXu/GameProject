@@ -9,19 +9,19 @@ namespace RimWorld
 	public abstract class SketchEntity : IExposable
 	{
 		
-		// (get) Token: 0x0600405F RID: 16479
+		
 		public abstract string Label { get; }
 
 		
-		// (get) Token: 0x06004060 RID: 16480
+		
 		public abstract CellRect OccupiedRect { get; }
 
 		
-		// (get) Token: 0x06004061 RID: 16481
+		
 		public abstract float SpawnOrder { get; }
 
 		
-		// (get) Token: 0x06004062 RID: 16482 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool LostImportantReferences
 		{
 			get

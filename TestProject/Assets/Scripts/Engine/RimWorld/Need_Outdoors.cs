@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Outdoors : Need
 	{
 		
-		// (get) Token: 0x0600458A RID: 17802 RVA: 0x00177C18 File Offset: 0x00175E18
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600458B RID: 17803 RVA: 0x00177C30 File Offset: 0x00175E30
+		
 		public OutdoorsCategory CurCategory
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600458C RID: 17804 RVA: 0x00177C89 File Offset: 0x00175E89
+		
 		public override bool ShowOnNeedList
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600458D RID: 17805 RVA: 0x00177C94 File Offset: 0x00175E94
+		
 		private bool Disabled
 		{
 			get

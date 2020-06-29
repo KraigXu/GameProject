@@ -30,9 +30,9 @@ namespace Verse
 		public static void DefNames()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (IEnumerator<Type> enumerator = (from def in GenDefDatabase.AllDefTypesWithDatabases()
+			IEnumerator<Type> enumerator = (from def in GenDefDatabase.AllDefTypesWithDatabases()
 			orderby def.Name
-			select def).GetEnumerator())
+			select def).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -95,9 +95,9 @@ namespace Verse
 		public static void DefLabels()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (IEnumerator<Type> enumerator = (from def in GenDefDatabase.AllDefTypesWithDatabases()
+			IEnumerator<Type> enumerator = (from def in GenDefDatabase.AllDefTypesWithDatabases()
 			orderby def.Name
-			select def).GetEnumerator())
+			select def).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

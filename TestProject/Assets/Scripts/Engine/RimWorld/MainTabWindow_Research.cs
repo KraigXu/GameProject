@@ -13,8 +13,8 @@ namespace RimWorld
 	public class MainTabWindow_Research : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005CB3 RID: 23731 RVA: 0x00201C64 File Offset: 0x001FFE64
-		// (set) Token: 0x06005CB4 RID: 23732 RVA: 0x00201C6C File Offset: 0x001FFE6C
+		
+		
 		private ResearchTabDef CurTab
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005CB5 RID: 23733 RVA: 0x00201CBC File Offset: 0x001FFEBC
+		
 		private bool ColonistsHaveResearchBench
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005CB6 RID: 23734 RVA: 0x00201CFC File Offset: 0x001FFEFC
+		
 		public override Vector2 InitialSize
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class StorytellerComp_CategoryIndividualMTBByBiome : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D12 RID: 15634 RVA: 0x001436E8 File Offset: 0x001418E8
+		
 		protected StorytellerCompProperties_CategoryIndividualMTBByBiome Props
 		{
 			get

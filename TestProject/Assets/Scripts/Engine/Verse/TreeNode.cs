@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BC6 RID: 7110 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool Openable
 		{
 			get

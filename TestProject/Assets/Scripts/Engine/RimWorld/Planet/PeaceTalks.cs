@@ -12,7 +12,7 @@ namespace RimWorld.Planet
 	public class PeaceTalks : WorldObject
 	{
 		
-		// (get) Token: 0x06006D7F RID: 28031 RVA: 0x002649E4 File Offset: 0x00262BE4
+		
 		public override Material Material
 		{
 			get
@@ -75,9 +75,9 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__0(caravan))
+
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			foreach (FloatMenuOption floatMenuOption2 in CaravanArrivalAction_VisitPeaceTalks.GetFloatMenuOptions(caravan, this))

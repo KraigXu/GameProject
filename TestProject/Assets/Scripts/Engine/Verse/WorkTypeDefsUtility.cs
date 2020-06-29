@@ -8,7 +8,7 @@ namespace Verse
 	public static class WorkTypeDefsUtility
 	{
 		
-		// (get) Token: 0x060006F5 RID: 1781 RVA: 0x0001FEB0 File Offset: 0x0001E0B0
+		
 		public static IEnumerable<WorkTypeDef> WorkTypeDefsInPriorityOrder
 		{
 			get

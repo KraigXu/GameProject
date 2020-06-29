@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Thought_SituationalSocial : Thought_Situational, ISocialThought
 	{
 		
-		// (get) Token: 0x060047E1 RID: 18401 RVA: 0x00185A8E File Offset: 0x00183C8E
+		
 		public override bool VisibleInNeedsTab
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047E2 RID: 18402 RVA: 0x00185AAC File Offset: 0x00183CAC
+		
 		public override string LabelCap
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047E3 RID: 18403 RVA: 0x00185B04 File Offset: 0x00183D04
+		
 		public override string LabelCapSocial
 		{
 			get

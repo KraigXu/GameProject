@@ -356,7 +356,7 @@ namespace Verse
 			{
 				((IncidentWorker_Raid)IncidentDefOf.RaidEnemy.Worker).DoTable_RaidStrategySampled(null);
 			}, MenuOptionPriority.Default, null, null, 0f, null, null));
-			using (IEnumerator<Faction> enumerator = Find.FactionManager.AllFactions.GetEnumerator())
+			IEnumerator<Faction> enumerator = Find.FactionManager.AllFactions.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -380,7 +380,7 @@ namespace Verse
 			{
 				((IncidentWorker_Raid)IncidentDefOf.RaidEnemy.Worker).DoTable_RaidArrivalModeSampled(null);
 			}, MenuOptionPriority.Default, null, null, 0f, null, null));
-			using (IEnumerator<Faction> enumerator = Find.FactionManager.AllFactions.GetEnumerator())
+			IEnumerator<Faction> enumerator = Find.FactionManager.AllFactions.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

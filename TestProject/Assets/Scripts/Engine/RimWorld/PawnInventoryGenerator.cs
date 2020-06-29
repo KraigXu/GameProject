@@ -73,7 +73,7 @@ namespace RimWorld
 			{
 				return;
 			}
-			using (IEnumerator<Hediff_Addiction> enumerator = p.health.hediffSet.GetHediffs<Hediff_Addiction>().GetEnumerator())
+			IEnumerator<Hediff_Addiction> enumerator = p.health.hediffSet.GetHediffs<Hediff_Addiction>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

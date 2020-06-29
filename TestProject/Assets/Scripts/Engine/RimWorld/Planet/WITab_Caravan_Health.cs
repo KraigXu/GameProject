@@ -11,7 +11,7 @@ namespace RimWorld.Planet
 	public class WITab_Caravan_Health : WITab
 	{
 		
-		// (get) Token: 0x06006FF0 RID: 28656 RVA: 0x0026F60A File Offset: 0x0026D80A
+		
 		private List<Pawn> Pawns
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006FF1 RID: 28657 RVA: 0x002706D8 File Offset: 0x0026E8D8
+		
 		private List<PawnCapacityDef> CapacitiesToDisplay
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006FF2 RID: 28658 RVA: 0x00270753 File Offset: 0x0026E953
+		
 		private float SpecificHealthTabWidth
 		{
 			get

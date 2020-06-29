@@ -223,7 +223,7 @@ namespace RimWorld
 			float num = float.MaxValue;
 			if (thingDef.MadeFromStuff)
 			{
-				using (IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator())
+				IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -246,7 +246,7 @@ namespace RimWorld
 			float num = float.MaxValue;
 			if (thingDef.MadeFromStuff)
 			{
-				using (IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator())
+				IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

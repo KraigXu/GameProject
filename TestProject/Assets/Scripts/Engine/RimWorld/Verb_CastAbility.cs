@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Verb_CastAbility : Verb
 	{
 		
-		// (get) Token: 0x060041EA RID: 16874 RVA: 0x00160509 File Offset: 0x0015E709
+		
 		public static Color RadiusHighlightColor
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041EB RID: 16875 RVA: 0x0016051F File Offset: 0x0015E71F
+		
 		public override string ReportLabel
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041EC RID: 16876 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool MultiSelect
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041ED RID: 16877 RVA: 0x00160534 File Offset: 0x0015E734
+		
 		public override ITargetingSource DestinationSelector
 		{
 			get
@@ -145,7 +145,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060041F5 RID: 16885 RVA: 0x00160736 File Offset: 0x0015E936
+		
 		public override Texture2D UIIcon
 		{
 			get

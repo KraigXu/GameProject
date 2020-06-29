@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public class PrisonerWillingToJoinComp : ImportantPawnComp, IThingHolder
 	{
 		
-		// (get) Token: 0x06006EF9 RID: 28409 RVA: 0x0026AA85 File Offset: 0x00268C85
+		
 		protected override string PawnSaveKey
 		{
 			get

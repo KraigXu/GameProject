@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			TerrainGrid terrainGrid = map.terrainGrid;
 			TerrainDef terrainDef = rp.floorDef ?? BaseGenUtility.RandomBasicFloorDef(rp.faction, false);
 			bool flag = rp.floorOnlyIfTerrainSupports ?? false;

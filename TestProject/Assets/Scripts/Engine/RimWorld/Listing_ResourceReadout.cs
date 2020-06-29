@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Listing_ResourceReadout : Listing_Tree
 	{
 		
-		// (get) Token: 0x06005DFF RID: 24063 RVA: 0x00207692 File Offset: 0x00205892
+		
 		protected override float LabelWidth
 		{
 			get

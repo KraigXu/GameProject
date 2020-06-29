@@ -11,7 +11,7 @@ namespace Verse
 	public class Battle : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x060006FF RID: 1791 RVA: 0x000201AC File Offset: 0x0001E3AC
+		
 		public int Importance
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000700 RID: 1792 RVA: 0x000201B9 File Offset: 0x0001E3B9
+		
 		public int CreationTimestamp
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000701 RID: 1793 RVA: 0x000201C1 File Offset: 0x0001E3C1
+		
 		public int LastEntryTimestamp
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000702 RID: 1794 RVA: 0x000201F0 File Offset: 0x0001E3F0
+		
 		public Battle AbsorbedBy
 		{
 			get
@@ -55,7 +55,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000703 RID: 1795 RVA: 0x000201F8 File Offset: 0x0001E3F8
+		
 		public List<LogEntry> Entries
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GameCondition_NoSunlight : GameCondition
 	{
 		
-		// (get) Token: 0x06003B5B RID: 15195 RVA: 0x000FAF75 File Offset: 0x000F9175
+		
 		public override int TransitionTicks
 		{
 			get

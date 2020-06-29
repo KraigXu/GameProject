@@ -9,7 +9,7 @@ namespace RimWorld
 	public class HediffComp_PsychicHarmonizer : HediffComp
 	{
 		
-		// (get) Token: 0x06006426 RID: 25638 RVA: 0x0022B1B6 File Offset: 0x002293B6
+		
 		public HediffCompProperties_PsychicHarmonizer Props
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Building_Grave : Building_Casket, IStoreSettingsParent, IHaulDestination
 	{
 		
-		// (get) Token: 0x06004CD3 RID: 19667 RVA: 0x0019C303 File Offset: 0x0019A503
+		
 		public Pawn AssignedPawn
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CD4 RID: 19668 RVA: 0x0019C332 File Offset: 0x0019A532
+		
 		public CompAssignableToPawn_Grave CompAssignableToPawn
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CD5 RID: 19669 RVA: 0x0019C33C File Offset: 0x0019A53C
+		
 		public override Graphic Graphic
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CD6 RID: 19670 RVA: 0x0019C39B File Offset: 0x0019A59B
+		
 		public bool HasCorpse
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CD7 RID: 19671 RVA: 0x0019C3A8 File Offset: 0x0019A5A8
+		
 		public Corpse Corpse
 		{
 			get
@@ -83,7 +83,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CD8 RID: 19672 RVA: 0x0019C3E3 File Offset: 0x0019A5E3
+		
 		public bool StorageTabVisible
 		{
 			get

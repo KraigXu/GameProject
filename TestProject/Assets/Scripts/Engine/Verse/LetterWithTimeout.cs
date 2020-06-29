@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class LetterWithTimeout : Letter
 	{
 		
-		// (get) Token: 0x06001B38 RID: 6968 RVA: 0x000A6E75 File Offset: 0x000A5075
+		
 		public bool TimeoutActive
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B39 RID: 6969 RVA: 0x000A6E83 File Offset: 0x000A5083
+		
 		public bool TimeoutPassed
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B3A RID: 6970 RVA: 0x000A6EA4 File Offset: 0x000A50A4
+		
 		public override bool CanShowInLetterStack
 		{
 			get

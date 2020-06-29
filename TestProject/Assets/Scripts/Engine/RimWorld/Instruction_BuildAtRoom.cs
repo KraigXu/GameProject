@@ -7,11 +7,11 @@ namespace RimWorld
 	public abstract class Instruction_BuildAtRoom : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E73 RID: 24179
+		
 		protected abstract CellRect BuildableRect { get; }
 
 		
-		// (get) Token: 0x06005E74 RID: 24180 RVA: 0x0020B051 File Offset: 0x00209251
+		
 		protected override float ProgressPercent
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		protected int NumPlaced()
 		{
 			int num = 0;
-			using (CellRect.Enumerator enumerator = this.BuildableRect.GetEnumerator())
+			CellRect.Enumerator enumerator = this.BuildableRect.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

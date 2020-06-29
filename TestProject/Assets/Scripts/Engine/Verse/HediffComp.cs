@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp
 	{
 		
-		// (get) Token: 0x06001007 RID: 4103 RVA: 0x0005CD3A File Offset: 0x0005AF3A
+		
 		public Pawn Pawn
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001008 RID: 4104 RVA: 0x0005CD47 File Offset: 0x0005AF47
+		
 		public HediffDef Def
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001009 RID: 4105 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string CompLabelInBracketsExtra
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600100A RID: 4106 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string CompTipStringExtra
 		{
 			get
@@ -47,7 +47,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600100B RID: 4107 RVA: 0x0005ACED File Offset: 0x00058EED
+		
 		public virtual TextureAndColor CompStateIcon
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600100C RID: 4108 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool CompShouldRemove
 		{
 			get

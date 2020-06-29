@@ -7,7 +7,7 @@ namespace Verse
 	internal class SectionLayer_Snow : SectionLayer
 	{
 		
-		// (get) Token: 0x06000B95 RID: 2965 RVA: 0x00040B45 File Offset: 0x0003ED45
+		
 		public override bool Visible
 		{
 			get

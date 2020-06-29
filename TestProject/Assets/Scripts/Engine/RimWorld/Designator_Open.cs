@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Open : Designator
 	{
 		
-		// (get) Token: 0x060057B6 RID: 22454 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057B7 RID: 22455 RVA: 0x001D1E93 File Offset: 0x001D0093
+		
 		protected override DesignationDef Designation
 		{
 			get

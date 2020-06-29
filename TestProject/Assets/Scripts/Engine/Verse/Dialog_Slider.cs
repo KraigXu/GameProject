@@ -7,7 +7,7 @@ namespace Verse
 	public class Dialog_Slider : Window
 	{
 		
-		// (get) Token: 0x06001D5F RID: 7519 RVA: 0x000B4771 File Offset: 0x000B2971
+		
 		public override Vector2 InitialSize
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse.Grammar
 	public class Rule_NamePerson : Rule
 	{
 		
-		// (get) Token: 0x0600241E RID: 9246 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public override float BaseSelectionWeight
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class DevModePermanentlyDisabledUtility
 	{
 		
-		// (get) Token: 0x060060BD RID: 24765 RVA: 0x002173ED File Offset: 0x002155ED
+		
 		public static bool Disabled
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class WorkGiver_Warden_DoExecution : WorkGiver_Warden
 	{
 		
-		// (get) Token: 0x0600306A RID: 12394 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get

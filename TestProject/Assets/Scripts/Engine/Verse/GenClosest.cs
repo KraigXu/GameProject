@@ -129,7 +129,7 @@ namespace Verse
 			int regionsSeenScan = 0;
 			RegionProcessor regionProcessor = delegate(Region r)
 			{
-				int regionsSeenScan;
+
 				if (RegionTraverser.ShouldCountRegion(r))
 				{
 					//regionsSeenScan = regionsSeenScan;

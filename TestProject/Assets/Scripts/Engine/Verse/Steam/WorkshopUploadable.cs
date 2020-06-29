@@ -9,7 +9,7 @@ namespace Verse.Steam
 	public interface WorkshopUploadable
 	{
 		
-		// (get) Token: 0x060022A4 RID: 8868
+		
 		IEnumerable<System.Version> SupportedVersions { get; }
 
 		

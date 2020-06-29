@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_PlantSow : JobDriver
 	{
 		
-		// (get) Token: 0x06002D4D RID: 11597 RVA: 0x000FFCE4 File Offset: 0x000FDEE4
+		
 		private Plant Plant
 		{
 			get

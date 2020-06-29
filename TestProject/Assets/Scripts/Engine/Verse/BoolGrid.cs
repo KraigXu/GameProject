@@ -7,7 +7,7 @@ namespace Verse
 	public class BoolGrid : IExposable
 	{
 		
-		// (get) Token: 0x06000A01 RID: 2561 RVA: 0x00036A80 File Offset: 0x00034C80
+		
 		public int TrueCount
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A02 RID: 2562 RVA: 0x00036A88 File Offset: 0x00034C88
+		
 		public IEnumerable<IntVec3> ActiveCells
 		{
 			get

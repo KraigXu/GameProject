@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_HuntEnemies : LordToil
 	{
 		
-		// (get) Token: 0x060032AA RID: 12970 RVA: 0x00119C84 File Offset: 0x00117E84
+		
 		private LordToilData_HuntEnemies Data
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032AB RID: 12971 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool ForceHighStoryDanger
 		{
 			get

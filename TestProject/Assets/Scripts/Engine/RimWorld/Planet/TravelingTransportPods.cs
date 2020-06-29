@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class TravelingTransportPods : WorldObject, IThingHolder
 	{
 		
-		// (get) Token: 0x06006E77 RID: 28279 RVA: 0x0026904F File Offset: 0x0026724F
+		
 		private Vector3 Start
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E78 RID: 28280 RVA: 0x00269061 File Offset: 0x00267261
+		
 		private Vector3 End
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E79 RID: 28281 RVA: 0x00269073 File Offset: 0x00267273
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E7A RID: 28282 RVA: 0x0026908C File Offset: 0x0026728C
+		
 		private float TraveledPctStepPerTick
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E7B RID: 28283 RVA: 0x002690E0 File Offset: 0x002672E0
+		
 		private bool PodsHaveAnyPotentialCaravanOwner
 		{
 			get
@@ -83,7 +83,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E7C RID: 28284 RVA: 0x00269148 File Offset: 0x00267348
+		
 		public bool PodsHaveAnyFreeColonist
 		{
 			get
@@ -105,7 +105,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006E7D RID: 28285 RVA: 0x002691B1 File Offset: 0x002673B1
+		
 		public IEnumerable<Pawn> Pawns
 		{
 			get

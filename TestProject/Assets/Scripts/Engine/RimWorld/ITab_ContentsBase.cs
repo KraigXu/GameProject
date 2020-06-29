@@ -10,11 +10,11 @@ namespace RimWorld
 	public abstract class ITab_ContentsBase : ITab
 	{
 		
-		// (get) Token: 0x06005B7B RID: 23419
+		
 		public abstract IList<Thing> container { get; }
 
 		
-		// (get) Token: 0x06005B7C RID: 23420 RVA: 0x001F7D26 File Offset: 0x001F5F26
+		
 		public override bool IsVisible
 		{
 			get

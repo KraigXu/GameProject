@@ -9,7 +9,7 @@ namespace RimWorld
 	internal class LordToil_DefendTraderCaravan : LordToil_DefendPoint
 	{
 		
-		// (get) Token: 0x0600328D RID: 12941 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600328E RID: 12942 RVA: 0x0011854D File Offset: 0x0011674D
+		
 		public override float? CustomWakeThreshold
 		{
 			get

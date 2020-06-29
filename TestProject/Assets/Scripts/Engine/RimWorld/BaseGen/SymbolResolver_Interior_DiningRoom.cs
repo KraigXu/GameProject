@@ -10,15 +10,15 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("indoorLighting", rp, null);
-			BaseGen.symbolStack.Push("randomlyPlaceMealsOnTables", rp, null);
-			BaseGen.symbolStack.Push("placeChairsNearTables", rp, null);
+			BaseGenCore.symbolStack.Push("indoorLighting", rp, null);
+			BaseGenCore.symbolStack.Push("randomlyPlaceMealsOnTables", rp, null);
+			BaseGenCore.symbolStack.Push("placeChairsNearTables", rp, null);
 			int num = Mathf.Max(GenMath.RoundRandom((float)rp.rect.Area / 20f), 1);
 			for (int i = 0; i < num; i++)
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingDef = ThingDefOf.Table2x2c;
-				BaseGen.symbolStack.Push("thing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 			}
 		}
 	}

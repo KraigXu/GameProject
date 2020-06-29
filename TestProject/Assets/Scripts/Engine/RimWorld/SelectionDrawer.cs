@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class SelectionDrawer
 	{
 		
-		// (get) Token: 0x06005BE3 RID: 23523 RVA: 0x001FBA8C File Offset: 0x001F9C8C
+		
 		public static Dictionary<object, float> SelectTimes
 		{
 			get

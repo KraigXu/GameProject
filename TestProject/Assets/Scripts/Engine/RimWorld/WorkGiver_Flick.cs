@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_Flick : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003170 RID: 12656 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

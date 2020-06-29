@@ -14,7 +14,7 @@ namespace RimWorld
 		protected abstract float GetRadius(Pawn pawn);
 
 		
-		// (get) Token: 0x06002E4D RID: 11853 RVA: 0x001043B2 File Offset: 0x001025B2
+		
 		protected virtual int FollowJobExpireInterval
 		{
 			get

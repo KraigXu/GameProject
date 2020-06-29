@@ -10,7 +10,7 @@ namespace Verse
 	public sealed class LetterStack : IExposable
 	{
 		
-		// (get) Token: 0x06001B44 RID: 6980 RVA: 0x000A6FE5 File Offset: 0x000A51E5
+		
 		public List<Letter> LettersListForReading
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B45 RID: 6981 RVA: 0x000A6FED File Offset: 0x000A51ED
+		
 		public float LastTopY
 		{
 			get

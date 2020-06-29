@@ -6,7 +6,7 @@ namespace Verse
 	public struct CoverInfo
 	{
 		
-		// (get) Token: 0x060021B4 RID: 8628 RVA: 0x000CD3D6 File Offset: 0x000CB5D6
+		
 		public Thing Thing
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021B5 RID: 8629 RVA: 0x000CD3DE File Offset: 0x000CB5DE
+		
 		public float BlockChance
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060021B6 RID: 8630 RVA: 0x000CD3E6 File Offset: 0x000CB5E6
+		
 		public static CoverInfo Invalid
 		{
 			get

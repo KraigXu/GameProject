@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class WorkGiver_GatherAnimalBodyResources : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06002FEE RID: 12270
+		
 		protected abstract JobDef JobDef { get; }
 
 		
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002FF2 RID: 12274 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

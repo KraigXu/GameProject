@@ -11,7 +11,7 @@ namespace RimWorld
 	public class LordJob_FormAndSendCaravan : LordJob
 	{
 		
-		// (get) Token: 0x060031AB RID: 12715 RVA: 0x00114CE6 File Offset: 0x00112EE6
+		
 		public bool GatheringItemsNow
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031AC RID: 12716 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowStartNewGatherings
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031AD RID: 12717 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool NeverInRestraints
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031AE RID: 12718 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060031AF RID: 12719 RVA: 0x00114CFC File Offset: 0x00112EFC
+		
 		public string Status
 		{
 			get

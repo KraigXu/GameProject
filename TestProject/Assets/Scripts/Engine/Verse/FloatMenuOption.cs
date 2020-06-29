@@ -11,8 +11,8 @@ namespace Verse
 	public class FloatMenuOption
 	{
 		
-		// (get) Token: 0x06001A88 RID: 6792 RVA: 0x000A3537 File Offset: 0x000A1737
-		// (set) Token: 0x06001A89 RID: 6793 RVA: 0x000A353F File Offset: 0x000A173F
+		
+		
 		public string Label
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A8A RID: 6794 RVA: 0x000A356D File Offset: 0x000A176D
+		
 		private float VerticalMargin
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A8B RID: 6795 RVA: 0x000A3583 File Offset: 0x000A1783
+		
 		private float HorizontalMargin
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A8C RID: 6796 RVA: 0x000A3599 File Offset: 0x000A1799
+		
 		private float IconOffset
 		{
 			get
@@ -73,7 +73,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A8D RID: 6797 RVA: 0x000A35C4 File Offset: 0x000A17C4
+		
 		private GameFont CurrentFont
 		{
 			get
@@ -87,8 +87,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A8E RID: 6798 RVA: 0x000A35D2 File Offset: 0x000A17D2
-		// (set) Token: 0x06001A8F RID: 6799 RVA: 0x000A35DD File Offset: 0x000A17DD
+		
+		
 		public bool Disabled
 		{
 			get
@@ -105,7 +105,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A90 RID: 6800 RVA: 0x000A35E9 File Offset: 0x000A17E9
+		
 		public float RequiredHeight
 		{
 			get
@@ -115,7 +115,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A91 RID: 6801 RVA: 0x000A35F1 File Offset: 0x000A17F1
+		
 		public float RequiredWidth
 		{
 			get
@@ -125,8 +125,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A92 RID: 6802 RVA: 0x000A35F9 File Offset: 0x000A17F9
-		// (set) Token: 0x06001A93 RID: 6803 RVA: 0x000A360B File Offset: 0x000A180B
+		
+		
 		public MenuOptionPriority Priority
 		{
 			get

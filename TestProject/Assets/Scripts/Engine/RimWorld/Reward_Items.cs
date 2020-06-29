@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RimWorld.Planet;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse;
 using Verse.Grammar;
 
@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_Items : Reward
 	{
 		
-		// (get) Token: 0x0600615A RID: 24922 RVA: 0x0021CCA0 File Offset: 0x0021AEA0
+		
 		public List<Thing> ItemsListForReading
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600615B RID: 24923 RVA: 0x0021CCA8 File Offset: 0x0021AEA8
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600615C RID: 24924 RVA: 0x0021CCB8 File Offset: 0x0021AEB8
+		
 		public override float TotalMarketValue
 		{
 			get

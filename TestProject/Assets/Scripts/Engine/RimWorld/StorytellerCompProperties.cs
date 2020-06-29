@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerCompProperties
 	{
 		
-		// (get) Token: 0x06003713 RID: 14099 RVA: 0x00128DD8 File Offset: 0x00126FD8
+		
 		public bool Enabled
 		{
 			get

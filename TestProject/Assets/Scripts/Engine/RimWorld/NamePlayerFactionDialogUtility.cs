@@ -33,9 +33,9 @@ namespace RimWorld
 						Find.Autosaver.DoAutosave();
 						IEnumerable<FileInfo> allSavedGameFiles = GenFilePaths.AllSavedGameFiles;
 						Func<FileInfo, bool> predicate;
-						if ((predicate ) == null)
+						if ((predicate=default ) == null)
 						{
-							predicate = (9__1 = ((FileInfo x) => Path.GetFileNameWithoutExtension(x.Name) == oldSavefileName));
+							predicate = ( ((FileInfo x) => Path.GetFileNameWithoutExtension(x.Name) == oldSavefileName));
 						}
 						FileInfo fileInfo = allSavedGameFiles.FirstOrDefault(predicate);
 						if (fileInfo != null)

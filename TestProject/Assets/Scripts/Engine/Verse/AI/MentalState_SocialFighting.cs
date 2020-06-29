@@ -7,7 +7,7 @@ namespace Verse.AI
 	public class MentalState_SocialFighting : MentalState
 	{
 		
-		// (get) Token: 0x060026FA RID: 9978 RVA: 0x000E48B5 File Offset: 0x000E2AB5
+		
 		private bool ShouldStop
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060026FB RID: 9979 RVA: 0x000E48EC File Offset: 0x000E2AEC
+		
 		private bool IsOtherPawnSocialFightingWithMe
 		{
 			get

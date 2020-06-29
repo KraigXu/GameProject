@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Verb_CastPsycast : Verb_CastAbility
 	{
 		
-		// (get) Token: 0x060041F7 RID: 16887 RVA: 0x00160748 File Offset: 0x0015E948
+		
 		public Psycast Psycast
 		{
 			get
@@ -100,13 +100,13 @@ namespace RimWorld
 			{
 				texture2D = TexCommand.CannotShoot;
 			}
-			if (ThingRequiringRoyalPermissionUtility.IsViolatingRulesOfAnyFaction_NewTemp(HediffDefOf.PsychicAmplifier, this.CasterPawn, this.Psycast.def.level, true) && this.Psycast.def.DetectionChance > 0f)
-			{
-				TaggedString taggedString = "Illegal".Translate().ToUpper() + "\n" + this.Psycast.def.DetectionChance.ToStringPercent() + " " + "DetectionChance".Translate();
-				Text.Font = GameFont.Small;
-				GenUI.DrawMouseAttachment(texture2D, taggedString, 0f, default(Vector2), null, true, new Color(0.25f, 0f, 0f));
-				return;
-			}
+			//if (ThingRequiringRoyalPermissionUtility.IsViolatingRulesOfAnyFaction_NewTemp(HediffDefOf.PsychicAmplifier, this.CasterPawn, this.Psycast.def.level, true) && this.Psycast.def.DetectionChance > 0f)
+			//{
+			//	TaggedString taggedString = "Illegal".Translate().ToUpper() + "\n" + this.Psycast.def.DetectionChance.ToStringPercent() + " " + "DetectionChance".Translate();
+			//	Text.Font = GameFont.Small;
+			//	GenUI.DrawMouseAttachment(texture2D, taggedString, 0f, default(Vector2), null, true, new Color(0.25f, 0f, 0f));
+			//	return;
+			//}
 			GenUI.DrawMouseAttachment(texture2D);
 		}
 

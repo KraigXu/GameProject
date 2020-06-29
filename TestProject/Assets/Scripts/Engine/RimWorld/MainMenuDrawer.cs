@@ -13,7 +13,7 @@ namespace RimWorld
 	public static class MainMenuDrawer
 	{
 		
-		// (get) Token: 0x06005A58 RID: 23128 RVA: 0x001E9A61 File Offset: 0x001E7C61
+		
 		private static UI_BackgroundMain BackgroundMain
 		{
 			get

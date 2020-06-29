@@ -7,7 +7,7 @@ namespace Verse
 	public struct ThingDefCount : IEquatable<ThingDefCount>, IExposable
 	{
 		
-		// (get) Token: 0x06001F6D RID: 8045 RVA: 0x000C1268 File Offset: 0x000BF468
+		
 		public ThingDef ThingDef
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F6E RID: 8046 RVA: 0x000C1270 File Offset: 0x000BF470
+		
 		public int Count
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F6F RID: 8047 RVA: 0x000C1278 File Offset: 0x000BF478
+		
 		public string Label
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F70 RID: 8048 RVA: 0x000C128C File Offset: 0x000BF48C
+		
 		public string LabelCap
 		{
 			get

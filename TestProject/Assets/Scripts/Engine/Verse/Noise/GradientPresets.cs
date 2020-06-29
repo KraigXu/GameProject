@@ -49,7 +49,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600230F RID: 8975 RVA: 0x000D4369 File Offset: 0x000D2569
+		
 		public static Gradient Empty
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002310 RID: 8976 RVA: 0x000D4370 File Offset: 0x000D2570
+		
 		public static Gradient Grayscale
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002311 RID: 8977 RVA: 0x000D4377 File Offset: 0x000D2577
+		
 		public static Gradient RGB
 		{
 			get
@@ -79,7 +79,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002312 RID: 8978 RVA: 0x000D437E File Offset: 0x000D257E
+		
 		public static Gradient RGBA
 		{
 			get
@@ -89,7 +89,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002313 RID: 8979 RVA: 0x000D4385 File Offset: 0x000D2585
+		
 		public static Gradient Terrain
 		{
 			get

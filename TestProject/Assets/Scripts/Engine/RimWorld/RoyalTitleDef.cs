@@ -9,7 +9,7 @@ namespace RimWorld
 	public class RoyalTitleDef : Def
 	{
 		
-		// (get) Token: 0x06006344 RID: 25412 RVA: 0x00227F63 File Offset: 0x00226163
+		
 		public bool Awardable
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006345 RID: 25413 RVA: 0x00227F6E File Offset: 0x0022616E
+		
 		public IEnumerable<WorkTypeDef> DisabledWorkTypes
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006346 RID: 25414 RVA: 0x00227F7E File Offset: 0x0022617E
+		
 		public RoyalTitleInheritanceWorker InheritanceWorkerOverride
 		{
 			get
@@ -63,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006348 RID: 25416 RVA: 0x00227FD4 File Offset: 0x002261D4
+		
 		public float MinThroneRoomImpressiveness
 		{
 			get
@@ -160,7 +160,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			using (List<RoomRequirement>.Enumerator enumerator = list.GetEnumerator())
+			List<RoomRequirement>.Enumerator enumerator = list.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -296,7 +296,7 @@ namespace RimWorld
 			//Func<RoyalTitleDef.ApparelRequirement, IEnumerable<ThingDef>> selector;
 			//if ((selector ) == null)
 			//{
-			//	selector = (9__0 = ((RoyalTitleDef.ApparelRequirement r) => r.AllRequiredApparel(g)));
+			//	selector = ( ((RoyalTitleDef.ApparelRequirement r) => r.AllRequiredApparel(g)));
 			//}
 			//foreach (TaggedString taggedString in from a in source.SelectMany(selector)
 			//select a.LabelCap)
@@ -322,9 +322,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			//foreach (string text in this.n__0())
+
 			//{
-			//	yield return text;
+			//	
 			//}
 			//IEnumerator<string> enumerator = null;
 			//if (!ModLister.RoyaltyInstalled)
@@ -489,7 +489,7 @@ namespace RimWorld
 			
 			public IEnumerable<ThingDef> AllAllowedApparelForPawn(Pawn p, bool ignoreGender = false, bool includeWorn = false)
 			{
-				//using (List<ThingDef>.Enumerator enumerator = DefDatabase<ThingDef>.AllDefsListForReading.GetEnumerator())
+				//List<ThingDef>.Enumerator enumerator = DefDatabase<ThingDef>.AllDefsListForReading.GetEnumerator();
 				//{
 				//	while (enumerator.MoveNext())
 				//	{
@@ -508,7 +508,7 @@ namespace RimWorld
 			
 			public IEnumerable<ThingDef> AllRequiredApparelForPawn(Pawn p, bool ignoreGender = false, bool includeWorn = false)
 			{
-				//using (List<ThingDef>.Enumerator enumerator = DefDatabase<ThingDef>.AllDefsListForReading.GetEnumerator())
+				//List<ThingDef>.Enumerator enumerator = DefDatabase<ThingDef>.AllDefsListForReading.GetEnumerator();
 				//{
 				//	while (enumerator.MoveNext())
 				//	{

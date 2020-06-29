@@ -74,20 +74,20 @@ namespace Verse.AI
 			Toil reserveTargetA = Toils_Reserve.Reserve(TargetIndex.A, 1, -1, null);
 			yield return reserveTargetA;
 			Toil toilGoto = null;
-			toilGoto = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnSomeonePhysicallyInteracting(TargetIndex.A).FailOn(delegate
-			{
-				Pawn actor = toilGoto.actor;
-				Job curJob = actor.jobs.curJob;
-				if (curJob.haulMode == HaulMode.ToCellStorage)
-				{
-					Thing thing = curJob.GetTarget(TargetIndex.A).Thing;
-					if (!actor.jobs.curJob.GetTarget(TargetIndex.B).Cell.IsValidStorageFor(this.Map, thing))
-					{
-						return true;
-					}
-				}
-				return false;
-			});
+			//toilGoto = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnSomeonePhysicallyInteracting(TargetIndex.A).FailOn(delegate
+			//{
+			//	Pawn actor = toilGoto.actor;
+			//	Job curJob = actor.jobs.curJob;
+			//	if (curJob.haulMode == HaulMode.ToCellStorage)
+			//	{
+			//		Thing thing = curJob.GetTarget(TargetIndex.A).Thing;
+			//		if (!actor.jobs.curJob.GetTarget(TargetIndex.B).Cell.IsValidStorageFor(this.Map, thing))
+			//		{
+			//			return true;
+			//		}
+			//	}
+			//	return false;
+			//});
 			yield return toilGoto;
 			yield return Toils_Haul.StartCarryThing(TargetIndex.A, false, true, false);
 			if (this.job.haulOpportunisticDuplicates)

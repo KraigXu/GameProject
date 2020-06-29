@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class RoofGrid : IExposable, ICellBoolGiver
 	{
 		
-		// (get) Token: 0x06000D32 RID: 3378 RVA: 0x0004B69C File Offset: 0x0004989C
+		
 		public CellBoolDrawer Drawer
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000D33 RID: 3379 RVA: 0x0004B6ED File Offset: 0x000498ED
+		
 		public Color Color
 		{
 			get

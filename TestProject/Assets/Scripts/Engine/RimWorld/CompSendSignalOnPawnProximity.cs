@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompSendSignalOnPawnProximity : ThingComp
 	{
 		
-		// (get) Token: 0x060052D4 RID: 21204 RVA: 0x001BAA28 File Offset: 0x001B8C28
+		
 		public CompProperties_SendSignalOnPawnProximity Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052D5 RID: 21205 RVA: 0x001BAA35 File Offset: 0x001B8C35
+		
 		public bool Sent
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060052D6 RID: 21206 RVA: 0x001BAA3D File Offset: 0x001B8C3D
+		
 		public bool Enabled
 		{
 			get
@@ -113,14 +113,14 @@ namespace RimWorld
 		}
 
 		
-		public override void Notify_SignalReceived(Signal signal)
-		{
-			Thing thing;
-			if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
-			{
-				this.sent = true;
-			}
-		}
+		//public override void Notify_SignalReceived(Signal signal)
+		//{
+		//	Thing thing;
+		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
+		//	{
+		//		this.sent = true;
+		//	}
+		//}
 
 		
 		public override string CompInspectStringExtra()

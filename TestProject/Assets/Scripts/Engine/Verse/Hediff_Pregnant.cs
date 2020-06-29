@@ -11,8 +11,8 @@ namespace Verse
 	public class Hediff_Pregnant : HediffWithComps
 	{
 		
-		// (get) Token: 0x06000FF9 RID: 4089 RVA: 0x0005C54D File Offset: 0x0005A74D
-		// (set) Token: 0x06000FFA RID: 4090 RVA: 0x0005C555 File Offset: 0x0005A755
+		
+		
 		public float GestationProgress
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FFB RID: 4091 RVA: 0x0005C560 File Offset: 0x0005A760
+		
 		private bool IsSeverelyWounded
 		{
 			get

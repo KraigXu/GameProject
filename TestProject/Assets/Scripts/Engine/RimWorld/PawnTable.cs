@@ -10,7 +10,7 @@ namespace RimWorld
 	public class PawnTable
 	{
 		
-		// (get) Token: 0x06005DD5 RID: 24021 RVA: 0x002066C8 File Offset: 0x002048C8
+		
 		public List<PawnColumnDef> ColumnsListForReading
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DD6 RID: 24022 RVA: 0x002066D5 File Offset: 0x002048D5
+		
 		public PawnColumnDef SortingBy
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DD7 RID: 24023 RVA: 0x002066DD File Offset: 0x002048DD
+		
 		public bool SortingDescending
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DD8 RID: 24024 RVA: 0x002066EF File Offset: 0x002048EF
+		
 		public Vector2 Size
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DD9 RID: 24025 RVA: 0x002066FD File Offset: 0x002048FD
+		
 		public float HeightNoScrollbar
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DDA RID: 24026 RVA: 0x0020670B File Offset: 0x0020490B
+		
 		public float HeaderHeight
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005DDB RID: 24027 RVA: 0x00206719 File Offset: 0x00204919
+		
 		public List<Pawn> PawnsListForReading
 		{
 			get

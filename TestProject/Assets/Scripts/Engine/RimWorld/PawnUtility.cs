@@ -782,7 +782,7 @@ namespace RimWorld
 				{
 					if (thought.IsSocial)
 					{
-						using (List<Pawn>.Enumerator enumerator2 = Find.GameInitData.startingAndOptionalPawns.GetEnumerator())
+						List<Pawn>.Enumerator enumerator2 = Find.GameInitData.startingAndOptionalPawns.GetEnumerator();
 						{
 							while (enumerator2.MoveNext())
 							{

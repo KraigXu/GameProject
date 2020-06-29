@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic_MoteSplash : Graphic_Mote
 	{
 		
-		// (get) Token: 0x06001538 RID: 5432 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool ForcePropertyBlock
 		{
 			get

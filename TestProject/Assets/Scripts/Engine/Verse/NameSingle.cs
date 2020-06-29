@@ -6,7 +6,7 @@ namespace Verse
 	public class NameSingle : Name
 	{
 		
-		// (get) Token: 0x06001194 RID: 4500 RVA: 0x00063608 File Offset: 0x00061808
+		
 		public string Name
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001195 RID: 4501 RVA: 0x00063608 File Offset: 0x00061808
+		
 		public override string ToStringFull
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001196 RID: 4502 RVA: 0x00063608 File Offset: 0x00061808
+		
 		public override string ToStringShort
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001197 RID: 4503 RVA: 0x00063610 File Offset: 0x00061810
+		
 		public override bool IsValid
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001198 RID: 4504 RVA: 0x00063620 File Offset: 0x00061820
+		
 		public override bool Numerical
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001199 RID: 4505 RVA: 0x00063628 File Offset: 0x00061828
+		
 		private int FirstDigitPosition
 		{
 			get
@@ -81,7 +81,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600119A RID: 4506 RVA: 0x000636A0 File Offset: 0x000618A0
+		
 		public string NameWithoutNumber
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600119B RID: 4507 RVA: 0x00063704 File Offset: 0x00061904
+		
 		public int Number
 		{
 			get

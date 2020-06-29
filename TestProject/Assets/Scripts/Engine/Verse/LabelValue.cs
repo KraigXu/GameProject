@@ -6,7 +6,7 @@ namespace Verse
 	public struct LabelValue
 	{
 		
-		// (get) Token: 0x06001D63 RID: 7523 RVA: 0x000B493A File Offset: 0x000B2B3A
+		
 		public string Label
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D64 RID: 7524 RVA: 0x000B4942 File Offset: 0x000B2B42
+		
 		public string Value
 		{
 			get

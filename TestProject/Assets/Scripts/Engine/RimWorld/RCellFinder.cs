@@ -615,7 +615,7 @@ namespace RimWorld
 							if (thing.Faction == ofPlayer && thing.Position.InHorDistOf(c, 16f) && GenSight.LineOfSight(thing.Position, c, map, true, null, 0, 0) && !RCellFinder.tmpBuildings.Contains(thing))
 							{
 								RCellFinder.tmpBuildings.Add(thing);
-								int colonyBuildingsLOSFound = colonyBuildingsLOSFound;
+							
 								colonyBuildingsLOSFound++;
 								if (colonyBuildingsLOSFound >= minColonyBuildingsLOS)
 								{
@@ -724,7 +724,7 @@ namespace RimWorld
 				IntVec3 randomCell = CellFinder.RandomRegionNear(region, 15, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), null, null, RegionType.Set_Passable).RandomCell;
 				if (randomCell.Walkable(pawn.Map) && (float)(root - randomCell).LengthHorizontalSquared > dist * dist)
 				{
-					using (PawnPath pawnPath = pawn.Map.pathFinder.FindPath(pawn.Position, randomCell, pawn, PathEndMode.OnCell))
+					PawnPath pawnPath = pawn.Map.pathFinder.FindPath(pawn.Position, randomCell, pawn, PathEndMode.OnCell);
 					{
 						if (PawnPathUtility.TryFindCellAtIndex(pawnPath, (int)dist + 3, out result))
 						{

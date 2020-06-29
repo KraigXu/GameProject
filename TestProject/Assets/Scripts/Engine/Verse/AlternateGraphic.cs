@@ -7,7 +7,7 @@ namespace Verse
 	public class AlternateGraphic
 	{
 		
-		// (get) Token: 0x060005D7 RID: 1495 RVA: 0x0001C3E4 File Offset: 0x0001A5E4
+		
 		public float Weight
 		{
 			get

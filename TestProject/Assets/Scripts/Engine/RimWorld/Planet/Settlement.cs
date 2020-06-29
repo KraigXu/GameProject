@@ -10,8 +10,8 @@ namespace RimWorld.Planet
 	public class Settlement : MapParent, ITrader, ITraderRestockingInfoProvider
 	{
 		
-		// (get) Token: 0x06006D98 RID: 28056 RVA: 0x002653FB File Offset: 0x002635FB
-		// (set) Token: 0x06006D99 RID: 28057 RVA: 0x00265403 File Offset: 0x00263603
+		
+		
 		public string Name
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9A RID: 28058 RVA: 0x0026540C File Offset: 0x0026360C
+		
 		public override Texture2D ExpandingIcon
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9B RID: 28059 RVA: 0x0026541E File Offset: 0x0026361E
+		
 		public override string Label
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9C RID: 28060 RVA: 0x00265435 File Offset: 0x00263635
+		
 		public override bool HasName
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9D RID: 28061 RVA: 0x00265445 File Offset: 0x00263645
+		
 		protected override bool UseGenericEnterMapFloatMenuOption
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9E RID: 28062 RVA: 0x00265450 File Offset: 0x00263650
+		
 		public virtual bool Visitable
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D9F RID: 28063 RVA: 0x0026547E File Offset: 0x0026367E
+		
 		public virtual bool Attackable
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA0 RID: 28064 RVA: 0x0026547E File Offset: 0x0026367E
+		
 		public override bool ShowRelatedQuests
 		{
 			get
@@ -99,7 +99,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA1 RID: 28065 RVA: 0x00265490 File Offset: 0x00263690
+		
 		public override Material Material
 		{
 			get
@@ -113,7 +113,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA2 RID: 28066 RVA: 0x002654E1 File Offset: 0x002636E1
+		
 		public override MapGeneratorDef MapGeneratorDef
 		{
 			get
@@ -127,7 +127,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA3 RID: 28067 RVA: 0x002654FB File Offset: 0x002636FB
+		
 		public TraderKindDef TraderKind
 		{
 			get
@@ -141,7 +141,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA4 RID: 28068 RVA: 0x00265512 File Offset: 0x00263712
+		
 		public IEnumerable<Thing> Goods
 		{
 			get
@@ -155,7 +155,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA5 RID: 28069 RVA: 0x00265529 File Offset: 0x00263729
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -169,7 +169,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA6 RID: 28070 RVA: 0x00265540 File Offset: 0x00263740
+		
 		public string TraderName
 		{
 			get
@@ -183,7 +183,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA7 RID: 28071 RVA: 0x00265557 File Offset: 0x00263757
+		
 		public bool CanTradeNow
 		{
 			get
@@ -193,7 +193,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA8 RID: 28072 RVA: 0x0026556E File Offset: 0x0026376E
+		
 		public float TradePriceImprovementOffsetForPlayer
 		{
 			get
@@ -207,7 +207,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DA9 RID: 28073 RVA: 0x00265589 File Offset: 0x00263789
+		
 		public TradeCurrency TradeCurrency
 		{
 			get
@@ -239,7 +239,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DAD RID: 28077 RVA: 0x002655CE File Offset: 0x002637CE
+		
 		public bool EverVisited
 		{
 			get
@@ -249,7 +249,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DAE RID: 28078 RVA: 0x002655DB File Offset: 0x002637DB
+		
 		public bool RestockedSinceLastVisit
 		{
 			get
@@ -259,7 +259,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DAF RID: 28079 RVA: 0x002655E8 File Offset: 0x002637E8
+		
 		public int NextRestockTick
 		{
 			get
@@ -277,10 +277,7 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<IncidentTargetTagDef> IncidentTargetTags()
 		{
-			foreach (IncidentTargetTagDef incidentTargetTagDef in this.n__0())
-			{
-				yield return incidentTargetTagDef;
-			}
+
 			IEnumerator<IncidentTargetTagDef> enumerator = null;
 			if (base.Faction == Faction.OfPlayer)
 			{
@@ -381,10 +378,8 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.n__1())
-			{
-				yield return gizmo;
-			}
+
+		
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.TraderKind != null)
 			{
@@ -435,10 +430,8 @@ namespace RimWorld.Planet
 			{
 				yield return FactionGiftUtility.OfferGiftsCommand(caravan, this);
 			}
-			foreach (Gizmo gizmo in this.n__2(caravan))
-			{
-				yield return gizmo;
-			}
+
+	
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.Attackable)
 			{
@@ -460,9 +453,9 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__3(caravan))
+
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (CaravanVisitUtility.SettlementVisitedNow(caravan) != this)
@@ -495,9 +488,9 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetTransportPodsFloatMenuOptions(IEnumerable<IThingHolder> pods, CompLaunchable representative)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__4(pods, representative))
+
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			foreach (FloatMenuOption floatMenuOption2 in TransportPodsArrivalAction_VisitSettlement.GetFloatMenuOptions(representative, pods, this))

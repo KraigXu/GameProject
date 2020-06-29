@@ -7,7 +7,7 @@ namespace Verse
 	public class LogMessageQueue
 	{
 		
-		// (get) Token: 0x06000300 RID: 768 RVA: 0x0000F5D4 File Offset: 0x0000D7D4
+		
 		public IEnumerable<LogMessage> Messages
 		{
 			get

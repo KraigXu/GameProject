@@ -7,7 +7,7 @@ namespace RimWorld
 	public class GenStep_FindPlayerStartSpot : GenStep
 	{
 		
-		// (get) Token: 0x06003E54 RID: 15956 RVA: 0x00149078 File Offset: 0x00147278
+		
 		public override int SeedPart
 		{
 			get

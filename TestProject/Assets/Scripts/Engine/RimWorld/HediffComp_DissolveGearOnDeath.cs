@@ -11,7 +11,7 @@ namespace RimWorld
 	public class HediffComp_DissolveGearOnDeath : HediffComp
 	{
 		
-		// (get) Token: 0x0600641B RID: 25627 RVA: 0x0022AE6B File Offset: 0x0022906B
+		
 		public HediffCompProperties_DissolveGearOnDeath Props
 		{
 			get

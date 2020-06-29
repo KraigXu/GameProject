@@ -8,7 +8,7 @@ namespace RimWorld
 	public class WorkGiver_ConstructDeliverResourcesToFrames : WorkGiver_ConstructDeliverResources
 	{
 		
-		// (get) Token: 0x06003038 RID: 12344 RVA: 0x0010F268 File Offset: 0x0010D468
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get

@@ -10,8 +10,8 @@ namespace RimWorld
 	public abstract class Designator_ZoneAdd : Designator_Zone
 	{
 		
-		// (get) Token: 0x06005847 RID: 22599 RVA: 0x001D4C0A File Offset: 0x001D2E0A
-		// (set) Token: 0x06005848 RID: 22600 RVA: 0x001D4C16 File Offset: 0x001D2E16
+		
+		
 		private Zone SelectedZone
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005849 RID: 22601
+		
 		protected abstract string NewZoneLabel { get; }
 
 		
@@ -97,7 +97,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			using (IEnumerator<Thing> enumerator = base.Map.thingGrid.ThingsAt(c).GetEnumerator())
+			IEnumerator<Thing> enumerator = base.Map.thingGrid.ThingsAt(c).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

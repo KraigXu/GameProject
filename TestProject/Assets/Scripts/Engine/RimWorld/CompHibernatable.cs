@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompHibernatable : ThingComp
 	{
 		
-		// (get) Token: 0x06003F2F RID: 16175 RVA: 0x0014FFDB File Offset: 0x0014E1DB
+		
 		public CompProperties_Hibernatable Props
 		{
 			get
@@ -19,8 +19,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F30 RID: 16176 RVA: 0x0014FFE8 File Offset: 0x0014E1E8
-		// (set) Token: 0x06003F31 RID: 16177 RVA: 0x0014FFF0 File Offset: 0x0014E1F0
+		
+		
 		public HibernatableStateDef State
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F32 RID: 16178 RVA: 0x0015001D File Offset: 0x0014E21D
+		
 		public bool Running
 		{
 			get

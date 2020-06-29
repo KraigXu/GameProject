@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GameCondition_Flashstorm : GameCondition
 	{
 		
-		// (get) Token: 0x06003B50 RID: 15184 RVA: 0x0013994E File Offset: 0x00137B4E
+		
 		public int AreaRadius
 		{
 			get

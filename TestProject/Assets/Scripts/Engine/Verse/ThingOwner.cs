@@ -9,7 +9,7 @@ namespace Verse
 	public class ThingOwner<T> : ThingOwner, IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable where T : Thing
 	{
 		
-		// (get) Token: 0x0600166F RID: 5743 RVA: 0x0008217D File Offset: 0x0008037D
+		
 		public List<T> InnerListForReading
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001671 RID: 5745 RVA: 0x00082193 File Offset: 0x00080393
+		
 		public override int Count
 		{
 			get
@@ -51,7 +51,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001674 RID: 5748 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		bool ICollection<T>.IsReadOnly
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_RemoveRoof : JobDriver_AffectRoof
 	{
 		
-		// (get) Token: 0x06002B8F RID: 11151 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		protected override PathEndMode PathEndMode
 		{
 			get
@@ -22,10 +22,8 @@ namespace RimWorld
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(() => !base.Map.areaManager.NoRoof[base.Cell]);
-			foreach (Toil toil in this.n__0())
-			{
-				yield return toil;
-			}
+
+
 			IEnumerator<Toil> enumerator = null;
 			yield break;
 			yield break;

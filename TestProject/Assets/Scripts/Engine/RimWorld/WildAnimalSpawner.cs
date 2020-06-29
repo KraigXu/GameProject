@@ -10,7 +10,7 @@ namespace RimWorld
 	public class WildAnimalSpawner
 	{
 		
-		// (get) Token: 0x060040F9 RID: 16633 RVA: 0x0015BF50 File Offset: 0x0015A150
+		
 		private float DesiredAnimalDensity
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040FA RID: 16634 RVA: 0x0015C018 File Offset: 0x0015A218
+		
 		private float DesiredTotalAnimalWeight
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040FB RID: 16635 RVA: 0x0015C050 File Offset: 0x0015A250
+		
 		private float CurrentTotalAnimalWeight
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040FC RID: 16636 RVA: 0x0015C0A8 File Offset: 0x0015A2A8
+		
 		public bool AnimalEcosystemFull
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompTargetable_SinglePawn : CompTargetable
 	{
 		
-		// (get) Token: 0x0600548A RID: 21642 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool PlayerChoosesTarget
 		{
 			get

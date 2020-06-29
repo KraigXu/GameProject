@@ -11,7 +11,7 @@ namespace RimWorld
 	public class MainButtonsRoot
 	{
 		
-		// (get) Token: 0x06005C2F RID: 23599 RVA: 0x001FD60C File Offset: 0x001FB80C
+		
 		private int VisibleButtonsCount
 		{
 			get

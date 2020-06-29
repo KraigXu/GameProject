@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class WorldMaterials
 	{
 		
-		// (get) Token: 0x06006A60 RID: 27232 RVA: 0x0025147E File Offset: 0x0024F67E
+		
 		public static Material CurTargetingMat
 		{
 			get

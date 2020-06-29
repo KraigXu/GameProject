@@ -14,7 +14,7 @@ namespace RimWorld.BaseGen
 			{
 				if (rp.clearEdificeOnly != null && rp.clearEdificeOnly.Value)
 				{
-					Building edifice = c.GetEdifice(BaseGen.globalSettings.map);
+					Building edifice = c.GetEdifice(BaseGenCore.globalSettings.map);
 					if (edifice != null && edifice.def.destroyable)
 					{
 						edifice.Destroy(DestroyMode.Vanish);
@@ -23,7 +23,7 @@ namespace RimWorld.BaseGen
 				else if (rp.clearFillageOnly != null && rp.clearFillageOnly.Value)
 				{
 					SymbolResolver_Clear.tmpThingsToDestroy.Clear();
-					SymbolResolver_Clear.tmpThingsToDestroy.AddRange(c.GetThingList(BaseGen.globalSettings.map));
+					SymbolResolver_Clear.tmpThingsToDestroy.AddRange(c.GetThingList(BaseGenCore.globalSettings.map));
 					for (int i = 0; i < SymbolResolver_Clear.tmpThingsToDestroy.Count; i++)
 					{
 						if (SymbolResolver_Clear.tmpThingsToDestroy[i].def.destroyable && SymbolResolver_Clear.tmpThingsToDestroy[i].def.Fillage != FillCategory.None)
@@ -35,7 +35,7 @@ namespace RimWorld.BaseGen
 				else
 				{
 					SymbolResolver_Clear.tmpThingsToDestroy.Clear();
-					SymbolResolver_Clear.tmpThingsToDestroy.AddRange(c.GetThingList(BaseGen.globalSettings.map));
+					SymbolResolver_Clear.tmpThingsToDestroy.AddRange(c.GetThingList(BaseGenCore.globalSettings.map));
 					for (int j = 0; j < SymbolResolver_Clear.tmpThingsToDestroy.Count; j++)
 					{
 						if (SymbolResolver_Clear.tmpThingsToDestroy[j].def.destroyable)
@@ -46,7 +46,7 @@ namespace RimWorld.BaseGen
 				}
 				if (rp.clearRoof != null && rp.clearRoof.Value)
 				{
-					BaseGen.globalSettings.map.roofGrid.SetRoof(c, null);
+					BaseGenCore.globalSettings.map.roofGrid.SetRoof(c, null);
 				}
 			}
 		}

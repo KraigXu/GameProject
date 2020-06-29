@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Tame : Designator
 	{
 		
-		// (get) Token: 0x060057F0 RID: 22512 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057F1 RID: 22513 RVA: 0x001D2BD1 File Offset: 0x001D0DD1
+		
 		protected override DesignationDef Designation
 		{
 			get
@@ -77,8 +77,8 @@ namespace RimWorld
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();
-			using (IEnumerator<PawnKindDef> enumerator = (from p in this.justDesignated
-			select p.kindDef).Distinct<PawnKindDef>().GetEnumerator())
+			IEnumerator<PawnKindDef> enumerator = (from p in this.justDesignated
+			select p.kindDef).Distinct<PawnKindDef>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

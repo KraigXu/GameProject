@@ -9,7 +9,7 @@ namespace Verse
 	public class HediffComp_GrowthMode : HediffComp_SeverityPerDay
 	{
 		
-		// (get) Token: 0x06001078 RID: 4216 RVA: 0x0005E1FA File Offset: 0x0005C3FA
+		
 		public HediffCompProperties_GrowthMode Props
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001079 RID: 4217 RVA: 0x0005E207 File Offset: 0x0005C407
+		
 		public override string CompLabelInBracketsExtra
 		{
 			get

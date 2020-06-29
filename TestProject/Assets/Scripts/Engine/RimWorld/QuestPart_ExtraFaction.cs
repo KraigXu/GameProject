@@ -8,15 +8,13 @@ namespace RimWorld
 	public class QuestPart_ExtraFaction : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003963 RID: 14691 RVA: 0x001314F2 File Offset: 0x0012F6F2
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__0())
-				{
-					yield return faction;
-				}
+
+			
 				IEnumerator<Faction> enumerator = null;
 				if (this.extraFaction != null && this.extraFaction.faction != null)
 				{

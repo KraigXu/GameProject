@@ -10,7 +10,7 @@ namespace Verse
 	public abstract class Zone : IExposable, ISelectable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06000DBD RID: 3517 RVA: 0x0004E9F3 File Offset: 0x0004CBF3
+		
 		public Map Map
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DBE RID: 3518 RVA: 0x0004EA00 File Offset: 0x0004CC00
+		
 		public IntVec3 Position
 		{
 			get
@@ -34,7 +34,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DBF RID: 3519 RVA: 0x0004EA21 File Offset: 0x0004CC21
+		
 		public Material Material
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC0 RID: 3520 RVA: 0x0004EA59 File Offset: 0x0004CC59
+		
 		public string BaseLabel
 		{
 			get
@@ -71,7 +71,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC2 RID: 3522 RVA: 0x0004EA70 File Offset: 0x0004CC70
+		
 		public List<IntVec3> Cells
 		{
 			get
@@ -86,7 +86,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC3 RID: 3523 RVA: 0x0004EA92 File Offset: 0x0004CC92
+		
 		public IEnumerable<Thing> AllContainedThings
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC4 RID: 3524 RVA: 0x0004EAA4 File Offset: 0x0004CCA4
+		
 		public bool ContainsStaticFire
 		{
 			get
@@ -131,7 +131,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC5 RID: 3525 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool IsMultiselectable
 		{
 			get
@@ -141,7 +141,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000DC6 RID: 3526
+		
 		protected abstract Color NextZoneColor { get; }
 
 		
@@ -390,7 +390,7 @@ namespace Verse
 			Action<IntVec3> processor = delegate(IntVec3 c)
 			{
 				Zone.foundGrid.Set(c, true);
-				int numFound = numFound;
+
 				numFound++;
 			};
 			this.Map.floodFiller.FloodFill(this.cells[0], passCheck, processor, int.MaxValue, false, null);

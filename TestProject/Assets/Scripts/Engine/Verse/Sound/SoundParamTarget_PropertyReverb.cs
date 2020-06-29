@@ -7,7 +7,7 @@ namespace Verse.Sound
 	public class SoundParamTarget_PropertyReverb : SoundParamTarget
 	{
 		
-		// (get) Token: 0x06002483 RID: 9347 RVA: 0x000D9266 File Offset: 0x000D7466
+		
 		public override string Label
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x06002484 RID: 9348 RVA: 0x000D926D File Offset: 0x000D746D
+		
 		public override Type NeededFilterType
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public static class UI
 	{
 		
-		// (get) Token: 0x060002D2 RID: 722 RVA: 0x0000ECE0 File Offset: 0x0000CEE0
+		
 		public static Vector2 MousePositionOnUI
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002D3 RID: 723 RVA: 0x0000ECF8 File Offset: 0x0000CEF8
+		
 		public static Vector2 MousePositionOnUIInverted
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002D4 RID: 724 RVA: 0x0000ED20 File Offset: 0x0000CF20
+		
 		public static Vector2 MousePosUIInvertedUseEventIfCan
 		{
 			get

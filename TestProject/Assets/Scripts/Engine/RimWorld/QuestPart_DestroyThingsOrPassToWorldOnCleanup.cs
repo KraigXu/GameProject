@@ -9,7 +9,7 @@ namespace RimWorld
 	public class QuestPart_DestroyThingsOrPassToWorldOnCleanup : QuestPart
 	{
 		
-		// (get) Token: 0x06003937 RID: 14647 RVA: 0x00130A54 File Offset: 0x0012EC54
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get

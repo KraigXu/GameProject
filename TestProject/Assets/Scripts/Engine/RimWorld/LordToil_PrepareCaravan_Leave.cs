@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_PrepareCaravan_Leave : LordToil
 	{
 		
-		// (get) Token: 0x06003266 RID: 12902 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003267 RID: 12903 RVA: 0x0011854D File Offset: 0x0011674D
+		
 		public override float? CustomWakeThreshold
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003268 RID: 12904 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowRestingInBed
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003269 RID: 12905 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSelfTend
 		{
 			get

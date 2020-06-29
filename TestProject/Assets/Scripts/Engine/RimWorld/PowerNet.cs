@@ -10,7 +10,7 @@ namespace RimWorld
 	public class PowerNet
 	{
 		
-		// (get) Token: 0x06003F9A RID: 16282 RVA: 0x00151FE4 File Offset: 0x001501E4
+		
 		public Map Map
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F9B RID: 16283 RVA: 0x00151FF4 File Offset: 0x001501F4
+		
 		public bool HasActivePowerSource
 		{
 			get

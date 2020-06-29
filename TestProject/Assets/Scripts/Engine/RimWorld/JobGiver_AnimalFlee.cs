@@ -99,7 +99,7 @@ namespace RimWorld
 			RegionTraverser.BreadthFirstTraverse(pawn.Position, pawn.Map, (Region from, Region to) => to.Allows(tp, false), delegate(Region x)
 			{
 				List<Thing> list = x.ListerThings.ThingsInGroup(ThingRequestGroup.Fire);
-				int firesCount;
+
 				for (int i = 0; i < list.Count; i++)
 				{
 					float num = (float)pawn.Position.DistanceToSquared(list[i].Position);
@@ -110,7 +110,7 @@ namespace RimWorld
 							closestDistSq = num;
 							closestFire = (Fire)list[i];
 						}
-						firesCount = firesCount;
+						
 						firesCount++;
 					}
 				}

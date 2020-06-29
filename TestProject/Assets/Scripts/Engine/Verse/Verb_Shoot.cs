@@ -7,7 +7,7 @@ namespace Verse
 	public class Verb_Shoot : Verb_LaunchProjectile
 	{
 		
-		// (get) Token: 0x06002258 RID: 8792 RVA: 0x000D1780 File Offset: 0x000CF980
+		
 		protected override int ShotsPerBurst
 		{
 			get

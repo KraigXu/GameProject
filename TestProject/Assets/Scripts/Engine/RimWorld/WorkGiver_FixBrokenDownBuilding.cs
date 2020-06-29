@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060030BE RID: 12478 RVA: 0x001117B5 File Offset: 0x0010F9B5
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060030C1 RID: 12481 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

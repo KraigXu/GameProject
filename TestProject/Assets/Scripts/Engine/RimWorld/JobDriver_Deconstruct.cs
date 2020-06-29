@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_Deconstruct : JobDriver_RemoveBuilding
 	{
 		
-		// (get) Token: 0x06002B71 RID: 11121 RVA: 0x000FB242 File Offset: 0x000F9442
+		
 		protected override DesignationDef Designation
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B72 RID: 11122 RVA: 0x000FB249 File Offset: 0x000F9449
+		
 		protected override float TotalNeededWork
 		{
 			get
@@ -33,10 +33,7 @@ namespace RimWorld
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(() => base.Building == null || !base.Building.DeconstructibleBy(this.pawn.Faction));
-			foreach (Toil toil in this.n__0())
-			{
-				yield return toil;
-			}
+
 			IEnumerator<Toil> enumerator = null;
 			yield break;
 			yield break;

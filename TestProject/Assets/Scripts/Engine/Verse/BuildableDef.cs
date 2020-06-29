@@ -10,7 +10,7 @@ namespace Verse
 	public abstract class BuildableDef : Def
 	{
 		
-		// (get) Token: 0x0600048E RID: 1166 RVA: 0x00004A30 File Offset: 0x00002C30
+		
 		public virtual IntVec2 Size
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600048F RID: 1167 RVA: 0x0001753E File Offset: 0x0001573E
+		
 		public bool MadeFromStuff
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000490 RID: 1168 RVA: 0x0001754E File Offset: 0x0001574E
+		
 		public bool BuildableByPlayer
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000491 RID: 1169 RVA: 0x00017559 File Offset: 0x00015759
+		
 		public Material DrawMatSingle
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000492 RID: 1170 RVA: 0x00017570 File Offset: 0x00015770
+		
 		public float Altitude
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000493 RID: 1171 RVA: 0x0001757D File Offset: 0x0001577D
+		
 		public bool AffectsFertility
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000494 RID: 1172 RVA: 0x00017590 File Offset: 0x00015790
+		
 		public List<PlaceWorker> PlaceWorkers
 		{
 			get
@@ -93,7 +93,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000495 RID: 1173 RVA: 0x00017610 File Offset: 0x00015810
+		
 		public bool IsResearchFinished
 		{
 			get
@@ -191,10 +191,7 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.useStuffTerrainAffordance && !this.MadeFromStuff)
 			{
@@ -207,10 +204,8 @@ namespace Verse
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__1(req))
-			{
-				yield return statDrawEntry;
-			}
+
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (this.BuildableByPlayer)
 			{

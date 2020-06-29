@@ -8,7 +8,7 @@ namespace Verse
 	public abstract class Gizmo
 	{
 		
-		// (get) Token: 0x06001AF5 RID: 6901 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool Visible
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001AF6 RID: 6902 RVA: 0x000A58C5 File Offset: 0x000A3AC5
+		
 		public virtual IEnumerable<FloatMenuOption> RightClickFloatMenuOptions
 		{
 			get

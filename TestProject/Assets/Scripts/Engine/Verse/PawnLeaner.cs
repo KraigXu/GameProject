@@ -7,7 +7,7 @@ namespace Verse
 	public class PawnLeaner
 	{
 		
-		// (get) Token: 0x06000F0B RID: 3851 RVA: 0x00055871 File Offset: 0x00053A71
+		
 		public Vector3 LeanOffset
 		{
 			get

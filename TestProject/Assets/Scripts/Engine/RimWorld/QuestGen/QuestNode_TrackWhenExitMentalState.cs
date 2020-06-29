@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_TrackWhenExitMentalState : QuestNode

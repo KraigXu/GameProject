@@ -9,7 +9,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingDef thingDef;
 			if (rp.faction == null || rp.faction.def.techLevel >= TechLevel.Industrial)
 			{
@@ -27,7 +27,7 @@ namespace RimWorld.BaseGen
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingDef = thingDef;
-				BaseGen.symbolStack.Push("edgeThing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("edgeThing", resolveParams, null);
 			}
 		}
 

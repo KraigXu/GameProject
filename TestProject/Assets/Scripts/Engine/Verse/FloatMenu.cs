@@ -11,7 +11,7 @@ namespace Verse
 	public class FloatMenu : Window
 	{
 		
-		// (get) Token: 0x06001A6B RID: 6763 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A6C RID: 6764 RVA: 0x000A2BC0 File Offset: 0x000A0DC0
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A6D RID: 6765 RVA: 0x000A2BD3 File Offset: 0x000A0DD3
+		
 		private float MaxWindowHeight
 		{
 			get
@@ -41,7 +41,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A6E RID: 6766 RVA: 0x000A2BE1 File Offset: 0x000A0DE1
+		
 		private float TotalWindowHeight
 		{
 			get
@@ -51,7 +51,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A6F RID: 6767 RVA: 0x000A2BFC File Offset: 0x000A0DFC
+		
 		private float MaxViewHeight
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A70 RID: 6768 RVA: 0x000A2C74 File Offset: 0x000A0E74
+		
 		private float TotalViewHeight
 		{
 			get
@@ -107,7 +107,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A71 RID: 6769 RVA: 0x000A2CE8 File Offset: 0x000A0EE8
+		
 		private float TotalWidth
 		{
 			get
@@ -122,7 +122,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A72 RID: 6770 RVA: 0x000A2D18 File Offset: 0x000A0F18
+		
 		private float ColumnWidth
 		{
 			get
@@ -145,7 +145,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A73 RID: 6771 RVA: 0x000A2D6D File Offset: 0x000A0F6D
+		
 		private int MaxColumns
 		{
 			get
@@ -155,7 +155,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A74 RID: 6772 RVA: 0x000A2D87 File Offset: 0x000A0F87
+		
 		private bool UsingScrollbar
 		{
 			get
@@ -165,7 +165,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A75 RID: 6773 RVA: 0x000A2D97 File Offset: 0x000A0F97
+		
 		private int ColumnCount
 		{
 			get
@@ -175,7 +175,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A76 RID: 6774 RVA: 0x000A2DAC File Offset: 0x000A0FAC
+		
 		private int ColumnCountIfNoScrollbar
 		{
 			get
@@ -206,7 +206,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A77 RID: 6775 RVA: 0x000A2E23 File Offset: 0x000A1023
+		
 		public FloatMenuSizeMode SizeMode
 		{
 			get

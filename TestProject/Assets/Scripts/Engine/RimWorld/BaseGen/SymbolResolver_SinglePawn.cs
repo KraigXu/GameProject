@@ -22,7 +22,7 @@ namespace RimWorld.BaseGen
 			{
 				return;
 			}
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			IntVec3 loc;
 			if (!SymbolResolver_SinglePawn.TryFindSpawnCell(rp, out loc))
 			{
@@ -98,7 +98,7 @@ namespace RimWorld.BaseGen
 		
 		public static bool TryFindSpawnCell(ResolveParams rp, out IntVec3 cell)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			return CellFinder.TryFindRandomCellInsideWith(rp.rect, (IntVec3 x) => x.Standable(map) && (rp.singlePawnSpawnCellExtraPredicate == null || rp.singlePawnSpawnCellExtraPredicate(x)), out cell);
 		}
 	}

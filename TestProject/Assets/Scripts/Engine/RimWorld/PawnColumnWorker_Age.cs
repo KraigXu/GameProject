@@ -7,7 +7,7 @@ namespace RimWorld
 	public class PawnColumnWorker_Age : PawnColumnWorker_Text
 	{
 		
-		// (get) Token: 0x06005D5C RID: 23900 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected override GameFont DefaultHeaderFont
 		{
 			get

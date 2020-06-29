@@ -9,8 +9,8 @@ namespace RimWorld
 	public class Pawn_StoryTracker : IExposable
 	{
 		
-		// (get) Token: 0x0600448F RID: 17551 RVA: 0x00172B35 File Offset: 0x00170D35
-		// (set) Token: 0x06004490 RID: 17552 RVA: 0x00172B4C File Offset: 0x00170D4C
+		
+		
 		public string Title
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004491 RID: 17553 RVA: 0x00172B72 File Offset: 0x00170D72
+		
 		public string TitleCap
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004492 RID: 17554 RVA: 0x00172B80 File Offset: 0x00170D80
+		
 		public string TitleDefault
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004493 RID: 17555 RVA: 0x00172BD0 File Offset: 0x00170DD0
+		
 		public string TitleDefaultCap
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004494 RID: 17556 RVA: 0x00172BE0 File Offset: 0x00170DE0
+		
 		public string TitleShort
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004495 RID: 17557 RVA: 0x00172C3F File Offset: 0x00170E3F
+		
 		public string TitleShortCap
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004496 RID: 17558 RVA: 0x00172C4C File Offset: 0x00170E4C
+		
 		public Color SkinColor
 		{
 			get
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004497 RID: 17559 RVA: 0x00172C59 File Offset: 0x00170E59
+		
 		public IEnumerable<Backstory> AllBackstories
 		{
 			get
@@ -130,7 +130,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004498 RID: 17560 RVA: 0x00172C6C File Offset: 0x00170E6C
+		
 		public string HeadGraphicPath
 		{
 			get
@@ -144,7 +144,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004499 RID: 17561 RVA: 0x00172CC4 File Offset: 0x00170EC4
+		
 		public WorkTags DisabledWorkTagsBackstoryAndTraits
 		{
 			get

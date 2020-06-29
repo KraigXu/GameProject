@@ -10,7 +10,7 @@ namespace RimWorld
 	public class KidnappedPawnsTracker : IExposable
 	{
 		
-		// (get) Token: 0x060048B7 RID: 18615 RVA: 0x0018BC11 File Offset: 0x00189E11
+		
 		public List<Pawn> KidnappedPawnsListForReading
 		{
 			get

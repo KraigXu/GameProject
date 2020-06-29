@@ -11,7 +11,7 @@ namespace RimWorld
 	public abstract class PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06003687 RID: 13959 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		protected virtual Color DefaultHeaderColor
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003688 RID: 13960 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual GameFont DefaultHeaderFont
 		{
 			get

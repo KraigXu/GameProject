@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Pawn_NeedsTracker : IExposable
 	{
 		
-		// (get) Token: 0x060045A5 RID: 17829 RVA: 0x0017857E File Offset: 0x0017677E
+		
 		public List<Need> AllNeeds
 		{
 			get

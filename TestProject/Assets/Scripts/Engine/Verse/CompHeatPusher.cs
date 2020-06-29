@@ -6,7 +6,7 @@ namespace Verse
 	public class CompHeatPusher : ThingComp
 	{
 		
-		// (get) Token: 0x06001759 RID: 5977 RVA: 0x0008583C File Offset: 0x00083A3C
+		
 		public CompProperties_HeatPusher Props
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600175A RID: 5978 RVA: 0x0008584C File Offset: 0x00083A4C
+		
 		protected virtual bool ShouldPushHeatNow
 		{
 			get

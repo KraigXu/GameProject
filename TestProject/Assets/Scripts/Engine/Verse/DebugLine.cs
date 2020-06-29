@@ -7,7 +7,7 @@ namespace Verse
 	internal struct DebugLine
 	{
 		
-		// (get) Token: 0x060009A1 RID: 2465 RVA: 0x000347AC File Offset: 0x000329AC
+		
 		public bool Done
 		{
 			get

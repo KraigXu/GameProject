@@ -6,7 +6,7 @@ namespace Verse
 	public class CellIndices
 	{
 		
-		// (get) Token: 0x06001E3D RID: 7741 RVA: 0x000BC7F0 File Offset: 0x000BA9F0
+		
 		public int NumGridCells
 		{
 			get

@@ -12,7 +12,7 @@ namespace RimWorld
 	public class LordToil_Siege : LordToil
 	{
 		
-		// (get) Token: 0x060032C9 RID: 13001 RVA: 0x0011A23D File Offset: 0x0011843D
+		
 		public override IntVec3 FlagLoc
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032CA RID: 13002 RVA: 0x0011A24A File Offset: 0x0011844A
+		
 		private LordToilData_Siege Data
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032CB RID: 13003 RVA: 0x0011A257 File Offset: 0x00118457
+		
 		private IEnumerable<Frame> Frames
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032CC RID: 13004 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool ForceHighStoryDanger
 		{
 			get
@@ -87,7 +87,7 @@ namespace RimWorld
 			foreach (Blueprint_Build blueprint_Build in SiegeBlueprintPlacer.PlaceBlueprints(data.siegeCenter, base.Map, this.lord.faction, data.blueprintPoints))
 			{
 				data.blueprints.Add(blueprint_Build);
-				using (List<ThingDefCountClass>.Enumerator enumerator2 = blueprint_Build.MaterialsNeeded().GetEnumerator())
+				List<ThingDefCountClass>.Enumerator enumerator2 = blueprint_Build.MaterialsNeeded().GetEnumerator();
 				{
 					while (enumerator2.MoveNext())
 					{
@@ -197,9 +197,9 @@ namespace RimWorld
 			{
 				IEnumerable<Pawn> ownedPawns = this.lord.ownedPawns;
 				Func<Pawn, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__1 = ((Pawn pa) => !this.rememberedDuties.ContainsKey(pa) && this.CanBeBuilder(pa)));
+					predicate = ( ((Pawn pa) => !this.rememberedDuties.ContainsKey(pa) && this.CanBeBuilder(pa)));
 				}
 				Pawn pawn2;
 				if (ownedPawns.Where(predicate).TryRandomElement(out pawn2))

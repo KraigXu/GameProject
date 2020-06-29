@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Ability : IVerbOwner, IExposable
 	{
 		
-		// (get) Token: 0x06004149 RID: 16713 RVA: 0x0015D575 File Offset: 0x0015B775
+		
 		public Verb verb
 		{
 			get
@@ -32,12 +32,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600414C RID: 16716 RVA: 0x0015D5A4 File Offset: 0x0015B7A4
-		// (set) Token: 0x0600414D RID: 16717 RVA: 0x0015D5AC File Offset: 0x0015B7AC
+		
+		
 		public List<Tool> Tools { get; private set; }
 
 		
-		// (get) Token: 0x0600414E RID: 16718 RVA: 0x0015D5B5 File Offset: 0x0015B7B5
+		
 		public Thing ConstantCaster
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600414F RID: 16719 RVA: 0x0015D5BD File Offset: 0x0015B7BD
+		
 		public List<VerbProperties> VerbProperties
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004150 RID: 16720 RVA: 0x0015D5D5 File Offset: 0x0015B7D5
+		
 		public ImplementOwnerTypeDef ImplementOwnerTypeDef
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004151 RID: 16721 RVA: 0x0015D5DC File Offset: 0x0015B7DC
+		
 		public int CooldownTicksRemaining
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004152 RID: 16722 RVA: 0x0015D5E4 File Offset: 0x0015B7E4
+		
 		public int CooldownTicksTotal
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004153 RID: 16723 RVA: 0x0015D5EC File Offset: 0x0015B7EC
+		
 		public VerbTracker VerbTracker
 		{
 			get
@@ -104,7 +104,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004154 RID: 16724 RVA: 0x0015D608 File Offset: 0x0015B808
+		
 		public bool HasCooldown
 		{
 			get
@@ -114,7 +114,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004155 RID: 16725 RVA: 0x0015D62E File Offset: 0x0015B82E
+		
 		public virtual bool CanCast
 		{
 			get
@@ -124,7 +124,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004156 RID: 16726 RVA: 0x0015D63C File Offset: 0x0015B83C
+		
 		public virtual bool CanQueueCast
 		{
 			get
@@ -136,7 +136,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004157 RID: 16727 RVA: 0x0015D6AD File Offset: 0x0015B8AD
+		
 		public List<CompAbilityEffect> EffectComps
 		{
 			get
@@ -166,7 +166,7 @@ namespace RimWorld
 		
 		public virtual bool CanApplyOn(LocalTargetInfo target)
 		{
-			using (List<CompAbilityEffect>.Enumerator enumerator = this.effectComps.GetEnumerator())
+			List<CompAbilityEffect>.Enumerator enumerator = this.effectComps.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

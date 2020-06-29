@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_UnusableMeditationFocus : Alert
 	{
 		
-		// (get) Token: 0x060056C9 RID: 22217 RVA: 0x001CC6D4 File Offset: 0x001CA8D4
+		
 		private List<GlobalTargetInfo> Targets
 		{
 			get

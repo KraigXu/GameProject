@@ -7,8 +7,8 @@ namespace Verse
 	public static class Text
 	{
 		
-		// (get) Token: 0x06001C0B RID: 7179 RVA: 0x000AAAE7 File Offset: 0x000A8CE7
-		// (set) Token: 0x06001C0C RID: 7180 RVA: 0x000AAAEE File Offset: 0x000A8CEE
+		
+		
 		public static GameFont Font
 		{
 			get
@@ -27,8 +27,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C0D RID: 7181 RVA: 0x000AAB18 File Offset: 0x000A8D18
-		// (set) Token: 0x06001C0E RID: 7182 RVA: 0x000AAB1F File Offset: 0x000A8D1F
+		
+		
 		public static TextAnchor Anchor
 		{
 			get
@@ -42,8 +42,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C0F RID: 7183 RVA: 0x000AAB27 File Offset: 0x000A8D27
-		// (set) Token: 0x06001C10 RID: 7184 RVA: 0x000AAB2E File Offset: 0x000A8D2E
+		
+		
 		public static bool WordWrap
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C11 RID: 7185 RVA: 0x000AAB36 File Offset: 0x000A8D36
+		
 		public static float LineHeight
 		{
 			get
@@ -67,7 +67,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C12 RID: 7186 RVA: 0x000AAB43 File Offset: 0x000A8D43
+		
 		public static float SpaceBetweenLines
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C13 RID: 7187 RVA: 0x000AAB50 File Offset: 0x000A8D50
+		
 		public static GUIStyle CurFontStyle
 		{
 			get
@@ -104,7 +104,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C14 RID: 7188 RVA: 0x000AABB4 File Offset: 0x000A8DB4
+		
 		public static GUIStyle CurTextFieldStyle
 		{
 			get
@@ -124,7 +124,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C15 RID: 7189 RVA: 0x000AABF8 File Offset: 0x000A8DF8
+		
 		public static GUIStyle CurTextAreaStyle
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001C16 RID: 7190 RVA: 0x000AAC3C File Offset: 0x000A8E3C
+		
 		public static GUIStyle CurTextAreaReadOnlyStyle
 		{
 			get

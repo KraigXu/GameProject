@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompRoyalImplant : ThingComp
 	{
 		
-		// (get) Token: 0x060052BE RID: 21182 RVA: 0x001BA426 File Offset: 0x001B8626
+		
 		public CompProperties_RoyalImplant Props
 		{
 			get

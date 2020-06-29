@@ -23,7 +23,7 @@ namespace RimWorld.BaseGen
 					building_Bed.ForPrisoners = true;
 				}
 			};
-			BaseGen.symbolStack.Push("bed", resolveParams, null);
+			BaseGenCore.symbolStack.Push("bed", resolveParams, null);
 		}
 	}
 }

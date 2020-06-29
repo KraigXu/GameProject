@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_Discoverable : HediffComp
 	{
 		
-		// (get) Token: 0x0600104C RID: 4172 RVA: 0x0005D5FD File Offset: 0x0005B7FD
+		
 		public HediffCompProperties_Discoverable Props
 		{
 			get

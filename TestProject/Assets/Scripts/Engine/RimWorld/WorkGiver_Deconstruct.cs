@@ -7,7 +7,7 @@ namespace RimWorld
 	public class WorkGiver_Deconstruct : WorkGiver_RemoveBuilding
 	{
 		
-		// (get) Token: 0x06003046 RID: 12358 RVA: 0x000FB242 File Offset: 0x000F9442
+		
 		protected override DesignationDef Designation
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003047 RID: 12359 RVA: 0x0010F425 File Offset: 0x0010D625
+		
 		protected override JobDef RemoveBuildingJob
 		{
 			get

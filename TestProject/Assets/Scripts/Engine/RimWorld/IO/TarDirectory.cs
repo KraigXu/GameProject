@@ -34,9 +34,9 @@ namespace RimWorld.IO
 		{
 			if (this.lazyLoadArchive != null)
 			{
-				using (FileStream fileStream = File.OpenRead(this.lazyLoadArchive))
+				FileStream fileStream = File.OpenRead(this.lazyLoadArchive);
 				{
-					using (TarInputStream tarInputStream = new TarInputStream(fileStream))
+					TarInputStream tarInputStream = new TarInputStream(fileStream);
 					{
 						TarDirectory.ParseTAR(this, tarInputStream, this.lazyLoadArchive);
 					}
@@ -54,7 +54,7 @@ namespace RimWorld.IO
 			byte[] buffer = new byte[16384];
 			try
 			{
-				using (MemoryStream memoryStream = new MemoryStream())
+				MemoryStream memoryStream = new MemoryStream();
 				{
 					TarEntry nextEntry;
 					while ((nextEntry = input.GetNextEntry()) != null)
@@ -156,7 +156,7 @@ namespace RimWorld.IO
 					yield return tarDirectory;
 				}
 				IEnumerator<TarDirectory> enumerator2 = null;
-				dir = null;
+				//dir = null;
 			}
 			List<TarDirectory>.Enumerator enumerator = default(List<TarDirectory>.Enumerator);
 			yield break;
@@ -205,7 +205,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070B1 RID: 28849 RVA: 0x00274C32 File Offset: 0x00272E32
+		
 		public override string Name
 		{
 			get
@@ -215,7 +215,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070B2 RID: 28850 RVA: 0x00274C3A File Offset: 0x00272E3A
+		
 		public override string FullPath
 		{
 			get
@@ -225,7 +225,7 @@ namespace RimWorld.IO
 		}
 
 		
-		// (get) Token: 0x060070B3 RID: 28851 RVA: 0x00274C42 File Offset: 0x00272E42
+		
 		public override bool Exists
 		{
 			get
@@ -285,7 +285,7 @@ namespace RimWorld.IO
 			filename = array[array.Length - 1];
 			if (virtualDirectory == this)
 			{
-				using (List<TarFile>.Enumerator enumerator = this.files.GetEnumerator())
+				List<TarFile>.Enumerator enumerator = this.files.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

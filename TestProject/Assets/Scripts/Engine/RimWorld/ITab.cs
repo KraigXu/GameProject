@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class ITab : InspectTabBase
 	{
 		
-		// (get) Token: 0x06005B68 RID: 23400 RVA: 0x001F7756 File Offset: 0x001F5956
+		
 		protected object SelObject
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B69 RID: 23401 RVA: 0x001F7762 File Offset: 0x001F5962
+		
 		protected Thing SelThing
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B6A RID: 23402 RVA: 0x001F776E File Offset: 0x001F596E
+		
 		protected Pawn SelPawn
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B6B RID: 23403 RVA: 0x001F777B File Offset: 0x001F597B
+		
 		private MainTabWindow_Inspect InspectPane
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B6C RID: 23404 RVA: 0x001F778C File Offset: 0x001F598C
+		
 		protected override bool StillValid
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B6D RID: 23405 RVA: 0x001F77D7 File Offset: 0x001F59D7
+		
 		protected override float PaneTopY
 		{
 			get

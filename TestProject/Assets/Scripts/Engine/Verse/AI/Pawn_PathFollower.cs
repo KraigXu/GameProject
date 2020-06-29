@@ -9,7 +9,7 @@ namespace Verse.AI
 	public class Pawn_PathFollower : IExposable
 	{
 		
-		// (get) Token: 0x06002775 RID: 10101 RVA: 0x000E71B8 File Offset: 0x000E53B8
+		
 		public LocalTargetInfo Destination
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002776 RID: 10102 RVA: 0x000E71C0 File Offset: 0x000E53C0
+		
 		public bool Moving
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002777 RID: 10103 RVA: 0x000E71C8 File Offset: 0x000E53C8
+		
 		public bool MovingNow
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002778 RID: 10104 RVA: 0x000E71E0 File Offset: 0x000E53E0
+		
 		public IntVec3 LastPassableCellInPath
 		{
 			get

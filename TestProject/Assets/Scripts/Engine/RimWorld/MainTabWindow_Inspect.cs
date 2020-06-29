@@ -10,8 +10,8 @@ namespace RimWorld
 	public class MainTabWindow_Inspect : MainTabWindow, IInspectPane
 	{
 		
-		// (get) Token: 0x06005C5C RID: 23644 RVA: 0x001FEF19 File Offset: 0x001FD119
-		// (set) Token: 0x06005C5D RID: 23645 RVA: 0x001FEF21 File Offset: 0x001FD121
+		
+		
 		public Type OpenTabType
 		{
 			get
@@ -25,8 +25,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C5E RID: 23646 RVA: 0x001FEF2A File Offset: 0x001FD12A
-		// (set) Token: 0x06005C5F RID: 23647 RVA: 0x001FEF32 File Offset: 0x001FD132
+		
+		
 		public float RecentHeight
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C60 RID: 23648 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C61 RID: 23649 RVA: 0x001FEF3B File Offset: 0x001FD13B
+		
 		public override Vector2 RequestedTabSize
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C62 RID: 23650 RVA: 0x001FEF43 File Offset: 0x001FD143
+		
 		private List<object> Selected
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C63 RID: 23651 RVA: 0x001F7762 File Offset: 0x001F5962
+		
 		private Thing SelThing
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C64 RID: 23652 RVA: 0x001D4C0A File Offset: 0x001D2E0A
+		
 		private Zone SelZone
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C65 RID: 23653 RVA: 0x001FEF4F File Offset: 0x001FD14F
+		
 		private int NumSelected
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C66 RID: 23654 RVA: 0x001FEF5B File Offset: 0x001FD15B
+		
 		public float PaneTopY
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C67 RID: 23655 RVA: 0x001FEF6F File Offset: 0x001FD16F
+		
 		public bool AnythingSelected
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C68 RID: 23656 RVA: 0x001FEF7A File Offset: 0x001FD17A
+		
 		public bool ShouldShowSelectNextInCellButton
 		{
 			get
@@ -130,7 +130,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C69 RID: 23657 RVA: 0x001FEFA9 File Offset: 0x001FD1A9
+		
 		public bool ShouldShowPaneContents
 		{
 			get
@@ -140,7 +140,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005C6A RID: 23658 RVA: 0x001FEFB4 File Offset: 0x001FD1B4
+		
 		public IEnumerable<InspectTabBase> CurTabs
 		{
 			get

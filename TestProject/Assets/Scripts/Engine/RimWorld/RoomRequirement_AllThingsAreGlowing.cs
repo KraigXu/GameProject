@@ -10,7 +10,7 @@ namespace RimWorld
 		
 		public override bool Met(Room r, Pawn p = null)
 		{
-			using (IEnumerator<Thing> enumerator = r.ContainedThings(this.thingDef).GetEnumerator())
+			IEnumerator<Thing> enumerator = r.ContainedThings(this.thingDef).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

@@ -85,7 +85,7 @@ namespace RimWorld
 		
 		private IEnumerable<Widgets.DropdownMenuElement<Outfit>> Button_GenerateMenu(Pawn pawn)
 		{
-			using (List<Outfit>.Enumerator enumerator = Current.Game.outfitDatabase.AllOutfits.GetEnumerator())
+			List<Outfit>.Enumerator enumerator = Current.Game.outfitDatabase.AllOutfits.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -100,7 +100,6 @@ namespace RimWorld
 					};
 				}
 			}
-			List<Outfit>.Enumerator enumerator = default(List<Outfit>.Enumerator);
 			yield break;
 			yield break;
 		}

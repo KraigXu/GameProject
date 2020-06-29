@@ -10,7 +10,7 @@ namespace Verse
 	public class DeathLetter : ChoiceLetter
 	{
 		
-		// (get) Token: 0x06001B1E RID: 6942 RVA: 0x000A6768 File Offset: 0x000A4968
+		
 		protected DiaOption Option_ReadMore
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B1F RID: 6943 RVA: 0x000A67D6 File Offset: 0x000A49D6
+		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get
@@ -63,9 +63,9 @@ namespace Verse
 			{
 				IEnumerable<LogEntry> entries = battle.Entries;
 				Func<LogEntry, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__4 = ((LogEntry entry) => entry.Concerns(targetPawn) && entry.ShowInCompactView()));
+					predicate = ( ((LogEntry entry) => entry.Concerns(targetPawn) && entry.ShowInCompactView()));
 				}
 				return entries.Where(predicate);
 			})

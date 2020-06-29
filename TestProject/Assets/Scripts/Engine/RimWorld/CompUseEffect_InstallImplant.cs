@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompUseEffect_InstallImplant : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054D2 RID: 21714 RVA: 0x001C44FF File Offset: 0x001C26FF
+		
 		public CompProperties_UseEffectInstallImplant Props
 		{
 			get

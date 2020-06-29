@@ -9,7 +9,7 @@ namespace RimWorld
 	public class TradeShip : PassingShip, ITrader, IThingHolder
 	{
 		
-		// (get) Token: 0x060055AD RID: 21933 RVA: 0x001C719C File Offset: 0x001C539C
+		
 		public override string FullTitle
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055AE RID: 21934 RVA: 0x001C71BE File Offset: 0x001C53BE
+		
 		public int Silver
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055AF RID: 21935 RVA: 0x001C71CC File Offset: 0x001C53CC
+		
 		public TradeCurrency TradeCurrency
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B0 RID: 21936 RVA: 0x001C71D9 File Offset: 0x001C53D9
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B1 RID: 21937 RVA: 0x001C71E1 File Offset: 0x001C53E1
+		
 		public TraderKindDef TraderKind
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B2 RID: 21938 RVA: 0x001C71E9 File Offset: 0x001C53E9
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B3 RID: 21939 RVA: 0x001C49FB File Offset: 0x001C2BFB
+		
 		public string TraderName
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B4 RID: 21940 RVA: 0x001C71F1 File Offset: 0x001C53F1
+		
 		public bool CanTradeNow
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B5 RID: 21941 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public float TradePriceImprovementOffsetForPlayer
 		{
 			get
@@ -99,7 +99,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055B6 RID: 21942 RVA: 0x001C71FC File Offset: 0x001C53FC
+		
 		public IEnumerable<Thing> Goods
 		{
 			get

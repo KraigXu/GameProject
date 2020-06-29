@@ -42,7 +42,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			using (PawnPath pawnPath = pawn.Map.pathFinder.FindPath(pawn.Position, intVec, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassAllDestroyableThings, false), PathEndMode.OnCell))
+			PawnPath pawnPath = pawn.Map.pathFinder.FindPath(pawn.Position, intVec, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassAllDestroyableThings, false), PathEndMode.OnCell);
 			{
 				IntVec3 cellBeforeBlocker;
 				Thing thing = pawnPath.FirstBlockingBuilding(out cellBeforeBlocker, pawn);

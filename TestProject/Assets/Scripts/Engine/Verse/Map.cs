@@ -12,7 +12,7 @@ namespace Verse
 	public sealed class Map : IIncidentTarget, ILoadReferenceable, IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x06000B09 RID: 2825 RVA: 0x0003AC98 File Offset: 0x00038E98
+		
 		public int Index
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0A RID: 2826 RVA: 0x0003ACA5 File Offset: 0x00038EA5
+		
 		public IntVec3 Size
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0B RID: 2827 RVA: 0x0003ACB2 File Offset: 0x00038EB2
+		
 		public IntVec3 Center
 		{
 			get
@@ -42,7 +42,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0C RID: 2828 RVA: 0x0003ACD4 File Offset: 0x00038ED4
+		
 		public Faction ParentFaction
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0D RID: 2829 RVA: 0x0003ACE6 File Offset: 0x00038EE6
+		
 		public int Area
 		{
 			get
@@ -62,7 +62,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0E RID: 2830 RVA: 0x0003ACFF File Offset: 0x00038EFF
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -72,7 +72,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B0F RID: 2831 RVA: 0x0003AD0C File Offset: 0x00038F0C
+		
 		public IEnumerable<IntVec3> AllCells
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B10 RID: 2832 RVA: 0x0003AD1C File Offset: 0x00038F1C
+		
 		public bool IsPlayerHome
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B11 RID: 2833 RVA: 0x0003AD56 File Offset: 0x00038F56
+		
 		public bool IsTempIncidentMap
 		{
 			get
@@ -128,7 +128,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B13 RID: 2835 RVA: 0x0003AD7C File Offset: 0x00038F7C
+		
 		public int Tile
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B14 RID: 2836 RVA: 0x0003AD89 File Offset: 0x00038F89
+		
 		public Tile TileInfo
 		{
 			get
@@ -148,7 +148,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B15 RID: 2837 RVA: 0x0003AD9B File Offset: 0x00038F9B
+		
 		public BiomeDef Biome
 		{
 			get
@@ -158,7 +158,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B16 RID: 2838 RVA: 0x0003ADA8 File Offset: 0x00038FA8
+		
 		public StoryState StoryState
 		{
 			get
@@ -168,7 +168,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B17 RID: 2839 RVA: 0x0003ADB0 File Offset: 0x00038FB0
+		
 		public GameConditionManager GameConditionManager
 		{
 			get
@@ -178,7 +178,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B18 RID: 2840 RVA: 0x0003ADB8 File Offset: 0x00038FB8
+		
 		public float PlayerWealthForStoryteller
 		{
 			get
@@ -204,7 +204,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B19 RID: 2841 RVA: 0x0003AE70 File Offset: 0x00039070
+		
 		public IEnumerable<Pawn> PlayerPawnsForStoryteller
 		{
 			get
@@ -214,7 +214,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B1A RID: 2842 RVA: 0x0003AE82 File Offset: 0x00039082
+		
 		public FloatRange IncidentPointsRandomFactorRange
 		{
 			get
@@ -224,7 +224,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B1B RID: 2843 RVA: 0x0003ACFF File Offset: 0x00038EFF
+		
 		public MapParent Parent
 		{
 			get
@@ -341,7 +341,7 @@ namespace Verse
 				{
 					try
 					{
-						using (List<Thing>.Enumerator enumerator = this.listerThings.AllThings.GetEnumerator())
+						List<Thing>.Enumerator enumerator = this.listerThings.AllThings.GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{
@@ -838,7 +838,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B28 RID: 2856 RVA: 0x0003BFC2 File Offset: 0x0003A1C2
+		
 		public int ConstantRandSeed
 		{
 			get

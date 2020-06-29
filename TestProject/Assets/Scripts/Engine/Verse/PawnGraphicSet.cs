@@ -9,7 +9,7 @@ namespace Verse
 	public class PawnGraphicSet
 	{
 		
-		// (get) Token: 0x06000F30 RID: 3888 RVA: 0x0005692A File Offset: 0x00054B2A
+		
 		public bool AllResolved
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F32 RID: 3890 RVA: 0x00056A64 File Offset: 0x00054C64
+		
 		public GraphicMeshSet HairMeshSet
 		{
 			get
@@ -201,7 +201,7 @@ namespace Verse
 		{
 			this.ClearCache();
 			this.apparelGraphics.Clear();
-			using (List<Apparel>.Enumerator enumerator = this.pawn.apparel.WornApparel.GetEnumerator())
+			List<Apparel>.Enumerator enumerator = this.pawn.apparel.WornApparel.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

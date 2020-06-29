@@ -28,7 +28,7 @@ namespace RimWorld
 				return false;
 			}
 			int num = 0;
-			using (List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonistsSpawned.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonistsSpawned.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

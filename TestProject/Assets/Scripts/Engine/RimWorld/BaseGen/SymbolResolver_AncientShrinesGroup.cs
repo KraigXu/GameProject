@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			int num = (rp.rect.Width + Mathf.Max(-1, 0)) / (SymbolResolver_AncientShrinesGroup.StandardAncientShrineSize.x + -1);
 			int num2 = (rp.rect.Height + Mathf.Max(-1, 0)) / (SymbolResolver_AncientShrinesGroup.StandardAncientShrineSize.z + -1);
 			IntVec3 bottomLeft = rp.rect.BottomLeft;
@@ -53,7 +53,7 @@ namespace RimWorld.BaseGen
 								resolveParams.rect = cellRect;
 								resolveParams.ancientCryptosleepCasketGroupID = new int?(value2);
 								resolveParams.podContentsType = podContentsType;
-								BaseGen.symbolStack.Push("ancientShrine", resolveParams, null);
+								BaseGenCore.symbolStack.Push("ancientShrine", resolveParams, null);
 								num3++;
 							}
 						}

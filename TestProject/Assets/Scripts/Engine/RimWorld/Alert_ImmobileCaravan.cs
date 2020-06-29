@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_ImmobileCaravan : Alert_Critical
 	{
 		
-		// (get) Token: 0x06005614 RID: 22036 RVA: 0x001C8A70 File Offset: 0x001C6C70
+		
 		private List<Caravan> ImmobileCaravans
 		{
 			get

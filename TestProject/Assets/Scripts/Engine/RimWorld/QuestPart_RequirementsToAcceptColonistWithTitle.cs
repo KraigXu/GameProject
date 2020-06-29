@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_RequirementsToAcceptColonistWithTitle : QuestPart_RequirementsToAccept
 	{
 		
-		// (get) Token: 0x060039D4 RID: 14804 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool RequiresAccepter
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060039D8 RID: 14808 RVA: 0x00133561 File Offset: 0x00131761
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get

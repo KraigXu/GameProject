@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_TendPatient : JobDriver
 	{
 		
-		// (get) Token: 0x06002BCF RID: 11215 RVA: 0x000DF6B2 File Offset: 0x000DD8B2
+		
 		protected Thing MedicineUsed
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002BD0 RID: 11216 RVA: 0x000FA2DB File Offset: 0x000F84DB
+		
 		protected Pawn Deliveree
 		{
 			get

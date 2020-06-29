@@ -2,7 +2,7 @@
 using System.Xml;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class PrefixCapturedVar

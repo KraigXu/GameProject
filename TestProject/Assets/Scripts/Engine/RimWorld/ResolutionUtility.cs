@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class ResolutionUtility
 	{
 		
-		// (get) Token: 0x0600594B RID: 22859 RVA: 0x001DDEA0 File Offset: 0x001DC0A0
+		
 		public static Resolution NativeResolution
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Insult : JobDriver
 	{
 		
-		// (get) Token: 0x06002C9B RID: 11419 RVA: 0x000FDF2E File Offset: 0x000FC12E
+		
 		private Pawn Target
 		{
 			get

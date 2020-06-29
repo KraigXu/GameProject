@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class CompPower : ThingComp
 	{
 		
-		// (get) Token: 0x06003F3A RID: 16186 RVA: 0x00150222 File Offset: 0x0014E422
+		
 		public bool TransmitsPowerNow
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F3B RID: 16187 RVA: 0x00150234 File Offset: 0x0014E434
+		
 		public PowerNet PowerNet
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F3C RID: 16188 RVA: 0x0015025A File Offset: 0x0014E45A
+		
 		public CompProperties_Power Props
 		{
 			get

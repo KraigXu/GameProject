@@ -7,7 +7,7 @@ namespace Verse
 	public class MoteText : MoteThrown
 	{
 		
-		// (get) Token: 0x060015D2 RID: 5586 RVA: 0x0007EED5 File Offset: 0x0007D0D5
+		
 		protected float TimeBeforeStartFadeout
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015D3 RID: 5587 RVA: 0x0007EEF1 File Offset: 0x0007D0F1
+		
 		protected override bool EndOfLife
 		{
 			get

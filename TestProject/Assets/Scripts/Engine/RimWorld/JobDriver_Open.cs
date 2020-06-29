@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Open : JobDriver
 	{
 		
-		// (get) Token: 0x06002CD4 RID: 11476 RVA: 0x000FE8E0 File Offset: 0x000FCAE0
+		
 		private IOpenable Openable
 		{
 			get

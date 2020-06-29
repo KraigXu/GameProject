@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_IsDead : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003890 RID: 14480 RVA: 0x0012E8F0 File Offset: 0x0012CAF0
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+		
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.pawn != null)
 				{

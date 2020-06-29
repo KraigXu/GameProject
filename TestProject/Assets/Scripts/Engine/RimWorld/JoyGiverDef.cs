@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JoyGiverDef : Def
 	{
 		
-		// (get) Token: 0x06003658 RID: 13912 RVA: 0x00126A18 File Offset: 0x00124C18
+		
 		public JoyGiver Worker
 		{
 			get
@@ -25,9 +25,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.jobDef != null && this.jobDef.joyKind != this.joyKind)

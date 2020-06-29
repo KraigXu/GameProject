@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Research : JobDriver
 	{
 		
-		// (get) Token: 0x06002CF4 RID: 11508 RVA: 0x000FEBD0 File Offset: 0x000FCDD0
+		
 		private ResearchProjectDef Project
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CF5 RID: 11509 RVA: 0x000FEBDC File Offset: 0x000FCDDC
+		
 		private Building_ResearchBench ResearchBench
 		{
 			get

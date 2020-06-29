@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_ChangeImplantLevel : HediffComp
 	{
 		
-		// (get) Token: 0x0600102F RID: 4143 RVA: 0x0005D13C File Offset: 0x0005B33C
+		
 		public HediffCompProperties_ChangeImplantLevel Props
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompArt : ThingComp
 	{
 		
-		// (get) Token: 0x0600503C RID: 20540 RVA: 0x001B093C File Offset: 0x001AEB3C
+		
 		public TaggedString AuthorName
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600503D RID: 20541 RVA: 0x001B0979 File Offset: 0x001AEB79
+		
 		public string Title
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600503E RID: 20542 RVA: 0x001B09AE File Offset: 0x001AEBAE
+		
 		public TaleReference TaleRef
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600503F RID: 20543 RVA: 0x001B09B8 File Offset: 0x001AEBB8
+		
 		public bool CanShowArt
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005040 RID: 20544 RVA: 0x001B0A0D File Offset: 0x001AEC0D
+		
 		public bool Active
 		{
 			get
@@ -75,7 +75,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005041 RID: 20545 RVA: 0x001B0A18 File Offset: 0x001AEC18
+		
 		public CompProperties_Art Props
 		{
 			get

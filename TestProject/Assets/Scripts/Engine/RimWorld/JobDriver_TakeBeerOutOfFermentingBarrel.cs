@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_TakeBeerOutOfFermentingBarrel : JobDriver
 	{
 		
-		// (get) Token: 0x06002D12 RID: 11538 RVA: 0x000FEF4C File Offset: 0x000FD14C
+		
 		protected Building_FermentingBarrel Barrel
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002D13 RID: 11539 RVA: 0x000FEF74 File Offset: 0x000FD174
+		
 		protected Thing Beer
 		{
 			get

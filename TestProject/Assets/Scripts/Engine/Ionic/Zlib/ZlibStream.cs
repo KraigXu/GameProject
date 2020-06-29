@@ -28,8 +28,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D1 RID: 29137 RVA: 0x0027D863 File Offset: 0x0027BA63
-		// (set) Token: 0x060071D2 RID: 29138 RVA: 0x0027D870 File Offset: 0x0027BA70
+		
+		
 		public virtual FlushType FlushMode
 		{
 			get
@@ -47,8 +47,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D3 RID: 29139 RVA: 0x0027D891 File Offset: 0x0027BA91
-		// (set) Token: 0x060071D4 RID: 29140 RVA: 0x0027D8A0 File Offset: 0x0027BAA0
+		
+		
 		public int BufferSize
 		{
 			get
@@ -74,7 +74,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D5 RID: 29141 RVA: 0x0027D90C File Offset: 0x0027BB0C
+		
 		public virtual long TotalIn
 		{
 			get
@@ -84,7 +84,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D6 RID: 29142 RVA: 0x0027D91E File Offset: 0x0027BB1E
+		
 		public virtual long TotalOut
 		{
 			get
@@ -114,7 +114,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D8 RID: 29144 RVA: 0x0027D97C File Offset: 0x0027BB7C
+		
 		public override bool CanRead
 		{
 			get
@@ -128,7 +128,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071D9 RID: 29145 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanSeek
 		{
 			get
@@ -138,7 +138,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071DA RID: 29146 RVA: 0x0027D9A1 File Offset: 0x0027BBA1
+		
 		public override bool CanWrite
 		{
 			get
@@ -162,7 +162,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071DC RID: 29148 RVA: 0x0027BDC1 File Offset: 0x00279FC1
+		
 		public override long Length
 		{
 			get
@@ -172,8 +172,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071DD RID: 29149 RVA: 0x0027D9E8 File Offset: 0x0027BBE8
-		// (set) Token: 0x060071DE RID: 29150 RVA: 0x0027BDC1 File Offset: 0x00279FC1
+		
+		
 		public override long Position
 		{
 			get
@@ -230,7 +230,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressString(string s)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new ZlibStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressString(s, compressor);
@@ -243,7 +243,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressBuffer(byte[] b)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new ZlibStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressBuffer(b, compressor);
@@ -256,7 +256,7 @@ namespace Ionic.Zlib
 		public static string UncompressString(byte[] compressed)
 		{
 			string result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new ZlibStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressString(compressed, decompressor);
@@ -268,7 +268,7 @@ namespace Ionic.Zlib
 		public static byte[] UncompressBuffer(byte[] compressed)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new ZlibStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressBuffer(compressed, decompressor);

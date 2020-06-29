@@ -10,7 +10,7 @@ namespace RimWorld
 	public class QuestPart_Delay : QuestPartActivable
 	{
 		
-		// (get) Token: 0x0600382A RID: 14378 RVA: 0x0012D3B3 File Offset: 0x0012B5B3
+		
 		public int TicksLeft
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600382B RID: 14379 RVA: 0x0012D3D8 File Offset: 0x0012B5D8
+		
 		public override string ExpiryInfoPart
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600382C RID: 14380 RVA: 0x0012D40D File Offset: 0x0012B60D
+		
 		public override string ExpiryInfoPartTip
 		{
 			get
@@ -48,15 +48,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600382D RID: 14381 RVA: 0x0012D441 File Offset: 0x0012B641
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+				
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.inspectStringTargets != null)
 				{

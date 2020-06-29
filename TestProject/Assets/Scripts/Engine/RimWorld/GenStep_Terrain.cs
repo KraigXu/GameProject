@@ -11,7 +11,7 @@ namespace RimWorld
 	public class GenStep_Terrain : GenStep
 	{
 		
-		// (get) Token: 0x06003EAC RID: 16044 RVA: 0x0014C564 File Offset: 0x0014A764
+		
 		public override int SeedPart
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class Lesson_Instruction : Lesson
 	{
 		
-		// (get) Token: 0x06005EF6 RID: 24310 RVA: 0x0020C6AF File Offset: 0x0020A8AF
+		
 		protected Map Map
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EF7 RID: 24311 RVA: 0x0004E475 File Offset: 0x0004C675
+		
 		protected virtual float ProgressPercent
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EF8 RID: 24312 RVA: 0x0020C6B6 File Offset: 0x0020A8B6
+		
 		protected virtual bool ShowProgressBar
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EF9 RID: 24313 RVA: 0x0020C6C8 File Offset: 0x0020A8C8
+		
 		public override string DefaultRejectInputMessage
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005EFA RID: 24314 RVA: 0x0020C6D5 File Offset: 0x0020A8D5
+		
 		public override InstructionDef Instruction
 		{
 			get

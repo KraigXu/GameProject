@@ -7,7 +7,7 @@ namespace Verse.AI.Group
 	public class Transition
 	{
 		
-		// (get) Token: 0x060029C9 RID: 10697 RVA: 0x000F54B8 File Offset: 0x000F36B8
+		
 		public Map Map
 		{
 			get

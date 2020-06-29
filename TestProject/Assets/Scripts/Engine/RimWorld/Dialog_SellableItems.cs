@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Dialog_SellableItems : Window
 	{
 		
-		// (get) Token: 0x06005E18 RID: 24088 RVA: 0x00208920 File Offset: 0x00206B20
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E19 RID: 24089 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

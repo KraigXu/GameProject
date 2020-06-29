@@ -7,7 +7,7 @@ namespace Verse
 	internal class EditWindow_DefEditor : EditWindow
 	{
 		
-		// (get) Token: 0x06001A49 RID: 6729 RVA: 0x000864F0 File Offset: 0x000846F0
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A4A RID: 6730 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

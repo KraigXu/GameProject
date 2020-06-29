@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_PreciousLump : GenStep_ScatterLumpsMineable
 	{
 		
-		// (get) Token: 0x06003EF0 RID: 16112 RVA: 0x0014EBC5 File Offset: 0x0014CDC5
+		
 		public override int SeedPart
 		{
 			get

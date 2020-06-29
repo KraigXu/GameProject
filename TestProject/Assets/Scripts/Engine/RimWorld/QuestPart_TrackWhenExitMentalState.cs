@@ -10,7 +10,7 @@ namespace RimWorld
 	public class QuestPart_TrackWhenExitMentalState : QuestPart
 	{
 		
-		// (get) Token: 0x06003A0D RID: 14861 RVA: 0x0013416C File Offset: 0x0013236C
+		
 		private List<Pawn> TrackedPawns
 		{
 			get

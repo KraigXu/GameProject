@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompUseEffect_PlaySound : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054DC RID: 21724 RVA: 0x001C4831 File Offset: 0x001C2A31
+		
 		private CompProperties_UseEffectPlaySound Props
 		{
 			get

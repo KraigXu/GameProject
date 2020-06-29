@@ -7,7 +7,7 @@ namespace Verse
 	public struct MoteAttachLink
 	{
 		
-		// (get) Token: 0x060015B6 RID: 5558 RVA: 0x0007E7BB File Offset: 0x0007C9BB
+		
 		public bool Linked
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015B7 RID: 5559 RVA: 0x0007E7C8 File Offset: 0x0007C9C8
+		
 		public TargetInfo Target
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015B8 RID: 5560 RVA: 0x0007E7D0 File Offset: 0x0007C9D0
+		
 		public Vector3 LastDrawPos
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015B9 RID: 5561 RVA: 0x0007E7D8 File Offset: 0x0007C9D8
+		
 		public static MoteAttachLink Invalid
 		{
 			get

@@ -143,19 +143,19 @@ namespace Verse.AI
 				UnfinishedThing unfinishedThing = curJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
 				return 1f - ((JobDriver_DoBill)actor.jobs.curDriver).workLeft / curJob.bill.recipe.WorkAmountTotal((unfinishedThing != null) ? unfinishedThing.Stuff : null);
 			}, false, -0.5f);
-			toil.FailOn(delegate
-			{
-				RecipeDef recipeDef = toil.actor.CurJob.RecipeDef;
-				if (recipeDef != null && recipeDef.interruptIfIngredientIsRotting)
-				{
-					LocalTargetInfo target = toil.actor.CurJob.GetTarget(TargetIndex.B);
-					if (target.HasThing && target.Thing.GetRotStage() > RotStage.Fresh)
-					{
-						return true;
-					}
-				}
-				return toil.actor.CurJob.bill.suspended;
-			});
+			//toil.FailOn(delegate
+			//{
+			//	RecipeDef recipeDef = toil.actor.CurJob.RecipeDef;
+			//	if (recipeDef != null && recipeDef.interruptIfIngredientIsRotting)
+			//	{
+			//		LocalTargetInfo target = toil.actor.CurJob.GetTarget(TargetIndex.B);
+			//		if (target.HasThing && target.Thing.GetRotStage() > RotStage.Fresh)
+			//		{
+			//			return true;
+			//		}
+			//	}
+			//	return toil.actor.CurJob.bill.suspended;
+			//});
 			toil.activeSkill = (() => toil.actor.CurJob.bill.recipe.workSkill);
 			return toil;
 		}

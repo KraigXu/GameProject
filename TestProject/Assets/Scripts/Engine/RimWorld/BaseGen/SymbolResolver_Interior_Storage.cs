@@ -9,13 +9,13 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
-			BaseGen.symbolStack.Push("stockpile", rp, null);
+			Map map = BaseGenCore.globalSettings.map;
+			BaseGenCore.symbolStack.Push("stockpile", rp, null);
 			if (map.mapTemperature.OutdoorTemp > 15f)
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingDef = ThingDefOf.PassiveCooler;
-				BaseGen.symbolStack.Push("edgeThing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("edgeThing", resolveParams, null);
 			}
 		}
 

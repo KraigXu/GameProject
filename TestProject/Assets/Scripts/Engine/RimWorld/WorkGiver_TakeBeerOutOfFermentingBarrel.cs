@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_TakeBeerOutOfFermentingBarrel : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600314D RID: 12621 RVA: 0x001115DD File Offset: 0x0010F7DD
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600314F RID: 12623 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

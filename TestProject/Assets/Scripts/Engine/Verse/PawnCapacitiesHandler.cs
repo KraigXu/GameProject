@@ -7,7 +7,7 @@ namespace Verse
 	public class PawnCapacitiesHandler
 	{
 		
-		// (get) Token: 0x0600117C RID: 4476 RVA: 0x00062BCA File Offset: 0x00060DCA
+		
 		public bool CanBeAwake
 		{
 			get

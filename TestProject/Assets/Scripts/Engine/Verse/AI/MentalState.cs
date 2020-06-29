@@ -7,7 +7,7 @@ namespace Verse.AI
 	public class MentalState : IExposable
 	{
 		
-		// (get) Token: 0x060026AF RID: 9903 RVA: 0x000E3C53 File Offset: 0x000E1E53
+		
 		public int Age
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060026B0 RID: 9904 RVA: 0x000E3C5B File Offset: 0x000E1E5B
+		
 		public virtual string InspectLine
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060026B1 RID: 9905 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanEndBeforeMaxDurationNow
 		{
 			get

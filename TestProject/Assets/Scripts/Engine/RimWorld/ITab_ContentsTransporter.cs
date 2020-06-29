@@ -11,7 +11,7 @@ namespace RimWorld
 	public class ITab_ContentsTransporter : ITab_ContentsBase
 	{
 		
-		// (get) Token: 0x06005B86 RID: 23430 RVA: 0x001F8372 File Offset: 0x001F6572
+		
 		public override IList<Thing> container
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B87 RID: 23431 RVA: 0x001F837F File Offset: 0x001F657F
+		
 		public CompTransporter Transporter
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B88 RID: 23432 RVA: 0x001F838C File Offset: 0x001F658C
+		
 		public override bool IsVisible
 		{
 			get

@@ -48,7 +48,7 @@ namespace RuntimeAudioClipLoader
 				}
 				if (format == AudioFormat.ogg)
 				{
-					this.readerStream = new VorbisWaveReader(stream);
+					//this.readerStream = new VorbisWaveReader(stream);
 					return;
 				}
 				Debug.LogWarning("Audio format " + format + " is not supported");
@@ -56,7 +56,7 @@ namespace RuntimeAudioClipLoader
 		}
 
 		
-		// (get) Token: 0x06000029 RID: 41 RVA: 0x000027C9 File Offset: 0x000009C9
+		
 		public override WaveFormat WaveFormat
 		{
 			get
@@ -66,7 +66,7 @@ namespace RuntimeAudioClipLoader
 		}
 
 		
-		// (get) Token: 0x0600002A RID: 42 RVA: 0x000027D6 File Offset: 0x000009D6
+		
 		public override long Length
 		{
 			get
@@ -76,8 +76,8 @@ namespace RuntimeAudioClipLoader
 		}
 
 		
-		// (get) Token: 0x0600002B RID: 43 RVA: 0x000027DE File Offset: 0x000009DE
-		// (set) Token: 0x0600002C RID: 44 RVA: 0x000027F4 File Offset: 0x000009F4
+		
+		
 		public override long Position
 		{
 			get
@@ -115,8 +115,8 @@ namespace RuntimeAudioClipLoader
 		}
 
 		
-		// (get) Token: 0x0600002F RID: 47 RVA: 0x000028B8 File Offset: 0x00000AB8
-		// (set) Token: 0x06000030 RID: 48 RVA: 0x000028C5 File Offset: 0x00000AC5
+		
+		
 		public float Volume
 		{
 			get

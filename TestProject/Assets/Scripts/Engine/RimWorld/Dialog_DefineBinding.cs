@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Dialog_DefineBinding : Window
 	{
 		
-		// (get) Token: 0x060058CF RID: 22735 RVA: 0x001D915B File Offset: 0x001D735B
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058D0 RID: 22736 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

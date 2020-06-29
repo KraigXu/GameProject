@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BE5 RID: 19429 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool StorageTabVisible
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BE6 RID: 19430 RVA: 0x00198BC6 File Offset: 0x00196DC6
+		
 		public bool IgnoreStoredThingsBeauty
 		{
 			get

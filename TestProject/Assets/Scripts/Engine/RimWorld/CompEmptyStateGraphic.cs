@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompEmptyStateGraphic : ThingComp
 	{
 		
-		// (get) Token: 0x06005105 RID: 20741 RVA: 0x001B3089 File Offset: 0x001B1289
+		
 		private CompProperties_EmptyStateGraphic Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005106 RID: 20742 RVA: 0x001B3098 File Offset: 0x001B1298
+		
 		public bool ParentIsEmpty
 		{
 			get

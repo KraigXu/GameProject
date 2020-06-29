@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_CampLoot : Reward
 	{
 		
-		// (get) Token: 0x06006149 RID: 24905 RVA: 0x0021C9BB File Offset: 0x0021ABBB
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get

@@ -9,14 +9,14 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("doors", rp, null);
+			BaseGenCore.symbolStack.Push("doors", rp, null);
 			if (!this.interior.NullOrEmpty())
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.rect = rp.rect.ContractedBy(1);
-				BaseGen.symbolStack.Push(this.interior, resolveParams, null);
+				BaseGenCore.symbolStack.Push(this.interior, resolveParams, null);
 			}
-			BaseGen.symbolStack.Push("emptyRoom", rp, null);
+			BaseGenCore.symbolStack.Push("emptyRoom", rp, null);
 		}
 
 		

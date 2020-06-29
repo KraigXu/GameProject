@@ -16,17 +16,13 @@ namespace RimWorld.SketchGen
 			bool flag = parms.requireFloor ?? false;
 			this.rects.Clear();
 			this.processed.Clear();
-			Predicate<IntVec3> 9__1;
+
 			foreach (IntVec3 c in cellRect.Cells.InRandomOrder(null))
 			{
 				CellRect outerRect = cellRect;
 				Sketch sketch = parms.sketch;
 				HashSet<IntVec3> hashSet = this.processed;
-				Predicate<IntVec3> canTraverse;
-				if ((canTraverse ) == null)
-				{
-					canTraverse = (9__1 = ((IntVec3 x) => !this.AnyColumnBlockerAt(x, parms.sketch)));
-				}
+				Predicate<IntVec3> canTraverse = (((IntVec3 x) => !this.AnyColumnBlockerAt(x, parms.sketch))); 
 				CellRect item = SketchGenUtility.FindBiggestRectAt(c, outerRect, sketch, hashSet, canTraverse);
 				if (!item.IsEmpty)
 				{

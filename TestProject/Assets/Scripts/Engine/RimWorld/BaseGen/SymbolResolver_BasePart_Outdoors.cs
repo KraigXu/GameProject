@@ -14,10 +14,10 @@ namespace RimWorld.BaseGen
 			resolveParams.pathwayFloorDef = (rp.pathwayFloorDef ?? BaseGenUtility.RandomBasicFloorDef(rp.faction, false));
 			if (flag)
 			{
-				BaseGen.symbolStack.Push("basePart_outdoors_division", resolveParams, null);
+				BaseGenCore.symbolStack.Push("basePart_outdoors_division", resolveParams, null);
 				return;
 			}
-			BaseGen.symbolStack.Push("basePart_outdoors_leafPossiblyDecorated", resolveParams, null);
+			BaseGenCore.symbolStack.Push("basePart_outdoors_leafPossiblyDecorated", resolveParams, null);
 		}
 	}
 }

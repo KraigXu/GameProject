@@ -8,7 +8,7 @@ namespace Verse
 	public class RulePackDef : Def
 	{
 		
-		// (get) Token: 0x0600063F RID: 1599 RVA: 0x0001DBDC File Offset: 0x0001BDDC
+		
 		public List<Rule> RulesPlusIncludes
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000640 RID: 1600 RVA: 0x0001DC5C File Offset: 0x0001BE5C
+		
 		public List<Rule> UntranslatedRulesPlusIncludes
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000641 RID: 1601 RVA: 0x0001DCDA File Offset: 0x0001BEDA
+		
 		public List<Rule> RulesImmediate
 		{
 			get
@@ -72,7 +72,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000642 RID: 1602 RVA: 0x0001DCF1 File Offset: 0x0001BEF1
+		
 		public List<Rule> UntranslatedRulesImmediate
 		{
 			get
@@ -86,7 +86,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000643 RID: 1603 RVA: 0x0001DD08 File Offset: 0x0001BF08
+		
 		public string FirstRuleKeyword
 		{
 			get
@@ -101,7 +101,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000644 RID: 1604 RVA: 0x0001DD38 File Offset: 0x0001BF38
+		
 		public string FirstUntranslatedRuleKeyword
 		{
 			get
@@ -118,9 +118,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.include != null)

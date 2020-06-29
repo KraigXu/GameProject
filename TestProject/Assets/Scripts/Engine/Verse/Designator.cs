@@ -10,7 +10,7 @@ namespace Verse
 	public abstract class Designator : Command
 	{
 		
-		// (get) Token: 0x060017CE RID: 6094 RVA: 0x000885D0 File Offset: 0x000867D0
+		
 		public Map Map
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017CF RID: 6095 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual int DraggableDimensions
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D0 RID: 6096 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool DragDrawMeasurements
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D1 RID: 6097 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected override bool DoTooltip
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D2 RID: 6098 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		protected virtual DesignationDef Designation
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D3 RID: 6099 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float PanelReadoutTitleExtraRightMargin
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D4 RID: 6100 RVA: 0x000885D7 File Offset: 0x000867D7
+		
 		public override string TutorTagSelect
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D5 RID: 6101 RVA: 0x00088607 File Offset: 0x00086807
+		
 		public string TutorTagDesignate
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D6 RID: 6102 RVA: 0x00088637 File Offset: 0x00086837
+		
 		public override string HighlightTag
 		{
 			get
@@ -120,14 +120,14 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017D7 RID: 6103 RVA: 0x00088665 File Offset: 0x00086865
+		
 		public override IEnumerable<FloatMenuOption> RightClickFloatMenuOptions
 		{
 			get
 			{
-				foreach (FloatMenuOption floatMenuOption in this.n__0())
+
 				{
-					yield return floatMenuOption;
+					
 				}
 				IEnumerator<FloatMenuOption> enumerator = null;
 				if (this.hasDesignateAllFloatMenuOption)

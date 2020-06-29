@@ -8,7 +8,7 @@ namespace RimWorld
 	public class MainButtonDef : Def
 	{
 		
-		// (get) Token: 0x06003662 RID: 13922 RVA: 0x00126C45 File Offset: 0x00124E45
+		
 		public MainButtonWorker Worker
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003663 RID: 13923 RVA: 0x00126C77 File Offset: 0x00124E77
+		
 		public MainTabWindow TabWindow
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003664 RID: 13924 RVA: 0x00126CB8 File Offset: 0x00124EB8
+		
 		public string ShortenedLabelCap
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003665 RID: 13925 RVA: 0x00126CEC File Offset: 0x00124EEC
+		
 		public float LabelCapWidth
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003666 RID: 13926 RVA: 0x00126D2C File Offset: 0x00124F2C
+		
 		public float ShortenedLabelCapWidth
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003667 RID: 13927 RVA: 0x00126D67 File Offset: 0x00124F67
+		
 		public Texture2D Icon
 		{
 			get

@@ -21,7 +21,7 @@ namespace Verse
 			case PathEndMode.OnCell:
 				if (thing.def.size.x != 1 || thing.def.size.z != 1)
 				{
-					using (CellRect.Enumerator enumerator = thing.OccupiedRect().GetEnumerator())
+					CellRect.Enumerator enumerator = thing.OccupiedRect().GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

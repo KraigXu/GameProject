@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Pawn_TraderTracker : IExposable
 	{
 		
-		// (get) Token: 0x060046C9 RID: 18121 RVA: 0x0017F039 File Offset: 0x0017D239
+		
 		public IEnumerable<Thing> Goods
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046CA RID: 18122 RVA: 0x0017F049 File Offset: 0x0017D249
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046CB RID: 18123 RVA: 0x0017F060 File Offset: 0x0017D260
+		
 		public string TraderName
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046CC RID: 18124 RVA: 0x0017F070 File Offset: 0x0017D270
+		
 		public bool CanTradeNow
 		{
 			get

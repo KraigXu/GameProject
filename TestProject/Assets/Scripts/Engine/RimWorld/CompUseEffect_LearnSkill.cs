@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompUseEffect_LearnSkill : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054D7 RID: 21719 RVA: 0x001C470F File Offset: 0x001C290F
+		
 		private SkillDef Skill
 		{
 			get

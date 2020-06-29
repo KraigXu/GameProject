@@ -177,9 +177,9 @@ namespace Verse
 			IEnumerable<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
 			
 			Func<Pawn, bool> predicate;
-			if ((predicate ) == null)
+			if ((predicate=default ) == null)
 			{
-				predicate = (9__0 = ((Pawn pawn) => bound.Contains(pawn.Position)));
+				predicate = ( ((Pawn pawn) => bound.Contains(pawn.Position)));
 			}
 			foreach (Pawn pawn2 in allPawnsSpawned.Where(predicate))
 			{

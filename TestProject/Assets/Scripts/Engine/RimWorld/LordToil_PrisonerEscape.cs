@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_PrisonerEscape : LordToil_Travel
 	{
 		
-		// (get) Token: 0x060032C0 RID: 12992 RVA: 0x0011A040 File Offset: 0x00118240
+		
 		public override IntVec3 FlagLoc
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032C1 RID: 12993 RVA: 0x000F4FA9 File Offset: 0x000F31A9
+		
 		private LordToilData_Travel Data
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032C2 RID: 12994 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032C3 RID: 12995 RVA: 0x0011A04D File Offset: 0x0011824D
+		
 		protected override float AllArrivedCheckRadius
 		{
 			get

@@ -120,7 +120,7 @@ namespace RimWorld.Planet
 			int num = 0;
 			if (siteParts != null)
 			{
-				using (IEnumerator<SitePartDef> enumerator = siteParts.GetEnumerator())
+				IEnumerator<SitePartDef> enumerator = siteParts.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -151,7 +151,7 @@ namespace RimWorld.Planet
 		{
 			if (parts != null)
 			{
-				using (IEnumerator<SitePartDef> enumerator = parts.GetEnumerator())
+				IEnumerator<SitePartDef> enumerator = parts.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

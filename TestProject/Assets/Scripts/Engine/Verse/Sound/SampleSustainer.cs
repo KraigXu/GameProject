@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public class SampleSustainer : Sample
 	{
 		
-		// (get) Token: 0x060024C0 RID: 9408 RVA: 0x000DA38E File Offset: 0x000D858E
+		
 		public override float ParentStartRealTime
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024C1 RID: 9409 RVA: 0x000DA39B File Offset: 0x000D859B
+		
 		public override float ParentStartTick
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024C2 RID: 9410 RVA: 0x000DA3A9 File Offset: 0x000D85A9
+		
 		public override float ParentHashCode
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024C3 RID: 9411 RVA: 0x000DA3B7 File Offset: 0x000D85B7
+		
 		public override SoundParams ExternalParams
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024C4 RID: 9412 RVA: 0x000DA3C4 File Offset: 0x000D85C4
+		
 		public override SoundInfo Info
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024C5 RID: 9413 RVA: 0x000DA3D4 File Offset: 0x000D85D4
+		
 		protected override float Volume
 		{
 			get

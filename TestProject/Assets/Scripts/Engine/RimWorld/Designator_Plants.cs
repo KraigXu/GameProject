@@ -7,7 +7,7 @@ namespace RimWorld
 	public abstract class Designator_Plants : Designator
 	{
 		
-		// (get) Token: 0x06005865 RID: 22629 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005866 RID: 22630 RVA: 0x001D5553 File Offset: 0x001D3753
+		
 		protected override DesignationDef Designation
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class LordToil_DoOpportunisticTaskOrCover : LordToil
 	{
 		
-		// (get) Token: 0x06003292 RID: 12946 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSatisfyLongNeeds
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003293 RID: 12947
+		
 		protected abstract DutyDef DutyDef { get; }
 
 		

@@ -7,15 +7,15 @@ namespace RimWorld
 	public abstract class SketchBuildable : SketchEntity
 	{
 		
-		// (get) Token: 0x06004058 RID: 16472
+		
 		public abstract BuildableDef Buildable { get; }
 
 		
-		// (get) Token: 0x06004059 RID: 16473
+		
 		public abstract ThingDef Stuff { get; }
 
 		
-		// (get) Token: 0x0600405A RID: 16474 RVA: 0x00158399 File Offset: 0x00156599
+		
 		public override string Label
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600405B RID: 16475 RVA: 0x001583AD File Offset: 0x001565AD
+		
 		public override bool LostImportantReferences
 		{
 			get

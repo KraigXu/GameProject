@@ -7,7 +7,7 @@ namespace RimWorld
 	public abstract class PawnColumnWorker_Designator : PawnColumnWorker_Checkbox
 	{
 		
-		// (get) Token: 0x06005CF4 RID: 23796
+		
 		protected abstract DesignationDef DesignationType { get; }
 
 		

@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WITab_Caravan_Social : WITab
 	{
 		
-		// (get) Token: 0x06007010 RID: 28688 RVA: 0x0026F60A File Offset: 0x0026D80A
+		
 		private List<Pawn> Pawns
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06007011 RID: 28689 RVA: 0x0027153D File Offset: 0x0026F73D
+		
 		private float SpecificSocialTabWidth
 		{
 			get

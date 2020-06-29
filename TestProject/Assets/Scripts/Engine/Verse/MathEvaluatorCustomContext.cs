@@ -9,7 +9,7 @@ namespace Verse
 	public class MathEvaluatorCustomContext : XsltContext
 	{
 		
-		// (get) Token: 0x0600031B RID: 795 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool Whitespace
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600031C RID: 796 RVA: 0x00010290 File Offset: 0x0000E490
+		
 		public XsltArgumentList ArgList
 		{
 			get

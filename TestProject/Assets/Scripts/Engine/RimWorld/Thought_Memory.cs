@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Thought_Memory : Thought
 	{
 		
-		// (get) Token: 0x060047B5 RID: 18357 RVA: 0x0018525E File Offset: 0x0018345E
+		
 		public override bool VisibleInNeedsTab
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047B6 RID: 18358 RVA: 0x00185273 File Offset: 0x00183473
+		
 		public override int CurStageIndex
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047B7 RID: 18359 RVA: 0x0018527B File Offset: 0x0018347B
+		
 		public virtual bool ShouldDiscard
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047B8 RID: 18360 RVA: 0x00185290 File Offset: 0x00183490
+		
 		public override string LabelCap
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047B9 RID: 18361 RVA: 0x00185368 File Offset: 0x00183568
+		
 		public override string LabelCapSocial
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldPathGrid
 	{
 		
-		// (get) Token: 0x060068E9 RID: 26857 RVA: 0x0024A72D File Offset: 0x0024892D
+		
 		private static int DayOfYearAt0Long
 		{
 			get

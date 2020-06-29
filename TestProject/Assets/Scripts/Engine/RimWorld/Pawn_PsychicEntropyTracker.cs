@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Pawn_PsychicEntropyTracker : IExposable
 	{
 		
-		// (get) Token: 0x06004652 RID: 18002 RVA: 0x0017B6DC File Offset: 0x001798DC
+		
 		public Pawn Pawn
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004653 RID: 18003 RVA: 0x0017B6E4 File Offset: 0x001798E4
+		
 		public float MaxEntropy
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004654 RID: 18004 RVA: 0x0017B6F7 File Offset: 0x001798F7
+		
 		public float MaxPotentialEntropy
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004655 RID: 18005 RVA: 0x0017B715 File Offset: 0x00179915
+		
 		public float PainMultiplier
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004656 RID: 18006 RVA: 0x0017B738 File Offset: 0x00179938
+		
 		public float RecoveryRate
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004657 RID: 18007 RVA: 0x0017B752 File Offset: 0x00179952
+		
 		public float EntropyValue
 		{
 			get
@@ -71,7 +71,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004658 RID: 18008 RVA: 0x0017B75A File Offset: 0x0017995A
+		
 		public float CurrentPsyfocus
 		{
 			get
@@ -81,7 +81,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004659 RID: 18009 RVA: 0x0017B762 File Offset: 0x00179962
+		
 		public float TargetPsyfocus
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465A RID: 18010 RVA: 0x0017B76A File Offset: 0x0017996A
+		
 		public int MaxAbilityLevel
 		{
 			get
@@ -101,7 +101,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465B RID: 18011 RVA: 0x0017B77C File Offset: 0x0017997C
+		
 		public bool IsCurrentlyMeditating
 		{
 			get
@@ -111,7 +111,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465C RID: 18012 RVA: 0x0017B794 File Offset: 0x00179994
+		
 		public float EntropyRelativeValue
 		{
 			get
@@ -140,7 +140,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465D RID: 18013 RVA: 0x0017B810 File Offset: 0x00179A10
+		
 		public PsychicEntropySeverity Severity
 		{
 			get
@@ -159,7 +159,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465E RID: 18014 RVA: 0x0017B878 File Offset: 0x00179A78
+		
 		public int PsyfocusBand
 		{
 			get
@@ -177,7 +177,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600465F RID: 18015 RVA: 0x0017B8A5 File Offset: 0x00179AA5
+		
 		public Hediff_Psylink Psylink
 		{
 			get
@@ -192,7 +192,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004660 RID: 18016 RVA: 0x0017B8E0 File Offset: 0x00179AE0
+		
 		public bool NeedsPsyfocus
 		{
 			get
@@ -202,7 +202,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004661 RID: 18017 RVA: 0x0017B918 File Offset: 0x00179B18
+		
 		private float PsyfocusFallPerDay
 		{
 			get

@@ -92,14 +92,14 @@ namespace Verse
 			//	Func<bool> callback2;
 			//	if ((callback2 ) == null)
 			//	{
-			//		callback2 = (9__0 = delegate
+			//		callback2 = ( delegate
 			//		{
 			//			List<PawnKindDef> lhs2 = lhs;
 			//			List<PawnKindDef> rhs2 = rhs;
 			//			Action<ArenaUtility.ArenaResult> callback3;
 			//			if ((callback3 ) == null)
 			//			{
-			//				callback3 = (9__1 = delegate(ArenaUtility.ArenaResult result)
+			//				callback3 = ( delegate(ArenaUtility.ArenaResult result)
 			//				{
 			//					callback(result);
 			//					int remaining;
@@ -135,7 +135,6 @@ namespace Verse
 			int completeFights = 0;
 			Current.Game.GetComponent<GameComponent_DebugTools>().AddPerFrameCallback(delegate
 			{
-				int currentFights;
 				//if (currentFights >= 15)
 				//{
 				//	return false;
@@ -160,7 +159,6 @@ namespace Verse
 				List<PawnKindDef> lhs = Enumerable.Repeat<PawnKindDef>(lhsDef, GenMath.RoundRandom(num2)).ToList<PawnKindDef>();
 				List<PawnKindDef> rhs = Enumerable.Repeat<PawnKindDef>(rhsDef, GenMath.RoundRandom(num3)).ToList<PawnKindDef>();
 				currentFights++;
-				currentFights = currentFights;
 				ArenaUtility.BeginArenaFight(lhs, rhs, delegate(ArenaUtility.ArenaResult result)
 				{
 					int num8 = currentFights - 1;

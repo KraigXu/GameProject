@@ -8,7 +8,7 @@ namespace Verse
 	public class SummaryHealthHandler
 	{
 		
-		// (get) Token: 0x06001189 RID: 4489 RVA: 0x0006348C File Offset: 0x0006168C
+		
 		public float SummaryHealthPercent
 		{
 			get

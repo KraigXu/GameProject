@@ -7,7 +7,7 @@ namespace Verse
 	public struct Pair<T1, T2> : IEquatable<Pair<T1, T2>>
 	{
 		
-		// (get) Token: 0x06001FAA RID: 8106 RVA: 0x000C1A14 File Offset: 0x000BFC14
+		
 		public T1 First
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001FAB RID: 8107 RVA: 0x000C1A1C File Offset: 0x000BFC1C
+		
 		public T2 Second
 		{
 			get

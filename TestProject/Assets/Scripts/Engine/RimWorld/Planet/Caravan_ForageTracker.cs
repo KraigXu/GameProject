@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class Caravan_ForageTracker : IExposable
 	{
 		
-		// (get) Token: 0x06006D30 RID: 27952 RVA: 0x00263973 File Offset: 0x00261B73
+		
 		public Pair<ThingDef, float> ForagedFoodPerDay
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D31 RID: 27953 RVA: 0x00263984 File Offset: 0x00261B84
+		
 		public string ForagedFoodPerDayExplanation
 		{
 			get

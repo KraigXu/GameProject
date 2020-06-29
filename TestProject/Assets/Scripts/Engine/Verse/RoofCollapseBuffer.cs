@@ -7,7 +7,7 @@ namespace Verse
 	public class RoofCollapseBuffer
 	{
 		
-		// (get) Token: 0x06000D18 RID: 3352 RVA: 0x0004A98C File Offset: 0x00048B8C
+		
 		public List<IntVec3> CellsMarkedToCollapse
 		{
 			get

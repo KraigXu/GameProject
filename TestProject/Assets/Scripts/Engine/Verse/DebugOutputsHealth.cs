@@ -133,7 +133,7 @@ namespace Verse
 				return "";
 			}));
 			List<TableDataGetter<RecipeDef>> list2 = list;
-			using (IEnumerator<string> enumerator = enumerable2.GetEnumerator())
+			IEnumerator<string> enumerator = enumerable2.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -142,11 +142,11 @@ namespace Verse
 					list2.Add(item);
 				}
 			}
-			using (IEnumerator<string> enumerator = enumerable.GetEnumerator())
+			IEnumerator<string> enumerator1 = enumerable.GetEnumerator();
 			{
-				while (enumerator.MoveNext())
+				while (enumerator1.MoveNext())
 				{
-					string c = enumerator.Current;
+					string c = enumerator1.Current;
 					TableDataGetter<RecipeDef> item2 = new TableDataGetter<RecipeDef>("trade\n" + c.Shorten(), (RecipeDef r) => (!getThingDef(r).tradeTags.NullOrEmpty<string>() && getThingDef(r).tradeTags.Contains(c)).ToStringCheckBlank());
 					list2.Add(item2);
 				}
@@ -399,9 +399,9 @@ namespace Verse
 			//}));
 			//list.Add(new TableDataGetter<RecipeDef>("install skill", (RecipeDef r) => (from sr in r.skillRequirements
 			//select sr.minLevel).Max()));
-			//using (IEnumerator<PawnCapacityDef> enumerator = (from pc in DefDatabase<PawnCapacityDef>.AllDefs
+			//IEnumerator<PawnCapacityDef> enumerator = (from pc in DefDatabase<PawnCapacityDef>.AllDefs
 			//orderby pc.listOrder
-			//select pc).GetEnumerator())
+			//select pc).GetEnumerator();
 			//{
 			//	while (enumerator.MoveNext())
 			//	{

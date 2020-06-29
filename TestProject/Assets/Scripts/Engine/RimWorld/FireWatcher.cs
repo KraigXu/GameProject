@@ -8,7 +8,7 @@ namespace RimWorld
 	public class FireWatcher
 	{
 		
-		// (get) Token: 0x06003DD8 RID: 15832 RVA: 0x001463A5 File Offset: 0x001445A5
+		
 		public float FireDanger
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DD9 RID: 15833 RVA: 0x001463AD File Offset: 0x001445AD
+		
 		public bool LargeFireDangerPresent
 		{
 			get

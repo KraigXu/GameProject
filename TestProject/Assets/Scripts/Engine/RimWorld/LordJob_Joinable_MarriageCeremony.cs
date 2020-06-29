@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordJob_Joinable_MarriageCeremony : LordJob_VoluntarilyJoinable
 	{
 		
-		// (get) Token: 0x06003217 RID: 12823 RVA: 0x00117067 File Offset: 0x00115267
+		
 		public override bool LostImportantReferenceDuringLoading
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003218 RID: 12824 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowStartNewGatherings
 		{
 			get

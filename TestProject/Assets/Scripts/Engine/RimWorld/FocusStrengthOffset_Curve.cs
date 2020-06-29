@@ -11,7 +11,7 @@ namespace RimWorld
 		protected abstract float SourceValue(Thing parent);
 
 		
-		// (get) Token: 0x060051CE RID: 20942
+		
 		protected abstract string ExplanationKey { get; }
 
 		

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class TradeDeal
 	{
 		
-		// (get) Token: 0x0600559A RID: 21914 RVA: 0x001C6A80 File Offset: 0x001C4C80
+		
 		public int TradeableCount
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600559B RID: 21915 RVA: 0x001C6A90 File Offset: 0x001C4C90
+		
 		public Tradeable CurrencyTradeable
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600559C RID: 21916 RVA: 0x001C6AF6 File Offset: 0x001C4CF6
+		
 		public List<Tradeable> AllTradeables
 		{
 			get

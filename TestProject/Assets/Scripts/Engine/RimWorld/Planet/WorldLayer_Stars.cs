@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldLayer_Stars : WorldLayer
 	{
 		
-		// (get) Token: 0x06006A38 RID: 27192 RVA: 0x00250F13 File Offset: 0x0024F113
+		
 		protected override int Layer
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A39 RID: 27193 RVA: 0x00250F1A File Offset: 0x0024F11A
+		
 		public override bool ShouldRegenerate
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A3A RID: 27194 RVA: 0x00250F50 File Offset: 0x0024F150
+		
 		private bool UseStaticRotation
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A3B RID: 27195 RVA: 0x00250F5A File Offset: 0x0024F15A
+		
 		protected override Quaternion Rotation
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
+			foreach (object obj in this.Regenerate())
 			{
 				yield return obj;
 			}

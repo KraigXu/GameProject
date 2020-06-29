@@ -14,7 +14,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			using (List<Pawn>.Enumerator enumerator = this.pawns.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = this.pawns.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

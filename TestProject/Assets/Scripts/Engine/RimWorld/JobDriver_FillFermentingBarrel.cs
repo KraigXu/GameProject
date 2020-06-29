@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_FillFermentingBarrel : JobDriver
 	{
 		
-		// (get) Token: 0x06002C5F RID: 11359 RVA: 0x000FD5DC File Offset: 0x000FB7DC
+		
 		protected Building_FermentingBarrel Barrel
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C60 RID: 11360 RVA: 0x000FD604 File Offset: 0x000FB804
+		
 		protected Thing Wort
 		{
 			get

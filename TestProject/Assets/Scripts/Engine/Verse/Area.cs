@@ -8,7 +8,7 @@ namespace Verse
 	public abstract class Area : IExposable, ILoadReferenceable, ICellBoolGiver
 	{
 		
-		// (get) Token: 0x0600094E RID: 2382 RVA: 0x000332B3 File Offset: 0x000314B3
+		
 		public Map Map
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600094F RID: 2383 RVA: 0x000332C0 File Offset: 0x000314C0
+		
 		public int TrueCount
 		{
 			get
@@ -28,19 +28,19 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000950 RID: 2384
+		
 		public abstract string Label { get; }
 
 		
-		// (get) Token: 0x06000951 RID: 2385
+		
 		public abstract Color Color { get; }
 
 		
-		// (get) Token: 0x06000952 RID: 2386
+		
 		public abstract int ListPriority { get; }
 
 		
-		// (get) Token: 0x06000953 RID: 2387 RVA: 0x000332CD File Offset: 0x000314CD
+		
 		public Texture2D ColorTexture
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000958 RID: 2392 RVA: 0x00033344 File Offset: 0x00031544
+		
 		private CellBoolDrawer Drawer
 		{
 			get
@@ -94,7 +94,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000959 RID: 2393 RVA: 0x00033395 File Offset: 0x00031595
+		
 		public IEnumerable<IntVec3> ActiveCells
 		{
 			get
@@ -104,7 +104,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600095A RID: 2394 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool Mutable
 		{
 			get

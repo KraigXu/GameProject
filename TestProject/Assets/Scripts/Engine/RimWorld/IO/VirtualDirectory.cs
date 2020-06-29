@@ -8,15 +8,15 @@ namespace RimWorld.IO
 	public abstract class VirtualDirectory
 	{
 		
-		// (get) Token: 0x060070C9 RID: 28873
+		
 		public abstract string Name { get; }
 
 		
-		// (get) Token: 0x060070CA RID: 28874
+		
 		public abstract string FullPath { get; }
 
 		
-		// (get) Token: 0x060070CB RID: 28875
+		
 		public abstract bool Exists { get; }
 
 		

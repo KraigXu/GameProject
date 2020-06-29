@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_MechCluster : GenStep
 	{
 		
-		// (get) Token: 0x06003EE7 RID: 16103 RVA: 0x0014E680 File Offset: 0x0014C880
+		
 		public override int SeedPart
 		{
 			get

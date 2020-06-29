@@ -81,7 +81,7 @@ namespace Verse.AI
 			//		Func<IntVec3, int> keySelector;
 			//		if ((keySelector = c__DisplayClass4_.9__0) == null)
 			//		{
-			//			keySelector = (c__DisplayClass4_.9__0 = ((IntVec3 c) => (c - c__DisplayClass4_.interactCell).LengthHorizontalSquared));
+			//			keySelector = (c__DisplayClass4_. ((IntVec3 c) => (c - c__DisplayClass4_.interactCell).LengthHorizontalSquared));
 			//		}
 			//		foreach (IntVec3 intVec in ingredientStackCells.OrderBy(keySelector))
 			//		{

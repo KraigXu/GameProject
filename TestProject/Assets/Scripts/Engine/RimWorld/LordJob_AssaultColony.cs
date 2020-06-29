@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordJob_AssaultColony : LordJob
 	{
 		
-		// (get) Token: 0x06003192 RID: 12690 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool GuiltyOnDowned
 		{
 			get

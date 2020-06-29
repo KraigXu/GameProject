@@ -66,7 +66,7 @@ namespace Verse
 				return "";
 			}
 			string result;
-			using (XmlReader xmlReader = element.CreateReader())
+			XmlReader xmlReader = element.CreateReader();
 			{
 				xmlReader.MoveToContent();
 				result = xmlReader.ReadInnerXml();

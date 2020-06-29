@@ -8,7 +8,7 @@ namespace Verse
 	public class Hediff_Injury : HediffWithComps
 	{
 		
-		// (get) Token: 0x06000FD7 RID: 4055 RVA: 0x0005BA98 File Offset: 0x00059C98
+		
 		public override int UIGroupKey
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FD8 RID: 4056 RVA: 0x0005BAC4 File Offset: 0x00059CC4
+		
 		public override string LabelBase
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FD9 RID: 4057 RVA: 0x0005BB38 File Offset: 0x00059D38
+		
 		public override string LabelInBrackets
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDA RID: 4058 RVA: 0x0005BC3F File Offset: 0x00059E3F
+		
 		public override Color LabelColor
 		{
 			get
@@ -101,7 +101,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDB RID: 4059 RVA: 0x0005BC54 File Offset: 0x00059E54
+		
 		public override string SeverityLabel
 		{
 			get
@@ -115,7 +115,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDC RID: 4060 RVA: 0x0005BC83 File Offset: 0x00059E83
+		
 		public override float SummaryHealthPercentImpact
 		{
 			get
@@ -129,7 +129,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDD RID: 4061 RVA: 0x0005BCB4 File Offset: 0x00059EB4
+		
 		public override float PainOffset
 		{
 			get
@@ -148,7 +148,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDE RID: 4062 RVA: 0x0005BD44 File Offset: 0x00059F44
+		
 		public override float BleedRate
 		{
 			get
@@ -179,7 +179,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FDF RID: 4063 RVA: 0x0005BE0C File Offset: 0x0005A00C
+		
 		private int AgeTicksToStopBleeding
 		{
 			get
@@ -191,7 +191,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FE0 RID: 4064 RVA: 0x0005BE59 File Offset: 0x0005A059
+		
 		private bool BleedingStoppedDueToAge
 		{
 			get

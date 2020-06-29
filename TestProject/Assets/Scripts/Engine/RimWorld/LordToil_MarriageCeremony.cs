@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_MarriageCeremony : LordToil
 	{
 		
-		// (get) Token: 0x060032F3 RID: 13043 RVA: 0x0011B0E7 File Offset: 0x001192E7
+		
 		public LordToilData_MarriageCeremony Data
 		{
 			get

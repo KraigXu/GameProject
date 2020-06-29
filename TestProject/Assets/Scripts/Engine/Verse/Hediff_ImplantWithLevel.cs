@@ -7,7 +7,7 @@ namespace Verse
 	public class Hediff_ImplantWithLevel : Hediff_Implant
 	{
 		
-		// (get) Token: 0x06000FD0 RID: 4048 RVA: 0x0005B9AC File Offset: 0x00059BAC
+		
 		public override string Label
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FD1 RID: 4049 RVA: 0x0005BA09 File Offset: 0x00059C09
+		
 		public override bool ShouldRemove
 		{
 			get

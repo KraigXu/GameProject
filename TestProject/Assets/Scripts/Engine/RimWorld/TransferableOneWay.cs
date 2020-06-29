@@ -8,7 +8,7 @@ namespace RimWorld
 	public class TransferableOneWay : Transferable
 	{
 		
-		// (get) Token: 0x06005A1C RID: 23068 RVA: 0x001E6E62 File Offset: 0x001E5062
+		
 		public override Thing AnyThing
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A1D RID: 23069 RVA: 0x001C5D00 File Offset: 0x001C3F00
+		
 		public override ThingDef ThingDef
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A1E RID: 23070 RVA: 0x001E6E7A File Offset: 0x001E507A
+		
 		public override bool HasAnyThing
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A1F RID: 23071 RVA: 0x001C5C54 File Offset: 0x001C3E54
+		
 		public override string Label
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A20 RID: 23072 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool Interactive
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A21 RID: 23073 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override TransferablePositiveCountDirection PositiveCountDirection
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A22 RID: 23074 RVA: 0x001C5D2E File Offset: 0x001C3F2E
+		
 		public override string TipDescription
 		{
 			get
@@ -90,8 +90,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A23 RID: 23075 RVA: 0x001E6E8A File Offset: 0x001E508A
-		// (set) Token: 0x06005A24 RID: 23076 RVA: 0x001E6E92 File Offset: 0x001E5092
+		
+		
 		public override int CountToTransfer
 		{
 			get
@@ -106,7 +106,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A25 RID: 23077 RVA: 0x001E6EA8 File Offset: 0x001E50A8
+		
 		public int MaxCount
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public abstract class FeatureWorker_FloodFill : FeatureWorker
 	{
 		
-		// (get) Token: 0x06006932 RID: 26930 RVA: 0x0024B838 File Offset: 0x00249A38
+		
 		protected virtual int MinSize
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006933 RID: 26931 RVA: 0x0024B845 File Offset: 0x00249A45
+		
 		protected virtual int MaxSize
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006934 RID: 26932 RVA: 0x0024BF7E File Offset: 0x0024A17E
+		
 		protected virtual int MaxPossiblyAllowedSizeToTake
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006935 RID: 26933 RVA: 0x0024BF8B File Offset: 0x0024A18B
+		
 		protected virtual float MaxPossiblyAllowedSizePctOfMeToTake
 		{
 			get
@@ -105,7 +105,7 @@ namespace RimWorld.Planet
 			//float maxPossiblyAllowedSizePctOfMeToTake = this.MaxPossiblyAllowedSizePctOfMeToTake;
 			//FeatureWorker.ClearVisited();
 			//FeatureWorker.ClearGroupSizes();
-			//Predicate<int> 9__0;
+
 			//for (int i = 0; i < this.possiblyAllowed.Count; i++)
 			//{
 			//	int num = this.possiblyAllowed[i];
@@ -117,7 +117,7 @@ namespace RimWorld.Planet
 			//		Predicate<int> passCheck;
 			//		if ((passCheck ) == null)
 			//		{
-			//			passCheck = (9__0 = ((int x) => this.possiblyAllowedSet.Contains(x) && !this.rootsSet.Contains(x)));
+			//			passCheck = ( ((int x) => this.possiblyAllowedSet.Contains(x) && !this.rootsSet.Contains(x)));
 			//		}
 			//		worldFloodFiller2.FloodFill(rootTile, passCheck, delegate(int x)
 			//		{
@@ -130,10 +130,10 @@ namespace RimWorld.Planet
 			//		}
 			//	}
 			//}
-			//Predicate<int> 9__2;
-			//Predicate<int> 9__4;
-			//Predicate<int> 9__8;
-			//Predicate<int> 9__9;
+
+
+
+
 			//Predicate<int> 9__10;
 			//for (int k = 0; k < this.roots.Count; k++)
 			//{
@@ -146,7 +146,7 @@ namespace RimWorld.Planet
 			//		Predicate<int> passCheck2;
 			//		if ((passCheck2 ) == null)
 			//		{
-			//			passCheck2 = (9__2 = ((int x) => (this.rootsSet.Contains(x) || this.possiblyAllowedSet.Contains(x)) && this.IsMember(x)));
+			//			passCheck2 = ( ((int x) => (this.rootsSet.Contains(x) || this.possiblyAllowedSet.Contains(x)) && this.IsMember(x)));
 			//		}
 			//		worldFloodFiller3.FloodFill(rootTile2, passCheck2, delegate(int x)
 			//		{
@@ -163,7 +163,7 @@ namespace RimWorld.Planet
 			//			Predicate<int> passCheck3;
 			//			if ((passCheck3 ) == null)
 			//			{
-			//				passCheck3 = (9__4 = ((int x) => this.rootsSet.Contains(x)));
+			//				passCheck3 = ( ((int x) => this.rootsSet.Contains(x)));
 			//			}
 			//			worldFloodFiller4.FloodFill(rootTile3, passCheck3, delegate(int x)
 			//			{
@@ -191,9 +191,9 @@ namespace RimWorld.Planet
 			//					{
 			//						List<int> list = this.currentGroup;
 			//						Predicate<int> predicate;
-			//						if ((predicate ) == null)
+			//						if ((predicate=default ) == null)
 			//						{
-			//							predicate = (9__8 = ((int x) => worldGrid.IsOnEdge(x)));
+			//							predicate = ( ((int x) => worldGrid.IsOnEdge(x)));
 			//						}
 			//						if (list.Any(predicate))
 			//						{
@@ -212,9 +212,9 @@ namespace RimWorld.Planet
 			//					{
 			//						List<int> list2 = this.currentGroup;
 			//						Predicate<int> predicate2;
-			//						if ((predicate2 ) == null)
+			//						if ((predicate2=default ) == null)
 			//						{
-			//							predicate2 = (9__9 = ((int x) => worldGrid[x].feature == null));
+			//							predicate2 = ( ((int x) => worldGrid[x].feature == null));
 			//						}
 			//						if (list2.Any(predicate2))
 			//						{

@@ -8,7 +8,7 @@ namespace Verse
 	public class Dialog_NodeTree : Window
 	{
 		
-		// (get) Token: 0x06001D8F RID: 7567 RVA: 0x000B5730 File Offset: 0x000B3930
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D90 RID: 7568 RVA: 0x000B5794 File Offset: 0x000B3994
+		
 		private bool InteractiveNow
 		{
 			get

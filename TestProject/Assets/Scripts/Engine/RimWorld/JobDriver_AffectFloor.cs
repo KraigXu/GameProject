@@ -9,15 +9,15 @@ namespace RimWorld
 	public abstract class JobDriver_AffectFloor : JobDriver
 	{
 		
-		// (get) Token: 0x06002B49 RID: 11081
+		
 		protected abstract int BaseWorkAmount { get; }
 
 		
-		// (get) Token: 0x06002B4A RID: 11082
+		
 		protected abstract DesignationDef DesDef { get; }
 
 		
-		// (get) Token: 0x06002B4B RID: 11083 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		protected virtual StatDef SpeedStat
 		{
 			get

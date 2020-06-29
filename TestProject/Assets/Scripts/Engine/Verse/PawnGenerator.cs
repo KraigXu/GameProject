@@ -1294,13 +1294,13 @@ namespace Verse
 		private struct PawnGenerationStatus
 		{
 			
-			// (get) Token: 0x06007A73 RID: 31347 RVA: 0x00298B6D File Offset: 0x00296D6D
-			// (set) Token: 0x06007A74 RID: 31348 RVA: 0x00298B75 File Offset: 0x00296D75
+			
+			
 			public Pawn Pawn { get; private set; }
 
 			
-			// (get) Token: 0x06007A75 RID: 31349 RVA: 0x00298B7E File Offset: 0x00296D7E
-			// (set) Token: 0x06007A76 RID: 31350 RVA: 0x00298B86 File Offset: 0x00296D86
+			
+			
 			public List<Pawn> PawnsGeneratedInTheMeantime { get; private set; }
 
 			

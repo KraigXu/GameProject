@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public class Sustainer
 	{
 		
-		// (get) Token: 0x060024FB RID: 9467 RVA: 0x000DB411 File Offset: 0x000D9611
+		
 		public bool Ended
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024FC RID: 9468 RVA: 0x000DB423 File Offset: 0x000D9623
+		
 		public float TimeSinceEnd
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024FD RID: 9469 RVA: 0x000DB434 File Offset: 0x000D9634
+		
 		public float CameraDistanceSquared
 		{
 			get

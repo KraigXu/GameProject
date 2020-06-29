@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_RequirementsToAcceptColonistWithTitle : QuestNode

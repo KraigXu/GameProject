@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Hive : ThingWithComps, IAttackTarget, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06004E28 RID: 20008 RVA: 0x001A481E File Offset: 0x001A2A1E
+		
 		public CompCanBeDormant CompDormant
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E29 RID: 20009 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IAttackTarget.Thing
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E2A RID: 20010 RVA: 0x001A4826 File Offset: 0x001A2A26
+		
 		public float TargetPriorityFactor
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E2B RID: 20011 RVA: 0x001A482D File Offset: 0x001A2A2D
+		
 		public LocalTargetInfo TargetCurrentlyAimingAt
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E2C RID: 20012 RVA: 0x001A4834 File Offset: 0x001A2A34
+		
 		public CompSpawnerPawn PawnSpawner
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class QueuedIncident : IExposable
 	{
 		
-		// (get) Token: 0x06003BD3 RID: 15315 RVA: 0x0013BAE6 File Offset: 0x00139CE6
+		
 		public int FireTick
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003BD4 RID: 15316 RVA: 0x0013BAEE File Offset: 0x00139CEE
+		
 		public FiringIncident FiringIncident
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003BD5 RID: 15317 RVA: 0x0013BAF6 File Offset: 0x00139CF6
+		
 		public int RetryDurationTicks
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003BD6 RID: 15318 RVA: 0x0013BAFE File Offset: 0x00139CFE
+		
 		public bool TriedToFire
 		{
 			get

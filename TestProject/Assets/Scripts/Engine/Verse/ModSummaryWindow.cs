@@ -11,7 +11,7 @@ namespace Verse
 	public class ModSummaryWindow
 	{
 		
-		// (get) Token: 0x0600033A RID: 826 RVA: 0x00010836 File Offset: 0x0000EA36
+		
 		private static bool AnyMods
 		{
 			get
@@ -124,9 +124,9 @@ namespace Verse
 			if (ModSummaryWindow.AnyMods)
 			{
 				Text.Anchor = TextAnchor.MiddleLeft;
-				using (IEnumerator<ModMetaData> enumerator = (from m in ModLister.AllInstalledMods
+				IEnumerator<ModMetaData> enumerator = (from m in ModLister.AllInstalledMods
 				where !m.Official && m.Active
-				select m).GetEnumerator())
+				select m).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

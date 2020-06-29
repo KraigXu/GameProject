@@ -10,10 +10,7 @@ namespace RimWorld
 		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> GetInfoCardHyperlinks(StatRequest statRequest)
 		{
-			foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__0(statRequest))
-			{
-				yield return hyperlink;
-			}
+
 			IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 			if (!statRequest.HasThing || statRequest.Thing.def.race == null || statRequest.Thing.def.race.meatDef == null)
 			{

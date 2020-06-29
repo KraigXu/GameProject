@@ -6,7 +6,7 @@ namespace Verse.Sound
 	public class SoundParamTarget_Pitch : SoundParamTarget
 	{
 		
-		// (get) Token: 0x06002474 RID: 9332 RVA: 0x000D908F File Offset: 0x000D728F
+		
 		public override string Label
 		{
 			get

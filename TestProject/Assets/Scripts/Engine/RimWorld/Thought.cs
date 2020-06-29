@@ -9,11 +9,11 @@ namespace RimWorld
 	public abstract class Thought : IExposable
 	{
 		
-		// (get) Token: 0x060047A2 RID: 18338
+		
 		public abstract int CurStageIndex { get; }
 
 		
-		// (get) Token: 0x060047A3 RID: 18339 RVA: 0x00184EE3 File Offset: 0x001830E3
+		
 		public ThoughtStage CurStage
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A4 RID: 18340 RVA: 0x00184EFB File Offset: 0x001830FB
+		
 		public virtual bool VisibleInNeedsTab
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A5 RID: 18341 RVA: 0x00184F08 File Offset: 0x00183108
+		
 		public virtual string LabelCap
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A6 RID: 18342 RVA: 0x00184F69 File Offset: 0x00183169
+		
 		protected virtual float BaseMoodOffset
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A7 RID: 18343 RVA: 0x00184F76 File Offset: 0x00183176
+		
 		public virtual string LabelCapSocial
 		{
 			get
@@ -71,7 +71,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A8 RID: 18344 RVA: 0x00184FB4 File Offset: 0x001831B4
+		
 		public virtual string Description
 		{
 			get
@@ -109,7 +109,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047A9 RID: 18345 RVA: 0x001850CF File Offset: 0x001832CF
+		
 		public Texture2D Icon
 		{
 			get

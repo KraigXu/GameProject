@@ -20,7 +20,7 @@ namespace RimWorld.BaseGen
 		
 		private Thing TrySpawnWall(IntVec3 c, ResolveParams rp, ThingDef wallStuff)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			List<Thing> thingList = c.GetThingList(map);
 			for (int i = 0; i < thingList.Count; i++)
 			{

@@ -9,7 +9,7 @@ namespace RimWorld
 	public struct AlertReport
 	{
 		
-		// (get) Token: 0x060055ED RID: 21997 RVA: 0x001C8148 File Offset: 0x001C6348
+		
 		public bool AnyCulpritValid
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055EE RID: 21998 RVA: 0x001C81D9 File Offset: 0x001C63D9
+		
 		public IEnumerable<GlobalTargetInfo> AllCulprits
 		{
 			get
@@ -162,7 +162,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055F8 RID: 22008 RVA: 0x001C831C File Offset: 0x001C651C
+		
 		public static AlertReport Active
 		{
 			get
@@ -175,7 +175,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060055F9 RID: 22009 RVA: 0x001C833C File Offset: 0x001C653C
+		
 		public static AlertReport Inactive
 		{
 			get

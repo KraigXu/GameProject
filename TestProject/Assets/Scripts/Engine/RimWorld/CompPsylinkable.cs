@@ -11,7 +11,7 @@ namespace RimWorld
 	public class CompPsylinkable : ThingComp
 	{
 		
-		// (get) Token: 0x0600525B RID: 21083 RVA: 0x001B8582 File Offset: 0x001B6782
+		
 		public CompProperties_Psylinkable Props
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600525C RID: 21084 RVA: 0x001B858F File Offset: 0x001B678F
+		
 		public CompSpawnSubplant CompSubplant
 		{
 			get

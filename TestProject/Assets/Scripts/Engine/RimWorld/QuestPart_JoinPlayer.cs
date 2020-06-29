@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_JoinPlayer : QuestPart
 	{
 		
-		// (get) Token: 0x06003A87 RID: 14983 RVA: 0x00135D40 File Offset: 0x00133F40
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.mapParent != null)
 				{
@@ -34,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A88 RID: 14984 RVA: 0x00135D50 File Offset: 0x00133F50
+		
 		public override bool IncreasesPopulation
 		{
 			get

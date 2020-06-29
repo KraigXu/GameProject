@@ -12,7 +12,7 @@ namespace Verse.AI.Group
 	public class Lord : IExposable, ILoadReferenceable, ISignalReceiver
 	{
 		
-		// (get) Token: 0x06002920 RID: 10528 RVA: 0x000F2AF3 File Offset: 0x000F0CF3
+		
 		public Map Map
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002921 RID: 10529 RVA: 0x000F2B00 File Offset: 0x000F0D00
+		
 		public StateGraph Graph
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002922 RID: 10530 RVA: 0x000F2B08 File Offset: 0x000F0D08
+		
 		public LordToil CurLordToil
 		{
 			get
@@ -42,7 +42,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002923 RID: 10531 RVA: 0x000F2B10 File Offset: 0x000F0D10
+		
 		public LordJob LordJob
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002924 RID: 10532 RVA: 0x000F2B18 File Offset: 0x000F0D18
+		
 		private bool CanExistWithoutPawns
 		{
 			get
@@ -62,7 +62,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002925 RID: 10533 RVA: 0x000F2B28 File Offset: 0x000F0D28
+		
 		private bool ShouldExist
 		{
 			get
@@ -72,7 +72,7 @@ namespace Verse.AI.Group
 		}
 
 		
-		// (get) Token: 0x06002926 RID: 10534 RVA: 0x000F2B50 File Offset: 0x000F0D50
+		
 		public bool AnyActivePawn
 		{
 			get
@@ -726,8 +726,12 @@ namespace Verse.AI.Group
 			return false;
 		}
 
-		
-		public LordManager lordManager;
+        public void Notify_SignalReceived(RimWorld.Signal signal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LordManager lordManager;
 
 		
 		private LordToil curLordToil;

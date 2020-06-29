@@ -13,7 +13,7 @@ namespace Verse
 		private static void LoadedFilesForMod()
 		{
 			//List<DebugMenuOption> list = new List<DebugMenuOption>();
-			//using (List<ModContentPack>.Enumerator enumerator = LoadedModManager.RunningModsListForReading.GetEnumerator())
+			//List<ModContentPack>.Enumerator enumerator = LoadedModManager.RunningModsListForReading.GetEnumerator();
 			//{
 			//	while (enumerator.MoveNext())
 			//	{

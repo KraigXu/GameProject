@@ -8,7 +8,7 @@ namespace RimWorld
 	public class WorkGiver_ConstructFinishFrames : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600303B RID: 12347 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600303D RID: 12349 RVA: 0x0010F268 File Offset: 0x0010D468
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get

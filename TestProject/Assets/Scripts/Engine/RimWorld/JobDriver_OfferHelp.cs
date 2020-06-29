@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_OfferHelp : JobDriver
 	{
 		
-		// (get) Token: 0x06002CCE RID: 11470 RVA: 0x000FE878 File Offset: 0x000FCA78
+		
 		public Pawn OtherPawn
 		{
 			get

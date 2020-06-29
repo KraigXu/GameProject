@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestManager : IExposable
 	{
 		
-		// (get) Token: 0x0600381B RID: 14363 RVA: 0x0012CF4C File Offset: 0x0012B14C
+		
 		public List<Quest> QuestsListForReading
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600381C RID: 14364 RVA: 0x0012CF54 File Offset: 0x0012B154
+		
 		public List<QuestPart_SituationalThought> SituationalThoughtQuestParts
 		{
 			get

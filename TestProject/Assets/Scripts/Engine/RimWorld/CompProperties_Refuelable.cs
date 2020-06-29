@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompProperties_Refuelable : CompProperties
 	{
 		
-		// (get) Token: 0x06005272 RID: 21106 RVA: 0x001B8EDA File Offset: 0x001B70DA
+		
 		public string FuelLabel
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005273 RID: 21107 RVA: 0x001B8EFA File Offset: 0x001B70FA
+		
 		public string FuelGizmoLabel
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005274 RID: 21108 RVA: 0x001B8F1C File Offset: 0x001B711C
+		
 		public Texture2D FuelIcon
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005275 RID: 21109 RVA: 0x001B8F8B File Offset: 0x001B718B
+		
 		public float FuelMultiplierCurrentDifficulty
 		{
 			get
@@ -96,9 +96,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.destroyOnNoFuel && this.initialFuelPercent <= 0f)
@@ -116,10 +116,7 @@ namespace RimWorld
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__1(req))
-			{
-				yield return statDrawEntry;
-			}
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (((ThingDef)req.Def).building.IsTurret)
 			{

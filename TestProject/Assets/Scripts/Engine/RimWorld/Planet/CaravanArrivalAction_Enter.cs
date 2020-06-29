@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class CaravanArrivalAction_Enter : CaravanArrivalAction
 	{
 		
-		// (get) Token: 0x06006B80 RID: 27520 RVA: 0x002586CE File Offset: 0x002568CE
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006B81 RID: 27521 RVA: 0x002586EF File Offset: 0x002568EF
+		
 		public override string ReportString
 		{
 			get

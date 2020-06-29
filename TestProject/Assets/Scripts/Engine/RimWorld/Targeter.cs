@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Targeter
 	{
 		
-		// (get) Token: 0x06005C1F RID: 23583 RVA: 0x001FCEFE File Offset: 0x001FB0FE
+		
 		public bool IsTargeting
 		{
 			get

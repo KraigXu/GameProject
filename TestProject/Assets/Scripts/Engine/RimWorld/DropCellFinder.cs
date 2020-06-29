@@ -237,7 +237,7 @@ namespace RimWorld
             //{
             //	if (c__DisplayClass7_.size != null)
             //	{
-            //		using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c, Rot4.North, c__DisplayClass7_.size.Value).GetEnumerator())
+            //		CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c, Rot4.North, c__DisplayClass7_.size.Value).GetEnumerator();
             //		{
             //			while (enumerator.MoveNext())
             //			{
@@ -511,7 +511,7 @@ namespace RimWorld
 			//Faction factionBaseFaction = c__DisplayClass15_.map.ParentFaction ?? Faction.OfPlayer;
 			//if (size != null)
 			//{
-			//	using (CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c__DisplayClass15_.cell, Rot4.North, size.Value).GetEnumerator())
+			//	CellRect.Enumerator enumerator = GenAdj.OccupiedRect(c__DisplayClass15_.cell, Rot4.North, size.Value).GetEnumerator();
 			//	{
 			//		while (enumerator.MoveNext())
 			//		{
@@ -548,7 +548,7 @@ namespace RimWorld
 			//}
 			//if (size != null)
 			//{
-			//	using (IEnumerator<IntVec3> enumerator3 = CellRect.CenteredOn(c__DisplayClass15_.cell, size.Value.x, size.Value.z).Cells.GetEnumerator())
+			//	IEnumerator<IntVec3> enumerator3 = CellRect.CenteredOn(c__DisplayClass15_.cell, size.Value.x, size.Value.z).Cells.GetEnumerator();
 			//	{
 			//		while (enumerator3.MoveNext())
 			//		{

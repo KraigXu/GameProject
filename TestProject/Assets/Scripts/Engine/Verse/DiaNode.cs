@@ -20,7 +20,7 @@ namespace Verse
 			this.text = this.def.texts.RandomElement<string>();
 			if (this.def.optionList.Count > 0)
 			{
-				using (List<DiaOptionMold>.Enumerator enumerator = this.def.optionList.GetEnumerator())
+				List<DiaOptionMold>.Enumerator enumerator = this.def.optionList.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

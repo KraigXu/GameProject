@@ -8,7 +8,7 @@ namespace Verse
 	public class LetterDef : Def
 	{
 		
-		// (get) Token: 0x060005A0 RID: 1440 RVA: 0x0001BC09 File Offset: 0x00019E09
+		
 		public Texture2D Icon
 		{
 			get

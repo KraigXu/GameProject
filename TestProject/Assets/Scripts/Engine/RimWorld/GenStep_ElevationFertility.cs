@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_ElevationFertility : GenStep
 	{
 		
-		// (get) Token: 0x06003E51 RID: 15953 RVA: 0x00148CD4 File Offset: 0x00146ED4
+		
 		public override int SeedPart
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 				}
 				else
 				{
-					random == Rot4.West;
+					//random == Rot4.West;
 				}
 				NoiseDebugUI.StoreNoiseRender(moduleBase2, "mountain");
 				moduleBase = new Add(moduleBase, moduleBase2);

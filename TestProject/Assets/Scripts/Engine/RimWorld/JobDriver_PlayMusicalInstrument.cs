@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobDriver_PlayMusicalInstrument : JobDriver_SitFacingBuilding
 	{
 		
-		// (get) Token: 0x06002BF3 RID: 11251 RVA: 0x000FC66E File Offset: 0x000FA86E
+		
 		public Building_MusicalInstrument MusicalInstrument
 		{
 			get

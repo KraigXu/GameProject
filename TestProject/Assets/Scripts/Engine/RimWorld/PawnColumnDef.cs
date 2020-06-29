@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PawnColumnDef : Def
 	{
 		
-		// (get) Token: 0x06003681 RID: 13953 RVA: 0x001275EF File Offset: 0x001257EF
+		
 		public PawnColumnWorker Worker
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003682 RID: 13954 RVA: 0x00127621 File Offset: 0x00125821
+		
 		public Texture2D HeaderIcon
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003683 RID: 13955 RVA: 0x00127658 File Offset: 0x00125858
+		
 		public Vector2 HeaderIconSize
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003684 RID: 13956 RVA: 0x0012769B File Offset: 0x0012589B
+		
 		public bool HeaderInteractable
 		{
 			get

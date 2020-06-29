@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompUseEffect_GainAbility : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054CB RID: 21707 RVA: 0x001C4344 File Offset: 0x001C2544
+		
 		private AbilityDef Ability
 		{
 			get

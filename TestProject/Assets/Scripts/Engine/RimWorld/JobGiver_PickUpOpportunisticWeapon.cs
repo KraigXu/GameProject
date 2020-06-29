@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobGiver_PickUpOpportunisticWeapon : ThinkNode_JobGiver
 	{
 		
-		// (get) Token: 0x06002E80 RID: 11904 RVA: 0x001056E0 File Offset: 0x001038E0
+		
 		private float MinMeleeWeaponDPSThreshold
 		{
 			get

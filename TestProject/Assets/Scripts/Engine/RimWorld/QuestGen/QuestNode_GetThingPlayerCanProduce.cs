@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_GetThingPlayerCanProduce : QuestNode
@@ -62,7 +62,7 @@ namespace RimWorld.QuestGen
 					{
 						if (recipes[j].AvailableNow && recipes[j].products.Any<ThingDefCountClass>() && !recipes[j].PotentiallyMissingIngredients(null, map).Any<ThingDef>())
 						{
-							using (IEnumerator<ThingDef> enumerator = (recipes[j].products[0].thingDef.MadeFromStuff ? GenStuff.AllowedStuffsFor(recipes[j].products[0].thingDef, TechLevel.Undefined) : Gen.YieldSingle<ThingDef>(null)).GetEnumerator())
+							IEnumerator<ThingDef> enumerator = (recipes[j].products[0].thingDef.MadeFromStuff ? GenStuff.AllowedStuffsFor(recipes[j].products[0].thingDef, TechLevel.Undefined) : Gen.YieldSingle<ThingDef>(null)).GetEnumerator();
 							{
 								while (enumerator.MoveNext())
 								{

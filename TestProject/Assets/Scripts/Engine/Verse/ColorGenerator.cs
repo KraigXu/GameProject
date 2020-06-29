@@ -7,7 +7,7 @@ namespace Verse
 	public abstract class ColorGenerator
 	{
 		
-		// (get) Token: 0x060004A9 RID: 1193 RVA: 0x000179E9 File Offset: 0x00015BE9
+		
 		public virtual Color ExemplaryColor
 		{
 			get

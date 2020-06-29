@@ -7,7 +7,7 @@ namespace RimWorld
 	public class StrengthWatcher
 	{
 		
-		// (get) Token: 0x0600409A RID: 16538 RVA: 0x0015A170 File Offset: 0x00158370
+		
 		public float StrengthRating
 		{
 			get

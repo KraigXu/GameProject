@@ -9,7 +9,7 @@ namespace Verse.AI
 	public class Pawn_MindState : IExposable
 	{
 		
-		// (get) Token: 0x060027F1 RID: 10225 RVA: 0x000EBA51 File Offset: 0x000E9C51
+		
 		public bool AvailableForGoodwillReward
 		{
 			get
@@ -19,8 +19,8 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027F2 RID: 10226 RVA: 0x000EBA68 File Offset: 0x000E9C68
-		// (set) Token: 0x060027F3 RID: 10227 RVA: 0x000EBA70 File Offset: 0x000E9C70
+		
+		
 		public bool Active
 		{
 			get
@@ -41,7 +41,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027F4 RID: 10228 RVA: 0x000EBAAA File Offset: 0x000E9CAA
+		
 		public bool IsIdle
 		{
 			get
@@ -51,7 +51,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027F5 RID: 10229 RVA: 0x000EBAD4 File Offset: 0x000E9CD4
+		
 		public bool MeleeThreatStillThreat
 		{
 			get
@@ -61,8 +61,8 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027F6 RID: 10230 RVA: 0x000EBB85 File Offset: 0x000E9D85
-		// (set) Token: 0x060027F7 RID: 10231 RVA: 0x000EBB8D File Offset: 0x000E9D8D
+		
+		
 		public bool WildManEverReachedOutside
 		{
 			get
@@ -81,8 +81,8 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027F8 RID: 10232 RVA: 0x000EBBAB File Offset: 0x000E9DAB
-		// (set) Token: 0x060027F9 RID: 10233 RVA: 0x000EBBB3 File Offset: 0x000E9DB3
+		
+		
 		public bool WillJoinColonyIfRescued
 		{
 			get
@@ -104,7 +104,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027FA RID: 10234 RVA: 0x000EBBF0 File Offset: 0x000E9DF0
+		
 		public bool AnythingPreventsJoiningColonyIfRescued
 		{
 			get
@@ -485,7 +485,7 @@ namespace Verse.AI
 			int num = 1;
 			if (Find.Storyteller.difficulty.allowBigThreats && Rand.Value < 0.5f)
 			{
-				using (IEnumerator<Pawn> enumerator = this.GetPackmates(this.pawn, 24f).GetEnumerator())
+				IEnumerator<Pawn> enumerator = this.GetPackmates(this.pawn, 24f).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

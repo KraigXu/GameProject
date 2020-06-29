@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public static class WorldCameraManager
 	{
 		
-		// (get) Token: 0x060069E2 RID: 27106 RVA: 0x0024F705 File Offset: 0x0024D905
+		
 		public static Camera WorldCamera
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069E3 RID: 27107 RVA: 0x0024F70C File Offset: 0x0024D90C
+		
 		public static Camera WorldSkyboxCamera
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069E4 RID: 27108 RVA: 0x0024F713 File Offset: 0x0024D913
+		
 		public static WorldCameraDriver WorldCameraDriver
 		{
 			get

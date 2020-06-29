@@ -13,8 +13,8 @@ namespace RimWorld
 	public class Faction : IExposable, ILoadReferenceable, ICommunicable
 	{
 		
-		// (get) Token: 0x06004831 RID: 18481 RVA: 0x0018703F File Offset: 0x0018523F
-		// (set) Token: 0x06004832 RID: 18482 RVA: 0x00187060 File Offset: 0x00185260
+		
+		
 		public string Name
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004833 RID: 18483 RVA: 0x00187069 File Offset: 0x00185269
+		
 		public bool HasName
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004834 RID: 18484 RVA: 0x00187074 File Offset: 0x00185274
+		
 		public bool IsPlayer
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004835 RID: 18485 RVA: 0x00187081 File Offset: 0x00185281
+		
 		public int PlayerGoodwill
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004836 RID: 18486 RVA: 0x0018708E File Offset: 0x0018528E
+		
 		public FactionRelationKind PlayerRelationKind
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004837 RID: 18487 RVA: 0x0018709B File Offset: 0x0018529B
+		
 		public Color Color
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004838 RID: 18488 RVA: 0x001870CC File Offset: 0x001852CC
+		
 		public string LeaderTitle
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004839 RID: 18489 RVA: 0x00187118 File Offset: 0x00185318
+		
 		public TaggedString NameColored
 		{
 			get
@@ -114,7 +114,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600483A RID: 18490 RVA: 0x0018713A File Offset: 0x0018533A
+		
 		[Obsolete]
 		public bool CanGiveGoodwillRewards
 		{
@@ -125,7 +125,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600483B RID: 18491 RVA: 0x00187142 File Offset: 0x00185342
+		
 		public bool CanEverGiveGoodwillRewards
 		{
 			get
@@ -135,7 +135,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600483C RID: 18492 RVA: 0x00187152 File Offset: 0x00185352
+		
 		public string GetReportText
 		{
 			get
@@ -1022,7 +1022,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004863 RID: 18531 RVA: 0x0018924E File Offset: 0x0018744E
+		
 		public static Faction OfPlayer
 		{
 			get
@@ -1037,7 +1037,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004864 RID: 18532 RVA: 0x00189263 File Offset: 0x00187463
+		
 		public static Faction OfMechanoids
 		{
 			get
@@ -1047,7 +1047,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004865 RID: 18533 RVA: 0x0018926F File Offset: 0x0018746F
+		
 		public static Faction OfInsects
 		{
 			get
@@ -1057,7 +1057,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004866 RID: 18534 RVA: 0x0018927B File Offset: 0x0018747B
+		
 		public static Faction OfAncients
 		{
 			get
@@ -1067,7 +1067,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004867 RID: 18535 RVA: 0x00189287 File Offset: 0x00187487
+		
 		public static Faction OfAncientsHostile
 		{
 			get
@@ -1077,7 +1077,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004868 RID: 18536 RVA: 0x00189293 File Offset: 0x00187493
+		
 		public static Faction Empire
 		{
 			get
@@ -1087,7 +1087,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004869 RID: 18537 RVA: 0x001892A0 File Offset: 0x001874A0
+		
 		public static Faction OfPlayerSilentFail
 		{
 			get

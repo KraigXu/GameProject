@@ -7,7 +7,7 @@ namespace Verse
 	public class SpecialThingFilterDef : Def
 	{
 		
-		// (get) Token: 0x060021DF RID: 8671 RVA: 0x000CE69C File Offset: 0x000CC89C
+		
 		public SpecialThingFilterWorker Worker
 		{
 			get
@@ -23,9 +23,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.workerClass == null)

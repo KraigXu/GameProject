@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Refuel : JobDriver
 	{
 		
-		// (get) Token: 0x06002CDF RID: 11487 RVA: 0x000FE974 File Offset: 0x000FCB74
+		
 		protected Thing Refuelable
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CE0 RID: 11488 RVA: 0x000FE995 File Offset: 0x000FCB95
+		
 		protected CompRefuelable RefuelableComp
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CE1 RID: 11489 RVA: 0x000FE9A4 File Offset: 0x000FCBA4
+		
 		protected Thing Fuel
 		{
 			get

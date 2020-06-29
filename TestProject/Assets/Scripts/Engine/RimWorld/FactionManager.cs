@@ -10,7 +10,7 @@ namespace RimWorld
 	public class FactionManager : IExposable
 	{
 		
-		// (get) Token: 0x06004886 RID: 18566 RVA: 0x0018AD26 File Offset: 0x00188F26
+		
 		public List<Faction> AllFactionsListForReading
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004887 RID: 18567 RVA: 0x0018AD26 File Offset: 0x00188F26
+		
 		public IEnumerable<Faction> AllFactions
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004888 RID: 18568 RVA: 0x0018AD2E File Offset: 0x00188F2E
+		
 		public IEnumerable<Faction> AllFactionsVisible
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004889 RID: 18569 RVA: 0x0018AD5A File Offset: 0x00188F5A
+		
 		public IEnumerable<Faction> AllFactionsVisibleInViewOrder
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488A RID: 18570 RVA: 0x0018AD67 File Offset: 0x00188F67
+		
 		public IEnumerable<Faction> AllFactionsInViewOrder
 		{
 			get
@@ -62,7 +62,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488B RID: 18571 RVA: 0x0018AD74 File Offset: 0x00188F74
+		
 		public Faction OfPlayer
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488C RID: 18572 RVA: 0x0018AD7C File Offset: 0x00188F7C
+		
 		public Faction OfMechanoids
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488D RID: 18573 RVA: 0x0018AD84 File Offset: 0x00188F84
+		
 		public Faction OfInsects
 		{
 			get
@@ -92,7 +92,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488E RID: 18574 RVA: 0x0018AD8C File Offset: 0x00188F8C
+		
 		public Faction OfAncients
 		{
 			get
@@ -102,7 +102,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600488F RID: 18575 RVA: 0x0018AD94 File Offset: 0x00188F94
+		
 		public Faction OfAncientsHostile
 		{
 			get
@@ -112,7 +112,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004890 RID: 18576 RVA: 0x0018AD9C File Offset: 0x00188F9C
+		
 		public Faction Empire
 		{
 			get

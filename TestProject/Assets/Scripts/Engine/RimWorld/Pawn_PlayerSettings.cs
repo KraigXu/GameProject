@@ -10,8 +10,8 @@ namespace RimWorld
 	public class Pawn_PlayerSettings : IExposable
 	{
 		
-		// (get) Token: 0x060046F5 RID: 18165 RVA: 0x0018012B File Offset: 0x0017E32B
-		// (set) Token: 0x060046F6 RID: 18166 RVA: 0x00180134 File Offset: 0x0017E334
+		
+		
 		public Pawn Master
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046F7 RID: 18167 RVA: 0x001801B9 File Offset: 0x0017E3B9
+		
 		public Area EffectiveAreaRestrictionInPawnCurrentMap
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046F8 RID: 18168 RVA: 0x001801E3 File Offset: 0x0017E3E3
+		
 		public Area EffectiveAreaRestriction
 		{
 			get
@@ -67,8 +67,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046F9 RID: 18169 RVA: 0x001801F5 File Offset: 0x0017E3F5
-		// (set) Token: 0x060046FA RID: 18170 RVA: 0x00180200 File Offset: 0x0017E400
+		
+		
 		public Area AreaRestriction
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046FB RID: 18171 RVA: 0x00180297 File Offset: 0x0017E497
+		
 		public bool RespectsAllowedArea
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046FC RID: 18172 RVA: 0x001802CA File Offset: 0x0017E4CA
+		
 		public bool RespectsMaster
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046FD RID: 18173 RVA: 0x00180302 File Offset: 0x0017E502
+		
 		public Pawn RespectedMaster
 		{
 			get
@@ -124,7 +124,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060046FE RID: 18174 RVA: 0x00180314 File Offset: 0x0017E514
+		
 		public bool UsesConfigurableHostilityResponse
 		{
 			get

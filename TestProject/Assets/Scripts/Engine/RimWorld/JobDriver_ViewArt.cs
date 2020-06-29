@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobDriver_ViewArt : JobDriver_VisitJoyThing
 	{
 		
-		// (get) Token: 0x06002C1E RID: 11294 RVA: 0x000FCCD8 File Offset: 0x000FAED8
+		
 		private Thing ArtThing
 		{
 			get

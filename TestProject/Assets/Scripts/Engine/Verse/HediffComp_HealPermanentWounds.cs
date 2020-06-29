@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffComp_HealPermanentWounds : HediffComp
 	{
 		
-		// (get) Token: 0x06001083 RID: 4227 RVA: 0x0005E5BF File Offset: 0x0005C7BF
+		
 		public HediffCompProperties_HealPermanentWounds Props
 		{
 			get

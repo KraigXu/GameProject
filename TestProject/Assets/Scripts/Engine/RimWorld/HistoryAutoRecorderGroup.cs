@@ -96,7 +96,7 @@ namespace RimWorld
 			{
 				Log.Warning("Some history auto recorders were null.", false);
 			}
-			using (List<HistoryAutoRecorderDef>.Enumerator enumerator = this.def.historyAutoRecorderDefs.GetEnumerator())
+			List<HistoryAutoRecorderDef>.Enumerator enumerator = this.def.historyAutoRecorderDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

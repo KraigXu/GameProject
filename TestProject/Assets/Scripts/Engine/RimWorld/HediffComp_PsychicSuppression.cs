@@ -8,7 +8,7 @@ namespace RimWorld
 	public class HediffComp_PsychicSuppression : HediffComp
 	{
 		
-		// (get) Token: 0x06003BAE RID: 15278 RVA: 0x0013B0C8 File Offset: 0x001392C8
+		
 		public override bool CompShouldRemove
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	internal class WorkGiver_CleanFilth : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003077 RID: 12407 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003078 RID: 12408 RVA: 0x0010FDB6 File Offset: 0x0010DFB6
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003079 RID: 12409 RVA: 0x0010FDBF File Offset: 0x0010DFBF
+		
 		public override int MaxRegionsToScanBeforeGlobalSearch
 		{
 			get

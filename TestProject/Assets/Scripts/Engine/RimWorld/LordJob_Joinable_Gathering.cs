@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class LordJob_Joinable_Gathering : LordJob_VoluntarilyJoinable
 	{
 		
-		// (get) Token: 0x0600320E RID: 12814 RVA: 0x00116F2A File Offset: 0x0011512A
+		
 		public Pawn Organizer
 		{
 			get

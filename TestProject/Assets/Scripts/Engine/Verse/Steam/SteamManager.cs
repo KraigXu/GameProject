@@ -9,7 +9,7 @@ namespace Verse.Steam
 	public static class SteamManager
 	{
 		
-		// (get) Token: 0x0600227D RID: 8829 RVA: 0x000D2252 File Offset: 0x000D0452
+		
 		public static bool Initialized
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x0600227E RID: 8830 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public static bool Active
 		{
 			get

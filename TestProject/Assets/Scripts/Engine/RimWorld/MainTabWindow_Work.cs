@@ -9,7 +9,7 @@ namespace RimWorld
 	public class MainTabWindow_Work : MainTabWindow_PawnTable
 	{
 		
-		// (get) Token: 0x06005CD9 RID: 23769 RVA: 0x00203941 File Offset: 0x00201B41
+		
 		protected override PawnTableDef PawnTableDef
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005CDA RID: 23770 RVA: 0x00203948 File Offset: 0x00201B48
+		
 		protected override float ExtraTopSpace
 		{
 			get

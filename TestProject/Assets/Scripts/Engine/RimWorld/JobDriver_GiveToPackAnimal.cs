@@ -11,7 +11,7 @@ namespace RimWorld
 	public class JobDriver_GiveToPackAnimal : JobDriver
 	{
 		
-		// (get) Token: 0x06002B1A RID: 11034 RVA: 0x000FA5CC File Offset: 0x000F87CC
+		
 		private Thing Item
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B1B RID: 11035 RVA: 0x000FA5F0 File Offset: 0x000F87F0
+		
 		private Pawn Animal
 		{
 			get

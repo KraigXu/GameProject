@@ -9,7 +9,7 @@ namespace RimWorld
 	public class SitePartDef : Def
 	{
 		
-		// (get) Token: 0x060036E3 RID: 14051 RVA: 0x00128661 File Offset: 0x00126861
+		
 		public SitePartWorker Worker
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060036E4 RID: 14052 RVA: 0x00128694 File Offset: 0x00126894
+		
 		public Texture2D ExpandingIconTexture
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060036E5 RID: 14053 RVA: 0x001286E4 File Offset: 0x001268E4
+		
 		public List<GenStepDef> ExtraGenSteps
 		{
 			get

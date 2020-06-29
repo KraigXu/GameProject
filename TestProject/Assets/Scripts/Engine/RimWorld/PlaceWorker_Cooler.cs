@@ -52,14 +52,14 @@ namespace RimWorld
 			{
 				return "MustPlaceCoolerWithFreeSpaces".Translate();
 			}
-			Frame firstThing = c.GetFirstThing(map);
-			Frame firstThing2 = c2.GetFirstThing(map);
+			Frame firstThing = c.GetFirstThing<Frame>(map);
+			Frame firstThing2 = c2.GetFirstThing<Frame>(map);
 			if ((firstThing != null && firstThing.def.entityDefToBuild != null && firstThing.def.entityDefToBuild.passability == Traversability.Impassable) || (firstThing2 != null && firstThing2.def.entityDefToBuild != null && firstThing2.def.entityDefToBuild.passability == Traversability.Impassable))
 			{
 				return "MustPlaceCoolerWithFreeSpaces".Translate();
 			}
-			Blueprint firstThing3 = c.GetFirstThing(map);
-			Blueprint firstThing4 = c2.GetFirstThing(map);
+			Blueprint firstThing3 = c.GetFirstThing<Blueprint>(map);
+			Blueprint firstThing4 = c2.GetFirstThing<Blueprint>(map);
 			if ((firstThing3 != null && firstThing3.def.entityDefToBuild != null && firstThing3.def.entityDefToBuild.passability == Traversability.Impassable) || (firstThing4 != null && firstThing4.def.entityDefToBuild != null && firstThing4.def.entityDefToBuild.passability == Traversability.Impassable))
 			{
 				return "MustPlaceCoolerWithFreeSpaces".Translate();

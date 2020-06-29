@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public static class OverallRainfallUtility
 	{
 		
-		// (get) Token: 0x060069C0 RID: 27072 RVA: 0x0024E214 File Offset: 0x0024C414
+		
 		public static int EnumValuesCount
 		{
 			get

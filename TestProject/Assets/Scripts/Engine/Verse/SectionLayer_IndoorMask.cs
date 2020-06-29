@@ -7,7 +7,7 @@ namespace Verse
 	internal class SectionLayer_IndoorMask : SectionLayer
 	{
 		
-		// (get) Token: 0x06000B8B RID: 2955 RVA: 0x0003F2D9 File Offset: 0x0003D4D9
+		
 		public override bool Visible
 		{
 			get

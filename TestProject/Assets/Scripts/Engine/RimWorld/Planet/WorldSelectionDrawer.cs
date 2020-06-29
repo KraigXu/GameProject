@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class WorldSelectionDrawer
 	{
 		
-		// (get) Token: 0x0600706F RID: 28783 RVA: 0x00273955 File Offset: 0x00271B55
+		
 		public static Dictionary<WorldObject, float> SelectTimes
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class Hediff_AddedPart : Hediff_Implant
 	{
 		
-		// (get) Token: 0x06000FC4 RID: 4036 RVA: 0x0005B738 File Offset: 0x00059938
+		
 		public override string TipStringExtra
 		{
 			get

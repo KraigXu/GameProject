@@ -29,7 +29,7 @@ namespace RimWorld
 				{
 					return;
 				}
-				using (List<ExtraDamage>.Enumerator enumerator = this.def.projectile.extraDamages.GetEnumerator())
+				List<ExtraDamage>.Enumerator enumerator = this.def.projectile.extraDamages.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

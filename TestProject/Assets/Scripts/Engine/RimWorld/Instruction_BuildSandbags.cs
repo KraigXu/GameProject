@@ -9,14 +9,14 @@ namespace RimWorld
 	public class Instruction_BuildSandbags : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005E93 RID: 24211 RVA: 0x0020B560 File Offset: 0x00209760
+		
 		protected override float ProgressPercent
 		{
 			get
 			{
 				int num = 0;
 				int num2 = 0;
-				using (List<IntVec3>.Enumerator enumerator = this.sandbagCells.GetEnumerator())
+				List<IntVec3>.Enumerator enumerator = this.sandbagCells.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

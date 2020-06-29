@@ -31,7 +31,7 @@ namespace RimWorld
 			if (myPawn.IsQuestLodger())
 			{
 				FloatMenuOption floatMenuOption = new FloatMenuOption("CannotUseReason".Translate("CryptosleepCasketGuestsNotAllowed".Translate()), null, MenuOptionPriority.Default, null, null, 0f, null, null);
-				yield return floatMenuOption;
+				
 				yield break;
 			}
 

@@ -11,7 +11,7 @@ namespace RimWorld
 	public class ColonistBar
 	{
 		
-		// (get) Token: 0x060056E5 RID: 22245 RVA: 0x001CD7BD File Offset: 0x001CB9BD
+		
 		public List<ColonistBar.Entry> Entries
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056E6 RID: 22246 RVA: 0x001CD7CC File Offset: 0x001CB9CC
+		
 		private bool ShowGroupFrames
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056E7 RID: 22247 RVA: 0x001CD80D File Offset: 0x001CBA0D
+		
 		public float Scale
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056E8 RID: 22248 RVA: 0x001CD815 File Offset: 0x001CBA15
+		
 		public List<Vector2> DrawLocs
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056E9 RID: 22249 RVA: 0x001CD81D File Offset: 0x001CBA1D
+		
 		public Vector2 Size
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056EA RID: 22250 RVA: 0x001CD82F File Offset: 0x001CBA2F
+		
 		public float SpaceBetweenColonistsHorizontal
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056EB RID: 22251 RVA: 0x001CD83D File Offset: 0x001CBA3D
+		
 		private bool Visible
 		{
 			get
@@ -134,14 +134,14 @@ namespace RimWorld
 						if (entry.pawn != null)
 						{
 							this.drawer.DrawColonist(rect, entry.pawn, entry.map, this.colonistsToHighlight.Contains(entry.pawn), reordering);
-							if (entry.pawn.HasExtraHomeFaction(null))
-							{
-								Faction extraHomeFaction = entry.pawn.GetExtraHomeFaction(null);
-								GUI.color = extraHomeFaction.Color;
-								float num2 = rect.width * 0.5f;
-								GUI.DrawTexture(new Rect(rect.xMax - num2 - 2f, rect.yMax - num2 - 2f, num2, num2), extraHomeFaction.def.FactionIcon);
-								GUI.color = Color.white;
-							}
+							//if (entry.pawn.HasExtraHomeFaction(null))
+							//{
+							//	Faction extraHomeFaction = entry.pawn.GetExtraHomeFaction(null);
+							//	GUI.color = extraHomeFaction.Color;
+							//	float num2 = rect.width * 0.5f;
+							//	GUI.DrawTexture(new Rect(rect.xMax - num2 - 2f, rect.yMax - num2 - 2f, num2, num2), extraHomeFaction.def.FactionIcon);
+							//	GUI.color = Color.white;
+							//}
 						}
 					}
 				}

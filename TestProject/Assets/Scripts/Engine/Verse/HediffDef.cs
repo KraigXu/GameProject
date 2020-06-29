@@ -9,7 +9,7 @@ namespace Verse
 	public class HediffDef : Def
 	{
 		
-		// (get) Token: 0x06000578 RID: 1400 RVA: 0x0001B3F2 File Offset: 0x000195F2
+		
 		public bool IsAddiction
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000579 RID: 1401 RVA: 0x0001B40C File Offset: 0x0001960C
+		
 		public bool AlwaysAllowMothball
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600057A RID: 1402 RVA: 0x0001B4AA File Offset: 0x000196AA
+		
 		public Hediff ConcreteExample
 		{
 			get
@@ -131,9 +131,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.hediffClass == null)

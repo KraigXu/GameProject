@@ -10,7 +10,7 @@ namespace Verse
 	public class PlayLogEntry_Interaction : LogEntry
 	{
 		
-		// (get) Token: 0x060007D6 RID: 2006 RVA: 0x000244A9 File Offset: 0x000226A9
+		
 		private string InitiatorName
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060007D7 RID: 2007 RVA: 0x000244C4 File Offset: 0x000226C4
+		
 		private string RecipientName
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class ScenPart_ForcedHediff : ScenPart_PawnModifier
 	{
 		
-		// (get) Token: 0x06004973 RID: 18803 RVA: 0x0018EB4F File Offset: 0x0018CD4F
+		
 		private float MaxSeverity
 		{
 			get

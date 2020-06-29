@@ -44,7 +44,7 @@ namespace RimWorld
 				int count = 0;
 				map.floodFiller.FloodFill(c, (IntVec3 x) => TerrainThreshold.TerrainAtValue(this.thresholds, this.noise.GetValue(x)) != null, delegate(IntVec3 x)
 				{
-					int count = count;
+
 					count++;
 					return count >= this.minSize;
 				}, int.MaxValue, false, null);

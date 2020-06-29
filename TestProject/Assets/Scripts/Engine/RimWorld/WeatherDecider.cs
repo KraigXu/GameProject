@@ -10,7 +10,7 @@ namespace RimWorld
 	public class WeatherDecider : IExposable
 	{
 		
-		// (get) Token: 0x060040BE RID: 16574 RVA: 0x0015AE68 File Offset: 0x00159068
+		
 		public WeatherDef ForcedWeather
 		{
 			get

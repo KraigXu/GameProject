@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PawnRelationDef : Def
 	{
 		
-		// (get) Token: 0x0600369F RID: 13983 RVA: 0x00127C7C File Offset: 0x00125E7C
+		
 		public PawnRelationWorker Worker
 		{
 			get
@@ -71,9 +71,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.implied && this.reflexive)

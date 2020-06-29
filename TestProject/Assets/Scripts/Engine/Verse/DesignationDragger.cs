@@ -10,7 +10,7 @@ namespace Verse
 	public class DesignationDragger
 	{
 		
-		// (get) Token: 0x060017C2 RID: 6082 RVA: 0x00087FD8 File Offset: 0x000861D8
+		
 		public bool Dragging
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017C3 RID: 6083 RVA: 0x00087FE0 File Offset: 0x000861E0
+		
 		private Designator SelDes
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017C4 RID: 6084 RVA: 0x00087FEC File Offset: 0x000861EC
+		
 		public List<IntVec3> DragCells
 		{
 			get
@@ -41,7 +41,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017C5 RID: 6085 RVA: 0x00087FFA File Offset: 0x000861FA
+		
 		public string FailureReason
 		{
 			get

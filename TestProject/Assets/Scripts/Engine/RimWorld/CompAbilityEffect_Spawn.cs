@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompAbilityEffect_Spawn : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x0600419D RID: 16797 RVA: 0x0015EE20 File Offset: 0x0015D020
+		
 		public new CompProperties_AbilitySpawn Props
 		{
 			get

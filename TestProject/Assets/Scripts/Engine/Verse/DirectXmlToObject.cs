@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using RimWorld.QuestGen;
+using Boo.Lang;
+using RimWorld.QuestGenNew;
 
 namespace Verse
 {
@@ -127,14 +128,14 @@ namespace Verse
 				}
 				if (Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
 				{
-					List<T> list = DirectXmlToObject.ListFromXml<T>(xmlRoot);
-					int num = 0;
-					foreach (T t2 in list)
-					{
-						int num2 = (int)((object)t2);
-						num |= num2;
-					}
-					return (T)((object)num);
+					//List<T> list = DirectXmlToObject.ListFromXml<T>(xmlRoot);
+					//int num = 0;
+					//foreach (T t2 in list)
+					//{
+					//	int num2 = (int)((object)t2);
+					//	num |= num2;
+					//}
+					//return (T)((object)num);
 				}
 				if (typeof(T).HasGenericDefinition(typeof(List)))
 				{
@@ -174,10 +175,10 @@ namespace Verse
 					if (typeof(T).IsGenericType)
 					{
 						Type genericTypeDefinition = typeof(T).GetGenericTypeDefinition();
-						if (genericTypeDefinition == typeof(List) || genericTypeDefinition == typeof(HashSet) || genericTypeDefinition == typeof(Dictionary<, >))
-						{
-							return Activator.CreateInstance<T>();
-						}
+						//if (genericTypeDefinition == typeof(List) || genericTypeDefinition == typeof(HashSet) || genericTypeDefinition == typeof(Dictionary<, >))
+						//{
+						//	return Activator.CreateInstance<T>();
+						//}
 					}
 				}
 				xmlRoot = XmlInheritance.GetResolvedNodeFor(xmlRoot);
@@ -425,9 +426,9 @@ namespace Verse
 		}
 
 		
-		private static List<T> ListFromXml<T>(XmlNode listRootNode)
+		private static System.Collections.Generic.List<T> ListFromXml<T>(XmlNode listRootNode)
 		{
-			List<T> list = new List<T>();
+			System.Collections.Generic.List<T> list = new System.Collections.Generic.List<T>();
 			try
 			{
 				bool flag = typeof(Def).IsAssignableFrom(typeof(T));
@@ -493,7 +494,7 @@ namespace Verse
 				bool flag2 = typeof(Def).IsAssignableFrom(typeof(V));
 				if (!flag && !flag2)
 				{
-					using (IEnumerator enumerator = dictRootNode.ChildNodes.GetEnumerator())
+					IEnumerator enumerator = dictRootNode.ChildNodes.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

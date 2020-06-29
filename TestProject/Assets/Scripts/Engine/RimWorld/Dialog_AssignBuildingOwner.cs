@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_AssignBuildingOwner : Window
 	{
 		
-		// (get) Token: 0x06005883 RID: 22659 RVA: 0x001D60A3 File Offset: 0x001D42A3
+		
 		public override Vector2 InitialSize
 		{
 			get

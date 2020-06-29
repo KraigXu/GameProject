@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_ContentsCasket : ITab_ContentsBase
 	{
 		
-		// (get) Token: 0x06005B84 RID: 23428 RVA: 0x001F82FC File Offset: 0x001F64FC
+		
 		public override IList<Thing> container
 		{
 			get

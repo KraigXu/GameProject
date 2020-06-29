@@ -8,12 +8,12 @@ namespace RimWorld
 	public class QuestPart_SetFactionRelations : QuestPart
 	{
 		
-		// (get) Token: 0x060039EA RID: 14826 RVA: 0x00133889 File Offset: 0x00131A89
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__0())
+
 				{
 					yield return faction;
 				}

@@ -10,7 +10,7 @@ namespace Verse
 	public static class StartingPawnUtility
 	{
 		
-		// (get) Token: 0x06000835 RID: 2101 RVA: 0x00025E90 File Offset: 0x00024090
+		
 		private static List<Pawn> StartingAndOptionalPawns
 		{
 			get

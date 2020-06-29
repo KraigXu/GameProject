@@ -9,7 +9,7 @@ namespace RimWorld.BaseGen
 		public override void Resolve(ResolveParams rp)
 		{
 			InteriorSymbolResolverUtility.PushBedroomHeatersCoolersAndLightSourcesSymbols(rp, true);
-			BaseGen.symbolStack.Push("fillWithBeds", rp, null);
+			BaseGenCore.symbolStack.Push("fillWithBeds", rp, null);
 		}
 	}
 }

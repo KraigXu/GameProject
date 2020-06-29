@@ -25,8 +25,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002354 RID: 9044 RVA: 0x000D52F1 File Offset: 0x000D34F1
-		// (set) Token: 0x06002355 RID: 9045 RVA: 0x000D52F9 File Offset: 0x000D34F9
+		
+		
 		public double Maximum
 		{
 			get
@@ -40,8 +40,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x06002356 RID: 9046 RVA: 0x000D5302 File Offset: 0x000D3502
-		// (set) Token: 0x06002357 RID: 9047 RVA: 0x000D530A File Offset: 0x000D350A
+		
+		
 		public double Minimum
 		{
 			get

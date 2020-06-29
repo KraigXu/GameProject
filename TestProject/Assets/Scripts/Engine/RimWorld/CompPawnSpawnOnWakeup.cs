@@ -11,7 +11,7 @@ namespace RimWorld
 	public class CompPawnSpawnOnWakeup : ThingComp
 	{
 		
-		// (get) Token: 0x0600521E RID: 21022 RVA: 0x001B6E7D File Offset: 0x001B507D
+		
 		private CompProperties_PawnSpawnOnWakeup Props
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600521F RID: 21023 RVA: 0x001B6E8A File Offset: 0x001B508A
+		
 		public bool CanSpawn
 		{
 			get
@@ -94,9 +94,9 @@ namespace RimWorld
 			{
 				IEnumerable<PawnKindDef> spawnablePawnKinds = this.Props.spawnablePawnKinds;
 				Func<PawnKindDef, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__0 = ((PawnKindDef p) => p.combatPower <= pointsLeft));
+					predicate = ( ((PawnKindDef p) => p.combatPower <= pointsLeft));
 				}
 				if (!spawnablePawnKinds.Where(predicate).TryRandomElement(out pawnKindDef))
 				{
@@ -136,7 +136,7 @@ namespace RimWorld
 				DropPodUtility.DropThingsNear(spawnPosition, this.parent.MapHeld, list, 110, false, false, true, true);
 			}
 			List<IntVec3> occupiedCells = new List<IntVec3>();
-			Predicate<IntVec3> 9__1;
+
 			foreach (Thing thing in list)
 			{
 				if (!this.Props.dropInPods)
@@ -144,11 +144,8 @@ namespace RimWorld
 					IntVec3 root = spawnPosition;
 					Map map = this.parent.Map;
 					int randomInRange = this.Props.pawnSpawnRadius.RandomInRange;
-					Predicate<IntVec3> extraValidator;
-					if ((extraValidator ) == null)
-					{
-						extraValidator = (9__1 = ((IntVec3 c) => !occupiedCells.Contains(c)));
-					}
+					Predicate<IntVec3> extraValidator = (((IntVec3 c) => !occupiedCells.Contains(c)));
+
 					IntVec3 intVec = CellFinder.RandomClosewalkCellNear(root, map, randomInRange, extraValidator);
 					if (!intVec.IsValid)
 					{

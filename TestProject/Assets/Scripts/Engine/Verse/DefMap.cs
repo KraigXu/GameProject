@@ -9,7 +9,7 @@ namespace Verse
 	public class DefMap<D, V> : IExposable, IEnumerable<KeyValuePair<D, V>>, IEnumerable where D : Def, new() where V : new()
 	{
 		
-		// (get) Token: 0x06001EA4 RID: 7844 RVA: 0x000BE800 File Offset: 0x000BCA00
+		
 		public int Count
 		{
 			get

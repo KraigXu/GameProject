@@ -34,7 +34,7 @@ namespace RimWorld.BaseGen
 					}
 				}
 			}
-			GenSpawn.Spawn(building_AncientCryptosleepCasket, rp.rect.RandomCell, BaseGen.globalSettings.map, rot, WipeMode.Vanish, false);
+			GenSpawn.Spawn(building_AncientCryptosleepCasket, rp.rect.RandomCell, BaseGenCore.globalSettings.map, rot, WipeMode.Vanish, false);
 		}
 	}
 }

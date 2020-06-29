@@ -9,15 +9,15 @@ namespace Verse
 	public abstract class ModRequirement
 	{
 		
-		// (get) Token: 0x06000E90 RID: 3728
+		
 		public abstract bool IsSatisfied { get; }
 
 		
-		// (get) Token: 0x06000E91 RID: 3729
+		
 		public abstract string RequirementTypeLabel { get; }
 
 		
-		// (get) Token: 0x06000E92 RID: 3730 RVA: 0x0005304B File Offset: 0x0005124B
+		
 		public virtual string Tooltip
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E93 RID: 3731 RVA: 0x00053071 File Offset: 0x00051271
+		
 		public virtual Texture2D StatusIcon
 		{
 			get

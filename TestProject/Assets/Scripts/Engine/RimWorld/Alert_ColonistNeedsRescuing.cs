@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_ColonistNeedsRescuing : Alert_Critical
 	{
 		
-		// (get) Token: 0x06005607 RID: 22023 RVA: 0x001C85DC File Offset: 0x001C67DC
+		
 		private List<Pawn> ColonistsNeedingRescue
 		{
 			get

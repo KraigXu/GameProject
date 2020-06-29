@@ -9,7 +9,7 @@ namespace Verse
 	internal class SectionLayer_Terrain : SectionLayer
 	{
 		
-		// (get) Token: 0x06000B9F RID: 2975 RVA: 0x000414B0 File Offset: 0x0003F6B0
+		
 		public override bool Visible
 		{
 			get

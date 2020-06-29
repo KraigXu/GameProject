@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_RoyalFavor : Reward
 	{
 		
-		// (get) Token: 0x06006174 RID: 24948 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool MakesUseOfChosenPawnSignal
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006175 RID: 24949 RVA: 0x0021D3A3 File Offset: 0x0021B5A3
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get

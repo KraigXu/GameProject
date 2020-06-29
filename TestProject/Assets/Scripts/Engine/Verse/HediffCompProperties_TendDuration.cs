@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffCompProperties_TendDuration : HediffCompProperties
 	{
 		
-		// (get) Token: 0x060010BF RID: 4287 RVA: 0x0005F0FE File Offset: 0x0005D2FE
+		
 		public bool TendIsPermanent
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C0 RID: 4288 RVA: 0x0005F10D File Offset: 0x0005D30D
+		
 		public int TendTicksFull
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C1 RID: 4289 RVA: 0x0005F13F File Offset: 0x0005D33F
+		
 		public int TendTicksBase
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010C2 RID: 4290 RVA: 0x0005F16A File Offset: 0x0005D36A
+		
 		public int TendTicksOverlap
 		{
 			get

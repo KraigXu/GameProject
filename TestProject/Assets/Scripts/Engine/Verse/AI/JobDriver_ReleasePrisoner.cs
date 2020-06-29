@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class JobDriver_ReleasePrisoner : JobDriver
 	{
 		
-		// (get) Token: 0x06002515 RID: 9493 RVA: 0x000DBEF4 File Offset: 0x000DA0F4
+		
 		private Pawn Prisoner
 		{
 			get

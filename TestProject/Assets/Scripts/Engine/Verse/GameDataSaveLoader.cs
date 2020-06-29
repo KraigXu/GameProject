@@ -9,7 +9,7 @@ namespace Verse
 	public static class GameDataSaveLoader
 	{
 		
-		// (get) Token: 0x060013F8 RID: 5112 RVA: 0x0007420D File Offset: 0x0007240D
+		
 		public static bool CurrentGameStateIsValuable
 		{
 			get

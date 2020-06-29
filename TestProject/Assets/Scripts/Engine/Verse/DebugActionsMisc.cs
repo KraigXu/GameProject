@@ -457,7 +457,7 @@ namespace Verse
 			//		Action method;
 			//		if ((method ) == null)
 			//		{
-			//			method = (9__2 = delegate
+			//			method = ( delegate
 			//			{
 			//				Find.ResearchManager.ApplyTechprint(localProject, null);
 			//			});

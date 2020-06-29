@@ -171,9 +171,9 @@ namespace RimWorld
 				{
 					IEnumerable<Thing> source = pawn.Map.thingGrid.ThingsAt(intVec);
 					Func<Thing, bool> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__0 = ((Thing t) => t.def == ingestibleDef));
+						predicate = ( ((Thing t) => t.def == ingestibleDef));
 					}
 					if (!source.Where(predicate).Any<Thing>() && !intVec.IsForbidden(pawn))
 					{
@@ -204,9 +204,9 @@ namespace RimWorld
 					{
 						IEnumerable<Thing> source2 = pawn.Map.thingGrid.ThingsAt(intVec2);
 						Func<Thing, bool> predicate2;
-						if ((predicate2 ) == null)
+						if ((predicate2=default ) == null)
 						{
-							predicate2 = (9__1 = ((Thing t) => t.def == ingestibleDef));
+							predicate2 = ( ((Thing t) => t.def == ingestibleDef));
 						}
 						if (!source2.Where(predicate2).Any<Thing>())
 						{

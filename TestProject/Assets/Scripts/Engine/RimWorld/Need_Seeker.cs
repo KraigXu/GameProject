@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Need_Seeker : Need
 	{
 		
-		// (get) Token: 0x060045A2 RID: 17826 RVA: 0x001784A8 File Offset: 0x001766A8
+		
 		public override int GUIChangeArrow
 		{
 			get

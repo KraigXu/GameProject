@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Blueprint_Install : Blueprint
 	{
 		
-		// (get) Token: 0x06004B24 RID: 19236 RVA: 0x001958EB File Offset: 0x00193AEB
+		
 		public Thing MiniToInstallOrBuildingToReinstall
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B25 RID: 19237 RVA: 0x00195915 File Offset: 0x00193B15
+		
 		public Thing ThingToInstall
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B26 RID: 19238 RVA: 0x00195922 File Offset: 0x00193B22
+		
 		public override Graphic Graphic
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B27 RID: 19239 RVA: 0x00195944 File Offset: 0x00193B44
+		
 		protected override float WorkTotal
 		{
 			get

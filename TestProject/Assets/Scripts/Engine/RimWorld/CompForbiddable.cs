@@ -8,8 +8,8 @@ namespace RimWorld
 	public class CompForbiddable : ThingComp
 	{
 		
-		// (get) Token: 0x06005142 RID: 20802 RVA: 0x001B41C1 File Offset: 0x001B23C1
-		// (set) Token: 0x06005143 RID: 20803 RVA: 0x001B41CC File Offset: 0x001B23CC
+		
+		
 		public bool Forbidden
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_UnloadInventory : JobDriver
 	{
 		
-		// (get) Token: 0x06002D2C RID: 11564 RVA: 0x000FF588 File Offset: 0x000FD788
+		
 		private Pawn OtherPawn
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class LastPlayedVersion
 	{
 		
-		// (get) Token: 0x06006316 RID: 25366 RVA: 0x00226F12 File Offset: 0x00225112
+		
 		public static Version Version
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public static class SettleUtility
 	{
 		
-		// (get) Token: 0x06006D0B RID: 27915 RVA: 0x00262E7C File Offset: 0x0026107C
+		
 		public static bool PlayerSettlementsCountLimitReached
 		{
 			get

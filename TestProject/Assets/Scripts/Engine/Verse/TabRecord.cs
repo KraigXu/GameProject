@@ -8,7 +8,7 @@ namespace Verse
 	public class TabRecord
 	{
 		
-		// (get) Token: 0x06001CA2 RID: 7330 RVA: 0x000AE4F7 File Offset: 0x000AC6F7
+		
 		public bool Selected
 		{
 			get

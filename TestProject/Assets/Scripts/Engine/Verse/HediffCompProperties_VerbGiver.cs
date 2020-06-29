@@ -29,9 +29,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors(HediffDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.tools != null)

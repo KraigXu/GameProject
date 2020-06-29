@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RimWorld.Planet;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using Verse;
 using Verse.Grammar;
 

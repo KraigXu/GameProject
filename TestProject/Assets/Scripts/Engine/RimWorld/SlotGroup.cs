@@ -8,7 +8,7 @@ namespace RimWorld
 	public class SlotGroup
 	{
 		
-		// (get) Token: 0x06004C13 RID: 19475 RVA: 0x001990E5 File Offset: 0x001972E5
+		
 		private Map Map
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C14 RID: 19476 RVA: 0x001990F2 File Offset: 0x001972F2
+		
 		public StorageSettings Settings
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C15 RID: 19477 RVA: 0x001990FF File Offset: 0x001972FF
+		
 		public IEnumerable<Thing> HeldThings
 		{
 			get
@@ -55,7 +55,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004C16 RID: 19478 RVA: 0x0019910F File Offset: 0x0019730F
+		
 		public List<IntVec3> CellsList
 		{
 			get

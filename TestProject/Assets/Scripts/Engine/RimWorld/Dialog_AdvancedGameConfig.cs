@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_AdvancedGameConfig : Window
 	{
 		
-		// (get) Token: 0x0600587F RID: 22655 RVA: 0x001D5C89 File Offset: 0x001D3E89
+		
 		public override Vector2 InitialSize
 		{
 			get

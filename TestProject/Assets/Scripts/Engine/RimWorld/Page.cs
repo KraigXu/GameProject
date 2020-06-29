@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Page : Window
 	{
 		
-		// (get) Token: 0x06005A63 RID: 23139 RVA: 0x001EAAA1 File Offset: 0x001E8CA1
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A64 RID: 23140 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string PageTitle
 		{
 			get

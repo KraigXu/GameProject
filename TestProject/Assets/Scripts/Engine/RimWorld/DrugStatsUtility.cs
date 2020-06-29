@@ -59,7 +59,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			using (List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator())
+			List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -80,7 +80,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			using (List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator())
+			List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -120,7 +120,7 @@ namespace RimWorld
 			HediffDef tolerance = DrugStatsUtility.GetTolerance(d);
 			if (tolerance != null)
 			{
-				using (List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator())
+				List<IngestionOutcomeDoer>.Enumerator enumerator = d.ingestible.outcomeDoers.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

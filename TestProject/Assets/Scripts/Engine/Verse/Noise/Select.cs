@@ -27,8 +27,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023AB RID: 9131 RVA: 0x000D5168 File Offset: 0x000D3368
-		// (set) Token: 0x060023AC RID: 9132 RVA: 0x000D5172 File Offset: 0x000D3372
+		
+		
 		public ModuleBase Controller
 		{
 			get
@@ -42,8 +42,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023AD RID: 9133 RVA: 0x000D5D9F File Offset: 0x000D3F9F
-		// (set) Token: 0x060023AE RID: 9134 RVA: 0x000D5DA8 File Offset: 0x000D3FA8
+		
+		
 		public double FallOff
 		{
 			get
@@ -59,8 +59,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023AF RID: 9135 RVA: 0x000D5DEC File Offset: 0x000D3FEC
-		// (set) Token: 0x060023B0 RID: 9136 RVA: 0x000D5DF4 File Offset: 0x000D3FF4
+		
+		
 		public double Maximum
 		{
 			get
@@ -75,8 +75,8 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x060023B1 RID: 9137 RVA: 0x000D5E09 File Offset: 0x000D4009
-		// (set) Token: 0x060023B2 RID: 9138 RVA: 0x000D5E11 File Offset: 0x000D4011
+		
+		
 		public double Minimum
 		{
 			get

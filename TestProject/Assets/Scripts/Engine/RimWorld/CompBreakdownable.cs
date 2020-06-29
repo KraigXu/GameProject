@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompBreakdownable : ThingComp
 	{
 		
-		// (get) Token: 0x060050A4 RID: 20644 RVA: 0x001B19EE File Offset: 0x001AFBEE
+		
 		public bool BrokenDown
 		{
 			get

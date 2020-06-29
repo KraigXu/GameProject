@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PawnColumnWorker_Gap : PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06005D50 RID: 23888 RVA: 0x00204A3E File Offset: 0x00202C3E
+		
 		protected virtual int Width
 		{
 			get

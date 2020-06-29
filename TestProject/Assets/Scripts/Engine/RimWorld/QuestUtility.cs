@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld.Planet;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 using Verse;
 using Verse.AI.Group;
@@ -344,12 +344,16 @@ namespace RimWorld
 		}
 
 		
-		public static bool HasExtraHomeFaction(this Pawn p, Quest forQuest = null)
+		//public static bool HasExtraHomeFaction(this Pawn p, Quest forQuest)
+		//{
+		//	return p.GetExtraHomeFaction(forQuest) != null;
+		//}
+		public static bool HasExtraHomeQuest(this Pawn p, Quest forQuest)
 		{
 			return p.GetExtraHomeFaction(forQuest) != null;
 		}
 
-		
+
 		public static bool HasExtraHomeFaction(this Pawn p, Faction faction)
 		{
 			QuestUtility.tmpExtraFactions.Clear();

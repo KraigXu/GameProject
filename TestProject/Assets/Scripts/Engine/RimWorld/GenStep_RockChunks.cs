@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_RockChunks : GenStep
 	{
 		
-		// (get) Token: 0x06003E89 RID: 16009 RVA: 0x0014B6C6 File Offset: 0x001498C6
+		
 		public override int SeedPart
 		{
 			get

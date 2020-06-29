@@ -11,7 +11,7 @@ namespace RimWorld
 	public abstract class Need : IExposable
 	{
 		
-		// (get) Token: 0x0600451A RID: 17690 RVA: 0x00175A95 File Offset: 0x00173C95
+		
 		public string LabelCap
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600451B RID: 17691 RVA: 0x00175AA7 File Offset: 0x00173CA7
+		
 		public float CurInstantLevelPercentage
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600451C RID: 17692 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual int GUIChangeArrow
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600451D RID: 17693 RVA: 0x0004E475 File Offset: 0x0004C675
+		
 		public virtual float CurInstantLevel
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600451E RID: 17694 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public virtual float MaxLevel
 		{
 			get
@@ -61,8 +61,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600451F RID: 17695 RVA: 0x00175AB6 File Offset: 0x00173CB6
-		// (set) Token: 0x06004520 RID: 17696 RVA: 0x00175ABE File Offset: 0x00173CBE
+		
+		
 		public virtual float CurLevel
 		{
 			get
@@ -76,8 +76,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004521 RID: 17697 RVA: 0x00175AD7 File Offset: 0x00173CD7
-		// (set) Token: 0x06004522 RID: 17698 RVA: 0x00175AE6 File Offset: 0x00173CE6
+		
+		
 		public float CurLevelPercentage
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004523 RID: 17699 RVA: 0x00175AF8 File Offset: 0x00173CF8
+		
 		protected virtual bool IsFrozen
 		{
 			get
@@ -101,7 +101,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004524 RID: 17700 RVA: 0x00175B55 File Offset: 0x00173D55
+		
 		private bool IsPawnInteractableOrVisible
 		{
 			get
@@ -111,7 +111,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004525 RID: 17701 RVA: 0x00175B85 File Offset: 0x00173D85
+		
 		public virtual bool ShowOnNeedList
 		{
 			get

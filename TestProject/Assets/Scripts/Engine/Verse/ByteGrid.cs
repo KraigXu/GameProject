@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000A18 RID: 2584 RVA: 0x00036DA1 File Offset: 0x00034FA1
+		
 		public int CellsCount
 		{
 			get

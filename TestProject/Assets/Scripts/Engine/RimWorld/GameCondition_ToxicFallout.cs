@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GameCondition_ToxicFallout : GameCondition
 	{
 		
-		// (get) Token: 0x06003B6E RID: 15214 RVA: 0x0013A1CF File Offset: 0x001383CF
+		
 		public override int TransitionTicks
 		{
 			get

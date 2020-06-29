@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Building_WorkTable : Building, IBillGiver, IBillGiverWithTickAction
 	{
 		
-		// (get) Token: 0x06004D49 RID: 19785 RVA: 0x0019E57B File Offset: 0x0019C77B
+		
 		public bool CanWorkWithoutPower
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D4A RID: 19786 RVA: 0x0019E5A1 File Offset: 0x0019C7A1
+		
 		public bool CanWorkWithoutFuel
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D4F RID: 19791 RVA: 0x0019E671 File Offset: 0x0019C871
+		
 		public BillStack BillStack
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D50 RID: 19792 RVA: 0x0019E679 File Offset: 0x0019C879
+		
 		public IntVec3 BillInteractionCell
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D51 RID: 19793 RVA: 0x0019E681 File Offset: 0x0019C881
+		
 		public IEnumerable<IntVec3> IngredientStackCells
 		{
 			get

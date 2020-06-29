@@ -8,7 +8,7 @@ namespace RimWorld
 	public class RecordDef : Def
 	{
 		
-		// (get) Token: 0x060036CE RID: 14030 RVA: 0x001283AD File Offset: 0x001265AD
+		
 		public RecordWorker Worker
 		{
 			get

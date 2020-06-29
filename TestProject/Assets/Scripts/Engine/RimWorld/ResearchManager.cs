@@ -10,7 +10,7 @@ namespace RimWorld
 	public sealed class ResearchManager : IExposable
 	{
 		
-		// (get) Token: 0x06003AE5 RID: 15077 RVA: 0x00137CE9 File Offset: 0x00135EE9
+		
 		public bool AnyProjectIsAvailable
 		{
 			get

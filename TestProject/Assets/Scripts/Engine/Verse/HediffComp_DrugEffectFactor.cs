@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_DrugEffectFactor : HediffComp
 	{
 		
-		// (get) Token: 0x0600105D RID: 4189 RVA: 0x0005DC99 File Offset: 0x0005BE99
+		
 		public HediffCompProperties_DrugEffectFactor Props
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600105E RID: 4190 RVA: 0x0005DCA6 File Offset: 0x0005BEA6
+		
 		private float CurrentFactor
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600105F RID: 4191 RVA: 0x0005DCC0 File Offset: 0x0005BEC0
+		
 		public override string CompTipStringExtra
 		{
 			get

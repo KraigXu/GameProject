@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_RecoveryThought : HediffComp
 	{
 		
-		// (get) Token: 0x060010AE RID: 4270 RVA: 0x0005EF09 File Offset: 0x0005D109
+		
 		public HediffCompProperties_RecoveryThought Props
 		{
 			get

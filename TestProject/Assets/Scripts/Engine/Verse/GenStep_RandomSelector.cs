@@ -7,7 +7,7 @@ namespace Verse
 	public class GenStep_RandomSelector : GenStep
 	{
 		
-		// (get) Token: 0x06000BC7 RID: 3015 RVA: 0x00042E73 File Offset: 0x00041073
+		
 		public override int SeedPart
 		{
 			get

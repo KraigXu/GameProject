@@ -6,7 +6,7 @@ namespace Verse
 	public abstract class WorldGenStep
 	{
 		
-		// (get) Token: 0x060006FA RID: 1786
+		
 		public abstract int SeedPart { get; }
 
 		

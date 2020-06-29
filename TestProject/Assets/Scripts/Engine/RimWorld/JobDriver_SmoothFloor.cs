@@ -7,7 +7,7 @@ namespace RimWorld
 	public class JobDriver_SmoothFloor : JobDriver_AffectFloor
 	{
 		
-		// (get) Token: 0x06002B56 RID: 11094 RVA: 0x000FAFCA File Offset: 0x000F91CA
+		
 		protected override int BaseWorkAmount
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B57 RID: 11095 RVA: 0x000FAFD1 File Offset: 0x000F91D1
+		
 		protected override DesignationDef DesDef
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B58 RID: 11096 RVA: 0x000FAFD8 File Offset: 0x000F91D8
+		
 		protected override StatDef SpeedStat
 		{
 			get

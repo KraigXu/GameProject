@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_Goodwill : Reward
 	{
 		
-		// (get) Token: 0x06006150 RID: 24912 RVA: 0x0021CA33 File Offset: 0x0021AC33
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get

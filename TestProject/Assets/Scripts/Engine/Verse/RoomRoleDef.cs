@@ -7,7 +7,7 @@ namespace Verse
 	public class RoomRoleDef : Def
 	{
 		
-		// (get) Token: 0x06000631 RID: 1585 RVA: 0x0001DA77 File Offset: 0x0001BC77
+		
 		public RoomRoleWorker Worker
 		{
 			get

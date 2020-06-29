@@ -10,8 +10,8 @@ namespace RimWorld
 	public class Pawn_DrugPolicyTracker : IExposable
 	{
 		
-		// (get) Token: 0x060044CE RID: 17614 RVA: 0x001738BF File Offset: 0x00171ABF
-		// (set) Token: 0x060044CF RID: 17615 RVA: 0x001738E4 File Offset: 0x00171AE4
+		
+		
 		public DrugPolicy CurrentPolicy
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044D0 RID: 17616 RVA: 0x001738F8 File Offset: 0x00171AF8
+		
 		private float DayPercentNotSleeping
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044D1 RID: 17617 RVA: 0x001739D8 File Offset: 0x00171BD8
+		
 		private float HoursPerDayNotSleeping
 		{
 			get

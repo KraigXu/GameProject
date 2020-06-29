@@ -8,7 +8,7 @@ namespace Verse.Steam
 	public class Dialog_WorkshopOperationInProgress : Window
 	{
 		
-		// (get) Token: 0x06002279 RID: 8825 RVA: 0x000A0E6A File Offset: 0x0009F06A
+		
 		public override Vector2 InitialSize
 		{
 			get

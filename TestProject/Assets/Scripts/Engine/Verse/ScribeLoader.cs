@@ -27,9 +27,9 @@ namespace Verse
 			}
 			try
 			{
-				using (StreamReader streamReader = new StreamReader(filePath))
+				StreamReader streamReader = new StreamReader(filePath);
 				{
-					using (XmlTextReader xmlTextReader = new XmlTextReader(streamReader))
+					XmlTextReader xmlTextReader = new XmlTextReader(streamReader);
 					{
 						XmlDocument xmlDocument = new XmlDocument();
 						xmlDocument.Load(xmlTextReader);
@@ -62,13 +62,13 @@ namespace Verse
 			}
 			try
 			{
-				using (StreamReader streamReader = new StreamReader(filePath))
+				StreamReader streamReader = new StreamReader(filePath);
 				{
-					using (XmlTextReader xmlTextReader = new XmlTextReader(streamReader))
+					XmlTextReader xmlTextReader = new XmlTextReader(streamReader);
 					{
 						if (ScribeMetaHeaderUtility.ReadToMetaElement(xmlTextReader))
 						{
-							using (XmlReader xmlReader = xmlTextReader.ReadSubtree())
+							XmlReader xmlReader = xmlTextReader.ReadSubtree();
 							{
 								XmlDocument xmlDocument = new XmlDocument();
 								xmlDocument.Load(xmlReader);

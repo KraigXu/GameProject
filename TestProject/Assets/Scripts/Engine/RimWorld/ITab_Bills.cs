@@ -10,7 +10,7 @@ namespace RimWorld
 	public class ITab_Bills : ITab
 	{
 		
-		// (get) Token: 0x06005B75 RID: 23413 RVA: 0x001F7953 File Offset: 0x001F5B53
+		
 		protected Building_WorkTable SelTable
 		{
 			get
@@ -76,14 +76,14 @@ namespace RimWorld
 					if (this.SelTable.def.AllRecipes[i].AvailableNow && this.SelTable.def.AllRecipes[i].AvailableOnNow(this.SelTable))
 					{
 						RecipeDef recipe = this.SelTable.def.AllRecipes[i];
-						Predicate<Pawn> 9__3;
+
 						list.Add(new FloatMenuOption(recipe.LabelCap, delegate
 						{
 							List<Pawn> freeColonists = this.SelTable.Map.mapPawns.FreeColonists;
 							Predicate<Pawn> predicate;
-							if ((predicate ) == null)
+							if ((predicate=default ) == null)
 							{
-								predicate = (9__3 = ((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)));
+								predicate = ( ((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)));
 							}
 							if (!freeColonists.Any(predicate))
 							{

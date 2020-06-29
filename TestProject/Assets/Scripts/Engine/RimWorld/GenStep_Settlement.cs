@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_Settlement : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003EC1 RID: 16065 RVA: 0x0014DA98 File Offset: 0x0014BC98
+		
 		public override int SeedPart
 		{
 			get
@@ -60,11 +60,11 @@ namespace RimWorld
 			ResolveParams resolveParams = default(ResolveParams);
 			resolveParams.rect = rect;
 			resolveParams.faction = faction;
-			BaseGen.globalSettings.map = map;
-			BaseGen.globalSettings.minBuildings = 1;
-			BaseGen.globalSettings.minBarracks = 1;
-			BaseGen.symbolStack.Push("settlement", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.globalSettings.minBuildings = 1;
+			BaseGenCore.globalSettings.minBarracks = 1;
+			BaseGenCore.symbolStack.Push("settlement", resolveParams, null);
+			BaseGenCore.Generate();
 		}
 
 		

@@ -5,30 +5,30 @@ using Verse;
 namespace RimWorld.BaseGen
 {
 	
-	public static class BaseGen
+	public static class BaseGenCore
 	{
 		
-		// (get) Token: 0x0600649E RID: 25758 RVA: 0x0022FFD0 File Offset: 0x0022E1D0
+		
 		public static string CurrentSymbolPath
 		{
 			get
 			{
-				return BaseGen.currentSymbolPath;
+				return BaseGenCore.currentSymbolPath;
 			}
 		}
 
 		
 		public static void Reset()
 		{
-			BaseGen.rulesBySymbol.Clear();
+			BaseGenCore.rulesBySymbol.Clear();
 			List<RuleDef> allDefsListForReading = DefDatabase<RuleDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				List<RuleDef> list;
-				if (!BaseGen.rulesBySymbol.TryGetValue(allDefsListForReading[i].symbol, out list))
+				if (!BaseGenCore.rulesBySymbol.TryGetValue(allDefsListForReading[i].symbol, out list))
 				{
 					list = new List<RuleDef>();
-					BaseGen.rulesBySymbol.Add(allDefsListForReading[i].symbol, list);
+					BaseGenCore.rulesBySymbol.Add(allDefsListForReading[i].symbol, list);
 				}
 				list.Add(allDefsListForReading[i]);
 			}
@@ -37,28 +37,28 @@ namespace RimWorld.BaseGen
 		
 		public static void Generate()
 		{
-			if (BaseGen.working)
+			if (BaseGenCore.working)
 			{
 				Log.Error("Cannot call Generate() while already generating. Nested calls are not allowed.", false);
 				return;
 			}
-			BaseGen.working = true;
-			BaseGen.currentSymbolPath = "";
+			BaseGenCore.working = true;
+			BaseGenCore.currentSymbolPath = "";
 			try
 			{
-				if (BaseGen.symbolStack.Empty)
+				if (BaseGenCore.symbolStack.Empty)
 				{
 					Log.Warning("Symbol stack is empty.", false);
 				}
-				else if (BaseGen.globalSettings.map == null)
+				else if (BaseGenCore.globalSettings.map == null)
 				{
 					Log.Error("Called BaseGen.Resolve() with null map.", false);
 				}
 				else
 				{
-					int num = BaseGen.symbolStack.Count - 1;
+					int num = BaseGenCore.symbolStack.Count - 1;
 					int num2 = 0;
-					while (!BaseGen.symbolStack.Empty)
+					while (!BaseGenCore.symbolStack.Empty)
 					{
 						num2++;
 						if (num2 > 100000)
@@ -66,16 +66,16 @@ namespace RimWorld.BaseGen
 							Log.Error("Error in BaseGen: Too many iterations. Infinite loop?", false);
 							break;
 						}
-						SymbolStack.Element element = BaseGen.symbolStack.Pop();
-						BaseGen.currentSymbolPath = element.symbolPath;
-						if (BaseGen.symbolStack.Count == num)
+						SymbolStack.Element element = BaseGenCore.symbolStack.Pop();
+						BaseGenCore.currentSymbolPath = element.symbolPath;
+						if (BaseGenCore.symbolStack.Count == num)
 						{
-							BaseGen.globalSettings.mainRect = element.resolveParams.rect;
+							BaseGenCore.globalSettings.mainRect = element.resolveParams.rect;
 							num--;
 						}
 						try
 						{
-							BaseGen.Resolve(element);
+							BaseGenCore.Resolve(element);
 						}
 						catch (Exception ex)
 						{
@@ -98,9 +98,9 @@ namespace RimWorld.BaseGen
 			}
 			finally
 			{
-				BaseGen.working = false;
-				BaseGen.symbolStack.Clear();
-				BaseGen.globalSettings.Clear();
+				BaseGenCore.working = false;
+				BaseGenCore.symbolStack.Clear();
+				BaseGenCore.globalSettings.Clear();
 			}
 		}
 
@@ -109,9 +109,9 @@ namespace RimWorld.BaseGen
 		{
 			string symbol = toResolve.symbol;
 			ResolveParams resolveParams = toResolve.resolveParams;
-			BaseGen.tmpResolvers.Clear();
+			BaseGenCore.tmpResolvers.Clear();
 			List<RuleDef> list;
-			if (BaseGen.rulesBySymbol.TryGetValue(symbol, out list))
+			if (BaseGenCore.rulesBySymbol.TryGetValue(symbol, out list))
 			{
 				for (int i = 0; i < list.Count; i++)
 				{
@@ -121,12 +121,12 @@ namespace RimWorld.BaseGen
 						SymbolResolver symbolResolver = ruleDef.resolvers[j];
 						if (symbolResolver.CanResolve(resolveParams))
 						{
-							BaseGen.tmpResolvers.Add(symbolResolver);
+							BaseGenCore.tmpResolvers.Add(symbolResolver);
 						}
 					}
 				}
 			}
-			if (!BaseGen.tmpResolvers.Any<SymbolResolver>())
+			if (!BaseGenCore.tmpResolvers.Any<SymbolResolver>())
 			{
 				Log.Warning(string.Concat(new object[]
 				{
@@ -137,7 +137,7 @@ namespace RimWorld.BaseGen
 				}), false);
 				return;
 			}
-			BaseGen.tmpResolvers.RandomElementByWeight((SymbolResolver x) => x.selectionWeight).Resolve(resolveParams);
+			BaseGenCore.tmpResolvers.RandomElementByWeight((SymbolResolver x) => x.selectionWeight).Resolve(resolveParams);
 		}
 
 		

@@ -11,7 +11,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_ChargeBatteries.batteries.Clear();
 			foreach (IntVec3 c in rp.rect)
 			{

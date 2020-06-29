@@ -33,7 +33,7 @@ namespace RimWorld.BaseGen
 			}
 			ResolveParams resolveParams = rp;
 			resolveParams.rect = rect;
-			BaseGen.symbolStack.Push("stockpile", resolveParams, null);
+			BaseGenCore.symbolStack.Push("stockpile", resolveParams, null);
 		}
 
 		
@@ -58,7 +58,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryFindRandomInnerRect(CellRect outerRect, int size, out CellRect rect, int minValidCells, out int maxValidCellsFound)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			size = Mathf.Min(size, Mathf.Min(outerRect.Width, outerRect.Height));
 			int maxValidCellsFoundLocal = 0;
 			bool result = outerRect.TryFindRandomInnerRect(new IntVec2(size, size), out rect, delegate(CellRect x)

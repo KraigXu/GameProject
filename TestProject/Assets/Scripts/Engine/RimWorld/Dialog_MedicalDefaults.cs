@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Dialog_MedicalDefaults : Window
 	{
 		
-		// (get) Token: 0x06005920 RID: 22816 RVA: 0x001DC19F File Offset: 0x001DA39F
+		
 		public override Vector2 InitialSize
 		{
 			get

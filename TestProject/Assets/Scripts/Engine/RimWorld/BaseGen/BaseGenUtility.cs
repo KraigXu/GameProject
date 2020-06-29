@@ -168,7 +168,7 @@ namespace RimWorld.BaseGen
 			{
 				return;
 			}
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			CellRect cellRect = GenAdj.OccupiedRect(c, rot, thingDef.size);
 			BaseGenUtility.bridgeCells.Clear();
 			foreach (IntVec3 intVec in cellRect)

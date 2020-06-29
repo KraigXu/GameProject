@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public class TimeoutComp : WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006F09 RID: 28425 RVA: 0x0026AD60 File Offset: 0x00268F60
+		
 		public bool Active
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F0A RID: 28426 RVA: 0x0026AD6E File Offset: 0x00268F6E
+		
 		public bool Passed
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F0B RID: 28427 RVA: 0x0026AD8F File Offset: 0x00268F8F
+		
 		private bool ShouldRemoveWorldObjectNow
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F0C RID: 28428 RVA: 0x0026ADA4 File Offset: 0x00268FA4
+		
 		public int TicksLeft
 		{
 			get

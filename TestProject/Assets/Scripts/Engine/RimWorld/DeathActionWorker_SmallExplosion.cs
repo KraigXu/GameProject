@@ -7,7 +7,7 @@ namespace RimWorld
 	public class DeathActionWorker_SmallExplosion : DeathActionWorker
 	{
 		
-		// (get) Token: 0x06004203 RID: 16899 RVA: 0x00160BAA File Offset: 0x0015EDAA
+		
 		public override RulePackDef DeathRules
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004204 RID: 16900 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DangerousInMelee
 		{
 			get

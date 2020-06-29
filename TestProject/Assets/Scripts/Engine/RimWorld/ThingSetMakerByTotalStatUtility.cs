@@ -329,7 +329,7 @@ namespace RimWorld
 		private static void CalculateAllowedThingStuffPairs(IEnumerable<ThingDef> allowed, TechLevel techLevel, QualityGenerator qualityGenerator)
 		{
 			ThingSetMakerByTotalStatUtility.allowedThingStuffPairs.Clear();
-			using (IEnumerator<ThingDef> enumerator = allowed.GetEnumerator())
+			IEnumerator<ThingDef> enumerator = allowed.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

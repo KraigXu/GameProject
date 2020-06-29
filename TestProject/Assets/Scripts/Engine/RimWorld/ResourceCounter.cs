@@ -9,7 +9,7 @@ namespace RimWorld
 	public sealed class ResourceCounter
 	{
 		
-		// (get) Token: 0x06003FC8 RID: 16328 RVA: 0x001538E4 File Offset: 0x00151AE4
+		
 		public int Silver
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003FC9 RID: 16329 RVA: 0x001538F4 File Offset: 0x00151AF4
+		
 		public float TotalHumanEdibleNutrition
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003FCA RID: 16330 RVA: 0x00153988 File Offset: 0x00151B88
+		
 		public Dictionary<ThingDef, int> AllCountedAmounts
 		{
 			get

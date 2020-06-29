@@ -14,8 +14,8 @@ namespace Verse
 	public class Pawn : ThingWithComps, IStrippable, IBillGiver, IVerbOwner, ITrader, IAttackTarget, ILoadReferenceable, IAttackTargetSearcher, IThingHolder
 	{
 		
-		// (get) Token: 0x060011B7 RID: 4535 RVA: 0x00063DE3 File Offset: 0x00061FE3
-		// (set) Token: 0x060011B8 RID: 4536 RVA: 0x00063DEB File Offset: 0x00061FEB
+		
+		
 		public Name Name
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011B9 RID: 4537 RVA: 0x00063DF4 File Offset: 0x00061FF4
+		
 		public RaceProperties RaceProps
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BA RID: 4538 RVA: 0x00063E01 File Offset: 0x00062001
+		
 		public Job CurJob
 		{
 			get
@@ -53,7 +53,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BB RID: 4539 RVA: 0x00063E18 File Offset: 0x00062018
+		
 		public JobDef CurJobDef
 		{
 			get
@@ -67,7 +67,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BC RID: 4540 RVA: 0x00063E2F File Offset: 0x0006202F
+		
 		public bool Downed
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BD RID: 4541 RVA: 0x00063E3C File Offset: 0x0006203C
+		
 		public bool Dead
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BE RID: 4542 RVA: 0x00063E49 File Offset: 0x00062049
+		
 		public string KindLabel
 		{
 			get
@@ -97,7 +97,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011BF RID: 4543 RVA: 0x00063E55 File Offset: 0x00062055
+		
 		public bool InMentalState
 		{
 			get
@@ -107,7 +107,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C0 RID: 4544 RVA: 0x00063E71 File Offset: 0x00062071
+		
 		public MentalState MentalState
 		{
 			get
@@ -121,7 +121,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C1 RID: 4545 RVA: 0x00063E8D File Offset: 0x0006208D
+		
 		public MentalStateDef MentalStateDef
 		{
 			get
@@ -135,7 +135,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C2 RID: 4546 RVA: 0x00063EA9 File Offset: 0x000620A9
+		
 		public bool InAggroMentalState
 		{
 			get
@@ -145,7 +145,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C3 RID: 4547 RVA: 0x00063EDE File Offset: 0x000620DE
+		
 		public bool Inspired
 		{
 			get
@@ -155,7 +155,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C4 RID: 4548 RVA: 0x00063EFA File Offset: 0x000620FA
+		
 		public Inspiration Inspiration
 		{
 			get
@@ -169,7 +169,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C5 RID: 4549 RVA: 0x00063F16 File Offset: 0x00062116
+		
 		public InspirationDef InspirationDef
 		{
 			get
@@ -183,7 +183,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C6 RID: 4550 RVA: 0x00063F32 File Offset: 0x00062132
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -193,7 +193,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C7 RID: 4551 RVA: 0x00063F3F File Offset: 0x0006213F
+		
 		public VerbTracker VerbTracker
 		{
 			get
@@ -203,7 +203,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C8 RID: 4552 RVA: 0x00063F47 File Offset: 0x00062147
+		
 		public List<VerbProperties> VerbProperties
 		{
 			get
@@ -213,7 +213,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011C9 RID: 4553 RVA: 0x00063F54 File Offset: 0x00062154
+		
 		public List<Tool> Tools
 		{
 			get
@@ -223,7 +223,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CA RID: 4554 RVA: 0x00063F61 File Offset: 0x00062161
+		
 		public bool IsColonist
 		{
 			get
@@ -233,7 +233,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CB RID: 4555 RVA: 0x00063F85 File Offset: 0x00062185
+		
 		public bool IsFreeColonist
 		{
 			get
@@ -243,7 +243,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CC RID: 4556 RVA: 0x00063F9A File Offset: 0x0006219A
+		
 		public Faction HostFaction
 		{
 			get
@@ -257,7 +257,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CD RID: 4557 RVA: 0x00063FB1 File Offset: 0x000621B1
+		
 		public bool Drafted
 		{
 			get
@@ -267,7 +267,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CE RID: 4558 RVA: 0x00063FC8 File Offset: 0x000621C8
+		
 		public bool IsPrisoner
 		{
 			get
@@ -277,7 +277,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011CF RID: 4559 RVA: 0x00063FDF File Offset: 0x000621DF
+		
 		public bool IsPrisonerOfColony
 		{
 			get
@@ -287,7 +287,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D0 RID: 4560 RVA: 0x00064008 File Offset: 0x00062208
+		
 		public bool IsColonistPlayerControlled
 		{
 			get
@@ -297,7 +297,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D1 RID: 4561 RVA: 0x0006402D File Offset: 0x0006222D
+		
 		public IEnumerable<IntVec3> IngredientStackCells
 		{
 			get
@@ -308,7 +308,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D2 RID: 4562 RVA: 0x0006403D File Offset: 0x0006223D
+		
 		public bool InContainerEnclosed
 		{
 			get
@@ -318,7 +318,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D3 RID: 4563 RVA: 0x0006404A File Offset: 0x0006224A
+		
 		public Corpse Corpse
 		{
 			get
@@ -328,7 +328,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D4 RID: 4564 RVA: 0x00064058 File Offset: 0x00062258
+		
 		public Pawn CarriedBy
 		{
 			get
@@ -347,7 +347,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D5 RID: 4565 RVA: 0x00064088 File Offset: 0x00062288
+		
 		public override string LabelNoCount
 		{
 			get
@@ -365,7 +365,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D6 RID: 4566 RVA: 0x000640EA File Offset: 0x000622EA
+		
 		public override string LabelShort
 		{
 			get
@@ -379,7 +379,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D7 RID: 4567 RVA: 0x00064108 File Offset: 0x00062308
+		
 		public TaggedString LabelNoCountColored
 		{
 			get
@@ -397,7 +397,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D8 RID: 4568 RVA: 0x0006418D File Offset: 0x0006238D
+		
 		public TaggedString NameShortColored
 		{
 			get
@@ -411,7 +411,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011D9 RID: 4569 RVA: 0x000641BD File Offset: 0x000623BD
+		
 		public TaggedString NameFullColored
 		{
 			get
@@ -425,7 +425,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DA RID: 4570 RVA: 0x000641ED File Offset: 0x000623ED
+		
 		public Pawn_DrawTracker Drawer
 		{
 			get
@@ -439,7 +439,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DB RID: 4571 RVA: 0x00064209 File Offset: 0x00062409
+		
 		public Faction FactionOrExtraHomeFaction
 		{
 			get
@@ -453,7 +453,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DC RID: 4572 RVA: 0x00064238 File Offset: 0x00062438
+		
 		public BillStack BillStack
 		{
 			get
@@ -463,7 +463,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DD RID: 4573 RVA: 0x00064248 File Offset: 0x00062448
+		
 		public override IntVec3 InteractionCell
 		{
 			get
@@ -567,7 +567,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DE RID: 4574 RVA: 0x00064589 File Offset: 0x00062789
+		
 		public TraderKindDef TraderKind
 		{
 			get
@@ -581,7 +581,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011DF RID: 4575 RVA: 0x000645A0 File Offset: 0x000627A0
+		
 		public IEnumerable<Thing> Goods
 		{
 			get
@@ -591,7 +591,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E0 RID: 4576 RVA: 0x000645AD File Offset: 0x000627AD
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -601,7 +601,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E1 RID: 4577 RVA: 0x000645BA File Offset: 0x000627BA
+		
 		public string TraderName
 		{
 			get
@@ -611,7 +611,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E2 RID: 4578 RVA: 0x000645C7 File Offset: 0x000627C7
+		
 		public bool CanTradeNow
 		{
 			get
@@ -621,7 +621,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E3 RID: 4579 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public float TradePriceImprovementOffsetForPlayer
 		{
 			get
@@ -631,7 +631,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E4 RID: 4580 RVA: 0x000645DE File Offset: 0x000627DE
+		
 		public float BodySize
 		{
 			get
@@ -641,7 +641,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E5 RID: 4581 RVA: 0x000645FC File Offset: 0x000627FC
+		
 		public float HealthScale
 		{
 			get
@@ -651,7 +651,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E6 RID: 4582 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IAttackTarget.Thing
 		{
 			get
@@ -661,7 +661,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E7 RID: 4583 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public float TargetPriorityFactor
 		{
 			get
@@ -671,7 +671,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E8 RID: 4584 RVA: 0x00064620 File Offset: 0x00062820
+		
 		public LocalTargetInfo TargetCurrentlyAimingAt
 		{
 			get
@@ -690,7 +690,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011E9 RID: 4585 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IAttackTargetSearcher.Thing
 		{
 			get
@@ -700,7 +700,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011EA RID: 4586 RVA: 0x00064668 File Offset: 0x00062868
+		
 		public LocalTargetInfo LastAttackedTarget
 		{
 			get
@@ -710,7 +710,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011EB RID: 4587 RVA: 0x00064675 File Offset: 0x00062875
+		
 		public int LastAttackTargetTick
 		{
 			get
@@ -720,7 +720,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011EC RID: 4588 RVA: 0x00064684 File Offset: 0x00062884
+		
 		public Verb CurrentEffectiveVerb
 		{
 			get
@@ -747,7 +747,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011EF RID: 4591 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		Thing IVerbOwner.ConstantCaster
 		{
 			get
@@ -757,7 +757,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060011F0 RID: 4592 RVA: 0x000646C5 File Offset: 0x000628C5
+		
 		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
 		{
 			get
@@ -1338,7 +1338,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001205 RID: 4613 RVA: 0x0006543D File Offset: 0x0006363D
+		
 		public int TicksPerMoveCardinal
 		{
 			get
@@ -1348,7 +1348,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001206 RID: 4614 RVA: 0x00065446 File Offset: 0x00063646
+		
 		public int TicksPerMoveDiagonal
 		{
 			get
@@ -2263,7 +2263,7 @@ namespace Verse
 			//			Func<BodyPartRecord, bool> predicate;
 			//			if ((predicate = c__DisplayClass203_.9__0) == null)
 			//			{
-			//				predicate = (c__DisplayClass203_.9__0 = ((BodyPartRecord x) => x.IsInGroup(c__DisplayClass203_.lifeStage.butcherBodyPart.bodyPartGroup)));
+			//				predicate = (c__DisplayClass203_. ((BodyPartRecord x) => x.IsInGroup(c__DisplayClass203_.lifeStage.butcherBodyPart.bodyPartGroup)));
 			//			}
 			//			BodyPartRecord bodyPartRecord = notMissingParts.Where(predicate).FirstOrDefault<BodyPartRecord>();
 			//			if (bodyPartRecord == null)
@@ -2723,7 +2723,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001224 RID: 4644 RVA: 0x000675DF File Offset: 0x000657DF
+		
 		public TradeCurrency TradeCurrency
 		{
 			get
@@ -2995,7 +2995,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001233 RID: 4659 RVA: 0x00067B98 File Offset: 0x00065D98
+		
 		public WorkTags CombinedDisabledWorkTags
 		{
 			get
@@ -3064,7 +3064,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001237 RID: 4663 RVA: 0x00067D6C File Offset: 0x00065F6C
+		
 		public bool HasPsylink
 		{
 			get

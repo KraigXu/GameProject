@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldCameraDriver : MonoBehaviour
 	{
 		
-		// (get) Token: 0x060069D0 RID: 27088 RVA: 0x0024EBE6 File Offset: 0x0024CDE6
+		
 		private Camera MyCamera
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D1 RID: 27089 RVA: 0x0024EC08 File Offset: 0x0024CE08
+		
 		public WorldCameraZoomRange CurrentZoom
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D2 RID: 27090 RVA: 0x00014515 File Offset: 0x00012715
+		
 		private float ScreenDollyEdgeWidthBottom
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D3 RID: 27091 RVA: 0x0024EC3B File Offset: 0x0024CE3B
+		
 		private Vector3 CurrentRealPosition
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D4 RID: 27092 RVA: 0x0024EC4D File Offset: 0x0024CE4D
+		
 		public float AltitudePercent
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D5 RID: 27093 RVA: 0x0024EC64 File Offset: 0x0024CE64
+		
 		public Vector3 CurrentlyLookingAtPointOnSphere
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x060069D6 RID: 27094 RVA: 0x0024EC80 File Offset: 0x0024CE80
+		
 		private bool AnythingPreventsCameraMotion
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct SignalArgs
 	{
 		
-		// (get) Token: 0x06003AF8 RID: 15096 RVA: 0x001384A8 File Offset: 0x001366A8
+		
 		public int Count
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003AF9 RID: 15097 RVA: 0x001384B0 File Offset: 0x001366B0
+		
 		public IEnumerable<NamedArgument> Args
 		{
 			get

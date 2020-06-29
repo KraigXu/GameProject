@@ -8,7 +8,7 @@ namespace RimWorld
 	public struct RoyalTitleFoodRequirement
 	{
 		
-		// (get) Token: 0x06006342 RID: 25410 RVA: 0x00227EFA File Offset: 0x002260FA
+		
 		public bool Defined
 		{
 			get

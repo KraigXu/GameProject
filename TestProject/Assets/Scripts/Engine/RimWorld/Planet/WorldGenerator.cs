@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class WorldGenerator
 	{
 		
-		// (get) Token: 0x06006AED RID: 27373 RVA: 0x00254E18 File Offset: 0x00253018
+		
 		public static IEnumerable<WorldGenStepDef> GenStepsInOrder
 		{
 			get

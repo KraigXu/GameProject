@@ -10,7 +10,7 @@ namespace Verse.Steam
 	public static class WorkshopItems
 	{
 		
-		// (get) Token: 0x060022BC RID: 8892 RVA: 0x000D307E File Offset: 0x000D127E
+		
 		public static IEnumerable<WorkshopItem> AllSubscribedItems
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022BD RID: 8893 RVA: 0x000D3088 File Offset: 0x000D1288
+		
 		public static int DownloadingItemsCount
 		{
 			get

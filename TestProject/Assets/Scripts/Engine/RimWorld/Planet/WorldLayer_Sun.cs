@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class WorldLayer_Sun : WorldLayer
 	{
 		
-		// (get) Token: 0x06006A40 RID: 27200 RVA: 0x00250F13 File Offset: 0x0024F113
+		
 		protected override int Layer
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006A41 RID: 27201 RVA: 0x00250FA9 File Offset: 0x0024F1A9
+		
 		protected override Quaternion Rotation
 		{
 			get
@@ -31,10 +31,12 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
-			{
-				yield return obj;
-			}
+	
+
+
+
+
+
 			IEnumerator enumerator = null;
 			Rand.PushState();
 			Rand.Seed = Find.World.info.Seed;

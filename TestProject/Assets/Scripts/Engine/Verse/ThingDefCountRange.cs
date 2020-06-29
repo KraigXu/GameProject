@@ -6,7 +6,7 @@ namespace Verse
 	public struct ThingDefCountRange : IEquatable<ThingDefCountRange>, IExposable
 	{
 		
-		// (get) Token: 0x06001F85 RID: 8069 RVA: 0x000C15BB File Offset: 0x000BF7BB
+		
 		public ThingDef ThingDef
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F86 RID: 8070 RVA: 0x000C15C3 File Offset: 0x000BF7C3
+		
 		public IntRange CountRange
 		{
 			get
@@ -26,7 +26,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F87 RID: 8071 RVA: 0x000C15CB File Offset: 0x000BF7CB
+		
 		public int Min
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F88 RID: 8072 RVA: 0x000C15D8 File Offset: 0x000BF7D8
+		
 		public int Max
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F89 RID: 8073 RVA: 0x000C15E5 File Offset: 0x000BF7E5
+		
 		public int TrueMin
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F8A RID: 8074 RVA: 0x000C15F2 File Offset: 0x000BF7F2
+		
 		public int TrueMax
 		{
 			get

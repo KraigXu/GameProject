@@ -8,7 +8,7 @@ namespace Verse
 	public class BodyPartRecord
 	{
 		
-		// (get) Token: 0x06000462 RID: 1122 RVA: 0x00016E65 File Offset: 0x00015065
+		
 		public bool IsCorePart
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000463 RID: 1123 RVA: 0x00016E70 File Offset: 0x00015070
+		
 		public string Label
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000464 RID: 1124 RVA: 0x00016E91 File Offset: 0x00015091
+		
 		public string LabelCap
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000465 RID: 1125 RVA: 0x00016ED0 File Offset: 0x000150D0
+		
 		public string LabelShort
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000466 RID: 1126 RVA: 0x00016EDD File Offset: 0x000150DD
+		
 		public string LabelShortCap
 		{
 			get
@@ -70,7 +70,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000467 RID: 1127 RVA: 0x00016EEA File Offset: 0x000150EA
+		
 		public int Index
 		{
 			get

@@ -7,8 +7,8 @@ namespace RimWorld
 	public class Pawn_FoodRestrictionTracker : IExposable
 	{
 		
-		// (get) Token: 0x060044E3 RID: 17635 RVA: 0x0017408F File Offset: 0x0017228F
-		// (set) Token: 0x060044E4 RID: 17636 RVA: 0x001740B4 File Offset: 0x001722B4
+		
+		
 		public FoodRestriction CurrentFoodRestriction
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044E5 RID: 17637 RVA: 0x001740C0 File Offset: 0x001722C0
+		
 		public bool Configurable
 		{
 			get

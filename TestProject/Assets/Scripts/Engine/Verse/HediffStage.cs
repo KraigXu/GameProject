@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffStage
 	{
 		
-		// (get) Token: 0x0600058B RID: 1419 RVA: 0x0001B78A File Offset: 0x0001998A
+		
 		public bool AffectsMemory
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600058C RID: 1420 RVA: 0x0001B7A8 File Offset: 0x000199A8
+		
 		public bool AffectsSocialInteractions
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class BillStack : IExposable
 	{
 		
-		// (get) Token: 0x06002A7F RID: 10879 RVA: 0x000F7B6C File Offset: 0x000F5D6C
+		
 		public List<Bill> Bills
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A82 RID: 10882 RVA: 0x000F7B94 File Offset: 0x000F5D94
+		
 		public int Count
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A83 RID: 10883 RVA: 0x000F7BA4 File Offset: 0x000F5DA4
+		
 		public Bill FirstShouldDoNow
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A84 RID: 10884 RVA: 0x000F7BE4 File Offset: 0x000F5DE4
+		
 		public bool AnyShouldDoNow
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GatheringDef : Def
 	{
 		
-		// (get) Token: 0x0600360C RID: 13836 RVA: 0x0012581B File Offset: 0x00123A1B
+		
 		public bool IsRandomSelectable
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600360D RID: 13837 RVA: 0x0012582A File Offset: 0x00123A2A
+		
 		public GatheringWorker Worker
 		{
 			get

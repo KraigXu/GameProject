@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class Autotests_ColonyMaker
 	{
 		
-		// (get) Token: 0x06005F57 RID: 24407 RVA: 0x000885D0 File Offset: 0x000867D0
+		
 		private static Map Map
 		{
 			get

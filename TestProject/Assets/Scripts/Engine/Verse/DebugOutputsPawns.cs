@@ -512,7 +512,7 @@ namespace Verse
 		{
 			List<TableDataGetter<Pawn>> list = new List<TableDataGetter<Pawn>>();
 			list.Add(new TableDataGetter<Pawn>("name", (Pawn p) => p.Label));
-			using (IEnumerator<InspirationDef> enumerator = DefDatabase<InspirationDef>.AllDefs.GetEnumerator())
+			IEnumerator<InspirationDef> enumerator = DefDatabase<InspirationDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -715,9 +715,9 @@ namespace Verse
 		{
 			List<TableDataGetter<PawnKindDef>> list = new List<TableDataGetter<PawnKindDef>>();
 			list.Add(new TableDataGetter<PawnKindDef>("animal", (PawnKindDef k) => k.defName));
-			using (IEnumerator<string> enumerator = (from k in DefDatabase<PawnKindDef>.AllDefs
+			IEnumerator<string> enumerator = (from k in DefDatabase<PawnKindDef>.AllDefs
 			where k.race.tradeTags != null
-			select k).SelectMany((PawnKindDef k) => k.race.tradeTags).Distinct<string>().GetEnumerator())
+			select k).SelectMany((PawnKindDef k) => k.race.tradeTags).Distinct<string>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

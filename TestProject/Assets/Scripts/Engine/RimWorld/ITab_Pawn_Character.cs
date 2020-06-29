@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_Pawn_Character : ITab
 	{
 		
-		// (get) Token: 0x06005B8F RID: 23439 RVA: 0x001F86F4 File Offset: 0x001F68F4
+		
 		private Pawn PawnToShowInfoAbout
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B90 RID: 23440 RVA: 0x001F873B File Offset: 0x001F693B
+		
 		public override bool IsVisible
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_BeatFire : JobDriver
 	{
 		
-		// (get) Token: 0x06002BA7 RID: 11175 RVA: 0x000FB804 File Offset: 0x000F9A04
+		
 		protected Fire TargetFire
 		{
 			get

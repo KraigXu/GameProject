@@ -7,7 +7,7 @@ namespace Verse
 	public class Hediff_MissingPart : HediffWithComps
 	{
 		
-		// (get) Token: 0x06000FE8 RID: 4072 RVA: 0x0005C044 File Offset: 0x0005A244
+		
 		public override float SummaryHealthPercentImpact
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FE9 RID: 4073 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool ShouldRemove
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FEA RID: 4074 RVA: 0x0005C0BC File Offset: 0x0005A2BC
+		
 		public override string LabelBase
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FEB RID: 4075 RVA: 0x0005C194 File Offset: 0x0005A394
+		
 		public override string LabelInBrackets
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FEC RID: 4076 RVA: 0x0005C1EC File Offset: 0x0005A3EC
+		
 		public override float BleedRate
 		{
 			get
@@ -92,7 +92,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FED RID: 4077 RVA: 0x0005C254 File Offset: 0x0005A454
+		
 		public override float PainOffset
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FEE RID: 4078 RVA: 0x0005C2B4 File Offset: 0x0005A4B4
+		
 		private bool ParentIsMissing
 		{
 			get
@@ -124,8 +124,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FEF RID: 4079 RVA: 0x0005C320 File Offset: 0x0005A520
-		// (set) Token: 0x06000FF0 RID: 4080 RVA: 0x0005C335 File Offset: 0x0005A535
+		
+		
 		public bool IsFresh
 		{
 			get
@@ -139,7 +139,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FF1 RID: 4081 RVA: 0x0005C340 File Offset: 0x0005A540
+		
 		public bool IsFreshNonSolidExtremity
 		{
 			get
@@ -149,7 +149,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000FF2 RID: 4082 RVA: 0x0005C3A4 File Offset: 0x0005A5A4
+		
 		private bool TicksAfterNoLongerFreshPassed
 		{
 			get

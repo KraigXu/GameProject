@@ -9,7 +9,7 @@ namespace Verse
 	public class PriorityWork : IExposable
 	{
 		
-		// (get) Token: 0x060003C5 RID: 965 RVA: 0x00013734 File Offset: 0x00011934
+		
 		public bool IsPrioritized
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003C6 RID: 966 RVA: 0x00013764 File Offset: 0x00011964
+		
 		public IntVec3 Cell
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003C7 RID: 967 RVA: 0x0001376C File Offset: 0x0001196C
+		
 		public WorkGiverDef WorkGiver
 		{
 			get

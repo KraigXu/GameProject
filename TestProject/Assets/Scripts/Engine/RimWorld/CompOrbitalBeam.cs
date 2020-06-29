@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompOrbitalBeam : ThingComp
 	{
 		
-		// (get) Token: 0x06005210 RID: 21008 RVA: 0x001B6A92 File Offset: 0x001B4C92
+		
 		public CompProperties_OrbitalBeam Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005211 RID: 21009 RVA: 0x001B6A9F File Offset: 0x001B4C9F
+		
 		private int TicksPassed
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005212 RID: 21010 RVA: 0x001B6AB2 File Offset: 0x001B4CB2
+		
 		private int TicksLeft
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005213 RID: 21011 RVA: 0x001B6AC1 File Offset: 0x001B4CC1
+		
 		private float BeamEndHeight
 		{
 			get

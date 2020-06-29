@@ -200,17 +200,14 @@ namespace Verse.AI
 			}
 			TraverseParms traverseParms = TraverseParms.For(worker, Danger.Deadly, TraverseMode.ByPawn, false);
 			IntVec3 foundCell = IntVec3.Invalid;
-			Comparison<IntVec3> 9__2;
+
 			RegionTraverser.BreadthFirstTraverse(region, (Region from, Region r) => r.Allows(traverseParms, false), delegate(Region r)
 			{
 				HaulAIUtility.candidates.Clear();
 				HaulAIUtility.candidates.AddRange(r.Cells);
 				List<IntVec3> list = HaulAIUtility.candidates;
-				Comparison<IntVec3> comparison;
-				if ((comparison ) == null)
-				{
-					comparison = (9__2 = ((IntVec3 a, IntVec3 b) => a.DistanceToSquared(center).CompareTo(b.DistanceToSquared(center))));
-				}
+				Comparison<IntVec3> comparison = (((IntVec3 a, IntVec3 b) => a.DistanceToSquared(center).CompareTo(b.DistanceToSquared(center)))); ;
+
 				list.Sort(comparison);
 				for (int i = 0; i < HaulAIUtility.candidates.Count; i++)
 				{

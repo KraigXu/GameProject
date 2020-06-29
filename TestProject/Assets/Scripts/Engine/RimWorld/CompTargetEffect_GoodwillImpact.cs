@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompTargetEffect_GoodwillImpact : CompTargetEffect
 	{
 		
-		// (get) Token: 0x06005498 RID: 21656 RVA: 0x001C3647 File Offset: 0x001C1847
+		
 		protected CompProperties_TargetEffect_GoodwillImpact PropsGoodwillImpact
 		{
 			get

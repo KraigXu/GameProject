@@ -7,7 +7,7 @@ namespace RimWorld
 	public class ITab_Pawn_Needs : ITab
 	{
 		
-		// (get) Token: 0x06005BCB RID: 23499 RVA: 0x001FB3D8 File Offset: 0x001F95D8
+		
 		public override bool IsVisible
 		{
 			get

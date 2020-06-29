@@ -7,11 +7,11 @@ namespace RimWorld.Planet
 	public abstract class CaravanArrivalAction : IExposable
 	{
 		
-		// (get) Token: 0x06006B71 RID: 27505
+		
 		public abstract string Label { get; }
 
 		
-		// (get) Token: 0x06006B72 RID: 27506
+		
 		public abstract string ReportString { get; }
 
 		

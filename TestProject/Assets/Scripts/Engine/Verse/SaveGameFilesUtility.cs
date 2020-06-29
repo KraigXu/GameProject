@@ -17,8 +17,8 @@ namespace Verse
 		
 		public static bool SavedGameNamedExists(string fileName)
 		{
-			using (IEnumerator<string> enumerator = (from f in GenFilePaths.AllSavedGameFiles
-			select Path.GetFileNameWithoutExtension(f.Name)).GetEnumerator())
+			IEnumerator<string> enumerator = (from f in GenFilePaths.AllSavedGameFiles
+			select Path.GetFileNameWithoutExtension(f.Name)).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

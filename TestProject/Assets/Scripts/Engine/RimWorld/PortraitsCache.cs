@@ -199,22 +199,22 @@ namespace RimWorld
 		private struct CachedPortrait
 		{
 			
-			// (get) Token: 0x0600A3CD RID: 41933 RVA: 0x0030B411 File Offset: 0x00309611
-			// (set) Token: 0x0600A3CE RID: 41934 RVA: 0x0030B419 File Offset: 0x00309619
+			
+			
 			public RenderTexture RenderTexture { get; private set; }
 
 			
-			// (get) Token: 0x0600A3CF RID: 41935 RVA: 0x0030B422 File Offset: 0x00309622
-			// (set) Token: 0x0600A3D0 RID: 41936 RVA: 0x0030B42A File Offset: 0x0030962A
+			
+			
 			public bool Dirty { get; private set; }
 
 			
-			// (get) Token: 0x0600A3D1 RID: 41937 RVA: 0x0030B433 File Offset: 0x00309633
-			// (set) Token: 0x0600A3D2 RID: 41938 RVA: 0x0030B43B File Offset: 0x0030963B
+			
+			
 			public float LastUseTime { get; private set; }
 
 			
-			// (get) Token: 0x0600A3D3 RID: 41939 RVA: 0x0030B444 File Offset: 0x00309644
+			
 			public bool Expired
 			{
 				get
@@ -240,23 +240,23 @@ namespace RimWorld
 		private struct CachedPortraitsWithParams
 		{
 			
-			// (get) Token: 0x0600A3D5 RID: 41941 RVA: 0x0030B477 File Offset: 0x00309677
-			// (set) Token: 0x0600A3D6 RID: 41942 RVA: 0x0030B47F File Offset: 0x0030967F
+			
+			
 			public Dictionary<Pawn, PortraitsCache.CachedPortrait> CachedPortraits { get; private set; }
 
 			
-			// (get) Token: 0x0600A3D7 RID: 41943 RVA: 0x0030B488 File Offset: 0x00309688
-			// (set) Token: 0x0600A3D8 RID: 41944 RVA: 0x0030B490 File Offset: 0x00309690
+			
+			
 			public Vector2 Size { get; private set; }
 
 			
-			// (get) Token: 0x0600A3D9 RID: 41945 RVA: 0x0030B499 File Offset: 0x00309699
-			// (set) Token: 0x0600A3DA RID: 41946 RVA: 0x0030B4A1 File Offset: 0x003096A1
+			
+			
 			public Vector3 CameraOffset { get; private set; }
 
 			
-			// (get) Token: 0x0600A3DB RID: 41947 RVA: 0x0030B4AA File Offset: 0x003096AA
-			// (set) Token: 0x0600A3DC RID: 41948 RVA: 0x0030B4B2 File Offset: 0x003096B2
+			
+			
 			public float CameraZoom { get; private set; }
 
 			

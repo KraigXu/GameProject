@@ -8,7 +8,7 @@ namespace Verse
 	public class Designation : IExposable
 	{
 		
-		// (get) Token: 0x060009B2 RID: 2482 RVA: 0x00034B4C File Offset: 0x00032D4C
+		
 		private Map Map
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060009B3 RID: 2483 RVA: 0x00034B59 File Offset: 0x00032D59
+		
 		public float DesignationDrawAltitude
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_DownedRefugee : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003EDB RID: 16091 RVA: 0x0014E1F8 File Offset: 0x0014C3F8
+		
 		public override int SeedPart
 		{
 			get

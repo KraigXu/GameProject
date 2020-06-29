@@ -8,7 +8,7 @@ namespace RimWorld
 	public class RetainedCaravanData : IExposable
 	{
 		
-		// (get) Token: 0x06003FD5 RID: 16341 RVA: 0x00153C81 File Offset: 0x00151E81
+		
 		public bool HasDestinationTile
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class IncidentWorker
 	{
 		
-		// (get) Token: 0x06003642 RID: 13890 RVA: 0x00126044 File Offset: 0x00124244
+		
 		public virtual float BaseChanceThisGame
 		{
 			get

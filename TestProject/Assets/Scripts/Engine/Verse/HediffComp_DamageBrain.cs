@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_DamageBrain : HediffComp
 	{
 		
-		// (get) Token: 0x0600103B RID: 4155 RVA: 0x0005D384 File Offset: 0x0005B584
+		
 		public HediffCompProperties_DamageBrain Props
 		{
 			get

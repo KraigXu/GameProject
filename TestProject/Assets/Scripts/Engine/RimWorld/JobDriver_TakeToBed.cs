@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobDriver_TakeToBed : JobDriver
 	{
 		
-		// (get) Token: 0x06002D19 RID: 11545 RVA: 0x000FF07C File Offset: 0x000FD27C
+		
 		protected Pawn Takee
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002D1A RID: 11546 RVA: 0x000FF0A4 File Offset: 0x000FD2A4
+		
 		protected Building_Bed DropBed
 		{
 			get

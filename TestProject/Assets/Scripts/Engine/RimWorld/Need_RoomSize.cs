@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Need_RoomSize : Need_Seeker
 	{
 		
-		// (get) Token: 0x0600459D RID: 17821 RVA: 0x00178291 File Offset: 0x00176491
+		
 		public override float CurInstantLevel
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600459E RID: 17822 RVA: 0x00178299 File Offset: 0x00176499
+		
 		public RoomSizeCategory CurCategory
 		{
 			get

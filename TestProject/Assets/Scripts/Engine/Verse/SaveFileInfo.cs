@@ -9,7 +9,7 @@ namespace Verse
 	public struct SaveFileInfo
 	{
 		
-		// (get) Token: 0x0600140A RID: 5130 RVA: 0x00074832 File Offset: 0x00072A32
+		
 		public bool Valid
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600140B RID: 5131 RVA: 0x0007483D File Offset: 0x00072A3D
+		
 		public FileInfo FileInfo
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600140C RID: 5132 RVA: 0x00074845 File Offset: 0x00072A45
+		
 		public string GameVersion
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600140D RID: 5133 RVA: 0x0007485C File Offset: 0x00072A5C
+		
 		public Color VersionColor
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600140E RID: 5134 RVA: 0x000748BC File Offset: 0x00072ABC
+		
 		public TipSignal CompatibilityTip
 		{
 			get

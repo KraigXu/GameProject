@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Bill_ProductionWithUft : Bill_Production
 	{
 		
-		// (get) Token: 0x06004D3F RID: 19775 RVA: 0x0019E394 File Offset: 0x0019C594
+		
 		protected override string StatusString
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D40 RID: 19776 RVA: 0x0019E3FC File Offset: 0x0019C5FC
+		
 		public Pawn BoundWorker
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D41 RID: 19777 RVA: 0x0019E4D0 File Offset: 0x0019C6D0
+		
 		public UnfinishedThing BoundUft
 		{
 			get

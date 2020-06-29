@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Lesson_Note : Lesson
 	{
 		
-		// (get) Token: 0x06005F02 RID: 24322 RVA: 0x0020CB6D File Offset: 0x0020AD6D
+		
 		public bool Expiring
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005F03 RID: 24323 RVA: 0x0020CB7C File Offset: 0x0020AD7C
+		
 		public Rect MainRect
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005F04 RID: 24324 RVA: 0x0020CBC0 File Offset: 0x0020ADC0
+		
 		public override float MessagesYOffset
 		{
 			get

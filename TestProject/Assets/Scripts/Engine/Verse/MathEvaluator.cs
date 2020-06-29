@@ -11,7 +11,7 @@ namespace Verse
 	public static class MathEvaluator
 	{
 		
-		// (get) Token: 0x06000318 RID: 792 RVA: 0x0001011B File Offset: 0x0000E31B
+		
 		private static XPathNavigator Navigator
 		{
 			get

@@ -204,10 +204,10 @@ namespace RimWorld
 			stringBuilder.AppendLine("ThreatBig count per day: " + ((float)threatBigCount / (float)numTestDays).ToString("F2"));
 			stringBuilder.AppendLine();
 			stringBuilder.AppendLine("Incident count per def:");
-			using (IEnumerator<IncidentDef> enumerator = (from x in (from x in allIncidents
+			IEnumerator<IncidentDef> enumerator = (from x in (from x in allIncidents
 			select x.First).Distinct<IncidentDef>()
 			orderby x.category.defName, x.defName
-			select x).GetEnumerator())
+			select x).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

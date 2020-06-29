@@ -12,9 +12,9 @@ namespace Verse
 		public static byte[] Compress(byte[] input)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
-				using (DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionMode.Compress))
+				DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionMode.Compress);
 				{
 					deflateStream.Write(input, 0, input.Length);
 				}
@@ -27,9 +27,9 @@ namespace Verse
 		public static byte[] Decompress(byte[] input)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream(input))
+			MemoryStream memoryStream = new MemoryStream(input);
 			{
-				using (DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionMode.Decompress))
+				DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionMode.Decompress);
 				{
 					List<byte[]> list = null;
 					byte[] array;

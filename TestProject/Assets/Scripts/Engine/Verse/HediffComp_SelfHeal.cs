@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_SelfHeal : HediffComp
 	{
 		
-		// (get) Token: 0x060010B2 RID: 4274 RVA: 0x0005EFA0 File Offset: 0x0005D1A0
+		
 		public HediffCompProperties_SelfHeal Props
 		{
 			get

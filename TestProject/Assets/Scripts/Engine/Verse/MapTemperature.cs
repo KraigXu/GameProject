@@ -9,7 +9,7 @@ namespace Verse
 	public class MapTemperature
 	{
 		
-		// (get) Token: 0x06000D6A RID: 3434 RVA: 0x0004C83E File Offset: 0x0004AA3E
+		
 		public float OutdoorTemp
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000D6B RID: 3435 RVA: 0x0004C85A File Offset: 0x0004AA5A
+		
 		public float SeasonalTemp
 		{
 			get

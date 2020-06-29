@@ -9,7 +9,7 @@ namespace RimWorld
 	public static class PawnsFinder
 	{
 		
-		// (get) Token: 0x0600432C RID: 17196 RVA: 0x00169AB0 File Offset: 0x00167CB0
+		
 		public static List<Pawn> AllMapsWorldAndTemporary_AliveOrDead
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600432D RID: 17197 RVA: 0x00169B08 File Offset: 0x00167D08
+		
 		public static List<Pawn> AllMapsWorldAndTemporary_Alive
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600432E RID: 17198 RVA: 0x00169B5D File Offset: 0x00167D5D
+		
 		public static List<Pawn> AllMapsAndWorld_Alive
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600432F RID: 17199 RVA: 0x00169B98 File Offset: 0x00167D98
+		
 		public static List<Pawn> AllMaps
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004330 RID: 17200 RVA: 0x00169C08 File Offset: 0x00167E08
+		
 		public static List<Pawn> AllMaps_Spawned
 		{
 			get
@@ -105,7 +105,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004331 RID: 17201 RVA: 0x00169C78 File Offset: 0x00167E78
+		
 		public static List<Pawn> All_AliveOrDead
 		{
 			get
@@ -124,7 +124,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004332 RID: 17202 RVA: 0x00169CC0 File Offset: 0x00167EC0
+		
 		public static List<Pawn> Temporary
 		{
 			get
@@ -203,7 +203,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004333 RID: 17203 RVA: 0x00169F4C File Offset: 0x0016814C
+		
 		public static List<Pawn> Temporary_Alive
 		{
 			get
@@ -222,7 +222,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004334 RID: 17204 RVA: 0x00169FA0 File Offset: 0x001681A0
+		
 		public static List<Pawn> Temporary_Dead
 		{
 			get
@@ -241,7 +241,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004335 RID: 17205 RVA: 0x00169FF4 File Offset: 0x001681F4
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive
 		{
 			get
@@ -260,7 +260,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004336 RID: 17206 RVA: 0x0016A03C File Offset: 0x0016823C
+		
 		public static List<Pawn> AllCaravansAndTravelingTransportPods_Alive
 		{
 			get
@@ -279,7 +279,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004337 RID: 17207 RVA: 0x0016A090 File Offset: 0x00168290
+		
 		public static List<Pawn> AllCaravansAndTravelingTransportPods_AliveOrDead
 		{
 			get
@@ -303,7 +303,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004338 RID: 17208 RVA: 0x0016A118 File Offset: 0x00168318
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_Colonists
 		{
 			get
@@ -322,7 +322,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004339 RID: 17209 RVA: 0x0016A16C File Offset: 0x0016836C
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists
 		{
 			get
@@ -341,7 +341,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433A RID: 17210 RVA: 0x0016A1C0 File Offset: 0x001683C0
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep
 		{
 			get
@@ -360,7 +360,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433B RID: 17211 RVA: 0x0016A220 File Offset: 0x00168420
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction
 		{
 			get
@@ -380,7 +380,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433C RID: 17212 RVA: 0x0016A27C File Offset: 0x0016847C
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction_NoCryptosleep
 		{
 			get
@@ -400,7 +400,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433D RID: 17213 RVA: 0x0016A2E4 File Offset: 0x001684E4
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_PrisonersOfColony
 		{
 			get
@@ -419,7 +419,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433E RID: 17214 RVA: 0x0016A338 File Offset: 0x00168538
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners
 		{
 			get
@@ -438,7 +438,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600433F RID: 17215 RVA: 0x0016A380 File Offset: 0x00168580
+		
 		public static List<Pawn> AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners_NoCryptosleep
 		{
 			get
@@ -457,7 +457,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004340 RID: 17216 RVA: 0x0016A3D4 File Offset: 0x001685D4
+		
 		public static List<Pawn> AllMaps_PrisonersOfColonySpawned
 		{
 			get
@@ -480,7 +480,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004341 RID: 17217 RVA: 0x0016A444 File Offset: 0x00168644
+		
 		public static List<Pawn> AllMaps_PrisonersOfColony
 		{
 			get
@@ -503,7 +503,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004342 RID: 17218 RVA: 0x0016A4B4 File Offset: 0x001686B4
+		
 		public static List<Pawn> AllMaps_FreeColonists
 		{
 			get
@@ -526,7 +526,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004343 RID: 17219 RVA: 0x0016A524 File Offset: 0x00168724
+		
 		public static List<Pawn> AllMaps_FreeColonistsSpawned
 		{
 			get
@@ -549,7 +549,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004344 RID: 17220 RVA: 0x0016A594 File Offset: 0x00168794
+		
 		public static List<Pawn> AllMaps_FreeColonistsAndPrisonersSpawned
 		{
 			get
@@ -572,7 +572,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004345 RID: 17221 RVA: 0x0016A604 File Offset: 0x00168804
+		
 		public static List<Pawn> AllMaps_FreeColonistsAndPrisoners
 		{
 			get
@@ -620,7 +620,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004347 RID: 17223 RVA: 0x0016A6FC File Offset: 0x001688FC
+		
 		public static List<Pawn> HomeMaps_FreeColonistsSpawned
 		{
 			get

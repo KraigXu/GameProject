@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Zone_Stockpile : Zone, ISlotGroupParent, IStoreSettingsParent, IHaulDestination
 	{
 		
-		// (get) Token: 0x06004131 RID: 16689 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool StorageTabVisible
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004132 RID: 16690 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public bool IgnoreStoredThingsBeauty
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004133 RID: 16691 RVA: 0x0015D402 File Offset: 0x0015B602
+		
 		protected override Color NextZoneColor
 		{
 			get
@@ -95,10 +95,6 @@ namespace RimWorld
 		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.n__0())
-			{
-				yield return gizmo;
-			}
 			IEnumerator<Gizmo> enumerator = null;
 			foreach (Gizmo gizmo2 in StorageSettingsClipboard.CopyPasteGizmosFor(this.settings))
 			{

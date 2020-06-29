@@ -7,7 +7,7 @@ namespace Verse
 	public class GenStep_TerrainPatches : GenStep
 	{
 		
-		// (get) Token: 0x06000BCA RID: 3018 RVA: 0x00042EEB File Offset: 0x000410EB
+		
 		public override int SeedPart
 		{
 			get

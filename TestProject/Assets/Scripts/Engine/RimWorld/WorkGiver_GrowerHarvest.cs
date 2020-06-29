@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_GrowerHarvest : WorkGiver_Grower
 	{
 		
-		// (get) Token: 0x060030CD RID: 12493 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

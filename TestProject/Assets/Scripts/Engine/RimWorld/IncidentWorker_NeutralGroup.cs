@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class IncidentWorker_NeutralGroup : IncidentWorker_PawnsArrive
 	{
 		
-		// (get) Token: 0x06003CCF RID: 15567 RVA: 0x00141A54 File Offset: 0x0013FC54
+		
 		protected virtual PawnGroupKindDef PawnGroupKindDef
 		{
 			get

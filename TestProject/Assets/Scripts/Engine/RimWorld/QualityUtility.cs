@@ -402,7 +402,7 @@ namespace RimWorld
 			{
 				list.Add(qualityGenerator());
 			}
-			using (List<QualityCategory>.Enumerator enumerator = QualityUtility.AllQualityCategories.GetEnumerator())
+			List<QualityCategory>.Enumerator enumerator = QualityUtility.AllQualityCategories.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

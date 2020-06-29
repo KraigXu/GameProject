@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Chemical_Any : Need
 	{
 		
-		// (get) Token: 0x06004550 RID: 17744 RVA: 0x00176AD9 File Offset: 0x00174CD9
+		
 		private Trait TraitDrugDesire
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004551 RID: 17745 RVA: 0x00176AF5 File Offset: 0x00174CF5
+		
 		private SimpleCurve FallCurve
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004552 RID: 17746 RVA: 0x00176B10 File Offset: 0x00174D10
+		
 		private float FallPerNeedIntervalTick
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004553 RID: 17747 RVA: 0x00176B64 File Offset: 0x00174D64
+		
 		private Need_Chemical_Any.LevelThresholds CurrentLevelThresholds
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004554 RID: 17748 RVA: 0x00176B80 File Offset: 0x00174D80
+		
 		public Need_Chemical_Any.MoodBuff MoodBuffForCurrentLevel
 		{
 			get
@@ -100,7 +100,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004555 RID: 17749 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -110,7 +110,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004556 RID: 17750 RVA: 0x00176BDD File Offset: 0x00174DDD
+		
 		public override bool ShowOnNeedList
 		{
 			get
@@ -120,7 +120,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004557 RID: 17751 RVA: 0x00176BE8 File Offset: 0x00174DE8
+		
 		private bool Disabled
 		{
 			get

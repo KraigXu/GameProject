@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class VersionControl
 	{
 		
-		// (get) Token: 0x06002A4B RID: 10827 RVA: 0x000F6C04 File Offset: 0x000F4E04
+		
 		public static Version CurrentVersion
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A4C RID: 10828 RVA: 0x000F6C0B File Offset: 0x000F4E0B
+		
 		public static string CurrentVersionString
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A4D RID: 10829 RVA: 0x000F6C12 File Offset: 0x000F4E12
+		
 		public static string CurrentVersionStringWithoutBuild
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A4E RID: 10830 RVA: 0x000F6C19 File Offset: 0x000F4E19
+		
 		public static string CurrentVersionStringWithRev
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A4F RID: 10831 RVA: 0x000F6C20 File Offset: 0x000F4E20
+		
 		public static int CurrentMajor
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A50 RID: 10832 RVA: 0x000F6C2C File Offset: 0x000F4E2C
+		
 		public static int CurrentMinor
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A51 RID: 10833 RVA: 0x000F6C38 File Offset: 0x000F4E38
+		
 		public static int CurrentBuild
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A52 RID: 10834 RVA: 0x000F6C44 File Offset: 0x000F4E44
+		
 		public static int CurrentRevision
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002A53 RID: 10835 RVA: 0x000F6C50 File Offset: 0x000F4E50
+		
 		public static DateTime CurrentBuildDate
 		{
 			get

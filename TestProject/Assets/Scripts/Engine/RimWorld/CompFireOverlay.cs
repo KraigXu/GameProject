@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompFireOverlay : ThingComp
 	{
 		
-		// (get) Token: 0x06005135 RID: 20789 RVA: 0x001B3F49 File Offset: 0x001B2149
+		
 		public CompProperties_FireOverlay Props
 		{
 			get

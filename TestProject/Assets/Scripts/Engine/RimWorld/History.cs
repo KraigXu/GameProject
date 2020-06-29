@@ -80,7 +80,7 @@ namespace RimWorld
 			{
 				Log.Warning("Some history auto recorder groups were null.", false);
 			}
-			using (IEnumerator<HistoryAutoRecorderGroupDef> enumerator = DefDatabase<HistoryAutoRecorderGroupDef>.AllDefs.GetEnumerator())
+			IEnumerator<HistoryAutoRecorderGroupDef> enumerator = DefDatabase<HistoryAutoRecorderGroupDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

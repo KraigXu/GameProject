@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompEggLayer : ThingComp
 	{
 		
-		// (get) Token: 0x060050F9 RID: 20729 RVA: 0x001B2D50 File Offset: 0x001B0F50
+		
 		private bool Active
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050FA RID: 20730 RVA: 0x001B2D9C File Offset: 0x001B0F9C
+		
 		public bool CanLayNow
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050FB RID: 20731 RVA: 0x001B2DB8 File Offset: 0x001B0FB8
+		
 		public bool FullyFertilized
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050FC RID: 20732 RVA: 0x001B2DD0 File Offset: 0x001B0FD0
+		
 		private bool ProgressStoppedBecauseUnfertilized
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050FD RID: 20733 RVA: 0x001B2E04 File Offset: 0x001B1004
+		
 		public CompProperties_EggLayer Props
 		{
 			get

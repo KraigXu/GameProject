@@ -9,11 +9,11 @@ namespace RimWorld
 	public abstract class WorkGiver_RemoveBuilding : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600304A RID: 12362
+		
 		protected abstract DesignationDef Designation { get; }
 
 		
-		// (get) Token: 0x0600304B RID: 12363
+		
 		protected abstract JobDef RemoveBuildingJob { get; }
 
 		
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600304E RID: 12366 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override PathEndMode PathEndMode
 		{
 			get

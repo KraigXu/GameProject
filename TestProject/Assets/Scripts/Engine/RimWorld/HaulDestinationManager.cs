@@ -8,7 +8,7 @@ namespace RimWorld
 	public sealed class HaulDestinationManager
 	{
 		
-		// (get) Token: 0x06004BF5 RID: 19445 RVA: 0x00198CF7 File Offset: 0x00196EF7
+		
 		public IEnumerable<IHaulDestination> AllHaulDestinations
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BF6 RID: 19446 RVA: 0x00198CF7 File Offset: 0x00196EF7
+		
 		public List<IHaulDestination> AllHaulDestinationsListForReading
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BF7 RID: 19447 RVA: 0x00198CF7 File Offset: 0x00196EF7
+		
 		public List<IHaulDestination> AllHaulDestinationsListInPriorityOrder
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BF8 RID: 19448 RVA: 0x00198CFF File Offset: 0x00196EFF
+		
 		public IEnumerable<SlotGroup> AllGroups
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BF9 RID: 19449 RVA: 0x00198CFF File Offset: 0x00196EFF
+		
 		public List<SlotGroup> AllGroupsListForReading
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BFA RID: 19450 RVA: 0x00198CFF File Offset: 0x00196EFF
+		
 		public List<SlotGroup> AllGroupsListInPriorityOrder
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004BFB RID: 19451 RVA: 0x00198D07 File Offset: 0x00196F07
+		
 		public IEnumerable<IntVec3> AllSlots
 		{
 			get

@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Frame : Building, IThingHolder, IConstructible
 	{
 		
-		// (get) Token: 0x06004B37 RID: 19255 RVA: 0x00195BA0 File Offset: 0x00193DA0
+		
 		public float WorkToBuild
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B38 RID: 19256 RVA: 0x00195BBD File Offset: 0x00193DBD
+		
 		public float WorkLeft
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B39 RID: 19257 RVA: 0x00195BCC File Offset: 0x00193DCC
+		
 		public float PercentComplete
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3A RID: 19258 RVA: 0x00195BDB File Offset: 0x00193DDB
+		
 		public override string Label
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3B RID: 19259 RVA: 0x00195BF8 File Offset: 0x00193DF8
+		
 		public string LabelEntityToBuild
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3C RID: 19260 RVA: 0x00195C48 File Offset: 0x00193E48
+		
 		public override Color DrawColor
 		{
 			get
@@ -95,7 +95,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3D RID: 19261 RVA: 0x00195CDC File Offset: 0x00193EDC
+		
 		public EffecterDef ConstructionEffect
 		{
 			get
@@ -113,7 +113,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3E RID: 19262 RVA: 0x00195D3C File Offset: 0x00193F3C
+		
 		private Material CornerMat
 		{
 			get
@@ -127,7 +127,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004B3F RID: 19263 RVA: 0x00195D6D File Offset: 0x00193F6D
+		
 		private Material TileMat
 		{
 			get
@@ -379,9 +379,9 @@ namespace RimWorld
 				IEnumerable<ThingDefCountClass> source = this.MaterialsNeeded();
 				Func<ThingDefCountClass, bool> predicate;
 				
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__0 = ((ThingDefCountClass needed) => needed.thingDef == need.thingDef));
+					predicate = ( ((ThingDefCountClass needed) => needed.thingDef == need.thingDef));
 				}
 				foreach (ThingDefCountClass thingDefCountClass in source.Where(predicate))
 				{

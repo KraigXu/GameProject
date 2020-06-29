@@ -10,8 +10,8 @@ namespace RimWorld
 	public class Blight : Thing
 	{
 		
-		// (get) Token: 0x06004D66 RID: 19814 RVA: 0x0019FD62 File Offset: 0x0019DF62
-		// (set) Token: 0x06004D67 RID: 19815 RVA: 0x0019FD6A File Offset: 0x0019DF6A
+		
+		
 		public float Severity
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D68 RID: 19816 RVA: 0x0019FD78 File Offset: 0x0019DF78
+		
 		public Plant Plant
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D69 RID: 19817 RVA: 0x0019FD95 File Offset: 0x0019DF95
+		
 		protected float ReproduceMTBHours
 		{
 			get

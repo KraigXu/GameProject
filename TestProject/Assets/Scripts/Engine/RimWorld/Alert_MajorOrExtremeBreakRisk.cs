@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_MajorOrExtremeBreakRisk : Alert_Critical
 	{
 		
-		// (get) Token: 0x060055FD RID: 22013 RVA: 0x001C8402 File Offset: 0x001C6602
+		
 		private List<Pawn> Culprits
 		{
 			get

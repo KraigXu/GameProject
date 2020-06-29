@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_ChangeNeed : HediffComp
 	{
 		
-		// (get) Token: 0x06001034 RID: 4148 RVA: 0x0005D2DF File Offset: 0x0005B4DF
+		
 		public HediffCompProperties_ChangeNeed Props
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001035 RID: 4149 RVA: 0x0005D2EC File Offset: 0x0005B4EC
+		
 		private Need Need
 		{
 			get

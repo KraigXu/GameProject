@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_EscapeShip : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003E29 RID: 15913 RVA: 0x001475D3 File Offset: 0x001457D3
+		
 		public override int SeedPart
 		{
 			get
@@ -78,9 +78,9 @@ namespace RimWorld
 			}
 			ResolveParams resolveParams = default(ResolveParams);
 			resolveParams.rect = rect;
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("ship_core", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("ship_core", resolveParams, null);
+			BaseGenCore.Generate();
 		}
 
 		

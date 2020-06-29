@@ -12,7 +12,7 @@ namespace RimWorld.Planet
 	public class MapParent : WorldObject, IThingHolder
 	{
 		
-		// (get) Token: 0x06006D5D RID: 27997 RVA: 0x0026454E File Offset: 0x0026274E
+		
 		public bool HasMap
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D5E RID: 27998 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool UseGenericEnterMapFloatMenuOption
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D5F RID: 27999 RVA: 0x00264559 File Offset: 0x00262759
+		
 		public Map Map
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D60 RID: 28000 RVA: 0x00264566 File Offset: 0x00262766
+		
 		public virtual MapGeneratorDef MapGeneratorDef
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D61 RID: 28001 RVA: 0x00264586 File Offset: 0x00262786
+		
 		public virtual IEnumerable<GenStepWithParams> ExtraGenStepDefs
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D62 RID: 28002 RVA: 0x0026458F File Offset: 0x0026278F
+		
 		public override bool ExpandMore
 		{
 			get
@@ -76,7 +76,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006D63 RID: 28003 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool HandlesConditionCausers
 		{
 			get
@@ -195,7 +195,7 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<IncidentTargetTagDef> IncidentTargetTags()
 		{
-			foreach (IncidentTargetTagDef incidentTargetTagDef in this.n__1())
+			foreach (IncidentTargetTagDef incidentTargetTagDef in this.IncidentTargetTags())
 			{
 				yield return incidentTargetTagDef;
 			}
@@ -215,9 +215,9 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__2(caravan))
+			foreach (FloatMenuOption floatMenuOption in this.GetFloatMenuOptions(caravan))
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (this.UseGenericEnterMapFloatMenuOption)
@@ -235,14 +235,14 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable<FloatMenuOption> GetTransportPodsFloatMenuOptions(IEnumerable<IThingHolder> pods, CompLaunchable representative)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__3(pods, representative))
+			foreach (FloatMenuOption floatMenuOption in this.GetTransportPodsFloatMenuOptions(pods, representative))
 			{
-				yield return floatMenuOption;
+				
 			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (TransportPodsArrivalAction_LandInSpecificCell.CanLandInSpecificCell(pods, this))
 			{
-				Action<LocalTargetInfo> 9__1;
+				
 				yield return new FloatMenuOption("LandInExistingMap".Translate(this.Label), delegate
 				{
 					Map myMap = representative.parent.Map;
@@ -251,14 +251,10 @@ namespace RimWorld.Planet
 					CameraJumper.TryHideWorld();
 					Targeter targeter = Find.Targeter;
 					TargetingParameters targetParams = TargetingParameters.ForDropPodsDestination();
-					Action<LocalTargetInfo> action;
-					if ((action ) == null)
+					Action<LocalTargetInfo> action = (delegate (LocalTargetInfo x)
 					{
-						action = (9__1 = delegate(LocalTargetInfo x)
-						{
-							representative.TryLaunch(this.Tile, new TransportPodsArrivalAction_LandInSpecificCell(this, x.Cell));
-						});
-					}
+						representative.TryLaunch(this.Tile, new TransportPodsArrivalAction_LandInSpecificCell(this, x.Cell));
+					});
 					targeter.BeginTargeting(targetParams, action, null, delegate
 					{
 						if (Find.Maps.Contains(myMap))

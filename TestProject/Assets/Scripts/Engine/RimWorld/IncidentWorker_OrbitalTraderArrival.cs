@@ -72,7 +72,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			using (List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonists.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonists.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

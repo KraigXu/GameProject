@@ -10,7 +10,7 @@ namespace Verse
 	public sealed class Room
 	{
 		
-		// (get) Token: 0x06000CB9 RID: 3257 RVA: 0x00048A69 File Offset: 0x00046C69
+		
 		public Map Map
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBA RID: 3258 RVA: 0x00048A86 File Offset: 0x00046C86
+		
 		public RegionType RegionType
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBB RID: 3259 RVA: 0x00048AA8 File Offset: 0x00046CA8
+		
 		public List<Region> Regions
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBC RID: 3260 RVA: 0x00048AB0 File Offset: 0x00046CB0
+		
 		public int RegionCount
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBD RID: 3261 RVA: 0x00048ABD File Offset: 0x00046CBD
+		
 		public bool IsHuge
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBE RID: 3262 RVA: 0x00048ACE File Offset: 0x00046CCE
+		
 		public bool Dereferenced
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CBF RID: 3263 RVA: 0x00048ADE File Offset: 0x00046CDE
+		
 		public bool TouchesMapEdge
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC0 RID: 3264 RVA: 0x00048AE9 File Offset: 0x00046CE9
+		
 		public float Temperature
 		{
 			get
@@ -98,7 +98,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC1 RID: 3265 RVA: 0x00048AF6 File Offset: 0x00046CF6
+		
 		public bool UsesOutdoorTemperature
 		{
 			get
@@ -108,8 +108,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC2 RID: 3266 RVA: 0x00048B03 File Offset: 0x00046D03
-		// (set) Token: 0x06000CC3 RID: 3267 RVA: 0x00048B0B File Offset: 0x00046D0B
+		
+		
 		public RoomGroup Group
 		{
 			get
@@ -135,7 +135,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC4 RID: 3268 RVA: 0x00048B48 File Offset: 0x00046D48
+		
 		public int CellCount
 		{
 			get
@@ -153,7 +153,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC5 RID: 3269 RVA: 0x00048B9F File Offset: 0x00046D9F
+		
 		public int OpenRoofCount
 		{
 			get
@@ -163,7 +163,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC6 RID: 3270 RVA: 0x00048BAC File Offset: 0x00046DAC
+		
 		public bool PsychologicallyOutdoors
 		{
 			get
@@ -173,7 +173,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC7 RID: 3271 RVA: 0x00048BE8 File Offset: 0x00046DE8
+		
 		public bool OutdoorsForWork
 		{
 			get
@@ -183,7 +183,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC8 RID: 3272 RVA: 0x00048C10 File Offset: 0x00046E10
+		
 		public List<Room> Neighbors
 		{
 			get
@@ -206,7 +206,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CC9 RID: 3273 RVA: 0x00048CCC File Offset: 0x00046ECC
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get
@@ -227,7 +227,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCA RID: 3274 RVA: 0x00048CDC File Offset: 0x00046EDC
+		
 		public IEnumerable<IntVec3> BorderCells
 		{
 			get
@@ -253,7 +253,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCB RID: 3275 RVA: 0x00048CEC File Offset: 0x00046EEC
+		
 		public IEnumerable<Pawn> Owners
 		{
 			get
@@ -310,7 +310,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCC RID: 3276 RVA: 0x00048CFC File Offset: 0x00046EFC
+		
 		public IEnumerable<Building_Bed> ContainedBeds
 		{
 			get
@@ -331,7 +331,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCD RID: 3277 RVA: 0x00048D0C File Offset: 0x00046F0C
+		
 		public bool Fogged
 		{
 			get
@@ -341,7 +341,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCE RID: 3278 RVA: 0x00048D39 File Offset: 0x00046F39
+		
 		public bool IsDoorway
 		{
 			get
@@ -351,7 +351,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CCF RID: 3279 RVA: 0x00048D5C File Offset: 0x00046F5C
+		
 		public List<Thing> ContainedAndAdjacentThings
 		{
 			get
@@ -379,7 +379,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CD0 RID: 3280 RVA: 0x00048DF3 File Offset: 0x00046FF3
+		
 		public RoomRoleDef Role
 		{
 			get

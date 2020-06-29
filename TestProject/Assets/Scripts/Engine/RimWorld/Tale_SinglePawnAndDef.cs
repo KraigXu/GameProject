@@ -33,10 +33,7 @@ namespace RimWorld
 			{
 				Log.Error(this.def + " uses tale type with def but defSymbol is not set.", false);
 			}
-			foreach (Rule rule in this.n__0())
-			{
-				yield return rule;
-			}
+
 			IEnumerator<Rule> enumerator = null;
 			foreach (Rule rule2 in this.defData.GetRules(this.def.defSymbol))
 			{

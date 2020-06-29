@@ -8,7 +8,7 @@ namespace Verse
 	public static class NameUseChecker
 	{
 		
-		// (get) Token: 0x06000B06 RID: 2822 RVA: 0x0003AB7C File Offset: 0x00038D7C
+		
 		public static IEnumerable<Name> AllPawnsNamesEverUsed
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class WorldPathPool
 	{
 		
-		// (get) Token: 0x060068F7 RID: 26871 RVA: 0x0024AB02 File Offset: 0x00248D02
+		
 		public static WorldPath NotFoundPath
 		{
 			get

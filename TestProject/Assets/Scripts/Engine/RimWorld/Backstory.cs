@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Backstory
 	{
 		
-		// (get) Token: 0x06004470 RID: 17520 RVA: 0x0017205C File Offset: 0x0017025C
+		
 		public RulePackDef NameMaker
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004471 RID: 17521 RVA: 0x00172064 File Offset: 0x00170264
+		
 		public IEnumerable<WorkTypeDef> DisabledWorkTypes
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004472 RID: 17522 RVA: 0x00172074 File Offset: 0x00170274
+		
 		public IEnumerable<WorkGiverDef> DisabledWorkGivers
 		{
 			get
@@ -297,7 +297,7 @@ namespace RimWorld
 			}
 			if (this.forcedTraits != null)
 			{
-				using (List<TraitEntry>.Enumerator enumerator = this.forcedTraits.GetEnumerator())
+				List<TraitEntry>.Enumerator enumerator = this.forcedTraits.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -316,7 +316,7 @@ namespace RimWorld
 						}
 					}
 				}
-				List<TraitEntry>.Enumerator enumerator = default(List<TraitEntry>.Enumerator);
+			
 			}
 			if (Prefs.DevMode)
 			{

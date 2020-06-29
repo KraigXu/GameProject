@@ -11,7 +11,7 @@ namespace Verse
 	public static class GenDraw
 	{
 		
-		// (get) Token: 0x06002086 RID: 8326 RVA: 0x000C6BA4 File Offset: 0x000C4DA4
+		
 		public static Material CurTargetingMat
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002087 RID: 8327 RVA: 0x000C6BBC File Offset: 0x000C4DBC
+		
 		public static Color CurTargetingColor
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public static class Log
 	{
 		
-		// (get) Token: 0x060002EF RID: 751 RVA: 0x0000F2EB File Offset: 0x0000D4EB
+		
 		public static IEnumerable<LogMessage> Messages
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060002F0 RID: 752 RVA: 0x0000F2F7 File Offset: 0x0000D4F7
+		
 		private static bool ReachedMaxMessagesLimit
 		{
 			get

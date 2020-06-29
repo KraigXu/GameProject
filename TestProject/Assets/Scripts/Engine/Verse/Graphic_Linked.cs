@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic_Linked : Graphic
 	{
 		
-		// (get) Token: 0x06001520 RID: 5408 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual LinkDrawerType LinkerType
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001521 RID: 5409 RVA: 0x0007C3A0 File Offset: 0x0007A5A0
+		
 		public override Material MatSingle
 		{
 			get

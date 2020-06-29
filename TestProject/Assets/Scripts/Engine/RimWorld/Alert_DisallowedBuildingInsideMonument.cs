@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_DisallowedBuildingInsideMonument : Alert_Critical
 	{
 		
-		// (get) Token: 0x06005617 RID: 22039 RVA: 0x001C8B24 File Offset: 0x001C6D24
+		
 		private List<Thing> DisallowedBuildings
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005618 RID: 22040 RVA: 0x001C8BB4 File Offset: 0x001C6DB4
+		
 		private int MinTicksLeft
 		{
 			get

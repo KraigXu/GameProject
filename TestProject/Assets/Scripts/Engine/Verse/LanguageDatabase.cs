@@ -13,7 +13,7 @@ namespace Verse
 	public static class LanguageDatabase
 	{
 		
-		// (get) Token: 0x06000886 RID: 2182 RVA: 0x0002BE26 File Offset: 0x0002A026
+		
 		public static IEnumerable<LoadedLanguage> AllLoadedLanguages
 		{
 			get

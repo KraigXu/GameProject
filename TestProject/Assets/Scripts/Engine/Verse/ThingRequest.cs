@@ -6,7 +6,7 @@ namespace Verse
 	public struct ThingRequest
 	{
 		
-		// (get) Token: 0x06000AD4 RID: 2772 RVA: 0x0003955A File Offset: 0x0003775A
+		
 		public bool IsUndefined
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000AD5 RID: 2773 RVA: 0x0003956F File Offset: 0x0003776F
+		
 		public bool CanBeFoundInRegion
 		{
 			get

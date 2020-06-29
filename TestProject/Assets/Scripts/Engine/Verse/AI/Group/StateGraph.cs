@@ -8,8 +8,8 @@ namespace Verse.AI.Group
 	public class StateGraph
 	{
 		
-		// (get) Token: 0x060029C1 RID: 10689 RVA: 0x000F51B9 File Offset: 0x000F33B9
-		// (set) Token: 0x060029C2 RID: 10690 RVA: 0x000F51C7 File Offset: 0x000F33C7
+		
+		
 		public LordToil StartingToil
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse.AI.Group
 			{
 				Log.Error("Graph has 0 lord toils.", false);
 			}
-			using (IEnumerator<LordToil> enumerator = this.lordToils.Distinct<LordToil>().GetEnumerator())
+			IEnumerator<LordToil> enumerator = this.lordToils.Distinct<LordToil>().GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -85,7 +85,7 @@ namespace Verse.AI.Group
 					}
 				}
 			}
-			using (List<Transition>.Enumerator enumerator2 = this.transitions.GetEnumerator())
+			List<Transition>.Enumerator enumerator2 = this.transitions.GetEnumerator();
 			{
 				while (enumerator2.MoveNext())
 				{

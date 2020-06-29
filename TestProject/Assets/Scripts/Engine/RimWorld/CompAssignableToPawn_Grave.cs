@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompAssignableToPawn_Grave : CompAssignableToPawn
 	{
 		
-		// (get) Token: 0x0600506B RID: 20587 RVA: 0x001B11B4 File Offset: 0x001AF3B4
+		
 		public override IEnumerable<Pawn> AssigningCandidates
 		{
 			get

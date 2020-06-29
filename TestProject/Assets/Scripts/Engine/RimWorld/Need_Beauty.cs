@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Beauty : Need_Seeker
 	{
 		
-		// (get) Token: 0x0600453C RID: 17724 RVA: 0x001764EC File Offset: 0x001746EC
+		
 		public override float CurInstantLevel
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600453D RID: 17725 RVA: 0x0017653C File Offset: 0x0017473C
+		
 		public BeautyCategory CurCategory
 		{
 			get

@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Dialog_Options : Window
 	{
 		
-		// (get) Token: 0x06005942 RID: 22850 RVA: 0x001DCBD8 File Offset: 0x001DADD8
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -59,10 +59,10 @@ namespace RimWorld
 			if (listing_Standard.ButtonTextLabeled("Resolution".Translate(), Dialog_Options.ResToString(Screen.width, Screen.height)))
 			{
 				List<FloatMenuOption> list = new List<FloatMenuOption>();
-				using (IEnumerator<Resolution> enumerator = (from x in UnityGUIBugsFixer.ScreenResolutionsWithoutDuplicates
+				IEnumerator<Resolution> enumerator = (from x in UnityGUIBugsFixer.ScreenResolutionsWithoutDuplicates
 				where x.width >= 1024 && x.height >= 768
 				orderby x.width, x.height
-				select x).GetEnumerator())
+				select x).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

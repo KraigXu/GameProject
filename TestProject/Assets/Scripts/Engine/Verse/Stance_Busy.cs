@@ -6,7 +6,7 @@ namespace Verse
 	public abstract class Stance_Busy : Stance
 	{
 		
-		// (get) Token: 0x06001363 RID: 4963 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool StanceBusy
 		{
 			get

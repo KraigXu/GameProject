@@ -10,7 +10,7 @@ namespace RimWorld
 	public class FactionDef : Def
 	{
 		
-		// (get) Token: 0x060035ED RID: 13805 RVA: 0x00124EC4 File Offset: 0x001230C4
+		
 		public List<RoyalTitleDef> RoyalTitlesAwardableInSeniorityOrderForReading
 		{
 			get
@@ -35,7 +35,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035EE RID: 13806 RVA: 0x00124F90 File Offset: 0x00123190
+		
 		public List<RoyalTitleDef> RoyalTitlesAllInSeniorityOrderForReading
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035EF RID: 13807 RVA: 0x00125050 File Offset: 0x00123250
+		
 		public RoyalTitleInheritanceWorker RoyalTitleInheritanceWorker
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035F0 RID: 13808 RVA: 0x00125084 File Offset: 0x00123284
+		
 		public bool CanEverBeNonHostile
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035F1 RID: 13809 RVA: 0x00125090 File Offset: 0x00123290
+		
 		public Texture2D SettlementTexture
 		{
 			get
@@ -105,7 +105,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035F2 RID: 13810 RVA: 0x001250E0 File Offset: 0x001232E0
+		
 		public Texture2D FactionIcon
 		{
 			get
@@ -126,7 +126,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035F3 RID: 13811 RVA: 0x0012512D File Offset: 0x0012332D
+		
 		public Texture2D RoyalFavorIcon
 		{
 			get
@@ -140,7 +140,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060035F4 RID: 13812 RVA: 0x00125162 File Offset: 0x00123362
+		
 		public bool HasRoyalTitles
 		{
 			get
@@ -211,10 +211,7 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.pawnGroupMakers != null && this.maxPawnCostPerTotalPointsCurve == null)
 			{

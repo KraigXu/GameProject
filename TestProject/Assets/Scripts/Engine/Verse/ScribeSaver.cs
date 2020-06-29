@@ -142,7 +142,7 @@ namespace Verse
 			string result;
 			try
 			{
-				using (StringWriter stringWriter = new StringWriter())
+				StringWriter stringWriter = new StringWriter();
 				{
 					XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
 					xmlWriterSettings.Indent = true;
@@ -150,7 +150,7 @@ namespace Verse
 					xmlWriterSettings.OmitXmlDeclaration = true;
 					try
 					{
-						using (this.writer = XmlWriter.Create(stringWriter, xmlWriterSettings))
+						this.writer = XmlWriter.Create(stringWriter, xmlWriterSettings);
 						{
 							Scribe.mode = LoadSaveMode.Saving;
 							this.savingForDebug = true;

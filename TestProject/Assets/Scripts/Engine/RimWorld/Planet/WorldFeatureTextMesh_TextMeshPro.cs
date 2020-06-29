@@ -16,7 +16,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600698D RID: 27021 RVA: 0x0024D3EA File Offset: 0x0024B5EA
+		
 		public override bool Active
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600698E RID: 27022 RVA: 0x0024D3FC File Offset: 0x0024B5FC
+		
 		public override Vector3 Position
 		{
 			get
@@ -36,8 +36,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600698F RID: 27023 RVA: 0x0024D40E File Offset: 0x0024B60E
-		// (set) Token: 0x06006990 RID: 27024 RVA: 0x0024D41B File Offset: 0x0024B61B
+		
+		
 		public override Color Color
 		{
 			get
@@ -51,8 +51,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006991 RID: 27025 RVA: 0x0024D429 File Offset: 0x0024B629
-		// (set) Token: 0x06006992 RID: 27026 RVA: 0x0024D436 File Offset: 0x0024B636
+		
+		
 		public override string Text
 		{
 			get
@@ -66,7 +66,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (set) Token: 0x06006993 RID: 27027 RVA: 0x0024D444 File Offset: 0x0024B644
+		
 		public override float Size
 		{
 			set
@@ -76,8 +76,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006994 RID: 27028 RVA: 0x0024D458 File Offset: 0x0024B658
-		// (set) Token: 0x06006995 RID: 27029 RVA: 0x0024D46A File Offset: 0x0024B66A
+		
+		
 		public override Quaternion Rotation
 		{
 			get
@@ -91,8 +91,8 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006996 RID: 27030 RVA: 0x0024D47D File Offset: 0x0024B67D
-		// (set) Token: 0x06006997 RID: 27031 RVA: 0x0024D48F File Offset: 0x0024B68F
+		
+		
 		public override Vector3 LocalPosition
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Dialog_GiveName : Window
 	{
 		
-		// (get) Token: 0x060058BF RID: 22719 RVA: 0x001D841C File Offset: 0x001D661C
+		
 		private float Height
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058C0 RID: 22720 RVA: 0x001D8431 File Offset: 0x001D6631
+		
 		public override Vector2 InitialSize
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffComp_Link : HediffComp
 	{
 		
-		// (get) Token: 0x060010A0 RID: 4256 RVA: 0x0005EBE9 File Offset: 0x0005CDE9
+		
 		public HediffCompProperties_Link Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010A1 RID: 4257 RVA: 0x0005EBF8 File Offset: 0x0005CDF8
+		
 		public override bool CompShouldRemove
 		{
 			get
@@ -73,7 +73,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010A4 RID: 4260 RVA: 0x0005ED67 File Offset: 0x0005CF67
+		
 		public override string CompLabelInBracketsExtra
 		{
 			get

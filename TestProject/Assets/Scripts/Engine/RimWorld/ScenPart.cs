@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class ScenPart : IExposable
 	{
 		
-		// (get) Token: 0x060049BA RID: 18874 RVA: 0x0018FE11 File Offset: 0x0018E011
+		
 		public static float RowHeight
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060049BB RID: 18875 RVA: 0x0018FE18 File Offset: 0x0018E018
+		
 		public virtual string Label
 		{
 			get

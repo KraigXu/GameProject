@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompProperties_Drug : CompProperties
 	{
 		
-		// (get) Token: 0x0600350A RID: 13578 RVA: 0x001227CC File Offset: 0x001209CC
+		
 		public bool Addictive
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600350B RID: 13579 RVA: 0x001227DB File Offset: 0x001209DB
+		
 		public bool CanCauseOverdose
 		{
 			get
@@ -36,10 +36,11 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
+			
 			IEnumerator<string> enumerator = null;
 			if (this.Addictive && this.chemical == null)
 			{

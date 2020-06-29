@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class DeepResourceGrid : ICellBoolGiver, IExposable
 	{
 		
-		// (get) Token: 0x06000A32 RID: 2610 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		public Color Color
 		{
 			get

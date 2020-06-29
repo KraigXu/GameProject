@@ -9,7 +9,7 @@ namespace Verse
 	public static class GenTypes
 	{
 		
-		// (get) Token: 0x0600024D RID: 589 RVA: 0x0000B3C4 File Offset: 0x000095C4
+		
 		private static IEnumerable<Assembly> AllActiveAssemblies
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600024E RID: 590 RVA: 0x0000B3CD File Offset: 0x000095CD
+		
 		public static IEnumerable<Type> AllTypes
 		{
 			get

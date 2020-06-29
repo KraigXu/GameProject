@@ -10,7 +10,7 @@ namespace RimWorld
 	public class ColonistBarDrawLocsFinder
 	{
 		
-		// (get) Token: 0x0600570E RID: 22286 RVA: 0x001CE6A7 File Offset: 0x001CC8A7
+		
 		private ColonistBar ColonistBar
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600570F RID: 22287 RVA: 0x001CF253 File Offset: 0x001CD453
+		
 		private static float MaxColonistBarWidth
 		{
 			get

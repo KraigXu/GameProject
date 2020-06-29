@@ -7,7 +7,7 @@ namespace Verse
 	public class PawnTweener
 	{
 		
-		// (get) Token: 0x06000F16 RID: 3862 RVA: 0x00055E08 File Offset: 0x00054008
+		
 		public Vector3 TweenedPos
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000F17 RID: 3863 RVA: 0x00055E10 File Offset: 0x00054010
+		
 		public Vector3 LastTickTweenedVelocity
 		{
 			get

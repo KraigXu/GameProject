@@ -9,7 +9,7 @@ namespace Verse
 	public static class GizmoGridDrawer
 	{
 		
-		// (get) Token: 0x06001B01 RID: 6913 RVA: 0x000A58FE File Offset: 0x000A3AFE
+		
 		public static float HeightDrawnRecently
 		{
 			get

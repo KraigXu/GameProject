@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Filth : Thing
 	{
 		
-		// (get) Token: 0x06004DDF RID: 19935 RVA: 0x001A32DF File Offset: 0x001A14DF
+		
 		public bool CanFilthAttachNow
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DE0 RID: 19936 RVA: 0x001A3316 File Offset: 0x001A1516
+		
 		public bool CanBeThickened
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DE1 RID: 19937 RVA: 0x001A3321 File Offset: 0x001A1521
+		
 		public int TicksSinceThickened
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DE2 RID: 19938 RVA: 0x001A3334 File Offset: 0x001A1534
+		
 		public int DisappearAfterTicks
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DE3 RID: 19939 RVA: 0x001A333C File Offset: 0x001A153C
+		
 		public override string Label
 		{
 			get

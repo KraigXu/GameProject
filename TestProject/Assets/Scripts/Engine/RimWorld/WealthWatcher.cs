@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WealthWatcher
 	{
 		
-		// (get) Token: 0x060040A5 RID: 16549 RVA: 0x0015A4A6 File Offset: 0x001586A6
+		
 		public int HealthTotal
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040A6 RID: 16550 RVA: 0x0015A4B4 File Offset: 0x001586B4
+		
 		public float WealthTotal
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040A7 RID: 16551 RVA: 0x0015A4D0 File Offset: 0x001586D0
+		
 		public float WealthItems
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040A8 RID: 16552 RVA: 0x0015A4DE File Offset: 0x001586DE
+		
 		public float WealthBuildings
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040A9 RID: 16553 RVA: 0x0015A4EC File Offset: 0x001586EC
+		
 		public float WealthFloorsOnly
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040AA RID: 16554 RVA: 0x0015A4FA File Offset: 0x001586FA
+		
 		public float WealthPawns
 		{
 			get

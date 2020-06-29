@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Pawn_InteractionsTracker : IExposable
 	{
 		
-		// (get) Token: 0x0600472A RID: 18218 RVA: 0x00181250 File Offset: 0x0017F450
+		
 		private RandomSocialMode CurrentSocialMode
 		{
 			get

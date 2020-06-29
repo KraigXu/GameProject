@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class JobDriver_AffectRoof : JobDriver
 	{
 		
-		// (get) Token: 0x06002B5B RID: 11099 RVA: 0x000FB03C File Offset: 0x000F923C
+		
 		protected IntVec3 Cell
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B5C RID: 11100
+		
 		protected abstract PathEndMode PathEndMode { get; }
 
 		

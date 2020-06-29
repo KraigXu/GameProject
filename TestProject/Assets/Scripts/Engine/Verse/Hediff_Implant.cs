@@ -6,7 +6,7 @@ namespace Verse
 	public class Hediff_Implant : HediffWithComps
 	{
 		
-		// (get) Token: 0x06000FCC RID: 4044 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool ShouldRemove
 		{
 			get

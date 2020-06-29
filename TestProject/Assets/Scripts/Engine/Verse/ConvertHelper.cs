@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
+using Boo.Lang;
 using RimWorld;
 using UnityEngine;
 
@@ -59,7 +60,7 @@ namespace Verse
 				{
 					Type to2 = to.GetGenericArguments()[0];
 					bool flag = true;
-					using (IEnumerator enumerator = enumerable.GetEnumerator())
+					IEnumerator enumerator = enumerable.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -173,7 +174,7 @@ namespace Verse
 				{
 					return defaultValue;
 				}
-				List<Faction> allFactionsListForReading = Find.FactionManager.AllFactionsListForReading;
+                System.Collections.Generic.List<Faction> allFactionsListForReading = Find.FactionManager.AllFactionsListForReading;
 				for (int i = 0; i < allFactionsListForReading.Count; i++)
 				{
 					if (allFactionsListForReading[i].GetUniqueLoadID() == text)
@@ -210,7 +211,7 @@ namespace Verse
 						Type type = to;
 						if (type == typeof(IEnumerable))
 						{
-							type = typeof(List<string>);
+							type = typeof(System.Collections.Generic.List<string>);
 						}
 						if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable) && type.GetGenericArguments().Length >= 1)
 						{
@@ -237,7 +238,7 @@ namespace Verse
 					{
 						Type type2 = to.GetGenericArguments()[0];
 						bool flag = true;
-						using (IEnumerator enumerator = enumerable.GetEnumerator())
+						IEnumerator enumerator = enumerable.GetEnumerator();
 						{
 							while (enumerator.MoveNext())
 							{

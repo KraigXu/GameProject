@@ -11,7 +11,7 @@ namespace RimWorld
 	public class GenStep_Turrets : GenStep
 	{
 		
-		// (get) Token: 0x06003EFE RID: 16126 RVA: 0x0014F251 File Offset: 0x0014D451
+		
 		public override int SeedPart
 		{
 			get
@@ -73,15 +73,15 @@ namespace RimWorld
 			resolveParams.edgeDefenseMortarsCount = new int?(value2);
 			resolveParams.edgeDefenseGuardsCount = new int?(this.guardsCountRange.RandomInRange);
 			resolveParams.edgeThingMustReachMapEdge = new bool?(true);
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("edgeDefense", resolveParams, null);
-			BaseGen.Generate();
+			//BaseGen.globalSettings.map = map;
+			//BaseGen.symbolStack.Push("edgeDefense", resolveParams, null);
+			//BaseGen.Generate();
 			ResolveParams resolveParams2 = default(ResolveParams);
 			resolveParams2.rect = rect;
 			resolveParams2.faction = faction;
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("outdoorLighting", resolveParams2, null);
-			BaseGen.Generate();
+			//BaseGen.globalSettings.map = map;
+			//BaseGen.symbolStack.Push("outdoorLighting", resolveParams2, null);
+			//BaseGen.Generate();
 		}
 
 		
@@ -103,7 +103,7 @@ namespace RimWorld
 				}
 				CellRect cellRect = CellRect.CenteredOn(x, rectRadius);
 				int num = 0;
-				using (CellRect.Enumerator enumerator = cellRect.GetEnumerator())
+				CellRect.Enumerator enumerator = cellRect.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

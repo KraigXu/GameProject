@@ -8,7 +8,7 @@ namespace Verse
 	public struct IntRange : IEquatable<IntRange>
 	{
 		
-		// (get) Token: 0x060000B6 RID: 182 RVA: 0x00004888 File Offset: 0x00002A88
+		
 		public static IntRange zero
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000B7 RID: 183 RVA: 0x00004891 File Offset: 0x00002A91
+		
 		public static IntRange one
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000B8 RID: 184 RVA: 0x0000489A File Offset: 0x00002A9A
+		
 		public int TrueMin
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000B9 RID: 185 RVA: 0x000048AD File Offset: 0x00002AAD
+		
 		public int TrueMax
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000BA RID: 186 RVA: 0x000048C0 File Offset: 0x00002AC0
+		
 		public float Average
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000BB RID: 187 RVA: 0x000048D7 File Offset: 0x00002AD7
+		
 		public int RandomInRange
 		{
 			get

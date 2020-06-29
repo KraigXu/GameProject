@@ -7,7 +7,7 @@ namespace Verse
 	public class Pawn_StanceTracker : IExposable
 	{
 		
-		// (get) Token: 0x06001351 RID: 4945 RVA: 0x0006F55F File Offset: 0x0006D75F
+		
 		public bool FullBodyBusy
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001352 RID: 4946 RVA: 0x0006F57B File Offset: 0x0006D77B
+		
 		public bool Staggered
 		{
 			get

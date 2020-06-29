@@ -156,7 +156,7 @@ namespace RimWorld
 		public static string ThingsLabel(List<ThingCount> things, string prefix = "  - ", bool ignoreStackLimit = false)
 		{
 			GenLabel.tmpThingsLabelElements.Clear();
-			using (List<ThingCount>.Enumerator enumerator = things.GetEnumerator())
+			List<ThingCount>.Enumerator enumerator = things.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

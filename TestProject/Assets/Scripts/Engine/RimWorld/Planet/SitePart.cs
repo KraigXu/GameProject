@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class SitePart : IExposable, IThingHolder
 	{
 		
-		// (get) Token: 0x06006E25 RID: 28197 RVA: 0x00267930 File Offset: 0x00265B30
+		
 		public IThingHolder ParentHolder
 		{
 			get

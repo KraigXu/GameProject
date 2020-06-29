@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Pawn_WorkSettings : IExposable
 	{
 		
-		// (get) Token: 0x06003341 RID: 13121 RVA: 0x0011C124 File Offset: 0x0011A324
+		
 		public bool EverWork
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003342 RID: 13122 RVA: 0x0011C12F File Offset: 0x0011A32F
+		
 		public List<WorkGiver> WorkGiversInOrderNormal
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003343 RID: 13123 RVA: 0x0011C145 File Offset: 0x0011A345
+		
 		public List<WorkGiver> WorkGiversInOrderEmergency
 		{
 			get

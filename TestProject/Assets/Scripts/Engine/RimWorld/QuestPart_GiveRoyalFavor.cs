@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_GiveRoyalFavor : QuestPart
 	{
 		
-		// (get) Token: 0x06003A6F RID: 14959 RVA: 0x001357A7 File Offset: 0x001339A7
+		
 		public override bool RequiresAccepter
 		{
 			get
@@ -18,12 +18,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A70 RID: 14960 RVA: 0x001357AF File Offset: 0x001339AF
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__0())
+
 				{
 					yield return faction;
 				}

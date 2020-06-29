@@ -10,7 +10,7 @@ namespace Verse
 	public class EditWindow_TweakValues : EditWindow
 	{
 		
-		// (get) Token: 0x060017B6 RID: 6070 RVA: 0x000877D9 File Offset: 0x000859D9
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060017B7 RID: 6071 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get

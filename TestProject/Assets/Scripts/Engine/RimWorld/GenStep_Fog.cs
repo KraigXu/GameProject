@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_Fog : GenStep
 	{
 		
-		// (get) Token: 0x06003E57 RID: 15959 RVA: 0x001490D8 File Offset: 0x001472D8
+		
 		public override int SeedPart
 		{
 			get

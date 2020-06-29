@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GenStep_PrisonerWillingToJoin : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003EF5 RID: 16117 RVA: 0x0014EDC0 File Offset: 0x0014CFC0
+		
 		public override int SeedPart
 		{
 			get
@@ -76,9 +76,9 @@ namespace RimWorld
 			ResolveParams resolveParams = default(ResolveParams);
 			resolveParams.rect = cellRect;
 			resolveParams.faction = faction;
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("prisonCell", resolveParams, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("prisonCell", resolveParams, null);
+			BaseGenCore.Generate();
 			ResolveParams resolveParams2 = default(ResolveParams);
 			resolveParams2.rect = cellRect;
 			resolveParams2.faction = faction;
@@ -88,9 +88,9 @@ namespace RimWorld
 				MapGenerator.rootsToUnfog.Add(x.Position);
 				((Pawn)x).mindState.WillJoinColonyIfRescued = true;
 			};
-			BaseGen.globalSettings.map = map;
-			BaseGen.symbolStack.Push("pawn", resolveParams2, null);
-			BaseGen.Generate();
+			BaseGenCore.globalSettings.map = map;
+			BaseGenCore.symbolStack.Push("pawn", resolveParams2, null);
+			BaseGenCore.Generate();
 			MapGenerator.SetVar<CellRect>("RectOfInterest", cellRect);
 		}
 

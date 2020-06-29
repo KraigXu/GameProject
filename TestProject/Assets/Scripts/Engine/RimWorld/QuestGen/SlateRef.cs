@@ -2,14 +2,14 @@
 using System.Text.RegularExpressions;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public struct SlateRef<T> : ISlateRef, IEquatable<SlateRef<T>>
 	{
 		
-		// (get) Token: 0x060068B9 RID: 26809 RVA: 0x00249479 File Offset: 0x00247679
-		// (set) Token: 0x060068BA RID: 26810 RVA: 0x00249481 File Offset: 0x00247681
+		
+		
 		string ISlateRef.SlateRef
 		{
 			get

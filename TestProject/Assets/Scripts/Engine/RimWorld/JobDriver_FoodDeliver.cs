@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_FoodDeliver : JobDriver
 	{
 		
-		// (get) Token: 0x06002D79 RID: 11641 RVA: 0x001004A2 File Offset: 0x000FE6A2
+		
 		private Pawn Deliveree
 		{
 			get

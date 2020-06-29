@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600569E RID: 22174 RVA: 0x001CB7C0 File Offset: 0x001C99C0
+		
 		private List<Pawn> BoredPawns
 		{
 			get

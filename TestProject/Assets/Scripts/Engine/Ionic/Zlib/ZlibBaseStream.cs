@@ -10,7 +10,7 @@ namespace Ionic.Zlib
 	internal class ZlibBaseStream : Stream
 	{
 		
-		// (get) Token: 0x0600719D RID: 29085 RVA: 0x0027C71E File Offset: 0x0027A91E
+		
 		internal int Crc32
 		{
 			get
@@ -39,7 +39,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600719F RID: 29087 RVA: 0x0027C7A9 File Offset: 0x0027A9A9
+		
 		protected internal bool _wantCompress
 		{
 			get
@@ -49,7 +49,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071A0 RID: 29088 RVA: 0x0027C7B4 File Offset: 0x0027A9B4
+		
 		private ZlibCodec z
 		{
 			get
@@ -73,7 +73,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071A1 RID: 29089 RVA: 0x0027C824 File Offset: 0x0027AA24
+		
 		private byte[] workingBuffer
 		{
 			get
@@ -180,7 +180,7 @@ namespace Ionic.Zlib
 					{
 						int crc32Result = this.crc.Crc32Result;
 						this._stream.Write(BitConverter.GetBytes(crc32Result), 0, 4);
-						int value = (int)(this.crc.TotalBytesRead & (long)((ulong)-1));
+						int value = (int)(this.crc.TotalBytesRead & (long)(-1));
 						this._stream.Write(BitConverter.GetBytes(value), 0, 4);
 						return;
 					}
@@ -215,7 +215,7 @@ namespace Ionic.Zlib
 				int num4 = BitConverter.ToInt32(array, 0);
 				int crc32Result2 = this.crc.Crc32Result;
 				int num5 = BitConverter.ToInt32(array, 4);
-				int num6 = (int)(this._z.TotalBytesOut & (long)((ulong)-1));
+				int num6 = (int)(this._z.TotalBytesOut & (long)(-1));
 				if (crc32Result2 != num4)
 				{
 					throw new ZlibException(string.Format("Bad CRC32 in GZIP trailer. (actual({0:X8})!=expected({1:X8}))", crc32Result2, num4));
@@ -464,7 +464,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071AC RID: 29100 RVA: 0x0027D1EA File Offset: 0x0027B3EA
+		
 		public override bool CanRead
 		{
 			get
@@ -474,7 +474,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071AD RID: 29101 RVA: 0x0027D1F7 File Offset: 0x0027B3F7
+		
 		public override bool CanSeek
 		{
 			get
@@ -484,7 +484,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071AE RID: 29102 RVA: 0x0027D204 File Offset: 0x0027B404
+		
 		public override bool CanWrite
 		{
 			get
@@ -494,7 +494,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071AF RID: 29103 RVA: 0x0027D211 File Offset: 0x0027B411
+		
 		public override long Length
 		{
 			get
@@ -504,8 +504,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x060071B0 RID: 29104 RVA: 0x000255BF File Offset: 0x000237BF
-		// (set) Token: 0x060071B1 RID: 29105 RVA: 0x000255BF File Offset: 0x000237BF
+		
+		
 		public override long Position
 		{
 			get
@@ -557,7 +557,7 @@ namespace Ionic.Zlib
 			byte[] array = new byte[1024];
 			Encoding utf = Encoding.UTF8;
 			string result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				try
 				{
@@ -585,7 +585,7 @@ namespace Ionic.Zlib
 		{
 			byte[] array = new byte[1024];
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				try
 				{

@@ -15,7 +15,7 @@ namespace RimWorld
 			ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDefOf.ActiveDropPod, null);
 			activeDropPod.Contents = info;
 			SkyfallerMaker.SpawnSkyfaller(ThingDefOf.DropPodIncoming, activeDropPod, c, map);
-			using (IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)activeDropPod.Contents.innerContainer).GetEnumerator())
+			IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)activeDropPod.Contents.innerContainer).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -50,7 +50,7 @@ namespace RimWorld
 		
 		public static void DropThingGroupsNear_NewTmp(IntVec3 dropCenter, Map map, List<List<Thing>> thingsGroups, int openDelay = 110, bool instaDrop = false, bool leaveSlag = false, bool canRoofPunch = true, bool forbid = true, bool allowFogged = true)
 		{
-			Predicate<IntVec3> 9__0;
+
 			foreach (List<Thing> list in thingsGroups)
 			{
 				IntVec3 intVec;
@@ -64,11 +64,8 @@ namespace RimWorld
 						dropCenter,
 						". Dropping on random square instead."
 					}), false);
-					Predicate<IntVec3> validator;
-					if ((validator ) == null)
-					{
-						validator = (9__0 = ((IntVec3 c) => c.Walkable(map)));
-					}
+					Predicate<IntVec3> validator = (((IntVec3 c) => c.Walkable(map)));
+
 					intVec = CellFinderLoose.RandomCellWith(validator, map, 1000);
 				}
 				if (forbid)
@@ -80,7 +77,7 @@ namespace RimWorld
 				}
 				if (instaDrop)
 				{
-					using (List<Thing>.Enumerator enumerator2 = list.GetEnumerator())
+					List<Thing>.Enumerator enumerator2 = list.GetEnumerator();
 					{
 						while (enumerator2.MoveNext())
 						{

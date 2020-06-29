@@ -8,13 +8,13 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			return base.CanResolve(rp) && BaseGen.globalSettings.basePart_buildingsResolved >= BaseGen.globalSettings.minBuildings;
+			return base.CanResolve(rp) && BaseGenCore.globalSettings.basePart_buildingsResolved >= BaseGenCore.globalSettings.minBuildings;
 		}
 
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.globalSettings.basePart_emptyNodesResolved++;
+			BaseGenCore.globalSettings.basePart_emptyNodesResolved++;
 		}
 	}
 }

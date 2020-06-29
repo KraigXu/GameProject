@@ -7,7 +7,7 @@ namespace Verse
 	public class StandardLetter : ChoiceLetter
 	{
 		
-		// (get) Token: 0x06001B42 RID: 6978 RVA: 0x000A6FD5 File Offset: 0x000A51D5
+		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get

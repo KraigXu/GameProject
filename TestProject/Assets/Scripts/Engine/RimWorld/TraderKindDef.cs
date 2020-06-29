@@ -9,7 +9,7 @@ namespace RimWorld
 	public class TraderKindDef : Def
 	{
 		
-		// (get) Token: 0x06003744 RID: 14148 RVA: 0x00129554 File Offset: 0x00127754
+		
 		public float CalculatedCommonality
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003745 RID: 14149 RVA: 0x00129584 File Offset: 0x00127784
+		
 		public RoyalTitleDef TitleRequiredToTrade
 		{
 			get
@@ -54,9 +54,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+			foreach (string text in this.ConfigErrors())
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			foreach (StockGenerator stockGenerator in this.stockGenerators)

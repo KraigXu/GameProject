@@ -8,7 +8,7 @@ namespace Verse
 	public static class DamagedMatPool
 	{
 		
-		// (get) Token: 0x06000F28 RID: 3880 RVA: 0x00056665 File Offset: 0x00054865
+		
 		public static int MatCount
 		{
 			get

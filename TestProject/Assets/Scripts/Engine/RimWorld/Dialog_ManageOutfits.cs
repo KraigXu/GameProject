@@ -9,8 +9,8 @@ namespace RimWorld
 	public class Dialog_ManageOutfits : Window
 	{
 		
-		// (get) Token: 0x06005917 RID: 22807 RVA: 0x001DBDBE File Offset: 0x001D9FBE
-		// (set) Token: 0x06005918 RID: 22808 RVA: 0x001DBDC6 File Offset: 0x001D9FC6
+		
+		
 		private Outfit SelectedOutfit
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005919 RID: 22809 RVA: 0x001DB9AC File Offset: 0x001D9BAC
+		
 		public override Vector2 InitialSize
 		{
 			get

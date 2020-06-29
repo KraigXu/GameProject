@@ -7,7 +7,7 @@ namespace RimWorld
 	public class DrugTakeRecord : IExposable
 	{
 		
-		// (get) Token: 0x060044C9 RID: 17609 RVA: 0x00173832 File Offset: 0x00171A32
+		
 		public int LastTakenDays
 		{
 			get
@@ -17,8 +17,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060044CA RID: 17610 RVA: 0x0017383F File Offset: 0x00171A3F
-		// (set) Token: 0x060044CB RID: 17611 RVA: 0x00173856 File Offset: 0x00171A56
+		
+		
 		public int TimesTakenThisDay
 		{
 			get

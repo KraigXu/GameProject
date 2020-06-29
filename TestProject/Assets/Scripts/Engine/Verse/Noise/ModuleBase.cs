@@ -8,7 +8,7 @@ namespace Verse.Noise
 	public abstract class ModuleBase : IDisposable
 	{
 		
-		// (get) Token: 0x06002314 RID: 8980 RVA: 0x000D438C File Offset: 0x000D258C
+		
 		public int SourceModuleCount
 		{
 			get
@@ -81,7 +81,7 @@ namespace Verse.Noise
 		}
 
 		
-		// (get) Token: 0x0600231C RID: 8988 RVA: 0x000D4480 File Offset: 0x000D2680
+		
 		public bool IsDisposed
 		{
 			get

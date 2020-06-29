@@ -11,7 +11,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			IntVec3 intVec = IntVec3.Invalid;
 			int num = -1;
 			for (int i = 0; i < 4; i++)
@@ -47,15 +47,15 @@ namespace RimWorld.BaseGen
 				ThingDef stuff = thingDef;
 				Thing thing = ThingMaker.MakeThing(ThingDefOf.Door, stuff);
 				thing.SetFaction(rp.faction, null);
-				GenSpawn.Spawn(thing, intVec, BaseGen.globalSettings.map, WipeMode.Vanish);
+				GenSpawn.Spawn(thing, intVec, BaseGenCore.globalSettings.map, WipeMode.Vanish);
 			}
 		}
 
 		
 		private bool WallHasDoor(CellRect rect, Rot4 dir)
 		{
-			Map map = BaseGen.globalSettings.map;
-			using (IEnumerator<IntVec3> enumerator = rect.GetEdgeCells(dir).GetEnumerator())
+			Map map = BaseGenCore.globalSettings.map;
+			IEnumerator<IntVec3> enumerator = rect.GetEdgeCells(dir).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -71,7 +71,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryFindRandomDoorSpawnCell(CellRect rect, Rot4 dir, out IntVec3 found)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (dir == Rot4.North)
 			{
 				if (rect.Width <= 2)
@@ -161,7 +161,7 @@ namespace RimWorld.BaseGen
 		
 		private int GetDistanceToExistingDoors(IntVec3 cell, CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			int num = int.MaxValue;
 			foreach (IntVec3 intVec in rect.EdgeCells)
 			{

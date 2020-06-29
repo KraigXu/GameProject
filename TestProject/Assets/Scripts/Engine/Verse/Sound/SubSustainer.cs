@@ -9,7 +9,7 @@ namespace Verse.Sound
 	public class SubSustainer
 	{
 		
-		// (get) Token: 0x060024F0 RID: 9456 RVA: 0x000DB0A3 File Offset: 0x000D92A3
+		
 		public SoundInfo Info
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x060024F1 RID: 9457 RVA: 0x000DB0B0 File Offset: 0x000D92B0
+		
 		public SoundParams ExternalParams
 		{
 			get

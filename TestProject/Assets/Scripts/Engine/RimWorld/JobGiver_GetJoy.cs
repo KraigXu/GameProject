@@ -10,7 +10,7 @@ namespace RimWorld
 	public class JobGiver_GetJoy : ThinkNode_JobGiver
 	{
 		
-		// (get) Token: 0x06002F2B RID: 12075 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected virtual bool CanDoDuringMedicalRest
 		{
 			get

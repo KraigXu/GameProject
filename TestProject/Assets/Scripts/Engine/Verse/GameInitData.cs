@@ -10,7 +10,7 @@ namespace Verse
 	public class GameInitData
 	{
 		
-		// (get) Token: 0x060007AD RID: 1965 RVA: 0x00023BE3 File Offset: 0x00021DE3
+		
 		public bool QuickStarted
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 			{
 				pawn2.workSettings.DisableAll();
 			}
-			using (IEnumerator<WorkTypeDef> enumerator2 = DefDatabase<WorkTypeDef>.AllDefs.GetEnumerator())
+			IEnumerator<WorkTypeDef> enumerator2 = DefDatabase<WorkTypeDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator2.MoveNext())
 				{
@@ -75,11 +75,11 @@ namespace Verse
 						IEnumerable<Pawn> source = list;
 						Func<Pawn, bool> predicate;
 						
-						if ((predicate ) == null)
+						if ((predicate=default ) == null)
 						{
-							predicate = (9__0 = ((Pawn col) => !col.WorkTypeIsDisabled(w)));
+							predicate = ( ((Pawn col) => !col.WorkTypeIsDisabled(w)));
 						}
-						using (IEnumerator<Pawn> enumerator3 = source.Where(predicate).GetEnumerator())
+						IEnumerator<Pawn> enumerator3 = source.Where(predicate).GetEnumerator();
 						{
 							while (enumerator3.MoveNext())
 							{

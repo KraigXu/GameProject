@@ -8,7 +8,7 @@ namespace Verse
 	public class BattleLogEntry_Event : LogEntry
 	{
 		
-		// (get) Token: 0x06000726 RID: 1830 RVA: 0x00020C3C File Offset: 0x0001EE3C
+		
 		private string SubjectName
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class LordJob_DefendAndExpandHive : LordJob
 	{
 		
-		// (get) Token: 0x0600319D RID: 12701 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanBlockHostileVisitors
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600319E RID: 12702 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AddFleeToil
 		{
 			get

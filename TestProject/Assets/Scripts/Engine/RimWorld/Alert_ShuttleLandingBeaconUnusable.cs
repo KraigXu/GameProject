@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_ShuttleLandingBeaconUnusable : Alert
 	{
 		
-		// (get) Token: 0x060056C2 RID: 22210 RVA: 0x001CC48C File Offset: 0x001CA68C
+		
 		private List<GlobalTargetInfo> Targets
 		{
 			get

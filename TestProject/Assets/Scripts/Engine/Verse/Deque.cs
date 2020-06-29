@@ -7,7 +7,7 @@ namespace Verse
 	internal class Deque<T>
 	{
 		
-		// (get) Token: 0x06001EAF RID: 7855 RVA: 0x000BE9BC File Offset: 0x000BCBBC
+		
 		public bool Empty
 		{
 			get

@@ -7,8 +7,8 @@ namespace Verse
 	public class RegionLink
 	{
 		
-		// (get) Token: 0x06000C85 RID: 3205 RVA: 0x00047ABF File Offset: 0x00045CBF
-		// (set) Token: 0x06000C86 RID: 3206 RVA: 0x00047AC9 File Offset: 0x00045CC9
+		
+		
 		public Region RegionA
 		{
 			get
@@ -22,8 +22,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C87 RID: 3207 RVA: 0x00047AD4 File Offset: 0x00045CD4
-		// (set) Token: 0x06000C88 RID: 3208 RVA: 0x00047ADE File Offset: 0x00045CDE
+		
+		
 		public Region RegionB
 		{
 			get

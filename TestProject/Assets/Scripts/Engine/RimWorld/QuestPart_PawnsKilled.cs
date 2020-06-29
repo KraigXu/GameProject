@@ -9,7 +9,7 @@ namespace RimWorld
 	public class QuestPart_PawnsKilled : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060039AC RID: 14764 RVA: 0x001329EC File Offset: 0x00130BEC
+		
 		public override string DescriptionPart
 		{
 			get
@@ -25,15 +25,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060039AD RID: 14765 RVA: 0x00132A69 File Offset: 0x00130C69
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__0())
-				{
-					yield return faction;
-				}
+
+		
 				IEnumerator<Faction> enumerator = null;
 				if (this.requiredInstigatorFaction != null)
 				{

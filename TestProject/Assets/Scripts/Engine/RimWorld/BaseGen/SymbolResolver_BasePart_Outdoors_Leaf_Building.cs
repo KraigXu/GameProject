@@ -8,7 +8,7 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			return base.CanResolve(rp) && (BaseGen.globalSettings.basePart_emptyNodesResolved >= BaseGen.globalSettings.minEmptyNodes || BaseGen.globalSettings.basePart_buildingsResolved < BaseGen.globalSettings.minBuildings);
+			return base.CanResolve(rp) && (BaseGenCore.globalSettings.basePart_emptyNodesResolved >= BaseGenCore.globalSettings.minEmptyNodes || BaseGenCore.globalSettings.basePart_buildingsResolved < BaseGenCore.globalSettings.minBuildings);
 		}
 
 		
@@ -17,8 +17,8 @@ namespace RimWorld.BaseGen
 			ResolveParams resolveParams = rp;
 			resolveParams.wallStuff = (rp.wallStuff ?? BaseGenUtility.RandomCheapWallStuff(rp.faction, false));
 			resolveParams.floorDef = (rp.floorDef ?? BaseGenUtility.RandomBasicFloorDef(rp.faction, true));
-			BaseGen.symbolStack.Push("basePart_indoors", resolveParams, null);
-			BaseGen.globalSettings.basePart_buildingsResolved++;
+			BaseGenCore.symbolStack.Push("basePart_indoors", resolveParams, null);
+			BaseGenCore.globalSettings.basePart_buildingsResolved++;
 		}
 	}
 }

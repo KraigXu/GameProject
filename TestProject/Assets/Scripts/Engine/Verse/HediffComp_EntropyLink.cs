@@ -7,7 +7,7 @@ namespace Verse
 	public class HediffComp_EntropyLink : HediffComp
 	{
 		
-		// (get) Token: 0x06001068 RID: 4200 RVA: 0x0005DDFF File Offset: 0x0005BFFF
+		
 		public HediffCompProperties_EntropyLink Props
 		{
 			get

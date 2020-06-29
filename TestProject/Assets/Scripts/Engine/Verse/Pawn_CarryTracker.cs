@@ -11,7 +11,7 @@ namespace Verse
 	public class Pawn_CarryTracker : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x060012E7 RID: 4839 RVA: 0x0006C558 File Offset: 0x0006A758
+		
 		public Thing CarriedThing
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012E8 RID: 4840 RVA: 0x0006C575 File Offset: 0x0006A775
+		
 		public bool Full
 		{
 			get
@@ -35,7 +35,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060012E9 RID: 4841 RVA: 0x0006C58E File Offset: 0x0006A78E
+		
 		public IThingHolder ParentHolder
 		{
 			get

@@ -10,8 +10,8 @@ namespace Verse.Steam
 	public class WorkshopItem_Scenario : WorkshopItem
 	{
 		
-		// (get) Token: 0x0600229E RID: 8862 RVA: 0x000D2E9D File Offset: 0x000D109D
-		// (set) Token: 0x0600229F RID: 8863 RVA: 0x000D2EA5 File Offset: 0x000D10A5
+		
+		
 		public override PublishedFileId_t PublishedFileId
 		{
 			get

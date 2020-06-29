@@ -11,7 +11,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingDef thingDef = (rp.faction == null || !rp.faction.def.techLevel.IsNeolithicOrWorse()) ? ThingDefOf.MealSimple : ThingDefOf.Pemmican;
 			foreach (IntVec3 c in rp.rect)
 			{
@@ -25,7 +25,7 @@ namespace RimWorld.BaseGen
 						resolveParams.rect = CellRect.SingleCell(c);
 						resolveParams.singleThingDef = thingDef;
 						resolveParams.singleThingStackCount = new int?(value);
-						BaseGen.symbolStack.Push("thing", resolveParams, null);
+						BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 					}
 				}
 			}

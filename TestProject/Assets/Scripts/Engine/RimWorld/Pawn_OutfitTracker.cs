@@ -7,8 +7,8 @@ namespace RimWorld
 	public class Pawn_OutfitTracker : IExposable
 	{
 		
-		// (get) Token: 0x060045C2 RID: 17858 RVA: 0x00178EDB File Offset: 0x001770DB
-		// (set) Token: 0x060045C3 RID: 17859 RVA: 0x00178F00 File Offset: 0x00177100
+		
+		
 		public Outfit CurrentOutfit
 		{
 			get

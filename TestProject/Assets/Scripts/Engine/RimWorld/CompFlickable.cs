@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompFlickable : ThingComp
 	{
 		
-		// (get) Token: 0x06003F21 RID: 16161 RVA: 0x0014FD8B File Offset: 0x0014DF8B
+		
 		private CompProperties_Flickable Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F22 RID: 16162 RVA: 0x0014FD98 File Offset: 0x0014DF98
+		
 		private Texture2D CommandTex
 		{
 			get
@@ -34,8 +34,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F23 RID: 16163 RVA: 0x0014FDC5 File Offset: 0x0014DFC5
-		// (set) Token: 0x06003F24 RID: 16164 RVA: 0x0014FDD0 File Offset: 0x0014DFD0
+		
+		
 		public bool SwitchIsOn
 		{
 			get
@@ -65,7 +65,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F25 RID: 16165 RVA: 0x0014FE48 File Offset: 0x0014E048
+		
 		public Graphic CurrentGraphic
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WITab_Terrain : WITab
 	{
 		
-		// (get) Token: 0x06007021 RID: 28705 RVA: 0x00271AE6 File Offset: 0x0026FCE6
+		
 		public override bool IsVisible
 		{
 			get

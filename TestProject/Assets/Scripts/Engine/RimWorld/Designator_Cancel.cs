@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Cancel : Designator
 	{
 		
-		// (get) Token: 0x06005761 RID: 22369 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		{
 			if (base.Map.designationManager.DesignationOn(t) != null)
 			{
-				using (IEnumerator<Designation> enumerator = base.Map.designationManager.AllDesignationsOn(t).GetEnumerator())
+				IEnumerator<Designation> enumerator = base.Map.designationManager.AllDesignationsOn(t).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

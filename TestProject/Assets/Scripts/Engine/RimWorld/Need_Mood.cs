@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Need_Mood : Need_Seeker
 	{
 		
-		// (get) Token: 0x06004583 RID: 17795 RVA: 0x001778A0 File Offset: 0x00175AA0
+		
 		public override float CurInstantLevel
 		{
 			get
@@ -25,7 +25,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004584 RID: 17796 RVA: 0x00177900 File Offset: 0x00175B00
+		
 		public string MoodString
 		{
 			get

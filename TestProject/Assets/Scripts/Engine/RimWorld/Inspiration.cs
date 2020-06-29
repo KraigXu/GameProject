@@ -7,7 +7,7 @@ namespace RimWorld
 	public class Inspiration : IExposable
 	{
 		
-		// (get) Token: 0x06002ABD RID: 10941 RVA: 0x000F98F8 File Offset: 0x000F7AF8
+		
 		public int Age
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002ABE RID: 10942 RVA: 0x000F9900 File Offset: 0x000F7B00
+		
 		public float AgeDays
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002ABF RID: 10943 RVA: 0x000F9910 File Offset: 0x000F7B10
+		
 		public virtual string InspectLine
 		{
 			get

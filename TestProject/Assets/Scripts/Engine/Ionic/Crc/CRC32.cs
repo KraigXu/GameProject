@@ -11,7 +11,7 @@ namespace Ionic.Crc
 	public class CRC32
 	{
 		
-		// (get) Token: 0x060071E7 RID: 29159 RVA: 0x0027DB94 File Offset: 0x0027BD94
+		
 		public long TotalBytesRead
 		{
 			get
@@ -21,7 +21,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x060071E8 RID: 29160 RVA: 0x0027DB9C File Offset: 0x0027BD9C
+		
 		public int Crc32Result
 		{
 			get

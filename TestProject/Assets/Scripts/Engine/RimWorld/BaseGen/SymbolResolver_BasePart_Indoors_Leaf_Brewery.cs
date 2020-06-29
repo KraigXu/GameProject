@@ -8,14 +8,14 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			return base.CanResolve(rp) && BaseGen.globalSettings.basePart_barracksResolved >= BaseGen.globalSettings.minBarracks && BaseGen.globalSettings.basePart_breweriesCoverage + (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area < 0.08f && (rp.faction == null || rp.faction.def.techLevel >= TechLevel.Medieval);
+			return base.CanResolve(rp) && BaseGenCore.globalSettings.basePart_barracksResolved >= BaseGenCore.globalSettings.minBarracks && BaseGenCore.globalSettings.basePart_breweriesCoverage + (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area < 0.08f && (rp.faction == null || rp.faction.def.techLevel >= TechLevel.Medieval);
 		}
 
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("brewery", rp, null);
-			BaseGen.globalSettings.basePart_breweriesCoverage += (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area;
+			BaseGenCore.symbolStack.Push("brewery", rp, null);
+			BaseGenCore.globalSettings.basePart_breweriesCoverage += (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area;
 		}
 
 		

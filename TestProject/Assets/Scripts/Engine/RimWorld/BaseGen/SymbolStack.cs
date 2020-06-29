@@ -8,7 +8,7 @@ namespace RimWorld.BaseGen
 	public class SymbolStack
 	{
 		
-		// (get) Token: 0x060065B3 RID: 26035 RVA: 0x0023A308 File Offset: 0x00238508
+		
 		public bool Empty
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.BaseGen
 		}
 
 		
-		// (get) Token: 0x060065B4 RID: 26036 RVA: 0x0023A318 File Offset: 0x00238518
+		
 		public int Count
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld.BaseGen
 		
 		public void Push(string symbol, ResolveParams resolveParams, string customNameForPath = null)
 		{
-			string text = BaseGen.CurrentSymbolPath;
+			string text = BaseGenCore.CurrentSymbolPath;
 			if (!text.NullOrEmpty())
 			{
 				text += "_";

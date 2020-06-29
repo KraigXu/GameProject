@@ -9,7 +9,7 @@ namespace RimWorld
 	public class IncidentWorker_TraderCaravanArrival : IncidentWorker_NeutralGroup
 	{
 		
-		// (get) Token: 0x06003CD8 RID: 15576 RVA: 0x00141CA9 File Offset: 0x0013FEA9
+		
 		protected override PawnGroupKindDef PawnGroupKindDef
 		{
 			get

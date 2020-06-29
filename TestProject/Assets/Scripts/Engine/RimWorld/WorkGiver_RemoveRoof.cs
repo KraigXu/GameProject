@@ -10,7 +10,7 @@ namespace RimWorld
 	public class WorkGiver_RemoveRoof : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x06003052 RID: 12370 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool Prioritized
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003055 RID: 12373 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		public override PathEndMode PathEndMode
 		{
 			get

@@ -11,7 +11,7 @@ namespace RimWorld
 	public class ITab_Pawn_Log : ITab
 	{
 		
-		// (get) Token: 0x06005BC2 RID: 23490 RVA: 0x001FAE44 File Offset: 0x001F9044
+		
 		private Pawn SelPawnForCombatInfo
 		{
 			get

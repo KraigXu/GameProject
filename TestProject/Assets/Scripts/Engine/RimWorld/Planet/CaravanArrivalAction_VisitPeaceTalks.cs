@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class CaravanArrivalAction_VisitPeaceTalks : CaravanArrivalAction
 	{
 		
-		// (get) Token: 0x06006BA7 RID: 27559 RVA: 0x00259059 File Offset: 0x00257259
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006BA8 RID: 27560 RVA: 0x0025907A File Offset: 0x0025727A
+		
 		public override string ReportString
 		{
 			get

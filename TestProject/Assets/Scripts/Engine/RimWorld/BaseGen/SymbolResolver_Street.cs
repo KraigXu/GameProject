@@ -95,7 +95,7 @@ namespace RimWorld.BaseGen
 		
 		private void SpawnFloor(CellRect rect, bool horizontal, TerrainDef floorDef)
 		{
-			TerrainGrid terrainGrid = BaseGen.globalSettings.map.terrainGrid;
+			TerrainGrid terrainGrid = BaseGenCore.globalSettings.map.terrainGrid;
 			foreach (IntVec3 intVec in rect)
 			{
 				if ((horizontal && SymbolResolver_Street.street[intVec.x - rect.minX]) || (!horizontal && SymbolResolver_Street.street[intVec.z - rect.minZ]))
@@ -108,7 +108,7 @@ namespace RimWorld.BaseGen
 		
 		private bool CausesStreet(IntVec3 c, TerrainDef floorDef)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (!c.InBounds(map))
 			{
 				return false;

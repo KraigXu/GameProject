@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompDeepScanner : CompScanner
 	{
 		
-		// (get) Token: 0x06005450 RID: 21584 RVA: 0x001C25FB File Offset: 0x001C07FB
+		
 		public new CompProperties_ScannerMineralsDeep Props
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class FocusStrengthOffset_ArtificialBuildings : FocusStrengthOffset_Curve
 	{
 		
-		// (get) Token: 0x060051EE RID: 20974 RVA: 0x001B6397 File Offset: 0x001B4597
+		
 		protected override string ExplanationKey
 		{
 			get

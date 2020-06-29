@@ -8,7 +8,7 @@ namespace Verse
 	public struct IntVec3 : IEquatable<IntVec3>
 	{
 		
-		// (get) Token: 0x060000E6 RID: 230 RVA: 0x00004D43 File Offset: 0x00002F43
+		
 		public IntVec2 ToIntVec2
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000E7 RID: 231 RVA: 0x00004D56 File Offset: 0x00002F56
+		
 		public bool IsValid
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000E8 RID: 232 RVA: 0x00004D64 File Offset: 0x00002F64
+		
 		public int LengthHorizontalSquared
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000E9 RID: 233 RVA: 0x00004D81 File Offset: 0x00002F81
+		
 		public float LengthHorizontal
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000EA RID: 234 RVA: 0x00004DA4 File Offset: 0x00002FA4
+		
 		public int LengthManhattan
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000EB RID: 235 RVA: 0x00004DD8 File Offset: 0x00002FD8
+		
 		public float AngleFlat
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000EF RID: 239 RVA: 0x00004E70 File Offset: 0x00003070
+		
 		public static IntVec3 Zero
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F0 RID: 240 RVA: 0x00004E7A File Offset: 0x0000307A
+		
 		public static IntVec3 North
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F1 RID: 241 RVA: 0x00004E84 File Offset: 0x00003084
+		
 		public static IntVec3 East
 		{
 			get
@@ -126,7 +126,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F2 RID: 242 RVA: 0x00004E8E File Offset: 0x0000308E
+		
 		public static IntVec3 South
 		{
 			get
@@ -136,7 +136,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F3 RID: 243 RVA: 0x00004E98 File Offset: 0x00003098
+		
 		public static IntVec3 West
 		{
 			get
@@ -146,7 +146,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F4 RID: 244 RVA: 0x00004EA2 File Offset: 0x000030A2
+		
 		public static IntVec3 NorthWest
 		{
 			get
@@ -156,7 +156,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F5 RID: 245 RVA: 0x00004EAC File Offset: 0x000030AC
+		
 		public static IntVec3 NorthEast
 		{
 			get
@@ -166,7 +166,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F6 RID: 246 RVA: 0x00004EB6 File Offset: 0x000030B6
+		
 		public static IntVec3 SouthWest
 		{
 			get
@@ -176,7 +176,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F7 RID: 247 RVA: 0x00004EC0 File Offset: 0x000030C0
+		
 		public static IntVec3 SouthEast
 		{
 			get
@@ -186,7 +186,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000F8 RID: 248 RVA: 0x00004ECA File Offset: 0x000030CA
+		
 		public static IntVec3 Invalid
 		{
 			get

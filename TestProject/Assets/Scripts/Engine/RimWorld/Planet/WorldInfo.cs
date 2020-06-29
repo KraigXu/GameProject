@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public class WorldInfo : IExposable
 	{
 		
-		// (get) Token: 0x06006B6D RID: 27501 RVA: 0x002583E6 File Offset: 0x002565E6
+		
 		public string FileNameNoExtension
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006B6E RID: 27502 RVA: 0x002583F3 File Offset: 0x002565F3
+		
 		public int Seed
 		{
 			get

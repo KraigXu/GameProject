@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005662 RID: 22114 RVA: 0x001CA3D4 File Offset: 0x001C85D4
+		
 		private List<Pawn> StarvingColonists
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompAbilityEffect_TransferEntropy : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x060041AC RID: 16812 RVA: 0x0015F1CD File Offset: 0x0015D3CD
+		
 		public new CompProperties_AbilityTransferEntropy Props
 		{
 			get

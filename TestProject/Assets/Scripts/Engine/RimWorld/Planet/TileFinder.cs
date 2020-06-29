@@ -23,27 +23,24 @@ namespace RimWorld.Planet
 			{
 				IEnumerable<int> source = from _ in Enumerable.Range(0, 100)
 				select Rand.Range(0, Find.WorldGrid.TilesCount);
-				Func<int, float> weightSelector;
-				if ((weightSelector ) == null)
+				Func<int, float> weightSelector = (delegate (int x)
 				{
-					weightSelector = (9__1 = delegate(int x)
+					Tile tile = Find.WorldGrid[x];
+					if (!tile.biome.canBuildBase || !tile.biome.implemented || tile.hilliness == Hilliness.Impassable)
 					{
-						Tile tile = Find.WorldGrid[x];
-						if (!tile.biome.canBuildBase || !tile.biome.implemented || tile.hilliness == Hilliness.Impassable)
-						{
-							return 0f;
-						}
-						if (mustBeAutoChoosable && !tile.biome.canAutoChoose)
-						{
-							return 0f;
-						}
-						if (extraValidator != null && !extraValidator(x))
-						{
-							return 0f;
-						}
-						return tile.biome.settlementSelectionWeight;
-					});
-				}
+						return 0f;
+					}
+					if (mustBeAutoChoosable && !tile.biome.canAutoChoose)
+					{
+						return 0f;
+					}
+					if (extraValidator != null && !extraValidator(x))
+					{
+						return 0f;
+					}
+					return tile.biome.settlementSelectionWeight;
+				});
+
 				int num;
 				if (source.TryRandomElementByWeight(weightSelector, out num) && TileFinder.IsValidTileForNewSettlement(num, null))
 				{

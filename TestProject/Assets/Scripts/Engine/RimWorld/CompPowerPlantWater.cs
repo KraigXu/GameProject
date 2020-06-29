@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompPowerPlantWater : CompPowerPlant
 	{
 		
-		// (get) Token: 0x06003F5B RID: 16219 RVA: 0x00150AFD File Offset: 0x0014ECFD
+		
 		protected override float DesiredPowerOutput
 		{
 			get

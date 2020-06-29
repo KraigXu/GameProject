@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JobDriver_HaulToTransporter : JobDriver_HaulToContainer
 	{
 		
-		// (get) Token: 0x06002C83 RID: 11395 RVA: 0x000FDB19 File Offset: 0x000FBD19
+		
 		public CompTransporter Transporter
 		{
 			get

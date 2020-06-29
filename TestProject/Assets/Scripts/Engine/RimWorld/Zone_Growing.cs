@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Zone_Growing : Zone, IPlantToGrowSettable
 	{
 		
-		// (get) Token: 0x06004120 RID: 16672 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsMultiselectable
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004121 RID: 16673 RVA: 0x0015D1B1 File Offset: 0x0015B3B1
+		
 		protected override Color NextZoneColor
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004122 RID: 16674 RVA: 0x0015D1B8 File Offset: 0x0015B3B8
+		
 		IEnumerable<IntVec3> IPlantToGrowSettable.Cells
 		{
 			get

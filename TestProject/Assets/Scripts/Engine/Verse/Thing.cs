@@ -14,8 +14,8 @@ namespace Verse
 	public class Thing : Entity, IExposable, ISelectable, ILoadReferenceable, ISignalReceiver
 	{
 		
-		// (get) Token: 0x06001604 RID: 5636 RVA: 0x00080321 File Offset: 0x0007E521
-		// (set) Token: 0x06001605 RID: 5637 RVA: 0x00080329 File Offset: 0x0007E529
+		
+		
 		public virtual int HitPoints
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001606 RID: 5638 RVA: 0x00080332 File Offset: 0x0007E532
+		
 		public int MaxHitPoints
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001607 RID: 5639 RVA: 0x00080345 File Offset: 0x0007E545
+		
 		public float MarketValue
 		{
 			get
@@ -49,7 +49,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001608 RID: 5640 RVA: 0x00080353 File Offset: 0x0007E553
+		
 		public virtual float RoyalFavorValue
 		{
 			get
@@ -59,7 +59,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001609 RID: 5641 RVA: 0x00080364 File Offset: 0x0007E564
+		
 		public bool FlammableNow
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160A RID: 5642 RVA: 0x000803CD File Offset: 0x0007E5CD
+		
 		public virtual bool FireBulwark
 		{
 			get
@@ -97,7 +97,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160B RID: 5643 RVA: 0x000803DD File Offset: 0x0007E5DD
+		
 		public bool Destroyed
 		{
 			get
@@ -107,7 +107,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160C RID: 5644 RVA: 0x000803F5 File Offset: 0x0007E5F5
+		
 		public bool Discarded
 		{
 			get
@@ -117,7 +117,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160D RID: 5645 RVA: 0x00080401 File Offset: 0x0007E601
+		
 		public bool Spawned
 		{
 			get
@@ -136,7 +136,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160E RID: 5646 RVA: 0x00080433 File Offset: 0x0007E633
+		
 		public bool SpawnedOrAnyParentSpawned
 		{
 			get
@@ -146,7 +146,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600160F RID: 5647 RVA: 0x0008043E File Offset: 0x0007E63E
+		
 		public Thing SpawnedParentOrMe
 		{
 			get
@@ -164,7 +164,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001610 RID: 5648 RVA: 0x0008045F File Offset: 0x0007E65F
+		
 		public Map Map
 		{
 			get
@@ -178,7 +178,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001611 RID: 5649 RVA: 0x0008047C File Offset: 0x0007E67C
+		
 		public Map MapHeld
 		{
 			get
@@ -196,8 +196,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001612 RID: 5650 RVA: 0x000804A2 File Offset: 0x0007E6A2
-		// (set) Token: 0x06001613 RID: 5651 RVA: 0x000804AC File Offset: 0x0007E6AC
+		
+		
 		public IntVec3 Position
 		{
 			get
@@ -235,7 +235,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001614 RID: 5652 RVA: 0x00080568 File Offset: 0x0007E768
+		
 		public IntVec3 PositionHeld
 		{
 			get
@@ -254,8 +254,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001615 RID: 5653 RVA: 0x000805A1 File Offset: 0x0007E7A1
-		// (set) Token: 0x06001616 RID: 5654 RVA: 0x000805AC File Offset: 0x0007E7AC
+		
+		
 		public Rot4 Rotation
 		{
 			get
@@ -291,7 +291,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001617 RID: 5655 RVA: 0x0008069B File Offset: 0x0007E89B
+		
 		public bool Smeltable
 		{
 			get
@@ -301,7 +301,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001618 RID: 5656 RVA: 0x000806C6 File Offset: 0x0007E8C6
+		
 		public bool BurnableByRecipe
 		{
 			get
@@ -311,7 +311,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001619 RID: 5657 RVA: 0x000806F1 File Offset: 0x0007E8F1
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -325,7 +325,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600161A RID: 5658 RVA: 0x00080708 File Offset: 0x0007E908
+		
 		public Faction Faction
 		{
 			get
@@ -335,8 +335,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600161B RID: 5659 RVA: 0x00080710 File Offset: 0x0007E910
-		// (set) Token: 0x0600161C RID: 5660 RVA: 0x00080746 File Offset: 0x0007E946
+		
+		
 		public string ThingID
 		{
 			get
@@ -379,7 +379,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600161E RID: 5662 RVA: 0x000807D4 File Offset: 0x0007E9D4
+		
 		public IntVec2 RotatedSize
 		{
 			get
@@ -393,7 +393,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600161F RID: 5663 RVA: 0x00080814 File Offset: 0x0007EA14
+		
 		public virtual CellRect? CustomRectForSelector
 		{
 			get
@@ -403,7 +403,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001620 RID: 5664 RVA: 0x0008082A File Offset: 0x0007EA2A
+		
 		public override string Label
 		{
 			get
@@ -417,7 +417,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001621 RID: 5665 RVA: 0x00080857 File Offset: 0x0007EA57
+		
 		public virtual string LabelNoCount
 		{
 			get
@@ -427,7 +427,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001622 RID: 5666 RVA: 0x00080861 File Offset: 0x0007EA61
+		
 		public override string LabelCap
 		{
 			get
@@ -437,7 +437,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001623 RID: 5667 RVA: 0x00080874 File Offset: 0x0007EA74
+		
 		public virtual string LabelCapNoCount
 		{
 			get
@@ -447,7 +447,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001624 RID: 5668 RVA: 0x00080887 File Offset: 0x0007EA87
+		
 		public override string LabelShort
 		{
 			get
@@ -457,7 +457,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001625 RID: 5669 RVA: 0x0008088F File Offset: 0x0007EA8F
+		
 		public virtual bool IngestibleNow
 		{
 			get
@@ -467,7 +467,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001626 RID: 5670 RVA: 0x000808A6 File Offset: 0x0007EAA6
+		
 		public ThingDef Stuff
 		{
 			get
@@ -477,7 +477,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001627 RID: 5671 RVA: 0x000808AE File Offset: 0x0007EAAE
+		
 		public Graphic DefaultGraphic
 		{
 			get
@@ -495,7 +495,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001628 RID: 5672 RVA: 0x000808E8 File Offset: 0x0007EAE8
+		
 		public virtual Graphic Graphic
 		{
 			get
@@ -505,7 +505,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001629 RID: 5673 RVA: 0x000808F0 File Offset: 0x0007EAF0
+		
 		public virtual IntVec3 InteractionCell
 		{
 			get
@@ -515,7 +515,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162A RID: 5674 RVA: 0x00080910 File Offset: 0x0007EB10
+		
 		public float AmbientTemperature
 		{
 			get
@@ -548,7 +548,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162B RID: 5675 RVA: 0x00080993 File Offset: 0x0007EB93
+		
 		public int Tile
 		{
 			get
@@ -566,7 +566,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162C RID: 5676 RVA: 0x000809BE File Offset: 0x0007EBBE
+		
 		public bool Suspended
 		{
 			get
@@ -576,7 +576,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162D RID: 5677 RVA: 0x000809DF File Offset: 0x0007EBDF
+		
 		public virtual string DescriptionDetailed
 		{
 			get
@@ -586,7 +586,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162E RID: 5678 RVA: 0x000809EC File Offset: 0x0007EBEC
+		
 		public virtual string DescriptionFlavor
 		{
 			get
@@ -596,7 +596,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600162F RID: 5679 RVA: 0x000809F9 File Offset: 0x0007EBF9
+		
 		public TerrainAffordanceDef TerrainAffordanceNeeded
 		{
 			get
@@ -1020,7 +1020,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001640 RID: 5696 RVA: 0x000814DC File Offset: 0x0007F6DC
+		
 		public virtual Vector3 DrawPos
 		{
 			get
@@ -1030,8 +1030,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001641 RID: 5697 RVA: 0x000814E4 File Offset: 0x0007F6E4
-		// (set) Token: 0x06001642 RID: 5698 RVA: 0x00081524 File Offset: 0x0007F724
+		
+		
 		public virtual Color DrawColor
 		{
 			get
@@ -1060,7 +1060,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001643 RID: 5699 RVA: 0x00081571 File Offset: 0x0007F771
+		
 		public virtual Color DrawColorTwo
 		{
 			get
@@ -1640,8 +1640,12 @@ namespace Verse
 			return 0;
 		}
 
-		
-		public ThingDef def;
+        public virtual void Notify_SignalReceived(RimWorld.Signal signal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ThingDef def;
 
 		
 		public int thingIDNumber = -1;

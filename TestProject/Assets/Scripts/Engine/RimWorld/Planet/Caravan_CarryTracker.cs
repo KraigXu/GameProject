@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class Caravan_CarryTracker : IExposable
 	{
 		
-		// (get) Token: 0x06006D23 RID: 27939 RVA: 0x002636BE File Offset: 0x002618BE
+		
 		public List<Pawn> CarriedPawnsListForReading
 		{
 			get

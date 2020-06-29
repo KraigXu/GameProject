@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_SingleOnceFixed : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D55 RID: 15701 RVA: 0x0013B2B7 File Offset: 0x001394B7
+		
 		protected int IntervalsPassed
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D56 RID: 15702 RVA: 0x00143E47 File Offset: 0x00142047
+		
 		private StorytellerCompProperties_SingleOnceFixed Props
 		{
 			get

@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D6B RID: 7531 RVA: 0x000B4A26 File Offset: 0x000B2C26
+		
 		private Def Def
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D6C RID: 7532 RVA: 0x000B4A56 File Offset: 0x000B2C56
+		
 		private Pawn ThingPawn
 		{
 			get
@@ -84,7 +84,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D6D RID: 7533 RVA: 0x000B4A63 File Offset: 0x000B2C63
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -94,7 +94,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D6E RID: 7534 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get
@@ -403,7 +403,7 @@ namespace Verse
 		public struct Hyperlink
 		{
 			
-			// (get) Token: 0x0600845B RID: 33883 RVA: 0x002AFD70 File Offset: 0x002ADF70
+			
 			public string Label
 			{
 				get

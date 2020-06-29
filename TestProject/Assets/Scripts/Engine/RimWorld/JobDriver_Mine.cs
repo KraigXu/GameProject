@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Mine : JobDriver
 	{
 		
-		// (get) Token: 0x06002CC8 RID: 11464 RVA: 0x000FE7A4 File Offset: 0x000FC9A4
+		
 		private Thing MineTarget
 		{
 			get

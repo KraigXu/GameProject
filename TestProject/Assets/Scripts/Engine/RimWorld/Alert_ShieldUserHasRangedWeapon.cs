@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Alert_ShieldUserHasRangedWeapon : Alert
 	{
 		
-		// (get) Token: 0x060056AF RID: 22191 RVA: 0x001CBD60 File Offset: 0x001C9F60
+		
 		private List<Pawn> ShieldUsersWithRangedWeapon
 		{
 			get

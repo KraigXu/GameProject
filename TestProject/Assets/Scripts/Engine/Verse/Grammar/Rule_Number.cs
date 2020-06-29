@@ -15,7 +15,7 @@ namespace Verse.Grammar
 		}
 
 		
-		// (get) Token: 0x06002424 RID: 9252 RVA: 0x000D8551 File Offset: 0x000D6751
+		
 		public override float BaseSelectionWeight
 		{
 			get

@@ -9,7 +9,7 @@ namespace Verse
 	public class PawnRenderer
 	{
 		
-		// (get) Token: 0x06000F3C RID: 3900 RVA: 0x00056FB7 File Offset: 0x000551B7
+		
 		private RotDrawMode CurRotDrawMode
 		{
 			get

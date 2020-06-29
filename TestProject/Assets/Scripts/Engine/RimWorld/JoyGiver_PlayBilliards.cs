@@ -8,7 +8,7 @@ namespace RimWorld
 	public class JoyGiver_PlayBilliards : JoyGiver_InteractBuilding
 	{
 		
-		// (get) Token: 0x06002F1D RID: 12061 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanDoDuringGathering
 		{
 			get

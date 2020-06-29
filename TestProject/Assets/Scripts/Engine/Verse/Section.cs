@@ -9,7 +9,7 @@ namespace Verse
 	public class Section
 	{
 		
-		// (get) Token: 0x06000B60 RID: 2912 RVA: 0x0003D7C4 File Offset: 0x0003B9C4
+		
 		public CellRect CellRect
 		{
 			get

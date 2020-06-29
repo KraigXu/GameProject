@@ -8,7 +8,7 @@ namespace RimWorld
 	public class StorytellerComp_DeepDrillInfestation : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D21 RID: 15649 RVA: 0x001437DC File Offset: 0x001419DC
+		
 		protected StorytellerCompProperties_DeepDrillInfestation Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003D22 RID: 15650 RVA: 0x001437EC File Offset: 0x001419EC
+		
 		private float DeepDrillInfestationMTBDaysPerDrill
 		{
 			get

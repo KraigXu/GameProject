@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MessageBoxEventsUI : MonoBehaviour
 {
     
-    // (set) Token: 0x06000008 RID: 8 RVA: 0x000021A3 File Offset: 0x000003A3
+    
     [HideInInspector]
     public string _tipstr
     {
@@ -112,6 +112,6 @@ public class MessageBoxEventsUI : MonoBehaviour
     public MessageBoxType mMessageBoxType = MessageBoxType.Composite_OkAndCANCEL;
 
     
-    // (Invoke) Token: 0x06000022 RID: 34
+    
     public delegate void MessageBoxSimpleClick();
 }

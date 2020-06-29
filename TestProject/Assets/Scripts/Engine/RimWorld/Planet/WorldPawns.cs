@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WorldPawns : IExposable
 	{
 		
-		// (get) Token: 0x06006F71 RID: 28529 RVA: 0x0026C521 File Offset: 0x0026A721
+		
 		public List<Pawn> AllPawnsAliveOrDead
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F72 RID: 28530 RVA: 0x0026C556 File Offset: 0x0026A756
+		
 		public List<Pawn> AllPawnsAlive
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F73 RID: 28531 RVA: 0x0026C58B File Offset: 0x0026A78B
+		
 		public HashSet<Pawn> AllPawnsDead
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006F74 RID: 28532 RVA: 0x0026C593 File Offset: 0x0026A793
+		
 		public HashSet<Pawn> ForcefullyKeptPawns
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompAnimalInsanityPulser : ThingComp
 	{
 		
-		// (get) Token: 0x06005035 RID: 20533 RVA: 0x001B0764 File Offset: 0x001AE964
+		
 		public CompProperties_AnimalInsanityPulser Props
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 			where p.RaceProps.Animal && p.Position.InHorDistOf(this.parent.Position, (float)this.Props.radius)
 			select p;
 			bool flag = false;
-			using (IEnumerator<Pawn> enumerator = enumerable.GetEnumerator())
+			IEnumerator<Pawn> enumerator = enumerable.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

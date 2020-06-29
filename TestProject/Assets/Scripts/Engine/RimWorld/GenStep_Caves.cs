@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GenStep_Caves : GenStep
 	{
 		
-		// (get) Token: 0x06003E3D RID: 15933 RVA: 0x00147EE3 File Offset: 0x001460E3
+		
 		public override int SeedPart
 		{
 			get
@@ -30,8 +30,8 @@ namespace RimWorld
 			MapGenFloatGrid elevation = MapGenerator.Elevation;
 			BoolGrid visited = new BoolGrid(map);
 			List<IntVec3> group = new List<IntVec3>();
-			Predicate<IntVec3> 9__0;
-			Action<IntVec3> 9__1;
+
+			
 			foreach (IntVec3 intVec in map.AllCells)
 			{
 				if (!visited[intVec] && this.IsRock(intVec, elevation, map))
@@ -39,20 +39,13 @@ namespace RimWorld
 					group.Clear();
 					FloodFiller floodFiller = map.floodFiller;
 					IntVec3 root = intVec;
-					Predicate<IntVec3> passCheck;
-					if ((passCheck ) == null)
+					Predicate<IntVec3> passCheck = (((IntVec3 x) => this.IsRock(x, elevation, map)));
+
+					Action<IntVec3> processor = (delegate (IntVec3 x)
 					{
-						passCheck = (9__0 = ((IntVec3 x) => this.IsRock(x, elevation, map)));
-					}
-					Action<IntVec3> processor;
-					if ((processor ) == null)
-					{
-						processor = (9__1 = delegate(IntVec3 x)
-						{
-							visited[x] = true;
-							group.Add(x);
-						});
-					}
+						visited[x] = true;
+						group.Add(x);
+					});
 					floodFiller.FloodFill(root, passCheck, processor, int.MaxValue, false, null);
 					this.Trim(group, map);
 					this.RemoveSmallDisconnectedSubGroups(group, map);

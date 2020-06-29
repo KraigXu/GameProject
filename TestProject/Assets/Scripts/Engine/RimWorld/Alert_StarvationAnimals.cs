@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060056B3 RID: 22195 RVA: 0x001CBE90 File Offset: 0x001CA090
+		
 		private List<Pawn> StarvingAnimals
 		{
 			get

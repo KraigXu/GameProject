@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_FoodFeedPatient : JobDriver
 	{
 		
-		// (get) Token: 0x06002D80 RID: 11648 RVA: 0x000DF68D File Offset: 0x000DD88D
+		
 		protected Thing Food
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002D81 RID: 11649 RVA: 0x001004A2 File Offset: 0x000FE6A2
+		
 		protected Pawn Deliveree
 		{
 			get

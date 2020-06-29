@@ -7,7 +7,7 @@ namespace Verse.Sound
 	public class SoundSizeAggregator
 	{
 		
-		// (get) Token: 0x060024DB RID: 9435 RVA: 0x000DAA24 File Offset: 0x000D8C24
+		
 		public float AggregateSize
 		{
 			get

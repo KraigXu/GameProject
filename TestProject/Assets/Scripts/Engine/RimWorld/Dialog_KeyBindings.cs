@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_KeyBindings : Window
 	{
 		
-		// (get) Token: 0x060058C7 RID: 22727 RVA: 0x001D89BA File Offset: 0x001D6BBA
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060058C8 RID: 22728 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		protected override float Margin
 		{
 			get

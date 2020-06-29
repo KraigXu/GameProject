@@ -8,7 +8,7 @@ namespace Verse
 	public class DebugActionAttribute : Attribute
 	{
 		
-		// (get) Token: 0x06001A05 RID: 6661 RVA: 0x0009FF44 File Offset: 0x0009E144
+		
 		public bool IsAllowedInCurrentGameState
 		{
 			get

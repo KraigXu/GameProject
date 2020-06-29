@@ -74,7 +74,7 @@ namespace Verse
 		
 		private IEnumerable<KeyBindingDef> ConflictingBindings(KeyBindingDef keyDef, KeyCode code)
 		{
-			using (IEnumerator<KeyBindingDef> enumerator = DefDatabase<KeyBindingDef>.AllDefs.GetEnumerator())
+			IEnumerator<KeyBindingDef> enumerator = DefDatabase<KeyBindingDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -86,7 +86,6 @@ namespace Verse
 					}
 				}
 			}
-			IEnumerator<KeyBindingDef> enumerator = null;
 			yield break;
 			yield break;
 		}

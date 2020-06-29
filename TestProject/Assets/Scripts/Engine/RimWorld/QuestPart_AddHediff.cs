@@ -10,15 +10,12 @@ namespace RimWorld
 	public class QuestPart_AddHediff : QuestPart
 	{
 		
-		// (get) Token: 0x060038F0 RID: 14576 RVA: 0x0012FAEC File Offset: 0x0012DCEC
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				int num;
 				for (int i = 0; i < this.pawns.Count; i = num + 1)
@@ -32,15 +29,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060038F1 RID: 14577 RVA: 0x0012FAFC File Offset: 0x0012DCFC
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__1())
-				{
-					yield return hyperlink;
-				}
+
+
 				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 				if (this.addToHyperlinks)
 				{

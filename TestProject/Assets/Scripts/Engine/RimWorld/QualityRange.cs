@@ -7,7 +7,7 @@ namespace RimWorld
 	public struct QualityRange : IEquatable<QualityRange>
 	{
 		
-		// (get) Token: 0x06005423 RID: 21539 RVA: 0x001C16A5 File Offset: 0x001BF8A5
+		
 		public static QualityRange All
 		{
 			get

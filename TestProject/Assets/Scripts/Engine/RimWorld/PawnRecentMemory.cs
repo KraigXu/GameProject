@@ -7,7 +7,7 @@ namespace RimWorld
 	public class PawnRecentMemory : IExposable
 	{
 		
-		// (get) Token: 0x060045B6 RID: 17846 RVA: 0x00178D0B File Offset: 0x00176F0B
+		
 		public int TicksSinceLastLight
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045B7 RID: 17847 RVA: 0x00178D1E File Offset: 0x00176F1E
+		
 		public int TicksSinceOutdoors
 		{
 			get

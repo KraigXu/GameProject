@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Alert_Critical : Alert
 	{
 		
-		// (get) Token: 0x060055FA RID: 22010 RVA: 0x001C835A File Offset: 0x001C655A
+		
 		protected override Color BGColor
 		{
 			get

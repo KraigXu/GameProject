@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_DamageUntilDowned : QuestPart
 	{
 		
-		// (get) Token: 0x06003925 RID: 14629 RVA: 0x001306FC File Offset: 0x0012E8FC
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				int num;
 				for (int i = 0; i < this.pawns.Count; i = num + 1)

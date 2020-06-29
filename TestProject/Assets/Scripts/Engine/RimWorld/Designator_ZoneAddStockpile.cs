@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Designator_ZoneAddStockpile : Designator_ZoneAdd
 	{
 		
-		// (get) Token: 0x06005851 RID: 22609 RVA: 0x001D50D6 File Offset: 0x001D32D6
+		
 		protected override string NewZoneLabel
 		{
 			get

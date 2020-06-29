@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_GetMonumentRequiredResourcesString : QuestNode
@@ -78,9 +78,9 @@ namespace RimWorld.QuestGen
 						SketchTerrain st;
 						if ((st = (sketchBuildable as SketchTerrain)) != null && st.treatSimilarAsSame)
 						{
-							using (IEnumerator<TerrainDef> enumerator2 = (from x in DefDatabase<TerrainDef>.AllDefs
+							IEnumerator<TerrainDef> enumerator2 = (from x in DefDatabase<TerrainDef>.AllDefs
 							where st.IsSameOrSimilar(x)
-							select x).GetEnumerator())
+							select x).GetEnumerator();
 							{
 								while (enumerator2.MoveNext())
 								{

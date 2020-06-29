@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005680 RID: 22144 RVA: 0x001CADEC File Offset: 0x001C8FEC
+		
 		public List<Pawn> Targets
 		{
 			get

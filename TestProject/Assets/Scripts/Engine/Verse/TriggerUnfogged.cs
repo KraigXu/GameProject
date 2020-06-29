@@ -28,7 +28,7 @@ namespace Verse
 		
 		public void Activated()
 		{
-			Find.SignalManager.SendSignal(new Signal(this.signalTag));
+			//Find.SignalManager.SendSignal(new Signal(this.signalTag));
 			if (!base.Destroyed)
 			{
 				this.Destroy(DestroyMode.Vanish);

@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Reward_PassageOffworld : Reward
 	{
 		
-		// (get) Token: 0x06006166 RID: 24934 RVA: 0x0021D182 File Offset: 0x0021B382
+		
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GenStep_ScatterLumpsMineable : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06003E92 RID: 16018 RVA: 0x0014BD58 File Offset: 0x00149F58
+		
 		public override int SeedPart
 		{
 			get

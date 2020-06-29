@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_RemoveMemoryThought : QuestPart
 	{
 		
-		// (get) Token: 0x060039BF RID: 14783 RVA: 0x00132E05 File Offset: 0x00131005
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.pawn != null && this.addToLookTargets)
 				{

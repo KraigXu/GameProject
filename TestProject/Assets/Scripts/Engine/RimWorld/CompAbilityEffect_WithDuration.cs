@@ -7,7 +7,7 @@ namespace RimWorld
 	public abstract class CompAbilityEffect_WithDuration : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x060041DA RID: 16858 RVA: 0x0015FD32 File Offset: 0x0015DF32
+		
 		public new CompProperties_AbilityEffectWithDuration Props
 		{
 			get

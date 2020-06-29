@@ -14,7 +14,7 @@ namespace RimWorld
 	public class Dialog_Trade : Window
 	{
 		
-		// (get) Token: 0x06005E23 RID: 24099 RVA: 0x001D66F9 File Offset: 0x001D48F9
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E24 RID: 24100 RVA: 0x00208FDA File Offset: 0x002071DA
+		
 		private int Tile
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E25 RID: 24101 RVA: 0x00208FE6 File Offset: 0x002071E6
+		
 		private BiomeDef Biome
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E26 RID: 24102 RVA: 0x00209000 File Offset: 0x00207200
+		
 		private float MassUsage
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E27 RID: 24103 RVA: 0x00209074 File Offset: 0x00207274
+		
 		private float MassCapacity
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E28 RID: 24104 RVA: 0x002090F8 File Offset: 0x002072F8
+		
 		private float TilesPerDay
 		{
 			get
@@ -113,7 +113,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E29 RID: 24105 RVA: 0x0020918C File Offset: 0x0020738C
+		
 		private Pair<float, float> DaysWorthOfFood
 		{
 			get
@@ -130,7 +130,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E2A RID: 24106 RVA: 0x002091FC File Offset: 0x002073FC
+		
 		private Pair<ThingDef, float> ForagedFoodPerDay
 		{
 			get
@@ -148,7 +148,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E2B RID: 24107 RVA: 0x00209260 File Offset: 0x00207460
+		
 		private float Visibility
 		{
 			get

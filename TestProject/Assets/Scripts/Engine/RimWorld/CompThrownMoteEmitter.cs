@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompThrownMoteEmitter : ThingComp
 	{
 		
-		// (get) Token: 0x060053BF RID: 21439 RVA: 0x001BFA82 File Offset: 0x001BDC82
+		
 		private CompProperties_ThrownMoteEmitter Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053C0 RID: 21440 RVA: 0x001BFA90 File Offset: 0x001BDC90
+		
 		private Vector3 EmissionOffset
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053C1 RID: 21441 RVA: 0x001BFB11 File Offset: 0x001BDD11
+		
 		private Color EmissionColor
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060053C2 RID: 21442 RVA: 0x001BFB34 File Offset: 0x001BDD34
+		
 		private bool IsOn
 		{
 			get

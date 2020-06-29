@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class Designator_Plan : Designator
 	{
 		
-		// (get) Token: 0x060057BF RID: 22463 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057C0 RID: 22464 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool DragDrawMeasurements
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057C1 RID: 22465 RVA: 0x001D2020 File Offset: 0x001D0220
+		
 		protected override DesignationDef Designation
 		{
 			get

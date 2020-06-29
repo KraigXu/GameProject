@@ -7,7 +7,7 @@ namespace Verse.Sound
 	public class SoundParamTarget_PropertyLowPass : SoundParamTarget
 	{
 		
-		// (get) Token: 0x06002477 RID: 9335 RVA: 0x000D90E0 File Offset: 0x000D72E0
+		
 		public override string Label
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse.Sound
 		}
 
 		
-		// (get) Token: 0x06002478 RID: 9336 RVA: 0x000D90F7 File Offset: 0x000D72F7
+		
 		public override Type NeededFilterType
 		{
 			get

@@ -9,7 +9,7 @@ namespace Verse
 	public class GenStep_ScatterThings : GenStep_Scatterer
 	{
 		
-		// (get) Token: 0x06000BD6 RID: 3030 RVA: 0x000432C7 File Offset: 0x000414C7
+		
 		public override int SeedPart
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000BD7 RID: 3031 RVA: 0x000432D0 File Offset: 0x000414D0
+		
 		private List<Rot4> PossibleRotations
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class PawnColumnWorker_Icon : PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06005D2C RID: 23852 RVA: 0x00204700 File Offset: 0x00202900
+		
 		protected virtual int Width
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005D2D RID: 23853 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		protected virtual int Padding
 		{
 			get

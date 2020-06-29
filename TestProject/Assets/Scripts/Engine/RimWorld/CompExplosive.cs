@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompExplosive : ThingComp
 	{
 		
-		// (get) Token: 0x06005109 RID: 20745 RVA: 0x001B3182 File Offset: 0x001B1382
+		
 		public CompProperties_Explosive Props
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600510A RID: 20746 RVA: 0x001B318F File Offset: 0x001B138F
+		
 		protected int StartWickThreshold
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600510B RID: 20747 RVA: 0x001B31B0 File Offset: 0x001B13B0
+		
 		private bool CanEverExplodeFromDamage
 		{
 			get

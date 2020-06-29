@@ -10,7 +10,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingDef thingDef;
 			if (rp.faction == null || rp.faction.def.techLevel >= TechLevel.Industrial)
 			{
@@ -48,7 +48,7 @@ namespace RimWorld.BaseGen
 		
 		private void FindNearbyGlowers(CellRect rect)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			SymbolResolver_OutdoorLighting.nearbyGlowers.Clear();
 			rect = rect.ExpandedBy(4);
 			rect = rect.ClipInsideMap(map);

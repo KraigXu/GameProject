@@ -9,7 +9,7 @@ namespace Verse
 	public class SimpleCurve : IEnumerable<CurvePoint>, IEnumerable
 	{
 		
-		// (get) Token: 0x0600014E RID: 334 RVA: 0x00005F93 File Offset: 0x00004193
+		
 		public int PointsCount
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600014F RID: 335 RVA: 0x00005FA0 File Offset: 0x000041A0
+		
 		public List<CurvePoint> Points
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000150 RID: 336 RVA: 0x00005FA8 File Offset: 0x000041A8
+		
 		public bool HasView
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000151 RID: 337 RVA: 0x00005FB3 File Offset: 0x000041B3
+		
 		public SimpleCurveView View
 		{
 			get

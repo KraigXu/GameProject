@@ -143,7 +143,7 @@ namespace RimWorld
 		
 		public static Pawn FindRandomGatheringOrganizer(Faction faction, Map map, GatheringDef gatheringDef)
 		{
-			Predicate<RoyalTitle> 9__2;
+
 			Predicate<Pawn> v = delegate(Pawn x)
 			{
 				if (!x.RaceProps.Humanlike || x.InBed() || x.InMentalState || x.GetLord() != null || !GatheringsUtility.ShouldPawnKeepGathering(x, gatheringDef) || x.Drafted)
@@ -158,9 +158,9 @@ namespace RimWorld
 				{
 					List<RoyalTitle> allTitlesInEffectForReading = x.royalty.AllTitlesInEffectForReading;
 					Predicate<RoyalTitle> predicate;
-					if ((predicate ) == null)
+					if ((predicate=default ) == null)
 					{
-						predicate = (9__2 = ((RoyalTitle t) => gatheringDef.requiredTitleAny.Contains(t.def)));
+						predicate = ( ((RoyalTitle t) => gatheringDef.requiredTitleAny.Contains(t.def)));
 					}
 					return allTitlesInEffectForReading.Any(predicate);
 				}

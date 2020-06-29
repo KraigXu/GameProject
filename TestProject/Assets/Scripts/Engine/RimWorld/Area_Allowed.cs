@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Area_Allowed : Area
 	{
 		
-		// (get) Token: 0x06003D9F RID: 15775 RVA: 0x00145C86 File Offset: 0x00143E86
+		
 		public override string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DA0 RID: 15776 RVA: 0x00145C8E File Offset: 0x00143E8E
+		
 		public override Color Color
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DA1 RID: 15777 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool Mutable
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003DA2 RID: 15778 RVA: 0x00145C96 File Offset: 0x00143E96
+		
 		public override int ListPriority
 		{
 			get

@@ -11,7 +11,7 @@ namespace RimWorld
 	public class Pawn_ApparelTracker : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x060045D6 RID: 17878 RVA: 0x00179228 File Offset: 0x00177428
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045D7 RID: 17879 RVA: 0x00179230 File Offset: 0x00177430
+		
 		public List<Apparel> WornApparel
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045D8 RID: 17880 RVA: 0x0017923D File Offset: 0x0017743D
+		
 		public int WornApparelCount
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045D9 RID: 17881 RVA: 0x0017924A File Offset: 0x0017744A
+		
 		public bool AnyApparel
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DA RID: 17882 RVA: 0x0017925A File Offset: 0x0017745A
+		
 		public bool AnyApparelLocked
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DB RID: 17883 RVA: 0x0017926C File Offset: 0x0017746C
+		
 		public bool AnyApparelUnlocked
 		{
 			get
@@ -82,7 +82,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DC RID: 17884 RVA: 0x001792B8 File Offset: 0x001774B8
+		
 		public bool AllApparelLocked
 		{
 			get
@@ -99,7 +99,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DD RID: 17885 RVA: 0x001792F2 File Offset: 0x001774F2
+		
 		public List<Apparel> LockedApparel
 		{
 			get
@@ -113,7 +113,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DE RID: 17886 RVA: 0x00179308 File Offset: 0x00177508
+		
 		public IEnumerable<Apparel> UnlockedApparel
 		{
 			get
@@ -129,7 +129,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060045DF RID: 17887 RVA: 0x00179340 File Offset: 0x00177540
+		
 		public bool PsychologicallyNude
 		{
 			get
@@ -148,7 +148,7 @@ namespace RimWorld
 				if (!flag)
 				{
 					bool flag3 = false;
-					using (IEnumerator<BodyPartRecord> enumerator = this.pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).GetEnumerator())
+					IEnumerator<BodyPartRecord> enumerator = this.pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

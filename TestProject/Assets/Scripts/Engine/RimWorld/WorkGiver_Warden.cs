@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class WorkGiver_Warden : WorkGiver_Scanner
 	{
 		
-		// (get) Token: 0x0600305E RID: 12382 RVA: 0x0010F64C File Offset: 0x0010D84C
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600305F RID: 12383 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get

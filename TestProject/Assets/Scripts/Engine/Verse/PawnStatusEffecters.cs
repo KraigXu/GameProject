@@ -78,7 +78,7 @@ namespace Verse
 		private class LiveEffecter : IFullPoolable
 		{
 			
-			// (get) Token: 0x06007937 RID: 31031 RVA: 0x002958CA File Offset: 0x00293ACA
+			
 			public bool Expired
 			{
 				get

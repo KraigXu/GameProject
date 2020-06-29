@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_ManageAreas : Window
 	{
 		
-		// (get) Token: 0x060058FA RID: 22778 RVA: 0x001DAC1F File Offset: 0x001D8E1F
+		
 		public override Vector2 InitialSize
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompTargetEffect_BrainDamageChance : CompTargetEffect
 	{
 		
-		// (get) Token: 0x06005494 RID: 21652 RVA: 0x001C359F File Offset: 0x001C179F
+		
 		protected CompProperties_TargetEffect_BrainDamageChance PropsBrainDamageChance
 		{
 			get

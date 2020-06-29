@@ -6,8 +6,8 @@ namespace Verse.Noise
 	public class Const : ModuleBase
 	{
 		
-		// (get) Token: 0x060022EC RID: 8940 RVA: 0x000D3BB6 File Offset: 0x000D1DB6
-		// (set) Token: 0x060022ED RID: 8941 RVA: 0x000D3BBE File Offset: 0x000D1DBE
+		
+		
 		public double Value
 		{
 			get

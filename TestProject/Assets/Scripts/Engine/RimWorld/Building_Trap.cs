@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class Building_Trap : Building
 	{
 		
-		// (get) Token: 0x06004B7B RID: 19323 RVA: 0x001972B2 File Offset: 0x001954B2
+		
 		private bool CanSetAutoRearm
 		{
 			get

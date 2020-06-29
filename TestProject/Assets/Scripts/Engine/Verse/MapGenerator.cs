@@ -10,7 +10,7 @@ namespace Verse
 	public static class MapGenerator
 	{
 		
-		// (get) Token: 0x06000BE8 RID: 3048 RVA: 0x000439E8 File Offset: 0x00041BE8
+		
 		public static MapGenFloatGrid Elevation
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000BE9 RID: 3049 RVA: 0x000439F4 File Offset: 0x00041BF4
+		
 		public static MapGenFloatGrid Fertility
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000BEA RID: 3050 RVA: 0x00043A00 File Offset: 0x00041C00
+		
 		public static MapGenFloatGrid Caves
 		{
 			get
@@ -40,8 +40,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000BEB RID: 3051 RVA: 0x00043A0C File Offset: 0x00041C0C
-		// (set) Token: 0x06000BEC RID: 3052 RVA: 0x00043A30 File Offset: 0x00041C30
+		
+		
 		public static IntVec3 PlayerStartSpot
 		{
 			get

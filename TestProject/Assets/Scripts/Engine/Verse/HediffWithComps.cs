@@ -10,7 +10,7 @@ namespace Verse
 	public class HediffWithComps : Hediff
 	{
 		
-		// (get) Token: 0x06001105 RID: 4357 RVA: 0x0006006C File Offset: 0x0005E26C
+		
 		public override string LabelInBrackets
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001106 RID: 4358 RVA: 0x000600E8 File Offset: 0x0005E2E8
+		
 		public override bool ShouldRemove
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001107 RID: 4359 RVA: 0x00060130 File Offset: 0x0005E330
+		
 		public override bool Visible
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001108 RID: 4360 RVA: 0x00060178 File Offset: 0x0005E378
+		
 		public override string TipStringExtra
 		{
 			get
@@ -100,7 +100,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001109 RID: 4361 RVA: 0x000601E0 File Offset: 0x0005E3E0
+		
 		public override TextureAndColor StateIcon
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_PrepareCaravan_Wait : LordToil
 	{
 		
-		// (get) Token: 0x0600326F RID: 12911 RVA: 0x0011854D File Offset: 0x0011674D
+		
 		public override float? CustomWakeThreshold
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003270 RID: 12912 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowRestingInBed
 		{
 			get

@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_InspectString : QuestPartActivable
 	{
 		
-		// (get) Token: 0x0600397B RID: 14715 RVA: 0x0013196F File Offset: 0x0012FB6F
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				int num;
 				for (int i = 0; i < this.targets.Count; i = num + 1)

@@ -8,7 +8,7 @@ namespace Verse
 	public class Graphic
 	{
 		
-		// (get) Token: 0x060014E8 RID: 5352 RVA: 0x0007B59C File Offset: 0x0007979C
+		
 		public Shader Shader
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014E9 RID: 5353 RVA: 0x0007B5C5 File Offset: 0x000797C5
+		
 		public Graphic_Shadow ShadowGraphic
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014EA RID: 5354 RVA: 0x0007B600 File Offset: 0x00079800
+		
 		public Color Color
 		{
 			get
@@ -47,7 +47,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014EB RID: 5355 RVA: 0x0007B608 File Offset: 0x00079808
+		
 		public Color ColorTwo
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014EC RID: 5356 RVA: 0x0007B610 File Offset: 0x00079810
+		
 		public virtual Material MatSingle
 		{
 			get
@@ -67,7 +67,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014ED RID: 5357 RVA: 0x0007B617 File Offset: 0x00079817
+		
 		public virtual Material MatWest
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014EE RID: 5358 RVA: 0x0007B617 File Offset: 0x00079817
+		
 		public virtual Material MatSouth
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014EF RID: 5359 RVA: 0x0007B617 File Offset: 0x00079817
+		
 		public virtual Material MatEast
 		{
 			get
@@ -97,7 +97,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F0 RID: 5360 RVA: 0x0007B617 File Offset: 0x00079817
+		
 		public virtual Material MatNorth
 		{
 			get
@@ -107,7 +107,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F1 RID: 5361 RVA: 0x0007B61F File Offset: 0x0007981F
+		
 		public virtual bool WestFlipped
 		{
 			get
@@ -117,7 +117,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F2 RID: 5362 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool EastFlipped
 		{
 			get
@@ -127,7 +127,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F3 RID: 5363 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool ShouldDrawRotated
 		{
 			get
@@ -137,7 +137,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F4 RID: 5364 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float DrawRotatedExtraAngleOffset
 		{
 			get
@@ -147,7 +147,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F5 RID: 5365 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool UseSameGraphicForGhost
 		{
 			get
@@ -157,7 +157,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060014F6 RID: 5366 RVA: 0x0007B634 File Offset: 0x00079834
+		
 		protected bool DataAllowsFlip
 		{
 			get

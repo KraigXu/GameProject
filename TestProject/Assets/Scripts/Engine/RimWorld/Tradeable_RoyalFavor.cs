@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Tradeable_RoyalFavor : Tradeable
 	{
 		
-		// (get) Token: 0x0600558C RID: 21900 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsFavor
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600558D RID: 21901 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsCurrency
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600558E RID: 21902 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TraderWillTrade
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600558F RID: 21903 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool IsThing
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005590 RID: 21904 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool Interactive
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005591 RID: 21905 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public override Thing AnyThing
 		{
 			get
@@ -68,7 +68,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005592 RID: 21906 RVA: 0x001C69C0 File Offset: 0x001C4BC0
+		
 		public override string Label
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005593 RID: 21907 RVA: 0x001C69D6 File Offset: 0x001C4BD6
+		
 		public override string TipDescription
 		{
 			get

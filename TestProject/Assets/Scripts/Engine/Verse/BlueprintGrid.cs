@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class BlueprintGrid
 	{
 		
-		// (get) Token: 0x060009FD RID: 2557 RVA: 0x00036950 File Offset: 0x00034B50
+		
 		public List<Blueprint>[] InnerArray
 		{
 			get

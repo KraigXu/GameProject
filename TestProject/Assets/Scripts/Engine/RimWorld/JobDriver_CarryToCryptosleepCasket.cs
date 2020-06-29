@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_CarryToCryptosleepCasket : JobDriver
 	{
 		
-		// (get) Token: 0x06002C42 RID: 11330 RVA: 0x000FD328 File Offset: 0x000FB528
+		
 		protected Pawn Takee
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002C43 RID: 11331 RVA: 0x000FD350 File Offset: 0x000FB550
+		
 		protected Building_CryptosleepCasket DropPod
 		{
 			get

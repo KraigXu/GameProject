@@ -9,7 +9,7 @@ namespace Verse
 	public class BattleLogEntry_DamageTaken : LogEntry_DamageResult
 	{
 		
-		// (get) Token: 0x0600071A RID: 1818 RVA: 0x00020ADA File Offset: 0x0001ECDA
+		
 		private string RecipientName
 		{
 			get

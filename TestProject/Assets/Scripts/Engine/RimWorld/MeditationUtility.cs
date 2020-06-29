@@ -97,9 +97,9 @@ namespace RimWorld
 				IEnumerable<Building> source = pawn.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.MeditationSpot);
 				
 				Func<Building, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__2 = delegate(Building s)
+					predicate = ( delegate(Building s)
 					{
 						if (s.IsForbidden(pawn) || !s.Position.Standable(s.Map))
 						{

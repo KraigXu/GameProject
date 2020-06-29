@@ -83,7 +83,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060039D1 RID: 14801 RVA: 0x001333E9 File Offset: 0x001315E9
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get

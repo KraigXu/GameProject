@@ -1082,7 +1082,7 @@ namespace Verse
 		private static void StartGathering()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (List<GatheringDef>.Enumerator enumerator = DefDatabase<GatheringDef>.AllDefsListForReading.GetEnumerator())
+			List<GatheringDef>.Enumerator enumerator = DefDatabase<GatheringDef>.AllDefsListForReading.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -1151,7 +1151,7 @@ namespace Verse
 		private static void TryJoyGiver(Pawn p)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			using (List<JoyGiverDef>.Enumerator enumerator = DefDatabase<JoyGiverDef>.AllDefsListForReading.GetEnumerator())
+			List<JoyGiverDef>.Enumerator enumerator = DefDatabase<JoyGiverDef>.AllDefsListForReading.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

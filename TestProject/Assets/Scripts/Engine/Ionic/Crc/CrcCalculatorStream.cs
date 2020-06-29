@@ -57,7 +57,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007200 RID: 29184 RVA: 0x0027E108 File Offset: 0x0027C308
+		
 		public long TotalBytesSlurped
 		{
 			get
@@ -67,7 +67,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007201 RID: 29185 RVA: 0x0027E115 File Offset: 0x0027C315
+		
 		public int Crc
 		{
 			get
@@ -77,8 +77,8 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007202 RID: 29186 RVA: 0x0027E122 File Offset: 0x0027C322
-		// (set) Token: 0x06007203 RID: 29187 RVA: 0x0027E12A File Offset: 0x0027C32A
+		
+		
 		public bool LeaveOpen
 		{
 			get
@@ -126,7 +126,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007206 RID: 29190 RVA: 0x0027E1C4 File Offset: 0x0027C3C4
+		
 		public override bool CanRead
 		{
 			get
@@ -136,7 +136,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007207 RID: 29191 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanSeek
 		{
 			get
@@ -146,7 +146,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x06007208 RID: 29192 RVA: 0x0027E1D1 File Offset: 0x0027C3D1
+		
 		public override bool CanWrite
 		{
 			get
@@ -162,7 +162,7 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x0600720A RID: 29194 RVA: 0x0027E1EB File Offset: 0x0027C3EB
+		
 		public override long Length
 		{
 			get
@@ -176,8 +176,8 @@ namespace Ionic.Crc
 		}
 
 		
-		// (get) Token: 0x0600720B RID: 29195 RVA: 0x0027E108 File Offset: 0x0027C308
-		// (set) Token: 0x0600720C RID: 29196 RVA: 0x0027BDC1 File Offset: 0x00279FC1
+		
+		
 		public override long Position
 		{
 			get

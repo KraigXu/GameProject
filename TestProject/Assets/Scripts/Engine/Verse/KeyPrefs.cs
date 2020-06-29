@@ -9,8 +9,8 @@ namespace Verse
 	public class KeyPrefs
 	{
 		
-		// (get) Token: 0x06002123 RID: 8483 RVA: 0x000CB31F File Offset: 0x000C951F
-		// (set) Token: 0x06002124 RID: 8484 RVA: 0x000CB326 File Offset: 0x000C9526
+		
+		
 		public static KeyPrefsData KeyPrefsData
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_StackCount : Graphic_Collection
 	{
 		
-		// (get) Token: 0x0600156A RID: 5482 RVA: 0x0007D485 File Offset: 0x0007B685
+		
 		public override Material MatSingle
 		{
 			get

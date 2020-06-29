@@ -11,8 +11,8 @@ namespace RimWorld
 	public class Plant : ThingWithComps
 	{
 		
-		// (get) Token: 0x06004E92 RID: 20114 RVA: 0x001A6B51 File Offset: 0x001A4D51
-		// (set) Token: 0x06004E93 RID: 20115 RVA: 0x001A6B59 File Offset: 0x001A4D59
+		
+		
 		public virtual float Growth
 		{
 			get
@@ -27,8 +27,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E94 RID: 20116 RVA: 0x001A6B6E File Offset: 0x001A4D6E
-		// (set) Token: 0x06004E95 RID: 20117 RVA: 0x001A6B76 File Offset: 0x001A4D76
+		
+		
 		public virtual int Age
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E96 RID: 20118 RVA: 0x001A6B86 File Offset: 0x001A4D86
+		
 		public virtual bool HarvestableNow
 		{
 			get
@@ -53,7 +53,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E97 RID: 20119 RVA: 0x001A6BB4 File Offset: 0x001A4DB4
+		
 		public bool HarvestableSoon
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E98 RID: 20120 RVA: 0x001A6C64 File Offset: 0x001A4E64
+		
 		public virtual bool BlightableNow
 		{
 			get
@@ -83,7 +83,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E99 RID: 20121 RVA: 0x001A6CBB File Offset: 0x001A4EBB
+		
 		public Blight Blight
 		{
 			get
@@ -97,7 +97,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9A RID: 20122 RVA: 0x001A6CEA File Offset: 0x001A4EEA
+		
 		public bool Blighted
 		{
 			get
@@ -107,7 +107,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9B RID: 20123 RVA: 0x001A6CF8 File Offset: 0x001A4EF8
+		
 		public override bool IngestibleNow
 		{
 			get
@@ -117,7 +117,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9C RID: 20124 RVA: 0x001A6D70 File Offset: 0x001A4F70
+		
 		public virtual float CurrentDyingDamagePerTick
 		{
 			get
@@ -145,7 +145,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9D RID: 20125 RVA: 0x001A6E3A File Offset: 0x001A503A
+		
 		public virtual bool DyingBecauseExposedToLight
 		{
 			get
@@ -155,7 +155,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9E RID: 20126 RVA: 0x001A6E76 File Offset: 0x001A5076
+		
 		public bool Dying
 		{
 			get
@@ -165,7 +165,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004E9F RID: 20127 RVA: 0x001A6E85 File Offset: 0x001A5085
+		
 		protected virtual bool Resting
 		{
 			get
@@ -175,7 +175,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA0 RID: 20128 RVA: 0x001A6EA4 File Offset: 0x001A50A4
+		
 		public virtual float GrowthRate
 		{
 			get
@@ -193,7 +193,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA1 RID: 20129 RVA: 0x001A6EF5 File Offset: 0x001A50F5
+		
 		protected float GrowthPerTick
 		{
 			get
@@ -207,7 +207,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA2 RID: 20130 RVA: 0x001A6F31 File Offset: 0x001A5131
+		
 		public float GrowthRateFactor_Fertility
 		{
 			get
@@ -217,7 +217,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA3 RID: 20131 RVA: 0x001A6F74 File Offset: 0x001A5174
+		
 		public float GrowthRateFactor_Light
 		{
 			get
@@ -232,7 +232,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA4 RID: 20132 RVA: 0x001A6FFC File Offset: 0x001A51FC
+		
 		public float GrowthRateFactor_Temperature
 		{
 			get
@@ -255,7 +255,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA5 RID: 20133 RVA: 0x001A705C File Offset: 0x001A525C
+		
 		protected int TicksUntilFullyGrown
 		{
 			get
@@ -274,7 +274,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA6 RID: 20134 RVA: 0x001A709C File Offset: 0x001A529C
+		
 		protected string GrowthPercentString
 		{
 			get
@@ -284,7 +284,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA7 RID: 20135 RVA: 0x001A70B0 File Offset: 0x001A52B0
+		
 		public override string LabelMouseover
 		{
 			get
@@ -306,7 +306,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA8 RID: 20136 RVA: 0x001A7156 File Offset: 0x001A5356
+		
 		protected virtual bool HasEnoughLightToGrow
 		{
 			get
@@ -316,7 +316,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EA9 RID: 20137 RVA: 0x001A7165 File Offset: 0x001A5365
+		
 		public virtual PlantLifeStage LifeStage
 		{
 			get
@@ -334,7 +334,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EAA RID: 20138 RVA: 0x001A7188 File Offset: 0x001A5388
+		
 		public override Graphic Graphic
 		{
 			get
@@ -356,7 +356,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EAB RID: 20139 RVA: 0x001A720F File Offset: 0x001A540F
+		
 		public bool LeaflessNow
 		{
 			get
@@ -366,7 +366,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EAC RID: 20140 RVA: 0x001A722C File Offset: 0x001A542C
+		
 		protected virtual float LeaflessTemperatureThresh
 		{
 			get
@@ -377,7 +377,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004EAD RID: 20141 RVA: 0x001A7258 File Offset: 0x001A5458
+		
 		public bool IsCrop
 		{
 			get

@@ -51,7 +51,6 @@ namespace Verse
 				result.cellsUnfogged++;
 				if (FloodFillerFog.testMode)
 				{
-					int numUnfogged = numUnfogged;
 					numUnfogged++;
 					map.debugDrawer.FlashCell(c, (float)numUnfogged / 200f, numUnfogged.ToStringCached(), 50);
 				}

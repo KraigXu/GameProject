@@ -33,7 +33,7 @@ namespace RimWorld
 		
 		private IEnumerable<Widgets.DropdownMenuElement<FoodRestriction>> Button_GenerateMenu(Pawn pawn)
 		{
-			using (List<FoodRestriction>.Enumerator enumerator = Current.Game.foodRestrictionDatabase.AllFoodRestrictions.GetEnumerator())
+			List<FoodRestriction>.Enumerator enumerator = Current.Game.foodRestrictionDatabase.AllFoodRestrictions.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -48,7 +48,7 @@ namespace RimWorld
 					};
 				}
 			}
-			List<FoodRestriction>.Enumerator enumerator = default(List<FoodRestriction>.Enumerator);
+			
 			yield break;
 			yield break;
 		}

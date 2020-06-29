@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class PawnColumnWorker_Text : PawnColumnWorker
 	{
 		
-		// (get) Token: 0x06005DCC RID: 24012 RVA: 0x002065F0 File Offset: 0x002047F0
+		
 		protected virtual int Width
 		{
 			get

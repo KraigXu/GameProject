@@ -10,15 +10,13 @@ namespace RimWorld
 	public class QuestPart_InitiateTradeRequest : QuestPart
 	{
 		
-		// (get) Token: 0x06003970 RID: 14704 RVA: 0x00131755 File Offset: 0x0012F955
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.settlement != null)
 				{
@@ -30,15 +28,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003971 RID: 14705 RVA: 0x00131765 File Offset: 0x0012F965
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
-				{
-					yield return faction;
-				}
+
 				IEnumerator<Faction> enumerator = null;
 				if (this.settlement.Faction != null)
 				{
@@ -50,15 +45,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003972 RID: 14706 RVA: 0x00131775 File Offset: 0x0012F975
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__2())
-				{
-					yield return hyperlink;
-				}
+
+
 				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 				yield return new Dialog_InfoCard.Hyperlink(this.requestedThingDef, -1);
 				yield break;

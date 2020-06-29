@@ -138,18 +138,15 @@ namespace RimWorld
 		private IntVec3 FindGroundSleepSpotFor(Pawn pawn)
 		{
 			Map map = pawn.Map;
-			Predicate<IntVec3> 9__0;
+
 			for (int i = 0; i < 2; i++)
 			{
 				int num = (i == 0) ? 4 : 12;
 				IntVec3 position = pawn.Position;
 				Map map2 = map;
 				int radius = num;
-				Predicate<IntVec3> extraValidator;
-				if ((extraValidator ) == null)
-				{
-					extraValidator = (9__0 = ((IntVec3 x) => !x.IsForbidden(pawn) && !x.GetTerrain(map).avoidWander));
-				}
+				Predicate<IntVec3> extraValidator = (((IntVec3 x) => !x.IsForbidden(pawn) && !x.GetTerrain(map).avoidWander));
+
 				IntVec3 result;
 				if (CellFinder.TryRandomClosewalkCellNear(position, map2, radius, out result, extraValidator))
 				{

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class RaidStrategyDef : Def
 	{
 		
-		// (get) Token: 0x060036C1 RID: 14017 RVA: 0x0012813F File Offset: 0x0012633F
+		
 		public RaidStrategyWorker Worker
 		{
 			get

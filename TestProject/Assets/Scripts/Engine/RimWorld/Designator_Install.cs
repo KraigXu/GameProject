@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Designator_Install : Designator_Place
 	{
 		
-		// (get) Token: 0x06005827 RID: 22567 RVA: 0x001D42F4 File Offset: 0x001D24F4
+		
 		private Thing MiniToInstallOrBuildingToReinstall
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005828 RID: 22568 RVA: 0x001D4330 File Offset: 0x001D2530
+		
 		private Thing ThingToInstall
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005829 RID: 22569 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool DoTooltip
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600582A RID: 22570 RVA: 0x001D433D File Offset: 0x001D253D
+		
 		public override BuildableDef PlacingDef
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600582B RID: 22571 RVA: 0x001D434A File Offset: 0x001D254A
+		
 		public override string Label
 		{
 			get
@@ -72,7 +72,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600582C RID: 22572 RVA: 0x001D4378 File Offset: 0x001D2578
+		
 		public override string Desc
 		{
 			get
@@ -86,7 +86,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600582D RID: 22573 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		public override Color IconDrawColor
 		{
 			get
@@ -96,7 +96,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600582E RID: 22574 RVA: 0x001D43A6 File Offset: 0x001D25A6
+		
 		public override bool Visible
 		{
 			get

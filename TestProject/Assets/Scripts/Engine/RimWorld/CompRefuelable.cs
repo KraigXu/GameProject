@@ -11,8 +11,8 @@ namespace RimWorld
 	public class CompRefuelable : ThingComp
 	{
 		
-		// (get) Token: 0x0600527C RID: 21116 RVA: 0x001B9053 File Offset: 0x001B7253
-		// (set) Token: 0x0600527D RID: 21117 RVA: 0x001B908D File Offset: 0x001B728D
+		
+		
 		public float TargetFuelLevel
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600527E RID: 21118 RVA: 0x001B90AB File Offset: 0x001B72AB
+		
 		public CompProperties_Refuelable Props
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600527F RID: 21119 RVA: 0x001B90B8 File Offset: 0x001B72B8
+		
 		public float Fuel
 		{
 			get
@@ -54,7 +54,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005280 RID: 21120 RVA: 0x001B90C0 File Offset: 0x001B72C0
+		
 		public float FuelPercentOfTarget
 		{
 			get
@@ -64,7 +64,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005281 RID: 21121 RVA: 0x001B90CF File Offset: 0x001B72CF
+		
 		public float FuelPercentOfMax
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005282 RID: 21122 RVA: 0x001B90E3 File Offset: 0x001B72E3
+		
 		public bool IsFull
 		{
 			get
@@ -84,7 +84,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005283 RID: 21123 RVA: 0x001B90F9 File Offset: 0x001B72F9
+		
 		public bool HasFuel
 		{
 			get
@@ -94,7 +94,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005284 RID: 21124 RVA: 0x001B9120 File Offset: 0x001B7320
+		
 		private float ConsumptionRatePerTick
 		{
 			get
@@ -104,7 +104,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005285 RID: 21125 RVA: 0x001B9133 File Offset: 0x001B7333
+		
 		public bool ShouldAutoRefuelNow
 		{
 			get
@@ -114,7 +114,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005286 RID: 21126 RVA: 0x001B9168 File Offset: 0x001B7368
+		
 		public bool ShouldAutoRefuelNowIgnoringFuelPct
 		{
 			get

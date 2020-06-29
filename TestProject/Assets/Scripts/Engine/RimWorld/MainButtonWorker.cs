@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class MainButtonWorker
 	{
 		
-		// (get) Token: 0x0600366C RID: 13932 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public virtual float ButtonBarPercent
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600366D RID: 13933 RVA: 0x00126E24 File Offset: 0x00125024
+		
 		public virtual bool Disabled
 		{
 			get

@@ -7,15 +7,15 @@ namespace Verse
 	public abstract class InspectTabBase
 	{
 		
-		// (get) Token: 0x06000393 RID: 915
+		
 		protected abstract float PaneTopY { get; }
 
 		
-		// (get) Token: 0x06000394 RID: 916
+		
 		protected abstract bool StillValid { get; }
 
 		
-		// (get) Token: 0x06000395 RID: 917 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public virtual bool IsVisible
 		{
 			get
@@ -25,7 +25,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000396 RID: 918 RVA: 0x00012D75 File Offset: 0x00010F75
+		
 		public string TutorHighlightTagClosed
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000397 RID: 919 RVA: 0x00012DAC File Offset: 0x00010FAC
+		
 		protected Rect TabRect
 		{
 			get

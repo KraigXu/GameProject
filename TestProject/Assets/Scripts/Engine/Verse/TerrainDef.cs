@@ -10,7 +10,7 @@ namespace Verse
 	public class TerrainDef : BuildableDef
 	{
 		
-		// (get) Token: 0x06000662 RID: 1634 RVA: 0x0001E3BF File Offset: 0x0001C5BF
+		
 		public bool Removable
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000663 RID: 1635 RVA: 0x0001E3C7 File Offset: 0x0001C5C7
+		
 		public bool IsCarpet
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000664 RID: 1636 RVA: 0x0001E3E3 File Offset: 0x0001C5E3
+		
 		public bool IsRiver
 		{
 			get
@@ -40,7 +40,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000665 RID: 1637 RVA: 0x0001E3F0 File Offset: 0x0001C5F0
+		
 		public bool IsWater
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000666 RID: 1638 RVA: 0x0001E3FD File Offset: 0x0001C5FD
+		
 		public bool IsFine
 		{
 			get
@@ -120,9 +120,9 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.texturePath.NullOrEmpty())
@@ -168,10 +168,8 @@ namespace Verse
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__1(req))
-			{
-				yield return statDrawEntry;
-			}
+
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			string[] array = (from ta in this.affordances.Distinct<TerrainAffordanceDef>()
 			orderby ta.order

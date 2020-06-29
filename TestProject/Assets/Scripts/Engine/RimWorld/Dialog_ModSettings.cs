@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_ModSettings : Window
 	{
 		
-		// (get) Token: 0x06005923 RID: 22819 RVA: 0x001DAEE7 File Offset: 0x001D90E7
+		
 		public override Vector2 InitialSize
 		{
 			get

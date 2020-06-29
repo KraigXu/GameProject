@@ -15,7 +15,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005612 RID: 22034 RVA: 0x001C89D0 File Offset: 0x001C6BD0
+		
 		private Fire FireInHomeArea
 		{
 			get

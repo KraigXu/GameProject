@@ -11,7 +11,7 @@ namespace RimWorld
 	public static class DateReadout
 	{
 		
-		// (get) Token: 0x06005AFD RID: 23293 RVA: 0x001F47EF File Offset: 0x001F29EF
+		
 		public static float Height
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005AFE RID: 23294 RVA: 0x001F4801 File Offset: 0x001F2A01
+		
 		private static bool SeasonLabelVisible
 		{
 			get

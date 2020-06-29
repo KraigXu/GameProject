@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_MonumentMarkerMissingBlueprints : Alert
 	{
 		
-		// (get) Token: 0x060056BF RID: 22207 RVA: 0x001CC384 File Offset: 0x001CA584
+		
 		private List<GlobalTargetInfo> Targets
 		{
 			get

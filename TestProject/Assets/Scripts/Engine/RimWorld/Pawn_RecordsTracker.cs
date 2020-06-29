@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Pawn_RecordsTracker : IExposable
 	{
 		
-		// (get) Token: 0x0600467E RID: 18046 RVA: 0x0017CB47 File Offset: 0x0017AD47
+		
 		public float StoryRelevance
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600467F RID: 18047 RVA: 0x0017CB58 File Offset: 0x0017AD58
+		
 		public Battle BattleActive
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004680 RID: 18048 RVA: 0x0017CBA7 File Offset: 0x0017ADA7
+		
 		public int LastBattleTick
 		{
 			get

@@ -7,7 +7,7 @@ namespace Verse
 	public class Dialog_MessageBox : Window
 	{
 		
-		// (get) Token: 0x06001D80 RID: 7552 RVA: 0x000B516E File Offset: 0x000B336E
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D81 RID: 7553 RVA: 0x000B517F File Offset: 0x000B337F
+		
 		private float TimeUntilInteractive
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D82 RID: 7554 RVA: 0x000B5194 File Offset: 0x000B3394
+		
 		private bool InteractionDelayExpired
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse
 	public class Verb_LaunchProjectile : Verb
 	{
 		
-		// (get) Token: 0x06002250 RID: 8784 RVA: 0x000D11E4 File Offset: 0x000CF3E4
+		
 		public virtual ThingDef Projectile
 		{
 			get

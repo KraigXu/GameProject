@@ -10,7 +10,7 @@ namespace Verse
 	public class EditWindow_Log : EditWindow
 	{
 		
-		// (get) Token: 0x06001A4D RID: 6733 RVA: 0x000A1B0B File Offset: 0x0009FD0B
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -20,7 +20,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A4E RID: 6734 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool IsDebug
 		{
 			get
@@ -30,8 +30,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001A4F RID: 6735 RVA: 0x000A1B2A File Offset: 0x0009FD2A
-		// (set) Token: 0x06001A50 RID: 6736 RVA: 0x000A1B31 File Offset: 0x0009FD31
+		
+		
 		private static LogMessage SelectedMessage
 		{
 			get

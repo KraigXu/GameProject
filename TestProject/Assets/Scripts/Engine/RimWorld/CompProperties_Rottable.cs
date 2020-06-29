@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompProperties_Rottable : CompProperties
 	{
 		
-		// (get) Token: 0x06003533 RID: 13619 RVA: 0x00122F89 File Offset: 0x00121189
+		
 		public int TicksToRotStart
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003534 RID: 13620 RVA: 0x00122F9C File Offset: 0x0012119C
+		
 		public int TicksToDessicated
 		{
 			get
@@ -43,9 +43,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
-			foreach (string text in this.n__0(parentDef))
+			foreach (string text in this.ConfigErrors(parentDef))
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (parentDef.tickerType != TickerType.Normal && parentDef.tickerType != TickerType.Rare)

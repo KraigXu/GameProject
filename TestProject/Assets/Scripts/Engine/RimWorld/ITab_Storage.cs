@@ -10,7 +10,7 @@ namespace RimWorld
 	public class ITab_Storage : ITab
 	{
 		
-		// (get) Token: 0x06005BDB RID: 23515 RVA: 0x001FB67C File Offset: 0x001F987C
+		
 		protected virtual IStoreSettingsParent SelStoreSettingsParent
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BDC RID: 23516 RVA: 0x001FB6B4 File Offset: 0x001F98B4
+		
 		public override bool IsVisible
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BDD RID: 23517 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool IsPrioritySettingVisible
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005BDE RID: 23518 RVA: 0x001FB6F9 File Offset: 0x001F98F9
+		
 		private float TopAreaHeight
 		{
 			get

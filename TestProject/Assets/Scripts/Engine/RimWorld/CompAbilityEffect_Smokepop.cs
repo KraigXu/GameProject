@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompAbilityEffect_Smokepop : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x06004198 RID: 16792 RVA: 0x0015ED73 File Offset: 0x0015CF73
+		
 		public new CompProperties_AbilitySmokepop Props
 		{
 			get

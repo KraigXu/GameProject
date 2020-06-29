@@ -14,9 +14,9 @@ namespace RimWorld.BaseGen
 			resolveParams.thingSetMakerDef = ThingSetMakerDefOf.MapGen_PrisonCellStockpile;
 			resolveParams.thingSetMakerParams = new ThingSetMakerParams?(value);
 			resolveParams.innerStockpileSize = new int?(3);
-			BaseGen.symbolStack.Push("innerStockpile", resolveParams, null);
+			BaseGenCore.symbolStack.Push("innerStockpile", resolveParams, null);
 			InteriorSymbolResolverUtility.PushBedroomHeatersCoolersAndLightSourcesSymbols(rp, false);
-			BaseGen.symbolStack.Push("prisonerBed", rp, null);
+			BaseGenCore.symbolStack.Push("prisonerBed", rp, null);
 		}
 
 		

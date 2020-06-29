@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompProximityFuse : ThingComp
 	{
 		
-		// (get) Token: 0x06005256 RID: 21078 RVA: 0x001B84DB File Offset: 0x001B66DB
+		
 		public CompProperties_ProximityFuse Props
 		{
 			get

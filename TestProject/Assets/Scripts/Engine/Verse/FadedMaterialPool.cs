@@ -9,7 +9,7 @@ namespace Verse
 	public static class FadedMaterialPool
 	{
 		
-		// (get) Token: 0x06001375 RID: 4981 RVA: 0x0006FBB8 File Offset: 0x0006DDB8
+		
 		public static int TotalMaterialCount
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001376 RID: 4982 RVA: 0x0006FBC4 File Offset: 0x0006DDC4
+		
 		public static long TotalMaterialBytes
 		{
 			get

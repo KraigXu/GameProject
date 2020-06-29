@@ -7,7 +7,7 @@ namespace Verse.AI
 	public class PawnPathPool
 	{
 		
-		// (get) Token: 0x060027AB RID: 10155 RVA: 0x000E87AF File Offset: 0x000E69AF
+		
 		public static PawnPath NotFoundPath
 		{
 			get

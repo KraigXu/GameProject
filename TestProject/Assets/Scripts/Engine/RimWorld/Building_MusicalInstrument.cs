@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CEE RID: 19694 RVA: 0x0019CB6F File Offset: 0x0019AD6F
+		
 		public bool IsBeingPlayed
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CEF RID: 19695 RVA: 0x0019CB7C File Offset: 0x0019AD7C
+		
 		public FloatRange SoundRange
 		{
 			get

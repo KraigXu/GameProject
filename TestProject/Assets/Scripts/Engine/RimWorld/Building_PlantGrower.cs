@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Building_PlantGrower : Building, IPlantToGrowSettable
 	{
 		
-		// (get) Token: 0x06004D0E RID: 19726 RVA: 0x0019D1A8 File Offset: 0x0019B3A8
+		
 		public IEnumerable<Plant> PlantsOnMe
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D0F RID: 19727 RVA: 0x0019D1B8 File Offset: 0x0019B3B8
+		
 		IEnumerable<IntVec3> IPlantToGrowSettable.Cells
 		{
 			get

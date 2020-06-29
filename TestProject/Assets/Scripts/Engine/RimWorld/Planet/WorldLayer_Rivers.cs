@@ -19,10 +19,8 @@ namespace RimWorld.Planet
 		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.n__0())
-			{
-				yield return obj;
-			}
+
+
 			IEnumerator enumerator = null;
 			LayerSubMesh subMesh = base.GetSubMesh(WorldMaterials.Rivers);
 			LayerSubMesh subMeshBorder = base.GetSubMesh(WorldMaterials.RiversBorder);

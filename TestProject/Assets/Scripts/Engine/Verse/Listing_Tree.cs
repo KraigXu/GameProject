@@ -9,7 +9,7 @@ namespace Verse
 	public class Listing_Tree : Listing_Lines
 	{
 		
-		// (get) Token: 0x06001BA2 RID: 7074 RVA: 0x000A909F File Offset: 0x000A729F
+		
 		protected virtual float LabelWidth
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001BA3 RID: 7075 RVA: 0x000A90AD File Offset: 0x000A72AD
+		
 		protected float EditAreaWidth
 		{
 			get

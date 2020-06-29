@@ -8,7 +8,7 @@ namespace Verse
 	public class MoteThrown : Mote
 	{
 		
-		// (get) Token: 0x060015D7 RID: 5591 RVA: 0x0007EFBA File Offset: 0x0007D1BA
+		
 		protected bool Flying
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015D8 RID: 5592 RVA: 0x0007EFC9 File Offset: 0x0007D1C9
+		
 		protected bool Skidding
 		{
 			get
@@ -28,8 +28,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015D9 RID: 5593 RVA: 0x0007EFE2 File Offset: 0x0007D1E2
-		// (set) Token: 0x060015DA RID: 5594 RVA: 0x0007EFEA File Offset: 0x0007D1EA
+		
+		
 		public Vector3 Velocity
 		{
 			get
@@ -43,8 +43,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015DB RID: 5595 RVA: 0x0007EFF3 File Offset: 0x0007D1F3
-		// (set) Token: 0x060015DC RID: 5596 RVA: 0x0007F000 File Offset: 0x0007D200
+		
+		
 		public float MoveAngle
 		{
 			get
@@ -58,8 +58,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015DD RID: 5597 RVA: 0x0007F00F File Offset: 0x0007D20F
-		// (set) Token: 0x060015DE RID: 5598 RVA: 0x0007F01C File Offset: 0x0007D21C
+		
+		
 		public float Speed
 		{
 			get

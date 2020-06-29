@@ -50,7 +50,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006957 RID: 26967 RVA: 0x0024CB1C File Offset: 0x0024AD1C
+		
 		public float EffectiveDrawSize
 		{
 			get
@@ -78,7 +78,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x0600695A RID: 26970 RVA: 0x0024CBD4 File Offset: 0x0024ADD4
+		
 		public IEnumerable<int> Tiles
 		{
 			get

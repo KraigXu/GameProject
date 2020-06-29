@@ -13,7 +13,7 @@ namespace RimWorld.SketchGen
 		{
 			CellRect outerRect = parms.rect ?? parms.sketch.OccupiedRect;
 			HashSet<IntVec3> processed = new HashSet<IntVec3>();
-			using (IEnumerator<IntVec3> enumerator = outerRect.Cells.InRandomOrder(null).GetEnumerator())
+			IEnumerator<IntVec3> enumerator = outerRect.Cells.InRandomOrder(null).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

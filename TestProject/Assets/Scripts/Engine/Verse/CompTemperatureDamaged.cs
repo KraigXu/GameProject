@@ -7,7 +7,7 @@ namespace Verse
 	public class CompTemperatureDamaged : ThingComp
 	{
 		
-		// (get) Token: 0x06001767 RID: 5991 RVA: 0x00085AD2 File Offset: 0x00083CD2
+		
 		public CompProperties_TemperatureDamaged Props
 		{
 			get

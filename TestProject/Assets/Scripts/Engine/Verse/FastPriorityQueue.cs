@@ -7,7 +7,7 @@ namespace Verse
 	public class FastPriorityQueue<T>
 	{
 		
-		// (get) Token: 0x06002000 RID: 8192 RVA: 0x000C3902 File Offset: 0x000C1B02
+		
 		public int Count
 		{
 			get

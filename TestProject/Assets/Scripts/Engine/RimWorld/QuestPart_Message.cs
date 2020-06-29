@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_Message : QuestPart
 	{
 		
-		// (get) Token: 0x060039A6 RID: 14758 RVA: 0x0013286E File Offset: 0x00130A6E
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
 				if (globalTargetInfo2.IsValid)

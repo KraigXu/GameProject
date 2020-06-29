@@ -119,7 +119,7 @@ namespace RimWorld
 			StringBuilder stringBuilder = new StringBuilder();
 			string text = wDef.gerundLabel.CapitalizeFirst();
 			int priority = p.workSettings.GetPriority(wDef);
-			text = text + ": " + ("Priority" + priority).Translate().Colorize(WidgetsWork.ColorOfPriority(priority));
+			//text = text + ": " + ("Priority" + priority).Translate().Colorize(WidgetsWork.ColorOfPriority(priority));
 			stringBuilder.AppendLine(text);
 			if (p.WorkTypeIsDisabled(wDef))
 			{

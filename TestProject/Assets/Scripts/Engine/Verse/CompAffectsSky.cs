@@ -7,7 +7,7 @@ namespace Verse
 	public class CompAffectsSky : ThingComp
 	{
 		
-		// (get) Token: 0x0600172F RID: 5935 RVA: 0x000851A4 File Offset: 0x000833A4
+		
 		public CompProperties_AffectsSky Props
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001730 RID: 5936 RVA: 0x000851B4 File Offset: 0x000833B4
+		
 		public virtual float LerpFactor
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001731 RID: 5937 RVA: 0x00085253 File Offset: 0x00083453
+		
 		public bool HasAutoAnimation
 		{
 			get
@@ -55,7 +55,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001732 RID: 5938 RVA: 0x0008527C File Offset: 0x0008347C
+		
 		public virtual SkyTarget SkyTarget
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001733 RID: 5939 RVA: 0x000852B0 File Offset: 0x000834B0
+		
 		public virtual Vector2? OverrideShadowVector
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiver_TakeToBedToOperate : WorkGiver_TakeToBed
 	{
 		
-		// (get) Token: 0x06003155 RID: 12629 RVA: 0x0010F64C File Offset: 0x0010D84C
+		
 		public override ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003156 RID: 12630 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override PathEndMode PathEndMode
 		{
 			get

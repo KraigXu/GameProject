@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Thought_PsychicHarmonizer : Thought_Memory
 	{
 		
-		// (get) Token: 0x0600642A RID: 25642 RVA: 0x0022B3DC File Offset: 0x002295DC
+		
 		public override string LabelCap
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600642F RID: 25647 RVA: 0x0022B4E8 File Offset: 0x002296E8
+		
 		public override bool ShouldDiscard
 		{
 			get

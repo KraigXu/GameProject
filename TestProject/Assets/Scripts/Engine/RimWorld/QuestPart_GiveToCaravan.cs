@@ -10,8 +10,8 @@ namespace RimWorld
 	public class QuestPart_GiveToCaravan : QuestPart
 	{
 		
-		// (get) Token: 0x06003A7A RID: 14970 RVA: 0x001359BD File Offset: 0x00133BBD
-		// (set) Token: 0x06003A7B RID: 14971 RVA: 0x001359D8 File Offset: 0x00133BD8
+		
+		
 		public IEnumerable<Thing> Things
 		{
 			get
@@ -41,15 +41,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A7C RID: 14972 RVA: 0x00135A58 File Offset: 0x00133C58
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.caravan != null)
 				{
@@ -66,7 +63,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A7D RID: 14973 RVA: 0x00135A68 File Offset: 0x00133C68
+		
 		public override bool IncreasesPopulation
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompFacility : ThingComp
 	{
 		
-		// (get) Token: 0x0600511F RID: 20767 RVA: 0x001B38F8 File Offset: 0x001B1AF8
+		
 		public bool CanBeActive
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005120 RID: 20768 RVA: 0x001B391F File Offset: 0x001B1B1F
+		
 		public CompProperties_Facility Props
 		{
 			get

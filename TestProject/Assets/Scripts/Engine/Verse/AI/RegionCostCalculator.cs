@@ -461,7 +461,7 @@ namespace Verse.AI
 		private struct RegionLinkQueueEntry
 		{
 			
-			// (get) Token: 0x060087DC RID: 34780 RVA: 0x002BB74D File Offset: 0x002B994D
+			
 			public Region From
 			{
 				get
@@ -471,7 +471,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x060087DD RID: 34781 RVA: 0x002BB755 File Offset: 0x002B9955
+			
 			public RegionLink Link
 			{
 				get
@@ -481,7 +481,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x060087DE RID: 34782 RVA: 0x002BB75D File Offset: 0x002B995D
+			
 			public int Cost
 			{
 				get
@@ -491,7 +491,7 @@ namespace Verse.AI
 			}
 
 			
-			// (get) Token: 0x060087DF RID: 34783 RVA: 0x002BB765 File Offset: 0x002B9965
+			
 			public int EstimatedPathCost
 			{
 				get

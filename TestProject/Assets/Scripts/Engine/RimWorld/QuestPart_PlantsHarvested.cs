@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_PlantsHarvested : QuestPartActivable
 	{
 		
-		// (get) Token: 0x060039B4 RID: 14772 RVA: 0x00132BD4 File Offset: 0x00130DD4
+		
 		public override string DescriptionPart
 		{
 			get
@@ -24,15 +24,13 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060039B5 RID: 14773 RVA: 0x00132C34 File Offset: 0x00130E34
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__0())
-				{
-					yield return hyperlink;
-				}
+
+
 				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 				yield return new Dialog_InfoCard.Hyperlink(this.plant, -1);
 				yield break;

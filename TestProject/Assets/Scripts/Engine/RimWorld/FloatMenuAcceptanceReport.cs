@@ -6,7 +6,7 @@ namespace RimWorld
 	public struct FloatMenuAcceptanceReport
 	{
 		
-		// (get) Token: 0x060048EB RID: 18667 RVA: 0x0018C9A9 File Offset: 0x0018ABA9
+		
 		public bool Accepted
 		{
 			get
@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060048EC RID: 18668 RVA: 0x0018C9B1 File Offset: 0x0018ABB1
+		
 		public string FailMessage
 		{
 			get
@@ -26,7 +26,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060048ED RID: 18669 RVA: 0x0018C9B9 File Offset: 0x0018ABB9
+		
 		public string FailReason
 		{
 			get
@@ -36,7 +36,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060048EE RID: 18670 RVA: 0x0018C9C4 File Offset: 0x0018ABC4
+		
 		public static FloatMenuAcceptanceReport WasAccepted
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060048EF RID: 18671 RVA: 0x0018C9E4 File Offset: 0x0018ABE4
+		
 		public static FloatMenuAcceptanceReport WasRejected
 		{
 			get

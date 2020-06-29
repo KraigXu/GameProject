@@ -9,11 +9,11 @@ namespace Verse
 	public abstract class ChoiceLetter : LetterWithTimeout
 	{
 		
-		// (get) Token: 0x06001B10 RID: 6928
+		
 		public abstract IEnumerable<DiaOption> Choices { get; }
 
 		
-		// (get) Token: 0x06001B11 RID: 6929 RVA: 0x000A63EE File Offset: 0x000A45EE
+		
 		protected DiaOption Option_Close
 		{
 			get
@@ -30,7 +30,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B12 RID: 6930 RVA: 0x000A6420 File Offset: 0x000A4620
+		
 		protected DiaOption Option_JumpToLocation
 		{
 			get
@@ -52,7 +52,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B13 RID: 6931 RVA: 0x000A6490 File Offset: 0x000A4690
+		
 		protected DiaOption Option_JumpToLocationAndPostpone
 		{
 			get
@@ -73,7 +73,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B14 RID: 6932 RVA: 0x000A64F7 File Offset: 0x000A46F7
+		
 		protected DiaOption Option_Reject
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001B15 RID: 6933 RVA: 0x000A6528 File Offset: 0x000A4728
+		
 		protected DiaOption Option_Postpone
 		{
 			get

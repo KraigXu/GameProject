@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class EnterCooldownComp : WorldObjectComp
 	{
 		
-		// (get) Token: 0x06006ED4 RID: 28372 RVA: 0x0026A6CF File Offset: 0x002688CF
+		
 		public WorldObjectCompProperties_EnterCooldown Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006ED5 RID: 28373 RVA: 0x0026A6DC File Offset: 0x002688DC
+		
 		public bool Active
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006ED6 RID: 28374 RVA: 0x0026A6E7 File Offset: 0x002688E7
+		
 		public bool BlocksEntering
 		{
 			get
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006ED7 RID: 28375 RVA: 0x0026A6FC File Offset: 0x002688FC
+		
 		public int TicksLeft
 		{
 			get
@@ -52,7 +52,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006ED8 RID: 28376 RVA: 0x0026A70E File Offset: 0x0026890E
+		
 		public float DaysLeft
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ExpectationDef : Def
 	{
 		
-		// (get) Token: 0x060035E5 RID: 13797 RVA: 0x00124DBC File Offset: 0x00122FBC
+		
 		public bool WealthTriggered
 		{
 			get

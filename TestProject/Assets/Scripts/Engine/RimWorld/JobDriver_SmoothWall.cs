@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_SmoothWall : JobDriver
 	{
 		
-		// (get) Token: 0x06002B9A RID: 11162 RVA: 0x000FB5EC File Offset: 0x000F97EC
+		
 		protected int BaseWorkAmount
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002B9B RID: 11163 RVA: 0x000FB5F3 File Offset: 0x000F97F3
+		
 		protected DesignationDef DesDef
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Alert_NeedMeditationSpot : Alert
 	{
 		
-		// (get) Token: 0x060056C5 RID: 22213 RVA: 0x001CC584 File Offset: 0x001CA784
+		
 		private List<GlobalTargetInfo> Targets
 		{
 			get

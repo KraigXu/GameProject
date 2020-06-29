@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class PortraitCameraManager
 	{
 		
-		// (get) Token: 0x06004392 RID: 17298 RVA: 0x0016C35D File Offset: 0x0016A55D
+		
 		public static Camera PortraitCamera
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004393 RID: 17299 RVA: 0x0016C364 File Offset: 0x0016A564
+		
 		public static PortraitRenderer PortraitRenderer
 		{
 			get

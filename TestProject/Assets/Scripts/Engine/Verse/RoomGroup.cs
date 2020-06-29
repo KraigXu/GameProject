@@ -9,7 +9,7 @@ namespace Verse
 	public class RoomGroup
 	{
 		
-		// (get) Token: 0x06000CEB RID: 3307 RVA: 0x00049825 File Offset: 0x00047A25
+		
 		public List<Room> Rooms
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CEC RID: 3308 RVA: 0x0004982D File Offset: 0x00047A2D
+		
 		public Map Map
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CED RID: 3309 RVA: 0x0004984F File Offset: 0x00047A4F
+		
 		public int RoomCount
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CEE RID: 3310 RVA: 0x0004985C File Offset: 0x00047A5C
+		
 		public RoomGroupTempTracker TempTracker
 		{
 			get
@@ -53,8 +53,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CEF RID: 3311 RVA: 0x00049864 File Offset: 0x00047A64
-		// (set) Token: 0x06000CF0 RID: 3312 RVA: 0x00049871 File Offset: 0x00047A71
+		
+		
 		public float Temperature
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF1 RID: 3313 RVA: 0x0004987F File Offset: 0x00047A7F
+		
 		public bool UsesOutdoorTemperature
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF2 RID: 3314 RVA: 0x000498A8 File Offset: 0x00047AA8
+		
 		public IEnumerable<IntVec3> Cells
 		{
 			get
@@ -99,7 +99,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF3 RID: 3315 RVA: 0x000498B8 File Offset: 0x00047AB8
+		
 		public int CellCount
 		{
 			get
@@ -117,7 +117,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF4 RID: 3316 RVA: 0x0004990F File Offset: 0x00047B0F
+		
 		public IEnumerable<Region> Regions
 		{
 			get
@@ -138,7 +138,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF5 RID: 3317 RVA: 0x00049920 File Offset: 0x00047B20
+		
 		public int RegionCount
 		{
 			get
@@ -153,7 +153,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF6 RID: 3318 RVA: 0x0004995C File Offset: 0x00047B5C
+		
 		public int OpenRoofCount
 		{
 			get
@@ -171,7 +171,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000CF7 RID: 3319 RVA: 0x000499B4 File Offset: 0x00047BB4
+		
 		public bool AnyRoomTouchesMapEdge
 		{
 			get

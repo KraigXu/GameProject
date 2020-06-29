@@ -10,7 +10,7 @@ namespace Verse
 	public class SkyManager
 	{
 		
-		// (get) Token: 0x06000D8A RID: 3466 RVA: 0x0004D588 File Offset: 0x0004B788
+		
 		public float CurSkyGlow
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 			if (this.map == Find.CurrentMap)
 			{
 				MatBases.LightOverlay.color = skyTarget.colors.sky;
-				Find.CameraColor.saturation = skyTarget.colors.saturation;
+				//Find.CameraColor.saturation = skyTarget.colors.saturation;
 				Color color = skyTarget.colors.sky;
 				color.a = 1f;
 				color *= SkyManager.FogOfWarBaseColor;

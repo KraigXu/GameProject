@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_TradeWithPawn : JobDriver
 	{
 		
-		// (get) Token: 0x06002D28 RID: 11560 RVA: 0x000FF549 File Offset: 0x000FD749
+		
 		private Pawn Trader
 		{
 			get

@@ -11,7 +11,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			ThingSetMakerDef thingSetMakerDef = rp.thingSetMakerDef ?? ThingSetMakerDefOf.MapGen_DefaultStockpile;
 			ThingSetMakerParams parms;
 			if (rp.thingSetMakerParams != null)
@@ -31,7 +31,7 @@ namespace RimWorld.BaseGen
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingToSpawn = list[i];
-				BaseGen.symbolStack.Push("thing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 			}
 		}
 	}

@@ -8,7 +8,7 @@ namespace Verse
 	public class LoadableXmlAsset
 	{
 		
-		// (get) Token: 0x060013E6 RID: 5094 RVA: 0x000734C0 File Offset: 0x000716C0
+		
 		public string FullFilePath
 		{
 			get
@@ -28,9 +28,9 @@ namespace Verse
 				xmlReaderSettings.IgnoreComments = true;
 				xmlReaderSettings.IgnoreWhitespace = true;
 				xmlReaderSettings.CheckCharacters = false;
-				using (StringReader stringReader = new StringReader(contents))
+				StringReader stringReader = new StringReader(contents);
 				{
-					using (XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings))
+					XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings);
 					{
 						this.xmlDoc = new XmlDocument();
 						this.xmlDoc.Load(xmlReader);

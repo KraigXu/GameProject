@@ -7,8 +7,8 @@ namespace Verse
 	public struct DamageInfo
 	{
 		
-		// (get) Token: 0x06001E87 RID: 7815 RVA: 0x000BE4BB File Offset: 0x000BC6BB
-		// (set) Token: 0x06001E88 RID: 7816 RVA: 0x000BE4C3 File Offset: 0x000BC6C3
+		
+		
 		public DamageDef Def
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E89 RID: 7817 RVA: 0x000BE4CC File Offset: 0x000BC6CC
+		
 		public float Amount
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8A RID: 7818 RVA: 0x000BE4E1 File Offset: 0x000BC6E1
+		
 		public float ArmorPenetrationInt
 		{
 			get
@@ -46,7 +46,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8B RID: 7819 RVA: 0x000BE4E9 File Offset: 0x000BC6E9
+		
 		public Thing Instigator
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8C RID: 7820 RVA: 0x000BE4F1 File Offset: 0x000BC6F1
+		
 		public DamageInfo.SourceCategory Category
 		{
 			get
@@ -66,7 +66,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8D RID: 7821 RVA: 0x000BE4F9 File Offset: 0x000BC6F9
+		
 		public Thing IntendedTarget
 		{
 			get
@@ -76,7 +76,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8E RID: 7822 RVA: 0x000BE501 File Offset: 0x000BC701
+		
 		public float Angle
 		{
 			get
@@ -86,7 +86,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E8F RID: 7823 RVA: 0x000BE509 File Offset: 0x000BC709
+		
 		public BodyPartRecord HitPart
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E90 RID: 7824 RVA: 0x000BE511 File Offset: 0x000BC711
+		
 		public BodyPartHeight Height
 		{
 			get
@@ -106,7 +106,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E91 RID: 7825 RVA: 0x000BE519 File Offset: 0x000BC719
+		
 		public BodyPartDepth Depth
 		{
 			get
@@ -116,7 +116,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E92 RID: 7826 RVA: 0x000BE521 File Offset: 0x000BC721
+		
 		public ThingDef Weapon
 		{
 			get
@@ -126,7 +126,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E93 RID: 7827 RVA: 0x000BE529 File Offset: 0x000BC729
+		
 		public BodyPartGroupDef WeaponBodyPartGroup
 		{
 			get
@@ -136,7 +136,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E94 RID: 7828 RVA: 0x000BE531 File Offset: 0x000BC731
+		
 		public HediffDef WeaponLinkedHediff
 		{
 			get
@@ -146,7 +146,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E95 RID: 7829 RVA: 0x000BE539 File Offset: 0x000BC739
+		
 		public bool InstantPermanentInjury
 		{
 			get
@@ -156,7 +156,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E96 RID: 7830 RVA: 0x000BE541 File Offset: 0x000BC741
+		
 		public bool AllowDamagePropagation
 		{
 			get
@@ -166,7 +166,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001E97 RID: 7831 RVA: 0x000BE553 File Offset: 0x000BC753
+		
 		public bool IgnoreArmor
 		{
 			get

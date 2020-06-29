@@ -7,7 +7,7 @@ namespace Verse
 	public class RegionDirtyer
 	{
 		
-		// (get) Token: 0x06000C6C RID: 3180 RVA: 0x000470FF File Offset: 0x000452FF
+		
 		public bool AnyDirty
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000C6D RID: 3181 RVA: 0x0004710F File Offset: 0x0004530F
+		
 		public List<IntVec3> DirtyCells
 		{
 			get

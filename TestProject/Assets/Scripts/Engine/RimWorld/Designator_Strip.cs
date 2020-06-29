@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Strip : Designator
 	{
 		
-		// (get) Token: 0x060057E8 RID: 22504 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057E9 RID: 22505 RVA: 0x001D2A50 File Offset: 0x001D0C50
+		
 		protected override DesignationDef Designation
 		{
 			get

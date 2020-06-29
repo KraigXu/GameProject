@@ -8,7 +8,7 @@ namespace RimWorld
 	public class FeatureDef : Def
 	{
 		
-		// (get) Token: 0x060035FF RID: 13823 RVA: 0x0012539E File Offset: 0x0012359E
+		
 		public FeatureWorker Worker
 		{
 			get

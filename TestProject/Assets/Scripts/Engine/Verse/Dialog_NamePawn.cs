@@ -8,7 +8,7 @@ namespace Verse
 	public class Dialog_NamePawn : Window
 	{
 		
-		// (get) Token: 0x06001D44 RID: 7492 RVA: 0x000B3D8C File Offset: 0x000B1F8C
+		
 		private Name CurPawnName
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001D45 RID: 7493 RVA: 0x000B3DE9 File Offset: 0x000B1FE9
+		
 		public override Vector2 InitialSize
 		{
 			get

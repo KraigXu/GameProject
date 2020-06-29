@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class DefeatAllEnemiesQuestComp : WorldObjectComp, IThingHolder
 	{
 		
-		// (get) Token: 0x06006EC3 RID: 28355 RVA: 0x0026A330 File Offset: 0x00268530
+		
 		public bool Active
 		{
 			get

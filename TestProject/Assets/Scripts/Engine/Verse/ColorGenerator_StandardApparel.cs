@@ -7,7 +7,7 @@ namespace Verse
 	public class ColorGenerator_StandardApparel : ColorGenerator
 	{
 		
-		// (get) Token: 0x060004B0 RID: 1200 RVA: 0x00017A17 File Offset: 0x00015C17
+		
 		public override Color ExemplaryColor
 		{
 			get

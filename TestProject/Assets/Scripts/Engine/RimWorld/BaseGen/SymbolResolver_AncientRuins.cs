@@ -13,7 +13,7 @@ namespace RimWorld.BaseGen
 			resolveParams.chanceToSkipWallBlock = new float?(rp.chanceToSkipWallBlock ?? 0.1f);
 			resolveParams.clearEdificeOnly = new bool?(rp.clearEdificeOnly ?? true);
 			resolveParams.noRoof = new bool?(rp.noRoof ?? true);
-			BaseGen.symbolStack.Push("emptyRoom", resolveParams, null);
+			BaseGenCore.symbolStack.Push("emptyRoom", resolveParams, null);
 		}
 	}
 }

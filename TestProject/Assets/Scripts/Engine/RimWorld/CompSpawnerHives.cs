@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompSpawnerHives : ThingComp
 	{
 		
-		// (get) Token: 0x06005340 RID: 21312 RVA: 0x001BD9CF File Offset: 0x001BBBCF
+		
 		private CompProperties_SpawnerHives Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005341 RID: 21313 RVA: 0x001BD9DC File Offset: 0x001BBBDC
+		
 		private bool CanSpawnChildHive
 		{
 			get

@@ -29,8 +29,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600710B RID: 28939 RVA: 0x00277535 File Offset: 0x00275735
-		// (set) Token: 0x0600710C RID: 28940 RVA: 0x00277542 File Offset: 0x00275742
+		
+		
 		public virtual FlushType FlushMode
 		{
 			get
@@ -48,8 +48,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600710D RID: 28941 RVA: 0x00277563 File Offset: 0x00275763
-		// (set) Token: 0x0600710E RID: 28942 RVA: 0x00277570 File Offset: 0x00275770
+		
+		
 		public int BufferSize
 		{
 			get
@@ -75,8 +75,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x0600710F RID: 28943 RVA: 0x002775DC File Offset: 0x002757DC
-		// (set) Token: 0x06007110 RID: 28944 RVA: 0x002775E9 File Offset: 0x002757E9
+		
+		
 		public CompressionStrategy Strategy
 		{
 			get
@@ -94,7 +94,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007111 RID: 28945 RVA: 0x0027760A File Offset: 0x0027580A
+		
 		public virtual long TotalIn
 		{
 			get
@@ -104,7 +104,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007112 RID: 28946 RVA: 0x0027761C File Offset: 0x0027581C
+		
 		public virtual long TotalOut
 		{
 			get
@@ -134,7 +134,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007114 RID: 28948 RVA: 0x0027767C File Offset: 0x0027587C
+		
 		public override bool CanRead
 		{
 			get
@@ -148,7 +148,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007115 RID: 28949 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool CanSeek
 		{
 			get
@@ -158,7 +158,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007116 RID: 28950 RVA: 0x002776A1 File Offset: 0x002758A1
+		
 		public override bool CanWrite
 		{
 			get
@@ -182,7 +182,7 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007118 RID: 28952 RVA: 0x000255BF File Offset: 0x000237BF
+		
 		public override long Length
 		{
 			get
@@ -192,8 +192,8 @@ namespace Ionic.Zlib
 		}
 
 		
-		// (get) Token: 0x06007119 RID: 28953 RVA: 0x002776E8 File Offset: 0x002758E8
-		// (set) Token: 0x0600711A RID: 28954 RVA: 0x000255BF File Offset: 0x000237BF
+		
+		
 		public override long Position
 		{
 			get
@@ -250,7 +250,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressString(string s)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new DeflateStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressString(s, compressor);
@@ -263,7 +263,7 @@ namespace Ionic.Zlib
 		public static byte[] CompressBuffer(byte[] b)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream())
+			MemoryStream memoryStream = new MemoryStream();
 			{
 				Stream compressor = new DeflateStream(memoryStream, CompressionMode.Compress, CompressionLevel.BestCompression);
 				ZlibBaseStream.CompressBuffer(b, compressor);
@@ -276,7 +276,7 @@ namespace Ionic.Zlib
 		public static string UncompressString(byte[] compressed)
 		{
 			string result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new DeflateStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressString(compressed, decompressor);
@@ -288,7 +288,7 @@ namespace Ionic.Zlib
 		public static byte[] UncompressBuffer(byte[] compressed)
 		{
 			byte[] result;
-			using (MemoryStream memoryStream = new MemoryStream(compressed))
+			MemoryStream memoryStream = new MemoryStream(compressed);
 			{
 				Stream decompressor = new DeflateStream(memoryStream, CompressionMode.Decompress);
 				result = ZlibBaseStream.UncompressBuffer(compressed, decompressor);

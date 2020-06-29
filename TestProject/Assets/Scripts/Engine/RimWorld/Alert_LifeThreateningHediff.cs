@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Alert_LifeThreateningHediff : Alert_Critical
 	{
 		
-		// (get) Token: 0x0600560D RID: 22029 RVA: 0x001C8790 File Offset: 0x001C6990
+		
 		private List<Pawn> SickPawns
 		{
 			get

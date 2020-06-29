@@ -8,7 +8,7 @@ namespace RimWorld
 	public class TraitSet : IExposable
 	{
 		
-		// (get) Token: 0x060047FA RID: 18426 RVA: 0x00186260 File Offset: 0x00184460
+		
 		public float HungerRateFactor
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060047FF RID: 18431 RVA: 0x001863FA File Offset: 0x001845FA
+		
 		public IEnumerable<MentalBreakDef> TheOnlyAllowedMentalBreaks
 		{
 			get

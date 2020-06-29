@@ -11,7 +11,7 @@ namespace RimWorld
 	public class LearningReadout : IExposable
 	{
 		
-		// (get) Token: 0x06005B0E RID: 23310 RVA: 0x001F554F File Offset: 0x001F374F
+		
 		public int ActiveConceptsCount
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005B0F RID: 23311 RVA: 0x001F555C File Offset: 0x001F375C
+		
 		public bool ShowAllMode
 		{
 			get

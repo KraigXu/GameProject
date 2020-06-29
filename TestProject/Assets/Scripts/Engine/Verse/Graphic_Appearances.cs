@@ -10,7 +10,7 @@ namespace Verse
 	public class Graphic_Appearances : Graphic
 	{
 		
-		// (get) Token: 0x06001507 RID: 5383 RVA: 0x0007BA3F File Offset: 0x00079C3F
+		
 		public override Material MatSingle
 		{
 			get

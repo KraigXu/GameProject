@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_ChangeHeir : QuestPart
 	{
 		
-		// (get) Token: 0x06003A51 RID: 14929 RVA: 0x00134B2C File Offset: 0x00132D2C
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				yield return this.holder;
 				yield return this.heir;
@@ -27,12 +25,12 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003A52 RID: 14930 RVA: 0x00134B3C File Offset: 0x00132D3C
+		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.n__1())
+
 				{
 					yield return faction;
 				}

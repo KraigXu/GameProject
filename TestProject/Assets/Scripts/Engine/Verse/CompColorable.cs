@@ -7,8 +7,8 @@ namespace Verse
 	public class CompColorable : ThingComp
 	{
 		
-		// (get) Token: 0x06001741 RID: 5953 RVA: 0x00085508 File Offset: 0x00083708
-		// (set) Token: 0x06001742 RID: 5954 RVA: 0x0008552E File Offset: 0x0008372E
+		
+		
 		public Color Color
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001743 RID: 5955 RVA: 0x00085558 File Offset: 0x00083758
+		
 		public bool Active
 		{
 			get

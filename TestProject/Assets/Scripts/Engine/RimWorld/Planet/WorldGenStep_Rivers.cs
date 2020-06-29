@@ -10,7 +10,7 @@ namespace RimWorld.Planet
 	public class WorldGenStep_Rivers : WorldGenStep
 	{
 		
-		// (get) Token: 0x06006B0D RID: 27405 RVA: 0x002558A0 File Offset: 0x00253AA0
+		
 		public override int SeedPart
 		{
 			get
@@ -172,11 +172,11 @@ namespace RimWorld.Planet
 				IEnumerable<int> source = riverPaths[index];
 				
 				Func<int, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__1 = ((int ni) => ni != bestOutput));
+					predicate = ( ((int ni) => ni != bestOutput));
 				}
-				using (IEnumerator<int> enumerator = source.Where(predicate).GetEnumerator())
+				IEnumerator<int> enumerator = source.Where(predicate).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

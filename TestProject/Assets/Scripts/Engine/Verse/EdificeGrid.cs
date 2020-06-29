@@ -6,7 +6,7 @@ namespace Verse
 	public sealed class EdificeGrid
 	{
 		
-		// (get) Token: 0x06000A40 RID: 2624 RVA: 0x0003752E File Offset: 0x0003572E
+		
 		public Building[] InnerArray
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class StorytellerComp_Disease : StorytellerComp
 	{
 		
-		// (get) Token: 0x06003D28 RID: 15656 RVA: 0x0014387C File Offset: 0x00141A7C
+		
 		protected StorytellerCompProperties_Disease Props
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Slaughter : Designator
 	{
 		
-		// (get) Token: 0x060057D2 RID: 22482 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override int DraggableDimensions
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060057D3 RID: 22483 RVA: 0x001D243B File Offset: 0x001D063B
+		
 		protected override DesignationDef Designation
 		{
 			get

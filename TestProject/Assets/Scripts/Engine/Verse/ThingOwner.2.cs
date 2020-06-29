@@ -11,7 +11,7 @@ namespace Verse
 	public abstract class ThingOwner : IExposable, IList<Thing>, ICollection<Thing>, IEnumerable<Thing>, IEnumerable
 	{
 		
-		// (get) Token: 0x06001693 RID: 5779 RVA: 0x000828FF File Offset: 0x00080AFF
+		
 		public IThingHolder Owner
 		{
 			get
@@ -21,7 +21,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001694 RID: 5780
+		
 		public abstract int Count { get; }
 
 		
@@ -34,7 +34,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001696 RID: 5782 RVA: 0x00082910 File Offset: 0x00080B10
+		
 		public bool Any
 		{
 			get
@@ -44,7 +44,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001697 RID: 5783 RVA: 0x0008291C File Offset: 0x00080B1C
+		
 		public int TotalStackCount
 		{
 			get
@@ -60,7 +60,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001698 RID: 5784 RVA: 0x0008294E File Offset: 0x00080B4E
+		
 		public string ContentsString
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600169B RID: 5787 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		bool ICollection<Thing>.IsReadOnly
 		{
 			get

@@ -9,7 +9,7 @@ namespace Verse
 	public class HediffComp_Disorientation : HediffComp
 	{
 		
-		// (get) Token: 0x06001058 RID: 4184 RVA: 0x0005DAEB File Offset: 0x0005BCEB
+		
 		private HediffCompProperties_Disorientation Props
 		{
 			get

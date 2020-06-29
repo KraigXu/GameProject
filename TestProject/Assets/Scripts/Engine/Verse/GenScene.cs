@@ -8,7 +8,7 @@ namespace Verse
 	public static class GenScene
 	{
 		
-		// (get) Token: 0x06000813 RID: 2067 RVA: 0x000255C8 File Offset: 0x000237C8
+		
 		public static bool InEntryScene
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000814 RID: 2068 RVA: 0x000255EC File Offset: 0x000237EC
+		
 		public static bool InPlayScene
 		{
 			get

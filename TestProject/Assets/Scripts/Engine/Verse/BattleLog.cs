@@ -9,7 +9,7 @@ namespace Verse
 	public class BattleLog : IExposable
 	{
 		
-		// (get) Token: 0x0600070D RID: 1805 RVA: 0x000206FF File Offset: 0x0001E8FF
+		
 		public List<Battle> Battles
 		{
 			get

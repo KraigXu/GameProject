@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ActiveLessonHandler : IExposable
 	{
 		
-		// (get) Token: 0x06005E51 RID: 24145 RVA: 0x0020A7F7 File Offset: 0x002089F7
+		
 		public Lesson Current
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005E52 RID: 24146 RVA: 0x0020A7FF File Offset: 0x002089FF
+		
 		public bool ActiveLessonVisible
 		{
 			get

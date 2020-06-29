@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public class Settlement_TraderTracker : IThingHolder, IExposable
 	{
 		
-		// (get) Token: 0x06006DC4 RID: 28100 RVA: 0x00127946 File Offset: 0x00125B46
+		
 		protected virtual int RegenerateStockEveryDays
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DC5 RID: 28101 RVA: 0x00265951 File Offset: 0x00263B51
+		
 		public IThingHolder ParentHolder
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DC6 RID: 28102 RVA: 0x00265959 File Offset: 0x00263B59
+		
 		public List<Thing> StockListForReading
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DC7 RID: 28103 RVA: 0x00265974 File Offset: 0x00263B74
+		
 		public TraderKindDef TraderKind
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DC8 RID: 28104 RVA: 0x002659C0 File Offset: 0x00263BC0
+		
 		public int RandomPriceFactorSeed
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DC9 RID: 28105 RVA: 0x002659D7 File Offset: 0x00263BD7
+		
 		public bool EverVisited
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DCA RID: 28106 RVA: 0x002659DF File Offset: 0x00263BDF
+		
 		public bool RestockedSinceLastVisit
 		{
 			get
@@ -89,7 +89,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DCB RID: 28107 RVA: 0x002659F4 File Offset: 0x00263BF4
+		
 		public int NextRestockTick
 		{
 			get
@@ -103,7 +103,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DCC RID: 28108 RVA: 0x00265A28 File Offset: 0x00263C28
+		
 		public virtual string TraderName
 		{
 			get
@@ -117,7 +117,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DCD RID: 28109 RVA: 0x00265A82 File Offset: 0x00263C82
+		
 		public virtual bool CanTradeNow
 		{
 			get
@@ -127,7 +127,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006DCE RID: 28110 RVA: 0x00265AB4 File Offset: 0x00263CB4
+		
 		public virtual float TradePriceImprovementOffsetForPlayer
 		{
 			get

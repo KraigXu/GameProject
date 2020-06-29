@@ -10,7 +10,7 @@ namespace Verse
 	public class CameraDriver : MonoBehaviour
 	{
 		
-		// (get) Token: 0x060003F6 RID: 1014 RVA: 0x000144F3 File Offset: 0x000126F3
+		
 		private Camera MyCamera
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003F7 RID: 1015 RVA: 0x00014515 File Offset: 0x00012715
+		
 		private float ScreenDollyEdgeWidthBottom
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003F8 RID: 1016 RVA: 0x0001452C File Offset: 0x0001272C
+		
 		public CameraZoomRange CurrentZoom
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003F9 RID: 1017 RVA: 0x00014582 File Offset: 0x00012782
+		
 		private Vector3 CurrentRealPosition
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003FA RID: 1018 RVA: 0x00014594 File Offset: 0x00012794
+		
 		private bool AnythingPreventsCameraMotion
 		{
 			get
@@ -84,7 +84,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003FB RID: 1019 RVA: 0x000145AC File Offset: 0x000127AC
+		
 		public IntVec3 MapPosition
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003FC RID: 1020 RVA: 0x000145D0 File Offset: 0x000127D0
+		
 		public CellRect CurrentViewRect
 		{
 			get
@@ -117,7 +117,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003FD RID: 1021 RVA: 0x0001469C File Offset: 0x0001289C
+		
 		public static float HitchReduceFactor
 		{
 			get
@@ -132,7 +132,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060003FE RID: 1022 RVA: 0x000146C8 File Offset: 0x000128C8
+		
 		public float CellSizePixels
 		{
 			get

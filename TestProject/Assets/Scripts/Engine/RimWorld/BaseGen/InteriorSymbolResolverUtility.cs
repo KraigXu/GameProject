@@ -9,12 +9,12 @@ namespace RimWorld.BaseGen
 		
 		public static void PushBedroomHeatersCoolersAndLightSourcesSymbols(ResolveParams rp, bool hasToSpawnLightSource = true)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			if (map.mapTemperature.OutdoorTemp > 22f)
 			{
 				ResolveParams resolveParams = rp;
 				resolveParams.singleThingDef = ThingDefOf.PassiveCooler;
-				BaseGen.symbolStack.Push("edgeThing", resolveParams, null);
+				BaseGenCore.symbolStack.Push("edgeThing", resolveParams, null);
 			}
 			bool flag = false;
 			if (map.mapTemperature.OutdoorTemp < 3f)
@@ -34,12 +34,12 @@ namespace RimWorld.BaseGen
 				{
 					ResolveParams resolveParams2 = rp;
 					resolveParams2.singleThingDef = singleThingDef;
-					BaseGen.symbolStack.Push("edgeThing", resolveParams2, null);
+					BaseGenCore.symbolStack.Push("edgeThing", resolveParams2, null);
 				}
 			}
 			if (!flag && hasToSpawnLightSource)
 			{
-				BaseGen.symbolStack.Push("indoorLighting", rp, null);
+				BaseGenCore.symbolStack.Push("indoorLighting", rp, null);
 			}
 		}
 

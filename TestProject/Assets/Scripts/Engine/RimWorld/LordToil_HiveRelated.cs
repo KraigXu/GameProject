@@ -10,7 +10,7 @@ namespace RimWorld
 	public abstract class LordToil_HiveRelated : LordToil
 	{
 		
-		// (get) Token: 0x060032A3 RID: 12963 RVA: 0x00119AE9 File Offset: 0x00117CE9
+		
 		private LordToil_HiveRelatedData Data
 		{
 			get

@@ -7,7 +7,7 @@ namespace RimWorld
 	public class PredatorThreat : IExposable
 	{
 		
-		// (get) Token: 0x060048C6 RID: 18630 RVA: 0x0018C122 File Offset: 0x0018A322
+		
 		public bool Expired
 		{
 			get

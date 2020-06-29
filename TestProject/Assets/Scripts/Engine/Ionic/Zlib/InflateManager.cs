@@ -6,8 +6,8 @@ namespace Ionic.Zlib
 	internal sealed class InflateManager
 	{
 		
-		// (get) Token: 0x06007151 RID: 29009 RVA: 0x0027A2C3 File Offset: 0x002784C3
-		// (set) Token: 0x06007152 RID: 29010 RVA: 0x0027A2CB File Offset: 0x002784CB
+		
+		
 		internal bool HandleRfc1950HeaderBytes
 		{
 			get
@@ -150,7 +150,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec3 = this._codec;
 					nextIn = codec3.NextIn;
 					codec3.NextIn = nextIn + 1;
-					this.expectedCheck = (uint)(inputBuffer3[nextIn] << 24 & (long)((ulong)-16777216));
+					this.expectedCheck = (uint)(inputBuffer3[nextIn] << 24 & (long)(-16777216));
 					this.mode = InflateManager.InflateManagerMode.DICT3;
 					continue;
 				}
@@ -168,7 +168,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec4 = this._codec;
 					nextIn = codec4.NextIn;
 					codec4.NextIn = nextIn + 1;
-					this.expectedCheck = num4 + (inputBuffer4[nextIn] << 16 & 16711680u);
+					this.expectedCheck = (uint)(num4 + (inputBuffer4[nextIn] << 16 & 16711680u));
 					this.mode = InflateManager.InflateManagerMode.DICT2;
 					continue;
 				}
@@ -186,7 +186,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec5 = this._codec;
 					nextIn = codec5.NextIn;
 					codec5.NextIn = nextIn + 1;
-					this.expectedCheck = num5 + (inputBuffer5[nextIn] << 8 & 65280u);
+					this.expectedCheck = (uint)(num5 + (inputBuffer5[nextIn] << 8 & 65280u));
 					this.mode = InflateManager.InflateManagerMode.DICT1;
 					continue;
 				}
@@ -231,7 +231,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec6 = this._codec;
 					nextIn = codec6.NextIn;
 					codec6.NextIn = nextIn + 1;
-					this.expectedCheck = (uint)(inputBuffer6[nextIn] << 24 & (long)((ulong)-16777216));
+					this.expectedCheck = (uint)(inputBuffer6[nextIn] << 24 & (long)(-16777216));
 					this.mode = InflateManager.InflateManagerMode.CHECK3;
 					continue;
 				}
@@ -249,7 +249,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec7 = this._codec;
 					nextIn = codec7.NextIn;
 					codec7.NextIn = nextIn + 1;
-					this.expectedCheck = num6 + (inputBuffer7[nextIn] << 16 & 16711680u);
+					this.expectedCheck = (uint)(num6 + (inputBuffer7[nextIn] << 16 & 16711680u));
 					this.mode = InflateManager.InflateManagerMode.CHECK2;
 					continue;
 				}
@@ -267,7 +267,7 @@ namespace Ionic.Zlib
 					ZlibCodec codec8 = this._codec;
 					nextIn = codec8.NextIn;
 					codec8.NextIn = nextIn + 1;
-					this.expectedCheck = num7 + (inputBuffer8[nextIn] << 8 & 65280u);
+					this.expectedCheck = (uint)(num7 + (inputBuffer8[nextIn] << 8 & 65280u));
 					this.mode = InflateManager.InflateManagerMode.CHECK1;
 					continue;
 				}

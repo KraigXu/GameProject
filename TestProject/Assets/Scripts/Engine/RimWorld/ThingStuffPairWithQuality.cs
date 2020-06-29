@@ -7,7 +7,7 @@ namespace RimWorld
 	public struct ThingStuffPairWithQuality : IEquatable<ThingStuffPairWithQuality>, IExposable
 	{
 		
-		// (get) Token: 0x06006449 RID: 25673 RVA: 0x0022BB78 File Offset: 0x00229D78
+		
 		public QualityCategory Quality
 		{
 			get

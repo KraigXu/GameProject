@@ -12,7 +12,7 @@ namespace RimWorld
 	public class CompSpawnerPawn : ThingComp
 	{
 		
-		// (get) Token: 0x0600535D RID: 21341 RVA: 0x001BE2EC File Offset: 0x001BC4EC
+		
 		private CompProperties_SpawnerPawn Props
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600535E RID: 21342 RVA: 0x001BE2F9 File Offset: 0x001BC4F9
+		
 		public Lord Lord
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600535F RID: 21343 RVA: 0x001BE320 File Offset: 0x001BC520
+		
 		private float SpawnedPawnsPoints
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005360 RID: 21344 RVA: 0x001BE369 File Offset: 0x001BC569
+		
 		public bool Active
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005361 RID: 21345 RVA: 0x001BE380 File Offset: 0x001BC580
+		
 		public CompCanBeDormant DormancyComp
 		{
 			get
@@ -73,7 +73,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005362 RID: 21346 RVA: 0x001BE3AB File Offset: 0x001BC5AB
+		
 		public bool Dormant
 		{
 			get

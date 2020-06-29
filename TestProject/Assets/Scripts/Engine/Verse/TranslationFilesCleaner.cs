@@ -300,9 +300,9 @@ namespace Verse
 			IEnumerable<LoadedLanguage.KeyedReplacement> source = list;
 			
 			Func<LoadedLanguage.KeyedReplacement, bool> predicate;
-			if ((predicate ) == null)
+			if ((predicate=default ) == null)
 			{
-				predicate = (9__2 = ((LoadedLanguage.KeyedReplacement x) => !writtenUnusedKeyedTranslations.Contains(x)));
+				predicate = ( ((LoadedLanguage.KeyedReplacement x) => !writtenUnusedKeyedTranslations.Contains(x)));
 			}
 			foreach (IGrouping<string, LoadedLanguage.KeyedReplacement> grouping in from x in source.Where(predicate)
 			group x by x.fileSourceFullPath)
@@ -447,9 +447,9 @@ namespace Verse
 			List<KeyValuePair<string, DefInjectionPackage.DefInjection>> source = (from x in list
 			where !x.Value.injected
 			select x).ToList<KeyValuePair<string, DefInjectionPackage.DefInjection>>();
-			using (IEnumerator<string> enumerator2 = (from x in possibleDefInjections
+			IEnumerator<string> enumerator2 = (from x in possibleDefInjections
 			select TranslationFilesCleaner.GetSourceFile(x.def)).Concat(from x in source
-			select x.Value.fileSource).Distinct<string>().GetEnumerator())
+			select x.Value.fileSource).Distinct<string>().GetEnumerator();
 			{
 				while (enumerator2.MoveNext())
 				{
@@ -469,11 +469,11 @@ namespace Verse
 							List<KeyValuePair<string, DefInjectionPackage.DefInjection>> source3 = (from x in source
 							where x.Value.fileSource == fileName
 							select x).ToList<KeyValuePair<string, DefInjectionPackage.DefInjection>>();
-							using (IEnumerator<string> enumerator3 = (from x in (from x in source2
+							IEnumerator<string> enumerator3 = (from x in (from x in source2
 							select x.def.defName).Concat(from x in source3
 							select x.Value.DefName).Distinct<string>()
 							orderby x
-							select x).GetEnumerator())
+							select x).GetEnumerator();
 							{
 								while (enumerator3.MoveNext())
 								{
@@ -515,7 +515,7 @@ namespace Verse
 															continue;
 														}
 														int num2 = -1;
-														using (IEnumerator<string> enumerator5 = englishList.GetEnumerator())
+														IEnumerator<string> enumerator5 = englishList.GetEnumerator();
 														{
 															while (enumerator5.MoveNext())
 															{
@@ -563,7 +563,7 @@ namespace Verse
 													bool flag4 = false;
 													if (englishList != null)
 													{
-														using (IEnumerator<string> enumerator5 = englishList.GetEnumerator())
+														IEnumerator<string> enumerator5 = englishList.GetEnumerator();
 														{
 															while (enumerator5.MoveNext())
 															{

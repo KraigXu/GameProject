@@ -8,7 +8,7 @@ namespace RimWorld
 	public interface ISlotGroupParent : IStoreSettingsParent, IHaulDestination
 	{
 		
-		// (get) Token: 0x06004C0C RID: 19468
+		
 		bool IgnoreStoredThingsBeauty { get; }
 
 		

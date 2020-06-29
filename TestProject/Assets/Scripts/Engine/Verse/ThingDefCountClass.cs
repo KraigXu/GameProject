@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class ThingDefCountClass : IExposable
 	{
 		
-		// (get) Token: 0x06001F7B RID: 8059 RVA: 0x000C1401 File Offset: 0x000BF601
+		
 		public string Label
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F7C RID: 8060 RVA: 0x000C1415 File Offset: 0x000BF615
+		
 		public string LabelCap
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F7D RID: 8061 RVA: 0x000C1428 File Offset: 0x000BF628
+		
 		public string Summary
 		{
 			get

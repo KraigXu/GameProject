@@ -8,7 +8,7 @@ namespace Verse
 	public class ColorGenerator_Options : ColorGenerator
 	{
 		
-		// (get) Token: 0x060004B3 RID: 1203 RVA: 0x00017AFC File Offset: 0x00015CFC
+		
 		public override Color ExemplaryColor
 		{
 			get

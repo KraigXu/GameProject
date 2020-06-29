@@ -12,7 +12,7 @@ namespace Verse
 	public static class ModsConfig
 	{
 		
-		// (get) Token: 0x06000EA3 RID: 3747 RVA: 0x00053304 File Offset: 0x00051504
+		
 		public static IEnumerable<ModMetaData> ActiveModsInLoadOrder
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000EA4 RID: 3748 RVA: 0x0005336C File Offset: 0x0005156C
+		
 		public static bool RoyaltyActive
 		{
 			get
@@ -345,7 +345,7 @@ namespace Verse
 		private static List<string> FindConflicts(List<ModMetaData> allMods, List<string> modsToCheck, Func<ModMetaData, bool> predicate)
 		{
 			List<string> list = new List<string>();
-			using (List<string>.Enumerator enumerator = modsToCheck.GetEnumerator())
+			List<string>.Enumerator enumerator = modsToCheck.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -368,7 +368,7 @@ namespace Verse
 			for (int i = 0; i < list.Count; i++)
 			{
 				ModMetaData modMetaData = list[i];
-				using (List<string>.Enumerator enumerator = modMetaData.LoadBefore.GetEnumerator())
+				List<string>.Enumerator enumerator = modMetaData.LoadBefore.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -380,11 +380,11 @@ namespace Verse
 						}
 					}
 				}
-				using (List<string>.Enumerator enumerator = modMetaData.LoadAfter.GetEnumerator())
+				List<string>.Enumerator enumerator1 = modMetaData.LoadAfter.GetEnumerator();
 				{
-					while (enumerator.MoveNext())
+					while (enumerator1.MoveNext())
 					{
-						string after = enumerator.Current;
+						string after = enumerator1.Current;
 						ModMetaData modMetaData3 = list.FirstOrDefault((ModMetaData m) => m.SamePackageId(after, true));
 						if (modMetaData3 != null)
 						{

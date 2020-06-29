@@ -9,7 +9,7 @@ namespace RimWorld
 	public abstract class WorkGiver_Scanner : WorkGiver
 	{
 		
-		// (get) Token: 0x06002FDE RID: 12254 RVA: 0x0010E01A File Offset: 0x0010C21A
+		
 		public virtual ThingRequest PotentialWorkThingRequest
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002FDF RID: 12255 RVA: 0x0010E022 File Offset: 0x0010C222
+		
 		public virtual int MaxRegionsToScanBeforeGlobalSearch
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002FE0 RID: 12256 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool Prioritized
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002FE3 RID: 12259 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool AllowUnreachable
 		{
 			get
@@ -61,7 +61,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002FE4 RID: 12260 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public virtual PathEndMode PathEndMode
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse.Sound
 	public abstract class SoundParamSource
 	{
 		
-		// (get) Token: 0x0600244E RID: 9294
+		
 		public abstract string Label { get; }
 
 		

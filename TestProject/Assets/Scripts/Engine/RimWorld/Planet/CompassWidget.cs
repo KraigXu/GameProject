@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class CompassWidget
 	{
 		
-		// (get) Token: 0x06006F8D RID: 28557 RVA: 0x0026D460 File Offset: 0x0026B660
+		
 		private static float Angle
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class CompAbilityEffect_Wallraise : CompAbilityEffect
 	{
 		
-		// (get) Token: 0x060041B2 RID: 16818 RVA: 0x0015F307 File Offset: 0x0015D507
+		
 		public new CompProperties_AbilityWallraise Props
 		{
 			get

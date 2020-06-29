@@ -9,7 +9,7 @@ namespace Verse.AI
 	public class Job : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06002524 RID: 9508 RVA: 0x000DC621 File Offset: 0x000DA821
+		
 		public RecipeDef RecipeDef
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002525 RID: 9509 RVA: 0x000DC638 File Offset: 0x000DA838
+		
 		public JobDriver GetCachedDriverDirect
 		{
 			get

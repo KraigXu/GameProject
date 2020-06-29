@@ -9,7 +9,7 @@ namespace RimWorld
 	public class IncidentCycleUtility
 	{
 		
-		// (get) Token: 0x06003BBA RID: 15290 RVA: 0x0013B2B7 File Offset: 0x001394B7
+		
 		private static int QueueIntervalsPassed
 		{
 			get

@@ -9,8 +9,8 @@ namespace Verse.Steam
 	public class WorkshopItemHook
 	{
 		
-		// (get) Token: 0x060022AF RID: 8879 RVA: 0x000D2F42 File Offset: 0x000D1142
-		// (set) Token: 0x060022B0 RID: 8880 RVA: 0x000D2F4F File Offset: 0x000D114F
+		
+		
 		public PublishedFileId_t PublishedFileId
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B1 RID: 8881 RVA: 0x000D2F5D File Offset: 0x000D115D
+		
 		public string Name
 		{
 			get
@@ -34,7 +34,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B2 RID: 8882 RVA: 0x000D2F6A File Offset: 0x000D116A
+		
 		public string Description
 		{
 			get
@@ -44,7 +44,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B3 RID: 8883 RVA: 0x000D2F77 File Offset: 0x000D1177
+		
 		public string PreviewImagePath
 		{
 			get
@@ -54,7 +54,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B4 RID: 8884 RVA: 0x000D2F84 File Offset: 0x000D1184
+		
 		public IList<string> Tags
 		{
 			get
@@ -64,7 +64,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B5 RID: 8885 RVA: 0x000D2F91 File Offset: 0x000D1191
+		
 		public DirectoryInfo Directory
 		{
 			get
@@ -74,7 +74,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B6 RID: 8886 RVA: 0x000D2F9E File Offset: 0x000D119E
+		
 		public IEnumerable<System.Version> SupportedVersions
 		{
 			get
@@ -84,7 +84,7 @@ namespace Verse.Steam
 		}
 
 		
-		// (get) Token: 0x060022B7 RID: 8887 RVA: 0x000D2FAB File Offset: 0x000D11AB
+		
 		public bool MayHaveAuthorNotCurrentUser
 		{
 			get

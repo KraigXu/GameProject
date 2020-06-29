@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompChangeableProjectile : ThingComp, IStoreSettingsParent
 	{
 		
-		// (get) Token: 0x060050CC RID: 20684 RVA: 0x001B21D7 File Offset: 0x001B03D7
+		
 		public CompProperties_ChangeableProjectile Props
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050CD RID: 20685 RVA: 0x001B21E4 File Offset: 0x001B03E4
+		
 		public ThingDef LoadedShell
 		{
 			get
@@ -32,7 +32,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050CE RID: 20686 RVA: 0x001B21F7 File Offset: 0x001B03F7
+		
 		public ThingDef Projectile
 		{
 			get
@@ -46,7 +46,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050CF RID: 20687 RVA: 0x001B220E File Offset: 0x001B040E
+		
 		public bool Loaded
 		{
 			get
@@ -56,7 +56,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060050D0 RID: 20688 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool StorageTabVisible
 		{
 			get

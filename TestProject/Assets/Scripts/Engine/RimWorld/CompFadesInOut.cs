@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompFadesInOut : ThingComp
 	{
 		
-		// (get) Token: 0x06005130 RID: 20784 RVA: 0x001B3E34 File Offset: 0x001B2034
+		
 		public CompProperties_FadesInOut Props
 		{
 			get

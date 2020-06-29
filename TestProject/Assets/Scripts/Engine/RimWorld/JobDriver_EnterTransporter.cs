@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_EnterTransporter : JobDriver
 	{
 		
-		// (get) Token: 0x06002C59 RID: 11353 RVA: 0x000FD554 File Offset: 0x000FB754
+		
 		public CompTransporter Transporter
 		{
 			get

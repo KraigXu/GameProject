@@ -7,7 +7,7 @@ using RimWorld.Planet;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public static class QuestGenUtility
@@ -274,7 +274,7 @@ namespace RimWorld.QuestGen
 					IL_336:
 					req.Rules.Add(new Rule_String(absoluteName + "_count", ((IEnumerable)obj).EnumerableCount().ToString()));
 					int num = 0;
-					using (IEnumerator enumerator = ((IEnumerable)obj).GetEnumerator())
+					IEnumerator enumerator = ((IEnumerable)obj).GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{
@@ -489,14 +489,14 @@ namespace RimWorld.QuestGen
 		public static ChoiceLetter MakeLetter(string labelKeyword, string textKeyword, LetterDef def, Faction relatedFaction = null, Quest quest = null)
 		{
 			ChoiceLetter letter = LetterMaker.MakeLetter("error", "error", def, relatedFaction, quest);
-			QuestGen.AddTextRequest(labelKeyword, delegate(string x)
-			{
-				letter.label = x;
-			}, null);
-			QuestGen.AddTextRequest(textKeyword, delegate(string x)
-			{
-				letter.text = x;
-			}, null);
+			//QuestGen.AddTextRequest(labelKeyword, delegate(string x)
+			//{
+			//	letter.label = x;
+			//}, null);
+			//QuestGen.AddTextRequest(textKeyword, delegate(string x)
+			//{
+			//	letter.text = x;
+			//}, null);
 			return letter;
 		}
 
@@ -504,14 +504,14 @@ namespace RimWorld.QuestGen
 		public static ChoiceLetter MakeLetter(string labelKeyword, string textKeyword, LetterDef def, LookTargets lookTargets, Faction relatedFaction = null, Quest quest = null)
 		{
 			ChoiceLetter letter = LetterMaker.MakeLetter("error", "error", def, lookTargets, relatedFaction, quest, null);
-			QuestGen.AddTextRequest(labelKeyword, delegate(string x)
-			{
-				letter.label = x;
-			}, null);
-			QuestGen.AddTextRequest(textKeyword, delegate(string x)
-			{
-				letter.text = x;
-			}, null);
+			//QuestGen.AddTextRequest(labelKeyword, delegate(string x)
+			//{
+			//	letter.label = x;
+			//}, null);
+			//QuestGen.AddTextRequest(textKeyword, delegate(string x)
+			//{
+			//	letter.text = x;
+			//}, null);
 			return letter;
 		}
 

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class RoyalTitlePermitDef : Def
 	{
 		
-		// (get) Token: 0x06006395 RID: 25493 RVA: 0x00228D59 File Offset: 0x00226F59
+		
 		public int CooldownTicks
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06006396 RID: 25494 RVA: 0x00228D68 File Offset: 0x00226F68
+		
 		public RoyalTitlePermitWorker Worker
 		{
 			get

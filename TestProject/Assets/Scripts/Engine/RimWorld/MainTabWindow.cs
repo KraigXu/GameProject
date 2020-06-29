@@ -8,7 +8,7 @@ namespace RimWorld
 	public abstract class MainTabWindow : Window
 	{
 		
-		// (get) Token: 0x06003672 RID: 13938 RVA: 0x001270D1 File Offset: 0x001252D1
+		
 		public virtual Vector2 RequestedTabSize
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003673 RID: 13939 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual MainTabWindowAnchor Anchor
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003674 RID: 13940 RVA: 0x001270E4 File Offset: 0x001252E4
+		
 		public override Vector2 InitialSize
 		{
 			get

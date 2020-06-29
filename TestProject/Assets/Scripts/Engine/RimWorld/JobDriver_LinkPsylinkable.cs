@@ -11,7 +11,7 @@ namespace RimWorld
 	public class JobDriver_LinkPsylinkable : JobDriver
 	{
 		
-		// (get) Token: 0x06002CA9 RID: 11433 RVA: 0x000FE0F0 File Offset: 0x000FC2F0
+		
 		private Thing PsylinkableThing
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CAA RID: 11434 RVA: 0x000FE10B File Offset: 0x000FC30B
+		
 		private CompPsylinkable Psylinkable
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CAB RID: 11435 RVA: 0x000DF673 File Offset: 0x000DD873
+		
 		private LocalTargetInfo LinkSpot
 		{
 			get

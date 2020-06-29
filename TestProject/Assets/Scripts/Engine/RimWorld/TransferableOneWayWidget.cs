@@ -13,7 +13,7 @@ namespace RimWorld
 	public class TransferableOneWayWidget
 	{
 		
-		// (get) Token: 0x06005A2B RID: 23083 RVA: 0x001E6FDC File Offset: 0x001E51DC
+		
 		public float TotalNumbersColumnsWidths
 		{
 			get
@@ -48,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005A2C RID: 23084 RVA: 0x001E7050 File Offset: 0x001E5250
+		
 		private bool AnyTransferable
 		{
 			get

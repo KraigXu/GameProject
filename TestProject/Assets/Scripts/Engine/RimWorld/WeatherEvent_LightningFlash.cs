@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WeatherEvent_LightningFlash : WeatherEvent
 	{
 		
-		// (get) Token: 0x060040CB RID: 16587 RVA: 0x0015B36D File Offset: 0x0015956D
+		
 		public override bool Expired
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040CC RID: 16588 RVA: 0x0015B37D File Offset: 0x0015957D
+		
 		public override SkyTarget SkyTarget
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040CD RID: 16589 RVA: 0x0015B398 File Offset: 0x00159598
+		
 		public override Vector2? OverrideShadowVector
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040CE RID: 16590 RVA: 0x0015B3A5 File Offset: 0x001595A5
+		
 		public override float SkyTargetLerpFactor
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060040CF RID: 16591 RVA: 0x0015B3AD File Offset: 0x001595AD
+		
 		protected float LightningBrightness
 		{
 			get

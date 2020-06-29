@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Thought_MemorySocialCumulative : Thought_MemorySocial
 	{
 		
-		// (get) Token: 0x060047D6 RID: 18390 RVA: 0x00185822 File Offset: 0x00183A22
+		
 		public override bool ShouldDiscard
 		{
 			get

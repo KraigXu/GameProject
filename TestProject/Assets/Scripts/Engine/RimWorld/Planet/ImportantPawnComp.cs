@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public abstract class ImportantPawnComp : WorldObjectComp, IThingHolder
 	{
 		
-		// (get) Token: 0x06006EEC RID: 28396
+		
 		protected abstract string PawnSaveKey { get; }
 
 		

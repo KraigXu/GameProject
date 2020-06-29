@@ -7,7 +7,7 @@ namespace Verse
 	public class TimeSlower
 	{
 		
-		// (get) Token: 0x06000803 RID: 2051 RVA: 0x0002554D File Offset: 0x0002374D
+		
 		public bool ForcedNormalSpeed
 		{
 			get

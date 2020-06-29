@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Trigger_FractionColonyDamageTaken : Trigger
 	{
 		
-		// (get) Token: 0x06003330 RID: 13104 RVA: 0x0011BE0B File Offset: 0x0011A00B
+		
 		private TriggerData_FractionColonyDamageTaken Data
 		{
 			get

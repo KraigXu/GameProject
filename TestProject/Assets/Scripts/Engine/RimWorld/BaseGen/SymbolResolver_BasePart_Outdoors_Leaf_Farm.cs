@@ -8,14 +8,14 @@ namespace RimWorld.BaseGen
 		
 		public override bool CanResolve(ResolveParams rp)
 		{
-			return base.CanResolve(rp) && BaseGen.globalSettings.basePart_buildingsResolved >= BaseGen.globalSettings.minBuildings && BaseGen.globalSettings.basePart_emptyNodesResolved >= BaseGen.globalSettings.minEmptyNodes && BaseGen.globalSettings.basePart_farmsCoverage + (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area < 0.55f && (rp.rect.Width <= 15 && rp.rect.Height <= 15) && (rp.cultivatedPlantDef != null || SymbolResolver_CultivatedPlants.DeterminePlantDef(rp.rect) != null);
+			return base.CanResolve(rp) && BaseGenCore.globalSettings.basePart_buildingsResolved >= BaseGenCore.globalSettings.minBuildings && BaseGenCore.globalSettings.basePart_emptyNodesResolved >= BaseGenCore.globalSettings.minEmptyNodes && BaseGenCore.globalSettings.basePart_farmsCoverage + (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area < 0.55f && (rp.rect.Width <= 15 && rp.rect.Height <= 15) && (rp.cultivatedPlantDef != null || SymbolResolver_CultivatedPlants.DeterminePlantDef(rp.rect) != null);
 		}
 
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("farm", rp, null);
-			BaseGen.globalSettings.basePart_farmsCoverage += (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area;
+			BaseGenCore.symbolStack.Push("farm", rp, null);
+			BaseGenCore.globalSettings.basePart_farmsCoverage += (float)rp.rect.Area / (float)BaseGenCore.globalSettings.mainRect.Area;
 		}
 
 		

@@ -8,7 +8,7 @@ namespace Verse
 	public class Command_Toggle : Command
 	{
 		
-		// (get) Token: 0x06001AE7 RID: 6887 RVA: 0x000A55CA File Offset: 0x000A37CA
+		
 		public override SoundDef CurActivateSound
 		{
 			get

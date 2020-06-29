@@ -11,7 +11,7 @@ namespace RimWorld
 	public class GenStep_Power : GenStep
 	{
 		
-		// (get) Token: 0x06003E5D RID: 15965 RVA: 0x001491E0 File Offset: 0x001473E0
+		
 		public override int SeedPart
 		{
 			get
@@ -429,7 +429,7 @@ namespace RimWorld
 		{
 			CellRect cellRect = thing.OccupiedRect();
 			bool flag = true;
-			using (CellRect.Enumerator enumerator = cellRect.GetEnumerator())
+			CellRect.Enumerator enumerator = cellRect.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

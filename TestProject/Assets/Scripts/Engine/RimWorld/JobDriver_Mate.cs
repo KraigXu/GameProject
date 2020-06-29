@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Mate : JobDriver
 	{
 		
-		// (get) Token: 0x06002ADC RID: 10972 RVA: 0x000F9EB8 File Offset: 0x000F80B8
+		
 		private Pawn Female
 		{
 			get

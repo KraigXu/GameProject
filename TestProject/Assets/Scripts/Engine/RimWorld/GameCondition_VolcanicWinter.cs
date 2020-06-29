@@ -8,7 +8,7 @@ namespace RimWorld
 	public class GameCondition_VolcanicWinter : GameCondition
 	{
 		
-		// (get) Token: 0x06003B7C RID: 15228 RVA: 0x0013A4DD File Offset: 0x001386DD
+		
 		public override int TransitionTicks
 		{
 			get

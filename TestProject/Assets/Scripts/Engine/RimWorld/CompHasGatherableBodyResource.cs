@@ -8,23 +8,23 @@ namespace RimWorld
 	public abstract class CompHasGatherableBodyResource : ThingComp
 	{
 		
-		// (get) Token: 0x0600516B RID: 20843
+		
 		protected abstract int GatherResourcesIntervalDays { get; }
 
 		
-		// (get) Token: 0x0600516C RID: 20844
+		
 		protected abstract int ResourceAmount { get; }
 
 		
-		// (get) Token: 0x0600516D RID: 20845
+		
 		protected abstract ThingDef ResourceDef { get; }
 
 		
-		// (get) Token: 0x0600516E RID: 20846
+		
 		protected abstract string SaveKey { get; }
 
 		
-		// (get) Token: 0x0600516F RID: 20847 RVA: 0x001B49FC File Offset: 0x001B2BFC
+		
 		public float Fullness
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005170 RID: 20848 RVA: 0x001B4A04 File Offset: 0x001B2C04
+		
 		protected virtual bool Active
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005171 RID: 20849 RVA: 0x001B4A16 File Offset: 0x001B2C16
+		
 		public bool ActiveAndFull
 		{
 			get

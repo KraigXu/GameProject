@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Storyteller : IExposable
 	{
 		
-		// (get) Token: 0x06003CF0 RID: 15600 RVA: 0x00142900 File Offset: 0x00140B00
+		
 		public List<IIncidentTarget> AllIncidentTargets
 		{
 			get

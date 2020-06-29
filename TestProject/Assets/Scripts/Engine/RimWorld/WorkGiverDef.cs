@@ -9,7 +9,7 @@ namespace RimWorld
 	public class WorkGiverDef : Def
 	{
 		
-		// (get) Token: 0x060063B2 RID: 25522 RVA: 0x00229152 File Offset: 0x00227352
+		
 		public WorkGiver Worker
 		{
 			get
@@ -26,10 +26,7 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.verb.NullOrEmpty())
 			{

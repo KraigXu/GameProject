@@ -7,7 +7,7 @@ namespace RimWorld
 	public class DamageWatcher : IExposable
 	{
 		
-		// (get) Token: 0x06003DC4 RID: 15812 RVA: 0x00145F24 File Offset: 0x00144124
+		
 		public float DamageTakenEver
 		{
 			get

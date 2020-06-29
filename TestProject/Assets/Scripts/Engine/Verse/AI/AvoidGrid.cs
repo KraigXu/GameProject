@@ -9,7 +9,7 @@ namespace Verse.AI
 	public class AvoidGrid
 	{
 		
-		// (get) Token: 0x06002904 RID: 10500 RVA: 0x000F212F File Offset: 0x000F032F
+		
 		public ByteGrid Grid
 		{
 			get

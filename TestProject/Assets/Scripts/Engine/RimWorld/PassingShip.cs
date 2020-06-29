@@ -8,7 +8,7 @@ namespace RimWorld
 	public class PassingShip : IExposable, ICommunicable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x060054EF RID: 21743 RVA: 0x001C4890 File Offset: 0x001C2A90
+		
 		public virtual string FullTitle
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054F0 RID: 21744 RVA: 0x001C4897 File Offset: 0x001C2A97
+		
 		public bool Departed
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054F1 RID: 21745 RVA: 0x001C48A5 File Offset: 0x001C2AA5
+		
 		public Map Map
 		{
 			get
@@ -42,7 +42,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060054F2 RID: 21746 RVA: 0x001C48BC File Offset: 0x001C2ABC
+		
 		public Faction Faction
 		{
 			get

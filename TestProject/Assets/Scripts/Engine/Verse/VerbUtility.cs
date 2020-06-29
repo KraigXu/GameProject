@@ -221,7 +221,7 @@ namespace Verse
 				return 0f;
 			}
 			int num = 0;
-			using (List<Verb>.Enumerator enumerator = allMeleeVerbs.GetEnumerator())
+			List<Verb>.Enumerator enumerator = allMeleeVerbs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -238,7 +238,7 @@ namespace Verse
 		public struct VerbPropertiesWithSource
 		{
 			
-			// (get) Token: 0x060085A1 RID: 34209 RVA: 0x002B2FDF File Offset: 0x002B11DF
+			
 			public ToolCapacityDef ToolCapacity
 			{
 				get

@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffComp_ReactOnDamage : HediffComp
 	{
 		
-		// (get) Token: 0x060010A8 RID: 4264 RVA: 0x0005EDE8 File Offset: 0x0005CFE8
+		
 		public HediffCompProperties_ReactOnDamage Props
 		{
 			get

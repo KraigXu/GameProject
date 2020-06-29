@@ -48,7 +48,7 @@ namespace RimWorld.Planet
 				}
 				else if (requiresNoEnemies)
 				{
-					using (HashSet<IAttackTarget>.Enumerator enumerator = map.attackTargetsCache.TargetsHostileToColony.GetEnumerator())
+					HashSet<IAttackTarget>.Enumerator enumerator = map.attackTargetsCache.TargetsHostileToColony.GetEnumerator();
 					{
 						while (enumerator.MoveNext())
 						{

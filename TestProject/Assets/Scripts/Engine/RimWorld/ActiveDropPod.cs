@@ -9,8 +9,8 @@ namespace RimWorld
 	public class ActiveDropPod : Thing, IActiveDropPod, IThingHolder
 	{
 		
-		// (get) Token: 0x06004EF9 RID: 20217 RVA: 0x001A95B5 File Offset: 0x001A77B5
-		// (set) Token: 0x06004EFA RID: 20218 RVA: 0x001A95BD File Offset: 0x001A77BD
+		
+		
 		public ActiveDropPodInfo Contents
 		{
 			get

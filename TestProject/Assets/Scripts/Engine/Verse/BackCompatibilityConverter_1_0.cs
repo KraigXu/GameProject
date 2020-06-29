@@ -320,16 +320,16 @@ namespace Verse
 			//}
 			//c__DisplayClass11_.worldObjects = Find.WorldObjects.AllWorldObjects;
 			//int l;
-			//Predicate<QuestPart> 9__3;
+
 			//for (l = 0; l < c__DisplayClass11_.worldObjects.Count; l = j + 1)
 			//{
 			//	if (c__DisplayClass11_.worldObjects[l].def == WorldObjectDefOf.EscapeShip && !Find.QuestManager.QuestsListForReading.Any(delegate(Quest x)
 			//	{
 			//		List<QuestPart> partsListForReading = x.PartsListForReading;
 			//		Predicate<QuestPart> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__3 = ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[l]));
+			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[l]));
 			//		}
 			//		return partsListForReading.Any(predicate);
 			//	}))
@@ -339,16 +339,16 @@ namespace Verse
 			//	j = l;
 			//}
 			//int m;
-			//Predicate<QuestPart> 9__5;
+
 			//for (m = 0; m < c__DisplayClass11_.worldObjects.Count; m = j + 1)
 			//{
 			//	if (c__DisplayClass11_.worldObjects[m] is PeaceTalks && !Find.QuestManager.QuestsListForReading.Any(delegate(Quest x)
 			//	{
 			//		List<QuestPart> partsListForReading = x.PartsListForReading;
 			//		Predicate<QuestPart> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__5 = ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[m]));
+			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[m]));
 			//		}
 			//		return partsListForReading.Any(predicate);
 			//	}))
@@ -363,7 +363,7 @@ namespace Verse
 			//	j = m;
 			//}
 			//int i;
-			//Predicate<QuestPart> 9__8;
+
 			//for (i = 0; i < c__DisplayClass11_.worldObjects.Count; i = j + 1)
 			//{
 			//	TradeRequestComp component2 = c__DisplayClass11_.worldObjects[i].GetComponent<TradeRequestComp>();
@@ -371,9 +371,9 @@ namespace Verse
 			//	{
 			//		List<QuestPart> partsListForReading = x.PartsListForReading;
 			//		Predicate<QuestPart> predicate;
-			//		if ((predicate ) == null)
+			//		if ((predicate=default ) == null)
 			//		{
-			//			predicate = (9__8 = ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[i]));
+			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[i]));
 			//		}
 			//		return partsListForReading.Any(predicate);
 			//	}))

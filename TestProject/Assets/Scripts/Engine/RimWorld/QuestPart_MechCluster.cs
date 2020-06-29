@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_MechCluster : QuestPart
 	{
 		
-		// (get) Token: 0x060039A1 RID: 14753 RVA: 0x001326EA File Offset: 0x001308EA
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+	
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				if (this.spawnedClusterPos.IsValid && this.mapParent != null && this.mapParent.HasMap)
 				{

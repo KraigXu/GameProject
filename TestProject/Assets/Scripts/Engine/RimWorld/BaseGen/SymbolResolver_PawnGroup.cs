@@ -16,14 +16,14 @@ namespace RimWorld.BaseGen
 				return false;
 			}
 			return (from x in rp.rect.Cells
-			where x.Standable(BaseGen.globalSettings.map)
+			where x.Standable(BaseGenCore.globalSettings.map)
 			select x).Any<IntVec3>();
 		}
 
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			PawnGroupMakerParms pawnGroupMakerParms = rp.pawnGroupMakerParams;
 			if (pawnGroupMakerParms == null)
 			{
@@ -39,7 +39,7 @@ namespace RimWorld.BaseGen
 				list.Add(pawn.kindDef);
 				ResolveParams resolveParams = rp;
 				resolveParams.singlePawnToSpawn = pawn;
-				BaseGen.symbolStack.Push("pawn", resolveParams, null);
+				BaseGenCore.symbolStack.Push("pawn", resolveParams, null);
 			}
 		}
 

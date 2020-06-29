@@ -75,7 +75,7 @@ namespace RimWorld
 		
 		private static IEnumerable<Widgets.DropdownMenuElement<HostilityResponseMode>> DrawResponseButton_GenerateMenu(Pawn p)
 		{
-			using (IEnumerator enumerator = Enum.GetValues(typeof(HostilityResponseMode)).GetEnumerator())
+			IEnumerator enumerator = Enum.GetValues(typeof(HostilityResponseMode)).GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -93,7 +93,7 @@ namespace RimWorld
 					}
 				}
 			}
-			IEnumerator enumerator = null;
+		
 			yield break;
 			yield break;
 		}

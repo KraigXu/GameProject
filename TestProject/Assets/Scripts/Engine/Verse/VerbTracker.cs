@@ -10,7 +10,7 @@ namespace Verse
 	public class VerbTracker : IExposable
 	{
 		
-		// (get) Token: 0x0600225C RID: 8796 RVA: 0x000D184B File Offset: 0x000CFA4B
+		
 		public List<Verb> AllVerbs
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600225D RID: 8797 RVA: 0x000D1864 File Offset: 0x000CFA64
+		
 		public Verb PrimaryVerb
 		{
 			get

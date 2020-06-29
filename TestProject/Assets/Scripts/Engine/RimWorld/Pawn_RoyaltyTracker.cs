@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.QuestGen;
+using RimWorld.QuestGenNew;
 using UnityEngine;
 using Verse;
 
@@ -13,7 +13,7 @@ namespace RimWorld
 	public class Pawn_RoyaltyTracker : IExposable
 	{
 		
-		// (get) Token: 0x06004692 RID: 18066 RVA: 0x0017D080 File Offset: 0x0017B280
+		
 		public List<RoyalTitle> AllTitlesForReading
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004693 RID: 18067 RVA: 0x0017D088 File Offset: 0x0017B288
+		
 		public List<RoyalTitle> AllTitlesInEffectForReading
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004694 RID: 18068 RVA: 0x0017D0A4 File Offset: 0x0017B2A4
+		
 		public RoyalTitle MostSeniorTitle
 		{
 			get
@@ -58,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004695 RID: 18069 RVA: 0x0017D101 File Offset: 0x0017B301
+		
 		public IEnumerable<QuestScriptDef> PossibleDecreeQuests
 		{
 			get
@@ -126,7 +126,7 @@ namespace RimWorld
 		
 		public bool HasAnyTitleIn(Faction faction)
 		{
-			using (List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator())
+			List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -142,7 +142,7 @@ namespace RimWorld
 		
 		public bool HasTitle(RoyalTitleDef title)
 		{
-			using (List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator())
+			List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -163,7 +163,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600469B RID: 18075 RVA: 0x0017D2FC File Offset: 0x0017B4FC
+		
 		public bool HasAidPermit
 		{
 			get
@@ -172,7 +172,7 @@ namespace RimWorld
 				{
 					if (!royalTitle.def.permits.NullOrEmpty<RoyalTitlePermitDef>())
 					{
-						using (List<RoyalTitlePermitDef>.Enumerator enumerator2 = royalTitle.def.permits.GetEnumerator())
+						List<RoyalTitlePermitDef>.Enumerator enumerator2 = royalTitle.def.permits.GetEnumerator();
 						{
 							while (enumerator2.MoveNext())
 							{

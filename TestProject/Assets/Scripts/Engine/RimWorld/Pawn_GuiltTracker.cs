@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Pawn_GuiltTracker : IExposable
 	{
 		
-		// (get) Token: 0x06004725 RID: 18213 RVA: 0x001811E9 File Offset: 0x0017F3E9
+		
 		public bool IsGuilty
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004726 RID: 18214 RVA: 0x001811F4 File Offset: 0x0017F3F4
+		
 		public int TicksUntilInnocent
 		{
 			get

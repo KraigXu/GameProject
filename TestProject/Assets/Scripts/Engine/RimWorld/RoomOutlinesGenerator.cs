@@ -53,9 +53,9 @@ namespace RimWorld
 					{
 						IEnumerable<RoomOutline> source = list;
 						Func<RoomOutline, bool> predicate;
-						if ((predicate ) == null)
+						if ((predicate=default ) == null)
 						{
-							predicate = (9__3 = ((RoomOutline x) => x.CellsCountIgnoringWalls > maxRoomCells));
+							predicate = ( ((RoomOutline x) => x.CellsCountIgnoringWalls > maxRoomCells));
 						}
 						RoomOutline roomOutline2 = source.Where(predicate).RandomElement<RoomOutline>();
 						bool horizontalWall = roomOutline2.rect.Height > roomOutline2.rect.Width;
@@ -73,7 +73,8 @@ namespace RimWorld
 					RoomOutlinesGenerator.Split(roomOutline, list, flag);
 				}
 			}
-			goto IL_11F;
+			//	goto IL_11F;
+			return default;
 		}
 
 		

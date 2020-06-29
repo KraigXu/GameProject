@@ -603,9 +603,9 @@ namespace Verse
 				{
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.AppendLine(localBd.defName + "\n----------------");
-					using (IEnumerator<BodyPartTagDef> enumerator2 = (from elem in localBd.AllParts.SelectMany((BodyPartRecord part) => part.def.tags)
+					IEnumerator<BodyPartTagDef> enumerator2 = (from elem in localBd.AllParts.SelectMany((BodyPartRecord part) => part.def.tags)
 					orderby elem
-					select elem).Distinct<BodyPartTagDef>().GetEnumerator())
+					select elem).Distinct<BodyPartTagDef>().GetEnumerator();
 					{
 						while (enumerator2.MoveNext())
 						{
@@ -658,7 +658,7 @@ namespace Verse
 			//foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
 			//{
 			//	ThingSetMakerDef localDef = localDef2;
-			//	Action<ThingSetMakerParams> 9__1;
+			//	
 			//	DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
 			//	{
 			//		DebugOutputsMisc.c__DisplayClass24_1 c__DisplayClass24_2 = new DebugOutputsMisc.c__DisplayClass24_1();
@@ -666,7 +666,7 @@ namespace Verse
 			//		Action<ThingSetMakerParams> generate;
 			//		if ((generate ) == null)
 			//		{
-			//			generate = (9__1 = delegate(ThingSetMakerParams parms)
+			//			generate = ( delegate(ThingSetMakerParams parms)
 			//			{
 			//				StringBuilder stringBuilder = new StringBuilder();
 			//				float num = 0f;
@@ -795,7 +795,7 @@ namespace Verse
 			//foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
 			//{
 			//	ThingSetMakerDef localDef = localDef2;
-			//	Action<ThingSetMakerParams> 9__1;
+			//	
 			//	DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
 			//	{
 			//		DebugOutputsMisc.c__DisplayClass26_1 c__DisplayClass26_2 = new DebugOutputsMisc.c__DisplayClass26_1();
@@ -803,7 +803,7 @@ namespace Verse
 			//		Action<ThingSetMakerParams> generate;
 			//		if ((generate ) == null)
 			//		{
-			//			generate = (9__1 = delegate(ThingSetMakerParams parms)
+			//			generate = ( delegate(ThingSetMakerParams parms)
 			//			{
 			//				Dictionary<ThingDef, int> counts = new Dictionary<ThingDef, int>();
 			//				for (int i = 0; i < 500; i++)
@@ -1068,7 +1068,7 @@ namespace Verse
 					IEnumerable<Backstory> enumerable = BackstoryDatabase.allBackstories.Select((KeyValuePair<string, Backstory> kvp) => kvp.Value);
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Backstories WorkTypeDef disable rates (there are " + enumerable.Count<Backstory>() + " backstories):");
-					using (IEnumerator<WorkTypeDef> enumerator3 = DefDatabase<WorkTypeDef>.AllDefs.GetEnumerator())
+					IEnumerator<WorkTypeDef> enumerator3 = DefDatabase<WorkTypeDef>.AllDefs.GetEnumerator();
 					{
 						while (enumerator3.MoveNext())
 						{

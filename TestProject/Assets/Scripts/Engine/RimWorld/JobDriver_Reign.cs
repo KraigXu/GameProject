@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Reign : JobDriver_Meditate
 	{
 		
-		// (get) Token: 0x06002DB1 RID: 11697 RVA: 0x0010132E File Offset: 0x000FF52E
+		
 		private Building_Throne Throne
 		{
 			get

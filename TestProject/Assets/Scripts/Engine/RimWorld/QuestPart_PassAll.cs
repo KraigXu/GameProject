@@ -8,7 +8,7 @@ namespace RimWorld
 	public class QuestPart_PassAll : QuestPart
 	{
 		
-		// (get) Token: 0x06003843 RID: 14403 RVA: 0x0012D7BD File Offset: 0x0012B9BD
+		
 		private bool AllSignalsReceived
 		{
 			get

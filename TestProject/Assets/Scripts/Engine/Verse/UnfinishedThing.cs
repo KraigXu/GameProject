@@ -10,8 +10,8 @@ namespace Verse
 	public class UnfinishedThing : ThingWithComps
 	{
 		
-		// (get) Token: 0x0600171C RID: 5916 RVA: 0x00084D10 File Offset: 0x00082F10
-		// (set) Token: 0x0600171D RID: 5917 RVA: 0x00084D18 File Offset: 0x00082F18
+		
+		
 		public Pawn Creator
 		{
 			get
@@ -31,7 +31,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600171E RID: 5918 RVA: 0x00084D3C File Offset: 0x00082F3C
+		
 		public RecipeDef Recipe
 		{
 			get
@@ -41,8 +41,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600171F RID: 5919 RVA: 0x00084D44 File Offset: 0x00082F44
-		// (set) Token: 0x06001720 RID: 5920 RVA: 0x00084D78 File Offset: 0x00082F78
+		
+		
 		public Bill_ProductionWithUft BoundBill
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001721 RID: 5921 RVA: 0x00084DD4 File Offset: 0x00082FD4
+		
 		public Thing BoundWorkTable
 		{
 			get
@@ -96,7 +96,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001722 RID: 5922 RVA: 0x00084E0C File Offset: 0x0008300C
+		
 		public override string LabelNoCount
 		{
 			get
@@ -114,7 +114,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001723 RID: 5923 RVA: 0x00084E9F File Offset: 0x0008309F
+		
 		public override string DescriptionDetailed
 		{
 			get
@@ -128,7 +128,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001724 RID: 5924 RVA: 0x00084EC0 File Offset: 0x000830C0
+		
 		public override string DescriptionFlavor
 		{
 			get
@@ -142,7 +142,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001725 RID: 5925 RVA: 0x00084EE1 File Offset: 0x000830E1
+		
 		public bool Initialized
 		{
 			get

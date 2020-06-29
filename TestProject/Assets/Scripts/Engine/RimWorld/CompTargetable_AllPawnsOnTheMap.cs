@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompTargetable_AllPawnsOnTheMap : CompTargetable
 	{
 		
-		// (get) Token: 0x06005480 RID: 21632 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		protected override bool PlayerChoosesTarget
 		{
 			get

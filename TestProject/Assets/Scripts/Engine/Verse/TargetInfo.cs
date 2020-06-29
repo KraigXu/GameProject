@@ -7,7 +7,7 @@ namespace Verse
 	public struct TargetInfo : IEquatable<TargetInfo>
 	{
 		
-		// (get) Token: 0x06001F39 RID: 7993 RVA: 0x000C0A39 File Offset: 0x000BEC39
+		
 		public bool IsValid
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3A RID: 7994 RVA: 0x000C0A50 File Offset: 0x000BEC50
+		
 		public bool HasThing
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3B RID: 7995 RVA: 0x000C0A5B File Offset: 0x000BEC5B
+		
 		public Thing Thing
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3C RID: 7996 RVA: 0x000C0A63 File Offset: 0x000BEC63
+		
 		public bool ThingDestroyed
 		{
 			get
@@ -47,7 +47,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3D RID: 7997 RVA: 0x000C0A7A File Offset: 0x000BEC7A
+		
 		public static TargetInfo Invalid
 		{
 			get
@@ -57,7 +57,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3E RID: 7998 RVA: 0x000C0A88 File Offset: 0x000BEC88
+		
 		public string Label
 		{
 			get
@@ -71,7 +71,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F3F RID: 7999 RVA: 0x000C0AAD File Offset: 0x000BECAD
+		
 		public IntVec3 Cell
 		{
 			get
@@ -85,7 +85,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F40 RID: 8000 RVA: 0x000C0ACC File Offset: 0x000BECCC
+		
 		public int Tile
 		{
 			get
@@ -103,7 +103,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F41 RID: 8001 RVA: 0x000C0B20 File Offset: 0x000BED20
+		
 		public Vector3 CenterVector3
 		{
 			get
@@ -113,7 +113,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F42 RID: 8002 RVA: 0x000C0B40 File Offset: 0x000BED40
+		
 		public Map Map
 		{
 			get

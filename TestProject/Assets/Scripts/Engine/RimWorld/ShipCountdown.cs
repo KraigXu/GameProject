@@ -12,7 +12,7 @@ namespace RimWorld
 	public static class ShipCountdown
 	{
 		
-		// (get) Token: 0x06005462 RID: 21602 RVA: 0x001C2A30 File Offset: 0x001C0C30
+		
 		public static bool CountingDown
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 					}
 				}
 				GameVictoryUtility.ShowCredits(GameVictoryUtility.MakeEndCredits("GameOverShipLaunchedIntro".Translate(), "GameOverShipLaunchedEnding".Translate(), stringBuilder.ToString()));
-				using (List<Building>.Enumerator enumerator = list.GetEnumerator())
+				List<Building>.Enumerator enumerator = list.GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

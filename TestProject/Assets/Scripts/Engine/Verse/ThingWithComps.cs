@@ -10,7 +10,7 @@ namespace Verse
 	public class ThingWithComps : Thing
 	{
 		
-		// (get) Token: 0x060016EC RID: 5868 RVA: 0x0008412F File Offset: 0x0008232F
+		
 		public List<ThingComp> AllComps
 		{
 			get
@@ -24,8 +24,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060016ED RID: 5869 RVA: 0x00084148 File Offset: 0x00082348
-		// (set) Token: 0x060016EE RID: 5870 RVA: 0x00084174 File Offset: 0x00082374
+		
+		
 		public override Color DrawColor
 		{
 			get
@@ -44,7 +44,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060016EF RID: 5871 RVA: 0x00084180 File Offset: 0x00082380
+		
 		public override string LabelNoCount
 		{
 			get
@@ -65,7 +65,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060016F0 RID: 5872 RVA: 0x000841C8 File Offset: 0x000823C8
+		
 		public override string DescriptionFlavor
 		{
 			get
@@ -539,10 +539,6 @@ namespace Verse
 		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.n__0(selPawn))
-			{
-				yield return floatMenuOption;
-			}
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (this.comps != null)
 			{
@@ -668,10 +664,7 @@ namespace Verse
 		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
-			foreach (StatDrawEntry statDrawEntry in this.n__1())
-			{
-				yield return statDrawEntry;
-			}
+
 			IEnumerator<StatDrawEntry> enumerator = null;
 			if (this.comps != null)
 			{

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Trigger_KidnapVictimPresent : Trigger
 	{
 		
-		// (get) Token: 0x06003338 RID: 13112 RVA: 0x0011BF4D File Offset: 0x0011A14D
+		
 		private TriggerData_PawnCycleInd Data
 		{
 			get

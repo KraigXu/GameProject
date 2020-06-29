@@ -43,7 +43,7 @@ namespace RimWorld
 		
 		private static IEnumerable<Widgets.DropdownMenuElement<DrugPolicy>> Button_GenerateMenu(Pawn pawn)
 		{
-			using (List<DrugPolicy>.Enumerator enumerator = Current.Game.drugPolicyDatabase.AllPolicies.GetEnumerator())
+			List<DrugPolicy>.Enumerator enumerator = Current.Game.drugPolicyDatabase.AllPolicies.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -58,7 +58,7 @@ namespace RimWorld
 					};
 				}
 			}
-			List<DrugPolicy>.Enumerator enumerator = default(List<DrugPolicy>.Enumerator);
+			
 			yield break;
 			yield break;
 		}

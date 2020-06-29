@@ -10,7 +10,7 @@ namespace RimWorld
 	public class GameCondition : IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06003B14 RID: 15124 RVA: 0x00138FBC File Offset: 0x001371BC
+		
 		protected Map SingleMap
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B15 RID: 15125 RVA: 0x00138FC9 File Offset: 0x001371C9
+		
 		public virtual string Label
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B16 RID: 15126 RVA: 0x00138FD6 File Offset: 0x001371D6
+		
 		public virtual string LabelCap
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B17 RID: 15127 RVA: 0x00138FE9 File Offset: 0x001371E9
+		
 		public virtual string LetterText
 		{
 			get
@@ -50,7 +50,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B18 RID: 15128 RVA: 0x00138FF6 File Offset: 0x001371F6
+		
 		public virtual bool Expired
 		{
 			get
@@ -60,7 +60,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B19 RID: 15129 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool ElectricityDisabled
 		{
 			get
@@ -70,7 +70,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B1A RID: 15130 RVA: 0x0013901B File Offset: 0x0013721B
+		
 		public int TicksPassed
 		{
 			get
@@ -80,7 +80,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B1B RID: 15131 RVA: 0x0013902E File Offset: 0x0013722E
+		
 		public virtual string Description
 		{
 			get
@@ -90,7 +90,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B1C RID: 15132 RVA: 0x0013903B File Offset: 0x0013723B
+		
 		public virtual int TransitionTicks
 		{
 			get
@@ -100,8 +100,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B1D RID: 15133 RVA: 0x00139042 File Offset: 0x00137242
-		// (set) Token: 0x06003B1E RID: 15134 RVA: 0x0013906F File Offset: 0x0013726F
+		
+		
 		public int TicksLeft
 		{
 			get
@@ -120,8 +120,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B1F RID: 15135 RVA: 0x0013907F File Offset: 0x0013727F
-		// (set) Token: 0x06003B20 RID: 15136 RVA: 0x00139087 File Offset: 0x00137287
+		
+		
 		public bool Permanent
 		{
 			get
@@ -139,8 +139,8 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B21 RID: 15137 RVA: 0x0013909A File Offset: 0x0013729A
-		// (set) Token: 0x06003B22 RID: 15138 RVA: 0x001390C0 File Offset: 0x001372C0
+		
+		
 		public int Duration
 		{
 			get
@@ -160,7 +160,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B23 RID: 15139 RVA: 0x001390D0 File Offset: 0x001372D0
+		
 		public virtual string TooltipString
 		{
 			get
@@ -213,7 +213,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003B24 RID: 15140 RVA: 0x001392C4 File Offset: 0x001374C4
+		
 		public List<Map> AffectedMaps
 		{
 			get

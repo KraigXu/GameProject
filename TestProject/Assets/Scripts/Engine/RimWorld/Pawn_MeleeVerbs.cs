@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Pawn_MeleeVerbs : IExposable
 	{
 		
-		// (get) Token: 0x06004610 RID: 17936 RVA: 0x0017A721 File Offset: 0x00178921
+		
 		public Pawn Pawn
 		{
 			get
@@ -185,7 +185,7 @@ namespace RimWorld
 						}
 					}
 				}
-				using (IEnumerator<Verb> enumerator = this.pawn.health.hediffSet.GetHediffsVerbs().GetEnumerator())
+				IEnumerator<Verb> enumerator = this.pawn.health.hediffSet.GetHediffsVerbs().GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{

@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class ListerThings
 	{
 		
-		// (get) Token: 0x06000AC9 RID: 2761 RVA: 0x00039287 File Offset: 0x00037487
+		
 		public List<Thing> AllThings
 		{
 			get

@@ -8,7 +8,7 @@ namespace RimWorld
 	public class InspirationDef : Def
 	{
 		
-		// (get) Token: 0x0600364C RID: 13900 RVA: 0x00126562 File Offset: 0x00124762
+		
 		public InspirationWorker Worker
 		{
 			get

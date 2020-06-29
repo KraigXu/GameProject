@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompUseEffect_Artifact : CompUseEffect
 	{
 		
-		// (get) Token: 0x060054B3 RID: 21683 RVA: 0x001C3A25 File Offset: 0x001C1C25
+		
 		public CompProperties_UseEffectArtifact Props
 		{
 			get

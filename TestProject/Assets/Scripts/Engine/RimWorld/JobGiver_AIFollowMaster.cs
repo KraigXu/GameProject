@@ -7,7 +7,7 @@ namespace RimWorld
 	public class JobGiver_AIFollowMaster : JobGiver_AIFollowPawn
 	{
 		
-		// (get) Token: 0x06002E54 RID: 11860 RVA: 0x000FAF75 File Offset: 0x000F9175
+		
 		protected override int FollowJobExpireInterval
 		{
 			get

@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Dialog_AddPreferredName : Window
 	{
 		
-		// (get) Token: 0x06005879 RID: 22649 RVA: 0x001D599F File Offset: 0x001D3B9F
+		
 		public override Vector2 InitialSize
 		{
 			get

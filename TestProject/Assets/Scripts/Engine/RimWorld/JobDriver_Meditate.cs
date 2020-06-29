@@ -11,7 +11,7 @@ namespace RimWorld
 	public class JobDriver_Meditate : JobDriver
 	{
 		
-		// (get) Token: 0x06002DA3 RID: 11683 RVA: 0x00100E98 File Offset: 0x000FF098
+		
 		public LocalTargetInfo Focus
 		{
 			get
@@ -21,7 +21,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002DA4 RID: 11684 RVA: 0x00100EA8 File Offset: 0x000FF0A8
+		
 		private bool FromBed
 		{
 			get

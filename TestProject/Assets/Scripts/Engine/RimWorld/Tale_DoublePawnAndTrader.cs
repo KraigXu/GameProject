@@ -35,10 +35,8 @@ namespace RimWorld
 		
 		protected override IEnumerable<Rule> SpecialTextGenerationRules()
 		{
-			foreach (Rule rule in this.n__0())
-			{
-				yield return rule;
-			}
+
+
 			IEnumerator<Rule> enumerator = null;
 			foreach (Rule rule2 in this.traderData.GetRules("TRADER"))
 			{

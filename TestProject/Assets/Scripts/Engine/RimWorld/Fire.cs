@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Fire : AttachableThing, ISizeReporter
 	{
 		
-		// (get) Token: 0x06004DF6 RID: 19958 RVA: 0x001A387B File Offset: 0x001A1A7B
+		
 		public int TicksSinceSpawn
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DF7 RID: 19959 RVA: 0x001A3883 File Offset: 0x001A1A83
+		
 		public override string Label
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DF8 RID: 19960 RVA: 0x001A38C4 File Offset: 0x001A1AC4
+		
 		public override string InspectStringAddon
 		{
 			get
@@ -44,7 +44,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004DF9 RID: 19961 RVA: 0x001A3924 File Offset: 0x001A1B24
+		
 		private float SpreadInterval
 		{
 			get

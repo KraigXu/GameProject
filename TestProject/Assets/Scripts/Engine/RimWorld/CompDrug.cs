@@ -7,7 +7,7 @@ namespace RimWorld
 	public class CompDrug : ThingComp
 	{
 		
-		// (get) Token: 0x060050F5 RID: 20725 RVA: 0x001B29FB File Offset: 0x001B0BFB
+		
 		public CompProperties_Drug Props
 		{
 			get

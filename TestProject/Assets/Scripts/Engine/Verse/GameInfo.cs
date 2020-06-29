@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class GameInfo : IExposable
 	{
 		
-		// (get) Token: 0x060007A8 RID: 1960 RVA: 0x00023B14 File Offset: 0x00021D14
+		
 		public float RealPlayTimeInteracting
 		{
 			get

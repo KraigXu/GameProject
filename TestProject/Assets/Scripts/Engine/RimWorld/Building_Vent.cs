@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Building_Vent : Building_TempControl
 	{
 		
-		// (get) Token: 0x06004C34 RID: 19508 RVA: 0x001997C0 File Offset: 0x001979C0
+		
 		public override Graphic Graphic
 		{
 			get

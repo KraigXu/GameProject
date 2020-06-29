@@ -9,7 +9,7 @@ namespace RimWorld
 	public class ApparelProperties
 	{
 		
-		// (get) Token: 0x060034E9 RID: 13545 RVA: 0x00121EF8 File Offset: 0x001200F8
+		
 		public ApparelLayerDef LastLayer
 		{
 			get
@@ -24,7 +24,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060034EA RID: 13546 RVA: 0x00121F38 File Offset: 0x00120138
+		
 		public float HumanBodyCoverage
 		{
 			get

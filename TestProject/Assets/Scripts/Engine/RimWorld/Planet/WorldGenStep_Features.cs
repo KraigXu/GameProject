@@ -8,7 +8,7 @@ namespace RimWorld.Planet
 	public class WorldGenStep_Features : WorldGenStep
 	{
 		
-		// (get) Token: 0x06006B06 RID: 27398 RVA: 0x0025567C File Offset: 0x0025387C
+		
 		public override int SeedPart
 		{
 			get

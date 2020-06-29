@@ -7,7 +7,7 @@ namespace Verse
 	public sealed class ThingDefCountRangeClass : IExposable
 	{
 		
-		// (get) Token: 0x06001F99 RID: 8089 RVA: 0x000C178B File Offset: 0x000BF98B
+		
 		public int Min
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F9A RID: 8090 RVA: 0x000C1798 File Offset: 0x000BF998
+		
 		public int Max
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F9B RID: 8091 RVA: 0x000C17A5 File Offset: 0x000BF9A5
+		
 		public int TrueMin
 		{
 			get
@@ -37,7 +37,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001F9C RID: 8092 RVA: 0x000C17B2 File Offset: 0x000BF9B2
+		
 		public int TrueMax
 		{
 			get

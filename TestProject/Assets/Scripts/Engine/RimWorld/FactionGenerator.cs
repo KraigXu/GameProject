@@ -14,7 +14,7 @@ namespace RimWorld
 		public static void GenerateFactionsIntoWorld()
 		{
 			int num = 0;
-			using (IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator())
+			IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -61,7 +61,7 @@ namespace RimWorld
 		
 		public static void EnsureRequiredEnemies(Faction player)
 		{
-			using (IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator())
+			IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

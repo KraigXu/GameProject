@@ -8,7 +8,7 @@ namespace RimWorld
 	public class ITab_Pawn_Health : ITab
 	{
 		
-		// (get) Token: 0x06005BBE RID: 23486 RVA: 0x001FAC58 File Offset: 0x001F8E58
+		
 		private Pawn PawnForHealth
 		{
 			get

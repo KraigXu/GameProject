@@ -8,7 +8,7 @@ namespace Verse
 	public struct FloatRange : IEquatable<FloatRange>
 	{
 		
-		// (get) Token: 0x0600009D RID: 157 RVA: 0x0000460E File Offset: 0x0000280E
+		
 		public static FloatRange Zero
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600009E RID: 158 RVA: 0x0000461F File Offset: 0x0000281F
+		
 		public static FloatRange One
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600009F RID: 159 RVA: 0x00004630 File Offset: 0x00002830
+		
 		public static FloatRange ZeroToOne
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000A0 RID: 160 RVA: 0x00004641 File Offset: 0x00002841
+		
 		public float Average
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000A1 RID: 161 RVA: 0x00004656 File Offset: 0x00002856
+		
 		public float RandomInRange
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000A2 RID: 162 RVA: 0x00004669 File Offset: 0x00002869
+		
 		public float TrueMin
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000A3 RID: 163 RVA: 0x0000467C File Offset: 0x0000287C
+		
 		public float TrueMax
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060000A4 RID: 164 RVA: 0x0000468F File Offset: 0x0000288F
+		
 		public float Span
 		{
 			get

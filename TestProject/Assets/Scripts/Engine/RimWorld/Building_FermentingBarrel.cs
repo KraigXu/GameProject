@@ -11,8 +11,8 @@ namespace RimWorld
 	public class Building_FermentingBarrel : Building
 	{
 		
-		// (get) Token: 0x06004CBC RID: 19644 RVA: 0x0019BD6A File Offset: 0x00199F6A
-		// (set) Token: 0x06004CBD RID: 19645 RVA: 0x0019BD72 File Offset: 0x00199F72
+		
+		
 		public float Progress
 		{
 			get
@@ -31,7 +31,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CBE RID: 19646 RVA: 0x0019BD8C File Offset: 0x00199F8C
+		
 		private Material BarFilledMat
 		{
 			get
@@ -45,7 +45,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CBF RID: 19647 RVA: 0x0019BDC3 File Offset: 0x00199FC3
+		
 		public int SpaceLeftForWort
 		{
 			get
@@ -59,7 +59,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CC0 RID: 19648 RVA: 0x0019BDD8 File Offset: 0x00199FD8
+		
 		private bool Empty
 		{
 			get
@@ -69,7 +69,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CC1 RID: 19649 RVA: 0x0019BDE6 File Offset: 0x00199FE6
+		
 		public bool Fermented
 		{
 			get
@@ -79,7 +79,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CC2 RID: 19650 RVA: 0x0019BE04 File Offset: 0x0019A004
+		
 		private float CurrentTempProgressSpeedFactor
 		{
 			get
@@ -99,7 +99,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CC3 RID: 19651 RVA: 0x0019BE5C File Offset: 0x0019A05C
+		
 		private float ProgressPerTickAtCurrentTemp
 		{
 			get
@@ -109,7 +109,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004CC4 RID: 19652 RVA: 0x0019BE6A File Offset: 0x0019A06A
+		
 		private int EstimatedTicksLeft
 		{
 			get

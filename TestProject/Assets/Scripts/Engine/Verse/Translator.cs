@@ -21,10 +21,10 @@ namespace Verse
 			{
 				return result;
 			}
-			if (backupKey.TryTranslate(out result))
-			{
-				return result;
-			}
+			//if (backupKey.TryTranslate(out result))
+			//{
+			//	return result;
+			//}
 			return key.Translate();
 		}
 

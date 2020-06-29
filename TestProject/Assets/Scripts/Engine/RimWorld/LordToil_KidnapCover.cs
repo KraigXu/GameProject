@@ -9,7 +9,7 @@ namespace RimWorld
 	public class LordToil_KidnapCover : LordToil_DoOpportunisticTaskOrCover
 	{
 		
-		// (get) Token: 0x060032B0 RID: 12976 RVA: 0x00119DA7 File Offset: 0x00117FA7
+		
 		protected override DutyDef DutyDef
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032B1 RID: 12977 RVA: 0x00119DAE File Offset: 0x00117FAE
+		
 		public override bool ForceHighStoryDanger
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060032B2 RID: 12978 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowSelfTend
 		{
 			get

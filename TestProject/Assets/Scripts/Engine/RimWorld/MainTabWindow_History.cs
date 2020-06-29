@@ -13,7 +13,7 @@ namespace RimWorld
 	public class MainTabWindow_History : MainTabWindow
 	{
 		
-		// (get) Token: 0x06005C53 RID: 23635 RVA: 0x001FDEDF File Offset: 0x001FC0DF
+		
 		public override Vector2 RequestedTabSize
 		{
 			get

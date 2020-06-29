@@ -10,7 +10,7 @@ namespace Verse
 	public class BattleLogEntry_MeleeCombat : LogEntry_DamageResult
 	{
 		
-		// (get) Token: 0x0600073D RID: 1853 RVA: 0x000212AE File Offset: 0x0001F4AE
+		
 		private string InitiatorName
 		{
 			get
@@ -24,7 +24,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600073E RID: 1854 RVA: 0x000212C9 File Offset: 0x0001F4C9
+		
 		private string RecipientName
 		{
 			get
@@ -38,8 +38,8 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600073F RID: 1855 RVA: 0x000212E4 File Offset: 0x0001F4E4
-		// (set) Token: 0x06000740 RID: 1856 RVA: 0x000212EC File Offset: 0x0001F4EC
+		
+		
 		public RulePackDef RuleDef
 		{
 			get

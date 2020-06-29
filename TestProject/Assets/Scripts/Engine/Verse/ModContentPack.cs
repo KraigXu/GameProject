@@ -13,7 +13,7 @@ namespace Verse
 	public class ModContentPack
 	{
 		
-		// (get) Token: 0x06000E23 RID: 3619 RVA: 0x000510D2 File Offset: 0x0004F2D2
+		
 		public string RootDir
 		{
 			get
@@ -23,7 +23,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E24 RID: 3620 RVA: 0x000510DF File Offset: 0x0004F2DF
+		
 		public string PackageId
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E25 RID: 3621 RVA: 0x000510E7 File Offset: 0x0004F2E7
+		
 		public string PackageIdPlayerFacing
 		{
 			get
@@ -43,7 +43,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E26 RID: 3622 RVA: 0x000510EF File Offset: 0x0004F2EF
+		
 		public string FolderName
 		{
 			get
@@ -53,7 +53,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E27 RID: 3623 RVA: 0x000510FC File Offset: 0x0004F2FC
+		
 		public string Name
 		{
 			get
@@ -63,7 +63,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E28 RID: 3624 RVA: 0x00051104 File Offset: 0x0004F304
+		
 		public int OverwritePriority
 		{
 			get
@@ -77,7 +77,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E29 RID: 3625 RVA: 0x00051111 File Offset: 0x0004F311
+		
 		public bool IsCoreMod
 		{
 			get
@@ -87,7 +87,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E2A RID: 3626 RVA: 0x00051123 File Offset: 0x0004F323
+		
 		public IEnumerable<Def> AllDefs
 		{
 			get
@@ -97,7 +97,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E2B RID: 3627 RVA: 0x0005112B File Offset: 0x0004F32B
+		
 		public IEnumerable<PatchOperation> Patches
 		{
 			get

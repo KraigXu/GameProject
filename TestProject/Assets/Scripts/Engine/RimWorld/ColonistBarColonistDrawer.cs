@@ -12,7 +12,7 @@ namespace RimWorld
 	public class ColonistBarColonistDrawer
 	{
 		
-		// (get) Token: 0x060056FE RID: 22270 RVA: 0x001CE6A7 File Offset: 0x001CC8A7
+		
 		private ColonistBar ColonistBar
 		{
 			get

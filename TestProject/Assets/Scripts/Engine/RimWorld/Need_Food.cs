@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Food : Need
 	{
 		
-		// (get) Token: 0x06004563 RID: 17763 RVA: 0x0017706A File Offset: 0x0017526A
+		
 		public bool Starving
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004564 RID: 17764 RVA: 0x00177075 File Offset: 0x00175275
+		
 		public float PercentageThreshUrgentlyHungry
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004565 RID: 17765 RVA: 0x0017708D File Offset: 0x0017528D
+		
 		public float PercentageThreshHungry
 		{
 			get
@@ -39,7 +39,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004566 RID: 17766 RVA: 0x001770A5 File Offset: 0x001752A5
+		
 		public float NutritionBetweenHungryAndFed
 		{
 			get
@@ -49,7 +49,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004567 RID: 17767 RVA: 0x001770BA File Offset: 0x001752BA
+		
 		public HungerCategory CurCategory
 		{
 			get
@@ -71,7 +71,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004568 RID: 17768 RVA: 0x001770EC File Offset: 0x001752EC
+		
 		public float FoodFallPerTick
 		{
 			get
@@ -81,7 +81,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004569 RID: 17769 RVA: 0x001770FB File Offset: 0x001752FB
+		
 		public int TicksUntilHungryWhenFed
 		{
 			get
@@ -91,7 +91,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456A RID: 17770 RVA: 0x00177111 File Offset: 0x00175311
+		
 		public int TicksUntilHungryWhenFedIgnoringMalnutrition
 		{
 			get
@@ -101,7 +101,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456B RID: 17771 RVA: 0x0010E022 File Offset: 0x0010C222
+		
 		public override int GUIChangeArrow
 		{
 			get
@@ -111,7 +111,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456C RID: 17772 RVA: 0x00177127 File Offset: 0x00175327
+		
 		public override float MaxLevel
 		{
 			get
@@ -121,7 +121,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456D RID: 17773 RVA: 0x0017714A File Offset: 0x0017534A
+		
 		public float NutritionWanted
 		{
 			get
@@ -131,7 +131,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456E RID: 17774 RVA: 0x0017715C File Offset: 0x0017535C
+		
 		private float HungerRate
 		{
 			get
@@ -141,7 +141,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600456F RID: 17775 RVA: 0x001771F4 File Offset: 0x001753F4
+		
 		private float HungerRateIgnoringMalnutrition
 		{
 			get
@@ -151,7 +151,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004570 RID: 17776 RVA: 0x00177290 File Offset: 0x00175490
+		
 		public int TicksStarving
 		{
 			get
@@ -161,7 +161,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004571 RID: 17777 RVA: 0x001772A9 File Offset: 0x001754A9
+		
 		private float MalnutritionSeverityPerInterval
 		{
 			get

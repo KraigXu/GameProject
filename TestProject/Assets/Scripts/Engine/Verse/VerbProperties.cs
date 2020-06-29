@@ -9,7 +9,7 @@ namespace Verse
 	public class VerbProperties
 	{
 		
-		// (get) Token: 0x0600053A RID: 1338 RVA: 0x0001A587 File Offset: 0x00018787
+		
 		public bool CausesTimeSlowdown
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600053B RID: 1339 RVA: 0x0001A599 File Offset: 0x00018799
+		
 		public bool LaunchesProjectile
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600053C RID: 1340 RVA: 0x0001A5B0 File Offset: 0x000187B0
+		
 		public string AccuracySummaryString
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600053D RID: 1341 RVA: 0x0001A618 File Offset: 0x00018818
+		
 		public bool IsMeleeAttack
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600053E RID: 1342 RVA: 0x0001A630 File Offset: 0x00018830
+		
 		public bool CausesExplosion
 		{
 			get

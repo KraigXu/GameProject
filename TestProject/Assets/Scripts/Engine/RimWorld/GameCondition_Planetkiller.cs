@@ -9,7 +9,7 @@ namespace RimWorld
 	public class GameCondition_Planetkiller : GameCondition
 	{
 		
-		// (get) Token: 0x06003B5F RID: 15199 RVA: 0x00139DB4 File Offset: 0x00137FB4
+		
 		public override string TooltipString
 		{
 			get

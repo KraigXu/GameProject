@@ -8,7 +8,7 @@ namespace Verse
 	public class HediffComp_SeverityPerDay : HediffComp
 	{
 		
-		// (get) Token: 0x060010EF RID: 4335 RVA: 0x0005FCAD File Offset: 0x0005DEAD
+		
 		private HediffCompProperties_SeverityPerDay Props
 		{
 			get
@@ -36,7 +36,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010F2 RID: 4338 RVA: 0x0005FD04 File Offset: 0x0005DF04
+		
 		public override string CompLabelInBracketsExtra
 		{
 			get
@@ -50,7 +50,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060010F3 RID: 4339 RVA: 0x0005FD78 File Offset: 0x0005DF78
+		
 		public override string CompTipStringExtra
 		{
 			get

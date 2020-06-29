@@ -9,7 +9,7 @@ namespace RimWorld
 	public class JobDriver_Resurrect : JobDriver
 	{
 		
-		// (get) Token: 0x06002CF9 RID: 11513 RVA: 0x000FEC1C File Offset: 0x000FCE1C
+		
 		private Corpse Corpse
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06002CFA RID: 11514 RVA: 0x000FEC44 File Offset: 0x000FCE44
+		
 		private Thing Item
 		{
 			get

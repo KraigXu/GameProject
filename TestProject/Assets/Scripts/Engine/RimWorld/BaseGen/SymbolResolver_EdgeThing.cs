@@ -105,7 +105,7 @@ namespace RimWorld.BaseGen
 			rp2.rect = CellRect.SingleCell(invalid);
 			rp2.thingRot = new Rot4?(value);
 			rp2.singleThingDef = thingDef;
-			BaseGen.symbolStack.Push("thing", rp2, null);
+			BaseGenCore.symbolStack.Push("thing", rp2, null);
 		}
 
 		
@@ -140,7 +140,7 @@ namespace RimWorld.BaseGen
 		
 		private bool TryFindSpawnCell(CellRect rect, ThingDef thingDef, Rot4 rot, bool mustReachMapEdge, out IntVec3 spawnCell)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			IntVec3 zero = IntVec3.Zero;
 			IntVec2 size = thingDef.size;
 			GenAdj.AdjustForRotation(ref zero, ref size, rot);
@@ -151,9 +151,9 @@ namespace RimWorld.BaseGen
 			{
 				IEnumerable<IntVec3> cells = x.Cells;
 				Func<IntVec3, bool> predicate;
-				if ((predicate ) == null)
+				if ((predicate=default ) == null)
 				{
-					predicate = (9__3 = ((IntVec3 y) => y.Standable(map)));
+					predicate = ( ((IntVec3 y) => y.Standable(map)));
 				}
 				if (cells.All(predicate))
 				{
@@ -194,7 +194,7 @@ namespace RimWorld.BaseGen
 		
 		private int GetDistanceSquaredToExistingEdgeThing(IntVec3 cell, CellRect rect, ThingDef thingDef)
 		{
-			Map map = BaseGen.globalSettings.map;
+			Map map = BaseGenCore.globalSettings.map;
 			int num = int.MaxValue;
 			foreach (IntVec3 intVec in rect.EdgeCells)
 			{

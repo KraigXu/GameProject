@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Designator_Dropdown : Designator
 	{
 		
-		// (get) Token: 0x0600577B RID: 22395 RVA: 0x001D12FD File Offset: 0x001CF4FD
+		
 		public override string Label
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600577C RID: 22396 RVA: 0x001D1323 File Offset: 0x001CF523
+		
 		public override string Desc
 		{
 			get
@@ -30,7 +30,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600577D RID: 22397 RVA: 0x001D1330 File Offset: 0x001CF530
+		
 		public override Color IconDrawColor
 		{
 			get
@@ -40,7 +40,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600577E RID: 22398 RVA: 0x001D1340 File Offset: 0x001CF540
+		
 		public override bool Visible
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600577F RID: 22399 RVA: 0x001D1379 File Offset: 0x001CF579
+		
 		public List<Designator> Elements
 		{
 			get
@@ -67,7 +67,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005780 RID: 22400 RVA: 0x001D1381 File Offset: 0x001CF581
+		
 		public override float PanelReadoutTitleExtraRightMargin
 		{
 			get
@@ -133,7 +133,7 @@ namespace RimWorld
 				{
 					Action action = delegate
 					{
-						this.n__0(ev);
+						//this.n__0(ev);
 						Find.DesignatorManager.Select(des);
 						this.SetActiveDesignator(des, true);
 					};

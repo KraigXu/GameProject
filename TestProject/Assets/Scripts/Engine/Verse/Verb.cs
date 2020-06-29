@@ -12,7 +12,7 @@ namespace Verse
 	public abstract class Verb : ITargetingSource, IExposable, ILoadReferenceable
 	{
 		
-		// (get) Token: 0x06002218 RID: 8728 RVA: 0x000D01BE File Offset: 0x000CE3BE
+		
 		public IVerbOwner DirectOwner
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002219 RID: 8729 RVA: 0x000D01CB File Offset: 0x000CE3CB
+		
 		public ImplementOwnerTypeDef ImplementOwnerType
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221A RID: 8730 RVA: 0x000D01DD File Offset: 0x000CE3DD
+		
 		public CompEquippable EquipmentCompSource
 		{
 			get
@@ -42,7 +42,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221B RID: 8731 RVA: 0x000D01EA File Offset: 0x000CE3EA
+		
 		public ThingWithComps EquipmentSource
 		{
 			get
@@ -56,7 +56,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221C RID: 8732 RVA: 0x000D0201 File Offset: 0x000CE401
+		
 		public HediffComp_VerbGiver HediffCompSource
 		{
 			get
@@ -66,7 +66,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221D RID: 8733 RVA: 0x000D020E File Offset: 0x000CE40E
+		
 		public Hediff HediffSource
 		{
 			get
@@ -80,7 +80,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221E RID: 8734 RVA: 0x000D0225 File Offset: 0x000CE425
+		
 		public Pawn_MeleeVerbs_TerrainSource TerrainSource
 		{
 			get
@@ -90,7 +90,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600221F RID: 8735 RVA: 0x000D0232 File Offset: 0x000CE432
+		
 		public TerrainDef TerrainDefSource
 		{
 			get
@@ -104,7 +104,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002220 RID: 8736 RVA: 0x000D0249 File Offset: 0x000CE449
+		
 		public virtual Thing Caster
 		{
 			get
@@ -114,7 +114,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002221 RID: 8737 RVA: 0x000D0251 File Offset: 0x000CE451
+		
 		public virtual Pawn CasterPawn
 		{
 			get
@@ -124,7 +124,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002222 RID: 8738 RVA: 0x0006461A File Offset: 0x0006281A
+		
 		public virtual Verb GetVerb
 		{
 			get
@@ -134,7 +134,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002223 RID: 8739 RVA: 0x000D025E File Offset: 0x000CE45E
+		
 		public virtual bool CasterIsPawn
 		{
 			get
@@ -144,7 +144,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002224 RID: 8740 RVA: 0x000D026E File Offset: 0x000CE46E
+		
 		public virtual bool Targetable
 		{
 			get
@@ -154,7 +154,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002225 RID: 8741 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public virtual bool MultiSelect
 		{
 			get
@@ -164,7 +164,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002226 RID: 8742 RVA: 0x000D027B File Offset: 0x000CE47B
+		
 		public LocalTargetInfo CurrentTarget
 		{
 			get
@@ -174,7 +174,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002227 RID: 8743 RVA: 0x000D0283 File Offset: 0x000CE483
+		
 		public virtual TargetingParameters targetParams
 		{
 			get
@@ -184,7 +184,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002228 RID: 8744 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual ITargetingSource DestinationSelector
 		{
 			get
@@ -194,7 +194,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002229 RID: 8745 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual int ShotsPerBurst
 		{
 			get
@@ -204,7 +204,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222A RID: 8746 RVA: 0x000D0290 File Offset: 0x000CE490
+		
 		public virtual Texture2D UIIcon
 		{
 			get
@@ -218,7 +218,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222B RID: 8747 RVA: 0x000D02B0 File Offset: 0x000CE4B0
+		
 		public bool Bursting
 		{
 			get
@@ -228,7 +228,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222C RID: 8748 RVA: 0x000D02BB File Offset: 0x000CE4BB
+		
 		public virtual bool IsMeleeAttack
 		{
 			get
@@ -238,7 +238,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222D RID: 8749 RVA: 0x000D02C8 File Offset: 0x000CE4C8
+		
 		public bool BuggedAfterLoading
 		{
 			get
@@ -248,7 +248,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222E RID: 8750 RVA: 0x000D02D3 File Offset: 0x000CE4D3
+		
 		public bool WarmingUp
 		{
 			get
@@ -258,7 +258,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600222F RID: 8751 RVA: 0x000D02E0 File Offset: 0x000CE4E0
+		
 		public Stance_Warmup WarmupStance
 		{
 			get
@@ -277,7 +277,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06002230 RID: 8752 RVA: 0x000D0329 File Offset: 0x000CE529
+		
 		public virtual string ReportLabel
 		{
 			get

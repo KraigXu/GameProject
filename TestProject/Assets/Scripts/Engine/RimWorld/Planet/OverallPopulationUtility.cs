@@ -6,7 +6,7 @@ namespace RimWorld.Planet
 	public static class OverallPopulationUtility
 	{
 		
-		// (get) Token: 0x060069BD RID: 27069 RVA: 0x0024E184 File Offset: 0x0024C384
+		
 		public static int EnumValuesCount
 		{
 			get

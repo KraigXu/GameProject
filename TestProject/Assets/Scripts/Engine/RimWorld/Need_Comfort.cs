@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Need_Comfort : Need_Seeker
 	{
 		
-		// (get) Token: 0x0600455E RID: 17758 RVA: 0x00176EF3 File Offset: 0x001750F3
+		
 		public override float CurInstantLevel
 		{
 			get
@@ -23,7 +23,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600455F RID: 17759 RVA: 0x00176F1C File Offset: 0x0017511C
+		
 		public ComfortCategory CurCategory
 		{
 			get

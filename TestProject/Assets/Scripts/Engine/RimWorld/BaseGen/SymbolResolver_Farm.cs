@@ -28,18 +28,18 @@ namespace RimWorld.BaseGen
 					resolveParams.rect = rect.ContractedBy(1);
 					resolveParams.singleThingDef = harvestedThingDef;
 					resolveParams.singleThingStackCount = new int?(Rand.RangeInclusive(Mathf.Min(10, harvestedThingDef.stackLimit), Mathf.Min(50, harvestedThingDef.stackLimit)));
-					BaseGen.symbolStack.Push("thing", resolveParams, null);
+					BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 				}
 				ResolveParams resolveParams2 = rp;
 				resolveParams2.rect = rect;
-				BaseGen.symbolStack.Push("ensureCanReachMapEdge", resolveParams2, null);
+				BaseGenCore.symbolStack.Push("ensureCanReachMapEdge", resolveParams2, null);
 				ResolveParams resolveParams3 = rp;
 				resolveParams3.rect = rect;
-				BaseGen.symbolStack.Push("emptyRoom", resolveParams3, null);
+				BaseGenCore.symbolStack.Push("emptyRoom", resolveParams3, null);
 			}
 			ResolveParams resolveParams4 = rp;
 			resolveParams4.cultivatedPlantDef = thingDef;
-			BaseGen.symbolStack.Push("cultivatedPlants", resolveParams4, null);
+			BaseGenCore.symbolStack.Push("cultivatedPlants", resolveParams4, null);
 		}
 	}
 }

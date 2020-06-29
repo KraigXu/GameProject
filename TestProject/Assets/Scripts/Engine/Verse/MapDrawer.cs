@@ -8,7 +8,7 @@ namespace Verse
 	public sealed class MapDrawer
 	{
 		
-		// (get) Token: 0x06000B53 RID: 2899 RVA: 0x0003D1CC File Offset: 0x0003B3CC
+		
 		private IntVec2 SectionCount
 		{
 			get
@@ -22,7 +22,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000B54 RID: 2900 RVA: 0x0003D228 File Offset: 0x0003B428
+		
 		private CellRect VisibleSections
 		{
 			get

@@ -12,7 +12,7 @@ namespace RimWorld
 	public class Dialog_BillConfig : Window
 	{
 		
-		// (get) Token: 0x06004D57 RID: 19799 RVA: 0x0019E81A File Offset: 0x0019CA1A
+		
 		public override Vector2 InitialSize
 		{
 			get
@@ -324,7 +324,7 @@ namespace RimWorld
 			enumerable = from pawn in enumerable
 			orderby pawn.WorkTypeIsDisabled(workGiver.workType)
 			select pawn;
-			using (IEnumerator<Pawn> enumerator = enumerable.GetEnumerator())
+			IEnumerator<Pawn> enumerator = enumerable.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
@@ -389,7 +389,7 @@ namespace RimWorld
 					}
 				}
 			}
-			IEnumerator<Pawn> enumerator = null;
+			
 			yield break;
 			yield break;
 		}

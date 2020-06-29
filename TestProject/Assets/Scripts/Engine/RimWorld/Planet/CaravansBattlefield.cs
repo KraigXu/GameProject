@@ -7,7 +7,7 @@ namespace RimWorld.Planet
 	public class CaravansBattlefield : MapParent
 	{
 		
-		// (get) Token: 0x06006D53 RID: 27987 RVA: 0x00264438 File Offset: 0x00262638
+		
 		public bool WonBattle
 		{
 			get

@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompPowerPlantSolar : CompPowerPlant
 	{
 		
-		// (get) Token: 0x06003F52 RID: 16210 RVA: 0x0015088C File Offset: 0x0014EA8C
+		
 		protected override float DesiredPowerOutput
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003F53 RID: 16211 RVA: 0x001508BC File Offset: 0x0014EABC
+		
 		private float RoofedPowerOutputFactor
 		{
 			get

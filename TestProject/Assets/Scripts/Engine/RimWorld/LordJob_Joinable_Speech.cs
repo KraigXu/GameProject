@@ -10,7 +10,7 @@ namespace RimWorld
 	public class LordJob_Joinable_Speech : LordJob_Joinable_Gathering
 	{
 		
-		// (get) Token: 0x06003241 RID: 12865 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public override bool AllowStartNewGatherings
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003242 RID: 12866 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool OrganizerIsStartingPawn
 		{
 			get

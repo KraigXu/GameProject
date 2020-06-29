@@ -10,8 +10,8 @@ namespace Verse
 	public abstract class Projectile : ThingWithComps
 	{
 		
-		// (get) Token: 0x060015E7 RID: 5607 RVA: 0x0007F40B File Offset: 0x0007D60B
-		// (set) Token: 0x060015E8 RID: 5608 RVA: 0x0007F43B File Offset: 0x0007D63B
+		
+		
 		public ProjectileHitFlags HitFlags
 		{
 			get
@@ -33,7 +33,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015E9 RID: 5609 RVA: 0x0007F444 File Offset: 0x0007D644
+		
 		protected float StartingTicksToImpact
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015EA RID: 5610 RVA: 0x0007F48B File Offset: 0x0007D68B
+		
 		protected IntVec3 DestinationCell
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015EB RID: 5611 RVA: 0x0007F498 File Offset: 0x0007D698
+		
 		public virtual Vector3 ExactPosition
 		{
 			get
@@ -69,7 +69,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015EC RID: 5612 RVA: 0x0007F4FB File Offset: 0x0007D6FB
+		
 		public virtual Quaternion ExactRotation
 		{
 			get
@@ -79,7 +79,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015ED RID: 5613 RVA: 0x0007F513 File Offset: 0x0007D713
+		
 		public override Vector3 DrawPos
 		{
 			get
@@ -89,7 +89,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015EE RID: 5614 RVA: 0x0007F51B File Offset: 0x0007D71B
+		
 		public int DamageAmount
 		{
 			get
@@ -99,7 +99,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015EF RID: 5615 RVA: 0x0007F534 File Offset: 0x0007D734
+		
 		public float ArmorPenetration
 		{
 			get
@@ -109,7 +109,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015F0 RID: 5616 RVA: 0x0007F54D File Offset: 0x0007D74D
+		
 		public ThingDef EquipmentDef
 		{
 			get
@@ -119,7 +119,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x060015F1 RID: 5617 RVA: 0x0007F555 File Offset: 0x0007D755
+		
 		public Thing Launcher
 		{
 			get

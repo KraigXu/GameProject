@@ -9,7 +9,7 @@ namespace RimWorld
 	public static class ScenarioMaker
 	{
 		
-		// (get) Token: 0x06004957 RID: 18775 RVA: 0x0018E3E8 File Offset: 0x0018C5E8
+		
 		public static Scenario GeneratingScenario
 		{
 			get

@@ -8,7 +8,7 @@ namespace Verse.AI
 	public class PawnPath : IDisposable
 	{
 		
-		// (get) Token: 0x06002798 RID: 10136 RVA: 0x000E84C7 File Offset: 0x000E66C7
+		
 		public bool Found
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x06002799 RID: 10137 RVA: 0x000E84D9 File Offset: 0x000E66D9
+		
 		public float TotalCost
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279A RID: 10138 RVA: 0x000E84E1 File Offset: 0x000E66E1
+		
 		public int NodesLeftCount
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279B RID: 10139 RVA: 0x000E84EB File Offset: 0x000E66EB
+		
 		public int NodesConsumedCount
 		{
 			get
@@ -48,7 +48,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279C RID: 10140 RVA: 0x000E84FF File Offset: 0x000E66FF
+		
 		public bool UsedRegionHeuristics
 		{
 			get
@@ -58,7 +58,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279D RID: 10141 RVA: 0x000E8507 File Offset: 0x000E6707
+		
 		public List<IntVec3> NodesReversed
 		{
 			get
@@ -68,7 +68,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279E RID: 10142 RVA: 0x000E850F File Offset: 0x000E670F
+		
 		public IntVec3 FirstNode
 		{
 			get
@@ -78,7 +78,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x0600279F RID: 10143 RVA: 0x000E8529 File Offset: 0x000E6729
+		
 		public IntVec3 LastNode
 		{
 			get
@@ -88,7 +88,7 @@ namespace Verse.AI
 		}
 
 		
-		// (get) Token: 0x060027A0 RID: 10144 RVA: 0x000E8537 File Offset: 0x000E6737
+		
 		public static PawnPath NotFound
 		{
 			get

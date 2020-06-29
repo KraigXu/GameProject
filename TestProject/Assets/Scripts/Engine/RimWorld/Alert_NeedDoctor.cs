@@ -16,7 +16,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005637 RID: 22071 RVA: 0x001C915C File Offset: 0x001C735C
+		
 		private List<Pawn> Patients
 		{
 			get

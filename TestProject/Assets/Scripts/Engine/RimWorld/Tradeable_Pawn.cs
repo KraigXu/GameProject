@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Tradeable_Pawn : Tradeable
 	{
 		
-		// (get) Token: 0x06005586 RID: 21894 RVA: 0x001C6816 File Offset: 0x001C4A16
+		
 		public override Window NewInfoDialog
 		{
 			get
@@ -20,7 +20,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005587 RID: 21895 RVA: 0x001C6824 File Offset: 0x001C4A24
+		
 		public override string Label
 		{
 			get
@@ -43,7 +43,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005588 RID: 21896 RVA: 0x001C68CA File Offset: 0x001C4ACA
+		
 		public override string TipDescription
 		{
 			get
@@ -57,7 +57,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06005589 RID: 21897 RVA: 0x001C6900 File Offset: 0x001C4B00
+		
 		private Pawn AnyPawn
 		{
 			get

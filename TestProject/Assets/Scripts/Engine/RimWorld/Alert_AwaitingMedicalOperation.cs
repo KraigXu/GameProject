@@ -10,7 +10,7 @@ namespace RimWorld
 	public class Alert_AwaitingMedicalOperation : Alert
 	{
 		
-		// (get) Token: 0x060056A7 RID: 22183 RVA: 0x001CBB10 File Offset: 0x001C9D10
+		
 		private List<Pawn> AwaitingMedicalOperation
 		{
 			get

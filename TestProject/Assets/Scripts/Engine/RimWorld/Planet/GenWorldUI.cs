@@ -9,7 +9,7 @@ namespace RimWorld.Planet
 	public static class GenWorldUI
 	{
 		
-		// (get) Token: 0x06006FB5 RID: 28597 RVA: 0x0026E45E File Offset: 0x0026C65E
+		
 		public static float CaravanDirectClickRadius
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006FB6 RID: 28598 RVA: 0x0026E470 File Offset: 0x0026C670
+		
 		private static float CaravanWideClickRadius
 		{
 			get
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 		}
 
 		
-		// (get) Token: 0x06006FB7 RID: 28599 RVA: 0x0026E45E File Offset: 0x0026C65E
+		
 		private static float DynamicallyDrawnObjectDirectClickRadius
 		{
 			get

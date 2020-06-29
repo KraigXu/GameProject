@@ -9,15 +9,13 @@ namespace RimWorld
 	public class QuestPart_Alert : QuestPartActivable
 	{
 		
-		// (get) Token: 0x06003900 RID: 14592 RVA: 0x0012FE16 File Offset: 0x0012E016
+		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
-				{
-					yield return globalTargetInfo;
-				}
+
+			
 				IEnumerator<GlobalTargetInfo> enumerator = null;
 				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
 				if (globalTargetInfo2.IsValid)
@@ -30,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003901 RID: 14593 RVA: 0x0012FE26 File Offset: 0x0012E026
+		
 		public override string AlertLabel
 		{
 			get
@@ -40,7 +38,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003902 RID: 14594 RVA: 0x0012FE2E File Offset: 0x0012E02E
+		
 		public override string AlertExplanation
 		{
 			get
@@ -50,7 +48,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003903 RID: 14595 RVA: 0x0012FE36 File Offset: 0x0012E036
+		
 		public override bool AlertCritical
 		{
 			get
@@ -60,7 +58,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003904 RID: 14596 RVA: 0x0012FE3E File Offset: 0x0012E03E
+		
 		public override AlertReport AlertReport
 		{
 			get

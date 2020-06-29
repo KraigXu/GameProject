@@ -7,7 +7,7 @@ namespace RimWorld
 	public struct ThoughtState
 	{
 		
-		// (get) Token: 0x060033E9 RID: 13289 RVA: 0x0011E347 File Offset: 0x0011C547
+		
 		public bool Active
 		{
 			get
@@ -17,7 +17,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060033EA RID: 13290 RVA: 0x0011E359 File Offset: 0x0011C559
+		
 		public int StageIndex
 		{
 			get
@@ -27,7 +27,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060033EB RID: 13291 RVA: 0x0011E361 File Offset: 0x0011C561
+		
 		public string Reason
 		{
 			get
@@ -37,7 +37,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060033EC RID: 13292 RVA: 0x0011E369 File Offset: 0x0011C569
+		
 		public static ThoughtState ActiveDefault
 		{
 			get
@@ -47,7 +47,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060033ED RID: 13293 RVA: 0x0011E374 File Offset: 0x0011C574
+		
 		public static ThoughtState Inactive
 		{
 			get

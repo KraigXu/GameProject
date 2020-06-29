@@ -37,7 +37,7 @@ namespace RimWorld
 						num = i;
 					}
 				}
-				b = null;
+				
 			}
 			IEnumerator<Backstory> enumerator = null;
 			yield break;

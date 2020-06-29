@@ -9,7 +9,7 @@ namespace Verse
 	public static class ShaderDatabase
 	{
 		
-		// (get) Token: 0x0600036F RID: 879 RVA: 0x000122BF File Offset: 0x000104BF
+		
 		public static Shader DefaultShader
 		{
 			get

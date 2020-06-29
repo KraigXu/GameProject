@@ -9,7 +9,7 @@ namespace Verse
 	public class LookTargets : IExposable
 	{
 		
-		// (get) Token: 0x06001ECD RID: 7885 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public static LookTargets Invalid
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ECE RID: 7886 RVA: 0x000BEED0 File Offset: 0x000BD0D0
+		
 		public bool IsValid
 		{
 			get
@@ -29,7 +29,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ECF RID: 7887 RVA: 0x000BEEEB File Offset: 0x000BD0EB
+		
 		public bool Any
 		{
 			get
@@ -39,7 +39,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001ED0 RID: 7888 RVA: 0x000BEEFC File Offset: 0x000BD0FC
+		
 		public GlobalTargetInfo PrimaryTarget
 		{
 			get
@@ -224,10 +224,10 @@ namespace Verse
 			return new LookTargets
 			{
 				targets = new List<GlobalTargetInfo>(),
-				targets = 
-				{
-					target
-				}
+				//targets = 
+				//{
+				//	target
+				//}
 			};
 		}
 
@@ -243,10 +243,10 @@ namespace Verse
 			return new LookTargets
 			{
 				targets = new List<GlobalTargetInfo>(),
-				targets = 
-				{
-					target
-				}
+				//targets = 
+				//{
+				//	target
+				//}
 			};
 		}
 

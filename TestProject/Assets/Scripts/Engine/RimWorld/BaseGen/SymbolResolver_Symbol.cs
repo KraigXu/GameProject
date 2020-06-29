@@ -35,7 +35,7 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push(this.symbol, rp, null);
+			BaseGenCore.symbolStack.Push(this.symbol, rp, null);
 		}
 
 		

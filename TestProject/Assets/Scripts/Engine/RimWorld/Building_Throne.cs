@@ -9,7 +9,7 @@ namespace RimWorld
 	public class Building_Throne : Building
 	{
 		
-		// (get) Token: 0x06004D26 RID: 19750 RVA: 0x0019D54C File Offset: 0x0019B74C
+		
 		public static IEnumerable<RoyalTitleDef> AllTitlesForThroneStature
 		{
 			get
@@ -22,7 +22,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D27 RID: 19751 RVA: 0x0019D5A8 File Offset: 0x0019B7A8
+		
 		public Pawn AssignedPawn
 		{
 			get
@@ -41,7 +41,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D28 RID: 19752 RVA: 0x0019D5FB File Offset: 0x0019B7FB
+		
 		public CompAssignableToPawn_Throne CompAssignableToPawn
 		{
 			get
@@ -51,7 +51,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06004D29 RID: 19753 RVA: 0x0019D604 File Offset: 0x0019B804
+		
 		public RoyalTitleDef TitleStature
 		{
 			get

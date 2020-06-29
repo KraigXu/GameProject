@@ -10,7 +10,7 @@ namespace RimWorld
 	public static class StorageSettingsClipboard
 	{
 		
-		// (get) Token: 0x06004C1D RID: 19485 RVA: 0x00199256 File Offset: 0x00197456
+		
 		public static bool HasCopiedSettings
 		{
 			get

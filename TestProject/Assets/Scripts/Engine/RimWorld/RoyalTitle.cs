@@ -8,7 +8,7 @@ namespace RimWorld
 	public class RoyalTitle : IExposable
 	{
 		
-		// (get) Token: 0x0600468C RID: 18060 RVA: 0x0017CEDD File Offset: 0x0017B0DD
+		
 		public float RoomRequirementGracePeriodDaysLeft
 		{
 			get

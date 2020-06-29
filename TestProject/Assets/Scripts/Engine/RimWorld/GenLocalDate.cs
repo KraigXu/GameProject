@@ -8,7 +8,7 @@ namespace RimWorld
 	public static class GenLocalDate
 	{
 		
-		// (get) Token: 0x06006001 RID: 24577 RVA: 0x00215AA3 File Offset: 0x00213CA3
+		
 		private static int TicksAbs
 		{
 			get

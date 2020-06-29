@@ -125,7 +125,7 @@ namespace Invector.vItemManager
         static void CreateEnumClass(string copyPath, List<string> itemTypes = null, List<string> itemAttributes = null)
         {
             if (File.Exists(copyPath)) File.Delete(copyPath);
-            using (StreamWriter outfile = new StreamWriter(copyPath))
+            StreamWriter outfile = new StreamWriter(copyPath))
             {
                 outfile.WriteLine("namespace Invector.vItemManager {");
                 outfile.WriteLine("     public enum vItemType {");

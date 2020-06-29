@@ -8,7 +8,7 @@ namespace RimWorld
 	public class CompAbilityEffect_Teleport : CompAbilityEffect_WithDest
 	{
 		
-		// (get) Token: 0x060041A8 RID: 16808 RVA: 0x0015F086 File Offset: 0x0015D286
+		
 		public new CompProperties_AbilityTeleport Props
 		{
 			get

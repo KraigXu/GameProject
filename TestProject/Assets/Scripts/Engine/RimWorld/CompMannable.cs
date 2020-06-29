@@ -9,7 +9,7 @@ namespace RimWorld
 	public class CompMannable : ThingComp
 	{
 		
-		// (get) Token: 0x060051B3 RID: 20915 RVA: 0x001B5B55 File Offset: 0x001B3D55
+		
 		public bool MannedNow
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060051B4 RID: 20916 RVA: 0x001B5B80 File Offset: 0x001B3D80
+		
 		public Pawn ManningPawn
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x060051B5 RID: 20917 RVA: 0x001B5B92 File Offset: 0x001B3D92
+		
 		public CompProperties_Mannable Props
 		{
 			get
@@ -74,7 +74,7 @@ namespace RimWorld
 				Job job = JobMaker.MakeJob(JobDefOf.ManTurret, this.parent);
 				pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 			}, MenuOptionPriority.Default, null, null, 0f, null, null);
-			yield return floatMenuOption;
+			
 			yield break;
 		}
 

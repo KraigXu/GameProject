@@ -7,7 +7,7 @@ namespace Verse
 	public class ModIncompatibility : ModRequirement
 	{
 		
-		// (get) Token: 0x06000E9E RID: 3742 RVA: 0x00053241 File Offset: 0x00051441
+		
 		public override string RequirementTypeLabel
 		{
 			get
@@ -17,7 +17,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000E9F RID: 3743 RVA: 0x0005325C File Offset: 0x0005145C
+		
 		public override bool IsSatisfied
 		{
 			get
@@ -27,7 +27,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000EA0 RID: 3744 RVA: 0x0005326C File Offset: 0x0005146C
+		
 		public override string Tooltip
 		{
 			get

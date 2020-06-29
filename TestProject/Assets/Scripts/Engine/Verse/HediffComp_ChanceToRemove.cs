@@ -6,7 +6,7 @@ namespace Verse
 	public class HediffComp_ChanceToRemove : HediffComp
 	{
 		
-		// (get) Token: 0x06001025 RID: 4133 RVA: 0x0005D01C File Offset: 0x0005B21C
+		
 		public HediffCompProperties_ChanceToRemove Props
 		{
 			get
@@ -16,7 +16,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06001026 RID: 4134 RVA: 0x0005D029 File Offset: 0x0005B229
+		
 		public override bool CompShouldRemove
 		{
 			get

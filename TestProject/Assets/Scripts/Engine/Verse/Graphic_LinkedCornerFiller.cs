@@ -7,7 +7,7 @@ namespace Verse
 	public class Graphic_LinkedCornerFiller : Graphic_Linked
 	{
 		
-		// (get) Token: 0x06001529 RID: 5417 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override LinkDrawerType LinkerType
 		{
 			get

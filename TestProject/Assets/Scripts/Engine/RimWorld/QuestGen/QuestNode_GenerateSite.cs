@@ -5,7 +5,7 @@ using RimWorld.Planet;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+namespace RimWorld.QuestGenNew
 {
 	
 	public class QuestNode_GenerateSite : QuestNode
@@ -15,7 +15,7 @@ namespace RimWorld.QuestGen
 		{
 			if (!Find.Storyteller.difficulty.allowViolentQuests && this.sitePartsParams.GetValue(slate) != null)
 			{
-				using (IEnumerator<SitePartDefWithParams> enumerator = this.sitePartsParams.GetValue(slate).GetEnumerator())
+				IEnumerator<SitePartDefWithParams> enumerator = this.sitePartsParams.GetValue(slate).GetEnumerator();
 				{
 					while (enumerator.MoveNext())
 					{
@@ -36,7 +36,7 @@ namespace RimWorld.QuestGen
 			Slate slate = QuestGen.slate;
 			IEnumerable<SitePartDefWithParams> enumerable = this.sitePartsParams.GetValue(slate);
 			bool flag = false;
-			using (IEnumerator<SitePartDefWithParams> enumerator = enumerable.GetEnumerator())
+			IEnumerator<SitePartDefWithParams> enumerator = enumerable.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{

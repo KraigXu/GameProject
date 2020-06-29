@@ -8,7 +8,7 @@ namespace RimWorld
 	public class Instruction_SetGrowingZonePlant : Lesson_Instruction
 	{
 		
-		// (get) Token: 0x06005ED2 RID: 24274 RVA: 0x0020C2F4 File Offset: 0x0020A4F4
+		
 		private Zone_Growing GrowZone
 		{
 			get

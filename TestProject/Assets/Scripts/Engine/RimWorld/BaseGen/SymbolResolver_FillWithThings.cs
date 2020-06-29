@@ -65,10 +65,10 @@ namespace RimWorld.BaseGen
 					resolveParams.rect = new CellRect(i, j, size.x, size.z);
 					resolveParams.singleThingDef = thingDef2;
 					resolveParams.thingRot = new Rot4?(rot);
-					BaseGen.symbolStack.Push("thing", resolveParams, null);
+					BaseGenCore.symbolStack.Push("thing", resolveParams, null);
 				}
 			}
-			BaseGen.symbolStack.Push("clear", rp, null);
+			BaseGenCore.symbolStack.Push("clear", rp, null);
 		}
 	}
 }

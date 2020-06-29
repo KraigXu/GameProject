@@ -81,7 +81,7 @@ namespace RimWorld.SketchGen
 					bool flag2 = false;
 					foreach (IntVec3 intVec in cellRect.GetEdgeCells(Rot4.East))
 					{
-						intVec.x++;
+						//intVec.x++;
 						if (processed.Contains(intVec) || !canTraverse(intVec))
 						{
 							flag2 = true;
@@ -99,7 +99,7 @@ namespace RimWorld.SketchGen
 					bool flag3 = false;
 					foreach (IntVec3 intVec2 in cellRect.GetEdgeCells(Rot4.West))
 					{
-						intVec2.x--;
+					//	intVec2.x--;
 						if (processed.Contains(intVec2) || !canTraverse(intVec2))
 						{
 							flag3 = true;
@@ -117,7 +117,7 @@ namespace RimWorld.SketchGen
 					bool flag4 = false;
 					foreach (IntVec3 intVec3 in cellRect.GetEdgeCells(Rot4.North))
 					{
-						intVec3.z++;
+					//	intVec3.z++;
 						if (processed.Contains(intVec3) || !canTraverse(intVec3))
 						{
 							flag4 = true;
@@ -135,7 +135,7 @@ namespace RimWorld.SketchGen
 					bool flag5 = false;
 					foreach (IntVec3 intVec4 in cellRect.GetEdgeCells(Rot4.South))
 					{
-						intVec4.z--;
+						//intVec4.z--;
 						if (processed.Contains(intVec4) || !canTraverse(intVec4))
 						{
 							flag5 = true;

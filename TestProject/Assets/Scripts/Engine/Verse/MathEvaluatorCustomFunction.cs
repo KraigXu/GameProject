@@ -8,7 +8,7 @@ namespace Verse
 	public class MathEvaluatorCustomFunction : IXsltContextFunction
 	{
 		
-		// (get) Token: 0x0600032F RID: 815 RVA: 0x000107B4 File Offset: 0x0000E9B4
+		
 		public XPathResultType[] ArgTypes
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000330 RID: 816 RVA: 0x000107BC File Offset: 0x0000E9BC
+		
 		public int Maxargs
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000331 RID: 817 RVA: 0x000107C9 File Offset: 0x0000E9C9
+		
 		public int Minargs
 		{
 			get
@@ -38,7 +38,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x06000332 RID: 818 RVA: 0x00010306 File Offset: 0x0000E506
+		
 		public XPathResultType ReturnType
 		{
 			get

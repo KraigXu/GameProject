@@ -10,7 +10,7 @@ namespace RimWorld
 	public class WorldObjectDef : Def
 	{
 		
-		// (get) Token: 0x06003772 RID: 14194 RVA: 0x00129BF3 File Offset: 0x00127DF3
+		
 		public Material Material
 		{
 			get
@@ -28,7 +28,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003773 RID: 14195 RVA: 0x00129C33 File Offset: 0x00127E33
+		
 		public Texture2D ExpandingIconTexture
 		{
 			get
@@ -88,9 +88,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			int num;

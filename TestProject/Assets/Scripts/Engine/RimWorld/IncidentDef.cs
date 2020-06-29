@@ -9,7 +9,7 @@ namespace RimWorld
 	public class IncidentDef : Def
 	{
 		
-		// (get) Token: 0x06003638 RID: 13880 RVA: 0x00125E9B File Offset: 0x0012409B
+		
 		public bool NeedsParmsPoints
 		{
 			get
@@ -19,7 +19,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x06003639 RID: 13881 RVA: 0x00125EA8 File Offset: 0x001240A8
+		
 		public IncidentWorker Worker
 		{
 			get
@@ -34,7 +34,7 @@ namespace RimWorld
 		}
 
 		
-		// (get) Token: 0x0600363A RID: 13882 RVA: 0x00125EDC File Offset: 0x001240DC
+		
 		public List<IncidentDef> RefireCheckIncidents
 		{
 			get
@@ -92,9 +92,9 @@ namespace RimWorld
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
+
 			{
-				yield return text;
+				
 			}
 			IEnumerator<string> enumerator = null;
 			if (this.category == null)

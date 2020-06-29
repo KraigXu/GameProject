@@ -8,8 +8,8 @@ namespace RimWorld.BaseGen
 		
 		public override void Resolve(ResolveParams rp)
 		{
-			BaseGen.symbolStack.Push("barracks", rp, null);
-			BaseGen.globalSettings.basePart_barracksResolved++;
+			BaseGenCore.symbolStack.Push("barracks", rp, null);
+			BaseGenCore.globalSettings.basePart_barracksResolved++;
 		}
 	}
 }

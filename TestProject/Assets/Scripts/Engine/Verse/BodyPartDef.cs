@@ -8,7 +8,7 @@ namespace Verse
 	public class BodyPartDef : Def
 	{
 		
-		// (get) Token: 0x0600047C RID: 1148 RVA: 0x0001732E File Offset: 0x0001552E
+		
 		public bool IsSolidInDefinition_Debug
 		{
 			get
@@ -18,7 +18,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600047D RID: 1149 RVA: 0x00017336 File Offset: 0x00015536
+		
 		public bool IsSkinCoveredInDefinition_Debug
 		{
 			get
@@ -28,7 +28,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600047E RID: 1150 RVA: 0x0001733E File Offset: 0x0001553E
+		
 		public string LabelShort
 		{
 			get
@@ -42,7 +42,7 @@ namespace Verse
 		}
 
 		
-		// (get) Token: 0x0600047F RID: 1151 RVA: 0x0001735A File Offset: 0x0001555A
+		
 		public string LabelShortCap
 		{
 			get
@@ -62,10 +62,8 @@ namespace Verse
 		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.n__0())
-			{
-				yield return text;
-			}
+
+
 			IEnumerator<string> enumerator = null;
 			if (this.frostbiteVulnerability > 10f)
 			{

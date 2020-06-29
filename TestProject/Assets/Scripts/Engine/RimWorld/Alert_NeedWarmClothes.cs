@@ -26,7 +26,7 @@ namespace RimWorld
 		{
 			float num = this.LowestTemperatureComing(map);
 			int num2 = 0;
-			using (List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonistsSpawned.GetEnumerator())
+			List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonistsSpawned.GetEnumerator();
 			{
 				while (enumerator.MoveNext())
 				{
