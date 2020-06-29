@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200097B RID: 2427
+	
 	public class QuestPart_InitiateTradeRequest : QuestPart
 	{
-		// Token: 0x17000A4B RID: 2635
+		
 		// (get) Token: 0x06003970 RID: 14704 RVA: 0x00131755 File Offset: 0x0012F955
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,13 +29,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A4C RID: 2636
+		
 		// (get) Token: 0x06003971 RID: 14705 RVA: 0x00131765 File Offset: 0x0012F965
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__1())
+				foreach (Faction faction in this.n__1())
 				{
 					yield return faction;
 				}
@@ -49,13 +49,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A4D RID: 2637
+		
 		// (get) Token: 0x06003972 RID: 14706 RVA: 0x00131775 File Offset: 0x0012F975
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.<>n__2())
+				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__2())
 				{
 					yield return hyperlink;
 				}
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003973 RID: 14707 RVA: 0x00131788 File Offset: 0x0012F988
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -87,7 +87,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003974 RID: 14708 RVA: 0x00131818 File Offset: 0x0012FA18
+		
 		public override void Cleanup()
 		{
 			base.Cleanup();
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003975 RID: 14709 RVA: 0x00131850 File Offset: 0x0012FA50
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -113,7 +113,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.keepAfterQuestEnds, "keepAfterQuestEnds", false, false);
 		}
 
-		// Token: 0x06003976 RID: 14710 RVA: 0x001318CC File Offset: 0x0012FACC
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -132,22 +132,22 @@ namespace RimWorld
 			this.requestDuration = 60000;
 		}
 
-		// Token: 0x040021DB RID: 8667
+		
 		public string inSignal;
 
-		// Token: 0x040021DC RID: 8668
+		
 		public Settlement settlement;
 
-		// Token: 0x040021DD RID: 8669
+		
 		public ThingDef requestedThingDef;
 
-		// Token: 0x040021DE RID: 8670
+		
 		public int requestedCount;
 
-		// Token: 0x040021DF RID: 8671
+		
 		public int requestDuration;
 
-		// Token: 0x040021E0 RID: 8672
+		
 		public bool keepAfterQuestEnds;
 	}
 }

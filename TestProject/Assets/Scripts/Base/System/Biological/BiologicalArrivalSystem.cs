@@ -78,7 +78,7 @@ namespace GameSystem
         //        var shipData = arrivingShipData[shipIndex];
         //        var planetData = _entityManager.GetComponentData<LivingArea>(status[shipIndex].TargetEntity);
         //        var planetDat = _entityManager.GetComponentData<LivingArea>(status[shipIndex].TargetEntity);
-        //        //var planetData=_entityManager.GetComponentData<>()
+        //        //var planetData=_entityManager.GetComponentData()
         //        //if (shipData.TeamOwnership != planetData.TeamOwnership)
         //        //{
         //        //    planetData.Occupants = planetData.Occupants - 1;

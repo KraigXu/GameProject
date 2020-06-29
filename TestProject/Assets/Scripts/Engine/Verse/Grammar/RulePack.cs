@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse.Grammar
 {
-	// Token: 0x020004C5 RID: 1221
+	
 	public class RulePack
 	{
-		// Token: 0x1700071E RID: 1822
+		
 		// (get) Token: 0x060023FF RID: 9215 RVA: 0x000D791C File Offset: 0x000D5B1C
 		public List<Rule> Rules
 		{
@@ -28,7 +28,7 @@ namespace Verse.Grammar
 			}
 		}
 
-		// Token: 0x1700071F RID: 1823
+		
 		// (get) Token: 0x06002400 RID: 9216 RVA: 0x000D79AC File Offset: 0x000D5BAC
 		public List<Rule> UntranslatedRules
 		{
@@ -49,7 +49,7 @@ namespace Verse.Grammar
 			}
 		}
 
-		// Token: 0x06002401 RID: 9217 RVA: 0x000D7A3C File Offset: 0x000D5C3C
+		
 		public void PostLoad()
 		{
 			this.untranslatedRulesStrings = this.rulesStrings.ToList<string>();
@@ -64,7 +64,7 @@ namespace Verse.Grammar
 			}
 		}
 
-		// Token: 0x06002402 RID: 9218 RVA: 0x000D7AB0 File Offset: 0x000D5CB0
+		
 		private static List<Rule> GetRulesResolved(List<Rule> rulesRaw, List<string> rulesStrings, List<string> rulesFiles)
 		{
 			List<Rule> list = new List<Rule>();
@@ -136,39 +136,39 @@ namespace Verse.Grammar
 			return list;
 		}
 
-		// Token: 0x040015BC RID: 5564
+		
 		[MustTranslate]
 		[TranslationCanChangeCount]
 		private List<string> rulesStrings = new List<string>();
 
-		// Token: 0x040015BD RID: 5565
+		
 		[MayTranslate]
 		[TranslationCanChangeCount]
 		private List<string> rulesFiles = new List<string>();
 
-		// Token: 0x040015BE RID: 5566
+		
 		private List<Rule> rulesRaw;
 
-		// Token: 0x040015BF RID: 5567
+		
 		public List<RulePackDef> include;
 
-		// Token: 0x040015C0 RID: 5568
+		
 		[Unsaved(false)]
 		private List<Rule> rulesResolved;
 
-		// Token: 0x040015C1 RID: 5569
+		
 		[Unsaved(false)]
 		private List<Rule> untranslatedRulesResolved;
 
-		// Token: 0x040015C2 RID: 5570
+		
 		[Unsaved(false)]
 		private List<string> untranslatedRulesStrings;
 
-		// Token: 0x040015C3 RID: 5571
+		
 		[Unsaved(false)]
 		private List<string> untranslatedRulesFiles;
 
-		// Token: 0x040015C4 RID: 5572
+		
 		[Unsaved(false)]
 		private List<Rule> untranslatedRulesRaw;
 	}

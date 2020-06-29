@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A70 RID: 2672
+	
 	public class GenStep_Turrets : GenStep
 	{
-		// Token: 0x17000B2B RID: 2859
+		
 		// (get) Token: 0x06003EFE RID: 16126 RVA: 0x0014F251 File Offset: 0x0014D451
 		public override int SeedPart
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EFF RID: 16127 RVA: 0x0014F258 File Offset: 0x0014D458
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			int num = 0;
@@ -84,7 +84,7 @@ namespace RimWorld
 			BaseGen.Generate();
 		}
 
-		// Token: 0x06003F00 RID: 16128 RVA: 0x0014F438 File Offset: 0x0014D638
+		
 		private CellRect FindRandomRectToDefend(Map map)
 		{
 			List<CellRect> usedRects;
@@ -134,22 +134,22 @@ namespace RimWorld
 			return CellRect.CenteredOn(CellFinder.RandomCell(map), rectRadius).ClipInsideMap(map);
 		}
 
-		// Token: 0x040024A6 RID: 9382
+		
 		public IntRange defaultTurretsCountRange = new IntRange(4, 5);
 
-		// Token: 0x040024A7 RID: 9383
+		
 		public IntRange defaultMortarsCountRange = new IntRange(0, 1);
 
-		// Token: 0x040024A8 RID: 9384
+		
 		public IntRange widthRange = new IntRange(3, 4);
 
-		// Token: 0x040024A9 RID: 9385
+		
 		public IntRange guardsCountRange = new IntRange(1, 1);
 
-		// Token: 0x040024AA RID: 9386
+		
 		private const int Padding = 7;
 
-		// Token: 0x040024AB RID: 9387
+		
 		public const int DefaultGuardsCount = 1;
 	}
 }

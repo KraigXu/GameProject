@@ -4,22 +4,22 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000160 RID: 352
+	
 	public sealed class FogGrid : IExposable
 	{
-		// Token: 0x060009D7 RID: 2519 RVA: 0x0003595F File Offset: 0x00033B5F
+		
 		public FogGrid(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x060009D8 RID: 2520 RVA: 0x0003596E File Offset: 0x00033B6E
+		
 		public void ExposeData()
 		{
 			DataExposeUtility.BoolArray(ref this.fogGrid, this.map.Area, "fogGrid");
 		}
 
-		// Token: 0x060009D9 RID: 2521 RVA: 0x0003598C File Offset: 0x00033B8C
+		
 		public void Unfog(IntVec3 c)
 		{
 			this.UnfogWorker(c);
@@ -37,7 +37,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060009DA RID: 2522 RVA: 0x00035A20 File Offset: 0x00033C20
+		
 		private void UnfogWorker(IntVec3 c)
 		{
 			int num = this.map.cellIndices.CellToIndex(c);
@@ -61,19 +61,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060009DB RID: 2523 RVA: 0x00035AB8 File Offset: 0x00033CB8
+		
 		public bool IsFogged(IntVec3 c)
 		{
 			return c.InBounds(this.map) && this.fogGrid != null && this.fogGrid[this.map.cellIndices.CellToIndex(c)];
 		}
 
-		// Token: 0x060009DC RID: 2524 RVA: 0x00035AEA File Offset: 0x00033CEA
+		
 		public bool IsFogged(int index)
 		{
 			return this.fogGrid[index];
 		}
 
-		// Token: 0x060009DD RID: 2525 RVA: 0x00035AF4 File Offset: 0x00033CF4
+		
 		public void ClearAllFog()
 		{
 			for (int i = 0; i < this.map.Size.x; i++)
@@ -85,7 +85,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060009DE RID: 2526 RVA: 0x00035B48 File Offset: 0x00033D48
+		
 		public void Notify_FogBlockerRemoved(IntVec3 c)
 		{
 			if (Current.ProgramState != ProgramState.Playing)
@@ -109,7 +109,7 @@ namespace Verse
 			this.FloodUnfogAdjacent(c);
 		}
 
-		// Token: 0x060009DF RID: 2527 RVA: 0x00035BA4 File Offset: 0x00033DA4
+		
 		public void Notify_PawnEnteringDoor(Building_Door door, Pawn pawn)
 		{
 			if (pawn.Faction != Faction.OfPlayer && pawn.HostFaction != Faction.OfPlayer)
@@ -119,7 +119,7 @@ namespace Verse
 			this.FloodUnfogAdjacent(door.Position);
 		}
 
-		// Token: 0x060009E0 RID: 2528 RVA: 0x00035BD0 File Offset: 0x00033DD0
+		
 		internal void SetAllFogged()
 		{
 			CellIndices cellIndices = this.map.cellIndices;
@@ -137,7 +137,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060009E1 RID: 2529 RVA: 0x00035C6C File Offset: 0x00033E6C
+		
 		private void FloodUnfogAdjacent(IntVec3 c)
 		{
 			this.Unfog(c);
@@ -186,13 +186,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000806 RID: 2054
+		
 		private Map map;
 
-		// Token: 0x04000807 RID: 2055
+		
 		public bool[] fogGrid;
 
-		// Token: 0x04000808 RID: 2056
+		
 		private const int AlwaysSendLetterIfUnfoggedMoreCellsThan = 600;
 	}
 }

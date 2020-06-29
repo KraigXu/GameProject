@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010E1 RID: 4321
+	
 	public class SymbolResolver_Ship_Core : SymbolResolver
 	{
-		// Token: 0x060065A7 RID: 26023 RVA: 0x002393E0 File Offset: 0x002375E0
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			float value = Rand.Value;

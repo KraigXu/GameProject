@@ -5,10 +5,10 @@ using System.Xml.Linq;
 
 namespace Verse
 {
-	// Token: 0x02000458 RID: 1112
+	
 	public class KeyPrefs
 	{
-		// Token: 0x1700066C RID: 1644
+		
 		// (get) Token: 0x06002123 RID: 8483 RVA: 0x000CB31F File Offset: 0x000C951F
 		// (set) Token: 0x06002124 RID: 8484 RVA: 0x000CB326 File Offset: 0x000C9526
 		public static KeyPrefsData KeyPrefsData
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002125 RID: 8485 RVA: 0x000CB330 File Offset: 0x000C9530
+		
 		public static void Init()
 		{
 			bool flag = !new FileInfo(GenFilePaths.KeyPrefsFilePath).Exists;
@@ -54,7 +54,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002126 RID: 8486 RVA: 0x000CB414 File Offset: 0x000C9614
+		
 		public static void Save()
 		{
 			try
@@ -86,18 +86,18 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04001431 RID: 5169
+		
 		private static KeyPrefsData data;
 
-		// Token: 0x04001432 RID: 5170
+		
 		private static Dictionary<string, KeyBindingData> unresolvedBindings;
 
-		// Token: 0x020016A9 RID: 5801
+		
 		public enum BindingSlot : byte
 		{
-			// Token: 0x040056EE RID: 22254
+			
 			A,
-			// Token: 0x040056EF RID: 22255
+			
 			B
 		}
 	}

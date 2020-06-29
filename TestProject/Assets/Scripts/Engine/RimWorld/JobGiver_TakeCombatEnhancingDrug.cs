@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006D7 RID: 1751
+	
 	public class JobGiver_TakeCombatEnhancingDrug : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EC3 RID: 11971 RVA: 0x00106B2F File Offset: 0x00104D2F
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_TakeCombatEnhancingDrug jobGiver_TakeCombatEnhancingDrug = (JobGiver_TakeCombatEnhancingDrug)base.DeepCopy(resolve);
@@ -17,7 +17,7 @@ namespace RimWorld
 			return jobGiver_TakeCombatEnhancingDrug;
 		}
 
-		// Token: 0x06002EC4 RID: 11972 RVA: 0x00106B4C File Offset: 0x00104D4C
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.IsTeetotaler())
@@ -69,13 +69,13 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002EC5 RID: 11973 RVA: 0x00106C17 File Offset: 0x00104E17
+		
 		private bool HarmedRecently(Pawn pawn)
 		{
 			return Find.TickManager.TicksGame - pawn.mindState.lastHarmTick < 2500;
 		}
 
-		// Token: 0x06002EC6 RID: 11974 RVA: 0x00106C38 File Offset: 0x00104E38
+		
 		private Thing FindCombatEnhancingDrug(Pawn pawn)
 		{
 			for (int i = 0; i < pawn.inventory.innerContainer.Count; i++)
@@ -90,10 +90,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001A88 RID: 6792
+		
 		private bool onlyIfInDanger;
 
-		// Token: 0x04001A89 RID: 6793
+		
 		private const int TakeEveryTicks = 20000;
 	}
 }

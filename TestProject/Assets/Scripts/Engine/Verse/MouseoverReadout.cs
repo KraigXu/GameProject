@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020003B3 RID: 947
+	
 	public class MouseoverReadout
 	{
-		// Token: 0x06001BED RID: 7149 RVA: 0x000AA447 File Offset: 0x000A8647
+		
 		public MouseoverReadout()
 		{
 			this.MakePermaCache();
 		}
 
-		// Token: 0x06001BEE RID: 7150 RVA: 0x000AA458 File Offset: 0x000A8658
+		
 		private void MakePermaCache()
 		{
 			this.glowStrings = new string[101];
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001BEF RID: 7151 RVA: 0x000AA4B8 File Offset: 0x000A86B8
+		
 		public void MouseoverReadoutOnGUI()
 		{
 			if (Event.current.type != EventType.Repaint)
@@ -101,25 +101,25 @@ namespace Verse
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x06001BF0 RID: 7152 RVA: 0x000AA8CC File Offset: 0x000A8ACC
+		
 		private string SpeedPercentString(float extraPathTicks)
 		{
 			return (13f / (extraPathTicks + 13f)).ToStringPercent();
 		}
 
-		// Token: 0x04001078 RID: 4216
+		
 		private TerrainDef cachedTerrain;
 
-		// Token: 0x04001079 RID: 4217
+		
 		private string cachedTerrainString;
 
-		// Token: 0x0400107A RID: 4218
+		
 		private string[] glowStrings;
 
-		// Token: 0x0400107B RID: 4219
+		
 		private const float YInterval = 19f;
 
-		// Token: 0x0400107C RID: 4220
+		
 		private static readonly Vector2 BotLeft = new Vector2(15f, 65f);
 	}
 }

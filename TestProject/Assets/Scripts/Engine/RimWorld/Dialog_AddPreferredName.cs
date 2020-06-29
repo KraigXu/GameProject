@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E4D RID: 3661
+	
 	public class Dialog_AddPreferredName : Window
 	{
-		// Token: 0x17000FDC RID: 4060
+		
 		// (get) Token: 0x06005879 RID: 22649 RVA: 0x001D599F File Offset: 0x001D3B9F
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600587A RID: 22650 RVA: 0x001D59B0 File Offset: 0x001D3BB0
+		
 		public Dialog_AddPreferredName()
 		{
 			this.doCloseButton = true;
@@ -30,7 +30,7 @@ namespace RimWorld
 			select n).ToList<NameTriple>();
 		}
 
-		// Token: 0x0600587B RID: 22651 RVA: 0x001D5A40 File Offset: 0x001D3C40
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Listing_Standard listing_Standard = new Listing_Standard();
@@ -63,7 +63,7 @@ namespace RimWorld
 			listing_Standard.End();
 		}
 
-		// Token: 0x0600587C RID: 22652 RVA: 0x001D5B64 File Offset: 0x001D3D64
+		
 		private bool FilterMatch(NameTriple n)
 		{
 			if (n.First == "Tynan" && n.Last == "Sylvester")
@@ -81,7 +81,7 @@ namespace RimWorld
 			return this.searchWords.Length == 2 && n.First.EqualsIgnoreCase(this.searchWords[0]) && (n.Last.StartsWith(this.searchWords[1], StringComparison.OrdinalIgnoreCase) || n.Nick.StartsWith(this.searchWords[1], StringComparison.OrdinalIgnoreCase));
 		}
 
-		// Token: 0x0600587D RID: 22653 RVA: 0x001D5C3A File Offset: 0x001D3E3A
+		
 		private void TryChooseName(NameTriple name)
 		{
 			if (this.AlreadyPreferred(name))
@@ -93,19 +93,19 @@ namespace RimWorld
 			this.Close(true);
 		}
 
-		// Token: 0x0600587E RID: 22654 RVA: 0x001D5C77 File Offset: 0x001D3E77
+		
 		private bool AlreadyPreferred(NameTriple name)
 		{
 			return Prefs.PreferredNames.Contains(name.ToString());
 		}
 
-		// Token: 0x04002FB7 RID: 12215
+		
 		private string searchName = "";
 
-		// Token: 0x04002FB8 RID: 12216
+		
 		private string[] searchWords;
 
-		// Token: 0x04002FB9 RID: 12217
+		
 		private List<NameTriple> cachedNames;
 	}
 }

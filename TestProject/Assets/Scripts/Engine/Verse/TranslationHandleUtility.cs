@@ -6,10 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Verse
 {
-	// Token: 0x02000147 RID: 327
+	
 	public static class TranslationHandleUtility
 	{
-		// Token: 0x06000935 RID: 2357 RVA: 0x000326F8 File Offset: 0x000308F8
+		
 		public static int GetElementIndexByHandle(object list, string handle, int handleIndex)
 		{
 			if (list == null)
@@ -102,7 +102,7 @@ namespace Verse
 			}));
 		}
 
-		// Token: 0x06000936 RID: 2358 RVA: 0x00032908 File Offset: 0x00030B08
+		
 		public static string GetBestHandleWithIndexForListElement(object list, object element)
 		{
 			if (list == null || element == null)
@@ -209,7 +209,7 @@ namespace Verse
 			return text2 + "-" + num3;
 		}
 
-		// Token: 0x06000937 RID: 2359 RVA: 0x00032AFC File Offset: 0x00030CFC
+		
 		public static bool HandlesMatch(object item, string handle)
 		{
 			if (item == null)
@@ -242,7 +242,7 @@ namespace Verse
 			return !text.NullOrEmpty() && TranslationHandleUtility.NormalizedHandle(text) == handle;
 		}
 
-		// Token: 0x06000938 RID: 2360 RVA: 0x00032BB8 File Offset: 0x00030DB8
+		
 		private static string NormalizedHandle(string handle)
 		{
 			if (handle.NullOrEmpty())
@@ -292,19 +292,19 @@ namespace Verse
 			return handle;
 		}
 
-		// Token: 0x06000939 RID: 2361 RVA: 0x00032D41 File Offset: 0x00030F41
+		
 		private static bool FieldInfosEqual(FieldInfo lhs, FieldInfo rhs)
 		{
 			return lhs.DeclaringType == rhs.DeclaringType && lhs.Name == rhs.Name;
 		}
 
-		// Token: 0x04000799 RID: 1945
+		
 		public const char HandleIndexCharacter = '-';
 
-		// Token: 0x0400079A RID: 1946
+		
 		private static Regex StringFormatSymbolsRegex = new Regex("{.*?}");
 
-		// Token: 0x0400079B RID: 1947
+		
 		private static StringBuilder tmpStringBuilder = new StringBuilder();
 	}
 }

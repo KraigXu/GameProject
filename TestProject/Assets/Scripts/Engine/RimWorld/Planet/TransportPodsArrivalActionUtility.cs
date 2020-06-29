@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001270 RID: 4720
+	
 	public static class TransportPodsArrivalActionUtility
 	{
-		// Token: 0x06006E71 RID: 28273 RVA: 0x00268DEF File Offset: 0x00266FEF
+		
 		public static IEnumerable<FloatMenuOption> GetFloatMenuOptions<T>(Func<FloatMenuAcceptanceReport> acceptanceReportGetter, Func<T> arrivalActionGetter, string label, CompLaunchable representative, int destinationTile, Action<Action> uiConfirmationCallback = null) where T : TransportPodsArrivalAction
 		{
 			FloatMenuAcceptanceReport floatMenuAcceptanceReport = acceptanceReportGetter();
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 				}
 				else
 				{
-					Action <>9__1;
+
 					yield return new FloatMenuOption(label, delegate
 					{
 						FloatMenuAcceptanceReport floatMenuAcceptanceReport2 = acceptanceReportGetter();
@@ -38,14 +38,11 @@ namespace RimWorld.Planet
 							return;
 						}
 						Action<Action> uiConfirmationCallback2 = uiConfirmationCallback;
-						Action obj;
-						if ((obj = <>9__1) == null)
+						Action obj = delegate
 						{
-							obj = (<>9__1 = delegate
-							{
-								representative.TryLaunch(destinationTile, arrivalActionGetter());
-							});
-						}
+							representative.TryLaunch(destinationTile, arrivalActionGetter());
+						};
+
 						uiConfirmationCallback2(obj);
 					}, MenuOptionPriority.Default, null, null, 0f, null, null);
 				}
@@ -53,7 +50,7 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006E72 RID: 28274 RVA: 0x00268E24 File Offset: 0x00267024
+		
 		public static bool AnyNonDownedColonist(IEnumerable<IThingHolder> pods)
 		{
 			foreach (IThingHolder thingHolder in pods)
@@ -71,7 +68,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006E73 RID: 28275 RVA: 0x00268EA4 File Offset: 0x002670A4
+		
 		public static bool AnyPotentialCaravanOwner(IEnumerable<IThingHolder> pods, Faction faction)
 		{
 			foreach (IThingHolder thingHolder in pods)
@@ -89,7 +86,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006E74 RID: 28276 RVA: 0x00268F20 File Offset: 0x00267120
+		
 		public static Thing GetLookTarget(List<ActiveDropPodInfo> pods)
 		{
 			for (int i = 0; i < pods.Count; i++)
@@ -115,7 +112,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006E75 RID: 28277 RVA: 0x00268FA8 File Offset: 0x002671A8
+		
 		public static void DropTravelingTransportPods(List<ActiveDropPodInfo> dropPods, IntVec3 near, Map map)
 		{
 			TransportPodsArrivalActionUtility.RemovePawnsFromWorldPawns(dropPods);
@@ -127,7 +124,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006E76 RID: 28278 RVA: 0x00268FF0 File Offset: 0x002671F0
+		
 		public static void RemovePawnsFromWorldPawns(List<ActiveDropPodInfo> pods)
 		{
 			for (int i = 0; i < pods.Count; i++)

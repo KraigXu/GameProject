@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006F0 RID: 1776
+	
 	public class JoyGiver_InteractBuildingSitAdjacent : JoyGiver_InteractBuilding
 	{
-		// Token: 0x06002F18 RID: 12056 RVA: 0x00108E18 File Offset: 0x00107018
+		
 		protected override Job TryGivePlayJob(Pawn pawn, Thing t)
 		{
 			JoyGiver_InteractBuildingSitAdjacent.tmpCells.Clear();
@@ -41,7 +41,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001AA8 RID: 6824
+		
 		private static List<IntVec3> tmpCells = new List<IntVec3>();
 	}
 }

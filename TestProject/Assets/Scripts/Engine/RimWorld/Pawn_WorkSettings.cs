@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020007BD RID: 1981
+	
 	public class Pawn_WorkSettings : IExposable
 	{
-		// Token: 0x17000957 RID: 2391
+		
 		// (get) Token: 0x06003341 RID: 13121 RVA: 0x0011C124 File Offset: 0x0011A324
 		public bool EverWork
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000958 RID: 2392
+		
 		// (get) Token: 0x06003342 RID: 13122 RVA: 0x0011C12F File Offset: 0x0011A32F
 		public List<WorkGiver> WorkGiversInOrderNormal
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000959 RID: 2393
+		
 		// (get) Token: 0x06003343 RID: 13123 RVA: 0x0011C145 File Offset: 0x0011A345
 		public List<WorkGiver> WorkGiversInOrderEmergency
 		{
@@ -47,18 +47,18 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003344 RID: 13124 RVA: 0x0011C15B File Offset: 0x0011A35B
+		
 		public Pawn_WorkSettings()
 		{
 		}
 
-		// Token: 0x06003345 RID: 13125 RVA: 0x0011C180 File Offset: 0x0011A380
+		
 		public Pawn_WorkSettings(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x06003346 RID: 13126 RVA: 0x0011C1AC File Offset: 0x0011A3AC
+		
 		public void ExposeData()
 		{
 			Scribe_Deep.Look<DefMap<WorkTypeDef, int>>(ref this.priorities, "priorities", Array.Empty<object>());
@@ -72,7 +72,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003347 RID: 13127 RVA: 0x0011C209 File Offset: 0x0011A409
+		
 		public void EnableAndInitializeIfNotAlreadyInitialized()
 		{
 			if (this.priorities == null)
@@ -81,7 +81,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003348 RID: 13128 RVA: 0x0011C21C File Offset: 0x0011A41C
+		
 		public void EnableAndInitialize()
 		{
 			if (this.priorities == null)
@@ -118,7 +118,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003349 RID: 13129 RVA: 0x0011C358 File Offset: 0x0011A558
+		
 		private void ConfirmInitializedDebug()
 		{
 			if (this.priorities == null)
@@ -128,7 +128,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600334A RID: 13130 RVA: 0x0011C380 File Offset: 0x0011A580
+		
 		public void SetPriority(WorkTypeDef w, int priority)
 		{
 			this.ConfirmInitializedDebug();
@@ -155,7 +155,7 @@ namespace RimWorld
 			this.workGiversDirty = true;
 		}
 
-		// Token: 0x0600334B RID: 13131 RVA: 0x0011C428 File Offset: 0x0011A628
+		
 		public int GetPriority(WorkTypeDef w)
 		{
 			this.ConfirmInitializedDebug();
@@ -167,21 +167,21 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x0600334C RID: 13132 RVA: 0x0011C45B File Offset: 0x0011A65B
+		
 		public bool WorkIsActive(WorkTypeDef w)
 		{
 			this.ConfirmInitializedDebug();
 			return this.GetPriority(w) > 0;
 		}
 
-		// Token: 0x0600334D RID: 13133 RVA: 0x0011C46D File Offset: 0x0011A66D
+		
 		public void Disable(WorkTypeDef w)
 		{
 			this.ConfirmInitializedDebug();
 			this.SetPriority(w, 0);
 		}
 
-		// Token: 0x0600334E RID: 13134 RVA: 0x0011C47D File Offset: 0x0011A67D
+		
 		public void DisableAll()
 		{
 			this.ConfirmInitializedDebug();
@@ -189,13 +189,13 @@ namespace RimWorld
 			this.workGiversDirty = true;
 		}
 
-		// Token: 0x0600334F RID: 13135 RVA: 0x0011C498 File Offset: 0x0011A698
+		
 		public void Notify_UseWorkPrioritiesChanged()
 		{
 			this.workGiversDirty = true;
 		}
 
-		// Token: 0x06003350 RID: 13136 RVA: 0x0011C4A4 File Offset: 0x0011A6A4
+		
 		public void Notify_DisabledWorkTypesChanged()
 		{
 			if (this.priorities == null)
@@ -209,7 +209,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003351 RID: 13137 RVA: 0x0011C4E8 File Offset: 0x0011A6E8
+		
 		private void CacheWorkGiversInOrder()
 		{
 			Pawn_WorkSettings.wtsByPrio.Clear();
@@ -265,7 +265,7 @@ namespace RimWorld
 			this.workGiversDirty = false;
 		}
 
-		// Token: 0x06003352 RID: 13138 RVA: 0x0011C6B8 File Offset: 0x0011A8B8
+		
 		public string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -295,7 +295,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06003353 RID: 13139 RVA: 0x0011C7B8 File Offset: 0x0011A9B8
+		
 		private string DebugStringFor(WorkGiverDef wg)
 		{
 			return string.Concat(new object[]
@@ -312,31 +312,31 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x04001B98 RID: 7064
+		
 		private Pawn pawn;
 
-		// Token: 0x04001B99 RID: 7065
+		
 		private DefMap<WorkTypeDef, int> priorities;
 
-		// Token: 0x04001B9A RID: 7066
+		
 		private bool workGiversDirty = true;
 
-		// Token: 0x04001B9B RID: 7067
+		
 		private List<WorkGiver> workGiversInOrderEmerg = new List<WorkGiver>();
 
-		// Token: 0x04001B9C RID: 7068
+		
 		private List<WorkGiver> workGiversInOrderNormal = new List<WorkGiver>();
 
-		// Token: 0x04001B9D RID: 7069
+		
 		public const int LowestPriority = 4;
 
-		// Token: 0x04001B9E RID: 7070
+		
 		public const int DefaultPriority = 3;
 
-		// Token: 0x04001B9F RID: 7071
+		
 		private const int MaxInitialActiveWorks = 6;
 
-		// Token: 0x04001BA0 RID: 7072
+		
 		private static List<WorkTypeDef> wtsByPrio = new List<WorkTypeDef>();
 	}
 }

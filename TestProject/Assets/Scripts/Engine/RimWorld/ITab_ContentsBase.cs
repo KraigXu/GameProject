@@ -6,14 +6,14 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EA4 RID: 3748
+	
 	public abstract class ITab_ContentsBase : ITab
 	{
-		// Token: 0x17001073 RID: 4211
+		
 		// (get) Token: 0x06005B7B RID: 23419
 		public abstract IList<Thing> container { get; }
 
-		// Token: 0x17001074 RID: 4212
+		
 		// (get) Token: 0x06005B7C RID: 23420 RVA: 0x001F7D26 File Offset: 0x001F5F26
 		public override bool IsVisible
 		{
@@ -23,13 +23,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B7D RID: 23421 RVA: 0x001F7D3A File Offset: 0x001F5F3A
+		
 		public ITab_ContentsBase()
 		{
 			this.size = new Vector2(460f, 450f);
 		}
 
-		// Token: 0x06005B7E RID: 23422 RVA: 0x001F7D6C File Offset: 0x001F5F6C
+		
 		protected override void FillTab()
 		{
 			this.thingsToSelect.Clear();
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B7F RID: 23423 RVA: 0x001F7E38 File Offset: 0x001F6038
+		
 		protected virtual void DoItemsLists(Rect inRect, ref float curY)
 		{
 			GUI.BeginGroup(inRect);
@@ -78,14 +78,14 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005B80 RID: 23424 RVA: 0x001F7F1C File Offset: 0x001F611C
+		
 		protected virtual void OnDropThing(Thing t, int count)
 		{
 			Thing thing;
 			GenDrop.TryDropSpawn_NewTmp(t.SplitOff(count), base.SelThing.Position, base.SelThing.Map, ThingPlaceMode.Near, out thing, null, null, true);
 		}
 
-		// Token: 0x06005B81 RID: 23425 RVA: 0x001F7F54 File Offset: 0x001F6154
+		
 		protected void DoThingRow(ThingDef thingDef, int count, List<Thing> things, float width, ref float curY, Action<int> discardAction)
 		{
 			Rect rect = new Rect(0f, curY, width, 28f);
@@ -167,50 +167,50 @@ namespace RimWorld
 			curY += 28f;
 		}
 
-		// Token: 0x06005B82 RID: 23426 RVA: 0x001F82C3 File Offset: 0x001F64C3
+		
 		private void SelectLater(List<Thing> things)
 		{
 			this.thingsToSelect.Clear();
 			this.thingsToSelect.AddRange(things);
 		}
 
-		// Token: 0x040031EC RID: 12780
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x040031ED RID: 12781
+		
 		private float lastDrawnHeight;
 
-		// Token: 0x040031EE RID: 12782
+		
 		private List<Thing> thingsToSelect = new List<Thing>();
 
-		// Token: 0x040031EF RID: 12783
+		
 		public bool canRemoveThings = true;
 
-		// Token: 0x040031F0 RID: 12784
+		
 		protected static List<Thing> tmpSingleThing = new List<Thing>();
 
-		// Token: 0x040031F1 RID: 12785
+		
 		protected const float TopPadding = 20f;
 
-		// Token: 0x040031F2 RID: 12786
+		
 		protected const float SpaceBetweenItemsLists = 10f;
 
-		// Token: 0x040031F3 RID: 12787
+		
 		protected const float ThingRowHeight = 28f;
 
-		// Token: 0x040031F4 RID: 12788
+		
 		protected const float ThingIconSize = 28f;
 
-		// Token: 0x040031F5 RID: 12789
+		
 		protected const float ThingLeftX = 36f;
 
-		// Token: 0x040031F6 RID: 12790
+		
 		protected static readonly Color ThingLabelColor = ITab_Pawn_Gear.ThingLabelColor;
 
-		// Token: 0x040031F7 RID: 12791
+		
 		protected static readonly Color ThingHighlightColor = ITab_Pawn_Gear.HighlightColor;
 
-		// Token: 0x040031F8 RID: 12792
+		
 		public string containedItemsKey;
 	}
 }

@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x020001D7 RID: 471
+	
 	public static class SnowUtility
 	{
-		// Token: 0x06000D49 RID: 3401 RVA: 0x0004BB2B File Offset: 0x00049D2B
+		
 		public static SnowCategory GetSnowCategory(float snowDepth)
 		{
 			if (snowDepth < 0.03f)
@@ -27,7 +27,7 @@ namespace Verse
 			return SnowCategory.Thick;
 		}
 
-		// Token: 0x06000D4A RID: 3402 RVA: 0x0004BB58 File Offset: 0x00049D58
+		
 		public static string GetDescription(SnowCategory category)
 		{
 			switch (category)
@@ -47,7 +47,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D4B RID: 3403 RVA: 0x0004BBD6 File Offset: 0x00049DD6
+		
 		public static int MovementTicksAddOn(SnowCategory category)
 		{
 			switch (category)
@@ -67,7 +67,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D4C RID: 3404 RVA: 0x0004BC00 File Offset: 0x00049E00
+		
 		public static void AddSnowRadial(IntVec3 center, Map map, float radius, float depth)
 		{
 			int num = GenRadial.NumCellsInRadius(radius);

@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000692 RID: 1682
+	
 	public class Toils_Ingest
 	{
-		// Token: 0x06002DC2 RID: 11714 RVA: 0x001017F0 File Offset: 0x000FF9F0
+		
 		public static Toil TakeMealFromDispenser(TargetIndex ind, Pawn eater)
 		{
 			Toil toil = new Toil();
@@ -32,7 +32,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC3 RID: 11715 RVA: 0x00101864 File Offset: 0x000FFA64
+		
 		public static Toil PickupIngestible(TargetIndex ind, Pawn eater)
 		{
 			Toil toil = new Toil();
@@ -59,7 +59,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC4 RID: 11716 RVA: 0x001018B4 File Offset: 0x000FFAB4
+		
 		public static Toil CarryIngestibleToChewSpot(Pawn pawn, TargetIndex ingestibleInd)
 		{
 			Toil toil = new Toil();
@@ -132,7 +132,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC5 RID: 11717 RVA: 0x0010190C File Offset: 0x000FFB0C
+		
 		public static Toil ReserveFoodFromStackForIngesting(TargetIndex ind, Pawn ingester = null)
 		{
 			Toil toil = new Toil();
@@ -159,11 +159,11 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC6 RID: 11718 RVA: 0x00101970 File Offset: 0x000FFB70
+		
 		public static bool TryFindAdjacentIngestionPlaceSpot(IntVec3 root, ThingDef ingestibleDef, Pawn pawn, out IntVec3 placeSpot)
 		{
 			placeSpot = IntVec3.Invalid;
-			Func<Thing, bool> <>9__0;
+			
 			for (int i = 0; i < 4; i++)
 			{
 				IntVec3 intVec = root + GenAdj.CardinalDirections[i];
@@ -171,9 +171,9 @@ namespace RimWorld
 				{
 					IEnumerable<Thing> source = pawn.Map.thingGrid.ThingsAt(intVec);
 					Func<Thing, bool> predicate;
-					if ((predicate = <>9__0) == null)
+					if ((predicate ) == null)
 					{
-						predicate = (<>9__0 = ((Thing t) => t.def == ingestibleDef));
+						predicate = (9__0 = ((Thing t) => t.def == ingestibleDef));
 					}
 					if (!source.Where(predicate).Any<Thing>() && !intVec.IsForbidden(pawn))
 					{
@@ -196,7 +196,7 @@ namespace RimWorld
 					Toils_Ingest.spotSearchList.Add(Toils_Ingest.diagonals[k]);
 				}
 				Toils_Ingest.spotSearchList.Add(IntVec3.Zero);
-				Func<Thing, bool> <>9__1;
+				
 				for (int l = 0; l < Toils_Ingest.spotSearchList.Count; l++)
 				{
 					IntVec3 intVec2 = root + Toils_Ingest.spotSearchList[l];
@@ -204,9 +204,9 @@ namespace RimWorld
 					{
 						IEnumerable<Thing> source2 = pawn.Map.thingGrid.ThingsAt(intVec2);
 						Func<Thing, bool> predicate2;
-						if ((predicate2 = <>9__1) == null)
+						if ((predicate2 ) == null)
 						{
-							predicate2 = (<>9__1 = ((Thing t) => t.def == ingestibleDef));
+							predicate2 = (9__1 = ((Thing t) => t.def == ingestibleDef));
 						}
 						if (!source2.Where(predicate2).Any<Thing>())
 						{
@@ -219,7 +219,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002DC7 RID: 11719 RVA: 0x00101B24 File Offset: 0x000FFD24
+		
 		public static Toil FindAdjacentEatSurface(TargetIndex eatSurfaceInd, TargetIndex foodInd)
 		{
 			Toil toil = new Toil();
@@ -249,7 +249,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC8 RID: 11720 RVA: 0x00101B7C File Offset: 0x000FFD7C
+		
 		public static Toil ChewIngestible(Pawn chewer, float durationMultiplier, TargetIndex ingestibleInd, TargetIndex eatSurfaceInd = TargetIndex.None)
 		{
 			Toil toil = new Toil();
@@ -325,7 +325,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DC9 RID: 11721 RVA: 0x00101C70 File Offset: 0x000FFE70
+		
 		public static Toil AddIngestionEffects(Toil toil, Pawn chewer, TargetIndex ingestibleInd, TargetIndex eatSurfaceInd)
 		{
 			toil.WithEffect(delegate
@@ -374,7 +374,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002DCA RID: 11722 RVA: 0x00101CE4 File Offset: 0x000FFEE4
+		
 		public static Toil FinalizeIngest(Pawn ingester, TargetIndex ingestibleInd)
 		{
 			Toil toil = new Toil();
@@ -415,16 +415,16 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x04001A3A RID: 6714
+		
 		public const int MaxPawnReservations = 10;
 
-		// Token: 0x04001A3B RID: 6715
+		
 		private static List<IntVec3> spotSearchList = new List<IntVec3>();
 
-		// Token: 0x04001A3C RID: 6716
+		
 		private static List<IntVec3> cardinals = GenAdj.CardinalDirections.ToList<IntVec3>();
 
-		// Token: 0x04001A3D RID: 6717
+		
 		private static List<IntVec3> diagonals = GenAdj.DiagonalDirections.ToList<IntVec3>();
 	}
 }

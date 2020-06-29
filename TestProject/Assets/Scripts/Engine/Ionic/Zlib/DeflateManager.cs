@@ -2,10 +2,10 @@
 
 namespace Ionic.Zlib
 {
-	// Token: 0x020012AB RID: 4779
+	
 	internal sealed class DeflateManager
 	{
-		// Token: 0x060070DE RID: 28894 RVA: 0x0027509C File Offset: 0x0027329C
+		
 		internal DeflateManager()
 		{
 			this.dyn_ltree = new short[DeflateManager.HEAP_SIZE * 2];
@@ -13,7 +13,7 @@ namespace Ionic.Zlib
 			this.bl_tree = new short[(2 * InternalConstants.BL_CODES + 1) * 2];
 		}
 
-		// Token: 0x060070DF RID: 28895 RVA: 0x00275150 File Offset: 0x00273350
+		
 		private void _InitializeLazyMatch()
 		{
 			this.window_size = 2 * this.w_size;
@@ -28,7 +28,7 @@ namespace Ionic.Zlib
 			this.ins_h = 0;
 		}
 
-		// Token: 0x060070E0 RID: 28896 RVA: 0x002751D0 File Offset: 0x002733D0
+		
 		private void _InitializeTreeData()
 		{
 			this.treeLiterals.dyn_tree = this.dyn_ltree;
@@ -43,7 +43,7 @@ namespace Ionic.Zlib
 			this._InitializeBlocks();
 		}
 
-		// Token: 0x060070E1 RID: 28897 RVA: 0x0027525C File Offset: 0x0027345C
+		
 		internal void _InitializeBlocks()
 		{
 			for (int i = 0; i < InternalConstants.L_CODES; i++)
@@ -63,7 +63,7 @@ namespace Ionic.Zlib
 			this.last_lit = (this.matches = 0);
 		}
 
-		// Token: 0x060070E2 RID: 28898 RVA: 0x002752EC File Offset: 0x002734EC
+		
 		internal void pqdownheap(short[] tree, int k)
 		{
 			int num = this.heap[k];
@@ -83,7 +83,7 @@ namespace Ionic.Zlib
 			this.heap[k] = num;
 		}
 
-		// Token: 0x060070E3 RID: 28899 RVA: 0x00275378 File Offset: 0x00273578
+		
 		internal static bool _IsSmaller(short[] tree, int n, int m, sbyte[] depth)
 		{
 			short num = tree[n * 2];
@@ -91,7 +91,7 @@ namespace Ionic.Zlib
 			return num < num2 || (num == num2 && depth[n] <= depth[m]);
 		}
 
-		// Token: 0x060070E4 RID: 28900 RVA: 0x002753A8 File Offset: 0x002735A8
+		
 		internal void scan_tree(short[] tree, int max_code)
 		{
 			int num = -1;
@@ -160,7 +160,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070E5 RID: 28901 RVA: 0x002754C4 File Offset: 0x002736C4
+		
 		internal int build_bl_tree()
 		{
 			this.scan_tree(this.dyn_ltree, this.treeLiterals.max_code);
@@ -175,7 +175,7 @@ namespace Ionic.Zlib
 			return num;
 		}
 
-		// Token: 0x060070E6 RID: 28902 RVA: 0x0027554C File Offset: 0x0027374C
+		
 		internal void send_all_trees(int lcodes, int dcodes, int blcodes)
 		{
 			this.send_bits(lcodes - 257, 5);
@@ -189,7 +189,7 @@ namespace Ionic.Zlib
 			this.send_tree(this.dyn_dtree, dcodes - 1);
 		}
 
-		// Token: 0x060070E7 RID: 28903 RVA: 0x002755C0 File Offset: 0x002737C0
+		
 		internal void send_tree(short[] tree, int max_code)
 		{
 			int num = -1;
@@ -257,21 +257,21 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070E8 RID: 28904 RVA: 0x002756D6 File Offset: 0x002738D6
+		
 		private void put_bytes(byte[] p, int start, int len)
 		{
 			Array.Copy(p, start, this.pending, this.pendingCount, len);
 			this.pendingCount += len;
 		}
 
-		// Token: 0x060070E9 RID: 28905 RVA: 0x002756FC File Offset: 0x002738FC
+		
 		internal void send_code(int c, short[] tree)
 		{
 			int num = c * 2;
 			this.send_bits((int)tree[num] & 65535, (int)tree[num + 1] & 65535);
 		}
 
-		// Token: 0x060070EA RID: 28906 RVA: 0x00275728 File Offset: 0x00273928
+		
 		internal void send_bits(int value, int length)
 		{
 			if (this.bi_valid > DeflateManager.Buf_size - length)
@@ -293,7 +293,7 @@ namespace Ionic.Zlib
 			this.bi_valid += length;
 		}
 
-		// Token: 0x060070EB RID: 28907 RVA: 0x00275804 File Offset: 0x00273A04
+		
 		internal void _tr_align()
 		{
 			this.send_bits(DeflateManager.STATIC_TREES << 1, 3);
@@ -308,7 +308,7 @@ namespace Ionic.Zlib
 			this.last_eob_len = 7;
 		}
 
-		// Token: 0x060070EC RID: 28908 RVA: 0x00275878 File Offset: 0x00273A78
+		
 		internal bool _tr_tally(int dist, int lc)
 		{
 			this.pending[this._distanceOffset + this.last_lit * 2] = (byte)((uint)dist >> 8);
@@ -349,7 +349,7 @@ namespace Ionic.Zlib
 			return this.last_lit == this.lit_bufsize - 1 || this.last_lit == this.lit_bufsize;
 		}
 
-		// Token: 0x060070ED RID: 28909 RVA: 0x002759DC File Offset: 0x00273BDC
+		
 		internal void send_compressed_block(short[] ltree, short[] dtree)
 		{
 			int num = 0;
@@ -392,7 +392,7 @@ namespace Ionic.Zlib
 			this.last_eob_len = (int)ltree[DeflateManager.END_BLOCK * 2 + 1];
 		}
 
-		// Token: 0x060070EE RID: 28910 RVA: 0x00275AE4 File Offset: 0x00273CE4
+		
 		internal void set_data_type()
 		{
 			int i = 0;
@@ -416,7 +416,7 @@ namespace Ionic.Zlib
 			this.data_type = (sbyte)((num2 > num >> 2) ? DeflateManager.Z_BINARY : DeflateManager.Z_ASCII);
 		}
 
-		// Token: 0x060070EF RID: 28911 RVA: 0x00275B60 File Offset: 0x00273D60
+		
 		internal void bi_flush()
 		{
 			if (this.bi_valid == 16)
@@ -444,7 +444,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F0 RID: 28912 RVA: 0x00275C0C File Offset: 0x00273E0C
+		
 		internal void bi_windup()
 		{
 			if (this.bi_valid > 8)
@@ -469,7 +469,7 @@ namespace Ionic.Zlib
 			this.bi_valid = 0;
 		}
 
-		// Token: 0x060070F1 RID: 28913 RVA: 0x00275C9C File Offset: 0x00273E9C
+		
 		internal void copy_block(int buf, int len, bool header)
 		{
 			this.bi_windup();
@@ -496,7 +496,7 @@ namespace Ionic.Zlib
 			this.put_bytes(this.window, buf, len);
 		}
 
-		// Token: 0x060070F2 RID: 28914 RVA: 0x00275D35 File Offset: 0x00273F35
+		
 		internal void flush_block_only(bool eof)
 		{
 			this._tr_flush_block((this.block_start >= 0) ? this.block_start : -1, this.strstart - this.block_start, eof);
@@ -504,7 +504,7 @@ namespace Ionic.Zlib
 			this._codec.flush_pending();
 		}
 
-		// Token: 0x060070F3 RID: 28915 RVA: 0x00275D74 File Offset: 0x00273F74
+		
 		internal BlockState DeflateNone(FlushType flush)
 		{
 			int num = 65535;
@@ -569,14 +569,14 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F4 RID: 28916 RVA: 0x00275E82 File Offset: 0x00274082
+		
 		internal void _tr_stored_block(int buf, int stored_len, bool eof)
 		{
 			this.send_bits((DeflateManager.STORED_BLOCK << 1) + (eof ? 1 : 0), 3);
 			this.copy_block(buf, stored_len, true);
 		}
 
-		// Token: 0x060070F5 RID: 28917 RVA: 0x00275EA4 File Offset: 0x002740A4
+		
 		internal void _tr_flush_block(int buf, int stored_len, bool eof)
 		{
 			int num = 0;
@@ -624,7 +624,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F6 RID: 28918 RVA: 0x00275FB4 File Offset: 0x002741B4
+		
 		private void _fillWindow()
 		{
 			for (;;)
@@ -681,7 +681,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F7 RID: 28919 RVA: 0x002761B4 File Offset: 0x002743B4
+		
 		internal BlockState DeflateFast(FlushType flush)
 		{
 			int num = 0;
@@ -776,7 +776,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F8 RID: 28920 RVA: 0x002764D0 File Offset: 0x002746D0
+		
 		internal BlockState DeflateSlow(FlushType flush)
 		{
 			int num = 0;
@@ -896,7 +896,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070F9 RID: 28921 RVA: 0x00276894 File Offset: 0x00274A94
+		
 		internal int longest_match(int cur_match)
 		{
 			int num = this.config.MaxChainLength;
@@ -949,7 +949,7 @@ namespace Ionic.Zlib
 			return this.lookahead;
 		}
 
-		// Token: 0x1700131E RID: 4894
+		
 		// (get) Token: 0x060070FA RID: 28922 RVA: 0x00276B0A File Offset: 0x00274D0A
 		// (set) Token: 0x060070FB RID: 28923 RVA: 0x00276B12 File Offset: 0x00274D12
 		internal bool WantRfc1950HeaderBytes
@@ -964,25 +964,25 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060070FC RID: 28924 RVA: 0x00276B1B File Offset: 0x00274D1B
+		
 		internal int Initialize(ZlibCodec codec, CompressionLevel level)
 		{
 			return this.Initialize(codec, level, 15);
 		}
 
-		// Token: 0x060070FD RID: 28925 RVA: 0x00276B27 File Offset: 0x00274D27
+		
 		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits)
 		{
 			return this.Initialize(codec, level, bits, DeflateManager.MEM_LEVEL_DEFAULT, CompressionStrategy.Default);
 		}
 
-		// Token: 0x060070FE RID: 28926 RVA: 0x00276B38 File Offset: 0x00274D38
+		
 		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits, CompressionStrategy compressionStrategy)
 		{
 			return this.Initialize(codec, level, bits, DeflateManager.MEM_LEVEL_DEFAULT, compressionStrategy);
 		}
 
-		// Token: 0x060070FF RID: 28927 RVA: 0x00276B4C File Offset: 0x00274D4C
+		
 		internal int Initialize(ZlibCodec codec, CompressionLevel level, int windowBits, int memLevel, CompressionStrategy strategy)
 		{
 			this._codec = codec;
@@ -1016,7 +1016,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x06007100 RID: 28928 RVA: 0x00276CA8 File Offset: 0x00274EA8
+		
 		internal void Reset()
 		{
 			this._codec.TotalBytesIn = (this._codec.TotalBytesOut = 0L);
@@ -1031,7 +1031,7 @@ namespace Ionic.Zlib
 			this._InitializeLazyMatch();
 		}
 
-		// Token: 0x06007101 RID: 28929 RVA: 0x00276D34 File Offset: 0x00274F34
+		
 		internal int End()
 		{
 			if (this.status != DeflateManager.INIT_STATE && this.status != DeflateManager.BUSY_STATE && this.status != DeflateManager.FINISH_STATE)
@@ -1049,7 +1049,7 @@ namespace Ionic.Zlib
 			return -3;
 		}
 
-		// Token: 0x06007102 RID: 28930 RVA: 0x00276D98 File Offset: 0x00274F98
+		
 		private void SetDeflater()
 		{
 			switch (this.config.Flavor)
@@ -1068,7 +1068,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x06007103 RID: 28931 RVA: 0x00276DFC File Offset: 0x00274FFC
+		
 		internal int SetParams(CompressionLevel level, CompressionStrategy strategy)
 		{
 			int result = 0;
@@ -1087,7 +1087,7 @@ namespace Ionic.Zlib
 			return result;
 		}
 
-		// Token: 0x06007104 RID: 28932 RVA: 0x00276E64 File Offset: 0x00275064
+		
 		internal int SetDictionary(byte[] dictionary)
 		{
 			int num = dictionary.Length;
@@ -1120,7 +1120,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x06007105 RID: 28933 RVA: 0x00276FB0 File Offset: 0x002751B0
+		
 		internal int Deflate(FlushType flush)
 		{
 			if (this._codec.OutputBuffer == null || (this._codec.InputBuffer == null && this._codec.AvailableBytesIn != 0) || (this.status == DeflateManager.FINISH_STATE && flush != FlushType.Finish))
@@ -1271,16 +1271,16 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x04004540 RID: 17728
+		
 		private static readonly int MEM_LEVEL_MAX = 9;
 
-		// Token: 0x04004541 RID: 17729
+		
 		private static readonly int MEM_LEVEL_DEFAULT = 8;
 
-		// Token: 0x04004542 RID: 17730
+		
 		private DeflateManager.CompressFunc DeflateFunction;
 
-		// Token: 0x04004543 RID: 17731
+		
 		private static readonly string[] _ErrorMessage = new string[]
 		{
 			"need dictionary",
@@ -1295,224 +1295,224 @@ namespace Ionic.Zlib
 			""
 		};
 
-		// Token: 0x04004544 RID: 17732
+		
 		private static readonly int PRESET_DICT = 32;
 
-		// Token: 0x04004545 RID: 17733
+		
 		private static readonly int INIT_STATE = 42;
 
-		// Token: 0x04004546 RID: 17734
+		
 		private static readonly int BUSY_STATE = 113;
 
-		// Token: 0x04004547 RID: 17735
+		
 		private static readonly int FINISH_STATE = 666;
 
-		// Token: 0x04004548 RID: 17736
+		
 		private static readonly int Z_DEFLATED = 8;
 
-		// Token: 0x04004549 RID: 17737
+		
 		private static readonly int STORED_BLOCK = 0;
 
-		// Token: 0x0400454A RID: 17738
+		
 		private static readonly int STATIC_TREES = 1;
 
-		// Token: 0x0400454B RID: 17739
+		
 		private static readonly int DYN_TREES = 2;
 
-		// Token: 0x0400454C RID: 17740
+		
 		private static readonly int Z_BINARY = 0;
 
-		// Token: 0x0400454D RID: 17741
+		
 		private static readonly int Z_ASCII = 1;
 
-		// Token: 0x0400454E RID: 17742
+		
 		private static readonly int Z_UNKNOWN = 2;
 
-		// Token: 0x0400454F RID: 17743
+		
 		private static readonly int Buf_size = 16;
 
-		// Token: 0x04004550 RID: 17744
+		
 		private static readonly int MIN_MATCH = 3;
 
-		// Token: 0x04004551 RID: 17745
+		
 		private static readonly int MAX_MATCH = 258;
 
-		// Token: 0x04004552 RID: 17746
+		
 		private static readonly int MIN_LOOKAHEAD = DeflateManager.MAX_MATCH + DeflateManager.MIN_MATCH + 1;
 
-		// Token: 0x04004553 RID: 17747
+		
 		private static readonly int HEAP_SIZE = 2 * InternalConstants.L_CODES + 1;
 
-		// Token: 0x04004554 RID: 17748
+		
 		private static readonly int END_BLOCK = 256;
 
-		// Token: 0x04004555 RID: 17749
+		
 		internal ZlibCodec _codec;
 
-		// Token: 0x04004556 RID: 17750
+		
 		internal int status;
 
-		// Token: 0x04004557 RID: 17751
+		
 		internal byte[] pending;
 
-		// Token: 0x04004558 RID: 17752
+		
 		internal int nextPending;
 
-		// Token: 0x04004559 RID: 17753
+		
 		internal int pendingCount;
 
-		// Token: 0x0400455A RID: 17754
+		
 		internal sbyte data_type;
 
-		// Token: 0x0400455B RID: 17755
+		
 		internal int last_flush;
 
-		// Token: 0x0400455C RID: 17756
+		
 		internal int w_size;
 
-		// Token: 0x0400455D RID: 17757
+		
 		internal int w_bits;
 
-		// Token: 0x0400455E RID: 17758
+		
 		internal int w_mask;
 
-		// Token: 0x0400455F RID: 17759
+		
 		internal byte[] window;
 
-		// Token: 0x04004560 RID: 17760
+		
 		internal int window_size;
 
-		// Token: 0x04004561 RID: 17761
+		
 		internal short[] prev;
 
-		// Token: 0x04004562 RID: 17762
+		
 		internal short[] head;
 
-		// Token: 0x04004563 RID: 17763
+		
 		internal int ins_h;
 
-		// Token: 0x04004564 RID: 17764
+		
 		internal int hash_size;
 
-		// Token: 0x04004565 RID: 17765
+		
 		internal int hash_bits;
 
-		// Token: 0x04004566 RID: 17766
+		
 		internal int hash_mask;
 
-		// Token: 0x04004567 RID: 17767
+		
 		internal int hash_shift;
 
-		// Token: 0x04004568 RID: 17768
+		
 		internal int block_start;
 
-		// Token: 0x04004569 RID: 17769
+		
 		private DeflateManager.Config config;
 
-		// Token: 0x0400456A RID: 17770
+		
 		internal int match_length;
 
-		// Token: 0x0400456B RID: 17771
+		
 		internal int prev_match;
 
-		// Token: 0x0400456C RID: 17772
+		
 		internal int match_available;
 
-		// Token: 0x0400456D RID: 17773
+		
 		internal int strstart;
 
-		// Token: 0x0400456E RID: 17774
+		
 		internal int match_start;
 
-		// Token: 0x0400456F RID: 17775
+		
 		internal int lookahead;
 
-		// Token: 0x04004570 RID: 17776
+		
 		internal int prev_length;
 
-		// Token: 0x04004571 RID: 17777
+		
 		internal CompressionLevel compressionLevel;
 
-		// Token: 0x04004572 RID: 17778
+		
 		internal CompressionStrategy compressionStrategy;
 
-		// Token: 0x04004573 RID: 17779
+		
 		internal short[] dyn_ltree;
 
-		// Token: 0x04004574 RID: 17780
+		
 		internal short[] dyn_dtree;
 
-		// Token: 0x04004575 RID: 17781
+		
 		internal short[] bl_tree;
 
-		// Token: 0x04004576 RID: 17782
+		
 		internal Tree treeLiterals = new Tree();
 
-		// Token: 0x04004577 RID: 17783
+		
 		internal Tree treeDistances = new Tree();
 
-		// Token: 0x04004578 RID: 17784
+		
 		internal Tree treeBitLengths = new Tree();
 
-		// Token: 0x04004579 RID: 17785
+		
 		internal short[] bl_count = new short[InternalConstants.MAX_BITS + 1];
 
-		// Token: 0x0400457A RID: 17786
+		
 		internal int[] heap = new int[2 * InternalConstants.L_CODES + 1];
 
-		// Token: 0x0400457B RID: 17787
+		
 		internal int heap_len;
 
-		// Token: 0x0400457C RID: 17788
+		
 		internal int heap_max;
 
-		// Token: 0x0400457D RID: 17789
+		
 		internal sbyte[] depth = new sbyte[2 * InternalConstants.L_CODES + 1];
 
-		// Token: 0x0400457E RID: 17790
+		
 		internal int _lengthOffset;
 
-		// Token: 0x0400457F RID: 17791
+		
 		internal int lit_bufsize;
 
-		// Token: 0x04004580 RID: 17792
+		
 		internal int last_lit;
 
-		// Token: 0x04004581 RID: 17793
+		
 		internal int _distanceOffset;
 
-		// Token: 0x04004582 RID: 17794
+		
 		internal int opt_len;
 
-		// Token: 0x04004583 RID: 17795
+		
 		internal int static_len;
 
-		// Token: 0x04004584 RID: 17796
+		
 		internal int matches;
 
-		// Token: 0x04004585 RID: 17797
+		
 		internal int last_eob_len;
 
-		// Token: 0x04004586 RID: 17798
+		
 		internal short bi_buf;
 
-		// Token: 0x04004587 RID: 17799
+		
 		internal int bi_valid;
 
-		// Token: 0x04004588 RID: 17800
+		
 		private bool Rfc1950BytesEmitted;
 
-		// Token: 0x04004589 RID: 17801
+		
 		private bool _WantRfc1950HeaderBytes = true;
 
-		// Token: 0x02002062 RID: 8290
+		
 		// (Invoke) Token: 0x0600B1BB RID: 45499
 		internal delegate BlockState CompressFunc(FlushType flush);
 
-		// Token: 0x02002063 RID: 8291
+		
 		internal class Config
 		{
-			// Token: 0x0600B1BE RID: 45502 RVA: 0x0032E797 File Offset: 0x0032C997
+			
 			private Config(int goodLength, int maxLazy, int niceLength, int maxChainLength, DeflateFlavor flavor)
 			{
 				this.GoodLength = goodLength;
@@ -1522,28 +1522,28 @@ namespace Ionic.Zlib
 				this.Flavor = flavor;
 			}
 
-			// Token: 0x0600B1BF RID: 45503 RVA: 0x0032E7C4 File Offset: 0x0032C9C4
+			
 			public static DeflateManager.Config Lookup(CompressionLevel level)
 			{
 				return DeflateManager.Config.Table[(int)level];
 			}
 
-			// Token: 0x0400796D RID: 31085
+			
 			internal int GoodLength;
 
-			// Token: 0x0400796E RID: 31086
+			
 			internal int MaxLazy;
 
-			// Token: 0x0400796F RID: 31087
+			
 			internal int NiceLength;
 
-			// Token: 0x04007970 RID: 31088
+			
 			internal int MaxChainLength;
 
-			// Token: 0x04007971 RID: 31089
+			
 			internal DeflateFlavor Flavor;
 
-			// Token: 0x04007972 RID: 31090
+			
 			private static readonly DeflateManager.Config[] Table = new DeflateManager.Config[]
 			{
 				new DeflateManager.Config(0, 0, 0, 0, DeflateFlavor.Store),

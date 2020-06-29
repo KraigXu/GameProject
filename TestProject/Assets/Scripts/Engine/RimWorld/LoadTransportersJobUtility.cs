@@ -6,16 +6,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200074C RID: 1868
+	
 	public static class LoadTransportersJobUtility
 	{
-		// Token: 0x060030F3 RID: 12531 RVA: 0x0011224C File Offset: 0x0011044C
+		
 		public static bool HasJobOnTransporter(Pawn pawn, CompTransporter transporter)
 		{
 			return !transporter.parent.IsForbidden(pawn) && transporter.AnythingLeftToLoad && pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation) && pawn.CanReach(transporter.parent, PathEndMode.Touch, pawn.NormalMaxDanger(), false, TraverseMode.ByPawn) && LoadTransportersJobUtility.FindThingToLoad(pawn, transporter).Thing != null;
 		}
 
-		// Token: 0x060030F4 RID: 12532 RVA: 0x001122BE File Offset: 0x001104BE
+		
 		public static Job JobOnTransporter(Pawn p, CompTransporter transporter)
 		{
 			Job job = JobMaker.MakeJob(JobDefOf.HaulToTransporter, LocalTargetInfo.Invalid, transporter.parent);
@@ -23,7 +23,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x060030F5 RID: 12533 RVA: 0x001122E4 File Offset: 0x001104E4
+		
 		public static ThingCount FindThingToLoad(Pawn p, CompTransporter transporter)
 		{
 			LoadTransportersJobUtility.neededThings.Clear();
@@ -115,10 +115,10 @@ namespace RimWorld
 			return default(ThingCount);
 		}
 
-		// Token: 0x04001AFD RID: 6909
+		
 		private static HashSet<Thing> neededThings = new HashSet<Thing>();
 
-		// Token: 0x04001AFE RID: 6910
+		
 		private static Dictionary<TransferableOneWay, int> tmpAlreadyLoading = new Dictionary<TransferableOneWay, int>();
 	}
 }

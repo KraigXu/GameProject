@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006F4 RID: 1780
+	
 	public static class WatchBuildingUtility
 	{
-		// Token: 0x06002F24 RID: 12068 RVA: 0x001090A1 File Offset: 0x001072A1
+		
 		public static IEnumerable<IntVec3> CalculateWatchCells(ThingDef def, IntVec3 center, Rot4 rot, Map map)
 		{
 			List<int> allowedDirections = WatchBuildingUtility.CalculateAllowedDirections(def, rot);
@@ -29,7 +29,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002F25 RID: 12069 RVA: 0x001090C8 File Offset: 0x001072C8
+		
 		public static bool TryFindBestWatchCell(Thing toWatch, Pawn pawn, bool desireSit, out IntVec3 result, out Building chair)
 		{
 			List<int> list = WatchBuildingUtility.CalculateAllowedDirections(toWatch.def, toWatch.Rotation);
@@ -85,7 +85,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002F26 RID: 12070 RVA: 0x0010927C File Offset: 0x0010747C
+		
 		public static bool CanWatchFromBed(Pawn pawn, Building_Bed bed, Thing toWatch)
 		{
 			if (!WatchBuildingUtility.EverPossibleToWatchFrom(pawn.Position, toWatch.Position, pawn.Map, true, toWatch.def))
@@ -124,7 +124,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002F27 RID: 12071 RVA: 0x001093A8 File Offset: 0x001075A8
+		
 		private static CellRect GetWatchCellRect(ThingDef def, IntVec3 center, Rot4 rot, int watchRot)
 		{
 			Rot4 a = new Rot4(watchRot);
@@ -174,14 +174,14 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06002F28 RID: 12072 RVA: 0x0010957C File Offset: 0x0010777C
+		
 		private static bool EverPossibleToWatchFrom(IntVec3 watchCell, IntVec3 buildingCenter, Map map, bool bedAllowed, ThingDef def)
 		{
 			Room room = (def.building != null && def.building.watchBuildingInSameRoom) ? buildingCenter.GetRoom(map, RegionType.Set_Passable) : null;
 			return (room == null || room.ContainsCell(watchCell)) && (watchCell.Standable(map) || (bedAllowed && watchCell.GetEdifice(map) is Building_Bed)) && GenSight.LineOfSight(buildingCenter, watchCell, map, true, null, 0, 0);
 		}
 
-		// Token: 0x06002F29 RID: 12073 RVA: 0x001095E0 File Offset: 0x001077E0
+		
 		private static List<int> CalculateAllowedDirections(ThingDef toWatchDef, Rot4 toWatchRot)
 		{
 			WatchBuildingUtility.allowedDirections.Clear();
@@ -199,7 +199,7 @@ namespace RimWorld
 			return WatchBuildingUtility.allowedDirections;
 		}
 
-		// Token: 0x04001AA9 RID: 6825
+		
 		private static List<int> allowedDirections = new List<int>();
 	}
 }

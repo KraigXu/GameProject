@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B40 RID: 2880
+	
 	public static class ChildRelationUtility
 	{
-		// Token: 0x060043B8 RID: 17336 RVA: 0x0016CC10 File Offset: 0x0016AE10
+		
 		public static float ChanceOfBecomingChildOf(Pawn child, Pawn father, Pawn mother, PawnGenerationRequest? childGenerationRequest, PawnGenerationRequest? fatherGenerationRequest, PawnGenerationRequest? motherGenerationRequest)
 		{
 			if (father != null && father.gender != Gender.Male)
@@ -96,7 +96,7 @@ namespace RimWorld
 			return skinColorFactor * num * num2 * num3 * num6 * num4;
 		}
 
-		// Token: 0x060043B9 RID: 17337 RVA: 0x0016CE8C File Offset: 0x0016B08C
+		
 		private static float GetParentAgeFactor(Pawn parent, Pawn child, float minAgeToHaveChildren, float usualAgeToHaveChildren, float maxAgeToHaveChildren)
 		{
 			float num = PawnRelationUtility.MaxPossibleBioAgeAt(parent.ageTracker.AgeBiologicalYearsFloat, parent.ageTracker.AgeChronologicalYearsFloat, child.ageTracker.AgeChronologicalYearsFloat);
@@ -129,13 +129,13 @@ namespace RimWorld
 			return Mathf.Max(ageFactor, ageFactor2);
 		}
 
-		// Token: 0x060043BA RID: 17338 RVA: 0x0016CF62 File Offset: 0x0016B162
+		
 		public static bool ChildWantsNameOfAnyParent(Pawn child)
 		{
 			return Rand.ValueSeeded(child.thingIDNumber ^ 88271612) < 0.99f;
 		}
 
-		// Token: 0x060043BB RID: 17339 RVA: 0x0016CF7C File Offset: 0x0016B17C
+		
 		private static int NumberOfChildrenFemaleWantsEver(Pawn female)
 		{
 			Rand.PushState();
@@ -145,7 +145,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060043BC RID: 17340 RVA: 0x0016CF9C File Offset: 0x0016B19C
+		
 		private static float? GetMelanin(Pawn pawn, PawnGenerationRequest? request)
 		{
 			if (request != null)
@@ -159,13 +159,13 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060043BD RID: 17341 RVA: 0x0016CFDF File Offset: 0x0016B1DF
+		
 		private static float GetAgeFactor(float ageAtBirth, float min, float max, float mid)
 		{
 			return GenMath.GetFactorInInterval(min, mid, max, 1.6f, ageAtBirth);
 		}
 
-		// Token: 0x060043BE RID: 17342 RVA: 0x0016CFF0 File Offset: 0x0016B1F0
+		
 		private static float GetSkinColorFactor(float? childMelanin, float? fatherMelanin, float? motherMelanin, bool fatherIsNew, bool motherIsNew)
 		{
 			if (childMelanin != null && fatherMelanin != null && motherMelanin != null)
@@ -197,7 +197,7 @@ namespace RimWorld
 			return num5;
 		}
 
-		// Token: 0x060043BF RID: 17343 RVA: 0x0016D0B0 File Offset: 0x0016B2B0
+		
 		private static float GetNewParentSkinColorFactor(float? newParentMelanin, float? otherParentMelanin, float? childMelanin)
 		{
 			if (newParentMelanin != null)
@@ -238,13 +238,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060043C0 RID: 17344 RVA: 0x0016D192 File Offset: 0x0016B392
+		
 		public static float GetReflectedSkin(float value, float mirror)
 		{
 			return Mathf.Clamp01(GenMath.Reflection(value, mirror));
 		}
 
-		// Token: 0x060043C1 RID: 17345 RVA: 0x0016D1A0 File Offset: 0x0016B3A0
+		
 		public static float GetMelaninSimilarityFactor(float melanin1, float melanin2)
 		{
 			float min = Mathf.Clamp01(melanin1 - 0.15f);
@@ -252,7 +252,7 @@ namespace RimWorld
 			return GenMath.GetFactorInInterval(min, melanin1, max, 2.5f, melanin2);
 		}
 
-		// Token: 0x060043C2 RID: 17346 RVA: 0x0016D1D4 File Offset: 0x0016B3D4
+		
 		public static float GetRandomChildSkinColor(float fatherMelanin, float motherMelanin)
 		{
 			float clampMin = Mathf.Min(fatherMelanin, motherMelanin);
@@ -260,7 +260,7 @@ namespace RimWorld
 			return PawnSkinColors.GetRandomMelaninSimilarTo((fatherMelanin + motherMelanin) / 2f, clampMin, clampMax);
 		}
 
-		// Token: 0x060043C3 RID: 17347 RVA: 0x0016D204 File Offset: 0x0016B404
+		
 		public static bool DefinitelyHasNotBirthName(Pawn pawn)
 		{
 			Pawn spouse = pawn.GetSpouse();
@@ -272,25 +272,25 @@ namespace RimWorld
 			return !(((NameTriple)pawn.Name).Last != last) && ((spouse.GetMother() != null && ((NameTriple)spouse.GetMother().Name).Last == last) || (spouse.GetFather() != null && ((NameTriple)spouse.GetFather().Name).Last == last));
 		}
 
-		// Token: 0x040026C4 RID: 9924
+		
 		public const float MinFemaleAgeToHaveChildren = 16f;
 
-		// Token: 0x040026C5 RID: 9925
+		
 		public const float MaxFemaleAgeToHaveChildren = 45f;
 
-		// Token: 0x040026C6 RID: 9926
+		
 		public const float UsualFemaleAgeToHaveChildren = 27f;
 
-		// Token: 0x040026C7 RID: 9927
+		
 		public const float MinMaleAgeToHaveChildren = 14f;
 
-		// Token: 0x040026C8 RID: 9928
+		
 		public const float MaxMaleAgeToHaveChildren = 50f;
 
-		// Token: 0x040026C9 RID: 9929
+		
 		public const float UsualMaleAgeToHaveChildren = 30f;
 
-		// Token: 0x040026CA RID: 9930
+		
 		public const float ChanceForChildToHaveNameOfAnyParent = 0.99f;
 	}
 }

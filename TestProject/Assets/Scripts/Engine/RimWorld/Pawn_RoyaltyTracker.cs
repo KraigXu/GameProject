@@ -8,11 +8,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BB3 RID: 2995
+	
 	[StaticConstructorOnStartup]
 	public class Pawn_RoyaltyTracker : IExposable
 	{
-		// Token: 0x17000C90 RID: 3216
+		
 		// (get) Token: 0x06004692 RID: 18066 RVA: 0x0017D080 File Offset: 0x0017B280
 		public List<RoyalTitle> AllTitlesForReading
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C91 RID: 3217
+		
 		// (get) Token: 0x06004693 RID: 18067 RVA: 0x0017D088 File Offset: 0x0017B288
 		public List<RoyalTitle> AllTitlesInEffectForReading
 		{
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C92 RID: 3218
+		
 		// (get) Token: 0x06004694 RID: 18068 RVA: 0x0017D0A4 File Offset: 0x0017B2A4
 		public RoyalTitle MostSeniorTitle
 		{
@@ -57,7 +57,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C93 RID: 3219
+		
 		// (get) Token: 0x06004695 RID: 18069 RVA: 0x0017D101 File Offset: 0x0017B301
 		public IEnumerable<QuestScriptDef> PossibleDecreeQuests
 		{
@@ -94,13 +94,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004696 RID: 18070 RVA: 0x0017D114 File Offset: 0x0017B314
+		
 		public Pawn_RoyaltyTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x06004697 RID: 18071 RVA: 0x0017D194 File Offset: 0x0017B394
+		
 		private int FindFactionTitleIndex(Faction faction, bool createIfNotExisting = false)
 		{
 			for (int i = 0; i < this.titles.Count; i++)
@@ -123,7 +123,7 @@ namespace RimWorld
 			return -1;
 		}
 
-		// Token: 0x06004698 RID: 18072 RVA: 0x0017D214 File Offset: 0x0017B414
+		
 		public bool HasAnyTitleIn(Faction faction)
 		{
 			using (List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator())
@@ -139,7 +139,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004699 RID: 18073 RVA: 0x0017D270 File Offset: 0x0017B470
+		
 		public bool HasTitle(RoyalTitleDef title)
 		{
 			using (List<RoyalTitle>.Enumerator enumerator = this.titles.GetEnumerator())
@@ -155,14 +155,14 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600469A RID: 18074 RVA: 0x0017D2CC File Offset: 0x0017B4CC
+		
 		public bool HasPermit(RoyalTitlePermitDef permit, Faction faction)
 		{
 			RoyalTitleDef currentTitle = this.GetCurrentTitle(faction);
 			return currentTitle != null && currentTitle.permits != null && currentTitle.permits.Contains(permit);
 		}
 
-		// Token: 0x17000C94 RID: 3220
+		
 		// (get) Token: 0x0600469B RID: 18075 RVA: 0x0017D2FC File Offset: 0x0017B4FC
 		public bool HasAidPermit
 		{
@@ -188,7 +188,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600469C RID: 18076 RVA: 0x0017D3B8 File Offset: 0x0017B5B8
+		
 		public int GetPermitLastUsedTick(RoyalTitlePermitDef permitDef)
 		{
 			if (!this.permitLastUsedTick.ContainsKey(permitDef))
@@ -198,14 +198,14 @@ namespace RimWorld
 			return this.permitLastUsedTick[permitDef];
 		}
 
-		// Token: 0x0600469D RID: 18077 RVA: 0x0017D3D8 File Offset: 0x0017B5D8
+		
 		public bool PermitOnCooldown(RoyalTitlePermitDef permitDef)
 		{
 			int num = this.GetPermitLastUsedTick(permitDef);
 			return num != -1 && GenTicks.TicksGame < num + permitDef.CooldownTicks;
 		}
 
-		// Token: 0x0600469E RID: 18078 RVA: 0x0017D402 File Offset: 0x0017B602
+		
 		public void Notify_PermitUsed(RoyalTitlePermitDef permitDef)
 		{
 			if (!this.permitLastUsedTick.ContainsKey(permitDef))
@@ -214,7 +214,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600469F RID: 18079 RVA: 0x0017D424 File Offset: 0x0017B624
+		
 		public RoyalTitleDef MainTitle()
 		{
 			if (this.titles.Count == 0)
@@ -232,7 +232,7 @@ namespace RimWorld
 			return royalTitleDef;
 		}
 
-		// Token: 0x060046A0 RID: 18080 RVA: 0x0017D4A0 File Offset: 0x0017B6A0
+		
 		public int GetFavor(Faction faction)
 		{
 			int result;
@@ -243,7 +243,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060046A1 RID: 18081 RVA: 0x0017D4C0 File Offset: 0x0017B6C0
+		
 		public void GainFavor(Faction faction, int amount)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -269,7 +269,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046A2 RID: 18082 RVA: 0x0017D544 File Offset: 0x0017B744
+		
 		public bool TryRemoveFavor(Faction faction, int amount)
 		{
 			int num = this.GetFavor(faction);
@@ -281,7 +281,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060046A3 RID: 18083 RVA: 0x0017D56C File Offset: 0x0017B76C
+		
 		public void SetFavor(Faction faction, int amount)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -297,7 +297,7 @@ namespace RimWorld
 			this.favor.SetOrAdd(faction, amount);
 		}
 
-		// Token: 0x060046A4 RID: 18084 RVA: 0x0017D5C8 File Offset: 0x0017B7C8
+		
 		public RoyalTitleDef GetCurrentTitle(Faction faction)
 		{
 			RoyalTitle currentTitleInFaction = this.GetCurrentTitleInFaction(faction);
@@ -308,7 +308,7 @@ namespace RimWorld
 			return currentTitleInFaction.def;
 		}
 
-		// Token: 0x060046A5 RID: 18085 RVA: 0x0017D5DC File Offset: 0x0017B7DC
+		
 		public RoyalTitle GetCurrentTitleInFaction(Faction faction)
 		{
 			if (faction == null)
@@ -323,7 +323,7 @@ namespace RimWorld
 			return this.titles[num];
 		}
 
-		// Token: 0x060046A6 RID: 18086 RVA: 0x0017D614 File Offset: 0x0017B814
+		
 		public void SetTitle(Faction faction, RoyalTitleDef title, bool grantRewards, bool rewardsOnlyForNewestTitle = false, bool sendLetter = true)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -351,7 +351,7 @@ namespace RimWorld
 			this.OnPostTitleChanged(faction, title);
 		}
 
-		// Token: 0x060046A7 RID: 18087 RVA: 0x0017D6B0 File Offset: 0x0017B8B0
+		
 		public void ReduceTitle(Faction faction)
 		{
 			RoyalTitleDef currentTitle = this.GetCurrentTitle(faction);
@@ -382,7 +382,7 @@ namespace RimWorld
 			this.OnPostTitleChanged(faction, previousTitle);
 		}
 
-		// Token: 0x060046A8 RID: 18088 RVA: 0x0017D780 File Offset: 0x0017B980
+		
 		public Pawn GetHeir(Faction faction)
 		{
 			if (this.heirs != null && this.heirs.ContainsKey(faction))
@@ -392,7 +392,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060046A9 RID: 18089 RVA: 0x0017D7A6 File Offset: 0x0017B9A6
+		
 		public void SetHeir(Pawn heir, Faction faction)
 		{
 			if (this.heirs != null)
@@ -401,7 +401,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AA RID: 18090 RVA: 0x0017D7C0 File Offset: 0x0017B9C0
+		
 		public void AssignHeirIfNone(RoyalTitleDef t, Faction faction)
 		{
 			if (!this.heirs.ContainsKey(faction) && t.Awardable && this.pawn.FactionOrExtraHomeFaction != Faction.Empire)
@@ -410,7 +410,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AB RID: 18091 RVA: 0x0017D810 File Offset: 0x0017BA10
+		
 		public void RoyaltyTrackerTick()
 		{
 			List<RoyalTitle> allTitlesInEffectForReading = this.AllTitlesInEffectForReading;
@@ -451,27 +451,27 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AC RID: 18092 RVA: 0x0017DA3C File Offset: 0x0017BC3C
+		
 		public void IssueDecree(bool causedByMentalBreak, string mentalBreakReason = null)
 		{
-			Pawn_RoyaltyTracker.<>c__DisplayClass43_0 <>c__DisplayClass43_ = new Pawn_RoyaltyTracker.<>c__DisplayClass43_0();
+			Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_ = new Pawn_RoyaltyTracker.c__DisplayClass43_0();
 			if (!ModLister.RoyaltyInstalled)
 			{
 				Log.ErrorOnce("Decrees are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 281653, false);
 				return;
 			}
-			Pawn_RoyaltyTracker.<>c__DisplayClass43_0 <>c__DisplayClass43_2 = <>c__DisplayClass43_;
+			Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_2 = c__DisplayClass43_;
 			IIncidentTarget mapHeld = this.pawn.MapHeld;
-			<>c__DisplayClass43_2.target = (mapHeld ?? Find.World);
+			c__DisplayClass43_2.target = (mapHeld ?? Find.World);
 			QuestScriptDef questScriptDef;
-			if (this.PossibleDecreeQuests.TryRandomElementByWeight((QuestScriptDef x) => NaturalRandomQuestChooser.GetNaturalDecreeSelectionWeight(x, <>c__DisplayClass43_.target.StoryState), out questScriptDef))
+			if (this.PossibleDecreeQuests.TryRandomElementByWeight((QuestScriptDef x) => NaturalRandomQuestChooser.GetNaturalDecreeSelectionWeight(x, c__DisplayClass43_.target.StoryState), out questScriptDef))
 			{
 				this.lastDecreeTicks = Find.TickManager.TicksGame;
 				Slate slate = new Slate();
-				slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(<>c__DisplayClass43_.target), false);
+				slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(c__DisplayClass43_.target), false);
 				slate.Set<Pawn>("asker", this.pawn, false);
 				Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questScriptDef, slate);
-				<>c__DisplayClass43_.target.StoryState.RecordDecreeFired(questScriptDef);
+				c__DisplayClass43_.target.StoryState.RecordDecreeFired(questScriptDef);
 				string str;
 				if (causedByMentalBreak)
 				{
@@ -500,7 +500,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AD RID: 18093 RVA: 0x0017DBF8 File Offset: 0x0017BDF8
+		
 		private void CleanupThoughts(RoyalTitleDef title)
 		{
 			if (title == null)
@@ -517,7 +517,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AE RID: 18094 RVA: 0x0017DCA4 File Offset: 0x0017BEA4
+		
 		private void OnPreTitleChanged(Faction faction, RoyalTitleDef currentTitle, RoyalTitleDef newTitle, bool sendLetter = true)
 		{
 			this.AssignHeirIfNone(newTitle, faction);
@@ -552,7 +552,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046AF RID: 18095 RVA: 0x0017DE74 File Offset: 0x0017C074
+		
 		private void OnPostTitleChanged(Faction faction, RoyalTitleDef newTitle)
 		{
 			this.pawn.Notify_DisabledWorkTypesChanged();
@@ -580,7 +580,7 @@ namespace RimWorld
 			MeditationFocusTypeAvailabilityCache.ClearFor(this.pawn);
 		}
 
-		// Token: 0x060046B0 RID: 18096 RVA: 0x0017DF84 File Offset: 0x0017C184
+		
 		private void UpdateRoyalTitle(Faction faction)
 		{
 			RoyalTitleDef currentTitle = this.GetCurrentTitle(faction);
@@ -612,7 +612,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046B1 RID: 18097 RVA: 0x0017E074 File Offset: 0x0017C274
+		
 		public List<Thing> ApplyRewardsForTitle(Faction faction, RoyalTitleDef currentTitle, RoyalTitleDef newTitle, bool onlyForNewestTitle = false)
 		{
 			List<Thing> list = new List<Thing>();
@@ -684,7 +684,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x060046B2 RID: 18098 RVA: 0x0017E35C File Offset: 0x0017C55C
+		
 		private void UpdateHighestTitleAchieved(Faction faction, RoyalTitleDef title)
 		{
 			if (!this.highestTitles.ContainsKey(faction))
@@ -698,7 +698,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046B3 RID: 18099 RVA: 0x0017E394 File Offset: 0x0017C594
+		
 		public bool NewHighestTitle(Faction faction, RoyalTitleDef newTitle)
 		{
 			if (this.highestTitles == null)
@@ -713,7 +713,7 @@ namespace RimWorld
 			return faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.IndexOf(newTitle) > num;
 		}
 
-		// Token: 0x060046B4 RID: 18100 RVA: 0x0017E3F8 File Offset: 0x0017C5F8
+		
 		public void Notify_PawnKilled()
 		{
 			if (PawnGenerator.IsBeingGenerated(this.pawn) || this.AllTitlesForReading.Count == 0)
@@ -787,7 +787,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046B5 RID: 18101 RVA: 0x0017E86C File Offset: 0x0017CA6C
+		
 		public void Notify_Resurrected()
 		{
 			foreach (Faction faction in (from t in this.titles
@@ -801,7 +801,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046B6 RID: 18102 RVA: 0x0017E910 File Offset: 0x0017CB10
+		
 		public Gizmo RoyalAidGizmo()
 		{
 			Command_Action command_Action = new Command_Action();
@@ -837,13 +837,13 @@ namespace RimWorld
 			return command_Action;
 		}
 
-		// Token: 0x060046B7 RID: 18103 RVA: 0x0017E9C9 File Offset: 0x0017CBC9
+		
 		public bool CanRequireThroneroom()
 		{
 			return this.pawn.IsFreeColonist && this.allowRoomRequirements && !this.pawn.IsQuestLodger();
 		}
 
-		// Token: 0x060046B8 RID: 18104 RVA: 0x0017E9F0 File Offset: 0x0017CBF0
+		
 		public RoyalTitle HighestTitleWithThroneRoomRequirements()
 		{
 			if (!this.CanRequireThroneroom())
@@ -862,7 +862,7 @@ namespace RimWorld
 			return royalTitle;
 		}
 
-		// Token: 0x060046B9 RID: 18105 RVA: 0x0017EA63 File Offset: 0x0017CC63
+		
 		public IEnumerable<string> GetUnmetThroneroomRequirements(bool includeOnGracePeriod = true, bool onlyOnGracePeriod = false)
 		{
 			if (this.pawn.ownership.AssignedThrone == null)
@@ -897,13 +897,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060046BA RID: 18106 RVA: 0x0017EA81 File Offset: 0x0017CC81
+		
 		public bool CanRequireBedroom()
 		{
 			return this.allowRoomRequirements && !this.pawn.IsPrisoner;
 		}
 
-		// Token: 0x060046BB RID: 18107 RVA: 0x0017EA9C File Offset: 0x0017CC9C
+		
 		public RoyalTitle HighestTitleWithBedroomRequirements()
 		{
 			if (!this.CanRequireBedroom())
@@ -922,7 +922,7 @@ namespace RimWorld
 			return royalTitle;
 		}
 
-		// Token: 0x060046BC RID: 18108 RVA: 0x0017EB15 File Offset: 0x0017CD15
+		
 		public IEnumerable<string> GetUnmetBedroomRequirements(bool includeOnGracePeriod = true, bool onlyOnGracePeriod = false)
 		{
 			RoyalTitle royalTitle = this.HighestTitleWithBedroomRequirements();
@@ -953,7 +953,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060046BD RID: 18109 RVA: 0x0017EB34 File Offset: 0x0017CD34
+		
 		public bool HasPersonalBedroom()
 		{
 			Building_Bed ownedBed = this.pawn.ownership.OwnedBed;
@@ -976,7 +976,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060046BE RID: 18110 RVA: 0x0017EBCC File Offset: 0x0017CDCC
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<RoyalTitle>(ref this.titles, "titles", LookMode.Deep, Array.Empty<object>());
@@ -1017,70 +1017,70 @@ namespace RimWorld
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x0400288B RID: 10379
+		
 		public Pawn pawn;
 
-		// Token: 0x0400288C RID: 10380
+		
 		private List<RoyalTitle> titles = new List<RoyalTitle>();
 
-		// Token: 0x0400288D RID: 10381
+		
 		private Dictionary<Faction, int> favor = new Dictionary<Faction, int>();
 
-		// Token: 0x0400288E RID: 10382
+		
 		private Dictionary<Faction, RoyalTitleDef> highestTitles = new Dictionary<Faction, RoyalTitleDef>();
 
-		// Token: 0x0400288F RID: 10383
+		
 		private Dictionary<Faction, Pawn> heirs = new Dictionary<Faction, Pawn>();
 
-		// Token: 0x04002890 RID: 10384
+		
 		private Dictionary<RoyalTitlePermitDef, int> permitLastUsedTick = new Dictionary<RoyalTitlePermitDef, int>();
 
-		// Token: 0x04002891 RID: 10385
+		
 		public int lastDecreeTicks = -999999;
 
-		// Token: 0x04002892 RID: 10386
+		
 		public bool allowRoomRequirements = true;
 
-		// Token: 0x04002893 RID: 10387
+		
 		public bool allowApparelRequirements = true;
 
-		// Token: 0x04002894 RID: 10388
+		
 		private static List<RoyalTitle> EmptyTitles = new List<RoyalTitle>();
 
-		// Token: 0x04002895 RID: 10389
+		
 		private List<string> tmpDecreeTags = new List<string>();
 
-		// Token: 0x04002896 RID: 10390
+		
 		private List<Faction> factionHeirsToClearTmp = new List<Faction>();
 
-		// Token: 0x04002897 RID: 10391
+		
 		private static List<Action> tmpInheritedTitles = new List<Action>();
 
-		// Token: 0x04002898 RID: 10392
+		
 		public static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/AttackSettlement", true);
 
-		// Token: 0x04002899 RID: 10393
+		
 		private List<Faction> tmpFavorFactions;
 
-		// Token: 0x0400289A RID: 10394
+		
 		private List<Faction> tmpHighestTitleFactions;
 
-		// Token: 0x0400289B RID: 10395
+		
 		private List<Faction> tmpHeirFactions;
 
-		// Token: 0x0400289C RID: 10396
+		
 		private List<int> tmpAmounts;
 
-		// Token: 0x0400289D RID: 10397
+		
 		private List<int> tmlPermitLastUsed;
 
-		// Token: 0x0400289E RID: 10398
+		
 		private List<Pawn> tmpPawns;
 
-		// Token: 0x0400289F RID: 10399
+		
 		private List<RoyalTitleDef> tmpTitleDefs;
 
-		// Token: 0x040028A0 RID: 10400
+		
 		private List<RoyalTitlePermitDef> tmpPermitDefs;
 	}
 }

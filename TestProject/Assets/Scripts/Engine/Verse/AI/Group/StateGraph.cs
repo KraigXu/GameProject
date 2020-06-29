@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse.AI.Group
 {
-	// Token: 0x020005DD RID: 1501
+	
 	public class StateGraph
 	{
-		// Token: 0x170007EF RID: 2031
+		
 		// (get) Token: 0x060029C1 RID: 10689 RVA: 0x000F51B9 File Offset: 0x000F33B9
 		// (set) Token: 0x060029C2 RID: 10690 RVA: 0x000F51C7 File Offset: 0x000F33C7
 		public LordToil StartingToil
@@ -26,13 +26,13 @@ namespace Verse.AI.Group
 			}
 		}
 
-		// Token: 0x060029C3 RID: 10691 RVA: 0x000F51F1 File Offset: 0x000F33F1
+		
 		public void AddToil(LordToil toil)
 		{
 			this.lordToils.Add(toil);
 		}
 
-		// Token: 0x060029C4 RID: 10692 RVA: 0x000F51FF File Offset: 0x000F33FF
+		
 		public void AddTransition(Transition transition, bool highPriority = false)
 		{
 			if (highPriority)
@@ -43,7 +43,7 @@ namespace Verse.AI.Group
 			this.transitions.Add(transition);
 		}
 
-		// Token: 0x060029C5 RID: 10693 RVA: 0x000F5220 File Offset: 0x000F3420
+		
 		public StateGraph AttachSubgraph(StateGraph subGraph)
 		{
 			for (int i = 0; i < subGraph.lordToils.Count; i++)
@@ -57,7 +57,7 @@ namespace Verse.AI.Group
 			return subGraph;
 		}
 
-		// Token: 0x060029C6 RID: 10694 RVA: 0x000F5288 File Offset: 0x000F3488
+		
 		public void ErrorCheck()
 		{
 			if (this.lordToils.Count == 0)
@@ -111,7 +111,7 @@ namespace Verse.AI.Group
 			StateGraph.checkedToils = null;
 		}
 
-		// Token: 0x060029C7 RID: 10695 RVA: 0x000F5418 File Offset: 0x000F3618
+		
 		private void CheckForUnregisteredLinkedToilsRecursive(LordToil toil)
 		{
 			if (!this.lordToils.Contains(toil))
@@ -129,13 +129,13 @@ namespace Verse.AI.Group
 			}
 		}
 
-		// Token: 0x04001904 RID: 6404
+		
 		public List<LordToil> lordToils = new List<LordToil>();
 
-		// Token: 0x04001905 RID: 6405
+		
 		public List<Transition> transitions = new List<Transition>();
 
-		// Token: 0x04001906 RID: 6406
+		
 		private static HashSet<LordToil> checkedToils;
 	}
 }

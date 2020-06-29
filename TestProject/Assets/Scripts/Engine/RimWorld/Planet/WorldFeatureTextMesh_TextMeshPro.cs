@@ -5,17 +5,17 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011CE RID: 4558
+	
 	[StaticConstructorOnStartup]
 	public class WorldFeatureTextMesh_TextMeshPro : WorldFeatureTextMesh
 	{
-		// Token: 0x0600698C RID: 27020 RVA: 0x0024CC9B File Offset: 0x0024AE9B
+		
 		private static void TextScale_Changed()
 		{
 			Find.WorldFeatures.textsCreated = false;
 		}
 
-		// Token: 0x17001196 RID: 4502
+		
 		// (get) Token: 0x0600698D RID: 27021 RVA: 0x0024D3EA File Offset: 0x0024B5EA
 		public override bool Active
 		{
@@ -25,7 +25,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001197 RID: 4503
+		
 		// (get) Token: 0x0600698E RID: 27022 RVA: 0x0024D3FC File Offset: 0x0024B5FC
 		public override Vector3 Position
 		{
@@ -35,7 +35,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001198 RID: 4504
+		
 		// (get) Token: 0x0600698F RID: 27023 RVA: 0x0024D40E File Offset: 0x0024B60E
 		// (set) Token: 0x06006990 RID: 27024 RVA: 0x0024D41B File Offset: 0x0024B61B
 		public override Color Color
@@ -50,7 +50,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001199 RID: 4505
+		
 		// (get) Token: 0x06006991 RID: 27025 RVA: 0x0024D429 File Offset: 0x0024B629
 		// (set) Token: 0x06006992 RID: 27026 RVA: 0x0024D436 File Offset: 0x0024B636
 		public override string Text
@@ -65,7 +65,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700119A RID: 4506
+		
 		// (set) Token: 0x06006993 RID: 27027 RVA: 0x0024D444 File Offset: 0x0024B644
 		public override float Size
 		{
@@ -75,7 +75,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700119B RID: 4507
+		
 		// (get) Token: 0x06006994 RID: 27028 RVA: 0x0024D458 File Offset: 0x0024B658
 		// (set) Token: 0x06006995 RID: 27029 RVA: 0x0024D46A File Offset: 0x0024B66A
 		public override Quaternion Rotation
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700119C RID: 4508
+		
 		// (get) Token: 0x06006996 RID: 27030 RVA: 0x0024D47D File Offset: 0x0024B67D
 		// (set) Token: 0x06006997 RID: 27031 RVA: 0x0024D48F File Offset: 0x0024B68F
 		public override Vector3 LocalPosition
@@ -105,19 +105,19 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006998 RID: 27032 RVA: 0x0024D4A2 File Offset: 0x0024B6A2
+		
 		public override void SetActive(bool active)
 		{
 			this.textMesh.gameObject.SetActive(active);
 		}
 
-		// Token: 0x06006999 RID: 27033 RVA: 0x0024D4B5 File Offset: 0x0024B6B5
+		
 		public override void Destroy()
 		{
 			UnityEngine.Object.Destroy(this.textMesh.gameObject);
 		}
 
-		// Token: 0x0600699A RID: 27034 RVA: 0x0024D4C8 File Offset: 0x0024B6C8
+		
 		public override void Init()
 		{
 			GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(WorldFeatureTextMesh_TextMeshPro.WorldTextPrefab);
@@ -131,7 +131,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x0600699B RID: 27035 RVA: 0x0024D540 File Offset: 0x0024B740
+		
 		public override void WrapAroundPlanetSurface()
 		{
 			this.textMesh.ForceMeshUpdate();
@@ -184,13 +184,13 @@ namespace RimWorld.Planet
 			this.textMesh.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
 		}
 
-		// Token: 0x0400418E RID: 16782
+		
 		private TextMeshPro textMesh;
 
-		// Token: 0x0400418F RID: 16783
+		
 		public static readonly GameObject WorldTextPrefab = Resources.Load<GameObject>("Prefabs/WorldText");
 
-		// Token: 0x04004190 RID: 16784
+		
 		[TweakValue("Interface.World", 0f, 5f)]
 		private static float TextScale = 1f;
 	}

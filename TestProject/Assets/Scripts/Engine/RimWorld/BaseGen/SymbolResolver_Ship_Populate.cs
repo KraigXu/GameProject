@@ -39,9 +39,9 @@ namespace RimWorld.BaseGen
 				{
 					IEnumerable<IntVec3> adjacentCellsCardinal = GenAdj.OccupiedRect(cell, rotation, thingDef.Size).AdjacentCellsCardinal;
 					Func<IntVec3, bool> predicate;
-					//if ((predicate = <>9__1) == null)
+					//if ((predicate ) == null)
 					//{
-					//	predicate = (<>9__1 = delegate(IntVec3 edgeCell)
+					//	predicate = (9__1 = delegate(IntVec3 edgeCell)
 					//	{
 					//		if (edgeCell.InBounds(map))
 					//		{

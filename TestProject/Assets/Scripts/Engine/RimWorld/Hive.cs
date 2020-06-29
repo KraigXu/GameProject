@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000CA1 RID: 3233
+	
 	public class Hive : ThingWithComps, IAttackTarget, ILoadReferenceable
 	{
-		// Token: 0x17000DCF RID: 3535
+		
 		// (get) Token: 0x06004E28 RID: 20008 RVA: 0x001A481E File Offset: 0x001A2A1E
 		public CompCanBeDormant CompDormant
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DD0 RID: 3536
+		
 		// (get) Token: 0x06004E29 RID: 20009 RVA: 0x0006461A File Offset: 0x0006281A
 		Thing IAttackTarget.Thing
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DD1 RID: 3537
+		
 		// (get) Token: 0x06004E2A RID: 20010 RVA: 0x001A4826 File Offset: 0x001A2A26
 		public float TargetPriorityFactor
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DD2 RID: 3538
+		
 		// (get) Token: 0x06004E2B RID: 20011 RVA: 0x001A482D File Offset: 0x001A2A2D
 		public LocalTargetInfo TargetCurrentlyAimingAt
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DD3 RID: 3539
+		
 		// (get) Token: 0x06004E2C RID: 20012 RVA: 0x001A4834 File Offset: 0x001A2A34
 		public CompSpawnerPawn PawnSpawner
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E2D RID: 20013 RVA: 0x001A483C File Offset: 0x001A2A3C
+		
 		public bool ThreatDisabled(IAttackTargetSearcher disabledFor)
 		{
 			if (!base.Spawned)
@@ -70,7 +70,7 @@ namespace RimWorld
 			return comp != null && !comp.Awake;
 		}
 
-		// Token: 0x06004E2E RID: 20014 RVA: 0x001A4868 File Offset: 0x001A2A68
+		
 		public static void ResetStaticData()
 		{
 			Hive.spawnablePawnKinds.Clear();
@@ -79,7 +79,7 @@ namespace RimWorld
 			Hive.spawnablePawnKinds.Add(PawnKindDefOf.Megaspider);
 		}
 
-		// Token: 0x06004E2F RID: 20015 RVA: 0x001A48A1 File Offset: 0x001A2AA1
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E30 RID: 20016 RVA: 0x001A48BF File Offset: 0x001A2ABF
+		
 		public override void Tick()
 		{
 			base.Tick();
@@ -99,7 +99,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E31 RID: 20017 RVA: 0x001A48FC File Offset: 0x001A2AFC
+		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -112,7 +112,7 @@ namespace RimWorld
 			HiveUtility.Notify_HiveDespawned(this, map);
 		}
 
-		// Token: 0x06004E32 RID: 20018 RVA: 0x001A494C File Offset: 0x001A2B4C
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			if (!this.questTags.NullOrEmpty<string>())
@@ -136,7 +136,7 @@ namespace RimWorld
 			base.Destroy(mode);
 		}
 
-		// Token: 0x06004E33 RID: 20019 RVA: 0x001A49F4 File Offset: 0x001A2BF4
+		
 		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			if (dinfo.Def.ExternalViolenceFor(this) && dinfo.Instigator != null && dinfo.Instigator.Faction != null)
@@ -158,7 +158,7 @@ namespace RimWorld
 			base.PostApplyDamage(dinfo, totalDamageDealt);
 		}
 
-		// Token: 0x06004E34 RID: 20020 RVA: 0x001A4A88 File Offset: 0x001A2C88
+		
 		public override void Kill(DamageInfo? dinfo = null, Hediff exactCulprit = null)
 		{
 			if (base.Spawned && (dinfo == null || dinfo.Value.Category != DamageInfo.SourceCategory.Collapse))
@@ -172,7 +172,7 @@ namespace RimWorld
 			base.Kill(dinfo, exactCulprit);
 		}
 
-		// Token: 0x06004E35 RID: 20021 RVA: 0x001A4AF8 File Offset: 0x001A2CF8
+		
 		public override bool PreventPlayerSellingThingsNearby(out string reason)
 		{
 			if (this.PawnSpawner.spawnedPawns.Count > 0)
@@ -187,13 +187,10 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004E36 RID: 20022 RVA: 0x001A4B5C File Offset: 0x001A2D5C
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			foreach (Gizmo gizmo2 in QuestUtility.GetQuestRelatedGizmos(this))
 			{
@@ -204,7 +201,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004E37 RID: 20023 RVA: 0x001A4B6C File Offset: 0x001A2D6C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -219,28 +216,28 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002BE4 RID: 11236
+		
 		public const int PawnSpawnRadius = 2;
 
-		// Token: 0x04002BE5 RID: 11237
+		
 		public const float MaxSpawnedPawnsPoints = 500f;
 
-		// Token: 0x04002BE6 RID: 11238
+		
 		public const float InitialPawnsPoints = 200f;
 
-		// Token: 0x04002BE7 RID: 11239
+		
 		public static List<PawnKindDef> spawnablePawnKinds = new List<PawnKindDef>();
 
-		// Token: 0x04002BE8 RID: 11240
+		
 		public static readonly string MemoAttackedByEnemy = "HiveAttacked";
 
-		// Token: 0x04002BE9 RID: 11241
+		
 		public static readonly string MemoDeSpawned = "HiveDeSpawned";
 
-		// Token: 0x04002BEA RID: 11242
+		
 		public static readonly string MemoBurnedBadly = "HiveBurnedBadly";
 
-		// Token: 0x04002BEB RID: 11243
+		
 		public static readonly string MemoDestroyedNonRoofCollapse = "HiveDestroyedNonRoofCollapse";
 	}
 }

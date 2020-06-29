@@ -9,10 +9,10 @@ using Verse.Steam;
 
 namespace Verse
 {
-	// Token: 0x0200012E RID: 302
+	
 	public static class LanguageDatabase
 	{
-		// Token: 0x170001C6 RID: 454
+		
 		// (get) Token: 0x06000886 RID: 2182 RVA: 0x0002BE26 File Offset: 0x0002A026
 		public static IEnumerable<LoadedLanguage> AllLoadedLanguages
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000887 RID: 2183 RVA: 0x0002BE2D File Offset: 0x0002A02D
+		
 		public static void SelectLanguage(LoadedLanguage lang)
 		{
 			Prefs.LangFolderName = lang.folderName;
@@ -33,14 +33,14 @@ namespace Verse
 			}, "LoadingLongEvent", true, null, true);
 		}
 
-		// Token: 0x06000888 RID: 2184 RVA: 0x0002BE66 File Offset: 0x0002A066
+		
 		public static void Clear()
 		{
 			LanguageDatabase.languages.Clear();
 			LanguageDatabase.activeLanguage = null;
 		}
 
-		// Token: 0x06000889 RID: 2185 RVA: 0x0002BE78 File Offset: 0x0002A078
+		
 		public static void InitAllMetadata()
 		{
 			foreach (ModContentPack modContentPack in LoadedModManager.RunningMods)
@@ -87,7 +87,7 @@ namespace Verse
 			LanguageDatabase.activeLanguage.LoadMetadata();
 		}
 
-		// Token: 0x0600088A RID: 2186 RVA: 0x0002C0F0 File Offset: 0x0002A2F0
+		
 		private static LoadedLanguage InitLanguageMetadataFrom(VirtualDirectory langDir)
 		{
 			LoadedLanguage loadedLanguage = LanguageDatabase.languages.FirstOrDefault((LoadedLanguage lib) => lib.folderName == langDir.Name || lib.LegacyFolderName == langDir.Name);
@@ -103,7 +103,7 @@ namespace Verse
 			return loadedLanguage;
 		}
 
-		// Token: 0x0600088B RID: 2187 RVA: 0x0002C150 File Offset: 0x0002A350
+		
 		public static string SystemLanguageFolderName()
 		{
 			if (SteamManager.Initialized)
@@ -122,19 +122,19 @@ namespace Verse
 			return LanguageDatabase.DefaultLangFolderName;
 		}
 
-		// Token: 0x0400075E RID: 1886
+		
 		private static List<LoadedLanguage> languages = new List<LoadedLanguage>();
 
-		// Token: 0x0400075F RID: 1887
+		
 		public static LoadedLanguage activeLanguage;
 
-		// Token: 0x04000760 RID: 1888
+		
 		public static LoadedLanguage defaultLanguage;
 
-		// Token: 0x04000761 RID: 1889
+		
 		public static readonly string DefaultLangFolderName = "English";
 
-		// Token: 0x04000762 RID: 1890
+		
 		private static readonly List<string> SupportedAutoSelectLanguages = new List<string>
 		{
 			"Arabic",

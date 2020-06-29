@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A10 RID: 2576
+	
 	public class StorytellerComp_FactionInteraction : StorytellerComp
 	{
-		// Token: 0x17000AD6 RID: 2774
+		
 		// (get) Token: 0x06003D2D RID: 15661 RVA: 0x001438E8 File Offset: 0x00141AE8
 		private StorytellerCompProperties_FactionInteraction Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D2E RID: 15662 RVA: 0x001438F5 File Offset: 0x00141AF5
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (this.Props.minDanger != StoryDanger.None)
@@ -47,7 +47,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D2F RID: 15663 RVA: 0x0014390C File Offset: 0x00141B0C
+		
 		public override string ToString()
 		{
 			return base.ToString() + " (" + this.Props.incident.defName + ")";

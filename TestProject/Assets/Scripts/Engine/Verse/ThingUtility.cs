@@ -8,16 +8,16 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x02000316 RID: 790
+	
 	public static class ThingUtility
 	{
-		// Token: 0x060016E2 RID: 5858 RVA: 0x00083D02 File Offset: 0x00081F02
+		
 		public static bool DestroyedOrNull(this Thing t)
 		{
 			return t == null || t.Destroyed;
 		}
 
-		// Token: 0x060016E3 RID: 5859 RVA: 0x00083D10 File Offset: 0x00081F10
+		
 		public static void DestroyOrPassToWorld(this Thing t, DestroyMode mode = DestroyMode.Vanish)
 		{
 			Pawn pawn = t as Pawn;
@@ -35,7 +35,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016E4 RID: 5860 RVA: 0x00083D48 File Offset: 0x00081F48
+		
 		public static int TryAbsorbStackNumToTake(Thing thing, Thing other, bool respectStackLimit)
 		{
 			int result;
@@ -50,7 +50,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060016E5 RID: 5861 RVA: 0x00083D80 File Offset: 0x00081F80
+		
 		public static int RoundedResourceStackCount(int stackCount)
 		{
 			if (stackCount > 200)
@@ -64,7 +64,7 @@ namespace Verse
 			return stackCount;
 		}
 
-		// Token: 0x060016E6 RID: 5862 RVA: 0x00083DA4 File Offset: 0x00081FA4
+		
 		public static IntVec3 InteractionCellWhenAt(ThingDef def, IntVec3 center, Rot4 rot, Map map)
 		{
 			if (def.hasInteractionCell)
@@ -126,13 +126,13 @@ namespace Verse
 			return center;
 		}
 
-		// Token: 0x060016E7 RID: 5863 RVA: 0x00083FB8 File Offset: 0x000821B8
+		
 		public static DamageDef PrimaryMeleeWeaponDamageType(ThingDef thing)
 		{
 			return ThingUtility.PrimaryMeleeWeaponDamageType(thing.tools);
 		}
 
-		// Token: 0x060016E8 RID: 5864 RVA: 0x00083FC8 File Offset: 0x000821C8
+		
 		public static DamageDef PrimaryMeleeWeaponDamageType(List<Tool> tools)
 		{
 			if (tools.NullOrEmpty<Tool>())
@@ -147,7 +147,7 @@ namespace Verse
 			return maneuverDef.verb.meleeDamageDef;
 		}
 
-		// Token: 0x060016E9 RID: 5865 RVA: 0x00084020 File Offset: 0x00082220
+		
 		public static void CheckAutoRebuildOnDestroyed(Thing thing, DestroyMode mode, Map map, BuildableDef buildingDef)
 		{
 			if (Find.PlaySettings.autoRebuild && mode == DestroyMode.KillFinalize && thing.Faction == Faction.OfPlayer && buildingDef.blueprintDef != null && buildingDef.IsResearchFinished && map.areaManager.Home[thing.Position] && GenConstruct.CanPlaceBlueprintAt(buildingDef, thing.Position, thing.Rotation, map, false, null, null, thing.Stuff).Accepted)
@@ -156,7 +156,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016EA RID: 5866 RVA: 0x000840B8 File Offset: 0x000822B8
+		
 		public static Pawn FindPawn(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -175,7 +175,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x060016EB RID: 5867 RVA: 0x00084100 File Offset: 0x00082300
+		
 		public static TerrainAffordanceDef GetTerrainAffordanceNeed(this BuildableDef def, ThingDef stuffDef = null)
 		{
 			TerrainAffordanceDef terrainAffordanceNeeded = def.terrainAffordanceNeeded;

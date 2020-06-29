@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200089D RID: 2205
+	
 	public class SkillNeed_Direct : SkillNeed
 	{
-		// Token: 0x06003582 RID: 13698 RVA: 0x00123B50 File Offset: 0x00121D50
+		
 		public override float ValueFor(Pawn pawn)
 		{
 			if (pawn.skills == null)
@@ -26,7 +26,7 @@ namespace RimWorld
 			return 1f;
 		}
 
-		// Token: 0x04001D4E RID: 7502
+		
 		public List<float> valuesPerLevel = new List<float>();
 	}
 }

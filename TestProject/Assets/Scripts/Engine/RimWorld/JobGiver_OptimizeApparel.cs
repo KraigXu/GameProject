@@ -6,16 +6,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006E3 RID: 1763
+	
 	public class JobGiver_OptimizeApparel : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EE7 RID: 12007 RVA: 0x00107748 File Offset: 0x00105948
+		
 		private void SetNextOptimizeTick(Pawn pawn)
 		{
 			pawn.mindState.nextApparelOptimizeTick = Find.TickManager.TicksGame + Rand.Range(6000, 9000);
 		}
 
-		// Token: 0x06002EE8 RID: 12008 RVA: 0x00107770 File Offset: 0x00105970
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.outfits == null)
@@ -101,7 +101,7 @@ namespace RimWorld
 			return JobMaker.MakeJob(JobDefOf.Wear, thing);
 		}
 
-		// Token: 0x06002EE9 RID: 12009 RVA: 0x00107AAC File Offset: 0x00105CAC
+		
 		public static float ApparelScoreGain(Pawn pawn, Apparel ap)
 		{
 			if (ap is ShieldBelt && pawn.equipment.Primary != null && pawn.equipment.Primary.def.IsWeaponUsingProjectiles)
@@ -130,7 +130,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06002EEA RID: 12010 RVA: 0x00107B88 File Offset: 0x00105D88
+		
 		public static float ApparelScoreRaw(Pawn pawn, Apparel ap)
 		{
 			float num = 0.1f;
@@ -223,25 +223,25 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04001A93 RID: 6803
+		
 		private static NeededWarmth neededWarmth;
 
-		// Token: 0x04001A94 RID: 6804
+		
 		private static StringBuilder debugSb;
 
-		// Token: 0x04001A95 RID: 6805
+		
 		private const int ApparelOptimizeCheckIntervalMin = 6000;
 
-		// Token: 0x04001A96 RID: 6806
+		
 		private const int ApparelOptimizeCheckIntervalMax = 9000;
 
-		// Token: 0x04001A97 RID: 6807
+		
 		private const float MinScoreGainToCare = 0.05f;
 
-		// Token: 0x04001A98 RID: 6808
+		
 		private const float ScoreFactorIfNotReplacing = 10f;
 
-		// Token: 0x04001A99 RID: 6809
+		
 		private static readonly SimpleCurve InsulationColdScoreFactorCurve_NeedWarm = new SimpleCurve
 		{
 			{
@@ -254,7 +254,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04001A9A RID: 6810
+		
 		private static readonly SimpleCurve HitPointsPercentScoreFactorCurve = new SimpleCurve
 		{
 			{
@@ -279,13 +279,13 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04001A9B RID: 6811
+		
 		private static HashSet<BodyPartGroupDef> tmpBodyPartGroupsWithRequirement = new HashSet<BodyPartGroupDef>();
 
-		// Token: 0x04001A9C RID: 6812
+		
 		private static HashSet<ThingDef> tmpAllowedApparels = new HashSet<ThingDef>();
 
-		// Token: 0x04001A9D RID: 6813
+		
 		private static HashSet<ThingDef> tmpRequiredApparels = new HashSet<ThingDef>();
 	}
 }

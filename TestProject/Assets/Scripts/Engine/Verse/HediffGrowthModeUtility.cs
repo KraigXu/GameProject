@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200025C RID: 604
+	
 	public static class HediffGrowthModeUtility
 	{
-		// Token: 0x06001077 RID: 4215 RVA: 0x0005E1A4 File Offset: 0x0005C3A4
+		
 		public static string GetLabel(this HediffGrowthMode m)
 		{
 			switch (m)

@@ -9,11 +9,11 @@ using Verse.Steam;
 
 namespace RimWorld
 {
-	// Token: 0x02000E89 RID: 3721
+	
 	[StaticConstructorOnStartup]
 	public class Page_SelectScenario : Page
 	{
-		// Token: 0x17001046 RID: 4166
+		
 		// (get) Token: 0x06005AAF RID: 23215 RVA: 0x001EDE35 File Offset: 0x001EC035
 		public override string PageTitle
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AB0 RID: 23216 RVA: 0x001EDE46 File Offset: 0x001EC046
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -32,7 +32,7 @@ namespace RimWorld
 			this.EnsureValidSelection();
 		}
 
-		// Token: 0x06005AB1 RID: 23217 RVA: 0x001EDE64 File Offset: 0x001EC064
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			base.DrawPageTitle(rect);
@@ -45,13 +45,13 @@ namespace RimWorld
 			base.DoBottomButtons(rect, null, "ScenarioEditor".Translate(), new Action(this.GoToScenarioEditor), true, true);
 		}
 
-		// Token: 0x06005AB2 RID: 23218 RVA: 0x001EDF2F File Offset: 0x001EC12F
+		
 		private bool CanEditScenario(Scenario scen)
 		{
 			return scen.Category == ScenarioCategory.CustomLocal || scen.CanToUploadToWorkshop();
 		}
 
-		// Token: 0x06005AB3 RID: 23219 RVA: 0x001EDF48 File Offset: 0x001EC148
+		
 		private void GoToScenarioEditor()
 		{
 			Page_ScenarioEditor page_ScenarioEditor = new Page_ScenarioEditor(this.CanEditScenario(this.curScen) ? this.curScen : this.curScen.CopyForEditing());
@@ -60,7 +60,7 @@ namespace RimWorld
 			this.Close(true);
 		}
 
-		// Token: 0x06005AB4 RID: 23220 RVA: 0x001EDF98 File Offset: 0x001EC198
+		
 		private void DoScenarioSelectionList(Rect rect)
 		{
 			rect.xMax += 2f;
@@ -90,7 +90,7 @@ namespace RimWorld
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06005AB5 RID: 23221 RVA: 0x001EE0D4 File Offset: 0x001EC2D4
+		
 		private void ListScenariosOnListing(Listing_Standard listing, IEnumerable<Scenario> scenarios)
 		{
 			bool flag = false;
@@ -116,7 +116,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AB6 RID: 23222 RVA: 0x001EE1A0 File Offset: 0x001EC3A0
+		
 		private void DoScenarioListEntry(Rect rect, Scenario scen)
 		{
 			bool flag = this.curScen == scen;
@@ -174,7 +174,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AB7 RID: 23223 RVA: 0x001EE3F5 File Offset: 0x001EC5F5
+		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
@@ -189,7 +189,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005AB8 RID: 23224 RVA: 0x001EE418 File Offset: 0x001EC618
+		
 		public static void BeginScenarioConfiguration(Scenario scen, Page originPage)
 		{
 			Current.Game = new Game();
@@ -206,7 +206,7 @@ namespace RimWorld
 			firstConfigPage.prev = originPage;
 		}
 
-		// Token: 0x06005AB9 RID: 23225 RVA: 0x001EE47F File Offset: 0x001EC67F
+		
 		private void EnsureValidSelection()
 		{
 			if (this.curScen == null || !ScenarioLister.ScenarioIsListedAnywhere(this.curScen))
@@ -215,7 +215,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005ABA RID: 23226 RVA: 0x001EE4A8 File Offset: 0x001EC6A8
+		
 		internal void Notify_ScenarioListChanged()
 		{
 			PublishedFileId_t selModId = this.curScen.GetPublishedFileId();
@@ -223,7 +223,7 @@ namespace RimWorld
 			this.EnsureValidSelection();
 		}
 
-		// Token: 0x06005ABB RID: 23227 RVA: 0x001EE4EE File Offset: 0x001EC6EE
+		
 		internal void Notify_SteamItemUnsubscribed(PublishedFileId_t pfid)
 		{
 			if (this.curScen != null && this.curScen.GetPublishedFileId() == pfid)
@@ -233,22 +233,22 @@ namespace RimWorld
 			this.EnsureValidSelection();
 		}
 
-		// Token: 0x04003176 RID: 12662
+		
 		private Scenario curScen;
 
-		// Token: 0x04003177 RID: 12663
+		
 		private Vector2 infoScrollPosition = Vector2.zero;
 
-		// Token: 0x04003178 RID: 12664
+		
 		private const float ScenarioEntryHeight = 62f;
 
-		// Token: 0x04003179 RID: 12665
+		
 		private static readonly Texture2D CanUploadIcon = ContentFinder<Texture2D>.Get("UI/Icons/ContentSources/CanUpload", true);
 
-		// Token: 0x0400317A RID: 12666
+		
 		private Vector2 scenariosScrollPosition = Vector2.zero;
 
-		// Token: 0x0400317B RID: 12667
+		
 		private float totalScenarioListHeight;
 	}
 }

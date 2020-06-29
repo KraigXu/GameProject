@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace RuntimeAudioClipLoader
 {
-	// Token: 0x02000006 RID: 6
+	
 	internal class CustomAudioFileReader : WaveStream, ISampleProvider
 	{
-		// Token: 0x06000027 RID: 39 RVA: 0x00002684 File Offset: 0x00000884
+		
 		public CustomAudioFileReader(Stream stream, AudioFormat format)
 		{
 			this.lockObject = new object();
@@ -21,7 +21,7 @@ namespace RuntimeAudioClipLoader
 			this.length = this.SourceToDest(this.readerStream.Length);
 		}
 
-		// Token: 0x06000028 RID: 40 RVA: 0x00002714 File Offset: 0x00000914
+		
 		private void CreateReaderStream(Stream stream, AudioFormat format)
 		{
 			if (format == AudioFormat.wav)
@@ -55,7 +55,7 @@ namespace RuntimeAudioClipLoader
 			}
 		}
 
-		// Token: 0x17000014 RID: 20
+		
 		// (get) Token: 0x06000029 RID: 41 RVA: 0x000027C9 File Offset: 0x000009C9
 		public override WaveFormat WaveFormat
 		{
@@ -65,7 +65,7 @@ namespace RuntimeAudioClipLoader
 			}
 		}
 
-		// Token: 0x17000015 RID: 21
+		
 		// (get) Token: 0x0600002A RID: 42 RVA: 0x000027D6 File Offset: 0x000009D6
 		public override long Length
 		{
@@ -75,7 +75,7 @@ namespace RuntimeAudioClipLoader
 			}
 		}
 
-		// Token: 0x17000016 RID: 22
+		
 		// (get) Token: 0x0600002B RID: 43 RVA: 0x000027DE File Offset: 0x000009DE
 		// (set) Token: 0x0600002C RID: 44 RVA: 0x000027F4 File Offset: 0x000009F4
 		public override long Position
@@ -94,7 +94,7 @@ namespace RuntimeAudioClipLoader
 			}
 		}
 
-		// Token: 0x0600002D RID: 45 RVA: 0x00002840 File Offset: 0x00000A40
+		
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			WaveBuffer waveBuffer = new WaveBuffer(buffer);
@@ -102,7 +102,7 @@ namespace RuntimeAudioClipLoader
 			return this.Read(waveBuffer.FloatBuffer, offset / 4, count2) * 4;
 		}
 
-		// Token: 0x0600002E RID: 46 RVA: 0x0000286C File Offset: 0x00000A6C
+		
 		public int Read(float[] buffer, int offset, int count)
 		{
 			object obj = this.lockObject;
@@ -114,7 +114,7 @@ namespace RuntimeAudioClipLoader
 			return result;
 		}
 
-		// Token: 0x17000017 RID: 23
+		
 		// (get) Token: 0x0600002F RID: 47 RVA: 0x000028B8 File Offset: 0x00000AB8
 		// (set) Token: 0x06000030 RID: 48 RVA: 0x000028C5 File Offset: 0x00000AC5
 		public float Volume
@@ -129,19 +129,19 @@ namespace RuntimeAudioClipLoader
 			}
 		}
 
-		// Token: 0x06000031 RID: 49 RVA: 0x000028D3 File Offset: 0x00000AD3
+		
 		private long SourceToDest(long sourceBytes)
 		{
 			return (long)this.destBytesPerSample * (sourceBytes / (long)this.sourceBytesPerSample);
 		}
 
-		// Token: 0x06000032 RID: 50 RVA: 0x000028E6 File Offset: 0x00000AE6
+		
 		private long DestToSource(long destBytes)
 		{
 			return (long)this.sourceBytesPerSample * (destBytes / (long)this.destBytesPerSample);
 		}
 
-		// Token: 0x06000033 RID: 51 RVA: 0x000028F9 File Offset: 0x00000AF9
+		
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && this.readerStream != null)
@@ -152,22 +152,22 @@ namespace RuntimeAudioClipLoader
 			base.Dispose(disposing);
 		}
 
-		// Token: 0x04000010 RID: 16
+		
 		private WaveStream readerStream;
 
-		// Token: 0x04000011 RID: 17
+		
 		private readonly SampleChannel sampleChannel;
 
-		// Token: 0x04000012 RID: 18
+		
 		private readonly int destBytesPerSample;
 
-		// Token: 0x04000013 RID: 19
+		
 		private readonly int sourceBytesPerSample;
 
-		// Token: 0x04000014 RID: 20
+		
 		private readonly long length;
 
-		// Token: 0x04000015 RID: 21
+		
 		private readonly object lockObject;
 	}
 }

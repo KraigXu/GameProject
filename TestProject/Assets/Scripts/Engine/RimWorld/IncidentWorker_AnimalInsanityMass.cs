@@ -6,22 +6,22 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x020009D6 RID: 2518
+	
 	public class IncidentWorker_AnimalInsanityMass : IncidentWorker
 	{
-		// Token: 0x06003C20 RID: 15392 RVA: 0x0013D584 File Offset: 0x0013B784
+		
 		public static bool AnimalUsable(Pawn p)
 		{
 			return p.Spawned && !p.Position.Fogged(p.Map) && (!p.InMentalState || !p.MentalStateDef.IsAggro) && !p.Downed && p.Faction == null;
 		}
 
-		// Token: 0x06003C21 RID: 15393 RVA: 0x0013D5D4 File Offset: 0x0013B7D4
+		
 		public static void DriveInsane(Pawn p)
 		{
 			p.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Manhunter, null, true, false, null, false);
 		}
 
-		// Token: 0x06003C22 RID: 15394 RVA: 0x0013D5F4 File Offset: 0x0013B7F4
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;

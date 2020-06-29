@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DB7 RID: 3511
+	
 	public static class TechprintUtility
 	{
-		// Token: 0x06005531 RID: 21809 RVA: 0x001C5480 File Offset: 0x001C3680
+		
 		public static IEnumerable<ResearchProjectDef> GetResearchProjectsNeedingTechprintsNow(Faction faction, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = 3.40282347E+38f)
 		{
 			return DefDatabase<ResearchProjectDef>.AllDefsListForReading.Where(delegate(ResearchProjectDef p)
@@ -54,13 +54,13 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06005532 RID: 21810 RVA: 0x001C54BE File Offset: 0x001C36BE
+		
 		public static float GetSelectionWeight(ResearchProjectDef project)
 		{
 			return project.techprintCommonality * (project.PrerequisitesCompleted ? 1f : 0.02f);
 		}
 
-		// Token: 0x06005533 RID: 21811 RVA: 0x001C54DC File Offset: 0x001C36DC
+		
 		public static bool TryGetTechprintDefToGenerate(Faction faction, out ThingDef result, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = 3.40282347E+38f)
 		{
 			ResearchProjectDef researchProjectDef;
@@ -73,7 +73,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005534 RID: 21812 RVA: 0x001C5514 File Offset: 0x001C3714
+		
 		[DebugOutput]
 		public static void TechprintsFromFactions()
 		{
@@ -98,7 +98,7 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06005535 RID: 21813 RVA: 0x001C55F8 File Offset: 0x001C37F8
+		
 		[DebugOutput]
 		public static void TechprintsFromFactionsChances()
 		{

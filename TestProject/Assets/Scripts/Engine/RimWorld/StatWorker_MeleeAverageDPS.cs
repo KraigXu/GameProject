@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200101B RID: 4123
+	
 	public class StatWorker_MeleeAverageDPS : StatWorker
 	{
-		// Token: 0x060062C1 RID: 25281 RVA: 0x00224A4C File Offset: 0x00222C4C
+		
 		public override bool ShouldShowFor(StatRequest req)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
@@ -41,7 +41,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060062C2 RID: 25282 RVA: 0x00224AB8 File Offset: 0x00222CB8
+		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
@@ -83,7 +83,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060062C3 RID: 25283 RVA: 0x00224C90 File Offset: 0x00222E90
+		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
@@ -117,7 +117,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x060062C4 RID: 25284 RVA: 0x00224E38 File Offset: 0x00223038
+		
 		public static Pawn GetCurrentWeaponUser(Thing weapon)
 		{
 			if (weapon == null)
@@ -137,7 +137,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060062C5 RID: 25285 RVA: 0x00224E78 File Offset: 0x00223078
+		
 		private void GetVerbsAndTools(ThingDef def, out List<VerbProperties> verbs, out List<Tool> tools)
 		{
 			verbs = def.Verbs;
@@ -159,7 +159,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060062C6 RID: 25286 RVA: 0x00224EC4 File Offset: 0x002230C4
+		
 		private HediffDef FindTechHediffHediff(ThingDef techHediff)
 		{
 			List<RecipeDef> allDefsListForReading = DefDatabase<RecipeDef>.AllDefsListForReading;

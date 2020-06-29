@@ -7,10 +7,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020001FA RID: 506
+	
 	public class ModLoadFolders
 	{
-		// Token: 0x06000E8B RID: 3723 RVA: 0x00052AF0 File Offset: 0x00050CF0
+		
 		public List<LoadFolder> FoldersForVersion(string version)
 		{
 			if (this.foldersForVersion.ContainsKey(version))
@@ -20,13 +20,13 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000E8C RID: 3724 RVA: 0x00052B0E File Offset: 0x00050D0E
+		
 		public List<string> DefinedVersions()
 		{
 			return this.foldersForVersion.Keys.ToList<string>();
 		}
 
-		// Token: 0x06000E8D RID: 3725 RVA: 0x00052B20 File Offset: 0x00050D20
+		
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
 			foreach (object obj in xmlRoot.ChildNodes)
@@ -84,7 +84,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000E8E RID: 3726 RVA: 0x00052D64 File Offset: 0x00050F64
+		
 		public List<string> GetIssueList(ModMetaData mod)
 		{
 			List<string> list = new List<string>();
@@ -137,10 +137,10 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x04000ADD RID: 2781
+		
 		private Dictionary<string, List<LoadFolder>> foldersForVersion = new Dictionary<string, List<LoadFolder>>();
 
-		// Token: 0x04000ADE RID: 2782
+		
 		public const string defaultVersionName = "default";
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D09 RID: 3337
+	
 	public class CompFadesInOut : ThingComp
 	{
-		// Token: 0x17000E44 RID: 3652
+		
 		// (get) Token: 0x06005130 RID: 20784 RVA: 0x001B3E34 File Offset: 0x001B2034
 		public CompProperties_FadesInOut Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005131 RID: 20785 RVA: 0x001B3E41 File Offset: 0x001B2041
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005132 RID: 20786 RVA: 0x001B3E64 File Offset: 0x001B2064
+		
 		public float Opacity()
 		{
 			float num = this.ageTicks.TicksToSeconds();
@@ -53,14 +53,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005133 RID: 20787 RVA: 0x001B3F2F File Offset: 0x001B212F
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
 			Scribe_Values.Look<int>(ref this.ageTicks, "ageTicks", 0, false);
 		}
 
-		// Token: 0x04002CFE RID: 11518
+		
 		private int ageTicks;
 	}
 }

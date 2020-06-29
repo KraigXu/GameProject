@@ -2,10 +2,10 @@
 
 namespace Verse.AI
 {
-	// Token: 0x020005AD RID: 1453
+	
 	public class ThinkNode_QueuedJob : ThinkNode
 	{
-		// Token: 0x060028C4 RID: 10436 RVA: 0x000EF9A7 File Offset: 0x000EDBA7
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			ThinkNode_QueuedJob thinkNode_QueuedJob = (ThinkNode_QueuedJob)base.DeepCopy(resolve);
@@ -13,7 +13,7 @@ namespace Verse.AI
 			return thinkNode_QueuedJob;
 		}
 
-		// Token: 0x060028C5 RID: 10437 RVA: 0x000EF9C4 File Offset: 0x000EDBC4
+		
 		public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
 		{
 			JobQueue jobQueue = pawn.jobs.jobQueue;
@@ -41,7 +41,7 @@ namespace Verse.AI
 			return ThinkResult.NoJob;
 		}
 
-		// Token: 0x0400186F RID: 6255
+		
 		public bool inBedOnly;
 	}
 }

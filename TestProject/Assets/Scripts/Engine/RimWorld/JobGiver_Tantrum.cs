@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000716 RID: 1814
+	
 	public class JobGiver_Tantrum : ThinkNode_JobGiver
 	{
-		// Token: 0x06002FBC RID: 12220 RVA: 0x0010CC84 File Offset: 0x0010AE84
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			MentalState_Tantrum mentalState_Tantrum = pawn.MentalState as MentalState_Tantrum;

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200019F RID: 415
+	
 	internal class SectionLayer_Zones : SectionLayer
 	{
-		// Token: 0x17000247 RID: 583
+		
 		// (get) Token: 0x06000BBB RID: 3003 RVA: 0x000428F8 File Offset: 0x00040AF8
 		public override bool Visible
 		{
@@ -17,13 +17,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000BBC RID: 3004 RVA: 0x000428FF File Offset: 0x00040AFF
+		
 		public SectionLayer_Zones(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.Zone;
 		}
 
-		// Token: 0x06000BBD RID: 3005 RVA: 0x00042913 File Offset: 0x00040B13
+		
 		public override void DrawLayer()
 		{
 			if (OverlayDrawHandler.ShouldDrawZones)
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000BBE RID: 3006 RVA: 0x00042924 File Offset: 0x00040B24
+		
 		public override void Regenerate()
 		{
 			float y = AltitudeLayer.Zone.AltitudeFor();

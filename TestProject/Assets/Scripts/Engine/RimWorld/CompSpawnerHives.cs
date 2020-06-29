@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D5B RID: 3419
+	
 	public class CompSpawnerHives : ThingComp
 	{
-		// Token: 0x17000ECB RID: 3787
+		
 		// (get) Token: 0x06005340 RID: 21312 RVA: 0x001BD9CF File Offset: 0x001BBBCF
 		private CompProperties_SpawnerHives Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000ECC RID: 3788
+		
 		// (get) Token: 0x06005341 RID: 21313 RVA: 0x001BD9DC File Offset: 0x001BBBDC
 		private bool CanSpawnChildHive
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005342 RID: 21314 RVA: 0x001BD9FC File Offset: 0x001BBBFC
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!respawningAfterLoad)
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005343 RID: 21315 RVA: 0x001BDA08 File Offset: 0x001BBC08
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005344 RID: 21316 RVA: 0x001BDA9C File Offset: 0x001BBC9C
+		
 		public override string CompInspectStringExtra()
 		{
 			if (!this.canSpawnHives)
@@ -72,7 +72,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005345 RID: 21317 RVA: 0x001BDB04 File Offset: 0x001BBD04
+		
 		public void CalculateNextHiveSpawnTick()
 		{
 			Room room = this.parent.GetRoom(RegionType.Set_Passable);
@@ -93,7 +93,7 @@ namespace RimWorld
 			this.nextHiveSpawnTick = Find.TickManager.TicksGame + (int)(this.Props.HiveSpawnIntervalDays.RandomInRange * 60000f / (num3 * Find.Storyteller.difficulty.enemyReproductionRateFactor));
 		}
 
-		// Token: 0x06005346 RID: 21318 RVA: 0x001BDC14 File Offset: 0x001BBE14
+		
 		public bool TrySpawnChildHive(bool ignoreRoofedRequirement, out Hive newHive)
 		{
 			if (!this.CanSpawnChildHive)
@@ -126,7 +126,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005347 RID: 21319 RVA: 0x001BDCFC File Offset: 0x001BBEFC
+		
 		public static IntVec3 FindChildHiveLocation(IntVec3 pos, Map map, ThingDef parentDef, CompProperties_SpawnerHives props, bool ignoreRoofedRequirement, bool allowUnreachable)
 		{
 			IntVec3 intVec = IntVec3.Invalid;
@@ -155,7 +155,7 @@ namespace RimWorld
 			return intVec;
 		}
 
-		// Token: 0x06005348 RID: 21320 RVA: 0x001BDE24 File Offset: 0x001BC024
+		
 		private static bool CanSpawnHiveAt(IntVec3 c, Map map, IntVec3 parentPos, ThingDef parentDef, float minDist, bool ignoreRoofedRequirement)
 		{
 			if ((!ignoreRoofedRequirement && !c.Roofed(map)) || (!c.Walkable(map) || (minDist != 0f && (float)c.DistanceToSquared(parentPos) < minDist * minDist)) || c.GetFirstThing(map, ThingDefOf.InsectJelly) != null || c.GetFirstThing(map, ThingDefOf.GlowPod) != null)
@@ -189,7 +189,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005349 RID: 21321 RVA: 0x001BDF3E File Offset: 0x001BC13E
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (Prefs.DevMode)
@@ -208,7 +208,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600534A RID: 21322 RVA: 0x001BDF4E File Offset: 0x001BC14E
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<int>(ref this.nextHiveSpawnTick, "nextHiveSpawnTick", 0, false);
@@ -216,16 +216,16 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.wasActivated, "wasActivated", true, false);
 		}
 
-		// Token: 0x04002DF8 RID: 11768
+		
 		private int nextHiveSpawnTick = -1;
 
-		// Token: 0x04002DF9 RID: 11769
+		
 		public bool canSpawnHives = true;
 
-		// Token: 0x04002DFA RID: 11770
+		
 		private bool wasActivated;
 
-		// Token: 0x04002DFB RID: 11771
+		
 		public const int MaxHivesPerMap = 30;
 	}
 }

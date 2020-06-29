@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x02000169 RID: 361
+	
 	public sealed class ByteGrid : IExposable
 	{
-		// Token: 0x170001EA RID: 490
+		
 		public byte this[IntVec3 c]
 		{
 			get
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170001EB RID: 491
+		
 		public byte this[int index]
 		{
 			get
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170001EC RID: 492
+		
 		public byte this[int x, int z]
 		{
 			get
@@ -45,7 +45,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170001ED RID: 493
+		
 		// (get) Token: 0x06000A18 RID: 2584 RVA: 0x00036DA1 File Offset: 0x00034FA1
 		public int CellsCount
 		{
@@ -55,24 +55,24 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000A19 RID: 2585 RVA: 0x0000F2A9 File Offset: 0x0000D4A9
+		
 		public ByteGrid()
 		{
 		}
 
-		// Token: 0x06000A1A RID: 2586 RVA: 0x00036DAB File Offset: 0x00034FAB
+		
 		public ByteGrid(Map map)
 		{
 			this.ClearAndResizeTo(map);
 		}
 
-		// Token: 0x06000A1B RID: 2587 RVA: 0x00036DBA File Offset: 0x00034FBA
+		
 		public bool MapSizeMatches(Map map)
 		{
 			return this.mapSizeX == map.Size.x && this.mapSizeZ == map.Size.z;
 		}
 
-		// Token: 0x06000A1C RID: 2588 RVA: 0x00036DE4 File Offset: 0x00034FE4
+		
 		public void ClearAndResizeTo(Map map)
 		{
 			if (this.MapSizeMatches(map) && this.grid != null)
@@ -85,7 +85,7 @@ namespace Verse
 			this.grid = new byte[this.mapSizeX * this.mapSizeZ];
 		}
 
-		// Token: 0x06000A1D RID: 2589 RVA: 0x00036E44 File Offset: 0x00035044
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<int>(ref this.mapSizeX, "mapSizeX", 0, false);
@@ -93,7 +93,7 @@ namespace Verse
 			DataExposeUtility.ByteArray(ref this.grid, "grid");
 		}
 
-		// Token: 0x06000A1E RID: 2590 RVA: 0x00036E7C File Offset: 0x0003507C
+		
 		public void Clear(byte value = 0)
 		{
 			if (value == 0)
@@ -107,7 +107,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000A1F RID: 2591 RVA: 0x00036EC0 File Offset: 0x000350C0
+		
 		public void DebugDraw()
 		{
 			for (int i = 0; i < this.grid.Length; i++)
@@ -120,13 +120,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000830 RID: 2096
+		
 		private byte[] grid;
 
-		// Token: 0x04000831 RID: 2097
+		
 		private int mapSizeX;
 
-		// Token: 0x04000832 RID: 2098
+		
 		private int mapSizeZ;
 	}
 }

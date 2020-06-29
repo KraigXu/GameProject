@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D4A RID: 3402
+	
 	public class CompRoyalImplant : ThingComp
 	{
-		// Token: 0x17000EA8 RID: 3752
+		
 		// (get) Token: 0x060052BE RID: 21182 RVA: 0x001BA426 File Offset: 0x001B8626
 		public CompProperties_RoyalImplant Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052BF RID: 21183 RVA: 0x001BA433 File Offset: 0x001B8633
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
 			Pair<Faction, RoyalTitleDef> minTitleForImplantAllFactions = Faction.GetMinTitleForImplantAllFactions(this.Props.implantHediff);
@@ -49,7 +49,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060052C0 RID: 21184 RVA: 0x001BA444 File Offset: 0x001B8644
+		
 		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -65,7 +65,7 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x060052C1 RID: 21185 RVA: 0x001BA4C8 File Offset: 0x001B86C8
+		
 		public static TaggedString CheckForViolations(Pawn pawn, HediffDef hediff, int levelOffset)
 		{
 			if (levelOffset < 0)

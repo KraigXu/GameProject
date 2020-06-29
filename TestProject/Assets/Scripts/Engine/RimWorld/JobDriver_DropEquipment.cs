@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000694 RID: 1684
+	
 	public class JobDriver_DropEquipment : JobDriver
 	{
-		// Token: 0x17000893 RID: 2195
+		
 		// (get) Token: 0x06002DCF RID: 11727 RVA: 0x00102088 File Offset: 0x00100288
 		private ThingWithComps TargetEquipment
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002DD0 RID: 11728 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002DD1 RID: 11729 RVA: 0x001020A8 File Offset: 0x001002A8
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -51,7 +51,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A40 RID: 6720
+		
 		private const int DurationTicks = 30;
 	}
 }

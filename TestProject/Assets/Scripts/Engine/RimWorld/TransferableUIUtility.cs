@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E7F RID: 3711
+	
 	[StaticConstructorOnStartup]
 	public static class TransferableUIUtility
 	{
-		// Token: 0x06005A44 RID: 23108 RVA: 0x001E838C File Offset: 0x001E658C
+		
 		public static void DoCountAdjustInterface(Rect rect, Transferable trad, int index, int min, int max, bool flash = false, List<TransferableCountToTransferStoppingPoint> extraStoppingPoints = null, bool readOnly = false)
 		{
 			TransferableUIUtility.stoppingPoints.Clear();
@@ -41,7 +41,7 @@ namespace RimWorld
 			TransferableUIUtility.DoCountAdjustInterfaceInternal(rect, trad, index, min, max, flash, readOnly);
 		}
 
-		// Token: 0x06005A45 RID: 23109 RVA: 0x001E8468 File Offset: 0x001E6668
+		
 		private static void DoCountAdjustInterfaceInternal(Rect rect, Transferable trad, int index, int min, int max, bool flash, bool readOnly)
 		{
 			rect = rect.Rounded();
@@ -223,7 +223,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A46 RID: 23110 RVA: 0x001E8A78 File Offset: 0x001E6C78
+		
 		public static void DrawTransferableInfo(Transferable trad, Rect idRect, Color labelColor)
 		{
 			if (!trad.HasAnyThing && trad.IsThing)
@@ -274,7 +274,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A47 RID: 23111 RVA: 0x001E8B86 File Offset: 0x001E6D86
+		
 		public static float DefaultListOrderPriority(Transferable transferable)
 		{
 			if (!transferable.HasAnyThing)
@@ -284,7 +284,7 @@ namespace RimWorld
 			return TransferableUIUtility.DefaultListOrderPriority(transferable.ThingDef);
 		}
 
-		// Token: 0x06005A48 RID: 23112 RVA: 0x001E8BA4 File Offset: 0x001E6DA4
+		
 		public static float DefaultListOrderPriority(ThingDef def)
 		{
 			if (def == ThingDefOf.Silver)
@@ -322,7 +322,7 @@ namespace RimWorld
 			return 20f;
 		}
 
-		// Token: 0x06005A49 RID: 23113 RVA: 0x001E8C28 File Offset: 0x001E6E28
+		
 		public static void DoTransferableSorters(TransferableSorterDef sorter1, TransferableSorterDef sorter2, Action<TransferableSorterDef> sorter1Setter, Action<TransferableSorterDef> sorter2Setter)
 		{
 			GUI.BeginGroup(new Rect(0f, 0f, 350f, 27f));
@@ -343,7 +343,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005A4A RID: 23114 RVA: 0x001E8D10 File Offset: 0x001E6F10
+		
 		public static void DoExtraAnimalIcons(Transferable trad, Rect rect, ref float curX)
 		{
 			Pawn pawn = trad.AnyThing as Pawn;
@@ -376,7 +376,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A4B RID: 23115 RVA: 0x001E8E28 File Offset: 0x001E7028
+		
 		private static void OpenSorterChangeFloatMenu(Action<TransferableSorterDef> sorterSetter)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -392,7 +392,7 @@ namespace RimWorld
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06005A4C RID: 23116 RVA: 0x001E8EC0 File Offset: 0x001E70C0
+		
 		public static void DrawExtraInfo(List<TransferableUIUtility.ExtraInfo> info, Rect rect)
 		{
 			if (rect.width > (float)info.Count * 230f)
@@ -454,60 +454,60 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x04003115 RID: 12565
+		
 		private static List<TransferableCountToTransferStoppingPoint> stoppingPoints = new List<TransferableCountToTransferStoppingPoint>();
 
-		// Token: 0x04003116 RID: 12566
+		
 		private const float AmountAreaWidth = 90f;
 
-		// Token: 0x04003117 RID: 12567
+		
 		private const float AmountAreaHeight = 25f;
 
-		// Token: 0x04003118 RID: 12568
+		
 		private const float AdjustArrowWidth = 30f;
 
-		// Token: 0x04003119 RID: 12569
+		
 		public const float ResourceIconSize = 27f;
 
-		// Token: 0x0400311A RID: 12570
+		
 		public const float SortersHeight = 27f;
 
-		// Token: 0x0400311B RID: 12571
+		
 		public const float ExtraInfoHeight = 40f;
 
-		// Token: 0x0400311C RID: 12572
+		
 		public const float ExtraInfoMargin = 12f;
 
-		// Token: 0x0400311D RID: 12573
+		
 		public static readonly Color ZeroCountColor = new Color(0.5f, 0.5f, 0.5f);
 
-		// Token: 0x0400311E RID: 12574
+		
 		public static readonly Texture2D FlashTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 0f, 0f, 0.4f));
 
-		// Token: 0x0400311F RID: 12575
+		
 		private static readonly Texture2D TradeArrow = ContentFinder<Texture2D>.Get("UI/Widgets/TradeArrow", true);
 
-		// Token: 0x04003120 RID: 12576
+		
 		private static readonly Texture2D DividerTex = ContentFinder<Texture2D>.Get("UI/Widgets/Divider", true);
 
-		// Token: 0x04003121 RID: 12577
+		
 		private static readonly Texture2D PregnantIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Pregnant", true);
 
-		// Token: 0x04003122 RID: 12578
+		
 		private static readonly Texture2D BondIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Bond", true);
 
-		// Token: 0x04003123 RID: 12579
+		
 		[TweakValue("Interface", 0f, 50f)]
 		private static float PregnancyIconWidth = 24f;
 
-		// Token: 0x04003124 RID: 12580
+		
 		[TweakValue("Interface", 0f, 50f)]
 		private static float BondIconWidth = 24f;
 
-		// Token: 0x02001D80 RID: 7552
+		
 		public struct ExtraInfo
 		{
-			// Token: 0x0600A5EC RID: 42476 RVA: 0x0031140C File Offset: 0x0030F60C
+			
 			public ExtraInfo(string key, string value, Color color, string tip, float lastFlashTime = -9999f)
 			{
 				this.key = key;
@@ -519,7 +519,7 @@ namespace RimWorld
 				this.secondColor = default(Color);
 			}
 
-			// Token: 0x0600A5ED RID: 42477 RVA: 0x00311446 File Offset: 0x0030F646
+			
 			public ExtraInfo(string key, string value, Color color, string tip, string secondValue, Color secondColor, float lastFlashTime = -9999f)
 			{
 				this.key = key;
@@ -531,25 +531,25 @@ namespace RimWorld
 				this.secondColor = secondColor;
 			}
 
-			// Token: 0x04006F8F RID: 28559
+			
 			public string key;
 
-			// Token: 0x04006F90 RID: 28560
+			
 			public string value;
 
-			// Token: 0x04006F91 RID: 28561
+			
 			public string secondValue;
 
-			// Token: 0x04006F92 RID: 28562
+			
 			public string tip;
 
-			// Token: 0x04006F93 RID: 28563
+			
 			public float lastFlashTime;
 
-			// Token: 0x04006F94 RID: 28564
+			
 			public Color color;
 
-			// Token: 0x04006F95 RID: 28565
+			
 			public Color secondColor;
 		}
 	}

@@ -6,17 +6,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C94 RID: 3220
+	
 	public class PowerBeam : OrbitalStrike
 	{
-		// Token: 0x06004DAF RID: 19887 RVA: 0x001A1A98 File Offset: 0x0019FC98
+		
 		public override void StartStrike()
 		{
 			base.StartStrike();
 			MoteMaker.MakePowerBeamMote(base.Position, base.Map);
 		}
 
-		// Token: 0x06004DB0 RID: 19888 RVA: 0x001A1AB4 File Offset: 0x0019FCB4
+		
 		public override void Tick()
 		{
 			base.Tick();
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004DB1 RID: 19889 RVA: 0x001A1AE4 File Offset: 0x0019FCE4
+		
 		private void StartRandomFireAndDoFlameDamage()
 		{
 			IntVec3 c = (from x in GenRadial.RadialCellsAround(base.Position, 15f, true)
@@ -54,19 +54,19 @@ namespace RimWorld
 			PowerBeam.tmpThings.Clear();
 		}
 
-		// Token: 0x04002B7A RID: 11130
+		
 		public const float Radius = 15f;
 
-		// Token: 0x04002B7B RID: 11131
+		
 		private const int FiresStartedPerTick = 4;
 
-		// Token: 0x04002B7C RID: 11132
+		
 		private static readonly IntRange FlameDamageAmountRange = new IntRange(65, 100);
 
-		// Token: 0x04002B7D RID: 11133
+		
 		private static readonly IntRange CorpseFlameDamageAmountRange = new IntRange(5, 10);
 
-		// Token: 0x04002B7E RID: 11134
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

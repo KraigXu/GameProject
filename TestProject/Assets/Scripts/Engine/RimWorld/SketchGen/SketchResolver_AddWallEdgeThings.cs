@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x0200108A RID: 4234
+	
 	public class SketchResolver_AddWallEdgeThings : SketchResolver
 	{
-		// Token: 0x06006473 RID: 25715 RVA: 0x0022D800 File Offset: 0x0022BA00
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			CellRect cellRect = parms.rect ?? parms.sketch.OccupiedRect;
@@ -22,16 +22,16 @@ namespace RimWorld.SketchGen
 			this.processed.Clear();
 			try
 			{
-				Predicate<IntVec3> <>9__1;
+				Predicate<IntVec3> 9__1;
 				foreach (IntVec3 c in cellRect.Cells.InRandomOrder(null))
 				{
 					CellRect outerRect = cellRect;
 					Sketch sketch = parms.sketch;
 					HashSet<IntVec3> hashSet = this.processed;
 					Predicate<IntVec3> canTraverse;
-					if ((canTraverse = <>9__1) == null)
+					if ((canTraverse ) == null)
 					{
-						canTraverse = (<>9__1 = ((IntVec3 x) => !parms.sketch.ThingsAt(x).Any<SketchThing>() && (!requireFloor || (parms.sketch.TerrainAt(x) != null && parms.sketch.TerrainAt(x).layerable))));
+						canTraverse = (9__1 = ((IntVec3 x) => !parms.sketch.ThingsAt(x).Any<SketchThing>() && (!requireFloor || (parms.sketch.TerrainAt(x) != null && parms.sketch.TerrainAt(x).layerable))));
 					}
 					CellRect cellRect4 = SketchGenUtility.FindBiggestRectAt(c, outerRect, sketch, hashSet, canTraverse);
 					if (cellRect4.Width >= cellRect2.Width && cellRect4.Height >= cellRect2.Height && cellRect4.Width >= cellRect3.Width && cellRect4.Height >= cellRect3.Height && Rand.Chance(0.2f))
@@ -68,13 +68,13 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x06006474 RID: 25716 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x06006475 RID: 25717 RVA: 0x0022DD88 File Offset: 0x0022BF88
+		
 		private bool CanPlaceAt(CellRect rect, Rot4 dir, Sketch sketch)
 		{
 			foreach (IntVec3 pos in rect.GetEdgeCells(dir))
@@ -103,10 +103,10 @@ namespace RimWorld.SketchGen
 			return true;
 		}
 
-		// Token: 0x04003D29 RID: 15657
+		
 		private HashSet<IntVec3> processed = new HashSet<IntVec3>();
 
-		// Token: 0x04003D2A RID: 15658
+		
 		private const float Chance = 0.2f;
 	}
 }

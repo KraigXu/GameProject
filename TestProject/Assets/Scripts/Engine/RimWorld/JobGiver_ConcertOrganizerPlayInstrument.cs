@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006C2 RID: 1730
+	
 	public class JobGiver_ConcertOrganizerPlayInstrument : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E87 RID: 11911 RVA: 0x00105948 File Offset: 0x00103B48
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.mindState.duty == null)

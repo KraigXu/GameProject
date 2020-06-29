@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A7C RID: 2684
+	
 	[StaticConstructorOnStartup]
 	public class CompPowerPlantWater : CompPowerPlant
 	{
-		// Token: 0x17000B3E RID: 2878
+		
 		// (get) Token: 0x06003F5B RID: 16219 RVA: 0x00150AFD File Offset: 0x0014ECFD
 		protected override float DesiredPowerOutput
 		{
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F5C RID: 16220 RVA: 0x00150B36 File Offset: 0x0014ED36
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
@@ -40,20 +40,20 @@ namespace RimWorld
 			this.ForceOthersToRebuildCache(this.parent.Map);
 		}
 
-		// Token: 0x06003F5D RID: 16221 RVA: 0x00150B6B File Offset: 0x0014ED6B
+		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
 			this.ForceOthersToRebuildCache(map);
 		}
 
-		// Token: 0x06003F5E RID: 16222 RVA: 0x00150B7B File Offset: 0x0014ED7B
+		
 		private void ClearCache()
 		{
 			this.cacheDirty = true;
 		}
 
-		// Token: 0x06003F5F RID: 16223 RVA: 0x00150B84 File Offset: 0x0014ED84
+		
 		private void RebuildCache()
 		{
 			this.waterUsable = true;
@@ -100,7 +100,7 @@ namespace RimWorld
 			this.cacheDirty = false;
 		}
 
-		// Token: 0x06003F60 RID: 16224 RVA: 0x00150DE4 File Offset: 0x0014EFE4
+		
 		private void ForceOthersToRebuildCache(Map map)
 		{
 			foreach (Building building in map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.WatermillGenerator))
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F61 RID: 16225 RVA: 0x00150E40 File Offset: 0x0014F040
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -119,13 +119,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F62 RID: 16226 RVA: 0x00150E7A File Offset: 0x0014F07A
+		
 		public IEnumerable<IntVec3> WaterCells()
 		{
 			return CompPowerPlantWater.WaterCells(this.parent.Position, this.parent.Rotation);
 		}
 
-		// Token: 0x06003F63 RID: 16227 RVA: 0x00150E97 File Offset: 0x0014F097
+		
 		public static IEnumerable<IntVec3> WaterCells(IntVec3 loc, Rot4 rot)
 		{
 			IntVec3 perpOffset = rot.Rotated(RotationDirection.Counterclockwise).FacingCell;
@@ -137,13 +137,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003F64 RID: 16228 RVA: 0x00150EAE File Offset: 0x0014F0AE
+		
 		public CellRect WaterUseRect()
 		{
 			return CompPowerPlantWater.WaterUseRect(this.parent.Position, this.parent.Rotation);
 		}
 
-		// Token: 0x06003F65 RID: 16229 RVA: 0x00150ECC File Offset: 0x0014F0CC
+		
 		public static CellRect WaterUseRect(IntVec3 loc, Rot4 rot)
 		{
 			int width = rot.IsHorizontal ? 7 : 13;
@@ -151,13 +151,13 @@ namespace RimWorld
 			return CellRect.CenteredOn(loc + rot.FacingCell * 4, width, height);
 		}
 
-		// Token: 0x06003F66 RID: 16230 RVA: 0x00150F11 File Offset: 0x0014F111
+		
 		public IEnumerable<IntVec3> WaterUseCells()
 		{
 			return CompPowerPlantWater.WaterUseCells(this.parent.Position, this.parent.Rotation);
 		}
 
-		// Token: 0x06003F67 RID: 16231 RVA: 0x00150F2E File Offset: 0x0014F12E
+		
 		public static IEnumerable<IntVec3> WaterUseCells(IntVec3 loc, Rot4 rot)
 		{
 			foreach (IntVec3 intVec in CompPowerPlantWater.WaterUseRect(loc, rot))
@@ -168,13 +168,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003F68 RID: 16232 RVA: 0x00150F45 File Offset: 0x0014F145
+		
 		public IEnumerable<IntVec3> GroundCells()
 		{
 			return CompPowerPlantWater.GroundCells(this.parent.Position, this.parent.Rotation);
 		}
 
-		// Token: 0x06003F69 RID: 16233 RVA: 0x00150F62 File Offset: 0x0014F162
+		
 		public static IEnumerable<IntVec3> GroundCells(IntVec3 loc, Rot4 rot)
 		{
 			IntVec3 perpOffset = rot.Rotated(RotationDirection.Counterclockwise).FacingCell;
@@ -190,7 +190,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003F6A RID: 16234 RVA: 0x00150F7C File Offset: 0x0014F17C
+		
 		public override void PostDraw()
 		{
 			base.PostDraw();
@@ -209,7 +209,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F6B RID: 16235 RVA: 0x0015109C File Offset: 0x0014F29C
+		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
@@ -220,34 +220,34 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x040024D3 RID: 9427
+		
 		private float spinPosition;
 
-		// Token: 0x040024D4 RID: 9428
+		
 		private bool cacheDirty = true;
 
-		// Token: 0x040024D5 RID: 9429
+		
 		private bool waterUsable;
 
-		// Token: 0x040024D6 RID: 9430
+		
 		private bool waterDoubleUsed;
 
-		// Token: 0x040024D7 RID: 9431
+		
 		private float spinRate = 1f;
 
-		// Token: 0x040024D8 RID: 9432
+		
 		private const float PowerFactorIfWaterDoubleUsed = 0.3f;
 
-		// Token: 0x040024D9 RID: 9433
+		
 		private const float SpinRateFactor = 0.006666667f;
 
-		// Token: 0x040024DA RID: 9434
+		
 		private const float BladeOffset = 2.36f;
 
-		// Token: 0x040024DB RID: 9435
+		
 		private const int BladeCount = 9;
 
-		// Token: 0x040024DC RID: 9436
+		
 		public static readonly Material BladesMat = MaterialPool.MatFrom("Things/Building/Power/WatermillGenerator/WatermillGeneratorBlades");
 	}
 }

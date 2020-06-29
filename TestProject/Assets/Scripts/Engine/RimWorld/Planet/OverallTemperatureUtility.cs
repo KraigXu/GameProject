@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011D5 RID: 4565
+	
 	public static class OverallTemperatureUtility
 	{
-		// Token: 0x170011AC RID: 4524
+		
 		// (get) Token: 0x060069C3 RID: 27075 RVA: 0x0024E5A3 File Offset: 0x0024C7A3
 		public static int EnumValuesCount
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x060069C4 RID: 27076 RVA: 0x0024E5C8 File Offset: 0x0024C7C8
+		
 		public static SimpleCurve GetTemperatureCurve(this OverallTemperature overallTemperature)
 		{
 			switch (overallTemperature)
@@ -41,10 +41,10 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x040041BE RID: 16830
+		
 		private static int cachedEnumValuesCount = -1;
 
-		// Token: 0x040041BF RID: 16831
+		
 		private static readonly SimpleCurve Curve_VeryCold = new SimpleCurve
 		{
 			{
@@ -81,7 +81,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041C0 RID: 16832
+		
 		private static readonly SimpleCurve Curve_Cold = new SimpleCurve
 		{
 			{
@@ -118,7 +118,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041C1 RID: 16833
+		
 		private static readonly SimpleCurve Curve_LittleBitColder = new SimpleCurve
 		{
 			{
@@ -147,7 +147,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041C2 RID: 16834
+		
 		private static readonly SimpleCurve Curve_LittleBitWarmer = new SimpleCurve
 		{
 			{
@@ -172,7 +172,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041C3 RID: 16835
+		
 		private static readonly SimpleCurve Curve_Hot = new SimpleCurve
 		{
 			{
@@ -205,7 +205,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041C4 RID: 16836
+		
 		private static readonly SimpleCurve Curve_VeryHot = new SimpleCurve
 		{
 			{

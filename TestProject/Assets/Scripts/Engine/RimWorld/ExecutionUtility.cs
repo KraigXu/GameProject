@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000688 RID: 1672
+	
 	public static class ExecutionUtility
 	{
-		// Token: 0x06002D6F RID: 11631 RVA: 0x000FFF18 File Offset: 0x000FE118
+		
 		public static void DoExecutionByCut(Pawn executioner, Pawn victim)
 		{
 			Map map = victim.Map;
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D70 RID: 11632 RVA: 0x000FFFC4 File Offset: 0x000FE1C4
+		
 		private static BodyPartRecord ExecuteCutPart(Pawn pawn)
 		{
 			BodyPartRecord bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).FirstOrDefault((BodyPartRecord x) => x.def == BodyPartDefOf.Neck);

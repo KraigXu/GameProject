@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000540 RID: 1344
+	
 	public class MentalBreakWorker
 	{
-		// Token: 0x0600267B RID: 9851 RVA: 0x000E2C34 File Offset: 0x000E0E34
+		
 		public virtual float CommonalityFor(Pawn pawn, bool moodCaused = false)
 		{
 			float num = this.def.baseCommonality;
@@ -19,7 +19,7 @@ namespace Verse.AI
 			return num;
 		}
 
-		// Token: 0x0600267C RID: 9852 RVA: 0x000E2C88 File Offset: 0x000E0E88
+		
 		public virtual bool BreakCanOccur(Pawn pawn)
 		{
 			if (this.def.requiredTrait != null && (pawn.story == null || !pawn.story.traits.HasTrait(this.def.requiredTrait)))
@@ -45,13 +45,13 @@ namespace Verse.AI
 			return !TutorSystem.TutorialMode || pawn.Faction != Faction.OfPlayer;
 		}
 
-		// Token: 0x0600267D RID: 9853 RVA: 0x000E2DBA File Offset: 0x000E0FBA
+		
 		public virtual bool TryStart(Pawn pawn, string reason, bool causedByMood)
 		{
 			return pawn.mindState.mentalStateHandler.TryStartMentalState(this.def.mentalState, reason, false, causedByMood, null, false);
 		}
 
-		// Token: 0x0600267E RID: 9854 RVA: 0x000E2DDC File Offset: 0x000E0FDC
+		
 		protected bool TrySendLetter(Pawn pawn, string textKey, string reason)
 		{
 			if (!PawnUtility.ShouldSendNotificationAbout(pawn))
@@ -69,7 +69,7 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x0400172E RID: 5934
+		
 		public MentalBreakDef def;
 	}
 }

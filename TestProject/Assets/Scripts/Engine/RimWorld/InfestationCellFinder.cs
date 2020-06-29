@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F3A RID: 3898
+	
 	public static class InfestationCellFinder
 	{
-		// Token: 0x06005F80 RID: 24448 RVA: 0x002111EC File Offset: 0x0020F3EC
+		
 		public static bool TryFindCell(out IntVec3 cell, Map map)
 		{
 			InfestationCellFinder.CalculateLocationCandidates(map);
@@ -22,7 +22,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005F81 RID: 24449 RVA: 0x0021127C File Offset: 0x0020F47C
+		
 		private static float GetScoreAt(IntVec3 cell, Map map)
 		{
 			if ((float)InfestationCellFinder.distToColonyBuilding[cell] > 30f)
@@ -88,7 +88,7 @@ namespace RimWorld
 			return num7;
 		}
 
-		// Token: 0x06005F82 RID: 24450 RVA: 0x00211418 File Offset: 0x0020F618
+		
 		public static void DebugDraw()
 		{
 			if (DebugViewSettings.drawInfestationChance)
@@ -147,7 +147,7 @@ namespace RimWorld
 			InfestationCellFinder.tmpCachedInfestationChanceCellColors = null;
 		}
 
-		// Token: 0x06005F83 RID: 24451 RVA: 0x002115D4 File Offset: 0x0020F7D4
+		
 		private static void CalculateLocationCandidates(Map map)
 		{
 			InfestationCellFinder.locationCandidates.Clear();
@@ -168,7 +168,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F84 RID: 24452 RVA: 0x00211654 File Offset: 0x0020F854
+		
 		private static bool CellHasBlockingThings(IntVec3 cell, Map map)
 		{
 			List<Thing> thingList = cell.GetThingList(map);
@@ -186,7 +186,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005F85 RID: 24453 RVA: 0x002116F0 File Offset: 0x0020F8F0
+		
 		private static int StraightLineDistToUnroofed(IntVec3 cell, Map map)
 		{
 			int num = int.MaxValue;
@@ -228,7 +228,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06005F86 RID: 24454 RVA: 0x00211778 File Offset: 0x0020F978
+		
 		private static float DistToBlocker(IntVec3 cell, Map map)
 		{
 			int num = int.MinValue;
@@ -261,7 +261,7 @@ namespace RimWorld
 			return (float)Mathf.Min(num, num2);
 		}
 
-		// Token: 0x06005F87 RID: 24455 RVA: 0x002117FC File Offset: 0x0020F9FC
+		
 		private static bool NoRoofAroundAndWalkable(IntVec3 cell, Map map)
 		{
 			if (!cell.Walkable(map))
@@ -283,7 +283,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005F88 RID: 24456 RVA: 0x00211858 File Offset: 0x0020FA58
+		
 		private static float GetMountainousnessScoreAt(IntVec3 cell, Map map)
 		{
 			float num = 0f;
@@ -308,7 +308,7 @@ namespace RimWorld
 			return num / (float)num2;
 		}
 
-		// Token: 0x06005F89 RID: 24457 RVA: 0x002118FC File Offset: 0x0020FAFC
+		
 		private static void CalculateTraversalDistancesToUnroofed(Map map)
 		{
 			InfestationCellFinder.tempUnroofedRegions.Clear();
@@ -328,7 +328,7 @@ namespace RimWorld
 			InfestationCellFinder.tempUnroofedRegions.Clear();
 		}
 
-		// Token: 0x06005F8A RID: 24458 RVA: 0x002119C4 File Offset: 0x0020FBC4
+		
 		private static void CalculateClosedAreaSizeGrid(Map map)
 		{
 			if (InfestationCellFinder.closedAreaSize == null)
@@ -339,8 +339,7 @@ namespace RimWorld
 			{
 				InfestationCellFinder.closedAreaSize.ClearAndResizeTo(map);
 			}
-			Predicate<IntVec3> <>9__0;
-			Predicate<IntVec3> <>9__2;
+
 			for (int i = 0; i < map.Size.z; i++)
 			{
 				for (int j = 0; j < map.Size.x; j++)
@@ -348,37 +347,30 @@ namespace RimWorld
 					IntVec3 intVec = new IntVec3(j, 0, i);
 					if (InfestationCellFinder.closedAreaSize[j, i] == 0 && !intVec.Impassable(map))
 					{
-						int area = 0;
+						int area1 = 0;
 						FloodFiller floodFiller = map.floodFiller;
 						IntVec3 root = intVec;
-						Predicate<IntVec3> passCheck;
-						if ((passCheck = <>9__0) == null)
-						{
-							passCheck = (<>9__0 = ((IntVec3 c) => !c.Impassable(map)));
-						}
+						Predicate<IntVec3> passCheck = ((IntVec3 c) => !c.Impassable(map));
 						floodFiller.FloodFill(root, passCheck, delegate(IntVec3 c)
 						{
-							int area = area;
+							int area = area1;
 							area++;
 						}, int.MaxValue, false, null);
-						area = Mathf.Min(area, 255);
+						area1 = Mathf.Min(area1, 255);
 						FloodFiller floodFiller2 = map.floodFiller;
 						IntVec3 root2 = intVec;
-						Predicate<IntVec3> passCheck2;
-						if ((passCheck2 = <>9__2) == null)
-						{
-							passCheck2 = (<>9__2 = ((IntVec3 c) => !c.Impassable(map)));
-						}
+						Predicate<IntVec3> passCheck2 = ((IntVec3 c) => !c.Impassable(map));
+	
 						floodFiller2.FloodFill(root2, passCheck2, delegate(IntVec3 c)
 						{
-							InfestationCellFinder.closedAreaSize[c] = (byte)area;
+							InfestationCellFinder.closedAreaSize[c] = (byte)area1;
 						}, int.MaxValue, false, null);
 					}
 				}
 			}
 		}
 
-		// Token: 0x06005F8B RID: 24459 RVA: 0x00211B28 File Offset: 0x0020FD28
+		
 		private static void CalculateDistanceToColonyBuildingGrid(Map map)
 		{
 			if (InfestationCellFinder.distToColonyBuilding == null)
@@ -410,68 +402,68 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040033D5 RID: 13269
+		
 		private static List<InfestationCellFinder.LocationCandidate> locationCandidates = new List<InfestationCellFinder.LocationCandidate>();
 
-		// Token: 0x040033D6 RID: 13270
+		
 		private static Dictionary<Region, float> regionsDistanceToUnroofed = new Dictionary<Region, float>();
 
-		// Token: 0x040033D7 RID: 13271
+		
 		private static ByteGrid closedAreaSize;
 
-		// Token: 0x040033D8 RID: 13272
+		
 		private static ByteGrid distToColonyBuilding;
 
-		// Token: 0x040033D9 RID: 13273
+		
 		private const float MinRequiredScore = 7.5f;
 
-		// Token: 0x040033DA RID: 13274
+		
 		private const float MinMountainousnessScore = 0.17f;
 
-		// Token: 0x040033DB RID: 13275
+		
 		private const int MountainousnessScoreRadialPatternIdx = 700;
 
-		// Token: 0x040033DC RID: 13276
+		
 		private const int MountainousnessScoreRadialPatternSkip = 10;
 
-		// Token: 0x040033DD RID: 13277
+		
 		private const float MountainousnessScorePerRock = 1f;
 
-		// Token: 0x040033DE RID: 13278
+		
 		private const float MountainousnessScorePerThickRoof = 0.5f;
 
-		// Token: 0x040033DF RID: 13279
+		
 		private const float MinCellTempToSpawnHive = -17f;
 
-		// Token: 0x040033E0 RID: 13280
+		
 		private const float MaxDistanceToColonyBuilding = 30f;
 
-		// Token: 0x040033E1 RID: 13281
+		
 		private static List<Pair<IntVec3, float>> tmpCachedInfestationChanceCellColors;
 
-		// Token: 0x040033E2 RID: 13282
+		
 		private static HashSet<Region> tempUnroofedRegions = new HashSet<Region>();
 
-		// Token: 0x040033E3 RID: 13283
+		
 		private static List<IntVec3> tmpColonyBuildingsLocs = new List<IntVec3>();
 
-		// Token: 0x040033E4 RID: 13284
+		
 		private static List<KeyValuePair<IntVec3, float>> tmpDistanceResult = new List<KeyValuePair<IntVec3, float>>();
 
-		// Token: 0x02001E3B RID: 7739
+		
 		private struct LocationCandidate
 		{
-			// Token: 0x0600A867 RID: 43111 RVA: 0x00317C7A File Offset: 0x00315E7A
+			
 			public LocationCandidate(IntVec3 cell, float score)
 			{
 				this.cell = cell;
 				this.score = score;
 			}
 
-			// Token: 0x040071C9 RID: 29129
+			
 			public IntVec3 cell;
 
-			// Token: 0x040071CA RID: 29130
+			
 			public float score;
 		}
 	}

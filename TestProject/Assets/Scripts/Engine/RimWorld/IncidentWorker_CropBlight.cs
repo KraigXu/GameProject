@@ -4,17 +4,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009D9 RID: 2521
+	
 	public class IncidentWorker_CropBlight : IncidentWorker
 	{
-		// Token: 0x06003C2C RID: 15404 RVA: 0x0013DBC8 File Offset: 0x0013BDC8
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Plant plant;
 			return this.TryFindRandomBlightablePlant((Map)parms.target, out plant);
 		}
 
-		// Token: 0x06003C2D RID: 15405 RVA: 0x0013DBE8 File Offset: 0x0013BDE8
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -44,7 +44,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C2E RID: 15406 RVA: 0x0013DD0C File Offset: 0x0013BF0C
+		
 		private bool TryFindRandomBlightablePlant(Map map, out Plant plant)
 		{
 			Thing thing;
@@ -55,17 +55,17 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06003C2F RID: 15407 RVA: 0x0013DD5C File Offset: 0x0013BF5C
+		
 		private float BlightChance(IntVec3 c, IntVec3 root, float radiusFactor)
 		{
 			float x = c.DistanceTo(root) / radiusFactor;
 			return IncidentWorker_CropBlight.BlightChancePerRadius.Evaluate(x);
 		}
 
-		// Token: 0x0400237B RID: 9083
+		
 		private const float Radius = 11f;
 
-		// Token: 0x0400237C RID: 9084
+		
 		private static readonly SimpleCurve BlightChancePerRadius = new SimpleCurve
 		{
 			{
@@ -82,7 +82,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400237D RID: 9085
+		
 		private static readonly SimpleCurve RadiusFactorPerPointsCurve = new SimpleCurve
 		{
 			{

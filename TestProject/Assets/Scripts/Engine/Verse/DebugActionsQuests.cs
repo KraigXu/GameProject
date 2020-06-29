@@ -8,31 +8,31 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000336 RID: 822
+	
 	public static class DebugActionsQuests
 	{
-		// Token: 0x0600184A RID: 6218 RVA: 0x0008B0E8 File Offset: 0x000892E8
+		
 		[DebugAction("Quests", "Generate quest", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void GenerateQuest()
 		{
 			DebugActionsQuests.GenerateQuests(1, false);
 		}
 
-		// Token: 0x0600184B RID: 6219 RVA: 0x0008B0F1 File Offset: 0x000892F1
+		
 		[DebugAction("Quests", "Generate quests x10", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void GenerateQuests10()
 		{
 			DebugActionsQuests.GenerateQuests(10, false);
 		}
 
-		// Token: 0x0600184C RID: 6220 RVA: 0x0008B0FB File Offset: 0x000892FB
+		
 		[DebugAction("Quests", "Generate quests x30", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void GenerateQuests30()
 		{
 			DebugActionsQuests.GenerateQuests(30, false);
 		}
 
-		// Token: 0x0600184D RID: 6221 RVA: 0x0008B108 File Offset: 0x00089308
+		
 		private static void GenerateQuests(int count, bool logDescOnly)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -131,7 +131,7 @@ namespace Verse
 			select op));
 		}
 
-		// Token: 0x0600184E RID: 6222 RVA: 0x0008B230 File Offset: 0x00089430
+		
 		[DebugAction("Quests", "QuestPart test", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestQuestPart()
 		{
@@ -154,7 +154,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600184F RID: 6223 RVA: 0x0008B2C8 File Offset: 0x000894C8
+		
 		[DebugAction("Quests", "Log generated quest savedata", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		public static void QuestExample()
 		{
@@ -182,7 +182,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001850 RID: 6224 RVA: 0x0008B354 File Offset: 0x00089554
+		
 		[DebugOutput]
 		public static void QuestRewardsSampled()
 		{
@@ -191,12 +191,12 @@ namespace Verse
 			{
 				while (enumerator.MoveNext())
 				{
-					DebugActionsQuests.<>c__DisplayClass8_0 <>c__DisplayClass8_ = new DebugActionsQuests.<>c__DisplayClass8_0();
-					<>c__DisplayClass8_.quest = enumerator.Current;
-					if (<>c__DisplayClass8_.quest.IsRootAny)
+					DebugActionsQuests.c__DisplayClass8_0 c__DisplayClass8_ = new DebugActionsQuests.c__DisplayClass8_0();
+					c__DisplayClass8_.quest = enumerator.Current;
+					if (c__DisplayClass8_.quest.IsRootAny)
 					{
-						QuestScriptDef localQuest = <>c__DisplayClass8_.quest;
-						list.Add(new DebugMenuOption(<>c__DisplayClass8_.quest.defName, DebugMenuOptionMode.Action, delegate
+						QuestScriptDef localQuest = c__DisplayClass8_.quest;
+						list.Add(new DebugMenuOption(c__DisplayClass8_.quest.defName, DebugMenuOptionMode.Action, delegate
 						{
 							Dictionary<float, int> numQuestsRating1 = new Dictionary<float, int>();
 							Dictionary<float, int> numQuestsRating2 = new Dictionary<float, int>();
@@ -212,7 +212,7 @@ namespace Verse
 							Dictionary<float, float> rewardRating3accumulated = new Dictionary<float, float>();
 							foreach (float num in DebugActionsQuests.QuestRewardDebugPointLevels)
 							{
-								if (num >= <>c__DisplayClass8_.quest.rootMinPoints)
+								if (num >= c__DisplayClass8_.quest.rootMinPoints)
 								{
 									numQuestsRating1.Add(num, 0);
 									numQuestsRating2.Add(num, 0);
@@ -359,7 +359,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001851 RID: 6225 RVA: 0x0008B418 File Offset: 0x00089618
+		
 		[DebugOutput]
 		public static void QuestDefs()
 		{
@@ -474,7 +474,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<QuestScriptDef>(dataSources, array);
 		}
 
-		// Token: 0x06001852 RID: 6226 RVA: 0x0008B6C4 File Offset: 0x000898C4
+		
 		[DebugOutput]
 		public static void QuestSelectionWeightsNow()
 		{
@@ -518,7 +518,7 @@ namespace Verse
 			select op));
 		}
 
-		// Token: 0x06001853 RID: 6227 RVA: 0x0008B780 File Offset: 0x00089980
+		
 		[DebugOutput]
 		public static void DecreeSelectionWeightsNow()
 		{
@@ -533,10 +533,10 @@ namespace Verse
 			DebugTables.MakeTablesDialog<QuestScriptDef>(dataSources, array);
 		}
 
-		// Token: 0x04000F0B RID: 3851
+		
 		public static float lastQuestGeneratedRewardValue;
 
-		// Token: 0x04000F0C RID: 3852
+		
 		private static readonly float[] QuestRewardDebugPointLevels = new float[]
 		{
 			35f,

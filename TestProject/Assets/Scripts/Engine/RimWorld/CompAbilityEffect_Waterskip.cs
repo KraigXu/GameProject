@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000ADE RID: 2782
+	
 	public class CompAbilityEffect_Waterskip : CompAbilityEffect
 	{
-		// Token: 0x060041BD RID: 16829 RVA: 0x0015F71C File Offset: 0x0015D91C
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041BE RID: 16830 RVA: 0x0015F844 File Offset: 0x0015DA44
+		
 		private IEnumerable<IntVec3> AffectedCells(LocalTargetInfo target, Map map)
 		{
 			if (target.Cell.Filled(this.parent.pawn.Map))
@@ -57,13 +57,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060041BF RID: 16831 RVA: 0x0015F862 File Offset: 0x0015DA62
+		
 		public override void DrawEffectPreview(LocalTargetInfo target)
 		{
 			GenDraw.DrawFieldEdges(this.AffectedCells(target, this.parent.pawn.Map).ToList<IntVec3>(), this.Valid(target, false) ? Color.white : Color.red);
 		}
 
-		// Token: 0x060041C0 RID: 16832 RVA: 0x0015F89C File Offset: 0x0015DA9C
+		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			if (target.Cell.Filled(this.parent.pawn.Map))

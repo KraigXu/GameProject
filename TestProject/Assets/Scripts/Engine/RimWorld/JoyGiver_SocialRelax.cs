@@ -7,22 +7,22 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006FE RID: 1790
+	
 	public class JoyGiver_SocialRelax : JoyGiver
 	{
-		// Token: 0x06002F56 RID: 12118 RVA: 0x0010A304 File Offset: 0x00108504
+		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			return this.TryGiveJobInt(pawn, null);
 		}
 
-		// Token: 0x06002F57 RID: 12119 RVA: 0x0010A310 File Offset: 0x00108510
+		
 		public override Job TryGiveJobInGatheringArea(Pawn pawn, IntVec3 gatheringSpot)
 		{
 			return this.TryGiveJobInt(pawn, (CompGatherSpot x) => GatheringsUtility.InGatheringArea(x.parent.Position, gatheringSpot, pawn.Map));
 		}
 
-		// Token: 0x06002F58 RID: 12120 RVA: 0x0010A34C File Offset: 0x0010854C
+		
 		private Job TryGiveJobInt(Pawn pawn, Predicate<CompGatherSpot> gatherSpotValidator)
 		{
 			if (pawn.Map.gatherSpotLister.activeSpots.Count == 0)
@@ -76,7 +76,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002F59 RID: 12121 RVA: 0x0010A544 File Offset: 0x00108744
+		
 		private static bool TryFindIngestibleToNurse(IntVec3 center, Pawn ingester, out Thing ingestible)
 		{
 			if (ingester.IsTeetotaler())
@@ -99,16 +99,16 @@ namespace RimWorld
 				}
 			}
 			JoyGiver_SocialRelax.nurseableDrugs.Shuffle<ThingDef>();
-			Predicate<Thing> <>9__0;
+			Predicate<Thing> 9__0;
 			for (int j = 0; j < JoyGiver_SocialRelax.nurseableDrugs.Count; j++)
 			{
 				List<Thing> list = ingester.Map.listerThings.ThingsOfDef(JoyGiver_SocialRelax.nurseableDrugs[j]);
 				if (list.Count > 0)
 				{
 					Predicate<Thing> predicate;
-					if ((predicate = <>9__0) == null)
+					if ((predicate ) == null)
 					{
-						predicate = (<>9__0 = ((Thing t) => ingester.CanReserve(t, 1, -1, null, false) && !t.IsForbidden(ingester)));
+						predicate = (9__0 = ((Thing t) => ingester.CanReserve(t, 1, -1, null, false) && !t.IsForbidden(ingester)));
 					}
 					Predicate<Thing> validator = predicate;
 					ingestible = GenClosest.ClosestThing_Global_Reachable(center, ingester.Map, list, PathEndMode.OnCell, TraverseParms.For(ingester, Danger.Deadly, TraverseMode.ByPawn, false), 40f, validator, null);
@@ -122,7 +122,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002F5A RID: 12122 RVA: 0x0010A694 File Offset: 0x00108894
+		
 		private static bool TryFindChairBesideTable(Thing table, Pawn sitter, out Thing chair)
 		{
 			for (int i = 0; i < 30; i++)
@@ -138,7 +138,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002F5B RID: 12123 RVA: 0x0010A6F0 File Offset: 0x001088F0
+		
 		private static bool TryFindChairNear(IntVec3 center, Pawn sitter, out Thing chair)
 		{
 			for (int i = 0; i < JoyGiver_SocialRelax.RadialPatternMiddleOutward.Count; i++)
@@ -154,7 +154,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06002F5C RID: 12124 RVA: 0x0010A780 File Offset: 0x00108980
+		
 		private static bool TryFindSitSpotOnGroundNear(IntVec3 center, Pawn sitter, out IntVec3 result)
 		{
 			for (int i = 0; i < 30; i++)
@@ -170,21 +170,21 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04001AB7 RID: 6839
+		
 		private static List<CompGatherSpot> workingSpots = new List<CompGatherSpot>();
 
-		// Token: 0x04001AB8 RID: 6840
+		
 		private const float GatherRadius = 3.9f;
 
-		// Token: 0x04001AB9 RID: 6841
+		
 		private static readonly int NumRadiusCells = GenRadial.NumCellsInRadius(3.9f);
 
-		// Token: 0x04001ABA RID: 6842
+		
 		private static readonly List<IntVec3> RadialPatternMiddleOutward = (from c in GenRadial.RadialPattern.Take(JoyGiver_SocialRelax.NumRadiusCells)
 		orderby Mathf.Abs((c - IntVec3.Zero).LengthHorizontal - 1.95f)
 		select c).ToList<IntVec3>();
 
-		// Token: 0x04001ABB RID: 6843
+		
 		private static List<ThingDef> nurseableDrugs = new List<ThingDef>();
 	}
 }

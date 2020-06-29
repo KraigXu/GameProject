@@ -9,16 +9,16 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000E92 RID: 3730
+	
 	public static class FloatMenuMakerMap
 	{
-		// Token: 0x06005AF0 RID: 23280 RVA: 0x001EFFB8 File Offset: 0x001EE1B8
+		
 		private static bool CanTakeOrder(Pawn pawn)
 		{
 			return pawn.IsColonistPlayerControlled;
 		}
 
-		// Token: 0x06005AF1 RID: 23281 RVA: 0x001EFFC0 File Offset: 0x001EE1C0
+		
 		public static void TryMakeFloatMenu(Pawn pawn)
 		{
 			if (!FloatMenuMakerMap.CanTakeOrder(pawn))
@@ -63,7 +63,7 @@ namespace RimWorld
 			Find.WindowStack.Add(floatMenuMap);
 		}
 
-		// Token: 0x06005AF2 RID: 23282 RVA: 0x001F00C4 File Offset: 0x001EE2C4
+		
 		public static List<FloatMenuOption> ChoicesAtFor(Vector3 clickPos, Pawn pawn)
 		{
 			IntVec3 intVec = IntVec3.FromVector3(clickPos);
@@ -117,19 +117,19 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06005AF3 RID: 23283 RVA: 0x001F01D0 File Offset: 0x001EE3D0
+		
 		private static void AddDraftedOrders(Vector3 clickPos, Pawn pawn, List<FloatMenuOption> opts)
 		{
 			//IntVec3 clickCell = IntVec3.FromVector3(clickPos);
 			//foreach (LocalTargetInfo attackTarg in GenUI.TargetsAt(clickPos, TargetingParameters.ForAttackHostile(), true))
 			//{
-			//	FloatMenuMakerMap.<>c__DisplayClass4_0 <>c__DisplayClass4_ = new FloatMenuMakerMap.<>c__DisplayClass4_0();
-			//	<>c__DisplayClass4_.attackTarg = attackTarg;
+			//	FloatMenuMakerMap.c__DisplayClass4_0 c__DisplayClass4_ = new FloatMenuMakerMap.c__DisplayClass4_0();
+			//	c__DisplayClass4_.attackTarg = attackTarg;
 			//	if (pawn.equipment.Primary != null && !pawn.equipment.PrimaryEq.PrimaryVerb.verbProps.IsMeleeAttack)
 			//	{
 			//		string str;
-			//		Action rangedAct = FloatMenuUtility.GetRangedAttackAction(pawn, <>c__DisplayClass4_.attackTarg, out str);
-			//		string text = "FireAt".Translate(<>c__DisplayClass4_.attackTarg.Thing.Label, <>c__DisplayClass4_.attackTarg.Thing);
+			//		Action rangedAct = FloatMenuUtility.GetRangedAttackAction(pawn, c__DisplayClass4_.attackTarg, out str);
+			//		string text = "FireAt".Translate(c__DisplayClass4_.attackTarg.Thing.Label, c__DisplayClass4_.attackTarg.Thing);
 			//		FloatMenuOption floatMenuOption = new FloatMenuOption("", null, MenuOptionPriority.High, null, attackTarg.Thing, 0f, null, null);
 			//		if (rangedAct == null)
 			//		{
@@ -137,11 +137,11 @@ namespace RimWorld
 			//		}
 			//		else
 			//		{
-			//			floatMenuOption.autoTakeable = (!<>c__DisplayClass4_.attackTarg.HasThing || <>c__DisplayClass4_.attackTarg.Thing.HostileTo(Faction.OfPlayer));
+			//			floatMenuOption.autoTakeable = (!c__DisplayClass4_.attackTarg.HasThing || c__DisplayClass4_.attackTarg.Thing.HostileTo(Faction.OfPlayer));
 			//			floatMenuOption.autoTakeablePriority = 40f;
 			//			floatMenuOption.action = delegate
 			//			{
-			//				MoteMaker.MakeStaticMote(<>c__DisplayClass4_.attackTarg.Thing.DrawPos, <>c__DisplayClass4_.attackTarg.Thing.Map, ThingDefOf.Mote_FeedbackShoot, 1f);
+			//				MoteMaker.MakeStaticMote(c__DisplayClass4_.attackTarg.Thing.DrawPos, c__DisplayClass4_.attackTarg.Thing.Map, ThingDefOf.Mote_FeedbackShoot, 1f);
 			//				rangedAct();
 			//			};
 			//		}
@@ -149,30 +149,30 @@ namespace RimWorld
 			//		opts.Add(floatMenuOption);
 			//	}
 			//	string str2;
-			//	Action meleeAct = FloatMenuUtility.GetMeleeAttackAction(pawn, <>c__DisplayClass4_.attackTarg, out str2);
-			//	Pawn pawn2 = <>c__DisplayClass4_.attackTarg.Thing as Pawn;
+			//	Action meleeAct = FloatMenuUtility.GetMeleeAttackAction(pawn, c__DisplayClass4_.attackTarg, out str2);
+			//	Pawn pawn2 = c__DisplayClass4_.attackTarg.Thing as Pawn;
 			//	string text2;
 			//	if (pawn2 != null && pawn2.Downed)
 			//	{
-			//		text2 = "MeleeAttackToDeath".Translate(<>c__DisplayClass4_.attackTarg.Thing.Label, <>c__DisplayClass4_.attackTarg.Thing);
+			//		text2 = "MeleeAttackToDeath".Translate(c__DisplayClass4_.attackTarg.Thing.Label, c__DisplayClass4_.attackTarg.Thing);
 			//	}
 			//	else
 			//	{
-			//		text2 = "MeleeAttack".Translate(<>c__DisplayClass4_.attackTarg.Thing.Label, <>c__DisplayClass4_.attackTarg.Thing);
+			//		text2 = "MeleeAttack".Translate(c__DisplayClass4_.attackTarg.Thing.Label, c__DisplayClass4_.attackTarg.Thing);
 			//	}
-			//	MenuOptionPriority priority = (<>c__DisplayClass4_.attackTarg.HasThing && pawn.HostileTo(<>c__DisplayClass4_.attackTarg.Thing)) ? MenuOptionPriority.AttackEnemy : MenuOptionPriority.VeryLow;
-			//	FloatMenuOption floatMenuOption2 = new FloatMenuOption("", null, priority, null, <>c__DisplayClass4_.attackTarg.Thing, 0f, null, null);
+			//	MenuOptionPriority priority = (c__DisplayClass4_.attackTarg.HasThing && pawn.HostileTo(c__DisplayClass4_.attackTarg.Thing)) ? MenuOptionPriority.AttackEnemy : MenuOptionPriority.VeryLow;
+			//	FloatMenuOption floatMenuOption2 = new FloatMenuOption("", null, priority, null, c__DisplayClass4_.attackTarg.Thing, 0f, null, null);
 			//	if (meleeAct == null)
 			//	{
 			//		text2 = text2 + ": " + str2.CapitalizeFirst();
 			//	}
 			//	else
 			//	{
-			//		floatMenuOption2.autoTakeable = (!<>c__DisplayClass4_.attackTarg.HasThing || <>c__DisplayClass4_.attackTarg.Thing.HostileTo(Faction.OfPlayer));
+			//		floatMenuOption2.autoTakeable = (!c__DisplayClass4_.attackTarg.HasThing || c__DisplayClass4_.attackTarg.Thing.HostileTo(Faction.OfPlayer));
 			//		floatMenuOption2.autoTakeablePriority = 30f;
 			//		floatMenuOption2.action = delegate
 			//		{
-			//			MoteMaker.MakeStaticMote(<>c__DisplayClass4_.attackTarg.Thing.DrawPos, <>c__DisplayClass4_.attackTarg.Thing.Map, ThingDefOf.Mote_FeedbackMelee, 1f);
+			//			MoteMaker.MakeStaticMote(c__DisplayClass4_.attackTarg.Thing.DrawPos, c__DisplayClass4_.attackTarg.Thing.Map, ThingDefOf.Mote_FeedbackMelee, 1f);
 			//			meleeAct();
 			//		};
 			//	}
@@ -191,20 +191,20 @@ namespace RimWorld
 		{
 		}
 
-		//	// Token: 0x06005AF4 RID: 23284 RVA: 0x001F0558 File Offset: 0x001EE758
+		//	
 		//	private static void AddHumanlikeOrders(Vector3 clickPos, Pawn pawn, List<FloatMenuOption> opts)
 		//{
-		//	FloatMenuMakerMap.<>c__DisplayClass5_0 <>c__DisplayClass5_ = new FloatMenuMakerMap.<>c__DisplayClass5_0();
-		//	<>c__DisplayClass5_.pawn = pawn;
+		//	FloatMenuMakerMap.c__DisplayClass5_0 c__DisplayClass5_ = new FloatMenuMakerMap.c__DisplayClass5_0();
+		//	c__DisplayClass5_.pawn = pawn;
 		//	IntVec3 c = IntVec3.FromVector3(clickPos);
-		//	if (<>c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+		//	if (c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 		//	{
-		//		foreach (LocalTargetInfo dest in GenUI.TargetsAt(clickPos, TargetingParameters.ForArrest(<>c__DisplayClass5_.pawn), true))
+		//		foreach (LocalTargetInfo dest in GenUI.TargetsAt(clickPos, TargetingParameters.ForArrest(c__DisplayClass5_.pawn), true))
 		//		{
 		//			bool flag = dest.HasThing && dest.Thing is Pawn && ((Pawn)dest.Thing).IsWildMan();
-		//			if (<>c__DisplayClass5_.pawn.Drafted || flag)
+		//			if (c__DisplayClass5_.pawn.Drafted || flag)
 		//			{
-		//				if (!<>c__DisplayClass5_.pawn.CanReach(dest, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+		//				if (!c__DisplayClass5_.pawn.CanReach(dest, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
 		//				{
 		//					opts.Add(new FloatMenuOption("CannotArrest".Translate() + ": " + "NoPath".Translate().CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//				}
@@ -213,10 +213,10 @@ namespace RimWorld
 		//					Pawn pTarg = (Pawn)dest.Thing;
 		//					Action action = delegate
 		//					{
-		//						Building_Bed building_Bed = RestUtility.FindBedFor(pTarg, <>c__DisplayClass5_.pawn, true, false, false);
+		//						Building_Bed building_Bed = RestUtility.FindBedFor(pTarg, c__DisplayClass5_.pawn, true, false, false);
 		//						if (building_Bed == null)
 		//						{
-		//							building_Bed = RestUtility.FindBedFor(pTarg, <>c__DisplayClass5_.pawn, true, false, true);
+		//							building_Bed = RestUtility.FindBedFor(pTarg, c__DisplayClass5_.pawn, true, false, true);
 		//						}
 		//						if (building_Bed == null)
 		//						{
@@ -225,21 +225,21 @@ namespace RimWorld
 		//						}
 		//						Job job = JobMaker.MakeJob(JobDefOf.Arrest, pTarg, building_Bed);
 		//						job.count = 1;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//						if (pTarg.Faction != null && ((pTarg.Faction != Faction.OfPlayer && !pTarg.Faction.def.hidden) || pTarg.IsQuestLodger()))
 		//						{
 		//							TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.ArrestingCreatesEnemies, Array.Empty<string>());
 		//						}
 		//					};
-		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("TryToArrest".Translate(dest.Thing.LabelCap, dest.Thing, pTarg.GetAcceptArrestChance(<>c__DisplayClass5_.pawn).ToStringPercent()), action, MenuOptionPriority.High, null, dest.Thing, 0f, null, null), <>c__DisplayClass5_.pawn, pTarg, "ReservedBy"));
+		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("TryToArrest".Translate(dest.Thing.LabelCap, dest.Thing, pTarg.GetAcceptArrestChance(c__DisplayClass5_.pawn).ToStringPercent()), action, MenuOptionPriority.High, null, dest.Thing, 0f, null, null), c__DisplayClass5_.pawn, pTarg, "ReservedBy"));
 		//				}
 		//			}
 		//		}
 		//	}
-		//	foreach (Thing t4 in c.GetThingList(<>c__DisplayClass5_.pawn.Map))
+		//	foreach (Thing t4 in c.GetThingList(c__DisplayClass5_.pawn.Map))
 		//	{
 		//		Thing t = t4;
-		//		if (t.def.ingestible != null && <>c__DisplayClass5_.pawn.RaceProps.CanEverEat(t) && t.IngestibleNow)
+		//		if (t.def.ingestible != null && c__DisplayClass5_.pawn.RaceProps.CanEverEat(t) && t.IngestibleNow)
 		//		{
 		//			string text;
 		//			if (t.def.ingestible.ingestCommandString.NullOrEmpty())
@@ -250,30 +250,30 @@ namespace RimWorld
 		//			{
 		//				text = string.Format(t.def.ingestible.ingestCommandString, t.LabelShort);
 		//			}
-		//			if (!t.IsSociallyProper(<>c__DisplayClass5_.pawn))
+		//			if (!t.IsSociallyProper(c__DisplayClass5_.pawn))
 		//			{
 		//				text = text + ": " + "ReservedForPrisoners".Translate().CapitalizeFirst();
 		//			}
 		//			FloatMenuOption floatMenuOption;
-		//			if (t.def.IsNonMedicalDrug && <>c__DisplayClass5_.pawn.IsTeetotaler())
+		//			if (t.def.IsNonMedicalDrug && c__DisplayClass5_.pawn.IsTeetotaler())
 		//			{
 		//				floatMenuOption = new FloatMenuOption(text + ": " + TraitDefOf.DrugDesire.DataAtDegree(-1).LabelCap, null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (FoodUtility.InappropriateForTitle(t.def, <>c__DisplayClass5_.pawn, true))
+		//			else if (FoodUtility.InappropriateForTitle(t.def, c__DisplayClass5_.pawn, true))
 		//			{
-		//				floatMenuOption = new FloatMenuOption(text + ": " + "FoodBelowTitleRequirements".Translate(<>c__DisplayClass5_.pawn.royalty.MostSeniorTitle.def.GetLabelFor(<>c__DisplayClass5_.pawn)), null, MenuOptionPriority.Default, null, null, 0f, null, null);
+		//				floatMenuOption = new FloatMenuOption(text + ": " + "FoodBelowTitleRequirements".Translate(c__DisplayClass5_.pawn.royalty.MostSeniorTitle.def.GetLabelFor(c__DisplayClass5_.pawn)), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!<>c__DisplayClass5_.pawn.CanReach(t, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			else if (!c__DisplayClass5_.pawn.CanReach(t, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				floatMenuOption = new FloatMenuOption(text + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
 		//			else
 		//			{
 		//				MenuOptionPriority priority = (t is Corpse) ? MenuOptionPriority.Low : MenuOptionPriority.Default;
-		//				bool maxAmountToPickup = FoodUtility.GetMaxAmountToPickup(t, <>c__DisplayClass5_.pawn, FoodUtility.WillIngestStackCountOf(<>c__DisplayClass5_.pawn, t.def, t.GetStatValue(StatDefOf.Nutrition, true))) != 0;
+		//				bool maxAmountToPickup = FoodUtility.GetMaxAmountToPickup(t, c__DisplayClass5_.pawn, FoodUtility.WillIngestStackCountOf(c__DisplayClass5_.pawn, t.def, t.GetStatValue(StatDefOf.Nutrition, true))) != 0;
 		//				floatMenuOption = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text, delegate
 		//				{
-		//					int maxAmountToPickup2 = FoodUtility.GetMaxAmountToPickup(t, <>c__DisplayClass5_.pawn, FoodUtility.WillIngestStackCountOf(<>c__DisplayClass5_.pawn, t.def, t.GetStatValue(StatDefOf.Nutrition, true)));
+		//					int maxAmountToPickup2 = FoodUtility.GetMaxAmountToPickup(t, c__DisplayClass5_.pawn, FoodUtility.WillIngestStackCountOf(c__DisplayClass5_.pawn, t.def, t.GetStatValue(StatDefOf.Nutrition, true)));
 		//					if (maxAmountToPickup2 == 0)
 		//					{
 		//						return;
@@ -281,8 +281,8 @@ namespace RimWorld
 		//					t.SetForbidden(false, true);
 		//					Job job = JobMaker.MakeJob(JobDefOf.Ingest, t);
 		//					job.count = maxAmountToPickup2;
-		//					<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//				}, priority, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, t, "ReservedBy");
+		//					c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//				}, priority, null, null, 0f, null, null), c__DisplayClass5_.pawn, t, "ReservedBy");
 		//				if (!maxAmountToPickup)
 		//				{
 		//					floatMenuOption.action = null;
@@ -291,11 +291,11 @@ namespace RimWorld
 		//			opts.Add(floatMenuOption);
 		//		}
 		//	}
-		//	foreach (LocalTargetInfo dest2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForQuestPawnsWhoWillJoinColony(<>c__DisplayClass5_.pawn), true))
+		//	foreach (LocalTargetInfo dest2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForQuestPawnsWhoWillJoinColony(c__DisplayClass5_.pawn), true))
 		//	{
 		//		Pawn toHelpPawn = (Pawn)dest2.Thing;
 		//		FloatMenuOption item6;
-		//		if (!<>c__DisplayClass5_.pawn.CanReach(dest2, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//		if (!c__DisplayClass5_.pawn.CanReach(dest2, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//		{
 		//			item6 = new FloatMenuOption("CannotGoNoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//		}
@@ -303,44 +303,44 @@ namespace RimWorld
 		//		{
 		//			item6 = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(toHelpPawn.IsPrisoner ? "FreePrisoner".Translate() : "OfferHelp".Translate(), delegate
 		//			{
-		//				<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.OfferHelp, toHelpPawn), JobTag.Misc);
-		//			}, MenuOptionPriority.RescueOrCapture, null, toHelpPawn, 0f, null, null), <>c__DisplayClass5_.pawn, toHelpPawn, "ReservedBy");
+		//				c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.OfferHelp, toHelpPawn), JobTag.Misc);
+		//			}, MenuOptionPriority.RescueOrCapture, null, toHelpPawn, 0f, null, null), c__DisplayClass5_.pawn, toHelpPawn, "ReservedBy");
 		//		}
 		//		opts.Add(item6);
 		//	}
-		//	if (<>c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+		//	if (c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 		//	{
-		//		foreach (Thing thing3 in c.GetThingList(<>c__DisplayClass5_.pawn.Map))
+		//		foreach (Thing thing3 in c.GetThingList(c__DisplayClass5_.pawn.Map))
 		//		{
 		//			Corpse corpse = thing3 as Corpse;
 		//			if (corpse != null && corpse.IsInValidStorage())
 		//			{
 		//				StoragePriority priority2 = StoreUtility.CurrentHaulDestinationOf(corpse).GetStoreSettings().Priority;
 		//				IHaulDestination haulDestination;
-		//				if (StoreUtility.TryFindBestBetterNonSlotGroupStorageFor(corpse, <>c__DisplayClass5_.pawn, <>c__DisplayClass5_.pawn.Map, priority2, Faction.OfPlayer, out haulDestination, true) && haulDestination.GetStoreSettings().Priority == priority2 && haulDestination is Building_Grave)
+		//				if (StoreUtility.TryFindBestBetterNonSlotGroupStorageFor(corpse, c__DisplayClass5_.pawn, c__DisplayClass5_.pawn.Map, priority2, Faction.OfPlayer, out haulDestination, true) && haulDestination.GetStoreSettings().Priority == priority2 && haulDestination is Building_Grave)
 		//				{
 		//					Building_Grave grave = haulDestination as Building_Grave;
 		//					string label = "PrioritizeGeneric".Translate("Burying".Translate(), corpse.Label);
 		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(label, delegate
 		//					{
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(HaulAIUtility.HaulToContainerJob(<>c__DisplayClass5_.pawn, corpse, grave), JobTag.Misc);
-		//					}, MenuOptionPriority.Default, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, new LocalTargetInfo(corpse), "ReservedBy"));
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(HaulAIUtility.HaulToContainerJob(c__DisplayClass5_.pawn, corpse, grave), JobTag.Misc);
+		//					}, MenuOptionPriority.Default, null, null, 0f, null, null), c__DisplayClass5_.pawn, new LocalTargetInfo(corpse), "ReservedBy"));
 		//				}
 		//			}
 		//		}
-		//		foreach (LocalTargetInfo localTargetInfo in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(<>c__DisplayClass5_.pawn), true))
+		//		foreach (LocalTargetInfo localTargetInfo in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(c__DisplayClass5_.pawn), true))
 		//		{
 		//			Pawn victim = (Pawn)localTargetInfo.Thing;
-		//			if (!victim.InBed() && <>c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && !victim.mindState.WillJoinColonyIfRescued)
+		//			if (!victim.InBed() && c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && !victim.mindState.WillJoinColonyIfRescued)
 		//			{
 		//				if (!victim.IsPrisonerOfColony && (!victim.InMentalState || victim.health.hediffSet.HasHediff(HediffDefOf.Scaria, false)) && (victim.Faction == Faction.OfPlayer || victim.Faction == null || !victim.Faction.HostileTo(Faction.OfPlayer)))
 		//				{
 		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("Rescue".Translate(victim.LabelCap, victim), delegate
 		//					{
-		//						Building_Bed building_Bed = RestUtility.FindBedFor(victim, <>c__DisplayClass5_.pawn, false, false, false);
+		//						Building_Bed building_Bed = RestUtility.FindBedFor(victim, c__DisplayClass5_.pawn, false, false, false);
 		//						if (building_Bed == null)
 		//						{
-		//							building_Bed = RestUtility.FindBedFor(victim, <>c__DisplayClass5_.pawn, false, false, true);
+		//							building_Bed = RestUtility.FindBedFor(victim, c__DisplayClass5_.pawn, false, false, true);
 		//						}
 		//						if (building_Bed == null)
 		//						{
@@ -358,9 +358,9 @@ namespace RimWorld
 		//						}
 		//						Job job = JobMaker.MakeJob(JobDefOf.Rescue, victim, building_Bed);
 		//						job.count = 1;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//						PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Rescuing, KnowledgeAmount.Total);
-		//					}, MenuOptionPriority.RescueOrCapture, null, victim, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					}, MenuOptionPriority.RescueOrCapture, null, victim, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//				if (victim.RaceProps.Humanlike && (victim.InMentalState || victim.Faction != Faction.OfPlayer || (victim.Downed && (victim.guilt.IsGuilty || victim.IsPrisonerOfColony))))
 		//				{
@@ -371,10 +371,10 @@ namespace RimWorld
 		//					}
 		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(taggedString, delegate
 		//					{
-		//						Building_Bed building_Bed = RestUtility.FindBedFor(victim, <>c__DisplayClass5_.pawn, true, false, false);
+		//						Building_Bed building_Bed = RestUtility.FindBedFor(victim, c__DisplayClass5_.pawn, true, false, false);
 		//						if (building_Bed == null)
 		//						{
-		//							building_Bed = RestUtility.FindBedFor(victim, <>c__DisplayClass5_.pawn, true, false, true);
+		//							building_Bed = RestUtility.FindBedFor(victim, c__DisplayClass5_.pawn, true, false, true);
 		//						}
 		//						if (building_Bed == null)
 		//						{
@@ -383,30 +383,30 @@ namespace RimWorld
 		//						}
 		//						Job job = JobMaker.MakeJob(JobDefOf.Capture, victim, building_Bed);
 		//						job.count = 1;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//						PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Capturing, KnowledgeAmount.Total);
 		//						if (victim.Faction != null && victim.Faction != Faction.OfPlayer && !victim.Faction.def.hidden && !victim.Faction.HostileTo(Faction.OfPlayer) && !victim.IsPrisonerOfColony)
 		//						{
 		//							Messages.Message("MessageCapturingWillAngerFaction".Translate(victim.Named("PAWN")).AdjustedFor(victim, "PAWN", true), victim, MessageTypeDefOf.CautionInput, false);
 		//						}
-		//					}, MenuOptionPriority.RescueOrCapture, null, victim, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					}, MenuOptionPriority.RescueOrCapture, null, victim, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//			}
 		//		}
-		//		foreach (LocalTargetInfo localTargetInfo2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(<>c__DisplayClass5_.pawn), true))
+		//		foreach (LocalTargetInfo localTargetInfo2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(c__DisplayClass5_.pawn), true))
 		//		{
 		//			LocalTargetInfo localTargetInfo3 = localTargetInfo2;
 		//			Pawn victim = (Pawn)localTargetInfo3.Thing;
-		//			if (victim.Downed && <>c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, <>c__DisplayClass5_.pawn, true) != null)
+		//			if (victim.Downed && c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, c__DisplayClass5_.pawn, true) != null)
 		//			{
 		//				string text2 = "CarryToCryptosleepCasket".Translate(localTargetInfo3.Thing.LabelCap, localTargetInfo3.Thing);
 		//				JobDef jDef = JobDefOf.CarryToCryptosleepCasket;
 		//				Action action2 = delegate
 		//				{
-		//					Building_CryptosleepCasket building_CryptosleepCasket = Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, <>c__DisplayClass5_.pawn, false);
+		//					Building_CryptosleepCasket building_CryptosleepCasket = Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, c__DisplayClass5_.pawn, false);
 		//					if (building_CryptosleepCasket == null)
 		//					{
-		//						building_CryptosleepCasket = Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, <>c__DisplayClass5_.pawn, true);
+		//						building_CryptosleepCasket = Building_CryptosleepCasket.FindCryptosleepCasketFor(victim, c__DisplayClass5_.pawn, true);
 		//					}
 		//					if (building_CryptosleepCasket == null)
 		//					{
@@ -415,27 +415,27 @@ namespace RimWorld
 		//					}
 		//					Job job = JobMaker.MakeJob(jDef, victim, building_CryptosleepCasket);
 		//					job.count = 1;
-		//					<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//					c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//				};
 		//				if (victim.IsQuestLodger())
 		//				{
 		//					text2 += " (" + "CryptosleepCasketGuestsNotAllowed".Translate() + ")";
-		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, null, MenuOptionPriority.Default, null, victim, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, null, MenuOptionPriority.Default, null, victim, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//				else if (victim.GetExtraHostFaction(null) != null)
 		//				{
 		//					text2 += " (" + "CryptosleepCasketGuestPrisonersNotAllowed".Translate() + ")";
-		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, null, MenuOptionPriority.Default, null, victim, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, null, MenuOptionPriority.Default, null, victim, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//				else
 		//				{
-		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, action2, MenuOptionPriority.Default, null, victim, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text2, action2, MenuOptionPriority.Default, null, victim, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//			}
 		//		}
 		//		if (ModsConfig.RoyaltyActive)
 		//		{
-		//			foreach (LocalTargetInfo localTargetInfo4 in GenUI.TargetsAt(clickPos, TargetingParameters.ForShuttle(<>c__DisplayClass5_.pawn), true))
+		//			foreach (LocalTargetInfo localTargetInfo4 in GenUI.TargetsAt(clickPos, TargetingParameters.ForShuttle(c__DisplayClass5_.pawn), true))
 		//			{
 		//				LocalTargetInfo localTargetInfo5 = localTargetInfo4;
 		//				Pawn victim = (Pawn)localTargetInfo5.Thing;
@@ -444,8 +444,8 @@ namespace RimWorld
 		//					CompShuttle compShuttle = thing.TryGetComp<CompShuttle>();
 		//					return compShuttle != null && compShuttle.IsAllowed(victim);
 		//				};
-		//				Thing shuttleThing = GenClosest.ClosestThingReachable(victim.Position, victim.Map, ThingRequest.ForDef(ThingDefOf.Shuttle), PathEndMode.ClosestTouch, TraverseParms.For(<>c__DisplayClass5_.pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, validator, null, 0, -1, false, RegionType.Set_Passable, false);
-		//				if (shuttleThing != null && <>c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && !<>c__DisplayClass5_.pawn.WorkTypeIsDisabled(WorkTypeDefOf.Hauling))
+		//				Thing shuttleThing = GenClosest.ClosestThingReachable(victim.Position, victim.Map, ThingRequest.ForDef(ThingDefOf.Shuttle), PathEndMode.ClosestTouch, TraverseParms.For(c__DisplayClass5_.pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, validator, null, 0, -1, false, RegionType.Set_Passable, false);
+		//				if (shuttleThing != null && c__DisplayClass5_.pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) && !c__DisplayClass5_.pawn.WorkTypeIsDisabled(WorkTypeDefOf.Hauling))
 		//				{
 		//					string label2 = "CarryToShuttle".Translate(localTargetInfo5.Thing);
 		//					Action action3 = delegate
@@ -458,18 +458,18 @@ namespace RimWorld
 		//						Job job = JobMaker.MakeJob(JobDefOf.HaulToTransporter, victim, shuttleThing);
 		//						job.ignoreForbidden = true;
 		//						job.count = 1;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//					};
-		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(label2, action3, MenuOptionPriority.Default, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, victim, "ReservedBy"));
+		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(label2, action3, MenuOptionPriority.Default, null, null, 0f, null, null), c__DisplayClass5_.pawn, victim, "ReservedBy"));
 		//				}
 		//			}
 		//		}
 		//	}
-		//	foreach (LocalTargetInfo stripTarg2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForStrip(<>c__DisplayClass5_.pawn), true))
+		//	foreach (LocalTargetInfo stripTarg2 in GenUI.TargetsAt(clickPos, TargetingParameters.ForStrip(c__DisplayClass5_.pawn), true))
 		//	{
 		//		LocalTargetInfo stripTarg = stripTarg2;
 		//		FloatMenuOption item2;
-		//		if (!<>c__DisplayClass5_.pawn.CanReach(stripTarg, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//		if (!c__DisplayClass5_.pawn.CanReach(stripTarg, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//		{
 		//			item2 = new FloatMenuOption("CannotStrip".Translate(stripTarg.Thing.LabelCap, stripTarg.Thing) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//		}
@@ -482,67 +482,67 @@ namespace RimWorld
 		//			item2 = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("Strip".Translate(stripTarg.Thing.LabelCap, stripTarg.Thing), delegate
 		//			{
 		//				stripTarg.Thing.SetForbidden(false, false);
-		//				<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.Strip, stripTarg), JobTag.Misc);
+		//				c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.Strip, stripTarg), JobTag.Misc);
 		//				StrippableUtility.CheckSendStrippingImpactsGoodwillMessage(stripTarg.Thing);
-		//			}, MenuOptionPriority.Default, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, stripTarg, "ReservedBy");
+		//			}, MenuOptionPriority.Default, null, null, 0f, null, null), c__DisplayClass5_.pawn, stripTarg, "ReservedBy");
 		//		}
 		//		opts.Add(item2);
 		//	}
-		//	if (<>c__DisplayClass5_.pawn.equipment != null)
+		//	if (c__DisplayClass5_.pawn.equipment != null)
 		//	{
-		//		FloatMenuMakerMap.<>c__DisplayClass5_11 <>c__DisplayClass5_12 = new FloatMenuMakerMap.<>c__DisplayClass5_11();
-		//		<>c__DisplayClass5_12.CS$<>8__locals11 = <>c__DisplayClass5_;
-		//		<>c__DisplayClass5_12.equipment = null;
-		//		List<Thing> thingList = c.GetThingList(<>c__DisplayClass5_12.CS$<>8__locals11.pawn.Map);
+		//		FloatMenuMakerMap.c__DisplayClass5_11 c__DisplayClass5_12 = new FloatMenuMakerMap.c__DisplayClass5_11();
+		//		c__DisplayClass5_12.CS$8__locals11 = c__DisplayClass5_;
+		//		c__DisplayClass5_12.equipment = null;
+		//		List<Thing> thingList = c.GetThingList(c__DisplayClass5_12.CS$8__locals11.pawn.Map);
 		//		for (int i = 0; i < thingList.Count; i++)
 		//		{
 		//			if (thingList[i].TryGetComp<CompEquippable>() != null)
 		//			{
-		//				<>c__DisplayClass5_12.equipment = (ThingWithComps)thingList[i];
+		//				c__DisplayClass5_12.equipment = (ThingWithComps)thingList[i];
 		//				break;
 		//			}
 		//		}
-		//		if (<>c__DisplayClass5_12.equipment != null)
+		//		if (c__DisplayClass5_12.equipment != null)
 		//		{
-		//			string labelShort = <>c__DisplayClass5_12.equipment.LabelShort;
+		//			string labelShort = c__DisplayClass5_12.equipment.LabelShort;
 		//			FloatMenuOption item3;
 		//			string str;
-		//			if (<>c__DisplayClass5_12.equipment.def.IsWeapon && <>c__DisplayClass5_12.CS$<>8__locals11.pawn.WorkTagIsDisabled(WorkTags.Violent))
+		//			if (c__DisplayClass5_12.equipment.def.IsWeapon && c__DisplayClass5_12.CS$8__locals11.pawn.WorkTagIsDisabled(WorkTags.Violent))
 		//			{
-		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "IsIncapableOfViolenceLower".Translate(<>c__DisplayClass5_12.CS$<>8__locals11.pawn.LabelShort, <>c__DisplayClass5_12.CS$<>8__locals11.pawn), null, MenuOptionPriority.Default, null, null, 0f, null, null);
+		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "IsIncapableOfViolenceLower".Translate(c__DisplayClass5_12.CS$8__locals11.pawn.LabelShort, c__DisplayClass5_12.CS$8__locals11.pawn), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!<>c__DisplayClass5_12.CS$<>8__locals11.pawn.CanReach(<>c__DisplayClass5_12.equipment, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			else if (!c__DisplayClass5_12.CS$8__locals11.pawn.CanReach(c__DisplayClass5_12.equipment, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!<>c__DisplayClass5_12.CS$<>8__locals11.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+		//			else if (!c__DisplayClass5_12.CS$8__locals11.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 		//			{
 		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "Incapable".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (<>c__DisplayClass5_12.equipment.IsBurning())
+		//			else if (c__DisplayClass5_12.equipment.IsBurning())
 		//			{
 		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "BurningLower".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (<>c__DisplayClass5_12.CS$<>8__locals11.pawn.IsQuestLodger() && !EquipmentUtility.QuestLodgerCanEquip(<>c__DisplayClass5_12.equipment, <>c__DisplayClass5_12.CS$<>8__locals11.pawn))
+		//			else if (c__DisplayClass5_12.CS$8__locals11.pawn.IsQuestLodger() && !EquipmentUtility.QuestLodgerCanEquip(c__DisplayClass5_12.equipment, c__DisplayClass5_12.CS$8__locals11.pawn))
 		//			{
 		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + "QuestRelated".Translate().CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!EquipmentUtility.CanEquip(<>c__DisplayClass5_12.equipment, <>c__DisplayClass5_12.CS$<>8__locals11.pawn, out str))
+		//			else if (!EquipmentUtility.CanEquip(c__DisplayClass5_12.equipment, c__DisplayClass5_12.CS$8__locals11.pawn, out str))
 		//			{
 		//				item3 = new FloatMenuOption("CannotEquip".Translate(labelShort) + ": " + str.CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
 		//			else
 		//			{
 		//				string text3 = "Equip".Translate(labelShort);
-		//				if (<>c__DisplayClass5_12.equipment.def.IsRangedWeapon && <>c__DisplayClass5_12.CS$<>8__locals11.pawn.story != null && <>c__DisplayClass5_12.CS$<>8__locals11.pawn.story.traits.HasTrait(TraitDefOf.Brawler))
+		//				if (c__DisplayClass5_12.equipment.def.IsRangedWeapon && c__DisplayClass5_12.CS$8__locals11.pawn.story != null && c__DisplayClass5_12.CS$8__locals11.pawn.story.traits.HasTrait(TraitDefOf.Brawler))
 		//				{
 		//					text3 += " " + "EquipWarningBrawler".Translate();
 		//				}
 		//				item3 = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text3, delegate
 		//				{
 		//					string text4 = "";
-		//					CompBladelinkWeapon compBladelinkWeapon = <>c__DisplayClass5_12.equipment.TryGetComp<CompBladelinkWeapon>();
-		//					if (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn != <>c__DisplayClass5_12.CS$<>8__locals11.pawn)
+		//					CompBladelinkWeapon compBladelinkWeapon = c__DisplayClass5_12.equipment.TryGetComp<CompBladelinkWeapon>();
+		//					if (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn != c__DisplayClass5_12.CS$8__locals11.pawn)
 		//					{
 		//						if (!text4.NullOrEmpty())
 		//						{
@@ -557,30 +557,30 @@ namespace RimWorld
 		//						TaggedString text5 = text4;
 		//						string buttonAText = "Yes".Translate();
 		//						Action buttonAAction;
-		//						if ((buttonAAction = <>c__DisplayClass5_12.<>9__12) == null)
+		//						if ((buttonAAction = c__DisplayClass5_12.9__12) == null)
 		//						{
-		//							buttonAAction = (<>c__DisplayClass5_12.<>9__12 = delegate
+		//							buttonAAction = (c__DisplayClass5_12.9__12 = delegate
 		//							{
-		//								<>c__DisplayClass5_12.<AddHumanlikeOrders>g__Equip|11();
+		//								c__DisplayClass5_12.<AddHumanlikeOrders>g__Equip|11();
 		//							});
 		//						}
 		//						windowStack.Add(new Dialog_MessageBox(text5, buttonAText, buttonAAction, "No".Translate(), null, null, false, null, null));
 		//						return;
 		//					}
-		//					<>c__DisplayClass5_12.<AddHumanlikeOrders>g__Equip|11();
-		//				}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_12.CS$<>8__locals11.pawn, <>c__DisplayClass5_12.equipment, "ReservedBy");
+		//					c__DisplayClass5_12.<AddHumanlikeOrders>g__Equip|11();
+		//				}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_12.CS$8__locals11.pawn, c__DisplayClass5_12.equipment, "ReservedBy");
 		//			}
 		//			opts.Add(item3);
 		//		}
 		//	}
-		//	if (<>c__DisplayClass5_.pawn.apparel != null)
+		//	if (c__DisplayClass5_.pawn.apparel != null)
 		//	{
-		//		Apparel apparel = <>c__DisplayClass5_.pawn.Map.thingGrid.ThingAt<Apparel>(c);
+		//		Apparel apparel = c__DisplayClass5_.pawn.Map.thingGrid.ThingAt<Apparel>(c);
 		//		if (apparel != null)
 		//		{
 		//			FloatMenuOption item4;
 		//			string t2;
-		//			if (!<>c__DisplayClass5_.pawn.CanReach(apparel, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			if (!c__DisplayClass5_.pawn.CanReach(apparel, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				item4 = new FloatMenuOption("CannotWear".Translate(apparel.Label, apparel) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
@@ -588,15 +588,15 @@ namespace RimWorld
 		//			{
 		//				item4 = new FloatMenuOption("CannotWear".Translate(apparel.Label, apparel) + ": " + "Burning".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (<>c__DisplayClass5_.pawn.apparel.WouldReplaceLockedApparel(apparel))
+		//			else if (c__DisplayClass5_.pawn.apparel.WouldReplaceLockedApparel(apparel))
 		//			{
 		//				item4 = new FloatMenuOption("CannotWear".Translate(apparel.Label, apparel) + ": " + "WouldReplaceLockedApparel".Translate().CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!ApparelUtility.HasPartsToWear(<>c__DisplayClass5_.pawn, apparel.def))
+		//			else if (!ApparelUtility.HasPartsToWear(c__DisplayClass5_.pawn, apparel.def))
 		//			{
 		//				item4 = new FloatMenuOption("CannotWear".Translate(apparel.Label, apparel) + ": " + "CannotWearBecauseOfMissingBodyParts".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
-		//			else if (!EquipmentUtility.CanEquip(apparel, <>c__DisplayClass5_.pawn, out t2))
+		//			else if (!EquipmentUtility.CanEquip(apparel, c__DisplayClass5_.pawn, out t2))
 		//			{
 		//				item4 = new FloatMenuOption("CannotWear".Translate(apparel.Label, apparel) + ": " + t2, null, MenuOptionPriority.Default, null, null, 0f, null, null);
 		//			}
@@ -606,20 +606,20 @@ namespace RimWorld
 		//				{
 		//					apparel.SetForbidden(false, true);
 		//					Job job = JobMaker.MakeJob(JobDefOf.Wear, apparel);
-		//					<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//				}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, apparel, "ReservedBy");
+		//					c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//				}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, apparel, "ReservedBy");
 		//			}
 		//			opts.Add(item4);
 		//		}
 		//	}
-		//	if (<>c__DisplayClass5_.pawn.IsFormingCaravan())
+		//	if (c__DisplayClass5_.pawn.IsFormingCaravan())
 		//	{
-		//		Thing item = c.GetFirstItem(<>c__DisplayClass5_.pawn.Map);
+		//		Thing item = c.GetFirstItem(c__DisplayClass5_.pawn.Map);
 		//		if (item != null && item.def.EverHaulable)
 		//		{
-		//			Pawn packTarget = GiveToPackAnimalUtility.UsablePackAnimalWithTheMostFreeSpace(<>c__DisplayClass5_.pawn) ?? <>c__DisplayClass5_.pawn;
-		//			JobDef jobDef = (packTarget == <>c__DisplayClass5_.pawn) ? JobDefOf.TakeInventory : JobDefOf.GiveToPackAnimal;
-		//			if (!<>c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			Pawn packTarget = GiveToPackAnimalUtility.UsablePackAnimalWithTheMostFreeSpace(c__DisplayClass5_.pawn) ?? c__DisplayClass5_.pawn;
+		//			JobDef jobDef = (packTarget == c__DisplayClass5_.pawn) ? JobDefOf.TakeInventory : JobDefOf.GiveToPackAnimal;
+		//			if (!c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				opts.Add(new FloatMenuOption("CannotLoadIntoCaravan".Translate(item.Label, item) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//			}
@@ -629,7 +629,7 @@ namespace RimWorld
 		//			}
 		//			else
 		//			{
-		//				LordJob_FormAndSendCaravan lordJob = (LordJob_FormAndSendCaravan)<>c__DisplayClass5_.pawn.GetLord().LordJob;
+		//				LordJob_FormAndSendCaravan lordJob = (LordJob_FormAndSendCaravan)c__DisplayClass5_.pawn.GetLord().LordJob;
 		//				float capacityLeft = CaravanFormingUtility.CapacityLeft(lordJob);
 		//				if (item.stackCount == 1)
 		//				{
@@ -639,9 +639,9 @@ namespace RimWorld
 		//						item.SetForbidden(false, false);
 		//						Job job = JobMaker.MakeJob(jobDef, item);
 		//						job.count = 1;
-		//						job.checkEncumbrance = (packTarget == <>c__DisplayClass5_.pawn);
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//					}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//						job.checkEncumbrance = (packTarget == c__DisplayClass5_.pawn);
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//					}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//				}
 		//				else
 		//				{
@@ -657,19 +657,19 @@ namespace RimWorld
 		//							item.SetForbidden(false, false);
 		//							Job job = JobMaker.MakeJob(jobDef, item);
 		//							job.count = item.stackCount;
-		//							job.checkEncumbrance = (packTarget == <>c__DisplayClass5_.pawn);
-		//							<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//						}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//							job.checkEncumbrance = (packTarget == c__DisplayClass5_.pawn);
+		//							c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//					}
-		//					Action<int> <>9__18;
-		//					Func<int, string> <>9__17;
+		//					Action<int> 9__18;
+		//					Func<int, string> 9__17;
 		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("LoadIntoCaravanSome".Translate(item.LabelNoCount, item), delegate
 		//					{
 		//						int num = Mathf.Min(MassUtility.CountToPickUpUntilOverEncumbered(packTarget, item), item.stackCount);
 		//						Func<int, string> textGetter;
-		//						if ((textGetter = <>9__17) == null)
+		//						if ((textGetter 7) == null)
 		//						{
-		//							textGetter = (<>9__17 = delegate(int val)
+		//							textGetter = (9__17 = delegate(int val)
 		//							{
 		//								float capacityLeft3 = capacityLeft - (float)val * item.GetStatValue(StatDefOf.Mass, true);
 		//								return CaravanFormingUtility.AppendOverweightInfo(string.Format("LoadIntoCaravanCount".Translate(item.LabelNoCount, item), val), capacityLeft3);
@@ -678,34 +678,34 @@ namespace RimWorld
 		//						int from = 1;
 		//						int to = num;
 		//						Action<int> confirmAction;
-		//						if ((confirmAction = <>9__18) == null)
+		//						if ((confirmAction 8) == null)
 		//						{
-		//							confirmAction = (<>9__18 = delegate(int count)
+		//							confirmAction = (9__18 = delegate(int count)
 		//							{
 		//								item.SetForbidden(false, false);
 		//								Job job = JobMaker.MakeJob(jobDef, item);
 		//								job.count = count;
-		//								job.checkEncumbrance = (packTarget == <>c__DisplayClass5_.pawn);
-		//								<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//								job.checkEncumbrance = (packTarget == c__DisplayClass5_.pawn);
+		//								c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//							});
 		//						}
 		//						Dialog_Slider window = new Dialog_Slider(textGetter, from, to, confirmAction, int.MinValue);
 		//						Find.WindowStack.Add(window);
-		//					}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//					}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//				}
 		//			}
 		//		}
 		//	}
-		//	if (!<>c__DisplayClass5_.pawn.Map.IsPlayerHome && !<>c__DisplayClass5_.pawn.IsFormingCaravan())
+		//	if (!c__DisplayClass5_.pawn.Map.IsPlayerHome && !c__DisplayClass5_.pawn.IsFormingCaravan())
 		//	{
-		//		Thing item = c.GetFirstItem(<>c__DisplayClass5_.pawn.Map);
+		//		Thing item = c.GetFirstItem(c__DisplayClass5_.pawn.Map);
 		//		if (item != null && item.def.EverHaulable)
 		//		{
-		//			if (!<>c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			if (!c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				opts.Add(new FloatMenuOption("CannotPickUp".Translate(item.Label, item) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//			}
-		//			else if (MassUtility.WillBeOverEncumberedAfterPickingUp(<>c__DisplayClass5_.pawn, item, 1))
+		//			else if (MassUtility.WillBeOverEncumberedAfterPickingUp(c__DisplayClass5_.pawn, item, 1))
 		//			{
 		//				opts.Add(new FloatMenuOption("CannotPickUp".Translate(item.Label, item) + ": " + "TooHeavy".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//			}
@@ -717,12 +717,12 @@ namespace RimWorld
 		//					Job job = JobMaker.MakeJob(JobDefOf.TakeInventory, item);
 		//					job.count = 1;
 		//					job.checkEncumbrance = true;
-		//					<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//				}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//					c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//				}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//			}
 		//			else
 		//			{
-		//				if (MassUtility.WillBeOverEncumberedAfterPickingUp(<>c__DisplayClass5_.pawn, item, item.stackCount))
+		//				if (MassUtility.WillBeOverEncumberedAfterPickingUp(c__DisplayClass5_.pawn, item, item.stackCount))
 		//				{
 		//					opts.Add(new FloatMenuOption("CannotPickUpAll".Translate(item.Label, item) + ": " + "TooHeavy".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//				}
@@ -734,43 +734,43 @@ namespace RimWorld
 		//						Job job = JobMaker.MakeJob(JobDefOf.TakeInventory, item);
 		//						job.count = item.stackCount;
 		//						job.checkEncumbrance = true;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//					}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//					}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//				}
-		//				Action<int> <>9__22;
+		//				Action<int> 9__22;
 		//				opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("PickUpSome".Translate(item.LabelNoCount, item), delegate
 		//				{
-		//					int num = Mathf.Min(MassUtility.CountToPickUpUntilOverEncumbered(<>c__DisplayClass5_.pawn, item), item.stackCount);
+		//					int num = Mathf.Min(MassUtility.CountToPickUpUntilOverEncumbered(c__DisplayClass5_.pawn, item), item.stackCount);
 		//					string text4 = "PickUpCount".Translate(item.LabelNoCount, item);
 		//					int from = 1;
 		//					int to = num;
 		//					Action<int> confirmAction;
-		//					if ((confirmAction = <>9__22) == null)
+		//					if ((confirmAction 2) == null)
 		//					{
-		//						confirmAction = (<>9__22 = delegate(int count)
+		//						confirmAction = (9__22 = delegate(int count)
 		//						{
 		//							item.SetForbidden(false, false);
 		//							Job job = JobMaker.MakeJob(JobDefOf.TakeInventory, item);
 		//							job.count = count;
 		//							job.checkEncumbrance = true;
-		//							<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//							c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//						});
 		//					}
 		//					Dialog_Slider window = new Dialog_Slider(text4, from, to, confirmAction, int.MinValue);
 		//					Find.WindowStack.Add(window);
-		//				}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//				}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//			}
 		//		}
 		//	}
-		//	if (!<>c__DisplayClass5_.pawn.Map.IsPlayerHome && !<>c__DisplayClass5_.pawn.IsFormingCaravan())
+		//	if (!c__DisplayClass5_.pawn.Map.IsPlayerHome && !c__DisplayClass5_.pawn.IsFormingCaravan())
 		//	{
-		//		Thing item = c.GetFirstItem(<>c__DisplayClass5_.pawn.Map);
+		//		Thing item = c.GetFirstItem(c__DisplayClass5_.pawn.Map);
 		//		if (item != null && item.def.EverHaulable)
 		//		{
-		//			Pawn bestPackAnimal = GiveToPackAnimalUtility.UsablePackAnimalWithTheMostFreeSpace(<>c__DisplayClass5_.pawn);
+		//			Pawn bestPackAnimal = GiveToPackAnimalUtility.UsablePackAnimalWithTheMostFreeSpace(c__DisplayClass5_.pawn);
 		//			if (bestPackAnimal != null)
 		//			{
-		//				if (!<>c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//				if (!c__DisplayClass5_.pawn.CanReach(item, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//				{
 		//					opts.Add(new FloatMenuOption("CannotGiveToPackAnimal".Translate(item.Label, item) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//				}
@@ -785,8 +785,8 @@ namespace RimWorld
 		//						item.SetForbidden(false, false);
 		//						Job job = JobMaker.MakeJob(JobDefOf.GiveToPackAnimal, item);
 		//						job.count = 1;
-		//						<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//					}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//						c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//					}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//				}
 		//				else
 		//				{
@@ -801,10 +801,10 @@ namespace RimWorld
 		//							item.SetForbidden(false, false);
 		//							Job job = JobMaker.MakeJob(JobDefOf.GiveToPackAnimal, item);
 		//							job.count = item.stackCount;
-		//							<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//						}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//							c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//					}
-		//					Action<int> <>9__26;
+		//					Action<int> 9__26;
 		//					opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("GiveToPackAnimalSome".Translate(item.LabelNoCount, item), delegate
 		//					{
 		//						int num = Mathf.Min(MassUtility.CountToPickUpUntilOverEncumbered(bestPackAnimal, item), item.stackCount);
@@ -812,38 +812,38 @@ namespace RimWorld
 		//						int from = 1;
 		//						int to = num;
 		//						Action<int> confirmAction;
-		//						if ((confirmAction = <>9__26) == null)
+		//						if ((confirmAction 6) == null)
 		//						{
-		//							confirmAction = (<>9__26 = delegate(int count)
+		//							confirmAction = (9__26 = delegate(int count)
 		//							{
 		//								item.SetForbidden(false, false);
 		//								Job job = JobMaker.MakeJob(JobDefOf.GiveToPackAnimal, item);
 		//								job.count = count;
-		//								<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//								c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//							});
 		//						}
 		//						Dialog_Slider window = new Dialog_Slider(text4, from, to, confirmAction, int.MinValue);
 		//						Find.WindowStack.Add(window);
-		//					}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, item, "ReservedBy"));
+		//					}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, item, "ReservedBy"));
 		//				}
 		//			}
 		//		}
 		//	}
-		//	if (!<>c__DisplayClass5_.pawn.Map.IsPlayerHome && <>c__DisplayClass5_.pawn.Map.exitMapGrid.MapUsesExitGrid)
+		//	if (!c__DisplayClass5_.pawn.Map.IsPlayerHome && c__DisplayClass5_.pawn.Map.exitMapGrid.MapUsesExitGrid)
 		//	{
-		//		foreach (LocalTargetInfo target in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(<>c__DisplayClass5_.pawn), true))
+		//		foreach (LocalTargetInfo target in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(c__DisplayClass5_.pawn), true))
 		//		{
 		//			Pawn p = (Pawn)target.Thing;
 		//			if (p.Faction == Faction.OfPlayer || p.IsPrisonerOfColony || CaravanUtility.ShouldAutoCapture(p, Faction.OfPlayer))
 		//			{
-		//				if (!<>c__DisplayClass5_.pawn.CanReach(p, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
+		//				if (!c__DisplayClass5_.pawn.CanReach(p, PathEndMode.ClosestTouch, Danger.Deadly, false, TraverseMode.ByPawn))
 		//				{
 		//					opts.Add(new FloatMenuOption("CannotCarryToExit".Translate(p.Label, p) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//				}
 		//				else
 		//				{
 		//					IntVec3 exitSpot;
-		//					if (!RCellFinder.TryFindBestExitSpot(<>c__DisplayClass5_.pawn, out exitSpot, TraverseMode.ByPawn))
+		//					if (!RCellFinder.TryFindBestExitSpot(c__DisplayClass5_.pawn, out exitSpot, TraverseMode.ByPawn))
 		//					{
 		//						opts.Add(new FloatMenuOption("CannotCarryToExit".Translate(p.Label, p) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//					}
@@ -855,39 +855,39 @@ namespace RimWorld
 		//							Job job = JobMaker.MakeJob(JobDefOf.CarryDownedPawnToExit, p, exitSpot);
 		//							job.count = 1;
 		//							job.failIfCantJoinOrCreateCaravan = true;
-		//							<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//						}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, target, "ReservedBy"));
+		//							c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//						}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, target, "ReservedBy"));
 		//					}
 		//				}
 		//			}
 		//		}
 		//	}
-		//	if (<>c__DisplayClass5_.pawn.equipment != null && <>c__DisplayClass5_.pawn.equipment.Primary != null && GenUI.TargetsAt(clickPos, TargetingParameters.ForSelf(<>c__DisplayClass5_.pawn), true).Any<LocalTargetInfo>())
+		//	if (c__DisplayClass5_.pawn.equipment != null && c__DisplayClass5_.pawn.equipment.Primary != null && GenUI.TargetsAt(clickPos, TargetingParameters.ForSelf(c__DisplayClass5_.pawn), true).Any<LocalTargetInfo>())
 		//	{
-		//		if (<>c__DisplayClass5_.pawn.IsQuestLodger())
+		//		if (c__DisplayClass5_.pawn.IsQuestLodger())
 		//		{
-		//			opts.Add(new FloatMenuOption("CannotDrop".Translate(<>c__DisplayClass5_.pawn.equipment.Primary.Label, <>c__DisplayClass5_.pawn.equipment.Primary) + ": " + "QuestRelated".Translate().CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
+		//			opts.Add(new FloatMenuOption("CannotDrop".Translate(c__DisplayClass5_.pawn.equipment.Primary.Label, c__DisplayClass5_.pawn.equipment.Primary) + ": " + "QuestRelated".Translate().CapitalizeFirst(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//		}
 		//		else
 		//		{
 		//			Action action4 = delegate
 		//			{
-		//				<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.DropEquipment, <>c__DisplayClass5_.pawn.equipment.Primary), JobTag.Misc);
+		//				c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.DropEquipment, c__DisplayClass5_.pawn.equipment.Primary), JobTag.Misc);
 		//			};
-		//			opts.Add(new FloatMenuOption("Drop".Translate(<>c__DisplayClass5_.pawn.equipment.Primary.Label, <>c__DisplayClass5_.pawn.equipment.Primary), action4, MenuOptionPriority.Default, null, <>c__DisplayClass5_.pawn, 0f, null, null));
+		//			opts.Add(new FloatMenuOption("Drop".Translate(c__DisplayClass5_.pawn.equipment.Primary.Label, c__DisplayClass5_.pawn.equipment.Primary), action4, MenuOptionPriority.Default, null, c__DisplayClass5_.pawn, 0f, null, null));
 		//		}
 		//	}
 		//	foreach (LocalTargetInfo dest3 in GenUI.TargetsAt(clickPos, TargetingParameters.ForTrade(), true))
 		//	{
-		//		if (!<>c__DisplayClass5_.pawn.CanReach(dest3, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+		//		if (!c__DisplayClass5_.pawn.CanReach(dest3, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
 		//		{
 		//			opts.Add(new FloatMenuOption("CannotTrade".Translate() + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//		}
-		//		else if (<>c__DisplayClass5_.pawn.skills.GetSkill(SkillDefOf.Social).TotallyDisabled)
+		//		else if (c__DisplayClass5_.pawn.skills.GetSkill(SkillDefOf.Social).TotallyDisabled)
 		//		{
 		//			opts.Add(new FloatMenuOption("CannotPrioritizeWorkTypeDisabled".Translate(SkillDefOf.Social.LabelCap), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//		}
-		//		else if (!<>c__DisplayClass5_.pawn.CanTradeWith(((Pawn)dest3.Thing).Faction, ((Pawn)dest3.Thing).TraderKind))
+		//		else if (!c__DisplayClass5_.pawn.CanTradeWith(((Pawn)dest3.Thing).Faction, ((Pawn)dest3.Thing).TraderKind))
 		//		{
 		//			opts.Add(new FloatMenuOption("CannotTradeMissingTitleAbility".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//		}
@@ -898,7 +898,7 @@ namespace RimWorld
 		//			{
 		//				Job job = JobMaker.MakeJob(JobDefOf.TradeWithPawn, pTarg);
 		//				job.playerForced = true;
-		//				<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//				c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		//				PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.InteractingWithTraders, KnowledgeAmount.Total);
 		//			};
 		//			string t3 = "";
@@ -906,19 +906,19 @@ namespace RimWorld
 		//			{
 		//				t3 = " (" + pTarg.Faction.Name + ")";
 		//			}
-		//			opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("TradeWith".Translate(pTarg.LabelShort + ", " + pTarg.TraderKind.label) + t3, action5, MenuOptionPriority.InitiateSocial, null, dest3.Thing, 0f, null, null), <>c__DisplayClass5_.pawn, pTarg, "ReservedBy"));
+		//			opts.Add(FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("TradeWith".Translate(pTarg.LabelShort + ", " + pTarg.TraderKind.label) + t3, action5, MenuOptionPriority.InitiateSocial, null, dest3.Thing, 0f, null, null), c__DisplayClass5_.pawn, pTarg, "ReservedBy"));
 		//		}
 		//	}
-		//	using (IEnumerator<LocalTargetInfo> enumerator = GenUI.TargetsAt(clickPos, TargetingParameters.ForOpen(<>c__DisplayClass5_.pawn), true).GetEnumerator())
+		//	using (IEnumerator<LocalTargetInfo> enumerator = GenUI.TargetsAt(clickPos, TargetingParameters.ForOpen(c__DisplayClass5_.pawn), true).GetEnumerator())
 		//	{
 		//		while (enumerator.MoveNext())
 		//		{
 		//			LocalTargetInfo casket = enumerator.Current;
-		//			if (!<>c__DisplayClass5_.pawn.CanReach(casket, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+		//			if (!c__DisplayClass5_.pawn.CanReach(casket, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
 		//			{
 		//				opts.Add(new FloatMenuOption("CannotOpen".Translate(casket.Thing) + ": " + "NoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//			}
-		//			else if (!<>c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+		//			else if (!c__DisplayClass5_.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 		//			{
 		//				opts.Add(new FloatMenuOption("CannotOpen".Translate(casket.Thing) + ": " + "Incapable".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
 		//			}
@@ -928,21 +928,21 @@ namespace RimWorld
 		//				{
 		//					Job job = JobMaker.MakeJob(JobDefOf.Open, casket.Thing);
 		//					job.ignoreDesignations = true;
-		//					<>c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-		//				}, MenuOptionPriority.High, null, null, 0f, null, null), <>c__DisplayClass5_.pawn, casket.Thing, "ReservedBy"));
+		//					c__DisplayClass5_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+		//				}, MenuOptionPriority.High, null, null, 0f, null, null), c__DisplayClass5_.pawn, casket.Thing, "ReservedBy"));
 		//			}
 		//		}
 		//	}
-		//	foreach (Thing thing2 in <>c__DisplayClass5_.pawn.Map.thingGrid.ThingsAt(c))
+		//	foreach (Thing thing2 in c__DisplayClass5_.pawn.Map.thingGrid.ThingsAt(c))
 		//	{
-		//		foreach (FloatMenuOption item5 in thing2.GetFloatMenuOptions(<>c__DisplayClass5_.pawn))
+		//		foreach (FloatMenuOption item5 in thing2.GetFloatMenuOptions(c__DisplayClass5_.pawn))
 		//		{
 		//			opts.Add(item5);
 		//		}
 		//	}
 		//}
 
-		// Token: 0x06005AF5 RID: 23285 RVA: 0x001F3368 File Offset: 0x001F1568
+		
 		private static void AddUndraftedOrders(Vector3 clickPos, Pawn pawn, List<FloatMenuOption> opts)
 		{
 			if (FloatMenuMakerMap.equivalenceGroupTempStorage == null || FloatMenuMakerMap.equivalenceGroupTempStorage.Length != DefDatabase<WorkGiverEquivalenceGroupDef>.DefCount)
@@ -968,7 +968,7 @@ namespace RimWorld
 			FloatMenuMakerMap.AddJobGiverWorkOrders(intVec, pawn, opts, false);
 		}
 
-		// Token: 0x06005AF6 RID: 23286 RVA: 0x001F3414 File Offset: 0x001F1614
+		
 		private static void AddJobGiverWorkOrders(IntVec3 clickCell, Pawn pawn, List<FloatMenuOption> opts, bool drafted)
 		{
 			if (pawn.thinker.TryGetMainTreeThinkNode<JobGiver_Work>() == null)
@@ -1275,13 +1275,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AF7 RID: 23287 RVA: 0x001F41C0 File Offset: 0x001F23C0
+		
 		private static FloatMenuOption GotoLocationOption(IntVec3 clickCell, Pawn pawn)
 		{
 			int num = GenRadial.NumCellsInRadius(2.9f);
 			int i = 0;
 			IntVec3 curLoc;
-			//Action <>9__0;
+			//Action 9__0;
 			//while (i < num)
 			//{
 			//	curLoc = GenRadial.RadialPattern[i] + clickCell;
@@ -1296,9 +1296,9 @@ namespace RimWorld
 			//			return new FloatMenuOption("CannotGoNoPath".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null);
 			//		}
 			//		Action action;
-			//		if ((action = <>9__0) == null)
+			//		if ((action ) == null)
 			//		{
-			//			action = (<>9__0 = delegate
+			//			action = (9__0 = delegate
 			//			{
 			//				IntVec3 intVec = RCellFinder.BestOrderedGotoDestNear(curLoc, pawn);
 			//				Job job = JobMaker.MakeJob(JobDefOf.Goto, intVec);
@@ -1338,10 +1338,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x0400319D RID: 12701
+		
 		public static Pawn makingFor;
 
-		// Token: 0x0400319E RID: 12702
+		
 		private static FloatMenuOption[] equivalenceGroupTempStorage;
 	}
 }

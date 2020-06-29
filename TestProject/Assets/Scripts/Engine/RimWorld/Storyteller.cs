@@ -8,10 +8,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A03 RID: 2563
+	
 	public class Storyteller : IExposable
 	{
-		// Token: 0x17000ACF RID: 2767
+		
 		// (get) Token: 0x06003CF0 RID: 15600 RVA: 0x00142900 File Offset: 0x00140B00
 		public List<IIncidentTarget> AllIncidentTargets
 		{
@@ -36,18 +36,18 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CF1 RID: 15601 RVA: 0x0014298E File Offset: 0x00140B8E
+		
 		public static void StorytellerStaticUpdate()
 		{
 			Storyteller.tmpAllIncidentTargets.Clear();
 		}
 
-		// Token: 0x06003CF2 RID: 15602 RVA: 0x0014299A File Offset: 0x00140B9A
+		
 		public Storyteller()
 		{
 		}
 
-		// Token: 0x06003CF3 RID: 15603 RVA: 0x001429B8 File Offset: 0x00140BB8
+		
 		public Storyteller(StorytellerDef def, DifficultyDef difficulty)
 		{
 			this.def = def;
@@ -55,7 +55,7 @@ namespace RimWorld
 			this.InitializeStorytellerComps();
 		}
 
-		// Token: 0x06003CF4 RID: 15604 RVA: 0x001429EC File Offset: 0x00140BEC
+		
 		private void InitializeStorytellerComps()
 		{
 			this.storytellerComps = new List<StorytellerComp>();
@@ -71,7 +71,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CF5 RID: 15605 RVA: 0x00142A84 File Offset: 0x00140C84
+		
 		public void ExposeData()
 		{
 			Scribe_Defs.Look<StorytellerDef>(ref this.def, "def");
@@ -88,7 +88,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CF6 RID: 15606 RVA: 0x00142AF8 File Offset: 0x00140CF8
+		
 		public void StorytellerTick()
 		{
 			this.incidentQueue.IncidentQueueTick();
@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CF7 RID: 15607 RVA: 0x00142B6C File Offset: 0x00140D6C
+		
 		public bool TryFire(FiringIncident fi)
 		{
 			if (fi.def.Worker.CanFireNow(fi.parms, false) && fi.def.Worker.TryExecute(fi.parms))
@@ -116,7 +116,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003CF8 RID: 15608 RVA: 0x00142BC3 File Offset: 0x00140DC3
+		
 		public IEnumerable<FiringIncident> MakeIncidentsForInterval()
 		{
 			List<IIncidentTarget> targets = this.AllIncidentTargets;
@@ -159,7 +159,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003CF9 RID: 15609 RVA: 0x00142BD3 File Offset: 0x00140DD3
+		
 		public IEnumerable<FiringIncident> MakeIncidentsForInterval(StorytellerComp comp, List<IIncidentTarget> targets)
 		{
 			if (GenDate.DaysPassedFloat <= comp.props.minDaysPassed)
@@ -201,7 +201,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003CFA RID: 15610 RVA: 0x00142BEC File Offset: 0x00140DEC
+		
 		public void Notify_PawnEvent(Pawn pawn, AdaptationEvent ev, DamageInfo? dinfo = null)
 		{
 			Find.StoryWatcher.watcherAdaptation.Notify_PawnEvent(pawn, ev, dinfo);
@@ -211,13 +211,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CFB RID: 15611 RVA: 0x00142C35 File Offset: 0x00140E35
+		
 		public void Notify_DefChanged()
 		{
 			this.InitializeStorytellerComps();
 		}
 
-		// Token: 0x06003CFC RID: 15612 RVA: 0x00142C40 File Offset: 0x00140E40
+		
 		public string DebugString()
 		{
 			if (Time.frameCount % 60 == 0)
@@ -281,34 +281,34 @@ namespace RimWorld
 			return this.debugStringCached;
 		}
 
-		// Token: 0x04002399 RID: 9113
+		
 		public StorytellerDef def;
 
-		// Token: 0x0400239A RID: 9114
+		
 		public DifficultyDef difficulty;
 
-		// Token: 0x0400239B RID: 9115
+		
 		public List<StorytellerComp> storytellerComps;
 
-		// Token: 0x0400239C RID: 9116
+		
 		public IncidentQueue incidentQueue = new IncidentQueue();
 
-		// Token: 0x0400239D RID: 9117
+		
 		public static readonly Vector2 PortraitSizeTiny = new Vector2(116f, 124f);
 
-		// Token: 0x0400239E RID: 9118
+		
 		public static readonly Vector2 PortraitSizeLarge = new Vector2(580f, 620f);
 
-		// Token: 0x0400239F RID: 9119
+		
 		public const int IntervalsPerDay = 60;
 
-		// Token: 0x040023A0 RID: 9120
+		
 		public const int CheckInterval = 1000;
 
-		// Token: 0x040023A1 RID: 9121
+		
 		private static List<IIncidentTarget> tmpAllIncidentTargets = new List<IIncidentTarget>();
 
-		// Token: 0x040023A2 RID: 9122
+		
 		private string debugStringCached = "Generating data...";
 	}
 }

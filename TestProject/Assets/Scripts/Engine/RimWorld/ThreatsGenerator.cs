@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001029 RID: 4137
+	
 	public static class ThreatsGenerator
 	{
-		// Token: 0x0600630E RID: 25358 RVA: 0x00226BB0 File Offset: 0x00224DB0
+		
 		public static IEnumerable<FiringIncident> MakeIntervalIncidents(ThreatsGeneratorParams parms, IIncidentTarget target, int startTick)
 		{
 			float threatsGeneratorThreatCountFactor = Find.Storyteller.difficulty.threatsGeneratorThreatCountFactor;
@@ -27,7 +27,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600630F RID: 25359 RVA: 0x00226BD0 File Offset: 0x00224DD0
+		
 		private static FiringIncident MakeThreat(ThreatsGeneratorParams parms, IIncidentTarget target)
 		{
 			IncidentParms incParms = ThreatsGenerator.GetIncidentParms(parms, target);
@@ -45,14 +45,14 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06006310 RID: 25360 RVA: 0x00226C50 File Offset: 0x00224E50
+		
 		public static bool AnyIncidentPossible(ThreatsGeneratorParams parms, IIncidentTarget target)
 		{
 			IncidentParms incParms = ThreatsGenerator.GetIncidentParms(parms, target);
 			return ThreatsGenerator.GetPossibleIncidents(parms.allowedThreats).Any((IncidentDef x) => x.Worker.BaseChanceThisGame > 0f && x.Worker.CanFireNow(incParms, false));
 		}
 
-		// Token: 0x06006311 RID: 25361 RVA: 0x00226C8C File Offset: 0x00224E8C
+		
 		private static IncidentParms GetIncidentParms(ThreatsGeneratorParams parms, IIncidentTarget target)
 		{
 			IncidentParms incidentParms = new IncidentParms();
@@ -67,7 +67,7 @@ namespace RimWorld
 			return incidentParms;
 		}
 
-		// Token: 0x06006312 RID: 25362 RVA: 0x00226D0F File Offset: 0x00224F0F
+		
 		private static IEnumerable<IncidentDef> GetPossibleIncidents(AllowedThreatsGeneratorThreats allowedThreats)
 		{
 			if ((allowedThreats & AllowedThreatsGeneratorThreats.Raids) != AllowedThreatsGeneratorThreats.None)

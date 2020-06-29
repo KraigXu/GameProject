@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E40 RID: 3648
+	
 	public abstract class Designator_ZoneAdd : Designator_Zone
 	{
-		// Token: 0x17000FD6 RID: 4054
+		
 		// (get) Token: 0x06005847 RID: 22599 RVA: 0x001D4C0A File Offset: 0x001D2E0A
 		// (set) Token: 0x06005848 RID: 22600 RVA: 0x001D4C16 File Offset: 0x001D2E16
 		private Zone SelectedZone
@@ -28,14 +28,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FD7 RID: 4055
+		
 		// (get) Token: 0x06005849 RID: 22601
 		protected abstract string NewZoneLabel { get; }
 
-		// Token: 0x0600584A RID: 22602
+		
 		protected abstract Zone MakeNewZone();
 
-		// Token: 0x0600584B RID: 22603 RVA: 0x001D4C32 File Offset: 0x001D2E32
+		
 		public Designator_ZoneAdd()
 		{
 			this.soundDragSustain = SoundDefOf.Designate_DragAreaAdd;
@@ -45,7 +45,7 @@ namespace RimWorld
 			this.hotKey = KeyBindingDefOf.Misc6;
 		}
 
-		// Token: 0x0600584C RID: 22604 RVA: 0x001D4C6C File Offset: 0x001D2E6C
+		
 		public override void SelectedUpdate()
 		{
 			base.SelectedUpdate();
@@ -55,7 +55,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600584D RID: 22605 RVA: 0x001D4CBC File Offset: 0x001D2EBC
+		
 		public override void DrawMouseAttachments()
 		{
 			if (this.useMouseIcon)
@@ -77,7 +77,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600584E RID: 22606 RVA: 0x001D4D68 File Offset: 0x001D2F68
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -110,7 +110,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600584F RID: 22607 RVA: 0x001D4E4C File Offset: 0x001D304C
+		
 		public override void DesignateMultiCell(IEnumerable<IntVec3> cells)
 		{
 			List<IntVec3> list = cells.ToList<IntVec3>();
@@ -203,7 +203,7 @@ namespace RimWorld
 			TutorSystem.Notify_Event(new EventPack(base.TutorTagDesignate, list));
 		}
 
-		// Token: 0x04002FB3 RID: 12211
+		
 		protected Type zoneTypeToPlace;
 	}
 }

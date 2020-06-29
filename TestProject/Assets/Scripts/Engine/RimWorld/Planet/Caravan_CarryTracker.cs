@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200124C RID: 4684
+	
 	public class Caravan_CarryTracker : IExposable
 	{
-		// Token: 0x1700123A RID: 4666
+		
 		// (get) Token: 0x06006D23 RID: 27939 RVA: 0x002636BE File Offset: 0x002618BE
 		public List<Pawn> CarriedPawnsListForReading
 		{
@@ -18,24 +18,24 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D24 RID: 27940 RVA: 0x002636C6 File Offset: 0x002618C6
+		
 		public Caravan_CarryTracker()
 		{
 		}
 
-		// Token: 0x06006D25 RID: 27941 RVA: 0x002636D9 File Offset: 0x002618D9
+		
 		public Caravan_CarryTracker(Caravan caravan)
 		{
 			this.caravan = caravan;
 		}
 
-		// Token: 0x06006D26 RID: 27942 RVA: 0x002636F3 File Offset: 0x002618F3
+		
 		public void CarryTrackerTick()
 		{
 			this.RecalculateCarriedPawns();
 		}
 
-		// Token: 0x06006D27 RID: 27943 RVA: 0x002636FB File Offset: 0x002618FB
+		
 		public void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -44,13 +44,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D28 RID: 27944 RVA: 0x0026370B File Offset: 0x0026190B
+		
 		public bool IsCarried(Pawn p)
 		{
 			return this.carriedPawns.Contains(p);
 		}
 
-		// Token: 0x06006D29 RID: 27945 RVA: 0x0026371C File Offset: 0x0026191C
+		
 		private void RecalculateCarriedPawns()
 		{
 			this.carriedPawns.Clear();
@@ -77,19 +77,19 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D2A RID: 27946 RVA: 0x002636F3 File Offset: 0x002618F3
+		
 		public void Notify_CaravanSpawned()
 		{
 			this.RecalculateCarriedPawns();
 		}
 
-		// Token: 0x06006D2B RID: 27947 RVA: 0x002636F3 File Offset: 0x002618F3
+		
 		public void Notify_PawnRemoved()
 		{
 			this.RecalculateCarriedPawns();
 		}
 
-		// Token: 0x06006D2C RID: 27948 RVA: 0x002637DC File Offset: 0x002619DC
+		
 		private void CalculatePawnsWhoCanCarry(List<Pawn> outPawns)
 		{
 			outPawns.Clear();
@@ -103,13 +103,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D2D RID: 27949 RVA: 0x00263860 File Offset: 0x00261A60
+		
 		private bool WantsToBeCarried(Pawn p)
 		{
 			return p.health.beCarriedByCaravanIfSick && CaravanCarryUtility.WouldBenefitFromBeingCarried(p);
 		}
 
-		// Token: 0x06006D2E RID: 27950 RVA: 0x00263878 File Offset: 0x00261A78
+		
 		public string GetInspectStringLine()
 		{
 			if (!this.carriedPawns.Any<Pawn>())
@@ -132,16 +132,16 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x040043D1 RID: 17361
+		
 		public Caravan caravan;
 
-		// Token: 0x040043D2 RID: 17362
+		
 		private List<Pawn> carriedPawns = new List<Pawn>();
 
-		// Token: 0x040043D3 RID: 17363
+		
 		private static List<Pawn> tmpPawnsWhoCanCarry = new List<Pawn>();
 
-		// Token: 0x040043D4 RID: 17364
+		
 		private static List<string> tmpPawnLabels = new List<string>();
 	}
 }

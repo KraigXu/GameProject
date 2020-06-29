@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B23 RID: 2851
+	
 	public class PawnsArrivalModeWorker_CenterDrop : PawnsArrivalModeWorker
 	{
-		// Token: 0x0600430F RID: 17167 RVA: 0x0016941F File Offset: 0x0016761F
+		
 		public override void Arrive(List<Pawn> pawns, IncidentParms parms)
 		{
 			PawnsArrivalModeWorkerUtility.DropInDropPodsNearSpawnCenter(parms, pawns);
 		}
 
-		// Token: 0x06004310 RID: 17168 RVA: 0x00169428 File Offset: 0x00167628
+		
 		public override void TravelingTransportPodsArrived(List<ActiveDropPodInfo> dropPods, Map map)
 		{
 			IntVec3 near;
@@ -25,7 +25,7 @@ namespace RimWorld
 			TransportPodsArrivalActionUtility.DropTravelingTransportPods(dropPods, near, map);
 		}
 
-		// Token: 0x06004311 RID: 17169 RVA: 0x00169454 File Offset: 0x00167654
+		
 		public override bool TryResolveRaidSpawnCenter(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -51,7 +51,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04002690 RID: 9872
+		
 		public const int PodOpenDelay = 520;
 	}
 }

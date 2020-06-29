@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x02000138 RID: 312
+	
 	public class LanguageWorker_English : LanguageWorker
 	{
-		// Token: 0x060008C4 RID: 2244 RVA: 0x0002DB8F File Offset: 0x0002BD8F
+		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -23,7 +23,7 @@ namespace Verse
 			return "a " + str;
 		}
 
-		// Token: 0x060008C5 RID: 2245 RVA: 0x0002DBB5 File Offset: 0x0002BDB5
+		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -37,7 +37,7 @@ namespace Verse
 			return "the " + str;
 		}
 
-		// Token: 0x060008C6 RID: 2246 RVA: 0x0002DBD8 File Offset: 0x0002BDD8
+		
 		public override string PostProcessed(string str)
 		{
 			str = base.PostProcessed(str);
@@ -72,7 +72,7 @@ namespace Verse
 			return str;
 		}
 
-		// Token: 0x060008C7 RID: 2247 RVA: 0x0002DE10 File Offset: 0x0002C010
+		
 		public override string ToTitleCase(string str)
 		{
 			if (str.NullOrEmpty())
@@ -97,7 +97,7 @@ namespace Verse
 			return string.Join(" ", array);
 		}
 
-		// Token: 0x060008C8 RID: 2248 RVA: 0x0002DEDC File Offset: 0x0002C0DC
+		
 		public override string OrdinalNumber(int number, Gender gender = Gender.None)
 		{
 			int num = number % 10;
@@ -119,7 +119,7 @@ namespace Verse
 			return number + "th";
 		}
 
-		// Token: 0x060008C9 RID: 2249 RVA: 0x0002DF48 File Offset: 0x0002C148
+		
 		public override string Pluralize(string str, Gender gender, int count = -1)
 		{
 			if (str.NullOrEmpty() || str[str.Length - 1] == 's')

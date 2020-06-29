@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C2B RID: 3115
+	
 	public abstract class ScenPart_ThingCount : ScenPart
 	{
-		// Token: 0x06004A40 RID: 19008 RVA: 0x00191730 File Offset: 0x0018F930
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -18,7 +18,7 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.count, "count", 1, false);
 		}
 
-		// Token: 0x06004A41 RID: 19009 RVA: 0x0019176C File Offset: 0x0018F96C
+		
 		public override void Randomize()
 		{
 			this.thingDef = this.PossibleThingDefs().RandomElement<ThingDef>();
@@ -33,7 +33,7 @@ namespace RimWorld
 			this.count = Rand.RangeInclusive(1, 100);
 		}
 
-		// Token: 0x06004A42 RID: 19010 RVA: 0x001917F8 File Offset: 0x0018F9F8
+		
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
 			Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight * 3f);
@@ -74,7 +74,7 @@ namespace RimWorld
 			Widgets.TextFieldNumeric<int>(rect3, ref this.count, ref this.countBuf, 1f, 1E+09f);
 		}
 
-		// Token: 0x06004A43 RID: 19011 RVA: 0x00191AA8 File Offset: 0x0018FCA8
+		
 		public override bool TryMerge(ScenPart other)
 		{
 			ScenPart_ThingCount scenPart_ThingCount = other as ScenPart_ThingCount;
@@ -86,7 +86,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004A44 RID: 19012 RVA: 0x00191B16 File Offset: 0x0018FD16
+		
 		protected virtual IEnumerable<ThingDef> PossibleThingDefs()
 		{
 			return from d in DefDatabase<ThingDef>.AllDefs
@@ -94,22 +94,22 @@ namespace RimWorld
 			select d;
 		}
 
-		// Token: 0x06004A45 RID: 19013 RVA: 0x00191B41 File Offset: 0x0018FD41
+		
 		public override bool HasNullDefs()
 		{
 			return base.HasNullDefs() || this.thingDef == null || (this.thingDef.MadeFromStuff && this.stuff == null);
 		}
 
-		// Token: 0x04002A23 RID: 10787
+		
 		protected ThingDef thingDef;
 
-		// Token: 0x04002A24 RID: 10788
+		
 		protected ThingDef stuff;
 
-		// Token: 0x04002A25 RID: 10789
+		
 		protected int count = 1;
 
-		// Token: 0x04002A26 RID: 10790
+		
 		private string countBuf;
 	}
 }

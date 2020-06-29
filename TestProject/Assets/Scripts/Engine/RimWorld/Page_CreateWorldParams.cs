@@ -8,10 +8,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E86 RID: 3718
+	
 	public class Page_CreateWorldParams : Page
 	{
-		// Token: 0x17001043 RID: 4163
+		
 		// (get) Token: 0x06005A83 RID: 23171 RVA: 0x001EBA2C File Offset: 0x001E9C2C
 		public override string PageTitle
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A84 RID: 23172 RVA: 0x001EBA3D File Offset: 0x001E9C3D
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -32,14 +32,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A85 RID: 23173 RVA: 0x001EBA5A File Offset: 0x001E9C5A
+		
 		public override void PostOpen()
 		{
 			base.PostOpen();
 			TutorSystem.Notify_Event("PageStart-CreateWorldParams");
 		}
 
-		// Token: 0x06005A86 RID: 23174 RVA: 0x001EBA74 File Offset: 0x001E9C74
+		
 		public void Reset()
 		{
 			this.seedString = GenText.RandomSeedString();
@@ -49,7 +49,7 @@ namespace RimWorld
 			this.population = OverallPopulation.Normal;
 		}
 
-		// Token: 0x06005A87 RID: 23175 RVA: 0x001EBAC4 File Offset: 0x001E9CC4
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			base.DrawPageTitle(rect);
@@ -112,7 +112,7 @@ namespace RimWorld
 			base.DoBottomButtons(rect, "WorldGenerate".Translate(), "Reset".Translate(), new Action(this.Reset), true, true);
 		}
 
-		// Token: 0x06005A88 RID: 23176 RVA: 0x001EBEC5 File Offset: 0x001EA0C5
+		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
@@ -137,25 +137,25 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04003148 RID: 12616
+		
 		private bool initialized;
 
-		// Token: 0x04003149 RID: 12617
+		
 		private string seedString;
 
-		// Token: 0x0400314A RID: 12618
+		
 		private float planetCoverage;
 
-		// Token: 0x0400314B RID: 12619
+		
 		private OverallRainfall rainfall;
 
-		// Token: 0x0400314C RID: 12620
+		
 		private OverallTemperature temperature;
 
-		// Token: 0x0400314D RID: 12621
+		
 		private OverallPopulation population;
 
-		// Token: 0x0400314E RID: 12622
+		
 		private static readonly float[] PlanetCoverages = new float[]
 		{
 			0.3f,
@@ -163,7 +163,7 @@ namespace RimWorld
 			1f
 		};
 
-		// Token: 0x0400314F RID: 12623
+		
 		private static readonly float[] PlanetCoveragesDev = new float[]
 		{
 			0.3f,

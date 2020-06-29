@@ -9,10 +9,10 @@ using UnityEngine.SceneManagement;
 
 namespace Verse
 {
-	// Token: 0x02000034 RID: 52
+	
 	public static class LongEventHandler
 	{
-		// Token: 0x17000080 RID: 128
+		
 		// (get) Token: 0x06000304 RID: 772 RVA: 0x0000F67B File Offset: 0x0000D87B
 		public static bool ShouldWaitForEvent
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000081 RID: 129
+		
 		// (get) Token: 0x06000305 RID: 773 RVA: 0x0000F6AC File Offset: 0x0000D8AC
 		public static bool AnyEventNowOrWaiting
 		{
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000082 RID: 130
+		
 		// (get) Token: 0x06000306 RID: 774 RVA: 0x0000F6C4 File Offset: 0x0000D8C4
 		public static bool AnyEventWhichDoesntUseStandardWindowNowOrWaiting
 		{
@@ -47,7 +47,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000083 RID: 131
+		
 		// (get) Token: 0x06000307 RID: 775 RVA: 0x0000F70D File Offset: 0x0000D90D
 		public static bool ForcePause
 		{
@@ -57,7 +57,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000308 RID: 776 RVA: 0x0000F714 File Offset: 0x0000D914
+		
 		public static void QueueLongEvent(Action action, string textKey, bool doAsynchronously, Action<Exception> exceptionHandler, bool showExtraUIInfo = true)
 		{
 			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
@@ -70,7 +70,7 @@ namespace Verse
 			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		// Token: 0x06000309 RID: 777 RVA: 0x0000F764 File Offset: 0x0000D964
+		
 		public static void QueueLongEvent(IEnumerable action, string textKey, Action<Exception> exceptionHandler = null, bool showExtraUIInfo = true)
 		{
 			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
@@ -83,7 +83,7 @@ namespace Verse
 			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		// Token: 0x0600030A RID: 778 RVA: 0x0000F7B8 File Offset: 0x0000D9B8
+		
 		public static void QueueLongEvent(Action preLoadLevelAction, string levelToLoad, string textKey, bool doAsynchronously, Action<Exception> exceptionHandler, bool showExtraUIInfo = true)
 		{
 			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
@@ -97,13 +97,13 @@ namespace Verse
 			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		// Token: 0x0600030B RID: 779 RVA: 0x0000F810 File Offset: 0x0000DA10
+		
 		public static void ClearQueuedEvents()
 		{
 			LongEventHandler.eventQueue.Clear();
 		}
 
-		// Token: 0x0600030C RID: 780 RVA: 0x0000F81C File Offset: 0x0000DA1C
+		
 		public static void LongEventsOnGUI()
 		{
 			if (LongEventHandler.currentEvent == null)
@@ -166,7 +166,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600030D RID: 781 RVA: 0x0000FA4C File Offset: 0x0000DC4C
+		
 		private static void DrawLongEventWindow(Rect statusRect)
 		{
 			Find.WindowStack.ImmediateWindow(62893994, statusRect, WindowLayer.Super, delegate
@@ -175,7 +175,7 @@ namespace Verse
 			}, true, false, 1f);
 		}
 
-		// Token: 0x0600030E RID: 782 RVA: 0x0000FA90 File Offset: 0x0000DC90
+		
 		public static void LongEventsUpdate(out bool sceneChanged)
 		{
 			sceneChanged = false;
@@ -206,7 +206,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600030F RID: 783 RVA: 0x0000FB30 File Offset: 0x0000DD30
+		
 		public static void ExecuteWhenFinished(Action action)
 		{
 			LongEventHandler.toExecuteWhenFinished.Add(action);
@@ -216,7 +216,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000310 RID: 784 RVA: 0x0000FB5C File Offset: 0x0000DD5C
+		
 		public static void SetCurrentEventText(string newText)
 		{
 			object currentEventTextLock = LongEventHandler.CurrentEventTextLock;
@@ -229,7 +229,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000311 RID: 785 RVA: 0x0000FBAC File Offset: 0x0000DDAC
+		
 		private static void UpdateCurrentEnumeratorEvent()
 		{
 			try
@@ -273,7 +273,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000312 RID: 786 RVA: 0x0000FC84 File Offset: 0x0000DE84
+		
 		private static void UpdateCurrentAsynchronousEvent()
 		{
 			if (LongEventHandler.eventThread == null)
@@ -313,7 +313,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000313 RID: 787 RVA: 0x0000FD34 File Offset: 0x0000DF34
+		
 		private static void UpdateCurrentSynchronousEvent(out bool sceneChanged)
 		{
 			sceneChanged = false;
@@ -350,7 +350,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000314 RID: 788 RVA: 0x0000FE04 File Offset: 0x0000E004
+		
 		private static void RunEventFromAnotherThread(Action action)
 		{
 			CultureInfoUtility.EnsureEnglish();
@@ -378,7 +378,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000315 RID: 789 RVA: 0x0000FE8C File Offset: 0x0000E08C
+		
 		private static void ExecuteToExecuteWhenFinished()
 		{
 			if (LongEventHandler.executingToExecuteWhenFinished)
@@ -415,7 +415,7 @@ namespace Verse
 			LongEventHandler.executingToExecuteWhenFinished = false;
 		}
 
-		// Token: 0x06000316 RID: 790 RVA: 0x0000FF88 File Offset: 0x0000E188
+		
 		private static void DrawLongEventWindowContents(Rect rect)
 		{
 			if (LongEventHandler.currentEvent == null)
@@ -455,34 +455,34 @@ namespace Verse
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x040000A8 RID: 168
+		
 		private static Queue<LongEventHandler.QueuedLongEvent> eventQueue = new Queue<LongEventHandler.QueuedLongEvent>();
 
-		// Token: 0x040000A9 RID: 169
+		
 		private static LongEventHandler.QueuedLongEvent currentEvent = null;
 
-		// Token: 0x040000AA RID: 170
+		
 		private static Thread eventThread = null;
 
-		// Token: 0x040000AB RID: 171
+		
 		private static AsyncOperation levelLoadOp = null;
 
-		// Token: 0x040000AC RID: 172
+		
 		private static List<Action> toExecuteWhenFinished = new List<Action>();
 
-		// Token: 0x040000AD RID: 173
+		
 		private static bool executingToExecuteWhenFinished = false;
 
-		// Token: 0x040000AE RID: 174
+		
 		private static readonly object CurrentEventTextLock = new object();
 
-		// Token: 0x040000AF RID: 175
+		
 		private static readonly Vector2 StatusRectSize = new Vector2(240f, 75f);
 
-		// Token: 0x02001309 RID: 4873
+		
 		private class QueuedLongEvent
 		{
-			// Token: 0x170013A8 RID: 5032
+			
 			// (get) Token: 0x06007389 RID: 29577 RVA: 0x00282437 File Offset: 0x00280637
 			public bool UseAnimatedDots
 			{
@@ -492,7 +492,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x170013A9 RID: 5033
+			
 			// (get) Token: 0x0600738A RID: 29578 RVA: 0x0028244C File Offset: 0x0028064C
 			public bool ShouldWaitUntilDisplayed
 			{
@@ -502,7 +502,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x170013AA RID: 5034
+			
 			// (get) Token: 0x0600738B RID: 29579 RVA: 0x0028246E File Offset: 0x0028066E
 			public bool UseStandardWindow
 			{
@@ -512,34 +512,34 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x0400480D RID: 18445
+			
 			public Action eventAction;
 
-			// Token: 0x0400480E RID: 18446
+			
 			public IEnumerator eventActionEnumerator;
 
-			// Token: 0x0400480F RID: 18447
+			
 			public string levelToLoad;
 
-			// Token: 0x04004810 RID: 18448
+			
 			public string eventTextKey = "";
 
-			// Token: 0x04004811 RID: 18449
+			
 			public string eventText = "";
 
-			// Token: 0x04004812 RID: 18450
+			
 			public bool doAsynchronously;
 
-			// Token: 0x04004813 RID: 18451
+			
 			public Action<Exception> exceptionHandler;
 
-			// Token: 0x04004814 RID: 18452
+			
 			public bool alreadyDisplayed;
 
-			// Token: 0x04004815 RID: 18453
+			
 			public bool canEverUseStandardWindow = true;
 
-			// Token: 0x04004816 RID: 18454
+			
 			public bool showExtraUIInfo = true;
 		}
 	}

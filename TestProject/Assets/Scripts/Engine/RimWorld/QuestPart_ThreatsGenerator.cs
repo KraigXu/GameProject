@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A8 RID: 2472
+	
 	public class QuestPart_ThreatsGenerator : QuestPartActivable, IIncidentMakerQuestPart
 	{
-		// Token: 0x06003AB9 RID: 15033 RVA: 0x00136DD1 File Offset: 0x00134FD1
+		
 		public IEnumerable<FiringIncident> MakeIntervalIncidents()
 		{
 			if (this.mapParent != null && this.mapParent.HasMap)
@@ -20,7 +20,7 @@ namespace RimWorld
 			return Enumerable.Empty<FiringIncident>();
 		}
 
-		// Token: 0x06003ABA RID: 15034 RVA: 0x00136E14 File Offset: 0x00135014
+		
 		public override void DoDebugWindowContents(Rect innerRect, ref float curY)
 		{
 			if (base.State != QuestPartState.Enabled)
@@ -35,7 +35,7 @@ namespace RimWorld
 			curY += rect.height + 4f;
 		}
 
-		// Token: 0x06003ABB RID: 15035 RVA: 0x00136E81 File Offset: 0x00135081
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -44,13 +44,13 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.threatStartTicks, "threatStartTicks", 0, false);
 		}
 
-		// Token: 0x040022AB RID: 8875
+		
 		public ThreatsGeneratorParams parms;
 
-		// Token: 0x040022AC RID: 8876
+		
 		public MapParent mapParent;
 
-		// Token: 0x040022AD RID: 8877
+		
 		public int threatStartTicks;
 	}
 }

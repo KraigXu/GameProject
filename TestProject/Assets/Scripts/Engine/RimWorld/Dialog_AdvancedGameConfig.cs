@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E4E RID: 3662
+	
 	public class Dialog_AdvancedGameConfig : Window
 	{
-		// Token: 0x17000FDD RID: 4061
+		
 		// (get) Token: 0x0600587F RID: 22655 RVA: 0x001D5C89 File Offset: 0x001D3E89
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005880 RID: 22656 RVA: 0x001D5C9A File Offset: 0x001D3E9A
+		
 		public Dialog_AdvancedGameConfig(int selTile)
 		{
 			this.doCloseButton = true;
@@ -28,7 +28,7 @@ namespace RimWorld
 			this.selTile = selTile;
 		}
 
-		// Token: 0x06005881 RID: 22657 RVA: 0x001D5CC8 File Offset: 0x001D3EC8
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Listing_Standard listing_Standard = new Listing_Standard();
@@ -121,13 +121,13 @@ namespace RimWorld
 			listing_Standard.End();
 		}
 
-		// Token: 0x04002FBA RID: 12218
+		
 		private int selTile = -1;
 
-		// Token: 0x04002FBB RID: 12219
+		
 		private const float ColumnWidth = 200f;
 
-		// Token: 0x04002FBC RID: 12220
+		
 		private static readonly int[] MapSizes = new int[]
 		{
 			200,
@@ -138,7 +138,7 @@ namespace RimWorld
 			325
 		};
 
-		// Token: 0x04002FBD RID: 12221
+		
 		private static readonly int[] TestMapSizes = new int[]
 		{
 			350,

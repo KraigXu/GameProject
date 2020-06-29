@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001106 RID: 4358
+	
 	public class QuestNode_End : QuestNode
 	{
-		// Token: 0x06006642 RID: 26178 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x06006643 RID: 26179 RVA: 0x0023D234 File Offset: 0x0023B434
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -36,23 +36,23 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_QuestEnd);
 		}
 
-		// Token: 0x04003E58 RID: 15960
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04003E59 RID: 15961
+		
 		public SlateRef<QuestEndOutcome> outcome;
 
-		// Token: 0x04003E5A RID: 15962
+		
 		public SlateRef<QuestPart.SignalListenMode?> signalListenMode;
 
-		// Token: 0x04003E5B RID: 15963
+		
 		public SlateRef<bool?> sendStandardLetter;
 
-		// Token: 0x04003E5C RID: 15964
+		
 		public SlateRef<int> goodwillChangeAmount;
 
-		// Token: 0x04003E5D RID: 15965
+		
 		public SlateRef<Thing> goodwillChangeFactionOf;
 	}
 }

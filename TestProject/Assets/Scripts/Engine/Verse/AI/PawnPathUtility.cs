@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000579 RID: 1401
+	
 	public static class PawnPathUtility
 	{
-		// Token: 0x060027AF RID: 10159 RVA: 0x000E888C File Offset: 0x000E6A8C
+		
 		public static Thing FirstBlockingBuilding(this PawnPath path, out IntVec3 cellBefore, Pawn pawn = null)
 		{
 			if (!path.Found)
@@ -57,7 +57,7 @@ namespace Verse.AI
 			return null;
 		}
 
-		// Token: 0x060027B0 RID: 10160 RVA: 0x000E89B8 File Offset: 0x000E6BB8
+		
 		public static IntVec3 FinalWalkableNonDoorCell(this PawnPath path, Map map)
 		{
 			if (path.NodesReversed.Count == 1)
@@ -80,7 +80,7 @@ namespace Verse.AI
 			return nodesReversed[0];
 		}
 
-		// Token: 0x060027B1 RID: 10161 RVA: 0x000E8A38 File Offset: 0x000E6C38
+		
 		public static IntVec3 LastCellBeforeBlockerOrFinalCell(this PawnPath path, Map map)
 		{
 			if (path.NodesReversed.Count == 1)
@@ -107,7 +107,7 @@ namespace Verse.AI
 			return nodesReversed[0];
 		}
 
-		// Token: 0x060027B2 RID: 10162 RVA: 0x000E8AC8 File Offset: 0x000E6CC8
+		
 		public static bool TryFindLastCellBeforeBlockingDoor(this PawnPath path, Pawn pawn, out IntVec3 result)
 		{
 			if (path.NodesReversed.Count == 1)
@@ -129,7 +129,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x060027B3 RID: 10163 RVA: 0x000E8B54 File Offset: 0x000E6D54
+		
 		public static bool TryFindCellAtIndex(PawnPath path, int index, out IntVec3 result)
 		{
 			if (path.NodesReversed.Count <= index || index < 0)

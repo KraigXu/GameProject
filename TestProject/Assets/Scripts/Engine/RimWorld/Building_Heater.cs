@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C6D RID: 3181
+	
 	public class Building_Heater : Building_TempControl
 	{
-		// Token: 0x06004C30 RID: 19504 RVA: 0x00199698 File Offset: 0x00197898
+		
 		public override void TickRare()
 		{
 			if (this.compPowerTrader.PowerOn)
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002AEB RID: 10987
+		
 		private const float EfficiencyFalloffSpan = 100f;
 	}
 }

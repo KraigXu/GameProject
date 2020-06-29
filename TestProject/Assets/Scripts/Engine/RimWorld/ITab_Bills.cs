@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EA3 RID: 3747
+	
 	public class ITab_Bills : ITab
 	{
-		// Token: 0x17001072 RID: 4210
+		
 		// (get) Token: 0x06005B75 RID: 23413 RVA: 0x001F7953 File Offset: 0x001F5B53
 		protected Building_WorkTable SelTable
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B76 RID: 23414 RVA: 0x001F7960 File Offset: 0x001F5B60
+		
 		public ITab_Bills()
 		{
 			this.size = ITab_Bills.WinSize;
@@ -27,7 +27,7 @@ namespace RimWorld
 			this.tutorTag = "Bills";
 		}
 
-		// Token: 0x06005B77 RID: 23415 RVA: 0x001F7994 File Offset: 0x001F5B94
+		
 		protected override void FillTab()
 		{
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.BillsTab, KnowledgeAmount.FrameDisplayed);
@@ -76,14 +76,14 @@ namespace RimWorld
 					if (this.SelTable.def.AllRecipes[i].AvailableNow && this.SelTable.def.AllRecipes[i].AvailableOnNow(this.SelTable))
 					{
 						RecipeDef recipe = this.SelTable.def.AllRecipes[i];
-						Predicate<Pawn> <>9__3;
+						Predicate<Pawn> 9__3;
 						list.Add(new FloatMenuOption(recipe.LabelCap, delegate
 						{
 							List<Pawn> freeColonists = this.SelTable.Map.mapPawns.FreeColonists;
 							Predicate<Pawn> predicate;
-							if ((predicate = <>9__3) == null)
+							if ((predicate ) == null)
 							{
-								predicate = (<>9__3 = ((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)));
+								predicate = (9__3 = ((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)));
 							}
 							if (!freeColonists.Any(predicate))
 							{
@@ -111,7 +111,7 @@ namespace RimWorld
 			this.mouseoverBill = this.SelTable.billStack.DoListing(rect2, recipeOptionsMaker, ref this.scrollPosition, ref this.viewHeight);
 		}
 
-		// Token: 0x06005B78 RID: 23416 RVA: 0x001F7BB0 File Offset: 0x001F5DB0
+		
 		public override void TabUpdate()
 		{
 			if (this.mouseoverBill != null)
@@ -121,27 +121,27 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040031E5 RID: 12773
+		
 		private float viewHeight = 1000f;
 
-		// Token: 0x040031E6 RID: 12774
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x040031E7 RID: 12775
+		
 		private Bill mouseoverBill;
 
-		// Token: 0x040031E8 RID: 12776
+		
 		private static readonly Vector2 WinSize = new Vector2(420f, 480f);
 
-		// Token: 0x040031E9 RID: 12777
+		
 		[TweakValue("Interface", 0f, 128f)]
 		private static float PasteX = 48f;
 
-		// Token: 0x040031EA RID: 12778
+		
 		[TweakValue("Interface", 0f, 128f)]
 		private static float PasteY = 3f;
 
-		// Token: 0x040031EB RID: 12779
+		
 		[TweakValue("Interface", 0f, 32f)]
 		private static float PasteSize = 24f;
 	}

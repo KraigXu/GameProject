@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C86 RID: 3206
+	
 	public class Building_Throne : Building
 	{
-		// Token: 0x17000DA6 RID: 3494
+		
 		// (get) Token: 0x06004D26 RID: 19750 RVA: 0x0019D54C File Offset: 0x0019B74C
 		public static IEnumerable<RoyalTitleDef> AllTitlesForThroneStature
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DA7 RID: 3495
+		
 		// (get) Token: 0x06004D27 RID: 19751 RVA: 0x0019D5A8 File Offset: 0x0019B7A8
 		public Pawn AssignedPawn
 		{
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DA8 RID: 3496
+		
 		// (get) Token: 0x06004D28 RID: 19752 RVA: 0x0019D5FB File Offset: 0x0019B7FB
 		public CompAssignableToPawn_Throne CompAssignableToPawn
 		{
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DA9 RID: 3497
+		
 		// (get) Token: 0x06004D29 RID: 19753 RVA: 0x0019D604 File Offset: 0x0019B804
 		public RoyalTitleDef TitleStature
 		{
@@ -75,7 +75,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D2A RID: 19754 RVA: 0x0019D67C File Offset: 0x0019B87C
+		
 		public override string GetInspectString()
 		{
 			string text = base.GetInspectString();
@@ -104,7 +104,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06004D2B RID: 19755 RVA: 0x0019D863 File Offset: 0x0019BA63
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -112,16 +112,13 @@ namespace RimWorld
 				Log.ErrorOnce("Thrones are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it.  See rules on the Ludeon forum for more info.", 1222185, false);
 				yield break;
 			}
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			yield break;
 			yield break;
 		}
 
-		// Token: 0x04002B2A RID: 11050
+		
 		private static List<RoyalTitleDef> tmpTitles = new List<RoyalTitleDef>();
 	}
 }

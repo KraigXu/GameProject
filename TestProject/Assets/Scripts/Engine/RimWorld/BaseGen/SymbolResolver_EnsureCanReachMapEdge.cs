@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010B3 RID: 4275
+	
 	public class SymbolResolver_EnsureCanReachMapEdge : SymbolResolver
 	{
-		// Token: 0x06006518 RID: 25880 RVA: 0x00234234 File Offset: 0x00232434
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			SymbolResolver_EnsureCanReachMapEdge.cellsInRandomOrder.Clear();
@@ -20,7 +20,7 @@ namespace RimWorld.BaseGen
 			this.TryMakeAllCellsReachable(true, rp);
 		}
 
-		// Token: 0x06006519 RID: 25881 RVA: 0x002342B0 File Offset: 0x002324B0
+		
 		private void TryMakeAllCellsReachable(bool canPathThroughNonStandable, ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -75,7 +75,7 @@ namespace RimWorld.BaseGen
 			SymbolResolver_EnsureCanReachMapEdge.visited.Clear();
 		}
 
-		// Token: 0x0600651A RID: 25882 RVA: 0x0023447C File Offset: 0x0023267C
+		
 		private void ReconstructPathAndDestroyWalls(IntVec3 foundDest, Room room, ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -129,7 +129,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600651B RID: 25883 RVA: 0x00234618 File Offset: 0x00232818
+		
 		private bool CanTraverse(IntVec3 c, bool canPathThroughNonStandable)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -137,19 +137,19 @@ namespace RimWorld.BaseGen
 			return this.IsWallOrRock(edifice) || ((canPathThroughNonStandable || c.Standable(map)) && !c.Impassable(map));
 		}
 
-		// Token: 0x0600651C RID: 25884 RVA: 0x0023465D File Offset: 0x0023285D
+		
 		private bool IsWallOrRock(Building b)
 		{
 			return b != null && (b.def == ThingDefOf.Wall || b.def.building.isNaturalRock);
 		}
 
-		// Token: 0x04003DB1 RID: 15793
+		
 		private static HashSet<Room> visited = new HashSet<Room>();
 
-		// Token: 0x04003DB2 RID: 15794
+		
 		private static List<IntVec3> path = new List<IntVec3>();
 
-		// Token: 0x04003DB3 RID: 15795
+		
 		private static List<IntVec3> cellsInRandomOrder = new List<IntVec3>();
 	}
 }

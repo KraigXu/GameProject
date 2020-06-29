@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.Sound
 {
-	// Token: 0x02000506 RID: 1286
+	
 	public class AudioSourcePoolCamera
 	{
-		// Token: 0x060024E8 RID: 9448 RVA: 0x000DAE68 File Offset: 0x000D9068
+		
 		public AudioSourcePoolCamera()
 		{
 			this.cameraSourcesContainer = new GameObject("OneShotSourcesCameraContainer");
@@ -28,7 +28,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x060024E9 RID: 9449 RVA: 0x000DAF28 File Offset: 0x000D9128
+		
 		public AudioSource GetSourceCamera()
 		{
 			for (int i = 0; i < this.sourcesCamera.Count; i++)
@@ -44,13 +44,13 @@ namespace Verse.Sound
 			return null;
 		}
 
-		// Token: 0x04001662 RID: 5730
+		
 		public GameObject cameraSourcesContainer;
 
-		// Token: 0x04001663 RID: 5731
+		
 		private List<AudioSource> sourcesCamera = new List<AudioSource>();
 
-		// Token: 0x04001664 RID: 5732
+		
 		private const int NumSourcesCamera = 16;
 	}
 }

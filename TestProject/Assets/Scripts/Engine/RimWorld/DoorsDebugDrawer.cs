@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C7A RID: 3194
+	
 	public static class DoorsDebugDrawer
 	{
-		// Token: 0x06004CBB RID: 19643 RVA: 0x0019BCAC File Offset: 0x00199EAC
+		
 		public static void DrawDebug()
 		{
 			if (!DebugViewSettings.drawDoorsDebug)

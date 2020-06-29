@@ -5,20 +5,20 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B1C RID: 2844
+	
 	public static class PawnWeaponGenerator
 	{
-		// Token: 0x060042E8 RID: 17128 RVA: 0x00167D10 File Offset: 0x00165F10
+		
 		public static void Reset()
 		{
 			Predicate<ThingDef> isWeapon = (ThingDef td) => td.equipmentType == EquipmentType.Primary && !td.weaponTags.NullOrEmpty<string>();
 			PawnWeaponGenerator.allWeaponPairs = ThingStuffPair.AllWith(isWeapon);
 			IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-			Func<ThingDef, bool> <>9__1;
+			
 			Func<ThingDef, bool> predicate;
-			if ((predicate = <>9__1) == null)
+			if ((predicate ) == null)
 			{
-				predicate = (<>9__1 = ((ThingDef td) => isWeapon(td)));
+				predicate = (9__1 = ((ThingDef td) => isWeapon(td)));
 			}
 			using (IEnumerator<ThingDef> enumerator = allDefs.Where(predicate).GetEnumerator())
 			{
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042E9 RID: 17129 RVA: 0x00167E7C File Offset: 0x0016607C
+		
 		public static void TryGenerateWeaponFor(Pawn pawn, PawnGenerationRequest request)
 		{
 			PawnWeaponGenerator.workingWeapons.Clear();
@@ -97,7 +97,7 @@ namespace RimWorld
 			PawnWeaponGenerator.workingWeapons.Clear();
 		}
 
-		// Token: 0x060042EA RID: 17130 RVA: 0x0016807C File Offset: 0x0016627C
+		
 		public static bool IsDerpWeapon(ThingDef thing, ThingDef stuff)
 		{
 			if (stuff == null)
@@ -124,7 +124,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060042EB RID: 17131 RVA: 0x001680DC File Offset: 0x001662DC
+		
 		public static float CheapestNonDerpPriceFor(ThingDef weaponDef)
 		{
 			float num = 9999999f;
@@ -139,7 +139,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060042EC RID: 17132 RVA: 0x00168140 File Offset: 0x00166340
+		
 		[DebugOutput]
 		private static void WeaponPairs()
 		{
@@ -171,17 +171,17 @@ namespace RimWorld
 			DebugTables.MakeTablesDialog<ThingStuffPair>(dataSources, array);
 		}
 
-		// Token: 0x060042ED RID: 17133 RVA: 0x001682B5 File Offset: 0x001664B5
+		
 		[DebugOutput]
 		private static void WeaponPairsByThing()
 		{
 			DebugOutputsGeneral.MakeTablePairsByThing(PawnWeaponGenerator.allWeaponPairs);
 		}
 
-		// Token: 0x0400267A RID: 9850
+		
 		private static List<ThingStuffPair> allWeaponPairs;
 
-		// Token: 0x0400267B RID: 9851
+		
 		private static List<ThingStuffPair> workingWeapons = new List<ThingStuffPair>();
 	}
 }

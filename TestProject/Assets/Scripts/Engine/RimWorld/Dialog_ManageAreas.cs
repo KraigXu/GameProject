@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E57 RID: 3671
+	
 	public class Dialog_ManageAreas : Window
 	{
-		// Token: 0x17001007 RID: 4103
+		
 		// (get) Token: 0x060058FA RID: 22778 RVA: 0x001DAC1F File Offset: 0x001D8E1F
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060058FB RID: 22779 RVA: 0x001DAC30 File Offset: 0x001D8E30
+		
 		public Dialog_ManageAreas(Map map)
 		{
 			this.map = map;
@@ -30,7 +30,7 @@ namespace RimWorld
 			this.absorbInputAroundWindow = true;
 		}
 
-		// Token: 0x060058FC RID: 22780 RVA: 0x001DAC64 File Offset: 0x001D8E64
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Listing_Standard listing_Standard = new Listing_Standard();
@@ -63,7 +63,7 @@ namespace RimWorld
 			listing_Standard.End();
 		}
 
-		// Token: 0x060058FD RID: 22781 RVA: 0x001DAD3C File Offset: 0x001D8F3C
+		
 		private static void DoAreaRow(Rect rect, Area area)
 		{
 			if (Mouse.IsOver(rect))
@@ -94,7 +94,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x060058FE RID: 22782 RVA: 0x001DAE90 File Offset: 0x001D9090
+		
 		public static void DoNameInputRect(Rect rect, ref string name, int maxLength)
 		{
 			string text = Widgets.TextField(rect, name);
@@ -104,10 +104,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003025 RID: 12325
+		
 		private Map map;
 
-		// Token: 0x04003026 RID: 12326
+		
 		private static Regex validNameRegex = new Regex("^[\\p{L}0-9 '\\-]*$");
 	}
 }

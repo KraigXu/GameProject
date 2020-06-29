@@ -6,10 +6,10 @@ using RimWorld.Planet;
 
 namespace Verse.Grammar
 {
-	// Token: 0x020004C4 RID: 1220
+	
 	public static class GrammarUtility
 	{
-		// Token: 0x060023F7 RID: 9207 RVA: 0x000D76F0 File Offset: 0x000D58F0
+		
 		public static IEnumerable<Rule> RulesForPawn(string pawnSymbol, Pawn pawn, Dictionary<string, string> constants = null, bool addRelationInfoSymbol = true, bool addTags = true)
 		{
 			if (pawn == null)
@@ -25,7 +25,7 @@ namespace Verse.Grammar
 			return GrammarUtility.RulesForPawn(pawnSymbol, pawn.Name, (pawn.story != null) ? pawn.story.Title : null, pawn.kindDef, pawn.gender, pawn.Faction, pawn.ageTracker.AgeBiologicalYears, pawn.ageTracker.AgeChronologicalYears, taggedString, PawnUtility.EverBeenColonistOrTameAnimal(pawn), PawnUtility.EverBeenQuestLodger(pawn), pawn.Faction != null && pawn.Faction.leader == pawn, (pawn.royalty != null) ? pawn.royalty.AllTitlesForReading : null, constants, addTags);
 		}
 
-		// Token: 0x060023F8 RID: 9208 RVA: 0x000D77C4 File Offset: 0x000D59C4
+		
 		public static IEnumerable<Rule> RulesForPawn(string pawnSymbol, Name name, string title, PawnKindDef kind, Gender gender, Faction faction, int age, int chronologicalAge, string relationInfo, bool everBeenColonistOrTameAnimal, bool everBeenQuestLodger, bool isFactionLeader, List<RoyalTitle> royalTitles, Dictionary<string, string> constants = null, bool addTags = true)
 		{
 			string prefix = "";
@@ -154,7 +154,7 @@ namespace Verse.Grammar
 					}
 					int num = royalTitleIndex;
 					royalTitleIndex = num + 1;
-					royalTitle = null;
+
 				}
 				IEnumerator<RoyalTitle> enumerator = null;
 				if (bestTitle != null)
@@ -197,7 +197,7 @@ namespace Verse.Grammar
 			yield break;
 		}
 
-		// Token: 0x060023F9 RID: 9209 RVA: 0x000D784C File Offset: 0x000D5A4C
+		
 		public static IEnumerable<Rule> RulesForDef(string prefix, Def def)
 		{
 			if (def == null)
@@ -225,7 +225,7 @@ namespace Verse.Grammar
 			yield break;
 		}
 
-		// Token: 0x060023FA RID: 9210 RVA: 0x000D7863 File Offset: 0x000D5A63
+		
 		public static IEnumerable<Rule> RulesForBodyPartRecord(string prefix, BodyPartRecord part)
 		{
 			if (part == null)
@@ -244,7 +244,7 @@ namespace Verse.Grammar
 			yield break;
 		}
 
-		// Token: 0x060023FB RID: 9211 RVA: 0x000D787A File Offset: 0x000D5A7A
+		
 		public static IEnumerable<Rule> RulesForHediffDef(string prefix, HediffDef def, BodyPartRecord part)
 		{
 			foreach (Rule rule in GrammarUtility.RulesForDef(prefix, def))
@@ -268,7 +268,7 @@ namespace Verse.Grammar
 			yield break;
 		}
 
-		// Token: 0x060023FC RID: 9212 RVA: 0x000D7898 File Offset: 0x000D5A98
+		
 		public static IEnumerable<Rule> RulesForFaction(string prefix, Faction faction, bool addTags = true)
 		{
 			if (!prefix.NullOrEmpty())
@@ -289,19 +289,19 @@ namespace Verse.Grammar
 			yield break;
 		}
 
-		// Token: 0x060023FD RID: 9213 RVA: 0x000D78B6 File Offset: 0x000D5AB6
+		
 		public static IEnumerable<Rule> RulesForWorldObject(string prefix, WorldObject worldObject, bool addTags = true)
 		{
-			GrammarUtility.<>c__DisplayClass6_0 <>c__DisplayClass6_;
-			<>c__DisplayClass6_.worldObject = worldObject;
-			<>c__DisplayClass6_.addTags = addTags;
-			if (!prefix.NullOrEmpty())
-			{
-				prefix += "_";
-			}
-			yield return new Rule_String(prefix + "label", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(<>c__DisplayClass6_.worldObject.Label, ref <>c__DisplayClass6_));
-			yield return new Rule_String(prefix + "definite", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(Find.ActiveLanguageWorker.WithDefiniteArticle(<>c__DisplayClass6_.worldObject.Label, false, <>c__DisplayClass6_.worldObject.HasName), ref <>c__DisplayClass6_));
-			yield return new Rule_String(prefix + "indefinite", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(Find.ActiveLanguageWorker.WithIndefiniteArticle(<>c__DisplayClass6_.worldObject.Label, false, <>c__DisplayClass6_.worldObject.HasName), ref <>c__DisplayClass6_));
+			//GrammarUtility.c__DisplayClass6_0 c__DisplayClass6_;
+			//c__DisplayClass6_.worldObject = worldObject;
+			//c__DisplayClass6_.addTags = addTags;
+			//if (!prefix.NullOrEmpty())
+			//{
+			//	prefix += "_";
+			//}
+			//yield return new Rule_String(prefix + "label", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(c__DisplayClass6_.worldObject.Label, ref c__DisplayClass6_));
+			//yield return new Rule_String(prefix + "definite", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(Find.ActiveLanguageWorker.WithDefiniteArticle(c__DisplayClass6_.worldObject.Label, false, c__DisplayClass6_.worldObject.HasName), ref c__DisplayClass6_));
+			//yield return new Rule_String(prefix + "indefinite", GrammarUtility.<RulesForWorldObject>g__PossiblyWithTag|6_0(Find.ActiveLanguageWorker.WithIndefiniteArticle(c__DisplayClass6_.worldObject.Label, false, c__DisplayClass6_.worldObject.HasName), ref c__DisplayClass6_));
 			yield break;
 		}
 	}

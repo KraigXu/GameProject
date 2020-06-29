@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000184 RID: 388
+	
 	public class WaterInfo : MapComponent
 	{
-		// Token: 0x06000B40 RID: 2880 RVA: 0x0003C322 File Offset: 0x0003A522
+		
 		public WaterInfo(Map map) : base(map)
 		{
 		}
 
-		// Token: 0x06000B41 RID: 2881 RVA: 0x0003C336 File Offset: 0x0003A536
+		
 		public override void MapRemoved()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
@@ -22,7 +22,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000B42 RID: 2882 RVA: 0x0003C34C File Offset: 0x0003A54C
+		
 		public void SetTextures()
 		{
 			Camera subcamera = Current.SubcameraDriver.GetSubcamera(SubcameraDefOf.WaterDepth);
@@ -37,7 +37,7 @@ namespace Verse
 			Shader.SetGlobalTexture(ShaderPropertyIDs.WaterOffsetTex, this.riverOffsetTexture);
 		}
 
-		// Token: 0x06000B43 RID: 2883 RVA: 0x0003C404 File Offset: 0x0003A604
+		
 		public Vector3 GetWaterMovement(Vector3 position)
 		{
 			if (this.riverOffsetMap == null)
@@ -63,7 +63,7 @@ namespace Verse
 			return Vector3.Lerp(a, b, position.z - (float)Mathf.FloorToInt(position.z));
 		}
 
-		// Token: 0x06000B44 RID: 2884 RVA: 0x0003C584 File Offset: 0x0003A784
+		
 		public void GenerateRiverFlowMap()
 		{
 			if (this.riverOffsetMap == null)
@@ -98,7 +98,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B45 RID: 2885 RVA: 0x0003C7E0 File Offset: 0x0003A9E0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -106,7 +106,7 @@ namespace Verse
 			this.GenerateRiverFlowMap();
 		}
 
-		// Token: 0x06000B46 RID: 2886 RVA: 0x0003C800 File Offset: 0x0003AA00
+		
 		public void DebugDrawRiver()
 		{
 			for (int i = 0; i < this.riverDebugData.Count; i += 2)
@@ -115,22 +115,22 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000904 RID: 2308
+		
 		public byte[] riverOffsetMap;
 
-		// Token: 0x04000905 RID: 2309
+		
 		public Texture2D riverOffsetTexture;
 
-		// Token: 0x04000906 RID: 2310
+		
 		public List<Vector3> riverDebugData = new List<Vector3>();
 
-		// Token: 0x04000907 RID: 2311
+		
 		public float[] riverFlowMap;
 
-		// Token: 0x04000908 RID: 2312
+		
 		public CellRect riverFlowMapBounds;
 
-		// Token: 0x04000909 RID: 2313
+		
 		public const int RiverOffsetMapBorder = 2;
 	}
 }

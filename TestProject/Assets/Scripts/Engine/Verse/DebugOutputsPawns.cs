@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000347 RID: 839
+	
 	public static class DebugOutputsPawns
 	{
-		// Token: 0x060019A7 RID: 6567 RVA: 0x0009A6FC File Offset: 0x000988FC
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsBasics()
 		{
@@ -75,7 +75,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019A8 RID: 6568 RVA: 0x0009AAA8 File Offset: 0x00098CA8
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsWeaponUsage()
 		{
@@ -117,7 +117,7 @@ namespace Verse
 			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
 		}
 
-		// Token: 0x060019A9 RID: 6569 RVA: 0x0009ACE4 File Offset: 0x00098EE4
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsApparelUsage()
 		{
@@ -132,7 +132,6 @@ namespace Verse
 			orderby PawnApparelGenerator.IsHeadgear(a), a.techLevel, a.BaseMarketValue
 			select a).Select(delegate(ThingDef a)
 			{
-				Predicate<string> <>9__14;
 				return new TableDataGetter<PawnKindDef>(a.label.Shorten() + "\n$" + a.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
 				{
 					if (k.apparelRequired != null && k.apparelRequired.Contains(a))
@@ -142,11 +141,8 @@ namespace Verse
 					if (k.apparelDisallowTags != null)
 					{
 						List<string> apparelDisallowTags = k.apparelDisallowTags;
-						Predicate<string> predicate;
-						if ((predicate = <>9__14) == null)
-						{
-							predicate = (<>9__14 = ((string tag) => a.apparel.tags.Contains(tag)));
-						}
+						Predicate<string> predicate= (string tag) => a.apparel.tags.Contains(tag);
+
 						if (apparelDisallowTags.Any(predicate))
 						{
 							return "distag";
@@ -195,7 +191,7 @@ namespace Verse
 			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
 		}
 
-		// Token: 0x060019AA RID: 6570 RVA: 0x0009AF20 File Offset: 0x00099120
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsTechHediffUsage()
 		{
@@ -236,7 +232,7 @@ namespace Verse
 			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
 		}
 
-		// Token: 0x060019AB RID: 6571 RVA: 0x0009B138 File Offset: 0x00099338
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindGearSampled()
 		{
@@ -297,12 +293,8 @@ namespace Verse
 					}));
 					stringBuilder.AppendLine("Weapons");
 					IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-					Func<ThingDef, int> <>9__3;
-					Func<ThingDef, int> keySelector;
-					if ((keySelector = <>9__3) == null)
-					{
-						keySelector = (<>9__3 = ((ThingDef t) => weapons[t]));
-					}
+					Func<ThingDef, int> keySelector= (ThingDef t) => weapons[t];
+
 					foreach (ThingDef thingDef in allDefs.OrderByDescending(keySelector))
 					{
 						int num2 = weapons[thingDef];
@@ -314,12 +306,8 @@ namespace Verse
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Apparel");
 					IEnumerable<ThingDef> allDefs2 = DefDatabase<ThingDef>.AllDefs;
-					Func<ThingDef, int> <>9__4;
-					Func<ThingDef, int> keySelector2;
-					if ((keySelector2 = <>9__4) == null)
-					{
-						keySelector2 = (<>9__4 = ((ThingDef t) => apparel[t]));
-					}
+					Func<ThingDef, int> keySelector2= (ThingDef t) => apparel[t];
+
 					foreach (ThingDef thingDef2 in allDefs2.OrderByDescending(keySelector2))
 					{
 						int num3 = apparel[thingDef2];
@@ -333,12 +321,8 @@ namespace Verse
 					IEnumerable<HediffDef> source = from h in DefDatabase<HediffDef>.AllDefs
 					where h.spawnThingOnRemoved != null
 					select h;
-					Func<HediffDef, int> <>9__6;
-					Func<HediffDef, int> keySelector3;
-					if ((keySelector3 = <>9__6) == null)
-					{
-						keySelector3 = (<>9__6 = ((HediffDef h) => hediffs[h]));
-					}
+					Func<HediffDef, int> keySelector3= (HediffDef h) => hediffs[h];
+
 					foreach (HediffDef hediffDef in source.OrderByDescending(keySelector3))
 					{
 						int num4 = hediffs[hediffDef];
@@ -352,12 +336,7 @@ namespace Verse
 					IEnumerable<HediffDef> source2 = from h in DefDatabase<HediffDef>.AllDefs
 					where h.IsAddiction
 					select h;
-					Func<HediffDef, int> <>9__8;
-					Func<HediffDef, int> keySelector4;
-					if ((keySelector4 = <>9__8) == null)
-					{
-						keySelector4 = (<>9__8 = ((HediffDef h) => hediffs[h]));
-					}
+					Func<HediffDef, int> keySelector4= (HediffDef h) => hediffs[h];
 					foreach (HediffDef hediffDef2 in source2.OrderByDescending(keySelector4))
 					{
 						int num5 = hediffs[hediffDef2];
@@ -371,12 +350,8 @@ namespace Verse
 					IEnumerable<HediffDef> source3 = from h in DefDatabase<HediffDef>.AllDefs
 					where h.spawnThingOnRemoved == null && !h.IsAddiction
 					select h;
-					Func<HediffDef, int> <>9__10;
-					Func<HediffDef, int> keySelector5;
-					if ((keySelector5 = <>9__10) == null)
-					{
-						keySelector5 = (<>9__10 = ((HediffDef h) => hediffs[h]));
-					}
+					Func<HediffDef, int> keySelector5= (HediffDef h) => hediffs[h];
+
 					foreach (HediffDef hediffDef3 in source3.OrderByDescending(keySelector5))
 					{
 						int num6 = hediffs[hediffDef3];
@@ -392,7 +367,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x060019AC RID: 6572 RVA: 0x0009B260 File Offset: 0x00099460
+		
 		[DebugOutput("Pawns", false)]
 		public static void PawnWorkDisablesSampled()
 		{
@@ -467,7 +442,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x060019AD RID: 6573 RVA: 0x0009B390 File Offset: 0x00099590
+		
 		[DebugOutput("Pawns", false)]
 		public static void RecruitDifficultiesSampled()
 		{
@@ -531,7 +506,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x060019AE RID: 6574 RVA: 0x0009B4C0 File Offset: 0x000996C0
+		
 		[DebugOutput("Pawns", false)]
 		public static void LivePawnsInspirationChances()
 		{
@@ -555,7 +530,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<Pawn>(Find.CurrentMap.mapPawns.FreeColonistsSpawned, list.ToArray());
 		}
 
-		// Token: 0x060019AF RID: 6575 RVA: 0x0009B584 File Offset: 0x00099784
+		
 		[DebugOutput("Pawns", false)]
 		public static void RacesFoodConsumption()
 		{
@@ -606,7 +581,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B0 RID: 6576 RVA: 0x0009B7BC File Offset: 0x000999BC
+		
 		[DebugOutput("Pawns", false)]
 		public static void RacesButchery()
 		{
@@ -626,7 +601,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B1 RID: 6577 RVA: 0x0009B984 File Offset: 0x00099B84
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalsBasics()
 		{
@@ -635,13 +610,13 @@ namespace Verse
 			select d;
 			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[16];
 			array[0] = new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName);
-			array[1] = new TableDataGetter<PawnKindDef>("dps", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__dps|10_0(d).ToString("F2"));
+		//	array[1] = new TableDataGetter<PawnKindDef>("dps", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__dps|10_0(d).ToString("F2"));
 			array[2] = new TableDataGetter<PawnKindDef>("healthScale", (PawnKindDef d) => d.RaceProps.baseHealthScale.ToString("F2"));
 			array[3] = new TableDataGetter<PawnKindDef>("points", (PawnKindDef d) => d.combatPower.ToString("F0"));
-			array[4] = new TableDataGetter<PawnKindDef>("points guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__pointsGuess|10_1(d).ToString("F0"));
+		//	array[4] = new TableDataGetter<PawnKindDef>("points guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__pointsGuess|10_1(d).ToString("F0"));
 			array[5] = new TableDataGetter<PawnKindDef>("speed", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MoveSpeed, null).ToString("F2"));
 			array[6] = new TableDataGetter<PawnKindDef>("mktval", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MarketValue, null).ToString("F0"));
-			array[7] = new TableDataGetter<PawnKindDef>("mktval guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__mktValGuess|10_2(d).ToString("F0"));
+		//	array[7] = new TableDataGetter<PawnKindDef>("mktval guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__mktValGuess|10_2(d).ToString("F0"));
 			array[8] = new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef d) => d.RaceProps.baseBodySize.ToString("F2"));
 			array[9] = new TableDataGetter<PawnKindDef>("hunger", (PawnKindDef d) => d.RaceProps.baseHungerRate.ToString("F2"));
 			array[10] = new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef d) => d.RaceProps.wildness.ToStringPercent());
@@ -660,13 +635,13 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B2 RID: 6578 RVA: 0x0009BC8D File Offset: 0x00099E8D
+		
 		private static float RaceMeleeDpsEstimate(ThingDef race)
 		{
 			return race.GetStatValueAbstract(StatDefOf.MeleeDPS, null);
 		}
 
-		// Token: 0x060019B3 RID: 6579 RVA: 0x0009BC9C File Offset: 0x00099E9C
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalPointsToHuntOrSlaughter()
 		{
@@ -686,7 +661,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B4 RID: 6580 RVA: 0x0009BE38 File Offset: 0x0009A038
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalCombatBalance()
 		{
@@ -734,7 +709,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B5 RID: 6581 RVA: 0x0009C014 File Offset: 0x0009A214
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalTradeTags()
 		{
@@ -755,7 +730,7 @@ namespace Verse
 			select d, list.ToArray());
 		}
 
-		// Token: 0x060019B6 RID: 6582 RVA: 0x0009C138 File Offset: 0x0009A338
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalBehavior()
 		{
@@ -813,7 +788,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B7 RID: 6583 RVA: 0x0009C4C8 File Offset: 0x0009A6C8
+		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalsEcosystem()
 		{
@@ -832,7 +807,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B8 RID: 6584 RVA: 0x0009C650 File Offset: 0x0009A850
+		
 		[DebugOutput("Pawns", false)]
 		public static void MentalBreaks()
 		{
@@ -920,7 +895,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<MentalBreakDef>(dataSources, array);
 		}
 
-		// Token: 0x060019B9 RID: 6585 RVA: 0x0009C8CC File Offset: 0x0009AACC
+		
 		[DebugOutput("Pawns", false)]
 		public static void Thoughts()
 		{
@@ -1066,44 +1041,44 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThoughtDef>(allDefs, array);
 		}
 
-		// Token: 0x060019BA RID: 6586 RVA: 0x0009CC24 File Offset: 0x0009AE24
+		
 		[DebugOutput("Pawns", false)]
 		public static void TraitsSampled()
 		{
-			DebugOutputsPawns.<>c__DisplayClass19_0 <>c__DisplayClass19_ = new DebugOutputsPawns.<>c__DisplayClass19_0();
-			<>c__DisplayClass19_.testColonists = new List<Pawn>();
-			for (int i = 0; i < 4000; i++)
-			{
-				<>c__DisplayClass19_.testColonists.Add(PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer));
-			}
-			IEnumerable<TraitDegreeData> dataSources = DefDatabase<TraitDef>.AllDefs.SelectMany((TraitDef tr) => tr.degreeDatas);
-			TableDataGetter<TraitDegreeData>[] array = new TableDataGetter<TraitDegreeData>[8];
-			array[0] = new TableDataGetter<TraitDegreeData>("trait", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).defName);
-			array[1] = new TableDataGetter<TraitDegreeData>("trait commonality", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.None).ToString("F2"));
-			array[2] = new TableDataGetter<TraitDegreeData>("trait commonalityFemale", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.Female).ToString("F2"));
-			array[3] = new TableDataGetter<TraitDegreeData>("degree", (TraitDegreeData d) => d.label);
-			array[4] = new TableDataGetter<TraitDegreeData>("degree num", delegate(TraitDegreeData d)
-			{
-				if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
-				{
-					return "";
-				}
-				return d.degree.ToString();
-			});
-			array[5] = new TableDataGetter<TraitDegreeData>("degree commonality", delegate(TraitDegreeData d)
-			{
-				if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
-				{
-					return "";
-				}
-				return d.commonality.ToString("F2");
-			});
-			array[6] = new TableDataGetter<TraitDegreeData>("marketValueFactorOffset", (TraitDegreeData d) => d.marketValueFactorOffset.ToString("F0"));
-			array[7] = new TableDataGetter<TraitDegreeData>("prevalence among " + 4000 + "\ngenerated Colonists", (TraitDegreeData d) => <>c__DisplayClass19_.<TraitsSampled>g__getPrevalence|1(d).ToStringPercent());
-			DebugTables.MakeTablesDialog<TraitDegreeData>(dataSources, array);
+			//DebugOutputsPawns.c__DisplayClass19_0 c__DisplayClass19_ = new DebugOutputsPawns.c__DisplayClass19_0();
+			//c__DisplayClass19_.testColonists = new List<Pawn>();
+			//for (int i = 0; i < 4000; i++)
+			//{
+			//	c__DisplayClass19_.testColonists.Add(PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer));
+			//}
+			//IEnumerable<TraitDegreeData> dataSources = DefDatabase<TraitDef>.AllDefs.SelectMany((TraitDef tr) => tr.degreeDatas);
+			//TableDataGetter<TraitDegreeData>[] array = new TableDataGetter<TraitDegreeData>[8];
+			//array[0] = new TableDataGetter<TraitDegreeData>("trait", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).defName);
+			//array[1] = new TableDataGetter<TraitDegreeData>("trait commonality", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.None).ToString("F2"));
+			//array[2] = new TableDataGetter<TraitDegreeData>("trait commonalityFemale", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.Female).ToString("F2"));
+			//array[3] = new TableDataGetter<TraitDegreeData>("degree", (TraitDegreeData d) => d.label);
+			////array[4] = new TableDataGetter<TraitDegreeData>("degree num", delegate(TraitDegreeData d)
+			////{
+			////	if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
+			////	{
+			////		return "";
+			////	}
+			////	return d.degree.ToString();
+			////});
+			////array[5] = new TableDataGetter<TraitDegreeData>("degree commonality", delegate(TraitDegreeData d)
+			////{
+			////	if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
+			////	{
+			////		return "";
+			////	}
+			////	return d.commonality.ToString("F2");
+			////});
+			//array[6] = new TableDataGetter<TraitDegreeData>("marketValueFactorOffset", (TraitDegreeData d) => d.marketValueFactorOffset.ToString("F0"));
+			//array[7] = new TableDataGetter<TraitDegreeData>("prevalence among " + 4000 + "\ngenerated Colonists", (TraitDegreeData d) => c__DisplayClass19_.<TraitsSampled>g__getPrevalence|1(d).ToStringPercent());
+			//DebugTables.MakeTablesDialog<TraitDegreeData>(dataSources, array);
 		}
 
-		// Token: 0x060019BB RID: 6587 RVA: 0x0009CE04 File Offset: 0x0009B004
+		
 		[DebugOutput("Pawns", false)]
 		public static void BackstoryCountsPerTag()
 		{
@@ -1148,7 +1123,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<string>(dataSources, list.ToArray());
 		}
 
-		// Token: 0x060019BC RID: 6588 RVA: 0x0009CFBC File Offset: 0x0009B1BC
+		
 		[DebugOutput("Pawns", false)]
 		public static void ListSolidBackstories()
 		{

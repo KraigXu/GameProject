@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200085A RID: 2138
+	
 	public static class TerrainDefGenerator_Stone
 	{
-		// Token: 0x060034DC RID: 13532 RVA: 0x0012169D File Offset: 0x0011F89D
+		
 		public static IEnumerable<TerrainDef> ImpliedTerrainDefs()
 		{
 			int i = 0;

@@ -5,22 +5,22 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001137 RID: 4407
+	
 	public class QuestNode_GetPlantPlayerCanHarvest : QuestNode
 	{
-		// Token: 0x060066FC RID: 26364 RVA: 0x002411CA File Offset: 0x0023F3CA
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.DoWork(slate);
 		}
 
-		// Token: 0x060066FD RID: 26365 RVA: 0x002411D3 File Offset: 0x0023F3D3
+		
 		protected override void RunInt()
 		{
 			this.DoWork(QuestGen.slate);
 		}
 
-		// Token: 0x060066FE RID: 26366 RVA: 0x002411E4 File Offset: 0x0023F3E4
+		
 		private bool DoWork(Slate slate)
 		{
 			Map map = slate.Get<Map>("map", null, false);
@@ -62,31 +62,31 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x04003F24 RID: 16164
+		
 		[NoTranslate]
 		public SlateRef<string> storeHarvestItemDefAs;
 
-		// Token: 0x04003F25 RID: 16165
+		
 		[NoTranslate]
 		public SlateRef<string> storeHarvestItemCountAs;
 
-		// Token: 0x04003F26 RID: 16166
+		
 		[NoTranslate]
 		public SlateRef<string> storeGrowDaysAs;
 
-		// Token: 0x04003F27 RID: 16167
+		
 		public SlateRef<int> maxPlantGrowDays;
 
-		// Token: 0x04003F28 RID: 16168
+		
 		public SlateRef<SimpleCurve> pointsToRequiredWorkCurve;
 
-		// Token: 0x04003F29 RID: 16169
+		
 		public SlateRef<FloatRange?> workRandomFactorRange;
 
-		// Token: 0x04003F2A RID: 16170
+		
 		private const float TemperatureBuffer = 5f;
 
-		// Token: 0x04003F2B RID: 16171
+		
 		private const int TemperatureCheckDays = 15;
 	}
 }

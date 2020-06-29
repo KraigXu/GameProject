@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000781 RID: 1921
+	
 	public class LordJob_Joinable_Speech : LordJob_Joinable_Gathering
 	{
-		// Token: 0x1700091A RID: 2330
+		
 		// (get) Token: 0x06003241 RID: 12865 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowStartNewGatherings
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700091B RID: 2331
+		
 		// (get) Token: 0x06003242 RID: 12866 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool OrganizerIsStartingPawn
 		{
@@ -29,23 +29,23 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003243 RID: 12867 RVA: 0x00117D3D File Offset: 0x00115F3D
+		
 		public LordJob_Joinable_Speech()
 		{
 		}
 
-		// Token: 0x06003244 RID: 12868 RVA: 0x00118060 File Offset: 0x00116260
+		
 		public LordJob_Joinable_Speech(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef) : base(spot, organizer, gatheringDef)
 		{
 		}
 
-		// Token: 0x06003245 RID: 12869 RVA: 0x0011806B File Offset: 0x0011626B
+		
 		protected override LordToil CreateGatheringToil(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
 		{
 			return new LordToil_Speech(spot, gatheringDef, organizer);
 		}
 
-		// Token: 0x06003246 RID: 12870 RVA: 0x00118078 File Offset: 0x00116278
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -74,7 +74,7 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x06003247 RID: 12871 RVA: 0x00118187 File Offset: 0x00116387
+		
 		public override string GetReport(Pawn pawn)
 		{
 			if (pawn != this.organizer)
@@ -84,7 +84,7 @@ namespace RimWorld
 			return "LordReportGivingSpeech".Translate();
 		}
 
-		// Token: 0x06003248 RID: 12872 RVA: 0x001181C4 File Offset: 0x001163C4
+		
 		protected virtual void ApplyOutcome(float progress)
 		{
 			if (progress < 0.5f)
@@ -121,13 +121,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003249 RID: 12873 RVA: 0x0011840C File Offset: 0x0011660C
+		
 		private static bool PositiveOutcome(ThoughtDef outcome)
 		{
 			return outcome == ThoughtDefOf.EncouragingSpeech || outcome == ThoughtDefOf.InspirationalSpeech;
 		}
 
-		// Token: 0x0600324A RID: 12874 RVA: 0x00118420 File Offset: 0x00116620
+		
 		public static IEnumerable<Tuple<ThoughtDef, float>> OutcomeChancesForPawn(Pawn p)
 		{
 			LordJob_Joinable_Speech.outcomeChancesTemp.Clear();
@@ -146,10 +146,10 @@ namespace RimWorld
 			return LordJob_Joinable_Speech.outcomeChancesTemp;
 		}
 
-		// Token: 0x04001B48 RID: 6984
+		
 		public const float DurationHours = 5f;
 
-		// Token: 0x04001B49 RID: 6985
+		
 		public static readonly Dictionary<ThoughtDef, float> OutcomeThoughtChances = new Dictionary<ThoughtDef, float>
 		{
 			{
@@ -170,7 +170,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04001B4A RID: 6986
+		
 		private static List<Tuple<ThoughtDef, float>> outcomeChancesTemp = new List<Tuple<ThoughtDef, float>>();
 	}
 }

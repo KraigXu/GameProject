@@ -8,10 +8,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C78 RID: 3192
+	
 	public class Building_CryptosleepCasket : Building_Casket
 	{
-		// Token: 0x06004C8E RID: 19598 RVA: 0x0019B0E9 File Offset: 0x001992E9
+		
 		public override bool TryAcceptThing(Thing thing, bool allowSpecialEffects = true)
 		{
 			if (base.TryAcceptThing(thing, allowSpecialEffects))
@@ -25,7 +25,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004C8F RID: 19599 RVA: 0x0019B11C File Offset: 0x0019931C
+		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
 		{
 			if (myPawn.IsQuestLodger())
@@ -34,10 +34,7 @@ namespace RimWorld
 				yield return floatMenuOption;
 				yield break;
 			}
-			foreach (FloatMenuOption floatMenuOption2 in this.<>n__0(myPawn))
-			{
-				yield return floatMenuOption2;
-			}
+
 			IEnumerator<FloatMenuOption> enumerator = null;
 			if (this.innerContainer.Count == 0)
 			{
@@ -62,13 +59,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004C90 RID: 19600 RVA: 0x0019B133 File Offset: 0x00199333
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__1())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (base.Faction == Faction.OfPlayer && this.innerContainer.Count > 0 && this.def.building.isPlayerEjectable)
 			{
@@ -88,7 +82,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004C91 RID: 19601 RVA: 0x0019B144 File Offset: 0x00199344
+		
 		public override void EjectContents()
 		{
 			ThingDef filth_Slime = ThingDefOf.Filth_Slime;
@@ -112,10 +106,10 @@ namespace RimWorld
 			base.EjectContents();
 		}
 
-		// Token: 0x06004C92 RID: 19602 RVA: 0x0019B204 File Offset: 0x00199404
+		
 		public static Building_CryptosleepCasket FindCryptosleepCasketFor(Pawn p, Pawn traveler, bool ignoreOtherReservations = false)
 		{
-			Predicate<Thing> <>9__1;
+
 			foreach (ThingDef singleDef in from def in DefDatabase<ThingDef>.AllDefs
 			where typeof(Building_CryptosleepCasket).IsAssignableFrom(def.thingClass)
 			select def)
@@ -126,11 +120,8 @@ namespace RimWorld
 				PathEndMode peMode = PathEndMode.InteractionCell;
 				TraverseParms traverseParams = TraverseParms.For(traveler, Danger.Deadly, TraverseMode.ByPawn, false);
 				float maxDistance = 9999f;
-				Predicate<Thing> validator;
-				if ((validator = <>9__1) == null)
-				{
-					validator = (<>9__1 = ((Thing x) => !((Building_CryptosleepCasket)x).HasAnyContents && traveler.CanReserve(x, 1, -1, null, ignoreOtherReservations)));
-				}
+				Predicate<Thing> validator = ((Thing x) => !((Building_CryptosleepCasket)x).HasAnyContents && traveler.CanReserve(x, 1, -1, null, ignoreOtherReservations));
+
 				Building_CryptosleepCasket building_CryptosleepCasket = (Building_CryptosleepCasket)GenClosest.ClosestThingReachable(position, map, thingReq, peMode, traverseParams, maxDistance, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 				if (building_CryptosleepCasket != null)
 				{

@@ -3,10 +3,10 @@ using RimWorld.Planet;
 
 namespace RimWorld
 {
-	// Token: 0x02000BE2 RID: 3042
+	
 	public class BiomeWorker_TemperateSwamp : BiomeWorker
 	{
-		// Token: 0x06004825 RID: 18469 RVA: 0x00186C58 File Offset: 0x00184E58
+		
 		public override float GetScore(Tile tile, int tileID)
 		{
 			if (tile.WaterCovered)

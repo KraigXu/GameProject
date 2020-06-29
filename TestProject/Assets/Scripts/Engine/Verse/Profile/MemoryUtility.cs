@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse.Profile
 {
-	// Token: 0x020004C1 RID: 1217
+	
 	public static class MemoryUtility
 	{
-		// Token: 0x060023E4 RID: 9188 RVA: 0x000D6960 File Offset: 0x000D4B60
+		
 		public static void UnloadUnusedUnityAssets()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
@@ -19,7 +19,7 @@ namespace Verse.Profile
 			});
 		}
 
-		// Token: 0x060023E5 RID: 9189 RVA: 0x000D6988 File Offset: 0x000D4B88
+		
 		public static void ClearAllMapsAndWorld()
 		{
 			if (Current.Game != null && Current.Game.Maps != null)

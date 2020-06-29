@@ -3,10 +3,10 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x02000407 RID: 1031
+	
 	public static class DataExposeUtility
 	{
-		// Token: 0x06001E6F RID: 7791 RVA: 0x000BDF34 File Offset: 0x000BC134
+		
 		public static void ByteArray(ref byte[] arr, string label)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving && arr != null)
@@ -42,7 +42,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001E70 RID: 7792 RVA: 0x000BDFEC File Offset: 0x000BC1EC
+		
 		public static void BoolArray(ref bool[] arr, int elements, string label)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -117,7 +117,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001E71 RID: 7793 RVA: 0x000BE114 File Offset: 0x000BC314
+		
 		public static string AddLineBreaksToLongString(string str)
 		{
 			StringBuilder stringBuilder = new StringBuilder(str.Length + (str.Length / 100 + 3) * 2 + 1);
@@ -134,13 +134,13 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06001E72 RID: 7794 RVA: 0x000BE180 File Offset: 0x000BC380
+		
 		public static string RemoveLineBreaks(string str)
 		{
 			return str.Replace("\n", "").Replace("\r", "");
 		}
 
-		// Token: 0x040012D3 RID: 4819
+		
 		private const int NewlineInterval = 100;
 	}
 }

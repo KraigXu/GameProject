@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200009B RID: 155
+	
 	public class RaceProperties
 	{
-		// Token: 0x170000DA RID: 218
+		
 		// (get) Token: 0x060004F6 RID: 1270 RVA: 0x0001912B File Offset: 0x0001732B
 		public bool Humanlike
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000DB RID: 219
+		
 		// (get) Token: 0x060004F7 RID: 1271 RVA: 0x00019139 File Offset: 0x00017339
 		public bool ToolUser
 		{
@@ -29,7 +29,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000DC RID: 220
+		
 		// (get) Token: 0x060004F8 RID: 1272 RVA: 0x00019147 File Offset: 0x00017347
 		public bool Animal
 		{
@@ -39,7 +39,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000DD RID: 221
+		
 		// (get) Token: 0x060004F9 RID: 1273 RVA: 0x00019159 File Offset: 0x00017359
 		public bool EatsFood
 		{
@@ -49,7 +49,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000DE RID: 222
+		
 		// (get) Token: 0x060004FA RID: 1274 RVA: 0x00019164 File Offset: 0x00017364
 		public float FoodLevelPercentageWantEat
 		{
@@ -75,7 +75,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000DF RID: 223
+		
 		// (get) Token: 0x060004FB RID: 1275 RVA: 0x000191C4 File Offset: 0x000173C4
 		public DietCategory ResolvedDietCategory
 		{
@@ -108,7 +108,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E0 RID: 224
+		
 		// (get) Token: 0x060004FC RID: 1276 RVA: 0x00019218 File Offset: 0x00017418
 		public DeathActionWorker DeathActionWorker
 		{
@@ -129,7 +129,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E1 RID: 225
+		
 		// (get) Token: 0x060004FD RID: 1277 RVA: 0x00019264 File Offset: 0x00017464
 		public FleshTypeDef FleshType
 		{
@@ -143,7 +143,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E2 RID: 226
+		
 		// (get) Token: 0x060004FE RID: 1278 RVA: 0x0001927A File Offset: 0x0001747A
 		public bool IsMechanoid
 		{
@@ -153,7 +153,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E3 RID: 227
+		
 		// (get) Token: 0x060004FF RID: 1279 RVA: 0x00019289 File Offset: 0x00017489
 		public bool IsFlesh
 		{
@@ -163,7 +163,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E4 RID: 228
+		
 		// (get) Token: 0x06000500 RID: 1280 RVA: 0x0001929B File Offset: 0x0001749B
 		public ThingDef BloodDef
 		{
@@ -181,7 +181,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E5 RID: 229
+		
 		// (get) Token: 0x06000501 RID: 1281 RVA: 0x000192BB File Offset: 0x000174BB
 		public bool CanDoHerdMigration
 		{
@@ -191,7 +191,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000E6 RID: 230
+		
 		// (get) Token: 0x06000502 RID: 1282 RVA: 0x000192D0 File Offset: 0x000174D0
 		public PawnKindDef AnyPawnKind
 		{
@@ -213,7 +213,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000503 RID: 1283 RVA: 0x00019325 File Offset: 0x00017525
+		
 		public RulePackDef GetNameGenerator(Gender gender)
 		{
 			if (gender == Gender.Female && this.nameGeneratorFemale != null)
@@ -223,25 +223,25 @@ namespace Verse
 			return this.nameGenerator;
 		}
 
-		// Token: 0x06000504 RID: 1284 RVA: 0x00019340 File Offset: 0x00017540
+		
 		public bool CanEverEat(Thing t)
 		{
 			return this.CanEverEat(t.def);
 		}
 
-		// Token: 0x06000505 RID: 1285 RVA: 0x00019350 File Offset: 0x00017550
+		
 		public bool CanEverEat(ThingDef t)
 		{
 			return this.EatsFood && t.ingestible != null && t.ingestible.preferability != FoodPreferability.Undefined && (this.willNeverEat == null || !this.willNeverEat.Contains(t)) && this.Eats(t.ingestible.foodType);
 		}
 
-		// Token: 0x06000506 RID: 1286 RVA: 0x000193A9 File Offset: 0x000175A9
+		
 		public bool Eats(FoodTypeFlags food)
 		{
 			return this.EatsFood && (this.foodType & food) > FoodTypeFlags.None;
 		}
 
-		// Token: 0x06000507 RID: 1287 RVA: 0x000193C0 File Offset: 0x000175C0
+		
 		public void ResolveReferencesSpecial()
 		{
 			if (this.useMeatFrom != null)
@@ -254,7 +254,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000508 RID: 1288 RVA: 0x000193FE File Offset: 0x000175FE
+		
 		public IEnumerable<string> ConfigErrors()
 		{
 			if (this.soundMeleeHitPawn == null)
@@ -338,7 +338,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000509 RID: 1289 RVA: 0x0001940E File Offset: 0x0001760E
+		
 		public IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef, StatRequest req)
 		{
 			yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Race".Translate(), parentDef.LabelCap, parentDef.description, 2100, null, null, false);
@@ -387,14 +387,14 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x0600050A RID: 1290 RVA: 0x0001942C File Offset: 0x0001762C
+		
 		[Obsolete("Will be replaced with NutritionEatenPerDayExplanation_NewTemp soon.")]
 		public static string NutritionEatenPerDayExplanation(Pawn p)
 		{
 			return RaceProperties.NutritionEatenPerDayExplanation_NewTemp(p, true, true, false);
 		}
 
-		// Token: 0x0600050B RID: 1291 RVA: 0x00019438 File Offset: 0x00017638
+		
 		public static string NutritionEatenPerDayExplanation_NewTemp(Pawn p, bool showDiet = false, bool showLegend = false, bool showCalculations = true)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -464,187 +464,187 @@ namespace Verse
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x040002B3 RID: 691
+		
 		public Intelligence intelligence;
 
-		// Token: 0x040002B4 RID: 692
+		
 		private FleshTypeDef fleshType;
 
-		// Token: 0x040002B5 RID: 693
+		
 		private ThingDef bloodDef;
 
-		// Token: 0x040002B6 RID: 694
+		
 		public bool hasGenders = true;
 
-		// Token: 0x040002B7 RID: 695
+		
 		public bool needsRest = true;
 
-		// Token: 0x040002B8 RID: 696
+		
 		public ThinkTreeDef thinkTreeMain;
 
-		// Token: 0x040002B9 RID: 697
+		
 		public ThinkTreeDef thinkTreeConstant;
 
-		// Token: 0x040002BA RID: 698
+		
 		public PawnNameCategory nameCategory;
 
-		// Token: 0x040002BB RID: 699
+		
 		public FoodTypeFlags foodType;
 
-		// Token: 0x040002BC RID: 700
+		
 		public BodyDef body;
 
-		// Token: 0x040002BD RID: 701
+		
 		public Type deathActionWorkerClass;
 
-		// Token: 0x040002BE RID: 702
+		
 		public List<AnimalBiomeRecord> wildBiomes;
 
-		// Token: 0x040002BF RID: 703
+		
 		public SimpleCurve ageGenerationCurve;
 
-		// Token: 0x040002C0 RID: 704
+		
 		public bool makesFootprints;
 
-		// Token: 0x040002C1 RID: 705
+		
 		public int executionRange = 2;
 
-		// Token: 0x040002C2 RID: 706
+		
 		public float lifeExpectancy = 10f;
 
-		// Token: 0x040002C3 RID: 707
+		
 		public List<HediffGiverSetDef> hediffGiverSets;
 
-		// Token: 0x040002C4 RID: 708
+		
 		public bool herdAnimal;
 
-		// Token: 0x040002C5 RID: 709
+		
 		public bool packAnimal;
 
-		// Token: 0x040002C6 RID: 710
+		
 		public bool predator;
 
-		// Token: 0x040002C7 RID: 711
+		
 		public float maxPreyBodySize = 99999f;
 
-		// Token: 0x040002C8 RID: 712
+		
 		public float wildness;
 
-		// Token: 0x040002C9 RID: 713
+		
 		public float petness;
 
-		// Token: 0x040002CA RID: 714
+		
 		public float nuzzleMtbHours = -1f;
 
-		// Token: 0x040002CB RID: 715
+		
 		public float manhunterOnDamageChance;
 
-		// Token: 0x040002CC RID: 716
+		
 		public float manhunterOnTameFailChance;
 
-		// Token: 0x040002CD RID: 717
+		
 		public bool canBePredatorPrey = true;
 
-		// Token: 0x040002CE RID: 718
+		
 		public bool herdMigrationAllowed = true;
 
-		// Token: 0x040002CF RID: 719
+		
 		public List<ThingDef> willNeverEat;
 
-		// Token: 0x040002D0 RID: 720
+		
 		public float gestationPeriodDays = 10f;
 
-		// Token: 0x040002D1 RID: 721
+		
 		public SimpleCurve litterSizeCurve;
 
-		// Token: 0x040002D2 RID: 722
+		
 		public float mateMtbHours = 12f;
 
-		// Token: 0x040002D3 RID: 723
+		
 		[NoTranslate]
 		public List<string> untrainableTags;
 
-		// Token: 0x040002D4 RID: 724
+		
 		[NoTranslate]
 		public List<string> trainableTags;
 
-		// Token: 0x040002D5 RID: 725
+		
 		public TrainabilityDef trainability;
 
-		// Token: 0x040002D6 RID: 726
+		
 		private RulePackDef nameGenerator;
 
-		// Token: 0x040002D7 RID: 727
+		
 		private RulePackDef nameGeneratorFemale;
 
-		// Token: 0x040002D8 RID: 728
+		
 		public float nameOnTameChance;
 
-		// Token: 0x040002D9 RID: 729
+		
 		public float nameOnNuzzleChance;
 
-		// Token: 0x040002DA RID: 730
+		
 		public float baseBodySize = 1f;
 
-		// Token: 0x040002DB RID: 731
+		
 		public float baseHealthScale = 1f;
 
-		// Token: 0x040002DC RID: 732
+		
 		public float baseHungerRate = 1f;
 
-		// Token: 0x040002DD RID: 733
+		
 		public List<LifeStageAge> lifeStageAges = new List<LifeStageAge>();
 
-		// Token: 0x040002DE RID: 734
+		
 		[MustTranslate]
 		public string meatLabel;
 
-		// Token: 0x040002DF RID: 735
+		
 		public Color meatColor = Color.white;
 
-		// Token: 0x040002E0 RID: 736
+		
 		public float meatMarketValue = 2f;
 
-		// Token: 0x040002E1 RID: 737
+		
 		public ThingDef useMeatFrom;
 
-		// Token: 0x040002E2 RID: 738
+		
 		public ThingDef useLeatherFrom;
 
-		// Token: 0x040002E3 RID: 739
+		
 		public ThingDef leatherDef;
 
-		// Token: 0x040002E4 RID: 740
+		
 		public ShadowData specialShadowData;
 
-		// Token: 0x040002E5 RID: 741
+		
 		public IntRange soundCallIntervalRange = new IntRange(2000, 4000);
 
-		// Token: 0x040002E6 RID: 742
+		
 		public SoundDef soundMeleeHitPawn;
 
-		// Token: 0x040002E7 RID: 743
+		
 		public SoundDef soundMeleeHitBuilding;
 
-		// Token: 0x040002E8 RID: 744
+		
 		public SoundDef soundMeleeMiss;
 
-		// Token: 0x040002E9 RID: 745
+		
 		public SoundDef soundMeleeDodge;
 
-		// Token: 0x040002EA RID: 746
+		
 		[Unsaved(false)]
 		private DeathActionWorker deathActionWorkerInt;
 
-		// Token: 0x040002EB RID: 747
+		
 		[Unsaved(false)]
 		public ThingDef meatDef;
 
-		// Token: 0x040002EC RID: 748
+		
 		[Unsaved(false)]
 		public ThingDef corpseDef;
 
-		// Token: 0x040002ED RID: 749
+		
 		[Unsaved(false)]
 		private PawnKindDef cachedAnyPawnKind;
 	}

@@ -5,10 +5,10 @@ using RimWorld.Planet;
 
 namespace Verse.AI
 {
-	// Token: 0x0200057F RID: 1407
+	
 	public class Pawn_MindState : IExposable
 	{
-		// Token: 0x170007A9 RID: 1961
+		
 		// (get) Token: 0x060027F1 RID: 10225 RVA: 0x000EBA51 File Offset: 0x000E9C51
 		public bool AvailableForGoodwillReward
 		{
@@ -18,7 +18,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AA RID: 1962
+		
 		// (get) Token: 0x060027F2 RID: 10226 RVA: 0x000EBA68 File Offset: 0x000E9C68
 		// (set) Token: 0x060027F3 RID: 10227 RVA: 0x000EBA70 File Offset: 0x000E9C70
 		public bool Active
@@ -40,7 +40,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AB RID: 1963
+		
 		// (get) Token: 0x060027F4 RID: 10228 RVA: 0x000EBAAA File Offset: 0x000E9CAA
 		public bool IsIdle
 		{
@@ -50,7 +50,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AC RID: 1964
+		
 		// (get) Token: 0x060027F5 RID: 10229 RVA: 0x000EBAD4 File Offset: 0x000E9CD4
 		public bool MeleeThreatStillThreat
 		{
@@ -60,7 +60,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AD RID: 1965
+		
 		// (get) Token: 0x060027F6 RID: 10230 RVA: 0x000EBB85 File Offset: 0x000E9D85
 		// (set) Token: 0x060027F7 RID: 10231 RVA: 0x000EBB8D File Offset: 0x000E9D8D
 		public bool WildManEverReachedOutside
@@ -80,7 +80,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AE RID: 1966
+		
 		// (get) Token: 0x060027F8 RID: 10232 RVA: 0x000EBBAB File Offset: 0x000E9DAB
 		// (set) Token: 0x060027F9 RID: 10233 RVA: 0x000EBBB3 File Offset: 0x000E9DB3
 		public bool WillJoinColonyIfRescued
@@ -103,7 +103,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x170007AF RID: 1967
+		
 		// (get) Token: 0x060027FA RID: 10234 RVA: 0x000EBBF0 File Offset: 0x000E9DF0
 		public bool AnythingPreventsJoiningColonyIfRescued
 		{
@@ -113,12 +113,12 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027FB RID: 10235 RVA: 0x000EBC78 File Offset: 0x000E9E78
+		
 		public Pawn_MindState()
 		{
 		}
 
-		// Token: 0x060027FC RID: 10236 RVA: 0x000EBD60 File Offset: 0x000E9F60
+		
 		public Pawn_MindState(Pawn pawn)
 		{
 			this.pawn = pawn;
@@ -128,7 +128,7 @@ namespace Verse.AI
 			this.priorityWork = new PriorityWork(pawn);
 		}
 
-		// Token: 0x060027FD RID: 10237 RVA: 0x000EBE80 File Offset: 0x000EA080
+		
 		public void Reset(bool clearInspiration = false, bool clearMentalState = true)
 		{
 			if (clearMentalState)
@@ -177,7 +177,7 @@ namespace Verse.AI
 			this.lastPredatorHuntingPlayerNotificationTick = -99999;
 		}
 
-		// Token: 0x060027FE RID: 10238 RVA: 0x000EBFF4 File Offset: 0x000EA1F4
+		
 		public void ExposeData()
 		{
 			Scribe_References.Look<Pawn>(ref this.meleeThreat, "meleeThreat", false);
@@ -237,7 +237,7 @@ namespace Verse.AI
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x060027FF RID: 10239 RVA: 0x000EC35C File Offset: 0x000EA55C
+		
 		public void MindStateTick()
 		{
 			if (this.wantsToTradeWithColony)
@@ -294,7 +294,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002800 RID: 10240 RVA: 0x000EC580 File Offset: 0x000EA780
+		
 		public void JoinColonyBecauseRescuedBy(Pawn by)
 		{
 			this.WillJoinColonyIfRescued = false;
@@ -311,13 +311,13 @@ namespace Verse.AI
 			Find.LetterStack.ReceiveLetter("LetterLabelRescueQuestFinished".Translate(), "LetterRescueQuestFinished".Translate(this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true).CapitalizeFirst(), LetterDefOf.PositiveEvent, this.pawn, null, null, null, null);
 		}
 
-		// Token: 0x06002801 RID: 10241 RVA: 0x000EC676 File Offset: 0x000EA876
+		
 		public void ResetLastDisturbanceTick()
 		{
 			this.lastDisturbanceTick = -9999999;
 		}
 
-		// Token: 0x06002802 RID: 10242 RVA: 0x000EC683 File Offset: 0x000EA883
+		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
 			IEnumerator<Gizmo> enumerator;
@@ -338,7 +338,7 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x06002803 RID: 10243 RVA: 0x000EC693 File Offset: 0x000EA893
+		
 		public void SetNoAidRelationsGainUntilTick(int tick)
 		{
 			if (tick > this.noAidRelationsGainUntilTick)
@@ -347,13 +347,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002804 RID: 10244 RVA: 0x000EC6A5 File Offset: 0x000EA8A5
+		
 		public void Notify_OutfitChanged()
 		{
 			this.nextApparelOptimizeTick = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06002805 RID: 10245 RVA: 0x000EC6B8 File Offset: 0x000EA8B8
+		
 		public void Notify_DamageTaken(DamageInfo dinfo)
 		{
 			this.mentalStateHandler.Notify_DamageTaken(dinfo);
@@ -379,20 +379,20 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002806 RID: 10246 RVA: 0x000EC874 File Offset: 0x000EAA74
+		
 		internal void Notify_EngagedTarget()
 		{
 			this.lastEngageTargetTick = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06002807 RID: 10247 RVA: 0x000EC886 File Offset: 0x000EAA86
+		
 		internal void Notify_AttackedTarget(LocalTargetInfo target)
 		{
 			this.lastAttackTargetTick = Find.TickManager.TicksGame;
 			this.lastAttackedTarget = target;
 		}
 
-		// Token: 0x06002808 RID: 10248 RVA: 0x000EC8A0 File Offset: 0x000EAAA0
+		
 		internal bool CheckStartMentalStateBecauseRecruitAttempted(Pawn tamer)
 		{
 			if (!this.pawn.RaceProps.Animal && (!this.pawn.IsWildMan() || this.pawn.IsPrisoner))
@@ -407,7 +407,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x06002809 RID: 10249 RVA: 0x000EC91A File Offset: 0x000EAB1A
+		
 		internal void Notify_DangerousExploderAboutToExplode(Thing exploder)
 		{
 			if (this.pawn.RaceProps.intelligence >= Intelligence.Humanlike)
@@ -417,7 +417,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600280A RID: 10250 RVA: 0x000EC948 File Offset: 0x000EAB48
+		
 		public void Notify_Explosion(Explosion explosion)
 		{
 			if (this.pawn.Faction != null)
@@ -434,7 +434,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600280B RID: 10251 RVA: 0x000EC9AC File Offset: 0x000EABAC
+		
 		public void Notify_TuckedIntoBed()
 		{
 			if (this.pawn.IsWildMan())
@@ -444,19 +444,19 @@ namespace Verse.AI
 			this.ResetLastDisturbanceTick();
 		}
 
-		// Token: 0x0600280C RID: 10252 RVA: 0x000EC9C8 File Offset: 0x000EABC8
+		
 		public void Notify_SelfTended()
 		{
 			this.lastSelfTendTick = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x0600280D RID: 10253 RVA: 0x000EC9DA File Offset: 0x000EABDA
+		
 		public void Notify_PredatorHuntingPlayerNotification()
 		{
 			this.lastPredatorHuntingPlayerNotificationTick = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x0600280E RID: 10254 RVA: 0x000EC9EC File Offset: 0x000EABEC
+		
 		private IEnumerable<Pawn> GetPackmates(Pawn pawn, float radius)
 		{
 			Room pawnRoom = pawn.GetRoom(RegionType.Set_Passable);
@@ -473,7 +473,7 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x0600280F RID: 10255 RVA: 0x000ECA04 File Offset: 0x000EAC04
+		
 		private void StartManhunterBecauseOfPawnAction(string letterTextKey)
 		{
 			if (!this.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Manhunter, null, false, false, null, false))
@@ -507,13 +507,13 @@ namespace Verse.AI
 			Find.LetterStack.ReceiveLetter(str, text, (num == 1) ? LetterDefOf.ThreatSmall : LetterDefOf.ThreatBig, target, null, null, null, null);
 		}
 
-		// Token: 0x06002810 RID: 10256 RVA: 0x000ECBEC File Offset: 0x000EADEC
+		
 		private static bool CanStartFleeingBecauseOfPawnAction(Pawn p)
 		{
 			return p.RaceProps.Animal && !p.InMentalState && !p.IsFighting() && !p.Downed && !p.Dead && !ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(p) && (p.jobs.curJob == null || p.jobs.curJob.def != JobDefOf.Flee || p.jobs.curJob.startTick != Find.TickManager.TicksGame);
 		}
 
-		// Token: 0x06002811 RID: 10257 RVA: 0x000ECC78 File Offset: 0x000EAE78
+		
 		public void StartFleeingBecauseOfPawnAction(Thing instigator)
 		{
 			List<Thing> threats = new List<Thing>
@@ -541,151 +541,151 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x040017F5 RID: 6133
+		
 		public Pawn pawn;
 
-		// Token: 0x040017F6 RID: 6134
+		
 		public MentalStateHandler mentalStateHandler;
 
-		// Token: 0x040017F7 RID: 6135
+		
 		public MentalBreaker mentalBreaker;
 
-		// Token: 0x040017F8 RID: 6136
+		
 		public InspirationHandler inspirationHandler;
 
-		// Token: 0x040017F9 RID: 6137
+		
 		public PriorityWork priorityWork;
 
-		// Token: 0x040017FA RID: 6138
+		
 		private bool activeInt = true;
 
-		// Token: 0x040017FB RID: 6139
+		
 		public JobTag lastJobTag;
 
-		// Token: 0x040017FC RID: 6140
+		
 		public int lastIngestTick = -99999;
 
-		// Token: 0x040017FD RID: 6141
+		
 		public int nextApparelOptimizeTick = -99999;
 
-		// Token: 0x040017FE RID: 6142
+		
 		public bool canFleeIndividual = true;
 
-		// Token: 0x040017FF RID: 6143
+		
 		public int exitMapAfterTick = -99999;
 
-		// Token: 0x04001800 RID: 6144
+		
 		public int lastDisturbanceTick = -99999;
 
-		// Token: 0x04001801 RID: 6145
+		
 		public IntVec3 forcedGotoPosition = IntVec3.Invalid;
 
-		// Token: 0x04001802 RID: 6146
+		
 		public Thing knownExploder;
 
-		// Token: 0x04001803 RID: 6147
+		
 		public bool wantsToTradeWithColony;
 
-		// Token: 0x04001804 RID: 6148
+		
 		public Thing lastMannedThing;
 
-		// Token: 0x04001805 RID: 6149
+		
 		public int canLovinTick = -99999;
 
-		// Token: 0x04001806 RID: 6150
+		
 		public int canSleepTick = -99999;
 
-		// Token: 0x04001807 RID: 6151
+		
 		public Pawn meleeThreat;
 
-		// Token: 0x04001808 RID: 6152
+		
 		public int lastMeleeThreatHarmTick = -99999;
 
-		// Token: 0x04001809 RID: 6153
+		
 		public int lastEngageTargetTick = -99999;
 
-		// Token: 0x0400180A RID: 6154
+		
 		public int lastAttackTargetTick = -99999;
 
-		// Token: 0x0400180B RID: 6155
+		
 		public LocalTargetInfo lastAttackedTarget;
 
-		// Token: 0x0400180C RID: 6156
+		
 		public Thing enemyTarget;
 
-		// Token: 0x0400180D RID: 6157
+		
 		public PawnDuty duty;
 
-		// Token: 0x0400180E RID: 6158
+		
 		public Dictionary<int, int> thinkData = new Dictionary<int, int>();
 
-		// Token: 0x0400180F RID: 6159
+		
 		public int lastAssignedInteractTime = -99999;
 
-		// Token: 0x04001810 RID: 6160
+		
 		public int interactionsToday;
 
-		// Token: 0x04001811 RID: 6161
+		
 		public int lastInventoryRawFoodUseTick;
 
-		// Token: 0x04001812 RID: 6162
+		
 		public bool nextMoveOrderIsWait;
 
-		// Token: 0x04001813 RID: 6163
+		
 		public int lastTakeCombatEnhancingDrugTick = -99999;
 
-		// Token: 0x04001814 RID: 6164
+		
 		public int lastHarmTick = -99999;
 
-		// Token: 0x04001815 RID: 6165
+		
 		public int noAidRelationsGainUntilTick = -99999;
 
-		// Token: 0x04001816 RID: 6166
+		
 		public bool anyCloseHostilesRecently;
 
-		// Token: 0x04001817 RID: 6167
+		
 		public int applyBedThoughtsTick;
 
-		// Token: 0x04001818 RID: 6168
+		
 		public int applyThroneThoughtsTick;
 
-		// Token: 0x04001819 RID: 6169
+		
 		public bool applyBedThoughtsOnLeave;
 
-		// Token: 0x0400181A RID: 6170
+		
 		public bool willJoinColonyIfRescuedInt;
 
-		// Token: 0x0400181B RID: 6171
+		
 		private bool wildManEverReachedOutsideInt;
 
-		// Token: 0x0400181C RID: 6172
+		
 		public int timesGuestTendedToByPlayer;
 
-		// Token: 0x0400181D RID: 6173
+		
 		public int lastSelfTendTick = -99999;
 
-		// Token: 0x0400181E RID: 6174
+		
 		public bool spawnedByInfestationThingComp;
 
-		// Token: 0x0400181F RID: 6175
+		
 		public int lastPredatorHuntingPlayerNotificationTick = -99999;
 
-		// Token: 0x04001820 RID: 6176
+		
 		public float maxDistToSquadFlag = -1f;
 
-		// Token: 0x04001821 RID: 6177
+		
 		private const int UpdateAnyCloseHostilesRecentlyEveryTicks = 100;
 
-		// Token: 0x04001822 RID: 6178
+		
 		private const int AnyCloseHostilesRecentlyRegionsToScan_ToActivate = 18;
 
-		// Token: 0x04001823 RID: 6179
+		
 		private const int AnyCloseHostilesRecentlyRegionsToScan_ToDeactivate = 24;
 
-		// Token: 0x04001824 RID: 6180
+		
 		private const float HarmForgetDistance = 3f;
 
-		// Token: 0x04001825 RID: 6181
+		
 		private const int MeleeHarmForgetDelay = 400;
 	}
 }

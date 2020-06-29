@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000966 RID: 2406
+	
 	public class QuestPart_Alert : QuestPartActivable
 	{
-		// Token: 0x17000A37 RID: 2615
+		
 		// (get) Token: 0x06003900 RID: 14592 RVA: 0x0012FE16 File Offset: 0x0012E016
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A38 RID: 2616
+		
 		// (get) Token: 0x06003901 RID: 14593 RVA: 0x0012FE26 File Offset: 0x0012E026
 		public override string AlertLabel
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A39 RID: 2617
+		
 		// (get) Token: 0x06003902 RID: 14594 RVA: 0x0012FE2E File Offset: 0x0012E02E
 		public override string AlertExplanation
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A3A RID: 2618
+		
 		// (get) Token: 0x06003903 RID: 14595 RVA: 0x0012FE36 File Offset: 0x0012E036
 		public override bool AlertCritical
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A3B RID: 2619
+		
 		// (get) Token: 0x06003904 RID: 14596 RVA: 0x0012FE3E File Offset: 0x0012E03E
 		public override AlertReport AlertReport
 		{
@@ -73,7 +73,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003905 RID: 14597 RVA: 0x0012FE64 File Offset: 0x0012E064
+		
 		protected override void Enable(SignalArgs receivedArgs)
 		{
 			base.Enable(receivedArgs);
@@ -86,7 +86,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003906 RID: 14598 RVA: 0x0012FEE8 File Offset: 0x0012E0E8
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -100,7 +100,7 @@ namespace RimWorld
 			Scribe_Deep.Look<LookTargets>(ref this.resolvedLookTargets, "resolvedLookTargets", Array.Empty<object>());
 		}
 
-		// Token: 0x06003907 RID: 14599 RVA: 0x0012FF91 File Offset: 0x0012E191
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -108,28 +108,28 @@ namespace RimWorld
 			this.explanation = "Test text";
 		}
 
-		// Token: 0x0400219A RID: 8602
+		
 		public string label;
 
-		// Token: 0x0400219B RID: 8603
+		
 		public string explanation;
 
-		// Token: 0x0400219C RID: 8604
+		
 		public LookTargets lookTargets;
 
-		// Token: 0x0400219D RID: 8605
+		
 		public bool critical;
 
-		// Token: 0x0400219E RID: 8606
+		
 		public bool getLookTargetsFromSignal;
 
-		// Token: 0x0400219F RID: 8607
+		
 		private string resolvedLabel;
 
-		// Token: 0x040021A0 RID: 8608
+		
 		private string resolvedExplanation;
 
-		// Token: 0x040021A1 RID: 8609
+		
 		private LookTargets resolvedLookTargets;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A18 RID: 2584
+	
 	public class StorytellerComp_RefiringUniqueQuest : StorytellerComp
 	{
-		// Token: 0x17000ADA RID: 2778
+		
 		// (get) Token: 0x06003D44 RID: 15684 RVA: 0x0013B2B7 File Offset: 0x001394B7
 		private int IntervalsPassed
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000ADB RID: 2779
+		
 		// (get) Token: 0x06003D45 RID: 15685 RVA: 0x00143C8A File Offset: 0x00141E8A
 		private StorytellerCompProperties_RefiringUniqueQuest Props
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D46 RID: 15686 RVA: 0x00143C97 File Offset: 0x00141E97
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (!this.Props.incident.TargetAllowed(target))
@@ -71,7 +71,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D47 RID: 15687 RVA: 0x00143CAE File Offset: 0x00141EAE
+		
 		public override void Initialize()
 		{
 			base.Initialize();
@@ -81,13 +81,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D48 RID: 15688 RVA: 0x00143CD6 File Offset: 0x00141ED6
+		
 		public override string ToString()
 		{
 			return base.ToString() + " " + this.Props.incident;
 		}
 
-		// Token: 0x040023C3 RID: 9155
+		
 		private bool generateSkipped;
 	}
 }

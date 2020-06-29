@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CD8 RID: 3288
+	
 	public class ThingSetMaker_TraderStock : ThingSetMaker
 	{
-		// Token: 0x06004FAD RID: 20397 RVA: 0x001AD900 File Offset: 0x001ABB00
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			TraderKindDef traderKindDef = parms.traderDef ?? DefDatabase<TraderKindDef>.AllDefsListForReading.RandomElement<TraderKindDef>();
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004FAE RID: 20398 RVA: 0x001ADA30 File Offset: 0x001ABC30
+		
 		public float DebugAverageTotalStockValue(TraderKindDef td)
 		{
 			ThingSetMakerParams parms = default(ThingSetMakerParams);
@@ -71,7 +71,7 @@ namespace RimWorld
 			return num / 50f;
 		}
 
-		// Token: 0x06004FAF RID: 20399 RVA: 0x001ADAC8 File Offset: 0x001ABCC8
+		
 		public string DebugGenerationDataFor(TraderKindDef td)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -103,7 +103,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06004FB0 RID: 20400 RVA: 0x001ADC20 File Offset: 0x001ABE20
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			if (parms.traderDef == null)

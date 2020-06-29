@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000D74 RID: 3444
+	
 	public static class TransporterUtility
 	{
-		// Token: 0x060053F7 RID: 21495 RVA: 0x001C0864 File Offset: 0x001BEA64
+		
 		public static void GetTransportersInGroup(int transportersGroup, Map map, List<CompTransporter> outTransporters)
 		{
 			outTransporters.Clear();
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060053F8 RID: 21496 RVA: 0x001C08B8 File Offset: 0x001BEAB8
+		
 		public static Lord FindLord(int transportersGroup, Map map)
 		{
 			List<Lord> lords = map.lordManager.lords;
@@ -45,14 +45,14 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060053F9 RID: 21497 RVA: 0x001C090C File Offset: 0x001BEB0C
+		
 		public static bool WasLoadingCanceled(Thing transporter)
 		{
 			CompTransporter compTransporter = transporter.TryGetComp<CompTransporter>();
 			return compTransporter != null && !compTransporter.LoadingInProgressOrReadyToLaunch;
 		}
 
-		// Token: 0x060053FA RID: 21498 RVA: 0x001C0930 File Offset: 0x001BEB30
+		
 		public static int InitiateLoading(IEnumerable<CompTransporter> transporters)
 		{
 			int nextTransporterGroupID = Find.UniqueIDsManager.GetNextTransporterGroupID();
@@ -63,7 +63,7 @@ namespace RimWorld
 			return nextTransporterGroupID;
 		}
 
-		// Token: 0x060053FB RID: 21499 RVA: 0x001C0984 File Offset: 0x001BEB84
+		
 		public static IEnumerable<Pawn> AllSendablePawns(List<CompTransporter> transporters, Map map)
 		{
 			CompShuttle shuttle = transporters[0].parent.TryGetComp<CompShuttle>();
@@ -84,7 +84,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060053FC RID: 21500 RVA: 0x001C099B File Offset: 0x001BEB9B
+		
 		public static IEnumerable<Thing> AllSendableItems(List<CompTransporter> transporters, Map map)
 		{
 			List<Thing> items = CaravanFormingUtility.AllReachableColonyItems(map, false, transporters[0].Props.canChangeAssignedThingsAfterStarting && transporters[0].LoadingInProgressOrReadyToLaunch, false);
@@ -101,7 +101,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060053FD RID: 21501 RVA: 0x001C09B2 File Offset: 0x001BEBB2
+		
 		public static IEnumerable<Thing> ThingsBeingHauledTo(List<CompTransporter> transporters, Map map)
 		{
 			List<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
@@ -117,7 +117,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060053FE RID: 21502 RVA: 0x001C09CC File Offset: 0x001BEBCC
+		
 		public static void MakeLordsAsAppropriate(List<Pawn> pawns, List<CompTransporter> transporters, Map map)
 		{
 			int groupID = transporters[0].groupID;

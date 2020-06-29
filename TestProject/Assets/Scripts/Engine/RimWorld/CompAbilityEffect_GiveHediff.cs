@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000ACD RID: 2765
+	
 	public class CompAbilityEffect_GiveHediff : CompAbilityEffect_WithDuration
 	{
-		// Token: 0x17000BA4 RID: 2980
+		
 		// (get) Token: 0x0600418E RID: 16782 RVA: 0x0015EAE6 File Offset: 0x0015CCE6
 		public new CompProperties_AbilityGiveHediff Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600418F RID: 16783 RVA: 0x0015EAF4 File Offset: 0x0015CCF4
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004190 RID: 16784 RVA: 0x0015EB48 File Offset: 0x0015CD48
+		
 		protected void ApplyInner(Pawn target, Pawn other)
 		{
 			if (target != null)

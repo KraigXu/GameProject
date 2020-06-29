@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CC6 RID: 3270
+	
 	public class ThingSetMaker_Conditional_FactionRelation : ThingSetMaker_Conditional
 	{
-		// Token: 0x06004F4F RID: 20303 RVA: 0x001AB620 File Offset: 0x001A9820
+		
 		protected override bool Condition(ThingSetMakerParams parms)
 		{
 			Faction faction = Find.FactionManager.FirstFactionOfDef(this.factionDef);
@@ -27,16 +27,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002C7F RID: 11391
+		
 		public FactionDef factionDef;
 
-		// Token: 0x04002C80 RID: 11392
+		
 		public bool allowHostile;
 
-		// Token: 0x04002C81 RID: 11393
+		
 		public bool allowNeutral;
 
-		// Token: 0x04002C82 RID: 11394
+		
 		public bool allowAlly;
 	}
 }

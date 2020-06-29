@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000992 RID: 2450
+	
 	public class QuestPart_SpawnThing : QuestPart
 	{
-		// Token: 0x17000A63 RID: 2659
+		
 		// (get) Token: 0x060039F5 RID: 14837 RVA: 0x001339F9 File Offset: 0x00131BF9
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A64 RID: 2660
+		
 		// (get) Token: 0x060039F6 RID: 14838 RVA: 0x00133A0C File Offset: 0x00131C0C
 		public override bool IncreasesPopulation
 		{
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039F7 RID: 14839 RVA: 0x00133A38 File Offset: 0x00131C38
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -83,13 +83,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039F8 RID: 14840 RVA: 0x00133C05 File Offset: 0x00131E05
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return p == this.thing;
 		}
 
-		// Token: 0x060039F9 RID: 14841 RVA: 0x00133C10 File Offset: 0x00131E10
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -112,7 +112,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.tryLandInShipLandingZone, "tryLandInShipLandingZone", false, false);
 		}
 
-		// Token: 0x060039FA RID: 14842 RVA: 0x00133D10 File Offset: 0x00131F10
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -124,34 +124,34 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002229 RID: 8745
+		
 		public string inSignal;
 
-		// Token: 0x0400222A RID: 8746
+		
 		public Thing thing;
 
-		// Token: 0x0400222B RID: 8747
+		
 		public Faction factionForFindingSpot;
 
-		// Token: 0x0400222C RID: 8748
+		
 		public MapParent mapParent;
 
-		// Token: 0x0400222D RID: 8749
+		
 		public IntVec3 cell = IntVec3.Invalid;
 
-		// Token: 0x0400222E RID: 8750
+		
 		public bool questLookTarget = true;
 
-		// Token: 0x0400222F RID: 8751
+		
 		public bool lookForSafeSpot;
 
-		// Token: 0x04002230 RID: 8752
+		
 		public bool tryLandInShipLandingZone;
 
-		// Token: 0x04002231 RID: 8753
+		
 		private Thing innerSkyfallerThing;
 
-		// Token: 0x04002232 RID: 8754
+		
 		private bool spawned;
 	}
 }

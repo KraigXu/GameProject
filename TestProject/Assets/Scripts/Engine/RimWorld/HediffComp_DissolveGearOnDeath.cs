@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02001077 RID: 4215
+	
 	public class HediffComp_DissolveGearOnDeath : HediffComp
 	{
-		// Token: 0x17001155 RID: 4437
+		
 		// (get) Token: 0x0600641B RID: 25627 RVA: 0x0022AE6B File Offset: 0x0022906B
 		public HediffCompProperties_DissolveGearOnDeath Props
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600641C RID: 25628 RVA: 0x0022AE78 File Offset: 0x00229078
+		
 		public override void Notify_PawnDied()
 		{
 			base.Notify_PawnDied();
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600641D RID: 25629 RVA: 0x0022AF38 File Offset: 0x00229138
+		
 		public override void Notify_PawnKilled()
 		{
 			base.Pawn.equipment.DestroyAllEquipment(DestroyMode.Vanish);

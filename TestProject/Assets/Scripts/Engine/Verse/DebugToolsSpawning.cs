@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace Verse
 {
-	// Token: 0x0200033E RID: 830
+	
 	public static class DebugToolsSpawning
 	{
-		// Token: 0x060018DE RID: 6366 RVA: 0x0008F994 File Offset: 0x0008DB94
+		
 		private static IEnumerable<float> PointsMechCluster()
 		{
 			for (float points = 50f; points <= 10000f; points += 50f)
@@ -21,7 +21,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060018DF RID: 6367 RVA: 0x0008F9A0 File Offset: 0x0008DBA0
+		
 		[DebugAction("Spawning", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnPawn()
 		{
@@ -55,7 +55,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018E0 RID: 6368 RVA: 0x0008FA50 File Offset: 0x0008DC50
+		
 		[DebugAction("Spawning", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnWeapon()
 		{
@@ -75,7 +75,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018E1 RID: 6369 RVA: 0x0008FB24 File Offset: 0x0008DD24
+		
 		[DebugAction("Spawning", "Spawn apparel...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnApparel()
 		{
@@ -95,42 +95,42 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018E2 RID: 6370 RVA: 0x0008FBF8 File Offset: 0x0008DDF8
+		
 		[DebugAction("Spawning", "Try place near thing...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TryPlaceNearThing()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugThingPlaceHelper.TryPlaceOptionsForStackCount(1, false)));
 		}
 
-		// Token: 0x060018E3 RID: 6371 RVA: 0x0008FC10 File Offset: 0x0008DE10
+		
 		[DebugAction("Spawning", "Try place near stack of 25...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TryPlaceNearStacksOf25()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugThingPlaceHelper.TryPlaceOptionsForStackCount(25, false)));
 		}
 
-		// Token: 0x060018E4 RID: 6372 RVA: 0x0008FC29 File Offset: 0x0008DE29
+		
 		[DebugAction("Spawning", "Try place near stack of 75...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TryPlaceNearStacksOf75()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugThingPlaceHelper.TryPlaceOptionsForStackCount(75, false)));
 		}
 
-		// Token: 0x060018E5 RID: 6373 RVA: 0x0008FC42 File Offset: 0x0008DE42
+		
 		[DebugAction("Spawning", "Try place direct thing...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TryPlaceDirectThing()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugThingPlaceHelper.TryPlaceOptionsForStackCount(1, true)));
 		}
 
-		// Token: 0x060018E6 RID: 6374 RVA: 0x0008FC5A File Offset: 0x0008DE5A
+		
 		[DebugAction("Spawning", "Try place direct stack of 25...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TryPlaceDirectStackOf25()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugThingPlaceHelper.TryPlaceOptionsForStackCount(25, true)));
 		}
 
-		// Token: 0x060018E7 RID: 6375 RVA: 0x0008FC74 File Offset: 0x0008DE74
+		
 		[DebugAction("Spawning", "Spawn thing with wipe mode...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnThingWithWipeMode()
 		{
@@ -148,7 +148,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018E8 RID: 6376 RVA: 0x0008FCF4 File Offset: 0x0008DEF4
+		
 		[DebugAction("Spawning", "Set terrain...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SetTerrain()
 		{
@@ -167,7 +167,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018E9 RID: 6377 RVA: 0x0008FD84 File Offset: 0x0008DF84
+		
 		[DebugAction("Spawning", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnMechCluster()
 		{
@@ -225,7 +225,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018EA RID: 6378 RVA: 0x0008FE14 File Offset: 0x0008E014
+		
 		[DebugAction("Spawning", "Make filth x100", actionType = DebugActionType.ToolMap, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void MakeFilthx100()
 		{
@@ -240,7 +240,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060018EB RID: 6379 RVA: 0x0008FE84 File Offset: 0x0008E084
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolMap, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnFactionLeader()
 		{
@@ -259,7 +259,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x060018EC RID: 6380 RVA: 0x0008FF4C File Offset: 0x0008E14C
+		
 		[DebugAction("Spawning", "Spawn world pawn...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnWorldPawn()
 		{
@@ -294,7 +294,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018ED RID: 6381 RVA: 0x00090014 File Offset: 0x0008E214
+		
 		[DebugAction("Spawning", "Spawn thing set...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnThingSet()
 		{
@@ -347,7 +347,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018EE RID: 6382 RVA: 0x00090084 File Offset: 0x0008E284
+		
 		[DebugAction("Spawning", "Trigger effecter...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TriggerEffecter()
 		{
@@ -366,7 +366,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018EF RID: 6383 RVA: 0x000900F4 File Offset: 0x0008E2F4
+		
 		[DebugAction("Spawning", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SpawnShuttle()
 		{
@@ -383,7 +383,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(options));
 		}
 
-		// Token: 0x060018F0 RID: 6384 RVA: 0x00090178 File Offset: 0x0008E378
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnRandomCaravan()
 		{
@@ -427,7 +427,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060018F1 RID: 6385 RVA: 0x00090320 File Offset: 0x0008E520
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnRandomFactionBase()
 		{
@@ -449,7 +449,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060018F2 RID: 6386 RVA: 0x000903BC File Offset: 0x0008E5BC
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnSite()
 		{
@@ -494,7 +494,7 @@ namespace Verse
 			addPart();
 		}
 
-		// Token: 0x060018F3 RID: 6387 RVA: 0x00090444 File Offset: 0x0008E644
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void DestroySite()
 		{
@@ -505,7 +505,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060018F4 RID: 6388 RVA: 0x000904A8 File Offset: 0x0008E6A8
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnSiteWithPoints()
 		{
@@ -558,7 +558,7 @@ namespace Verse
 			addPart();
 		}
 
-		// Token: 0x060018F5 RID: 6389 RVA: 0x00090530 File Offset: 0x0008E730
+		
 		[DebugAction("Spawning", null, actionType = DebugActionType.ToolWorld, allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void SpawnWorldObject()
 		{
@@ -583,7 +583,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060018F6 RID: 6390 RVA: 0x0009060C File Offset: 0x0008E80C
+		
 		[DebugAction("General", "Change camera config...", allowedGameStates = AllowedGameStates.PlayingOnWorld)]
 		private static void ChangeCameraConfigWorld()
 		{

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CFF RID: 3327
+	
 	public static class DeepDrillUtility
 	{
-		// Token: 0x060050EC RID: 20716 RVA: 0x001B2858 File Offset: 0x001B0A58
+		
 		public static ThingDef GetNextResource(IntVec3 p, Map map)
 		{
 			ThingDef result;
@@ -17,7 +17,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060050ED RID: 20717 RVA: 0x001B2874 File Offset: 0x001B0A74
+		
 		public static bool GetNextResource(IntVec3 p, Map map, out ThingDef resDef, out int countPresent, out IntVec3 cell)
 		{
 			for (int i = 0; i < 21; i++)
@@ -41,7 +41,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060050EE RID: 20718 RVA: 0x001B28F0 File Offset: 0x001B0AF0
+		
 		public static ThingDef GetBaseResource(Map map, IntVec3 cell)
 		{
 			if (!map.Biome.hasBedrock)
@@ -56,7 +56,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04002CEB RID: 11499
+		
 		public const int NumCellsToScan = 21;
 	}
 }

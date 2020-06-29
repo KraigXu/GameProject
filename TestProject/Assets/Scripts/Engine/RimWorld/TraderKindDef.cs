@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000916 RID: 2326
+	
 	public class TraderKindDef : Def
 	{
-		// Token: 0x170009E3 RID: 2531
+		
 		// (get) Token: 0x06003744 RID: 14148 RVA: 0x00129554 File Offset: 0x00127754
 		public float CalculatedCommonality
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170009E4 RID: 2532
+		
 		// (get) Token: 0x06003745 RID: 14149 RVA: 0x00129584 File Offset: 0x00127784
 		public RoyalTitleDef TitleRequiredToTrade
 		{
@@ -41,7 +41,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003746 RID: 14150 RVA: 0x001295BC File Offset: 0x001277BC
+		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
@@ -51,10 +51,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003747 RID: 14151 RVA: 0x00129614 File Offset: 0x00127814
+		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
+			foreach (string text in this.n__0())
 			{
 				yield return text;
 			}
@@ -72,7 +72,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003748 RID: 14152 RVA: 0x00129624 File Offset: 0x00127824
+		
 		public bool WillTrade(ThingDef td)
 		{
 			for (int i = 0; i < this.stockGenerators.Count; i++)
@@ -85,7 +85,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003749 RID: 14153 RVA: 0x00129660 File Offset: 0x00127860
+		
 		public PriceType PriceTypeFor(ThingDef thingDef, TradeAction action)
 		{
 			if (thingDef == ThingDefOf.Silver)
@@ -106,34 +106,34 @@ namespace RimWorld
 			return PriceType.Normal;
 		}
 
-		// Token: 0x04002077 RID: 8311
+		
 		public List<StockGenerator> stockGenerators = new List<StockGenerator>();
 
-		// Token: 0x04002078 RID: 8312
+		
 		public bool orbital;
 
-		// Token: 0x04002079 RID: 8313
+		
 		public bool requestable = true;
 
-		// Token: 0x0400207A RID: 8314
+		
 		public bool hideThingsNotWillingToTrade;
 
-		// Token: 0x0400207B RID: 8315
+		
 		public float commonality = 1f;
 
-		// Token: 0x0400207C RID: 8316
+		
 		public string category;
 
-		// Token: 0x0400207D RID: 8317
+		
 		public TradeCurrency tradeCurrency;
 
-		// Token: 0x0400207E RID: 8318
+		
 		public SimpleCurve commonalityMultFromPopulationIntent;
 
-		// Token: 0x0400207F RID: 8319
+		
 		public FactionDef faction;
 
-		// Token: 0x04002080 RID: 8320
+		
 		public RoyalTitlePermitDef permitRequiredForTrading;
 	}
 }

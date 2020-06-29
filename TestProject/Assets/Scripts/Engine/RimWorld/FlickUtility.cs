@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A3A RID: 2618
+	
 	public static class FlickUtility
 	{
-		// Token: 0x06003DDD RID: 15837 RVA: 0x0014646C File Offset: 0x0014466C
+		
 		public static void UpdateFlickDesignation(Thing t)
 		{
 			bool flag = false;
@@ -35,7 +35,7 @@ namespace RimWorld
 			TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.SwitchFlickingDesignation, Array.Empty<string>());
 		}
 
-		// Token: 0x06003DDE RID: 15838 RVA: 0x0014651C File Offset: 0x0014471C
+		
 		public static bool WantsToBeOn(Thing t)
 		{
 			CompFlickable compFlickable = t.TryGetComp<CompFlickable>();

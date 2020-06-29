@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200125F RID: 4703
+	
 	public static class SiteMaker
 	{
-		// Token: 0x06006E12 RID: 28178 RVA: 0x00267331 File Offset: 0x00265531
+		
 		public static Site MakeSite(SitePartDef sitePart, int tile, Faction faction, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			return SiteMaker.MakeSite((sitePart != null) ? Gen.YieldSingle<SitePartDef>(sitePart) : null, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
 		}
 
-		// Token: 0x06006E13 RID: 28179 RVA: 0x0026734C File Offset: 0x0026554C
+		
 		public static Site MakeSite(IEnumerable<SitePartDef> siteParts, int tile, Faction faction, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			float num = threatPoints ?? StorytellerUtility.DefaultSiteThreatPointsNow();
@@ -24,7 +24,7 @@ namespace RimWorld.Planet
 			return site;
 		}
 
-		// Token: 0x06006E14 RID: 28180 RVA: 0x00267390 File Offset: 0x00265590
+		
 		public static Site MakeSite(IEnumerable<SitePartDefWithParams> siteParts, int tile, Faction faction, bool ifHostileThenMustRemainHostile = true)
 		{
 			Site site = (Site)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Site);
@@ -45,7 +45,7 @@ namespace RimWorld.Planet
 			return site;
 		}
 
-		// Token: 0x06006E15 RID: 28181 RVA: 0x00267434 File Offset: 0x00265634
+		
 		public static Site TryMakeSite_SingleSitePart(IEnumerable<SitePartDef> singleSitePartCandidates, int tile, Faction faction = null, bool disallowNonHostileFactions = true, Predicate<Faction> extraFactionValidator = null, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			SitePartDef sitePart;
@@ -56,7 +56,7 @@ namespace RimWorld.Planet
 			return SiteMaker.MakeSite(sitePart, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
 		}
 
-		// Token: 0x06006E16 RID: 28182 RVA: 0x00267460 File Offset: 0x00265660
+		
 		public static Site TryMakeSite_SingleSitePart(string singleSitePartTag, int tile, Faction faction = null, bool disallowNonHostileFactions = true, Predicate<Faction> extraFactionValidator = null, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			SitePartDef sitePart;
@@ -67,7 +67,7 @@ namespace RimWorld.Planet
 			return SiteMaker.MakeSite(sitePart, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
 		}
 
-		// Token: 0x06006E17 RID: 28183 RVA: 0x0026748C File Offset: 0x0026568C
+		
 		public static Site TryMakeSite_MultipleSiteParts(IEnumerable<IEnumerable<SitePartDef>> sitePartsCandidates, int tile, Faction faction = null, bool disallowNonHostileFactions = true, Predicate<Faction> extraFactionValidator = null, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			List<SitePartDef> siteParts;
@@ -78,7 +78,7 @@ namespace RimWorld.Planet
 			return SiteMaker.MakeSite(siteParts, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
 		}
 
-		// Token: 0x06006E18 RID: 28184 RVA: 0x002674B8 File Offset: 0x002656B8
+		
 		public static Site TryMakeSite_MultipleSiteParts(List<string> sitePartsTags, int tile, Faction faction = null, bool disallowNonHostileFactions = true, Predicate<Faction> extraFactionValidator = null, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			List<SitePartDef> siteParts;
@@ -89,7 +89,7 @@ namespace RimWorld.Planet
 			return SiteMaker.MakeSite(siteParts, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
 		}
 
-		// Token: 0x06006E19 RID: 28185 RVA: 0x002674E4 File Offset: 0x002656E4
+		
 		public static Site TryMakeSite(IEnumerable<SitePartDef> siteParts, int tile, bool disallowNonHostileFactions = true, Predicate<Faction> extraFactionValidator = null, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 		{
 			Faction faction;

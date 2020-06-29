@@ -4,16 +4,16 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x02000148 RID: 328
+	
 	public static class Translator
 	{
-		// Token: 0x0600093B RID: 2363 RVA: 0x00032D84 File Offset: 0x00030F84
+		
 		public static bool CanTranslate(this string key)
 		{
 			return LanguageDatabase.activeLanguage.HaveTextForKey(key, false);
 		}
 
-		// Token: 0x0600093C RID: 2364 RVA: 0x00032D94 File Offset: 0x00030F94
+		
 		public static TaggedString TranslateWithBackup(this string key, TaggedString backupKey)
 		{
 			TaggedString result;
@@ -28,7 +28,7 @@ namespace Verse
 			return key.Translate();
 		}
 
-		// Token: 0x0600093D RID: 2365 RVA: 0x00032DC4 File Offset: 0x00030FC4
+		
 		public static bool TryTranslate(this string key, out TaggedString result)
 		{
 			if (key.NullOrEmpty())
@@ -50,13 +50,13 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600093E RID: 2366 RVA: 0x00032E2F File Offset: 0x0003102F
+		
 		public static string TranslateSimple(this string key)
 		{
 			return key.Translate();
 		}
 
-		// Token: 0x0600093F RID: 2367 RVA: 0x00032E3C File Offset: 0x0003103C
+		
 		public static TaggedString Translate(this string key)
 		{
 			TaggedString taggedString;
@@ -72,7 +72,7 @@ namespace Verse
 			return taggedString;
 		}
 
-		// Token: 0x06000940 RID: 2368 RVA: 0x00032E7C File Offset: 0x0003107C
+		
 		[Obsolete("Use TranslatorFormattedStringExtensions")]
 		public static string Translate(this string key, params object[] args)
 		{
@@ -106,7 +106,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06000941 RID: 2369 RVA: 0x00032F48 File Offset: 0x00031148
+		
 		public static bool TryGetTranslatedStringsForFile(string fileName, out List<string> stringList)
 		{
 			if (!LanguageDatabase.activeLanguage.TryGetStringsFromFile(fileName, out stringList) && !LanguageDatabase.defaultLanguage.TryGetStringsFromFile(fileName, out stringList))
@@ -117,7 +117,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000942 RID: 2370 RVA: 0x00032F80 File Offset: 0x00031180
+		
 		private static string PseudoTranslated(string original)
 		{
 			if (original == null)

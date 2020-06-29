@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000444 RID: 1092
+	
 	public static class GenExplosion
 	{
-		// Token: 0x060020A9 RID: 8361 RVA: 0x000C7C14 File Offset: 0x000C5E14
+		
 		public static void DoExplosion(IntVec3 center, Map map, float radius, DamageDef damType, Thing instigator, int damAmount = -1, float armorPenetration = -1f, SoundDef explosionSound = null, ThingDef weapon = null, ThingDef projectile = null, Thing intendedTarget = null, ThingDef postExplosionSpawnThingDef = null, float postExplosionSpawnChance = 0f, int postExplosionSpawnThingCount = 1, bool applyDamageToExplosionCellsNeighbors = false, ThingDef preExplosionSpawnThingDef = null, float preExplosionSpawnChance = 0f, int preExplosionSpawnThingCount = 1, float chanceToStartFire = 0f, bool damageFalloff = false, float? direction = null, List<Thing> ignoredThings = null)
 		{
 			if (map == null)
@@ -59,7 +59,7 @@ namespace Verse
 			explosion.StartExplosion(explosionSound, ignoredThings);
 		}
 
-		// Token: 0x060020AA RID: 8362 RVA: 0x000C7D4C File Offset: 0x000C5F4C
+		
 		private static void CalculateNeededLOSToCells(IntVec3 position, Map map, float direction, out IntVec3? needLOSToCell1, out IntVec3? needLOSToCell2)
 		{
 			needLOSToCell1 = null;
@@ -126,13 +126,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060020AB RID: 8363 RVA: 0x000C7ED4 File Offset: 0x000C60D4
+		
 		public static void RenderPredictedAreaOfEffect(IntVec3 loc, float radius)
 		{
 			GenDraw.DrawFieldEdges(DamageDefOf.Bomb.Worker.ExplosionCellsToHit(loc, Find.CurrentMap, radius, null, null).ToList<IntVec3>());
 		}
 
-		// Token: 0x060020AC RID: 8364 RVA: 0x000C7F14 File Offset: 0x000C6114
+		
 		public static void NotifyNearbyPawnsOfDangerousExplosive(Thing exploder, DamageDef damage, Faction onlyFaction = null)
 		{
 			Room room = exploder.GetRoom(RegionType.Set_Passable);
@@ -158,7 +158,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040013F4 RID: 5108
+		
 		private static readonly int PawnNotifyCellCount = GenRadial.NumCellsInRadius(4.5f);
 	}
 }

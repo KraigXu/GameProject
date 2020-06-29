@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B9B RID: 2971
+	
 	public class Need_RoomSize : Need_Seeker
 	{
-		// Token: 0x17000C53 RID: 3155
+		
 		// (get) Token: 0x0600459D RID: 17821 RVA: 0x00178291 File Offset: 0x00176491
 		public override float CurInstantLevel
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C54 RID: 3156
+		
 		// (get) Token: 0x0600459E RID: 17822 RVA: 0x00178299 File Offset: 0x00176499
 		public RoomSizeCategory CurCategory
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600459F RID: 17823 RVA: 0x001782C9 File Offset: 0x001764C9
+		
 		public Need_RoomSize(Pawn pawn) : base(pawn)
 		{
 			this.threshPercents = new List<float>();
@@ -47,7 +47,7 @@ namespace RimWorld
 			this.threshPercents.Add(0.7f);
 		}
 
-		// Token: 0x060045A0 RID: 17824 RVA: 0x00178300 File Offset: 0x00176500
+		
 		public float SpacePerceptibleNow()
 		{
 			if (!this.pawn.Spawned)
@@ -84,22 +84,22 @@ namespace RimWorld
 			return Need_RoomSize.RoomCellCountSpaceCurve.Evaluate(num);
 		}
 
-		// Token: 0x04002807 RID: 10247
+		
 		private static List<Room> tempScanRooms = new List<Room>();
 
-		// Token: 0x04002808 RID: 10248
+		
 		private const float MinCramped = 0.01f;
 
-		// Token: 0x04002809 RID: 10249
+		
 		private const float MinNormal = 0.3f;
 
-		// Token: 0x0400280A RID: 10250
+		
 		private const float MinSpacious = 0.7f;
 
-		// Token: 0x0400280B RID: 10251
+		
 		public static readonly int SampleNumCells = GenRadial.NumCellsInRadius(7.9f);
 
-		// Token: 0x0400280C RID: 10252
+		
 		private static readonly SimpleCurve RoomCellCountSpaceCurve = new SimpleCurve
 		{
 			{

@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C9D RID: 3229
+	
 	public class Fire : AttachableThing, ISizeReporter
 	{
-		// Token: 0x17000DC8 RID: 3528
+		
 		// (get) Token: 0x06004DF6 RID: 19958 RVA: 0x001A387B File Offset: 0x001A1A7B
 		public int TicksSinceSpawn
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DC9 RID: 3529
+		
 		// (get) Token: 0x06004DF7 RID: 19959 RVA: 0x001A3883 File Offset: 0x001A1A83
 		public override string Label
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DCA RID: 3530
+		
 		// (get) Token: 0x06004DF8 RID: 19960 RVA: 0x001A38C4 File Offset: 0x001A1AC4
 		public override string InspectStringAddon
 		{
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DCB RID: 3531
+		
 		// (get) Token: 0x06004DF9 RID: 19961 RVA: 0x001A3924 File Offset: 0x001A1B24
 		private float SpreadInterval
 		{
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004DFA RID: 19962 RVA: 0x001A3959 File Offset: 0x001A1B59
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -66,7 +66,7 @@ namespace RimWorld
 			Scribe_Values.Look<float>(ref this.fireSize, "fireSize", 0f, false);
 		}
 
-		// Token: 0x06004DFB RID: 19963 RVA: 0x001A3989 File Offset: 0x001A1B89
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -75,13 +75,13 @@ namespace RimWorld
 			this.ticksSinceSpread = (int)(this.SpreadInterval * Rand.Value);
 		}
 
-		// Token: 0x06004DFC RID: 19964 RVA: 0x001A39B9 File Offset: 0x001A1BB9
+		
 		public float CurrentSize()
 		{
 			return this.fireSize;
 		}
 
-		// Token: 0x06004DFD RID: 19965 RVA: 0x001A39C4 File Offset: 0x001A1BC4
+		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			if (this.sustainer != null)
@@ -97,7 +97,7 @@ namespace RimWorld
 			this.RecalcPathsOnAndAroundMe(map);
 		}
 
-		// Token: 0x06004DFE RID: 19966 RVA: 0x001A3A2C File Offset: 0x001A1C2C
+		
 		private void RecalcPathsOnAndAroundMe(Map map)
 		{
 			IntVec3[] adjacentCellsAndInside = GenAdj.AdjacentCellsAndInside;
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004DFF RID: 19967 RVA: 0x001A3A78 File Offset: 0x001A1C78
+		
 		public override void AttachTo(Thing parent)
 		{
 			base.AttachTo(parent);
@@ -125,7 +125,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E00 RID: 19968 RVA: 0x001A3AAC File Offset: 0x001A1CAC
+		
 		public override void Tick()
 		{
 			this.ticksSinceSpawn++;
@@ -171,7 +171,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E01 RID: 19969 RVA: 0x001A3C10 File Offset: 0x001A1E10
+		
 		private void SpawnSmokeParticles()
 		{
 			if (Fire.fireCount < 15)
@@ -191,7 +191,7 @@ namespace RimWorld
 			this.ticksUntilSmoke = Fire.SmokeIntervalRange.Lerped(num) + (int)(10f * Rand.Value);
 		}
 
-		// Token: 0x06004E02 RID: 19970 RVA: 0x001A3CB0 File Offset: 0x001A1EB0
+		
 		private void DoComplexCalcs()
 		{
 			bool flag = false;
@@ -281,7 +281,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E03 RID: 19971 RVA: 0x001A3F7F File Offset: 0x001A217F
+		
 		private void TryBurnFloor()
 		{
 			if (this.parent != null || !base.Spawned)
@@ -294,7 +294,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E04 RID: 19972 RVA: 0x001A3FBC File Offset: 0x001A21BC
+		
 		private bool VulnerableToRain()
 		{
 			if (!base.Spawned)
@@ -314,7 +314,7 @@ namespace RimWorld
 			return edifice != null && edifice.def.holdsRoof;
 		}
 
-		// Token: 0x06004E05 RID: 19973 RVA: 0x001A401C File Offset: 0x001A221C
+		
 		private void DoFireDamage(Thing targ)
 		{
 			int num = GenMath.RoundRandom(Mathf.Clamp(0.0125f + 0.0036f * this.fireSize, 0.0125f, 0.05f) * 150f);
@@ -343,7 +343,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E06 RID: 19974 RVA: 0x001A4118 File Offset: 0x001A2318
+		
 		protected void TrySpread()
 		{
 			IntVec3 intVec = base.Position;
@@ -382,94 +382,94 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002BC2 RID: 11202
+		
 		private int ticksSinceSpawn;
 
-		// Token: 0x04002BC3 RID: 11203
+		
 		public float fireSize = 0.1f;
 
-		// Token: 0x04002BC4 RID: 11204
+		
 		private int ticksSinceSpread;
 
-		// Token: 0x04002BC5 RID: 11205
+		
 		private float flammabilityMax = 0.5f;
 
-		// Token: 0x04002BC6 RID: 11206
+		
 		private int ticksUntilSmoke;
 
-		// Token: 0x04002BC7 RID: 11207
+		
 		private Sustainer sustainer;
 
-		// Token: 0x04002BC8 RID: 11208
+		
 		private static List<Thing> flammableList = new List<Thing>();
 
-		// Token: 0x04002BC9 RID: 11209
+		
 		private static int fireCount;
 
-		// Token: 0x04002BCA RID: 11210
+		
 		private static int lastFireCountUpdateTick;
 
-		// Token: 0x04002BCB RID: 11211
+		
 		public const float MinFireSize = 0.1f;
 
-		// Token: 0x04002BCC RID: 11212
+		
 		private const float MinSizeForSpark = 1f;
 
-		// Token: 0x04002BCD RID: 11213
+		
 		private const float TicksBetweenSparksBase = 150f;
 
-		// Token: 0x04002BCE RID: 11214
+		
 		private const float TicksBetweenSparksReductionPerFireSize = 40f;
 
-		// Token: 0x04002BCF RID: 11215
+		
 		private const float MinTicksBetweenSparks = 75f;
 
-		// Token: 0x04002BD0 RID: 11216
+		
 		private const float MinFireSizeToEmitSpark = 1f;
 
-		// Token: 0x04002BD1 RID: 11217
+		
 		public const float MaxFireSize = 1.75f;
 
-		// Token: 0x04002BD2 RID: 11218
+		
 		private const int TicksToBurnFloor = 7500;
 
-		// Token: 0x04002BD3 RID: 11219
+		
 		private const int ComplexCalcsInterval = 150;
 
-		// Token: 0x04002BD4 RID: 11220
+		
 		private const float CellIgniteChancePerTickPerSize = 0.01f;
 
-		// Token: 0x04002BD5 RID: 11221
+		
 		private const float MinSizeForIgniteMovables = 0.4f;
 
-		// Token: 0x04002BD6 RID: 11222
+		
 		private const float FireBaseGrowthPerTick = 0.00055f;
 
-		// Token: 0x04002BD7 RID: 11223
+		
 		private static readonly IntRange SmokeIntervalRange = new IntRange(130, 200);
 
-		// Token: 0x04002BD8 RID: 11224
+		
 		private const int SmokeIntervalRandomAddon = 10;
 
-		// Token: 0x04002BD9 RID: 11225
+		
 		private const float BaseSkyExtinguishChance = 0.04f;
 
-		// Token: 0x04002BDA RID: 11226
+		
 		private const int BaseSkyExtinguishDamage = 10;
 
-		// Token: 0x04002BDB RID: 11227
+		
 		private const float HeatPerFireSizePerInterval = 160f;
 
-		// Token: 0x04002BDC RID: 11228
+		
 		private const float HeatFactorWhenDoorPresent = 0.15f;
 
-		// Token: 0x04002BDD RID: 11229
+		
 		private const float SnowClearRadiusPerFireSize = 3f;
 
-		// Token: 0x04002BDE RID: 11230
+		
 		private const float SnowClearDepthFactor = 0.1f;
 
-		// Token: 0x04002BDF RID: 11231
+		
 		private const int FireCountParticlesOff = 15;
 	}
 }

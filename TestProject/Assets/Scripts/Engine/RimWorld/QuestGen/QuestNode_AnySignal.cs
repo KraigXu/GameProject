@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001102 RID: 4354
+	
 	public class QuestNode_AnySignal : QuestNode
 	{
-		// Token: 0x06006634 RID: 26164 RVA: 0x0023CC38 File Offset: 0x0023AE38
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.node == null || this.node.TestRun(slate);
 		}
 
-		// Token: 0x06006635 RID: 26165 RVA: 0x0023CC50 File Offset: 0x0023AE50
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -62,21 +62,21 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_PassAnyOutMany);
 		}
 
-		// Token: 0x04003E40 RID: 15936
+		
 		[NoTranslate]
 		public SlateRef<IEnumerable<string>> inSignals;
 
-		// Token: 0x04003E41 RID: 15937
+		
 		[NoTranslate]
 		public SlateRef<IEnumerable<string>> outSignals;
 
-		// Token: 0x04003E42 RID: 15938
+		
 		public QuestNode node;
 
-		// Token: 0x04003E43 RID: 15939
+		
 		public SlateRef<QuestPart.SignalListenMode?> signalListenMode;
 
-		// Token: 0x04003E44 RID: 15940
+		
 		private const string OuterNodeCompletedSignal = "OuterNodeCompleted";
 	}
 }

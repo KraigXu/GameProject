@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006D5 RID: 1749
+	
 	public static class StealAIUtility
 	{
-		// Token: 0x06002EB8 RID: 11960 RVA: 0x00106528 File Offset: 0x00104728
+		
 		public static bool TryFindBestItemToSteal(IntVec3 root, Map map, float maxDist, out Thing item, Pawn thief, List<Thing> disallowed = null)
 		{
 			if (map == null)
@@ -37,7 +37,7 @@ namespace RimWorld
 			return item != null;
 		}
 
-		// Token: 0x06002EB9 RID: 11961 RVA: 0x00106634 File Offset: 0x00104834
+		
 		public static float TotalMarketValueAround(List<Pawn> pawns)
 		{
 			float num = 0f;
@@ -55,7 +55,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06002EBA RID: 11962 RVA: 0x001066C4 File Offset: 0x001048C4
+		
 		public static float StartStealingMarketValueThreshold(Lord lord)
 		{
 			Rand.PushState();
@@ -70,22 +70,22 @@ namespace RimWorld
 			return num * randomInRange;
 		}
 
-		// Token: 0x06002EBB RID: 11963 RVA: 0x00106736 File Offset: 0x00104936
+		
 		public static float GetValue(Thing thing)
 		{
 			return thing.MarketValue * (float)thing.stackCount;
 		}
 
-		// Token: 0x04001A81 RID: 6785
+		
 		private const float MinMarketValueToTake = 320f;
 
-		// Token: 0x04001A82 RID: 6786
+		
 		private static readonly FloatRange StealThresholdValuePerCombatPowerRange = new FloatRange(2f, 10f);
 
-		// Token: 0x04001A83 RID: 6787
+		
 		private const float MinCombatPowerPerPawn = 100f;
 
-		// Token: 0x04001A84 RID: 6788
+		
 		private static List<Thing> tmpToSteal = new List<Thing>();
 	}
 }

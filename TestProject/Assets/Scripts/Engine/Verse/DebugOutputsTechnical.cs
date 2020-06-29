@@ -9,10 +9,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000349 RID: 841
+	
 	public static class DebugOutputsTechnical
 	{
-		// Token: 0x060019C5 RID: 6597 RVA: 0x0009D5D8 File Offset: 0x0009B7D8
+		
 		[DebugOutput]
 		public static void KeyStrings()
 		{
@@ -25,7 +25,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x060019C6 RID: 6598 RVA: 0x0009D66C File Offset: 0x0009B86C
+		
 		[DebugOutput]
 		public static void DefNames()
 		{
@@ -39,7 +39,7 @@ namespace Verse
 					Type type = enumerator.Current;
 					DebugMenuOption item = new DebugMenuOption(type.Name, DebugMenuOptionMode.Action, delegate
 					{
-						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
+						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
 						int num = 0;
 						StringBuilder stringBuilder = new StringBuilder();
 						foreach (Def def in source.Cast<Def>())
@@ -61,7 +61,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060019C7 RID: 6599 RVA: 0x0009D71C File Offset: 0x0009B91C
+		
 		[DebugOutput]
 		public static void DefNamesAll()
 		{
@@ -71,7 +71,7 @@ namespace Verse
 			orderby def.Name
 			select def)
 			{
-				IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
+				IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
 				stringBuilder.AppendLine("--    " + type.ToString());
 				foreach (Def def2 in source.Cast<Def>().OrderBy((Def def) => def.defName))
 				{
@@ -90,7 +90,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x060019C8 RID: 6600 RVA: 0x0009D86C File Offset: 0x0009BA6C
+		
 		[DebugOutput]
 		public static void DefLabels()
 		{
@@ -104,7 +104,7 @@ namespace Verse
 					Type type = enumerator.Current;
 					DebugMenuOption item = new DebugMenuOption(type.Name, DebugMenuOptionMode.Action, delegate
 					{
-						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
+						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
 						int num = 0;
 						StringBuilder stringBuilder = new StringBuilder();
 						foreach (Def def in source.Cast<Def>())
@@ -126,7 +126,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x060019C9 RID: 6601 RVA: 0x0009D91C File Offset: 0x0009BB1C
+		
 		[DebugOutput]
 		public static void BestThingRequestGroup()
 		{
@@ -191,7 +191,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x060019CA RID: 6602 RVA: 0x0009DA08 File Offset: 0x0009BC08
+		
 		[DebugOutput]
 		public static void DamageTest()
 		{

@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001DC RID: 476
+	
 	public class TemperatureSaveLoad
 	{
-		// Token: 0x06000D7D RID: 3453 RVA: 0x0004D01C File Offset: 0x0004B21C
+		
 		public TemperatureSaveLoad(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000D7E RID: 3454 RVA: 0x0004D02C File Offset: 0x0004B22C
+		
 		public void DoExposeWork()
 		{
 			byte[] arr = null;
@@ -50,7 +50,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D7F RID: 3455 RVA: 0x0004D1D4 File Offset: 0x0004B3D4
+		
 		public void ApplyLoadedDataToRegions()
 		{
 			if (this.tempGrid != null)
@@ -67,7 +67,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D80 RID: 3456 RVA: 0x0004D278 File Offset: 0x0004B478
+		
 		private ushort TempFloatToShort(float temp)
 		{
 			temp = Mathf.Clamp(temp, -273.15f, 1000f);
@@ -75,16 +75,16 @@ namespace Verse
 			return (ushort)((int)temp + 32768);
 		}
 
-		// Token: 0x06000D81 RID: 3457 RVA: 0x0004D29E File Offset: 0x0004B49E
+		
 		private float TempShortToFloat(ushort temp)
 		{
 			return ((float)temp - 32768f) / 16f;
 		}
 
-		// Token: 0x04000A4F RID: 2639
+		
 		private Map map;
 
-		// Token: 0x04000A50 RID: 2640
+		
 		private ushort[] tempGrid;
 	}
 }

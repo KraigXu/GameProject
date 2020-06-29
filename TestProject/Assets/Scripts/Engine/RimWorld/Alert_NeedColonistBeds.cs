@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DE8 RID: 3560
+	
 	public class Alert_NeedColonistBeds : Alert
 	{
-		// Token: 0x06005653 RID: 22099 RVA: 0x001C9E06 File Offset: 0x001C8006
+		
 		public Alert_NeedColonistBeds()
 		{
 			this.defaultLabel = "NeedColonistBeds".Translate();
@@ -15,7 +15,7 @@ namespace RimWorld
 			this.defaultPriority = AlertPriority.High;
 		}
 
-		// Token: 0x06005654 RID: 22100 RVA: 0x001C9E40 File Offset: 0x001C8040
+		
 		public override AlertReport GetReport()
 		{
 			if (GenDate.DaysPassed > 30)
@@ -33,7 +33,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005655 RID: 22101 RVA: 0x001C9E90 File Offset: 0x001C8090
+		
 		private bool NeedColonistBeds(Map map)
 		{
 			if (!map.IsPlayerHome)

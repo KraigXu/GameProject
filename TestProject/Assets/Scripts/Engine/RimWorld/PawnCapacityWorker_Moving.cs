@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B07 RID: 2823
+	
 	public class PawnCapacityWorker_Moving : PawnCapacityWorker
 	{
-		// Token: 0x0600428B RID: 17035 RVA: 0x001636AC File Offset: 0x001618AC
+		
 		public override float CalculateCapacityLevel(HediffSet diffSet, List<PawnCapacityUtility.CapacityImpactor> impactors = null)
 		{
 			float num = 0f;
@@ -24,7 +24,7 @@ namespace RimWorld
 			return num2 * Mathf.Min(base.CalculateCapacityAndRecord(diffSet, PawnCapacityDefOf.Consciousness, impactors), 1f);
 		}
 
-		// Token: 0x0600428C RID: 17036 RVA: 0x00163780 File Offset: 0x00161980
+		
 		public override bool CanHaveCapacity(BodyDef body)
 		{
 			return body.HasPartWithTag(BodyPartTagDefOf.MovingLimbCore);

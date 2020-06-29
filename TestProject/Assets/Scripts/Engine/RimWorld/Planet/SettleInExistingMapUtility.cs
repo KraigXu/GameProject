@@ -7,29 +7,26 @@ using Verse.Sound;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001248 RID: 4680
+	
 	public static class SettleInExistingMapUtility
 	{
-		// Token: 0x06006D08 RID: 27912 RVA: 0x00262C50 File Offset: 0x00260E50
+		
 		public static Command SettleCommand(Map map, bool requiresNoEnemies)
 		{
 			Command_Settle command_Settle = new Command_Settle();
 			command_Settle.defaultLabel = "CommandSettle".Translate();
 			command_Settle.defaultDesc = "CommandSettleDesc".Translate();
 			command_Settle.icon = SettleUtility.SettleCommandTex;
-			Action <>9__1;
+
 			command_Settle.action = delegate
 			{
 				SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
 				int tile = map.Tile;
-				Action settleAction;
-				if ((settleAction = <>9__1) == null)
+				Action settleAction = delegate
 				{
-					settleAction = (<>9__1 = delegate
-					{
-						SettleInExistingMapUtility.Settle(map);
-					});
-				}
+					SettleInExistingMapUtility.Settle(map);
+				};
+
 				SettlementProximityGoodwillUtility.CheckConfirmSettle(tile, settleAction);
 			};
 			if (SettleUtility.PlayerSettlementsCountLimitReached)
@@ -67,7 +64,7 @@ namespace RimWorld.Planet
 			return command_Settle;
 		}
 
-		// Token: 0x06006D09 RID: 27913 RVA: 0x00262D90 File Offset: 0x00260F90
+		
 		public static void Settle(Map map)
 		{
 			MapParent parent = map.Parent;
@@ -91,7 +88,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x040043C9 RID: 17353
+		
 		private static List<Pawn> tmpPlayerPawns = new List<Pawn>();
 	}
 }

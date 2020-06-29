@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200106A RID: 4202
+	
 	public class PlaceWorker_WatermillGenerator : PlaceWorker
 	{
-		// Token: 0x060063F8 RID: 25592 RVA: 0x0022A3F4 File Offset: 0x002285F4
+		
 		public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
 		{
 			foreach (IntVec3 c in CompPowerPlantWater.GroundCells(loc, rot))
@@ -26,7 +26,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060063F9 RID: 25593 RVA: 0x0022A4AC File Offset: 0x002286AC
+		
 		private bool WaterCellsPresent(IntVec3 loc, Rot4 rot, Map map)
 		{
 			foreach (IntVec3 c in CompPowerPlantWater.WaterCells(loc, rot))
@@ -39,7 +39,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060063FA RID: 25594 RVA: 0x0022A518 File Offset: 0x00228718
+		
 		public override void DrawGhost(ThingDef def, IntVec3 loc, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
 			GenDraw.DrawFieldEdges(CompPowerPlantWater.GroundCells(loc, rot).ToList<IntVec3>(), Color.white);
@@ -70,7 +70,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060063FB RID: 25595 RVA: 0x0022A704 File Offset: 0x00228904
+		
 		public override IEnumerable<TerrainAffordanceDef> DisplayAffordances()
 		{
 			yield return TerrainAffordanceDefOf.Heavy;
@@ -78,7 +78,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04003CDE RID: 15582
+		
 		private static List<Thing> waterMills = new List<Thing>();
 	}
 }

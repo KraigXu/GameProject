@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D77 RID: 3447
+	
 	public class CompUsableImplant : CompUsable
 	{
-		// Token: 0x0600540A RID: 21514 RVA: 0x001C1044 File Offset: 0x001BF244
+		
 		protected override string FloatMenuOptionLabel(Pawn pawn)
 		{
 			CompUseEffect_InstallImplant compUseEffect_InstallImplant = this.parent.TryGetComp<CompUseEffect_InstallImplant>();
@@ -21,7 +21,7 @@ namespace RimWorld
 			return base.FloatMenuOptionLabel(pawn);
 		}
 
-		// Token: 0x0600540B RID: 21515 RVA: 0x001C10C8 File Offset: 0x001BF2C8
+		
 		public override void TryStartUseJob(Pawn pawn, LocalTargetInfo extraTarget)
 		{
 			CompUseEffect_InstallImplant useEffectImplant = this.parent.TryGetComp<CompUseEffect_InstallImplant>();
@@ -38,7 +38,7 @@ namespace RimWorld
 			this.UseJobInternal(pawn, extraTarget, useEffectImplant.Props.hediffDef);
 		}
 
-		// Token: 0x0600540C RID: 21516 RVA: 0x001C11B8 File Offset: 0x001BF3B8
+		
 		private void UseJobInternal(Pawn pawn, LocalTargetInfo extraTarget, HediffDef hediff)
 		{
 			base.TryStartUseJob(pawn, extraTarget);

@@ -7,11 +7,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E70 RID: 3696
+	
 	[StaticConstructorOnStartup]
 	public static class HealthCardUtility
 	{
-		// Token: 0x0600597F RID: 22911 RVA: 0x001E1200 File Offset: 0x001DF400
+		
 		public static void DrawPawnHealthCard(Rect outRect, Pawn pawn, bool allowOperations, bool showBloodLoss, Thing thingForMedBills)
 		{
 			if (pawn.Dead && allowOperations)
@@ -27,7 +27,7 @@ namespace RimWorld
 			HealthCardUtility.DrawHediffListing(rect2.ContractedBy(10f), pawn, showBloodLoss);
 		}
 
-		// Token: 0x06005980 RID: 22912 RVA: 0x001E12B4 File Offset: 0x001DF4B4
+		
 		public static void DrawHealthSummary(Rect rect, Pawn pawn, bool allowOperations, Thing thingForMedBills)
 		{
 			GUI.color = Color.white;
@@ -71,7 +71,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005981 RID: 22913 RVA: 0x001E141C File Offset: 0x001DF61C
+		
 		public static void DrawHediffListing(Rect rect, Pawn pawn, bool showBloodLoss)
 		{
 			GUI.color = Color.white;
@@ -136,7 +136,7 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x06005982 RID: 22914 RVA: 0x001E16E8 File Offset: 0x001DF8E8
+		
 		private static IEnumerable<IGrouping<BodyPartRecord, Hediff>> VisibleHediffGroupsInOrder(Pawn pawn, bool showBloodLoss)
 		{
 			foreach (IGrouping<BodyPartRecord, Hediff> grouping in from x in HealthCardUtility.VisibleHediffs(pawn, showBloodLoss)
@@ -151,7 +151,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005983 RID: 22915 RVA: 0x001E16FF File Offset: 0x001DF8FF
+		
 		private static float GetListPriority(BodyPartRecord rec)
 		{
 			if (rec == null)
@@ -161,7 +161,7 @@ namespace RimWorld
 			return (float)((int)rec.height * 10000) + rec.coverageAbsWithChildren;
 		}
 
-		// Token: 0x06005984 RID: 22916 RVA: 0x001E171E File Offset: 0x001DF91E
+		
 		private static IEnumerable<Hediff> VisibleHediffs(Pawn pawn, bool showBloodLoss)
 		{
 			if (!HealthCardUtility.showAllHediffs)
@@ -195,7 +195,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005985 RID: 22917 RVA: 0x001E1738 File Offset: 0x001DF938
+		
 		private static float DrawMedOperationsTab(Rect leftRect, Pawn pawn, Thing thingForMedBills, float curY)
 		{
 			curY += 2f;
@@ -235,7 +235,7 @@ namespace RimWorld
 			return curY;
 		}
 
-		// Token: 0x06005986 RID: 22918 RVA: 0x001E17BC File Offset: 0x001DF9BC
+		
 		private static FloatMenuOption GenerateSurgeryOption(Pawn pawn, Thing thingForMedBills, RecipeDef recipe, IEnumerable<ThingDef> missingIngredients, BodyPartRecord part = null)
 		{
 			string text = recipe.Worker.GetLabelWhenUsedOn(pawn, part).CapitalizeFirst();
@@ -305,7 +305,7 @@ namespace RimWorld
 			return floatMenuOption;
 		}
 
-		// Token: 0x06005987 RID: 22919 RVA: 0x001E199C File Offset: 0x001DFB9C
+		
 		private static void CreateSurgeryBill(Pawn medPawn, RecipeDef recipe, BodyPartRecord part)
 		{
 			Bill_Medical bill_Medical = new Bill_Medical(recipe);
@@ -346,7 +346,7 @@ namespace RimWorld
 			recipe.Worker.CheckForWarnings(medPawn);
 		}
 
-		// Token: 0x06005988 RID: 22920 RVA: 0x001E1C40 File Offset: 0x001DFE40
+		
 		private static ThingDef GetMinRequiredMedicine(RecipeDef recipe)
 		{
 			HealthCardUtility.tmpMedicineBestToWorst.Clear();
@@ -379,7 +379,7 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		// Token: 0x06005989 RID: 22921 RVA: 0x001E1D50 File Offset: 0x001DFF50
+		
 		private static float DrawOverviewTab(Rect leftRect, Pawn pawn, float curY)
 		{
 			curY += 4f;
@@ -514,7 +514,7 @@ namespace RimWorld
 			return curY;
 		}
 
-		// Token: 0x0600598A RID: 22922 RVA: 0x001E24C0 File Offset: 0x001E06C0
+		
 		private static float DrawLeftRow(Rect leftRect, float curY, string leftLabel, string rightLabel, Color rightLabelColor, TipSignal tipSignal)
 		{
 			Rect rect = new Rect(0f, curY, leftRect.width, 20f);
@@ -536,7 +536,7 @@ namespace RimWorld
 			return curY;
 		}
 
-		// Token: 0x0600598B RID: 22923 RVA: 0x001E2598 File Offset: 0x001E0798
+		
 		private static void DrawHediffRow(Rect rect, Pawn pawn, IEnumerable<Hediff> diffs, ref float curY)
 		{
 			float num = rect.width * 0.375f;
@@ -674,13 +674,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600598C RID: 22924 RVA: 0x001E2B68 File Offset: 0x001E0D68
+		
 		public static string GetPainTip(Pawn pawn)
 		{
 			return "PainLevel".Translate() + ": " + (pawn.health.hediffSet.PainTotal * 100f).ToString("F0") + "%";
 		}
 
-		// Token: 0x0600598D RID: 22925 RVA: 0x001E2BC0 File Offset: 0x001E0DC0
+		
 		public static string GetPawnCapacityTip(Pawn pawn, PawnCapacityDef capacity)
 		{
 			List<PawnCapacityUtility.CapacityImpactor> list = new List<PawnCapacityUtility.CapacityImpactor>();
@@ -723,7 +723,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600598E RID: 22926 RVA: 0x001E2D48 File Offset: 0x001E0F48
+		
 		private static string GetTooltip(IEnumerable<Hediff> diffs, Pawn pawn, BodyPartRecord part)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -780,7 +780,7 @@ namespace RimWorld
 		private static bool CanEntryBeClicked(IEnumerable<Hediff> diffs, Pawn pawn)
 		{
 			//LogEntry combatLogEntry;
-			//Predicate<LogEntry> <>9__1;
+			//Predicate<LogEntry> 9__1;
 			//TaggedString taggedString;
 			//return HealthCardUtility.GetCombatLogInfo(diffs, out taggedString, out combatLogEntry) && combatLogEntry != null && Find.BattleLog.Battles.Any(delegate(Battle b)
 			//{
@@ -788,9 +788,9 @@ namespace RimWorld
 			//	{
 			//		List<LogEntry> entries = b.Entries;
 			//		Predicate<LogEntry> predicate;
-			//		if ((predicate = <>9__1) == null)
+			//		if ((predicate ) == null)
 			//		{
-			//			predicate = (<>9__1 = ((LogEntry e) => e == combatLogEntry));
+			//			predicate = (9__1 = ((LogEntry e) => e == combatLogEntry));
 			//		}
 			//		return entries.Any(predicate);
 			//	}
@@ -799,7 +799,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005990 RID: 22928 RVA: 0x001E303C File Offset: 0x001E123C
+		
 		private static void EntryClicked(IEnumerable<Hediff> diffs, Pawn pawn)
 		{
 			//LogEntry combatLogEntry;
@@ -808,16 +808,16 @@ namespace RimWorld
 			//{
 			//	return;
 			//}
-			//Predicate<LogEntry> <>9__1;
+			//Predicate<LogEntry> 9__1;
 			//if (!Find.BattleLog.Battles.Any(delegate(Battle b)
 			//{
 			//	if (b.Concerns(pawn))
 			//	{
 			//		List<LogEntry> entries = b.Entries;
 			//		Predicate<LogEntry> predicate;
-			//		if ((predicate = <>9__1) == null)
+			//		if ((predicate ) == null)
 			//		{
-			//			predicate = (<>9__1 = ((LogEntry e) => e == combatLogEntry));
+			//			predicate = (9__1 = ((LogEntry e) => e == combatLogEntry));
 			//		}
 			//		return entries.Any(predicate);
 			//	}
@@ -835,7 +835,7 @@ namespace RimWorld
 			//tab_Pawn_Log.Highlight(combatLogEntry);
 		}
 
-		// Token: 0x06005991 RID: 22929 RVA: 0x001E30C0 File Offset: 0x001E12C0
+		
 		private static bool GetCombatLogInfo(IEnumerable<Hediff> diffs, out TaggedString combatLogText, out LogEntry combatLogEntry)
 		{
 			combatLogText = null;
@@ -855,7 +855,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005992 RID: 22930 RVA: 0x001E3170 File Offset: 0x001E1370
+		
 		private static void DoRightRowHighlight(Rect rowRect)
 		{
 			if (HealthCardUtility.highlight)
@@ -871,7 +871,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005993 RID: 22931 RVA: 0x001E31C4 File Offset: 0x001E13C4
+		
 		private static void DoDebugOptions(Rect rightRect, Pawn pawn)
 		{
 			Widgets.CheckboxLabeled(new Rect(rightRect.x, rightRect.y - 25f, 110f, 30f), "Dev: AllDiffs", ref HealthCardUtility.showAllHediffs, false, null, null, false);
@@ -914,15 +914,15 @@ namespace RimWorld
 					}
 					Find.WindowStack.Add(new Dialog_MessageBox(stringBuilder.ToString(), null, null, null, null, null, false, null, null));
 				}, MenuOptionPriority.Default, null, null, 0f, null, null));
-				//Func<BodyPartGroupDef, bool> <>9__15;
+				//Func<BodyPartGroupDef, bool> 9__15;
 				//list.Add(new FloatMenuOption("BodyPartGroup efficiency (of only natural parts)", delegate
 				//{
 				//	StringBuilder stringBuilder = new StringBuilder();
 				//	IEnumerable<BodyPartGroupDef> allDefs = DefDatabase<BodyPartGroupDef>.AllDefs;
 				//	Func<BodyPartGroupDef, bool> predicate;
-				//	if ((predicate = <>9__15) == null)
+				//	if ((predicate 5) == null)
 				//	{
-				//		predicate = (<>9__15 = ((BodyPartGroupDef x) => pawn.RaceProps.body.AllParts.Any((BodyPartRecord y) => y.groups.Contains(x))));
+				//		predicate = (9__15 = ((BodyPartGroupDef x) => pawn.RaceProps.body.AllParts.Any((BodyPartRecord y) => y.groups.Contains(x))));
 				//	}
 				//	foreach (BodyPartGroupDef bodyPartGroupDef in allDefs.Where(predicate))
 				//	{
@@ -987,15 +987,15 @@ namespace RimWorld
 					}
 					Find.WindowStack.Add(new Dialog_MessageBox(stringBuilder.ToString(), null, null, null, null, null, false, null, null));
 				}, MenuOptionPriority.Default, null, null, 0f, null, null));
-				//Func<BodyPartRecord, float> <>9__17;
+				//Func<BodyPartRecord, float> 9__17;
 				//list.Add(new FloatMenuOption("GetCoverageOfNotMissingNaturalParts", delegate
 				//{
 				//	StringBuilder stringBuilder = new StringBuilder();
 				//	IEnumerable<BodyPartRecord> allParts = pawn.RaceProps.body.AllParts;
 				//	Func<BodyPartRecord, float> keySelector;
-				//	if ((keySelector = <>9__17) == null)
+				//	if ((keySelector 7) == null)
 				//	{
-				//		keySelector = (<>9__17 = ((BodyPartRecord x) => pawn.health.hediffSet.GetCoverageOfNotMissingNaturalParts(x)));
+				//		keySelector = (9__17 = ((BodyPartRecord x) => pawn.health.hediffSet.GetCoverageOfNotMissingNaturalParts(x)));
 				//	}
 				//	foreach (BodyPartRecord bodyPartRecord in allParts.OrderByDescending(keySelector))
 				//	{
@@ -1008,11 +1008,11 @@ namespace RimWorld
 				//	StringBuilder stringBuilder = new StringBuilder();
 				//	float totalCorpseNutrition = StatDefOf.Nutrition.Worker.GetValueAbstract(pawn.RaceProps.corpseDef, null);
 				//	IEnumerable<BodyPartRecord> allParts = pawn.RaceProps.body.AllParts;
-				//	Func<BodyPartRecord, float> <>9__18;
+				//	Func<BodyPartRecord, float> 9__18;
 				//	Func<BodyPartRecord, float> keySelector;
-				//	if ((keySelector = <>9__18) == null)
+				//	if ((keySelector 8) == null)
 				//	{
-				//		keySelector = (<>9__18 = ((BodyPartRecord x) => FoodUtility.GetBodyPartNutrition(totalCorpseNutrition, pawn, x)));
+				//		keySelector = (9__18 = ((BodyPartRecord x) => FoodUtility.GetBodyPartNutrition(totalCorpseNutrition, pawn, x)));
 				//	}
 				//	foreach (BodyPartRecord bodyPartRecord in allParts.OrderByDescending(keySelector))
 				//	{
@@ -1071,20 +1071,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005994 RID: 22932 RVA: 0x001E3490 File Offset: 0x001E1690
+		
 		public static Pair<string, Color> GetEfficiencyLabel(Pawn pawn, PawnCapacityDef activity)
 		{
 			float level = pawn.health.capacities.GetLevel(activity);
 			return new Pair<string, Color>(PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, activity, null, false).ToStringPercent(), HealthCardUtility.efficiencyToColor[HealthCardUtility.EfficiencyValueToEstimate(level)]);
 		}
 
-		// Token: 0x06005995 RID: 22933 RVA: 0x001E34DC File Offset: 0x001E16DC
+		
 		public static string GetEfficiencyEstimateLabel(float eff)
 		{
 			return HealthCardUtility.EfficiencyValueToEstimate(eff).ToString().Translate();
 		}
 
-		// Token: 0x06005996 RID: 22934 RVA: 0x001E3508 File Offset: 0x001E1708
+		
 		public static EfficiencyEstimate EfficiencyValueToEstimate(float eff)
 		{
 			if (eff <= 0f)
@@ -1110,7 +1110,7 @@ namespace RimWorld
 			return EfficiencyEstimate.Enhanced;
 		}
 
-		// Token: 0x06005997 RID: 22935 RVA: 0x001E355C File Offset: 0x001E175C
+		
 		public static Pair<string, Color> GetPainLabel(Pawn pawn)
 		{
 			float painTotal = pawn.health.hediffSet.PainTotal;
@@ -1144,61 +1144,61 @@ namespace RimWorld
 			return new Pair<string, Color>(first, second);
 		}
 
-		// Token: 0x0400308D RID: 12429
+		
 		private static Vector2 scrollPosition = Vector2.zero;
 
-		// Token: 0x0400308E RID: 12430
+		
 		private static float scrollViewHeight = 0f;
 
-		// Token: 0x0400308F RID: 12431
+		
 		private static bool highlight = true;
 
-		// Token: 0x04003090 RID: 12432
+		
 		private static bool onOperationTab = false;
 
-		// Token: 0x04003091 RID: 12433
+		
 		private static Vector2 billsScrollPosition = Vector2.zero;
 
-		// Token: 0x04003092 RID: 12434
+		
 		private static float billsScrollHeight = 1000f;
 
-		// Token: 0x04003093 RID: 12435
+		
 		private static bool showAllHediffs = false;
 
-		// Token: 0x04003094 RID: 12436
+		
 		private static bool showHediffsDebugInfo = false;
 
-		// Token: 0x04003095 RID: 12437
+		
 		private static float lastMaxIconsTotalWidth;
 
-		// Token: 0x04003096 RID: 12438
+		
 		public const float TopPadding = 20f;
 
-		// Token: 0x04003097 RID: 12439
+		
 		private const float ThoughtLevelHeight = 25f;
 
-		// Token: 0x04003098 RID: 12440
+		
 		private const float ThoughtLevelSpacing = 4f;
 
-		// Token: 0x04003099 RID: 12441
+		
 		private const float IconSize = 20f;
 
-		// Token: 0x0400309A RID: 12442
+		
 		private static readonly Color HighlightColor = new Color(0.5f, 0.5f, 0.5f, 1f);
 
-		// Token: 0x0400309B RID: 12443
+		
 		private static readonly Color StaticHighlightColor = new Color(0.75f, 0.75f, 0.85f, 1f);
 
-		// Token: 0x0400309C RID: 12444
+		
 		private static readonly Color MediumPainColor = new Color(0.9f, 0.9f, 0f);
 
-		// Token: 0x0400309D RID: 12445
+		
 		private static readonly Color SeverePainColor = new Color(0.9f, 0.5f, 0f);
 
-		// Token: 0x0400309E RID: 12446
+		
 		private static readonly Texture2D BleedingIcon = ContentFinder<Texture2D>.Get("UI/Icons/Medical/Bleeding", true);
 
-		// Token: 0x0400309F RID: 12447
+		
 		private static readonly Dictionary<EfficiencyEstimate, Color> efficiencyToColor = new Dictionary<EfficiencyEstimate, Color>
 		{
 			{
@@ -1227,7 +1227,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040030A0 RID: 12448
+		
 		private static List<ThingDef> tmpMedicineBestToWorst = new List<ThingDef>();
 	}
 }

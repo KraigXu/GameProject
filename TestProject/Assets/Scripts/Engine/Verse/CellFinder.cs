@@ -7,16 +7,16 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x0200043A RID: 1082
+	
 	public static class CellFinder
 	{
-		// Token: 0x06002052 RID: 8274 RVA: 0x000C43BE File Offset: 0x000C25BE
+		
 		public static IntVec3 RandomCell(Map map)
 		{
 			return new IntVec3(Rand.Range(0, map.Size.x), 0, Rand.Range(0, map.Size.z));
 		}
 
-		// Token: 0x06002053 RID: 8275 RVA: 0x000C43E8 File Offset: 0x000C25E8
+		
 		public static IntVec3 RandomEdgeCell(Map map)
 		{
 			IntVec3 result = default(IntVec3);
@@ -47,7 +47,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06002054 RID: 8276 RVA: 0x000C4490 File Offset: 0x000C2690
+		
 		public static IntVec3 RandomEdgeCell(Rot4 dir, Map map)
 		{
 			if (dir == Rot4.North)
@@ -69,7 +69,7 @@ namespace Verse
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x06002055 RID: 8277 RVA: 0x000C4554 File Offset: 0x000C2754
+		
 		public static IntVec3 RandomNotEdgeCell(int minEdgeDistance, Map map)
 		{
 			if (minEdgeDistance > map.Size.x / 2 || minEdgeDistance > map.Size.z / 2)
@@ -81,7 +81,7 @@ namespace Verse
 			return new IntVec3(newX, 0, newZ);
 		}
 
-		// Token: 0x06002056 RID: 8278 RVA: 0x000C45B8 File Offset: 0x000C27B8
+		
 		public static bool TryFindClosestRegionWith(Region rootReg, TraverseParms traverseParms, Predicate<Region> validator, int maxRegions, out Region result, RegionType traversableRegionTypes = RegionType.Set_Passable)
 		{
 			if (rootReg == null)
@@ -103,7 +103,7 @@ namespace Verse
 			return result != null;
 		}
 
-		// Token: 0x06002057 RID: 8279 RVA: 0x000C461C File Offset: 0x000C281C
+		
 		public static Region RandomRegionNear(Region root, int maxRegions, TraverseParms traverseParms, Predicate<Region> validator = null, Pawn pawnToAllow = null, RegionType traversableRegionTypes = RegionType.Set_Passable)
 		{
 			if (root == null)
@@ -125,7 +125,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06002058 RID: 8280 RVA: 0x000C46CC File Offset: 0x000C28CC
+		
 		public static void AllRegionsNear(List<Region> results, Region root, int maxRegions, TraverseParms traverseParms, Predicate<Region> validator = null, Pawn pawnToAllow = null, RegionType traversableRegionTypes = RegionType.Set_Passable)
 		{
 			if (results == null)
@@ -146,7 +146,7 @@ namespace Verse
 			}, maxRegions, traversableRegionTypes);
 		}
 
-		// Token: 0x06002059 RID: 8281 RVA: 0x000C4758 File Offset: 0x000C2958
+		
 		public static bool TryFindRandomReachableCellNear(IntVec3 root, Map map, float radius, TraverseParms traverseParms, Predicate<IntVec3> cellValidator, Predicate<Region> regionValidator, out IntVec3 result, int maxRegions = 999999)
 		{
 			if (map == null)
@@ -168,15 +168,15 @@ namespace Verse
 				CellFinder.workingRegions.Add(r);
 				return false;
 			}, maxRegions, RegionType.Set_Passable);
-			Predicate<IntVec3> <>9__3;
+			Predicate<IntVec3> 9__3;
 			while (CellFinder.workingRegions.Count > 0)
 			{
 				Region region2 = CellFinder.workingRegions.RandomElementByWeight((Region r) => (float)r.CellCount);
 				Region reg = region2;
 				Predicate<IntVec3> validator;
-				if ((validator = <>9__3) == null)
+				if ((validator ) == null)
 				{
-					validator = (<>9__3 = ((IntVec3 c) => (float)(c - root).LengthHorizontalSquared <= radSquared && (cellValidator == null || cellValidator(c))));
+					validator = (9__3 = ((IntVec3 c) => (float)(c - root).LengthHorizontalSquared <= radSquared && (cellValidator == null || cellValidator(c))));
 				}
 				if (reg.TryFindRandomCellInRegion(validator, out result))
 				{
@@ -190,7 +190,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600205A RID: 8282 RVA: 0x000C48B4 File Offset: 0x000C2AB4
+		
 		public static IntVec3 RandomClosewalkCellNear(IntVec3 root, Map map, int radius, Predicate<IntVec3> extraValidator = null)
 		{
 			IntVec3 result;
@@ -201,13 +201,13 @@ namespace Verse
 			return root;
 		}
 
-		// Token: 0x0600205B RID: 8283 RVA: 0x000C48D4 File Offset: 0x000C2AD4
+		
 		public static bool TryRandomClosewalkCellNear(IntVec3 root, Map map, int radius, out IntVec3 result, Predicate<IntVec3> extraValidator = null)
 		{
 			return CellFinder.TryFindRandomReachableCellNear(root, map, (float)radius, TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false), (IntVec3 c) => c.Standable(map) && (extraValidator == null || extraValidator(c)), null, out result, 999999);
 		}
 
-		// Token: 0x0600205C RID: 8284 RVA: 0x000C4920 File Offset: 0x000C2B20
+		
 		public static IntVec3 RandomClosewalkCellNearNotForbidden(IntVec3 root, Map map, int radius, Pawn pawn)
 		{
 			IntVec3 result;
@@ -218,7 +218,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x0600205D RID: 8285 RVA: 0x000C4980 File Offset: 0x000C2B80
+		
 		public static bool TryFindRandomCellInRegion(this Region reg, Predicate<IntVec3> validator, out IntVec3 result)
 		{
 			for (int i = 0; i < 10; i++)
@@ -244,7 +244,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600205E RID: 8286 RVA: 0x000C4A24 File Offset: 0x000C2C24
+		
 		public static bool TryFindRandomCellNear(IntVec3 root, Map map, int squareRadius, Predicate<IntVec3> validator, out IntVec3 result, int maxTries = -1)
 		{
 			int num = root.x - squareRadius;
@@ -338,13 +338,13 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600205F RID: 8287 RVA: 0x000C4C64 File Offset: 0x000C2E64
+		
 		public static bool TryFindRandomPawnExitCell(Pawn searcher, out IntVec3 result)
 		{
 			return CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => !searcher.Map.roofGrid.Roofed(c) && c.Walkable(searcher.Map) && searcher.CanReach(c, PathEndMode.OnCell, Danger.Some, false, TraverseMode.ByPawn), searcher.Map, 0f, out result);
 		}
 
-		// Token: 0x06002060 RID: 8288 RVA: 0x000C4CA0 File Offset: 0x000C2EA0
+		
 		public static bool TryFindRandomEdgeCellWith(Predicate<IntVec3> validator, Map map, float roadChance, out IntVec3 result)
 		{
 			if (Rand.Chance(roadChance))
@@ -400,7 +400,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002061 RID: 8289 RVA: 0x000C4E50 File Offset: 0x000C3050
+		
 		public static bool TryFindRandomEdgeCellWith(Predicate<IntVec3> validator, Map map, Rot4 dir, float roadChance, out IntVec3 result)
 		{
 			if (Rand.Value < roadChance)
@@ -461,7 +461,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002062 RID: 8290 RVA: 0x000C5044 File Offset: 0x000C3244
+		
 		public static bool TryFindRandomEdgeCellNearWith(IntVec3 near, float radius, Map map, Predicate<IntVec3> validator, out IntVec3 spot)
 		{
 			CellRect cellRect = CellRect.CenteredOn(near, Mathf.CeilToInt(radius)).ClipInsideMap(map);
@@ -478,29 +478,29 @@ namespace Verse
 			return CellFinder.TryFindRandomCellInsideWith(cellRect, predicate, out spot);
 		}
 
-		// Token: 0x06002063 RID: 8291 RVA: 0x000C511C File Offset: 0x000C331C
+		
 		public static bool TryFindBestPawnStandCell(Pawn forPawn, out IntVec3 cell, bool cellByCell = false)
 		{
 			cell = IntVec3.Invalid;
 			int num = -1;
 			float radius = 10f;
-			Func<IntVec3, IEnumerable<IntVec3>> <>9__0;
-			Predicate<Thing> <>9__2;
-			Func<IntVec3, IntVec3, float> <>9__1;
+			
+			Predicate<Thing> 9__2;
+			
 			for (;;)
 			{
 				CellFinder.tmpDistances.Clear();
 				CellFinder.tmpParents.Clear();
 				IntVec3 position = forPawn.Position;
 				Func<IntVec3, IEnumerable<IntVec3>> neighborsGetter;
-				if ((neighborsGetter = <>9__0) == null)
+				if ((neighborsGetter ) == null)
 				{
-					neighborsGetter = (<>9__0 = ((IntVec3 x) => CellFinder.GetAdjacentCardinalCellsForBestStandCell(x, radius, forPawn)));
+					neighborsGetter = (9__0 = ((IntVec3 x) => CellFinder.GetAdjacentCardinalCellsForBestStandCell(x, radius, forPawn)));
 				}
 				Func<IntVec3, IntVec3, float> distanceGetter;
-				if ((distanceGetter = <>9__1) == null)
+				if ((distanceGetter ) == null)
 				{
-					distanceGetter = (<>9__1 = delegate(IntVec3 from, IntVec3 to)
+					distanceGetter = (9__1 = delegate(IntVec3 from, IntVec3 to)
 					{
 						float num4 = 1f;
 						if (from.x != to.x && from.z != to.z)
@@ -515,9 +515,9 @@ namespace Verse
 						{
 							List<Thing> thingList = to.GetThingList(forPawn.Map);
 							Predicate<Thing> match;
-							if ((match = <>9__2) == null)
+							if ((match ) == null)
 							{
-								match = (<>9__2 = ((Thing x) => x is Pawn && x.HostileTo(forPawn)));
+								match = (9__2 = ((Thing x) => x is Pawn && x.HostileTo(forPawn)));
 							}
 							if (thingList.Find(match) != null)
 							{
@@ -601,7 +601,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06002064 RID: 8292 RVA: 0x000C539C File Offset: 0x000C359C
+		
 		public static bool TryFindRandomCellInsideWith(CellRect cellRect, Predicate<IntVec3> predicate, out IntVec3 result)
 		{
 			int num = Mathf.Max(Mathf.RoundToInt(Mathf.Sqrt((float)cellRect.Area)), 5);
@@ -635,7 +635,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002065 RID: 8293 RVA: 0x000C5498 File Offset: 0x000C3698
+		
 		public static IntVec3 RandomSpawnCellForPawnNear(IntVec3 root, Map map, int firstTryWithRadius = 4)
 		{
 			IntVec3 result;
@@ -646,7 +646,7 @@ namespace Verse
 			return root;
 		}
 
-		// Token: 0x06002066 RID: 8294 RVA: 0x000C54B4 File Offset: 0x000C36B4
+		
 		public static bool TryFindRandomSpawnCellForPawnNear(IntVec3 root, Map map, out IntVec3 result, int firstTryWithRadius = 4)
 		{
 			if (root.Standable(map) && root.GetFirstPawn(map) == null)
@@ -656,16 +656,16 @@ namespace Verse
 			}
 			bool rootFogged = root.Fogged(map);
 			int num = firstTryWithRadius;
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			for (int i = 0; i < 3; i++)
 			{
 				Map map2 = map;
 				float radius = (float)num;
 				TraverseParms traverseParms = TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false);
 				Predicate<IntVec3> cellValidator;
-				if ((cellValidator = <>9__0) == null)
+				if ((cellValidator ) == null)
 				{
-					cellValidator = (<>9__0 = ((IntVec3 c) => c.Standable(map) && (rootFogged || !c.Fogged(map)) && c.GetFirstPawn(map) == null));
+					cellValidator = (9__0 = ((IntVec3 c) => c.Standable(map) && (rootFogged || !c.Fogged(map)) && c.GetFirstPawn(map) == null));
 				}
 				if (CellFinder.TryFindRandomReachableCellNear(root, map2, radius, traverseParms, cellValidator, null, out result, 999999))
 				{
@@ -686,7 +686,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06002067 RID: 8295 RVA: 0x000C55A8 File Offset: 0x000C37A8
+		
 		public static IntVec3 FindNoWipeSpawnLocNear(IntVec3 near, Map map, ThingDef thingToSpawn, Rot4 rot, int maxDist = 2, Predicate<IntVec3> extraValidator = null)
 		{
 			int num = GenRadial.NumCellsInRadius((float)maxDist);
@@ -773,7 +773,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06002068 RID: 8296 RVA: 0x000C58E4 File Offset: 0x000C3AE4
+		
 		private static IEnumerable<IntVec3> GetAdjacentCardinalCellsForBestStandCell(IntVec3 x, float radius, Pawn pawn)
 		{
 			if ((float)(x - pawn.Position).LengthManhattan > radius)
@@ -797,58 +797,58 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x040013BD RID: 5053
+		
 		public static float EdgeRoadChance_Ignore = 0f;
 
-		// Token: 0x040013BE RID: 5054
+		
 		public static float EdgeRoadChance_Animal = 0f;
 
-		// Token: 0x040013BF RID: 5055
+		
 		public static float EdgeRoadChance_Hostile = 0.2f;
 
-		// Token: 0x040013C0 RID: 5056
+		
 		public static float EdgeRoadChance_Neutral = 0.75f;
 
-		// Token: 0x040013C1 RID: 5057
+		
 		public static float EdgeRoadChance_Friendly = 0.75f;
 
-		// Token: 0x040013C2 RID: 5058
+		
 		public static float EdgeRoadChance_Always = 1f;
 
-		// Token: 0x040013C3 RID: 5059
+		
 		private static List<IntVec3> workingCells = new List<IntVec3>();
 
-		// Token: 0x040013C4 RID: 5060
+		
 		private static List<Region> workingRegions = new List<Region>();
 
-		// Token: 0x040013C5 RID: 5061
+		
 		private static List<int> workingListX = new List<int>();
 
-		// Token: 0x040013C6 RID: 5062
+		
 		private static List<int> workingListZ = new List<int>();
 
-		// Token: 0x040013C7 RID: 5063
+		
 		private static List<IntVec3> mapEdgeCells;
 
-		// Token: 0x040013C8 RID: 5064
+		
 		private static IntVec3 mapEdgeCellsSize;
 
-		// Token: 0x040013C9 RID: 5065
+		
 		private static List<IntVec3>[] mapSingleEdgeCells = new List<IntVec3>[4];
 
-		// Token: 0x040013CA RID: 5066
+		
 		private static IntVec3 mapSingleEdgeCellsSize;
 
-		// Token: 0x040013CB RID: 5067
+		
 		private static Dictionary<IntVec3, float> tmpDistances = new Dictionary<IntVec3, float>();
 
-		// Token: 0x040013CC RID: 5068
+		
 		private static Dictionary<IntVec3, IntVec3> tmpParents = new Dictionary<IntVec3, IntVec3>();
 
-		// Token: 0x040013CD RID: 5069
+		
 		private static List<IntVec3> tmpCells = new List<IntVec3>();
 
-		// Token: 0x040013CE RID: 5070
+		
 		private static List<Thing> tmpUniqueWipedThings = new List<Thing>();
 	}
 }

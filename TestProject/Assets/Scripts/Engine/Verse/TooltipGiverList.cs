@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x020001DF RID: 479
+	
 	public sealed class TooltipGiverList
 	{
-		// Token: 0x06000D85 RID: 3461 RVA: 0x0004D38F File Offset: 0x0004B58F
+		
 		public void Notify_ThingSpawned(Thing t)
 		{
 			if (t.def.hasTooltip || this.ShouldShowShotReport(t))
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D86 RID: 3462 RVA: 0x0004D3B3 File Offset: 0x0004B5B3
+		
 		public void Notify_ThingDespawned(Thing t)
 		{
 			if (t.def.hasTooltip || this.ShouldShowShotReport(t))
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D87 RID: 3463 RVA: 0x0004D3D8 File Offset: 0x0004B5D8
+		
 		public void DispenseAllThingTooltips()
 		{
 			if (Event.current.type != EventType.Repaint)
@@ -69,13 +69,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D88 RID: 3464 RVA: 0x0004D553 File Offset: 0x0004B753
+		
 		private bool ShouldShowShotReport(Thing t)
 		{
 			return t.def.hasTooltip || t is Hive || t is IAttackTarget;
 		}
 
-		// Token: 0x04000A62 RID: 2658
+		
 		private List<Thing> givers = new List<Thing>();
 	}
 }

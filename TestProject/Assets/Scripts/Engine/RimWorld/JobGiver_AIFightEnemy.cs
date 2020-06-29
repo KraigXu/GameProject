@@ -6,31 +6,31 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006B0 RID: 1712
+	
 	public abstract class JobGiver_AIFightEnemy : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E3E RID: 11838
+		
 		protected abstract bool TryFindShootingPosition(Pawn pawn, out IntVec3 dest);
 
-		// Token: 0x06002E3F RID: 11839 RVA: 0x00103F31 File Offset: 0x00102131
+		
 		protected virtual float GetFlagRadius(Pawn pawn)
 		{
 			return 999999f;
 		}
 
-		// Token: 0x06002E40 RID: 11840 RVA: 0x000F4A48 File Offset: 0x000F2C48
+		
 		protected virtual IntVec3 GetFlagPosition(Pawn pawn)
 		{
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x06002E41 RID: 11841 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool ExtraTargetValidator(Pawn pawn, Thing target)
 		{
 			return true;
 		}
 
-		// Token: 0x06002E42 RID: 11842 RVA: 0x00103F38 File Offset: 0x00102138
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_AIFightEnemy jobGiver_AIFightEnemy = (JobGiver_AIFightEnemy)base.DeepCopy(resolve);
@@ -41,7 +41,7 @@ namespace RimWorld
 			return jobGiver_AIFightEnemy;
 		}
 
-		// Token: 0x06002E43 RID: 11843 RVA: 0x00103F78 File Offset: 0x00102178
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			this.UpdateEnemyTarget(pawn);
@@ -88,7 +88,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002E44 RID: 11844 RVA: 0x001040EC File Offset: 0x001022EC
+		
 		protected virtual Job MeleeAttackJob(Thing enemyTarget)
 		{
 			Job job = JobMaker.MakeJob(JobDefOf.AttackMelee, enemyTarget);
@@ -98,7 +98,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002E45 RID: 11845 RVA: 0x0010412C File Offset: 0x0010232C
+		
 		protected virtual void UpdateEnemyTarget(Pawn pawn)
 		{
 			Thing thing = pawn.mindState.enemyTarget;
@@ -139,7 +139,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002E46 RID: 11846 RVA: 0x0010425B File Offset: 0x0010245B
+		
 		private Thing FindAttackTargetIfPossible(Pawn pawn)
 		{
 			if (pawn.TryGetAttackVerb(null, !pawn.IsColonist) == null)
@@ -149,7 +149,7 @@ namespace RimWorld
 			return this.FindAttackTarget(pawn);
 		}
 
-		// Token: 0x06002E47 RID: 11847 RVA: 0x00104278 File Offset: 0x00102478
+		
 		protected virtual Thing FindAttackTarget(Pawn pawn)
 		{
 			TargetScanFlags targetScanFlags = TargetScanFlags.NeedLOSToPawns | TargetScanFlags.NeedReachableIfCantHitFromMyPos | TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable;
@@ -164,7 +164,7 @@ namespace RimWorld
 			return (Thing)AttackTargetFinder.BestAttackTarget(pawn, targetScanFlags, (Thing x) => this.ExtraTargetValidator(pawn, x), 0f, this.targetAcquireRadius, this.GetFlagPosition(pawn), this.GetFlagRadius(pawn), false, true);
 		}
 
-		// Token: 0x06002E48 RID: 11848 RVA: 0x00104300 File Offset: 0x00102500
+		
 		private bool PrimaryVerbIsIncendiary(Pawn pawn)
 		{
 			if (pawn.equipment != null && pawn.equipment.Primary != null)
@@ -181,28 +181,28 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04001A5C RID: 6748
+		
 		private float targetAcquireRadius = 56f;
 
-		// Token: 0x04001A5D RID: 6749
+		
 		private float targetKeepRadius = 65f;
 
-		// Token: 0x04001A5E RID: 6750
+		
 		private bool needLOSToAcquireNonPawnTargets;
 
-		// Token: 0x04001A5F RID: 6751
+		
 		private bool chaseTarget;
 
-		// Token: 0x04001A60 RID: 6752
+		
 		public static readonly IntRange ExpiryInterval_ShooterSucceeded = new IntRange(450, 550);
 
-		// Token: 0x04001A61 RID: 6753
+		
 		private static readonly IntRange ExpiryInterval_Melee = new IntRange(360, 480);
 
-		// Token: 0x04001A62 RID: 6754
+		
 		private const int MinTargetDistanceToMove = 5;
 
-		// Token: 0x04001A63 RID: 6755
+		
 		private const int TicksSinceEngageToLoseTarget = 400;
 	}
 }

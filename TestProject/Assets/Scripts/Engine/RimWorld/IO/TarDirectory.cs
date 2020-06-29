@@ -6,16 +6,16 @@ using ICSharpCode.SharpZipLib.Tar;
 
 namespace RimWorld.IO
 {
-	// Token: 0x020012A4 RID: 4772
+	
 	internal class TarDirectory : VirtualDirectory
 	{
-		// Token: 0x060070A8 RID: 28840 RVA: 0x002746D4 File Offset: 0x002728D4
+		
 		public static void ClearCache()
 		{
 			TarDirectory.cache.Clear();
 		}
 
-		// Token: 0x060070A9 RID: 28841 RVA: 0x002746E0 File Offset: 0x002728E0
+		
 		public static TarDirectory ReadFromFileOrCache(string file)
 		{
 			string key = file.Replace('\\', '/');
@@ -29,7 +29,7 @@ namespace RimWorld.IO
 			return tarDirectory;
 		}
 
-		// Token: 0x060070AA RID: 28842 RVA: 0x00274728 File Offset: 0x00272928
+		
 		private void CheckLazyLoad()
 		{
 			if (this.lazyLoadArchive != null)
@@ -45,7 +45,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x060070AB RID: 28843 RVA: 0x00274798 File Offset: 0x00272998
+		
 		private static void ParseTAR(TarDirectory root, TarInputStream input, string fullPath)
 		{
 			Dictionary<string, byte[]> dictionary = new Dictionary<string, byte[]>();
@@ -114,7 +114,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x060070AC RID: 28844 RVA: 0x00274AD4 File Offset: 0x00272CD4
+		
 		private static string FormatFolderPath(string str)
 		{
 			if (str.Length == 0)
@@ -132,7 +132,7 @@ namespace RimWorld.IO
 			return str;
 		}
 
-		// Token: 0x060070AD RID: 28845 RVA: 0x00274B28 File Offset: 0x00272D28
+		
 		private static void ReadTarEntryData(TarInputStream tarIn, Stream outStream, byte[] buffer = null)
 		{
 			if (buffer == null)
@@ -145,7 +145,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x060070AE RID: 28846 RVA: 0x00274B6B File Offset: 0x00272D6B
+		
 		private static IEnumerable<TarDirectory> EnumerateAllChildrenRecursive(TarDirectory of)
 		{
 			foreach (TarDirectory dir in of.subDirectories)
@@ -163,7 +163,7 @@ namespace RimWorld.IO
 			yield break;
 		}
 
-		// Token: 0x060070AF RID: 28847 RVA: 0x00274B7B File Offset: 0x00272D7B
+		
 		private static IEnumerable<TarFile> EnumerateAllFilesRecursive(TarDirectory of)
 		{
 			foreach (TarFile tarFile in of.files)
@@ -184,7 +184,7 @@ namespace RimWorld.IO
 			yield break;
 		}
 
-		// Token: 0x060070B0 RID: 28848 RVA: 0x00274B8C File Offset: 0x00272D8C
+		
 		private static Func<string, bool> GetPatternMatcher(string searchPattern)
 		{
 			Func<string, bool> func = null;
@@ -204,7 +204,7 @@ namespace RimWorld.IO
 			return func;
 		}
 
-		// Token: 0x17001310 RID: 4880
+		
 		// (get) Token: 0x060070B1 RID: 28849 RVA: 0x00274C32 File Offset: 0x00272E32
 		public override string Name
 		{
@@ -214,7 +214,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x17001311 RID: 4881
+		
 		// (get) Token: 0x060070B2 RID: 28850 RVA: 0x00274C3A File Offset: 0x00272E3A
 		public override string FullPath
 		{
@@ -224,7 +224,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x17001312 RID: 4882
+		
 		// (get) Token: 0x060070B3 RID: 28851 RVA: 0x00274C42 File Offset: 0x00272E42
 		public override bool Exists
 		{
@@ -234,7 +234,7 @@ namespace RimWorld.IO
 			}
 		}
 
-		// Token: 0x060070B4 RID: 28852 RVA: 0x00274C4A File Offset: 0x00272E4A
+		
 		private TarDirectory(string fullPath, string inArchiveFullPath)
 		{
 			this.name = Path.GetFileNameWithoutExtension(fullPath);
@@ -243,13 +243,13 @@ namespace RimWorld.IO
 			this.exists = true;
 		}
 
-		// Token: 0x060070B5 RID: 28853 RVA: 0x00274C89 File Offset: 0x00272E89
+		
 		private TarDirectory()
 		{
 			this.exists = false;
 		}
 
-		// Token: 0x060070B6 RID: 28854 RVA: 0x00274CB0 File Offset: 0x00272EB0
+		
 		public override VirtualDirectory GetDirectory(string directoryName)
 		{
 			this.CheckLazyLoad();
@@ -268,7 +268,7 @@ namespace RimWorld.IO
 			return TarDirectory.NotFound;
 		}
 
-		// Token: 0x060070B7 RID: 28855 RVA: 0x00274D3C File Offset: 0x00272F3C
+		
 		public override VirtualFile GetFile(string filename)
 		{
 			this.CheckLazyLoad();
@@ -305,7 +305,7 @@ namespace RimWorld.IO
 			return virtualDirectory.GetFile(filename);
 		}
 
-		// Token: 0x060070B8 RID: 28856 RVA: 0x00274DF4 File Offset: 0x00272FF4
+		
 		public override IEnumerable<VirtualFile> GetFiles(string searchPattern, SearchOption searchOption)
 		{
 			this.CheckLazyLoad();
@@ -327,7 +327,7 @@ namespace RimWorld.IO
 			yield break;
 		}
 
-		// Token: 0x060070B9 RID: 28857 RVA: 0x00274E12 File Offset: 0x00273012
+		
 		public override IEnumerable<VirtualDirectory> GetDirectories(string searchPattern, SearchOption searchOption)
 		{
 			this.CheckLazyLoad();
@@ -349,37 +349,37 @@ namespace RimWorld.IO
 			yield break;
 		}
 
-		// Token: 0x060070BA RID: 28858 RVA: 0x00274E30 File Offset: 0x00273030
+		
 		public override string ToString()
 		{
 			return string.Format("TarDirectory [{0}], {1} files", this.fullPath, this.files.Count.ToString());
 		}
 
-		// Token: 0x0400452A RID: 17706
+		
 		private static Dictionary<string, TarDirectory> cache = new Dictionary<string, TarDirectory>();
 
-		// Token: 0x0400452B RID: 17707
+		
 		private string lazyLoadArchive;
 
-		// Token: 0x0400452C RID: 17708
+		
 		private static readonly TarDirectory NotFound = new TarDirectory();
 
-		// Token: 0x0400452D RID: 17709
+		
 		private string fullPath;
 
-		// Token: 0x0400452E RID: 17710
+		
 		private string inArchiveFullPath;
 
-		// Token: 0x0400452F RID: 17711
+		
 		private string name;
 
-		// Token: 0x04004530 RID: 17712
+		
 		private bool exists;
 
-		// Token: 0x04004531 RID: 17713
+		
 		public List<TarDirectory> subDirectories = new List<TarDirectory>();
 
-		// Token: 0x04004532 RID: 17714
+		
 		public List<TarFile> files = new List<TarFile>();
 	}
 }

@@ -9,10 +9,10 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020010E9 RID: 4329
+	
 	public static class QuestGenUtility
 	{
-		// Token: 0x060065D5 RID: 26069 RVA: 0x0023AB38 File Offset: 0x00238D38
+		
 		public static string HardcodedSignalWithQuestID(string signal)
 		{
 			if (!QuestGen.Working)
@@ -48,7 +48,7 @@ namespace RimWorld.QuestGen
 			return QuestGen.GenerateNewSignal(signal, false);
 		}
 
-		// Token: 0x060065D6 RID: 26070 RVA: 0x0023AC18 File Offset: 0x00238E18
+		
 		public static string HardcodedTargetQuestTagWithQuestID(string questTag)
 		{
 			if (!QuestGen.Working)
@@ -71,7 +71,7 @@ namespace RimWorld.QuestGen
 			return QuestGen.GenerateNewTargetQuestTag(questTag, false);
 		}
 
-		// Token: 0x060065D7 RID: 26071 RVA: 0x0023AC8C File Offset: 0x00238E8C
+		
 		public static void RunInnerNode(QuestNode node, QuestPartActivable outerQuestPart)
 		{
 			string text = QuestGen.GenerateNewSignal("OuterNodeCompleted", true);
@@ -79,7 +79,7 @@ namespace RimWorld.QuestGen
 			QuestGenUtility.RunInnerNode(node, text);
 		}
 
-		// Token: 0x060065D8 RID: 26072 RVA: 0x0023ACB8 File Offset: 0x00238EB8
+		
 		public static void RunInnerNode(QuestNode node, string innerNodeInSignal)
 		{
 			Slate.VarRestoreInfo restoreInfo = QuestGen.slate.GetRestoreInfo("inSignal");
@@ -94,7 +94,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065D9 RID: 26073 RVA: 0x0023AD0C File Offset: 0x00238F0C
+		
 		public static void AddSlateVars(ref GrammarRequest req)
 		{
 			QuestGenUtility.tmpAddedSlateVars.Clear();
@@ -139,7 +139,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065DA RID: 26074 RVA: 0x0023AE20 File Offset: 0x00239020
+		
 		private static void AddSlateVar(ref GrammarRequest req, string absoluteName, HashSet<string> added)
 		{
 			if (absoluteName == null)
@@ -188,7 +188,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065DB RID: 26075 RVA: 0x0023AF10 File Offset: 0x00239110
+		
 		private static void AddSlateVar(ref GrammarRequest req, string absoluteName, object obj)
 		{
 			if (obj == null)
@@ -340,7 +340,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065DC RID: 26076 RVA: 0x0023B518 File Offset: 0x00239718
+		
 		public static string ResolveLocalTextWithDescriptionRules(RulePack localRules, string localRootKeyword = "root")
 		{
 			List<Rule> list = new List<Rule>();
@@ -358,13 +358,13 @@ namespace RimWorld.QuestGen
 			return QuestGenUtility.ResolveAbsoluteText(list, QuestGen.QuestDescriptionConstantsReadOnly, text, true);
 		}
 
-		// Token: 0x060065DD RID: 26077 RVA: 0x0023B587 File Offset: 0x00239787
+		
 		public static string ResolveLocalText(RulePack localRules, string localRootKeyword = "root")
 		{
 			return QuestGenUtility.ResolveLocalText((localRules != null) ? localRules.Rules : null, null, localRootKeyword, true);
 		}
 
-		// Token: 0x060065DE RID: 26078 RVA: 0x0023B5A0 File Offset: 0x002397A0
+		
 		public static string ResolveLocalText(List<Rule> localRules, Dictionary<string, string> localConstants = null, string localRootKeyword = "root", bool capitalizeFirstSentence = true)
 		{
 			string text = localRootKeyword;
@@ -376,7 +376,7 @@ namespace RimWorld.QuestGen
 			return QuestGenUtility.ResolveAbsoluteText(QuestGenUtility.AppendCurrentPrefix(localRules), QuestGenUtility.AppendCurrentPrefix(localConstants), text, capitalizeFirstSentence);
 		}
 
-		// Token: 0x060065DF RID: 26079 RVA: 0x0023B5F0 File Offset: 0x002397F0
+		
 		public static string ResolveAbsoluteText(List<Rule> absoluteRules, Dictionary<string, string> absoluteConstants = null, string absoluteRootKeyword = "root", bool capitalizeFirstSentence = true)
 		{
 			GrammarRequest request = default(GrammarRequest);
@@ -395,7 +395,7 @@ namespace RimWorld.QuestGen
 			return GrammarResolver.Resolve(absoluteRootKeyword, request, null, false, null, null, null, capitalizeFirstSentence);
 		}
 
-		// Token: 0x060065E0 RID: 26080 RVA: 0x0023B680 File Offset: 0x00239880
+		
 		public static List<Rule> AppendCurrentPrefix(List<Rule> rules)
 		{
 			if (rules == null)
@@ -422,7 +422,7 @@ namespace RimWorld.QuestGen
 			return list;
 		}
 
-		// Token: 0x060065E1 RID: 26081 RVA: 0x0023B710 File Offset: 0x00239910
+		
 		public static Dictionary<string, string> AppendCurrentPrefix(Dictionary<string, string> constants)
 		{
 			if (constants == null)
@@ -444,7 +444,7 @@ namespace RimWorld.QuestGen
 			return dictionary;
 		}
 
-		// Token: 0x060065E2 RID: 26082 RVA: 0x0023B7A8 File Offset: 0x002399A8
+		
 		public static LookTargets ToLookTargets(SlateRef<IEnumerable<object>> objects, Slate slate)
 		{
 			if (objects.GetValue(slate) == null || !objects.GetValue(slate).Any<object>())
@@ -470,7 +470,7 @@ namespace RimWorld.QuestGen
 			return lookTargets;
 		}
 
-		// Token: 0x060065E3 RID: 26083 RVA: 0x0023B87C File Offset: 0x00239A7C
+		
 		public static List<Rule> MergeRules(RulePack rules, string singleRule, string root)
 		{
 			List<Rule> list = new List<Rule>();
@@ -485,7 +485,7 @@ namespace RimWorld.QuestGen
 			return list;
 		}
 
-		// Token: 0x060065E4 RID: 26084 RVA: 0x0023B8B4 File Offset: 0x00239AB4
+		
 		public static ChoiceLetter MakeLetter(string labelKeyword, string textKeyword, LetterDef def, Faction relatedFaction = null, Quest quest = null)
 		{
 			ChoiceLetter letter = LetterMaker.MakeLetter("error", "error", def, relatedFaction, quest);
@@ -500,7 +500,7 @@ namespace RimWorld.QuestGen
 			return letter;
 		}
 
-		// Token: 0x060065E5 RID: 26085 RVA: 0x0023B918 File Offset: 0x00239B18
+		
 		public static ChoiceLetter MakeLetter(string labelKeyword, string textKeyword, LetterDef def, LookTargets lookTargets, Faction relatedFaction = null, Quest quest = null)
 		{
 			ChoiceLetter letter = LetterMaker.MakeLetter("error", "error", def, lookTargets, relatedFaction, quest, null);
@@ -515,7 +515,7 @@ namespace RimWorld.QuestGen
 			return letter;
 		}
 
-		// Token: 0x060065E6 RID: 26086 RVA: 0x0023B980 File Offset: 0x00239B80
+		
 		public static void AddToOrMakeList(Slate slate, string name, object obj)
 		{
 			List<object> list;
@@ -527,7 +527,7 @@ namespace RimWorld.QuestGen
 			slate.Set<List<object>>(name, list, false);
 		}
 
-		// Token: 0x060065E7 RID: 26087 RVA: 0x0023B9B0 File Offset: 0x00239BB0
+		
 		public static void AddRangeToOrMakeList(Slate slate, string name, List<object> objs)
 		{
 			if (objs.NullOrEmpty<object>())
@@ -543,14 +543,14 @@ namespace RimWorld.QuestGen
 			slate.Set<List<object>>(name, list, false);
 		}
 
-		// Token: 0x060065E8 RID: 26088 RVA: 0x0023B9E8 File Offset: 0x00239BE8
+		
 		public static bool IsInList(Slate slate, string name, object obj)
 		{
 			List<object> list;
 			return slate.TryGet<List<object>>(name, out list, false) && list != null && list.Contains(obj);
 		}
 
-		// Token: 0x060065E9 RID: 26089 RVA: 0x0023BA10 File Offset: 0x00239C10
+		
 		public static List<Slate.VarRestoreInfo> SetVarsForPrefix(List<PrefixCapturedVar> capturedVars, string prefix, Slate slate)
 		{
 			if (capturedVars.NullOrEmpty<PrefixCapturedVar>())
@@ -594,7 +594,7 @@ namespace RimWorld.QuestGen
 			return null;
 		}
 
-		// Token: 0x060065EA RID: 26090 RVA: 0x0023BB4C File Offset: 0x00239D4C
+		
 		public static void RestoreVarsForPrefix(List<Slate.VarRestoreInfo> varsRestoreInfo, Slate slate)
 		{
 			if (varsRestoreInfo.NullOrEmpty<Slate.VarRestoreInfo>())
@@ -607,7 +607,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065EB RID: 26091 RVA: 0x0023BB80 File Offset: 0x00239D80
+		
 		public static void GetReturnedVars(List<SlateRef<string>> varNames, string prefix, Slate slate)
 		{
 			if (varNames.NullOrEmpty<SlateRef<string>>())
@@ -629,7 +629,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060065EC RID: 26092 RVA: 0x0023BBF0 File Offset: 0x00239DF0
+		
 		public static string NormalizeVarPath(string path)
 		{
 			if (path.NullOrEmpty())
@@ -686,22 +686,22 @@ namespace RimWorld.QuestGen
 			return QuestGenUtility.tmpSb.ToString();
 		}
 
-		// Token: 0x04003DEE RID: 15854
+		
 		public const string OuterNodeCompletedSignal = "OuterNodeCompleted";
 
-		// Token: 0x04003DEF RID: 15855
+		
 		private static HashSet<string> tmpAddedSlateVars = new HashSet<string>();
 
-		// Token: 0x04003DF0 RID: 15856
+		
 		private static StringBuilder tmpSymbol = new StringBuilder();
 
-		// Token: 0x04003DF1 RID: 15857
+		
 		private static StringBuilder tmpVarAbsoluteName = new StringBuilder();
 
-		// Token: 0x04003DF2 RID: 15858
+		
 		private static List<string> tmpPathParts = new List<string>();
 
-		// Token: 0x04003DF3 RID: 15859
+		
 		private static StringBuilder tmpSb = new StringBuilder();
 	}
 }

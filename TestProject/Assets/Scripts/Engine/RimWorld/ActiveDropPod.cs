@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000CBA RID: 3258
+	
 	public class ActiveDropPod : Thing, IActiveDropPod, IThingHolder
 	{
-		// Token: 0x17000DFD RID: 3581
+		
 		// (get) Token: 0x06004EF9 RID: 20217 RVA: 0x001A95B5 File Offset: 0x001A77B5
 		// (set) Token: 0x06004EFA RID: 20218 RVA: 0x001A95BD File Offset: 0x001A77BD
 		public ActiveDropPodInfo Contents
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004EFB RID: 20219 RVA: 0x001A95E4 File Offset: 0x001A77E4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -42,13 +42,13 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004EFC RID: 20220 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return null;
 		}
 
-		// Token: 0x06004EFD RID: 20221 RVA: 0x001A9618 File Offset: 0x001A7818
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004EFE RID: 20222 RVA: 0x001A963C File Offset: 0x001A783C
+		
 		public override void Tick()
 		{
 			if (this.contents == null)
@@ -76,7 +76,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004EFF RID: 20223 RVA: 0x001A9694 File Offset: 0x001A7894
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			if (this.contents != null)
@@ -94,7 +94,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F00 RID: 20224 RVA: 0x001A96FC File Offset: 0x001A78FC
+		
 		private void PodOpen()
 		{
 			Map map = base.Map;
@@ -161,10 +161,10 @@ namespace RimWorld
 			this.Destroy(DestroyMode.Vanish);
 		}
 
-		// Token: 0x04002C58 RID: 11352
+		
 		public int age;
 
-		// Token: 0x04002C59 RID: 11353
+		
 		private ActiveDropPodInfo contents;
 	}
 }

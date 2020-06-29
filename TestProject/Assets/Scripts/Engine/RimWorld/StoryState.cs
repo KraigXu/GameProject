@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A26 RID: 2598
+	
 	public class StoryState : IExposable
 	{
-		// Token: 0x17000AE7 RID: 2791
+		
 		// (get) Token: 0x06003D78 RID: 15736 RVA: 0x001451D8 File Offset: 0x001433D8
 		public IIncidentTarget Target
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE8 RID: 2792
+		
 		// (get) Token: 0x06003D79 RID: 15737 RVA: 0x001451E0 File Offset: 0x001433E0
 		public List<QuestScriptDef> RecentRandomQuests
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE9 RID: 2793
+		
 		// (get) Token: 0x06003D7A RID: 15738 RVA: 0x001451E8 File Offset: 0x001433E8
 		public List<QuestScriptDef> RecentRandomDecrees
 		{
@@ -37,7 +37,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AEA RID: 2794
+		
 		// (get) Token: 0x06003D7B RID: 15739 RVA: 0x001451F0 File Offset: 0x001433F0
 		public int LastRoyalFavorQuestTick
 		{
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AEB RID: 2795
+		
 		// (get) Token: 0x06003D7C RID: 15740 RVA: 0x001451F8 File Offset: 0x001433F8
 		public int LastThreatBigTick
 		{
@@ -69,13 +69,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D7D RID: 15741 RVA: 0x00145280 File Offset: 0x00143480
+		
 		public StoryState(IIncidentTarget target)
 		{
 			this.target = target;
 		}
 
-		// Token: 0x06003D7E RID: 15742 RVA: 0x001452D4 File Offset: 0x001434D4
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<int>(ref this.lastThreatBigTick, "lastThreatBigTick", 0, true);
@@ -102,7 +102,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D7F RID: 15743 RVA: 0x0014539C File Offset: 0x0014359C
+		
 		public void Notify_IncidentFired(FiringIncident fi)
 		{
 			if (fi.parms.forced || fi.parms.target != this.target)
@@ -129,7 +129,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D80 RID: 15744 RVA: 0x0014545C File Offset: 0x0014365C
+		
 		public void RecordRandomQuestFired(QuestScriptDef questScript)
 		{
 			this.recentRandomQuests.Insert(0, questScript);
@@ -143,7 +143,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D81 RID: 15745 RVA: 0x001454B6 File Offset: 0x001436B6
+		
 		public void RecordDecreeFired(QuestScriptDef questScript)
 		{
 			this.recentRandomDecrees.Insert(0, questScript);
@@ -153,7 +153,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D82 RID: 15746 RVA: 0x001454F0 File Offset: 0x001436F0
+		
 		public void RecordPopulationIncrease()
 		{
 			int count = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists.Count;
@@ -163,7 +163,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D83 RID: 15747 RVA: 0x0014552C File Offset: 0x0014372C
+		
 		public int GetTicksFromColonistCount(int count)
 		{
 			if (!this.colonistCountTicks.ContainsKey(count))
@@ -173,7 +173,7 @@ namespace RimWorld
 			return this.colonistCountTicks[count];
 		}
 
-		// Token: 0x06003D84 RID: 15748 RVA: 0x00145560 File Offset: 0x00143760
+		
 		public void CopyTo(StoryState other)
 		{
 			other.lastThreatBigTick = this.lastThreatBigTick;
@@ -194,28 +194,28 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040023E1 RID: 9185
+		
 		private IIncidentTarget target;
 
-		// Token: 0x040023E2 RID: 9186
+		
 		private int lastThreatBigTick = -1;
 
-		// Token: 0x040023E3 RID: 9187
+		
 		private Dictionary<int, int> colonistCountTicks = new Dictionary<int, int>();
 
-		// Token: 0x040023E4 RID: 9188
+		
 		public Dictionary<IncidentDef, int> lastFireTicks = new Dictionary<IncidentDef, int>();
 
-		// Token: 0x040023E5 RID: 9189
+		
 		private List<QuestScriptDef> recentRandomQuests = new List<QuestScriptDef>();
 
-		// Token: 0x040023E6 RID: 9190
+		
 		private List<QuestScriptDef> recentRandomDecrees = new List<QuestScriptDef>();
 
-		// Token: 0x040023E7 RID: 9191
+		
 		private int lastRoyalFavorQuestTick = -1;
 
-		// Token: 0x040023E8 RID: 9192
+		
 		private const int RecentRandomQuestsMaxStorage = 5;
 	}
 }

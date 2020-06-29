@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001180 RID: 4480
+	
 	public class QuestNode_PawnsKilled : QuestNode
 	{
-		// Token: 0x06006801 RID: 26625 RVA: 0x00245E20 File Offset: 0x00244020
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return Find.Storyteller.difficulty.allowViolentQuests && (this.node == null || this.node.TestRun(slate));
 		}
 
-		// Token: 0x06006802 RID: 26626 RVA: 0x00245E4C File Offset: 0x0024404C
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -48,28 +48,28 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_PawnsAvailable);
 		}
 
-		// Token: 0x0400404E RID: 16462
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x0400404F RID: 16463
+		
 		[NoTranslate]
 		public SlateRef<string> outSignalComplete;
 
-		// Token: 0x04004050 RID: 16464
+		
 		[NoTranslate]
 		public SlateRef<string> outSignalPawnsNotAvailable;
 
-		// Token: 0x04004051 RID: 16465
+		
 		public SlateRef<ThingDef> race;
 
-		// Token: 0x04004052 RID: 16466
+		
 		public SlateRef<int> count;
 
-		// Token: 0x04004053 RID: 16467
+		
 		public QuestNode node;
 
-		// Token: 0x04004054 RID: 16468
+		
 		private const string PawnOfRaceKilledSignal = "PawnOfRaceKilled";
 	}
 }

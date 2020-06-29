@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000FBE RID: 4030
+	
 	public static class GenConstruct
 	{
-		// Token: 0x060060D7 RID: 24791 RVA: 0x00217CB1 File Offset: 0x00215EB1
+		
 		public static void Reset()
 		{
 			GenConstruct.SkillTooLowTrans = "SkillTooLowForConstruction".Translate();
@@ -16,7 +16,7 @@ namespace RimWorld
 			GenConstruct.IncapableOfMining = "IncapableOfMining".Translate();
 		}
 
-		// Token: 0x060060D8 RID: 24792 RVA: 0x00217CEF File Offset: 0x00215EEF
+		
 		public static Blueprint_Build PlaceBlueprintForBuild(BuildableDef sourceDef, IntVec3 center, Map map, Rot4 rotation, Faction faction, ThingDef stuff)
 		{
 			Blueprint_Build blueprint_Build = (Blueprint_Build)ThingMaker.MakeThing(sourceDef.blueprintDef, null);
@@ -26,7 +26,7 @@ namespace RimWorld
 			return blueprint_Build;
 		}
 
-		// Token: 0x060060D9 RID: 24793 RVA: 0x00217D1E File Offset: 0x00215F1E
+		
 		public static Blueprint_Install PlaceBlueprintForInstall(MinifiedThing itemToInstall, IntVec3 center, Map map, Rot4 rotation, Faction faction)
 		{
 			Blueprint_Install blueprint_Install = (Blueprint_Install)ThingMaker.MakeThing(itemToInstall.InnerThing.def.installBlueprintDef, null);
@@ -36,7 +36,7 @@ namespace RimWorld
 			return blueprint_Install;
 		}
 
-		// Token: 0x060060DA RID: 24794 RVA: 0x00217D56 File Offset: 0x00215F56
+		
 		public static Blueprint_Install PlaceBlueprintForReinstall(Building buildingToReinstall, IntVec3 center, Map map, Rot4 rotation, Faction faction)
 		{
 			Blueprint_Install blueprint_Install = (Blueprint_Install)ThingMaker.MakeThing(buildingToReinstall.def.installBlueprintDef, null);
@@ -46,7 +46,7 @@ namespace RimWorld
 			return blueprint_Install;
 		}
 
-		// Token: 0x060060DB RID: 24795 RVA: 0x00217D8C File Offset: 0x00215F8C
+		
 		public static bool CanBuildOnTerrain(BuildableDef entDef, IntVec3 c, Map map, Rot4 rot, Thing thingToIgnore = null, ThingDef stuffDef = null)
 		{
 			if (entDef is TerrainDef && !c.GetTerrain(map).changeable)
@@ -82,7 +82,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060060DC RID: 24796 RVA: 0x00217E98 File Offset: 0x00216098
+		
 		public static Thing MiniToInstallOrBuildingToReinstall(Blueprint b)
 		{
 			Blueprint_Install blueprint_Install = b as Blueprint_Install;
@@ -93,7 +93,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060060DD RID: 24797 RVA: 0x00217EB8 File Offset: 0x002160B8
+		
 		public static bool CanConstruct(Thing t, Pawn p, bool checkSkills = true, bool forced = false)
 		{
 			if (GenConstruct.FirstBlockingThing(t, p) != null)
@@ -121,7 +121,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060060DE RID: 24798 RVA: 0x00217F94 File Offset: 0x00216194
+		
 		public static int AmountNeededByOf(IConstructible c, ThingDef resDef)
 		{
 			foreach (ThingDefCountClass thingDefCountClass in c.MaterialsNeeded())
@@ -134,7 +134,7 @@ namespace RimWorld
 			return 0;
 		}
 
-		// Token: 0x060060DF RID: 24799 RVA: 0x00217FF8 File Offset: 0x002161F8
+		
 		public static AcceptanceReport CanPlaceBlueprintAt(BuildableDef entDef, IntVec3 center, Rot4 rot, Map map, bool godMode = false, Thing thingToIgnore = null, Thing thing = null, ThingDef stuffDef = null)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(center, rot, entDef.Size);
@@ -301,7 +301,7 @@ namespace RimWorld
 			return new AcceptanceReport("TerrainCannotSupport_TerrainAffordance".Translate(entDef, entDef.GetTerrainAffordanceNeed(stuffDef)).CapitalizeFirst());
 		}
 
-		// Token: 0x060060E0 RID: 24800 RVA: 0x00218680 File Offset: 0x00216880
+		
 		public static BuildableDef BuiltDefOf(ThingDef def)
 		{
 			if (def.entityDefToBuild == null)
@@ -311,7 +311,7 @@ namespace RimWorld
 			return def.entityDefToBuild;
 		}
 
-		// Token: 0x060060E1 RID: 24801 RVA: 0x00218694 File Offset: 0x00216894
+		
 		public static bool CanPlaceBlueprintOver(BuildableDef newDef, ThingDef oldDef)
 		{
 			if (oldDef.EverHaulable)
@@ -370,7 +370,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060060E2 RID: 24802 RVA: 0x00218854 File Offset: 0x00216A54
+		
 		public static Thing FirstBlockingThing(Thing constructible, Pawn pawnToIgnore)
 		{
 			Blueprint blueprint = constructible as Blueprint;
@@ -398,7 +398,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060060E3 RID: 24803 RVA: 0x00218904 File Offset: 0x00216B04
+		
 		public static Job HandleBlockingThingJob(Thing constructible, Pawn worker, bool forced = false)
 		{
 			Thing thing = GenConstruct.FirstBlockingThing(constructible, worker);
@@ -463,7 +463,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060060E4 RID: 24804 RVA: 0x00218A94 File Offset: 0x00216C94
+		
 		public static bool BlocksConstruction(Thing constructible, Thing t)
 		{
 			if (t == constructible)
@@ -514,7 +514,7 @@ namespace RimWorld
 			return (t.def.IsEdifice() && thingDef2.IsEdifice()) || (t.def.category == ThingCategory.Pawn || (t.def.category == ThingCategory.Item && thingDef.entityDefToBuild.passability == Traversability.Impassable)) || (t.def.Fillage >= FillCategory.Partial && (t.def.IsEdifice() || (t.def.entityDefToBuild != null && t.def.entityDefToBuild.IsEdifice())));
 		}
 
-		// Token: 0x060060E5 RID: 24805 RVA: 0x00218C68 File Offset: 0x00216E68
+		
 		public static bool TerrainCanSupport(CellRect rect, Map map, ThingDef thing)
 		{
 			using (CellRect.Enumerator enumerator = rect.GetEnumerator())
@@ -530,16 +530,16 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04003B07 RID: 15111
+		
 		public const float ConstructionSpeedGlobalFactor = 1.7f;
 
-		// Token: 0x04003B08 RID: 15112
+		
 		private static string SkillTooLowTrans;
 
-		// Token: 0x04003B09 RID: 15113
+		
 		private static string IncapableOfDeconstruction;
 
-		// Token: 0x04003B0A RID: 15114
+		
 		private static string IncapableOfMining;
 	}
 }

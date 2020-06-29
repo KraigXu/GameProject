@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200047A RID: 1146
+	
 	public struct ShotReport
 	{
-		// Token: 0x17000693 RID: 1683
+		
 		// (get) Token: 0x060021CB RID: 8651 RVA: 0x000CDE28 File Offset: 0x000CC028
 		private float FactorFromPosture
 		{
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000694 RID: 1684
+		
 		// (get) Token: 0x060021CC RID: 8652 RVA: 0x000CDE78 File Offset: 0x000CC078
 		private float FactorFromExecution
 		{
@@ -45,7 +45,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000695 RID: 1685
+		
 		// (get) Token: 0x060021CD RID: 8653 RVA: 0x000CDEC6 File Offset: 0x000CC0C6
 		private float FactorFromCoveringGas
 		{
@@ -59,7 +59,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000696 RID: 1686
+		
 		// (get) Token: 0x060021CE RID: 8654 RVA: 0x000CDEEC File Offset: 0x000CC0EC
 		public float AimOnTargetChance_StandardTarget
 		{
@@ -74,7 +74,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000697 RID: 1687
+		
 		// (get) Token: 0x060021CF RID: 8655 RVA: 0x000CDF2B File Offset: 0x000CC12B
 		public float AimOnTargetChance_IgnoringPosture
 		{
@@ -84,7 +84,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000698 RID: 1688
+		
 		// (get) Token: 0x060021D0 RID: 8656 RVA: 0x000CDF3A File Offset: 0x000CC13A
 		public float AimOnTargetChance
 		{
@@ -94,7 +94,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000699 RID: 1689
+		
 		// (get) Token: 0x060021D1 RID: 8657 RVA: 0x000CDF49 File Offset: 0x000CC149
 		public float PassCoverChance
 		{
@@ -104,7 +104,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700069A RID: 1690
+		
 		// (get) Token: 0x060021D2 RID: 8658 RVA: 0x000CDF57 File Offset: 0x000CC157
 		public float TotalEstimatedHitChance
 		{
@@ -114,7 +114,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700069B RID: 1691
+		
 		// (get) Token: 0x060021D3 RID: 8659 RVA: 0x000CDF6B File Offset: 0x000CC16B
 		public ShootLine ShootLine
 		{
@@ -124,7 +124,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060021D4 RID: 8660 RVA: 0x000CDF74 File Offset: 0x000CC174
+		
 		public static ShotReport HitReportFor(Thing caster, Verb verb, LocalTargetInfo target)
 		{
 			IntVec3 cell = target.Cell;
@@ -183,19 +183,19 @@ namespace Verse
 			return shotReport;
 		}
 
-		// Token: 0x060021D5 RID: 8661 RVA: 0x000CE1E4 File Offset: 0x000CC3E4
+		
 		public static float HitFactorFromShooter(Thing caster, float distance)
 		{
 			return ShotReport.HitFactorFromShooter((caster is Pawn) ? caster.GetStatValue(StatDefOf.ShootingAccuracyPawn, true) : caster.GetStatValue(StatDefOf.ShootingAccuracyTurret, true), distance);
 		}
 
-		// Token: 0x060021D6 RID: 8662 RVA: 0x000CE20E File Offset: 0x000CC40E
+		
 		public static float HitFactorFromShooter(float accRating, float distance)
 		{
 			return Mathf.Max(Mathf.Pow(accRating, distance), 0.0201f);
 		}
 
-		// Token: 0x060021D7 RID: 8663 RVA: 0x000CE224 File Offset: 0x000CC424
+		
 		public string GetTextReadout()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -250,7 +250,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x060021D8 RID: 8664 RVA: 0x000CE5D4 File Offset: 0x000CC7D4
+		
 		public Thing GetRandomCoverToMissInto()
 		{
 			CoverInfo coverInfo;
@@ -261,37 +261,37 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x040014C7 RID: 5319
+		
 		private TargetInfo target;
 
-		// Token: 0x040014C8 RID: 5320
+		
 		private float distance;
 
-		// Token: 0x040014C9 RID: 5321
+		
 		private List<CoverInfo> covers;
 
-		// Token: 0x040014CA RID: 5322
+		
 		private float coversOverallBlockChance;
 
-		// Token: 0x040014CB RID: 5323
+		
 		private ThingDef coveringGas;
 
-		// Token: 0x040014CC RID: 5324
+		
 		private float factorFromShooterAndDist;
 
-		// Token: 0x040014CD RID: 5325
+		
 		private float factorFromEquipment;
 
-		// Token: 0x040014CE RID: 5326
+		
 		private float factorFromTargetSize;
 
-		// Token: 0x040014CF RID: 5327
+		
 		private float factorFromWeather;
 
-		// Token: 0x040014D0 RID: 5328
+		
 		private float forcedMissRadius;
 
-		// Token: 0x040014D1 RID: 5329
+		
 		private ShootLine shootLine;
 	}
 }

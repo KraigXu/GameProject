@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000B3F RID: 2879
+	
 	public static class ResurrectionUtility
 	{
-		// Token: 0x060043B5 RID: 17333 RVA: 0x0016C7C0 File Offset: 0x0016A9C0
+		
 		public static void Resurrect(Pawn pawn)
 		{
 			if (!pawn.Dead)
@@ -77,7 +77,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060043B6 RID: 17334 RVA: 0x0016C974 File Offset: 0x0016AB74
+		
 		public static void ResurrectWithSideEffects(Pawn pawn)
 		{
 			Corpse corpse = pawn.Corpse;
@@ -133,7 +133,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040026C1 RID: 9921
+		
 		private static SimpleCurve DementiaChancePerRotDaysCurve = new SimpleCurve
 		{
 			{
@@ -146,7 +146,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026C2 RID: 9922
+		
 		private static SimpleCurve BlindnessChancePerRotDaysCurve = new SimpleCurve
 		{
 			{
@@ -159,7 +159,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026C3 RID: 9923
+		
 		private static SimpleCurve ResurrectionPsychosisChancePerRotDaysCurve = new SimpleCurve
 		{
 			{

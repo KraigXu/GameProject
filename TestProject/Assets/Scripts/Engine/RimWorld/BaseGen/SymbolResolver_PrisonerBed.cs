@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010B9 RID: 4281
+	
 	public class SymbolResolver_PrisonerBed : SymbolResolver
 	{
-		// Token: 0x06006531 RID: 25905 RVA: 0x00234E6C File Offset: 0x0023306C
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			ResolveParams resolveParams = rp;

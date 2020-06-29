@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DB2 RID: 3506
+	
 	public class StockGenerator_Slaves : StockGenerator
 	{
-		// Token: 0x06005527 RID: 21799 RVA: 0x001C5321 File Offset: 0x001C3521
+		
 		public override IEnumerable<Thing> GenerateThings(int forTile, Faction faction = null)
 		{
 			if (this.respectPopulationIntent && Rand.Value > StorytellerUtilityPopulation.PopulationIntent)
@@ -38,16 +38,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005528 RID: 21800 RVA: 0x001C5338 File Offset: 0x001C3538
+		
 		public override bool HandlesThingDef(ThingDef thingDef)
 		{
 			return thingDef.category == ThingCategory.Pawn && thingDef.race.Humanlike && thingDef.tradeability > Tradeability.None;
 		}
 
-		// Token: 0x04002EA5 RID: 11941
+		
 		private bool respectPopulationIntent;
 
-		// Token: 0x04002EA6 RID: 11942
+		
 		public PawnKindDef slaveKindDef;
 	}
 }

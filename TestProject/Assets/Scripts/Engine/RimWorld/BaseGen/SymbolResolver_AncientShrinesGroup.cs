@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C2 RID: 4290
+	
 	public class SymbolResolver_AncientShrinesGroup : SymbolResolver
 	{
-		// Token: 0x0600654D RID: 25933 RVA: 0x00235FBC File Offset: 0x002341BC
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -62,16 +62,16 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DBB RID: 15803
+		
 		public static readonly IntVec2 StandardAncientShrineSize = new IntVec2(4, 3);
 
-		// Token: 0x04003DBC RID: 15804
+		
 		private const int MaxNumCaskets = 6;
 
-		// Token: 0x04003DBD RID: 15805
+		
 		private const float SkipShrineChance = 0.25f;
 
-		// Token: 0x04003DBE RID: 15806
+		
 		public const int MarginCells = -1;
 	}
 }

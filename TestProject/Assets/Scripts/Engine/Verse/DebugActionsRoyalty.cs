@@ -7,10 +7,10 @@ using RimWorld.QuestGen;
 
 namespace Verse
 {
-	// Token: 0x02000337 RID: 823
+	
 	public static class DebugActionsRoyalty
 	{
-		// Token: 0x06001855 RID: 6229 RVA: 0x0008B844 File Offset: 0x00089A44
+		
 		[DebugAction("General", "Award 4 royal favor", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void Award4RoyalFavor()
 		{
@@ -32,7 +32,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001856 RID: 6230 RVA: 0x0008B8F8 File Offset: 0x00089AF8
+		
 		[DebugAction("General", "Reduce royal title", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ReduceRoyalTitle()
 		{
@@ -54,7 +54,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001857 RID: 6231 RVA: 0x0008B9AC File Offset: 0x00089BAC
+		
 		[DebugAction("General", "Set royal title", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SetTitleForced()
 		{
@@ -85,7 +85,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001858 RID: 6232 RVA: 0x0008BA60 File Offset: 0x00089C60
+		
 		[DebugOutput]
 		private static void RoyalTitles()
 		{
@@ -142,7 +142,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<RoyalTitleDef>(allDefsListForReading, array);
 		}
 
-		// Token: 0x06001859 RID: 6233 RVA: 0x0008BC38 File Offset: 0x00089E38
+		
 		[DebugOutput(name = "Royal Favor Availability (slow)")]
 		private static void RoyalFavorAvailability()
 		{

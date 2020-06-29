@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200077A RID: 1914
+	
 	public class LordJob_TradeWithColony : LordJob
 	{
-		// Token: 0x1700090C RID: 2316
+		
 		// (get) Token: 0x060031FA RID: 12794 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AddFleeToil
 		{
@@ -18,19 +18,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031FB RID: 12795 RVA: 0x000F4066 File Offset: 0x000F2266
+		
 		public LordJob_TradeWithColony()
 		{
 		}
 
-		// Token: 0x060031FC RID: 12796 RVA: 0x0011661B File Offset: 0x0011481B
+		
 		public LordJob_TradeWithColony(Faction faction, IntVec3 chillSpot)
 		{
 			this.faction = faction;
 			this.chillSpot = chillSpot;
 		}
 
-		// Token: 0x060031FD RID: 12797 RVA: 0x00116634 File Offset: 0x00114834
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -128,17 +128,17 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x060031FE RID: 12798 RVA: 0x00116A5C File Offset: 0x00114C5C
+		
 		public override void ExposeData()
 		{
 			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
 			Scribe_Values.Look<IntVec3>(ref this.chillSpot, "chillSpot", default(IntVec3), false);
 		}
 
-		// Token: 0x04001B3B RID: 6971
+		
 		private Faction faction;
 
-		// Token: 0x04001B3C RID: 6972
+		
 		private IntVec3 chillSpot;
 	}
 }

@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000AAD RID: 2733
+	
 	public static class LightningBoltMeshMaker
 	{
-		// Token: 0x060040B4 RID: 16564 RVA: 0x0015A9DC File Offset: 0x00158BDC
+		
 		public static Mesh NewBoltMesh()
 		{
 			LightningBoltMeshMaker.lightningTop = new Vector2(Rand.Range(-50f, 50f), 200f);
@@ -19,7 +19,7 @@ namespace RimWorld
 			return LightningBoltMeshMaker.MeshFromVerts();
 		}
 
-		// Token: 0x060040B5 RID: 16565 RVA: 0x0015AA10 File Offset: 0x00158C10
+		
 		private static void MakeVerticesBase()
 		{
 			int num = (int)Math.Ceiling((double)((Vector2.zero - LightningBoltMeshMaker.lightningTop).magnitude / 0.25f));
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040B6 RID: 16566 RVA: 0x0015AA84 File Offset: 0x00158C84
+		
 		private static void PeturbVerticesRandomly()
 		{
 			Perlin perlin = new Perlin(0.0070000002160668373, 2.0, 0.5, 6, Rand.Range(0, int.MaxValue), QualityMode.High);
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040B7 RID: 16567 RVA: 0x0015AB2C File Offset: 0x00158D2C
+		
 		private static void DoubleVertices()
 		{
 			List<Vector2> list = LightningBoltMeshMaker.verts2D.ListFullCopy<Vector2>();
@@ -69,7 +69,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040B8 RID: 16568 RVA: 0x0015AC14 File Offset: 0x00158E14
+		
 		private static Mesh MeshFromVerts()
 		{
 			Vector3[] array = new Vector3[LightningBoltMeshMaker.verts2D.Count];
@@ -105,31 +105,31 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x0400258C RID: 9612
+		
 		private static List<Vector2> verts2D;
 
-		// Token: 0x0400258D RID: 9613
+		
 		private static Vector2 lightningTop;
 
-		// Token: 0x0400258E RID: 9614
+		
 		private const float LightningHeight = 200f;
 
-		// Token: 0x0400258F RID: 9615
+		
 		private const float LightningRootXVar = 50f;
 
-		// Token: 0x04002590 RID: 9616
+		
 		private const float VertexInterval = 0.25f;
 
-		// Token: 0x04002591 RID: 9617
+		
 		private const float MeshWidth = 2f;
 
-		// Token: 0x04002592 RID: 9618
+		
 		private const float UVIntervalY = 0.04f;
 
-		// Token: 0x04002593 RID: 9619
+		
 		private const float PerturbAmp = 12f;
 
-		// Token: 0x04002594 RID: 9620
+		
 		private const float PerturbFreq = 0.007f;
 	}
 }

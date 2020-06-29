@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D02 RID: 3330
+	
 	public class CompDrug : ThingComp
 	{
-		// Token: 0x17000E37 RID: 3639
+		
 		// (get) Token: 0x060050F5 RID: 20725 RVA: 0x001B29FB File Offset: 0x001B0BFB
 		public CompProperties_Drug Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050F6 RID: 20726 RVA: 0x001B2A08 File Offset: 0x001B0C08
+		
 		public override void PrePostIngested(Pawn ingester)
 		{
 			if (this.Props.Addictive && ingester.RaceProps.IsFlesh)
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050F7 RID: 20727 RVA: 0x001B2BF4 File Offset: 0x001B0DF4
+		
 		public override void PostIngested(Pawn ingester)
 		{
 			if (this.Props.Addictive && ingester.RaceProps.IsFlesh)

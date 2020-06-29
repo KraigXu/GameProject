@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000674 RID: 1652
+	
 	public class JobDriver_Strip : JobDriver
 	{
-		// Token: 0x06002D03 RID: 11523 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D04 RID: 11524 RVA: 0x000FED5A File Offset: 0x000FCF5A
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -51,7 +51,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D05 RID: 11525 RVA: 0x000FED6C File Offset: 0x000FCF6C
+		
 		public override object[] TaleParameters()
 		{
 			Corpse corpse = base.TargetA.Thing as Corpse;
@@ -62,7 +62,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04001A0B RID: 6667
+		
 		private const int StripTicks = 60;
 	}
 }

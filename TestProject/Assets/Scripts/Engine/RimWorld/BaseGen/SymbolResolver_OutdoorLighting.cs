@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D0 RID: 4304
+	
 	public class SymbolResolver_OutdoorLighting : SymbolResolver
 	{
-		// Token: 0x06006576 RID: 25974 RVA: 0x00237A78 File Offset: 0x00235C78
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -45,7 +45,7 @@ namespace RimWorld.BaseGen
 			SymbolResolver_OutdoorLighting.nearbyGlowers.Clear();
 		}
 
-		// Token: 0x06006577 RID: 25975 RVA: 0x00237BE0 File Offset: 0x00235DE0
+		
 		private void FindNearbyGlowers(CellRect rect)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -70,7 +70,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x06006578 RID: 25976 RVA: 0x00237CAC File Offset: 0x00235EAC
+		
 		private bool AnyGlowerNearby(IntVec3 c)
 		{
 			for (int i = 0; i < SymbolResolver_OutdoorLighting.nearbyGlowers.Count; i++)
@@ -83,10 +83,10 @@ namespace RimWorld.BaseGen
 			return false;
 		}
 
-		// Token: 0x04003DC7 RID: 15815
+		
 		private static List<CompGlower> nearbyGlowers = new List<CompGlower>();
 
-		// Token: 0x04003DC8 RID: 15816
+		
 		private const float Margin = 2f;
 	}
 }

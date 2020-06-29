@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B7B RID: 2939
+	
 	public class Pawn_DrugPolicyTracker : IExposable
 	{
-		// Token: 0x17000C03 RID: 3075
+		
 		// (get) Token: 0x060044CE RID: 17614 RVA: 0x001738BF File Offset: 0x00171ABF
 		// (set) Token: 0x060044CF RID: 17615 RVA: 0x001738E4 File Offset: 0x00171AE4
 		public DrugPolicy CurrentPolicy
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C04 RID: 3076
+		
 		// (get) Token: 0x060044D0 RID: 17616 RVA: 0x001738F8 File Offset: 0x00171AF8
 		private float DayPercentNotSleeping
 		{
@@ -69,7 +69,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C05 RID: 3077
+		
 		// (get) Token: 0x060044D1 RID: 17617 RVA: 0x001739D8 File Offset: 0x00171BD8
 		private float HoursPerDayNotSleeping
 		{
@@ -91,25 +91,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044D2 RID: 17618 RVA: 0x00173A2A File Offset: 0x00171C2A
+		
 		public Pawn_DrugPolicyTracker()
 		{
 		}
 
-		// Token: 0x060044D3 RID: 17619 RVA: 0x00173A3D File Offset: 0x00171C3D
+		
 		public Pawn_DrugPolicyTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x060044D4 RID: 17620 RVA: 0x00173A57 File Offset: 0x00171C57
+		
 		public void ExposeData()
 		{
 			Scribe_References.Look<DrugPolicy>(ref this.curPolicy, "curAssignedDrugs", false);
 			Scribe_Collections.Look<DrugTakeRecord>(ref this.drugTakeRecords, "drugTakeRecords", LookMode.Deep, Array.Empty<object>());
 		}
 
-		// Token: 0x060044D5 RID: 17621 RVA: 0x00173A80 File Offset: 0x00171C80
+		
 		public bool HasEverTaken(ThingDef drug)
 		{
 			if (!drug.IsDrug)
@@ -120,7 +120,7 @@ namespace RimWorld
 			return this.drugTakeRecords.Any((DrugTakeRecord x) => x.drug == drug);
 		}
 
-		// Token: 0x060044D6 RID: 17622 RVA: 0x00173AD8 File Offset: 0x00171CD8
+		
 		public bool AllowedToTakeToInventory(ThingDef thingDef)
 		{
 			if (!thingDef.IsIngestible)
@@ -141,7 +141,7 @@ namespace RimWorld
 			return !drugPolicyEntry.allowScheduled && drugPolicyEntry.takeToInventory > 0 && !this.pawn.inventory.innerContainer.Contains(thingDef);
 		}
 
-		// Token: 0x060044D7 RID: 17623 RVA: 0x00173B70 File Offset: 0x00171D70
+		
 		public bool AllowedToTakeScheduledEver(ThingDef thingDef)
 		{
 			if (!thingDef.IsIngestible)
@@ -157,7 +157,7 @@ namespace RimWorld
 			return this.CurrentPolicy[thingDef].allowScheduled && (!thingDef.IsNonMedicalDrug || !this.pawn.IsTeetotaler());
 		}
 
-		// Token: 0x060044D8 RID: 17624 RVA: 0x00173BE0 File Offset: 0x00171DE0
+		
 		public bool AllowedToTakeScheduledNow(ThingDef thingDef)
 		{
 			if (!thingDef.IsIngestible)
@@ -207,7 +207,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060044D9 RID: 17625 RVA: 0x00173D4C File Offset: 0x00171F4C
+		
 		public bool ShouldTryToTakeScheduledNow(ThingDef ingestible)
 		{
 			if (!ingestible.IsDrug)
@@ -256,7 +256,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060044DA RID: 17626 RVA: 0x00173EF4 File Offset: 0x001720F4
+		
 		public void Notify_DrugIngested(Thing drug)
 		{
 			DrugTakeRecord drugTakeRecord = this.drugTakeRecords.Find((DrugTakeRecord x) => x.drug == drug.def);
@@ -272,7 +272,7 @@ namespace RimWorld
 			drugTakeRecord2.TimesTakenThisDay = timesTakenThisDay + 1;
 		}
 
-		// Token: 0x060044DB RID: 17627 RVA: 0x00173F6C File Offset: 0x0017216C
+		
 		private int LastTicksWhenTakenDrugWhichCanCauseOverdose()
 		{
 			int num = -999999;
@@ -286,23 +286,23 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060044DC RID: 17628 RVA: 0x00173FC8 File Offset: 0x001721C8
+		
 		private bool CanCauseOverdose(ThingDef drug)
 		{
 			CompProperties_Drug compProperties = drug.GetCompProperties<CompProperties_Drug>();
 			return compProperties != null && compProperties.CanCauseOverdose;
 		}
 
-		// Token: 0x04002750 RID: 10064
+		
 		public Pawn pawn;
 
-		// Token: 0x04002751 RID: 10065
+		
 		private DrugPolicy curPolicy;
 
-		// Token: 0x04002752 RID: 10066
+		
 		private List<DrugTakeRecord> drugTakeRecords = new List<DrugTakeRecord>();
 
-		// Token: 0x04002753 RID: 10067
+		
 		private const float DangerousDrugOverdoseSeverity = 0.5f;
 	}
 }

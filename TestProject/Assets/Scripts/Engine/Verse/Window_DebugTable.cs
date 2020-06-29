@@ -8,10 +8,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x02000379 RID: 889
+	
 	public class Window_DebugTable : Window
 	{
-		// Token: 0x17000503 RID: 1283
+		
 		// (get) Token: 0x06001A5E RID: 6750 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
 		public override Vector2 InitialSize
 		{
@@ -21,7 +21,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A5F RID: 6751 RVA: 0x000A2204 File Offset: 0x000A0404
+		
 		public Window_DebugTable(string[,] tables)
 		{
 			this.tableRaw = tables;
@@ -36,7 +36,7 @@ namespace Verse
 			this.BuildTableSorted();
 		}
 
-		// Token: 0x06001A60 RID: 6752 RVA: 0x000A2294 File Offset: 0x000A0494
+		
 		private void BuildTableSorted()
 		{
 			if (this.sortMode == Window_DebugTable.SortMode.Off)
@@ -121,7 +121,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A61 RID: 6753 RVA: 0x000A252C File Offset: 0x000A072C
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Tiny;
@@ -215,47 +215,47 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000F6F RID: 3951
+		
 		private string[,] tableRaw;
 
-		// Token: 0x04000F70 RID: 3952
+		
 		private Vector2 scrollPosition = Vector2.zero;
 
-		// Token: 0x04000F71 RID: 3953
+		
 		private string[,] tableSorted;
 
-		// Token: 0x04000F72 RID: 3954
+		
 		private List<float> colWidths = new List<float>();
 
-		// Token: 0x04000F73 RID: 3955
+		
 		private List<float> rowHeights = new List<float>();
 
-		// Token: 0x04000F74 RID: 3956
+		
 		private int sortColumn = -1;
 
-		// Token: 0x04000F75 RID: 3957
+		
 		private Window_DebugTable.SortMode sortMode;
 
-		// Token: 0x04000F76 RID: 3958
+		
 		private bool[] colVisible;
 
-		// Token: 0x04000F77 RID: 3959
+		
 		private const float ColExtraWidth = 2f;
 
-		// Token: 0x04000F78 RID: 3960
+		
 		private const float RowExtraHeight = 2f;
 
-		// Token: 0x04000F79 RID: 3961
+		
 		private const float HiddenColumnWidth = 10f;
 
-		// Token: 0x02001611 RID: 5649
+		
 		private enum SortMode
 		{
-			// Token: 0x0400550E RID: 21774
+			
 			Off,
-			// Token: 0x0400550F RID: 21775
+			
 			Ascending,
-			// Token: 0x04005510 RID: 21776
+			
 			Descending
 		}
 	}

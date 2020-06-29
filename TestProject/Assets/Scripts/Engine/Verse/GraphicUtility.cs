@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020002FD RID: 765
+	
 	public static class GraphicUtility
 	{
-		// Token: 0x06001592 RID: 5522 RVA: 0x0007DF94 File Offset: 0x0007C194
+		
 		public static Graphic ExtractInnerGraphicFor(this Graphic outerGraphic, Thing thing)
 		{
 			Graphic_Random graphic_Random = outerGraphic as Graphic_Random;
@@ -22,7 +22,7 @@ namespace Verse
 			return outerGraphic;
 		}
 
-		// Token: 0x06001593 RID: 5523 RVA: 0x0007DFC8 File Offset: 0x0007C1C8
+		
 		public static Graphic_Linked WrapLinked(Graphic subGraphic, LinkDrawerType linkDrawerType)
 		{
 			switch (linkDrawerType)

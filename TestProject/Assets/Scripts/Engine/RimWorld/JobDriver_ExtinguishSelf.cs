@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200063C RID: 1596
+	
 	public class JobDriver_ExtinguishSelf : JobDriver
 	{
-		// Token: 0x17000845 RID: 2117
+		
 		// (get) Token: 0x06002BAC RID: 11180 RVA: 0x000FB804 File Offset: 0x000F9A04
 		protected Fire TargetFire
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002BAD RID: 11181 RVA: 0x000FB89C File Offset: 0x000F9A9C
+		
 		public override string GetReport()
 		{
 			if (this.TargetFire != null && this.TargetFire.parent != null)
@@ -28,13 +28,13 @@ namespace RimWorld
 			return "ReportExtinguishingFire".Translate();
 		}
 
-		// Token: 0x06002BAE RID: 11182 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002BAF RID: 11183 RVA: 0x000FB907 File Offset: 0x000F9B07
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return new Toil

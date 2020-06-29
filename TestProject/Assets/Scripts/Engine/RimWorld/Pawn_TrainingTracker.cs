@@ -5,17 +5,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BB7 RID: 2999
+	
 	public class Pawn_TrainingTracker : IExposable
 	{
-		// Token: 0x060046D8 RID: 18136 RVA: 0x0017F5BA File Offset: 0x0017D7BA
+		
 		public Pawn_TrainingTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 			this.countDecayFrom = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x060046D9 RID: 18137 RVA: 0x0017F5FC File Offset: 0x0017D7FC
+		
 		public void ExposeData()
 		{
 			Scribe_Deep.Look<DefMap<TrainableDef, bool>>(ref this.wantedTrainables, "wantedTrainables", Array.Empty<object>());
@@ -28,25 +28,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046DA RID: 18138 RVA: 0x0017F67A File Offset: 0x0017D87A
+		
 		public bool GetWanted(TrainableDef td)
 		{
 			return this.wantedTrainables[td];
 		}
 
-		// Token: 0x060046DB RID: 18139 RVA: 0x0017F688 File Offset: 0x0017D888
+		
 		private void SetWanted(TrainableDef td, bool wanted)
 		{
 			this.wantedTrainables[td] = wanted;
 		}
 
-		// Token: 0x060046DC RID: 18140 RVA: 0x0017F697 File Offset: 0x0017D897
+		
 		internal int GetSteps(TrainableDef td)
 		{
 			return this.steps[td];
 		}
 
-		// Token: 0x060046DD RID: 18141 RVA: 0x0017F6A8 File Offset: 0x0017D8A8
+		
 		public bool CanBeTrained(TrainableDef td)
 		{
 			if (this.steps[td] >= td.steps)
@@ -67,20 +67,20 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060046DE RID: 18142 RVA: 0x0017F70C File Offset: 0x0017D90C
+		
 		public bool HasLearned(TrainableDef td)
 		{
 			return this.learned[td];
 		}
 
-		// Token: 0x060046DF RID: 18143 RVA: 0x0017F71C File Offset: 0x0017D91C
+		
 		public AcceptanceReport CanAssignToTrain(TrainableDef td)
 		{
 			bool flag;
 			return this.CanAssignToTrain(td, out flag);
 		}
 
-		// Token: 0x060046E0 RID: 18144 RVA: 0x0017F734 File Offset: 0x0017D934
+		
 		public AcceptanceReport CanAssignToTrain(TrainableDef td, out bool visible)
 		{
 			if (this.pawn.RaceProps.untrainableTags != null)
@@ -134,7 +134,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060046E1 RID: 18145 RVA: 0x0017F8F8 File Offset: 0x0017DAF8
+		
 		public TrainableDef NextTrainableToTrain()
 		{
 			List<TrainableDef> trainableDefsInListOrder = TrainableUtility.TrainableDefsInListOrder;
@@ -148,7 +148,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060046E2 RID: 18146 RVA: 0x0017F944 File Offset: 0x0017DB44
+		
 		public void Train(TrainableDef td, Pawn trainer, bool complete = false)
 		{
 			if (complete)
@@ -171,7 +171,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046E3 RID: 18147 RVA: 0x0017F9E0 File Offset: 0x0017DBE0
+		
 		public void SetWantedRecursive(TrainableDef td, bool checkOn)
 		{
 			this.SetWanted(td, checkOn);
@@ -197,7 +197,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046E4 RID: 18148 RVA: 0x0017FA9C File Offset: 0x0017DC9C
+		
 		public void TrainingTrackerTickRare()
 		{
 			if (this.pawn.Suspended)
@@ -250,25 +250,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046E5 RID: 18149 RVA: 0x0017FD16 File Offset: 0x0017DF16
+		
 		public void Debug_MakeDegradeHappenSoon()
 		{
 			this.countDecayFrom = Find.TickManager.TicksGame - TrainableUtility.DegradationPeriodTicks(this.pawn.def) - 500;
 		}
 
-		// Token: 0x040028A6 RID: 10406
+		
 		private Pawn pawn;
 
-		// Token: 0x040028A7 RID: 10407
+		
 		private DefMap<TrainableDef, bool> wantedTrainables = new DefMap<TrainableDef, bool>();
 
-		// Token: 0x040028A8 RID: 10408
+		
 		private DefMap<TrainableDef, int> steps = new DefMap<TrainableDef, int>();
 
-		// Token: 0x040028A9 RID: 10409
+		
 		private DefMap<TrainableDef, bool> learned = new DefMap<TrainableDef, bool>();
 
-		// Token: 0x040028AA RID: 10410
+		
 		private int countDecayFrom;
 	}
 }

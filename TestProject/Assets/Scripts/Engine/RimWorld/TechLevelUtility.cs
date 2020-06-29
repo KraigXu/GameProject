@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A2E RID: 2606
+	
 	public static class TechLevelUtility
 	{
-		// Token: 0x06003D9C RID: 15772 RVA: 0x00145B18 File Offset: 0x00143D18
+		
 		public static string ToStringHuman(this TechLevel tl)
 		{
 			switch (tl)
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D9D RID: 15773 RVA: 0x00145BD8 File Offset: 0x00143DD8
+		
 		public static bool CanSpawnWithEquipmentFrom(this TechLevel pawnLevel, TechLevel gearLevel)
 		{
 			if (gearLevel == TechLevel.Undefined)
@@ -66,7 +66,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003D9E RID: 15774 RVA: 0x00145C78 File Offset: 0x00143E78
+		
 		public static bool IsNeolithicOrWorse(this TechLevel techLevel)
 		{
 			return techLevel != TechLevel.Undefined && techLevel <= TechLevel.Neolithic;

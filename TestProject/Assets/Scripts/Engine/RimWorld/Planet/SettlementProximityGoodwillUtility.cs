@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011BF RID: 4543
+	
 	public static class SettlementProximityGoodwillUtility
 	{
-		// Token: 0x17001177 RID: 4471
+		
 		// (get) Token: 0x0600690E RID: 26894 RVA: 0x0024B378 File Offset: 0x00249578
 		public static int MaxDist
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x0600690F RID: 26895 RVA: 0x0024B39C File Offset: 0x0024959C
+		
 		public static void CheckSettlementProximityGoodwillChange()
 		{
 			if (Find.TickManager.TicksGame == 0 || Find.TickManager.TicksGame % 900000 != 0)
@@ -72,7 +72,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006910 RID: 26896 RVA: 0x0024B550 File Offset: 0x00249750
+		
 		public static void AppendProximityGoodwillOffsets(int tile, List<Pair<Settlement, int>> outOffsets, bool ignoreIfAlreadyMinGoodwill, bool ignorePermanentlyHostile)
 		{
 			int maxDist = SettlementProximityGoodwillUtility.MaxDist;
@@ -95,13 +95,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006911 RID: 26897 RVA: 0x0024B610 File Offset: 0x00249810
+		
 		public static void SortProximityGoodwillOffsets(List<Pair<Settlement, int>> offsets)
 		{
 			offsets.SortBy((Pair<Settlement, int> x) => x.First.Faction.loadID, (Pair<Settlement, int> x) => -Mathf.Abs(x.Second));
 		}
 
-		// Token: 0x06006912 RID: 26898 RVA: 0x0024B664 File Offset: 0x00249864
+		
 		public static string ProximityGoodwillOffsetsToString(List<Pair<Settlement, int>> offsets)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -116,7 +116,7 @@ namespace RimWorld.Planet
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06006913 RID: 26899 RVA: 0x0024B71C File Offset: 0x0024991C
+		
 		public static void CheckConfirmSettle(int tile, Action settleAction)
 		{
 			SettlementProximityGoodwillUtility.tmpGoodwillOffsets.Clear();
@@ -130,7 +130,7 @@ namespace RimWorld.Planet
 			settleAction();
 		}
 
-		// Token: 0x04004159 RID: 16729
+		
 		private static List<Pair<Settlement, int>> tmpGoodwillOffsets = new List<Pair<Settlement, int>>();
 	}
 }

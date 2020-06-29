@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000661 RID: 1633
+	
 	public class JobDriver_Hunt : JobDriver
 	{
-		// Token: 0x17000865 RID: 2149
+		
 		// (get) Token: 0x06002C88 RID: 11400 RVA: 0x000FDC68 File Offset: 0x000FBE68
 		public Pawn Victim
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000866 RID: 2150
+		
 		// (get) Token: 0x06002C89 RID: 11401 RVA: 0x000FDCA0 File Offset: 0x000FBEA0
 		private Corpse Corpse
 		{
@@ -33,14 +33,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C8A RID: 11402 RVA: 0x000FDCC6 File Offset: 0x000FBEC6
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.jobStartTick, "jobStartTick", 0, false);
 		}
 
-		// Token: 0x06002C8B RID: 11403 RVA: 0x000FDCE0 File Offset: 0x000FBEE0
+		
 		public override string GetReport()
 		{
 			if (this.Victim != null)
@@ -50,13 +50,13 @@ namespace RimWorld
 			return base.GetReport();
 		}
 
-		// Token: 0x06002C8C RID: 11404 RVA: 0x000FDD11 File Offset: 0x000FBF11
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Victim, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002C8D RID: 11405 RVA: 0x000FDD33 File Offset: 0x000FBF33
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(delegate
@@ -120,7 +120,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002C8E RID: 11406 RVA: 0x000FDD44 File Offset: 0x000FBF44
+		
 		private Toil StartCollectCorpseToil()
 		{
 			Toil toil = new Toil();
@@ -159,19 +159,19 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x040019E5 RID: 6629
+		
 		private int jobStartTick = -1;
 
-		// Token: 0x040019E6 RID: 6630
+		
 		private const TargetIndex VictimInd = TargetIndex.A;
 
-		// Token: 0x040019E7 RID: 6631
+		
 		private const TargetIndex CorpseInd = TargetIndex.A;
 
-		// Token: 0x040019E8 RID: 6632
+		
 		private const TargetIndex StoreCellInd = TargetIndex.B;
 
-		// Token: 0x040019E9 RID: 6633
+		
 		private const int MaxHuntTicks = 5000;
 	}
 }

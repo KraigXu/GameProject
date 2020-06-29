@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200021F RID: 543
+	
 	public class PawnGraphicSet
 	{
-		// Token: 0x170002F6 RID: 758
+		
 		// (get) Token: 0x06000F30 RID: 3888 RVA: 0x0005692A File Offset: 0x00054B2A
 		public bool AllResolved
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F31 RID: 3889 RVA: 0x00056938 File Offset: 0x00054B38
+		
 		public List<Material> MatsBodyBaseAt(Rot4 facing, RotDrawMode bodyCondition = RotDrawMode.Fresh)
 		{
 			int num = facing.AsInt + 1000 * (int)bodyCondition;
@@ -49,7 +49,7 @@ namespace Verse
 			return this.cachedMatsBodyBase;
 		}
 
-		// Token: 0x170002F7 RID: 759
+		
 		// (get) Token: 0x06000F32 RID: 3890 RVA: 0x00056A64 File Offset: 0x00054C64
 		public GraphicMeshSet HairMeshSet
 		{
@@ -68,7 +68,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F33 RID: 3891 RVA: 0x00056AD0 File Offset: 0x00054CD0
+		
 		public Material HeadMatAt(Rot4 facing, RotDrawMode bodyCondition = RotDrawMode.Fresh, bool stump = false)
 		{
 			Material material = null;
@@ -109,7 +109,7 @@ namespace Verse
 			return material;
 		}
 
-		// Token: 0x06000F34 RID: 3892 RVA: 0x00056B6C File Offset: 0x00054D6C
+		
 		public Material HairMatAt(Rot4 facing)
 		{
 			Material baseMat = this.hairGraphic.MatAt(facing, null);
@@ -120,20 +120,20 @@ namespace Verse
 			return this.flasher.GetDamagedMat(baseMat);
 		}
 
-		// Token: 0x06000F35 RID: 3893 RVA: 0x00056BA7 File Offset: 0x00054DA7
+		
 		public PawnGraphicSet(Pawn pawn)
 		{
 			this.pawn = pawn;
 			this.flasher = new DamageFlasher(pawn);
 		}
 
-		// Token: 0x06000F36 RID: 3894 RVA: 0x00056BDF File Offset: 0x00054DDF
+		
 		public void ClearCache()
 		{
 			this.cachedMatsBodyBaseHash = -1;
 		}
 
-		// Token: 0x06000F37 RID: 3895 RVA: 0x00056BE8 File Offset: 0x00054DE8
+		
 		public void ResolveAllGraphics()
 		{
 			this.ClearCache();
@@ -187,7 +187,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F38 RID: 3896 RVA: 0x00056EEE File Offset: 0x000550EE
+		
 		public void SetAllGraphicsDirty()
 		{
 			if (this.AllResolved)
@@ -196,7 +196,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F39 RID: 3897 RVA: 0x00056F00 File Offset: 0x00055100
+		
 		public void ResolveApparelGraphics()
 		{
 			this.ClearCache();
@@ -214,7 +214,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F3A RID: 3898 RVA: 0x00056F8C File Offset: 0x0005518C
+		
 		public void SetApparelGraphicsDirty()
 		{
 			if (this.AllResolved)
@@ -223,52 +223,52 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000B4E RID: 2894
+		
 		public Pawn pawn;
 
-		// Token: 0x04000B4F RID: 2895
+		
 		public Graphic nakedGraphic;
 
-		// Token: 0x04000B50 RID: 2896
+		
 		public Graphic rottingGraphic;
 
-		// Token: 0x04000B51 RID: 2897
+		
 		public Graphic dessicatedGraphic;
 
-		// Token: 0x04000B52 RID: 2898
+		
 		public Graphic packGraphic;
 
-		// Token: 0x04000B53 RID: 2899
+		
 		public DamageFlasher flasher;
 
-		// Token: 0x04000B54 RID: 2900
+		
 		public Graphic headGraphic;
 
-		// Token: 0x04000B55 RID: 2901
+		
 		public Graphic desiccatedHeadGraphic;
 
-		// Token: 0x04000B56 RID: 2902
+		
 		public Graphic skullGraphic;
 
-		// Token: 0x04000B57 RID: 2903
+		
 		public Graphic headStumpGraphic;
 
-		// Token: 0x04000B58 RID: 2904
+		
 		public Graphic desiccatedHeadStumpGraphic;
 
-		// Token: 0x04000B59 RID: 2905
+		
 		public Graphic hairGraphic;
 
-		// Token: 0x04000B5A RID: 2906
+		
 		public List<ApparelGraphicRecord> apparelGraphics = new List<ApparelGraphicRecord>();
 
-		// Token: 0x04000B5B RID: 2907
+		
 		private List<Material> cachedMatsBodyBase = new List<Material>();
 
-		// Token: 0x04000B5C RID: 2908
+		
 		private int cachedMatsBodyBaseHash = -1;
 
-		// Token: 0x04000B5D RID: 2909
+		
 		public static readonly Color RottingColor = new Color(0.34f, 0.32f, 0.3f);
 	}
 }

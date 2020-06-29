@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200127A RID: 4730
+	
 	[StaticConstructorOnStartup]
 	public class FormCaravanComp : WorldObjectComp
 	{
-		// Token: 0x170012A0 RID: 4768
+		
 		// (get) Token: 0x06006EE5 RID: 28389 RVA: 0x0026A889 File Offset: 0x00268A89
 		public WorldObjectCompProperties_FormCaravan Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012A1 RID: 4769
+		
 		// (get) Token: 0x06006EE6 RID: 28390 RVA: 0x0026A896 File Offset: 0x00268A96
 		private MapParent MapParent
 		{
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012A2 RID: 4770
+		
 		// (get) Token: 0x06006EE7 RID: 28391 RVA: 0x0026A8A3 File Offset: 0x00268AA3
 		public bool Reform
 		{
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012A3 RID: 4771
+		
 		// (get) Token: 0x06006EE8 RID: 28392 RVA: 0x0026A8C8 File Offset: 0x00268AC8
 		public bool CanFormOrReformCaravanNow
 		{
@@ -50,7 +50,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006EE9 RID: 28393 RVA: 0x0026A911 File Offset: 0x00268B11
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
 			MapParent mapParent = (MapParent)this.parent;
@@ -107,7 +107,7 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x04004448 RID: 17480
+		
 		public static readonly Texture2D FormCaravanCommand = ContentFinder<Texture2D>.Get("UI/Commands/FormCaravan", true);
 	}
 }

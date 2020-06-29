@@ -7,10 +7,10 @@ using RimWorld.QuestGen;
 
 namespace Verse
 {
-	// Token: 0x0200012D RID: 301
+	
 	public static class DefInjectionUtility
 	{
-		// Token: 0x06000881 RID: 2177 RVA: 0x0002B998 File Offset: 0x00029B98
+		
 		public static void ForEachPossibleDefInjection(Type defType, DefInjectionUtility.PossibleDefInjectionTraverser action, ModMetaData onlyFromMod = null)
 		{
 			foreach (Def def in GenDefDatabase.GetAllDefsInDatabaseForDef(defType))
@@ -22,14 +22,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000882 RID: 2178 RVA: 0x0002BA08 File Offset: 0x00029C08
+		
 		private static void ForEachPossibleDefInjectionInDef(Def def, DefInjectionUtility.PossibleDefInjectionTraverser action)
 		{
 			HashSet<object> visited = new HashSet<object>();
 			DefInjectionUtility.ForEachPossibleDefInjectionInDefRecursive(def, def.defName, def.defName, visited, true, def, action);
 		}
 
-		// Token: 0x06000883 RID: 2179 RVA: 0x0002BA34 File Offset: 0x00029C34
+		
 		private static void ForEachPossibleDefInjectionInDefRecursive(object obj, string curNormalizedPath, string curSuggestedPath, HashSet<object> visited, bool translationAllowed, Def def, DefInjectionUtility.PossibleDefInjectionTraverser action)
 		{
 			if (obj == null)
@@ -124,7 +124,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000884 RID: 2180 RVA: 0x0002BD28 File Offset: 0x00029F28
+		
 		public static bool ShouldCheckMissingInjection(string str, FieldInfo fi, Def def)
 		{
 			if (def.generated)
@@ -146,7 +146,7 @@ namespace Verse
 			return fi.HasAttribute<MustTranslateAttribute>() || str.Contains(' ');
 		}
 
-		// Token: 0x06000885 RID: 2181 RVA: 0x0002BD88 File Offset: 0x00029F88
+		
 		private static IEnumerable<FieldInfo> FieldsInDeterministicOrder(IEnumerable<FieldInfo> fields)
 		{
 			return from x in fields
@@ -154,7 +154,7 @@ namespace Verse
 			select x;
 		}
 
-		// Token: 0x02001393 RID: 5011
+		
 		// (Invoke) Token: 0x060076B3 RID: 30387
 		public delegate void PossibleDefInjectionTraverser(string suggestedPath, string normalizedPath, bool isCollection, string currentValue, IEnumerable<string> currentValueCollection, bool translationAllowed, bool fullListTranslationAllowed, FieldInfo fieldInfo, Def def);
 	}

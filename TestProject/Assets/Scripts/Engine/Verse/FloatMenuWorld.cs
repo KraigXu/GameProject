@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000381 RID: 897
+	
 	public class FloatMenuWorld : FloatMenu
 	{
-		// Token: 0x06001A9C RID: 6812 RVA: 0x000A3C00 File Offset: 0x000A1E00
+		
 		public FloatMenuWorld(List<FloatMenuOption> options, string title, Vector2 clickPos) : base(options, title, false)
 		{
 			this.clickPos = clickPos;
 		}
 
-		// Token: 0x06001A9D RID: 6813 RVA: 0x000A3C14 File Offset: 0x000A1E14
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Caravan caravan = Find.WorldSelector.SingleSelectedObject as Caravan;
@@ -39,7 +39,7 @@ namespace Verse
 			base.DoWindowContents(inRect);
 		}
 
-		// Token: 0x06001A9E RID: 6814 RVA: 0x000A3CC4 File Offset: 0x000A1EC4
+		
 		private static bool StillValid(FloatMenuOption opt, List<FloatMenuOption> curOpts, Caravan forCaravan)
 		{
 			List<FloatMenuOption> list = null;
@@ -47,7 +47,7 @@ namespace Verse
 			return FloatMenuWorld.StillValid(opt, curOpts, forCaravan, ref list, ref vector);
 		}
 
-		// Token: 0x06001A9F RID: 6815 RVA: 0x000A3CF0 File Offset: 0x000A1EF0
+		
 		private static bool StillValid(FloatMenuOption opt, List<FloatMenuOption> curOpts, Caravan forCaravan, ref List<FloatMenuOption> cachedChoices, ref Vector2 cachedChoicesForPos)
 		{
 			if (opt.revalidateWorldClickTarget == null)
@@ -90,7 +90,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001AA0 RID: 6816 RVA: 0x000A3DB4 File Offset: 0x000A1FB4
+		
 		public override void PreOptionChosen(FloatMenuOption opt)
 		{
 			base.PreOptionChosen(opt);
@@ -101,16 +101,16 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AA1 RID: 6817 RVA: 0x000A351F File Offset: 0x000A171F
+		
 		private static bool OptionsMatch(FloatMenuOption a, FloatMenuOption b)
 		{
 			return a.Label == b.Label;
 		}
 
-		// Token: 0x04000FBB RID: 4027
+		
 		private Vector2 clickPos;
 
-		// Token: 0x04000FBC RID: 4028
+		
 		private const int RevalidateEveryFrame = 3;
 	}
 }

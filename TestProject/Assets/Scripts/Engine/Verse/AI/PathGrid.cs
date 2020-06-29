@@ -5,53 +5,53 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000573 RID: 1395
+	
 	public sealed class PathGrid
 	{
-		// Token: 0x06002767 RID: 10087 RVA: 0x000E6C62 File Offset: 0x000E4E62
+		
 		public PathGrid(Map map)
 		{
 			this.map = map;
 			this.ResetPathGrid();
 		}
 
-		// Token: 0x06002768 RID: 10088 RVA: 0x000E6C77 File Offset: 0x000E4E77
+		
 		public void ResetPathGrid()
 		{
 			this.pathGrid = new int[this.map.cellIndices.NumGridCells];
 		}
 
-		// Token: 0x06002769 RID: 10089 RVA: 0x000E6C94 File Offset: 0x000E4E94
+		
 		public bool Walkable(IntVec3 loc)
 		{
 			return loc.InBounds(this.map) && this.pathGrid[this.map.cellIndices.CellToIndex(loc)] < 10000;
 		}
 
-		// Token: 0x0600276A RID: 10090 RVA: 0x000E6CC5 File Offset: 0x000E4EC5
+		
 		public bool WalkableFast(IntVec3 loc)
 		{
 			return this.pathGrid[this.map.cellIndices.CellToIndex(loc)] < 10000;
 		}
 
-		// Token: 0x0600276B RID: 10091 RVA: 0x000E6CE6 File Offset: 0x000E4EE6
+		
 		public bool WalkableFast(int x, int z)
 		{
 			return this.pathGrid[this.map.cellIndices.CellToIndex(x, z)] < 10000;
 		}
 
-		// Token: 0x0600276C RID: 10092 RVA: 0x000E6D08 File Offset: 0x000E4F08
+		
 		public bool WalkableFast(int index)
 		{
 			return this.pathGrid[index] < 10000;
 		}
 
-		// Token: 0x0600276D RID: 10093 RVA: 0x000E6D19 File Offset: 0x000E4F19
+		
 		public int PerceivedPathCostAt(IntVec3 loc)
 		{
 			return this.pathGrid[this.map.cellIndices.CellToIndex(loc)];
 		}
 
-		// Token: 0x0600276E RID: 10094 RVA: 0x000E6D34 File Offset: 0x000E4F34
+		
 		public void RecalculatePerceivedPathCostUnderThing(Thing t)
 		{
 			if (t.def.size == IntVec2.One)
@@ -70,7 +70,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600276F RID: 10095 RVA: 0x000E6DAC File Offset: 0x000E4FAC
+		
 		public void RecalculatePerceivedPathCostAt(IntVec3 c)
 		{
 			if (!c.InBounds(this.map))
@@ -86,7 +86,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002770 RID: 10096 RVA: 0x000E6E20 File Offset: 0x000E5020
+		
 		public void RecalculateAllPerceivedPathCosts()
 		{
 			foreach (IntVec3 c in this.map.AllCells)
@@ -95,7 +95,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002771 RID: 10097 RVA: 0x000E6E74 File Offset: 0x000E5074
+		
 		public int CalculatedCostAt(IntVec3 c, bool perceivedStatic, IntVec3 prevCell)
 		{
 			bool flag = false;
@@ -174,7 +174,7 @@ namespace Verse.AI
 			return num;
 		}
 
-		// Token: 0x06002772 RID: 10098 RVA: 0x000E7040 File Offset: 0x000E5240
+		
 		private bool ContainsPathCostIgnoreRepeater(IntVec3 c)
 		{
 			List<Thing> list = this.map.thingGrid.ThingsListAt(c);
@@ -188,13 +188,13 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x06002773 RID: 10099 RVA: 0x000E7086 File Offset: 0x000E5286
+		
 		private static bool IsPathCostIgnoreRepeater(ThingDef def)
 		{
 			return def.pathCost >= 25 && def.pathCostIgnoreRepeat;
 		}
 
-		// Token: 0x06002774 RID: 10100 RVA: 0x000E709C File Offset: 0x000E529C
+		
 		[DebugOutput]
 		public static void ThingPathCostsIgnoreRepeaters()
 		{
@@ -218,13 +218,13 @@ namespace Verse.AI
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x04001782 RID: 6018
+		
 		private Map map;
 
-		// Token: 0x04001783 RID: 6019
+		
 		public int[] pathGrid;
 
-		// Token: 0x04001784 RID: 6020
+		
 		public const int ImpassableCost = 10000;
 	}
 }

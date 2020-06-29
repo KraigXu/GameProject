@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200100F RID: 4111
+	
 	public class StatPart_UnfinishedThingIngredientsMass : StatPart
 	{
-		// Token: 0x0600625F RID: 25183 RVA: 0x00221998 File Offset: 0x0021FB98
+		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
 			float num;
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006260 RID: 25184 RVA: 0x002219B8 File Offset: 0x0021FBB8
+		
 		public override string ExplanationPart(StatRequest req)
 		{
 			float mass;
@@ -27,7 +27,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06006261 RID: 25185 RVA: 0x002219F8 File Offset: 0x0021FBF8
+		
 		private bool TryGetValue(StatRequest req, out float value)
 		{
 			UnfinishedThing unfinishedThing = req.Thing as UnfinishedThing;

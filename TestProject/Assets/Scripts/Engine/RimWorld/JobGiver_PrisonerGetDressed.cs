@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006E7 RID: 1767
+	
 	public class JobGiver_PrisonerGetDressed : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EF6 RID: 12022 RVA: 0x00108358 File Offset: 0x00106558
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.guest.PrisonerIsSecure && pawn.apparel != null)
@@ -57,7 +57,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002EF7 RID: 12023 RVA: 0x0010848C File Offset: 0x0010668C
+		
 		private Apparel FindGarmentCoveringPart(Pawn pawn, BodyPartGroupDef bodyPartGroupDef)
 		{
 			Room room = pawn.GetRoom(RegionType.Set_Passable);
@@ -79,7 +79,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002EF8 RID: 12024 RVA: 0x0010857C File Offset: 0x0010677C
+		
 		private Apparel FindGarmentSatisfyingTitleRequirement(Pawn pawn, RoyalTitleDef.ApparelRequirement req)
 		{
 			Room room = pawn.GetRoom(RegionType.Set_Passable);

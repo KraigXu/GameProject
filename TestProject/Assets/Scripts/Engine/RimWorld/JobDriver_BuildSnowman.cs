@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000644 RID: 1604
+	
 	public class JobDriver_BuildSnowman : JobDriver
 	{
-		// Token: 0x06002BE1 RID: 11233 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002BE2 RID: 11234 RVA: 0x000FC446 File Offset: 0x000FA646
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.Touch);
@@ -43,17 +43,17 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002BE3 RID: 11235 RVA: 0x000FC456 File Offset: 0x000FA656
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<float>(ref this.workLeft, "workLeft", 0f, false);
 		}
 
-		// Token: 0x040019BF RID: 6591
+		
 		private float workLeft = -1000f;
 
-		// Token: 0x040019C0 RID: 6592
+		
 		protected const int BaseWorkAmount = 2300;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D30 RID: 3376
+	
 	public class CompMoteEmitterProximityScan : CompMoteEmitter
 	{
-		// Token: 0x17000E79 RID: 3705
+		
 		// (get) Token: 0x06005205 RID: 20997 RVA: 0x001B67C3 File Offset: 0x001B49C3
 		private CompProperties_MoteEmitterProximityScan Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E7A RID: 3706
+		
 		// (get) Token: 0x06005206 RID: 20998 RVA: 0x001B67D0 File Offset: 0x001B49D0
 		private CompSendSignalOnPawnProximity ProximityComp
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005207 RID: 20999 RVA: 0x001B67FC File Offset: 0x001B49FC
+		
 		public override void CompTick()
 		{
 			if (this.ProximityComp == null || this.ProximityComp.Sent)
@@ -95,7 +95,7 @@ namespace RimWorld
 			this.mote.instanceColor.a = a;
 		}
 
-		// Token: 0x04002D36 RID: 11574
+		
 		private CompSendSignalOnPawnProximity proximityCompCached;
 	}
 }

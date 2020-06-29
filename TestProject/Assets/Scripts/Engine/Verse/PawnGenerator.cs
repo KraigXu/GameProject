@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000295 RID: 661
+	
 	public static class PawnGenerator
 	{
-		// Token: 0x06001252 RID: 4690 RVA: 0x000688F8 File Offset: 0x00066AF8
+		
 		public static void Reset()
 		{
 			PawnGenerator.relationsGeneratableBlood = (from rel in DefDatabase<PawnRelationDef>.AllDefsListForReading
@@ -22,13 +22,13 @@ namespace Verse
 			select rel).ToArray<PawnRelationDef>();
 		}
 
-		// Token: 0x06001253 RID: 4691 RVA: 0x0006896C File Offset: 0x00066B6C
+		
 		public static Pawn GeneratePawn(PawnKindDef kindDef, Faction faction = null)
 		{
 			return PawnGenerator.GeneratePawn(new PawnGenerationRequest(kindDef, faction, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
 		}
 
-		// Token: 0x06001254 RID: 4692 RVA: 0x000689DC File Offset: 0x00066BDC
+		
 		public static Pawn GeneratePawn(PawnGenerationRequest request)
 		{
 			Pawn result;
@@ -76,7 +76,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06001255 RID: 4693 RVA: 0x00068B5C File Offset: 0x00066D5C
+		
 		private static Pawn GenerateOrRedressPawnInternal(PawnGenerationRequest request)
 		{
 			Pawn pawn = null;
@@ -144,7 +144,7 @@ namespace Verse
 			return pawn;
 		}
 
-		// Token: 0x06001256 RID: 4694 RVA: 0x00068D4C File Offset: 0x00066F4C
+		
 		public static void RedressPawn(Pawn pawn, PawnGenerationRequest request)
 		{
 			try
@@ -193,7 +193,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001257 RID: 4695 RVA: 0x00068F08 File Offset: 0x00067108
+		
 		public static bool IsBeingGenerated(Pawn pawn)
 		{
 			for (int i = 0; i < PawnGenerator.pawnsBeingGenerated.Count; i++)
@@ -206,7 +206,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001258 RID: 4696 RVA: 0x00068F44 File Offset: 0x00067144
+		
 		private static bool IsValidCandidateToRedress(Pawn pawn, PawnGenerationRequest request)
 		{
 			if (pawn.def != request.KindDef.race)
@@ -353,7 +353,7 @@ namespace Verse
 			return (request.RedressValidator == null || request.RedressValidator(pawn)) && (request.KindDef.requiredWorkTags == WorkTags.None || pawn.kindDef == request.KindDef || (pawn.CombinedDisabledWorkTags & request.KindDef.requiredWorkTags) == WorkTags.None);
 		}
 
-		// Token: 0x06001259 RID: 4697 RVA: 0x00069458 File Offset: 0x00067658
+		
 		private static Pawn GenerateNewPawnInternal(ref PawnGenerationRequest request)
 		{
 			Pawn pawn = null;
@@ -410,7 +410,7 @@ namespace Verse
 			return pawn;
 		}
 
-		// Token: 0x0600125A RID: 4698 RVA: 0x00069570 File Offset: 0x00067770
+		
 		private static Pawn TryGenerateNewPawnInternal(ref PawnGenerationRequest request, out string error, bool ignoreScenarioRequirements, bool ignoreValidator)
 		{
 			error = null;
@@ -623,7 +623,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x0600125B RID: 4699 RVA: 0x00069CA0 File Offset: 0x00067EA0
+		
 		private static void DiscardGeneratedPawn(Pawn pawn)
 		{
 			if (Find.WorldPawns.Contains(pawn))
@@ -650,7 +650,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600125C RID: 4700 RVA: 0x00069D58 File Offset: 0x00067F58
+		
 		private static IEnumerable<Pawn> GetValidCandidatesToRedress(PawnGenerationRequest request)
 		{
 			IEnumerable<Pawn> enumerable = Find.WorldPawns.GetPawnsBySituation(WorldPawnSituation.Free);
@@ -663,7 +663,7 @@ namespace Verse
 			select x;
 		}
 
-		// Token: 0x0600125D RID: 4701 RVA: 0x00069DB8 File Offset: 0x00067FB8
+		
 		private static float ChanceToRedressAnyWorldPawn(PawnGenerationRequest request)
 		{
 			int pawnsBySituationCount = Find.WorldPawns.GetPawnsBySituationCount(WorldPawnSituation.Free);
@@ -675,7 +675,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x0600125E RID: 4702 RVA: 0x00069E18 File Offset: 0x00068018
+		
 		private static float WorldPawnSelectionWeight(Pawn p)
 		{
 			if (p.RaceProps.IsFlesh && !p.relations.everSeenByPlayer && p.relations.RelatedToAnyoneOrAnyoneRelatedToMe)
@@ -685,7 +685,7 @@ namespace Verse
 			return 1f;
 		}
 
-		// Token: 0x0600125F RID: 4703 RVA: 0x00069E4C File Offset: 0x0006804C
+		
 		private static void GenerateGearFor(Pawn pawn, PawnGenerationRequest request)
 		{
 			PawnApparelGenerator.GenerateStartingApparelFor(pawn, request);
@@ -693,7 +693,7 @@ namespace Verse
 			PawnInventoryGenerator.GenerateInventoryFor(pawn, request);
 		}
 
-		// Token: 0x06001260 RID: 4704 RVA: 0x00069E64 File Offset: 0x00068064
+		
 		private static void GenerateInitialHediffs(Pawn pawn, PawnGenerationRequest request)
 		{
 			int num = 0;
@@ -741,7 +741,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001261 RID: 4705 RVA: 0x00069F84 File Offset: 0x00068184
+		
 		private static void GenerateRandomAge(Pawn pawn, PawnGenerationRequest request)
 		{
 			if (request.FixedBiologicalAge != null && request.FixedChronologicalAge != null)
@@ -844,7 +844,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001262 RID: 4706 RVA: 0x0006A290 File Offset: 0x00068490
+		
 		public static int RandomTraitDegree(TraitDef traitDef)
 		{
 			if (traitDef.degreeDatas.Count == 1)
@@ -854,7 +854,7 @@ namespace Verse
 			return traitDef.degreeDatas.RandomElementByWeight((TraitDegreeData dd) => dd.commonality).degree;
 		}
 
-		// Token: 0x06001263 RID: 4707 RVA: 0x0006A2EC File Offset: 0x000684EC
+		
 		private static void GenerateTraits(Pawn pawn, PawnGenerationRequest request)
 		{
 			if (pawn.story == null)
@@ -912,27 +912,27 @@ namespace Verse
 			
 			//while (pawn.story.traits.allTraits.Count < num)
 			//{
-			//	PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_2 = new PawnGenerator.<>c__DisplayClass24_1();
-			//	PawnGenerator.<>c__DisplayClass24_1 <>c__DisplayClass24_3 = <>c__DisplayClass24_2;
+			//	PawnGenerator.c__DisplayClass24_1 c__DisplayClass24_2 = new PawnGenerator.c__DisplayClass24_1();
+			//	PawnGenerator.c__DisplayClass24_1 c__DisplayClass24_3 = c__DisplayClass24_2;
 			//	IEnumerable<TraitDef> allDefsListForReading = DefDatabase<TraitDef>.AllDefsListForReading;
 			//	Func<TraitDef, float> weightSelector=tr=> tr.GetGenderSpecificCommonality(pawn.gender);
 
-			//	<>c__DisplayClass24_3.newTraitDef = allDefsListForReading.RandomElementByWeight(weightSelector);
-			//	if (!pawn.story.traits.HasTrait(<>c__DisplayClass24_2.newTraitDef) && (request.KindDef.disallowedTraits == null || !request.KindDef.disallowedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.KindDef.requiredWorkTags == WorkTags.None || (<>c__DisplayClass24_2.newTraitDef.disabledWorkTags & request.KindDef.requiredWorkTags) == WorkTags.None) && (<>c__DisplayClass24_2.newTraitDef != TraitDefOf.Gay || (request.AllowGay && !LovePartnerRelationUtility.HasAnyLovePartnerOfTheOppositeGender(pawn) && !LovePartnerRelationUtility.HasAnyExLovePartnerOfTheOppositeGender(pawn))) && (request.ProhibitedTraits == null || !request.ProhibitedTraits.Contains(<>c__DisplayClass24_2.newTraitDef)) && (request.Faction == null || Faction.OfPlayerSilentFail == null || !request.Faction.HostileTo(Faction.OfPlayer) || <>c__DisplayClass24_2.newTraitDef.allowOnHostileSpawn) && !pawn.story.traits.allTraits.Any((Trait tr) => <>c__DisplayClass24_2.newTraitDef.ConflictsWith(tr)) && (<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes == null || !pawn.OneOfWorkTypesIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTypes)) && !pawn.WorkTagIsDisabled(<>c__DisplayClass24_2.newTraitDef.requiredWorkTags))
+			//	c__DisplayClass24_3.newTraitDef = allDefsListForReading.RandomElementByWeight(weightSelector);
+			//	if (!pawn.story.traits.HasTrait(c__DisplayClass24_2.newTraitDef) && (request.KindDef.disallowedTraits == null || !request.KindDef.disallowedTraits.Contains(c__DisplayClass24_2.newTraitDef)) && (request.KindDef.requiredWorkTags == WorkTags.None || (c__DisplayClass24_2.newTraitDef.disabledWorkTags & request.KindDef.requiredWorkTags) == WorkTags.None) && (c__DisplayClass24_2.newTraitDef != TraitDefOf.Gay || (request.AllowGay && !LovePartnerRelationUtility.HasAnyLovePartnerOfTheOppositeGender(pawn) && !LovePartnerRelationUtility.HasAnyExLovePartnerOfTheOppositeGender(pawn))) && (request.ProhibitedTraits == null || !request.ProhibitedTraits.Contains(c__DisplayClass24_2.newTraitDef)) && (request.Faction == null || Faction.OfPlayerSilentFail == null || !request.Faction.HostileTo(Faction.OfPlayer) || c__DisplayClass24_2.newTraitDef.allowOnHostileSpawn) && !pawn.story.traits.allTraits.Any((Trait tr) => c__DisplayClass24_2.newTraitDef.ConflictsWith(tr)) && (c__DisplayClass24_2.newTraitDef.requiredWorkTypes == null || !pawn.OneOfWorkTypesIsDisabled(c__DisplayClass24_2.newTraitDef.requiredWorkTypes)) && !pawn.WorkTagIsDisabled(c__DisplayClass24_2.newTraitDef.requiredWorkTags))
 			//	{
-			//		if (<>c__DisplayClass24_2.newTraitDef.forcedPassions != null && pawn.workSettings != null)
+			//		if (c__DisplayClass24_2.newTraitDef.forcedPassions != null && pawn.workSettings != null)
 			//		{
-			//			List<SkillDef> forcedPassions = <>c__DisplayClass24_2.newTraitDef.forcedPassions;
+			//			List<SkillDef> forcedPassions = c__DisplayClass24_2.newTraitDef.forcedPassions;
 			//			Predicate<SkillDef> predicate=p=> p.IsDisabled(pawn.story.DisabledWorkTagsBackstoryAndTraits, pawn.GetDisabledWorkTypes(true));
 			//			if (forcedPassions.Any(predicate))
 			//			{
 			//				continue;
 			//			}
 			//		}
-			//		int degree = PawnGenerator.RandomTraitDegree(<>c__DisplayClass24_2.newTraitDef);
-			//		if (!pawn.story.childhood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree) && (pawn.story.adulthood == null || !pawn.story.adulthood.DisallowsTrait(<>c__DisplayClass24_2.newTraitDef, degree)))
+			//		int degree = PawnGenerator.RandomTraitDegree(c__DisplayClass24_2.newTraitDef);
+			//		if (!pawn.story.childhood.DisallowsTrait(c__DisplayClass24_2.newTraitDef, degree) && (pawn.story.adulthood == null || !pawn.story.adulthood.DisallowsTrait(c__DisplayClass24_2.newTraitDef, degree)))
 			//		{
-			//			Trait trait2 = new Trait(<>c__DisplayClass24_2.newTraitDef, degree, false);
+			//			Trait trait2 = new Trait(c__DisplayClass24_2.newTraitDef, degree, false);
 			//			if (pawn.mindState == null || pawn.mindState.mentalBreaker == null || (pawn.mindState.mentalBreaker.BreakThresholdMinor + trait2.OffsetOfStat(StatDefOf.MentalBreakThreshold)) * trait2.MultiplierOfStat(StatDefOf.MentalBreakThreshold) <= 0.5f)
 			//			{
 			//				pawn.story.traits.GainTrait(trait2);
@@ -1006,7 +1006,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001266 RID: 4710 RVA: 0x0006AAD4 File Offset: 0x00068CD4
+		
 		private static int FinalLevelOfSkill(Pawn pawn, SkillDef sk)
 		{
 			float num;
@@ -1059,7 +1059,7 @@ namespace Verse
 			return Mathf.Clamp(Mathf.RoundToInt(num), 0, 20);
 		}
 
-		// Token: 0x06001267 RID: 4711 RVA: 0x0006ACE4 File Offset: 0x00068EE4
+		
 		public static void PostProcessGeneratedGear(Thing gear, Pawn pawn)
 		{
 			CompQuality compQuality = gear.TryGetComp<CompQuality>();
@@ -1088,7 +1088,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001268 RID: 4712 RVA: 0x0006AD98 File Offset: 0x00068F98
+		
 		private static void GeneratePawnRelations(Pawn pawn, ref PawnGenerationRequest request)
 		{
 			if (!pawn.RaceProps.Humanlike)
@@ -1136,7 +1136,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001269 RID: 4713 RVA: 0x0006AF38 File Offset: 0x00069138
+		
 		private static Pair<Pawn, PawnRelationDef>[] GenerateSamples(Pawn[] pawns, PawnRelationDef[] relations, int count)
 		{
 			Pair<Pawn, PawnRelationDef>[] array = new Pair<Pawn, PawnRelationDef>[count];
@@ -1147,7 +1147,7 @@ namespace Verse
 			return array;
 		}
 
-		// Token: 0x0600126A RID: 4714 RVA: 0x0006AF7C File Offset: 0x0006917C
+		
 		[DebugOutput("Performance", false)]
 		public static void PawnGenerationHistogram()
 		{
@@ -1163,23 +1163,23 @@ namespace Verse
 			debugHistogram.Display();
 		}
 
-		// Token: 0x04000CBC RID: 3260
+		
 		private static List<PawnGenerator.PawnGenerationStatus> pawnsBeingGenerated = new List<PawnGenerator.PawnGenerationStatus>();
 
-		// Token: 0x04000CBD RID: 3261
+		
 		private static PawnRelationDef[] relationsGeneratableBlood = (from rel in DefDatabase<PawnRelationDef>.AllDefsListForReading
 		where rel.familyByBloodRelation && rel.generationChanceFactor > 0f
 		select rel).ToArray<PawnRelationDef>();
 
-		// Token: 0x04000CBE RID: 3262
+		
 		private static PawnRelationDef[] relationsGeneratableNonblood = (from rel in DefDatabase<PawnRelationDef>.AllDefsListForReading
 		where !rel.familyByBloodRelation && rel.generationChanceFactor > 0f
 		select rel).ToArray<PawnRelationDef>();
 
-		// Token: 0x04000CBF RID: 3263
+		
 		public const float MaxStartMinorMentalBreakThreshold = 0.5f;
 
-		// Token: 0x04000CC0 RID: 3264
+		
 		private static SimpleCurve DefaultAgeGenerationCurve = new SimpleCurve
 		{
 			{
@@ -1216,10 +1216,10 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x04000CC1 RID: 3265
+		
 		public const float MaxGeneratedMechanoidAge = 2500f;
 
-		// Token: 0x04000CC2 RID: 3266
+		
 		private static readonly SimpleCurve AgeSkillMaxFactorCurve = new SimpleCurve
 		{
 			{
@@ -1240,7 +1240,7 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x04000CC3 RID: 3267
+		
 		private static readonly SimpleCurve LevelFinalAdjustmentCurve = new SimpleCurve
 		{
 			{
@@ -1261,7 +1261,7 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x04000CC4 RID: 3268
+		
 		private static readonly SimpleCurve LevelRandomCurve = new SimpleCurve
 		{
 			{
@@ -1290,20 +1290,20 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x02001466 RID: 5222
+		
 		private struct PawnGenerationStatus
 		{
-			// Token: 0x170014A7 RID: 5287
+			
 			// (get) Token: 0x06007A73 RID: 31347 RVA: 0x00298B6D File Offset: 0x00296D6D
 			// (set) Token: 0x06007A74 RID: 31348 RVA: 0x00298B75 File Offset: 0x00296D75
 			public Pawn Pawn { get; private set; }
 
-			// Token: 0x170014A8 RID: 5288
+			
 			// (get) Token: 0x06007A75 RID: 31349 RVA: 0x00298B7E File Offset: 0x00296D7E
 			// (set) Token: 0x06007A76 RID: 31350 RVA: 0x00298B86 File Offset: 0x00296D86
 			public List<Pawn> PawnsGeneratedInTheMeantime { get; private set; }
 
-			// Token: 0x06007A77 RID: 31351 RVA: 0x00298B8F File Offset: 0x00296D8F
+			
 			public PawnGenerationStatus(Pawn pawn, List<Pawn> pawnsGeneratedInTheMeantime)
 			{
 				this = default(PawnGenerator.PawnGenerationStatus);

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000633 RID: 1587
+	
 	public class JobDriver_FixBrokenDownBuilding : JobDriver
 	{
-		// Token: 0x17000839 RID: 2105
+		
 		// (get) Token: 0x06002B79 RID: 11129 RVA: 0x000FB324 File Offset: 0x000F9524
 		private Building Building
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700083A RID: 2106
+		
 		// (get) Token: 0x06002B7A RID: 11130 RVA: 0x000FB34C File Offset: 0x000F954C
 		private Thing Components
 		{
@@ -28,13 +28,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002B7B RID: 11131 RVA: 0x000FB370 File Offset: 0x000F9570
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Building, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.Components, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002B7C RID: 11132 RVA: 0x000FB3C1 File Offset: 0x000F95C1
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -63,13 +63,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019A0 RID: 6560
+		
 		private const TargetIndex BuildingInd = TargetIndex.A;
 
-		// Token: 0x040019A1 RID: 6561
+		
 		private const TargetIndex ComponentInd = TargetIndex.B;
 
-		// Token: 0x040019A2 RID: 6562
+		
 		private const int TicksDuration = 1000;
 	}
 }

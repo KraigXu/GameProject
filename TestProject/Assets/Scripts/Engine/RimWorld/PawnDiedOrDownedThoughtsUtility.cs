@@ -9,10 +9,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000B0E RID: 2830
+	
 	public static class PawnDiedOrDownedThoughtsUtility
 	{
-		// Token: 0x060042A0 RID: 17056 RVA: 0x00163EB4 File Offset: 0x001620B4
+		
 		public static void TryGiveThoughts(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind)
 		{
 			try
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A1 RID: 17057 RVA: 0x00163FCC File Offset: 0x001621CC
+		
 		public static void TryGiveThoughts(IEnumerable<Pawn> victims, PawnDiedOrDownedThoughtsKind thoughtsKind)
 		{
 			foreach (Pawn victim in victims)
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A2 RID: 17058 RVA: 0x0016401C File Offset: 0x0016221C
+		
 		public static void GetThoughts(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
 			outIndividualThoughts.Clear();
@@ -74,7 +74,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A3 RID: 17059 RVA: 0x00164070 File Offset: 0x00162270
+		
 		public static void BuildMoodThoughtsListString(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, StringBuilder sb, string individualThoughtsHeader, string allColonistsThoughtsHeader)
 		{
 			PawnDiedOrDownedThoughtsUtility.GetThoughts(victim, dinfo, thoughtsKind, PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd, PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts);
@@ -122,7 +122,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A4 RID: 17060 RVA: 0x001642A4 File Offset: 0x001624A4
+		
 		public static void BuildMoodThoughtsListString(IEnumerable<Pawn> victims, PawnDiedOrDownedThoughtsKind thoughtsKind, StringBuilder sb, string individualThoughtsHeader, string allColonistsThoughtsHeader, string victimLabelKey)
 		{
 			foreach (Pawn pawn in victims)
@@ -149,7 +149,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A5 RID: 17061 RVA: 0x0016439C File Offset: 0x0016259C
+		
 		private static void AppendThoughts_ForHumanlike(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
 			bool flag = dinfo != null && dinfo.Value.Def.execution;
@@ -224,7 +224,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A6 RID: 17062 RVA: 0x0016477C File Offset: 0x0016297C
+		
 		private static void AppendThoughts_Relations(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
 			if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Banished && victim.RaceProps.Animal)
@@ -313,7 +313,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A7 RID: 17063 RVA: 0x00164B50 File Offset: 0x00162D50
+		
 		private static bool Witnessed(Pawn p, Pawn victim)
 		{
 			if (!p.Awake() || !p.health.capacities.CapableOf(PawnCapacityDefOf.Sight))
@@ -327,7 +327,7 @@ namespace RimWorld
 			return victim.Spawned && p.Spawned && p.Position.InHorDistOf(victim.Position, 12f) && GenSight.LineOfSight(victim.Position, p.Position, victim.Map, false, null, 0, 0);
 		}
 
-		// Token: 0x060042A8 RID: 17064 RVA: 0x00164BE4 File Offset: 0x00162DE4
+		
 		public static void RemoveDiedThoughts(Pawn pawn)
 		{
 			foreach (Pawn pawn2 in PawnsFinder.AllMapsWorldAndTemporary_Alive)
@@ -352,7 +352,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042A9 RID: 17065 RVA: 0x00164CD4 File Offset: 0x00162ED4
+		
 		public static void RemoveLostThoughts(Pawn pawn)
 		{
 			foreach (Pawn pawn2 in PawnsFinder.AllMapsWorldAndTemporary_Alive)
@@ -376,10 +376,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002649 RID: 9801
+		
 		private static List<IndividualThoughtToAdd> tmpIndividualThoughtsToAdd = new List<IndividualThoughtToAdd>();
 
-		// Token: 0x0400264A RID: 9802
+		
 		private static List<ThoughtToAddToAll> tmpAllColonistsThoughts = new List<ThoughtToAddToAll>();
 	}
 }

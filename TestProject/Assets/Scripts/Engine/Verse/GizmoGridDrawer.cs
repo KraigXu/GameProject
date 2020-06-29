@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000395 RID: 917
+	
 	public static class GizmoGridDrawer
 	{
-		// Token: 0x1700052B RID: 1323
+		
 		// (get) Token: 0x06001B01 RID: 6913 RVA: 0x000A58FE File Offset: 0x000A3AFE
 		public static float HeightDrawnRecently
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B02 RID: 6914 RVA: 0x000A591C File Offset: 0x000A3B1C
+		
 		public static void DrawGizmoGrid(IEnumerable<Gizmo> gizmos, float startX, out Gizmo mouseoverGizmo)
 		{
 			GizmoGridDrawer.tmpAllGizmos.Clear();
@@ -144,71 +144,71 @@ namespace Verse
 			}
 			if (gizmo3 != null)
 			{
-				List<Gizmo> list3 = GizmoGridDrawer.<DrawGizmoGrid>g__FindMatchingGroup|10_0(gizmo3);
-				for (int num3 = 0; num3 < list3.Count; num3++)
-				{
-					Gizmo gizmo6 = list3[num3];
-					if (gizmo6 != gizmo3 && !gizmo6.disabled && gizmo3.InheritInteractionsFrom(gizmo6))
-					{
-						gizmo6.ProcessInput(ev);
-					}
-				}
-				gizmo3.ProcessInput(ev);
-				Event.current.Use();
+				//List<Gizmo> list3 = GizmoGridDrawer.<DrawGizmoGrid>g__FindMatchingGroup|10_0(gizmo3);
+				//for (int num3 = 0; num3 < list3.Count; num3++)
+				//{
+				//	Gizmo gizmo6 = list3[num3];
+				//	if (gizmo6 != gizmo3 && !gizmo6.disabled && gizmo3.InheritInteractionsFrom(gizmo6))
+				//	{
+				//		gizmo6.ProcessInput(ev);
+				//	}
+				//}
+				//gizmo3.ProcessInput(ev);
+				//Event.current.Use();
 			}
 			else if (gizmo4 != null)
 			{
-				List<FloatMenuOption> list4 = new List<FloatMenuOption>();
-				foreach (FloatMenuOption item in gizmo4.RightClickFloatMenuOptions)
-				{
-					list4.Add(item);
-				}
-				List<Gizmo> list5 = GizmoGridDrawer.<DrawGizmoGrid>g__FindMatchingGroup|10_0(gizmo4);
-				for (int num4 = 0; num4 < list5.Count; num4++)
-				{
-					Gizmo gizmo7 = list5[num4];
-					if (gizmo7 != gizmo4 && !gizmo7.disabled && gizmo4.InheritFloatMenuInteractionsFrom(gizmo7))
-					{
-						foreach (FloatMenuOption floatMenuOption in gizmo7.RightClickFloatMenuOptions)
-						{
-							FloatMenuOption floatMenuOption2 = null;
-							for (int num5 = 0; num5 < list4.Count; num5++)
-							{
-								if (list4[num5].Label == floatMenuOption.Label)
-								{
-									floatMenuOption2 = list4[num5];
-									break;
-								}
-							}
-							if (floatMenuOption2 == null)
-							{
-								list4.Add(floatMenuOption);
-							}
-							else if (!floatMenuOption.Disabled)
-							{
-								if (!floatMenuOption2.Disabled)
-								{
-									Action prevAction = floatMenuOption2.action;
-									Action localOptionAction = floatMenuOption.action;
-									floatMenuOption2.action = delegate
-									{
-										prevAction();
-										localOptionAction();
-									};
-								}
-								else if (floatMenuOption2.Disabled)
-								{
-									list4[list4.IndexOf(floatMenuOption2)] = floatMenuOption;
-								}
-							}
-						}
-					}
-				}
-				Event.current.Use();
-				if (list4.Any<FloatMenuOption>())
-				{
-					Find.WindowStack.Add(new FloatMenu(list4));
-				}
+				//List<FloatMenuOption> list4 = new List<FloatMenuOption>();
+				//foreach (FloatMenuOption item in gizmo4.RightClickFloatMenuOptions)
+				//{
+				//	list4.Add(item);
+				//}
+				//List<Gizmo> list5 = GizmoGridDrawer.<DrawGizmoGrid>g__FindMatchingGroup|10_0(gizmo4);
+				//for (int num4 = 0; num4 < list5.Count; num4++)
+				//{
+				//	Gizmo gizmo7 = list5[num4];
+				//	if (gizmo7 != gizmo4 && !gizmo7.disabled && gizmo4.InheritFloatMenuInteractionsFrom(gizmo7))
+				//	{
+				//		foreach (FloatMenuOption floatMenuOption in gizmo7.RightClickFloatMenuOptions)
+				//		{
+				//			FloatMenuOption floatMenuOption2 = null;
+				//			for (int num5 = 0; num5 < list4.Count; num5++)
+				//			{
+				//				if (list4[num5].Label == floatMenuOption.Label)
+				//				{
+				//					floatMenuOption2 = list4[num5];
+				//					break;
+				//				}
+				//			}
+				//			if (floatMenuOption2 == null)
+				//			{
+				//				list4.Add(floatMenuOption);
+				//			}
+				//			else if (!floatMenuOption.Disabled)
+				//			{
+				//				if (!floatMenuOption2.Disabled)
+				//				{
+				//					Action prevAction = floatMenuOption2.action;
+				//					Action localOptionAction = floatMenuOption.action;
+				//					floatMenuOption2.action = delegate
+				//					{
+				//						prevAction();
+				//						localOptionAction();
+				//					};
+				//				}
+				//				else if (floatMenuOption2.Disabled)
+				//				{
+				//					list4[list4.IndexOf(floatMenuOption2)] = floatMenuOption;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
+				//Event.current.Use();
+				//if (list4.Any<FloatMenuOption>())
+				//{
+				//	Find.WindowStack.Add(new FloatMenu(list4));
+				//}
 			}
 			for (int num6 = 0; num6 < GizmoGridDrawer.gizmoGroups.Count; num6++)
 			{
@@ -220,28 +220,28 @@ namespace Verse
 			GizmoGridDrawer.tmpAllGizmos.Clear();
 		}
 
-		// Token: 0x04000FFD RID: 4093
+		
 		public static HashSet<KeyCode> drawnHotKeys = new HashSet<KeyCode>();
 
-		// Token: 0x04000FFE RID: 4094
+		
 		private static float heightDrawn;
 
-		// Token: 0x04000FFF RID: 4095
+		
 		private static int heightDrawnFrame;
 
-		// Token: 0x04001000 RID: 4096
+		
 		public static readonly Vector2 GizmoSpacing = new Vector2(5f, 14f);
 
-		// Token: 0x04001001 RID: 4097
+		
 		private static List<List<Gizmo>> gizmoGroups = new List<List<Gizmo>>();
 
-		// Token: 0x04001002 RID: 4098
+		
 		private static List<Gizmo> firstGizmos = new List<Gizmo>();
 
-		// Token: 0x04001003 RID: 4099
+		
 		private static List<Gizmo> tmpAllGizmos = new List<Gizmo>();
 
-		// Token: 0x04001004 RID: 4100
+		
 		private static readonly Func<Gizmo, Gizmo, int> SortByOrder = (Gizmo lhs, Gizmo rhs) => lhs.order.CompareTo(rhs.order);
 	}
 }

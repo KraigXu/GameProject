@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002FC RID: 764
+	
 	public static class GraphicDatabaseUtility
 	{
-		// Token: 0x06001591 RID: 5521 RVA: 0x0007DF83 File Offset: 0x0007C183
+		
 		public static IEnumerable<string> GraphicNamesInFolder(string folderPath)
 		{
 			HashSet<string> loadedAssetNames = new HashSet<string>();

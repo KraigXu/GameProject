@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020003F4 RID: 1012
+	
 	public class BackCompatibilityConverter_0_18 : BackCompatibilityConverter
 	{
-		// Token: 0x06001E20 RID: 7712 RVA: 0x000B9A5C File Offset: 0x000B7C5C
+		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
 			return majorVer == 0 && minorVer <= 18;
 		}
 
-		// Token: 0x06001E21 RID: 7713 RVA: 0x000B9A6C File Offset: 0x000B7C6C
+		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -1307,7 +1307,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E22 RID: 7714 RVA: 0x000BB304 File Offset: 0x000B9504
+		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (baseType == typeof(WorldObject))
@@ -1328,7 +1328,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E23 RID: 7715 RVA: 0x000BB3C4 File Offset: 0x000B95C4
+		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -1486,19 +1486,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04001268 RID: 4712
+		
 		private static readonly Regex MeatSuffixExtract = new Regex("^(.+)_Meat$");
 
-		// Token: 0x04001269 RID: 4713
+		
 		private static readonly Regex CorpseSuffixExtract = new Regex("^(.+)_Corpse$");
 
-		// Token: 0x0400126A RID: 4714
+		
 		private static readonly Regex BlueprintSuffixExtract = new Regex("^(.+)_Blueprint$");
 
-		// Token: 0x0400126B RID: 4715
+		
 		private static readonly Regex BlueprintInstallSuffixExtract = new Regex("^(.+)_Blueprint_Install$");
 
-		// Token: 0x0400126C RID: 4716
+		
 		private static readonly Regex FrameSuffixExtract = new Regex("^(.+)_Frame$");
 	}
 }

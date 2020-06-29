@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200032F RID: 815
+	
 	[StaticConstructorOnStartup]
 	public static class DesignatorUtility
 	{
-		// Token: 0x060017F2 RID: 6130 RVA: 0x0008888C File Offset: 0x00086A8C
+		
 		public static Designator FindAllowedDesignator<T>() where T : Designator
 		{
 			List<DesignationCategoryDef> allDefsListForReading = DefDatabase<DesignationCategoryDef>.AllDefsListForReading;
@@ -38,7 +38,7 @@ namespace Verse
 			return designator;
 		}
 
-		// Token: 0x060017F3 RID: 6131 RVA: 0x00088960 File Offset: 0x00086B60
+		
 		public static void RenderHighlightOverSelectableCells(Designator designator, List<IntVec3> dragCells)
 		{
 			for (int i = 0; i < dragCells.Count; i++)
@@ -49,7 +49,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017F4 RID: 6132 RVA: 0x000889B4 File Offset: 0x00086BB4
+		
 		public static void RenderHighlightOverSelectableThings(Designator designator, List<IntVec3> dragCells)
 		{
 			DesignatorUtility.selectedThings.Clear();
@@ -70,16 +70,16 @@ namespace Verse
 			DesignatorUtility.selectedThings.Clear();
 		}
 
-		// Token: 0x04000EFF RID: 3839
+		
 		public static readonly Material DragHighlightCellMat = MaterialPool.MatFrom("UI/Overlays/DragHighlightCell", ShaderDatabase.MetaOverlay);
 
-		// Token: 0x04000F00 RID: 3840
+		
 		public static readonly Material DragHighlightThingMat = MaterialPool.MatFrom("UI/Overlays/DragHighlightThing", ShaderDatabase.MetaOverlay);
 
-		// Token: 0x04000F01 RID: 3841
+		
 		private static Dictionary<Type, Designator> StandaloneDesignators = new Dictionary<Type, Designator>();
 
-		// Token: 0x04000F02 RID: 3842
+		
 		private static HashSet<Thing> selectedThings = new HashSet<Thing>();
 	}
 }

@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200069F RID: 1695
+	
 	public class JobGiver_ConfigurableHostilityResponse : ThinkNode_JobGiver
 	{
-		// Token: 0x06002DFA RID: 11770 RVA: 0x001029D8 File Offset: 0x00100BD8
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.playerSettings == null || !pawn.playerSettings.UsesConfigurableHostilityResponse)
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002DFB RID: 11771 RVA: 0x00102A3C File Offset: 0x00100C3C
+		
 		private Job TryGetAttackNearbyEnemyJob(Pawn pawn)
 		{
 			if (pawn.WorkTagIsDisabled(WorkTags.Violent))
@@ -67,7 +67,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002DFC RID: 11772 RVA: 0x00102B38 File Offset: 0x00100D38
+		
 		private Job TryGetFleeJob(Pawn pawn)
 		{
 			if (!SelfDefenseUtility.ShouldStartFleeing(pawn))
@@ -139,7 +139,7 @@ namespace RimWorld
 			return JobMaker.MakeJob(JobDefOf.FleeAndCower, c);
 		}
 
-		// Token: 0x04001A4A RID: 6730
+		
 		private static List<Thing> tmpThreats = new List<Thing>();
 	}
 }

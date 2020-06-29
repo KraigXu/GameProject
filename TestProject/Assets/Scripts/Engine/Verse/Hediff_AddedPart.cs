@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000234 RID: 564
+	
 	public class Hediff_AddedPart : Hediff_Implant
 	{
-		// Token: 0x17000310 RID: 784
+		
 		// (get) Token: 0x06000FC4 RID: 4036 RVA: 0x0005B738 File Offset: 0x00059938
 		public override string TipStringExtra
 		{
@@ -20,7 +20,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FC5 RID: 4037 RVA: 0x0005B798 File Offset: 0x00059998
+		
 		public override void PostAdd(DamageInfo? dinfo)
 		{
 			base.PostAdd(dinfo);

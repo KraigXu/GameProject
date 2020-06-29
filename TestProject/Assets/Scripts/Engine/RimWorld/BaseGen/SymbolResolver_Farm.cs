@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C8 RID: 4296
+	
 	public class SymbolResolver_Farm : SymbolResolver
 	{
-		// Token: 0x0600655D RID: 25949 RVA: 0x0023306C File Offset: 0x0023126C
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			return base.CanResolve(rp) && (rp.cultivatedPlantDef != null || SymbolResolver_CultivatedPlants.DeterminePlantDef(rp.rect) != null);
 		}
 
-		// Token: 0x0600655E RID: 25950 RVA: 0x00236E44 File Offset: 0x00235044
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			ThingDef thingDef = rp.cultivatedPlantDef ?? SymbolResolver_CultivatedPlants.DeterminePlantDef(rp.rect);

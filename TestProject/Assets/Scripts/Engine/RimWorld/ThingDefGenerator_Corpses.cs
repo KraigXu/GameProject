@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200085C RID: 2140
+	
 	public static class ThingDefGenerator_Corpses
 	{
-		// Token: 0x060034E5 RID: 13541 RVA: 0x00121E03 File Offset: 0x00120003
+		
 		public static IEnumerable<ThingDef> ImpliedCorpseDefs()
 		{
 			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs.ToList<ThingDef>())
@@ -103,7 +103,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034E6 RID: 13542 RVA: 0x00121E0C File Offset: 0x0012000C
+		
 		private static float CalculateMarketValue(ThingDef raceDef)
 		{
 			float num = 0f;
@@ -127,19 +127,19 @@ namespace RimWorld
 			return num * 0.6f;
 		}
 
-		// Token: 0x04001BC3 RID: 7107
+		
 		private const float DaysToStartRot = 2.5f;
 
-		// Token: 0x04001BC4 RID: 7108
+		
 		private const float DaysToDessicate = 5f;
 
-		// Token: 0x04001BC5 RID: 7109
+		
 		private const float RotDamagePerDay = 2f;
 
-		// Token: 0x04001BC6 RID: 7110
+		
 		private const float DessicatedDamagePerDay = 0.7f;
 
-		// Token: 0x04001BC7 RID: 7111
+		
 		private const float ButcherProductsMarketValueFactor = 0.6f;
 	}
 }

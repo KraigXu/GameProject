@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020002E2 RID: 738
+	
 	public class RectTrigger : Thing
 	{
-		// Token: 0x17000436 RID: 1078
+		
 		// (get) Token: 0x060014DD RID: 5341 RVA: 0x0007B324 File Offset: 0x00079524
 		// (set) Token: 0x060014DE RID: 5342 RVA: 0x0007B32C File Offset: 0x0007952C
 		public CellRect Rect
@@ -26,14 +26,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014DF RID: 5343 RVA: 0x0007B34F File Offset: 0x0007954F
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			this.rect.ClipInsideMap(base.Map);
 		}
 
-		// Token: 0x060014E0 RID: 5344 RVA: 0x0007B36C File Offset: 0x0007956C
+		
 		public override void Tick()
 		{
 			if (this.destroyIfUnfogged && !this.rect.CenterCell.Fogged(base.Map))
@@ -62,7 +62,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014E1 RID: 5345 RVA: 0x0007B479 File Offset: 0x00079679
+		
 		public void ActivatedBy(Pawn p)
 		{
 			Find.SignalManager.SendSignal(new Signal(this.signalTag, p.Named("SUBJECT")));
@@ -72,7 +72,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014E2 RID: 5346 RVA: 0x0007B4AC File Offset: 0x000796AC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -82,16 +82,16 @@ namespace Verse
 			Scribe_Values.Look<string>(ref this.signalTag, "signalTag", null, false);
 		}
 
-		// Token: 0x04000DDF RID: 3551
+		
 		private CellRect rect;
 
-		// Token: 0x04000DE0 RID: 3552
+		
 		public bool destroyIfUnfogged;
 
-		// Token: 0x04000DE1 RID: 3553
+		
 		public bool activateOnExplosion;
 
-		// Token: 0x04000DE2 RID: 3554
+		
 		public string signalTag;
 	}
 }

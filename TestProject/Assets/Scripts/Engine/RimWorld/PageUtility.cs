@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E84 RID: 3716
+	
 	public static class PageUtility
 	{
-		// Token: 0x06005A70 RID: 23152 RVA: 0x001EAE34 File Offset: 0x001E9034
+		
 		public static Page StitchedPages(IEnumerable<Page> pages)
 		{
 			List<Page> list = pages.ToList<Page>();
@@ -30,7 +30,7 @@ namespace RimWorld
 			return list[0];
 		}
 
-		// Token: 0x06005A71 RID: 23153 RVA: 0x001EAEA3 File Offset: 0x001E90A3
+		
 		public static void InitGameStart()
 		{
 			LongEventHandler.QueueLongEvent(delegate

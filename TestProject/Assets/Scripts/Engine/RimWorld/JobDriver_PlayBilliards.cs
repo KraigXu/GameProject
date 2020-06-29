@@ -6,16 +6,16 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000646 RID: 1606
+	
 	public class JobDriver_PlayBilliards : JobDriver
 	{
-		// Token: 0x06002BE8 RID: 11240 RVA: 0x000FC497 File Offset: 0x000FA697
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, this.job.def.joyMaxParticipants, 0, null, errorOnFailed);
 		}
 
-		// Token: 0x06002BE9 RID: 11241 RVA: 0x000FC4C8 File Offset: 0x000FA6C8
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.EndOnDespawnedOrNull(TargetIndex.A, JobCondition.Incompletable);
@@ -56,7 +56,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002BEA RID: 11242 RVA: 0x000FC4D8 File Offset: 0x000FA6D8
+		
 		public override object[] TaleParameters()
 		{
 			return new object[]
@@ -66,7 +66,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x040019C1 RID: 6593
+		
 		private const int ShotDuration = 600;
 	}
 }

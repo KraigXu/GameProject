@@ -4,10 +4,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000047 RID: 71
+	
 	public class WorldFloodFiller
 	{
-		// Token: 0x06000386 RID: 902 RVA: 0x00012970 File Offset: 0x00010B70
+		
 		public void FloodFill(int rootTile, Predicate<int> passCheck, Action<int> processor, int maxTilesToProcess = 2147483647, IEnumerable<int> extraRootTiles = null)
 		{
 			this.FloodFill(rootTile, passCheck, delegate(int tile, int traversalDistance)
@@ -17,7 +17,7 @@ namespace Verse
 			}, maxTilesToProcess, extraRootTiles);
 		}
 
-		// Token: 0x06000387 RID: 903 RVA: 0x000129A4 File Offset: 0x00010BA4
+		
 		public void FloodFill(int rootTile, Predicate<int> passCheck, Action<int, int> processor, int maxTilesToProcess = 2147483647, IEnumerable<int> extraRootTiles = null)
 		{
 			this.FloodFill(rootTile, passCheck, delegate(int tile, int traversalDistance)
@@ -27,13 +27,13 @@ namespace Verse
 			}, maxTilesToProcess, extraRootTiles);
 		}
 
-		// Token: 0x06000388 RID: 904 RVA: 0x000129D8 File Offset: 0x00010BD8
+		
 		public void FloodFill(int rootTile, Predicate<int> passCheck, Predicate<int> processor, int maxTilesToProcess = 2147483647, IEnumerable<int> extraRootTiles = null)
 		{
 			this.FloodFill(rootTile, passCheck, (int tile, int traversalDistance) => processor(tile), maxTilesToProcess, extraRootTiles);
 		}
 
-		// Token: 0x06000389 RID: 905 RVA: 0x00012A0C File Offset: 0x00010C0C
+		
 		public void FloodFill(int rootTile, Predicate<int> passCheck, Func<int, int, bool> processor, int maxTilesToProcess = 2147483647, IEnumerable<int> extraRootTiles = null)
 		{
 			if (this.working)
@@ -132,7 +132,7 @@ namespace Verse
 			this.working = false;
 		}
 
-		// Token: 0x0600038A RID: 906 RVA: 0x00012CA4 File Offset: 0x00010EA4
+		
 		private void ClearVisited()
 		{
 			int i = 0;
@@ -146,16 +146,16 @@ namespace Verse
 			this.openSet.Clear();
 		}
 
-		// Token: 0x040000FA RID: 250
+		
 		private bool working;
 
-		// Token: 0x040000FB RID: 251
+		
 		private Queue<int> openSet = new Queue<int>();
 
-		// Token: 0x040000FC RID: 252
+		
 		private List<int> traversalDistance = new List<int>();
 
-		// Token: 0x040000FD RID: 253
+		
 		private List<int> visited = new List<int>();
 	}
 }

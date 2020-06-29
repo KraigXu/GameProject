@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x0200017D RID: 381
+	
 	public static class ThingListGroupHelper
 	{
-		// Token: 0x06000ADC RID: 2780 RVA: 0x000397F0 File Offset: 0x000379F0
+		
 		static ThingListGroupHelper()
 		{
 			int num = 0;
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000ADD RID: 2781 RVA: 0x00039878 File Offset: 0x00037A78
+		
 		public static bool Includes(this ThingRequestGroup group, ThingDef def)
 		{
 			switch (group)
@@ -128,7 +128,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000894 RID: 2196
+		
 		public static readonly ThingRequestGroup[] AllGroups = new ThingRequestGroup[Enum.GetValues(typeof(ThingRequestGroup)).Length];
 	}
 }

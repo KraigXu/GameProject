@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200107B RID: 4219
+	
 	public class HediffComp_PsychicHarmonizer : HediffComp
 	{
-		// Token: 0x17001157 RID: 4439
+		
 		// (get) Token: 0x06006426 RID: 25638 RVA: 0x0022B1B6 File Offset: 0x002293B6
 		public HediffCompProperties_PsychicHarmonizer Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006427 RID: 25639 RVA: 0x0022B1C4 File Offset: 0x002293C4
+		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006428 RID: 25640 RVA: 0x0022B254 File Offset: 0x00229454
+		
 		private void AffectPawns(Pawn p, List<Pawn> pawns)
 		{
 			for (int i = 0; i < pawns.Count; i++)

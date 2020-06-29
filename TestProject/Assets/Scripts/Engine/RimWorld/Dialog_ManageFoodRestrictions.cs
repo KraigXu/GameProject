@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E59 RID: 3673
+	
 	public class Dialog_ManageFoodRestrictions : Window
 	{
-		// Token: 0x1700100A RID: 4106
+		
 		// (get) Token: 0x0600590E RID: 22798 RVA: 0x001DB995 File Offset: 0x001D9B95
 		// (set) Token: 0x0600590F RID: 22799 RVA: 0x001DB99D File Offset: 0x001D9B9D
 		private FoodRestriction SelectedFoodRestriction
@@ -24,7 +24,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700100B RID: 4107
+		
 		// (get) Token: 0x06005910 RID: 22800 RVA: 0x001DB9AC File Offset: 0x001D9BAC
 		public override Vector2 InitialSize
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005911 RID: 22801 RVA: 0x001DB9BD File Offset: 0x001D9BBD
+		
 		private void CheckSelectedFoodRestrictionHasName()
 		{
 			if (this.SelectedFoodRestriction != null && this.SelectedFoodRestriction.label.NullOrEmpty())
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005912 RID: 22802 RVA: 0x001DB9EC File Offset: 0x001D9BEC
+		
 		public Dialog_ManageFoodRestrictions(FoodRestriction selectedFoodRestriction)
 		{
 			this.forcePause = true;
@@ -61,7 +61,7 @@ namespace RimWorld
 			this.SelectedFoodRestriction = selectedFoodRestriction;
 		}
 
-		// Token: 0x06005913 RID: 22803 RVA: 0x001DBA70 File Offset: 0x001D9C70
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			float num = 0f;
@@ -128,42 +128,42 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005914 RID: 22804 RVA: 0x001DBD94 File Offset: 0x001D9F94
+		
 		private IEnumerable<SpecialThingFilterDef> HiddenSpecialThingFilters()
 		{
 			yield return SpecialThingFilterDefOf.AllowFresh;
 			yield break;
 		}
 
-		// Token: 0x06005915 RID: 22805 RVA: 0x001DBD9D File Offset: 0x001D9F9D
+		
 		public override void PreClose()
 		{
 			base.PreClose();
 			this.CheckSelectedFoodRestrictionHasName();
 		}
 
-		// Token: 0x06005916 RID: 22806 RVA: 0x001DBDAB File Offset: 0x001D9FAB
+		
 		public static void DoNameInputRect(Rect rect, ref string name)
 		{
 			name = Widgets.TextField(rect, name, 30, Outfit.ValidNameRegex);
 		}
 
-		// Token: 0x04003036 RID: 12342
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04003037 RID: 12343
+		
 		private FoodRestriction selFoodRestrictionInt;
 
-		// Token: 0x04003038 RID: 12344
+		
 		private const float TopAreaHeight = 40f;
 
-		// Token: 0x04003039 RID: 12345
+		
 		private const float TopButtonHeight = 35f;
 
-		// Token: 0x0400303A RID: 12346
+		
 		private const float TopButtonWidth = 150f;
 
-		// Token: 0x0400303B RID: 12347
+		
 		private static ThingFilter foodGlobalFilter;
 	}
 }

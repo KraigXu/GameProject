@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200095D RID: 2397
+	
 	public class QuestPart_ShuttleDelay : QuestPart_Delay
 	{
-		// Token: 0x17000A27 RID: 2599
+		
 		// (get) Token: 0x060038B8 RID: 14520 RVA: 0x0012F166 File Offset: 0x0012D366
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038B9 RID: 14521 RVA: 0x0012F178 File Offset: 0x0012D378
+		
 		public override string ExtraInspectString(ISelectable target)
 		{
 			Pawn pawn = target as Pawn;
@@ -41,7 +41,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060038BA RID: 14522 RVA: 0x0012F1C4 File Offset: 0x0012D3C4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -52,7 +52,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038BB RID: 14523 RVA: 0x0012F220 File Offset: 0x0012D420
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -62,13 +62,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038BC RID: 14524 RVA: 0x0012F249 File Offset: 0x0012D449
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.lodgers.Replace(replace, with);
 		}
 
-		// Token: 0x04002182 RID: 8578
+		
 		public List<Pawn> lodgers = new List<Pawn>();
 	}
 }

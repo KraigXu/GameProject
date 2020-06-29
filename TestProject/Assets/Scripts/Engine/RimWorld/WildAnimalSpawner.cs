@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AB9 RID: 2745
+	
 	public class WildAnimalSpawner
 	{
-		// Token: 0x17000B82 RID: 2946
+		
 		// (get) Token: 0x060040F9 RID: 16633 RVA: 0x0015BF50 File Offset: 0x0015A150
 		private float DesiredAnimalDensity
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B83 RID: 2947
+		
 		// (get) Token: 0x060040FA RID: 16634 RVA: 0x0015C018 File Offset: 0x0015A218
 		private float DesiredTotalAnimalWeight
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B84 RID: 2948
+		
 		// (get) Token: 0x060040FB RID: 16635 RVA: 0x0015C050 File Offset: 0x0015A250
 		private float CurrentTotalAnimalWeight
 		{
@@ -68,7 +68,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B85 RID: 2949
+		
 		// (get) Token: 0x060040FC RID: 16636 RVA: 0x0015C0A8 File Offset: 0x0015A2A8
 		public bool AnimalEcosystemFull
 		{
@@ -78,13 +78,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040FD RID: 16637 RVA: 0x0015C0BB File Offset: 0x0015A2BB
+		
 		public WildAnimalSpawner(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x060040FE RID: 16638 RVA: 0x0015C0CC File Offset: 0x0015A2CC
+		
 		public void WildAnimalSpawnerTick()
 		{
 			if (Find.TickManager.TicksGame % 1213 == 0 && !this.AnimalEcosystemFull && Rand.Chance(0.0269555561f * this.DesiredAnimalDensity))
@@ -98,7 +98,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040FF RID: 16639 RVA: 0x0015C14C File Offset: 0x0015A34C
+		
 		public bool SpawnRandomWildAnimalAt(IntVec3 loc)
 		{
 			PawnKindDef pawnKindDef = (from a in this.map.Biome.AllWildAnimals
@@ -119,7 +119,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004100 RID: 16640 RVA: 0x0015C1F4 File Offset: 0x0015A3F4
+		
 		public string DebugString()
 		{
 			return string.Concat(new object[]
@@ -133,13 +133,13 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x040025B8 RID: 9656
+		
 		private Map map;
 
-		// Token: 0x040025B9 RID: 9657
+		
 		private const int AnimalCheckInterval = 1213;
 
-		// Token: 0x040025BA RID: 9658
+		
 		private const float BaseAnimalSpawnChancePerInterval = 0.0269555561f;
 	}
 }

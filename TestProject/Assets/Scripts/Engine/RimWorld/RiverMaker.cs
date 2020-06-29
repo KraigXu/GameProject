@@ -8,10 +8,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000A5F RID: 2655
+	
 	public class RiverMaker
 	{
-		// Token: 0x06003EBD RID: 16061 RVA: 0x0014D694 File Offset: 0x0014B894
+		
 		public RiverMaker(Vector3 center, float angle, RiverDef riverDef)
 		{
 			this.surfaceLevel = riverDef.widthOnMap / 2f;
@@ -33,7 +33,7 @@ namespace RimWorld
 			this.shallowizer = new Abs(this.shallowizer);
 		}
 
-		// Token: 0x06003EBE RID: 16062 RVA: 0x0014D8A0 File Offset: 0x0014BAA0
+		
 		public TerrainDef TerrainAt(IntVec3 loc, bool recordForValidation = false)
 		{
 			float value = this.generator.GetValue(loc);
@@ -60,13 +60,13 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003EBF RID: 16063 RVA: 0x0014D91E File Offset: 0x0014BB1E
+		
 		public Vector3 WaterCoordinateAt(IntVec3 loc)
 		{
 			return new Vector3(this.coordinateX.GetValue(loc), 0f, this.coordinateZ.GetValue(loc));
 		}
 
-		// Token: 0x06003EC0 RID: 16064 RVA: 0x0014D944 File Offset: 0x0014BB44
+		
 		public void ValidatePassage(Map map)
 		{
 			IntVec3 intVec = (from loc in this.lhs
@@ -98,28 +98,28 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400248A RID: 9354
+		
 		private ModuleBase generator;
 
-		// Token: 0x0400248B RID: 9355
+		
 		private ModuleBase coordinateX;
 
-		// Token: 0x0400248C RID: 9356
+		
 		private ModuleBase coordinateZ;
 
-		// Token: 0x0400248D RID: 9357
+		
 		private ModuleBase shallowizer;
 
-		// Token: 0x0400248E RID: 9358
+		
 		private float surfaceLevel;
 
-		// Token: 0x0400248F RID: 9359
+		
 		private float shallowFactor = 0.2f;
 
-		// Token: 0x04002490 RID: 9360
+		
 		private List<IntVec3> lhs = new List<IntVec3>();
 
-		// Token: 0x04002491 RID: 9361
+		
 		private List<IntVec3> rhs = new List<IntVec3>();
 	}
 }

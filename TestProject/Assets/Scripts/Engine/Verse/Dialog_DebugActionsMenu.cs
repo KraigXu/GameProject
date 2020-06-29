@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000359 RID: 857
+	
 	public class Dialog_DebugActionsMenu : Dialog_DebugOptionLister
 	{
-		// Token: 0x170004F5 RID: 1269
+		
 		// (get) Token: 0x06001A08 RID: 6664 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool IsDebug
 		{
@@ -20,7 +20,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A09 RID: 6665 RVA: 0x000A0020 File Offset: 0x0009E220
+		
 		public Dialog_DebugActionsMenu()
 		{
 			this.forcePause = true;
@@ -48,7 +48,7 @@ namespace Verse
 			select r).ToList<Dialog_DebugActionsMenu.DebugActionOption>();
 		}
 
-		// Token: 0x06001A0A RID: 6666 RVA: 0x000A0164 File Offset: 0x0009E364
+		
 		private void GenerateCacheForMethod(MethodInfo method, DebugActionAttribute attribute)
 		{
 			if (!attribute.IsAllowedInCurrentGameState)
@@ -78,7 +78,7 @@ namespace Verse
 			this.debugActions.Add(item);
 		}
 
-		// Token: 0x06001A0B RID: 6667 RVA: 0x000A0240 File Offset: 0x0009E440
+		
 		protected override void DoListingItems()
 		{
 			if (KeyBindingDefOf.Dev_ToggleDebugActionsMenu.KeyDownEvent)
@@ -121,25 +121,25 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000F33 RID: 3891
+		
 		private List<Dialog_DebugActionsMenu.DebugActionOption> debugActions = new List<Dialog_DebugActionsMenu.DebugActionOption>();
 
-		// Token: 0x02001605 RID: 5637
+		
 		public struct DebugActionOption
 		{
-			// Token: 0x040054ED RID: 21741
+			
 			public DebugActionType actionType;
 
-			// Token: 0x040054EE RID: 21742
+			
 			public string label;
 
-			// Token: 0x040054EF RID: 21743
+			
 			public string category;
 
-			// Token: 0x040054F0 RID: 21744
+			
 			public Action action;
 
-			// Token: 0x040054F1 RID: 21745
+			
 			public Action<Pawn> pawnAction;
 		}
 	}

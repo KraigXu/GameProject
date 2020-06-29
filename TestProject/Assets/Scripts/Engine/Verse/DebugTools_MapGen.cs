@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000353 RID: 851
+	
 	public static class DebugTools_MapGen
 	{
-		// Token: 0x06001A02 RID: 6658 RVA: 0x0009FDBC File Offset: 0x0009DFBC
+		
 		public static List<DebugMenuOption> Options_Scatterers()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();

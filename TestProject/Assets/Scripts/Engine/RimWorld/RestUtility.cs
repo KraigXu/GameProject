@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020007BE RID: 1982
+	
 	public static class RestUtility
 	{
-		// Token: 0x1700095A RID: 2394
+		
 		// (get) Token: 0x06003358 RID: 13144 RVA: 0x0011C8B1 File Offset: 0x0011AAB1
 		public static List<ThingDef> AllBedDefBestToWorst
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003359 RID: 13145 RVA: 0x0011C8B8 File Offset: 0x0011AAB8
+		
 		public static void Reset()
 		{
 			RestUtility.bedDefsBestToWorst_RestEffectiveness = (from d in DefDatabase<ThingDef>.AllDefs
@@ -34,7 +34,7 @@ namespace RimWorld
 			select d).ToList<ThingDef>();
 		}
 
-		// Token: 0x0600335A RID: 13146 RVA: 0x0011C9E0 File Offset: 0x0011ABE0
+		
 		public static bool IsValidBedFor(Thing bedThing, Pawn sleeper, Pawn traveler, bool sleeperWillBePrisoner, bool checkSocialProperness, bool allowMedBedEvenIfSetToNoCare = false, bool ignoreOtherReservations = false)
 		{
 			Building_Bed building_Bed = bedThing as Building_Bed;
@@ -127,7 +127,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600335B RID: 13147 RVA: 0x0011CB60 File Offset: 0x0011AD60
+		
 		private static bool IsAnyOwnerLovePartnerOf(Building_Bed bed, Pawn sleeper)
 		{
 			for (int i = 0; i < bed.OwnersForReading.Count; i++)
@@ -140,13 +140,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600335C RID: 13148 RVA: 0x0011CB9A File Offset: 0x0011AD9A
+		
 		public static Building_Bed FindBedFor(Pawn p)
 		{
 			return RestUtility.FindBedFor(p, p, p.IsPrisoner, true, false);
 		}
 
-		// Token: 0x0600335D RID: 13149 RVA: 0x0011CBAC File Offset: 0x0011ADAC
+		
 		public static Building_Bed FindBedFor(Pawn sleeper, Pawn traveler, bool sleeperWillBePrisoner, bool checkSocialProperness, bool ignoreOtherReservations = false)
 		{
 			if (HealthAIUtility.ShouldSeekMedicalRest(sleeper))
@@ -188,7 +188,7 @@ namespace RimWorld
 			for (int k = 0; k < 2; k++)
 			{
 				Danger maxDanger = (k == 0) ? Danger.None : Danger.Deadly;
-				Predicate<Thing> <>9__1;
+				Predicate<Thing> 9__1;
 				for (int l = 0; l < RestUtility.bedDefsBestToWorst_RestEffectiveness.Count; l++)
 				{
 					ThingDef thingDef2 = RestUtility.bedDefsBestToWorst_RestEffectiveness[l];
@@ -201,9 +201,9 @@ namespace RimWorld
 						TraverseParms traverseParams = TraverseParms.For(traveler, Danger.Deadly, TraverseMode.ByPawn, false);
 						float maxDistance = 9999f;
 						Predicate<Thing> validator;
-						if ((validator = <>9__1) == null)
+						if ((validator ) == null)
 						{
-							validator = (<>9__1 = ((Thing b) => !((Building_Bed)b).Medical && b.Position.GetDangerFor(sleeper, sleeper.Map) <= maxDanger && RestUtility.IsValidBedFor(b, sleeper, traveler, sleeperWillBePrisoner, checkSocialProperness, false, ignoreOtherReservations)));
+							validator = (9__1 = ((Thing b) => !((Building_Bed)b).Medical && b.Position.GetDangerFor(sleeper, sleeper.Map) <= maxDanger && RestUtility.IsValidBedFor(b, sleeper, traveler, sleeperWillBePrisoner, checkSocialProperness, false, ignoreOtherReservations)));
 						}
 						Building_Bed building_Bed2 = (Building_Bed)GenClosest.ClosestThingReachable(position, map, thingReq, peMode, traverseParams, maxDistance, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 						if (building_Bed2 != null)
@@ -216,7 +216,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x0600335E RID: 13150 RVA: 0x0011CED4 File Offset: 0x0011B0D4
+		
 		public static Building_Bed FindPatientBedFor(Pawn pawn)
 		{
 			Predicate<Thing> medBedValidator = delegate(Thing t)
@@ -240,7 +240,7 @@ namespace RimWorld
 			return RestUtility.FindBedFor(pawn);
 		}
 
-		// Token: 0x0600335F RID: 13151 RVA: 0x0011CFCC File Offset: 0x0011B1CC
+		
 		public static IntVec3 GetBedSleepingSlotPosFor(Pawn pawn, Building_Bed bed)
 		{
 			for (int i = 0; i < bed.OwnersForReading.Count; i++)
@@ -270,31 +270,31 @@ namespace RimWorld
 			return bed.GetSleepingSlotPos(0);
 		}
 
-		// Token: 0x06003360 RID: 13152 RVA: 0x0011D0A6 File Offset: 0x0011B2A6
+		
 		public static bool CanUseBedEver(Pawn p, ThingDef bedDef)
 		{
 			return p.BodySize <= bedDef.building.bed_maxBodySize && p.RaceProps.Humanlike == bedDef.building.bed_humanlike;
 		}
 
-		// Token: 0x06003361 RID: 13153 RVA: 0x0011D0D8 File Offset: 0x0011B2D8
+		
 		public static bool TimetablePreventsLayDown(Pawn pawn)
 		{
 			return pawn.timetable != null && !pawn.timetable.CurrentAssignment.allowRest && pawn.needs.rest.CurLevel >= 0.2f;
 		}
 
-		// Token: 0x06003362 RID: 13154 RVA: 0x0011D10E File Offset: 0x0011B30E
+		
 		public static bool DisturbancePreventsLyingDown(Pawn pawn)
 		{
 			return !pawn.Downed && Find.TickManager.TicksGame - pawn.mindState.lastDisturbanceTick < 400;
 		}
 
-		// Token: 0x06003363 RID: 13155 RVA: 0x0011D138 File Offset: 0x0011B338
+		
 		public static bool Awake(this Pawn p)
 		{
 			return p.health.capacities.CanBeAwake && (!p.Spawned || p.CurJob == null || p.jobs.curDriver == null || !p.jobs.curDriver.asleep);
 		}
 
-		// Token: 0x06003364 RID: 13156 RVA: 0x0011D190 File Offset: 0x0011B390
+		
 		public static Building_Bed CurrentBed(this Pawn p)
 		{
 			if (!p.Spawned || p.CurJob == null || p.GetPosture() != PawnPosture.LayingInBed)
@@ -325,13 +325,13 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003365 RID: 13157 RVA: 0x0011D210 File Offset: 0x0011B410
+		
 		public static bool InBed(this Pawn p)
 		{
 			return p.CurrentBed() != null;
 		}
 
-		// Token: 0x06003366 RID: 13158 RVA: 0x0011D21C File Offset: 0x0011B41C
+		
 		public static void WakeUp(Pawn p)
 		{
 			if (p.CurJob != null && (p.GetPosture().Laying() || p.CurJobDef == JobDefOf.LayDown) && !p.Downed)
@@ -346,7 +346,7 @@ namespace RimWorld
 			comp.WakeUpWithDelay();
 		}
 
-		// Token: 0x06003367 RID: 13159 RVA: 0x0011D274 File Offset: 0x0011B474
+		
 		public static float WakeThreshold(Pawn p)
 		{
 			Lord lord = p.GetLord();
@@ -357,16 +357,16 @@ namespace RimWorld
 			return 1f;
 		}
 
-		// Token: 0x06003368 RID: 13160 RVA: 0x0011D2C1 File Offset: 0x0011B4C1
+		
 		public static float FallAsleepMaxLevel(Pawn p)
 		{
 			return Mathf.Min(0.75f, RestUtility.WakeThreshold(p) - 0.01f);
 		}
 
-		// Token: 0x04001BA1 RID: 7073
+		
 		private static List<ThingDef> bedDefsBestToWorst_RestEffectiveness;
 
-		// Token: 0x04001BA2 RID: 7074
+		
 		private static List<ThingDef> bedDefsBestToWorst_Medical;
 	}
 }

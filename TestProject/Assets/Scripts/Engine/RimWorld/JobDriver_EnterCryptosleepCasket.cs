@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000659 RID: 1625
+	
 	public class JobDriver_EnterCryptosleepCasket : JobDriver
 	{
-		// Token: 0x06002C56 RID: 11350 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002C57 RID: 11351 RVA: 0x000FD543 File Offset: 0x000FB743
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);

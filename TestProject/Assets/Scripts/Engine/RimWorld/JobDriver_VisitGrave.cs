@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000650 RID: 1616
+	
 	public class JobDriver_VisitGrave : JobDriver_VisitJoyThing
 	{
-		// Token: 0x17000853 RID: 2131
+		
 		// (get) Token: 0x06002C21 RID: 11297 RVA: 0x000FCD70 File Offset: 0x000FAF70
 		private Building_Grave Grave
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C22 RID: 11298 RVA: 0x000FCD98 File Offset: 0x000FAF98
+		
 		protected override void WaitTickAction()
 		{
 			float num = 1f;
@@ -30,7 +30,7 @@ namespace RimWorld
 			JoyUtility.JoyTickCheckEnd(this.pawn, JoyTickFullJoyAction.EndJob, num, this.Grave);
 		}
 
-		// Token: 0x06002C23 RID: 11299 RVA: 0x000FCDE8 File Offset: 0x000FAFE8
+		
 		public override object[] TaleParameters()
 		{
 			return new object[]

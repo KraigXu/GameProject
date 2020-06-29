@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A05 RID: 2565
+	
 	public class StorytellerComp_CategoryIndividualMTBByBiome : StorytellerComp
 	{
-		// Token: 0x17000AD0 RID: 2768
+		
 		// (get) Token: 0x06003D12 RID: 15634 RVA: 0x001436E8 File Offset: 0x001418E8
 		protected StorytellerCompProperties_CategoryIndividualMTBByBiome Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D13 RID: 15635 RVA: 0x001436F5 File Offset: 0x001418F5
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (target is World)
@@ -73,7 +73,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D14 RID: 15636 RVA: 0x0014370C File Offset: 0x0014190C
+		
 		public override string ToString()
 		{
 			return base.ToString() + " " + this.Props.category;

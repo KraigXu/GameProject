@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D7 RID: 4311
+	
 	public class SymbolResolver_Street : SymbolResolver
 	{
-		// Token: 0x0600658C RID: 25996 RVA: 0x00238A78 File Offset: 0x00236C78
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			bool flag = rp.streetHorizontal ?? (rp.rect.Width >= rp.rect.Height);
@@ -19,7 +19,7 @@ namespace RimWorld.BaseGen
 			this.SpawnFloor(rp.rect, flag, floorDef);
 		}
 
-		// Token: 0x0600658D RID: 25997 RVA: 0x00238B20 File Offset: 0x00236D20
+		
 		private void CalculateStreet(CellRect rect, bool horizontal, TerrainDef floorDef)
 		{
 			SymbolResolver_Street.street.Clear();
@@ -37,7 +37,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600658E RID: 25998 RVA: 0x00238BF4 File Offset: 0x00236DF4
+		
 		private void FillStreetGaps(bool horizontal, int width)
 		{
 			int num = -1;
@@ -63,7 +63,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600658F RID: 25999 RVA: 0x00238C70 File Offset: 0x00236E70
+		
 		private void RemoveShortStreetParts(bool horizontal, int width)
 		{
 			for (int i = 0; i < SymbolResolver_Street.street.Count; i++)
@@ -92,7 +92,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x06006590 RID: 26000 RVA: 0x00238D00 File Offset: 0x00236F00
+		
 		private void SpawnFloor(CellRect rect, bool horizontal, TerrainDef floorDef)
 		{
 			TerrainGrid terrainGrid = BaseGen.globalSettings.map.terrainGrid;
@@ -105,7 +105,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x06006591 RID: 26001 RVA: 0x00238D98 File Offset: 0x00236F98
+		
 		private bool CausesStreet(IntVec3 c, TerrainDef floorDef)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -117,7 +117,7 @@ namespace RimWorld.BaseGen
 			return (edifice != null && edifice.def == ThingDefOf.Wall) || c.GetDoor(map) != null || c.GetTerrain(map) == floorDef;
 		}
 
-		// Token: 0x04003DCF RID: 15823
+		
 		private static List<bool> street = new List<bool>();
 	}
 }

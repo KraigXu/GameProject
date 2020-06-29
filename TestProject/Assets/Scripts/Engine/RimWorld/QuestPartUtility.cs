@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000999 RID: 2457
+	
 	public static class QuestPartUtility
 	{
-		// Token: 0x06003A49 RID: 14921 RVA: 0x001348CC File Offset: 0x00132ACC
+		
 		public static T MakeAndAddEndCondition<T>(Quest quest, string inSignalActivate, QuestEndOutcome outcome, Letter letter = null) where T : QuestPartActivable, new()
 		{
 			T t = Activator.CreateInstance<T>();
@@ -31,7 +31,7 @@ namespace RimWorld
 			return t;
 		}
 
-		// Token: 0x06003A4A RID: 14922 RVA: 0x0013494C File Offset: 0x00132B4C
+		
 		public static QuestPart_QuestEnd MakeAndAddEndNodeWithLetter(Quest quest, string inSignalActivate, QuestEndOutcome outcome, Letter letter)
 		{
 			quest.AddPart(new QuestPart_Letter
@@ -46,7 +46,7 @@ namespace RimWorld
 			return questPart_QuestEnd;
 		}
 
-		// Token: 0x06003A4B RID: 14923 RVA: 0x00134998 File Offset: 0x00132B98
+		
 		public static QuestPart_Delay MakeAndAddQuestTimeoutDelay(Quest quest, int delayTicks, WorldObject worldObject)
 		{
 			QuestPart_WorldObjectTimeout questPart_WorldObjectTimeout = new QuestPart_WorldObjectTimeout();
@@ -67,7 +67,7 @@ namespace RimWorld
 			return questPart_WorldObjectTimeout;
 		}
 
-		// Token: 0x06003A4C RID: 14924 RVA: 0x00134A4F File Offset: 0x00132C4F
+		
 		public static IEnumerable<GenUI.AnonymousStackElement> GetRewardStackElementsForThings(IEnumerable<Thing> things, bool detailsHidden = false)
 		{
 			QuestPartUtility.tmpThings.Clear();
@@ -144,7 +144,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003A4D RID: 14925 RVA: 0x00134A66 File Offset: 0x00132C66
+		
 		public static IEnumerable<GenUI.AnonymousStackElement> GetRewardStackElementsForThings(IEnumerable<Reward_Items.RememberedItem> thingDefs)
 		{
 			QuestPartUtility.tmpThingDefs.Clear();
@@ -198,7 +198,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003A4E RID: 14926 RVA: 0x00134A78 File Offset: 0x00132C78
+		
 		public static GenUI.AnonymousStackElement GetStandardRewardStackElement(string label, Texture2D icon, Func<string> tipGetter, Action onClick = null)
 		{
 			return QuestPartUtility.GetStandardRewardStackElement(label, delegate(Rect r)
@@ -207,7 +207,7 @@ namespace RimWorld
 			}, tipGetter, onClick);
 		}
 
-		// Token: 0x06003A4F RID: 14927 RVA: 0x00134AA8 File Offset: 0x00132CA8
+		
 		public static GenUI.AnonymousStackElement GetStandardRewardStackElement(string label, Action<Rect> iconDrawer, Func<string> tipGetter, Action onClick = null)
 		{
 			return new GenUI.AnonymousStackElement
@@ -238,22 +238,22 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04002254 RID: 8788
+		
 		public const int RewardStackElementIconSize = 22;
 
-		// Token: 0x04002255 RID: 8789
+		
 		public const int RewardStackElementMarginHorizontal = 6;
 
-		// Token: 0x04002256 RID: 8790
+		
 		public const int RewardStackElementMarginVertical = 1;
 
-		// Token: 0x04002257 RID: 8791
+		
 		public const int RewardStackElementIconGap = 2;
 
-		// Token: 0x04002258 RID: 8792
+		
 		private static List<Pair<Thing, int>> tmpThings = new List<Pair<Thing, int>>();
 
-		// Token: 0x04002259 RID: 8793
+		
 		private static List<Reward_Items.RememberedItem> tmpThingDefs = new List<Reward_Items.RememberedItem>();
 	}
 }

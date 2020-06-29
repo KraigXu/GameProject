@@ -6,11 +6,11 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011E5 RID: 4581
+	
 	[StaticConstructorOnStartup]
 	public class WorldLayer
 	{
-		// Token: 0x170011BB RID: 4539
+		
 		// (get) Token: 0x06006A02 RID: 27138 RVA: 0x002500DF File Offset: 0x0024E2DF
 		public virtual bool ShouldRegenerate
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170011BC RID: 4540
+		
 		// (get) Token: 0x06006A03 RID: 27139 RVA: 0x002500E7 File Offset: 0x0024E2E7
 		protected virtual int Layer
 		{
@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170011BD RID: 4541
+		
 		// (get) Token: 0x06006A04 RID: 27140 RVA: 0x002500EE File Offset: 0x0024E2EE
 		protected virtual Quaternion Rotation
 		{
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170011BE RID: 4542
+		
 		// (get) Token: 0x06006A05 RID: 27141 RVA: 0x0001BFCE File Offset: 0x0001A1CE
 		protected virtual float Alpha
 		{
@@ -50,7 +50,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170011BF RID: 4543
+		
 		// (get) Token: 0x06006A06 RID: 27142 RVA: 0x002500DF File Offset: 0x0024E2DF
 		public bool Dirty
 		{
@@ -60,14 +60,14 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006A07 RID: 27143 RVA: 0x002500F8 File Offset: 0x0024E2F8
+		
 		protected LayerSubMesh GetSubMesh(Material material)
 		{
 			int num;
 			return this.GetSubMesh(material, out num);
 		}
 
-		// Token: 0x06006A08 RID: 27144 RVA: 0x00250110 File Offset: 0x0024E310
+		
 		protected LayerSubMesh GetSubMesh(Material material, out int subMeshIndex)
 		{
 			for (int i = 0; i < this.subMeshes.Count; i++)
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 			return layerSubMesh2;
 		}
 
-		// Token: 0x06006A09 RID: 27145 RVA: 0x002501C4 File Offset: 0x0024E3C4
+		
 		protected void FinalizeMesh(MeshParts tags)
 		{
 			for (int i = 0; i < this.subMeshes.Count; i++)
@@ -102,14 +102,14 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006A0A RID: 27146 RVA: 0x00250212 File Offset: 0x0024E412
+		
 		public void RegenerateNow()
 		{
 			this.dirty = false;
 			this.Regenerate().ExecuteEnumerable();
 		}
 
-		// Token: 0x06006A0B RID: 27147 RVA: 0x00250228 File Offset: 0x0024E428
+		
 		public void Render()
 		{
 			if (this.ShouldRegenerate)
@@ -137,7 +137,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006A0C RID: 27148 RVA: 0x00250344 File Offset: 0x0024E544
+		
 		public virtual IEnumerable Regenerate()
 		{
 			this.dirty = false;
@@ -145,13 +145,13 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006A0D RID: 27149 RVA: 0x00250354 File Offset: 0x0024E554
+		
 		public void SetDirty()
 		{
 			this.dirty = true;
 		}
 
-		// Token: 0x06006A0E RID: 27150 RVA: 0x00250360 File Offset: 0x0024E560
+		
 		private void ClearSubMeshes(MeshParts parts)
 		{
 			for (int i = 0; i < this.subMeshes.Count; i++)
@@ -160,16 +160,16 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x04004214 RID: 16916
+		
 		protected List<LayerSubMesh> subMeshes = new List<LayerSubMesh>();
 
-		// Token: 0x04004215 RID: 16917
+		
 		private bool dirty = true;
 
-		// Token: 0x04004216 RID: 16918
+		
 		private static MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
-		// Token: 0x04004217 RID: 16919
+		
 		private const int MaxVerticesPerMesh = 40000;
 	}
 }

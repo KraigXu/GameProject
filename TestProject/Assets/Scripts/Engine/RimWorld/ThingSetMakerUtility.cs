@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CDA RID: 3290
+	
 	public static class ThingSetMakerUtility
 	{
-		// Token: 0x06004FC0 RID: 20416 RVA: 0x001AE828 File Offset: 0x001ACA28
+		
 		public static void Reset()
 		{
 			ThingSetMakerUtility.allGeneratableItems.Clear();
@@ -23,13 +23,13 @@ namespace RimWorld
 			ThingSetMaker_Meteorite.Reset();
 		}
 
-		// Token: 0x06004FC1 RID: 20417 RVA: 0x001AE890 File Offset: 0x001ACA90
+		
 		public static bool CanGenerate(ThingDef thingDef)
 		{
 			return (thingDef.category == ThingCategory.Item || thingDef.Minifiable) && (thingDef.category != ThingCategory.Item || thingDef.EverHaulable) && !thingDef.isUnfinishedThing && !thingDef.IsCorpse && thingDef.PlayerAcquirable && thingDef.graphicData != null && !typeof(MinifiedThing).IsAssignableFrom(thingDef.thingClass);
 		}
 
-		// Token: 0x06004FC2 RID: 20418 RVA: 0x001AE8FC File Offset: 0x001ACAFC
+		
 		public static IEnumerable<ThingDef> GetAllowedThingDefs(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
@@ -95,7 +95,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004FC3 RID: 20419 RVA: 0x001AEA48 File Offset: 0x001ACC48
+		
 		public static void AssignQuality(Thing thing, QualityGenerator? qualityGenerator)
 		{
 			CompQuality compQuality = thing.TryGetComp<CompQuality>();
@@ -106,7 +106,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004FC4 RID: 20420 RVA: 0x001AEA84 File Offset: 0x001ACC84
+		
 		public static bool IsDerpAndDisallowed(ThingDef thing, ThingDef stuff, QualityGenerator? qualityGenerator)
 		{
 			QualityGenerator? qualityGenerator2 = qualityGenerator;
@@ -128,7 +128,7 @@ namespace RimWorld
 			return PawnWeaponGenerator.IsDerpWeapon(thing, stuff) || PawnApparelGenerator.IsDerpApparel(thing, stuff);
 		}
 
-		// Token: 0x06004FC5 RID: 20421 RVA: 0x001AEAF0 File Offset: 0x001ACCF0
+		
 		public static float AdjustedBigCategoriesSelectionWeight(ThingDef d, int numMeats, int numLeathers)
 		{
 			float num = 1f;
@@ -143,7 +143,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06004FC6 RID: 20422 RVA: 0x001AEB40 File Offset: 0x001ACD40
+		
 		public static bool PossibleToWeighNoMoreThan(ThingDef t, float maxMass, IEnumerable<ThingDef> allowedStuff)
 		{
 			if (maxMass == 3.40282347E+38f || t.category == ThingCategory.Pawn)
@@ -168,7 +168,7 @@ namespace RimWorld
 			return t.GetStatValueAbstract(StatDefOf.Mass, null) <= maxMass;
 		}
 
-		// Token: 0x06004FC7 RID: 20423 RVA: 0x001AEBD0 File Offset: 0x001ACDD0
+		
 		public static bool TryGetRandomThingWhichCanWeighNoMoreThan(IEnumerable<ThingDef> candidates, TechLevel stuffTechLevel, float maxMass, QualityGenerator? qualityGenerator, out ThingStuffPair thingStuffPair)
 		{
 			ThingDef thingDef;
@@ -198,7 +198,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004FC8 RID: 20424 RVA: 0x001AECA0 File Offset: 0x001ACEA0
+		
 		public static bool PossibleToWeighNoMoreThan(IEnumerable<ThingDef> candidates, TechLevel stuffTechLevel, float maxMass, int count)
 		{
 			if (maxMass == 3.40282347E+38f || count <= 0)
@@ -217,7 +217,7 @@ namespace RimWorld
 			return num <= maxMass * (float)count;
 		}
 
-		// Token: 0x06004FC9 RID: 20425 RVA: 0x001AED18 File Offset: 0x001ACF18
+		
 		public static float GetMinMass(ThingDef thingDef, TechLevel stuffTechLevel)
 		{
 			float num = float.MaxValue;
@@ -240,7 +240,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06004FCA RID: 20426 RVA: 0x001AEDA8 File Offset: 0x001ACFA8
+		
 		public static float GetMinMarketValue(ThingDef thingDef, TechLevel stuffTechLevel)
 		{
 			float num = float.MaxValue;
@@ -263,7 +263,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04002CA3 RID: 11427
+		
 		public static List<ThingDef> allGeneratableItems = new List<ThingDef>();
 	}
 }

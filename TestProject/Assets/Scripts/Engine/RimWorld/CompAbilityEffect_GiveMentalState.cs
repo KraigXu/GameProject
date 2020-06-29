@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000ACF RID: 2767
+	
 	public class CompAbilityEffect_GiveMentalState : CompAbilityEffect
 	{
-		// Token: 0x17000BA5 RID: 2981
+		
 		// (get) Token: 0x06004193 RID: 16787 RVA: 0x0015EC2F File Offset: 0x0015CE2F
 		public new CompProperties_AbilityGiveMentalState Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004194 RID: 16788 RVA: 0x0015EC3C File Offset: 0x0015CE3C
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004195 RID: 16789 RVA: 0x0015ECEC File Offset: 0x0015CEEC
+		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			Pawn pawn = target.Pawn;

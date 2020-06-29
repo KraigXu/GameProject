@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000696 RID: 1686
+	
 	public class JobDriver_Wear : JobDriver
 	{
-		// Token: 0x17000895 RID: 2197
+		
 		// (get) Token: 0x06002DDD RID: 11741 RVA: 0x00102268 File Offset: 0x00100468
 		private Apparel Apparel
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002DDE RID: 11742 RVA: 0x0010228E File Offset: 0x0010048E
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -26,13 +26,13 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.unequipBuffer, "unequipBuffer", 0, false);
 		}
 
-		// Token: 0x06002DDF RID: 11743 RVA: 0x001022BA File Offset: 0x001004BA
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Apparel, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002DE0 RID: 11744 RVA: 0x001022DC File Offset: 0x001004DC
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002DE1 RID: 11745 RVA: 0x00102387 File Offset: 0x00100587
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnBurningImmobile(TargetIndex.A);
@@ -76,7 +76,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002DE2 RID: 11746 RVA: 0x00102398 File Offset: 0x00100598
+		
 		private void TryUnequipSomething()
 		{
 			Apparel apparel = this.Apparel;
@@ -108,13 +108,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001A43 RID: 6723
+		
 		private int duration;
 
-		// Token: 0x04001A44 RID: 6724
+		
 		private int unequipBuffer;
 
-		// Token: 0x04001A45 RID: 6725
+		
 		private const TargetIndex ApparelInd = TargetIndex.A;
 	}
 }

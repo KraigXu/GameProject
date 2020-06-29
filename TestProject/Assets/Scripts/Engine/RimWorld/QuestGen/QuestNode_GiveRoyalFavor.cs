@@ -3,16 +3,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001172 RID: 4466
+	
 	public class QuestNode_GiveRoyalFavor : QuestNode
 	{
-		// Token: 0x060067D6 RID: 26582 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x060067D7 RID: 26583 RVA: 0x00244FFC File Offset: 0x002431FC
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -39,26 +39,26 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x04004003 RID: 16387
+		
 		public SlateRef<Pawn> giveTo;
 
-		// Token: 0x04004004 RID: 16388
+		
 		public SlateRef<bool> giveToAccepter;
 
-		// Token: 0x04004005 RID: 16389
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04004006 RID: 16390
+		
 		public SlateRef<Faction> faction;
 
-		// Token: 0x04004007 RID: 16391
+		
 		public SlateRef<Thing> factionOf;
 
-		// Token: 0x04004008 RID: 16392
+		
 		public SlateRef<int> amount;
 
-		// Token: 0x04004009 RID: 16393
+		
 		public SlateRef<bool> isSingleReward;
 	}
 }

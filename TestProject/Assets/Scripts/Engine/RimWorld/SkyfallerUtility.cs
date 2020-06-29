@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CC3 RID: 3267
+	
 	public static class SkyfallerUtility
 	{
-		// Token: 0x06004F44 RID: 20292 RVA: 0x001AB31C File Offset: 0x001A951C
+		
 		public static bool CanPossiblyFallOnColonist(ThingDef skyfaller, IntVec3 c, Map map)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(c, Rot4.North, skyfaller.size);
@@ -31,7 +31,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004F45 RID: 20293 RVA: 0x001AB3EC File Offset: 0x001A95EC
+		
 		public static void MakeDropoffShuttle(Map map, List<Thing> contents, Faction faction = null)
 		{
 			IntVec3 center;

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200003F RID: 63
+	
 	public class ShaderParameter
 	{
-		// Token: 0x06000373 RID: 883 RVA: 0x00012528 File Offset: 0x00010728
+		
 		public void Apply(Material mat)
 		{
 			switch (this.type)
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000374 RID: 884 RVA: 0x000125BC File Offset: 0x000107BC
+		
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
 			if (xmlRoot.ChildNodes.Count != 1)
@@ -64,29 +64,29 @@ namespace Verse
 			this.type = ShaderParameter.Type.Float;
 		}
 
-		// Token: 0x040000F0 RID: 240
+		
 		[NoTranslate]
 		private string name;
 
-		// Token: 0x040000F1 RID: 241
+		
 		private Vector4 value;
 
-		// Token: 0x040000F2 RID: 242
+		
 		private Texture2D valueTex;
 
-		// Token: 0x040000F3 RID: 243
+		
 		private ShaderParameter.Type type;
 
-		// Token: 0x02001314 RID: 4884
+		
 		private enum Type
 		{
-			// Token: 0x0400482F RID: 18479
+			
 			Float,
-			// Token: 0x04004830 RID: 18480
+			
 			Vector,
-			// Token: 0x04004831 RID: 18481
+			
 			Matrix,
-			// Token: 0x04004832 RID: 18482
+			
 			Texture
 		}
 	}

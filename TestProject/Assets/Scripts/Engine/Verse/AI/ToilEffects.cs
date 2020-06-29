@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace Verse.AI
 {
-	// Token: 0x0200052C RID: 1324
+	
 	public static class ToilEffects
 	{
-		// Token: 0x060025E9 RID: 9705 RVA: 0x000E04CC File Offset: 0x000DE6CC
+		
 		public static Toil PlaySoundAtStart(this Toil toil, SoundDef sound)
 		{
 			toil.AddPreInitAction(delegate
@@ -18,7 +18,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025EA RID: 9706 RVA: 0x000E050C File Offset: 0x000DE70C
+		
 		public static Toil PlaySoundAtEnd(this Toil toil, SoundDef sound)
 		{
 			toil.AddFinishAction(delegate
@@ -28,13 +28,13 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025EB RID: 9707 RVA: 0x000E054C File Offset: 0x000DE74C
+		
 		public static Toil PlaySustainerOrSound(this Toil toil, SoundDef soundDef)
 		{
 			return toil.PlaySustainerOrSound(() => soundDef);
 		}
 
-		// Token: 0x060025EC RID: 9708 RVA: 0x000E0578 File Offset: 0x000DE778
+		
 		public static Toil PlaySustainerOrSound(this Toil toil, Func<SoundDef> soundDefGetter)
 		{
 			Sustainer sustainer = null;
@@ -66,25 +66,25 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025ED RID: 9709 RVA: 0x000E05D4 File Offset: 0x000DE7D4
+		
 		public static Toil WithEffect(this Toil toil, EffecterDef effectDef, TargetIndex ind)
 		{
 			return toil.WithEffect(() => effectDef, ind);
 		}
 
-		// Token: 0x060025EE RID: 9710 RVA: 0x000E0604 File Offset: 0x000DE804
+		
 		public static Toil WithEffect(this Toil toil, Func<EffecterDef> effecterDefGetter, TargetIndex ind)
 		{
 			return toil.WithEffect(effecterDefGetter, () => toil.actor.CurJob.GetTarget(ind));
 		}
 
-		// Token: 0x060025EF RID: 9711 RVA: 0x000E0640 File Offset: 0x000DE840
+		
 		public static Toil WithEffect(this Toil toil, Func<EffecterDef> effecterDefGetter, Thing thing)
 		{
 			return toil.WithEffect(effecterDefGetter, () => thing);
 		}
 
-		// Token: 0x060025F0 RID: 9712 RVA: 0x000E0670 File Offset: 0x000DE870
+		
 		public static Toil WithEffect(this Toil toil, Func<EffecterDef> effecterDefGetter, Func<LocalTargetInfo> effectTargetGetter)
 		{
 			Effecter effecter = null;
@@ -113,7 +113,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025F1 RID: 9713 RVA: 0x000E06D4 File Offset: 0x000DE8D4
+		
 		public static Toil WithProgressBar(this Toil toil, TargetIndex ind, Func<float> progressGetter, bool interpolateBetweenActorAndTarget = false, float offsetZ = -0.5f)
 		{
 			Effecter effecter = null;
@@ -160,13 +160,13 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025F2 RID: 9714 RVA: 0x000E0748 File Offset: 0x000DE948
+		
 		public static Toil WithProgressBarToilDelay(this Toil toil, TargetIndex ind, bool interpolateBetweenActorAndTarget = false, float offsetZ = -0.5f)
 		{
 			return toil.WithProgressBar(ind, () => 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / (float)toil.defaultDuration, interpolateBetweenActorAndTarget, offsetZ);
 		}
 
-		// Token: 0x060025F3 RID: 9715 RVA: 0x000E077C File Offset: 0x000DE97C
+		
 		public static Toil WithProgressBarToilDelay(this Toil toil, TargetIndex ind, int toilDuration, bool interpolateBetweenActorAndTarget = false, float offsetZ = -0.5f)
 		{
 			return toil.WithProgressBar(ind, () => 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / (float)toilDuration, interpolateBetweenActorAndTarget, offsetZ);

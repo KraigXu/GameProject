@@ -6,10 +6,10 @@ using Verse.Steam;
 
 namespace Verse
 {
-	// Token: 0x02000384 RID: 900
+	
 	public class UIRoot_Entry : UIRoot
 	{
-		// Token: 0x1700051A RID: 1306
+		
 		// (get) Token: 0x06001AA4 RID: 6820 RVA: 0x000A3E00 File Offset: 0x000A2000
 		private bool ShouldDoMainMenu
 		{
@@ -30,7 +30,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AA5 RID: 6821 RVA: 0x000A3E54 File Offset: 0x000A2054
+		
 		public override void Init()
 		{
 			base.Init();
@@ -48,7 +48,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AA6 RID: 6822 RVA: 0x000A3EF0 File Offset: 0x000A20F0
+		
 		public override void UIRootOnGUI()
 		{
 			base.UIRootOnGUI();
@@ -71,7 +71,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AA7 RID: 6823 RVA: 0x000A3F60 File Offset: 0x000A2160
+		
 		public override void UIRootUpdate()
 		{
 			base.UIRootUpdate();
@@ -86,7 +86,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AA8 RID: 6824 RVA: 0x000A3F94 File Offset: 0x000A2194
+		
 		private void DoMainMenu()
 		{
 			if (!WorldRendererUtility.WorldRenderedNow)

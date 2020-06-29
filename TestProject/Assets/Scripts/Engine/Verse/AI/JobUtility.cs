@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200053B RID: 1339
+	
 	public static class JobUtility
 	{
-		// Token: 0x06002653 RID: 9811 RVA: 0x000E1D74 File Offset: 0x000DFF74
+		
 		public static void TryStartErrorRecoverJob(Pawn pawn, string message, Exception exception = null, JobDriver concreteDriver = null)
 		{
 			string text = message;
@@ -39,34 +39,35 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002654 RID: 9812 RVA: 0x000E1E30 File Offset: 0x000E0030
+		
 		public static string GetResolvedJobReport(string baseText, LocalTargetInfo a)
 		{
 			return JobUtility.GetResolvedJobReport(baseText, a, LocalTargetInfo.Invalid, LocalTargetInfo.Invalid);
 		}
 
-		// Token: 0x06002655 RID: 9813 RVA: 0x000E1E43 File Offset: 0x000E0043
+		
 		public static string GetResolvedJobReport(string baseText, LocalTargetInfo a, LocalTargetInfo b)
 		{
 			return JobUtility.GetResolvedJobReport(baseText, a, b, LocalTargetInfo.Invalid);
 		}
 
-		// Token: 0x06002656 RID: 9814 RVA: 0x000E1E54 File Offset: 0x000E0054
+		
 		public static string GetResolvedJobReport(string baseText, LocalTargetInfo a, LocalTargetInfo b, LocalTargetInfo c)
 		{
-			string aText;
-			object aObj;
-			JobUtility.<GetResolvedJobReport>g__GetText|4_0(a, out aText, out aObj);
-			string bText;
-			object bObj;
-			JobUtility.<GetResolvedJobReport>g__GetText|4_0(b, out bText, out bObj);
-			string cText;
-			object cObj;
-			JobUtility.<GetResolvedJobReport>g__GetText|4_0(c, out cText, out cObj);
-			return JobUtility.GetResolvedJobReportRaw(baseText, aText, aObj, bText, bObj, cText, cObj);
+			//string aText;
+			//object aObj;
+			//JobUtility.<GetResolvedJobReport>g__GetText|4_0(a, out aText, out aObj);
+			//string bText;
+			//object bObj;
+			//JobUtility.<GetResolvedJobReport>g__GetText|4_0(b, out bText, out bObj);
+			//string cText;
+			//object cObj;
+			//JobUtility.<GetResolvedJobReport>g__GetText|4_0(c, out cText, out cObj);
+			//return JobUtility.GetResolvedJobReportRaw(baseText, aText, aObj, bText, bObj, cText, cObj);
+			return "";
 		}
 
-		// Token: 0x06002657 RID: 9815 RVA: 0x000E1E90 File Offset: 0x000E0090
+		
 		public static string GetResolvedJobReportRaw(string baseText, string aText, object aObj, string bText, object bObj, string cText, object cObj)
 		{
 			baseText = baseText.Formatted(aObj.Named("TargetA"), bObj.Named("TargetB"), cObj.Named("TargetC"));
@@ -76,7 +77,7 @@ namespace Verse.AI
 			return baseText;
 		}
 
-		// Token: 0x06002658 RID: 9816 RVA: 0x000E1EFC File Offset: 0x000E00FC
+		
 		private static void AppendVarsInfoToDebugMessage(Pawn pawn, ref string msg, JobDriver concreteDriver)
 		{
 			if (concreteDriver != null)
@@ -117,7 +118,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0400171B RID: 5915
+		
 		private static bool startingErrorRecoverJob;
 	}
 }

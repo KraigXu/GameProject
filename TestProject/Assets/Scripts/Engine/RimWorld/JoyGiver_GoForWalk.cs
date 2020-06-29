@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006FA RID: 1786
+	
 	public class JoyGiver_GoForWalk : JoyGiver
 	{
-		// Token: 0x06002F45 RID: 12101 RVA: 0x00109BC0 File Offset: 0x00107DC0
+		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			if (!JoyUtility.EnjoyableOutsideNow(pawn, null))

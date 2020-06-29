@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020007B5 RID: 1973
+	
 	public static class SiegeBlueprintPlacer
 	{
-		// Token: 0x06003328 RID: 13096 RVA: 0x0011BBFA File Offset: 0x00119DFA
+		
 		public static IEnumerable<Blueprint_Build> PlaceBlueprints(IntVec3 placeCenter, Map map, Faction placeFaction, float points)
 		{
 			SiegeBlueprintPlacer.center = placeCenter;
@@ -29,13 +29,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003329 RID: 13097 RVA: 0x0011BC20 File Offset: 0x00119E20
+		
 		private static bool CanPlaceBlueprintAt(IntVec3 root, Rot4 rot, ThingDef buildingDef, Map map, ThingDef stuffDef)
 		{
 			return GenConstruct.CanPlaceBlueprintAt(buildingDef, root, rot, map, false, null, null, stuffDef).Accepted;
 		}
 
-		// Token: 0x0600332A RID: 13098 RVA: 0x0011BC43 File Offset: 0x00119E43
+		
 		private static IEnumerable<Blueprint_Build> PlaceCoverBlueprints(Map map)
 		{
 			SiegeBlueprintPlacer.placedCoverLocs.Clear();
@@ -95,7 +95,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600332B RID: 13099 RVA: 0x0011BC53 File Offset: 0x00119E53
+		
 		private static IEnumerable<Blueprint_Build> MakeCoverLine(IntVec3 root, Map map, Rot4 growDir, int maxLength, ThingDef coverThing, ThingDef coverStuff)
 		{
 			IntVec3 cur = root;
@@ -111,7 +111,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600332C RID: 13100 RVA: 0x0011BC88 File Offset: 0x00119E88
+		
 		private static IEnumerable<Blueprint_Build> PlaceArtilleryBlueprints(float points, Map map)
 		{
 			IEnumerable<ThingDef> artyDefs = from def in DefDatabase<ThingDef>.AllDefs
@@ -136,7 +136,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600332D RID: 13101 RVA: 0x0011BCA0 File Offset: 0x00119EA0
+		
 		private static IntVec3 FindCoverRoot(Map map, ThingDef coverThing, ThingDef coverStuff)
 		{
 			CellRect cellRect = CellRect.CenteredOn(SiegeBlueprintPlacer.center, 13);
@@ -171,7 +171,7 @@ namespace RimWorld
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x0600332E RID: 13102 RVA: 0x0011BD74 File Offset: 0x00119F74
+		
 		private static IntVec3 FindArtySpot(ThingDef artyDef, Rot4 rot, Map map)
 		{
 			CellRect cellRect = CellRect.CenteredOn(SiegeBlueprintPlacer.center, 8);
@@ -193,28 +193,28 @@ namespace RimWorld
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x04001B84 RID: 7044
+		
 		private static IntVec3 center;
 
-		// Token: 0x04001B85 RID: 7045
+		
 		private static Faction faction;
 
-		// Token: 0x04001B86 RID: 7046
+		
 		private static List<IntVec3> placedCoverLocs = new List<IntVec3>();
 
-		// Token: 0x04001B87 RID: 7047
+		
 		private const int MaxArtyCount = 2;
 
-		// Token: 0x04001B88 RID: 7048
+		
 		public const float ArtyCost = 60f;
 
-		// Token: 0x04001B89 RID: 7049
+		
 		private const int MinCoverDistSquared = 36;
 
-		// Token: 0x04001B8A RID: 7050
+		
 		private static readonly IntRange NumCoverRange = new IntRange(2, 4);
 
-		// Token: 0x04001B8B RID: 7051
+		
 		private static readonly IntRange CoverLengthRange = new IntRange(2, 7);
 	}
 }

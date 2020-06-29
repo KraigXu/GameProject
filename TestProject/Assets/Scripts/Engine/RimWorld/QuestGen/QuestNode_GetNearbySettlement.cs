@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001131 RID: 4401
+	
 	public class QuestNode_GetNearbySettlement : QuestNode
 	{
-		// Token: 0x060066E0 RID: 26336 RVA: 0x002402E8 File Offset: 0x0023E4E8
+		
 		private Settlement RandomNearbyTradeableSettlement(int originTile, Slate slate)
 		{
 			return Find.WorldObjects.SettlementBases.Where(delegate(Settlement settlement)
@@ -45,7 +45,7 @@ namespace RimWorld.QuestGen
 			}).RandomElementWithFallback(null);
 		}
 
-		// Token: 0x060066E1 RID: 26337 RVA: 0x00240334 File Offset: 0x0023E534
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -62,7 +62,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060066E2 RID: 26338 RVA: 0x002403E4 File Offset: 0x0023E5E4
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			Map map = slate.Get<Map>("map", null, false);
@@ -83,21 +83,21 @@ namespace RimWorld.QuestGen
 			return false;
 		}
 
-		// Token: 0x04003EFA RID: 16122
+		
 		public SlateRef<bool> allowActiveTradeRequest = true;
 
-		// Token: 0x04003EFB RID: 16123
+		
 		public SlateRef<float> maxTileDistance;
 
-		// Token: 0x04003EFC RID: 16124
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003EFD RID: 16125
+		
 		[NoTranslate]
 		public SlateRef<string> storeFactionAs;
 
-		// Token: 0x04003EFE RID: 16126
+		
 		[NoTranslate]
 		public SlateRef<string> storeFactionLeaderAs;
 	}

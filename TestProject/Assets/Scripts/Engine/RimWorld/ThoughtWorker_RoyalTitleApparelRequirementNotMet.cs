@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000849 RID: 2121
+	
 	public class ThoughtWorker_RoyalTitleApparelRequirementNotMet : ThoughtWorker
 	{
-		// Token: 0x060034A3 RID: 13475 RVA: 0x00120808 File Offset: 0x0011EA08
+		
 		private static RoyalTitleDef Validate(Pawn p)
 		{
 			if (p.royalty == null || !p.royalty.allowApparelRequirements)
@@ -31,7 +31,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060034A4 RID: 13476 RVA: 0x001208D0 File Offset: 0x0011EAD0
+		
 		private static IEnumerable<string> GetFirstRequiredApparelPerGroup(Pawn p)
 		{
 			if (p.royalty == null || !p.royalty.allowApparelRequirements)
@@ -62,7 +62,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034A5 RID: 13477 RVA: 0x001208E0 File Offset: 0x0011EAE0
+		
 		public override string PostProcessLabel(Pawn p, string label)
 		{
 			RoyalTitleDef royalTitleDef = ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p);
@@ -73,7 +73,7 @@ namespace RimWorld
 			return label.Formatted(royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
 		}
 
-		// Token: 0x060034A6 RID: 13478 RVA: 0x00120924 File Offset: 0x0011EB24
+		
 		public override string PostProcessDescription(Pawn p, string description)
 		{
 			RoyalTitleDef royalTitleDef = ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p);
@@ -84,7 +84,7 @@ namespace RimWorld
 			return description.Formatted(ThoughtWorker_RoyalTitleApparelRequirementNotMet.GetFirstRequiredApparelPerGroup(p).ToLineList("- ", false), royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
 		}
 
-		// Token: 0x060034A7 RID: 13479 RVA: 0x0012097E File Offset: 0x0011EB7E
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p) == null)

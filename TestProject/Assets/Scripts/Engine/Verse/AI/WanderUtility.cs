@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x020005B9 RID: 1465
+	
 	public static class WanderUtility
 	{
-		// Token: 0x060028E1 RID: 10465 RVA: 0x000EFF94 File Offset: 0x000EE194
+		
 		public static IntVec3 BestCloseWanderRoot(IntVec3 trueWanderRoot, Pawn pawn)
 		{
 			for (int i = 0; i < 50; i++)
@@ -30,14 +30,14 @@ namespace Verse.AI
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x060028E2 RID: 10466 RVA: 0x000F0018 File Offset: 0x000EE218
+		
 		public static bool InSameRoom(IntVec3 locA, IntVec3 locB, Map map)
 		{
 			Room room = locA.GetRoom(map, RegionType.Set_All);
 			return room == null || room == locB.GetRoom(map, RegionType.Set_All);
 		}
 
-		// Token: 0x060028E3 RID: 10467 RVA: 0x000F0040 File Offset: 0x000EE240
+		
 		public static IntVec3 GetColonyWanderRoot(Pawn pawn)
 		{
 			if (pawn.RaceProps.Humanlike)
@@ -95,7 +95,7 @@ namespace Verse.AI
 			return pawn.Position;
 		}
 
-		// Token: 0x04001877 RID: 6263
+		
 		private static List<IntVec3> gatherSpots = new List<IntVec3>();
 	}
 }

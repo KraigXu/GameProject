@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A5B RID: 2651
+	
 	public class GenStep_Snow : GenStep
 	{
-		// Token: 0x17000B1C RID: 2844
+		
 		// (get) Token: 0x06003EA9 RID: 16041 RVA: 0x0014C458 File Offset: 0x0014A658
 		public override int SeedPart
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EAA RID: 16042 RVA: 0x0014C460 File Offset: 0x0014A660
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			int num = 0;

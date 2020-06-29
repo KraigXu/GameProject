@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D0C RID: 3340
+	
 	public static class FoodPoisonCauseExtension
 	{
-		// Token: 0x0600513A RID: 20794 RVA: 0x001B3FF4 File Offset: 0x001B21F4
+		
 		public static string ToStringHuman(this FoodPoisonCause cause)
 		{
 			switch (cause)

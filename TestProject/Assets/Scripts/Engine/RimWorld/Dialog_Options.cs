@@ -8,10 +8,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E64 RID: 3684
+	
 	public class Dialog_Options : Window
 	{
-		// Token: 0x17001011 RID: 4113
+		
 		// (get) Token: 0x06005942 RID: 22850 RVA: 0x001DCBD8 File Offset: 0x001DADD8
 		public override Vector2 InitialSize
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005943 RID: 22851 RVA: 0x001DCBE9 File Offset: 0x001DADE9
+		
 		public Dialog_Options()
 		{
 			this.doCloseButton = true;
@@ -30,14 +30,14 @@ namespace RimWorld
 			this.absorbInputAroundWindow = true;
 		}
 
-		// Token: 0x06005944 RID: 22852 RVA: 0x001DCC0D File Offset: 0x001DAE0D
+		
 		public override void PostOpen()
 		{
 			base.PostOpen();
 			this.simulateNotOwningRoyaltyWhenOpened = Prefs.SimulateNotOwningRoyalty;
 		}
 
-		// Token: 0x06005945 RID: 22853 RVA: 0x001DCC20 File Offset: 0x001DAE20
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = inRect.AtZero();
@@ -395,7 +395,7 @@ namespace RimWorld
 			listing_Standard.End();
 		}
 
-		// Token: 0x06005946 RID: 22854 RVA: 0x001DDD58 File Offset: 0x001DBF58
+		
 		public override void PreClose()
 		{
 			base.PreClose();
@@ -407,7 +407,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005947 RID: 22855 RVA: 0x001DDD8C File Offset: 0x001DBF8C
+		
 		public static string ResToString(int width, int height)
 		{
 			string text = width + "x" + height;
@@ -422,7 +422,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06005948 RID: 22856 RVA: 0x001DDDEC File Offset: 0x001DBFEC
+		
 		public void RestoreToDefaultSettings()
 		{
 			foreach (FileInfo fileInfo in new DirectoryInfo(GenFilePaths.ConfigFolderPath).GetFiles("*.xml"))
@@ -441,13 +441,13 @@ namespace RimWorld
 			}, null, null, null, false, null, null));
 		}
 
-		// Token: 0x04003051 RID: 12369
+		
 		private bool simulateNotOwningRoyaltyWhenOpened;
 
-		// Token: 0x04003052 RID: 12370
+		
 		private const float SubOptionTabWidth = 40f;
 
-		// Token: 0x04003053 RID: 12371
+		
 		public static readonly float[] UIScales = new float[]
 		{
 			1f,

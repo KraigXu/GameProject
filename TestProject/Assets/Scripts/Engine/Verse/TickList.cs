@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000119 RID: 281
+	
 	public class TickList
 	{
-		// Token: 0x170001AA RID: 426
+		
 		// (get) Token: 0x060007E5 RID: 2021 RVA: 0x0002492C File Offset: 0x00022B2C
 		private int TickInterval
 		{
@@ -26,7 +26,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060007E6 RID: 2022 RVA: 0x00024968 File Offset: 0x00022B68
+		
 		public TickList(TickerType tickType)
 		{
 			this.tickType = tickType;
@@ -36,7 +36,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060007E7 RID: 2023 RVA: 0x000249C4 File Offset: 0x00022BC4
+		
 		public void Reset()
 		{
 			for (int i = 0; i < this.thingLists.Count; i++)
@@ -47,7 +47,7 @@ namespace Verse
 			this.thingsToDeregister.Clear();
 		}
 
-		// Token: 0x060007E8 RID: 2024 RVA: 0x00024A10 File Offset: 0x00022C10
+		
 		public void RemoveWhere(Predicate<Thing> predicate)
 		{
 			for (int i = 0; i < this.thingLists.Count; i++)
@@ -58,19 +58,19 @@ namespace Verse
 			this.thingsToDeregister.RemoveAll(predicate);
 		}
 
-		// Token: 0x060007E9 RID: 2025 RVA: 0x00024A60 File Offset: 0x00022C60
+		
 		public void RegisterThing(Thing t)
 		{
 			this.thingsToRegister.Add(t);
 		}
 
-		// Token: 0x060007EA RID: 2026 RVA: 0x00024A6E File Offset: 0x00022C6E
+		
 		public void DeregisterThing(Thing t)
 		{
 			this.thingsToDeregister.Add(t);
 		}
 
-		// Token: 0x060007EB RID: 2027 RVA: 0x00024A7C File Offset: 0x00022C7C
+		
 		public void Tick()
 		{
 			for (int i = 0; i < this.thingsToRegister.Count; i++)
@@ -148,7 +148,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060007EC RID: 2028 RVA: 0x00024D00 File Offset: 0x00022F00
+		
 		private List<Thing> BucketOf(Thing t)
 		{
 			int num = t.GetHashCode();
@@ -160,16 +160,16 @@ namespace Verse
 			return this.thingLists[index];
 		}
 
-		// Token: 0x0400070E RID: 1806
+		
 		private TickerType tickType;
 
-		// Token: 0x0400070F RID: 1807
+		
 		private List<List<Thing>> thingLists = new List<List<Thing>>();
 
-		// Token: 0x04000710 RID: 1808
+		
 		private List<Thing> thingsToRegister = new List<Thing>();
 
-		// Token: 0x04000711 RID: 1809
+		
 		private List<Thing> thingsToDeregister = new List<Thing>();
 	}
 }

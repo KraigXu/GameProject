@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200013E RID: 318
+	
 	public class LanguageWorker_Norwegian : LanguageWorker
 	{
-		// Token: 0x060008EC RID: 2284 RVA: 0x0002F0E2 File Offset: 0x0002D2E2
+		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -19,7 +19,7 @@ namespace Verse
 			return "et " + str;
 		}
 
-		// Token: 0x060008ED RID: 2285 RVA: 0x0002F10C File Offset: 0x0002D30C
+		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())

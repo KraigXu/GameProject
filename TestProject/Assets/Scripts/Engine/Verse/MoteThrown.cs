@@ -4,10 +4,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x02000309 RID: 777
+	
 	public class MoteThrown : Mote
 	{
-		// Token: 0x17000474 RID: 1140
+		
 		// (get) Token: 0x060015D7 RID: 5591 RVA: 0x0007EFBA File Offset: 0x0007D1BA
 		protected bool Flying
 		{
@@ -17,7 +17,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000475 RID: 1141
+		
 		// (get) Token: 0x060015D8 RID: 5592 RVA: 0x0007EFC9 File Offset: 0x0007D1C9
 		protected bool Skidding
 		{
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000476 RID: 1142
+		
 		// (get) Token: 0x060015D9 RID: 5593 RVA: 0x0007EFE2 File Offset: 0x0007D1E2
 		// (set) Token: 0x060015DA RID: 5594 RVA: 0x0007EFEA File Offset: 0x0007D1EA
 		public Vector3 Velocity
@@ -42,7 +42,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000477 RID: 1143
+		
 		// (get) Token: 0x060015DB RID: 5595 RVA: 0x0007EFF3 File Offset: 0x0007D1F3
 		// (set) Token: 0x060015DC RID: 5596 RVA: 0x0007F000 File Offset: 0x0007D200
 		public float MoveAngle
@@ -57,7 +57,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000478 RID: 1144
+		
 		// (get) Token: 0x060015DD RID: 5597 RVA: 0x0007F00F File Offset: 0x0007D20F
 		// (set) Token: 0x060015DE RID: 5598 RVA: 0x0007F01C File Offset: 0x0007D21C
 		public float Speed
@@ -82,7 +82,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060015DF RID: 5599 RVA: 0x0007F080 File Offset: 0x0007D280
+		
 		protected override void TimeInterval(float deltaTime)
 		{
 			base.TimeInterval(deltaTime);
@@ -147,19 +147,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060015E0 RID: 5600 RVA: 0x0007F297 File Offset: 0x0007D497
+		
 		protected virtual Vector3 NextExactPosition(float deltaTime)
 		{
 			return this.exactPosition + this.velocity * deltaTime;
 		}
 
-		// Token: 0x060015E1 RID: 5601 RVA: 0x0007F2B0 File Offset: 0x0007D4B0
+		
 		public void SetVelocity(float angle, float speed)
 		{
 			this.velocity = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward * speed;
 		}
 
-		// Token: 0x060015E2 RID: 5602 RVA: 0x0007F2D3 File Offset: 0x0007D4D3
+		
 		protected virtual void WallHit()
 		{
 			this.airTimeLeft = 0f;
@@ -167,10 +167,10 @@ namespace Verse
 			this.rotationRate = 0f;
 		}
 
-		// Token: 0x04000E4A RID: 3658
+		
 		public float airTimeLeft = 999999f;
 
-		// Token: 0x04000E4B RID: 3659
+		
 		protected Vector3 velocity = Vector3.zero;
 	}
 }

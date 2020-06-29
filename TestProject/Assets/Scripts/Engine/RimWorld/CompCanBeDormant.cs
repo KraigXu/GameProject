@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000CFB RID: 3323
+	
 	public class CompCanBeDormant : ThingComp
 	{
-		// Token: 0x17000E29 RID: 3625
+		
 		// (get) Token: 0x060050BB RID: 20667 RVA: 0x001B1D1A File Offset: 0x001AFF1A
 		private CompProperties_CanBeDormant Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E2A RID: 3626
+		
 		// (get) Token: 0x060050BC RID: 20668 RVA: 0x001B1D27 File Offset: 0x001AFF27
 		private bool WaitingToWakeUp
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E2B RID: 3627
+		
 		// (get) Token: 0x060050BD RID: 20669 RVA: 0x001B1D39 File Offset: 0x001AFF39
 		public bool Awake
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050BE RID: 20670 RVA: 0x001B1D5F File Offset: 0x001AFF5F
+		
 		public override void PostPostMake()
 		{
 			base.PostPostMake();
@@ -50,14 +50,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050BF RID: 20671 RVA: 0x001B1D85 File Offset: 0x001AFF85
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
 			this.wakeUpSignalTag = this.Props.wakeUpSignalTag;
 		}
 
-		// Token: 0x060050C0 RID: 20672 RVA: 0x001B1D9F File Offset: 0x001AFF9F
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (!Prefs.DevMode)
@@ -75,7 +75,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060050C1 RID: 20673 RVA: 0x001B1DB0 File Offset: 0x001AFFB0
+		
 		public override string CompInspectStringExtra()
 		{
 			if (!this.Awake)
@@ -89,7 +89,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060050C2 RID: 20674 RVA: 0x001B1E23 File Offset: 0x001B0023
+		
 		public void WakeUpWithDelay()
 		{
 			if (!this.Awake)
@@ -98,7 +98,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C3 RID: 20675 RVA: 0x001B1E4C File Offset: 0x001B004C
+		
 		public void WakeUp()
 		{
 			if (this.Awake)
@@ -124,7 +124,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C4 RID: 20676 RVA: 0x001B1EE8 File Offset: 0x001B00E8
+		
 		public void ToSleep()
 		{
 			if (!this.Awake)
@@ -142,7 +142,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C5 RID: 20677 RVA: 0x001B1F3B File Offset: 0x001B013B
+		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
@@ -153,7 +153,7 @@ namespace RimWorld
 			this.TickRareWorker();
 		}
 
-		// Token: 0x060050C6 RID: 20678 RVA: 0x001B1F70 File Offset: 0x001B0170
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -167,7 +167,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C7 RID: 20679 RVA: 0x001B1FC0 File Offset: 0x001B01C0
+		
 		public void TickRareWorker()
 		{
 			if (!this.parent.Spawned || this.Awake)
@@ -180,7 +180,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C8 RID: 20680 RVA: 0x001B2030 File Offset: 0x001B0230
+		
 		public override void Notify_SignalReceived(Signal signal)
 		{
 			if (string.IsNullOrEmpty(this.wakeUpSignalTag) || this.Awake)
@@ -195,7 +195,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050C9 RID: 20681 RVA: 0x001B2138 File Offset: 0x001B0338
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -206,22 +206,22 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.makeTick, "makeTick", 0, false);
 		}
 
-		// Token: 0x04002CDA RID: 11482
+		
 		public int makeTick;
 
-		// Token: 0x04002CDB RID: 11483
+		
 		public int wokeUpTick = int.MinValue;
 
-		// Token: 0x04002CDC RID: 11484
+		
 		public int wakeUpOnTick = int.MinValue;
 
-		// Token: 0x04002CDD RID: 11485
+		
 		public string wakeUpSignalTag;
 
-		// Token: 0x04002CDE RID: 11486
+		
 		public List<string> wakeUpSignalTags;
 
-		// Token: 0x04002CDF RID: 11487
+		
 		public const string DefaultWakeUpSignal = "CompCanBeDormant.WakeUp";
 	}
 }

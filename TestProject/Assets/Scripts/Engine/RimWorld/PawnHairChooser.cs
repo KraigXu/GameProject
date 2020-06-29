@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B19 RID: 2841
+	
 	public static class PawnHairChooser
 	{
-		// Token: 0x060042DD RID: 17117 RVA: 0x001675BC File Offset: 0x001657BC
+		
 		public static HairDef RandomHairDefFor(Pawn pawn, FactionDef factionType)
 		{
 			IEnumerable<string> enumerable = PawnHairChooser.HairTagsFromBackstory(pawn);
@@ -23,7 +23,7 @@ namespace RimWorld
 			select hair).RandomElementByWeight((HairDef hair) => PawnHairChooser.HairChoiceLikelihoodFor(hair, pawn));
 		}
 
-		// Token: 0x060042DE RID: 17118 RVA: 0x00167641 File Offset: 0x00165841
+		
 		private static IEnumerable<string> HairTagsFromBackstory(Pawn pawn)
 		{
 			foreach (Backstory b in pawn.story.AllBackstories)
@@ -44,7 +44,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060042DF RID: 17119 RVA: 0x00167651 File Offset: 0x00165851
+		
 		private static IEnumerable<string> HairTagsFromPawnKind(Pawn pawn)
 		{
 			if (pawn.kindDef.hairTags != null)
@@ -59,7 +59,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060042E0 RID: 17120 RVA: 0x00167664 File Offset: 0x00165864
+		
 		private static float HairChoiceLikelihoodFor(HairDef hair, Pawn pawn)
 		{
 			if (pawn.gender == Gender.None)

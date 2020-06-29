@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001018 RID: 4120
+	
 	public class StatWorker_MarketValue : StatWorker
 	{
-		// Token: 0x060062B3 RID: 25267 RVA: 0x002242F4 File Offset: 0x002224F4
+		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			if (req.HasThing && req.Thing is Pawn)
@@ -28,7 +28,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060062B4 RID: 25268 RVA: 0x00224390 File Offset: 0x00222590
+		
 		public static float CalculatedBaseMarketValue(BuildableDef def, ThingDef stuffDef)
 		{
 			float num = 0f;
@@ -80,7 +80,7 @@ namespace RimWorld
 			return num / (float)num3;
 		}
 
-		// Token: 0x060062B5 RID: 25269 RVA: 0x002244E4 File Offset: 0x002226E4
+		
 		public static RecipeDef CalculableRecipe(BuildableDef def)
 		{
 			if (def.costList.NullOrEmpty<ThingDefCountClass>() && def.costStuffCount <= 0)
@@ -105,7 +105,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060062B6 RID: 25270 RVA: 0x00224580 File Offset: 0x00222780
+		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			if (req.HasThing && req.Thing is Pawn)
@@ -126,10 +126,10 @@ namespace RimWorld
 			}) + ": " + StatWorker_MarketValue.CalculatedBaseMarketValue(req.BuildableDef, req.StuffDef).ToStringByStyle(this.stat.ToStringStyleUnfinalized, numberSense);
 		}
 
-		// Token: 0x04003C0B RID: 15371
+		
 		public const float ValuePerWork = 0.0036f;
 
-		// Token: 0x04003C0C RID: 15372
+		
 		private const float DefaultGuessStuffCost = 2f;
 	}
 }

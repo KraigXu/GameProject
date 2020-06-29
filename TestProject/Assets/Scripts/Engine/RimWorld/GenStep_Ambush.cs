@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A63 RID: 2659
+	
 	public abstract class GenStep_Ambush : GenStep
 	{
-		// Token: 0x06003ECB RID: 16075 RVA: 0x0014DF38 File Offset: 0x0014C138
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			CellRect rectToDefend;
@@ -18,7 +18,7 @@ namespace RimWorld
 			this.SpawnTrigger(rectToDefend, root, map, parms);
 		}
 
-		// Token: 0x06003ECC RID: 16076 RVA: 0x0014DF5C File Offset: 0x0014C15C
+		
 		private void SpawnTrigger(CellRect rectToDefend, IntVec3 root, Map map, GenStepParams parms)
 		{
 			int nextSignalTagID = Find.UniqueIDsManager.GetNextSignalTagID();
@@ -44,13 +44,13 @@ namespace RimWorld
 			GenSpawn.Spawn(triggerUnfogged, rect.CenterCell, map, WipeMode.Vanish);
 		}
 
-		// Token: 0x06003ECD RID: 16077 RVA: 0x0014E00C File Offset: 0x0014C20C
+		
 		protected virtual RectTrigger MakeRectTrigger()
 		{
 			return (RectTrigger)ThingMaker.MakeThing(ThingDefOf.RectTrigger, null);
 		}
 
-		// Token: 0x06003ECE RID: 16078 RVA: 0x0014E020 File Offset: 0x0014C220
+		
 		protected virtual SignalAction_Ambush MakeAmbushSignalAction(CellRect rectToDefend, IntVec3 root, GenStepParams parms)
 		{
 			SignalAction_Ambush signalAction_Ambush = (SignalAction_Ambush)ThingMaker.MakeThing(ThingDefOf.SignalAction_Ambush, null);
@@ -78,7 +78,7 @@ namespace RimWorld
 			return signalAction_Ambush;
 		}
 
-		// Token: 0x04002496 RID: 9366
+		
 		public FloatRange defaultPointsRange = new FloatRange(180f, 340f);
 	}
 }

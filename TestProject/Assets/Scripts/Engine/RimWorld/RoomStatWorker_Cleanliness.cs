@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A9B RID: 2715
+	
 	public class RoomStatWorker_Cleanliness : RoomStatWorker
 	{
-		// Token: 0x06003FFD RID: 16381 RVA: 0x0015466C File Offset: 0x0015286C
+		
 		public override float GetScore(Room room)
 		{
 			float num = 0f;

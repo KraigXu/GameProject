@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000780 RID: 1920
+	
 	public class LordJob_Joinable_Party : LordJob_Joinable_Gathering
 	{
-		// Token: 0x17000914 RID: 2324
+		
 		// (get) Token: 0x06003233 RID: 12851 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowStartNewGatherings
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000915 RID: 2325
+		
 		// (get) Token: 0x06003234 RID: 12852 RVA: 0x00117D27 File Offset: 0x00115F27
 		protected virtual ThoughtDef AttendeeThought
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000916 RID: 2326
+		
 		// (get) Token: 0x06003235 RID: 12853 RVA: 0x00117D2E File Offset: 0x00115F2E
 		protected virtual TaleDef AttendeeTale
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000917 RID: 2327
+		
 		// (get) Token: 0x06003236 RID: 12854 RVA: 0x00117D27 File Offset: 0x00115F27
 		protected virtual ThoughtDef OrganizerThought
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000918 RID: 2328
+		
 		// (get) Token: 0x06003237 RID: 12855 RVA: 0x00117D2E File Offset: 0x00115F2E
 		protected virtual TaleDef OrganizerTale
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000919 RID: 2329
+		
 		// (get) Token: 0x06003238 RID: 12856 RVA: 0x00117D35 File Offset: 0x00115F35
 		public int DurationTicks
 		{
@@ -69,30 +69,30 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003239 RID: 12857 RVA: 0x00117D3D File Offset: 0x00115F3D
+		
 		public LordJob_Joinable_Party()
 		{
 		}
 
-		// Token: 0x0600323A RID: 12858 RVA: 0x00117D45 File Offset: 0x00115F45
+		
 		public LordJob_Joinable_Party(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef) : base(spot, organizer, gatheringDef)
 		{
 			this.durationTicks = Rand.RangeInclusive(5000, 15000);
 		}
 
-		// Token: 0x0600323B RID: 12859 RVA: 0x00117D65 File Offset: 0x00115F65
+		
 		public override string GetReport(Pawn pawn)
 		{
 			return "LordReportAttendingParty".Translate();
 		}
 
-		// Token: 0x0600323C RID: 12860 RVA: 0x00117D76 File Offset: 0x00115F76
+		
 		protected override LordToil CreateGatheringToil(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
 		{
 			return new LordToil_Party(spot, gatheringDef, 3.5E-05f);
 		}
 
-		// Token: 0x0600323D RID: 12861 RVA: 0x00117D84 File Offset: 0x00115F84
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -122,13 +122,13 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x0600323E RID: 12862 RVA: 0x00117EE9 File Offset: 0x001160E9
+		
 		protected virtual Trigger_TicksPassed GetTimeoutTrigger()
 		{
 			return new Trigger_TicksPassed(this.durationTicks);
 		}
 
-		// Token: 0x0600323F RID: 12863 RVA: 0x00117EF8 File Offset: 0x001160F8
+		
 		private void ApplyOutcome(LordToil_Party toil)
 		{
 			List<Pawn> ownedPawns = this.lord.ownedPawns;
@@ -158,7 +158,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003240 RID: 12864 RVA: 0x0011802B File Offset: 0x0011622B
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -169,7 +169,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001B47 RID: 6983
+		
 		private int durationTicks;
 	}
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x0200004B RID: 75
+	
 	public static class Autotests_RegionListers
 	{
-		// Token: 0x060003A4 RID: 932 RVA: 0x00012E97 File Offset: 0x00011097
+		
 		public static void CheckBugs(Map map)
 		{
 			Autotests_RegionListers.CalculateExpectedListers(map);
@@ -15,7 +15,7 @@ namespace Verse
 			Autotests_RegionListers.CheckThingRegisteredButShouldnt(map);
 		}
 
-		// Token: 0x060003A5 RID: 933 RVA: 0x00012EB0 File Offset: 0x000110B0
+		
 		private static void CheckThingRegisteredTwice(Map map)
 		{
 			foreach (KeyValuePair<Region, List<Thing>> keyValuePair in Autotests_RegionListers.expectedListers)
@@ -28,7 +28,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060003A6 RID: 934 RVA: 0x00012F5C File Offset: 0x0001115C
+		
 		private static void CheckDuplicates(List<Thing> lister, Region region, bool expected)
 		{
 			for (int i = 1; i < lister.Count; i++)
@@ -63,7 +63,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060003A7 RID: 935 RVA: 0x0001300C File Offset: 0x0001120C
+		
 		private static void CheckThingNotRegisteredButShould()
 		{
 			foreach (KeyValuePair<Region, List<Thing>> keyValuePair in Autotests_RegionListers.expectedListers)
@@ -89,7 +89,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060003A8 RID: 936 RVA: 0x000130F8 File Offset: 0x000112F8
+		
 		private static void CheckThingRegisteredButShouldnt(Map map)
 		{
 			foreach (Region region in map.regionGrid.AllRegions)
@@ -119,7 +119,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060003A9 RID: 937 RVA: 0x000131E4 File Offset: 0x000113E4
+		
 		private static void CalculateExpectedListers(Map map)
 		{
 			Autotests_RegionListers.expectedListers.Clear();
@@ -145,10 +145,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000105 RID: 261
+		
 		private static Dictionary<Region, List<Thing>> expectedListers = new Dictionary<Region, List<Thing>>();
 
-		// Token: 0x04000106 RID: 262
+		
 		private static List<Region> tmpTouchableRegions = new List<Region>();
 	}
 }

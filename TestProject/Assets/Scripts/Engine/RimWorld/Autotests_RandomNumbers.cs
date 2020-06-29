@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F36 RID: 3894
+	
 	public static class Autotests_RandomNumbers
 	{
-		// Token: 0x06005F63 RID: 24419 RVA: 0x0020FC0B File Offset: 0x0020DE0B
+		
 		public static void Run()
 		{
 			Log.Message("Running random numbers tests.", false);
@@ -19,7 +19,7 @@ namespace RimWorld
 			Log.Message("Finished.", false);
 		}
 
-		// Token: 0x06005F64 RID: 24420 RVA: 0x0020FC38 File Offset: 0x0020DE38
+		
 		private static void CheckSimpleFloats()
 		{
 			List<float> list = Autotests_RandomNumbers.RandomFloats(500).ToList<float>();
@@ -46,7 +46,7 @@ namespace RimWorld
 			Log.Message("< 0.0001 count (should be ~0.01%): " + (float)num / (float)list.Count<float>() * 100f + "%", false);
 		}
 
-		// Token: 0x06005F65 RID: 24421 RVA: 0x0020FDB7 File Offset: 0x0020DFB7
+		
 		private static IEnumerable<float> RandomFloats(int count)
 		{
 			int num;
@@ -58,7 +58,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005F66 RID: 24422 RVA: 0x0020FDC8 File Offset: 0x0020DFC8
+		
 		private static void CheckIntsRange()
 		{
 			int num = -7;
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F67 RID: 24423 RVA: 0x0020FEE4 File Offset: 0x0020E0E4
+		
 		private static void CheckIntsDistribution()
 		{
 			List<int> list = new List<int>();
@@ -144,7 +144,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F68 RID: 24424 RVA: 0x0020FFA8 File Offset: 0x0020E1A8
+		
 		private static void CheckSeed()
 		{
 			int seed = Rand.Seed = 10;
@@ -165,7 +165,7 @@ namespace RimWorld
 			Autotests_RandomNumbers.TestPushSeed(455, 648023);
 		}
 
-		// Token: 0x06005F69 RID: 24425 RVA: 0x0021003C File Offset: 0x0020E23C
+		
 		private static void TestPushSeed(int seed1, int seed2)
 		{
 			Rand.Seed = seed1;

@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200001D RID: 29
+	
 	public static class GenFile
 	{
-		// Token: 0x060001F5 RID: 501 RVA: 0x000097AA File Offset: 0x000079AA
+		
 		public static string TextFromRawFile(string filePath)
 		{
 			return File.ReadAllText(filePath);
 		}
 
-		// Token: 0x060001F6 RID: 502 RVA: 0x000097B4 File Offset: 0x000079B4
+		
 		public static string TextFromResourceFile(string filePath)
 		{
 			TextAsset textAsset = Resources.Load("Text/" + filePath) as TextAsset;
@@ -27,7 +27,7 @@ namespace Verse
 			return GenFile.GetTextWithoutBOM(textAsset);
 		}
 
-		// Token: 0x060001F7 RID: 503 RVA: 0x000097FC File Offset: 0x000079FC
+		
 		public static string GetTextWithoutBOM(TextAsset textAsset)
 		{
 			string result = null;
@@ -41,7 +41,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001F8 RID: 504 RVA: 0x0000985C File Offset: 0x00007A5C
+		
 		public static IEnumerable<string> LinesFromFile(string filePath)
 		{
 			string text = GenFile.TextFromResourceFile(filePath);
@@ -54,7 +54,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001F9 RID: 505 RVA: 0x0000986C File Offset: 0x00007A6C
+		
 		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, bool useLinuxLineEndings = false)
 		{
 			DirectoryInfo directoryInfo = new DirectoryInfo(sourceDirName);
@@ -92,7 +92,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001FA RID: 506 RVA: 0x00009980 File Offset: 0x00007B80
+		
 		public static string SanitizedFileName(string fileName)
 		{
 			char[] invalidFileNameChars = Path.GetInvalidFileNameChars();

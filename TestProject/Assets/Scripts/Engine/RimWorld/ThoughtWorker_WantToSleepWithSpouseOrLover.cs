@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200080D RID: 2061
+	
 	public class ThoughtWorker_WantToSleepWithSpouseOrLover : ThoughtWorker
 	{
-		// Token: 0x06003426 RID: 13350 RVA: 0x0011EDA0 File Offset: 0x0011CFA0
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			DirectPawnRelation directPawnRelation = LovePartnerRelationUtility.ExistingMostLikedLovePartnerRel(p, false);

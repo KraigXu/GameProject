@@ -6,10 +6,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000125 RID: 293
+	
 	public static class StartingPawnUtility
 	{
-		// Token: 0x170001C5 RID: 453
+		
 		// (get) Token: 0x06000835 RID: 2101 RVA: 0x00025E90 File Offset: 0x00024090
 		private static List<Pawn> StartingAndOptionalPawns
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000836 RID: 2102 RVA: 0x00025E9C File Offset: 0x0002409C
+		
 		public static void ClearAllStartingPawns()
 		{
 			for (int i = StartingPawnUtility.StartingAndOptionalPawns.Count - 1; i >= 0; i--)
@@ -35,13 +35,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000837 RID: 2103 RVA: 0x00025F1D File Offset: 0x0002411D
+		
 		public static Pawn RandomizeInPlace(Pawn p)
 		{
 			return StartingPawnUtility.RegenerateStartingPawnInPlace(StartingPawnUtility.StartingAndOptionalPawns.IndexOf(p));
 		}
 
-		// Token: 0x06000838 RID: 2104 RVA: 0x00025F30 File Offset: 0x00024130
+		
 		private static Pawn RegenerateStartingPawnInPlace(int index)
 		{
 			Pawn pawn = StartingPawnUtility.StartingAndOptionalPawns[index];
@@ -62,7 +62,7 @@ namespace Verse
 			return pawn2;
 		}
 
-		// Token: 0x06000839 RID: 2105 RVA: 0x00025FC0 File Offset: 0x000241C0
+		
 		public static Pawn NewGeneratedStartingPawn()
 		{
 			PawnGenerationRequest request = new PawnGenerationRequest(Faction.OfPlayer.def.basicMemberKind, Faction.OfPlayer, PawnGenerationContext.PlayerStarter, -1, true, false, false, false, true, TutorSystem.TutorialMode, 20f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null);
@@ -81,7 +81,7 @@ namespace Verse
 			return pawn;
 		}
 
-		// Token: 0x0600083A RID: 2106 RVA: 0x0002608C File Offset: 0x0002428C
+		
 		public static bool WorkTypeRequirementsSatisfied()
 		{
 			if (StartingPawnUtility.StartingAndOptionalPawns.Count == 0)
@@ -119,7 +119,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x0600083B RID: 2107 RVA: 0x0002614A File Offset: 0x0002434A
+		
 		public static IEnumerable<WorkTypeDef> RequiredWorkTypesDisabledForEveryone()
 		{
 			List<WorkTypeDef> workTypes = DefDatabase<WorkTypeDef>.AllDefsListForReading;

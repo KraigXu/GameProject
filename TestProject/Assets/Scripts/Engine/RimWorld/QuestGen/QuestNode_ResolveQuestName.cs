@@ -5,16 +5,16 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011A2 RID: 4514
+	
 	public class QuestNode_ResolveQuestName : QuestNode
 	{
-		// Token: 0x06006878 RID: 26744 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x06006879 RID: 26745 RVA: 0x002479C8 File Offset: 0x00245BC8
+		
 		protected override void RunInt()
 		{
 			if (this.rules.GetValue(QuestGen.slate) != null)
@@ -24,7 +24,7 @@ namespace RimWorld.QuestGen
 			QuestNode_ResolveQuestName.Resolve();
 		}
 
-		// Token: 0x0600687A RID: 26746 RVA: 0x002479F8 File Offset: 0x00245BF8
+		
 		public static void Resolve()
 		{
 			string text;
@@ -36,7 +36,7 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.name = text;
 		}
 
-		// Token: 0x0600687B RID: 26747 RVA: 0x00247A40 File Offset: 0x00245C40
+		
 		private static string GenerateName()
 		{
 			GrammarRequest request = default(GrammarRequest);
@@ -74,13 +74,13 @@ namespace RimWorld.QuestGen
 			return text;
 		}
 
-		// Token: 0x040040C6 RID: 16582
+		
 		public SlateRef<RulePack> rules;
 
-		// Token: 0x040040C7 RID: 16583
+		
 		public const string TextRoot = "questName";
 
-		// Token: 0x040040C8 RID: 16584
+		
 		private const int MaxTriesTryAvoidDuplicateName = 20;
 	}
 }

@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000969 RID: 2409
+	
 	public class QuestPart_CameraJump : QuestPart
 	{
-		// Token: 0x17000A3C RID: 2620
+		
 		// (get) Token: 0x06003910 RID: 14608 RVA: 0x00130121 File Offset: 0x0012E321
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003911 RID: 14609 RVA: 0x00130134 File Offset: 0x0012E334
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003912 RID: 14610 RVA: 0x001301AC File Offset: 0x0012E3AC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -63,7 +63,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.select, "select", true, false);
 		}
 
-		// Token: 0x06003913 RID: 14611 RVA: 0x0013020C File Offset: 0x0012E40C
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -71,16 +71,16 @@ namespace RimWorld
 			this.lookTargets = Find.Maps.SelectMany((Map x) => x.mapPawns.FreeColonistsSpawned).RandomElementWithFallback(null);
 		}
 
-		// Token: 0x040021A5 RID: 8613
+		
 		public string inSignal;
 
-		// Token: 0x040021A6 RID: 8614
+		
 		public LookTargets lookTargets;
 
-		// Token: 0x040021A7 RID: 8615
+		
 		public bool getLookTargetsFromSignal = true;
 
-		// Token: 0x040021A8 RID: 8616
+		
 		public bool select = true;
 	}
 }

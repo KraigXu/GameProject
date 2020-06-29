@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02001026 RID: 4134
+	
 	public class TargetingParameters
 	{
-		// Token: 0x060062F6 RID: 25334 RVA: 0x002260A0 File Offset: 0x002242A0
+		
 		public bool CanTarget(TargetInfo targ)
 		{
 			if (this.validator != null && !this.validator(targ))
@@ -98,7 +98,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060062F7 RID: 25335 RVA: 0x002262FA File Offset: 0x002244FA
+		
 		public static TargetingParameters ForSelf(Pawn p)
 		{
 			return new TargetingParameters
@@ -110,7 +110,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060062F8 RID: 25336 RVA: 0x00226320 File Offset: 0x00224520
+		
 		public static TargetingParameters ForArrest(Pawn arrester)
 		{
 			return new TargetingParameters
@@ -130,7 +130,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060062F9 RID: 25337 RVA: 0x00226368 File Offset: 0x00224568
+		
 		public static TargetingParameters ForAttackHostile()
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -154,7 +154,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x060062FA RID: 25338 RVA: 0x002263BB File Offset: 0x002245BB
+		
 		public static TargetingParameters ForAttackAny()
 		{
 			return new TargetingParameters
@@ -166,7 +166,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060062FB RID: 25339 RVA: 0x002263DE File Offset: 0x002245DE
+		
 		public static TargetingParameters ForRescue(Pawn p)
 		{
 			return new TargetingParameters
@@ -178,7 +178,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060062FC RID: 25340 RVA: 0x00226404 File Offset: 0x00224604
+		
 		public static TargetingParameters ForStrip(Pawn p)
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -189,7 +189,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x060062FD RID: 25341 RVA: 0x00226450 File Offset: 0x00224650
+		
 		public static TargetingParameters ForTrade()
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -204,7 +204,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x060062FE RID: 25342 RVA: 0x0022649C File Offset: 0x0022469C
+		
 		public static TargetingParameters ForDropPodsDestination()
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -218,7 +218,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x060062FF RID: 25343 RVA: 0x00226500 File Offset: 0x00224700
+		
 		public static TargetingParameters ForQuestPawnsWhoWillJoinColony(Pawn p)
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -233,7 +233,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x06006300 RID: 25344 RVA: 0x0022654C File Offset: 0x0022474C
+		
 		public static TargetingParameters ForOpen(Pawn p)
 		{
 			TargetingParameters targetingParameters = new TargetingParameters();
@@ -248,7 +248,7 @@ namespace RimWorld
 			return targetingParameters;
 		}
 
-		// Token: 0x06006301 RID: 25345 RVA: 0x00226598 File Offset: 0x00224798
+		
 		public static TargetingParameters ForShuttle(Pawn hauler)
 		{
 			return new TargetingParameters
@@ -280,73 +280,73 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04003C1D RID: 15389
+		
 		public bool canTargetLocations;
 
-		// Token: 0x04003C1E RID: 15390
+		
 		public bool canTargetSelf;
 
-		// Token: 0x04003C1F RID: 15391
+		
 		public bool canTargetPawns = true;
 
-		// Token: 0x04003C20 RID: 15392
+		
 		public bool canTargetFires;
 
-		// Token: 0x04003C21 RID: 15393
+		
 		public bool canTargetBuildings = true;
 
-		// Token: 0x04003C22 RID: 15394
+		
 		public bool canTargetItems;
 
-		// Token: 0x04003C23 RID: 15395
+		
 		public bool canTargetAnimals = true;
 
-		// Token: 0x04003C24 RID: 15396
+		
 		public bool canTargetHumans = true;
 
-		// Token: 0x04003C25 RID: 15397
+		
 		public bool canTargetMechs = true;
 
-		// Token: 0x04003C26 RID: 15398
+		
 		public List<Faction> onlyTargetFactions;
 
-		// Token: 0x04003C27 RID: 15399
+		
 		public Predicate<TargetInfo> validator;
 
-		// Token: 0x04003C28 RID: 15400
+		
 		public bool onlyTargetFlammables;
 
-		// Token: 0x04003C29 RID: 15401
+		
 		public Thing targetSpecificThing;
 
-		// Token: 0x04003C2A RID: 15402
+		
 		public bool mustBeSelectable;
 
-		// Token: 0x04003C2B RID: 15403
+		
 		public bool neverTargetDoors;
 
-		// Token: 0x04003C2C RID: 15404
+		
 		public bool neverTargetIncapacitated;
 
-		// Token: 0x04003C2D RID: 15405
+		
 		public bool onlyTargetThingsAffectingRegions;
 
-		// Token: 0x04003C2E RID: 15406
+		
 		public bool onlyTargetDamagedThings;
 
-		// Token: 0x04003C2F RID: 15407
+		
 		public bool mapObjectTargetsMustBeAutoAttackable = true;
 
-		// Token: 0x04003C30 RID: 15408
+		
 		public bool onlyTargetIncapacitatedPawns;
 
-		// Token: 0x04003C31 RID: 15409
+		
 		public bool onlyTargetControlledPawns;
 
-		// Token: 0x04003C32 RID: 15410
+		
 		public bool onlyTargetColonists;
 
-		// Token: 0x04003C33 RID: 15411
+		
 		public ThingCategory thingCategory;
 	}
 }

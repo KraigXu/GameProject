@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CA2 RID: 3234
+	
 	public static class HiveUtility
 	{
-		// Token: 0x06004E3B RID: 20027 RVA: 0x001A4BD9 File Offset: 0x001A2DD9
+		
 		public static int TotalSpawnedHivesCount(Map map)
 		{
 			return map.listerThings.ThingsOfDef(ThingDefOf.Hive).Count;
 		}
 
-		// Token: 0x06004E3C RID: 20028 RVA: 0x001A4BF0 File Offset: 0x001A2DF0
+		
 		public static bool AnyHivePreventsClaiming(Thing thing)
 		{
 			if (!thing.Spawned)
@@ -32,7 +32,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004E3D RID: 20029 RVA: 0x001A4C54 File Offset: 0x001A2E54
+		
 		public static void Notify_HiveDespawned(Hive hive, Map map)
 		{
 			int num = GenRadial.NumCellsInRadius(2f);
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002BEC RID: 11244
+		
 		private const float HivePreventsClaimingInRadius = 2f;
 	}
 }

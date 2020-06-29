@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E9B RID: 3739
+	
 	public class ArchitectCategoryTab
 	{
-		// Token: 0x1700105B RID: 4187
+		
 		// (get) Token: 0x06005B2C RID: 23340 RVA: 0x001F61F6 File Offset: 0x001F43F6
 		public static Rect InfoRect
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B2D RID: 23341 RVA: 0x001F6230 File Offset: 0x001F4430
+		
 		public ArchitectCategoryTab(DesignationCategoryDef def)
 		{
 			this.def = def;
 		}
 
-		// Token: 0x06005B2E RID: 23342 RVA: 0x001F6240 File Offset: 0x001F4440
+		
 		public void DesignationTabOnGUI()
 		{
 			if (Find.DesignatorManager.SelectedDesignator != null)
@@ -41,7 +41,7 @@ namespace RimWorld
 			this.DoInfoBox(ArchitectCategoryTab.InfoRect, (Designator)selectedDesignator);
 		}
 
-		// Token: 0x06005B2F RID: 23343 RVA: 0x001F62DC File Offset: 0x001F44DC
+		
 		protected void DoInfoBox(Rect infoRect, Designator designator)
 		{
 			Find.WindowStack.ImmediateWindow(32520, infoRect, WindowLayer.GameUI, delegate
@@ -65,10 +65,10 @@ namespace RimWorld
 			}, true, false, 1f);
 		}
 
-		// Token: 0x040031C9 RID: 12745
+		
 		public DesignationCategoryDef def;
 
-		// Token: 0x040031CA RID: 12746
+		
 		public const float InfoRectHeight = 270f;
 	}
 }

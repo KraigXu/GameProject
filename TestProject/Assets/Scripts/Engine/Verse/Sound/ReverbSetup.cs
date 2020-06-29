@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.Sound
 {
-	// Token: 0x020004D4 RID: 1236
+	
 	public class ReverbSetup
 	{
-		// Token: 0x0600243C RID: 9276 RVA: 0x000D8804 File Offset: 0x000D6A04
+		
 		public void DoEditWidgets(WidgetRow widgetRow)
 		{
 			if (widgetRow.ButtonText("Setup from preset...", "Set up the reverb filter from a preset.", true, true))
@@ -29,7 +29,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x0600243D RID: 9277 RVA: 0x000D88D8 File Offset: 0x000D6AD8
+		
 		public void ApplyTo(AudioReverbFilter filter)
 		{
 			filter.dryLevel = this.dryLevel;
@@ -48,7 +48,7 @@ namespace Verse.Sound
 			filter.density = this.density;
 		}
 
-		// Token: 0x0600243E RID: 9278 RVA: 0x000D8990 File Offset: 0x000D6B90
+		
 		public static ReverbSetup Lerp(ReverbSetup A, ReverbSetup B, float t)
 		{
 			return new ReverbSetup
@@ -70,46 +70,46 @@ namespace Verse.Sound
 			};
 		}
 
-		// Token: 0x040015DB RID: 5595
+		
 		public float dryLevel;
 
-		// Token: 0x040015DC RID: 5596
+		
 		public float room;
 
-		// Token: 0x040015DD RID: 5597
+		
 		public float roomHF;
 
-		// Token: 0x040015DE RID: 5598
+		
 		public float roomLF;
 
-		// Token: 0x040015DF RID: 5599
+		
 		public float decayTime = 1f;
 
-		// Token: 0x040015E0 RID: 5600
+		
 		public float decayHFRatio = 0.5f;
 
-		// Token: 0x040015E1 RID: 5601
+		
 		public float reflectionsLevel = -10000f;
 
-		// Token: 0x040015E2 RID: 5602
+		
 		public float reflectionsDelay;
 
-		// Token: 0x040015E3 RID: 5603
+		
 		public float reverbLevel;
 
-		// Token: 0x040015E4 RID: 5604
+		
 		public float reverbDelay = 0.04f;
 
-		// Token: 0x040015E5 RID: 5605
+		
 		public float hfReference = 5000f;
 
-		// Token: 0x040015E6 RID: 5606
+		
 		public float lfReference = 250f;
 
-		// Token: 0x040015E7 RID: 5607
+		
 		public float diffusion = 100f;
 
-		// Token: 0x040015E8 RID: 5608
+		
 		public float density = 100f;
 	}
 }

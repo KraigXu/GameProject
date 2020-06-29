@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010B0 RID: 4272
+	
 	public class SymbolResolver_EdgeWalls : SymbolResolver
 	{
-		// Token: 0x0600650C RID: 25868 RVA: 0x00233C80 File Offset: 0x00231E80
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			ThingDef wallStuff = rp.wallStuff ?? BaseGenUtility.RandomCheapWallStuff(rp.faction, false);
@@ -17,7 +17,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600650D RID: 25869 RVA: 0x00233CF0 File Offset: 0x00231EF0
+		
 		private Thing TrySpawnWall(IntVec3 c, ResolveParams rp, ThingDef wallStuff)
 		{
 			Map map = BaseGen.globalSettings.map;

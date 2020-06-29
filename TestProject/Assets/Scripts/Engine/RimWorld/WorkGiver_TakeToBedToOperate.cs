@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200075E RID: 1886
+	
 	public class WorkGiver_TakeToBedToOperate : WorkGiver_TakeToBed
 	{
-		// Token: 0x170008EE RID: 2286
+		
 		// (get) Token: 0x06003155 RID: 12629 RVA: 0x0010F64C File Offset: 0x0010D84C
 		public override ThingRequest PotentialWorkThingRequest
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170008EF RID: 2287
+		
 		// (get) Token: 0x06003156 RID: 12630 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override PathEndMode PathEndMode
 		{
@@ -28,13 +28,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003157 RID: 12631 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		// Token: 0x06003158 RID: 12632 RVA: 0x0011354C File Offset: 0x0011174C
+		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			List<Pawn> allPawnsSpawned = pawn.Map.mapPawns.AllPawnsSpawned;
@@ -48,13 +48,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003159 RID: 12633 RVA: 0x0011358C File Offset: 0x0011178C
+		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.mapPawns.SpawnedPawnsWhoShouldHaveSurgeryDoneNow;
 		}
 
-		// Token: 0x0600315A RID: 12634 RVA: 0x001135A0 File Offset: 0x001117A0
+		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
@@ -81,7 +81,7 @@ namespace RimWorld
 			return building_Bed != null && pawn2.CanReserve(building_Bed, building_Bed.SleepingSlotsCount, -1, null, false);
 		}
 
-		// Token: 0x0600315B RID: 12635 RVA: 0x00113668 File Offset: 0x00111868
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;

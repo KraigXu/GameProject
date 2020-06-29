@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000ECD RID: 3789
+	
 	public class MapInterface
 	{
-		// Token: 0x06005CDF RID: 23775 RVA: 0x00203BB0 File Offset: 0x00201DB0
+		
 		public void MapInterfaceOnGUI_BeforeMainTabs()
 		{
 			if (Find.CurrentMap == null)
@@ -52,7 +52,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CE0 RID: 23776 RVA: 0x00203C87 File Offset: 0x00201E87
+		
 		public void MapInterfaceOnGUI_AfterMainTabs()
 		{
 			if (Find.CurrentMap == null)
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CE1 RID: 23777 RVA: 0x00203CBD File Offset: 0x00201EBD
+		
 		public void HandleMapClicks()
 		{
 			if (Find.CurrentMap == null)
@@ -80,7 +80,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CE2 RID: 23778 RVA: 0x00203CE4 File Offset: 0x00201EE4
+		
 		public void HandleLowPriorityInput()
 		{
 			if (Find.CurrentMap == null)
@@ -94,7 +94,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CE3 RID: 23779 RVA: 0x00203D10 File Offset: 0x00201F10
+		
 		public void MapInterfaceUpdate()
 		{
 			if (Find.CurrentMap == null)
@@ -146,7 +146,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CE4 RID: 23780 RVA: 0x00203E44 File Offset: 0x00202044
+		
 		public void Notify_SwitchedMap()
 		{
 			this.designatorManager.Deselect();
@@ -171,31 +171,31 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040032B2 RID: 12978
+		
 		public ThingOverlays thingOverlays = new ThingOverlays();
 
-		// Token: 0x040032B3 RID: 12979
+		
 		public Selector selector = new Selector();
 
-		// Token: 0x040032B4 RID: 12980
+		
 		public Targeter targeter = new Targeter();
 
-		// Token: 0x040032B5 RID: 12981
+		
 		public DesignatorManager designatorManager = new DesignatorManager();
 
-		// Token: 0x040032B6 RID: 12982
+		
 		public ReverseDesignatorDatabase reverseDesignatorDatabase = new ReverseDesignatorDatabase();
 
-		// Token: 0x040032B7 RID: 12983
+		
 		private MouseoverReadout mouseoverReadout = new MouseoverReadout();
 
-		// Token: 0x040032B8 RID: 12984
+		
 		public GlobalControls globalControls = new GlobalControls();
 
-		// Token: 0x040032B9 RID: 12985
+		
 		protected ResourceReadout resourceReadout = new ResourceReadout();
 
-		// Token: 0x040032BA RID: 12986
+		
 		public ColonistBar colonistBar = new ColonistBar();
 	}
 }

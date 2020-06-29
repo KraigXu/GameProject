@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001280 RID: 4736
+	
 	[StaticConstructorOnStartup]
 	public class TradeRequestComp : WorldObjectComp
 	{
-		// Token: 0x170012AC RID: 4780
+		
 		// (get) Token: 0x06006F13 RID: 28435 RVA: 0x0026AE59 File Offset: 0x00269059
 		public bool ActiveRequest
 		{
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F14 RID: 28436 RVA: 0x0026AE70 File Offset: 0x00269070
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.ActiveRequest)
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006F15 RID: 28437 RVA: 0x0026AEF5 File Offset: 0x002690F5
+		
 		public override IEnumerable<Gizmo> GetCaravanGizmos(Caravan caravan)
 		{
 			if (this.ActiveRequest && CaravanVisitUtility.SettlementVisitedNow(caravan) == this.parent)
@@ -39,13 +39,13 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006F16 RID: 28438 RVA: 0x0026AF0C File Offset: 0x0026910C
+		
 		public void Disable()
 		{
 			this.expiration = -1;
 		}
 
-		// Token: 0x06006F17 RID: 28439 RVA: 0x0026AF18 File Offset: 0x00269118
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -55,14 +55,14 @@ namespace RimWorld.Planet
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06006F18 RID: 28440 RVA: 0x0026AF68 File Offset: 0x00269168
+		
 		private Command FulfillRequestCommand(Caravan caravan)
 		{
 			Command_Action command_Action = new Command_Action();
 			command_Action.defaultLabel = "CommandFulfillTradeOffer".Translate();
 			command_Action.defaultDesc = "CommandFulfillTradeOfferDesc".Translate();
 			command_Action.icon = TradeRequestComp.TradeCommandTex;
-			Action <>9__1;
+
 			command_Action.action = delegate
 			{
 				if (!this.ActiveRequest)
@@ -77,14 +77,11 @@ namespace RimWorld.Planet
 				}
 				WindowStack windowStack = Find.WindowStack;
 				TaggedString text = "CommandFulfillTradeOfferConfirm".Translate(GenLabel.ThingLabel(this.requestThingDef, null, this.requestCount));
-				Action confirmedAct;
-				if ((confirmedAct = <>9__1) == null)
+				Action confirmedAct = delegate
 				{
-					confirmedAct = (<>9__1 = delegate
-					{
-						this.Fulfill(caravan);
-					});
-				}
+					this.Fulfill(caravan);
+				};
+
 				windowStack.Add(Dialog_MessageBox.CreateConfirmation(text, confirmedAct, false, null));
 			};
 			if (!CaravanInventoryUtility.HasThings(caravan, this.requestThingDef, this.requestCount, new Func<Thing, bool>(this.PlayerCanGive)))
@@ -94,7 +91,7 @@ namespace RimWorld.Planet
 			return command_Action;
 		}
 
-		// Token: 0x06006F19 RID: 28441 RVA: 0x0026B028 File Offset: 0x00269228
+		
 		private void Fulfill(Caravan caravan)
 		{
 			int remaining = this.requestCount;
@@ -124,7 +121,7 @@ namespace RimWorld.Planet
 			this.Disable();
 		}
 
-		// Token: 0x06006F1A RID: 28442 RVA: 0x0026B0FC File Offset: 0x002692FC
+		
 		private bool PlayerCanGive(Thing thing)
 		{
 			if (thing.GetRotStage() != RotStage.Fresh)
@@ -140,19 +137,19 @@ namespace RimWorld.Planet
 			return compQuality == null || compQuality.Quality >= QualityCategory.Normal;
 		}
 
-		// Token: 0x0400444F RID: 17487
+		
 		public ThingDef requestThingDef;
 
-		// Token: 0x04004450 RID: 17488
+		
 		public int requestCount;
 
-		// Token: 0x04004451 RID: 17489
+		
 		public int expiration = -1;
 
-		// Token: 0x04004452 RID: 17490
+		
 		public string outSignalFulfilled;
 
-		// Token: 0x04004453 RID: 17491
+		
 		private static readonly Texture2D TradeCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/FulfillTradeRequest", true);
 	}
 }

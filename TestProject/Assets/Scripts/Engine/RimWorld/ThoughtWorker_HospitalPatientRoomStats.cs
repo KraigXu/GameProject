@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000805 RID: 2053
+	
 	public class ThoughtWorker_HospitalPatientRoomStats : ThoughtWorker
 	{
-		// Token: 0x06003411 RID: 13329 RVA: 0x0011E9AC File Offset: 0x0011CBAC
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			Building_Bed building_Bed = p.CurrentBed();

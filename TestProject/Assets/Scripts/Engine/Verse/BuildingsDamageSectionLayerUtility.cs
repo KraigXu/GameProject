@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200018E RID: 398
+	
 	[StaticConstructorOnStartup]
 	public static class BuildingsDamageSectionLayerUtility
 	{
-		// Token: 0x06000B6E RID: 2926 RVA: 0x0003DCB8 File Offset: 0x0003BEB8
+		
 		public static void Notify_BuildingHitPointsChanged(Building b, int oldHitPoints)
 		{
 			if (!b.Spawned || !b.def.useHitPoints || b.HitPoints == oldHitPoints || !b.def.drawDamagedOverlay || BuildingsDamageSectionLayerUtility.GetDamageOverlaysCount(b, b.HitPoints) == BuildingsDamageSectionLayerUtility.GetDamageOverlaysCount(b, oldHitPoints))
@@ -19,13 +19,13 @@ namespace Verse
 			b.Map.mapDrawer.MapMeshDirty(b.Position, MapMeshFlag.BuildingsDamage);
 		}
 
-		// Token: 0x06000B6F RID: 2927 RVA: 0x0003DD21 File Offset: 0x0003BF21
+		
 		public static bool UsesLinkableCornersAndEdges(Building b)
 		{
 			return b.def.size.x == 1 && b.def.size.z == 1 && b.def.Fillage == FillCategory.Full;
 		}
 
-		// Token: 0x06000B70 RID: 2928 RVA: 0x0003DD5C File Offset: 0x0003BF5C
+		
 		public static IList<Material> GetScratchMats(Building b)
 		{
 			IList<Material> result = BuildingsDamageSectionLayerUtility.DefaultScratchMats;
@@ -36,7 +36,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06000B71 RID: 2929 RVA: 0x0003DDBC File Offset: 0x0003BFBC
+		
 		public static List<DamageOverlay> GetAvailableOverlays(Building b)
 		{
 			BuildingsDamageSectionLayerUtility.availableOverlays.Clear();
@@ -121,7 +121,7 @@ namespace Verse
 			return BuildingsDamageSectionLayerUtility.availableOverlays;
 		}
 
-		// Token: 0x06000B72 RID: 2930 RVA: 0x0003E194 File Offset: 0x0003C394
+		
 		public static void GetCornerMats(out Material topLeft, out Material topRight, out Material botRight, out Material botLeft, Building b)
 		{
 			if (b.def.graphicData == null || b.def.graphicData.damageData == null)
@@ -163,7 +163,7 @@ namespace Verse
 			botLeft = damageData.cornerTLMat;
 		}
 
-		// Token: 0x06000B73 RID: 2931 RVA: 0x0003E2A0 File Offset: 0x0003C4A0
+		
 		public static List<DamageOverlay> GetOverlays(Building b)
 		{
 			BuildingsDamageSectionLayerUtility.overlays.Clear();
@@ -188,7 +188,7 @@ namespace Verse
 			return BuildingsDamageSectionLayerUtility.overlays;
 		}
 
-		// Token: 0x06000B74 RID: 2932 RVA: 0x0003E350 File Offset: 0x0003C550
+		
 		public static Rect GetDamageRect(Building b)
 		{
 			DamageGraphicData damageGraphicData = null;
@@ -256,7 +256,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06000B75 RID: 2933 RVA: 0x0003E6F4 File Offset: 0x0003C8F4
+		
 		private static int GetDamageOverlaysCount(Building b, int hp)
 		{
 			float num = (float)hp / (float)b.MaxHitPoints;
@@ -264,7 +264,7 @@ namespace Verse
 			return count - Mathf.FloorToInt((float)count * num);
 		}
 
-		// Token: 0x06000B76 RID: 2934 RVA: 0x0003E724 File Offset: 0x0003C924
+		
 		private static bool DifferentAt(Building b, int x, int z)
 		{
 			IntVec3 c = new IntVec3(x, 0, z);
@@ -283,7 +283,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000B77 RID: 2935 RVA: 0x0003E780 File Offset: 0x0003C980
+		
 		private static bool SameAndDamagedAt(Building b, int x, int z)
 		{
 			IntVec3 c = new IntVec3(x, 0, z);
@@ -302,7 +302,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000B78 RID: 2936 RVA: 0x0003E7F8 File Offset: 0x0003C9F8
+		
 		public static void DebugDraw()
 		{
 			if (!Prefs.DevMode || !DebugViewSettings.drawDamageRects || Find.CurrentMap == null)
@@ -322,7 +322,7 @@ namespace Verse
 			Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(pos, Quaternion.identity, s), material, 0);
 		}
 
-		// Token: 0x0400093D RID: 2365
+		
 		private static readonly Material[] DefaultScratchMats = new Material[]
 		{
 			MaterialPool.MatFrom("Damage/Scratch1", ShaderDatabase.Transparent),
@@ -330,13 +330,13 @@ namespace Verse
 			MaterialPool.MatFrom("Damage/Scratch3", ShaderDatabase.Transparent)
 		};
 
-		// Token: 0x0400093E RID: 2366
+		
 		private static List<DamageOverlay> availableOverlays = new List<DamageOverlay>();
 
-		// Token: 0x0400093F RID: 2367
+		
 		private static List<DamageOverlay> overlaysWorkingList = new List<DamageOverlay>();
 
-		// Token: 0x04000940 RID: 2368
+		
 		private static List<DamageOverlay> overlays = new List<DamageOverlay>();
 	}
 }

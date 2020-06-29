@@ -4,10 +4,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x020002D9 RID: 729
+	
 	public static class Scribe_Universal
 	{
-		// Token: 0x06001473 RID: 5235 RVA: 0x000786B8 File Offset: 0x000768B8
+		
 		public static void Look<TAny>(ref TAny obj, string label, LookMode lookMode, ref Type type)
 		{
 			if (lookMode == LookMode.Undefined)
@@ -29,7 +29,7 @@ namespace Verse
 			obj = ((obj2 is TAny) ? ((TAny)((object)obj2)) : default(TAny));
 		}
 
-		// Token: 0x06001474 RID: 5236 RVA: 0x0007876C File Offset: 0x0007696C
+		
 		public static void Look<TAny>(ref TAny obj, string label, ref LookMode lookMode, ref Type type, bool forceDeepSave = false)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -60,7 +60,7 @@ namespace Verse
 			obj = ((obj2 is TAny) ? ((TAny)((object)obj2)) : default(TAny));
 		}
 
-		// Token: 0x06001475 RID: 5237 RVA: 0x0007887C File Offset: 0x00076A7C
+		
 		private static void LookInt(ref object obj, string label, LookMode lookMode, Type type)
 		{
 			if (type == typeof(object))
@@ -97,7 +97,7 @@ namespace Verse
 			obj = array[0];
 		}
 
-		// Token: 0x06001476 RID: 5238 RVA: 0x00078910 File Offset: 0x00076B10
+		
 		private static void LookInternalMisc<T>(ref T obj, string label, LookMode lookMode)
 		{
 			switch (lookMode)
@@ -144,19 +144,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001477 RID: 5239 RVA: 0x00078A0E File Offset: 0x00076C0E
+		
 		private static void LookInternalDef<T>(ref T obj, string label, LookMode lookMode) where T : Def, new()
 		{
 			Scribe_Defs.Look<T>(ref obj, label);
 		}
 
-		// Token: 0x06001478 RID: 5240 RVA: 0x00078A17 File Offset: 0x00076C17
+		
 		private static void LookInternalReference<T>(ref T obj, string label, LookMode lookMode) where T : ILoadReferenceable
 		{
 			Scribe_References.Look<T>(ref obj, label, false);
 		}
 
-		// Token: 0x06001479 RID: 5241 RVA: 0x00078A24 File Offset: 0x00076C24
+		
 		public static bool TryResolveLookMode(Type type, out LookMode lookMode, bool desperate = false, bool preferDeepIfDesperateAndAmbiguous = false)
 		{
 			if (type == null)
@@ -228,13 +228,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000DAF RID: 3503
+		
 		private const string LookInternalMiscName = "LookInternalMisc";
 
-		// Token: 0x04000DB0 RID: 3504
+		
 		private const string LookInternalDefName = "LookInternalDef";
 
-		// Token: 0x04000DB1 RID: 3505
+		
 		private const string LookInternalReferenceName = "LookInternalReference";
 	}
 }

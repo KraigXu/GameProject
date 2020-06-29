@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse.Sound
 {
-	// Token: 0x020004FB RID: 1275
+	
 	public class SampleOneShotManager
 	{
-		// Token: 0x17000752 RID: 1874
+		
 		// (get) Token: 0x060024B6 RID: 9398 RVA: 0x000DA058 File Offset: 0x000D8258
 		public IEnumerable<SampleOneShot> PlayingOneShots
 		{
@@ -17,19 +17,19 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x060024B7 RID: 9399 RVA: 0x000DA060 File Offset: 0x000D8260
+		
 		private float CameraDistanceSquaredOf(SoundInfo info)
 		{
 			return (float)(Find.CameraDriver.MapPosition - info.Maker.Cell).LengthHorizontalSquared;
 		}
 
-		// Token: 0x060024B8 RID: 9400 RVA: 0x000DA094 File Offset: 0x000D8294
+		
 		private float ImportanceOf(SampleOneShot sample)
 		{
 			return this.ImportanceOf(sample.subDef.parentDef, sample.info, sample.AgeRealTime);
 		}
 
-		// Token: 0x060024B9 RID: 9401 RVA: 0x000DA0B3 File Offset: 0x000D82B3
+		
 		private float ImportanceOf(SoundDef def, SoundInfo info, float ageRealTime)
 		{
 			if (def.priorityMode == VoicePriorityMode.PrioritizeNearest)
@@ -43,7 +43,7 @@ namespace Verse.Sound
 			throw new NotImplementedException();
 		}
 
-		// Token: 0x060024BA RID: 9402 RVA: 0x000DA0F0 File Offset: 0x000D82F0
+		
 		public bool CanAddPlayingOneShot(SoundDef def, SoundInfo info)
 		{
 			if (!SoundDefHelper.CorrectContextNow(def, info.Maker.Map))
@@ -60,7 +60,7 @@ namespace Verse.Sound
 			return sampleOneShot == null || this.ImportanceOf(def, info, 0f) >= this.ImportanceOf(sampleOneShot);
 		}
 
-		// Token: 0x060024BB RID: 9403 RVA: 0x000DA184 File Offset: 0x000D8384
+		
 		public void TryAddPlayingOneShot(SampleOneShot newSample)
 		{
 			if ((from s in this.samples
@@ -74,7 +74,7 @@ namespace Verse.Sound
 			this.samples.Add(newSample);
 		}
 
-		// Token: 0x060024BC RID: 9404 RVA: 0x000DA214 File Offset: 0x000D8414
+		
 		private SampleOneShot LeastImportantOf(SoundDef def)
 		{
 			SampleOneShot sampleOneShot = null;
@@ -89,7 +89,7 @@ namespace Verse.Sound
 			return sampleOneShot;
 		}
 
-		// Token: 0x060024BD RID: 9405 RVA: 0x000DA26C File Offset: 0x000D846C
+		
 		public void SampleOneShotManagerUpdate()
 		{
 			for (int i = 0; i < this.samples.Count; i++)
@@ -116,10 +116,10 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x0400164D RID: 5709
+		
 		private List<SampleOneShot> samples = new List<SampleOneShot>();
 
-		// Token: 0x0400164E RID: 5710
+		
 		private List<SampleOneShot> cleanupList = new List<SampleOneShot>();
 	}
 }

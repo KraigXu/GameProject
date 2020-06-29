@@ -4,11 +4,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B15 RID: 2837
+	
 	[StaticConstructorOnStartup]
 	public static class PawnNameDatabaseShuffled
 	{
-		// Token: 0x060042C8 RID: 17096 RVA: 0x00166690 File Offset: 0x00164890
+		
 		static PawnNameDatabaseShuffled()
 		{
 			foreach (object obj in Enum.GetValues(typeof(PawnNameCategory)))
@@ -32,13 +32,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042C9 RID: 17097 RVA: 0x001667A0 File Offset: 0x001649A0
+		
 		public static NameBank BankOf(PawnNameCategory category)
 		{
 			return PawnNameDatabaseShuffled.banks[category];
 		}
 
-		// Token: 0x04002665 RID: 9829
+		
 		private static Dictionary<PawnNameCategory, NameBank> banks = new Dictionary<PawnNameCategory, NameBank>();
 	}
 }

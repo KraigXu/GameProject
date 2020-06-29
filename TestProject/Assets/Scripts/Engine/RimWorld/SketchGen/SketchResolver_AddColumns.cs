@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001086 RID: 4230
+	
 	public class SketchResolver_AddColumns : SketchResolver
 	{
-		// Token: 0x06006466 RID: 25702 RVA: 0x0022CA04 File Offset: 0x0022AC04
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			CellRect cellRect = parms.rect ?? parms.sketch.OccupiedRect;
@@ -16,16 +16,16 @@ namespace RimWorld.SketchGen
 			bool flag = parms.requireFloor ?? false;
 			this.rects.Clear();
 			this.processed.Clear();
-			Predicate<IntVec3> <>9__1;
+			Predicate<IntVec3> 9__1;
 			foreach (IntVec3 c in cellRect.Cells.InRandomOrder(null))
 			{
 				CellRect outerRect = cellRect;
 				Sketch sketch = parms.sketch;
 				HashSet<IntVec3> hashSet = this.processed;
 				Predicate<IntVec3> canTraverse;
-				if ((canTraverse = <>9__1) == null)
+				if ((canTraverse ) == null)
 				{
-					canTraverse = (<>9__1 = ((IntVec3 x) => !this.AnyColumnBlockerAt(x, parms.sketch)));
+					canTraverse = (9__1 = ((IntVec3 x) => !this.AnyColumnBlockerAt(x, parms.sketch)));
 				}
 				CellRect item = SketchGenUtility.FindBiggestRectAt(c, outerRect, sketch, hashSet, canTraverse);
 				if (!item.IsEmpty)
@@ -81,25 +81,25 @@ namespace RimWorld.SketchGen
 			this.processed.Clear();
 		}
 
-		// Token: 0x06006467 RID: 25703 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x06006468 RID: 25704 RVA: 0x0022CE54 File Offset: 0x0022B054
+		
 		private bool AnyColumnBlockerAt(IntVec3 c, Sketch sketch)
 		{
 			return sketch.ThingsAt(c).Any((SketchThing x) => x.def.passability == Traversability.Impassable);
 		}
 
-		// Token: 0x04003D20 RID: 15648
+		
 		private List<CellRect> rects = new List<CellRect>();
 
-		// Token: 0x04003D21 RID: 15649
+		
 		private HashSet<IntVec3> processed = new HashSet<IntVec3>();
 
-		// Token: 0x04003D22 RID: 15650
+		
 		private const float Chance = 0.8f;
 	}
 }

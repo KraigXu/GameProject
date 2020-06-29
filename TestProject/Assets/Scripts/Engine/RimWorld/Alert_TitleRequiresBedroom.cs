@@ -4,17 +4,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DF6 RID: 3574
+	
 	public class Alert_TitleRequiresBedroom : Alert
 	{
-		// Token: 0x0600568A RID: 22154 RVA: 0x001CB193 File Offset: 0x001C9393
+		
 		public Alert_TitleRequiresBedroom()
 		{
 			this.defaultLabel = "NeedBedroomAssigned".Translate();
 			this.defaultExplanation = "NeedBedroomAssignedDesc".Translate();
 		}
 
-		// Token: 0x17000F70 RID: 3952
+		
 		// (get) Token: 0x0600568B RID: 22155 RVA: 0x001CB1D0 File Offset: 0x001C93D0
 		public List<Pawn> Targets
 		{
@@ -36,13 +36,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600568C RID: 22156 RVA: 0x001CB290 File Offset: 0x001C9490
+		
 		public override AlertReport GetReport()
 		{
 			return AlertReport.CulpritsAre(this.Targets);
 		}
 
-		// Token: 0x04002F36 RID: 12086
+		
 		private List<Pawn> targetsResult = new List<Pawn>();
 	}
 }

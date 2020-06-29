@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E81 RID: 3713
+	
 	public static class TransferableUtility
 	{
-		// Token: 0x06005A4E RID: 23118 RVA: 0x001E92B0 File Offset: 0x001E74B0
+		
 		public static void Transfer(List<Thing> things, int count, Action<Thing, IThingHolder> transferred)
 		{
 			if (count <= 0)
@@ -45,7 +45,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A4F RID: 23119 RVA: 0x001E9354 File Offset: 0x001E7554
+		
 		public static void TransferNoSplit(List<Thing> things, int count, Action<Thing, int> transfer, bool removeIfTakingEntireThing = true, bool errorIfNotEnoughThings = true)
 		{
 			if (count <= 0)
@@ -80,7 +80,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A50 RID: 23120 RVA: 0x001E93F4 File Offset: 0x001E75F4
+		
 		public static bool TransferAsOne(Thing a, Thing b, TransferAsOneMode mode)
 		{
 			if (a == b)
@@ -177,7 +177,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A51 RID: 23121 RVA: 0x001E96C4 File Offset: 0x001E78C4
+		
 		public static bool CanStack(Thing thing)
 		{
 			if (thing.def.category == ThingCategory.Pawn)
@@ -207,7 +207,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005A52 RID: 23122 RVA: 0x001E975C File Offset: 0x001E795C
+		
 		public static T TransferableMatching<T>(Thing thing, List<T> transferables, TransferAsOneMode mode) where T : Transferable
 		{
 			if (thing == null || transferables == null)
@@ -225,7 +225,7 @@ namespace RimWorld
 			return default(T);
 		}
 
-		// Token: 0x06005A53 RID: 23123 RVA: 0x001E97C0 File Offset: 0x001E79C0
+		
 		public static Tradeable TradeableMatching(Thing thing, List<Tradeable> tradeables)
 		{
 			if (thing == null || tradeables == null)
@@ -247,7 +247,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005A54 RID: 23124 RVA: 0x001E9818 File Offset: 0x001E7A18
+		
 		public static TransferableOneWay TransferableMatchingDesperate(Thing thing, List<TransferableOneWay> transferables, TransferAsOneMode mode)
 		{
 			if (thing == null || transferables == null)
@@ -284,7 +284,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005A55 RID: 23125 RVA: 0x001E98D4 File Offset: 0x001E7AD4
+		
 		public static List<Pawn> GetPawnsFromTransferables(List<TransferableOneWay> transferables)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -302,7 +302,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06005A56 RID: 23126 RVA: 0x001E9954 File Offset: 0x001E7B54
+		
 		public static void SimulateTradeableTransfer(List<Thing> all, List<Tradeable> tradeables, List<ThingCount> outThingsAfterTransfer)
 		{
 			outThingsAfterTransfer.Clear();
@@ -310,8 +310,7 @@ namespace RimWorld
 			{
 				outThingsAfterTransfer.Add(new ThingCount(all[i], all[i].stackCount));
 			}
-			Action<Thing, int> <>9__0;
-			Action<Thing, int> <>9__1;
+
 			for (int j = 0; j < tradeables.Count; j++)
 			{
 				int countToTransferToSource = tradeables[j].CountToTransferToSource;
@@ -320,42 +319,36 @@ namespace RimWorld
 				{
 					List<Thing> thingsTrader = tradeables[j].thingsTrader;
 					int count = countToTransferToSource;
-					Action<Thing, int> transfer;
-					if ((transfer = <>9__0) == null)
+					Action<Thing, int> transfer = delegate (Thing originalThing, int toTake)
 					{
-						transfer = (<>9__0 = delegate(Thing originalThing, int toTake)
-						{
-							outThingsAfterTransfer.Add(new ThingCount(originalThing, toTake));
-						});
-					}
+						outThingsAfterTransfer.Add(new ThingCount(originalThing, toTake));
+					};
+
 					TransferableUtility.TransferNoSplit(thingsTrader, count, transfer, false, false);
 				}
 				else if (countToTransferToDestination > 0)
 				{
 					List<Thing> thingsColony = tradeables[j].thingsColony;
 					int count2 = countToTransferToDestination;
-					Action<Thing, int> transfer2;
-					if ((transfer2 = <>9__1) == null)
+					Action<Thing, int> transfer2 = delegate (Thing originalThing, int toTake)
 					{
-						transfer2 = (<>9__1 = delegate(Thing originalThing, int toTake)
+						for (int k = 0; k < outThingsAfterTransfer.Count; k++)
 						{
-							for (int k = 0; k < outThingsAfterTransfer.Count; k++)
+							ThingCount thingCount = outThingsAfterTransfer[k];
+							if (thingCount.Thing == originalThing)
 							{
-								ThingCount thingCount = outThingsAfterTransfer[k];
-								if (thingCount.Thing == originalThing)
-								{
-									outThingsAfterTransfer[k] = thingCount.WithCount(thingCount.Count - toTake);
-									return;
-								}
+								outThingsAfterTransfer[k] = thingCount.WithCount(thingCount.Count - toTake);
+								return;
 							}
-						});
-					}
+						}
+					};
+
 					TransferableUtility.TransferNoSplit(thingsColony, count2, transfer2, false, false);
 				}
 			}
 		}
 
-		// Token: 0x04003129 RID: 12585
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

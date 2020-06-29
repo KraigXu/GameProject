@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000628 RID: 1576
+	
 	public class JobDriver_GiveToPackAnimal : JobDriver
 	{
-		// Token: 0x17000823 RID: 2083
+		
 		// (get) Token: 0x06002B1A RID: 11034 RVA: 0x000FA5CC File Offset: 0x000F87CC
 		private Thing Item
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000824 RID: 2084
+		
 		// (get) Token: 0x06002B1B RID: 11035 RVA: 0x000FA5F0 File Offset: 0x000F87F0
 		private Pawn Animal
 		{
@@ -30,13 +30,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002B1C RID: 11036 RVA: 0x000FA616 File Offset: 0x000F8816
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Item, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002B1D RID: 11037 RVA: 0x000FA638 File Offset: 0x000F8838
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch);
@@ -49,7 +49,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002B1E RID: 11038 RVA: 0x000FA648 File Offset: 0x000F8848
+		
 		private Toil FindCarrierToil()
 		{
 			return new Toil
@@ -67,7 +67,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002B1F RID: 11039 RVA: 0x000FA664 File Offset: 0x000F8864
+		
 		private Pawn FindCarrier()
 		{
 			IEnumerable<Pawn> enumerable = GiveToPackAnimalUtility.CarrierCandidatesFor(this.pawn);
@@ -93,13 +93,13 @@ namespace RimWorld
 			return pawn;
 		}
 
-		// Token: 0x06002B20 RID: 11040 RVA: 0x000FA72C File Offset: 0x000F892C
+		
 		private bool CanCarryAtLeastOne(Pawn carrier)
 		{
 			return !MassUtility.WillBeOverEncumberedAfterPickingUp(carrier, this.Item, 1);
 		}
 
-		// Token: 0x06002B21 RID: 11041 RVA: 0x000FA73E File Offset: 0x000F893E
+		
 		private Toil GiveToCarrierAsMuchAsPossibleToil()
 		{
 			return new Toil
@@ -117,10 +117,10 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04001990 RID: 6544
+		
 		private const TargetIndex ItemInd = TargetIndex.A;
 
-		// Token: 0x04001991 RID: 6545
+		
 		private const TargetIndex AnimalInd = TargetIndex.B;
 	}
 }

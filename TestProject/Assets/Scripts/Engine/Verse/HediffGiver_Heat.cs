@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace Verse
 {
-	// Token: 0x02000284 RID: 644
+	
 	public class HediffGiver_Heat : HediffGiver
 	{
-		// Token: 0x06001133 RID: 4403 RVA: 0x00060F20 File Offset: 0x0005F120
+		
 		public override void OnIntervalPassed(Pawn pawn, Hediff cause)
 		{
 			float ambientTemperature = pawn.AmbientTemperature;
@@ -61,13 +61,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000C5D RID: 3165
+		
 		private const int BurnCheckInterval = 420;
 
-		// Token: 0x04000C5E RID: 3166
+		
 		public static readonly string MemoPawnBurnedByAir = "PawnBurnedByAir";
 
-		// Token: 0x04000C5F RID: 3167
+		
 		public static readonly SimpleCurve TemperatureOverageAdjustmentCurve = new SimpleCurve
 		{
 			{

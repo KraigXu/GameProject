@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B85 RID: 2949
+	
 	public class Need_Authority : Need
 	{
-		// Token: 0x17000C1B RID: 3099
+		
 		// (get) Token: 0x06004532 RID: 17714 RVA: 0x001761CE File Offset: 0x001743CE
 		public override int GUIChangeArrow
 		{
@@ -25,7 +25,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C1C RID: 3100
+		
 		// (get) Token: 0x06004533 RID: 17715 RVA: 0x001761F0 File Offset: 0x001743F0
 		public AuthorityCategory CurCategory
 		{
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C1D RID: 3101
+		
 		// (get) Token: 0x06004534 RID: 17716 RVA: 0x00176244 File Offset: 0x00174444
 		public bool IsActive
 		{
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C1E RID: 3102
+		
 		// (get) Token: 0x06004535 RID: 17717 RVA: 0x001762A3 File Offset: 0x001744A3
 		protected override bool IsFrozen
 		{
@@ -76,7 +76,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C1F RID: 3103
+		
 		// (get) Token: 0x06004536 RID: 17718 RVA: 0x001762D8 File Offset: 0x001744D8
 		public float FallPerDay
 		{
@@ -99,7 +99,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C20 RID: 3104
+		
 		// (get) Token: 0x06004537 RID: 17719 RVA: 0x001763B0 File Offset: 0x001745B0
 		public override bool ShowOnNeedList
 		{
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C21 RID: 3105
+		
 		// (get) Token: 0x06004538 RID: 17720 RVA: 0x001763B8 File Offset: 0x001745B8
 		public bool IsCurrentlyReigning
 		{
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C22 RID: 3106
+		
 		// (get) Token: 0x06004539 RID: 17721 RVA: 0x001763CC File Offset: 0x001745CC
 		public bool IsCurrentlyGivingSpeech
 		{
@@ -129,12 +129,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600453A RID: 17722 RVA: 0x001763E0 File Offset: 0x001745E0
+		
 		public Need_Authority(Pawn pawn) : base(pawn)
 		{
 		}
 
-		// Token: 0x0600453B RID: 17723 RVA: 0x00176444 File Offset: 0x00174644
+		
 		public override void NeedInterval()
 		{
 			float num = 400f;
@@ -162,13 +162,13 @@ namespace RimWorld
 			this.CurLevel -= num2;
 		}
 
-		// Token: 0x0400278C RID: 10124
+		
 		public const float LevelGainPerDayOfReigning = 2f;
 
-		// Token: 0x0400278D RID: 10125
+		
 		public const float LevelGainPerDayOfGivingSpeech = 3f;
 
-		// Token: 0x0400278E RID: 10126
+		
 		private readonly SimpleCurve FallFactorCurve = new SimpleCurve
 		{
 			{

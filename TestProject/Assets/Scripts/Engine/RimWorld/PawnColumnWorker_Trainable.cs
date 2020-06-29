@@ -6,17 +6,17 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EEE RID: 3822
+	
 	public class PawnColumnWorker_Trainable : PawnColumnWorker
 	{
-		// Token: 0x06005DB0 RID: 23984 RVA: 0x00203F72 File Offset: 0x00202172
+		
 		public override void DoHeader(Rect rect, PawnTable table)
 		{
 			base.DoHeader(rect, table);
 			MouseoverSounds.DoRegion(rect);
 		}
 
-		// Token: 0x06005DB1 RID: 23985 RVA: 0x00205C2C File Offset: 0x00203E2C
+		
 		public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
 		{
 			if (pawn.training == null)
@@ -34,31 +34,31 @@ namespace RimWorld
 			TrainingCardUtility.DoTrainableCheckbox(new Rect(rect.x + (float)num, rect.y + (float)num2, 24f, 24f), pawn, this.def.trainable, canTrain, false, true);
 		}
 
-		// Token: 0x06005DB2 RID: 23986 RVA: 0x0020526B File Offset: 0x0020346B
+		
 		public override int GetMinWidth(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinWidth(table), 24);
 		}
 
-		// Token: 0x06005DB3 RID: 23987 RVA: 0x0020405E File Offset: 0x0020225E
+		
 		public override int GetMaxWidth(PawnTable table)
 		{
 			return Mathf.Min(base.GetMaxWidth(table), this.GetMinWidth(table));
 		}
 
-		// Token: 0x06005DB4 RID: 23988 RVA: 0x00204073 File Offset: 0x00202273
+		
 		public override int GetMinCellHeight(Pawn pawn)
 		{
 			return Mathf.Max(base.GetMinCellHeight(pawn), 24);
 		}
 
-		// Token: 0x06005DB5 RID: 23989 RVA: 0x00205CBC File Offset: 0x00203EBC
+		
 		public override int Compare(Pawn a, Pawn b)
 		{
 			return this.GetValueToCompare(a).CompareTo(this.GetValueToCompare(b));
 		}
 
-		// Token: 0x06005DB6 RID: 23990 RVA: 0x00205CE0 File Offset: 0x00203EE0
+		
 		private int GetValueToCompare(Pawn pawn)
 		{
 			if (pawn.training == null)
@@ -86,7 +86,7 @@ namespace RimWorld
 			return 3;
 		}
 
-		// Token: 0x06005DB7 RID: 23991 RVA: 0x00205D5C File Offset: 0x00203F5C
+		
 		protected override void HeaderClicked(Rect headerRect, PawnTable table)
 		{
 			base.HeaderClicked(headerRect, table);
@@ -128,7 +128,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005DB8 RID: 23992 RVA: 0x00204190 File Offset: 0x00202390
+		
 		protected override string GetHeaderTip(PawnTable table)
 		{
 			return base.GetHeaderTip(table) + "\n" + "CheckboxShiftClickTip".Translate();

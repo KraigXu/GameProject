@@ -2,15 +2,15 @@
 
 namespace Ionic.Zlib
 {
-	// Token: 0x020012B0 RID: 4784
+	
 	internal sealed class InflateCodes
 	{
-		// Token: 0x0600714D RID: 29005 RVA: 0x0000F2A9 File Offset: 0x0000D4A9
+		
 		internal InflateCodes()
 		{
 		}
 
-		// Token: 0x0600714E RID: 29006 RVA: 0x0027916A File Offset: 0x0027736A
+		
 		internal void Init(int bl, int bd, int[] tl, int tl_index, int[] td, int td_index)
 		{
 			this.mode = 0;
@@ -23,7 +23,7 @@ namespace Ionic.Zlib
 			this.tree = null;
 		}
 
-		// Token: 0x0600714F RID: 29007 RVA: 0x002791AC File Offset: 0x002773AC
+		
 		internal int Process(InflateBlocks blocks, int r)
 		{
 			ZlibCodec codec = blocks._codec;
@@ -382,7 +382,7 @@ namespace Ionic.Zlib
 			return blocks.Flush(r);
 		}
 
-		// Token: 0x06007150 RID: 29008 RVA: 0x00279C68 File Offset: 0x00277E68
+		
 		internal int InflateFast(int bl, int bd, int[] tl, int tl_index, int[] td, int td_index, InflateBlocks s, ZlibCodec z)
 		{
 			int num = z.NextIn;
@@ -606,76 +606,76 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x040045AE RID: 17838
+		
 		private const int START = 0;
 
-		// Token: 0x040045AF RID: 17839
+		
 		private const int LEN = 1;
 
-		// Token: 0x040045B0 RID: 17840
+		
 		private const int LENEXT = 2;
 
-		// Token: 0x040045B1 RID: 17841
+		
 		private const int DIST = 3;
 
-		// Token: 0x040045B2 RID: 17842
+		
 		private const int DISTEXT = 4;
 
-		// Token: 0x040045B3 RID: 17843
+		
 		private const int COPY = 5;
 
-		// Token: 0x040045B4 RID: 17844
+		
 		private const int LIT = 6;
 
-		// Token: 0x040045B5 RID: 17845
+		
 		private const int WASH = 7;
 
-		// Token: 0x040045B6 RID: 17846
+		
 		private const int END = 8;
 
-		// Token: 0x040045B7 RID: 17847
+		
 		private const int BADCODE = 9;
 
-		// Token: 0x040045B8 RID: 17848
+		
 		internal int mode;
 
-		// Token: 0x040045B9 RID: 17849
+		
 		internal int len;
 
-		// Token: 0x040045BA RID: 17850
+		
 		internal int[] tree;
 
-		// Token: 0x040045BB RID: 17851
+		
 		internal int tree_index;
 
-		// Token: 0x040045BC RID: 17852
+		
 		internal int need;
 
-		// Token: 0x040045BD RID: 17853
+		
 		internal int lit;
 
-		// Token: 0x040045BE RID: 17854
+		
 		internal int bitsToGet;
 
-		// Token: 0x040045BF RID: 17855
+		
 		internal int dist;
 
-		// Token: 0x040045C0 RID: 17856
+		
 		internal byte lbits;
 
-		// Token: 0x040045C1 RID: 17857
+		
 		internal byte dbits;
 
-		// Token: 0x040045C2 RID: 17858
+		
 		internal int[] ltree;
 
-		// Token: 0x040045C3 RID: 17859
+		
 		internal int ltree_index;
 
-		// Token: 0x040045C4 RID: 17860
+		
 		internal int[] dtree;
 
-		// Token: 0x040045C5 RID: 17861
+		
 		internal int dtree_index;
 	}
 }

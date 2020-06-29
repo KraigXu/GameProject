@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200096C RID: 2412
+	
 	public class QuestPart_DamageUntilDowned : QuestPart
 	{
-		// Token: 0x17000A3F RID: 2623
+		
 		// (get) Token: 0x06003925 RID: 14629 RVA: 0x001306FC File Offset: 0x0012E8FC
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003926 RID: 14630 RVA: 0x0013070C File Offset: 0x0012E90C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003927 RID: 14631 RVA: 0x00130774 File Offset: 0x0012E974
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -60,7 +60,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003928 RID: 14632 RVA: 0x001307F4 File Offset: 0x0012E9F4
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -68,19 +68,19 @@ namespace RimWorld
 			this.pawns.Add(PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>());
 		}
 
-		// Token: 0x06003929 RID: 14633 RVA: 0x0013082B File Offset: 0x0012EA2B
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x040021B0 RID: 8624
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x040021B1 RID: 8625
+		
 		public string inSignal;
 
-		// Token: 0x040021B2 RID: 8626
+		
 		public bool allowBleedingWounds = true;
 	}
 }

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000C7E RID: 3198
+	
 	public static class MarriageSpotUtility
 	{
-		// Token: 0x06004CEB RID: 19691 RVA: 0x0019C8B8 File Offset: 0x0019AAB8
+		
 		public static bool IsValidMarriageSpot(IntVec3 cell, Map map, StringBuilder outFailReason = null)
 		{
 			if (!cell.Standable(map))
@@ -22,7 +22,7 @@ namespace RimWorld
 			return cell.Roofed(map) || JoyUtility.EnjoyableOutsideNow(map, outFailReason);
 		}
 
-		// Token: 0x06004CEC RID: 19692 RVA: 0x0019C8F4 File Offset: 0x0019AAF4
+		
 		public static bool IsValidMarriageSpotFor(IntVec3 cell, Pawn firstFiance, Pawn secondFiance, StringBuilder outFailReason = null)
 		{
 			if (!firstFiance.Spawned || !secondFiance.Spawned)

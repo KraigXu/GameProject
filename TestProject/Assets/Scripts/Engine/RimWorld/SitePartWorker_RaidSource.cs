@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000C03 RID: 3075
+	
 	public class SitePartWorker_RaidSource : SitePartWorker_Outpost
 	{
-		// Token: 0x06004912 RID: 18706 RVA: 0x0018D0B4 File Offset: 0x0018B2B4
+		
 		public override void SitePartWorkerTick(SitePart sitePart)
 		{
 			base.SitePartWorkerTick(sitePart);
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004913 RID: 18707 RVA: 0x0018D158 File Offset: 0x0018B358
+		
 		private void StartRaid(Map map, SitePart sitePart)
 		{
 			IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004914 RID: 18708 RVA: 0x0018D1C0 File Offset: 0x0018B3C0
+		
 		public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);

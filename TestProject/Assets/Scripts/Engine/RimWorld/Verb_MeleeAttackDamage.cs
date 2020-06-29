@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001034 RID: 4148
+	
 	public class Verb_MeleeAttackDamage : Verb_MeleeAttack
 	{
-		// Token: 0x06006334 RID: 25396 RVA: 0x00227C42 File Offset: 0x00225E42
+		
 		private IEnumerable<DamageInfo> DamageInfosToApply(LocalTargetInfo target)
 		{
 			float num = this.verbProps.AdjustedMeleeDamageAmount(this, this.CasterPawn);
@@ -96,7 +96,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006335 RID: 25397 RVA: 0x00227C5C File Offset: 0x00225E5C
+		
 		protected override DamageWorker.DamageResult ApplyMeleeDamageToTarget(LocalTargetInfo target)
 		{
 			DamageWorker.DamageResult result = new DamageWorker.DamageResult();
@@ -111,10 +111,10 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04003C50 RID: 15440
+		
 		private const float MeleeDamageRandomFactorMin = 0.8f;
 
-		// Token: 0x04003C51 RID: 15441
+		
 		private const float MeleeDamageRandomFactorMax = 1.2f;
 	}
 }

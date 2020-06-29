@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E2C RID: 3628
+	
 	public class Designator_Open : Designator
 	{
-		// Token: 0x17000FB0 RID: 4016
+		
 		// (get) Token: 0x060057B6 RID: 22454 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
 		public override int DraggableDimensions
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FB1 RID: 4017
+		
 		// (get) Token: 0x060057B7 RID: 22455 RVA: 0x001D1E93 File Offset: 0x001D0093
 		protected override DesignationDef Designation
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060057B8 RID: 22456 RVA: 0x001D1E9C File Offset: 0x001D009C
+		
 		public Designator_Open()
 		{
 			this.defaultLabel = "DesignatorOpen".Translate();
@@ -42,14 +42,14 @@ namespace RimWorld
 			this.soundSucceeded = SoundDefOf.Designate_Claim;
 		}
 
-		// Token: 0x060057B9 RID: 22457 RVA: 0x001D1F1D File Offset: 0x001D011D
+		
 		protected override void FinalizeDesignationFailed()
 		{
 			base.FinalizeDesignationFailed();
 			Messages.Message("MessageMustDesignateOpenable".Translate(), MessageTypeDefOf.RejectInput, false);
 		}
 
-		// Token: 0x060057BA RID: 22458 RVA: 0x001D1F3F File Offset: 0x001D013F
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -63,7 +63,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060057BB RID: 22459 RVA: 0x001D1F74 File Offset: 0x001D0174
+		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			foreach (Thing t in this.OpenablesInCell(c))
@@ -72,7 +72,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060057BC RID: 22460 RVA: 0x001D1FC4 File Offset: 0x001D01C4
+		
 		public override AcceptanceReport CanDesignateThing(Thing t)
 		{
 			IOpenable openable = t as IOpenable;
@@ -83,13 +83,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060057BD RID: 22461 RVA: 0x001D196B File Offset: 0x001CFB6B
+		
 		public override void DesignateThing(Thing t)
 		{
 			base.Map.designationManager.AddDesignation(new Designation(t, this.Designation));
 		}
 
-		// Token: 0x060057BE RID: 22462 RVA: 0x001D2009 File Offset: 0x001D0209
+		
 		private IEnumerable<Thing> OpenablesInCell(IntVec3 c)
 		{
 			if (c.Fogged(base.Map))

@@ -3,10 +3,10 @@ using System.Xml;
 
 namespace Verse
 {
-	// Token: 0x02000204 RID: 516
+	
 	public class PatchOperationAddModExtension : PatchOperationPathed
 	{
-		// Token: 0x06000EC9 RID: 3785 RVA: 0x0005421C File Offset: 0x0005241C
+		
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
 			XmlNode node = this.value.node;
@@ -30,7 +30,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x04000AF4 RID: 2804
+		
 		private XmlContainer value;
 	}
 }

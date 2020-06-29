@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C9E RID: 3230
+	
 	public static class FireUtility
 	{
-		// Token: 0x06004E09 RID: 19977 RVA: 0x001A424B File Offset: 0x001A244B
+		
 		public static bool CanEverAttachFire(this Thing t)
 		{
 			return !t.Destroyed && t.FlammableNow && t.def.category == ThingCategory.Pawn && t.TryGetComp<CompAttachBase>() != null;
 		}
 
-		// Token: 0x06004E0A RID: 19978 RVA: 0x001A427C File Offset: 0x001A247C
+		
 		public static float ChanceToStartFireIn(IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -50,7 +50,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06004E0B RID: 19979 RVA: 0x001A43AA File Offset: 0x001A25AA
+		
 		public static bool TryStartFireIn(IntVec3 c, Map map, float fireSize)
 		{
 			if (FireUtility.ChanceToStartFireIn(c, map) <= 0f)
@@ -63,7 +63,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004E0C RID: 19980 RVA: 0x001A43E4 File Offset: 0x001A25E4
+		
 		public static void TryAttachFire(this Thing t, float fireSize)
 		{
 			if (!t.CanEverAttachFire())
@@ -86,7 +86,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004E0D RID: 19981 RVA: 0x001A4466 File Offset: 0x001A2666
+		
 		public static bool IsBurning(this TargetInfo t)
 		{
 			if (t.HasThing)
@@ -96,7 +96,7 @@ namespace RimWorld
 			return t.Cell.ContainsStaticFire(t.Map);
 		}
 
-		// Token: 0x06004E0E RID: 19982 RVA: 0x001A4494 File Offset: 0x001A2694
+		
 		public static bool IsBurning(this Thing t)
 		{
 			if (t.Destroyed || !t.Spawned)
@@ -124,7 +124,7 @@ namespace RimWorld
 			return t.Position.ContainsStaticFire(t.Map);
 		}
 
-		// Token: 0x06004E0F RID: 19983 RVA: 0x001A4548 File Offset: 0x001A2748
+		
 		public static bool ContainsStaticFire(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -139,20 +139,20 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004E10 RID: 19984 RVA: 0x001A4590 File Offset: 0x001A2790
+		
 		public static bool ContainsTrap(this IntVec3 c, Map map)
 		{
 			Building edifice = c.GetEdifice(map);
 			return edifice != null && edifice is Building_Trap;
 		}
 
-		// Token: 0x06004E11 RID: 19985 RVA: 0x001A45B3 File Offset: 0x001A27B3
+		
 		public static bool Flammable(this TerrainDef terrain)
 		{
 			return terrain.GetStatValueAbstract(StatDefOf.Flammability, null) > 0.01f;
 		}
 
-		// Token: 0x06004E12 RID: 19986 RVA: 0x001A45C8 File Offset: 0x001A27C8
+		
 		public static bool TerrainFlammableNow(this IntVec3 c, Map map)
 		{
 			if (!c.GetTerrain(map).Flammable())

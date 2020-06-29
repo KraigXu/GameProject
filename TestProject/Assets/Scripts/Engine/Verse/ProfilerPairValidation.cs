@@ -6,16 +6,16 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x02000428 RID: 1064
+	
 	public static class ProfilerPairValidation
 	{
-		// Token: 0x06001FD1 RID: 8145 RVA: 0x000C2A96 File Offset: 0x000C0C96
+		
 		public static void BeginSample(string token)
 		{
 			ProfilerPairValidation.profilerSignatures.Push(new StackTrace(1, true));
 		}
 
-		// Token: 0x06001FD2 RID: 8146 RVA: 0x000C2AAC File Offset: 0x000C0CAC
+		
 		public static void EndSample()
 		{
 			StackTrace stackTrace = ProfilerPairValidation.profilerSignatures.Pop();
@@ -35,7 +35,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040013A3 RID: 5027
+		
 		public static Stack<StackTrace> profilerSignatures = new Stack<StackTrace>();
 	}
 }

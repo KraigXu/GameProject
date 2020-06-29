@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000AE5 RID: 2789
+	
 	public class PsycastUtility
 	{
-		// Token: 0x060041E8 RID: 16872 RVA: 0x0016046C File Offset: 0x0015E66C
+		
 		public static float TotalEntropyFromQueuedPsycasts(Pawn pawn)
 		{
 			Job curJob = pawn.jobs.curJob;

@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000ACB RID: 2763
+	
 	public class CompAbilityEffect_ForceJob : CompAbilityEffect_WithDest
 	{
-		// Token: 0x17000BA3 RID: 2979
+		
 		// (get) Token: 0x0600418A RID: 16778 RVA: 0x0015E9E3 File Offset: 0x0015CBE3
 		public new CompProperties_AbilityForceJob Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600418B RID: 16779 RVA: 0x0015E9F0 File Offset: 0x0015CBF0
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);

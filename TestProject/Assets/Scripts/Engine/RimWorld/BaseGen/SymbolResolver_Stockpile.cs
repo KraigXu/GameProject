@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D6 RID: 4310
+	
 	public class SymbolResolver_Stockpile : SymbolResolver
 	{
-		// Token: 0x06006589 RID: 25993 RVA: 0x00238730 File Offset: 0x00236930
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -59,7 +59,7 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("thingSet", rp2, null);
 		}
 
-		// Token: 0x0600658A RID: 25994 RVA: 0x002389A0 File Offset: 0x00236BA0
+		
 		private void CalculateFreeCells(CellRect rect, float freeCellsFraction)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -79,10 +79,10 @@ namespace RimWorld.BaseGen
 			this.cells.Shuffle<IntVec3>();
 		}
 
-		// Token: 0x04003DCD RID: 15821
+		
 		private List<IntVec3> cells = new List<IntVec3>();
 
-		// Token: 0x04003DCE RID: 15822
+		
 		private const float FreeCellsFraction = 0.45f;
 	}
 }

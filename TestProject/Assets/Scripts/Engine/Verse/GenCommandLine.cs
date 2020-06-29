@@ -5,10 +5,10 @@ using System.Threading;
 
 namespace Verse
 {
-	// Token: 0x0200043F RID: 1087
+	
 	public static class GenCommandLine
 	{
-		// Token: 0x0600207F RID: 8319 RVA: 0x000C6824 File Offset: 0x000C4A24
+		
 		public static bool CommandLineArgPassed(string key)
 		{
 			string[] commandLineArgs = Environment.GetCommandLineArgs();
@@ -22,7 +22,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002080 RID: 8320 RVA: 0x000C686C File Offset: 0x000C4A6C
+		
 		public static bool TryGetCommandLineArg(string key, out string value)
 		{
 			string[] commandLineArgs = Environment.GetCommandLineArgs();
@@ -45,7 +45,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002081 RID: 8321 RVA: 0x000C68E0 File Offset: 0x000C4AE0
+		
 		public static void Restart()
 		{
 			try

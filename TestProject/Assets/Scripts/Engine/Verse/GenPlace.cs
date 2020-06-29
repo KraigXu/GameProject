@@ -5,17 +5,17 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x0200044F RID: 1103
+	
 	public static class GenPlace
 	{
-		// Token: 0x060020FE RID: 8446 RVA: 0x000C9E34 File Offset: 0x000C8034
+		
 		public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
 		{
 			Thing thing2;
 			return GenPlace.TryPlaceThing(thing, center, map, mode, out thing2, placedAction, nearPlaceValidator, rot);
 		}
 
-		// Token: 0x060020FF RID: 8447 RVA: 0x000C9E54 File Offset: 0x000C8054
+		
 		public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, out Thing lastResultingThing, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
 		{
 			if (map == null)
@@ -70,7 +70,7 @@ namespace Verse
 			throw new InvalidOperationException();
 		}
 
-		// Token: 0x06002100 RID: 8448 RVA: 0x000C9F38 File Offset: 0x000C8138
+		
 		private static bool TryFindPlaceSpotNear(IntVec3 center, Rot4 rot, Map map, Thing thing, bool allowStacking, out IntVec3 bestSpot, Predicate<IntVec3> extraValidator = null)
 		{
 			GenPlace.PlaceSpotQuality placeSpotQuality = GenPlace.PlaceSpotQuality.Unusable;
@@ -133,7 +133,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06002101 RID: 8449 RVA: 0x000CA03C File Offset: 0x000C823C
+		
 		private static GenPlace.PlaceSpotQuality PlaceSpotQualityAt(IntVec3 c, Rot4 rot, Map map, Thing thing, IntVec3 center, bool allowStacking, Predicate<IntVec3> extraValidator = null)
 		{
 			if (!c.InBounds(map) || !c.Walkable(map))
@@ -225,7 +225,7 @@ namespace Verse
 			return GenPlace.PlaceSpotQuality.Bad;
 		}
 
-		// Token: 0x06002102 RID: 8450 RVA: 0x000CA2B0 File Offset: 0x000C84B0
+		
 		private static bool TryPlaceDirect(Thing thing, IntVec3 loc, Rot4 rot, Map map, out Thing resultingThing, Action<Thing, int> placedAction = null)
 		{
 			Thing thing2 = thing;
@@ -279,7 +279,7 @@ namespace Verse
 			return !flag;
 		}
 
-		// Token: 0x06002103 RID: 8451 RVA: 0x000CA3AC File Offset: 0x000C85AC
+		
 		public static Thing HaulPlaceBlockerIn(Thing haulThing, IntVec3 c, Map map, bool checkBlueprintsAndFrames)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -309,24 +309,24 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x0400141D RID: 5149
+		
 		private static readonly int PlaceNearMaxRadialCells = GenRadial.NumCellsInRadius(12.9f);
 
-		// Token: 0x0400141E RID: 5150
+		
 		private static readonly int PlaceNearMiddleRadialCells = GenRadial.NumCellsInRadius(3f);
 
-		// Token: 0x020016A1 RID: 5793
+		
 		private enum PlaceSpotQuality : byte
 		{
-			// Token: 0x040056D5 RID: 22229
+			
 			Unusable,
-			// Token: 0x040056D6 RID: 22230
+			
 			Awful,
-			// Token: 0x040056D7 RID: 22231
+			
 			Bad,
-			// Token: 0x040056D8 RID: 22232
+			
 			Okay,
-			// Token: 0x040056D9 RID: 22233
+			
 			Perfect
 		}
 	}

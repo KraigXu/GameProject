@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001147 RID: 4423
+	
 	public class QuestNode_GetThingPlayerCanProduce : QuestNode
 	{
-		// Token: 0x0600673D RID: 26429 RVA: 0x00242158 File Offset: 0x00240358
+		
 		public static void ResetStaticData()
 		{
 			QuestNode_GetThingPlayerCanProduce.allWorkTables.Clear();
@@ -23,19 +23,19 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x0600673E RID: 26430 RVA: 0x002421A5 File Offset: 0x002403A5
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.DoWork(slate);
 		}
 
-		// Token: 0x0600673F RID: 26431 RVA: 0x002421AE File Offset: 0x002403AE
+		
 		protected override void RunInt()
 		{
 			this.DoWork(QuestGen.slate);
 		}
 
-		// Token: 0x06006740 RID: 26432 RVA: 0x002421BC File Offset: 0x002403BC
+		
 		private bool DoWork(Slate slate)
 		{
 			Map map = slate.Get<Map>("map", null, false);
@@ -124,44 +124,44 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x04003F5A RID: 16218
+		
 		[NoTranslate]
 		public SlateRef<string> storeProductionItemDefAs;
 
-		// Token: 0x04003F5B RID: 16219
+		
 		[NoTranslate]
 		public SlateRef<string> storeProductionItemStuffAs;
 
-		// Token: 0x04003F5C RID: 16220
+		
 		[NoTranslate]
 		public SlateRef<string> storeProductionItemCountAs;
 
-		// Token: 0x04003F5D RID: 16221
+		
 		[NoTranslate]
 		public SlateRef<string> storeProductionItemLabelAs;
 
-		// Token: 0x04003F5E RID: 16222
+		
 		public SlateRef<SimpleCurve> pointsToRequiredWorkCurve;
 
-		// Token: 0x04003F5F RID: 16223
+		
 		public SlateRef<SimpleCurve> pointsToMaxItemMarketValueCurve;
 
-		// Token: 0x04003F60 RID: 16224
+		
 		public SlateRef<float?> maxMarketValueFactor;
 
-		// Token: 0x04003F61 RID: 16225
+		
 		public SlateRef<float> minStuffCommonality;
 
-		// Token: 0x04003F62 RID: 16226
+		
 		public SlateRef<FloatRange?> workAmountRandomFactorRange;
 
-		// Token: 0x04003F63 RID: 16227
+		
 		public SlateRef<FloatRange?> productionItemCountRandomFactorRange;
 
-		// Token: 0x04003F64 RID: 16228
+		
 		private static List<ThingDef> allWorkTables = new List<ThingDef>();
 
-		// Token: 0x04003F65 RID: 16229
+		
 		private static List<Pair<ThingStuffPair, int>> tmpCandidates = new List<Pair<ThingStuffPair, int>>();
 	}
 }

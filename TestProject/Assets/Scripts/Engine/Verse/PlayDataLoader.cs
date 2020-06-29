@@ -9,10 +9,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x0200006C RID: 108
+	
 	public static class PlayDataLoader
 	{
-		// Token: 0x170000B5 RID: 181
+		
 		// (get) Token: 0x06000446 RID: 1094 RVA: 0x000161C8 File Offset: 0x000143C8
 		public static bool Loaded
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000447 RID: 1095 RVA: 0x000161D0 File Offset: 0x000143D0
+		
 		public static void LoadAllPlayData(bool recovering = false)
 		{
 			if (PlayDataLoader.loadedInt)
@@ -80,7 +80,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000448 RID: 1096 RVA: 0x00016318 File Offset: 0x00014518
+		
 		private static void DoPlayLoad()
 		{
 			DeepProfiler.Start("GraphicDatabase.Clear()");
@@ -116,7 +116,7 @@ namespace Verse
 			{
 				foreach (Type genericParam in typeof(Def).AllSubclasses())
 				{
-					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "AddAllInMods");
+					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam, "AddAllInMods");
 				}
 			}
 			finally
@@ -266,7 +266,7 @@ namespace Verse
 					{
 						if (!(type == typeof(ThingDef)) && !(type == typeof(ThingCategoryDef)) && !(type == typeof(RecipeDef)))
 						{
-							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), type, "ResolveAllReferences", new object[]
+							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), type, "ResolveAllReferences", new object[]
 							{
 								true,
 								false
@@ -319,7 +319,7 @@ namespace Verse
 				{
 					foreach (Type genericParam2 in typeof(Def).AllSubclasses())
 					{
-						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam2, "ErrorCheckAllDefs");
+						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam2, "ErrorCheckAllDefs");
 					}
 				}
 				finally
@@ -399,14 +399,14 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000449 RID: 1097 RVA: 0x00016A18 File Offset: 0x00014C18
+		
 		public static void ClearAllPlayData()
 		{
 			LanguageDatabase.Clear();
 			LoadedModManager.ClearDestroy();
 			foreach (Type genericParam in typeof(Def).AllSubclasses())
 			{
-				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "Clear");
+				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam, "Clear");
 			}
 			ThingCategoryNodeDatabase.Clear();
 			BackstoryDatabase.Clear();
@@ -415,7 +415,7 @@ namespace Verse
 			PlayDataLoader.loadedInt = false;
 		}
 
-		// Token: 0x04000168 RID: 360
+		
 		private static bool loadedInt;
 	}
 }

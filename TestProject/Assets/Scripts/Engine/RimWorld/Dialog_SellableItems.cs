@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EFE RID: 3838
+	
 	public class Dialog_SellableItems : Window
 	{
-		// Token: 0x170010E0 RID: 4320
+		
 		// (get) Token: 0x06005E18 RID: 24088 RVA: 0x00208920 File Offset: 0x00206B20
 		public override Vector2 InitialSize
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170010E1 RID: 4321
+		
 		// (get) Token: 0x06005E19 RID: 24089 RVA: 0x0005AC15 File Offset: 0x00058E15
 		protected override float Margin
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E1A RID: 24090 RVA: 0x0020893C File Offset: 0x00206B3C
+		
 		public Dialog_SellableItems(ITrader trader)
 		{
 			this.forcePause = true;
@@ -38,7 +38,7 @@ namespace RimWorld
 			this.CalculateTabs();
 		}
 
-		// Token: 0x06005E1B RID: 24091 RVA: 0x002089AC File Offset: 0x00206BAC
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			float num = 40f;
@@ -105,7 +105,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005E1C RID: 24092 RVA: 0x00208C54 File Offset: 0x00206E54
+		
 		private void DoBottomButtons(Rect rect)
 		{
 			if (Widgets.ButtonText(new Rect(rect.width / 2f - this.BottomButtonSize.x / 2f, rect.height - 55f, this.BottomButtonSize.x, this.BottomButtonSize.y), "CloseButton".Translate(), true, true, true))
@@ -114,7 +114,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E1D RID: 24093 RVA: 0x00208CC8 File Offset: 0x00206EC8
+		
 		private void CalculateSellableItems(TraderKindDef trader)
 		{
 			this.sellableItems.Clear();
@@ -131,7 +131,7 @@ namespace RimWorld
 			this.sellableItems.SortBy((ThingDef x) => x.label);
 		}
 
-		// Token: 0x06005E1E RID: 24094 RVA: 0x00208D9C File Offset: 0x00206F9C
+		
 		private void CalculateTabs()
 		{
 			this.tabs.Clear();
@@ -159,7 +159,7 @@ namespace RimWorld
 			}, () => this.pawnsTabOpen));
 		}
 
-		// Token: 0x06005E1F RID: 24095 RVA: 0x00208E90 File Offset: 0x00207090
+		
 		private List<ThingDef> GetSellableItemsInCategory(ThingCategoryDef category, bool pawns)
 		{
 			if (pawns)
@@ -194,7 +194,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06005E20 RID: 24096 RVA: 0x00208F60 File Offset: 0x00207160
+		
 		private bool AnyTraderWillEverTrade(ThingCategoryDef thingCategory)
 		{
 			List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
@@ -215,43 +215,43 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04003317 RID: 13079
+		
 		private ThingCategoryDef currentCategory;
 
-		// Token: 0x04003318 RID: 13080
+		
 		private bool pawnsTabOpen;
 
-		// Token: 0x04003319 RID: 13081
+		
 		private List<ThingDef> sellableItems = new List<ThingDef>();
 
-		// Token: 0x0400331A RID: 13082
+		
 		private List<TabRecord> tabs = new List<TabRecord>();
 
-		// Token: 0x0400331B RID: 13083
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x0400331C RID: 13084
+		
 		private ITrader trader;
 
-		// Token: 0x0400331D RID: 13085
+		
 		private List<ThingDef> cachedSellablePawns;
 
-		// Token: 0x0400331E RID: 13086
+		
 		private Dictionary<ThingCategoryDef, List<ThingDef>> cachedSellableItemsByCategory = new Dictionary<ThingCategoryDef, List<ThingDef>>();
 
-		// Token: 0x0400331F RID: 13087
+		
 		private const float RowHeight = 24f;
 
-		// Token: 0x04003320 RID: 13088
+		
 		private const float TitleRectHeight = 40f;
 
-		// Token: 0x04003321 RID: 13089
+		
 		private const float RestockTextHeight = 20f;
 
-		// Token: 0x04003322 RID: 13090
+		
 		private const float BottomAreaHeight = 55f;
 
-		// Token: 0x04003323 RID: 13091
+		
 		private readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
 	}
 }

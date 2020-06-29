@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x020003A0 RID: 928
+	
 	public sealed class LetterStack : IExposable
 	{
-		// Token: 0x17000544 RID: 1348
+		
 		// (get) Token: 0x06001B44 RID: 6980 RVA: 0x000A6FE5 File Offset: 0x000A51E5
 		public List<Letter> LettersListForReading
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000545 RID: 1349
+		
 		// (get) Token: 0x06001B45 RID: 6981 RVA: 0x000A6FED File Offset: 0x000A51ED
 		public float LastTopY
 		{
@@ -29,21 +29,21 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B46 RID: 6982 RVA: 0x000A6FF8 File Offset: 0x000A51F8
+		
 		public void ReceiveLetter(TaggedString label, TaggedString text, LetterDef textLetterDef, LookTargets lookTargets, Faction relatedFaction = null, Quest quest = null, List<ThingDef> hyperlinkThingDefs = null, string debugInfo = null)
 		{
 			ChoiceLetter let = LetterMaker.MakeLetter(label, text, textLetterDef, lookTargets, relatedFaction, quest, hyperlinkThingDefs);
 			this.ReceiveLetter(let, debugInfo);
 		}
 
-		// Token: 0x06001B47 RID: 6983 RVA: 0x000A7020 File Offset: 0x000A5220
+		
 		public void ReceiveLetter(string label, string text, LetterDef textLetterDef, string debugInfo = null)
 		{
 			ChoiceLetter let = LetterMaker.MakeLetter(label, text, textLetterDef, null, null);
 			this.ReceiveLetter(let, debugInfo);
 		}
 
-		// Token: 0x06001B48 RID: 6984 RVA: 0x000A704C File Offset: 0x000A524C
+		
 		public void ReceiveLetter(Letter let, string debugInfo = null)
 		{
 			if (!let.CanShowInLetterStack)
@@ -67,14 +67,14 @@ namespace Verse
 			let.Received();
 		}
 
-		// Token: 0x06001B49 RID: 6985 RVA: 0x000A70ED File Offset: 0x000A52ED
+		
 		public void RemoveLetter(Letter let)
 		{
 			this.letters.Remove(let);
 			let.Removed();
 		}
 
-		// Token: 0x06001B4A RID: 6986 RVA: 0x000A7104 File Offset: 0x000A5304
+		
 		public void LettersOnGUI(float baseY)
 		{
 			float num = baseY;
@@ -97,7 +97,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B4B RID: 6987 RVA: 0x000A71A0 File Offset: 0x000A53A0
+		
 		public void LetterStackTick()
 		{
 			int num = Find.TickManager.TicksGame + 1;
@@ -112,7 +112,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B4C RID: 6988 RVA: 0x000A7200 File Offset: 0x000A5400
+		
 		public void LetterStackUpdate()
 		{
 			if (this.mouseoverLetterIndex >= 0 && this.mouseoverLetterIndex < this.letters.Count)
@@ -129,13 +129,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B4D RID: 6989 RVA: 0x000A728B File Offset: 0x000A548B
+		
 		public void Notify_LetterMouseover(Letter let)
 		{
 			this.mouseoverLetterIndex = this.letters.IndexOf(let);
 		}
 
-		// Token: 0x06001B4E RID: 6990 RVA: 0x000A72A0 File Offset: 0x000A54A0
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Letter>(ref this.letters, "letters", LookMode.Reference, Array.Empty<object>());
@@ -145,19 +145,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0400102B RID: 4139
+		
 		private List<Letter> letters = new List<Letter>();
 
-		// Token: 0x0400102C RID: 4140
+		
 		private int mouseoverLetterIndex = -1;
 
-		// Token: 0x0400102D RID: 4141
+		
 		private float lastTopYInt;
 
-		// Token: 0x0400102E RID: 4142
+		
 		private const float LettersBottomY = 350f;
 
-		// Token: 0x0400102F RID: 4143
+		
 		public const float LetterSpacing = 12f;
 	}
 }

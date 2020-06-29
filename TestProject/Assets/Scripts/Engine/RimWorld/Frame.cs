@@ -9,11 +9,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C50 RID: 3152
+	
 	[StaticConstructorOnStartup]
 	public class Frame : Building, IThingHolder, IConstructible
 	{
-		// Token: 0x17000D37 RID: 3383
+		
 		// (get) Token: 0x06004B37 RID: 19255 RVA: 0x00195BA0 File Offset: 0x00193DA0
 		public float WorkToBuild
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D38 RID: 3384
+		
 		// (get) Token: 0x06004B38 RID: 19256 RVA: 0x00195BBD File Offset: 0x00193DBD
 		public float WorkLeft
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D39 RID: 3385
+		
 		// (get) Token: 0x06004B39 RID: 19257 RVA: 0x00195BCC File Offset: 0x00193DCC
 		public float PercentComplete
 		{
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3A RID: 3386
+		
 		// (get) Token: 0x06004B3A RID: 19258 RVA: 0x00195BDB File Offset: 0x00193DDB
 		public override string Label
 		{
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3B RID: 3387
+		
 		// (get) Token: 0x06004B3B RID: 19259 RVA: 0x00195BF8 File Offset: 0x00193DF8
 		public string LabelEntityToBuild
 		{
@@ -68,7 +68,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3C RID: 3388
+		
 		// (get) Token: 0x06004B3C RID: 19260 RVA: 0x00195C48 File Offset: 0x00193E48
 		public override Color DrawColor
 		{
@@ -94,7 +94,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3D RID: 3389
+		
 		// (get) Token: 0x06004B3D RID: 19261 RVA: 0x00195CDC File Offset: 0x00193EDC
 		public EffecterDef ConstructionEffect
 		{
@@ -112,7 +112,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3E RID: 3390
+		
 		// (get) Token: 0x06004B3E RID: 19262 RVA: 0x00195D3C File Offset: 0x00193F3C
 		private Material CornerMat
 		{
@@ -126,7 +126,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D3F RID: 3391
+		
 		// (get) Token: 0x06004B3F RID: 19263 RVA: 0x00195D6D File Offset: 0x00193F6D
 		private Material TileMat
 		{
@@ -140,25 +140,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004B40 RID: 19264 RVA: 0x00195D9E File Offset: 0x00193F9E
+		
 		public Frame()
 		{
 			this.resourceContainer = new ThingOwner<Thing>(this, false, LookMode.Deep);
 		}
 
-		// Token: 0x06004B41 RID: 19265 RVA: 0x00195DBF File Offset: 0x00193FBF
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return this.resourceContainer;
 		}
 
-		// Token: 0x06004B42 RID: 19266 RVA: 0x00195DC7 File Offset: 0x00193FC7
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
 		}
 
-		// Token: 0x06004B43 RID: 19267 RVA: 0x00195DD5 File Offset: 0x00193FD5
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -169,7 +169,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004B44 RID: 19268 RVA: 0x00195E10 File Offset: 0x00194010
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			bool spawned = base.Spawned;
@@ -181,13 +181,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004B45 RID: 19269 RVA: 0x00195E46 File Offset: 0x00194046
+		
 		public ThingDef EntityToBuildStuff()
 		{
 			return base.Stuff;
 		}
 
-		// Token: 0x06004B46 RID: 19270 RVA: 0x00195E50 File Offset: 0x00194050
+		
 		public List<ThingDefCountClass> MaterialsNeeded()
 		{
 			this.cachedMaterialsNeeded.Clear();
@@ -205,7 +205,7 @@ namespace RimWorld
 			return this.cachedMaterialsNeeded;
 		}
 
-		// Token: 0x06004B47 RID: 19271 RVA: 0x00195ED8 File Offset: 0x001940D8
+		
 		public void CompleteConstruction(Pawn worker)
 		{
 			this.resourceContainer.ClearAndDestroyContents(DestroyMode.Vanish);
@@ -256,7 +256,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004B48 RID: 19272 RVA: 0x0019607C File Offset: 0x0019427C
+		
 		public void FailConstruction(Pawn worker)
 		{
 			Map map = base.Map;
@@ -281,7 +281,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004B49 RID: 19273 RVA: 0x00196190 File Offset: 0x00194390
+		
 		public override void Draw()
 		{
 			Vector2 vector = new Vector2((float)this.def.size.x, (float)this.def.size.z);
@@ -338,13 +338,10 @@ namespace RimWorld
 			base.Comps_PostDraw();
 		}
 
-		// Token: 0x06004B4A RID: 19274 RVA: 0x001964DD File Offset: 0x001946DD
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			Gizmo selectMonumentMarkerGizmo = QuestUtility.GetSelectMonumentMarkerGizmo(this);
 			if (selectMonumentMarkerGizmo != null)
@@ -368,7 +365,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004B4B RID: 19275 RVA: 0x001964F0 File Offset: 0x001946F0
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -381,10 +378,10 @@ namespace RimWorld
 				int num = need.count;
 				IEnumerable<ThingDefCountClass> source = this.MaterialsNeeded();
 				Func<ThingDefCountClass, bool> predicate;
-				Func<ThingDefCountClass, bool> <>9__0;
-				if ((predicate = <>9__0) == null)
+				
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__0 = ((ThingDefCountClass needed) => needed.thingDef == need.thingDef));
+					predicate = (9__0 = ((ThingDefCountClass needed) => needed.thingDef == need.thingDef));
 				}
 				foreach (ThingDefCountClass thingDefCountClass in source.Where(predicate))
 				{
@@ -402,7 +399,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06004B4C RID: 19276 RVA: 0x00196680 File Offset: 0x00194880
+		
 		public override ushort PathFindCostFor(Pawn p)
 		{
 			if (base.Faction == null)
@@ -420,41 +417,41 @@ namespace RimWorld
 			return 0;
 		}
 
-		// Token: 0x04002A82 RID: 10882
+		
 		public ThingOwner resourceContainer;
 
-		// Token: 0x04002A83 RID: 10883
+		
 		public float workDone;
 
-		// Token: 0x04002A84 RID: 10884
+		
 		private Material cachedCornerMat;
 
-		// Token: 0x04002A85 RID: 10885
+		
 		private Material cachedTileMat;
 
-		// Token: 0x04002A86 RID: 10886
+		
 		protected const float UnderfieldOverdrawFactor = 1.15f;
 
-		// Token: 0x04002A87 RID: 10887
+		
 		protected const float CenterOverdrawFactor = 0.5f;
 
-		// Token: 0x04002A88 RID: 10888
+		
 		private const int LongConstructionProjectThreshold = 9500;
 
-		// Token: 0x04002A89 RID: 10889
+		
 		private static readonly Material UnderfieldMat = MaterialPool.MatFrom("Things/Building/BuildingFrame/Underfield", ShaderDatabase.Transparent);
 
-		// Token: 0x04002A8A RID: 10890
+		
 		private static readonly Texture2D CornerTex = ContentFinder<Texture2D>.Get("Things/Building/BuildingFrame/Corner", true);
 
-		// Token: 0x04002A8B RID: 10891
+		
 		private static readonly Texture2D TileTex = ContentFinder<Texture2D>.Get("Things/Building/BuildingFrame/Tile", true);
 
-		// Token: 0x04002A8C RID: 10892
+		
 		[TweakValue("Pathfinding", 0f, 1000f)]
 		public static ushort AvoidUnderConstructionPathFindCost = 800;
 
-		// Token: 0x04002A8D RID: 10893
+		
 		private List<ThingDefCountClass> cachedMaterialsNeeded = new List<ThingDefCountClass>();
 	}
 }

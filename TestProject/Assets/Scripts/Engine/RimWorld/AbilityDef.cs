@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020008AC RID: 2220
+	
 	public class AbilityDef : Def
 	{
-		// Token: 0x17000989 RID: 2441
+		
 		// (get) Token: 0x060035A4 RID: 13732 RVA: 0x00123E3E File Offset: 0x0012203E
 		public float EntropyGain
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098A RID: 2442
+		
 		// (get) Token: 0x060035A5 RID: 13733 RVA: 0x00123E55 File Offset: 0x00122055
 		public float PsyfocusCost
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098B RID: 2443
+		
 		// (get) Token: 0x060035A6 RID: 13734 RVA: 0x00123E6C File Offset: 0x0012206C
 		public float EffectRadius
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098C RID: 2444
+		
 		// (get) Token: 0x060035A7 RID: 13735 RVA: 0x00123E83 File Offset: 0x00122083
 		public float EffectDuration
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098D RID: 2445
+		
 		// (get) Token: 0x060035A8 RID: 13736 RVA: 0x00123E9A File Offset: 0x0012209A
 		public bool HasAreaOfEffect
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098E RID: 2446
+		
 		// (get) Token: 0x060035A9 RID: 13737 RVA: 0x00123EA9 File Offset: 0x001220A9
 		public float DetectionChance
 		{
@@ -73,7 +73,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700098F RID: 2447
+		
 		// (get) Token: 0x060035AA RID: 13738 RVA: 0x00123ECC File Offset: 0x001220CC
 		public int RequiredPsyfocusBand
 		{
@@ -96,7 +96,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000990 RID: 2448
+		
 		// (get) Token: 0x060035AB RID: 13739 RVA: 0x00123F2D File Offset: 0x0012212D
 		public IEnumerable<string> StatSummary
 		{
@@ -126,7 +126,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060035AC RID: 13740 RVA: 0x00123F3D File Offset: 0x0012213D
+		
 		public override void PostLoad()
 		{
 			if (!string.IsNullOrEmpty(this.iconPath))
@@ -138,7 +138,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060035AD RID: 13741 RVA: 0x00123F60 File Offset: 0x00122160
+		
 		public string GetTooltip(Pawn pawn = null)
 		{
 			if (this.cachedTooltip == null)
@@ -166,7 +166,7 @@ namespace RimWorld
 			return this.cachedTooltip;
 		}
 
-		// Token: 0x060035AE RID: 13742 RVA: 0x001240F1 File Offset: 0x001222F1
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
 			if (this.cachedTargets == null)
@@ -205,13 +205,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060035AF RID: 13743 RVA: 0x00124108 File Offset: 0x00122308
+		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
-			{
-				yield return text;
-			}
+
 			IEnumerator<string> enumerator = null;
 			if (this.abilityClass == null)
 			{
@@ -254,70 +251,70 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001D52 RID: 7506
+		
 		public Type abilityClass = typeof(Ability);
 
-		// Token: 0x04001D53 RID: 7507
+		
 		public Type gizmoClass = typeof(Command_Ability);
 
-		// Token: 0x04001D54 RID: 7508
+		
 		public List<AbilityCompProperties> comps = new List<AbilityCompProperties>();
 
-		// Token: 0x04001D55 RID: 7509
+		
 		public List<StatModifier> statBases;
 
-		// Token: 0x04001D56 RID: 7510
+		
 		public VerbProperties verbProperties;
 
-		// Token: 0x04001D57 RID: 7511
+		
 		public KeyBindingDef hotKey;
 
-		// Token: 0x04001D58 RID: 7512
+		
 		public JobDef jobDef;
 
-		// Token: 0x04001D59 RID: 7513
+		
 		public ThingDef warmupMote;
 
-		// Token: 0x04001D5A RID: 7514
+		
 		public Vector3 moteDrawOffset;
 
-		// Token: 0x04001D5B RID: 7515
+		
 		public bool canUseAoeToGetTargets = true;
 
-		// Token: 0x04001D5C RID: 7516
+		
 		public bool targetRequired = true;
 
-		// Token: 0x04001D5D RID: 7517
+		
 		public int level;
 
-		// Token: 0x04001D5E RID: 7518
+		
 		public IntRange cooldownTicksRange;
 
-		// Token: 0x04001D5F RID: 7519
+		
 		public bool sendLetterOnCooldownComplete;
 
-		// Token: 0x04001D60 RID: 7520
+		
 		public bool displayGizmoWhileUndrafted;
 
-		// Token: 0x04001D61 RID: 7521
+		
 		public bool disableGizmoWhileUndrafted = true;
 
-		// Token: 0x04001D62 RID: 7522
+		
 		public float detectionChanceOverride = -1f;
 
-		// Token: 0x04001D63 RID: 7523
+		
 		public string iconPath;
 
-		// Token: 0x04001D64 RID: 7524
+		
 		public Texture2D uiIcon = BaseContent.BadTex;
 
-		// Token: 0x04001D65 RID: 7525
+		
 		private string cachedTooltip;
 
-		// Token: 0x04001D66 RID: 7526
+		
 		private List<string> cachedTargets;
 
-		// Token: 0x04001D67 RID: 7527
+		
 		private int requiredPsyfocusBandCached = -1;
 	}
 }

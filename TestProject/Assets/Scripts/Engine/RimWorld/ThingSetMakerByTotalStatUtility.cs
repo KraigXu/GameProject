@@ -6,28 +6,28 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CD9 RID: 3289
+	
 	public static class ThingSetMakerByTotalStatUtility
 	{
-		// Token: 0x06004FB2 RID: 20402 RVA: 0x001ADC30 File Offset: 0x001ABE30
+		
 		public static List<ThingStuffPairWithQuality> GenerateDefsWithPossibleTotalValue(IntRange countRange, float totalValue, IEnumerable<ThingDef> allowed, TechLevel techLevel, QualityGenerator qualityGenerator, Func<ThingStuffPairWithQuality, float> getMinValue, Func<ThingStuffPairWithQuality, float> getMaxValue, Func<ThingDef, float> weightSelector = null, int tries = 100, float maxMass = 3.40282347E+38f)
 		{
 			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp(countRange, totalValue, allowed, techLevel, qualityGenerator, getMinValue, getMaxValue, weightSelector, tries, maxMass, true);
 		}
 
-		// Token: 0x06004FB3 RID: 20403 RVA: 0x001ADC54 File Offset: 0x001ABE54
+		
 		public static List<ThingStuffPairWithQuality> GenerateDefsWithPossibleTotalValue_NewTmp(IntRange countRange, float totalValue, IEnumerable<ThingDef> allowed, TechLevel techLevel, QualityGenerator qualityGenerator, Func<ThingStuffPairWithQuality, float> getMinValue, Func<ThingStuffPairWithQuality, float> getMaxValue, Func<ThingDef, float> weightSelector = null, int tries = 100, float maxMass = 3.40282347E+38f, bool allowNonStackableDuplicates = true)
 		{
 			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp2(countRange, totalValue, allowed, techLevel, qualityGenerator, getMinValue, getMaxValue, weightSelector, tries, maxMass, allowNonStackableDuplicates, 0f);
 		}
 
-		// Token: 0x06004FB4 RID: 20404 RVA: 0x001ADC80 File Offset: 0x001ABE80
+		
 		public static List<ThingStuffPairWithQuality> GenerateDefsWithPossibleTotalValue_NewTmp2(IntRange countRange, float totalValue, IEnumerable<ThingDef> allowed, TechLevel techLevel, QualityGenerator qualityGenerator, Func<ThingStuffPairWithQuality, float> getMinValue, Func<ThingStuffPairWithQuality, float> getMaxValue, Func<ThingDef, float> weightSelector = null, int tries = 100, float maxMass = 3.40282347E+38f, bool allowNonStackableDuplicates = true, float minSingleItemValue = 0f)
 		{
 			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp3(countRange, totalValue, allowed, techLevel, qualityGenerator, getMinValue, getMaxValue, getMinValue, weightSelector, tries, maxMass, allowNonStackableDuplicates, minSingleItemValue);
 		}
 
-		// Token: 0x06004FB5 RID: 20405 RVA: 0x001ADCA8 File Offset: 0x001ABEA8
+		
 		public static List<ThingStuffPairWithQuality> GenerateDefsWithPossibleTotalValue_NewTmp3(IntRange countRange, float totalValue, IEnumerable<ThingDef> allowed, TechLevel techLevel, QualityGenerator qualityGenerator, Func<ThingStuffPairWithQuality, float> getMinValue, Func<ThingStuffPairWithQuality, float> getMaxValue, Func<ThingStuffPairWithQuality, float> getSingleThingValue, Func<ThingDef, float> weightSelector = null, int tries = 100, float maxMass = 3.40282347E+38f, bool allowNonStackableDuplicates = true, float minSingleItemValue = 0f)
 		{
 			List<ThingStuffPairWithQuality> chosen = new List<ThingStuffPairWithQuality>();
@@ -182,14 +182,14 @@ namespace RimWorld
 			return chosen;
 		}
 
-		// Token: 0x06004FB6 RID: 20406 RVA: 0x001AE150 File Offset: 0x001AC350
+		
 		[Obsolete]
 		public static void IncreaseStackCountsToTotalValue(List<Thing> things, float totalValue, Func<Thing, float> getValue, float maxMass = 3.40282347E+38f)
 		{
 			ThingSetMakerByTotalStatUtility.IncreaseStackCountsToTotalValue_NewTemp(things, totalValue, getValue, maxMass, false);
 		}
 
-		// Token: 0x06004FB7 RID: 20407 RVA: 0x001AE15C File Offset: 0x001AC35C
+		
 		public static void IncreaseStackCountsToTotalValue_NewTemp(List<Thing> things, float totalValue, Func<Thing, float> getValue, float maxMass = 3.40282347E+38f, bool satisfyMinRewardCount = false)
 		{
 			float num = 0f;
@@ -228,7 +228,7 @@ namespace RimWorld
 			ThingSetMakerByTotalStatUtility.GiveRemainingValueToAnything(things, totalValue, ref num, ref num2, getValue, maxMass);
 		}
 
-		// Token: 0x06004FB8 RID: 20408 RVA: 0x001AE290 File Offset: 0x001AC490
+		
 		private static void DistributeEvenly(List<Thing> things, float totalValue, ref float currentTotalValue, ref float currentTotalMass, Func<Thing, float> getValue, float maxMass, bool useValueMassRatio = false)
 		{
 			float num = (totalValue - currentTotalValue) / (float)things.Count;
@@ -271,7 +271,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004FB9 RID: 20409 RVA: 0x001AE434 File Offset: 0x001AC634
+		
 		private static void SatisfyMinRewardCount(List<Thing> things, float totalValue, ref float currentTotalValue, ref float currentTotalMass, Func<Thing, float> getValue, float maxMass)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -303,7 +303,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004FBA RID: 20410 RVA: 0x001AE56C File Offset: 0x001AC76C
+		
 		private static void GiveRemainingValueToAnything(List<Thing> things, float totalValue, ref float currentTotalValue, ref float currentTotalMass, Func<Thing, float> getValue, float maxMass)
 		{
 			for (int i = 0; i < things.Count; i++)

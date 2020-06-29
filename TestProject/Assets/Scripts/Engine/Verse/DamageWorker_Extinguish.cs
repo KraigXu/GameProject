@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x0200022E RID: 558
+	
 	public class DamageWorker_Extinguish : DamageWorker
 	{
-		// Token: 0x06000F7A RID: 3962 RVA: 0x00059984 File Offset: 0x00057B84
+		
 		public override DamageWorker.DamageResult Apply(DamageInfo dinfo, Thing victim)
 		{
 			DamageWorker.DamageResult result = new DamageWorker.DamageResult();
@@ -24,7 +24,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x04000B7B RID: 2939
+		
 		private const float DamageAmountToFireSizeRatio = 0.01f;
 	}
 }

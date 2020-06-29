@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000845 RID: 2117
+	
 	public class ThoughtWorker_PsychicDrone : ThoughtWorker
 	{
-		// Token: 0x0600349A RID: 13466 RVA: 0x0012048C File Offset: 0x0011E68C
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			PsychicDroneLevel psychicDroneLevel = PsychicDroneLevel.None;

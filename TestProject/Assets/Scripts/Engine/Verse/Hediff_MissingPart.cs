@@ -3,10 +3,10 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x0200023A RID: 570
+	
 	public class Hediff_MissingPart : HediffWithComps
 	{
-		// Token: 0x1700031F RID: 799
+		
 		// (get) Token: 0x06000FE8 RID: 4072 RVA: 0x0005C044 File Offset: 0x0005A244
 		public override float SummaryHealthPercentImpact
 		{
@@ -24,7 +24,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000320 RID: 800
+		
 		// (get) Token: 0x06000FE9 RID: 4073 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool ShouldRemove
 		{
@@ -34,7 +34,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000321 RID: 801
+		
 		// (get) Token: 0x06000FEA RID: 4074 RVA: 0x0005C0BC File Offset: 0x0005A2BC
 		public override string LabelBase
 		{
@@ -57,7 +57,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000322 RID: 802
+		
 		// (get) Token: 0x06000FEB RID: 4075 RVA: 0x0005C194 File Offset: 0x0005A394
 		public override string LabelInBrackets
 		{
@@ -77,7 +77,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000323 RID: 803
+		
 		// (get) Token: 0x06000FEC RID: 4076 RVA: 0x0005C1EC File Offset: 0x0005A3EC
 		public override float BleedRate
 		{
@@ -91,7 +91,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000324 RID: 804
+		
 		// (get) Token: 0x06000FED RID: 4077 RVA: 0x0005C254 File Offset: 0x0005A454
 		public override float PainOffset
 		{
@@ -105,7 +105,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000325 RID: 805
+		
 		// (get) Token: 0x06000FEE RID: 4078 RVA: 0x0005C2B4 File Offset: 0x0005A4B4
 		private bool ParentIsMissing
 		{
@@ -123,7 +123,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000326 RID: 806
+		
 		// (get) Token: 0x06000FEF RID: 4079 RVA: 0x0005C320 File Offset: 0x0005A520
 		// (set) Token: 0x06000FF0 RID: 4080 RVA: 0x0005C335 File Offset: 0x0005A535
 		public bool IsFresh
@@ -138,7 +138,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000327 RID: 807
+		
 		// (get) Token: 0x06000FF1 RID: 4081 RVA: 0x0005C340 File Offset: 0x0005A540
 		public bool IsFreshNonSolidExtremity
 		{
@@ -148,7 +148,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000328 RID: 808
+		
 		// (get) Token: 0x06000FF2 RID: 4082 RVA: 0x0005C3A4 File Offset: 0x0005A5A4
 		private bool TicksAfterNoLongerFreshPassed
 		{
@@ -158,13 +158,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FF3 RID: 4083 RVA: 0x0005C3B6 File Offset: 0x0005A5B6
+		
 		public override bool TendableNow(bool ignoreTimer = false)
 		{
 			return this.IsFreshNonSolidExtremity;
 		}
 
-		// Token: 0x06000FF4 RID: 4084 RVA: 0x0005C3C0 File Offset: 0x0005A5C0
+		
 		public override void Tick()
 		{
 			bool ticksAfterNoLongerFreshPassed = this.TicksAfterNoLongerFreshPassed;
@@ -176,7 +176,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FF5 RID: 4085 RVA: 0x0005C3F4 File Offset: 0x0005A5F4
+		
 		public override void Tended(float quality, int batchPosition = 0)
 		{
 			base.Tended(quality, batchPosition);
@@ -184,7 +184,7 @@ namespace Verse
 			this.pawn.health.Notify_HediffChanged(this);
 		}
 
-		// Token: 0x06000FF6 RID: 4086 RVA: 0x0005C418 File Offset: 0x0005A618
+		
 		public override void PostAdd(DamageInfo? dinfo)
 		{
 			base.PostAdd(dinfo);
@@ -203,7 +203,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FF7 RID: 4087 RVA: 0x0005C4E0 File Offset: 0x0005A6E0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -217,10 +217,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000BCB RID: 3019
+		
 		public HediffDef lastInjury;
 
-		// Token: 0x04000BCC RID: 3020
+		
 		private bool isFreshInt;
 	}
 }

@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000D7B RID: 3451
+	
 	public class CompWakeUpDormant : ThingComp
 	{
-		// Token: 0x17000EF5 RID: 3829
+		
 		// (get) Token: 0x06005412 RID: 21522 RVA: 0x001C1284 File Offset: 0x001BF484
 		private CompProperties_WakeUpDormant Props
 		{
@@ -18,14 +18,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005413 RID: 21523 RVA: 0x001C1291 File Offset: 0x001BF491
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
 			this.wakeUpIfColonistClose = this.Props.wakeUpIfAnyColonistClose;
 		}
 
-		// Token: 0x06005414 RID: 21524 RVA: 0x001C12AB File Offset: 0x001BF4AB
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -35,7 +35,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005415 RID: 21525 RVA: 0x001C12CC File Offset: 0x001BF4CC
+		
 		public void TickRareWorker()
 		{
 			if (!this.parent.Spawned)
@@ -71,7 +71,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005416 RID: 21526 RVA: 0x001C1448 File Offset: 0x001BF648
+		
 		public void Activate(bool sendSignal = true, bool silent = false)
 		{
 			if (sendSignal && !this.sentSignal)
@@ -100,7 +100,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005417 RID: 21527 RVA: 0x001C155A File Offset: 0x001BF75A
+		
 		public override void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			if (this.Props.wakeUpOnDamage && totalDamageDealt > 0f && dinfo.Def.ExternalViolenceFor(this.parent))
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005418 RID: 21528 RVA: 0x001C158D File Offset: 0x001BF78D
+		
 		public override void Notify_SignalReceived(Signal signal)
 		{
 			if (string.IsNullOrEmpty(this.Props.wakeUpSignalTag))
@@ -119,7 +119,7 @@ namespace RimWorld
 			this.sentSignal = true;
 		}
 
-		// Token: 0x06005419 RID: 21529 RVA: 0x001C15A9 File Offset: 0x001BF7A9
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -127,10 +127,10 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.sentSignal, "sentSignal", false, false);
 		}
 
-		// Token: 0x04002E5D RID: 11869
+		
 		public bool wakeUpIfColonistClose;
 
-		// Token: 0x04002E5E RID: 11870
+		
 		private bool sentSignal;
 	}
 }

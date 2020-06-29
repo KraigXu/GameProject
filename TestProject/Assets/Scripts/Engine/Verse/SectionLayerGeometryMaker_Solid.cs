@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001A0 RID: 416
+	
 	public static class SectionLayerGeometryMaker_Solid
 	{
-		// Token: 0x06000BBF RID: 3007 RVA: 0x00042ABC File Offset: 0x00040CBC
+		
 		public static void MakeBaseGeometry(Section section, LayerSubMesh sm, AltitudeLayer altitudeLayer)
 		{
 			sm.Clear(MeshParts.Verts | MeshParts.Tris);

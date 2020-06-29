@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B41 RID: 2881
+	
 	public class InteractionWorker_Breakup : InteractionWorker
 	{
-		// Token: 0x060043C4 RID: 17348 RVA: 0x0016D298 File Offset: 0x0016B498
+		
 		public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
 		{
 			if (!LovePartnerRelationUtility.LovePartnerRelationExists(initiator, recipient))
@@ -26,7 +26,7 @@ namespace RimWorld
 			return 0.02f * num * num2;
 		}
 
-		// Token: 0x060043C5 RID: 17349 RVA: 0x0016D2FC File Offset: 0x0016B4FC
+		
 		public Thought RandomBreakupReason(Pawn initiator, Pawn recipient)
 		{
 			if (initiator.needs.mood == null)
@@ -48,7 +48,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060043C6 RID: 17350 RVA: 0x0016D3C8 File Offset: 0x0016B5C8
+		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			Thought thought = this.RandomBreakupReason(initiator, recipient);
@@ -133,10 +133,10 @@ namespace RimWorld
 			lookTargets = null;
 		}
 
-		// Token: 0x040026CB RID: 9931
+		
 		private const float BaseChance = 0.02f;
 
-		// Token: 0x040026CC RID: 9932
+		
 		private const float SpouseRelationChanceFactor = 0.4f;
 	}
 }

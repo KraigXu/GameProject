@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200028C RID: 652
+	
 	public class ImmunityRecord : IExposable
 	{
-		// Token: 0x06001178 RID: 4472 RVA: 0x00062AC4 File Offset: 0x00060CC4
+		
 		public void ExposeData()
 		{
 			Scribe_Defs.Look<HediffDef>(ref this.hediffDef, "hediffDef");
@@ -15,14 +15,14 @@ namespace Verse
 			Scribe_Values.Look<float>(ref this.immunity, "immunity", 0f, false);
 		}
 
-		// Token: 0x06001179 RID: 4473 RVA: 0x00062AFC File Offset: 0x00060CFC
+		
 		public void ImmunityTick(Pawn pawn, bool sick, Hediff diseaseInstance)
 		{
 			this.immunity += this.ImmunityChangePerTick(pawn, sick, diseaseInstance);
 			this.immunity = Mathf.Clamp01(this.immunity);
 		}
 
-		// Token: 0x0600117A RID: 4474 RVA: 0x00062B28 File Offset: 0x00060D28
+		
 		public float ImmunityChangePerTick(Pawn pawn, bool sick, Hediff diseaseInstance)
 		{
 			if (!pawn.RaceProps.IsFlesh)
@@ -46,13 +46,13 @@ namespace Verse
 			return hediffCompProperties_Immunizable.immunityPerDayNotSick / 60000f;
 		}
 
-		// Token: 0x04000C73 RID: 3187
+		
 		public HediffDef hediffDef;
 
-		// Token: 0x04000C74 RID: 3188
+		
 		public HediffDef source;
 
-		// Token: 0x04000C75 RID: 3189
+		
 		public float immunity;
 	}
 }

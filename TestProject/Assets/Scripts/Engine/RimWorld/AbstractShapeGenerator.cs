@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AA8 RID: 2728
+	
 	public static class AbstractShapeGenerator
 	{
-		// Token: 0x06004095 RID: 16533 RVA: 0x0015916C File Offset: 0x0015736C
+		
 		public static bool[,] Generate(int width, int height, bool horizontalSymmetry, bool verticalSymmetry, bool allTruesMustBeConnected = false, bool allowEnclosedFalses = true, bool preferOutlines = false, float wipedCircleRadiusPct = 0f)
 		{
 			bool[,] array = new bool[width, height];
@@ -37,7 +37,7 @@ namespace RimWorld
 			return array;
 		}
 
-		// Token: 0x06004096 RID: 16534 RVA: 0x00159208 File Offset: 0x00157408
+		
 		private static void GenerateInt(bool[,] grid, bool horizontalSymmetry, bool verticalSymmetry, bool allowEnclosedFalses, bool preferOutlines, float wipedCircleRadiusPct)
 		{
 			int length = grid.GetLength(0);
@@ -243,7 +243,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004097 RID: 16535 RVA: 0x00159C9C File Offset: 0x00157E9C
+		
 		private static bool IsValid(bool[,] grid, bool allTruesMustBeConnected, bool allowEnclosedFalses, bool preferOutlines, float wipedCircleRadiusPct)
 		{
 			int num = 0;
@@ -362,7 +362,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004098 RID: 16536 RVA: 0x00159FE0 File Offset: 0x001581E0
+		
 		private static void MarkVisited(int startX, int startY, bool[,] grid, bool[,] visited, bool traverseFalses)
 		{
 			if (visited[startX, startY])
@@ -400,25 +400,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002572 RID: 9586
+		
 		private const int MaxIterations = 500;
 
-		// Token: 0x04002573 RID: 9587
+		
 		private const float MinTruesPct = 0.6f;
 
-		// Token: 0x04002574 RID: 9588
+		
 		private const float MaxTruesPct = 0.85f;
 
-		// Token: 0x04002575 RID: 9589
+		
 		private const float MinTruesPct_PreferOutlines = 0.24f;
 
-		// Token: 0x04002576 RID: 9590
+		
 		private const float MaxTruesPct_PreferOutlines = 0.53f;
 
-		// Token: 0x04002577 RID: 9591
+		
 		private static HashSet<IntVec3> tmpCircleCells = new HashSet<IntVec3>();
 
-		// Token: 0x04002578 RID: 9592
+		
 		private static Stack<Pair<int, int>> tmpStack = new Stack<Pair<int, int>>();
 	}
 }

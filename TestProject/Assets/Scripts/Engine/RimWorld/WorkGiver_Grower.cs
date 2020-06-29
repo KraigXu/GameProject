@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000743 RID: 1859
+	
 	public abstract class WorkGiver_Grower : WorkGiver_Scanner
 	{
-		// Token: 0x170008D3 RID: 2259
+		
 		// (get) Token: 0x060030C7 RID: 12487 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool AllowUnreachable
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060030C8 RID: 12488 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool ExtraRequirements(IPlantToGrowSettable settable, Pawn pawn)
 		{
 			return true;
 		}
 
-		// Token: 0x060030C9 RID: 12489 RVA: 0x00111967 File Offset: 0x0010FB67
+		
 		public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
 		{
 			Danger maxDanger = pawn.NormalMaxDanger();
@@ -72,7 +72,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060030CA RID: 12490 RVA: 0x00111980 File Offset: 0x0010FB80
+		
 		public static ThingDef CalculateWantedPlantDef(IntVec3 c, Map map)
 		{
 			IPlantToGrowSettable plantToGrowSettable = c.GetPlantToGrowSettable(map);
@@ -83,7 +83,7 @@ namespace RimWorld
 			return plantToGrowSettable.GetPlantDefToGrow();
 		}
 
-		// Token: 0x04001AFA RID: 6906
+		
 		protected static ThingDef wantedPlantDef;
 	}
 }

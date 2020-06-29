@@ -4,10 +4,10 @@ using System.Diagnostics;
 
 namespace Verse
 {
-	// Token: 0x02000467 RID: 1127
+	
 	public static class PerfTest
 	{
-		// Token: 0x06002157 RID: 8535 RVA: 0x000CC5EC File Offset: 0x000CA7EC
+		
 		public static string TestStandardMilliseconds()
 		{
 			Stopwatch stopwatch = new Stopwatch();

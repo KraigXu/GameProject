@@ -4,10 +4,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000161 RID: 353
+	
 	public static class GetOrGenerateMapUtility
 	{
-		// Token: 0x060009E2 RID: 2530 RVA: 0x00035DF0 File Offset: 0x00033FF0
+		
 		public static Map GetOrGenerateMap(int tile, IntVec3 size, WorldObjectDef suggestedMapParentDef)
 		{
 			Map map = Current.Game.FindMap(tile);
@@ -30,7 +30,7 @@ namespace Verse
 			return map;
 		}
 
-		// Token: 0x060009E3 RID: 2531 RVA: 0x00035E71 File Offset: 0x00034071
+		
 		public static Map GetOrGenerateMap(int tile, WorldObjectDef suggestedMapParentDef)
 		{
 			return GetOrGenerateMapUtility.GetOrGenerateMap(tile, Find.World.info.initialMapSize, suggestedMapParentDef);

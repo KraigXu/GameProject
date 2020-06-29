@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x02000020 RID: 32
+	
 	public static class GenDictionary
 	{
-		// Token: 0x0600020C RID: 524 RVA: 0x00009CE0 File Offset: 0x00007EE0
+		
 		public static string ToStringFullContents<K, V>(this Dictionary<K, V> dict)
 		{
 			StringBuilder stringBuilder = new StringBuilder();

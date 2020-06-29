@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009C2 RID: 2498
+	
 	public class HediffComp_PsychicSuppression : HediffComp
 	{
-		// Token: 0x17000ABB RID: 2747
+		
 		// (get) Token: 0x06003BAE RID: 15278 RVA: 0x0013B0C8 File Offset: 0x001392C8
 		public override bool CompShouldRemove
 		{

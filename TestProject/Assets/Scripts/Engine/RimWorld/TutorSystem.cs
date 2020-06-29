@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F2C RID: 3884
+	
 	public static class TutorSystem
 	{
-		// Token: 0x17001115 RID: 4373
+		
 		// (get) Token: 0x06005F1D RID: 24349 RVA: 0x0020D221 File Offset: 0x0020B421
 		public static bool TutorialMode
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001116 RID: 4374
+		
 		// (get) Token: 0x06005F1E RID: 24350 RVA: 0x0020D247 File Offset: 0x0020B447
 		public static bool AdaptiveTrainingEnabled
 		{
@@ -27,13 +27,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F1F RID: 24351 RVA: 0x0020D279 File Offset: 0x0020B479
+		
 		public static void Notify_Event(string eventTag, IntVec3 cell)
 		{
 			TutorSystem.Notify_Event(new EventPack(eventTag, cell));
 		}
 
-		// Token: 0x06005F20 RID: 24352 RVA: 0x0020D288 File Offset: 0x0020B488
+		
 		public static void Notify_Event(EventPack ep)
 		{
 			if (!TutorSystem.TutorialMode)
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F21 RID: 24353 RVA: 0x0020D36C File Offset: 0x0020B56C
+		
 		public static bool AllowAction(EventPack ep)
 		{
 			if (!TutorSystem.TutorialMode)

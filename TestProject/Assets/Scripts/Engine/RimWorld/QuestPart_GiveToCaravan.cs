@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200099F RID: 2463
+	
 	public class QuestPart_GiveToCaravan : QuestPart
 	{
-		// Token: 0x17000A89 RID: 2697
+		
 		// (get) Token: 0x06003A7A RID: 14970 RVA: 0x001359BD File Offset: 0x00133BBD
 		// (set) Token: 0x06003A7B RID: 14971 RVA: 0x001359D8 File Offset: 0x00133BD8
 		public IEnumerable<Thing> Things
@@ -40,13 +40,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A8A RID: 2698
+		
 		// (get) Token: 0x06003A7C RID: 14972 RVA: 0x00135A58 File Offset: 0x00133C58
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A8B RID: 2699
+		
 		// (get) Token: 0x06003A7D RID: 14973 RVA: 0x00135A68 File Offset: 0x00133C68
 		public override bool IncreasesPopulation
 		{
@@ -75,7 +75,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A7E RID: 14974 RVA: 0x00135A78 File Offset: 0x00133C78
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -106,7 +106,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A7F RID: 14975 RVA: 0x00135B8C File Offset: 0x00133D8C
+		
 		public override void PostQuestAdded()
 		{
 			base.PostQuestAdded();
@@ -120,13 +120,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A80 RID: 14976 RVA: 0x00135BD8 File Offset: 0x00133DD8
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x06003A81 RID: 14977 RVA: 0x00135BE8 File Offset: 0x00133DE8
+		
 		public override void Cleanup()
 		{
 			base.Cleanup();
@@ -137,7 +137,7 @@ namespace RimWorld
 			this.items.Clear();
 		}
 
-		// Token: 0x06003A82 RID: 14978 RVA: 0x00135C30 File Offset: 0x00133E30
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -152,29 +152,29 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A83 RID: 14979 RVA: 0x00135CF0 File Offset: 0x00133EF0
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
 			this.inSignal = "DebugSignal" + Rand.Int;
 		}
 
-		// Token: 0x06003A84 RID: 14980 RVA: 0x00135D12 File Offset: 0x00133F12
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x04002280 RID: 8832
+		
 		public string inSignal;
 
-		// Token: 0x04002281 RID: 8833
+		
 		public Caravan caravan;
 
-		// Token: 0x04002282 RID: 8834
+		
 		private List<Thing> items = new List<Thing>();
 
-		// Token: 0x04002283 RID: 8835
+		
 		private List<Pawn> pawns = new List<Pawn>();
 	}
 }

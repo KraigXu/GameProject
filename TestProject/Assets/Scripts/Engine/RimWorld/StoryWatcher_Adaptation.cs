@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A2A RID: 2602
+	
 	public class StoryWatcher_Adaptation : IExposable
 	{
-		// Token: 0x17000AEC RID: 2796
+		
 		// (get) Token: 0x06003D8C RID: 15756 RVA: 0x001457C7 File Offset: 0x001439C7
 		public float TotalThreatPointsFactor
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AED RID: 2797
+		
 		// (get) Token: 0x06003D8D RID: 15757 RVA: 0x001457DF File Offset: 0x001439DF
 		public float AdaptDays
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AEE RID: 2798
+		
 		// (get) Token: 0x06003D8E RID: 15758 RVA: 0x001457E7 File Offset: 0x001439E7
 		private int Population
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AEF RID: 2799
+		
 		// (get) Token: 0x06003D8F RID: 15759 RVA: 0x00144F07 File Offset: 0x00143107
 		private StorytellerDef StorytellerDef
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D90 RID: 15760 RVA: 0x001457F4 File Offset: 0x001439F4
+		
 		public void Notify_PawnEvent(Pawn p, AdaptationEvent ev, DamageInfo? dinfo = null)
 		{
 			if (!p.RaceProps.Humanlike || !p.IsColonist)
@@ -68,7 +68,7 @@ namespace RimWorld
 			this.pawnsJustDownedThisTick.Add(p);
 		}
 
-		// Token: 0x06003D91 RID: 15761 RVA: 0x00145850 File Offset: 0x00143A50
+		
 		private void ResolvePawnEvent(Pawn p, AdaptationEvent ev)
 		{
 			float num;
@@ -102,7 +102,7 @@ namespace RimWorld
 			this.adaptDays = Mathf.Max(this.StorytellerDef.adaptDaysMin, this.adaptDays - num);
 		}
 
-		// Token: 0x06003D92 RID: 15762 RVA: 0x00145938 File Offset: 0x00143B38
+		
 		public void AdaptationWatcherTick()
 		{
 			for (int i = 0; i < this.pawnsJustDownedThisTick.Count; i++)
@@ -126,25 +126,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D93 RID: 15763 RVA: 0x00145A15 File Offset: 0x00143C15
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<float>(ref this.adaptDays, "adaptDays", 0f, false);
 		}
 
-		// Token: 0x06003D94 RID: 15764 RVA: 0x00145A2D File Offset: 0x00143C2D
+		
 		public void Debug_OffsetAdaptDays(float days)
 		{
 			this.adaptDays += days;
 		}
 
-		// Token: 0x040023F6 RID: 9206
+		
 		private float adaptDays;
 
-		// Token: 0x040023F7 RID: 9207
+		
 		private List<Pawn> pawnsJustDownedThisTick = new List<Pawn>();
 
-		// Token: 0x040023F8 RID: 9208
+		
 		private const int UpdateInterval = 30000;
 	}
 }

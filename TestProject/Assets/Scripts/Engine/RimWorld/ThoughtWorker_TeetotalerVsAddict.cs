@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000817 RID: 2071
+	
 	public class ThoughtWorker_TeetotalerVsAddict : ThoughtWorker
 	{
-		// Token: 0x0600343B RID: 13371 RVA: 0x0011F20C File Offset: 0x0011D40C
+		
 		protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn other)
 		{
 			if (!p.RaceProps.Humanlike)

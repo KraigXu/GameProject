@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000531 RID: 1329
+	
 	public static class Toils_General
 	{
-		// Token: 0x06002618 RID: 9752 RVA: 0x000E1100 File Offset: 0x000DF300
+		
 		public static Toil Wait(int ticks, TargetIndex face = TargetIndex.None)
 		{
 			Toil toil = new Toil();
@@ -27,7 +27,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002619 RID: 9753 RVA: 0x000E1188 File Offset: 0x000DF388
+		
 		public static Toil WaitWith(TargetIndex targetInd, int ticks, bool useProgressBar = false, bool maintainPosture = false)
 		{
 			Toil toil = new Toil();
@@ -56,7 +56,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600261A RID: 9754 RVA: 0x000E1238 File Offset: 0x000DF438
+		
 		public static Toil RemoveDesignationsOnThing(TargetIndex ind, DesignationDef def)
 		{
 			Toil toil = new Toil();
@@ -67,7 +67,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600261B RID: 9755 RVA: 0x000E127C File Offset: 0x000DF47C
+		
 		public static Toil ClearTarget(TargetIndex ind)
 		{
 			Toil toil = new Toil();
@@ -78,7 +78,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600261C RID: 9756 RVA: 0x000E12C0 File Offset: 0x000DF4C0
+		
 		public static Toil PutCarriedThingInInventory()
 		{
 			Toil toil = new Toil();
@@ -94,7 +94,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600261D RID: 9757 RVA: 0x000E12FB File Offset: 0x000DF4FB
+		
 		public static Toil Do(Action action)
 		{
 			return new Toil
@@ -103,7 +103,7 @@ namespace Verse.AI
 			};
 		}
 
-		// Token: 0x0600261E RID: 9758 RVA: 0x000E1309 File Offset: 0x000DF509
+		
 		public static Toil DoAtomic(Action action)
 		{
 			return new Toil
@@ -113,7 +113,7 @@ namespace Verse.AI
 			};
 		}
 
-		// Token: 0x0600261F RID: 9759 RVA: 0x000E1320 File Offset: 0x000DF520
+		
 		public static Toil Open(TargetIndex openableInd)
 		{
 			Toil open = new Toil();
@@ -137,7 +137,7 @@ namespace Verse.AI
 			return open;
 		}
 
-		// Token: 0x06002620 RID: 9760 RVA: 0x000E136E File Offset: 0x000DF56E
+		
 		public static Toil Label()
 		{
 			return new Toil

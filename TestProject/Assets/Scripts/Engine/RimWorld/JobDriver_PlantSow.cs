@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000680 RID: 1664
+	
 	public class JobDriver_PlantSow : JobDriver
 	{
-		// Token: 0x17000883 RID: 2179
+		
 		// (get) Token: 0x06002D4D RID: 11597 RVA: 0x000FFCE4 File Offset: 0x000FDEE4
 		private Plant Plant
 		{
@@ -18,20 +18,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D4E RID: 11598 RVA: 0x000FFD0A File Offset: 0x000FDF0A
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<float>(ref this.sowWorkDone, "sowWorkDone", 0f, false);
 		}
 
-		// Token: 0x06002D4F RID: 11599 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D50 RID: 11600 RVA: 0x000FFD28 File Offset: 0x000FDF28
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.Touch).FailOn(() => PlantUtility.AdjacentSowBlocker(this.job.plantDefToSow, this.TargetA.Cell, this.Map) != null).FailOn(() => !this.job.plantDefToSow.CanEverPlantAt_NewTemp(this.TargetLocA, this.Map, false));
@@ -89,7 +89,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A1E RID: 6686
+		
 		private float sowWorkDone;
 	}
 }

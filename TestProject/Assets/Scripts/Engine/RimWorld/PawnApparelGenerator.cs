@@ -7,16 +7,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B11 RID: 2833
+	
 	public static class PawnApparelGenerator
 	{
-		// Token: 0x060042B1 RID: 17073 RVA: 0x001653CC File Offset: 0x001635CC
+		
 		static PawnApparelGenerator()
 		{
 			PawnApparelGenerator.Reset();
 		}
 
-		// Token: 0x060042B2 RID: 17074 RVA: 0x00165404 File Offset: 0x00163604
+		
 		public static void Reset()
 		{
 			PawnApparelGenerator.allApparelPairs = ThingStuffPair.AllWith((ThingDef td) => td.IsApparel);
@@ -24,7 +24,7 @@ namespace RimWorld
 			PawnApparelGenerator.freeWarmHatMaxPrice = (float)((int)(StatDefOf.MarketValue.Worker.GetValueAbstract(ThingDefOf.Apparel_Tuque, ThingDefOf.Cloth) * 1.3f));
 		}
 
-		// Token: 0x060042B3 RID: 17075 RVA: 0x00165488 File Offset: 0x00163688
+		
 		public static void GenerateStartingApparelFor(Pawn pawn, PawnGenerationRequest request)
 		{
 			if (!pawn.RaceProps.ToolUser || !pawn.RaceProps.IsFlesh)
@@ -195,7 +195,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042B4 RID: 17076 RVA: 0x001659F4 File Offset: 0x00163BF4
+		
 		private static void GenerateWorkingPossibleApparelSetFor(Pawn pawn, float money, List<ThingStuffPair> apparelCandidates)
 		{
 			PawnApparelGenerator.workingSet.Reset(pawn.RaceProps.body, pawn.def);
@@ -244,14 +244,14 @@ namespace RimWorld
 					PawnApparelGenerator.usableApparel.Add(apparelCandidates[j]);
 				}
 			}
-			Func<ThingStuffPair, bool> <>9__4;
+			
 			while (Rand.Value >= 0.1f || money >= 9999999f)
 			{
 				IEnumerable<ThingStuffPair> source = PawnApparelGenerator.usableApparel;
 				Func<ThingStuffPair, bool> predicate;
-				if ((predicate = <>9__4) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__4 = ((ThingStuffPair pa) => PawnApparelGenerator.CanUseStuff(pawn, pa)));
+					predicate = (9__4 = ((ThingStuffPair pa) => PawnApparelGenerator.CanUseStuff(pawn, pa)));
 				}
 				ThingStuffPair pair3;
 				if (!source.Where(predicate).TryRandomElementByWeight((ThingStuffPair pa) => pa.Commonality, out pair3))
@@ -270,7 +270,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042B5 RID: 17077 RVA: 0x00165D14 File Offset: 0x00163F14
+		
 		private static bool CanUseStuff(Pawn pawn, ThingStuffPair pair)
 		{
 			List<SpecificApparelRequirement> specificApparelRequirements = pawn.kindDef.specificApparelRequirements;
@@ -287,7 +287,7 @@ namespace RimWorld
 			return pair.stuff == null || pawn.Faction == null || pawn.Faction.def.CanUseStuffForApparel(pair.stuff);
 		}
 
-		// Token: 0x060042B6 RID: 17078 RVA: 0x00165D80 File Offset: 0x00163F80
+		
 		public static bool IsDerpApparel(ThingDef thing, ThingDef stuff)
 		{
 			if (stuff == null)
@@ -310,13 +310,13 @@ namespace RimWorld
 			return flag && (stuff.stuffProps.categories.Contains(StuffCategoryDefOf.Woody) || stuff.stuffProps.categories.Contains(StuffCategoryDefOf.Stony)) && (thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso) || thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Legs));
 		}
 
-		// Token: 0x060042B7 RID: 17079 RVA: 0x00165E44 File Offset: 0x00164044
+		
 		public static bool ApparelRequirementHandlesThing(SpecificApparelRequirement req, ThingDef thing)
 		{
 			return (req.BodyPartGroup == null || thing.apparel.bodyPartGroups.Contains(req.BodyPartGroup)) && (req.ApparelLayer == null || thing.apparel.layers.Contains(req.ApparelLayer));
 		}
 
-		// Token: 0x060042B8 RID: 17080 RVA: 0x00165E98 File Offset: 0x00164098
+		
 		public static bool ApparelRequirementTagsMatch(SpecificApparelRequirement req, ThingDef thing)
 		{
 			return (!req.RequiredTag.NullOrEmpty() && thing.apparel.tags.Contains(req.RequiredTag)) || (!req.AlternateTagChoices.NullOrEmpty<SpecificApparelRequirement.TagChance>() && (from x in req.AlternateTagChoices
@@ -324,13 +324,13 @@ namespace RimWorld
 			select x).Any<SpecificApparelRequirement.TagChance>());
 		}
 
-		// Token: 0x060042B9 RID: 17081 RVA: 0x00165F09 File Offset: 0x00164109
+		
 		private static bool ApparelRequirementCanUseStuff(SpecificApparelRequirement req, ThingStuffPair pair)
 		{
 			return req.Stuff == null || !PawnApparelGenerator.ApparelRequirementHandlesThing(req, pair.thing) || (pair.stuff != null && req.Stuff == pair.stuff);
 		}
 
-		// Token: 0x060042BA RID: 17082 RVA: 0x00165F40 File Offset: 0x00164140
+		
 		private static bool CanUsePair(ThingStuffPair pair, Pawn pawn, float moneyLeft, bool allowHeadgear, int fixedSeed)
 		{
 			if (pair.Price > moneyLeft)
@@ -381,13 +381,13 @@ namespace RimWorld
 			return pair.thing.generateAllowChance >= 1f || Rand.ChanceSeeded(pair.thing.generateAllowChance, fixedSeed ^ (int)pair.thing.shortHash ^ 64128343);
 		}
 
-		// Token: 0x060042BB RID: 17083 RVA: 0x001660A0 File Offset: 0x001642A0
+		
 		public static bool IsHeadgear(ThingDef td)
 		{
 			return td.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) || td.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead);
 		}
 
-		// Token: 0x060042BC RID: 17084 RVA: 0x001660D0 File Offset: 0x001642D0
+		
 		private static NeededWarmth ApparelWarmthNeededNow(Pawn pawn, PawnGenerationRequest request, out float mapTemperature)
 		{
 			int tile = request.Tile;
@@ -428,7 +428,7 @@ namespace RimWorld
 			return NeededWarmth.Any;
 		}
 
-		// Token: 0x060042BD RID: 17085 RVA: 0x00166164 File Offset: 0x00164364
+		
 		public static NeededWarmth CalculateNeededWarmth(Pawn pawn, int tile, Twelfth twelfth)
 		{
 			float num = GenTemperature.AverageTemperatureAtTileForTwelfth(tile, twelfth);
@@ -443,7 +443,7 @@ namespace RimWorld
 			return NeededWarmth.Any;
 		}
 
-		// Token: 0x060042BE RID: 17086 RVA: 0x001661B4 File Offset: 0x001643B4
+		
 		[DebugOutput]
 		private static void ApparelPairs()
 		{
@@ -490,41 +490,41 @@ namespace RimWorld
 			DebugTables.MakeTablesDialog<ThingStuffPair>(dataSources, array);
 		}
 
-		// Token: 0x060042BF RID: 17087 RVA: 0x00166355 File Offset: 0x00164555
+		
 		[DebugOutput]
 		private static void ApparelPairsByThing()
 		{
 			DebugOutputsGeneral.MakeTablePairsByThing(PawnApparelGenerator.allApparelPairs);
 		}
 
-		// Token: 0x04002651 RID: 9809
+		
 		private static List<ThingStuffPair> allApparelPairs = new List<ThingStuffPair>();
 
-		// Token: 0x04002652 RID: 9810
+		
 		private static float freeWarmParkaMaxPrice;
 
-		// Token: 0x04002653 RID: 9811
+		
 		private static float freeWarmHatMaxPrice;
 
-		// Token: 0x04002654 RID: 9812
+		
 		private static PawnApparelGenerator.PossibleApparelSet workingSet = new PawnApparelGenerator.PossibleApparelSet();
 
-		// Token: 0x04002655 RID: 9813
+		
 		private static StringBuilder debugSb = null;
 
-		// Token: 0x04002656 RID: 9814
+		
 		private const int PracticallyInfinity = 9999999;
 
-		// Token: 0x04002657 RID: 9815
+		
 		private static List<ThingStuffPair> tmpApparelCandidates = new List<ThingStuffPair>();
 
-		// Token: 0x04002658 RID: 9816
+		
 		private static List<ThingStuffPair> usableApparel = new List<ThingStuffPair>();
 
-		// Token: 0x02001ABB RID: 6843
+		
 		private class PossibleApparelSet
 		{
-			// Token: 0x170017DD RID: 6109
+			
 			// (get) Token: 0x06009896 RID: 39062 RVA: 0x002EDA9C File Offset: 0x002EBC9C
 			public int Count
 			{
@@ -534,7 +534,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x170017DE RID: 6110
+			
 			// (get) Token: 0x06009897 RID: 39063 RVA: 0x002EDAA9 File Offset: 0x002EBCA9
 			public float TotalPrice
 			{
@@ -544,7 +544,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x170017DF RID: 6111
+			
 			// (get) Token: 0x06009898 RID: 39064 RVA: 0x002EDAD5 File Offset: 0x002EBCD5
 			public float TotalInsulationCold
 			{
@@ -554,7 +554,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x170017E0 RID: 6112
+			
 			// (get) Token: 0x06009899 RID: 39065 RVA: 0x002EDB01 File Offset: 0x002EBD01
 			public List<ThingStuffPair> ApparelsForReading
 			{
@@ -564,7 +564,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x0600989A RID: 39066 RVA: 0x002EDB09 File Offset: 0x002EBD09
+			
 			public void Reset(BodyDef body, ThingDef raceDef)
 			{
 				this.aps.Clear();
@@ -573,7 +573,7 @@ namespace RimWorld
 				this.raceDef = raceDef;
 			}
 
-			// Token: 0x0600989B RID: 39067 RVA: 0x002EDB30 File Offset: 0x002EBD30
+			
 			public void Add(ThingStuffPair pair)
 			{
 				this.aps.Add(pair);
@@ -588,7 +588,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x0600989C RID: 39068 RVA: 0x002EDBBC File Offset: 0x002EBDBC
+			
 			public bool PairOverlapsAnything(ThingStuffPair pair)
 			{
 				if (!this.lgps.Any<ApparelUtility.LayerGroupPair>())
@@ -610,7 +610,7 @@ namespace RimWorld
 				return false;
 			}
 
-			// Token: 0x0600989D RID: 39069 RVA: 0x002EDC50 File Offset: 0x002EBE50
+			
 			public bool CoatButNoShirt()
 			{
 				bool flag = false;
@@ -636,7 +636,7 @@ namespace RimWorld
 				return flag && !flag2;
 			}
 
-			// Token: 0x0600989E RID: 39070 RVA: 0x002EDD1C File Offset: 0x002EBF1C
+			
 			public bool Covers(BodyPartGroupDef bp)
 			{
 				for (int i = 0; i < this.aps.Count; i++)
@@ -649,7 +649,7 @@ namespace RimWorld
 				return false;
 			}
 
-			// Token: 0x0600989F RID: 39071 RVA: 0x002EDD68 File Offset: 0x002EBF68
+			
 			public bool IsNaked(Gender gender)
 			{
 				switch (gender)
@@ -665,7 +665,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x060098A0 RID: 39072 RVA: 0x002EDDBC File Offset: 0x002EBFBC
+			
 			public bool SatisfiesNeededWarmth(NeededWarmth warmth, bool mustBeSafe = false, float mapTemperature = 21f)
 			{
 				if (warmth == NeededWarmth.Any)
@@ -687,7 +687,7 @@ namespace RimWorld
 				throw new NotImplementedException();
 			}
 
-			// Token: 0x060098A1 RID: 39073 RVA: 0x002EDE68 File Offset: 0x002EC068
+			
 			public void AddFreeWarmthAsNeeded(NeededWarmth warmth, float mapTemperature)
 			{
 				if (warmth == NeededWarmth.Any)
@@ -713,19 +713,16 @@ namespace RimWorld
 						}
 						Predicate<ThingStuffPair> parkaPairValidator = (ThingStuffPair pa) => pa.Price <= PawnApparelGenerator.freeWarmParkaMaxPrice && pa.InsulationCold > 0f && pa.thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso) && pa.thing.apparel.canBeGeneratedToSatisfyWarmth && this.GetReplacedInsulationCold(pa) < pa.InsulationCold;
 						int j = 0;
-						Func<ThingStuffPair, bool> <>9__1;
-						Func<ThingStuffPair, bool> <>9__3;
+						;
+						
 						while (j < 2)
 						{
 							ThingStuffPair candidate;
 							if (j == 0)
 							{
 								IEnumerable<ThingStuffPair> allApparelPairs = PawnApparelGenerator.allApparelPairs;
-								Func<ThingStuffPair, bool> predicate;
-								if ((predicate = <>9__1) == null)
-								{
-									predicate = (<>9__1 = ((ThingStuffPair pa) => parkaPairValidator(pa) && pa.InsulationCold < 40f));
-								}
+								Func<ThingStuffPair, bool> predicate = ((ThingStuffPair pa) => parkaPairValidator(pa) && pa.InsulationCold < 40f);
+		
 								if (allApparelPairs.Where(predicate).TryRandomElementByWeight((ThingStuffPair pa) => pa.Commonality / (pa.Price * pa.Price), out candidate))
 								{
 									goto IL_15D;
@@ -734,11 +731,8 @@ namespace RimWorld
 							else
 							{
 								IEnumerable<ThingStuffPair> allApparelPairs2 = PawnApparelGenerator.allApparelPairs;
-								Func<ThingStuffPair, bool> predicate2;
-								if ((predicate2 = <>9__3) == null)
-								{
-									predicate2 = (<>9__3 = ((ThingStuffPair pa) => parkaPairValidator(pa)));
-								}
+								Func<ThingStuffPair, bool> predicate2 = ((ThingStuffPair pa) => parkaPairValidator(pa));
+	
 								if (allApparelPairs2.Where(predicate2).TryMaxBy((ThingStuffPair x) => x.InsulationCold - this.GetReplacedInsulationCold(x), out candidate))
 								{
 									goto IL_15D;
@@ -757,12 +751,9 @@ namespace RimWorld
 									candidate.InsulationCold
 								}));
 								IEnumerable<ThingStuffPair> source = this.aps;
-								Func<ThingStuffPair, bool> predicate3;
-								Func<ThingStuffPair, bool> <>9__6;
-								if ((predicate3 = <>9__6) == null)
-								{
-									predicate3 = (<>9__6 = ((ThingStuffPair a) => !ApparelUtility.CanWearTogether(a.thing, candidate.thing, this.body)));
-								}
+								Func<ThingStuffPair, bool> predicate3 = ((ThingStuffPair a) => !ApparelUtility.CanWearTogether(a.thing, candidate.thing, this.body));
+								
+
 								foreach (ThingStuffPair thingStuffPair in source.Where(predicate3))
 								{
 									PawnApparelGenerator.debugSb.AppendLine(string.Concat(new object[]
@@ -806,12 +797,8 @@ namespace RimWorld
 								hatPair.InsulationCold
 							}));
 							IEnumerable<ThingStuffPair> source2 = this.aps;
-							Func<ThingStuffPair, bool> predicate4;
-							Func<ThingStuffPair, bool> <>9__11;
-							if ((predicate4 = <>9__11) == null)
-							{
-								predicate4 = (<>9__11 = ((ThingStuffPair a) => !ApparelUtility.CanWearTogether(a.thing, hatPair.thing, this.body)));
-							}
+							Func<ThingStuffPair, bool> predicate4 = ((ThingStuffPair a) => !ApparelUtility.CanWearTogether(a.thing, hatPair.thing, this.body));
+
 							foreach (ThingStuffPair thingStuffPair2 in source2.Where(predicate4))
 							{
 								PawnApparelGenerator.debugSb.AppendLine(string.Concat(new object[]
@@ -833,7 +820,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x060098A2 RID: 39074 RVA: 0x002EE318 File Offset: 0x002EC518
+			
 			public void GiveToPawn(Pawn pawn)
 			{
 				for (int i = 0; i < this.aps.Count; i++)
@@ -865,7 +852,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x060098A3 RID: 39075 RVA: 0x002EE44C File Offset: 0x002EC64C
+			
 			private float GetReplacedInsulationCold(ThingStuffPair newAp)
 			{
 				float num = 0f;
@@ -879,7 +866,7 @@ namespace RimWorld
 				return num;
 			}
 
-			// Token: 0x060098A4 RID: 39076 RVA: 0x002EE4B4 File Offset: 0x002EC6B4
+			
 			public override string ToString()
 			{
 				string str = "[";
@@ -890,28 +877,28 @@ namespace RimWorld
 				return str + "]";
 			}
 
-			// Token: 0x04006581 RID: 25985
+			
 			private List<ThingStuffPair> aps = new List<ThingStuffPair>();
 
-			// Token: 0x04006582 RID: 25986
+			
 			private HashSet<ApparelUtility.LayerGroupPair> lgps = new HashSet<ApparelUtility.LayerGroupPair>();
 
-			// Token: 0x04006583 RID: 25987
+			
 			private BodyDef body;
 
-			// Token: 0x04006584 RID: 25988
+			
 			private ThingDef raceDef;
 
-			// Token: 0x04006585 RID: 25989
+			
 			private const float StartingMinTemperature = 12f;
 
-			// Token: 0x04006586 RID: 25990
+			
 			private const float TargetMinTemperature = -40f;
 
-			// Token: 0x04006587 RID: 25991
+			
 			private const float StartingMaxTemperature = 32f;
 
-			// Token: 0x04006588 RID: 25992
+			
 			private const float TargetMaxTemperature = 30f;
 		}
 	}

@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x02000259 RID: 601
+	
 	public class HediffComp_GetsPermanent : HediffComp
 	{
-		// Token: 0x17000342 RID: 834
+		
 		// (get) Token: 0x0600106C RID: 4204 RVA: 0x0005DEBB File Offset: 0x0005C0BB
 		public HediffCompProperties_GetsPermanent Props
 		{
@@ -15,7 +15,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000343 RID: 835
+		
 		// (get) Token: 0x0600106D RID: 4205 RVA: 0x0005DEC8 File Offset: 0x0005C0C8
 		// (set) Token: 0x0600106E RID: 4206 RVA: 0x0005DED0 File Offset: 0x0005C0D0
 		public bool IsPermanent
@@ -39,7 +39,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000344 RID: 836
+		
 		// (get) Token: 0x0600106F RID: 4207 RVA: 0x0005DF35 File Offset: 0x0005C135
 		public PainCategory PainCategory
 		{
@@ -49,7 +49,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000345 RID: 837
+		
 		// (get) Token: 0x06001070 RID: 4208 RVA: 0x0005DF3D File Offset: 0x0005C13D
 		public float PainFactor
 		{
@@ -59,7 +59,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001071 RID: 4209 RVA: 0x0005DF48 File Offset: 0x0005C148
+		
 		public override void CompExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.isPermanentInt, "isPermanent", false, false);
@@ -68,7 +68,7 @@ namespace Verse
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06001072 RID: 4210 RVA: 0x0005DF98 File Offset: 0x0005C198
+		
 		public void PreFinalizeInjury()
 		{
 			if (base.Pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(this.parent.Part))
@@ -91,7 +91,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001073 RID: 4211 RVA: 0x0005E068 File Offset: 0x0005C268
+		
 		public override void CompPostInjuryHeal(float amount)
 		{
 			if (this.permanentDamageThreshold >= 9999f || this.IsPermanent)
@@ -106,7 +106,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001074 RID: 4212 RVA: 0x0005E0E4 File Offset: 0x0005C2E4
+		
 		public override string CompDebugString()
 		{
 			return string.Concat(new object[]
@@ -120,16 +120,16 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x04000C01 RID: 3073
+		
 		public float permanentDamageThreshold = 9999f;
 
-		// Token: 0x04000C02 RID: 3074
+		
 		public bool isPermanentInt;
 
-		// Token: 0x04000C03 RID: 3075
+		
 		private PainCategory painCategory;
 
-		// Token: 0x04000C04 RID: 3076
+		
 		private const float NonActivePermanentDamageThresholdValue = 9999f;
 	}
 }

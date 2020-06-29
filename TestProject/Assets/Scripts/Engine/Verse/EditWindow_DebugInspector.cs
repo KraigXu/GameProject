@@ -12,10 +12,10 @@ using Verse.Steam;
 
 namespace Verse
 {
-	// Token: 0x02000329 RID: 809
+	
 	public class EditWindow_DebugInspector : EditWindow
 	{
-		// Token: 0x170004DF RID: 1247
+		
 		// (get) Token: 0x060017AE RID: 6062 RVA: 0x000864F0 File Offset: 0x000846F0
 		public override Vector2 InitialSize
 		{
@@ -25,7 +25,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004E0 RID: 1248
+		
 		// (get) Token: 0x060017AF RID: 6063 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool IsDebug
 		{
@@ -35,13 +35,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017B0 RID: 6064 RVA: 0x00086501 File Offset: 0x00084701
+		
 		public EditWindow_DebugInspector()
 		{
 			this.optionalTitle = "Debug inspector";
 		}
 
-		// Token: 0x060017B1 RID: 6065 RVA: 0x0008652A File Offset: 0x0008472A
+		
 		public override void WindowUpdate()
 		{
 			base.WindowUpdate();
@@ -51,7 +51,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017B2 RID: 6066 RVA: 0x00086540 File Offset: 0x00084740
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			if (KeyBindingDefOf.Dev_ToggleDebugInspector.KeyDownEvent)
@@ -97,13 +97,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017B3 RID: 6067 RVA: 0x0008670D File Offset: 0x0008490D
+		
 		public void AppendDebugString(string str)
 		{
 			this.debugStringBuilder.AppendLine(str);
 		}
 
-		// Token: 0x060017B4 RID: 6068 RVA: 0x0008671C File Offset: 0x0008491C
+		
 		private string CurrentDebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -500,13 +500,13 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x04000EDF RID: 3807
+		
 		private StringBuilder debugStringBuilder = new StringBuilder();
 
-		// Token: 0x04000EE0 RID: 3808
+		
 		public bool fullMode;
 
-		// Token: 0x04000EE1 RID: 3809
+		
 		private float columnWidth = 360f;
 	}
 }

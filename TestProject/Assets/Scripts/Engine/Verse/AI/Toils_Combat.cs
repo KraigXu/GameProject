@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.AI
 {
-	// Token: 0x0200052F RID: 1327
+	
 	public static class Toils_Combat
 	{
-		// Token: 0x06002612 RID: 9746 RVA: 0x000E0F4C File Offset: 0x000DF14C
+		
 		public static Toil TrySetJobToUseAttackVerb(TargetIndex targetInd)
 		{
 			Toil toil = new Toil();
@@ -27,7 +27,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002613 RID: 9747 RVA: 0x000E0F90 File Offset: 0x000DF190
+		
 		public static Toil GotoCastPosition(TargetIndex targetInd, bool closeIfDowned = false, float maxRangeFactor = 1f)
 		{
 			Toil toil = new Toil();
@@ -58,13 +58,13 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002614 RID: 9748 RVA: 0x000E0FFE File Offset: 0x000DF1FE
+		
 		public static Toil CastVerb(TargetIndex targetInd, bool canHitNonTargetPawns = true)
 		{
 			return Toils_Combat.CastVerb(targetInd, TargetIndex.None, canHitNonTargetPawns);
 		}
 
-		// Token: 0x06002615 RID: 9749 RVA: 0x000E1008 File Offset: 0x000DF208
+		
 		public static Toil CastVerb(TargetIndex targetInd, TargetIndex destInd, bool canHitNonTargetPawns = true)
 		{
 			Toil toil = new Toil();
@@ -78,7 +78,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002616 RID: 9750 RVA: 0x000E1064 File Offset: 0x000DF264
+		
 		public static Toil FollowAndMeleeAttack(TargetIndex targetInd, Action hitAction)
 		{
 			Toil followAndAttack = new Toil();

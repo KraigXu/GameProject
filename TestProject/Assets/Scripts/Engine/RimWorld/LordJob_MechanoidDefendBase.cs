@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000772 RID: 1906
+	
 	public abstract class LordJob_MechanoidDefendBase : LordJob
 	{
-		// Token: 0x060031CA RID: 12746 RVA: 0x00115618 File Offset: 0x00113818
+		
 		public override void LordJobTick()
 		{
 			base.LordJobTick();
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031CB RID: 12747 RVA: 0x00115643 File Offset: 0x00113843
+		
 		public override void Notify_LordDestroyed()
 		{
 			if (this.isMechCluster && !this.mechClusterDefeated)
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031CC RID: 12748 RVA: 0x0011565C File Offset: 0x0011385C
+		
 		private void OnDefeat()
 		{
 			foreach (Thing thing in this.things)
@@ -73,13 +73,13 @@ namespace RimWorld
 			SoundDefOf.MechClusterDefeated.PlayOneShotOnCamera(base.Map);
 		}
 
-		// Token: 0x060031CD RID: 12749 RVA: 0x001157E0 File Offset: 0x001139E0
+		
 		public void AddThingToNotifyOnDefeat(Thing t)
 		{
 			this.thingsToNotifyOnDefeat.AddDistinct(t);
 		}
 
-		// Token: 0x060031CE RID: 12750 RVA: 0x001157F0 File Offset: 0x001139F0
+		
 		public override void ExposeData()
 		{
 			Scribe_Values.Look<IntVec3>(ref this.defSpot, "defSpot", default(IntVec3), false);
@@ -97,28 +97,28 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001B27 RID: 6951
+		
 		public List<Thing> things = new List<Thing>();
 
-		// Token: 0x04001B28 RID: 6952
+		
 		protected List<Thing> thingsToNotifyOnDefeat = new List<Thing>();
 
-		// Token: 0x04001B29 RID: 6953
+		
 		protected IntVec3 defSpot;
 
-		// Token: 0x04001B2A RID: 6954
+		
 		protected Faction faction;
 
-		// Token: 0x04001B2B RID: 6955
+		
 		protected float defendRadius;
 
-		// Token: 0x04001B2C RID: 6956
+		
 		protected bool canAssaultColony;
 
-		// Token: 0x04001B2D RID: 6957
+		
 		protected bool isMechCluster;
 
-		// Token: 0x04001B2E RID: 6958
+		
 		protected bool mechClusterDefeated;
 	}
 }

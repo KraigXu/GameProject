@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D21 RID: 3361
+	
 	public class CompMeditationFocus : CompStatOffsetBase
 	{
-		// Token: 0x17000E6D RID: 3693
+		
 		// (get) Token: 0x060051BC RID: 20924 RVA: 0x001B5C61 File Offset: 0x001B3E61
 		public new CompProperties_MeditationFocus Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060051BD RID: 20925 RVA: 0x001B5C70 File Offset: 0x001B3E70
+		
 		public override float GetStatOffset(Pawn pawn = null)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -35,7 +35,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060051BE RID: 20926 RVA: 0x001B5CDC File Offset: 0x001B3EDC
+		
 		public override IEnumerable<string> GetExplanation()
 		{
 			int num;
@@ -51,7 +51,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060051BF RID: 20927 RVA: 0x001B5CEC File Offset: 0x001B3EEC
+		
 		public bool CanPawnUse(Pawn pawn)
 		{
 			for (int i = 0; i < this.Props.focusTypes.Count; i++)
@@ -64,7 +64,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060051C0 RID: 20928 RVA: 0x001B5D30 File Offset: 0x001B3F30
+		
 		public bool WillBeAffectedBy(ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(pos, rotation, def.size);
@@ -82,7 +82,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060051C1 RID: 20929 RVA: 0x001B5DD4 File Offset: 0x001B3FD4
+		
 		public override string CompInspectStringExtra()
 		{
 			if (!ModsConfig.RoyaltyActive)
@@ -109,7 +109,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x060051C2 RID: 20930 RVA: 0x001B5EBB File Offset: 0x001B40BB
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
 			if (ModsConfig.RoyaltyActive)
@@ -120,7 +120,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060051C3 RID: 20931 RVA: 0x001B5ECC File Offset: 0x001B40CC
+		
 		public override void PostDrawExtraSelectionOverlays()
 		{
 			base.PostDrawExtraSelectionOverlays();

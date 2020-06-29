@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x0200110F RID: 4367
+	
 	public class QuestNode_SignalActivable : QuestNode
 	{
-		// Token: 0x0600665D RID: 26205 RVA: 0x0023DABC File Offset: 0x0023BCBC
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.node == null || this.node.TestRun(slate);
 		}
 
-		// Token: 0x0600665E RID: 26206 RVA: 0x0023DAD4 File Offset: 0x0023BCD4
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -42,27 +42,27 @@ namespace RimWorld.QuestGen
 			questPart_PassActivable.signalListenMode = (this.signalListenMode.GetValue(slate) ?? QuestPart.SignalListenMode.OngoingOnly);
 		}
 
-		// Token: 0x04003E74 RID: 15988
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x04003E75 RID: 15989
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalDisable;
 
-		// Token: 0x04003E76 RID: 15990
+		
 		[NoTranslate]
 		[TranslationHandle(Priority = 100)]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04003E77 RID: 15991
+		
 		[NoTranslate]
 		public SlateRef<IEnumerable<string>> outSignals;
 
-		// Token: 0x04003E78 RID: 15992
+		
 		public QuestNode node;
 
-		// Token: 0x04003E79 RID: 15993
+		
 		public SlateRef<QuestPart.SignalListenMode?> signalListenMode;
 	}
 }

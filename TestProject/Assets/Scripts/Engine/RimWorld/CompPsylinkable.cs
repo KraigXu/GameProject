@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000D3E RID: 3390
+	
 	public class CompPsylinkable : ThingComp
 	{
-		// Token: 0x17000E8E RID: 3726
+		
 		// (get) Token: 0x0600525B RID: 21083 RVA: 0x001B8582 File Offset: 0x001B6782
 		public CompProperties_Psylinkable Props
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E8F RID: 3727
+		
 		// (get) Token: 0x0600525C RID: 21084 RVA: 0x001B858F File Offset: 0x001B678F
 		public CompSpawnSubplant CompSubplant
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600525D RID: 21085 RVA: 0x001B859C File Offset: 0x001B679C
+		
 		private IEnumerable<Pawn> GetPawnsThatCanPsylink(int level = -1)
 		{
 			return from p in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists
@@ -38,13 +38,13 @@ namespace RimWorld
 			select p;
 		}
 
-		// Token: 0x0600525E RID: 21086 RVA: 0x001B85D3 File Offset: 0x001B67D3
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			this.CompSubplant.onGrassGrown = new Action(this.OnGrassGrown);
 		}
 
-		// Token: 0x0600525F RID: 21087 RVA: 0x001B85EC File Offset: 0x001B67EC
+		
 		private void OnGrassGrown()
 		{
 			bool flag = false;
@@ -87,7 +87,7 @@ namespace RimWorld
 			this.pawnsThatCanPsylinkLastGrassGrow.AddRange(this.GetPawnsThatCanPsylink(-1));
 		}
 
-		// Token: 0x06005260 RID: 21088 RVA: 0x001B87D8 File Offset: 0x001B69D8
+		
 		private int GetRequiredPlantCount(Pawn pawn)
 		{
 			int psylinkLevel = pawn.GetPsylinkLevel();
@@ -108,7 +108,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06005261 RID: 21089 RVA: 0x001B8840 File Offset: 0x001B6A40
+		
 		public AcceptanceReport CanPsylink(Pawn pawn, LocalTargetInfo? knownSpot = null)
 		{
 			if (pawn.Dead || pawn.Faction != Faction.OfPlayer)
@@ -153,7 +153,7 @@ namespace RimWorld
 			return AcceptanceReport.WasAccepted;
 		}
 
-		// Token: 0x06005262 RID: 21090 RVA: 0x001B8A0C File Offset: 0x001B6C0C
+		
 		public bool TryFindLinkSpot(Pawn pawn, out LocalTargetInfo spot)
 		{
 			spot = MeditationUtility.FindMeditationSpot(pawn).spot;
@@ -176,14 +176,14 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005263 RID: 21091 RVA: 0x001B8AA8 File Offset: 0x001B6CA8
+		
 		private bool CanUseSpot(Pawn pawn, LocalTargetInfo spot)
 		{
 			IntVec3 cell = spot.Cell;
 			return cell.DistanceTo(this.parent.Position) <= 3.9f && cell.Standable(this.parent.Map) && GenSight.LineOfSight(cell, this.parent.Position, this.parent.Map, false, null, 0, 0) && pawn.CanReach(spot, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn);
 		}
 
-		// Token: 0x06005264 RID: 21092 RVA: 0x001B8B20 File Offset: 0x001B6D20
+		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
 		{
 			if (pawn.Dead || pawn.Drafted)
@@ -196,7 +196,6 @@ namespace RimWorld
 			{
 				text = text + ": " + acceptanceReport.Reason;
 			}
-			Action <>9__1;
 			yield return new FloatMenuOption(text, delegate
 			{
 				TaggedString psylinkAffectedByTraitsNegativelyWarning = RoyalTitleUtility.GetPsylinkAffectedByTraitsNegativelyWarning(pawn);
@@ -205,14 +204,10 @@ namespace RimWorld
 					WindowStack windowStack = Find.WindowStack;
 					TaggedString text2 = psylinkAffectedByTraitsNegativelyWarning;
 					string buttonAText = "Confirm".Translate();
-					Action buttonAAction;
-					if ((buttonAAction = <>9__1) == null)
+					Action buttonAAction = delegate
 					{
-						buttonAAction = (<>9__1 = delegate
-						{
-							this.BeginLinkingRitual(pawn);
-						});
-					}
+						this.BeginLinkingRitual(pawn);
+					};
 					windowStack.Add(new Dialog_MessageBox(text2, buttonAText, buttonAAction, "GoBack".Translate(), null, null, false, null, null));
 					return;
 				}
@@ -224,7 +219,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005265 RID: 21093 RVA: 0x001B8B38 File Offset: 0x001B6D38
+		
 		private void BeginLinkingRitual(Pawn pawn)
 		{
 			LocalTargetInfo localTargetInfo;
@@ -236,7 +231,7 @@ namespace RimWorld
 			pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		}
 
-		// Token: 0x06005266 RID: 21094 RVA: 0x001B8B90 File Offset: 0x001B6D90
+		
 		public void FinishLinkingRitual(Pawn pawn)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -267,7 +262,7 @@ namespace RimWorld
 			}), null, null, null, null);
 		}
 
-		// Token: 0x06005267 RID: 21095 RVA: 0x001B8CD0 File Offset: 0x001B6ED0
+		
 		public override void PostExposeData()
 		{
 			Scribe_Collections.Look<Pawn>(ref this.pawnsThatCanPsylinkLastGrassGrow, "pawnsThatCanPsylinkLastGrassGrow", LookMode.Reference, Array.Empty<object>());
@@ -277,10 +272,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002D78 RID: 11640
+		
 		private List<Pawn> pawnsThatCanPsylinkLastGrassGrow = new List<Pawn>();
 
-		// Token: 0x04002D79 RID: 11641
+		
 		public const float MaxDistance = 3.9f;
 	}
 }

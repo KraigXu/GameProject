@@ -7,10 +7,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020002DB RID: 731
+	
 	public class ScribeMetaHeaderUtility
 	{
-		// Token: 0x0600147B RID: 5243 RVA: 0x00078CCC File Offset: 0x00076ECC
+		
 		public static void WriteMetaHeader()
 		{
 			if (Scribe.EnterNode("meta"))
@@ -33,7 +33,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600147C RID: 5244 RVA: 0x00078D98 File Offset: 0x00076F98
+		
 		public static void LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode mode, bool logVersionConflictWarning)
 		{
 			ScribeMetaHeaderUtility.loadedGameVersion = "Unknown";
@@ -68,13 +68,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600147D RID: 5245 RVA: 0x00078E88 File Offset: 0x00077088
+		
 		private static bool VersionsMatch()
 		{
 			return VersionControl.BuildFromVersionString(ScribeMetaHeaderUtility.loadedGameVersion) == VersionControl.BuildFromVersionString(VersionControl.CurrentVersionStringWithRev);
 		}
 
-		// Token: 0x0600147E RID: 5246 RVA: 0x00078EA0 File Offset: 0x000770A0
+		
 		public static bool TryCreateDialogsForVersionMismatchWarnings(Action confirmedAction)
 		{
 			string text = null;
@@ -147,7 +147,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600147F RID: 5247 RVA: 0x00079060 File Offset: 0x00077260
+		
 		public static bool LoadedModsMatchesActiveMods(out string loadedModsSummary, out string runningModsSummary)
 		{
 			loadedModsSummary = null;
@@ -173,7 +173,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001480 RID: 5248 RVA: 0x00079144 File Offset: 0x00077344
+		
 		private static bool ModListsMatch(List<string> a, List<string> b)
 		{
 			if (a == null || b == null)
@@ -194,7 +194,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06001481 RID: 5249 RVA: 0x00079194 File Offset: 0x00077394
+		
 		public static string GameVersionOf(FileInfo file)
 		{
 			if (!file.Exists)
@@ -221,13 +221,13 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001482 RID: 5250 RVA: 0x00079250 File Offset: 0x00077450
+		
 		public static bool ReadToMetaElement(XmlTextReader textReader)
 		{
 			return ScribeMetaHeaderUtility.ReadToNextElement(textReader) && ScribeMetaHeaderUtility.ReadToNextElement(textReader) && !(textReader.Name != "meta");
 		}
 
-		// Token: 0x06001483 RID: 5251 RVA: 0x0007927B File Offset: 0x0007747B
+		
 		private static bool ReadToNextElement(XmlTextReader textReader)
 		{
 			while (textReader.Read())
@@ -240,40 +240,40 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x04000DB2 RID: 3506
+		
 		private static ScribeMetaHeaderUtility.ScribeHeaderMode lastMode;
 
-		// Token: 0x04000DB3 RID: 3507
+		
 		public static string loadedGameVersion;
 
-		// Token: 0x04000DB4 RID: 3508
+		
 		public static List<string> loadedModIdsList;
 
-		// Token: 0x04000DB5 RID: 3509
+		
 		public static List<string> loadedModNamesList;
 
-		// Token: 0x04000DB6 RID: 3510
+		
 		public const string MetaNodeName = "meta";
 
-		// Token: 0x04000DB7 RID: 3511
+		
 		public const string GameVersionNodeName = "gameVersion";
 
-		// Token: 0x04000DB8 RID: 3512
+		
 		public const string ModIdsNodeName = "modIds";
 
-		// Token: 0x04000DB9 RID: 3513
+		
 		public const string ModNamesNodeName = "modNames";
 
-		// Token: 0x02001494 RID: 5268
+		
 		public enum ScribeHeaderMode
 		{
-			// Token: 0x04004DF9 RID: 19961
+			
 			None,
-			// Token: 0x04004DFA RID: 19962
+			
 			Map,
-			// Token: 0x04004DFB RID: 19963
+			
 			World,
-			// Token: 0x04004DFC RID: 19964
+			
 			Scenario
 		}
 	}

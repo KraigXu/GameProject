@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020010F0 RID: 4336
+	
 	public static class QuestNodeEqualUtility
 	{
-		// Token: 0x06006600 RID: 26112 RVA: 0x0023C018 File Offset: 0x0023A218
+		
 		public static bool Equal(object value1, object value2, Type compareAs)
 		{
 			if (value1 == value2)

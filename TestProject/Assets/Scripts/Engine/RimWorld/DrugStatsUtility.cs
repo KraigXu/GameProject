@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200086A RID: 2154
+	
 	public static class DrugStatsUtility
 	{
-		// Token: 0x0600350F RID: 13583 RVA: 0x00122848 File Offset: 0x00120A48
+		
 		public static CompProperties_Drug GetDrugComp(ThingDef d)
 		{
 			return d.GetCompProperties<CompProperties_Drug>();
 		}
 
-		// Token: 0x06003510 RID: 13584 RVA: 0x00122850 File Offset: 0x00120A50
+		
 		public static ChemicalDef GetChemical(ThingDef d)
 		{
 			CompProperties_Drug drugComp = DrugStatsUtility.GetDrugComp(d);
@@ -25,7 +25,7 @@ namespace RimWorld
 			return drugComp.chemical;
 		}
 
-		// Token: 0x06003511 RID: 13585 RVA: 0x00122863 File Offset: 0x00120A63
+		
 		public static NeedDef GetNeed(ThingDef d)
 		{
 			ChemicalDef chemical = DrugStatsUtility.GetChemical(d);
@@ -41,7 +41,7 @@ namespace RimWorld
 			return addictionHediff.causesNeed;
 		}
 
-		// Token: 0x06003512 RID: 13586 RVA: 0x00122881 File Offset: 0x00120A81
+		
 		public static HediffDef GetTolerance(ThingDef d)
 		{
 			ChemicalDef chemical = DrugStatsUtility.GetChemical(d);
@@ -52,7 +52,7 @@ namespace RimWorld
 			return chemical.toleranceHediff;
 		}
 
-		// Token: 0x06003513 RID: 13587 RVA: 0x00122894 File Offset: 0x00120A94
+		
 		public static IngestionOutcomeDoer_GiveHediff GetDrugHighGiver(ThingDef d)
 		{
 			if (d.ingestible == null || d.ingestible.outcomeDoers == null)
@@ -73,7 +73,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003514 RID: 13588 RVA: 0x00122928 File Offset: 0x00120B28
+		
 		public static IngestionOutcomeDoer_GiveHediff GetToleranceGiver(ThingDef d)
 		{
 			if (d.ingestible == null || d.ingestible.outcomeDoers == null)
@@ -94,7 +94,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003515 RID: 13589 RVA: 0x001229B0 File Offset: 0x00120BB0
+		
 		public static float GetHighOffsetPerDay(ThingDef d)
 		{
 			IngestionOutcomeDoer_GiveHediff drugHighGiver = DrugStatsUtility.GetDrugHighGiver(d);
@@ -110,7 +110,7 @@ namespace RimWorld
 			return hediffCompProperties_SeverityPerDay.severityPerDay;
 		}
 
-		// Token: 0x06003516 RID: 13590 RVA: 0x001229E8 File Offset: 0x00120BE8
+		
 		public static float GetToleranceGain(ThingDef d)
 		{
 			if (d.ingestible == null || d.ingestible.outcomeDoers == null)
@@ -135,7 +135,7 @@ namespace RimWorld
 			return 0f;
 		}
 
-		// Token: 0x06003517 RID: 13591 RVA: 0x00122A80 File Offset: 0x00120C80
+		
 		public static float GetToleranceOffsetPerDay(ThingDef d)
 		{
 			HediffDef tolerance = DrugStatsUtility.GetTolerance(d);
@@ -151,7 +151,7 @@ namespace RimWorld
 			return hediffCompProperties_SeverityPerDay.severityPerDay;
 		}
 
-		// Token: 0x06003518 RID: 13592 RVA: 0x00122AB4 File Offset: 0x00120CB4
+		
 		public static float GetAddictionOffsetPerDay(ThingDef d)
 		{
 			ChemicalDef chemical = DrugStatsUtility.GetChemical(d);
@@ -168,7 +168,7 @@ namespace RimWorld
 			return hediffCompProperties_SeverityPerDay.severityPerDay;
 		}
 
-		// Token: 0x06003519 RID: 13593 RVA: 0x00122AF4 File Offset: 0x00120CF4
+		
 		public static float GetAddictionNeedCostPerDay(ThingDef d)
 		{
 			NeedDef need = DrugStatsUtility.GetNeed(d);
@@ -179,7 +179,7 @@ namespace RimWorld
 			return 0f;
 		}
 
-		// Token: 0x0600351A RID: 13594 RVA: 0x00122B38 File Offset: 0x00120D38
+		
 		public static float GetSafeDoseInterval(ThingDef d)
 		{
 			CompProperties_Drug drugComp = DrugStatsUtility.GetDrugComp(d);
@@ -195,7 +195,7 @@ namespace RimWorld
 			return Mathf.Max(drugComp.overdoseSeverityOffset.TrueMax, (num > 0f) ? (DrugStatsUtility.GetToleranceGiver(d).severity / num) : -1f);
 		}
 
-		// Token: 0x0600351B RID: 13595 RVA: 0x00122BB0 File Offset: 0x00120DB0
+		
 		public static string GetSafeDoseIntervalReadout(ThingDef d)
 		{
 			IngestionOutcomeDoer_GiveHediff toleranceGiver = DrugStatsUtility.GetToleranceGiver(d);
@@ -217,7 +217,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x0600351C RID: 13596 RVA: 0x00122C3E File Offset: 0x00120E3E
+		
 		public static IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef def)
 		{
 			CompProperties_Drug drugComp = DrugStatsUtility.GetDrugComp(def);

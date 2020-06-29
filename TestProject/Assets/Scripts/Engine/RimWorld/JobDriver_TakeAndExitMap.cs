@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000675 RID: 1653
+	
 	public class JobDriver_TakeAndExitMap : JobDriver
 	{
-		// Token: 0x1700087C RID: 2172
+		
 		// (get) Token: 0x06002D0A RID: 11530 RVA: 0x000FEE2C File Offset: 0x000FD02C
 		protected Thing Item
 		{
@@ -19,13 +19,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D0B RID: 11531 RVA: 0x000FEE4D File Offset: 0x000FD04D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Item, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D0C RID: 11532 RVA: 0x000FEE6F File Offset: 0x000FD06F
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -56,10 +56,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A0C RID: 6668
+		
 		private const TargetIndex ItemInd = TargetIndex.A;
 
-		// Token: 0x04001A0D RID: 6669
+		
 		private const TargetIndex ExitCellInd = TargetIndex.B;
 	}
 }

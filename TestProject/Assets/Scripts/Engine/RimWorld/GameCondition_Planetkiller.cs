@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x020009B9 RID: 2489
+	
 	public class GameCondition_Planetkiller : GameCondition
 	{
-		// Token: 0x17000AAF RID: 2735
+		
 		// (get) Token: 0x06003B5F RID: 15199 RVA: 0x00139DB4 File Offset: 0x00137FB4
 		public override string TooltipString
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B60 RID: 15200 RVA: 0x00139EA4 File Offset: 0x001380A4
+		
 		public override void GameConditionTick()
 		{
 			base.GameConditionTick();
@@ -45,27 +45,27 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B61 RID: 15201 RVA: 0x00139EFF File Offset: 0x001380FF
+		
 		public override void End()
 		{
 			base.End();
 			this.Impact();
 		}
 
-		// Token: 0x06003B62 RID: 15202 RVA: 0x00139F0D File Offset: 0x0013810D
+		
 		private void Impact()
 		{
 			ScreenFader.SetColor(Color.clear);
 			GenGameEnd.EndGameDialogMessage("GameOverPlanetkillerImpact".Translate(Find.World.info.name), false, GameCondition_Planetkiller.FadeColor);
 		}
 
-		// Token: 0x0400231C RID: 8988
+		
 		private const int SoundDuration = 179;
 
-		// Token: 0x0400231D RID: 8989
+		
 		private const int FadeDuration = 90;
 
-		// Token: 0x0400231E RID: 8990
+		
 		private static readonly Color FadeColor = Color.white;
 	}
 }

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000802 RID: 2050
+	
 	public abstract class ThoughtWorker_RoomImpressiveness : ThoughtWorker
 	{
-		// Token: 0x0600340B RID: 13323 RVA: 0x0011E8A4 File Offset: 0x0011CAA4
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.story.traits.HasTrait(TraitDefOf.Ascetic))

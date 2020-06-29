@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E72 RID: 3698
+	
 	public static class NeedsCardUtility
 	{
-		// Token: 0x0600599B RID: 22939 RVA: 0x001E39EC File Offset: 0x001E1BEC
+		
 		public static Vector2 GetSize(Pawn pawn)
 		{
 			NeedsCardUtility.UpdateDisplayNeeds(pawn);
@@ -20,7 +20,7 @@ namespace RimWorld
 			return new Vector2(225f, (float)NeedsCardUtility.displayNeeds.Count * Mathf.Min(70f, NeedsCardUtility.FullSize.y / (float)NeedsCardUtility.displayNeeds.Count));
 		}
 
-		// Token: 0x0600599C RID: 22940 RVA: 0x001E3A48 File Offset: 0x001E1C48
+		
 		public static void DoNeedsMoodAndThoughts(Rect rect, Pawn pawn, ref Vector2 thoughtScrollPosition)
 		{
 			Rect rect2 = new Rect(rect.x, rect.y, 225f, rect.height);
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600599D RID: 22941 RVA: 0x001E3ABC File Offset: 0x001E1CBC
+		
 		public static void DoNeeds(Rect rect, Pawn pawn)
 		{
 			NeedsCardUtility.UpdateDisplayNeeds(pawn);
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600599E RID: 22942 RVA: 0x001E3BC0 File Offset: 0x001E1DC0
+		
 		private static void DoMoodAndThoughts(Rect rect, Pawn pawn, ref Vector2 thoughtScrollPosition)
 		{
 			GUI.BeginGroup(rect);
@@ -64,7 +64,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x0600599F RID: 22943 RVA: 0x001E3C54 File Offset: 0x001E1E54
+		
 		private static void UpdateDisplayNeeds(Pawn pawn)
 		{
 			NeedsCardUtility.displayNeeds.Clear();
@@ -79,7 +79,7 @@ namespace RimWorld
 			PawnNeedsUIUtility.SortInDisplayOrder(NeedsCardUtility.displayNeeds);
 		}
 
-		// Token: 0x060059A0 RID: 22944 RVA: 0x001E3CB4 File Offset: 0x001E1EB4
+		
 		private static void DrawThoughtListing(Rect listingRect, Pawn pawn, ref Vector2 thoughtScrollPosition)
 		{
 			if (Event.current.type == EventType.Layout)
@@ -103,7 +103,7 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x060059A1 RID: 22945 RVA: 0x001E3D88 File Offset: 0x001E1F88
+		
 		private static bool DrawThoughtGroup(Rect rect, Thought group, Pawn pawn)
 		{
 			try
@@ -228,43 +228,43 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x040030A6 RID: 12454
+		
 		private static List<Need> displayNeeds = new List<Need>();
 
-		// Token: 0x040030A7 RID: 12455
+		
 		private static readonly Color MoodColor = new Color(0.1f, 1f, 0.1f);
 
-		// Token: 0x040030A8 RID: 12456
+		
 		private static readonly Color MoodColorNegative = new Color(0.8f, 0.4f, 0.4f);
 
-		// Token: 0x040030A9 RID: 12457
+		
 		private static readonly Color NoEffectColor = new Color(0.5f, 0.5f, 0.5f, 0.75f);
 
-		// Token: 0x040030AA RID: 12458
+		
 		private const float ThoughtHeight = 20f;
 
-		// Token: 0x040030AB RID: 12459
+		
 		private const float ThoughtSpacing = 4f;
 
-		// Token: 0x040030AC RID: 12460
+		
 		private const float ThoughtIntervalY = 24f;
 
-		// Token: 0x040030AD RID: 12461
+		
 		private const float MoodX = 235f;
 
-		// Token: 0x040030AE RID: 12462
+		
 		private const float MoodNumberWidth = 32f;
 
-		// Token: 0x040030AF RID: 12463
+		
 		private const float NeedsColumnWidth = 225f;
 
-		// Token: 0x040030B0 RID: 12464
+		
 		public static readonly Vector2 FullSize = new Vector2(580f, 520f);
 
-		// Token: 0x040030B1 RID: 12465
+		
 		private static List<Thought> thoughtGroupsPresent = new List<Thought>();
 
-		// Token: 0x040030B2 RID: 12466
+		
 		private static List<Thought> thoughtGroup = new List<Thought>();
 	}
 }

@@ -7,10 +7,10 @@ using RimWorld.IO;
 
 namespace Verse
 {
-	// Token: 0x0200012A RID: 298
+	
 	public static class BackstoryTranslationUtility
 	{
-		// Token: 0x06000870 RID: 2160 RVA: 0x00029A72 File Offset: 0x00027C72
+		
 		private static IEnumerable<XElement> BackstoryTranslationElements(IEnumerable<Tuple<VirtualDirectory, ModContentPack, string>> folders, List<string> loadErrors)
 		{
 			Dictionary<ModContentPack, HashSet<string>> alreadyLoadedFiles = new Dictionary<ModContentPack, HashSet<string>>();
@@ -66,7 +66,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000871 RID: 2161 RVA: 0x00029A8C File Offset: 0x00027C8C
+		
 		public static void LoadAndInjectBackstoryData(IEnumerable<Tuple<VirtualDirectory, ModContentPack, string>> folderPaths, List<string> loadErrors)
 		{
 			foreach (XElement xelement in BackstoryTranslationUtility.BackstoryTranslationElements(folderPaths, loadErrors))
@@ -130,7 +130,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000872 RID: 2162 RVA: 0x00029C94 File Offset: 0x00027E94
+		
 		public static List<string> MissingBackstoryTranslations(LoadedLanguage lang)
 		{
 			List<KeyValuePair<string, Backstory>> list = BackstoryDatabase.allBackstories.ToList<KeyValuePair<string, Backstory>>();
@@ -195,7 +195,7 @@ namespace Verse
 			return list2;
 		}
 
-		// Token: 0x06000873 RID: 2163 RVA: 0x00029F38 File Offset: 0x00028138
+		
 		public static List<string> BackstoryTranslationsMatchingEnglish(LoadedLanguage lang)
 		{
 			List<string> list = new List<string>();
@@ -248,7 +248,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06000874 RID: 2164 RVA: 0x0002A198 File Offset: 0x00028398
+		
 		private static string GetText(XElement backstory, string fieldName)
 		{
 			XElement xelement = backstory.Element(fieldName);
@@ -259,10 +259,10 @@ namespace Verse
 			return xelement.Value.Replace("\\n", "\n");
 		}
 
-		// Token: 0x04000750 RID: 1872
+		
 		public const string BackstoriesFolder = "Backstories";
 
-		// Token: 0x04000751 RID: 1873
+		
 		public const string BackstoriesFileName = "Backstories.xml";
 	}
 }

@@ -6,11 +6,11 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000D75 RID: 3445
+	
 	[StaticConstructorOnStartup]
 	public class Command_LoadToTransporter : Command
 	{
-		// Token: 0x060053FF RID: 21503 RVA: 0x001C0BAC File Offset: 0x001BEDAC
+		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
@@ -56,7 +56,7 @@ namespace RimWorld
 			Find.WindowStack.Add(new Dialog_LoadTransporters(this.transComp.Map, this.transporters));
 		}
 
-		// Token: 0x06005400 RID: 21504 RVA: 0x001C0D9C File Offset: 0x001BEF9C
+		
 		public override bool InheritInteractionsFrom(Gizmo other)
 		{
 			if (this.transComp.Props.max1PerGroup)
@@ -76,13 +76,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04002E53 RID: 11859
+		
 		public CompTransporter transComp;
 
-		// Token: 0x04002E54 RID: 11860
+		
 		private List<CompTransporter> transporters;
 
-		// Token: 0x04002E55 RID: 11861
+		
 		private static HashSet<Building> tmpFuelingPortGivers = new HashSet<Building>();
 	}
 }

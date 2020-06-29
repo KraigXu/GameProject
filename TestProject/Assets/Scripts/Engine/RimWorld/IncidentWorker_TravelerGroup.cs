@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020009FF RID: 2559
+	
 	public class IncidentWorker_TravelerGroup : IncidentWorker_NeutralGroup
 	{
-		// Token: 0x06003CE1 RID: 15585 RVA: 0x001420A8 File Offset: 0x001402A8
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -44,7 +44,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003CE2 RID: 15586 RVA: 0x0014220D File Offset: 0x0014040D
+		
 		protected override void ResolveParmsPoints(IncidentParms parms)
 		{
 			if (parms.points >= 0f)
@@ -54,7 +54,7 @@ namespace RimWorld
 			parms.points = Rand.ByCurve(IncidentWorker_TravelerGroup.PointsCurve);
 		}
 
-		// Token: 0x04002395 RID: 9109
+		
 		private static readonly SimpleCurve PointsCurve = new SimpleCurve
 		{
 			{

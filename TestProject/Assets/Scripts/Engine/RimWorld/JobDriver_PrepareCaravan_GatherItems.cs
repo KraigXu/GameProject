@@ -9,10 +9,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200062A RID: 1578
+	
 	public class JobDriver_PrepareCaravan_GatherItems : JobDriver
 	{
-		// Token: 0x17000825 RID: 2085
+		
 		// (get) Token: 0x06002B29 RID: 11049 RVA: 0x000FA958 File Offset: 0x000F8B58
 		public Thing ToHaul
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000826 RID: 2086
+		
 		// (get) Token: 0x06002B2A RID: 11050 RVA: 0x000FA97C File Offset: 0x000F8B7C
 		public Pawn Carrier
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000827 RID: 2087
+		
 		// (get) Token: 0x06002B2B RID: 11051 RVA: 0x000FA9A2 File Offset: 0x000F8BA2
 		private List<TransferableOneWay> Transferables
 		{
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000828 RID: 2088
+		
 		// (get) Token: 0x06002B2C RID: 11052 RVA: 0x000FA9C0 File Offset: 0x000F8BC0
 		private TransferableOneWay Transferable
 		{
@@ -57,13 +57,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002B2D RID: 11053 RVA: 0x000FA9EF File Offset: 0x000F8BEF
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.ToHaul, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002B2E RID: 11054 RVA: 0x000FAA11 File Offset: 0x000F8C11
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(() => !base.Map.lordManager.lords.Contains(this.job.lord));
@@ -82,7 +82,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002B2F RID: 11055 RVA: 0x000FAA21 File Offset: 0x000F8C21
+		
 		private Toil DetermineNumToHaul()
 		{
 			return new Toil
@@ -106,7 +106,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002B30 RID: 11056 RVA: 0x000FAA48 File Offset: 0x000F8C48
+		
 		private Toil AddCarriedThingToTransferables()
 		{
 			return new Toil
@@ -124,7 +124,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002B31 RID: 11057 RVA: 0x000FAA6F File Offset: 0x000F8C6F
+		
 		private Toil FindCarrier()
 		{
 			return new Toil
@@ -168,7 +168,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002B32 RID: 11058 RVA: 0x000FAA88 File Offset: 0x000F8C88
+		
 		private Toil PlaceTargetInCarrierInventory()
 		{
 			return new Toil
@@ -183,13 +183,13 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002B33 RID: 11059 RVA: 0x000FAAA4 File Offset: 0x000F8CA4
+		
 		public static bool IsUsableCarrier(Pawn p, Pawn forPawn, bool allowColonists)
 		{
 			return p.IsFormingCaravan() && (p == forPawn || (!p.DestroyedOrNull() && p.Spawned && !p.inventory.UnloadEverything && forPawn.CanReach(p, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn) && ((allowColonists && p.IsColonist) || ((p.RaceProps.packAnimal || p.HostFaction == Faction.OfPlayer) && !p.IsBurning() && !p.Downed && !MassUtility.IsOverEncumbered(p)))));
 		}
 
-		// Token: 0x06002B34 RID: 11060 RVA: 0x000FAB34 File Offset: 0x000F8D34
+		
 		private float GetCarrierScore(Pawn p)
 		{
 			float lengthHorizontal = (p.Position - this.pawn.Position).LengthHorizontal;
@@ -197,7 +197,7 @@ namespace RimWorld
 			return 1f - num - lengthHorizontal / 10f * 0.2f;
 		}
 
-		// Token: 0x06002B35 RID: 11061 RVA: 0x000FAB7C File Offset: 0x000F8D7C
+		
 		private Pawn FindBestCarrier(bool onlyAnimals)
 		{
 			Lord lord = this.job.lord;
@@ -222,13 +222,13 @@ namespace RimWorld
 			return pawn;
 		}
 
-		// Token: 0x04001992 RID: 6546
+		
 		private const TargetIndex ToHaulInd = TargetIndex.A;
 
-		// Token: 0x04001993 RID: 6547
+		
 		private const TargetIndex CarrierInd = TargetIndex.B;
 
-		// Token: 0x04001994 RID: 6548
+		
 		private const int PlaceInInventoryDuration = 25;
 	}
 }

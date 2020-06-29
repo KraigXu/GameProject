@@ -5,22 +5,22 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000451 RID: 1105
+	
 	public static class GenSpawn
 	{
-		// Token: 0x06002105 RID: 8453 RVA: 0x000CA4C9 File Offset: 0x000C86C9
+		
 		public static Thing Spawn(ThingDef def, IntVec3 loc, Map map, WipeMode wipeMode = WipeMode.Vanish)
 		{
 			return GenSpawn.Spawn(ThingMaker.MakeThing(def, null), loc, map, wipeMode);
 		}
 
-		// Token: 0x06002106 RID: 8454 RVA: 0x000CA4DA File Offset: 0x000C86DA
+		
 		public static Thing Spawn(Thing newThing, IntVec3 loc, Map map, WipeMode wipeMode = WipeMode.Vanish)
 		{
 			return GenSpawn.Spawn(newThing, loc, map, Rot4.North, wipeMode, false);
 		}
 
-		// Token: 0x06002107 RID: 8455 RVA: 0x000CA4EC File Offset: 0x000C86EC
+		
 		public static Thing Spawn(Thing newThing, IntVec3 loc, Map map, Rot4 rot, WipeMode wipeMode = WipeMode.Vanish, bool respawningAfterLoad = false)
 		{
 			if (map == null)
@@ -79,7 +79,7 @@ namespace Verse
 			}
 			if (newThing.def.category == ThingCategory.Item)
 			{
-				Predicate<IntVec3> <>9__0;
+				Predicate<IntVec3> 9__0;
 				foreach (IntVec3 intVec in occupiedRect)
 				{
 					foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -92,9 +92,9 @@ namespace Verse
 							ThingPlaceMode mode = ThingPlaceMode.Near;
 							Action<Thing, int> placedAction = null;
 							Predicate<IntVec3> nearPlaceValidator;
-							if ((nearPlaceValidator = <>9__0) == null)
+							if ((nearPlaceValidator ) == null)
 							{
-								nearPlaceValidator = (<>9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
+								nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
 							}
 							if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 							{
@@ -137,7 +137,7 @@ namespace Verse
 			return newThing;
 		}
 
-		// Token: 0x06002108 RID: 8456 RVA: 0x000CA85C File Offset: 0x000C8A5C
+		
 		public static void SpawnBuildingAsPossible(Building building, Map map, bool respawningAfterLoad = false)
 		{
 			bool flag = false;
@@ -177,7 +177,7 @@ namespace Verse
 			GenSpawn.Spawn(building, building.Position, map, building.Rotation, WipeMode.FullRefund, respawningAfterLoad);
 		}
 
-		// Token: 0x06002109 RID: 8457 RVA: 0x000CA97C File Offset: 0x000C8B7C
+		
 		public static void Refund(Thing thing, Map map, CellRect avoidThisRect)
 		{
 			bool flag = false;
@@ -201,7 +201,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600210A RID: 8458 RVA: 0x000CAA10 File Offset: 0x000C8C10
+		
 		public static void WipeExistingThings(IntVec3 thingPos, Rot4 thingRot, BuildableDef thingDef, Map map, DestroyMode mode)
 		{
 			foreach (IntVec3 c in GenAdj.CellsOccupiedBy(thingPos, thingRot, thingDef.Size))
@@ -216,11 +216,11 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600210B RID: 8459 RVA: 0x000CAABC File Offset: 0x000C8CBC
+		
 		public static void WipeAndRefundExistingThings(IntVec3 thingPos, Rot4 thingRot, BuildableDef thingDef, Map map)
 		{
 			CellRect occupiedRect = GenAdj.OccupiedRect(thingPos, thingRot, thingDef.Size);
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			foreach (IntVec3 intVec in occupiedRect)
 			{
 				foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -235,9 +235,9 @@ namespace Verse
 							ThingPlaceMode mode = ThingPlaceMode.Near;
 							Action<Thing, int> placedAction = null;
 							Predicate<IntVec3> nearPlaceValidator;
-							if ((nearPlaceValidator = <>9__0) == null)
+							if ((nearPlaceValidator ) == null)
 							{
-								nearPlaceValidator = (<>9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
+								nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
 							}
 							if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 							{
@@ -253,7 +253,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600210C RID: 8460 RVA: 0x000CABE4 File Offset: 0x000C8DE4
+		
 		public static void CheckMoveItemsAside(IntVec3 thingPos, Rot4 thingRot, ThingDef thingDef, Map map)
 		{
 			if (thingDef.surfaceType != SurfaceType.None || thingDef.passability == Traversability.Standable)
@@ -261,7 +261,7 @@ namespace Verse
 				return;
 			}
 			CellRect occupiedRect = GenAdj.OccupiedRect(thingPos, thingRot, thingDef.Size);
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			foreach (IntVec3 intVec in occupiedRect)
 			{
 				foreach (Thing thing in intVec.GetThingList(map).ToList<Thing>())
@@ -274,9 +274,9 @@ namespace Verse
 						ThingPlaceMode mode = ThingPlaceMode.Near;
 						Action<Thing, int> placedAction = null;
 						Predicate<IntVec3> nearPlaceValidator;
-						if ((nearPlaceValidator = <>9__0) == null)
+						if ((nearPlaceValidator ) == null)
 						{
-							nearPlaceValidator = (<>9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
+							nearPlaceValidator = (9__0 = ((IntVec3 x) => !occupiedRect.Contains(x)));
 						}
 						if (!GenPlace.TryPlaceThing(thing2, center, map, mode, placedAction, nearPlaceValidator, default(Rot4)))
 						{
@@ -287,13 +287,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600210D RID: 8461 RVA: 0x000CACFC File Offset: 0x000C8EFC
+		
 		public static bool WouldWipeAnythingWith(IntVec3 thingPos, Rot4 thingRot, BuildableDef thingDef, Map map, Predicate<Thing> predicate)
 		{
 			return GenSpawn.WouldWipeAnythingWith(GenAdj.OccupiedRect(thingPos, thingRot, thingDef.Size), thingDef, map, predicate);
 		}
 
-		// Token: 0x0600210E RID: 8462 RVA: 0x000CAD14 File Offset: 0x000C8F14
+		
 		public static bool WouldWipeAnythingWith(CellRect cellRect, BuildableDef thingDef, Map map, Predicate<Thing> predicate)
 		{
 			foreach (IntVec3 c in cellRect)
@@ -309,7 +309,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600210F RID: 8463 RVA: 0x000CADC4 File Offset: 0x000C8FC4
+		
 		public static bool SpawningWipes(BuildableDef newEntDef, BuildableDef oldEntDef)
 		{
 			ThingDef thingDef = newEntDef as ThingDef;

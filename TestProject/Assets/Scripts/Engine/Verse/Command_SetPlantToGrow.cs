@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200038D RID: 909
+	
 	[StaticConstructorOnStartup]
 	public class Command_SetPlantToGrow : Command
 	{
-		// Token: 0x06001ADA RID: 6874 RVA: 0x000A4F84 File Offset: 0x000A3184
+		
 		public Command_SetPlantToGrow()
 		{
 			this.tutorTag = "GrowingZoneSetPlant";
@@ -40,7 +40,7 @@ namespace Verse
 			this.defaultLabel = "CommandSelectPlantToGrow".Translate(thingDef.LabelCap);
 		}
 
-		// Token: 0x06001ADB RID: 6875 RVA: 0x000A5070 File Offset: 0x000A3270
+		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
@@ -111,7 +111,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001ADC RID: 6876 RVA: 0x000A5260 File Offset: 0x000A3460
+		
 		public override bool InheritInteractionsFrom(Gizmo other)
 		{
 			if (this.settables == null)
@@ -122,7 +122,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001ADD RID: 6877 RVA: 0x000A528C File Offset: 0x000A348C
+		
 		private void WarnAsAppropriate(ThingDef plantDef)
 		{
 			if (plantDef.plant.sowMinSkill > 0)
@@ -161,7 +161,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001ADE RID: 6878 RVA: 0x000A5490 File Offset: 0x000A3690
+		
 		public static bool IsPlantAvailable(ThingDef plantDef, Map map)
 		{
 			List<ResearchProjectDef> sowResearchPrerequisites = plantDef.plant.sowResearchPrerequisites;
@@ -179,7 +179,7 @@ namespace Verse
 			return !plantDef.plant.mustBeWildToSow || map.Biome.AllWildPlants.Contains(plantDef);
 		}
 
-		// Token: 0x06001ADF RID: 6879 RVA: 0x000A54F4 File Offset: 0x000A36F4
+		
 		private float GetPlantListPriority(ThingDef plantDef)
 		{
 			if (plantDef.plant.IsTree)
@@ -201,16 +201,16 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000FE3 RID: 4067
+		
 		public IPlantToGrowSettable settable;
 
-		// Token: 0x04000FE4 RID: 4068
+		
 		private List<IPlantToGrowSettable> settables;
 
-		// Token: 0x04000FE5 RID: 4069
+		
 		private static List<ThingDef> tmpAvailablePlants = new List<ThingDef>();
 
-		// Token: 0x04000FE6 RID: 4070
+		
 		private static readonly Texture2D SetPlantToGrowTex = ContentFinder<Texture2D>.Get("UI/Commands/SetPlantToGrow", true);
 	}
 }

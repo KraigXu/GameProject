@@ -6,10 +6,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000332 RID: 818
+	
 	public static class DebugActionsIncidents
 	{
-		// Token: 0x06001804 RID: 6148 RVA: 0x00088E7F File Offset: 0x0008707F
+		
 		[DebugActionYielder]
 		private static IEnumerable<Dialog_DebugActionsMenu.DebugActionOption> IncidentsYielder()
 		{
@@ -36,7 +36,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06001805 RID: 6149 RVA: 0x00088E88 File Offset: 0x00087088
+		
 		[DebugAction("Incidents", "Execute raid with points...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ExecuteRaidWithPoints()
 		{
@@ -55,15 +55,15 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001806 RID: 6150 RVA: 0x00088F28 File Offset: 0x00087128
+		
 		[DebugAction("Incidents", "Execute raid with faction...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ExecuteRaidWithFaction()
 		{
 			StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
 			IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			Func<RaidStrategyDef, bool> <>9__3;
-			Func<PawnsArrivalModeDef, bool> <>9__5;
+			
+			
 			foreach (Faction localFac2 in Find.FactionManager.AllFactions)
 			{
 				Faction localFac = localFac2;
@@ -78,22 +78,16 @@ namespace Verse
 						{
 							parms.points = localPoints;
 							IEnumerable<RaidStrategyDef> allDefs = DefDatabase<RaidStrategyDef>.AllDefs;
-							Func<RaidStrategyDef, bool> predicate;
-							if ((predicate = <>9__3) == null)
-							{
-								predicate = (<>9__3 = ((RaidStrategyDef s) => s.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat)));
-							}
+							Func<RaidStrategyDef, bool> predicate = ((RaidStrategyDef s) => s.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat));
+
 							List<RaidStrategyDef> source = allDefs.Where(predicate).ToList<RaidStrategyDef>();
 							Log.Message("Available strategies: " + string.Join(", ", (from s in source
 							select s.defName).ToArray<string>()), false);
 							parms.raidStrategy = source.RandomElement<RaidStrategyDef>();
 							Log.Message("Strategy: " + parms.raidStrategy.defName, false);
 							IEnumerable<PawnsArrivalModeDef> allDefs2 = DefDatabase<PawnsArrivalModeDef>.AllDefs;
-							Func<PawnsArrivalModeDef, bool> predicate2;
-							if ((predicate2 = <>9__5) == null)
-							{
-								predicate2 = (<>9__5 = ((PawnsArrivalModeDef a) => a.Worker.CanUseWith(parms) && parms.raidStrategy.arriveModes.Contains(a)));
-							}
+							Func<PawnsArrivalModeDef, bool> predicate2 = ((PawnsArrivalModeDef a) => a.Worker.CanUseWith(parms) && parms.raidStrategy.arriveModes.Contains(a));
+
 							List<PawnsArrivalModeDef> source2 = allDefs2.Where(predicate2).ToList<PawnsArrivalModeDef>();
 							Log.Message("Available arrival modes: " + string.Join(", ", (from s in source2
 							select s.defName).ToArray<string>()), false);
@@ -108,14 +102,13 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001807 RID: 6151 RVA: 0x00089034 File Offset: 0x00087234
+		
 		[DebugAction("Incidents", "Execute raid with specifics...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ExecuteRaidWithSpecifics()
 		{
 			StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
 			IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			Action <>9__4;
 			foreach (Faction localFac2 in Find.FactionManager.AllFactions)
 			{
 				Faction localFac = localFac2;
@@ -145,14 +138,11 @@ namespace Verse
 									List<DebugMenuOption> list5 = list4;
 									string label = "-Random-";
 									DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
-									Action method;
-									if ((method = <>9__4) == null)
+									Action method = delegate
 									{
-										method = (<>9__4 = delegate
-										{
-											DebugActionsIncidents.DoRaid(parms);
-										});
-									}
+										DebugActionsIncidents.DoRaid(parms);
+									};
+	
 									list5.Add(new DebugMenuOption(label, mode, method));
 									foreach (PawnsArrivalModeDef localArrival2 in DefDatabase<PawnsArrivalModeDef>.AllDefs)
 									{
@@ -180,7 +170,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001808 RID: 6152 RVA: 0x00089140 File Offset: 0x00087340
+		
 		private static string GetIncidentTargetLabel(IIncidentTarget target)
 		{
 			if (target == null)
@@ -202,7 +192,7 @@ namespace Verse
 			return target.ToString();
 		}
 
-		// Token: 0x06001809 RID: 6153 RVA: 0x0008918C File Offset: 0x0008738C
+		
 		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentDebugAction(IIncidentTarget target)
 		{
 			return new Dialog_DebugActionsMenu.DebugActionOption
@@ -217,7 +207,7 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x0600180A RID: 6154 RVA: 0x000891F8 File Offset: 0x000873F8
+		
 		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidents10DebugAction(IIncidentTarget target)
 		{
 			return new Dialog_DebugActionsMenu.DebugActionOption
@@ -232,17 +222,14 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x0600180B RID: 6155 RVA: 0x00089264 File Offset: 0x00087464
+		
 		private static void DoIncidentDebugAction(IIncidentTarget target, int iterations = 1)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
 			IEnumerable<IncidentDef> allDefs = DefDatabase<IncidentDef>.AllDefs;
-			Func<IncidentDef, bool> <>9__0;
-			Func<IncidentDef, bool> predicate;
-			if ((predicate = <>9__0) == null)
-			{
-				predicate = (<>9__0 = ((IncidentDef d) => d.TargetAllowed(target)));
-			}
+			
+			Func<IncidentDef, bool> predicate = ((IncidentDef d) => d.TargetAllowed(target));
+
 			foreach (IncidentDef localDef2 in from d in allDefs.Where(predicate)
 			orderby d.defName
 			select d)
@@ -270,7 +257,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600180C RID: 6156 RVA: 0x000893B0 File Offset: 0x000875B0
+		
 		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentWithPointsDebugAction(IIncidentTarget target)
 		{
 			return new Dialog_DebugActionsMenu.DebugActionOption
@@ -285,17 +272,14 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x0600180D RID: 6157 RVA: 0x0008941C File Offset: 0x0008761C
+		
 		private static void DoIncidentWithPointsAction(IIncidentTarget target)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
 			IEnumerable<IncidentDef> allDefs = DefDatabase<IncidentDef>.AllDefs;
-			Func<IncidentDef, bool> <>9__0;
-			Func<IncidentDef, bool> predicate;
-			if ((predicate = <>9__0) == null)
-			{
-				predicate = (<>9__0 = ((IncidentDef d) => d.TargetAllowed(target) && d.pointsScaleable));
-			}
+			
+			Func<IncidentDef, bool> predicate = ((IncidentDef d) => d.TargetAllowed(target) && d.pointsScaleable);
+
 			foreach (IncidentDef localDef2 in from d in allDefs.Where(predicate)
 			orderby d.defName
 			select d)
@@ -325,7 +309,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600180E RID: 6158 RVA: 0x00089554 File Offset: 0x00087754
+		
 		private static void DoRaid(IncidentParms parms)
 		{
 			IncidentDef incidentDef;

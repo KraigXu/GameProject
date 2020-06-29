@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.Sound
 {
-	// Token: 0x0200050B RID: 1291
+	
 	public class Sustainer
 	{
-		// Token: 0x17000761 RID: 1889
+		
 		// (get) Token: 0x060024FB RID: 9467 RVA: 0x000DB411 File Offset: 0x000D9611
 		public bool Ended
 		{
@@ -17,7 +17,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x17000762 RID: 1890
+		
 		// (get) Token: 0x060024FC RID: 9468 RVA: 0x000DB423 File Offset: 0x000D9623
 		public float TimeSinceEnd
 		{
@@ -27,7 +27,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x17000763 RID: 1891
+		
 		// (get) Token: 0x060024FD RID: 9469 RVA: 0x000DB434 File Offset: 0x000D9634
 		public float CameraDistanceSquared
 		{
@@ -56,7 +56,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x060024FE RID: 9470 RVA: 0x000DB4DC File Offset: 0x000D96DC
+		
 		public Sustainer(SoundDef def, SoundInfo info)
 		{
 			this.def = def;
@@ -97,7 +97,7 @@ namespace Verse.Sound
 			});
 		}
 
-		// Token: 0x060024FF RID: 9471 RVA: 0x000DB660 File Offset: 0x000D9860
+		
 		public void SustainerUpdate()
 		{
 			if (!this.Ended)
@@ -134,7 +134,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x06002500 RID: 9472 RVA: 0x000DB748 File Offset: 0x000D9948
+		
 		private void UpdateRootObjectPosition()
 		{
 			if (this.worldRootObject != null)
@@ -143,7 +143,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x06002501 RID: 9473 RVA: 0x000DB794 File Offset: 0x000D9994
+		
 		public void Maintain()
 		{
 			if (this.Ended)
@@ -162,7 +162,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x06002502 RID: 9474 RVA: 0x000DB7F8 File Offset: 0x000D99F8
+		
 		public void End()
 		{
 			this.endRealTime = Time.realtimeSinceStartup;
@@ -172,7 +172,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x06002503 RID: 9475 RVA: 0x000DB820 File Offset: 0x000D9A20
+		
 		private void Cleanup()
 		{
 			if (this.def.subSounds.Count > 0)
@@ -206,7 +206,7 @@ namespace Verse.Sound
 			DebugSoundEventsLog.Notify_SustainerEnded(this, this.info);
 		}
 
-		// Token: 0x06002504 RID: 9476 RVA: 0x000DB91C File Offset: 0x000D9B1C
+		
 		public string DebugString()
 		{
 			string text = this.def.defName;
@@ -219,31 +219,31 @@ namespace Verse.Sound
 			return text;
 		}
 
-		// Token: 0x04001675 RID: 5749
+		
 		public SoundDef def;
 
-		// Token: 0x04001676 RID: 5750
+		
 		public SoundInfo info;
 
-		// Token: 0x04001677 RID: 5751
+		
 		internal GameObject worldRootObject;
 
-		// Token: 0x04001678 RID: 5752
+		
 		private int lastMaintainTick;
 
-		// Token: 0x04001679 RID: 5753
+		
 		private int lastMaintainFrame;
 
-		// Token: 0x0400167A RID: 5754
+		
 		private float endRealTime = -1f;
 
-		// Token: 0x0400167B RID: 5755
+		
 		private List<SubSustainer> subSustainers = new List<SubSustainer>();
 
-		// Token: 0x0400167C RID: 5756
+		
 		public SoundParams externalParams = new SoundParams();
 
-		// Token: 0x0400167D RID: 5757
+		
 		public SustainerScopeFader scopeFader = new SustainerScopeFader();
 	}
 }

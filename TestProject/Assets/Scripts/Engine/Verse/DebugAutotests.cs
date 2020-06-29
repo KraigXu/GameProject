@@ -7,24 +7,24 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x0200033A RID: 826
+	
 	public static class DebugAutotests
 	{
-		// Token: 0x0600185E RID: 6238 RVA: 0x0008C076 File Offset: 0x0008A276
+		
 		[DebugAction("Autotests", "Make colony (full)", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void MakeColonyFull()
 		{
 			Autotests_ColonyMaker.MakeColony_Full();
 		}
 
-		// Token: 0x0600185F RID: 6239 RVA: 0x0008C07D File Offset: 0x0008A27D
+		
 		[DebugAction("Autotests", "Make colony (animals)", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void MakeColonyAnimals()
 		{
 			Autotests_ColonyMaker.MakeColony_Animals();
 		}
 
-		// Token: 0x06001860 RID: 6240 RVA: 0x0008C084 File Offset: 0x0008A284
+		
 		[DebugAction("Autotests", "Test force downed x100", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestForceDownedx100()
 		{
@@ -48,7 +48,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001861 RID: 6241 RVA: 0x0008C138 File Offset: 0x0008A338
+		
 		[DebugAction("Autotests", "Test force kill x100", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestForceKillx100()
 		{
@@ -72,7 +72,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001862 RID: 6242 RVA: 0x0008C1EC File Offset: 0x0008A3EC
+		
 		[DebugAction("Autotests", "Test Surgery fail catastrophic x100", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestSurgeryFailCatastrophicx100()
 		{
@@ -98,7 +98,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001863 RID: 6243 RVA: 0x0008C2D4 File Offset: 0x0008A4D4
+		
 		[DebugAction("Autotests", "Test Surgery fail ridiculous x100", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestSurgeryFailRidiculousx100()
 		{
@@ -123,7 +123,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001864 RID: 6244 RVA: 0x0008C3A0 File Offset: 0x0008A5A0
+		
 		[DebugAction("Autotests", "Test generate pawn x1000", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestGeneratePawnx1000()
 		{
@@ -163,14 +163,14 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001865 RID: 6245 RVA: 0x0008C4A0 File Offset: 0x0008A6A0
+		
 		[DebugAction("Autotests", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void CheckRegionListers()
 		{
 			Autotests_RegionListers.CheckBugs(Find.CurrentMap);
 		}
 
-		// Token: 0x06001866 RID: 6246 RVA: 0x0008C4AC File Offset: 0x0008A6AC
+		
 		[DebugAction("Autotests", "Test time-to-down", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void TestTimeToDown()
 		{
@@ -216,14 +216,14 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001867 RID: 6247 RVA: 0x0008C55C File Offset: 0x0008A75C
+		
 		[DebugAction("Autotests", "Battle Royale All PawnKinds", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void BattleRoyaleAllPawnKinds()
 		{
 			ArenaUtility.PerformBattleRoyale(DefDatabase<PawnKindDef>.AllDefs);
 		}
 
-		// Token: 0x06001868 RID: 6248 RVA: 0x0008C568 File Offset: 0x0008A768
+		
 		[DebugAction("Autotests", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void BattleRoyaleHumanlikes()
 		{
@@ -232,7 +232,7 @@ namespace Verse
 			select k);
 		}
 
-		// Token: 0x06001869 RID: 6249 RVA: 0x0008C598 File Offset: 0x0008A798
+		
 		[DebugAction("Autotests", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void BattleRoyaleByDamagetype()
 		{
@@ -278,7 +278,7 @@ namespace Verse
 			ArenaUtility.PerformBattleRoyale(DebugAutotests.pawnKindsForDamageTypeBattleRoyale);
 		}
 
-		// Token: 0x04000F0D RID: 3853
+		
 		private static List<PawnKindDef> pawnKindsForDamageTypeBattleRoyale;
 	}
 }

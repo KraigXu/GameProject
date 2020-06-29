@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001040 RID: 4160
+	
 	public class RoomRequirement_TerrainWithTags : RoomRequirement
 	{
-		// Token: 0x0600636D RID: 25453 RVA: 0x00228594 File Offset: 0x00226794
+		
 		public override bool Met(Room r, Pawn p = null)
 		{
 			foreach (IntVec3 c in r.Cells)
@@ -34,7 +34,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600636E RID: 25454 RVA: 0x00228650 File Offset: 0x00226850
+		
 		public override bool SameOrSubsetOf(RoomRequirement other)
 		{
 			if (!base.SameOrSubsetOf(other))
@@ -52,10 +52,10 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600636F RID: 25455 RVA: 0x002286C4 File Offset: 0x002268C4
+		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
+			foreach (string text in this.n__0())
 			{
 				yield return text;
 			}
@@ -72,7 +72,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04003C8F RID: 15503
+		
 		public List<string> tags;
 	}
 }

@@ -4,22 +4,22 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000153 RID: 339
+	
 	public class MapFileCompressor : IExposable
 	{
-		// Token: 0x06000992 RID: 2450 RVA: 0x000342CD File Offset: 0x000324CD
+		
 		public MapFileCompressor(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000993 RID: 2451 RVA: 0x000342DC File Offset: 0x000324DC
+		
 		public void ExposeData()
 		{
 			DataExposeUtility.ByteArray(ref this.compressedData, "compressedThingMap");
 		}
 
-		// Token: 0x06000994 RID: 2452 RVA: 0x000342EE File Offset: 0x000324EE
+		
 		public void BuildCompressedString()
 		{
 			this.compressibilityDecider = new CompressibilityDecider(this.map);
@@ -27,7 +27,7 @@ namespace Verse
 			this.compressedData = MapSerializeUtility.SerializeUshort(this.map, new Func<IntVec3, ushort>(this.HashValueForSquare));
 		}
 
-		// Token: 0x06000995 RID: 2453 RVA: 0x0003432C File Offset: 0x0003252C
+		
 		private ushort HashValueForSquare(IntVec3 curSq)
 		{
 			ushort num = 0;
@@ -51,7 +51,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x06000996 RID: 2454 RVA: 0x000343C8 File Offset: 0x000325C8
+		
 		public IEnumerable<Thing> ThingsToSpawnAfterLoad()
 		{
 			Dictionary<ushort, ThingDef> thingDefsByShortHash = new Dictionary<ushort, ThingDef>();
@@ -122,13 +122,13 @@ namespace Verse
 			return loadables;
 		}
 
-		// Token: 0x040007DE RID: 2014
+		
 		private Map map;
 
-		// Token: 0x040007DF RID: 2015
+		
 		private byte[] compressedData;
 
-		// Token: 0x040007E0 RID: 2016
+		
 		public CompressibilityDecider compressibilityDecider;
 	}
 }

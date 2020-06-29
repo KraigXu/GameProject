@@ -4,10 +4,10 @@ using Steamworks;
 
 namespace Verse.Steam
 {
-	// Token: 0x0200048D RID: 1165
+	
 	public class WorkshopItem
 	{
-		// Token: 0x170006CD RID: 1741
+		
 		// (get) Token: 0x06002297 RID: 8855 RVA: 0x000D2DA9 File Offset: 0x000D0FA9
 		public DirectoryInfo Directory
 		{
@@ -17,7 +17,7 @@ namespace Verse.Steam
 			}
 		}
 
-		// Token: 0x170006CE RID: 1742
+		
 		// (get) Token: 0x06002298 RID: 8856 RVA: 0x000D2DB1 File Offset: 0x000D0FB1
 		// (set) Token: 0x06002299 RID: 8857 RVA: 0x000D2DB9 File Offset: 0x000D0FB9
 		public virtual PublishedFileId_t PublishedFileId
@@ -32,7 +32,7 @@ namespace Verse.Steam
 			}
 		}
 
-		// Token: 0x0600229A RID: 8858 RVA: 0x000D2DC4 File Offset: 0x000D0FC4
+		
 		public static WorkshopItem MakeFrom(PublishedFileId_t pfid)
 		{
 			ulong num;
@@ -71,16 +71,16 @@ namespace Verse.Steam
 			return workshopItem;
 		}
 
-		// Token: 0x0600229B RID: 8859 RVA: 0x000D2E73 File Offset: 0x000D1073
+		
 		public override string ToString()
 		{
 			return base.GetType().ToString() + "-" + this.PublishedFileId;
 		}
 
-		// Token: 0x04001524 RID: 5412
+		
 		protected DirectoryInfo directoryInt;
 
-		// Token: 0x04001525 RID: 5413
+		
 		private PublishedFileId_t pfidInt;
 	}
 }

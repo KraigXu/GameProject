@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FDD RID: 4061
+	
 	public static class ShortCircuitUtility
 	{
-		// Token: 0x06006198 RID: 24984 RVA: 0x0021F30D File Offset: 0x0021D50D
+		
 		public static IEnumerable<Building> GetShortCircuitablePowerConduits(Map map)
 		{
 			ShortCircuitUtility.tmpPowerNetHasActivePowerSource.Clear();
@@ -46,7 +46,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006199 RID: 24985 RVA: 0x0021F320 File Offset: 0x0021D520
+		
 		public static void DoShortCircuit(Building culprit)
 		{
 			PowerNet powerNet = culprit.PowerComp.PowerNet;
@@ -101,7 +101,7 @@ namespace RimWorld
 			Find.LetterStack.ReceiveLetter("LetterLabelShortCircuit".Translate(), stringBuilder.ToString(), LetterDefOf.NegativeEvent, new TargetInfo(culprit.Position, map, false), null, null, null, null);
 		}
 
-		// Token: 0x0600619A RID: 24986 RVA: 0x0021F4E8 File Offset: 0x0021D6E8
+		
 		public static bool TryShortCircuitInRain(Thing thing)
 		{
 			CompPowerTrader compPowerTrader = thing.TryGetComp<CompPowerTrader>();
@@ -123,7 +123,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600619B RID: 24987 RVA: 0x0021F600 File Offset: 0x0021D800
+		
 		private static void DrainBatteriesAndCauseExplosion(PowerNet net, Building culprit, out float totalEnergy, out float explosionRadius)
 		{
 			totalEnergy = 0f;
@@ -142,7 +142,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600619C RID: 24988 RVA: 0x0021F704 File Offset: 0x0021D904
+		
 		private static bool TryStartFireNear(Building b)
 		{
 			ShortCircuitUtility.tmpCells.Clear();
@@ -159,10 +159,10 @@ namespace RimWorld
 			return ShortCircuitUtility.tmpCells.Any<IntVec3>() && FireUtility.TryStartFireIn(ShortCircuitUtility.tmpCells.RandomElement<IntVec3>(), b.Map, Rand.Range(0.1f, 1.75f));
 		}
 
-		// Token: 0x04003B66 RID: 15206
+		
 		private static Dictionary<PowerNet, bool> tmpPowerNetHasActivePowerSource = new Dictionary<PowerNet, bool>();
 
-		// Token: 0x04003B67 RID: 15207
+		
 		private static List<IntVec3> tmpCells = new List<IntVec3>();
 	}
 }

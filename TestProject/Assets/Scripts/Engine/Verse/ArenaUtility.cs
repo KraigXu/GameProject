@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace Verse
 {
-	// Token: 0x02000421 RID: 1057
+	
 	public static class ArenaUtility
 	{
-		// Token: 0x06001FB3 RID: 8115 RVA: 0x000C1B0B File Offset: 0x000BFD0B
+		
 		public static bool ValidateArenaCapability()
 		{
 			if (Find.World.info.planetCoverage < 0.299f)
@@ -22,7 +22,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06001FB4 RID: 8116 RVA: 0x000C1B34 File Offset: 0x000BFD34
+		
 		public static void BeginArenaFight(List<PawnKindDef> lhs, List<PawnKindDef> rhs, Action<ArenaUtility.ArenaResult> callback)
 		{
 			MapParent mapParent = (MapParent)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Debug_Arena);
@@ -41,7 +41,7 @@ namespace Verse
 			component.callback = callback;
 		}
 
-		// Token: 0x06001FB5 RID: 8117 RVA: 0x000C1BFC File Offset: 0x000BFDFC
+		
 		public static List<Pawn> SpawnPawnSet(Map map, List<PawnKindDef> kinds, IntVec3 spot, Faction faction)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -56,7 +56,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06001FB6 RID: 8118 RVA: 0x000C1C68 File Offset: 0x000BFE68
+		
 		private static bool ArenaFightQueue(List<PawnKindDef> lhs, List<PawnKindDef> rhs, Action<ArenaUtility.ArenaResult> callback, ArenaUtility.ArenaSetState state)
 		{
 			if (!ArenaUtility.ValidateArenaCapability())
@@ -76,7 +76,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001FB7 RID: 8119 RVA: 0x000C1CCC File Offset: 0x000BFECC
+		
 		public static void BeginArenaFightSet(int count, List<PawnKindDef> lhs, List<PawnKindDef> rhs, Action<ArenaUtility.ArenaResult> callback, Action report)
 		{
 			if (!ArenaUtility.ValidateArenaCapability())
@@ -85,41 +85,40 @@ namespace Verse
 			}
 			int remaining = count;
 			ArenaUtility.ArenaSetState state = new ArenaUtility.ArenaSetState();
-			Action<ArenaUtility.ArenaResult> <>9__1;
-			Func<bool> <>9__0;
-			for (int i = 0; i < count; i++)
-			{
-				GameComponent_DebugTools component = Current.Game.GetComponent<GameComponent_DebugTools>();
-				Func<bool> callback2;
-				if ((callback2 = <>9__0) == null)
-				{
-					callback2 = (<>9__0 = delegate
-					{
-						List<PawnKindDef> lhs2 = lhs;
-						List<PawnKindDef> rhs2 = rhs;
-						Action<ArenaUtility.ArenaResult> callback3;
-						if ((callback3 = <>9__1) == null)
-						{
-							callback3 = (<>9__1 = delegate(ArenaUtility.ArenaResult result)
-							{
-								callback(result);
-								int remaining;
-								remaining--;
-								remaining = remaining;
-								if (remaining % 10 == 0)
-								{
-									report();
-								}
-							});
-						}
-						return ArenaUtility.ArenaFightQueue(lhs2, rhs2, callback3, state);
-					});
-				}
-				component.AddPerFrameCallback(callback2);
-			}
+			
+			//for (int i = 0; i < count; i++)
+			//{
+			//	GameComponent_DebugTools component = Current.Game.GetComponent<GameComponent_DebugTools>();
+			//	Func<bool> callback2;
+			//	if ((callback2 ) == null)
+			//	{
+			//		callback2 = (9__0 = delegate
+			//		{
+			//			List<PawnKindDef> lhs2 = lhs;
+			//			List<PawnKindDef> rhs2 = rhs;
+			//			Action<ArenaUtility.ArenaResult> callback3;
+			//			if ((callback3 ) == null)
+			//			{
+			//				callback3 = (9__1 = delegate(ArenaUtility.ArenaResult result)
+			//				{
+			//					callback(result);
+			//					int remaining;
+			//					remaining--;
+			//					remaining = remaining;
+			//					if (remaining % 10 == 0)
+			//					{
+			//						report();
+			//					}
+			//				});
+			//			}
+			//			return ArenaUtility.ArenaFightQueue(lhs2, rhs2, callback3, state);
+			//		});
+			//	}
+			//	component.AddPerFrameCallback(callback2);
+			//}
 		}
 
-		// Token: 0x06001FB8 RID: 8120 RVA: 0x000C1D50 File Offset: 0x000BFF50
+		
 		public static void PerformBattleRoyale(IEnumerable<PawnKindDef> kindsEnumerable)
 		{
 			if (!ArenaUtility.ValidateArenaCapability())
@@ -137,10 +136,10 @@ namespace Verse
 			Current.Game.GetComponent<GameComponent_DebugTools>().AddPerFrameCallback(delegate
 			{
 				int currentFights;
-				if (currentFights >= 15)
-				{
-					return false;
-				}
+				//if (currentFights >= 15)
+				//{
+				//	return false;
+				//}
 				PawnKindDef lhsDef = kinds.RandomElement<PawnKindDef>();
 				PawnKindDef rhsDef = kinds.RandomElement<PawnKindDef>();
 				float num = EloUtility.CalculateExpectation(ratings[lhsDef], ratings[rhsDef]);
@@ -191,34 +190,34 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x04001328 RID: 4904
+		
 		private const int liveSimultaneous = 15;
 
-		// Token: 0x02001668 RID: 5736
+		
 		public struct ArenaResult
 		{
-			// Token: 0x040055E6 RID: 21990
+			
 			public ArenaUtility.ArenaResult.Winner winner;
 
-			// Token: 0x040055E7 RID: 21991
+			
 			public int tickDuration;
 
-			// Token: 0x02002085 RID: 8325
+			
 			public enum Winner
 			{
-				// Token: 0x040079AE RID: 31150
+				
 				Other,
-				// Token: 0x040079AF RID: 31151
+				
 				Lhs,
-				// Token: 0x040079B0 RID: 31152
+				
 				Rhs
 			}
 		}
 
-		// Token: 0x02001669 RID: 5737
+		
 		private class ArenaSetState
 		{
-			// Token: 0x040055E8 RID: 21992
+			
 			public int live;
 		}
 	}

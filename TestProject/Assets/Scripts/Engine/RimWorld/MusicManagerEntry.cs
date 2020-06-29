@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C2E RID: 3118
+	
 	public class MusicManagerEntry
 	{
-		// Token: 0x17000D14 RID: 3348
+		
 		// (get) Token: 0x06004A4F RID: 19023 RVA: 0x00191DA5 File Offset: 0x0018FFA5
 		private float CurVolume
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D15 RID: 3349
+		
 		// (get) Token: 0x06004A50 RID: 19024 RVA: 0x00191DB7 File Offset: 0x0018FFB7
 		public float CurSanitizedVolume
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004A51 RID: 19025 RVA: 0x00191DC9 File Offset: 0x0018FFC9
+		
 		public void MusicManagerEntryUpdate()
 		{
 			if (this.audioSource == null || !this.audioSource.isPlaying)
@@ -37,7 +37,7 @@ namespace RimWorld
 			this.audioSource.volume = this.CurSanitizedVolume;
 		}
 
-		// Token: 0x06004A52 RID: 19026 RVA: 0x00191E00 File Offset: 0x00190000
+		
 		private void StartPlaying()
 		{
 			if (this.audioSource != null && !this.audioSource.isPlaying)
@@ -68,10 +68,10 @@ namespace RimWorld
 			this.audioSource.Play();
 		}
 
-		// Token: 0x04002A29 RID: 10793
+		
 		private AudioSource audioSource;
 
-		// Token: 0x04002A2A RID: 10794
+		
 		private const string SourceGameObjectName = "MusicAudioSourceDummy";
 	}
 }

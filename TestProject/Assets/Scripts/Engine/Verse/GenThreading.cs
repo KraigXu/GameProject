@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200044B RID: 1099
+	
 	public static class GenThreading
 	{
-		// Token: 0x17000666 RID: 1638
+		
 		// (get) Token: 0x060020F1 RID: 8433 RVA: 0x000C99CC File Offset: 0x000C7BCC
 		public static int ProcessorCount
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060020F2 RID: 8434 RVA: 0x000C99D3 File Offset: 0x000C7BD3
+		
 		private static void GetMaxDegreeOfParallelism(ref int maxDegreeOfParallelism)
 		{
 			if (maxDegreeOfParallelism == -1)
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060020F3 RID: 8435 RVA: 0x000C99E4 File Offset: 0x000C7BE4
+		
 		public static List<GenThreading.Slice> SliceWork(int fromInclusive, int toExclusive, int maxBatches)
 		{
 			List<GenThreading.Slice> list = new List<GenThreading.Slice>(maxBatches);
@@ -63,7 +63,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x060020F4 RID: 8436 RVA: 0x000C9A78 File Offset: 0x000C7C78
+		
 		public static List<List<T>> SliceWork<T>(List<T> list, int maxBatches)
 		{
 			List<List<T>> list2 = new List<List<T>>(maxBatches);
@@ -79,7 +79,7 @@ namespace Verse
 			return list2;
 		}
 
-		// Token: 0x060020F5 RID: 8437 RVA: 0x000C9B18 File Offset: 0x000C7D18
+		
 		public static void ParallelForEach<T>(List<T> list, Action<T> callback, int maxDegreeOfParallelism = -1)
 		{
 			GenThreading.GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
@@ -121,7 +121,7 @@ namespace Verse
 			goto IL_83;
 		}
 
-		// Token: 0x060020F6 RID: 8438 RVA: 0x000C9BD4 File Offset: 0x000C7DD4
+		
 		public static void ParallelFor(int fromInclusive, int toExclusive, Action<int> callback, int maxDegreeOfParallelism = -1)
 		{
 			GenThreading.GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
@@ -163,20 +163,20 @@ namespace Verse
 			goto IL_81;
 		}
 
-		// Token: 0x0200169C RID: 5788
+		
 		public struct Slice
 		{
-			// Token: 0x06008538 RID: 34104 RVA: 0x002B20A3 File Offset: 0x002B02A3
+			
 			public Slice(int fromInclusive, int toExclusive)
 			{
 				this.fromInclusive = fromInclusive;
 				this.toExclusive = toExclusive;
 			}
 
-			// Token: 0x040056C8 RID: 22216
+			
 			public readonly int fromInclusive;
 
-			// Token: 0x040056C9 RID: 22217
+			
 			public readonly int toExclusive;
 		}
 	}

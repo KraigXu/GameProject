@@ -7,10 +7,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000185 RID: 389
+	
 	public static class MapDeiniter
 	{
-		// Token: 0x06000B48 RID: 2888 RVA: 0x0003C850 File Offset: 0x0003AA50
+		
 		public static void Deinit(Map map)
 		{
 			try
@@ -96,13 +96,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B49 RID: 2889 RVA: 0x0003CA40 File Offset: 0x0003AC40
+		
 		private static void DoQueuedPowerTasks(Map map)
 		{
 			map.powerNetManager.UpdatePowerNetsAndConnections_First();
 		}
 
-		// Token: 0x06000B4A RID: 2890 RVA: 0x0003CA50 File Offset: 0x0003AC50
+		
 		private static void PassPawnsToWorld(Map map)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -189,7 +189,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B4B RID: 2891 RVA: 0x0003CDD8 File Offset: 0x0003AFD8
+		
 		private static void CleanUpAndPassToWorld(Pawn p)
 		{
 			if (p.ownership != null)
@@ -204,7 +204,7 @@ namespace Verse
 			Find.WorldPawns.PassToWorld(p, PawnDiscardDecideMode.Decide);
 		}
 
-		// Token: 0x06000B4C RID: 2892 RVA: 0x0003CE28 File Offset: 0x0003B028
+		
 		private static void NotifyEverythingWhichUsesMapReference(Map map)
 		{
 			List<Map> maps = Find.Maps;
@@ -251,7 +251,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0400090A RID: 2314
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

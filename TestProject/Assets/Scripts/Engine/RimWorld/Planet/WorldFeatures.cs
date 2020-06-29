@@ -6,22 +6,22 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011CB RID: 4555
+	
 	public class WorldFeatures : IExposable
 	{
-		// Token: 0x0600695D RID: 26973 RVA: 0x0024CC9B File Offset: 0x0024AE9B
+		
 		private static void TextWrapThreshold_Changed()
 		{
 			Find.WorldFeatures.textsCreated = false;
 		}
 
-		// Token: 0x0600695E RID: 26974 RVA: 0x0024CC9B File Offset: 0x0024AE9B
+		
 		protected static void ForceLegacyText_Changed()
 		{
 			Find.WorldFeatures.textsCreated = false;
 		}
 
-		// Token: 0x0600695F RID: 26975 RVA: 0x0024CCA8 File Offset: 0x0024AEA8
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<WorldFeature>(ref this.features, "features", LookMode.Deep, Array.Empty<object>());
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006960 RID: 26976 RVA: 0x0024CD34 File Offset: 0x0024AF34
+		
 		public void UpdateFeatures()
 		{
 			if (!this.textsCreated)
@@ -64,7 +64,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006961 RID: 26977 RVA: 0x0024CDF0 File Offset: 0x0024AFF0
+		
 		public WorldFeature GetFeatureWithID(int uniqueID)
 		{
 			for (int i = 0; i < this.features.Count; i++)
@@ -77,7 +77,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006962 RID: 26978 RVA: 0x0024CE38 File Offset: 0x0024B038
+		
 		private void UpdateAlpha(WorldFeatureTextMesh text, WorldFeature feature)
 		{
 			float num = 0.3f * feature.alpha;
@@ -98,7 +98,7 @@ namespace RimWorld.Planet
 			feature.alpha = Mathf.Clamp01(feature.alpha);
 		}
 
-		// Token: 0x06006963 RID: 26979 RVA: 0x0024CEC8 File Offset: 0x0024B0C8
+		
 		private bool GoodCameraAltitudeFor(WorldFeature feature)
 		{
 			float num = feature.EffectiveDrawSize;
@@ -116,7 +116,7 @@ namespace RimWorld.Planet
 			return num <= WorldFeatures.VisibleMaximumSize || Find.WorldCameraDriver.AltitudePercent >= 0.35f;
 		}
 
-		// Token: 0x06006964 RID: 26980 RVA: 0x0024CF54 File Offset: 0x0024B154
+		
 		private void CreateTextsAndSetPosition()
 		{
 			this.CreateOrDestroyTexts();
@@ -136,7 +136,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006965 RID: 26981 RVA: 0x0024D0A0 File Offset: 0x0024B2A0
+		
 		private void CreateOrDestroyTexts()
 		{
 			for (int i = 0; i < WorldFeatures.texts.Count; i++)
@@ -161,7 +161,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006966 RID: 26982 RVA: 0x0024D144 File Offset: 0x0024B344
+		
 		private bool HasCharactersUnsupportedByTextMeshPro(string str)
 		{
 			TMP_FontAsset font = WorldFeatureTextMesh_TextMeshPro.WorldTextPrefab.GetComponent<TextMeshPro>().font;
@@ -175,7 +175,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006967 RID: 26983 RVA: 0x0024D188 File Offset: 0x0024B388
+		
 		private bool HasCharacter(TMP_FontAsset font, char character)
 		{
 			if (TMP_FontAsset.GetCharacters(font).IndexOf(character) >= 0)
@@ -193,38 +193,38 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x0400417F RID: 16767
+		
 		public List<WorldFeature> features = new List<WorldFeature>();
 
-		// Token: 0x04004180 RID: 16768
+		
 		public bool textsCreated;
 
-		// Token: 0x04004181 RID: 16769
+		
 		private static List<WorldFeatureTextMesh> texts = new List<WorldFeatureTextMesh>();
 
-		// Token: 0x04004182 RID: 16770
+		
 		private const float BaseAlpha = 0.3f;
 
-		// Token: 0x04004183 RID: 16771
+		
 		private const float AlphaChangeSpeed = 5f;
 
-		// Token: 0x04004184 RID: 16772
+		
 		[TweakValue("Interface", 0f, 300f)]
 		private static float TextWrapThreshold = 150f;
 
-		// Token: 0x04004185 RID: 16773
+		
 		[TweakValue("Interface.World", 0f, 100f)]
 		protected static bool ForceLegacyText = false;
 
-		// Token: 0x04004186 RID: 16774
+		
 		[TweakValue("Interface.World", 1f, 150f)]
 		protected static float AlphaScale = 30f;
 
-		// Token: 0x04004187 RID: 16775
+		
 		[TweakValue("Interface.World", 0f, 1f)]
 		protected static float VisibleMinimumSize = 0.04f;
 
-		// Token: 0x04004188 RID: 16776
+		
 		[TweakValue("Interface.World", 0f, 5f)]
 		protected static float VisibleMaximumSize = 1f;
 	}

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001245 RID: 4677
+	
 	public static class MultipleCaravansCellFinder
 	{
-		// Token: 0x06006CFF RID: 27903 RVA: 0x00262614 File Offset: 0x00260814
+		
 		public static void FindStartingCellsFor2Groups(Map map, out IntVec3 first, out IntVec3 second)
 		{
 			for (int i = 0; i < 10; i++)
@@ -45,7 +45,7 @@ namespace RimWorld.Planet
 			second = CellFinder.RandomClosewalkCellNear(second, map, 7, null);
 		}
 
-		// Token: 0x06006D00 RID: 27904 RVA: 0x00262798 File Offset: 0x00260998
+		
 		private static bool TryFindOppositeSpots(Map map, float maxDistPctToOppositeSpots, out IntVec3 first, out IntVec3 second)
 		{
 			IntVec3 intVec = MultipleCaravansCellFinder.RandomSpotNearEdge(map);
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006D01 RID: 27905 RVA: 0x002628B8 File Offset: 0x00260AB8
+		
 		private static IntVec3 RandomSpotNearEdge(Map map)
 		{
 			CellRect cellRect = CellRect.WholeMap(map);
@@ -80,31 +80,31 @@ namespace RimWorld.Planet
 			return cellRect.EdgeCells.RandomElement<IntVec3>();
 		}
 
-		// Token: 0x06006D02 RID: 27906 RVA: 0x00262960 File Offset: 0x00260B60
+		
 		private static IntVec3 OppositeSpot(IntVec3 spot, Map map)
 		{
 			return new IntVec3(map.Size.x - spot.x, spot.y, map.Size.z - spot.z);
 		}
 
-		// Token: 0x040043C0 RID: 17344
+		
 		private const int TriesToFindPerfectOppositeSpots = 10;
 
-		// Token: 0x040043C1 RID: 17345
+		
 		private const int TriesToFindGoodEnoughOppositeSpots = 10;
 
-		// Token: 0x040043C2 RID: 17346
+		
 		private const int TriesToFindMatchingPair = 20;
 
-		// Token: 0x040043C3 RID: 17347
+		
 		private const float PerfectIfDistPctToOppositeSpotsAtMost = 0.05f;
 
-		// Token: 0x040043C4 RID: 17348
+		
 		private const float GoodEnoughIfDistPctToOppositeSpotsAtMost = 0.15f;
 
-		// Token: 0x040043C5 RID: 17349
+		
 		private const float SpotDistPctToEdge = 0.2f;
 
-		// Token: 0x040043C6 RID: 17350
+		
 		private const float TryMinDistPctBetweenFallbackEdgeCells = 0.6f;
 	}
 }

@@ -3,10 +3,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x020001B7 RID: 439
+	
 	public static class ReachabilityWithinRegion
 	{
-		// Token: 0x06000C34 RID: 3124 RVA: 0x0004563C File Offset: 0x0004383C
+		
 		public static bool ThingFromRegionListerReachable(Thing thing, Region region, PathEndMode peMode, Pawn traveler)
 		{
 			Map map = region.Map;

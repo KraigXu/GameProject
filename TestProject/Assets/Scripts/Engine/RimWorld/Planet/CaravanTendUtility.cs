@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200123B RID: 4667
+	
 	public static class CaravanTendUtility
 	{
-		// Token: 0x06006CB6 RID: 27830 RVA: 0x0025F018 File Offset: 0x0025D218
+		
 		public static void CheckTend(Caravan caravan)
 		{
 			for (int i = 0; i < caravan.pawns.Count; i++)
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006CB7 RID: 27831 RVA: 0x0025F068 File Offset: 0x0025D268
+		
 		public static void TryTendToAnyPawn(Caravan caravan)
 		{
 			CaravanTendUtility.FindPawnsNeedingTend(caravan, CaravanTendUtility.tmpPawnsNeedingTreatment);
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 			CaravanTendUtility.tmpPawnsNeedingTreatment.Clear();
 		}
 
-		// Token: 0x06006CB8 RID: 27832 RVA: 0x0025F134 File Offset: 0x0025D334
+		
 		private static void FindPawnsNeedingTend(Caravan caravan, List<Pawn> outPawnsNeedingTend)
 		{
 			outPawnsNeedingTend.Clear();
@@ -70,7 +70,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006CB9 RID: 27833 RVA: 0x0025F194 File Offset: 0x0025D394
+		
 		private static Pawn FindBestDoctorFor(Caravan caravan, Pawn patient)
 		{
 			float num = 0f;
@@ -92,13 +92,13 @@ namespace RimWorld.Planet
 			return pawn;
 		}
 
-		// Token: 0x06006CBA RID: 27834 RVA: 0x0025F1F4 File Offset: 0x0025D3F4
+		
 		private static bool IsValidDoctorFor(Pawn doctor, Pawn patient, Caravan caravan)
 		{
 			return doctor.RaceProps.Humanlike && caravan.IsOwner(doctor) && (doctor != patient || (doctor.IsColonist && doctor.playerSettings.selfTend)) && !doctor.Downed && !doctor.InMentalState && (doctor.story == null || !doctor.WorkTypeIsDisabled(WorkTypeDefOf.Doctor));
 		}
 
-		// Token: 0x06006CBB RID: 27835 RVA: 0x0025F260 File Offset: 0x0025D460
+		
 		private static float GetTendPriority(Pawn patient)
 		{
 			int num = HealthUtility.TicksUntilDeathDueToBloodLoss(patient);
@@ -149,10 +149,10 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x04004398 RID: 17304
+		
 		private static List<Pawn> tmpPawnsNeedingTreatment = new List<Pawn>();
 
-		// Token: 0x04004399 RID: 17305
+		
 		private const int TendIntervalTicks = 1250;
 	}
 }

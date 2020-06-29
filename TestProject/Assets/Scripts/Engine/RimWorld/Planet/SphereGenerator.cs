@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200120C RID: 4620
+	
 	public static class SphereGenerator
 	{
-		// Token: 0x06006AE5 RID: 27365 RVA: 0x00254A68 File Offset: 0x00252C68
+		
 		public static void Generate(int subdivisionsCount, float radius, Vector3 viewCenter, float viewAngle, out List<Vector3> outVerts, out List<int> outIndices)
 		{
 			SphereGenerator.middlePointsCache.Clear();
@@ -47,7 +47,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006AE6 RID: 27366 RVA: 0x00254C58 File Offset: 0x00252E58
+		
 		private static int GetMiddlePoint(int p1, int p2, List<Vector3> verts, float radius)
 		{
 			long key = ((long)Mathf.Min(p1, p2) << 32) + (long)Mathf.Max(p1, p2);
@@ -63,13 +63,13 @@ namespace RimWorld.Planet
 			return count;
 		}
 
-		// Token: 0x040042CB RID: 17099
+		
 		private static List<TriangleIndices> tris = new List<TriangleIndices>();
 
-		// Token: 0x040042CC RID: 17100
+		
 		private static List<TriangleIndices> newTris = new List<TriangleIndices>();
 
-		// Token: 0x040042CD RID: 17101
+		
 		private static Dictionary<long, int> middlePointsCache = new Dictionary<long, int>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E08 RID: 3592
+	
 	public class Alert_UnusableMeditationFocus : Alert
 	{
-		// Token: 0x17000F7D RID: 3965
+		
 		// (get) Token: 0x060056C9 RID: 22217 RVA: 0x001CC6D4 File Offset: 0x001CA8D4
 		private List<GlobalTargetInfo> Targets
 		{
@@ -39,19 +39,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060056CA RID: 22218 RVA: 0x001CC890 File Offset: 0x001CAA90
+		
 		public Alert_UnusableMeditationFocus()
 		{
 			this.defaultLabel = "UnusableMeditationFocusAlert".Translate();
 		}
 
-		// Token: 0x060056CB RID: 22219 RVA: 0x001CC8C3 File Offset: 0x001CAAC3
+		
 		public override TaggedString GetExplanation()
 		{
 			return "UnusableMeditationFocusAlertDesc".Translate(this.pawnEntries.ToLineList("  - "));
 		}
 
-		// Token: 0x060056CC RID: 22220 RVA: 0x001CC8E4 File Offset: 0x001CAAE4
+		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
@@ -61,10 +61,10 @@ namespace RimWorld
 			return AlertReport.CulpritsAre(this.Targets);
 		}
 
-		// Token: 0x04002F47 RID: 12103
+		
 		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
 
-		// Token: 0x04002F48 RID: 12104
+		
 		private List<string> pawnEntries = new List<string>();
 	}
 }

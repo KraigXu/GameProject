@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000983 RID: 2435
+	
 	public class QuestPart_Message : QuestPart
 	{
-		// Token: 0x17000A56 RID: 2646
+		
 		// (get) Token: 0x060039A6 RID: 14758 RVA: 0x0013286E File Offset: 0x00130A6E
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039A7 RID: 14759 RVA: 0x00132880 File Offset: 0x00130A80
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039A8 RID: 14760 RVA: 0x0013291C File Offset: 0x00130B1C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -60,7 +60,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.getLookTargetsFromSignal, "getLookTargetsFromSignal", true, false);
 		}
 
-		// Token: 0x060039A9 RID: 14761 RVA: 0x0013299C File Offset: 0x00130B9C
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -69,22 +69,22 @@ namespace RimWorld
 			this.messageType = MessageTypeDefOf.PositiveEvent;
 		}
 
-		// Token: 0x040021FC RID: 8700
+		
 		public string inSignal;
 
-		// Token: 0x040021FD RID: 8701
+		
 		public string message;
 
-		// Token: 0x040021FE RID: 8702
+		
 		public MessageTypeDef messageType;
 
-		// Token: 0x040021FF RID: 8703
+		
 		public LookTargets lookTargets;
 
-		// Token: 0x04002200 RID: 8704
+		
 		public bool historical = true;
 
-		// Token: 0x04002201 RID: 8705
+		
 		public bool getLookTargetsFromSignal = true;
 	}
 }

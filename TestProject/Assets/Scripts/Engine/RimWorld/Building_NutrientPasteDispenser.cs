@@ -9,10 +9,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C80 RID: 3200
+	
 	public class Building_NutrientPasteDispenser : Building
 	{
-		// Token: 0x17000D9E RID: 3486
+		
 		// (get) Token: 0x06004CF8 RID: 19704 RVA: 0x0019CCB9 File Offset: 0x0019AEB9
 		public bool CanDispenseNow
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D9F RID: 3487
+		
 		// (get) Token: 0x06004CF9 RID: 19705 RVA: 0x0019CCD0 File Offset: 0x0019AED0
 		public List<IntVec3> AdjCellsCardinalInBounds
 		{
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DA0 RID: 3488
+		
 		// (get) Token: 0x06004CFA RID: 19706 RVA: 0x0019CD02 File Offset: 0x0019AF02
 		public virtual ThingDef DispensableDef
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DA1 RID: 3489
+		
 		// (get) Token: 0x06004CFB RID: 19707 RVA: 0x0019CD09 File Offset: 0x0019AF09
 		public override Color DrawColor
 		{
@@ -62,14 +62,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004CFC RID: 19708 RVA: 0x0019CD22 File Offset: 0x0019AF22
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			this.powerComp = base.GetComp<CompPowerTrader>();
 		}
 
-		// Token: 0x06004CFD RID: 19709 RVA: 0x0019CD38 File Offset: 0x0019AF38
+		
 		public virtual Building AdjacentReachableHopper(Pawn reacher)
 		{
 			for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
@@ -83,7 +83,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004CFE RID: 19710 RVA: 0x0019CD98 File Offset: 0x0019AF98
+		
 		public virtual Thing TryDispenseFood()
 		{
 			if (!this.CanDispenseNow)
@@ -121,7 +121,7 @@ namespace RimWorld
 			return thing2;
 		}
 
-		// Token: 0x06004CFF RID: 19711 RVA: 0x0019CE98 File Offset: 0x0019B098
+		
 		public virtual Thing FindFeedInAnyHopper()
 		{
 			for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
@@ -149,7 +149,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004D00 RID: 19712 RVA: 0x0019CF24 File Offset: 0x0019B124
+		
 		public virtual bool HasEnoughFeedstockInHoppers()
 		{
 			float num = 0f;
@@ -183,13 +183,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004D01 RID: 19713 RVA: 0x0019CFE8 File Offset: 0x0019B1E8
+		
 		public static bool IsAcceptableFeedstock(ThingDef def)
 		{
 			return def.IsNutritionGivingIngestible && def.ingestible.preferability != FoodPreferability.Undefined && (def.ingestible.foodType & FoodTypeFlags.Plant) != FoodTypeFlags.Plant && (def.ingestible.foodType & FoodTypeFlags.Tree) != FoodTypeFlags.Tree;
 		}
 
-		// Token: 0x06004D02 RID: 19714 RVA: 0x0019D03C File Offset: 0x0019B23C
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -201,13 +201,13 @@ namespace RimWorld
 			return stringBuilder.ToString().Trim();
 		}
 
-		// Token: 0x04002B21 RID: 11041
+		
 		public CompPowerTrader powerComp;
 
-		// Token: 0x04002B22 RID: 11042
+		
 		private List<IntVec3> cachedAdjCellsCardinal;
 
-		// Token: 0x04002B23 RID: 11043
+		
 		public static int CollectDuration = 50;
 	}
 }

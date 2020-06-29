@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200032B RID: 811
+	
 	public class EditWindow_TweakValues : EditWindow
 	{
-		// Token: 0x170004E1 RID: 1249
+		
 		// (get) Token: 0x060017B6 RID: 6070 RVA: 0x000877D9 File Offset: 0x000859D9
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004E2 RID: 1250
+		
 		// (get) Token: 0x060017B7 RID: 6071 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool IsDebug
 		{
@@ -29,7 +29,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017B8 RID: 6072 RVA: 0x000877EC File Offset: 0x000859EC
+		
 		public EditWindow_TweakValues()
 		{
 			this.optionalTitle = "TweakValues";
@@ -47,7 +47,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017B9 RID: 6073 RVA: 0x00087856 File Offset: 0x00085A56
+		
 		private IEnumerable<FieldInfo> FindAllTweakables()
 		{
 			foreach (Type type in GenTypes.AllTypes)
@@ -81,7 +81,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060017BA RID: 6074 RVA: 0x00087860 File Offset: 0x00085A60
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Small;
@@ -163,7 +163,7 @@ namespace Verse
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x060017BB RID: 6075 RVA: 0x00087D28 File Offset: 0x00085F28
+		
 		private float GetAsFloat(FieldInfo field)
 		{
 			if (field.FieldType == typeof(float))
@@ -186,7 +186,7 @@ namespace Verse
 			return 0f;
 		}
 
-		// Token: 0x060017BC RID: 6076 RVA: 0x00087DF0 File Offset: 0x00085FF0
+		
 		private void SetFromFloat(FieldInfo field, float input)
 		{
 			if (field.FieldType == typeof(float))
@@ -212,34 +212,34 @@ namespace Verse
 			Log.ErrorOnce(string.Format("Attempted to set unknown field type {0} from a float", field.FieldType), 83944645, false);
 		}
 
-		// Token: 0x04000EE5 RID: 3813
+		
 		[TweakValue("TweakValue", 0f, 300f)]
 		public static float CategoryWidth = 180f;
 
-		// Token: 0x04000EE6 RID: 3814
+		
 		[TweakValue("TweakValue", 0f, 300f)]
 		public static float TitleWidth = 300f;
 
-		// Token: 0x04000EE7 RID: 3815
+		
 		[TweakValue("TweakValue", 0f, 300f)]
 		public static float NumberWidth = 140f;
 
-		// Token: 0x04000EE8 RID: 3816
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04000EE9 RID: 3817
+		
 		private static List<EditWindow_TweakValues.TweakInfo> tweakValueFields;
 
-		// Token: 0x020014BD RID: 5309
+		
 		private struct TweakInfo
 		{
-			// Token: 0x04004E93 RID: 20115
+			
 			public FieldInfo field;
 
-			// Token: 0x04004E94 RID: 20116
+			
 			public TweakValue tweakValue;
 
-			// Token: 0x04004E95 RID: 20117
+			
 			public float initial;
 		}
 	}

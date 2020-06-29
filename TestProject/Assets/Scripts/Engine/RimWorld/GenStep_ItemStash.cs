@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A68 RID: 2664
+	
 	public class GenStep_ItemStash : GenStep_Scatterer
 	{
-		// Token: 0x17000B24 RID: 2852
+		
 		// (get) Token: 0x06003EDF RID: 16095 RVA: 0x0014E2F4 File Offset: 0x0014C4F4
 		public override int SeedPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EE0 RID: 16096 RVA: 0x0014E2FC File Offset: 0x0014C4FC
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -50,7 +50,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003EE1 RID: 16097 RVA: 0x0014E3D0 File Offset: 0x0014C5D0
+		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
 		{
 			CellRect cellRect = CellRect.CenteredOn(loc, 7, 7).ClipInsideMap(map);
@@ -86,10 +86,10 @@ namespace RimWorld
 			list.Add(cellRect);
 		}
 
-		// Token: 0x04002499 RID: 9369
+		
 		public ThingSetMakerDef thingSetMakerDef;
 
-		// Token: 0x0400249A RID: 9370
+		
 		private const int Size = 7;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A69 RID: 2665
+	
 	public class GenStep_ManhunterPack : GenStep
 	{
-		// Token: 0x17000B25 RID: 2853
+		
 		// (get) Token: 0x06003EE3 RID: 16099 RVA: 0x0014E4DE File Offset: 0x0014C6DE
 		public override int SeedPart
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EE4 RID: 16100 RVA: 0x0014E4E8 File Offset: 0x0014C6E8
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			TraverseParms traverseParams = TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false);
@@ -45,10 +45,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400249B RID: 9371
+		
 		public FloatRange defaultPointsRange = new FloatRange(300f, 500f);
 
-		// Token: 0x0400249C RID: 9372
+		
 		private int MinRoomCells = 225;
 	}
 }

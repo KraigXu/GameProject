@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CCE RID: 3278
+	
 	public class ThingSetMaker_MarketValue : ThingSetMaker
 	{
-		// Token: 0x06004F6B RID: 20331 RVA: 0x001ABF8A File Offset: 0x001AA18A
+		
 		public ThingSetMaker_MarketValue()
 		{
 			this.nextSeed = Rand.Int;
 		}
 
-		// Token: 0x06004F6C RID: 20332 RVA: 0x001ABFA0 File Offset: 0x001AA1A0
+		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			if (!this.AllowedThingDefs(parms).Any<ThingDef>())
@@ -42,7 +42,7 @@ namespace RimWorld
 			return this.GeneratePossibleDefs(parms, out maxValue, this.nextSeed).Any<ThingStuffPairWithQuality>();
 		}
 
-		// Token: 0x06004F6D RID: 20333 RVA: 0x001AC0AC File Offset: 0x001AA2AC
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			float maxMass = parms.maxTotalMass ?? float.MaxValue;
@@ -56,31 +56,31 @@ namespace RimWorld
 			this.nextSeed++;
 		}
 
-		// Token: 0x06004F6E RID: 20334 RVA: 0x001ABF6B File Offset: 0x001AA16B
+		
 		protected virtual IEnumerable<ThingDef> AllowedThingDefs(ThingSetMakerParams parms)
 		{
 			return ThingSetMakerUtility.GetAllowedThingDefs(parms);
 		}
 
-		// Token: 0x06004F6F RID: 20335 RVA: 0x001AC14A File Offset: 0x001AA34A
+		
 		private float GetSingleThingValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue);
 		}
 
-		// Token: 0x06004F70 RID: 20336 RVA: 0x001AC158 File Offset: 0x001AA358
+		
 		private float GetMinValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue) * (float)thingStuffPair.thing.minRewardCount;
 		}
 
-		// Token: 0x06004F71 RID: 20337 RVA: 0x001AC173 File Offset: 0x001AA373
+		
 		private float GetMaxValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue) * (float)thingStuffPair.thing.stackLimit;
 		}
 
-		// Token: 0x06004F72 RID: 20338 RVA: 0x001AC18E File Offset: 0x001AA38E
+		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalMarketValue, int seed)
 		{
 			Rand.PushState(seed);
@@ -89,7 +89,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06004F73 RID: 20339 RVA: 0x001AC1A4 File Offset: 0x001AA3A4
+		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalMarketValue)
 		{
 			IEnumerable<ThingDef> enumerable = this.AllowedThingDefs(parms);
@@ -107,7 +107,7 @@ namespace RimWorld
 			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp3(countRange, totalMarketValue, enumerable, techLevel, qualityGenerator, new Func<ThingStuffPairWithQuality, float>(this.GetMinValue), new Func<ThingStuffPairWithQuality, float>(this.GetMaxValue), new Func<ThingStuffPairWithQuality, float>(this.GetSingleThingValue), null, 100, maxMass, parms.allowNonStackableDuplicates.GetValueOrDefault(true), totalMarketValue * (parms.minSingleItemMarketValuePct ?? 0f));
 		}
 
-		// Token: 0x06004F74 RID: 20340 RVA: 0x001AC2D7 File Offset: 0x001AA4D7
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
@@ -137,7 +137,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002C8D RID: 11405
+		
 		private int nextSeed;
 	}
 }

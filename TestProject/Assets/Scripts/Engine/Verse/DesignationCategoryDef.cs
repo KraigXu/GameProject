@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020000AA RID: 170
+	
 	public class DesignationCategoryDef : Def
 	{
-		// Token: 0x170000EF RID: 239
+		
 		// (get) Token: 0x0600055E RID: 1374 RVA: 0x0001AFF0 File Offset: 0x000191F0
 		public IEnumerable<Designator> ResolvedAllowedDesignators
 		{
@@ -29,7 +29,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170000F0 RID: 240
+		
 		// (get) Token: 0x0600055F RID: 1375 RVA: 0x0001B000 File Offset: 0x00019200
 		public List<Designator> AllResolvedDesignators
 		{
@@ -39,7 +39,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000560 RID: 1376 RVA: 0x0001B008 File Offset: 0x00019208
+		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
@@ -50,7 +50,7 @@ namespace Verse
 			this.cachedHighlightClosedTag = "DesignationCategoryButton-" + this.defName + "-Closed";
 		}
 
-		// Token: 0x06000561 RID: 1377 RVA: 0x0001B03C File Offset: 0x0001923C
+		
 		private void ResolveDesignators()
 		{
 			this.resolvedDesignators.Clear();
@@ -101,24 +101,24 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000370 RID: 880
+		
 		public List<Type> specialDesignatorClasses = new List<Type>();
 
-		// Token: 0x04000371 RID: 881
+		
 		public int order;
 
-		// Token: 0x04000372 RID: 882
+		
 		public bool showPowerGrid;
 
-		// Token: 0x04000373 RID: 883
+		
 		[Unsaved(false)]
 		private List<Designator> resolvedDesignators = new List<Designator>();
 
-		// Token: 0x04000374 RID: 884
+		
 		[Unsaved(false)]
 		public KeyBindingCategoryDef bindingCatDef;
 
-		// Token: 0x04000375 RID: 885
+		
 		[Unsaved(false)]
 		public string cachedHighlightClosedTag;
 	}

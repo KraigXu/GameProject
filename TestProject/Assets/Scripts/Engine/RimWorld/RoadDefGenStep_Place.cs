@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A52 RID: 2642
+	
 	public class RoadDefGenStep_Place : RoadDefGenStep_Bulldoze
 	{
-		// Token: 0x06003E84 RID: 16004 RVA: 0x0014B310 File Offset: 0x00149510
+		
 		public override void Place(Map map, IntVec3 position, TerrainDef rockDef, IntVec3 origin, GenStep_Roads.DistanceElement[,] distance)
 		{
 			if (this.onlyIfOriginAllows)
@@ -96,16 +96,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002467 RID: 9319
+		
 		public BuildableDef place;
 
-		// Token: 0x04002468 RID: 9320
+		
 		public int proximitySpacing;
 
-		// Token: 0x04002469 RID: 9321
+		
 		public bool onlyIfOriginAllows;
 
-		// Token: 0x0400246A RID: 9322
+		
 		public string suppressOnTerrainTag;
 	}
 }

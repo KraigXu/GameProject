@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200106C RID: 4204
+	
 	public class PlaceWorker_PreventInteractionSpotOverlap : PlaceWorker
 	{
-		// Token: 0x06006400 RID: 25600 RVA: 0x0022A794 File Offset: 0x00228994
+		
 		public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thingToPlace = null)
 		{
 			ThingDef thingDef = checkingDef as ThingDef;

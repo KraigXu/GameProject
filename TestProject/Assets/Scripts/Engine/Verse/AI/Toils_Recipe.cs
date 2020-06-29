@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000524 RID: 1316
+	
 	public static class Toils_Recipe
 	{
-		// Token: 0x0600258E RID: 9614 RVA: 0x000DE814 File Offset: 0x000DCA14
+		
 		public static Toil MakeUnfinishedThingIfNeeded()
 		{
 			Toil toil = new Toil();
@@ -52,7 +52,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600258F RID: 9615 RVA: 0x000DE850 File Offset: 0x000DCA50
+		
 		public static Toil DoRecipeWork()
 		{
 			Toil toil = new Toil();
@@ -160,7 +160,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002590 RID: 9616 RVA: 0x000DE930 File Offset: 0x000DCB30
+		
 		public static Toil FinishRecipeAndStartStoringProduct()
 		{
 			Toil toil = new Toil();
@@ -270,7 +270,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x06002591 RID: 9617 RVA: 0x000DE96C File Offset: 0x000DCB6C
+		
 		private static List<Thing> CalculateIngredients(Job job, Pawn actor)
 		{
 			UnfinishedThing unfinishedThing = job.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
@@ -333,7 +333,7 @@ namespace Verse.AI
 			return list;
 		}
 
-		// Token: 0x06002592 RID: 9618 RVA: 0x000DEB20 File Offset: 0x000DCD20
+		
 		private static Thing CalculateDominantIngredient(Job job, List<Thing> ingredients)
 		{
 			UnfinishedThing uft = job.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
@@ -358,7 +358,7 @@ namespace Verse.AI
 			return ingredients.RandomElementByWeight((Thing x) => (float)x.stackCount);
 		}
 
-		// Token: 0x06002593 RID: 9619 RVA: 0x000DEC48 File Offset: 0x000DCE48
+		
 		private static void ConsumeIngredients(List<Thing> ingredients, RecipeDef recipe, Map map)
 		{
 			for (int i = 0; i < ingredients.Count; i++)
@@ -367,7 +367,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x040016E8 RID: 5864
+		
 		private const int LongCraftingProjectThreshold = 10000;
 	}
 }

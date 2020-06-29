@@ -6,16 +6,16 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x020003F3 RID: 1011
+	
 	public class BackCompatibilityConverter_0_17_AndLower : BackCompatibilityConverter
 	{
-		// Token: 0x06001E1B RID: 7707 RVA: 0x000B87F2 File Offset: 0x000B69F2
+		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
 			return majorVer == 0 && minorVer <= 17;
 		}
 
-		// Token: 0x06001E1C RID: 7708 RVA: 0x000B8804 File Offset: 0x000B6A04
+		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -785,7 +785,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E1D RID: 7709 RVA: 0x000B96B8 File Offset: 0x000B78B8
+		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (baseType == typeof(WorldObject))
@@ -813,7 +813,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E1E RID: 7710 RVA: 0x000B97EC File Offset: 0x000B79EC
+		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)

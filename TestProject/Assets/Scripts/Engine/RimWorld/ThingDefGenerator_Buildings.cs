@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200085B RID: 2139
+	
 	public static class ThingDefGenerator_Buildings
 	{
-		// Token: 0x060034DD RID: 13533 RVA: 0x001216A6 File Offset: 0x0011F8A6
+		
 		public static IEnumerable<ThingDef> ImpliedBlueprintAndFrameDefs()
 		{
 			foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs.ToList<ThingDef>())
@@ -43,7 +43,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034DE RID: 13534 RVA: 0x001216B0 File Offset: 0x0011F8B0
+		
 		private static ThingDef BaseBlueprintDef()
 		{
 			return new ThingDef
@@ -62,7 +62,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060034DF RID: 13535 RVA: 0x0012170C File Offset: 0x0011F90C
+		
 		private static ThingDef BaseFrameDef()
 		{
 			return new ThingDef
@@ -84,7 +84,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060034E0 RID: 13536 RVA: 0x00121788 File Offset: 0x0011F988
+		
 		private static ThingDef NewBlueprintDef_Thing(ThingDef def, bool isInstallBlueprint, ThingDef normalBlueprint = null)
 		{
 			ThingDef thingDef = ThingDefGenerator_Buildings.BaseBlueprintDef();
@@ -174,7 +174,7 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		// Token: 0x060034E1 RID: 13537 RVA: 0x00121A10 File Offset: 0x0011FC10
+		
 		private static ThingDef NewFrameDef_Thing(ThingDef def)
 		{
 			ThingDef thingDef = ThingDefGenerator_Buildings.BaseFrameDef();
@@ -217,7 +217,7 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		// Token: 0x060034E2 RID: 13538 RVA: 0x00121BD8 File Offset: 0x0011FDD8
+		
 		private static ThingDef NewBlueprintDef_Terrain(TerrainDef terrDef)
 		{
 			ThingDef thingDef = ThingDefGenerator_Buildings.BaseBlueprintDef();
@@ -238,7 +238,7 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		// Token: 0x060034E3 RID: 13539 RVA: 0x00121CB4 File Offset: 0x0011FEB4
+		
 		private static ThingDef NewFrameDef_Terrain(TerrainDef terrDef)
 		{
 			ThingDef thingDef = ThingDefGenerator_Buildings.BaseFrameDef();
@@ -267,19 +267,19 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		// Token: 0x04001BBE RID: 7102
+		
 		public static readonly string BlueprintDefNamePrefix = "Blueprint_";
 
-		// Token: 0x04001BBF RID: 7103
+		
 		public static readonly string InstallBlueprintDefNamePrefix = "Install_";
 
-		// Token: 0x04001BC0 RID: 7104
+		
 		public static readonly string BuildingFrameDefNamePrefix = "Frame_";
 
-		// Token: 0x04001BC1 RID: 7105
+		
 		private static readonly string TerrainBlueprintGraphicPath = "Things/Special/TerrainBlueprint";
 
-		// Token: 0x04001BC2 RID: 7106
+		
 		private static Color BlueprintColor = new Color(0.8235294f, 0.921568632f, 1f, 0.6f);
 	}
 }

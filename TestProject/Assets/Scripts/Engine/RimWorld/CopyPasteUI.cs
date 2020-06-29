@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E14 RID: 3604
+	
 	public static class CopyPasteUI
 	{
-		// Token: 0x06005729 RID: 22313 RVA: 0x001CFDE0 File Offset: 0x001CDFE0
+		
 		public static void DoCopyPasteButtons(Rect rect, Action copyAction, Action pasteAction)
 		{
 			MouseoverSounds.DoRegion(rect);
@@ -32,13 +32,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002F91 RID: 12177
+		
 		public const float CopyPasteIconHeight = 24f;
 
-		// Token: 0x04002F92 RID: 12178
+		
 		public const float CopyPasteIconWidth = 18f;
 
-		// Token: 0x04002F93 RID: 12179
+		
 		public const float CopyPasteColumnWidth = 36f;
 	}
 }

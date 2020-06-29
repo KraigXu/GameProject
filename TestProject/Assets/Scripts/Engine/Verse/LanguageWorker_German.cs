@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200013A RID: 314
+	
 	public class LanguageWorker_German : LanguageWorker
 	{
-		// Token: 0x060008D5 RID: 2261 RVA: 0x0002E938 File Offset: 0x0002CB38
+		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -25,7 +25,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060008D6 RID: 2262 RVA: 0x0002E984 File Offset: 0x0002CB84
+		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -45,13 +45,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060008D7 RID: 2263 RVA: 0x0002E9D0 File Offset: 0x0002CBD0
+		
 		public override string OrdinalNumber(int number, Gender gender = Gender.None)
 		{
 			return number + ".";
 		}
 
-		// Token: 0x060008D8 RID: 2264 RVA: 0x0002E9E4 File Offset: 0x0002CBE4
+		
 		public override string Pluralize(string str, Gender gender, int count = -1)
 		{
 			if (str.NullOrEmpty())

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C1 RID: 4289
+	
 	public class SymbolResolver_AncientShrine : SymbolResolver
 	{
-		// Token: 0x0600654B RID: 25931 RVA: 0x00235D48 File Offset: 0x00233F48
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			IntVec3 bottomLeft = rp.rect.BottomLeft;
@@ -68,13 +68,13 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("floor", resolveParams6, null);
 		}
 
-		// Token: 0x04003DB8 RID: 15800
+		
 		public float techprintChance;
 
-		// Token: 0x04003DB9 RID: 15801
+		
 		public float bladelinkChance;
 
-		// Token: 0x04003DBA RID: 15802
+		
 		public float psychicChance;
 	}
 }

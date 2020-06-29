@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000660 RID: 1632
+	
 	public class JobDriver_HaulToTransporter : JobDriver_HaulToContainer
 	{
-		// Token: 0x17000864 RID: 2148
+		
 		// (get) Token: 0x06002C83 RID: 11395 RVA: 0x000FDB19 File Offset: 0x000FBD19
 		public CompTransporter Transporter
 		{
@@ -21,14 +21,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C84 RID: 11396 RVA: 0x000FDB30 File Offset: 0x000FBD30
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.initialCount, "initialCount", 0, false);
 		}
 
-		// Token: 0x06002C85 RID: 11397 RVA: 0x000FDB4C File Offset: 0x000FBD4C
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			this.pawn.ReserveAsManyAsPossible(this.job.GetTargetQueue(TargetIndex.A), this.job, 1, -1, null);
@@ -36,7 +36,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002C86 RID: 11398 RVA: 0x000FDB9C File Offset: 0x000FBD9C
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
@@ -55,7 +55,7 @@ namespace RimWorld
 			this.pawn.Reserve(thingCount.Thing, this.job, 1, -1, null, true);
 		}
 
-		// Token: 0x040019E4 RID: 6628
+		
 		public int initialCount;
 	}
 }

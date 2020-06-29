@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200064D RID: 1613
+	
 	public class JobDriver_Skygaze : JobDriver
 	{
-		// Token: 0x06002C0C RID: 11276 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002C0D RID: 11277 RVA: 0x000FCA19 File Offset: 0x000FAC19
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.OnCell);
@@ -36,7 +36,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002C0E RID: 11278 RVA: 0x000FCA2C File Offset: 0x000FAC2C
+		
 		public override string GetReport()
 		{
 			if (base.Map.gameConditionManager.ConditionIsActive(GameConditionDefOf.Eclipse))

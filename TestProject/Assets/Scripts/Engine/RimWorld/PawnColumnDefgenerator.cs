@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000858 RID: 2136
+	
 	public class PawnColumnDefgenerator
 	{
-		// Token: 0x060034D6 RID: 13526 RVA: 0x00121371 File Offset: 0x0011F571
+		
 		public static IEnumerable<PawnColumnDef> ImpliedPawnColumnDefs()
 		{
 			PawnTableDef animalsTable = PawnTableDefOf.Animals;

@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009DE RID: 2526
+	
 	public class IncidentWorker_DiseaseAnimal : IncidentWorker_Disease
 	{
-		// Token: 0x06003C43 RID: 15427 RVA: 0x0013E528 File Offset: 0x0013C728
+		
 		protected override IEnumerable<Pawn> PotentialVictimCandidates(IIncidentTarget target)
 		{
 			Map map = target as Map;
@@ -25,7 +25,7 @@ namespace RimWorld
 			select p;
 		}
 
-		// Token: 0x06003C44 RID: 15428 RVA: 0x0013E5A4 File Offset: 0x0013C7A4
+		
 		protected override IEnumerable<Pawn> ActualVictims(IncidentParms parms)
 		{
 			Pawn[] potentialVictims = base.PotentialVictims(parms.target).ToArray<Pawn>();

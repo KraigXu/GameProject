@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A9A RID: 2714
+	
 	public class RoomStatWorker_Beauty : RoomStatWorker
 	{
-		// Token: 0x06003FFA RID: 16378 RVA: 0x001544E8 File Offset: 0x001526E8
+		
 		public override float GetScore(Room room)
 		{
 			float num = 0f;
@@ -37,7 +37,7 @@ namespace RimWorld
 			return num / RoomStatWorker_Beauty.CellCountCurve.Evaluate((float)num2);
 		}
 
-		// Token: 0x0400252C RID: 9516
+		
 		private static readonly SimpleCurve CellCountCurve = new SimpleCurve
 		{
 			{
@@ -54,10 +54,10 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400252D RID: 9517
+		
 		private static List<Thing> countedThings = new List<Thing>();
 
-		// Token: 0x0400252E RID: 9518
+		
 		private static List<IntVec3> countedAdjCells = new List<IntVec3>();
 	}
 }

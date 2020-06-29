@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000016 RID: 22
+	
 	public class SimpleCurveView
 	{
-		// Token: 0x17000071 RID: 113
+		
 		// (get) Token: 0x06000163 RID: 355 RVA: 0x00006632 File Offset: 0x00004832
 		public IEnumerable<float> DebugInputValues
 		{
@@ -28,13 +28,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000164 RID: 356 RVA: 0x00006642 File Offset: 0x00004842
+		
 		public void SetDebugInput(object key, float value)
 		{
 			this.debugInputValues[key] = value;
 		}
 
-		// Token: 0x06000165 RID: 357 RVA: 0x00006651 File Offset: 0x00004851
+		
 		public void ClearDebugInputFrom(object key)
 		{
 			if (this.debugInputValues.ContainsKey(key))
@@ -43,7 +43,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000166 RID: 358 RVA: 0x00006670 File Offset: 0x00004870
+		
 		public void SetViewRectAround(SimpleCurve curve)
 		{
 			if (curve.PointsCount == 0)
@@ -83,16 +83,16 @@ namespace Verse
 			this.rect.yMax = this.rect.yMax + height * 0.1f;
 		}
 
-		// Token: 0x04000039 RID: 57
+		
 		public Rect rect;
 
-		// Token: 0x0400003A RID: 58
+		
 		private Dictionary<object, float> debugInputValues = new Dictionary<object, float>();
 
-		// Token: 0x0400003B RID: 59
+		
 		private const float ResetZoomBuffer = 0.1f;
 
-		// Token: 0x0400003C RID: 60
+		
 		private static Rect identityRect = new Rect(0f, 0f, 1f, 1f);
 	}
 }

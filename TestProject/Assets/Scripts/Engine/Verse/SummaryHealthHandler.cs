@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200028F RID: 655
+	
 	public class SummaryHealthHandler
 	{
-		// Token: 0x1700037D RID: 893
+		
 		// (get) Token: 0x06001189 RID: 4489 RVA: 0x0006348C File Offset: 0x0006168C
 		public float SummaryHealthPercent
 		{
@@ -42,25 +42,25 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600118A RID: 4490 RVA: 0x00063587 File Offset: 0x00061787
+		
 		public SummaryHealthHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x0600118B RID: 4491 RVA: 0x000635A8 File Offset: 0x000617A8
+		
 		public void Notify_HealthChanged()
 		{
 			this.dirty = true;
 		}
 
-		// Token: 0x04000C78 RID: 3192
+		
 		private Pawn pawn;
 
-		// Token: 0x04000C79 RID: 3193
+		
 		private float cachedSummaryHealthPercent = 1f;
 
-		// Token: 0x04000C7A RID: 3194
+		
 		private bool dirty = true;
 	}
 }

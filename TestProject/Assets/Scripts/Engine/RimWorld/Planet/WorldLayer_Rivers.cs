@@ -7,19 +7,19 @@ using Verse.Noise;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011EB RID: 4587
+	
 	public class WorldLayer_Rivers : WorldLayer_Paths
 	{
-		// Token: 0x06006A23 RID: 27171 RVA: 0x00250B9C File Offset: 0x0024ED9C
+		
 		public WorldLayer_Rivers()
 		{
 			this.pointyEnds = true;
 		}
 
-		// Token: 0x06006A24 RID: 27172 RVA: 0x00250C53 File Offset: 0x0024EE53
+		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.<>n__0())
+			foreach (object obj in this.n__0())
 			{
 				yield return obj;
 			}
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006A25 RID: 27173 RVA: 0x00250C64 File Offset: 0x0024EE64
+		
 		public override Vector3 FinalizePoint(Vector3 inp, float distortionFrequency, float distortionIntensity)
 		{
 			float magnitude = inp.magnitude;
@@ -77,22 +77,22 @@ namespace RimWorld.Planet
 			return inp + inp.normalized * 0.008f;
 		}
 
-		// Token: 0x04004226 RID: 16934
+		
 		private Color32 riverColor = new Color32(73, 82, 100, byte.MaxValue);
 
-		// Token: 0x04004227 RID: 16935
+		
 		private const float PerlinFrequency = 0.6f;
 
-		// Token: 0x04004228 RID: 16936
+		
 		private const float PerlinMagnitude = 0.1f;
 
-		// Token: 0x04004229 RID: 16937
+		
 		private ModuleBase riverDisplacementX = new Perlin(0.60000002384185791, 2.0, 0.5, 3, 84905524, QualityMode.Medium);
 
-		// Token: 0x0400422A RID: 16938
+		
 		private ModuleBase riverDisplacementY = new Perlin(0.60000002384185791, 2.0, 0.5, 3, 37971116, QualityMode.Medium);
 
-		// Token: 0x0400422B RID: 16939
+		
 		private ModuleBase riverDisplacementZ = new Perlin(0.60000002384185791, 2.0, 0.5, 3, 91572032, QualityMode.Medium);
 	}
 }

@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001238 RID: 4664
+	
 	[StaticConstructorOnStartup]
 	public static class CaravanMergeUtility
 	{
-		// Token: 0x17001236 RID: 4662
+		
 		// (get) Token: 0x06006CA3 RID: 27811 RVA: 0x0025E9D4 File Offset: 0x0025CBD4
 		public static bool ShouldShowMergeCommand
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001237 RID: 4663
+		
 		// (get) Token: 0x06006CA4 RID: 27812 RVA: 0x0025E9E4 File Offset: 0x0025CBE4
 		public static bool CanMergeAnySelectedCaravans
 		{
@@ -46,7 +46,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001238 RID: 4664
+		
 		// (get) Token: 0x06006CA5 RID: 27813 RVA: 0x0025EA60 File Offset: 0x0025CC60
 		public static bool AnySelectedCaravanCloseToAnyOtherMergeableCaravan
 		{
@@ -73,7 +73,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006CA6 RID: 27814 RVA: 0x0025EAE8 File Offset: 0x0025CCE8
+		
 		public static Command MergeCommand(Caravan caravan)
 		{
 			Command_Action command_Action = new Command_Action();
@@ -92,7 +92,7 @@ namespace RimWorld.Planet
 			return command_Action;
 		}
 
-		// Token: 0x06006CA7 RID: 27815 RVA: 0x0025EB74 File Offset: 0x0025CD74
+		
 		public static void TryMergeSelectedCaravans()
 		{
 			CaravanMergeUtility.tmpSelectedPlayerCaravans.Clear();
@@ -126,7 +126,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006CA8 RID: 27816 RVA: 0x0025EC74 File Offset: 0x0025CE74
+		
 		private static bool CloseToEachOther(Caravan c1, Caravan c2)
 		{
 			if (c1.Tile == c2.Tile)
@@ -139,7 +139,7 @@ namespace RimWorld.Planet
 			return (drawPos - drawPos2).sqrMagnitude < num * num;
 		}
 
-		// Token: 0x06006CA9 RID: 27817 RVA: 0x0025ECC8 File Offset: 0x0025CEC8
+		
 		private static void MergeCaravans(List<Caravan> caravans)
 		{
 			Caravan caravan = caravans.MaxBy((Caravan x) => x.PawnsListForReading.Count);
@@ -155,13 +155,13 @@ namespace RimWorld.Planet
 			caravan.Notify_Merged(caravans);
 		}
 
-		// Token: 0x04004393 RID: 17299
+		
 		private static readonly Texture2D MergeCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/MergeCaravans", true);
 
-		// Token: 0x04004394 RID: 17300
+		
 		private static List<Caravan> tmpSelectedPlayerCaravans = new List<Caravan>();
 
-		// Token: 0x04004395 RID: 17301
+		
 		private static List<Caravan> tmpCaravansOnSameTile = new List<Caravan>();
 	}
 }

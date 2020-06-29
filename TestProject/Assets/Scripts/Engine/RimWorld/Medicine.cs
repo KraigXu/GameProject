@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CA4 RID: 3236
+	
 	public class Medicine : ThingWithComps
 	{
-		// Token: 0x06004E45 RID: 20037 RVA: 0x001A4EF4 File Offset: 0x001A30F4
+		
 		public static int GetMedicineCountToFullyHeal(Pawn pawn)
 		{
 			int num = 0;
@@ -48,10 +48,10 @@ namespace RimWorld
 			return num3;
 		}
 
-		// Token: 0x04002BF4 RID: 11252
+		
 		private static List<Hediff> tendableHediffsInTendPriorityOrder = new List<Hediff>();
 
-		// Token: 0x04002BF5 RID: 11253
+		
 		private static List<Hediff> tmpHediffs = new List<Hediff>();
 	}
 }

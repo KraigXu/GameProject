@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009F4 RID: 2548
+	
 	public class IncidentWorker_TransportPodCrash : IncidentWorker
 	{
-		// Token: 0x06003C98 RID: 15512 RVA: 0x001401C0 File Offset: 0x0013E3C0
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;

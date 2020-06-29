@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001292 RID: 4754
+	
 	public class WITab_Caravan_Gear : WITab
 	{
-		// Token: 0x170012DC RID: 4828
+		
 		// (get) Token: 0x06006FDA RID: 28634 RVA: 0x0026F60A File Offset: 0x0026D80A
 		private List<Pawn> Pawns
 		{
@@ -19,13 +19,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FDB RID: 28635 RVA: 0x0026F617 File Offset: 0x0026D817
+		
 		public WITab_Caravan_Gear()
 		{
 			this.labelKey = "TabCaravanGear";
 		}
 
-		// Token: 0x06006FDC RID: 28636 RVA: 0x0026F62C File Offset: 0x0026D82C
+		
 		protected override void UpdateSize()
 		{
 			base.UpdateSize();
@@ -35,14 +35,14 @@ namespace RimWorld.Planet
 			this.size.y = Mathf.Min(550f, this.PaneTopY - 30f);
 		}
 
-		// Token: 0x06006FDD RID: 28637 RVA: 0x0026F68E File Offset: 0x0026D88E
+		
 		public override void OnOpen()
 		{
 			base.OnOpen();
 			this.draggedItem = null;
 		}
 
-		// Token: 0x06006FDE RID: 28638 RVA: 0x0026F6A0 File Offset: 0x0026D8A0
+		
 		protected override void FillTab()
 		{
 			Text.Font = GameFont.Small;
@@ -62,7 +62,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FDF RID: 28639 RVA: 0x0026F744 File Offset: 0x0026D944
+		
 		private void DoLeftPane()
 		{
 			Rect rect = new Rect(0f, 0f, this.leftPaneWidth, this.size.y).ContractedBy(10f);
@@ -77,7 +77,7 @@ namespace RimWorld.Planet
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06006FE0 RID: 28640 RVA: 0x0026F7E0 File Offset: 0x0026D9E0
+		
 		private void DoRightPane()
 		{
 			Rect rect = new Rect(0f, 0f, this.rightPaneWidth, this.size.y).ContractedBy(10f);
@@ -101,7 +101,7 @@ namespace RimWorld.Planet
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06006FE1 RID: 28641 RVA: 0x0026F8C8 File Offset: 0x0026DAC8
+		
 		protected override void ExtraOnGUI()
 		{
 			base.ExtraOnGUI();
@@ -121,7 +121,7 @@ namespace RimWorld.Planet
 			this.CheckDropDraggedItem();
 		}
 
-		// Token: 0x06006FE2 RID: 28642 RVA: 0x0026F964 File Offset: 0x0026DB64
+		
 		private void DoPawnRows(ref float curY, Rect scrollViewRect, Rect scrollOutRect)
 		{
 			List<Pawn> pawns = this.Pawns;
@@ -155,7 +155,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FE3 RID: 28643 RVA: 0x0026FA60 File Offset: 0x0026DC60
+		
 		private void DoPawnRow(ref float curY, Rect viewRect, Rect scrollOutRect, Pawn p)
 		{
 			float num = this.leftPaneScrollPosition.y - 50f;
@@ -167,7 +167,7 @@ namespace RimWorld.Planet
 			curY += 50f;
 		}
 
-		// Token: 0x06006FE4 RID: 28644 RVA: 0x0026FAC8 File Offset: 0x0026DCC8
+		
 		private void DoPawnRow(Rect rect, Pawn p)
 		{
 			GUI.BeginGroup(rect);
@@ -218,7 +218,7 @@ namespace RimWorld.Planet
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06006FE5 RID: 28645 RVA: 0x0026FD50 File Offset: 0x0026DF50
+		
 		private void DoInventoryRows(ref float curY, Rect scrollViewRect, Rect scrollOutRect)
 		{
 			List<Thing> list = CaravanInventoryUtility.AllInventoryItems(base.SelCaravan);
@@ -255,7 +255,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FE6 RID: 28646 RVA: 0x0026FE14 File Offset: 0x0026E014
+		
 		private void DoInventoryRow(ref float curY, Rect viewRect, Rect scrollOutRect, Thing t)
 		{
 			float num = this.rightPaneScrollPosition.y - 30f;
@@ -267,7 +267,7 @@ namespace RimWorld.Planet
 			curY += 30f;
 		}
 
-		// Token: 0x06006FE7 RID: 28647 RVA: 0x0026FE7C File Offset: 0x0026E07C
+		
 		private void DoInventoryRow(Rect rect, Thing t)
 		{
 			GUI.BeginGroup(rect);
@@ -300,7 +300,7 @@ namespace RimWorld.Planet
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06006FE8 RID: 28648 RVA: 0x0026FFF4 File Offset: 0x0026E1F4
+		
 		private void DoEquippedGear(Thing t, Pawn p, ref float curX)
 		{
 			Rect rect = new Rect(curX, 9f, 32f, 32f);
@@ -334,7 +334,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FE9 RID: 28649 RVA: 0x002700D4 File Offset: 0x0026E2D4
+		
 		private void CheckDraggedItemStillValid()
 		{
 			if (this.draggedItem == null)
@@ -357,7 +357,7 @@ namespace RimWorld.Planet
 			this.draggedItem = null;
 		}
 
-		// Token: 0x06006FEA RID: 28650 RVA: 0x0027012E File Offset: 0x0026E32E
+		
 		private void CheckDropDraggedItem()
 		{
 			if (this.draggedItem == null)
@@ -370,13 +370,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FEB RID: 28651 RVA: 0x0027015A File Offset: 0x0026E35A
+		
 		private bool IsVisibleWeapon(ThingDef t)
 		{
 			return t.IsWeapon && t != ThingDefOf.WoodLog && t != ThingDefOf.Beer;
 		}
 
-		// Token: 0x06006FEC RID: 28652 RVA: 0x0027017C File Offset: 0x0026E37C
+		
 		private Pawn CurrentWearerOf(Thing t)
 		{
 			IThingHolder parentHolder = t.ParentHolder;
@@ -387,7 +387,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006FED RID: 28653 RVA: 0x002701B0 File Offset: 0x0026E3B0
+		
 		private void MoveDraggedItemToInventory()
 		{
 			this.droppedDraggedItem = false;
@@ -410,7 +410,7 @@ namespace RimWorld.Planet
 			this.draggedItem = null;
 		}
 
-		// Token: 0x06006FEE RID: 28654 RVA: 0x00270280 File Offset: 0x0026E480
+		
 		private void TryEquipDraggedItem(Pawn p)
 		{
 			this.droppedDraggedItem = false;
@@ -516,64 +516,64 @@ namespace RimWorld.Planet
 			this.draggedItem = null;
 		}
 
-		// Token: 0x040044C9 RID: 17609
+		
 		private Vector2 leftPaneScrollPosition;
 
-		// Token: 0x040044CA RID: 17610
+		
 		private float leftPaneScrollViewHeight;
 
-		// Token: 0x040044CB RID: 17611
+		
 		private Vector2 rightPaneScrollPosition;
 
-		// Token: 0x040044CC RID: 17612
+		
 		private float rightPaneScrollViewHeight;
 
-		// Token: 0x040044CD RID: 17613
+		
 		private Thing draggedItem;
 
-		// Token: 0x040044CE RID: 17614
+		
 		private Vector2 draggedItemPosOffset;
 
-		// Token: 0x040044CF RID: 17615
+		
 		private bool droppedDraggedItem;
 
-		// Token: 0x040044D0 RID: 17616
+		
 		private float leftPaneWidth;
 
-		// Token: 0x040044D1 RID: 17617
+		
 		private float rightPaneWidth;
 
-		// Token: 0x040044D2 RID: 17618
+		
 		private const float PawnRowHeight = 50f;
 
-		// Token: 0x040044D3 RID: 17619
+		
 		private const float ItemRowHeight = 30f;
 
-		// Token: 0x040044D4 RID: 17620
+		
 		private const float PawnLabelHeight = 18f;
 
-		// Token: 0x040044D5 RID: 17621
+		
 		private const float PawnLabelColumnWidth = 100f;
 
-		// Token: 0x040044D6 RID: 17622
+		
 		private const float GearLabelColumnWidth = 250f;
 
-		// Token: 0x040044D7 RID: 17623
+		
 		private const float SpaceAroundIcon = 4f;
 
-		// Token: 0x040044D8 RID: 17624
+		
 		private const float EquippedGearColumnWidth = 250f;
 
-		// Token: 0x040044D9 RID: 17625
+		
 		private const float EquippedGearIconSize = 32f;
 
-		// Token: 0x040044DA RID: 17626
+		
 		private static List<Apparel> tmpApparel = new List<Apparel>();
 
-		// Token: 0x040044DB RID: 17627
+		
 		private static List<ThingWithComps> tmpExistingEquipment = new List<ThingWithComps>();
 
-		// Token: 0x040044DC RID: 17628
+		
 		private static List<Apparel> tmpExistingApparel = new List<Apparel>();
 	}
 }

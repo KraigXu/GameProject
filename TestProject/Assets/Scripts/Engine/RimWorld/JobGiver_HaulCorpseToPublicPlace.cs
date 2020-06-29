@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200070E RID: 1806
+	
 	public class JobGiver_HaulCorpseToPublicPlace : ThinkNode_JobGiver
 	{
-		// Token: 0x06002FA9 RID: 12201 RVA: 0x0010C7B0 File Offset: 0x0010A9B0
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			MentalState_CorpseObsession mentalState_CorpseObsession = pawn.MentalState as MentalState_CorpseObsession;

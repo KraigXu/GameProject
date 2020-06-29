@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200092C RID: 2348
+	
 	public class HistoryAutoRecorderGroup : IExposable
 	{
-		// Token: 0x060037CD RID: 14285 RVA: 0x0012B638 File Offset: 0x00129838
+		
 		public float GetMaxDay()
 		{
 			float num = 0f;
@@ -27,7 +27,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060037CE RID: 14286 RVA: 0x0012B6BC File Offset: 0x001298BC
+		
 		public void Tick()
 		{
 			for (int i = 0; i < this.recorders.Count; i++)
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037CF RID: 14287 RVA: 0x0012B6F0 File Offset: 0x001298F0
+		
 		public void DrawGraph(Rect graphRect, Rect legendRect, FloatRange section, List<CurveMark> marks)
 		{
 			int ticksGame = Find.TickManager.TicksGame;
@@ -78,7 +78,7 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x060037D0 RID: 14288 RVA: 0x0012B8C5 File Offset: 0x00129AC5
+		
 		public void ExposeData()
 		{
 			Scribe_Defs.Look<HistoryAutoRecorderGroupDef>(ref this.def, "def");
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037D1 RID: 14289 RVA: 0x0012B8FC File Offset: 0x00129AFC
+		
 		public void AddOrRemoveHistoryRecorders()
 		{
 			if (this.recorders.RemoveAll((HistoryAutoRecorder x) => x == null) != 0)
@@ -112,16 +112,16 @@ namespace RimWorld
 			this.recorders.RemoveAll((HistoryAutoRecorder x) => x.def == null);
 		}
 
-		// Token: 0x0400210B RID: 8459
+		
 		public HistoryAutoRecorderGroupDef def;
 
-		// Token: 0x0400210C RID: 8460
+		
 		public List<HistoryAutoRecorder> recorders = new List<HistoryAutoRecorder>();
 
-		// Token: 0x0400210D RID: 8461
+		
 		private List<SimpleCurveDrawInfo> curves = new List<SimpleCurveDrawInfo>();
 
-		// Token: 0x0400210E RID: 8462
+		
 		private int cachedGraphTickCount = -1;
 	}
 }

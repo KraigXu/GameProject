@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D2 RID: 4306
+	
 	public class SymbolResolver_RandomlyPlaceMealsOnTables : SymbolResolver
 	{
-		// Token: 0x0600657E RID: 25982 RVA: 0x00237F70 File Offset: 0x00236170
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;

@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000D98 RID: 3480
+	
 	public class CompTargetEffect_Resurrect : CompTargetEffect
 	{
-		// Token: 0x060054A1 RID: 21665 RVA: 0x001C37F4 File Offset: 0x001C19F4
+		
 		public override void DoEffectOn(Pawn user, Thing target)
 		{
 			if (!user.IsColonistPlayerControlled)

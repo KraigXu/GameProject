@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F4F RID: 3919
+	
 	public static class DefOfHelper
 	{
-		// Token: 0x06006054 RID: 24660 RVA: 0x00216B24 File Offset: 0x00214D24
+		
 		public static void RebindAllDefOfs(bool earlyTryMode)
 		{
 			DefOfHelper.earlyTry = earlyTryMode;
@@ -25,7 +25,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006055 RID: 24661 RVA: 0x00216B8C File Offset: 0x00214D8C
+		
 		private static void BindDefsFor(Type type)
 		{
 			foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.Public))
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006056 RID: 24662 RVA: 0x00216C88 File Offset: 0x00214E88
+		
 		public static void EnsureInitializedInCtor(Type defOf)
 		{
 			if (!DefOfHelper.bindingNow)
@@ -85,10 +85,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003433 RID: 13363
+		
 		private static bool bindingNow;
 
-		// Token: 0x04003434 RID: 13364
+		
 		private static bool earlyTry = true;
 	}
 }

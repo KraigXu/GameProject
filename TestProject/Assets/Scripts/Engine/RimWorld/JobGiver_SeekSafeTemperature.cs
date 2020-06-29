@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006EC RID: 1772
+	
 	public class JobGiver_SeekSafeTemperature : ThinkNode_JobGiver
 	{
-		// Token: 0x06002F07 RID: 12039 RVA: 0x00108A70 File Offset: 0x00106C70
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!pawn.health.hediffSet.HasTemperatureInjury(TemperatureInjuryStage.Serious))
@@ -27,7 +27,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002F08 RID: 12040 RVA: 0x00108AF0 File Offset: 0x00106CF0
+		
 		private static Region ClosestRegionWithinTemperatureRange(IntVec3 root, Map map, FloatRange tempRange, TraverseParms traverseParms, RegionType traversableRegionTypes = RegionType.Set_Passable)
 		{
 			Region region = root.GetRegion(map, traversableRegionTypes);

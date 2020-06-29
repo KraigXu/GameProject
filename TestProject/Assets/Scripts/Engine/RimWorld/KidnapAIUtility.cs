@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006CF RID: 1743
+	
 	public static class KidnapAIUtility
 	{
-		// Token: 0x06002EA9 RID: 11945 RVA: 0x0010622C File Offset: 0x0010442C
+		
 		public static bool TryFindGoodKidnapVictim(Pawn kidnapper, float maxDist, out Pawn victim, List<Thing> disallowed = null)
 		{
 			if (!kidnapper.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation) || !kidnapper.Map.reachability.CanReachMapEdge(kidnapper.Position, TraverseParms.For(kidnapper, Danger.Some, TraverseMode.ByPawn, false)))
@@ -25,7 +25,7 @@ namespace RimWorld
 			return victim != null;
 		}
 
-		// Token: 0x06002EAA RID: 11946 RVA: 0x001062EC File Offset: 0x001044EC
+		
 		public static Pawn ReachableWoundedGuest(Pawn searcher)
 		{
 			List<Pawn> list = searcher.Map.mapPawns.SpawnedPawnsInFaction(searcher.Faction);

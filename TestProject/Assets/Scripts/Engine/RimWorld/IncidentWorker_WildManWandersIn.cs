@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009F6 RID: 2550
+	
 	public class IncidentWorker_WildManWandersIn : IncidentWorker
 	{
-		// Token: 0x06003C9E RID: 15518 RVA: 0x00140508 File Offset: 0x0013E708
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -23,7 +23,7 @@ namespace RimWorld
 			return !map.GameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout) && map.mapTemperature.SeasonAcceptableFor(ThingDefOf.Human) && this.TryFindEntryCell(map, out intVec);
 		}
 
-		// Token: 0x06003C9F RID: 15519 RVA: 0x0014056C File Offset: 0x0013E76C
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -47,13 +47,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003CA0 RID: 15520 RVA: 0x0014065C File Offset: 0x0013E85C
+		
 		private bool TryFindEntryCell(Map map, out IntVec3 cell)
 		{
 			return CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => map.reachability.CanReachColony(c), map, CellFinder.EdgeRoadChance_Ignore, out cell);
 		}
 
-		// Token: 0x06003CA1 RID: 15521 RVA: 0x00140693 File Offset: 0x0013E893
+		
 		private bool TryFindFormerFaction(out Faction formerFaction)
 		{
 			return Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out formerFaction, false, true, TechLevel.Undefined);

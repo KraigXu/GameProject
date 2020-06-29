@@ -11,10 +11,10 @@ using RimWorld.IO;
 
 namespace Verse
 {
-	// Token: 0x02000146 RID: 326
+	
 	public static class TranslationFilesCleaner
 	{
-		// Token: 0x06000923 RID: 2339 RVA: 0x00030900 File Offset: 0x0002EB00
+		
 		public static void CleanupTranslationFiles()
 		{
 			LoadedLanguage curLang = LanguageDatabase.activeLanguage;
@@ -56,7 +56,7 @@ namespace Verse
 			Messages.Message("MessageDisableModsBeforeCleaningTranslationFiles".Translate(), MessageTypeDefOf.RejectInput, false);
 		}
 
-		// Token: 0x06000924 RID: 2340 RVA: 0x00030A08 File Offset: 0x0002EC08
+		
 		private static void DoCleanupTranslationFiles()
 		{
 			if (LanguageDatabase.activeLanguage == LanguageDatabase.defaultLanguage)
@@ -99,7 +99,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000925 RID: 2341 RVA: 0x00030B1C File Offset: 0x0002ED1C
+		
 		private static void CleanupKeyedTranslations()
 		{
 			LoadedLanguage activeLanguage = LanguageDatabase.activeLanguage;
@@ -298,11 +298,11 @@ namespace Verse
 				}
 			}
 			IEnumerable<LoadedLanguage.KeyedReplacement> source = list;
-			Func<LoadedLanguage.KeyedReplacement, bool> <>9__2;
+			
 			Func<LoadedLanguage.KeyedReplacement, bool> predicate;
-			if ((predicate = <>9__2) == null)
+			if ((predicate ) == null)
 			{
-				predicate = (<>9__2 = ((LoadedLanguage.KeyedReplacement x) => !writtenUnusedKeyedTranslations.Contains(x)));
+				predicate = (9__2 = ((LoadedLanguage.KeyedReplacement x) => !writtenUnusedKeyedTranslations.Contains(x)));
 			}
 			foreach (IGrouping<string, LoadedLanguage.KeyedReplacement> grouping in from x in source.Where(predicate)
 			group x by x.fileSourceFullPath)
@@ -344,7 +344,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000926 RID: 2342 RVA: 0x00031368 File Offset: 0x0002F568
+		
 		private static void CleanupDefInjections()
 		{
 			foreach (ModMetaData modMetaData in ModsConfig.ActiveModsInLoadOrder)
@@ -407,7 +407,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000927 RID: 2343 RVA: 0x00031558 File Offset: 0x0002F758
+		
 		private static void CleanupDefInjectionsForDefType(Type defType, string defInjectionsFolderPath, ModMetaData mod)
 		{
 			List<KeyValuePair<string, DefInjectionPackage.DefInjection>> list = (from x in (from x in LanguageDatabase.activeLanguage.defInjections
@@ -691,7 +691,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000928 RID: 2344 RVA: 0x00031EE4 File Offset: 0x000300E4
+		
 		private static void CleanupBackstories()
 		{
 			string text = Path.Combine(TranslationFilesCleaner.GetActiveLanguageCoreModFolderPath(), "Backstories");
@@ -737,7 +737,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000929 RID: 2345 RVA: 0x00032140 File Offset: 0x00030340
+		
 		private static void AddBackstoryFieldElement(XElement addTo, string fieldName, string currentValue, string untranslatedValue, bool wasTranslated)
 		{
 			if (wasTranslated || !untranslatedValue.NullOrEmpty())
@@ -751,26 +751,26 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600092A RID: 2346 RVA: 0x000321D0 File Offset: 0x000303D0
+		
 		private static string GetActiveLanguageCoreModFolderPath()
 		{
 			ModContentPack modContentPack = LoadedModManager.RunningMods.FirstOrDefault((ModContentPack x) => x.IsCoreMod);
 			return TranslationFilesCleaner.GetLanguageFolderPath(LanguageDatabase.activeLanguage, modContentPack.RootDir);
 		}
 
-		// Token: 0x0600092B RID: 2347 RVA: 0x00032217 File Offset: 0x00030417
+		
 		public static string GetLanguageFolderPath(LoadedLanguage language, string modRootDir)
 		{
 			return Path.Combine(Path.Combine(modRootDir, "Languages"), language.folderName);
 		}
 
-		// Token: 0x0600092C RID: 2348 RVA: 0x0003222F File Offset: 0x0003042F
+		
 		private static void SaveXMLDocumentWithProcessedNewlineTags(XNode doc, string path)
 		{
 			File.WriteAllText(path, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + doc.ToString().Replace("<!--NEWLINE-->", "").Replace("&gt;", ">"), Encoding.UTF8);
 		}
 
-		// Token: 0x0600092D RID: 2349 RVA: 0x0003226C File Offset: 0x0003046C
+		
 		private static string ListToLiNodesString(IEnumerable<string> list)
 		{
 			if (list == null)
@@ -791,7 +791,7 @@ namespace Verse
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x0600092E RID: 2350 RVA: 0x00032308 File Offset: 0x00030508
+		
 		private static XElement ListToXElement(IEnumerable<string> list, string name, List<Pair<int, string>> comments)
 		{
 			XElement xelement = new XElement(name);
@@ -832,7 +832,7 @@ namespace Verse
 			return xelement;
 		}
 
-		// Token: 0x0600092F RID: 2351 RVA: 0x00032438 File Offset: 0x00030638
+		
 		private static string AppendXmlExtensionIfNotAlready(string fileName)
 		{
 			if (!fileName.ToLower().EndsWith(".xml"))
@@ -842,7 +842,7 @@ namespace Verse
 			return fileName;
 		}
 
-		// Token: 0x06000930 RID: 2352 RVA: 0x00032459 File Offset: 0x00030659
+		
 		private static string GetSourceFile(Def def)
 		{
 			if (!def.fileName.NullOrEmpty())
@@ -852,7 +852,7 @@ namespace Verse
 			return "Unknown.xml";
 		}
 
-		// Token: 0x06000931 RID: 2353 RVA: 0x0003247C File Offset: 0x0003067C
+		
 		private static string TryRemoveLastIndexSymbol(string str)
 		{
 			int num = str.LastIndexOf('.');
@@ -866,7 +866,7 @@ namespace Verse
 			return str;
 		}
 
-		// Token: 0x06000932 RID: 2354 RVA: 0x000324D0 File Offset: 0x000306D0
+		
 		private static IEnumerable<string> GetEnglishList(string normalizedPath, IEnumerable<string> curValue, Dictionary<string, DefInjectionPackage.DefInjection> injectionsByNormalizedPath)
 		{
 			DefInjectionPackage.DefInjection defInjection;
@@ -891,7 +891,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06000933 RID: 2355 RVA: 0x0003254C File Offset: 0x0003074C
+		
 		private static XElement GetDefInjectableFieldNode(string suggestedPath, DefInjectionPackage.DefInjection existingInjection)
 		{
 			if (existingInjection == null || existingInjection.isPlaceholder)
@@ -944,7 +944,7 @@ namespace Verse
 			return xelement;
 		}
 
-		// Token: 0x06000934 RID: 2356 RVA: 0x000326A8 File Offset: 0x000308A8
+		
 		private static string SanitizeXComment(string comment)
 		{
 			while (comment.Contains("-----"))
@@ -958,37 +958,37 @@ namespace Verse
 			return comment;
 		}
 
-		// Token: 0x04000797 RID: 1943
+		
 		private const string NewlineTag = "NEWLINE";
 
-		// Token: 0x04000798 RID: 1944
+		
 		private const string NewlineTagFull = "<!--NEWLINE-->";
 
-		// Token: 0x020013A2 RID: 5026
+		
 		private class PossibleDefInjection
 		{
-			// Token: 0x04004A96 RID: 19094
+			
 			public string suggestedPath;
 
-			// Token: 0x04004A97 RID: 19095
+			
 			public string normalizedPath;
 
-			// Token: 0x04004A98 RID: 19096
+			
 			public bool isCollection;
 
-			// Token: 0x04004A99 RID: 19097
+			
 			public bool fullListTranslationAllowed;
 
-			// Token: 0x04004A9A RID: 19098
+			
 			public string curValue;
 
-			// Token: 0x04004A9B RID: 19099
+			
 			public IEnumerable<string> curValueCollection;
 
-			// Token: 0x04004A9C RID: 19100
+			
 			public FieldInfo fieldInfo;
 
-			// Token: 0x04004A9D RID: 19101
+			
 			public Def def;
 		}
 	}

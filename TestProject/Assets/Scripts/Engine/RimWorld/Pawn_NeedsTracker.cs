@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B9E RID: 2974
+	
 	public class Pawn_NeedsTracker : IExposable
 	{
-		// Token: 0x17000C56 RID: 3158
+		
 		// (get) Token: 0x060045A5 RID: 17829 RVA: 0x0017857E File Offset: 0x0017677E
 		public List<Need> AllNeeds
 		{
@@ -17,19 +17,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060045A6 RID: 17830 RVA: 0x00178586 File Offset: 0x00176786
+		
 		public Pawn_NeedsTracker()
 		{
 		}
 
-		// Token: 0x060045A7 RID: 17831 RVA: 0x00178599 File Offset: 0x00176799
+		
 		public Pawn_NeedsTracker(Pawn newPawn)
 		{
 			this.pawn = newPawn;
 			this.AddOrRemoveNeedsAsAppropriate();
 		}
 
-		// Token: 0x060045A8 RID: 17832 RVA: 0x001785BC File Offset: 0x001767BC
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Need>(ref this.needs, "needs", LookMode.Deep, new object[]
@@ -47,7 +47,7 @@ namespace RimWorld
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x060045A9 RID: 17833 RVA: 0x00178654 File Offset: 0x00176854
+		
 		private void BindDirectNeedFields()
 		{
 			this.mood = this.TryGetNeed<Need_Mood>();
@@ -62,7 +62,7 @@ namespace RimWorld
 			this.authority = null;
 		}
 
-		// Token: 0x060045AA RID: 17834 RVA: 0x001786D4 File Offset: 0x001768D4
+		
 		public void NeedsTrackerTick()
 		{
 			if (this.pawn.IsHashIntervalTick(150))
@@ -74,7 +74,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060045AB RID: 17835 RVA: 0x0017871C File Offset: 0x0017691C
+		
 		public T TryGetNeed<T>() where T : Need
 		{
 			for (int i = 0; i < this.needs.Count; i++)
@@ -87,7 +87,7 @@ namespace RimWorld
 			return default(T);
 		}
 
-		// Token: 0x060045AC RID: 17836 RVA: 0x0017877C File Offset: 0x0017697C
+		
 		public Need TryGetNeed(NeedDef def)
 		{
 			for (int i = 0; i < this.needs.Count; i++)
@@ -100,7 +100,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060045AD RID: 17837 RVA: 0x001787C4 File Offset: 0x001769C4
+		
 		public void SetInitialLevels()
 		{
 			for (int i = 0; i < this.needs.Count; i++)
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060045AE RID: 17838 RVA: 0x001787F8 File Offset: 0x001769F8
+		
 		public void AddOrRemoveNeedsAsAppropriate()
 		{
 			List<NeedDef> allDefsListForReading = DefDatabase<NeedDef>.AllDefsListForReading;
@@ -145,7 +145,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060045AF RID: 17839 RVA: 0x001788B8 File Offset: 0x00176AB8
+		
 		private bool ShouldHaveNeed(NeedDef nd)
 		{
 			if (this.pawn.RaceProps.intelligence < nd.minIntelligence)
@@ -218,7 +218,7 @@ namespace RimWorld
 			return nd != NeedDefOf.Rest || this.pawn.RaceProps.needsRest;
 		}
 
-		// Token: 0x060045B0 RID: 17840 RVA: 0x00178B44 File Offset: 0x00176D44
+		
 		private void AddNeed(NeedDef nd)
 		{
 			Need need = (Need)Activator.CreateInstance(nd.needClass, new object[]
@@ -231,7 +231,7 @@ namespace RimWorld
 			this.BindDirectNeedFields();
 		}
 
-		// Token: 0x060045B1 RID: 17841 RVA: 0x00178B90 File Offset: 0x00176D90
+		
 		private void RemoveNeed(NeedDef nd)
 		{
 			Need item = this.TryGetNeed(nd);
@@ -239,40 +239,40 @@ namespace RimWorld
 			this.BindDirectNeedFields();
 		}
 
-		// Token: 0x0400280F RID: 10255
+		
 		private Pawn pawn;
 
-		// Token: 0x04002810 RID: 10256
+		
 		private List<Need> needs = new List<Need>();
 
-		// Token: 0x04002811 RID: 10257
+		
 		public Need_Mood mood;
 
-		// Token: 0x04002812 RID: 10258
+		
 		public Need_Food food;
 
-		// Token: 0x04002813 RID: 10259
+		
 		public Need_Rest rest;
 
-		// Token: 0x04002814 RID: 10260
+		
 		public Need_Joy joy;
 
-		// Token: 0x04002815 RID: 10261
+		
 		public Need_Beauty beauty;
 
-		// Token: 0x04002816 RID: 10262
+		
 		public Need_RoomSize roomsize;
 
-		// Token: 0x04002817 RID: 10263
+		
 		public Need_Outdoors outdoors;
 
-		// Token: 0x04002818 RID: 10264
+		
 		public Need_Chemical_Any drugsDesire;
 
-		// Token: 0x04002819 RID: 10265
+		
 		public Need_Comfort comfort;
 
-		// Token: 0x0400281A RID: 10266
+		
 		public Need_Authority authority;
 	}
 }

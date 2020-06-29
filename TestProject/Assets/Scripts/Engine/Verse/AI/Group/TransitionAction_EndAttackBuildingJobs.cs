@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI.Group
 {
-	// Token: 0x020005E3 RID: 1507
+	
 	public class TransitionAction_EndAttackBuildingJobs : TransitionAction
 	{
-		// Token: 0x060029E1 RID: 10721 RVA: 0x000F5A70 File Offset: 0x000F3C70
+		
 		public override void DoAction(Transition trans)
 		{
 			List<Pawn> ownedPawns = trans.target.lord.ownedPawns;

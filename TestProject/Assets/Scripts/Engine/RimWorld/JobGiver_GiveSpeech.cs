@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006C5 RID: 1733
+	
 	public class JobGiver_GiveSpeech : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E8E RID: 11918 RVA: 0x00105B84 File Offset: 0x00103D84
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			PawnDuty duty = pawn.mindState.duty;

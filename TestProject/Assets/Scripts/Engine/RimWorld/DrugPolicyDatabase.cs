@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000921 RID: 2337
+	
 	public class DrugPolicyDatabase : IExposable
 	{
-		// Token: 0x170009ED RID: 2541
+		
 		// (get) Token: 0x0600377F RID: 14207 RVA: 0x00129FF2 File Offset: 0x001281F2
 		public List<DrugPolicy> AllPolicies
 		{
@@ -18,19 +18,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003780 RID: 14208 RVA: 0x00129FFA File Offset: 0x001281FA
+		
 		public DrugPolicyDatabase()
 		{
 			this.GenerateStartingDrugPolicies();
 		}
 
-		// Token: 0x06003781 RID: 14209 RVA: 0x0012A013 File Offset: 0x00128213
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<DrugPolicy>(ref this.policies, "policies", LookMode.Deep, Array.Empty<object>());
 		}
 
-		// Token: 0x06003782 RID: 14210 RVA: 0x0012A02B File Offset: 0x0012822B
+		
 		public DrugPolicy DefaultDrugPolicy()
 		{
 			if (this.policies.Count == 0)
@@ -40,7 +40,7 @@ namespace RimWorld
 			return this.policies[0];
 		}
 
-		// Token: 0x06003783 RID: 14211 RVA: 0x0012A050 File Offset: 0x00128250
+		
 		public AcceptanceReport TryDelete(DrugPolicy policy)
 		{
 			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
@@ -61,7 +61,7 @@ namespace RimWorld
 			return AcceptanceReport.WasAccepted;
 		}
 
-		// Token: 0x06003784 RID: 14212 RVA: 0x0012A140 File Offset: 0x00128340
+		
 		public DrugPolicy MakeNewDrugPolicy()
 		{
 			int num;
@@ -79,7 +79,7 @@ namespace RimWorld
 			return drugPolicy;
 		}
 
-		// Token: 0x06003785 RID: 14213 RVA: 0x0012A1C4 File Offset: 0x001283C4
+		
 		private void GenerateStartingDrugPolicies()
 		{
 			DrugPolicy drugPolicy = this.MakeNewDrugPolicy();
@@ -105,7 +105,7 @@ namespace RimWorld
 			drugPolicy3[ThingDefOf.SmokeleafJoint].allowedForJoy = true;
 		}
 
-		// Token: 0x040020E9 RID: 8425
+		
 		private List<DrugPolicy> policies = new List<DrugPolicy>();
 	}
 }

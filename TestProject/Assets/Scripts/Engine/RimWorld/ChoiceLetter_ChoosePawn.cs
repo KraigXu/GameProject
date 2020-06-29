@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E99 RID: 3737
+	
 	public class ChoiceLetter_ChoosePawn : ChoiceLetter
 	{
-		// Token: 0x17001056 RID: 4182
+		
 		// (get) Token: 0x06005B1F RID: 23327 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool CanDismissWithRightClick
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001057 RID: 4183
+		
 		// (get) Token: 0x06005B20 RID: 23328 RVA: 0x001F5EF4 File Offset: 0x001F40F4
 		public override bool CanShowInLetterStack
 		{
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001058 RID: 4184
+		
 		// (get) Token: 0x06005B21 RID: 23329 RVA: 0x001F5F4A File Offset: 0x001F414A
 		public override IEnumerable<DiaOption> Choices
 		{
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B22 RID: 23330 RVA: 0x001F5F5C File Offset: 0x001F415C
+		
 		private DiaOption Option_ChoosePawn(Pawn p)
 		{
 			return new DiaOption(p.LabelCap)
@@ -96,7 +96,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06005B23 RID: 23331 RVA: 0x001F5FA8 File Offset: 0x001F41A8
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -108,10 +108,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040031C3 RID: 12739
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x040031C4 RID: 12740
+		
 		public string chosenPawnSignal;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A12 RID: 2578
+	
 	public class StorytellerComp_OnOffCycle : StorytellerComp
 	{
-		// Token: 0x17000AD8 RID: 2776
+		
 		// (get) Token: 0x06003D34 RID: 15668 RVA: 0x00143982 File Offset: 0x00141B82
 		protected StorytellerCompProperties_OnOffCycle Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D35 RID: 15669 RVA: 0x0014398F File Offset: 0x00141B8F
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			float num = 1f;
@@ -47,7 +47,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D36 RID: 15670 RVA: 0x001439A8 File Offset: 0x00141BA8
+		
 		private FiringIncident GenerateIncident(IIncidentTarget target)
 		{
 			IncidentParms parms = this.GenerateParms(this.Props.IncidentCategory, target);
@@ -78,7 +78,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06003D37 RID: 15671 RVA: 0x00143A68 File Offset: 0x00141C68
+		
 		public override string ToString()
 		{
 			return base.ToString() + " (" + ((this.Props.incident != null) ? this.Props.incident.defName : this.Props.IncidentCategory.defName) + ")";

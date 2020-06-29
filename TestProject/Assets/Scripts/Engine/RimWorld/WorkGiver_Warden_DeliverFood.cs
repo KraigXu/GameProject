@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000733 RID: 1843
+	
 	public class WorkGiver_Warden_DeliverFood : WorkGiver_Warden
 	{
-		// Token: 0x06003066 RID: 12390 RVA: 0x0010F7A8 File Offset: 0x0010D9A8
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (!base.ShouldTakeCareOfPrisoner(pawn, t))
@@ -53,7 +53,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06003067 RID: 12391 RVA: 0x0010F8A8 File Offset: 0x0010DAA8
+		
 		private static bool FoodAvailableInRoomTo(Pawn prisoner)
 		{
 			if (prisoner.carryTracker.CarriedThing != null && WorkGiver_Warden_DeliverFood.NutritionAvailableForFrom(prisoner, prisoner.carryTracker.CarriedThing) > 0f)
@@ -92,7 +92,7 @@ namespace RimWorld
 			return num2 + 0.5f >= num;
 		}
 
-		// Token: 0x06003068 RID: 12392 RVA: 0x0010FA2C File Offset: 0x0010DC2C
+		
 		private static float NutritionAvailableForFrom(Pawn p, Thing foodSource)
 		{
 			if (foodSource.def.IsNutritionGivingIngestible && p.WillEat(foodSource, null, true))

@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020001D9 RID: 473
+	
 	public class MapTemperature
 	{
-		// Token: 0x17000298 RID: 664
+		
 		// (get) Token: 0x06000D6A RID: 3434 RVA: 0x0004C83E File Offset: 0x0004AA3E
 		public float OutdoorTemp
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000299 RID: 665
+		
 		// (get) Token: 0x06000D6B RID: 3435 RVA: 0x0004C85A File Offset: 0x0004AA5A
 		public float SeasonalTemp
 		{
@@ -28,13 +28,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D6C RID: 3436 RVA: 0x0004C876 File Offset: 0x0004AA76
+		
 		public MapTemperature(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000D6D RID: 3437 RVA: 0x0004C890 File Offset: 0x0004AA90
+		
 		public void MapTemperatureTick()
 		{
 			if (Find.TickManager.TicksGame % 120 == 7 || DebugSettings.fastEcology)
@@ -54,25 +54,25 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D6E RID: 3438 RVA: 0x0004C91F File Offset: 0x0004AB1F
+		
 		public bool SeasonAcceptableFor(ThingDef animalRace)
 		{
 			return Find.World.tileTemperatures.SeasonAcceptableFor(this.map.Tile, animalRace);
 		}
 
-		// Token: 0x06000D6F RID: 3439 RVA: 0x0004C93C File Offset: 0x0004AB3C
+		
 		public bool OutdoorTemperatureAcceptableFor(ThingDef animalRace)
 		{
 			return Find.World.tileTemperatures.OutdoorTemperatureAcceptableFor(this.map.Tile, animalRace);
 		}
 
-		// Token: 0x06000D70 RID: 3440 RVA: 0x0004C959 File Offset: 0x0004AB59
+		
 		public bool SeasonAndOutdoorTemperatureAcceptableFor(ThingDef animalRace)
 		{
 			return Find.World.tileTemperatures.SeasonAndOutdoorTemperatureAcceptableFor(this.map.Tile, animalRace);
 		}
 
-		// Token: 0x06000D71 RID: 3441 RVA: 0x0004C978 File Offset: 0x0004AB78
+		
 		public bool LocalSeasonsAreMeaningful()
 		{
 			bool flag = false;
@@ -92,7 +92,7 @@ namespace Verse
 			return flag2 && flag;
 		}
 
-		// Token: 0x06000D72 RID: 3442 RVA: 0x0004C9C8 File Offset: 0x0004ABC8
+		
 		public void DebugLogTemps()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -147,10 +147,10 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x04000A45 RID: 2629
+		
 		private Map map;
 
-		// Token: 0x04000A46 RID: 2630
+		
 		private HashSet<RoomGroup> fastProcessedRoomGroups = new HashSet<RoomGroup>();
 	}
 }

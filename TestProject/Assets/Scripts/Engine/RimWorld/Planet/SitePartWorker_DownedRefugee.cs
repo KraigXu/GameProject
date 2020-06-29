@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001264 RID: 4708
+	
 	public class SitePartWorker_DownedRefugee : SitePartWorker
 	{
-		// Token: 0x06006E31 RID: 28209 RVA: 0x00267B74 File Offset: 0x00265D74
+		
 		public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 			slate.Set<Pawn>("refugee", pawn, false);
 		}
 
-		// Token: 0x06006E32 RID: 28210 RVA: 0x00267C88 File Offset: 0x00265E88
+		
 		public override string GetPostProcessedThreatLabel(Site site, SitePart sitePart)
 		{
 			string text = base.GetPostProcessedThreatLabel(site, sitePart);
@@ -54,7 +54,7 @@ namespace RimWorld.Planet
 			return text;
 		}
 
-		// Token: 0x06006E33 RID: 28211 RVA: 0x00267D18 File Offset: 0x00265F18
+		
 		public override void PostDestroy(SitePart sitePart)
 		{
 			base.PostDestroy(sitePart);

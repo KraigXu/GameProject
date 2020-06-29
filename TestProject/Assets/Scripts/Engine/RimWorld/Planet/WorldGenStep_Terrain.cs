@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001218 RID: 4632
+	
 	public class WorldGenStep_Terrain : WorldGenStep
 	{
-		// Token: 0x170011EF RID: 4591
+		
 		// (get) Token: 0x06006B25 RID: 27429 RVA: 0x002563AF File Offset: 0x002545AF
 		public override int SeedPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170011F0 RID: 4592
+		
 		// (get) Token: 0x06006B26 RID: 27430 RVA: 0x0001BFCE File Offset: 0x0001A1CE
 		private static float FreqMultiplier
 		{
@@ -29,20 +29,20 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006B27 RID: 27431 RVA: 0x002563B6 File Offset: 0x002545B6
+		
 		public override void GenerateFresh(string seed)
 		{
 			this.GenerateGridIntoWorld();
 		}
 
-		// Token: 0x06006B28 RID: 27432 RVA: 0x002563BE File Offset: 0x002545BE
+		
 		public override void GenerateFromScribe(string seed)
 		{
 			Find.World.pathGrid = new WorldPathGrid();
 			NoiseDebugUI.ClearPlanetNoises();
 		}
 
-		// Token: 0x06006B29 RID: 27433 RVA: 0x002563D4 File Offset: 0x002545D4
+		
 		private void GenerateGridIntoWorld()
 		{
 			Find.World.grid = new WorldGrid();
@@ -63,7 +63,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006B2A RID: 27434 RVA: 0x0025645C File Offset: 0x0025465C
+		
 		private void SetupElevationNoise()
 		{
 			float freqMultiplier = WorldGenStep_Terrain.FreqMultiplier;
@@ -99,7 +99,7 @@ namespace RimWorld.Planet
 			this.noiseElevation = new ScaleBias((double)WorldGenStep_Terrain.ElevationRange.Span, (double)WorldGenStep_Terrain.ElevationRange.min, this.noiseElevation);
 		}
 
-		// Token: 0x06006B2B RID: 27435 RVA: 0x002566C4 File Offset: 0x002548C4
+		
 		private void SetupTemperatureOffsetNoise()
 		{
 			float freqMultiplier = WorldGenStep_Terrain.FreqMultiplier;
@@ -107,7 +107,7 @@ namespace RimWorld.Planet
 			this.noiseTemperatureOffset = new Multiply(this.noiseTemperatureOffset, new Const(4.0));
 		}
 
-		// Token: 0x06006B2C RID: 27436 RVA: 0x00256728 File Offset: 0x00254928
+		
 		private void SetupRainfallNoise()
 		{
 			float freqMultiplier = WorldGenStep_Terrain.FreqMultiplier;
@@ -184,7 +184,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006B2D RID: 27437 RVA: 0x00256968 File Offset: 0x00254B68
+		
 		private void SetupHillinessNoise()
 		{
 			float freqMultiplier = WorldGenStep_Terrain.FreqMultiplier;
@@ -200,7 +200,7 @@ namespace RimWorld.Planet
 			this.noiseHillsPatchesMicro = new Perlin((double)(0.19f * freqMultiplier), 2.0, 0.5, 6, Rand.Range(0, int.MaxValue), QualityMode.High);
 		}
 
-		// Token: 0x06006B2E RID: 27438 RVA: 0x00256AA4 File Offset: 0x00254CA4
+		
 		private void SetupSwampinessNoise()
 		{
 			float freqMultiplier = WorldGenStep_Terrain.FreqMultiplier;
@@ -216,7 +216,7 @@ namespace RimWorld.Planet
 			NoiseDebugUI.StorePlanetNoise(this.noiseSwampiness, "noiseSwampiness");
 		}
 
-		// Token: 0x06006B2F RID: 27439 RVA: 0x00256BC0 File Offset: 0x00254DC0
+		
 		private Tile GenerateTileFor(int tileID)
 		{
 			Tile tile = new Tile();
@@ -289,7 +289,7 @@ namespace RimWorld.Planet
 			return tile;
 		}
 
-		// Token: 0x06006B30 RID: 27440 RVA: 0x00256DAC File Offset: 0x00254FAC
+		
 		private BiomeDef BiomeFrom(Tile ws, int tileID)
 		{
 			List<BiomeDef> allDefsListForReading = DefDatabase<BiomeDef>.AllDefsListForReading;
@@ -311,7 +311,7 @@ namespace RimWorld.Planet
 			return biomeDef;
 		}
 
-		// Token: 0x06006B31 RID: 27441 RVA: 0x00256E0C File Offset: 0x0025500C
+		
 		private static float FertilityFactorFromTemperature(float temp)
 		{
 			if (temp < -15f)
@@ -329,14 +329,14 @@ namespace RimWorld.Planet
 			return 0f;
 		}
 
-		// Token: 0x06006B32 RID: 27442 RVA: 0x00256E60 File Offset: 0x00255060
+		
 		private static float BaseTemperatureAtLatitude(float lat)
 		{
 			float x = Mathf.Abs(lat) / 90f;
 			return WorldGenStep_Terrain.AvgTempByLatitudeCurve.Evaluate(x);
 		}
 
-		// Token: 0x06006B33 RID: 27443 RVA: 0x00256E88 File Offset: 0x00255088
+		
 		private static float TemperatureReductionAtElevation(float elev)
 		{
 			if (elev < 250f)
@@ -347,80 +347,80 @@ namespace RimWorld.Planet
 			return Mathf.Lerp(0f, 40f, t);
 		}
 
-		// Token: 0x040042EA RID: 17130
+		
 		[Unsaved(false)]
 		private ModuleBase noiseElevation;
 
-		// Token: 0x040042EB RID: 17131
+		
 		[Unsaved(false)]
 		private ModuleBase noiseTemperatureOffset;
 
-		// Token: 0x040042EC RID: 17132
+		
 		[Unsaved(false)]
 		private ModuleBase noiseRainfall;
 
-		// Token: 0x040042ED RID: 17133
+		
 		[Unsaved(false)]
 		private ModuleBase noiseSwampiness;
 
-		// Token: 0x040042EE RID: 17134
+		
 		[Unsaved(false)]
 		private ModuleBase noiseMountainLines;
 
-		// Token: 0x040042EF RID: 17135
+		
 		[Unsaved(false)]
 		private ModuleBase noiseHillsPatchesMicro;
 
-		// Token: 0x040042F0 RID: 17136
+		
 		[Unsaved(false)]
 		private ModuleBase noiseHillsPatchesMacro;
 
-		// Token: 0x040042F1 RID: 17137
+		
 		private const float ElevationFrequencyMicro = 0.035f;
 
-		// Token: 0x040042F2 RID: 17138
+		
 		private const float ElevationFrequencyMacro = 0.012f;
 
-		// Token: 0x040042F3 RID: 17139
+		
 		private const float ElevationMacroFactorFrequency = 0.12f;
 
-		// Token: 0x040042F4 RID: 17140
+		
 		private const float ElevationContinentsFrequency = 0.01f;
 
-		// Token: 0x040042F5 RID: 17141
+		
 		private const float MountainLinesFrequency = 0.025f;
 
-		// Token: 0x040042F6 RID: 17142
+		
 		private const float MountainLinesHolesFrequency = 0.06f;
 
-		// Token: 0x040042F7 RID: 17143
+		
 		private const float HillsPatchesFrequencyMicro = 0.19f;
 
-		// Token: 0x040042F8 RID: 17144
+		
 		private const float HillsPatchesFrequencyMacro = 0.032f;
 
-		// Token: 0x040042F9 RID: 17145
+		
 		private const float SwampinessFrequencyMacro = 0.025f;
 
-		// Token: 0x040042FA RID: 17146
+		
 		private const float SwampinessFrequencyMicro = 0.09f;
 
-		// Token: 0x040042FB RID: 17147
+		
 		private static readonly FloatRange SwampinessMaxElevation = new FloatRange(650f, 750f);
 
-		// Token: 0x040042FC RID: 17148
+		
 		private static readonly FloatRange SwampinessMinRainfall = new FloatRange(725f, 900f);
 
-		// Token: 0x040042FD RID: 17149
+		
 		private static readonly FloatRange ElevationRange = new FloatRange(-500f, 5000f);
 
-		// Token: 0x040042FE RID: 17150
+		
 		private const float TemperatureOffsetFrequency = 0.018f;
 
-		// Token: 0x040042FF RID: 17151
+		
 		private const float TemperatureOffsetFactor = 4f;
 
-		// Token: 0x04004300 RID: 17152
+		
 		private static readonly SimpleCurve AvgTempByLatitudeCurve = new SimpleCurve
 		{
 			{
@@ -441,37 +441,37 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x04004301 RID: 17153
+		
 		private const float ElevationTempReductionStartAlt = 250f;
 
-		// Token: 0x04004302 RID: 17154
+		
 		private const float ElevationTempReductionEndAlt = 5000f;
 
-		// Token: 0x04004303 RID: 17155
+		
 		private const float MaxElevationTempReduction = 40f;
 
-		// Token: 0x04004304 RID: 17156
+		
 		private const float RainfallOffsetFrequency = 0.013f;
 
-		// Token: 0x04004305 RID: 17157
+		
 		private const float RainfallPower = 1.5f;
 
-		// Token: 0x04004306 RID: 17158
+		
 		private const float RainfallFactor = 4000f;
 
-		// Token: 0x04004307 RID: 17159
+		
 		private const float RainfallStartFallAltitude = 500f;
 
-		// Token: 0x04004308 RID: 17160
+		
 		private const float RainfallFinishFallAltitude = 5000f;
 
-		// Token: 0x04004309 RID: 17161
+		
 		private const float FertilityTempMinimum = -15f;
 
-		// Token: 0x0400430A RID: 17162
+		
 		private const float FertilityTempOptimal = 30f;
 
-		// Token: 0x0400430B RID: 17163
+		
 		private const float FertilityTempMaximum = 50f;
 	}
 }

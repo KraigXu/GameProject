@@ -8,17 +8,17 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020009D0 RID: 2512
+	
 	public class IncidentWorker_CaravanDemand : IncidentWorker
 	{
-		// Token: 0x06003BFD RID: 15357 RVA: 0x0013C31C File Offset: 0x0013A51C
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Faction faction;
 			return CaravanIncidentUtility.CanFireIncidentWhichWantsToGenerateMapAt(parms.target.Tile) && PawnGroupMakerUtility.TryGetRandomFactionForCombatPawnGroup(parms.points, out faction, null, false, false, false, true);
 		}
 
-		// Token: 0x06003BFE RID: 15358 RVA: 0x0013C350 File Offset: 0x0013A550
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			parms.points *= IncidentWorker_CaravanDemand.IncidentPointsFactorRange.RandomInRange;
@@ -71,7 +71,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003BFF RID: 15359 RVA: 0x0013C580 File Offset: 0x0013A780
+		
 		private List<ThingCount> GenerateDemands(Caravan caravan)
 		{
 			float num = 1.8f;
@@ -126,7 +126,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003C00 RID: 15360 RVA: 0x0013C640 File Offset: 0x0013A840
+		
 		private List<ThingCount> TryGenerateColonistOrPrisonerDemand(Caravan caravan)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -165,7 +165,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003C01 RID: 15361 RVA: 0x0013C728 File Offset: 0x0013A928
+		
 		private List<ThingCount> TryGenerateAnimalsDemand(Caravan caravan)
 		{
 			int num = 0;
@@ -188,7 +188,7 @@ namespace RimWorld
 			select new ThingCount(x, 1)).ToList<ThingCount>();
 		}
 
-		// Token: 0x06003C02 RID: 15362 RVA: 0x0013C80C File Offset: 0x0013AA0C
+		
 		private List<ThingCount> TryGenerateItemsDemand(Caravan caravan)
 		{
 			List<ThingCount> list = new List<ThingCount>();
@@ -198,14 +198,14 @@ namespace RimWorld
 			list2.RemoveAll((Thing x) => x.ParentHolder is Pawn_ApparelTracker && x.MarketValue < 500f);
 			float num = list2.Sum((Thing x) => x.MarketValue * (float)x.stackCount);
 			float requestedCaravanValue = Mathf.Clamp(IncidentWorker_CaravanDemand.DemandAsPercentageOfCaravan.RandomInRange * num, 300f, 3500f);
-			Func<Thing, bool> <>9__4;
+			
 			while (requestedCaravanValue > 50f)
 			{
 				IEnumerable<Thing> source = list2;
 				Func<Thing, bool> predicate;
-				if ((predicate = <>9__4) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__4 = ((Thing x) => x.MarketValue * (float)x.stackCount <= requestedCaravanValue * 2f));
+					predicate = (9__4 = ((Thing x) => x.MarketValue * (float)x.stackCount <= requestedCaravanValue * 2f));
 				}
 				Thing thing;
 				if (!source.Where(predicate).TryRandomElementByWeight((Thing x) => Mathf.Pow(x.MarketValue / x.GetStatValue(StatDefOf.Mass, true), 2f), out thing))
@@ -220,13 +220,13 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06003C03 RID: 15363 RVA: 0x0013C9A8 File Offset: 0x0013ABA8
+		
 		private string GenerateMessageText(Faction enemyFaction, int attackerCount, List<ThingCount> demands, Caravan caravan)
 		{
 			return "CaravanDemand".Translate(caravan.Name, enemyFaction.Name, attackerCount, GenLabel.ThingsLabel(demands, "  - ", false), enemyFaction.def.pawnsPlural).CapitalizeFirst();
 		}
 
-		// Token: 0x06003C04 RID: 15364 RVA: 0x0013CA0C File Offset: 0x0013AC0C
+		
 		private void TakeFromCaravan(Caravan caravan, List<ThingCount> demands, Faction enemyFaction)
 		{
 			List<Thing> list = new List<Thing>();
@@ -265,7 +265,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003C05 RID: 15365 RVA: 0x0013CB40 File Offset: 0x0013AD40
+		
 		private void ActionGive(Caravan caravan, List<ThingCount> demands, List<Pawn> attackers)
 		{
 			this.TakeFromCaravan(caravan, demands, attackers[0].Faction);
@@ -275,7 +275,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003C06 RID: 15366 RVA: 0x0013CB84 File Offset: 0x0013AD84
+		
 		private void ActionFight(Caravan caravan, List<Pawn> attackers)
 		{
 			Faction enemyFaction = attackers[0].Faction;
@@ -296,34 +296,34 @@ namespace RimWorld
 			}, "GeneratingMapForNewEncounter", false, null, true);
 		}
 
-		// Token: 0x04002366 RID: 9062
+		
 		private static readonly FloatRange DemandAsPercentageOfCaravan = new FloatRange(0.05f, 0.2f);
 
-		// Token: 0x04002367 RID: 9063
+		
 		private static readonly FloatRange IncidentPointsFactorRange = new FloatRange(1f, 1.7f);
 
-		// Token: 0x04002368 RID: 9064
+		
 		private const float DemandAnimalsWeight = 0.15f;
 
-		// Token: 0x04002369 RID: 9065
+		
 		private const float DemandColonistOrPrisonerWeight = 0.15f;
 
-		// Token: 0x0400236A RID: 9066
+		
 		private const float DemandItemsWeight = 1.5f;
 
-		// Token: 0x0400236B RID: 9067
+		
 		private const float MaxDemandedAnimalsPct = 0.6f;
 
-		// Token: 0x0400236C RID: 9068
+		
 		private const float MinDemandedMarketValue = 300f;
 
-		// Token: 0x0400236D RID: 9069
+		
 		private const float MaxDemandedMarketValue = 3500f;
 
-		// Token: 0x0400236E RID: 9070
+		
 		private const float TrashMarketValueThreshold = 50f;
 
-		// Token: 0x0400236F RID: 9071
+		
 		private const float IgnoreApparelMarketValueThreshold = 500f;
 	}
 }

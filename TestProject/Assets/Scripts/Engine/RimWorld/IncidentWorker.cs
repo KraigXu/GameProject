@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020008D5 RID: 2261
+	
 	public class IncidentWorker
 	{
-		// Token: 0x170009AF RID: 2479
+		
 		// (get) Token: 0x06003642 RID: 13890 RVA: 0x00126044 File Offset: 0x00124244
 		public virtual float BaseChanceThisGame
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003643 RID: 13891 RVA: 0x00126078 File Offset: 0x00124278
+		
 		public bool CanFireNow(IncidentParms parms, bool forced = false)
 		{
 			if (!parms.forced)
@@ -77,7 +77,7 @@ namespace RimWorld
 			return this.CanFireNowSub(parms);
 		}
 
-		// Token: 0x06003644 RID: 13892 RVA: 0x001261E8 File Offset: 0x001243E8
+		
 		public bool FiredTooRecently(IIncidentTarget target)
 		{
 			Dictionary<IncidentDef, int> lastFireTicks = target.StoryState.lastFireTicks;
@@ -101,13 +101,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003645 RID: 13893 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanFireNowSub(IncidentParms parms)
 		{
 			return true;
 		}
 
-		// Token: 0x06003646 RID: 13894 RVA: 0x00126288 File Offset: 0x00124488
+		
 		public bool TryExecute(IncidentParms parms)
 		{
 			Map map;
@@ -153,20 +153,20 @@ namespace RimWorld
 			return flag;
 		}
 
-		// Token: 0x06003647 RID: 13895 RVA: 0x001263A4 File Offset: 0x001245A4
+		
 		protected virtual bool TryExecuteWorker(IncidentParms parms)
 		{
 			Log.Error("Unimplemented incident " + this, false);
 			return false;
 		}
 
-		// Token: 0x06003648 RID: 13896 RVA: 0x001263B8 File Offset: 0x001245B8
+		
 		protected void SendStandardLetter(IncidentParms parms, LookTargets lookTargets, params NamedArgument[] textArgs)
 		{
 			this.SendStandardLetter(this.def.letterLabel, this.def.letterText, this.def.letterDef, parms, lookTargets, textArgs);
 		}
 
-		// Token: 0x06003649 RID: 13897 RVA: 0x001263F0 File Offset: 0x001245F0
+		
 		protected void SendStandardLetter(TaggedString baseLetterLabel, TaggedString baseLetterText, LetterDef baseLetterDef, IncidentParms parms, LookTargets lookTargets, params NamedArgument[] textArgs)
 		{
 			if (baseLetterLabel.NullOrEmpty() || baseLetterText.NullOrEmpty())
@@ -223,7 +223,7 @@ namespace RimWorld
 			Find.LetterStack.ReceiveLetter(choiceLetter, null);
 		}
 
-		// Token: 0x04001E92 RID: 7826
+		
 		public IncidentDef def;
 	}
 }

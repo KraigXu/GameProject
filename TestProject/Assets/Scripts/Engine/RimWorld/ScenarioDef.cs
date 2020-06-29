@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020008FE RID: 2302
+	
 	public class ScenarioDef : Def
 	{
-		// Token: 0x060036DC RID: 14044 RVA: 0x00128590 File Offset: 0x00126790
+		
 		public override void PostLoad()
 		{
 			base.PostLoad();
@@ -22,7 +22,7 @@ namespace RimWorld
 			this.scenario.Category = ScenarioCategory.FromDef;
 		}
 
-		// Token: 0x060036DD RID: 14045 RVA: 0x001285F5 File Offset: 0x001267F5
+		
 		public override IEnumerable<string> ConfigErrors()
 		{
 			if (this.scenario == null)
@@ -38,7 +38,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001F8F RID: 8079
+		
 		public Scenario scenario;
 	}
 }

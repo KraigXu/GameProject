@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B2A RID: 2858
+	
 	public static class PawnsArrivalModeWorkerUtility
 	{
-		// Token: 0x06004327 RID: 17191 RVA: 0x00169878 File Offset: 0x00167A78
+		
 		public static void DropInDropPodsNearSpawnCenter(IncidentParms parms, List<Pawn> pawns)
 		{
 			Map map = (Map)parms.target;
@@ -17,7 +17,7 @@ namespace RimWorld
 			DropPodUtility.DropThingsNear(parms.spawnCenter, map, pawns.Cast<Thing>(), parms.podOpenDelay, false, true, flag || parms.raidArrivalModeForQuickMilitaryAid, true);
 		}
 
-		// Token: 0x06004328 RID: 17192 RVA: 0x001698D4 File Offset: 0x00167AD4
+		
 		public static List<Pair<List<Pawn>, IntVec3>> SplitIntoRandomGroupsNearMapEdge(List<Pawn> pawns, Map map, bool arriveInPods)
 		{
 			List<Pair<List<Pawn>, IntVec3>> list = new List<Pair<List<Pawn>, IntVec3>>();
@@ -45,7 +45,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06004329 RID: 17193 RVA: 0x00169980 File Offset: 0x00167B80
+		
 		private static IntVec3 FindNewMapEdgeGroupCenter(Map map, List<Pair<List<Pawn>, IntVec3>> groups, bool arriveInPods)
 		{
 			IntVec3 result = IntVec3.Invalid;
@@ -84,7 +84,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x0600432A RID: 17194 RVA: 0x00169A31 File Offset: 0x00167C31
+		
 		private static int GetMaxGroupsCount(int pawnsCount)
 		{
 			if (pawnsCount <= 1)
@@ -94,7 +94,7 @@ namespace RimWorld
 			return Mathf.Clamp(pawnsCount / 2, 2, 3);
 		}
 
-		// Token: 0x0600432B RID: 17195 RVA: 0x00169A44 File Offset: 0x00167C44
+		
 		public static void SetPawnGroupsInfo(IncidentParms parms, List<Pair<List<Pawn>, IntVec3>> groups)
 		{
 			parms.pawnGroups = new Dictionary<Pawn, int>();
@@ -107,7 +107,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002691 RID: 9873
+		
 		private const int MaxGroupsCount = 3;
 	}
 }

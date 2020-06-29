@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace Verse.AI
 {
-	// Token: 0x02000584 RID: 1412
+	
 	[StaticConstructorOnStartup]
 	public sealed class ReservationManager : IExposable
 	{
-		// Token: 0x170007B4 RID: 1972
+		
 		// (get) Token: 0x0600282D RID: 10285 RVA: 0x000ED660 File Offset: 0x000EB860
 		public List<ReservationManager.Reservation> ReservationsReadOnly
 		{
@@ -21,13 +21,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600282E RID: 10286 RVA: 0x000ED668 File Offset: 0x000EB868
+		
 		public ReservationManager(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x0600282F RID: 10287 RVA: 0x000ED684 File Offset: 0x000EB884
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<ReservationManager.Reservation>(ref this.reservations, "reservations", LookMode.Deep, Array.Empty<object>());
@@ -60,7 +60,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002830 RID: 10288 RVA: 0x000ED7B4 File Offset: 0x000EB9B4
+		
 		public bool CanReserve(Pawn claimant, LocalTargetInfo target, int maxPawns = 1, int stackCount = -1, ReservationLayerDef layer = null, bool ignoreOtherReservations = false)
 		{
 			if (claimant == null)
@@ -130,7 +130,7 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x06002831 RID: 10289 RVA: 0x000ED984 File Offset: 0x000EBB84
+		
 		public int CanReserveStack(Pawn claimant, LocalTargetInfo target, int maxPawns = 1, ReservationLayerDef layer = null, bool ignoreOtherReservations = false)
 		{
 			if (claimant == null)
@@ -187,7 +187,7 @@ namespace Verse.AI
 			return Mathf.Max(num - num2, 0);
 		}
 
-		// Token: 0x06002832 RID: 10290 RVA: 0x000EDAE0 File Offset: 0x000EBCE0
+		
 		public bool Reserve(Pawn claimant, Job job, LocalTargetInfo target, int maxPawns = 1, int stackCount = -1, ReservationLayerDef layer = null, bool errorOnFailed = true)
 		{
 			if (maxPawns > 1 && stackCount == -1)
@@ -237,7 +237,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x06002833 RID: 10291 RVA: 0x000EDCDC File Offset: 0x000EBEDC
+		
 		public void Release(LocalTargetInfo target, Pawn claimant, Job job)
 		{
 			if (target.ThingDestroyed)
@@ -275,7 +275,7 @@ namespace Verse.AI
 			this.reservations.Remove(reservation);
 		}
 
-		// Token: 0x06002834 RID: 10292 RVA: 0x000EDDBC File Offset: 0x000EBFBC
+		
 		public void ReleaseAllForTarget(Thing t)
 		{
 			if (t == null)
@@ -291,7 +291,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002835 RID: 10293 RVA: 0x000EDE10 File Offset: 0x000EC010
+		
 		public void ReleaseClaimedBy(Pawn claimant, Job job)
 		{
 			for (int i = this.reservations.Count - 1; i >= 0; i--)
@@ -303,7 +303,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002836 RID: 10294 RVA: 0x000EDE6C File Offset: 0x000EC06C
+		
 		public void ReleaseAllClaimedBy(Pawn claimant)
 		{
 			if (claimant == null)
@@ -319,7 +319,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002837 RID: 10295 RVA: 0x000EDEB8 File Offset: 0x000EC0B8
+		
 		public LocalTargetInfo FirstReservationFor(Pawn claimant)
 		{
 			if (claimant == null)
@@ -336,7 +336,7 @@ namespace Verse.AI
 			return LocalTargetInfo.Invalid;
 		}
 
-		// Token: 0x06002838 RID: 10296 RVA: 0x000EDF10 File Offset: 0x000EC110
+		
 		public bool IsReservedByAnyoneOf(LocalTargetInfo target, Faction faction)
 		{
 			if (!target.IsValid)
@@ -354,13 +354,13 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x06002839 RID: 10297 RVA: 0x000EDF6A File Offset: 0x000EC16A
+		
 		public bool IsReservedAndRespected(LocalTargetInfo target, Pawn claimant)
 		{
 			return this.FirstRespectedReserver(target, claimant) != null;
 		}
 
-		// Token: 0x0600283A RID: 10298 RVA: 0x000EDF78 File Offset: 0x000EC178
+		
 		public Pawn FirstRespectedReserver(LocalTargetInfo target, Pawn claimant)
 		{
 			if (!target.IsValid)
@@ -378,7 +378,7 @@ namespace Verse.AI
 			return null;
 		}
 
-		// Token: 0x0600283B RID: 10299 RVA: 0x000EDFD8 File Offset: 0x000EC1D8
+		
 		public bool ReservedBy(LocalTargetInfo target, Pawn claimant, Job job = null)
 		{
 			if (!target.IsValid)
@@ -396,7 +396,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x0600283C RID: 10300 RVA: 0x000EE03C File Offset: 0x000EC23C
+		
 		public bool ReservedBy<TDriver>(LocalTargetInfo target, Pawn claimant, LocalTargetInfo? targetAIsNot = null, LocalTargetInfo? targetBIsNot = null, LocalTargetInfo? targetCIsNot = null)
 		{
 			if (!target.IsValid)
@@ -414,14 +414,14 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x0600283D RID: 10301 RVA: 0x000EE156 File Offset: 0x000EC356
+		
 		public IEnumerable<Thing> AllReservedThings()
 		{
 			return from res in this.reservations
 			select res.Target.Thing;
 		}
 
-		// Token: 0x0600283E RID: 10302 RVA: 0x000EE184 File Offset: 0x000EC384
+		
 		private static bool RespectsReservationsOf(Pawn newClaimant, Pawn oldClaimant)
 		{
 			if (newClaimant == oldClaimant)
@@ -458,7 +458,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x0600283F RID: 10303 RVA: 0x000EE20C File Offset: 0x000EC40C
+		
 		internal string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -476,7 +476,7 @@ namespace Verse.AI
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06002840 RID: 10304 RVA: 0x000EE288 File Offset: 0x000EC488
+		
 		internal void DebugDrawReservations()
 		{
 			for (int i = 0; i < this.reservations.Count; i++)
@@ -506,7 +506,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002841 RID: 10305 RVA: 0x000EE424 File Offset: 0x000EC624
+		
 		private void LogCouldNotReserveError(Pawn claimant, Job job, LocalTargetInfo target, int maxPawns, int stackCount, ReservationLayerDef layer)
 		{
 			Job curJob = claimant.CurJob;
@@ -588,22 +588,22 @@ namespace Verse.AI
 			Log.Error(text3, false);
 		}
 
-		// Token: 0x04001837 RID: 6199
+		
 		private Map map;
 
-		// Token: 0x04001838 RID: 6200
+		
 		private List<ReservationManager.Reservation> reservations = new List<ReservationManager.Reservation>();
 
-		// Token: 0x04001839 RID: 6201
+		
 		private static readonly Material DebugReservedThingIcon = MaterialPool.MatFrom("UI/Overlays/ReservedForWork", ShaderDatabase.Cutout);
 
-		// Token: 0x0400183A RID: 6202
+		
 		public const int StackCount_All = -1;
 
-		// Token: 0x0200176F RID: 5999
+		
 		public class Reservation : IExposable
 		{
-			// Token: 0x17001560 RID: 5472
+			
 			// (get) Token: 0x060087FF RID: 34815 RVA: 0x002BBC3C File Offset: 0x002B9E3C
 			public Pawn Claimant
 			{
@@ -613,7 +613,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001561 RID: 5473
+			
 			// (get) Token: 0x06008800 RID: 34816 RVA: 0x002BBC44 File Offset: 0x002B9E44
 			public Job Job
 			{
@@ -623,7 +623,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001562 RID: 5474
+			
 			// (get) Token: 0x06008801 RID: 34817 RVA: 0x002BBC4C File Offset: 0x002B9E4C
 			public LocalTargetInfo Target
 			{
@@ -633,7 +633,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001563 RID: 5475
+			
 			// (get) Token: 0x06008802 RID: 34818 RVA: 0x002BBC54 File Offset: 0x002B9E54
 			public ReservationLayerDef Layer
 			{
@@ -643,7 +643,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001564 RID: 5476
+			
 			// (get) Token: 0x06008803 RID: 34819 RVA: 0x002BBC5C File Offset: 0x002B9E5C
 			public int MaxPawns
 			{
@@ -653,7 +653,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001565 RID: 5477
+			
 			// (get) Token: 0x06008804 RID: 34820 RVA: 0x002BBC64 File Offset: 0x002B9E64
 			public int StackCount
 			{
@@ -663,7 +663,7 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x17001566 RID: 5478
+			
 			// (get) Token: 0x06008805 RID: 34821 RVA: 0x002BBC6C File Offset: 0x002B9E6C
 			public Faction Faction
 			{
@@ -673,12 +673,12 @@ namespace Verse.AI
 				}
 			}
 
-			// Token: 0x06008806 RID: 34822 RVA: 0x002BBC79 File Offset: 0x002B9E79
+			
 			public Reservation()
 			{
 			}
 
-			// Token: 0x06008807 RID: 34823 RVA: 0x002BBC88 File Offset: 0x002B9E88
+			
 			public Reservation(Pawn claimant, Job job, int maxPawns, int stackCount, LocalTargetInfo target, ReservationLayerDef layer)
 			{
 				this.claimant = claimant;
@@ -689,7 +689,7 @@ namespace Verse.AI
 				this.layer = layer;
 			}
 
-			// Token: 0x06008808 RID: 34824 RVA: 0x002BBCC4 File Offset: 0x002B9EC4
+			
 			public void ExposeData()
 			{
 				Scribe_References.Look<Pawn>(ref this.claimant, "claimant", false);
@@ -700,7 +700,7 @@ namespace Verse.AI
 				Scribe_Defs.Look<ReservationLayerDef>(ref this.layer, "layer");
 			}
 
-			// Token: 0x06008809 RID: 34825 RVA: 0x002BBD38 File Offset: 0x002B9F38
+			
 			public override string ToString()
 			{
 				return string.Concat(new object[]
@@ -719,22 +719,22 @@ namespace Verse.AI
 				});
 			}
 
-			// Token: 0x0400596D RID: 22893
+			
 			private Pawn claimant;
 
-			// Token: 0x0400596E RID: 22894
+			
 			private Job job;
 
-			// Token: 0x0400596F RID: 22895
+			
 			private LocalTargetInfo target;
 
-			// Token: 0x04005970 RID: 22896
+			
 			private ReservationLayerDef layer;
 
-			// Token: 0x04005971 RID: 22897
+			
 			private int maxPawns;
 
-			// Token: 0x04005972 RID: 22898
+			
 			private int stackCount = -1;
 		}
 	}

@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000711 RID: 1809
+	
 	public class JobGiver_Manhunter : ThinkNode_JobGiver
 	{
-		// Token: 0x06002FAF RID: 12207 RVA: 0x0010C8E0 File Offset: 0x0010AAE0
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.TryGetAttackVerb(null, false) == null)
@@ -49,7 +49,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002FB0 RID: 12208 RVA: 0x0010CA18 File Offset: 0x0010AC18
+		
 		private Job MeleeAttackJob(Pawn pawn, Thing target)
 		{
 			Job job = JobMaker.MakeJob(JobDefOf.AttackMelee, target);
@@ -59,31 +59,31 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002FB1 RID: 12209 RVA: 0x0010CA50 File Offset: 0x0010AC50
+		
 		private Pawn FindPawnTarget(Pawn pawn)
 		{
 			return (Pawn)AttackTargetFinder.BestAttackTarget(pawn, TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable, (Thing x) => x is Pawn && x.def.race.intelligence >= Intelligence.ToolUser, 0f, 9999f, default(IntVec3), float.MaxValue, true, true);
 		}
 
-		// Token: 0x06002FB2 RID: 12210 RVA: 0x0010CAA8 File Offset: 0x0010ACA8
+		
 		private Building FindTurretTarget(Pawn pawn)
 		{
 			return (Building)AttackTargetFinder.BestAttackTarget(pawn, TargetScanFlags.NeedLOSToPawns | TargetScanFlags.NeedLOSToNonPawns | TargetScanFlags.NeedReachable | TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable, (Thing t) => t is Building, 0f, 70f, default(IntVec3), float.MaxValue, false, true);
 		}
 
-		// Token: 0x04001AD2 RID: 6866
+		
 		private const float WaitChance = 0.75f;
 
-		// Token: 0x04001AD3 RID: 6867
+		
 		private const int WaitTicks = 90;
 
-		// Token: 0x04001AD4 RID: 6868
+		
 		private const int MinMeleeChaseTicks = 420;
 
-		// Token: 0x04001AD5 RID: 6869
+		
 		private const int MaxMeleeChaseTicks = 900;
 
-		// Token: 0x04001AD6 RID: 6870
+		
 		private const int WanderOutsideDoorRegions = 9;
 	}
 }

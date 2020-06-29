@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200073F RID: 1855
+	
 	public static class FeedPatientUtility
 	{
-		// Token: 0x060030AD RID: 12461 RVA: 0x00111340 File Offset: 0x0010F540
+		
 		public static bool ShouldBeFed(Pawn p)
 		{
 			if (p.GetPosture() == PawnPosture.Standing)
@@ -58,7 +58,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060030AE RID: 12462 RVA: 0x00111408 File Offset: 0x0010F608
+		
 		public static bool IsHungry(Pawn p)
 		{
 			return p.needs != null && p.needs.food != null && p.needs.food.CurLevelPercentage <= p.needs.food.PercentageThreshHungry + 0.02f;

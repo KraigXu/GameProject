@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A6C RID: 2668
+	
 	public class GenStep_Outpost : GenStep
 	{
-		// Token: 0x17000B27 RID: 2855
+		
 		// (get) Token: 0x06003EEB RID: 16107 RVA: 0x0014E7AA File Offset: 0x0014C9AA
 		public override int SeedPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EEC RID: 16108 RVA: 0x0014E7B4 File Offset: 0x0014C9B4
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			CellRect rectToDefend;
@@ -65,7 +65,7 @@ namespace RimWorld
 			list.Add(resolveParams.rect);
 		}
 
-		// Token: 0x06003EED RID: 16109 RVA: 0x0014E910 File Offset: 0x0014CB10
+		
 		private CellRect GetOutpostRect(CellRect rectToDefend, List<CellRect> usedRects, Map map)
 		{
 			GenStep_Outpost.possibleRects.Add(new CellRect(rectToDefend.minX - 1 - this.size, rectToDefend.CenterCell.z - this.size / 2, this.size, this.size));
@@ -95,13 +95,13 @@ namespace RimWorld
 			return GenStep_Outpost.possibleRects.RandomElement<CellRect>();
 		}
 
-		// Token: 0x0400249F RID: 9375
+		
 		public int size = 16;
 
-		// Token: 0x040024A0 RID: 9376
+		
 		public FloatRange defaultPawnGroupPointsRange = SymbolResolver_Settlement.DefaultPawnsPoints;
 
-		// Token: 0x040024A1 RID: 9377
+		
 		private static List<CellRect> possibleRects = new List<CellRect>();
 	}
 }

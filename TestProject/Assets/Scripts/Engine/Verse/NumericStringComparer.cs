@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000465 RID: 1125
+	
 	public class NumericStringComparer : IComparer<string>
 	{
-		// Token: 0x0600214E RID: 8526 RVA: 0x000CC400 File Offset: 0x000CA600
+		
 		public int Compare(string x, string y)
 		{
 			if (x.Contains("~"))

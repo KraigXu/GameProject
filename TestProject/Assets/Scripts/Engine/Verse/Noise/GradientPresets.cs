@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.Noise
 {
-	// Token: 0x020004A2 RID: 1186
+	
 	public static class GradientPresets
 	{
-		// Token: 0x0600230E RID: 8974 RVA: 0x000D407C File Offset: 0x000D227C
+		
 		static GradientPresets()
 		{
 			List<GradientColorKey> list = new List<GradientColorKey>();
@@ -48,7 +48,7 @@ namespace Verse.Noise
 			GradientPresets._terrain.SetKeys(list5.ToArray(), list6.ToArray());
 		}
 
-		// Token: 0x170006E8 RID: 1768
+		
 		// (get) Token: 0x0600230F RID: 8975 RVA: 0x000D4369 File Offset: 0x000D2569
 		public static Gradient Empty
 		{
@@ -58,7 +58,7 @@ namespace Verse.Noise
 			}
 		}
 
-		// Token: 0x170006E9 RID: 1769
+		
 		// (get) Token: 0x06002310 RID: 8976 RVA: 0x000D4370 File Offset: 0x000D2570
 		public static Gradient Grayscale
 		{
@@ -68,7 +68,7 @@ namespace Verse.Noise
 			}
 		}
 
-		// Token: 0x170006EA RID: 1770
+		
 		// (get) Token: 0x06002311 RID: 8977 RVA: 0x000D4377 File Offset: 0x000D2577
 		public static Gradient RGB
 		{
@@ -78,7 +78,7 @@ namespace Verse.Noise
 			}
 		}
 
-		// Token: 0x170006EB RID: 1771
+		
 		// (get) Token: 0x06002312 RID: 8978 RVA: 0x000D437E File Offset: 0x000D257E
 		public static Gradient RGBA
 		{
@@ -88,7 +88,7 @@ namespace Verse.Noise
 			}
 		}
 
-		// Token: 0x170006EC RID: 1772
+		
 		// (get) Token: 0x06002313 RID: 8979 RVA: 0x000D4385 File Offset: 0x000D2585
 		public static Gradient Terrain
 		{
@@ -98,19 +98,19 @@ namespace Verse.Noise
 			}
 		}
 
-		// Token: 0x0400154F RID: 5455
+		
 		private static Gradient _empty;
 
-		// Token: 0x04001550 RID: 5456
+		
 		private static Gradient _grayscale;
 
-		// Token: 0x04001551 RID: 5457
+		
 		private static Gradient _rgb;
 
-		// Token: 0x04001552 RID: 5458
+		
 		private static Gradient _rgba;
 
-		// Token: 0x04001553 RID: 5459
+		
 		private static Gradient _terrain;
 	}
 }

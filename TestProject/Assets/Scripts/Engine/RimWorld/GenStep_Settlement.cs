@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A60 RID: 2656
+	
 	public class GenStep_Settlement : GenStep_Scatterer
 	{
-		// Token: 0x17000B1E RID: 2846
+		
 		// (get) Token: 0x06003EC1 RID: 16065 RVA: 0x0014DA98 File Offset: 0x0014BC98
 		public override int SeedPart
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EC2 RID: 16066 RVA: 0x0014DAA0 File Offset: 0x0014BCA0
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -41,7 +41,7 @@ namespace RimWorld
 			return cellRect.FullyContainedWithin(new CellRect(0, 0, map.Size.x, map.Size.z));
 		}
 
-		// Token: 0x06003EC3 RID: 16067 RVA: 0x0014DB38 File Offset: 0x0014BD38
+		
 		protected override void ScatterAt(IntVec3 c, Map map, GenStepParams parms, int stackCount = 1)
 		{
 			int randomInRange = GenStep_Settlement.SettlementSizeRange.RandomInRange;
@@ -67,7 +67,7 @@ namespace RimWorld
 			BaseGen.Generate();
 		}
 
-		// Token: 0x04002492 RID: 9362
+		
 		private static readonly IntRange SettlementSizeRange = new IntRange(34, 38);
 	}
 }

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B94 RID: 2964
+	
 	public class Need_Mood : Need_Seeker
 	{
-		// Token: 0x17000C47 RID: 3143
+		
 		// (get) Token: 0x06004583 RID: 17795 RVA: 0x001778A0 File Offset: 0x00175AA0
 		public override float CurInstantLevel
 		{
@@ -24,7 +24,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C48 RID: 3144
+		
 		// (get) Token: 0x06004584 RID: 17796 RVA: 0x00177900 File Offset: 0x00175B00
 		public string MoodString
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004585 RID: 17797 RVA: 0x001779EE File Offset: 0x00175BEE
+		
 		public Need_Mood(Pawn pawn) : base(pawn)
 		{
 			this.thoughts = new ThoughtHandler(pawn);
@@ -67,7 +67,7 @@ namespace RimWorld
 			this.recentMemory = new PawnRecentMemory(pawn);
 		}
 
-		// Token: 0x06004586 RID: 17798 RVA: 0x00177A1C File Offset: 0x00175C1C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -81,7 +81,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004587 RID: 17799 RVA: 0x00177A6D File Offset: 0x00175C6D
+		
 		public override void NeedInterval()
 		{
 			base.NeedInterval();
@@ -90,7 +90,7 @@ namespace RimWorld
 			this.observer.ObserverInterval();
 		}
 
-		// Token: 0x06004588 RID: 17800 RVA: 0x00177A98 File Offset: 0x00175C98
+		
 		public override string GetTipString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -102,7 +102,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06004589 RID: 17801 RVA: 0x00177B80 File Offset: 0x00175D80
+		
 		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
 		{
 			if (this.threshPercents == null)
@@ -116,13 +116,13 @@ namespace RimWorld
 			base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
 		}
 
-		// Token: 0x040027DE RID: 10206
+		
 		public ThoughtHandler thoughts;
 
-		// Token: 0x040027DF RID: 10207
+		
 		public PawnObserver observer;
 
-		// Token: 0x040027E0 RID: 10208
+		
 		public PawnRecentMemory recentMemory;
 	}
 }

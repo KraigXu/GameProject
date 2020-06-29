@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000668 RID: 1640
+	
 	public class JobDriver_Maintain : JobDriver
 	{
-		// Token: 0x06002CC0 RID: 11456 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002CC1 RID: 11457 RVA: 0x000FE6CF File Offset: 0x000FC8CF
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -34,7 +34,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019F4 RID: 6644
+		
 		private const int MaintainTicks = 180;
 	}
 }

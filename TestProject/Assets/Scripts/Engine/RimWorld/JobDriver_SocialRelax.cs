@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200064E RID: 1614
+	
 	public class JobDriver_SocialRelax : JobDriver
 	{
-		// Token: 0x1700084E RID: 2126
+		
 		// (get) Token: 0x06002C14 RID: 11284 RVA: 0x000FCB74 File Offset: 0x000FAD74
 		private Thing GatherSpotParent
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700084F RID: 2127
+		
 		// (get) Token: 0x06002C15 RID: 11285 RVA: 0x000FCB98 File Offset: 0x000FAD98
 		private bool HasChair
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000850 RID: 2128
+		
 		// (get) Token: 0x06002C16 RID: 11286 RVA: 0x000FCBBC File Offset: 0x000FADBC
 		private bool HasDrink
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000851 RID: 2129
+		
 		// (get) Token: 0x06002C17 RID: 11287 RVA: 0x000FCBE0 File Offset: 0x000FADE0
 		private IntVec3 ClosestGatherSpotParentCell
 		{
@@ -49,13 +49,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C18 RID: 11288 RVA: 0x000FCC0C File Offset: 0x000FAE0C
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.GetTarget(TargetIndex.B), this.job, 1, -1, null, errorOnFailed) && (!this.HasDrink || this.pawn.Reserve(this.job.GetTarget(TargetIndex.C), this.job, 1, -1, null, errorOnFailed));
 		}
 
-		// Token: 0x06002C19 RID: 11289 RVA: 0x000FCC6C File Offset: 0x000FAE6C
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.EndOnDespawnedOrNull(TargetIndex.A, JobCondition.Incompletable);
@@ -94,20 +94,20 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002C1A RID: 11290 RVA: 0x000FCC7C File Offset: 0x000FAE7C
+		
 		public override bool ModifyCarriedThingDrawPos(ref Vector3 drawPos, ref bool behind, ref bool flip)
 		{
 			IntVec3 closestGatherSpotParentCell = this.ClosestGatherSpotParentCell;
 			return JobDriver_Ingest.ModifyCarriedThingDrawPosWorker(ref drawPos, ref behind, ref flip, closestGatherSpotParentCell, this.pawn);
 		}
 
-		// Token: 0x040019C6 RID: 6598
+		
 		private const TargetIndex GatherSpotParentInd = TargetIndex.A;
 
-		// Token: 0x040019C7 RID: 6599
+		
 		private const TargetIndex ChairOrSpotInd = TargetIndex.B;
 
-		// Token: 0x040019C8 RID: 6600
+		
 		private const TargetIndex OptionalIngestibleInd = TargetIndex.C;
 	}
 }

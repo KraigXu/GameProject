@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010AF RID: 4271
+	
 	public class SymbolResolver_EdgeThing : SymbolResolver
 	{
-		// Token: 0x06006506 RID: 25862 RVA: 0x00233704 File Offset: 0x00231904
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			if (!base.CanResolve(rp))
@@ -57,7 +57,7 @@ namespace RimWorld.BaseGen
 			return true;
 		}
 
-		// Token: 0x06006507 RID: 25863 RVA: 0x002337FC File Offset: 0x002319FC
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			ThingDef thingDef = rp.singleThingDef ?? (from x in DefDatabase<ThingDef>.AllDefsListForReading
@@ -108,7 +108,7 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("thing", rp2, null);
 		}
 
-		// Token: 0x06006508 RID: 25864 RVA: 0x002339C4 File Offset: 0x00231BC4
+		
 		private bool TryFindSpawnCell(CellRect rect, ThingDef thingDef, Rot4 rot, bool avoidOtherEdgeThings, bool mustReachMapEdge, out IntVec3 spawnCell)
 		{
 			if (avoidOtherEdgeThings)
@@ -137,7 +137,7 @@ namespace RimWorld.BaseGen
 			return this.TryFindSpawnCell(rect, thingDef, rot, mustReachMapEdge, out spawnCell);
 		}
 
-		// Token: 0x06006509 RID: 25865 RVA: 0x00233A44 File Offset: 0x00231C44
+		
 		private bool TryFindSpawnCell(CellRect rect, ThingDef thingDef, Rot4 rot, bool mustReachMapEdge, out IntVec3 spawnCell)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -146,14 +146,14 @@ namespace RimWorld.BaseGen
 			GenAdj.AdjustForRotation(ref zero, ref size, rot);
 			CellRect empty = CellRect.Empty;
 			TraverseParms traverseParms = TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false);
-			Func<IntVec3, bool> <>9__3;
+			
 			Predicate<CellRect> basePredicate = delegate(CellRect x)
 			{
 				IEnumerable<IntVec3> cells = x.Cells;
 				Func<IntVec3, bool> predicate;
-				if ((predicate = <>9__3) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__3 = ((IntVec3 y) => y.Standable(map)));
+					predicate = (9__3 = ((IntVec3 y) => y.Standable(map)));
 				}
 				if (cells.All(predicate))
 				{
@@ -191,7 +191,7 @@ namespace RimWorld.BaseGen
 			return false;
 		}
 
-		// Token: 0x0600650A RID: 25866 RVA: 0x00233BA4 File Offset: 0x00231DA4
+		
 		private int GetDistanceSquaredToExistingEdgeThing(IntVec3 cell, CellRect rect, ThingDef thingDef)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -216,7 +216,7 @@ namespace RimWorld.BaseGen
 			return num;
 		}
 
-		// Token: 0x04003DAC RID: 15788
+		
 		private List<int> randomRotations = new List<int>
 		{
 			0,
@@ -225,7 +225,7 @@ namespace RimWorld.BaseGen
 			3
 		};
 
-		// Token: 0x04003DAD RID: 15789
+		
 		private int MaxTriesToAvoidOtherEdgeThings = 4;
 	}
 }

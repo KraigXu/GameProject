@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BF5 RID: 3061
+	
 	public class VisitorGiftForPlayerUtility
 	{
-		// Token: 0x060048C9 RID: 18633 RVA: 0x0018C173 File Offset: 0x0018A373
+		
 		public static float ChanceToLeaveGift(Faction faction, Map map)
 		{
 			if (faction.IsPlayer)
@@ -19,7 +19,7 @@ namespace RimWorld
 			return 0.25f * VisitorGiftForPlayerUtility.PlayerWealthChanceFactor(map) * VisitorGiftForPlayerUtility.FactionRelationsChanceFactor(faction);
 		}
 
-		// Token: 0x060048CA RID: 18634 RVA: 0x0018C198 File Offset: 0x0018A398
+		
 		public static List<Thing> GenerateGifts(Faction faction, Map map)
 		{
 			ThingSetMakerParams parms = default(ThingSetMakerParams);
@@ -27,13 +27,13 @@ namespace RimWorld
 			return ThingSetMakerDefOf.VisitorGift.root.Generate(parms);
 		}
 
-		// Token: 0x060048CB RID: 18635 RVA: 0x0018C1E8 File Offset: 0x0018A3E8
+		
 		private static float PlayerWealthChanceFactor(Map map)
 		{
 			return DiplomacyTuning.VisitorGiftChanceFactorFromPlayerWealthCurve.Evaluate(map.wealthWatcher.WealthTotal);
 		}
 
-		// Token: 0x060048CC RID: 18636 RVA: 0x0018C1FF File Offset: 0x0018A3FF
+		
 		private static float FactionRelationsChanceFactor(Faction faction)
 		{
 			if (faction.HostileTo(Faction.OfPlayer))
@@ -43,7 +43,7 @@ namespace RimWorld
 			return DiplomacyTuning.VisitorGiftChanceFactorFromGoodwillCurve.Evaluate((float)faction.PlayerGoodwill);
 		}
 
-		// Token: 0x060048CD RID: 18637 RVA: 0x0018C228 File Offset: 0x0018A428
+		
 		public static void GiveGift(List<Pawn> possibleGivers, Faction faction)
 		{
 			if (possibleGivers.NullOrEmpty<Pawn>())
@@ -94,7 +94,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060048CE RID: 18638 RVA: 0x0018C3D8 File Offset: 0x0018A5D8
+		
 		[DebugOutput]
 		private static void VisitorGiftChance()
 		{

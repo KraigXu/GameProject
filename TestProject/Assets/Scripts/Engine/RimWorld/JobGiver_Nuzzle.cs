@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200069E RID: 1694
+	
 	public class JobGiver_Nuzzle : ThinkNode_JobGiver
 	{
-		// Token: 0x06002DF8 RID: 11768 RVA: 0x00102944 File Offset: 0x00100B44
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.RaceProps.nuzzleMtbHours <= 0f)
@@ -28,7 +28,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x04001A49 RID: 6729
+		
 		private const float MaxNuzzleDistance = 40f;
 	}
 }

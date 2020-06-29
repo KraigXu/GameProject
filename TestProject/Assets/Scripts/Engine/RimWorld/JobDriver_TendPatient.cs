@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000641 RID: 1601
+	
 	public class JobDriver_TendPatient : JobDriver
 	{
-		// Token: 0x17000849 RID: 2121
+		
 		// (get) Token: 0x06002BCF RID: 11215 RVA: 0x000DF6B2 File Offset: 0x000DD8B2
 		protected Thing MedicineUsed
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700084A RID: 2122
+		
 		// (get) Token: 0x06002BD0 RID: 11216 RVA: 0x000FA2DB File Offset: 0x000F84DB
 		protected Pawn Deliveree
 		{
@@ -29,21 +29,21 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002BD1 RID: 11217 RVA: 0x000FBCE1 File Offset: 0x000F9EE1
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<bool>(ref this.usesMedicine, "usesMedicine", false, false);
 		}
 
-		// Token: 0x06002BD2 RID: 11218 RVA: 0x000FBCFB File Offset: 0x000F9EFB
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
 			this.usesMedicine = (this.MedicineUsed != null);
 		}
 
-		// Token: 0x06002BD3 RID: 11219 RVA: 0x000FBD14 File Offset: 0x000F9F14
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			if (this.Deliveree != this.pawn && !this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed))
@@ -61,7 +61,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002BD4 RID: 11220 RVA: 0x000FBDC0 File Offset: 0x000F9FC0
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -145,7 +145,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002BD5 RID: 11221 RVA: 0x000FBDD0 File Offset: 0x000F9FD0
+		
 		public override void Notify_DamageTaken(DamageInfo dinfo)
 		{
 			base.Notify_DamageTaken(dinfo);
@@ -155,13 +155,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040019B3 RID: 6579
+		
 		private bool usesMedicine;
 
-		// Token: 0x040019B4 RID: 6580
+		
 		private const int BaseTendDuration = 600;
 
-		// Token: 0x040019B5 RID: 6581
+		
 		private const int TicksBetweenSelfTendMotes = 100;
 	}
 }

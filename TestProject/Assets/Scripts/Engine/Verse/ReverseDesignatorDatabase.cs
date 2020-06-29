@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000331 RID: 817
+	
 	public class ReverseDesignatorDatabase
 	{
-		// Token: 0x170004F3 RID: 1267
+		
 		// (get) Token: 0x060017FF RID: 6143 RVA: 0x00088CCE File Offset: 0x00086ECE
 		public List<Designator> AllDesignators
 		{
@@ -21,13 +21,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001800 RID: 6144 RVA: 0x00088CE4 File Offset: 0x00086EE4
+		
 		public void Reinit()
 		{
 			this.desList = null;
 		}
 
-		// Token: 0x06001801 RID: 6145 RVA: 0x00088CF0 File Offset: 0x00086EF0
+		
 		public T Get<T>() where T : Designator
 		{
 			if (this.desList == null)
@@ -45,7 +45,7 @@ namespace Verse
 			return default(T);
 		}
 
-		// Token: 0x06001802 RID: 6146 RVA: 0x00088D4C File Offset: 0x00086F4C
+		
 		private void InitDesignators()
 		{
 			this.desList = new List<Designator>();
@@ -67,7 +67,7 @@ namespace Verse
 			this.desList.RemoveAll((Designator des) => !Current.Game.Rules.DesignatorAllowed(des));
 		}
 
-		// Token: 0x04000F05 RID: 3845
+		
 		private List<Designator> desList;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010AA RID: 4266
+	
 	public class SymbolResolver_Clear : SymbolResolver
 	{
-		// Token: 0x060064F6 RID: 25846 RVA: 0x00232E80 File Offset: 0x00231080
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			foreach (IntVec3 c in rp.rect)
@@ -51,7 +51,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DA6 RID: 15782
+		
 		private static List<Thing> tmpThingsToDestroy = new List<Thing>();
 	}
 }

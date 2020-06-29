@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000955 RID: 2389
+	
 	public class QuestPart_FactionGoodwillForMoodChange : QuestPartActivable
 	{
-		// Token: 0x17000A1A RID: 2586
+		
 		// (get) Token: 0x06003880 RID: 14464 RVA: 0x0012E417 File Offset: 0x0012C617
 		public override string ExpiryInfoPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A1B RID: 2587
+		
 		// (get) Token: 0x06003881 RID: 14465 RVA: 0x0012E44C File Offset: 0x0012C64C
 		public override string ExpiryInfoPartTip
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A1C RID: 2588
+		
 		// (get) Token: 0x06003882 RID: 14466 RVA: 0x0012E4B0 File Offset: 0x0012C6B0
 		private float AveragePawnMoodPercent
 		{
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A1D RID: 2589
+		
 		// (get) Token: 0x06003883 RID: 14467 RVA: 0x0012E538 File Offset: 0x0012C738
 		private float MovingAveragePawnMoodPercent
 		{
@@ -73,7 +73,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A1E RID: 2590
+		
 		// (get) Token: 0x06003884 RID: 14468 RVA: 0x0012E592 File Offset: 0x0012C792
 		public int SampleSize
 		{
@@ -83,7 +83,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003885 RID: 14469 RVA: 0x0012E5A0 File Offset: 0x0012C7A0
+		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
@@ -100,7 +100,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003886 RID: 14470 RVA: 0x0012E614 File Offset: 0x0012C814
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -118,7 +118,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003887 RID: 14471 RVA: 0x0012E6BC File Offset: 0x0012C8BC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -139,28 +139,28 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002163 RID: 8547
+		
 		public string inSignal;
 
-		// Token: 0x04002164 RID: 8548
+		
 		public string outSignalSuccess;
 
-		// Token: 0x04002165 RID: 8549
+		
 		public string outSignalFailed;
 
-		// Token: 0x04002166 RID: 8550
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x04002167 RID: 8551
+		
 		private int currentInterval = 2500;
 
-		// Token: 0x04002168 RID: 8552
+		
 		private List<float> movingAverage = new List<float>();
 
-		// Token: 0x04002169 RID: 8553
+		
 		private float cachedMovingAverage;
 
-		// Token: 0x0400216A RID: 8554
+		
 		private static readonly SimpleCurve GoodwillFromAverageMoodCurve = new SimpleCurve
 		{
 			{
@@ -177,10 +177,10 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400216B RID: 8555
+		
 		public const int Interval = 2500;
 
-		// Token: 0x0400216C RID: 8556
+		
 		public const int Range = 120000;
 	}
 }

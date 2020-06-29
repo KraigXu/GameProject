@@ -4,11 +4,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F03 RID: 3843
+	
 	[StaticConstructorOnStartup]
 	public static class TradeUI
 	{
-		// Token: 0x06005E3C RID: 24124 RVA: 0x0020A08C File Offset: 0x0020828C
+		
 		public static void DrawTradeableRow(Rect rect, Tradeable trad, int index)
 		{
 			if (index % 2 == 1)
@@ -74,7 +74,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005E3D RID: 24125 RVA: 0x0020A2FC File Offset: 0x002084FC
+		
 		private static void DrawPrice(Rect rect, Tradeable trad, TradeAction action)
 		{
 			if (trad.IsCurrency || !trad.TraderWillTrade)
@@ -149,7 +149,7 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x06005E3E RID: 24126 RVA: 0x0020A590 File Offset: 0x00208790
+		
 		private static void DrawWillNotTradeIndication(Rect rect, Tradeable trad)
 		{
 			rect = rect.Rounded();
@@ -162,19 +162,19 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x04003355 RID: 13141
+		
 		public const float CountColumnWidth = 75f;
 
-		// Token: 0x04003356 RID: 13142
+		
 		public const float PriceColumnWidth = 100f;
 
-		// Token: 0x04003357 RID: 13143
+		
 		public const float AdjustColumnWidth = 240f;
 
-		// Token: 0x04003358 RID: 13144
+		
 		public const float TotalNumbersColumnsWidths = 590f;
 
-		// Token: 0x04003359 RID: 13145
+		
 		public static readonly Color NoTradeColor = new Color(0.5f, 0.5f, 0.5f);
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000986 RID: 2438
+	
 	public class QuestPart_RemoveEquipmentFromPawns : QuestPart
 	{
-		// Token: 0x060039BC RID: 14780 RVA: 0x00132D0C File Offset: 0x00130F0C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039BD RID: 14781 RVA: 0x00132D84 File Offset: 0x00130F84
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -35,10 +35,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400220B RID: 8715
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x0400220C RID: 8716
+		
 		public string inSignal;
 	}
 }

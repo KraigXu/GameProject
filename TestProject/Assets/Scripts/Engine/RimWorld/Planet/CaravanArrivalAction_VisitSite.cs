@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001223 RID: 4643
+	
 	public class CaravanArrivalAction_VisitSite : CaravanArrivalAction
 	{
-		// Token: 0x17001207 RID: 4615
+		
 		// (get) Token: 0x06006BB9 RID: 27577 RVA: 0x00259359 File Offset: 0x00257559
 		public override string Label
 		{
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001208 RID: 4616
+		
 		// (get) Token: 0x06006BBA RID: 27578 RVA: 0x00259366 File Offset: 0x00257566
 		public override string ReportString
 		{
@@ -29,18 +29,18 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006BBB RID: 27579 RVA: 0x00258549 File Offset: 0x00256749
+		
 		public CaravanArrivalAction_VisitSite()
 		{
 		}
 
-		// Token: 0x06006BBC RID: 27580 RVA: 0x00259373 File Offset: 0x00257573
+		
 		public CaravanArrivalAction_VisitSite(Site site)
 		{
 			this.site = site;
 		}
 
-		// Token: 0x06006BBD RID: 27581 RVA: 0x00259384 File Offset: 0x00257584
+		
 		public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
 		{
 			FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 			return CaravanArrivalAction_VisitSite.CanVisit(caravan, this.site);
 		}
 
-		// Token: 0x06006BBE RID: 27582 RVA: 0x002593D0 File Offset: 0x002575D0
+		
 		public override void Arrived(Caravan caravan)
 		{
 			if (!this.site.HasMap)
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 			this.DoEnter(caravan, this.site);
 		}
 
-		// Token: 0x06006BBF RID: 27583 RVA: 0x0025942C File Offset: 0x0025762C
+		
 		private void DoEnter(Caravan caravan, Site site)
 		{
 			LookTargets lookTargets = new LookTargets(caravan.PawnsListForReading);
@@ -114,7 +114,7 @@ namespace RimWorld.Planet
 			CaravanEnterMapUtility.Enter(caravan, orGenerateMap, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, draftColonists, null);
 		}
 
-		// Token: 0x06006BC0 RID: 27584 RVA: 0x0025966C File Offset: 0x0025786C
+		
 		private void AppendThreatInfo(StringBuilder sb, Site site, Map map, out LetterDef letterDef, out LookTargets allLookTargets)
 		{
 			allLookTargets = new LookTargets();
@@ -154,14 +154,14 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006BC1 RID: 27585 RVA: 0x0025977D File Offset: 0x0025797D
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_References.Look<Site>(ref this.site, "site", false);
 		}
 
-		// Token: 0x06006BC2 RID: 27586 RVA: 0x00259798 File Offset: 0x00257998
+		
 		public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, Site site)
 		{
 			if (site == null || !site.Spawned)
@@ -175,22 +175,22 @@ namespace RimWorld.Planet
 			return true;
 		}
 
-		// Token: 0x06006BC3 RID: 27587 RVA: 0x002597F4 File Offset: 0x002579F4
+		
 		public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, Site site)
 		{
 			return CaravanArrivalActionUtility.GetFloatMenuOptions<CaravanArrivalAction_VisitSite>(() => CaravanArrivalAction_VisitSite.CanVisit(caravan, site), () => new CaravanArrivalAction_VisitSite(site), site.ApproachOrderString, caravan, site.Tile, site, null);
 		}
 
-		// Token: 0x04004339 RID: 17209
+		
 		private Site site;
 
-		// Token: 0x0400433A RID: 17210
+		
 		public static readonly IntVec3 MapSize = new IntVec3(120, 1, 120);
 
-		// Token: 0x0400433B RID: 17211
+		
 		private static List<SitePartDef> tmpDefs = new List<SitePartDef>();
 
-		// Token: 0x0400433C RID: 17212
+		
 		private static List<SitePartDef> tmpUsedDefs = new List<SitePartDef>();
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200085E RID: 2142
+	
 	public static class ThingDefGenerator_Techprints
 	{
-		// Token: 0x060034E8 RID: 13544 RVA: 0x00121EEF File Offset: 0x001200EF
+		
 		public static IEnumerable<ThingDef> ImpliedTechprintDefs()
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -67,7 +67,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001BC8 RID: 7112
+		
 		public const string Tag = "Techprint";
 	}
 }

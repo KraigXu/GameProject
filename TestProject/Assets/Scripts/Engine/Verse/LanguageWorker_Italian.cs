@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200013C RID: 316
+	
 	public class LanguageWorker_Italian : LanguageWorker
 	{
-		// Token: 0x060008DE RID: 2270 RVA: 0x0002EBD0 File Offset: 0x0002CDD0
+		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -38,7 +38,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060008DF RID: 2271 RVA: 0x0002EC98 File Offset: 0x0002CE98
+		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -77,19 +77,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060008E0 RID: 2272 RVA: 0x0002ED4B File Offset: 0x0002CF4B
+		
 		public bool IsVowel(char ch)
 		{
 			return "aeiouAEIOU".IndexOf(ch) >= 0;
 		}
 
-		// Token: 0x060008E1 RID: 2273 RVA: 0x0002ED5E File Offset: 0x0002CF5E
+		
 		public override string OrdinalNumber(int number, Gender gender = Gender.None)
 		{
 			return number + "°";
 		}
 
-		// Token: 0x060008E2 RID: 2274 RVA: 0x0002ED70 File Offset: 0x0002CF70
+		
 		public override string Pluralize(string str, Gender gender, int count = -1)
 		{
 			if (str.NullOrEmpty())

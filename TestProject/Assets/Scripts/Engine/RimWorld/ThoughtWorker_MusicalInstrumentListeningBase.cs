@@ -4,14 +4,14 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000850 RID: 2128
+	
 	public abstract class ThoughtWorker_MusicalInstrumentListeningBase : ThoughtWorker
 	{
-		// Token: 0x17000968 RID: 2408
+		
 		// (get) Token: 0x060034BD RID: 13501
 		protected abstract ThingDef InstrumentDef { get; }
 
-		// Token: 0x060034BE RID: 13502 RVA: 0x00120CF8 File Offset: 0x0011EEF8
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			ThingDef def = this.InstrumentDef;

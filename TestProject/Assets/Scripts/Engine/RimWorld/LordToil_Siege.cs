@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200079F RID: 1951
+	
 	public class LordToil_Siege : LordToil
 	{
-		// Token: 0x17000944 RID: 2372
+		
 		// (get) Token: 0x060032C9 RID: 13001 RVA: 0x0011A23D File Offset: 0x0011843D
 		public override IntVec3 FlagLoc
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000945 RID: 2373
+		
 		// (get) Token: 0x060032CA RID: 13002 RVA: 0x0011A24A File Offset: 0x0011844A
 		private LordToilData_Siege Data
 		{
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000946 RID: 2374
+		
 		// (get) Token: 0x060032CB RID: 13003 RVA: 0x0011A257 File Offset: 0x00118457
 		private IEnumerable<Frame> Frames
 		{
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000947 RID: 2375
+		
 		// (get) Token: 0x060032CC RID: 13004 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool ForceHighStoryDanger
 		{
@@ -68,7 +68,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060032CD RID: 13005 RVA: 0x0011A267 File Offset: 0x00118467
+		
 		public LordToil_Siege(IntVec3 siegeCenter, float blueprintPoints)
 		{
 			this.data = new LordToilData_Siege();
@@ -76,7 +76,7 @@ namespace RimWorld
 			this.Data.blueprintPoints = blueprintPoints;
 		}
 
-		// Token: 0x060032CE RID: 13006 RVA: 0x0011A2A0 File Offset: 0x001184A0
+		
 		public override void Init()
 		{
 			base.Init();
@@ -155,7 +155,7 @@ namespace RimWorld
 			data.desiredBuilderFraction = LordToil_Siege.BuilderCountFraction.RandomInRange;
 		}
 
-		// Token: 0x060032CF RID: 13007 RVA: 0x0011A658 File Offset: 0x00118858
+		
 		public override void UpdateAllDuties()
 		{
 			LordToilData_Siege data = this.Data;
@@ -192,14 +192,14 @@ namespace RimWorld
 				}
 			}
 			int num4 = num - num3;
-			Func<Pawn, bool> <>9__1;
+			
 			for (int k = 0; k < num4; k++)
 			{
 				IEnumerable<Pawn> ownedPawns = this.lord.ownedPawns;
 				Func<Pawn, bool> predicate;
-				if ((predicate = <>9__1) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__1 = ((Pawn pa) => !this.rememberedDuties.ContainsKey(pa) && this.CanBeBuilder(pa)));
+					predicate = (9__1 = ((Pawn pa) => !this.rememberedDuties.ContainsKey(pa) && this.CanBeBuilder(pa)));
 				}
 				Pawn pawn2;
 				if (ownedPawns.Where(predicate).TryRandomElement(out pawn2))
@@ -225,14 +225,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060032D0 RID: 13008 RVA: 0x0011A876 File Offset: 0x00118A76
+		
 		public override void Notify_PawnLost(Pawn victim, PawnLostCondition cond)
 		{
 			this.UpdateAllDuties();
 			base.Notify_PawnLost(victim, cond);
 		}
 
-		// Token: 0x060032D1 RID: 13009 RVA: 0x0011A886 File Offset: 0x00118A86
+		
 		public override void Notify_ConstructionFailed(Pawn pawn, Frame frame, Blueprint_Build newBlueprint)
 		{
 			base.Notify_ConstructionFailed(pawn, frame, newBlueprint);
@@ -242,13 +242,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060032D2 RID: 13010 RVA: 0x0011A8B8 File Offset: 0x00118AB8
+		
 		private bool CanBeBuilder(Pawn p)
 		{
 			return !p.WorkTypeIsDisabled(WorkTypeDefOf.Construction) && !p.WorkTypeIsDisabled(WorkTypeDefOf.Firefighter);
 		}
 
-		// Token: 0x060032D3 RID: 13011 RVA: 0x0011A8D8 File Offset: 0x00118AD8
+		
 		private void SetAsBuilder(Pawn p)
 		{
 			LordToilData_Siege data = this.Data;
@@ -272,7 +272,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060032D4 RID: 13012 RVA: 0x0011A9A8 File Offset: 0x00118BA8
+		
 		private void SetAsDefender(Pawn p)
 		{
 			LordToilData_Siege data = this.Data;
@@ -280,7 +280,7 @@ namespace RimWorld
 			p.mindState.duty.radius = data.baseRadius;
 		}
 
-		// Token: 0x060032D5 RID: 13013 RVA: 0x0011A9F8 File Offset: 0x00118BF8
+		
 		public override void LordToilTick()
 		{
 			base.LordToilTick();
@@ -344,7 +344,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060032D6 RID: 13014 RVA: 0x0011AC18 File Offset: 0x00118E18
+		
 		private void DropSupplies(ThingDef thingDef, int count)
 		{
 			List<Thing> list = new List<Thing>();
@@ -354,7 +354,7 @@ namespace RimWorld
 			DropPodUtility.DropThingsNear(this.Data.siegeCenter, base.Map, list, 110, false, false, true, true);
 		}
 
-		// Token: 0x060032D7 RID: 13015 RVA: 0x0011AC60 File Offset: 0x00118E60
+		
 		public override void Cleanup()
 		{
 			LordToilData_Siege data = this.Data;
@@ -369,40 +369,40 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001B62 RID: 7010
+		
 		public Dictionary<Pawn, DutyDef> rememberedDuties = new Dictionary<Pawn, DutyDef>();
 
-		// Token: 0x04001B63 RID: 7011
+		
 		private const float BaseRadiusMin = 14f;
 
-		// Token: 0x04001B64 RID: 7012
+		
 		private const float BaseRadiusMax = 25f;
 
-		// Token: 0x04001B65 RID: 7013
+		
 		private static readonly FloatRange MealCountRangePerRaider = new FloatRange(1f, 3f);
 
-		// Token: 0x04001B66 RID: 7014
+		
 		private const int StartBuildingDelay = 450;
 
-		// Token: 0x04001B67 RID: 7015
+		
 		private static readonly FloatRange BuilderCountFraction = new FloatRange(0.25f, 0.4f);
 
-		// Token: 0x04001B68 RID: 7016
+		
 		private const float FractionLossesToAssault = 0.4f;
 
-		// Token: 0x04001B69 RID: 7017
+		
 		private const int InitalShellsPerCannon = 5;
 
-		// Token: 0x04001B6A RID: 7018
+		
 		private const int ReplenishAtShells = 4;
 
-		// Token: 0x04001B6B RID: 7019
+		
 		private const int ShellReplenishCount = 6;
 
-		// Token: 0x04001B6C RID: 7020
+		
 		private const int ReplenishAtMeals = 5;
 
-		// Token: 0x04001B6D RID: 7021
+		
 		private const int MealReplenishCount = 12;
 	}
 }

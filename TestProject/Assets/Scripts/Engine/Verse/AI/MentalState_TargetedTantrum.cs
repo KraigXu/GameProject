@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200055F RID: 1375
+	
 	public class MentalState_TargetedTantrum : MentalState_Tantrum
 	{
-		// Token: 0x0600271C RID: 10012 RVA: 0x000E4E3C File Offset: 0x000E303C
+		
 		public override void MentalStateTick()
 		{
 			if (this.target == null || this.target.Destroyed)
@@ -30,14 +30,14 @@ namespace Verse.AI
 			base.MentalStateTick();
 		}
 
-		// Token: 0x0600271D RID: 10013 RVA: 0x000E4F43 File Offset: 0x000E3143
+		
 		public override void PreStart()
 		{
 			base.PreStart();
 			this.TryFindNewTarget();
 		}
 
-		// Token: 0x0600271E RID: 10014 RVA: 0x000E4F54 File Offset: 0x000E3154
+		
 		private bool TryFindNewTarget()
 		{
 			TantrumMentalStateUtility.GetSmashableThingsNear(this.pawn, this.pawn.Position, MentalState_TargetedTantrum.tmpThings, null, 300, 40);
@@ -46,7 +46,7 @@ namespace Verse.AI
 			return result;
 		}
 
-		// Token: 0x0600271F RID: 10015 RVA: 0x000E4FC0 File Offset: 0x000E31C0
+		
 		public override string GetBeginLetterText()
 		{
 			if (this.target == null)
@@ -57,10 +57,10 @@ namespace Verse.AI
 			return this.def.beginLetter.Formatted(this.pawn.NameShortColored.Resolve(), this.target.Label, this.pawn.Named("PAWN"), this.target.Named("TARGET")).AdjustedFor(this.pawn, "PAWN", true).CapitalizeFirst();
 		}
 
-		// Token: 0x04001758 RID: 5976
+		
 		public const int MinMarketValue = 300;
 
-		// Token: 0x04001759 RID: 5977
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

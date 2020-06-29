@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FC3 RID: 4035
+	
 	public static class GenLabel
 	{
-		// Token: 0x060060FF RID: 24831 RVA: 0x00219E14 File Offset: 0x00218014
+		
 		public static void ClearCache()
 		{
 			GenLabel.labelDictionary.Clear();
 		}
 
-		// Token: 0x06006100 RID: 24832 RVA: 0x00219E20 File Offset: 0x00218020
+		
 		public static string ThingLabel(BuildableDef entDef, ThingDef stuffDef, int stackCount = 1)
 		{
 			GenLabel.LabelRequest key = default(GenLabel.LabelRequest);
@@ -35,7 +35,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006101 RID: 24833 RVA: 0x00219E90 File Offset: 0x00218090
+		
 		private static string NewThingLabel(BuildableDef entDef, ThingDef stuffDef, int stackCount)
 		{
 			string text;
@@ -54,7 +54,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006102 RID: 24834 RVA: 0x00219EE8 File Offset: 0x002180E8
+		
 		public static string ThingLabel(Thing t, int stackCount, bool includeHp = true)
 		{
 			GenLabel.LabelRequest key = default(GenLabel.LabelRequest);
@@ -85,7 +85,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006103 RID: 24835 RVA: 0x00219FB0 File Offset: 0x002181B0
+		
 		private static string NewThingLabel(Thing t, int stackCount, bool includeHp)
 		{
 			string text = GenLabel.ThingLabel(t.def, t.Stuff, 1);
@@ -128,7 +128,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006104 RID: 24836 RVA: 0x0021A0C0 File Offset: 0x002182C0
+		
 		public static string ThingsLabel(IEnumerable<Thing> things, string prefix = "  - ")
 		{
 			GenLabel.tmpThingCounts.Clear();
@@ -152,7 +152,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06006105 RID: 24837 RVA: 0x0021A178 File Offset: 0x00218378
+		
 		public static string ThingsLabel(List<ThingCount> things, string prefix = "  - ", bool ignoreStackLimit = false)
 		{
 			GenLabel.tmpThingsLabelElements.Clear();
@@ -212,7 +212,7 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x06006106 RID: 24838 RVA: 0x0021A448 File Offset: 0x00218648
+		
 		public static string BestKindLabel(Pawn pawn, bool mustNoteGender = false, bool mustNoteLifeStage = false, bool plural = false, int pluralCount = -1)
 		{
 			if (plural && pluralCount == 1)
@@ -328,14 +328,14 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006107 RID: 24839 RVA: 0x0021A808 File Offset: 0x00218A08
+		
 		public static string BestKindLabel(PawnKindDef kindDef, Gender gender, bool plural = false, int pluralCount = -1)
 		{
 			bool flag;
 			return GenLabel.BestKindLabel(kindDef, gender, out flag, plural, pluralCount);
 		}
 
-		// Token: 0x06006108 RID: 24840 RVA: 0x0021A820 File Offset: 0x00218A20
+		
 		public static string BestKindLabel(PawnKindDef kindDef, Gender gender, out bool genderNoted, bool plural = false, int pluralCount = -1)
 		{
 			if (plural && pluralCount == 1)
@@ -420,7 +420,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006109 RID: 24841 RVA: 0x0021A970 File Offset: 0x00218B70
+		
 		public static string BestGroupLabel(List<Pawn> pawns, bool definite, out Pawn singlePawn)
 		{
 			singlePawn = null;
@@ -573,65 +573,65 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003B13 RID: 15123
+		
 		private static Dictionary<GenLabel.LabelRequest, string> labelDictionary = new Dictionary<GenLabel.LabelRequest, string>();
 
-		// Token: 0x04003B14 RID: 15124
+		
 		private const int LabelDictionaryMaxCount = 2000;
 
-		// Token: 0x04003B15 RID: 15125
+		
 		private static List<ThingCount> tmpThingCounts = new List<ThingCount>();
 
-		// Token: 0x04003B16 RID: 15126
+		
 		private static List<GenLabel.LabelElement> tmpThingsLabelElements = new List<GenLabel.LabelElement>();
 
-		// Token: 0x04003B17 RID: 15127
+		
 		private static List<Pawn> tmpHumanlikes = new List<Pawn>();
 
-		// Token: 0x04003B18 RID: 15128
+		
 		private static Dictionary<string, int> tmpHumanlikeLabels = new Dictionary<string, int>();
 
-		// Token: 0x04003B19 RID: 15129
+		
 		private static Dictionary<string, int> tmpLabels = new Dictionary<string, int>();
 
-		// Token: 0x02001E66 RID: 7782
+		
 		private class LabelElement
 		{
-			// Token: 0x04007260 RID: 29280
+			
 			public Thing thingTemplate;
 
-			// Token: 0x04007261 RID: 29281
+			
 			public int count;
 		}
 
-		// Token: 0x02001E67 RID: 7783
+		
 		private struct LabelRequest : IEquatable<GenLabel.LabelRequest>
 		{
-			// Token: 0x0600A903 RID: 43267 RVA: 0x00319130 File Offset: 0x00317330
+			
 			public static bool operator ==(GenLabel.LabelRequest lhs, GenLabel.LabelRequest rhs)
 			{
 				return lhs.Equals(rhs);
 			}
 
-			// Token: 0x0600A904 RID: 43268 RVA: 0x0031913A File Offset: 0x0031733A
+			
 			public static bool operator !=(GenLabel.LabelRequest lhs, GenLabel.LabelRequest rhs)
 			{
 				return !(lhs == rhs);
 			}
 
-			// Token: 0x0600A905 RID: 43269 RVA: 0x00319146 File Offset: 0x00317346
+			
 			public override bool Equals(object obj)
 			{
 				return obj is GenLabel.LabelRequest && this.Equals((GenLabel.LabelRequest)obj);
 			}
 
-			// Token: 0x0600A906 RID: 43270 RVA: 0x00319160 File Offset: 0x00317360
+			
 			public bool Equals(GenLabel.LabelRequest other)
 			{
 				return this.entDef == other.entDef && this.stuffDef == other.stuffDef && this.stackCount == other.stackCount && this.quality == other.quality && this.health == other.health && this.maxHealth == other.maxHealth && this.wornByCorpse == other.wornByCorpse;
 			}
 
-			// Token: 0x0600A907 RID: 43271 RVA: 0x003191D4 File Offset: 0x003173D4
+			
 			public override int GetHashCode()
 			{
 				int num = 0;
@@ -652,25 +652,25 @@ namespace RimWorld
 				return num;
 			}
 
-			// Token: 0x04007262 RID: 29282
+			
 			public BuildableDef entDef;
 
-			// Token: 0x04007263 RID: 29283
+			
 			public ThingDef stuffDef;
 
-			// Token: 0x04007264 RID: 29284
+			
 			public int stackCount;
 
-			// Token: 0x04007265 RID: 29285
+			
 			public QualityCategory quality;
 
-			// Token: 0x04007266 RID: 29286
+			
 			public int health;
 
-			// Token: 0x04007267 RID: 29287
+			
 			public int maxHealth;
 
-			// Token: 0x04007268 RID: 29288
+			
 			public bool wornByCorpse;
 		}
 	}

@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CB0 RID: 3248
+	
 	public static class PlantUtility
 	{
-		// Token: 0x06004EC7 RID: 20167 RVA: 0x001A82D4 File Offset: 0x001A64D4
+		
 		public static bool GrowthSeasonNow(IntVec3 c, Map map, bool forSowing = false)
 		{
 			Room roomOrAdjacent = c.GetRoomOrAdjacent(map, RegionType.Set_All);
@@ -30,19 +30,19 @@ namespace RimWorld
 			return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNow;
 		}
 
-		// Token: 0x06004EC8 RID: 20168 RVA: 0x001A8336 File Offset: 0x001A6536
+		
 		public static bool SnowAllowsPlanting(IntVec3 c, Map map)
 		{
 			return c.GetSnowDepth(map) < 0.2f;
 		}
 
-		// Token: 0x06004EC9 RID: 20169 RVA: 0x001A8346 File Offset: 0x001A6546
+		
 		public static bool CanEverPlantAt(this ThingDef plantDef, IntVec3 c, Map map)
 		{
 			return plantDef.CanEverPlantAt_NewTemp(c, map, false);
 		}
 
-		// Token: 0x06004ECA RID: 20170 RVA: 0x001A8354 File Offset: 0x001A6554
+		
 		public static bool CanEverPlantAt_NewTemp(this ThingDef plantDef, IntVec3 c, Map map, bool canWipePlantsExceptTree = false)
 		{
 			if (plantDef.category != ThingCategory.Plant)
@@ -95,7 +95,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004ECB RID: 20171 RVA: 0x001A8488 File Offset: 0x001A6688
+		
 		public static void LogPlantProportions()
 		{
 			Dictionary<ThingDef, float> dictionary = new Dictionary<ThingDef, float>();
@@ -132,7 +132,7 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06004ECC RID: 20172 RVA: 0x001A869C File Offset: 0x001A689C
+		
 		private static Dictionary<ThingDef, float> CalculateDesiredPlantProportions(BiomeDef biome)
 		{
 			Dictionary<ThingDef, float> dictionary = new Dictionary<ThingDef, float>();
@@ -155,7 +155,7 @@ namespace RimWorld
 			return dictionary;
 		}
 
-		// Token: 0x06004ECD RID: 20173 RVA: 0x001A8764 File Offset: 0x001A6964
+		
 		public static IEnumerable<ThingDef> ValidPlantTypesForGrowers(List<IPlantToGrowSettable> sel)
 		{
 			using (IEnumerator<ThingDef> enumerator = (from def in DefDatabase<ThingDef>.AllDefs
@@ -176,7 +176,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004ECE RID: 20174 RVA: 0x001A8774 File Offset: 0x001A6974
+		
 		public static bool CanSowOnGrower(ThingDef plantDef, object obj)
 		{
 			if (obj is Zone)
@@ -187,7 +187,7 @@ namespace RimWorld
 			return thing != null && thing.def.building != null && plantDef.plant.sowTags.Contains(thing.def.building.sowTag);
 		}
 
-		// Token: 0x06004ECF RID: 20175 RVA: 0x001A87D8 File Offset: 0x001A69D8
+		
 		public static Thing AdjacentSowBlocker(ThingDef plantDef, IntVec3 c, Map map)
 		{
 			for (int i = 0; i < 8; i++)
@@ -205,20 +205,20 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004ED0 RID: 20176 RVA: 0x001A8841 File Offset: 0x001A6A41
+		
 		public static byte GetWindExposure(Plant plant)
 		{
 			return (byte)Mathf.Min(255f * plant.def.plant.topWindExposure, 255f);
 		}
 
-		// Token: 0x06004ED1 RID: 20177 RVA: 0x001A8864 File Offset: 0x001A6A64
+		
 		public static void SetWindExposureColors(Color32[] colors, Plant plant)
 		{
 			colors[1].a = (colors[2].a = PlantUtility.GetWindExposure(plant));
 			colors[0].a = (colors[3].a = 0);
 		}
 
-		// Token: 0x06004ED2 RID: 20178 RVA: 0x001A88B0 File Offset: 0x001A6AB0
+		
 		public static void LogFallColorForYear()
 		{
 			StringBuilder stringBuilder = new StringBuilder();

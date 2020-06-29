@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000239 RID: 569
+	
 	public class Hediff_Injury : HediffWithComps
 	{
-		// Token: 0x17000315 RID: 789
+		
 		// (get) Token: 0x06000FD7 RID: 4055 RVA: 0x0005BA98 File Offset: 0x00059C98
 		public override int UIGroupKey
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000316 RID: 790
+		
 		// (get) Token: 0x06000FD8 RID: 4056 RVA: 0x0005BAC4 File Offset: 0x00059CC4
 		public override string LabelBase
 		{
@@ -44,7 +44,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000317 RID: 791
+		
 		// (get) Token: 0x06000FD9 RID: 4057 RVA: 0x0005BB38 File Offset: 0x00059D38
 		public override string LabelInBrackets
 		{
@@ -86,7 +86,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000318 RID: 792
+		
 		// (get) Token: 0x06000FDA RID: 4058 RVA: 0x0005BC3F File Offset: 0x00059E3F
 		public override Color LabelColor
 		{
@@ -100,7 +100,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000319 RID: 793
+		
 		// (get) Token: 0x06000FDB RID: 4059 RVA: 0x0005BC54 File Offset: 0x00059E54
 		public override string SeverityLabel
 		{
@@ -114,7 +114,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700031A RID: 794
+		
 		// (get) Token: 0x06000FDC RID: 4060 RVA: 0x0005BC83 File Offset: 0x00059E83
 		public override float SummaryHealthPercentImpact
 		{
@@ -128,7 +128,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700031B RID: 795
+		
 		// (get) Token: 0x06000FDD RID: 4061 RVA: 0x0005BCB4 File Offset: 0x00059EB4
 		public override float PainOffset
 		{
@@ -147,7 +147,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700031C RID: 796
+		
 		// (get) Token: 0x06000FDE RID: 4062 RVA: 0x0005BD44 File Offset: 0x00059F44
 		public override float BleedRate
 		{
@@ -178,7 +178,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700031D RID: 797
+		
 		// (get) Token: 0x06000FDF RID: 4063 RVA: 0x0005BE0C File Offset: 0x0005A00C
 		private int AgeTicksToStopBleeding
 		{
@@ -190,7 +190,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700031E RID: 798
+		
 		// (get) Token: 0x06000FE0 RID: 4064 RVA: 0x0005BE59 File Offset: 0x0005A059
 		private bool BleedingStoppedDueToAge
 		{
@@ -200,7 +200,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FE1 RID: 4065 RVA: 0x0005BE6C File Offset: 0x0005A06C
+		
 		public override void Tick()
 		{
 			bool bleedingStoppedDueToAge = this.BleedingStoppedDueToAge;
@@ -212,7 +212,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FE2 RID: 4066 RVA: 0x0005BEA0 File Offset: 0x0005A0A0
+		
 		public override void Heal(float amount)
 		{
 			this.Severity -= amount;
@@ -226,14 +226,14 @@ namespace Verse
 			this.pawn.health.Notify_HediffChanged(this);
 		}
 
-		// Token: 0x06000FE3 RID: 4067 RVA: 0x0005BEFC File Offset: 0x0005A0FC
+		
 		public override bool TryMergeWith(Hediff other)
 		{
 			Hediff_Injury hediff_Injury = other as Hediff_Injury;
 			return hediff_Injury != null && hediff_Injury.def == this.def && hediff_Injury.Part == base.Part && !hediff_Injury.IsTended() && !hediff_Injury.IsPermanent() && !this.IsTended() && !this.IsPermanent() && this.def.injuryProps.canMerge && base.TryMergeWith(other);
 		}
 
-		// Token: 0x06000FE4 RID: 4068 RVA: 0x0005BF6C File Offset: 0x0005A16C
+		
 		public override void PostAdd(DamageInfo? dinfo)
 		{
 			base.PostAdd(dinfo);
@@ -251,7 +251,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FE5 RID: 4069 RVA: 0x0005BFE8 File Offset: 0x0005A1E8
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -263,7 +263,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000BCA RID: 3018
+		
 		private static readonly Color PermanentInjuryColor = new Color(0.72f, 0.72f, 0.72f);
 	}
 }

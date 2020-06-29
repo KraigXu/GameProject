@@ -5,30 +5,30 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000621 RID: 1569
+	
 	public abstract class JobDriver_GatherAnimalBodyResources : JobDriver
 	{
-		// Token: 0x1700081B RID: 2075
+		
 		// (get) Token: 0x06002AEF RID: 10991
 		protected abstract float WorkTotal { get; }
 
-		// Token: 0x06002AF0 RID: 10992
+		
 		protected abstract CompHasGatherableBodyResource GetComp(Pawn animal);
 
-		// Token: 0x06002AF1 RID: 10993 RVA: 0x000FA2AD File Offset: 0x000F84AD
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<float>(ref this.gatherProgress, "gatherProgress", 0f, false);
 		}
 
-		// Token: 0x06002AF2 RID: 10994 RVA: 0x000DE503 File Offset: 0x000DC703
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.GetTarget(TargetIndex.A), this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002AF3 RID: 10995 RVA: 0x000FA2CB File Offset: 0x000F84CB
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -79,10 +79,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001984 RID: 6532
+		
 		private float gatherProgress;
 
-		// Token: 0x04001985 RID: 6533
+		
 		protected const TargetIndex AnimalInd = TargetIndex.A;
 	}
 }

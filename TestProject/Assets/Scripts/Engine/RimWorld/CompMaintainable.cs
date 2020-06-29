@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D1C RID: 3356
+	
 	public class CompMaintainable : ThingComp
 	{
-		// Token: 0x17000E67 RID: 3687
+		
 		// (get) Token: 0x060051A8 RID: 20904 RVA: 0x001B59AA File Offset: 0x001B3BAA
 		public CompProperties_Maintainable Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E68 RID: 3688
+		
 		// (get) Token: 0x060051A9 RID: 20905 RVA: 0x001B59B7 File Offset: 0x001B3BB7
 		public MaintainableStage CurStage
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E69 RID: 3689
+		
 		// (get) Token: 0x060051AA RID: 20906 RVA: 0x001B59F0 File Offset: 0x001B3BF0
 		private bool Active
 		{
@@ -45,13 +45,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060051AB RID: 20907 RVA: 0x001B5A19 File Offset: 0x001B3C19
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<int>(ref this.ticksSinceMaintain, "ticksSinceMaintain", 0, false);
 		}
 
-		// Token: 0x060051AC RID: 20908 RVA: 0x001B5A2D File Offset: 0x001B3C2D
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060051AD RID: 20909 RVA: 0x001B5A64 File Offset: 0x001B3C64
+		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
@@ -78,7 +78,7 @@ namespace RimWorld
 			this.CheckTakeDamage();
 		}
 
-		// Token: 0x060051AE RID: 20910 RVA: 0x001B5A90 File Offset: 0x001B3C90
+		
 		private void CheckTakeDamage()
 		{
 			if (this.CurStage == MaintainableStage.Damaging)
@@ -87,13 +87,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060051AF RID: 20911 RVA: 0x001B5AD7 File Offset: 0x001B3CD7
+		
 		public void Maintained()
 		{
 			this.ticksSinceMaintain = 0;
 		}
 
-		// Token: 0x060051B0 RID: 20912 RVA: 0x001B5AE0 File Offset: 0x001B3CE0
+		
 		public override string CompInspectStringExtra()
 		{
 			MaintainableStage curStage = this.CurStage;
@@ -108,7 +108,7 @@ namespace RimWorld
 			return "DeterioratingDueToLackOfMaintenance".Translate();
 		}
 
-		// Token: 0x04002D21 RID: 11553
+		
 		public int ticksSinceMaintain;
 	}
 }

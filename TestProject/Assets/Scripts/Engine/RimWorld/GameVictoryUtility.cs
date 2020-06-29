@@ -8,10 +8,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D88 RID: 3464
+	
 	public static class GameVictoryUtility
 	{
-		// Token: 0x06005469 RID: 21609 RVA: 0x001C2C48 File Offset: 0x001C0E48
+		
 		public static string MakeEndCredits(string intro, string ending, string escapees)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -33,7 +33,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600546A RID: 21610 RVA: 0x001C2CE8 File Offset: 0x001C0EE8
+		
 		public static void ShowCredits(string victoryText)
 		{
 			Screen_Credits screen_Credits = new Screen_Credits(victoryText);
@@ -43,7 +43,7 @@ namespace RimWorld
 			ScreenFader.StartFade(Color.clear, 3f);
 		}
 
-		// Token: 0x0600546B RID: 21611 RVA: 0x001C2D2C File Offset: 0x001C0F2C
+		
 		public static string PawnsLeftBehind()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -75,7 +75,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600546C RID: 21612 RVA: 0x001C2E30 File Offset: 0x001C1030
+		
 		public static string InMemoryOfSection()
 		{
 			StringBuilder stringBuilder = new StringBuilder();

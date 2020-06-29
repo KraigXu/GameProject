@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200002F RID: 47
+	
 	public class GameplayTipWindow
 	{
-		// Token: 0x060002EA RID: 746 RVA: 0x0000F0F0 File Offset: 0x0000D2F0
+		
 		public static void DrawWindow(Vector2 offset, bool useWindowStack)
 		{
 			if (GameplayTipWindow.allTipsCached == null)
@@ -29,7 +29,7 @@ namespace Verse
 			GameplayTipWindow.DrawContents(rect);
 		}
 
-		// Token: 0x060002EB RID: 747 RVA: 0x0000F1BC File Offset: 0x0000D3BC
+		
 		private static void DrawContents(Rect rect)
 		{
 			Text.Font = GameFont.Small;
@@ -48,28 +48,28 @@ namespace Verse
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x060002EC RID: 748 RVA: 0x0000F29D File Offset: 0x0000D49D
+		
 		public static void ResetTipTimer()
 		{
 			GameplayTipWindow.lastTimeUpdatedTooltip = -1f;
 		}
 
-		// Token: 0x04000091 RID: 145
+		
 		private static List<string> allTipsCached;
 
-		// Token: 0x04000092 RID: 146
+		
 		private static float lastTimeUpdatedTooltip = -1f;
 
-		// Token: 0x04000093 RID: 147
+		
 		private static int currentTipIndex = 0;
 
-		// Token: 0x04000094 RID: 148
+		
 		public const float tipUpdateInterval = 17.5f;
 
-		// Token: 0x04000095 RID: 149
+		
 		public static readonly Vector2 WindowSize = new Vector2(776f, 60f);
 
-		// Token: 0x04000096 RID: 150
+		
 		private static readonly Vector2 TextMargin = new Vector2(15f, 8f);
 	}
 }

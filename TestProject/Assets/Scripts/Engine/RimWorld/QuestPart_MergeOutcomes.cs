@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000959 RID: 2393
+	
 	public class QuestPart_MergeOutcomes : QuestPart
 	{
-		// Token: 0x0600389E RID: 14494 RVA: 0x0012EA20 File Offset: 0x0012CC20
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600389F RID: 14495 RVA: 0x0012EA94 File Offset: 0x0012CC94
+		
 		private QuestEndOutcome GetOutcome(SignalArgs args)
 		{
 			QuestEndOutcome result;
@@ -34,7 +34,7 @@ namespace RimWorld
 			return QuestEndOutcome.Unknown;
 		}
 
-		// Token: 0x060038A0 RID: 14496 RVA: 0x0012EAB4 File Offset: 0x0012CCB4
+		
 		private void CheckEnd()
 		{
 			bool flag = false;
@@ -71,7 +71,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038A1 RID: 14497 RVA: 0x0012EBC0 File Offset: 0x0012CDC0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -80,7 +80,7 @@ namespace RimWorld
 			Scribe_Collections.Look<QuestEndOutcome?>(ref this.signalsReceived, "signalsReceived", LookMode.Value, Array.Empty<object>());
 		}
 
-		// Token: 0x060038A2 RID: 14498 RVA: 0x0012EC14 File Offset: 0x0012CE14
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -92,13 +92,13 @@ namespace RimWorld
 			this.outSignal = "DebugSignal" + Rand.Int;
 		}
 
-		// Token: 0x04002172 RID: 8562
+		
 		public List<string> inSignals = new List<string>();
 
-		// Token: 0x04002173 RID: 8563
+		
 		public string outSignal;
 
-		// Token: 0x04002174 RID: 8564
+		
 		private List<QuestEndOutcome?> signalsReceived = new List<QuestEndOutcome?>();
 	}
 }

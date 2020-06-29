@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C5 RID: 4293
+	
 	public class SymbolResolver_EdgeDefense : SymbolResolver
 	{
-		// Token: 0x06006555 RID: 25941 RVA: 0x00236638 File Offset: 0x00234838
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -72,7 +72,7 @@ namespace RimWorld.BaseGen
 			if (num > 0)
 			{
 				Lord singlePawnLord = rp.singlePawnLord ?? LordMaker.MakeNewLord(faction, new LordJob_DefendBase(faction, rp.rect.CenterCell), map, null);
-				Predicate<IntVec3> <>9__0;
+
 				for (int i = 0; i < num; i++)
 				{
 					PawnGenerationRequest value = new PawnGenerationRequest(faction.RandomPawnKind(), faction, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, true, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null);
@@ -81,22 +81,22 @@ namespace RimWorld.BaseGen
 					rp2.singlePawnLord = singlePawnLord;
 					rp2.singlePawnGenerationRequest = new PawnGenerationRequest?(value);
 					Predicate<IntVec3> singlePawnSpawnCellExtraPredicate;
-					if ((singlePawnSpawnCellExtraPredicate = rp2.singlePawnSpawnCellExtraPredicate) == null && (singlePawnSpawnCellExtraPredicate = <>9__0) == null)
-					{
-						singlePawnSpawnCellExtraPredicate = (<>9__0 = delegate(IntVec3 x)
-						{
-							CellRect cellRect = rp.rect;
-							for (int m = 0; m < width; m++)
-							{
-								if (cellRect.IsOnEdge(x))
-								{
-									return true;
-								}
-								cellRect = cellRect.ContractedBy(1);
-							}
-							return true;
-						});
-					}
+					//if ((singlePawnSpawnCellExtraPredicate = rp2.singlePawnSpawnCellExtraPredicate) == null && (singlePawnSpawnCellExtraPredicate ) == null)
+					//{
+					//	singlePawnSpawnCellExtraPredicate = (9__0 = delegate(IntVec3 x)
+					//	{
+					//		CellRect cellRect = rp.rect;
+					//		for (int m = 0; m < width; m++)
+					//		{
+					//			if (cellRect.IsOnEdge(x))
+					//			{
+					//				return true;
+					//			}
+					//			cellRect = cellRect.ContractedBy(1);
+					//		}
+					//		return true;
+					//	});
+					//}
 					rp2.singlePawnSpawnCellExtraPredicate = singlePawnSpawnCellExtraPredicate;
 					BaseGen.symbolStack.Push("pawn", rp2, null);
 				}
@@ -137,10 +137,10 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DC0 RID: 15808
+		
 		private const int DefaultCellsPerTurret = 30;
 
-		// Token: 0x04003DC1 RID: 15809
+		
 		private const int DefaultCellsPerMortar = 75;
 	}
 }

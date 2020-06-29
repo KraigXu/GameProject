@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C7 RID: 4295
+	
 	public class SymbolResolver_EdgeStreet : SymbolResolver
 	{
-		// Token: 0x0600655B RID: 25947 RVA: 0x00236CA4 File Offset: 0x00234EA4
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			TerrainDef floorDef = rp.floorDef ?? BaseGenUtility.RandomBasicFloorDef(rp.faction, false);

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D54 RID: 3412
+	
 	public static class ShipLandingBeaconUtility
 	{
-		// Token: 0x060052FD RID: 21245 RVA: 0x001BB920 File Offset: 0x001B9B20
+		
 		public static List<ShipLandingArea> GetLandingZones(Map map)
 		{
 			ShipLandingBeaconUtility.tmpShipLandingAreas.Clear();
@@ -30,7 +30,7 @@ namespace RimWorld
 			return ShipLandingBeaconUtility.tmpShipLandingAreas;
 		}
 
-		// Token: 0x060052FE RID: 21246 RVA: 0x001BBA08 File Offset: 0x001B9C08
+		
 		public static void DrawLinesToNearbyBeacons(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map, Thing thing = null)
 		{
 			Vector3 a = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052FF RID: 21247 RVA: 0x001BBBBC File Offset: 0x001B9DBC
+		
 		public static bool AlignedDistanceTooShort(IntVec3 position, IntVec3 otherPos, float minEdgeDistance)
 		{
 			if (position.x == otherPos.x)
@@ -66,7 +66,7 @@ namespace RimWorld
 			return position.z == otherPos.z && (float)Mathf.Abs(position.x - otherPos.x) < minEdgeDistance;
 		}
 
-		// Token: 0x06005300 RID: 21248 RVA: 0x001BBC14 File Offset: 0x001B9E14
+		
 		private static bool AlignedDistanceTooLong(IntVec3 position, IntVec3 otherPos, float maxEdgeDistance)
 		{
 			if (position.x == otherPos.x)
@@ -76,7 +76,7 @@ namespace RimWorld
 			return position.z == otherPos.z && (float)Mathf.Abs(position.x - otherPos.x) >= maxEdgeDistance;
 		}
 
-		// Token: 0x06005301 RID: 21249 RVA: 0x001BBC74 File Offset: 0x001B9E74
+		
 		public static bool CanLinkTo(IntVec3 position, CompShipLandingBeacon other)
 		{
 			if (position.x == other.parent.Position.x)
@@ -86,7 +86,7 @@ namespace RimWorld
 			return position.z == other.parent.Position.z && other.parent.def.displayNumbersBetweenSameDefDistRange.Includes((float)(Mathf.Abs(position.x - other.parent.Position.x) + 1));
 		}
 
-		// Token: 0x04002DC7 RID: 11719
+		
 		public static List<ShipLandingArea> tmpShipLandingAreas = new List<ShipLandingArea>();
 	}
 }

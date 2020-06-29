@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E8A RID: 3722
+	
 	public static class ScenarioUI
 	{
-		// Token: 0x06005ABE RID: 23230 RVA: 0x001EE548 File Offset: 0x001EC748
+		
 		public static void DrawScenarioInfo(Rect rect, Scenario scen, ref Vector2 infoScrollPosition)
 		{
 			Widgets.DrawMenuSection(rect);
@@ -28,7 +28,7 @@ namespace RimWorld
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06005ABF RID: 23231 RVA: 0x001EE60C File Offset: 0x001EC80C
+		
 		public static void DrawScenarioEditInterface(Rect rect, Scenario scen, ref Vector2 infoScrollPosition)
 		{
 			Widgets.DrawMenuSection(rect);
@@ -59,7 +59,7 @@ namespace RimWorld
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x0400317C RID: 12668
+		
 		private static float editViewHeight;
 	}
 }

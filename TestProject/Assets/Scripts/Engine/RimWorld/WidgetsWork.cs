@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000F2F RID: 3887
+	
 	[StaticConstructorOnStartup]
 	public static class WidgetsWork
 	{
-		// Token: 0x06005F34 RID: 24372 RVA: 0x0020DB38 File Offset: 0x0020BD38
+		
 		public static Color ColorOfPriority(int prio)
 		{
 			switch (prio)
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F35 RID: 24373 RVA: 0x0020DBB8 File Offset: 0x0020BDB8
+		
 		public static void DrawWorkBoxFor(float x, float y, Pawn p, WorkTypeDef wType, bool incapableBecauseOfCapacities)
 		{
 			if (p.WorkTypeIsDisabled(wType))
@@ -113,7 +113,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F36 RID: 24374 RVA: 0x0020DDF8 File Offset: 0x0020BFF8
+		
 		public static string TipForPawnWorker(Pawn p, WorkTypeDef wDef, bool incapableBecauseOfCapacities)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -156,7 +156,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06005F37 RID: 24375 RVA: 0x0020DFE4 File Offset: 0x0020C1E4
+		
 		private static void DrawWorkBoxBackground(Rect rect, Pawn p, WorkTypeDef workDef)
 		{
 			float num = p.skills.AverageOfRelevantSkillsFor(workDef);
@@ -208,43 +208,43 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x0400339B RID: 13211
+		
 		public const float WorkBoxSize = 25f;
 
-		// Token: 0x0400339C RID: 13212
+		
 		public static readonly Texture2D WorkBoxBGTex_Awful = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxBG_Awful", true);
 
-		// Token: 0x0400339D RID: 13213
+		
 		public static readonly Texture2D WorkBoxBGTex_Bad = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxBG_Bad", true);
 
-		// Token: 0x0400339E RID: 13214
+		
 		private const int AwfulBGMax = 4;
 
-		// Token: 0x0400339F RID: 13215
+		
 		public static readonly Texture2D WorkBoxBGTex_Mid = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxBG_Mid", true);
 
-		// Token: 0x040033A0 RID: 13216
+		
 		private const int BadBGMax = 14;
 
-		// Token: 0x040033A1 RID: 13217
+		
 		public static readonly Texture2D WorkBoxBGTex_Excellent = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxBG_Excellent", true);
 
-		// Token: 0x040033A2 RID: 13218
+		
 		public static readonly Texture2D WorkBoxCheckTex = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxCheck", true);
 
-		// Token: 0x040033A3 RID: 13219
+		
 		public static readonly Texture2D PassionWorkboxMinorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMinorGray", true);
 
-		// Token: 0x040033A4 RID: 13220
+		
 		public static readonly Texture2D PassionWorkboxMajorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMajorGray", true);
 
-		// Token: 0x040033A5 RID: 13221
+		
 		public static readonly Texture2D WorkBoxOverlay_Warning = ContentFinder<Texture2D>.Get("UI/Widgets/WorkBoxOverlay_Warning", true);
 
-		// Token: 0x040033A6 RID: 13222
+		
 		private const int WarnIfSelectedMax = 2;
 
-		// Token: 0x040033A7 RID: 13223
+		
 		private const float PassionOpacity = 0.4f;
 	}
 }

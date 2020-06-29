@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x0200023C RID: 572
+	
 	public class Hediff_Psylink : Hediff_ImplantWithLevel
 	{
-		// Token: 0x06001002 RID: 4098 RVA: 0x0005CB42 File Offset: 0x0005AD42
+		
 		public override void PostAdd(DamageInfo? dinfo)
 		{
 			base.PostAdd(dinfo);
@@ -20,7 +20,7 @@ namespace Verse
 			psychicEntropy.Notify_GainedPsylink();
 		}
 
-		// Token: 0x06001003 RID: 4099 RVA: 0x0005CB6C File Offset: 0x0005AD6C
+		
 		public override void ChangeLevel(int levelOffset)
 		{
 			if (levelOffset > 0)
@@ -42,7 +42,7 @@ namespace Verse
 			base.ChangeLevel(levelOffset);
 		}
 
-		// Token: 0x06001004 RID: 4100 RVA: 0x0005CBD4 File Offset: 0x0005ADD4
+		
 		public void TryGiveAbilityOfLevel(int abilityLevel)
 		{
 			string str = "LetterLabelPsylinkLevelGained".Translate() + ": " + this.pawn.LabelShortCap;
@@ -61,7 +61,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001005 RID: 4101 RVA: 0x0005CD15 File Offset: 0x0005AF15
+		
 		public override void PostRemoved()
 		{
 			base.PostRemoved();

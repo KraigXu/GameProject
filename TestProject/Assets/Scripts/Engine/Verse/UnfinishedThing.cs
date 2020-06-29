@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000318 RID: 792
+	
 	public class UnfinishedThing : ThingWithComps
 	{
-		// Token: 0x170004BF RID: 1215
+		
 		// (get) Token: 0x0600171C RID: 5916 RVA: 0x00084D10 File Offset: 0x00082F10
 		// (set) Token: 0x0600171D RID: 5917 RVA: 0x00084D18 File Offset: 0x00082F18
 		public Pawn Creator
@@ -30,7 +30,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C0 RID: 1216
+		
 		// (get) Token: 0x0600171E RID: 5918 RVA: 0x00084D3C File Offset: 0x00082F3C
 		public RecipeDef Recipe
 		{
@@ -40,7 +40,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C1 RID: 1217
+		
 		// (get) Token: 0x0600171F RID: 5919 RVA: 0x00084D44 File Offset: 0x00082F44
 		// (set) Token: 0x06001720 RID: 5920 RVA: 0x00084D78 File Offset: 0x00082F78
 		public Bill_ProductionWithUft BoundBill
@@ -76,7 +76,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C2 RID: 1218
+		
 		// (get) Token: 0x06001721 RID: 5921 RVA: 0x00084DD4 File Offset: 0x00082FD4
 		public Thing BoundWorkTable
 		{
@@ -95,7 +95,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C3 RID: 1219
+		
 		// (get) Token: 0x06001722 RID: 5922 RVA: 0x00084E0C File Offset: 0x0008300C
 		public override string LabelNoCount
 		{
@@ -113,7 +113,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C4 RID: 1220
+		
 		// (get) Token: 0x06001723 RID: 5923 RVA: 0x00084E9F File Offset: 0x0008309F
 		public override string DescriptionDetailed
 		{
@@ -127,7 +127,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C5 RID: 1221
+		
 		// (get) Token: 0x06001724 RID: 5924 RVA: 0x00084EC0 File Offset: 0x000830C0
 		public override string DescriptionFlavor
 		{
@@ -141,7 +141,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004C6 RID: 1222
+		
 		// (get) Token: 0x06001725 RID: 5925 RVA: 0x00084EE1 File Offset: 0x000830E1
 		public bool Initialized
 		{
@@ -151,7 +151,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001726 RID: 5926 RVA: 0x00084EF0 File Offset: 0x000830F0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -167,7 +167,7 @@ namespace Verse
 			Scribe_Collections.Look<Thing>(ref this.ingredients, "ingredients", LookMode.Deep, Array.Empty<object>());
 		}
 
-		// Token: 0x06001727 RID: 5927 RVA: 0x00084F98 File Offset: 0x00083198
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			if (mode == DestroyMode.Cancel)
@@ -187,13 +187,10 @@ namespace Verse
 			this.BoundBill = null;
 		}
 
-		// Token: 0x06001728 RID: 5928 RVA: 0x00085036 File Offset: 0x00083236
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			yield return new Command_Action
 			{
@@ -210,7 +207,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06001729 RID: 5929 RVA: 0x00085048 File Offset: 0x00083248
+		
 		public Bill_ProductionWithUft BillOnTableForMe(Thing workTable)
 		{
 			if (this.Recipe.AllRecipeUsers.Contains(workTable.def))
@@ -228,7 +225,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x0600172A RID: 5930 RVA: 0x000850BB File Offset: 0x000832BB
+		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
@@ -238,7 +235,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600172B RID: 5931 RVA: 0x000850E4 File Offset: 0x000832E4
+		
 		public override string GetInspectString()
 		{
 			string text = base.GetInspectString();
@@ -250,25 +247,25 @@ namespace Verse
 			return text + ("\n" + "WorkLeft".Translate() + ": " + this.workLeft.ToStringWorkAmount());
 		}
 
-		// Token: 0x04000E94 RID: 3732
+		
 		private Pawn creatorInt;
 
-		// Token: 0x04000E95 RID: 3733
+		
 		private string creatorName = "ErrorCreatorName";
 
-		// Token: 0x04000E96 RID: 3734
+		
 		private RecipeDef recipeInt;
 
-		// Token: 0x04000E97 RID: 3735
+		
 		public List<Thing> ingredients = new List<Thing>();
 
-		// Token: 0x04000E98 RID: 3736
+		
 		private Bill_ProductionWithUft boundBillInt;
 
-		// Token: 0x04000E99 RID: 3737
+		
 		public float workLeft = -10000f;
 
-		// Token: 0x04000E9A RID: 3738
+		
 		private const float CancelIngredientRecoveryFraction = 0.75f;
 	}
 }

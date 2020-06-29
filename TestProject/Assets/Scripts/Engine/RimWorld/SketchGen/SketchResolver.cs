@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001085 RID: 4229
+	
 	public abstract class SketchResolver
 	{
-		// Token: 0x06006461 RID: 25697 RVA: 0x0022C918 File Offset: 0x0022AB18
+		
 		public void Resolve(ResolveParams parms)
 		{
 			try
@@ -27,7 +27,7 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x06006462 RID: 25698 RVA: 0x0022C98C File Offset: 0x0022AB8C
+		
 		public bool CanResolve(ResolveParams parms)
 		{
 			bool result;
@@ -51,10 +51,10 @@ namespace RimWorld.SketchGen
 			return result;
 		}
 
-		// Token: 0x06006463 RID: 25699
+		
 		protected abstract void ResolveInt(ResolveParams parms);
 
-		// Token: 0x06006464 RID: 25700
+		
 		protected abstract bool CanResolveInt(ResolveParams parms);
 	}
 }

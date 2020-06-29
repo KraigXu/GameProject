@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000173 RID: 371
+	
 	public sealed class TerrainGrid : IExposable
 	{
-		// Token: 0x17000202 RID: 514
+		
 		// (get) Token: 0x06000A92 RID: 2706 RVA: 0x000383E4 File Offset: 0x000365E4
 		public CellBoolDrawer Drawer
 		{
@@ -22,45 +22,45 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000A93 RID: 2707 RVA: 0x00038458 File Offset: 0x00036658
+		
 		public TerrainGrid(Map map)
 		{
 			this.map = map;
 			this.ResetGrids();
 		}
 
-		// Token: 0x06000A94 RID: 2708 RVA: 0x0003846D File Offset: 0x0003666D
+		
 		public void ResetGrids()
 		{
 			this.topGrid = new TerrainDef[this.map.cellIndices.NumGridCells];
 			this.underGrid = new TerrainDef[this.map.cellIndices.NumGridCells];
 		}
 
-		// Token: 0x06000A95 RID: 2709 RVA: 0x000384A5 File Offset: 0x000366A5
+		
 		public TerrainDef TerrainAt(int ind)
 		{
 			return this.topGrid[ind];
 		}
 
-		// Token: 0x06000A96 RID: 2710 RVA: 0x000384AF File Offset: 0x000366AF
+		
 		public TerrainDef TerrainAt(IntVec3 c)
 		{
 			return this.topGrid[this.map.cellIndices.CellToIndex(c)];
 		}
 
-		// Token: 0x06000A97 RID: 2711 RVA: 0x000384C9 File Offset: 0x000366C9
+		
 		public TerrainDef UnderTerrainAt(int ind)
 		{
 			return this.underGrid[ind];
 		}
 
-		// Token: 0x06000A98 RID: 2712 RVA: 0x000384D3 File Offset: 0x000366D3
+		
 		public TerrainDef UnderTerrainAt(IntVec3 c)
 		{
 			return this.underGrid[this.map.cellIndices.CellToIndex(c)];
 		}
 
-		// Token: 0x06000A99 RID: 2713 RVA: 0x000384F0 File Offset: 0x000366F0
+		
 		public void SetTerrain(IntVec3 c, TerrainDef newTerr)
 		{
 			if (newTerr == null)
@@ -99,7 +99,7 @@ namespace Verse
 			this.DoTerrainChangedEffects(c);
 		}
 
-		// Token: 0x06000A9A RID: 2714 RVA: 0x000385B4 File Offset: 0x000367B4
+		
 		public void SetUnderTerrain(IntVec3 c, TerrainDef newTerr)
 		{
 			if (!c.InBounds(this.map))
@@ -111,7 +111,7 @@ namespace Verse
 			this.underGrid[num] = newTerr;
 		}
 
-		// Token: 0x06000A9B RID: 2715 RVA: 0x00038604 File Offset: 0x00036804
+		
 		public void RemoveTopLayer(IntVec3 c, bool doLeavings = true)
 		{
 			int num = this.map.cellIndices.CellToIndex(c);
@@ -127,14 +127,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000A9C RID: 2716 RVA: 0x00038664 File Offset: 0x00036864
+		
 		public bool CanRemoveTopLayerAt(IntVec3 c)
 		{
 			int num = this.map.cellIndices.CellToIndex(c);
 			return this.topGrid[num].Removable && this.underGrid[num] != null;
 		}
 
-		// Token: 0x06000A9D RID: 2717 RVA: 0x000386A0 File Offset: 0x000368A0
+		
 		private void DoTerrainChangedEffects(IntVec3 c)
 		{
 			this.map.mapDrawer.MapMeshDirty(c, MapMeshFlag.Terrain, true, false);
@@ -167,14 +167,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000A9E RID: 2718 RVA: 0x00038851 File Offset: 0x00036A51
+		
 		public void ExposeData()
 		{
 			this.ExposeTerrainGrid(this.topGrid, "topGrid");
 			this.ExposeTerrainGrid(this.underGrid, "underGrid");
 		}
 
-		// Token: 0x06000A9F RID: 2719 RVA: 0x00038878 File Offset: 0x00036A78
+		
 		public void Notify_TerrainBurned(IntVec3 c)
 		{
 			TerrainDef terrain = c.GetTerrain(this.map);
@@ -185,7 +185,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000AA0 RID: 2720 RVA: 0x000388B0 File Offset: 0x00036AB0
+		
 		public void Notify_TerrainDestroyed(IntVec3 c)
 		{
 			if (!this.CanRemoveTopLayerAt(c))
@@ -217,7 +217,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000AA1 RID: 2721 RVA: 0x00038988 File Offset: 0x00036B88
+		
 		private void ExposeTerrainGrid(TerrainDef[] grid, string label)
 		{
 			Dictionary<ushort, TerrainDef> terrainDefsByShortHash = new Dictionary<ushort, TerrainDef>();
@@ -260,7 +260,7 @@ namespace Verse
 			MapExposeUtility.ExposeUshort(this.map, shortReader, shortWriter, label);
 		}
 
-		// Token: 0x06000AA2 RID: 2722 RVA: 0x00038A2C File Offset: 0x00036C2C
+		
 		public string DebugStringAt(IntVec3 c)
 		{
 			if (c.InBounds(this.map))
@@ -272,7 +272,7 @@ namespace Verse
 			return "out of bounds";
 		}
 
-		// Token: 0x06000AA3 RID: 2723 RVA: 0x00038AA2 File Offset: 0x00036CA2
+		
 		public void TerrainGridUpdate()
 		{
 			if (Find.PlaySettings.showTerrainAffordanceOverlay)
@@ -282,13 +282,13 @@ namespace Verse
 			this.Drawer.CellBoolDrawerUpdate();
 		}
 
-		// Token: 0x06000AA4 RID: 2724 RVA: 0x00017A00 File Offset: 0x00015C00
+		
 		private Color CellBoolDrawerColorInt()
 		{
 			return Color.white;
 		}
 
-		// Token: 0x06000AA5 RID: 2725 RVA: 0x00038AC8 File Offset: 0x00036CC8
+		
 		private bool CellBoolDrawerGetBoolInt(int index)
 		{
 			IntVec3 c = CellIndicesUtility.IndexToCell(index, this.map.Size.x);
@@ -296,7 +296,7 @@ namespace Verse
 			return !c.Filled(this.map) && !c.Fogged(this.map) && this.TryGetAffordanceDefToDraw(this.TerrainAt(index), out terrainAffordanceDef);
 		}
 
-		// Token: 0x06000AA6 RID: 2726 RVA: 0x00038B1C File Offset: 0x00036D1C
+		
 		private bool TryGetAffordanceDefToDraw(TerrainDef terrainDef, out TerrainAffordanceDef affordance)
 		{
 			if (terrainDef == null || terrainDef.affordances.NullOrEmpty<TerrainAffordanceDef>())
@@ -326,7 +326,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000AA7 RID: 2727 RVA: 0x00038BB8 File Offset: 0x00036DB8
+		
 		private Color CellBoolDrawerGetExtraColorInt(int index)
 		{
 			TerrainAffordanceDef terrainAffordanceDef;
@@ -338,19 +338,19 @@ namespace Verse
 			return TerrainGrid.NoAffordanceColor;
 		}
 
-		// Token: 0x0400084A RID: 2122
+		
 		private Map map;
 
-		// Token: 0x0400084B RID: 2123
+		
 		public TerrainDef[] topGrid;
 
-		// Token: 0x0400084C RID: 2124
+		
 		private TerrainDef[] underGrid;
 
-		// Token: 0x0400084D RID: 2125
+		
 		private CellBoolDrawer drawerInt;
 
-		// Token: 0x0400084E RID: 2126
+		
 		private static readonly Color NoAffordanceColor = Color.red;
 	}
 }

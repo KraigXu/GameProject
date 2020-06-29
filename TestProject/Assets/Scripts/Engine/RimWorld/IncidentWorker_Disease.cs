@@ -6,13 +6,13 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009DC RID: 2524
+	
 	public abstract class IncidentWorker_Disease : IncidentWorker
 	{
-		// Token: 0x06003C37 RID: 15415
+		
 		protected abstract IEnumerable<Pawn> PotentialVictimCandidates(IIncidentTarget target);
 
-		// Token: 0x06003C38 RID: 15416 RVA: 0x0013DFF3 File Offset: 0x0013C1F3
+		
 		protected IEnumerable<Pawn> PotentialVictims(IIncidentTarget target)
 		{
 			return this.PotentialVictimCandidates(target).Where(delegate(Pawn p)
@@ -41,10 +41,10 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06003C39 RID: 15417
+		
 		protected abstract IEnumerable<Pawn> ActualVictims(IncidentParms parms);
 
-		// Token: 0x06003C3A RID: 15418 RVA: 0x0013E010 File Offset: 0x0013C210
+		
 		private static bool CanAddHediffToAnyPartOfDef(Pawn pawn, HediffDef hediffDef, BodyPartDef partDef)
 		{
 			List<BodyPartRecord> allParts = pawn.def.race.body.AllParts;
@@ -59,13 +59,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003C3B RID: 15419 RVA: 0x0013E080 File Offset: 0x0013C280
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			return this.PotentialVictims(parms.target).Any<Pawn>();
 		}
 
-		// Token: 0x06003C3C RID: 15420 RVA: 0x0013E098 File Offset: 0x0013C298
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			string text;
@@ -110,7 +110,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C3D RID: 15421 RVA: 0x0013E1DC File Offset: 0x0013C3DC
+		
 		public List<Pawn> ApplyToPawns(IEnumerable<Pawn> pawns, out string blockedInfo)
 		{
 			List<Pawn> list = new List<Pawn>();

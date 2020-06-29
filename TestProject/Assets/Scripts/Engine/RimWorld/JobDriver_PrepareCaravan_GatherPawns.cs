@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200062B RID: 1579
+	
 	public class JobDriver_PrepareCaravan_GatherPawns : JobDriver
 	{
-		// Token: 0x17000829 RID: 2089
+		
 		// (get) Token: 0x06002B40 RID: 11072 RVA: 0x000FAE44 File Offset: 0x000F9044
 		private Pawn AnimalOrSlave
 		{
@@ -19,13 +19,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002B41 RID: 11073 RVA: 0x000FAE6A File Offset: 0x000F906A
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.AnimalOrSlave, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002B42 RID: 11074 RVA: 0x000FAE8C File Offset: 0x000F908C
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(() => !base.Map.lordManager.lords.Contains(this.job.lord));
@@ -35,7 +35,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002B43 RID: 11075 RVA: 0x000FAE9C File Offset: 0x000F909C
+		
 		private Toil SetFollowerToil()
 		{
 			return new Toil
@@ -49,7 +49,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04001995 RID: 6549
+		
 		private const TargetIndex AnimalOrSlaveInd = TargetIndex.A;
 	}
 }

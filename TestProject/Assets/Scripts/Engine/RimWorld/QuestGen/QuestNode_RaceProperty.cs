@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001159 RID: 4441
+	
 	public abstract class QuestNode_RaceProperty : QuestNode
 	{
-		// Token: 0x0600677E RID: 26494 RVA: 0x00243350 File Offset: 0x00241550
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			if (this.Matches(this.value.GetValue(slate)))
@@ -18,7 +18,7 @@ namespace RimWorld.QuestGen
 			return this.elseNode == null || this.elseNode.TestRun(slate);
 		}
 
-		// Token: 0x0600677F RID: 26495 RVA: 0x002433A0 File Offset: 0x002415A0
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -36,7 +36,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x06006780 RID: 26496 RVA: 0x002433F0 File Offset: 0x002415F0
+		
 		private bool Matches(object obj)
 		{
 			if (obj == null)
@@ -74,17 +74,17 @@ namespace RimWorld.QuestGen
 			return obj is string && !((string)obj).NullOrEmpty() && this.Matches(DefDatabase<PawnKindDef>.GetNamed((string)obj, true).RaceProps);
 		}
 
-		// Token: 0x06006781 RID: 26497
+		
 		protected abstract bool Matches(RaceProperties raceProperties);
 
-		// Token: 0x04003F9E RID: 16286
+		
 		[NoTranslate]
 		public SlateRef<object> value;
 
-		// Token: 0x04003F9F RID: 16287
+		
 		public QuestNode node;
 
-		// Token: 0x04003FA0 RID: 16288
+		
 		public QuestNode elseNode;
 	}
 }

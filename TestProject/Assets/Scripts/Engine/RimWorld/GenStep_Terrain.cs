@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A5C RID: 2652
+	
 	public class GenStep_Terrain : GenStep
 	{
-		// Token: 0x17000B1D RID: 2845
+		
 		// (get) Token: 0x06003EAC RID: 16044 RVA: 0x0014C564 File Offset: 0x0014A764
 		public override int SeedPart
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EAD RID: 16045 RVA: 0x0014C56C File Offset: 0x0014A76C
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			BeachMaker.Init(map);
@@ -61,7 +61,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EAE RID: 16046 RVA: 0x0014C6E4 File Offset: 0x0014A8E4
+		
 		private TerrainDef TerrainFrom(IntVec3 c, Map map, float elevation, float fertility, RiverMaker river, bool preferSolid)
 		{
 			TerrainDef terrainDef = null;
@@ -127,7 +127,7 @@ namespace RimWorld
 			return TerrainDefOf.Sand;
 		}
 
-		// Token: 0x06003EAF RID: 16047 RVA: 0x0014C828 File Offset: 0x0014AA28
+		
 		private RiverMaker GenerateRiver(Map map)
 		{
 			List<Tile.RiverLink> rivers = Find.WorldGrid[map.Tile].Rivers;
@@ -150,7 +150,7 @@ namespace RimWorld
 			return riverMaker;
 		}
 
-		// Token: 0x06003EB0 RID: 16048 RVA: 0x0014C94C File Offset: 0x0014AB4C
+		
 		private void UpdateRiverAnchorEntry(Dictionary<int, GenStep_Terrain.GRLT_Entry> entries, IntVec3 center, int entryId, float zValue)
 		{
 			float num = zValue - (float)entryId;
@@ -168,7 +168,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EB1 RID: 16049 RVA: 0x0014C9A0 File Offset: 0x0014ABA0
+		
 		private void GenerateRiverLookupTexture(Map map, RiverMaker riverMaker)
 		{
 			int num = Mathf.CeilToInt((from rd in DefDatabase<RiverDef>.AllDefs
@@ -374,16 +374,16 @@ namespace RimWorld
 			map.waterInfo.GenerateRiverFlowMap();
 		}
 
-		// Token: 0x04002479 RID: 9337
+		
 		private static bool debug_WarnedMissingTerrain;
 
-		// Token: 0x02001A53 RID: 6739
+		
 		private struct GRLT_Entry
 		{
-			// Token: 0x04006405 RID: 25605
+			
 			public float bestDistance;
 
-			// Token: 0x04006406 RID: 25606
+			
 			public IntVec3 bestNode;
 		}
 	}

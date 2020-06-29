@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006EA RID: 1770
+	
 	public class JobGiver_RescueNearby : ThinkNode_JobGiver
 	{
-		// Token: 0x06002F00 RID: 12032 RVA: 0x001087F4 File Offset: 0x001069F4
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_RescueNearby jobGiver_RescueNearby = (JobGiver_RescueNearby)base.DeepCopy(resolve);
@@ -15,7 +15,7 @@ namespace RimWorld
 			return jobGiver_RescueNearby;
 		}
 
-		// Token: 0x06002F01 RID: 12033 RVA: 0x00108810 File Offset: 0x00106A10
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Predicate<Thing> validator = delegate(Thing t)
@@ -38,10 +38,10 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x04001AA5 RID: 6821
+		
 		private float radius = 30f;
 
-		// Token: 0x04001AA6 RID: 6822
+		
 		private const float MinDistFromEnemy = 25f;
 	}
 }

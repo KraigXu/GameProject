@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x020005C4 RID: 1476
+	
 	public class AttackTargetsCache
 	{
-		// Token: 0x170007C6 RID: 1990
+		
 		// (get) Token: 0x06002911 RID: 10513 RVA: 0x000F23E6 File Offset: 0x000F05E6
 		public HashSet<IAttackTarget> TargetsHostileToColony
 		{
@@ -17,19 +17,19 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002912 RID: 10514 RVA: 0x000F23F3 File Offset: 0x000F05F3
+		
 		public AttackTargetsCache(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06002913 RID: 10515 RVA: 0x000F242E File Offset: 0x000F062E
+		
 		public static void AttackTargetsCacheStaticUpdate()
 		{
 			AttackTargetsCache.targets.Clear();
 		}
 
-		// Token: 0x06002914 RID: 10516 RVA: 0x000F243C File Offset: 0x000F063C
+		
 		public void UpdateTarget(IAttackTarget t)
 		{
 			if (!this.allTargets.Contains(t))
@@ -44,7 +44,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002915 RID: 10517 RVA: 0x000F2484 File Offset: 0x000F0684
+		
 		public List<IAttackTarget> GetPotentialTargetsFor(IAttackTargetSearcher th)
 		{
 			Thing thing = th.Thing;
@@ -90,7 +90,7 @@ namespace Verse.AI
 			return AttackTargetsCache.targets;
 		}
 
-		// Token: 0x06002916 RID: 10518 RVA: 0x000F2620 File Offset: 0x000F0820
+		
 		public HashSet<IAttackTarget> TargetsHostileToFaction(Faction f)
 		{
 			if (f == null)
@@ -105,7 +105,7 @@ namespace Verse.AI
 			return AttackTargetsCache.emptySet;
 		}
 
-		// Token: 0x06002917 RID: 10519 RVA: 0x000F2658 File Offset: 0x000F0858
+		
 		public void Notify_ThingSpawned(Thing th)
 		{
 			IAttackTarget attackTarget = th as IAttackTarget;
@@ -115,7 +115,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002918 RID: 10520 RVA: 0x000F2678 File Offset: 0x000F0878
+		
 		public void Notify_ThingDespawned(Thing th)
 		{
 			IAttackTarget attackTarget = th as IAttackTarget;
@@ -125,7 +125,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002919 RID: 10521 RVA: 0x000F2698 File Offset: 0x000F0898
+		
 		public void Notify_FactionHostilityChanged(Faction f1, Faction f2)
 		{
 			AttackTargetsCache.tmpTargets.Clear();
@@ -145,7 +145,7 @@ namespace Verse.AI
 			AttackTargetsCache.tmpTargets.Clear();
 		}
 
-		// Token: 0x0600291A RID: 10522 RVA: 0x000F2768 File Offset: 0x000F0968
+		
 		private void RegisterTarget(IAttackTarget target)
 		{
 			if (this.allTargets.Contains(target))
@@ -203,7 +203,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600291B RID: 10523 RVA: 0x000F28E4 File Offset: 0x000F0AE4
+		
 		private void DeregisterTarget(IAttackTarget target)
 		{
 			if (!this.allTargets.Contains(target))
@@ -230,7 +230,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600291C RID: 10524 RVA: 0x000F29AC File Offset: 0x000F0BAC
+		
 		private void Debug_AssertHostile(Faction f, HashSet<IAttackTarget> targets)
 		{
 			AttackTargetsCache.tmpToUpdate.Clear();
@@ -258,43 +258,43 @@ namespace Verse.AI
 			AttackTargetsCache.tmpToUpdate.Clear();
 		}
 
-		// Token: 0x0600291D RID: 10525 RVA: 0x000F2A98 File Offset: 0x000F0C98
+		
 		public bool Debug_CheckIfInAllTargets(IAttackTarget t)
 		{
 			return t != null && this.allTargets.Contains(t);
 		}
 
-		// Token: 0x0600291E RID: 10526 RVA: 0x000F2AAB File Offset: 0x000F0CAB
+		
 		public bool Debug_CheckIfHostileToFaction(Faction f, IAttackTarget t)
 		{
 			return f != null && t != null && this.targetsHostileToFaction[f].Contains(t);
 		}
 
-		// Token: 0x040018B9 RID: 6329
+		
 		private Map map;
 
-		// Token: 0x040018BA RID: 6330
+		
 		private HashSet<IAttackTarget> allTargets = new HashSet<IAttackTarget>();
 
-		// Token: 0x040018BB RID: 6331
+		
 		private Dictionary<Faction, HashSet<IAttackTarget>> targetsHostileToFaction = new Dictionary<Faction, HashSet<IAttackTarget>>();
 
-		// Token: 0x040018BC RID: 6332
+		
 		private HashSet<Pawn> pawnsInAggroMentalState = new HashSet<Pawn>();
 
-		// Token: 0x040018BD RID: 6333
+		
 		private HashSet<Pawn> factionlessHumanlikes = new HashSet<Pawn>();
 
-		// Token: 0x040018BE RID: 6334
+		
 		private static List<IAttackTarget> targets = new List<IAttackTarget>();
 
-		// Token: 0x040018BF RID: 6335
+		
 		private static HashSet<IAttackTarget> emptySet = new HashSet<IAttackTarget>();
 
-		// Token: 0x040018C0 RID: 6336
+		
 		private static List<IAttackTarget> tmpTargets = new List<IAttackTarget>();
 
-		// Token: 0x040018C1 RID: 6337
+		
 		private static List<IAttackTarget> tmpToUpdate = new List<IAttackTarget>();
 	}
 }

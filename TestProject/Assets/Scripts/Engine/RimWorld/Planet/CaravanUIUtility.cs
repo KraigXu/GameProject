@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001240 RID: 4672
+	
 	public static class CaravanUIUtility
 	{
-		// Token: 0x06006CD6 RID: 27862 RVA: 0x0025FDD0 File Offset: 0x0025DFD0
+		
 		public static void CreateCaravanTransferableWidgets(List<TransferableOneWay> transferables, out TransferableOneWayWidget pawnsTransfer, out TransferableOneWayWidget itemsTransfer, string thingCountTip, IgnorePawnsInventoryMode ignorePawnInventoryMass, Func<float> availableMassGetter, bool ignoreSpawnedCorpsesGearAndInventoryMass, int tile, bool playerPawnsReadOnly = false)
 		{
 			pawnsTransfer = new TransferableOneWayWidget(null, null, null, thingCountTip, true, ignorePawnInventoryMass, false, availableMassGetter, 0f, ignoreSpawnedCorpsesGearAndInventoryMass, tile, true, true, true, false, true, false, playerPawnsReadOnly);
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			select x, null, null, thingCountTip, true, ignorePawnInventoryMass, false, availableMassGetter, 0f, ignoreSpawnedCorpsesGearAndInventoryMass, tile, true, false, false, true, false, true, false);
 		}
 
-		// Token: 0x06006CD7 RID: 27863 RVA: 0x0025FE4C File Offset: 0x0025E04C
+		
 		public static void AddPawnsSections(TransferableOneWayWidget widget, List<TransferableOneWay> transferables)
 		{
 			IEnumerable<TransferableOneWay> source = from x in transferables
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 			select x);
 		}
 
-		// Token: 0x06006CD8 RID: 27864 RVA: 0x0025FF68 File Offset: 0x0025E168
+		
 		private static string GetDaysWorthOfFoodLabel(Pair<float, float> daysWorthOfFood, bool multiline)
 		{
 			if (daysWorthOfFood.First >= 600f)
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 			return text;
 		}
 
-		// Token: 0x06006CD9 RID: 27865 RVA: 0x00260020 File Offset: 0x0025E220
+		
 		private static Color GetDaysWorthOfFoodColor(Pair<float, float> daysWorthOfFood, int? ticksToArrive)
 		{
 			if (daysWorthOfFood.First >= 600f)
@@ -70,7 +70,7 @@ namespace RimWorld.Planet
 			return GenUI.LerpColor(CaravanUIUtility.DaysWorthOfFoodColor, num);
 		}
 
-		// Token: 0x06006CDA RID: 27866 RVA: 0x00260084 File Offset: 0x0025E284
+		
 		public static void DrawCaravanInfo(CaravanUIUtility.CaravanInfo info, CaravanUIUtility.CaravanInfo? info2, int currentTile, int? ticksToArrive, float lastMassFlashTime, Rect rect, bool lerpMassColor = true, string extraDaysWorthOfFoodTipInfo = null, bool multiline = false)
 		{
 			CaravanUIUtility.tmpInfo.Clear();
@@ -202,7 +202,7 @@ namespace RimWorld.Planet
 			TransferableUIUtility.DrawExtraInfo(CaravanUIUtility.tmpInfo, rect);
 		}
 
-		// Token: 0x06006CDB RID: 27867 RVA: 0x00260867 File Offset: 0x0025EA67
+		
 		private static Color GetMassColor(float massUsage, float massCapacity, bool lerpMassColor)
 		{
 			if (massCapacity == 0f)
@@ -220,7 +220,7 @@ namespace RimWorld.Planet
 			return Color.white;
 		}
 
-		// Token: 0x06006CDC RID: 27868 RVA: 0x00260898 File Offset: 0x0025EA98
+		
 		private static string GetMassTip(float massUsage, float massCapacity, string massCapacityExplanation, float? massUsage2, float? massCapacity2, string massCapacity2Explanation)
 		{
 			TaggedString taggedString = "MassCarriedSimple".Translate() + ": " + massUsage.ToStringEnsureThreshold(massCapacity, 2) + " " + "kg".Translate() + "\n" + "MassCapacity".Translate() + ": " + massCapacity.ToString("F2") + " " + "kg".Translate();
@@ -240,7 +240,7 @@ namespace RimWorld.Planet
 			return taggedString;
 		}
 
-		// Token: 0x040043A4 RID: 17316
+		
 		private static readonly List<Pair<float, Color>> MassColor = new List<Pair<float, Color>>
 		{
 			new Pair<float, Color>(0.37f, Color.green),
@@ -248,7 +248,7 @@ namespace RimWorld.Planet
 			new Pair<float, Color>(1f, new Color(1f, 0.6f, 0f))
 		};
 
-		// Token: 0x040043A5 RID: 17317
+		
 		private static readonly List<Pair<float, Color>> TilesPerDayColor = new List<Pair<float, Color>>
 		{
 			new Pair<float, Color>(0f, Color.white),
@@ -257,14 +257,14 @@ namespace RimWorld.Planet
 			new Pair<float, Color>(2f, Color.white)
 		};
 
-		// Token: 0x040043A6 RID: 17318
+		
 		private static readonly List<Pair<float, Color>> DaysWorthOfFoodColor = new List<Pair<float, Color>>
 		{
 			new Pair<float, Color>(1f, Color.red),
 			new Pair<float, Color>(2f, Color.white)
 		};
 
-		// Token: 0x040043A7 RID: 17319
+		
 		private static readonly List<Pair<float, Color>> DaysWorthOfFoodKnownRouteColor = new List<Pair<float, Color>>
 		{
 			new Pair<float, Color>(0.3f, ColoredText.RedReadable),
@@ -272,7 +272,7 @@ namespace RimWorld.Planet
 			new Pair<float, Color>(1.02f, Color.green)
 		};
 
-		// Token: 0x040043A8 RID: 17320
+		
 		private static readonly List<Pair<float, Color>> VisibilityColor = new List<Pair<float, Color>>
 		{
 			new Pair<float, Color>(0f, Color.white),
@@ -282,13 +282,13 @@ namespace RimWorld.Planet
 			new Pair<float, Color>(1.2f, ColoredText.RedReadable)
 		};
 
-		// Token: 0x040043A9 RID: 17321
+		
 		private static List<TransferableUIUtility.ExtraInfo> tmpInfo = new List<TransferableUIUtility.ExtraInfo>();
 
-		// Token: 0x02001FDE RID: 8158
+		
 		public struct CaravanInfo
 		{
-			// Token: 0x0600AEF9 RID: 44793 RVA: 0x003271F8 File Offset: 0x003253F8
+			
 			public CaravanInfo(float massUsage, float massCapacity, string massCapacityExplanation, float tilesPerDay, string tilesPerDayExplanation, Pair<float, float> daysWorthOfFood, Pair<ThingDef, float> foragedFoodPerDay, string foragedFoodPerDayExplanation, float visibility, string visibilityExplanation, float extraMassUsage = -1f, float extraMassCapacity = -1f, string extraMassCapacityExplanation = null)
 			{
 				this.massUsage = massUsage;
@@ -306,43 +306,43 @@ namespace RimWorld.Planet
 				this.extraMassCapacityExplanation = extraMassCapacityExplanation;
 			}
 
-			// Token: 0x04007730 RID: 30512
+			
 			public float massUsage;
 
-			// Token: 0x04007731 RID: 30513
+			
 			public float massCapacity;
 
-			// Token: 0x04007732 RID: 30514
+			
 			public string massCapacityExplanation;
 
-			// Token: 0x04007733 RID: 30515
+			
 			public float tilesPerDay;
 
-			// Token: 0x04007734 RID: 30516
+			
 			public string tilesPerDayExplanation;
 
-			// Token: 0x04007735 RID: 30517
+			
 			public Pair<float, float> daysWorthOfFood;
 
-			// Token: 0x04007736 RID: 30518
+			
 			public Pair<ThingDef, float> foragedFoodPerDay;
 
-			// Token: 0x04007737 RID: 30519
+			
 			public string foragedFoodPerDayExplanation;
 
-			// Token: 0x04007738 RID: 30520
+			
 			public float visibility;
 
-			// Token: 0x04007739 RID: 30521
+			
 			public string visibilityExplanation;
 
-			// Token: 0x0400773A RID: 30522
+			
 			public float extraMassUsage;
 
-			// Token: 0x0400773B RID: 30523
+			
 			public float extraMassCapacity;
 
-			// Token: 0x0400773C RID: 30524
+			
 			public string extraMassCapacityExplanation;
 		}
 	}

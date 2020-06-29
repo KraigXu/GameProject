@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006BA RID: 1722
+	
 	public class JobGiver_PackAnimalFollowColonists : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E6C RID: 11884 RVA: 0x00104F18 File Offset: 0x00103118
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Pawn pawnToFollow = JobGiver_PackAnimalFollowColonists.GetPawnToFollow(pawn);
@@ -29,7 +29,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002E6D RID: 11885 RVA: 0x00104F98 File Offset: 0x00103198
+		
 		public static Pawn GetPawnToFollow(Pawn forPawn)
 		{
 			if (!forPawn.RaceProps.packAnimal || forPawn.inventory.UnloadEverything || MassUtility.IsOverEncumbered(forPawn))
@@ -62,7 +62,7 @@ namespace RimWorld
 			return pawn2;
 		}
 
-		// Token: 0x04001A6F RID: 6767
+		
 		private const int MaxDistanceToPawnToFollow = 10;
 	}
 }

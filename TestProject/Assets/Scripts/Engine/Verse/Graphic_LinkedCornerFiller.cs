@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002EC RID: 748
+	
 	public class Graphic_LinkedCornerFiller : Graphic_Linked
 	{
-		// Token: 0x1700044B RID: 1099
+		
 		// (get) Token: 0x06001529 RID: 5417 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
 		public override LinkDrawerType LinkerType
 		{
@@ -16,12 +16,12 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600152A RID: 5418 RVA: 0x0007C4F7 File Offset: 0x0007A6F7
+		
 		public Graphic_LinkedCornerFiller(Graphic subGraphic) : base(subGraphic)
 		{
 		}
 
-		// Token: 0x0600152B RID: 5419 RVA: 0x0007C500 File Offset: 0x0007A700
+		
 		public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
 		{
 			return new Graphic_LinkedCornerFiller(this.subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
@@ -30,7 +30,7 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x0600152C RID: 5420 RVA: 0x0007C524 File Offset: 0x0007A724
+		
 		public override void Print(SectionLayer layer, Thing thing)
 		{
 			base.Print(layer, thing);
@@ -70,22 +70,22 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000DF8 RID: 3576
+		
 		private const float ShiftUp = 0.09f;
 
-		// Token: 0x04000DF9 RID: 3577
+		
 		private const float CoverSize = 0.5f;
 
-		// Token: 0x04000DFA RID: 3578
+		
 		private static readonly float CoverSizeCornerCorner = new Vector2(0.5f, 0.5f).magnitude;
 
-		// Token: 0x04000DFB RID: 3579
+		
 		private static readonly float DistCenterCorner = new Vector2(0.5f, 0.5f).magnitude;
 
-		// Token: 0x04000DFC RID: 3580
+		
 		private static readonly float CoverOffsetDist = Graphic_LinkedCornerFiller.DistCenterCorner - Graphic_LinkedCornerFiller.CoverSizeCornerCorner * 0.5f;
 
-		// Token: 0x04000DFD RID: 3581
+		
 		private static readonly Vector2[] CornerFillUVs = new Vector2[]
 		{
 			new Vector2(0.5f, 0.6f),

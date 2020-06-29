@@ -5,16 +5,16 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000F37 RID: 3895
+	
 	public static class BuildCopyCommandUtility
 	{
-		// Token: 0x06005F6A RID: 24426 RVA: 0x002100B0 File Offset: 0x0020E2B0
+		
 		public static Command BuildCopyCommand(BuildableDef buildable, ThingDef stuff)
 		{
 			return BuildCopyCommandUtility.BuildCommand(buildable, stuff, "CommandBuildCopy".Translate(), "CommandBuildCopyDesc".Translate(), true);
 		}
 
-		// Token: 0x06005F6B RID: 24427 RVA: 0x002100D8 File Offset: 0x0020E2D8
+		
 		public static Command BuildCommand(BuildableDef buildable, ThingDef stuff, string label, string description, bool allowHotKey)
 		{
 			Designator_Build des = BuildCopyCommandUtility.FindAllowedDesignator(buildable, true);
@@ -57,7 +57,7 @@ namespace RimWorld
 			return command_Action;
 		}
 
-		// Token: 0x06005F6C RID: 24428 RVA: 0x002101F0 File Offset: 0x0020E3F0
+		
 		public static Designator_Build FindAllowedDesignator(BuildableDef buildable, bool mustBeVisible = true)
 		{
 			Game game = Current.Game;
@@ -101,7 +101,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005F6D RID: 24429 RVA: 0x002102DC File Offset: 0x0020E4DC
+		
 		public static Designator FindAllowedDesignatorRoot(BuildableDef buildable, bool mustBeVisible = true)
 		{
 			List<Designator> allResolvedDesignators = buildable.designationCategory.AllResolvedDesignators;
@@ -115,7 +115,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005F6E RID: 24430 RVA: 0x00210320 File Offset: 0x0020E520
+		
 		private static Designator_Build FindAllowedDesignatorRecursive(Designator designator, BuildableDef buildable, bool mustBeVisible)
 		{
 			if (!Current.Game.Rules.DesignatorAllowed(designator))
@@ -146,10 +146,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x040033D1 RID: 13265
+		
 		private static Dictionary<BuildableDef, Designator_Build> cache = new Dictionary<BuildableDef, Designator_Build>();
 
-		// Token: 0x040033D2 RID: 13266
+		
 		private static int lastCacheTick = -1;
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200084A RID: 2122
+	
 	public class ThoughtWorker_RoyalTitleApparelMinQualityNotMet : ThoughtWorker
 	{
-		// Token: 0x060034A9 RID: 13481 RVA: 0x00120994 File Offset: 0x0011EB94
+		
 		private RoyalTitleDef Validate(Pawn p, out QualityCategory minQuality)
 		{
 			minQuality = QualityCategory.Awful;
@@ -27,7 +27,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060034AA RID: 13482 RVA: 0x00120A44 File Offset: 0x0011EC44
+		
 		public override string PostProcessLabel(Pawn p, string label)
 		{
 			QualityCategory qualityCategory;
@@ -39,7 +39,7 @@ namespace RimWorld
 			return label.Formatted(royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
 		}
 
-		// Token: 0x060034AB RID: 13483 RVA: 0x00120A8C File Offset: 0x0011EC8C
+		
 		public override string PostProcessDescription(Pawn p, string description)
 		{
 			QualityCategory cat;
@@ -51,7 +51,7 @@ namespace RimWorld
 			return description.Formatted(royalTitleDef.GetLabelCapFor(p).Named("TITLE"), cat.GetLabel().Named("QUALITY"), p.Named("PAWN"));
 		}
 
-		// Token: 0x060034AC RID: 13484 RVA: 0x00120AE4 File Offset: 0x0011ECE4
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.royalty == null)

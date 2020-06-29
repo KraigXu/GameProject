@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001FE RID: 510
+	
 	public static class ModsConfig
 	{
-		// Token: 0x170002EB RID: 747
+		
 		// (get) Token: 0x06000EA3 RID: 3747 RVA: 0x00053304 File Offset: 0x00051504
 		public static IEnumerable<ModMetaData> ActiveModsInLoadOrder
 		{
@@ -31,7 +31,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002EC RID: 748
+		
 		// (get) Token: 0x06000EA4 RID: 3748 RVA: 0x0005336C File Offset: 0x0005156C
 		public static bool RoyaltyActive
 		{
@@ -41,7 +41,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000EA5 RID: 3749 RVA: 0x00053374 File Offset: 0x00051574
+		
 		static ModsConfig()
 		{
 			bool flag = false;
@@ -126,7 +126,7 @@ namespace Verse
 			ModsConfig.RecacheActiveMods();
 		}
 
-		// Token: 0x06000EA6 RID: 3750 RVA: 0x00053650 File Offset: 0x00051850
+		
 		public static bool TryGetPackageIdWithoutExtraSteamPostfix(string packageId, out string nonSteamPackageId)
 		{
 			if (packageId.EndsWith(ModMetaData.SteamModPostfix))
@@ -138,7 +138,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000EA7 RID: 3751 RVA: 0x00053680 File Offset: 0x00051880
+		
 		public static void DeactivateNotInstalledMods(Action<string> logCallback = null)
 		{
 			for (int i = ModsConfig.data.activeMods.Count - 1; i >= 0; i--)
@@ -161,7 +161,7 @@ namespace Verse
 			ModsConfig.RecacheActiveMods();
 		}
 
-		// Token: 0x06000EA8 RID: 3752 RVA: 0x00053720 File Offset: 0x00051920
+		
 		public static void Reset()
 		{
 			ModsConfig.data.activeMods.Clear();
@@ -177,7 +177,7 @@ namespace Verse
 			ModsConfig.RecacheActiveMods();
 		}
 
-		// Token: 0x06000EA9 RID: 3753 RVA: 0x000537C0 File Offset: 0x000519C0
+		
 		public static void Reorder(int modIndex, int newIndex)
 		{
 			if (modIndex == newIndex)
@@ -189,7 +189,7 @@ namespace Verse
 			ModsConfig.activeModsInLoadOrderCachedDirty = true;
 		}
 
-		// Token: 0x06000EAA RID: 3754 RVA: 0x00053814 File Offset: 0x00051A14
+		
 		public static void Reorder(List<int> newIndices)
 		{
 			List<string> list = new List<string>();
@@ -201,25 +201,25 @@ namespace Verse
 			ModsConfig.activeModsInLoadOrderCachedDirty = true;
 		}
 
-		// Token: 0x06000EAB RID: 3755 RVA: 0x00053888 File Offset: 0x00051A88
+		
 		public static bool IsActive(ModMetaData mod)
 		{
 			return ModsConfig.IsActive(mod.PackageId);
 		}
 
-		// Token: 0x06000EAC RID: 3756 RVA: 0x00053895 File Offset: 0x00051A95
+		
 		public static bool IsActive(string id)
 		{
 			return ModsConfig.activeModsHashSet.Contains(id.ToLower());
 		}
 
-		// Token: 0x06000EAD RID: 3757 RVA: 0x000538A7 File Offset: 0x00051AA7
+		
 		public static void SetActive(ModMetaData mod, bool active)
 		{
 			ModsConfig.SetActive(mod.PackageId, active);
 		}
 
-		// Token: 0x06000EAE RID: 3758 RVA: 0x000538B8 File Offset: 0x00051AB8
+		
 		public static void SetActive(string modIdentifier, bool active)
 		{
 			string item = modIdentifier.ToLower();
@@ -237,7 +237,7 @@ namespace Verse
 			ModsConfig.RecacheActiveMods();
 		}
 
-		// Token: 0x06000EAF RID: 3759 RVA: 0x0005391B File Offset: 0x00051B1B
+		
 		public static void SetActiveToList(List<string> mods)
 		{
 			ModsConfig.data.activeMods = (from mod in mods
@@ -246,13 +246,13 @@ namespace Verse
 			ModsConfig.RecacheActiveMods();
 		}
 
-		// Token: 0x06000EB0 RID: 3760 RVA: 0x00053956 File Offset: 0x00051B56
+		
 		public static bool IsExpansionNew(string id)
 		{
 			return !ModsConfig.data.knownExpansions.Contains(id.ToLower());
 		}
 
-		// Token: 0x06000EB1 RID: 3761 RVA: 0x00053970 File Offset: 0x00051B70
+		
 		public static void AddKnownExpansion(string id)
 		{
 			if (ModsConfig.IsExpansionNew(id))
@@ -261,14 +261,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000EB2 RID: 3762 RVA: 0x0005398F File Offset: 0x00051B8F
+		
 		public static void Save()
 		{
 			ModsConfig.data.version = VersionControl.CurrentVersionStringWithRev;
 			DirectXmlSaver.SaveDataObject(ModsConfig.data, GenFilePaths.ModsConfigFilePath);
 		}
 
-		// Token: 0x06000EB3 RID: 3763 RVA: 0x000539AF File Offset: 0x00051BAF
+		
 		public static void SaveFromList(List<string> mods)
 		{
 			DirectXmlSaver.SaveDataObject(new ModsConfig.ModsConfigData
@@ -279,7 +279,7 @@ namespace Verse
 			}, GenFilePaths.ModsConfigFilePath);
 		}
 
-		// Token: 0x06000EB4 RID: 3764 RVA: 0x000539E4 File Offset: 0x00051BE4
+		
 		public static void RestartFromChangedMods()
 		{
 			Find.WindowStack.Add(new Dialog_MessageBox("ModsChanged".Translate(), null, delegate
@@ -288,7 +288,7 @@ namespace Verse
 			}, null, null, null, false, null, null));
 		}
 
-		// Token: 0x06000EB5 RID: 3765 RVA: 0x00053A30 File Offset: 0x00051C30
+		
 		public static List<string> GetModWarnings()
 		{
 			List<string> list = new List<string>();
@@ -333,7 +333,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06000EB6 RID: 3766 RVA: 0x00053CA4 File Offset: 0x00051EA4
+		
 		public static bool ModHasAnyOrderingIssues(ModMetaData mod)
 		{
 			List<ModMetaData> mods = ModsConfig.ActiveModsInLoadOrder.ToList<ModMetaData>();
@@ -341,7 +341,7 @@ namespace Verse
 			return index != -1 && (ModsConfig.FindConflicts(mods, mod.LoadBefore, (ModMetaData beforeMod) => mods.IndexOf(beforeMod) < index).Count > 0 || ModsConfig.FindConflicts(mods, mod.LoadAfter, (ModMetaData afterMod) => mods.IndexOf(afterMod) > index).Count > 0);
 		}
 
-		// Token: 0x06000EB7 RID: 3767 RVA: 0x00053D34 File Offset: 0x00051F34
+		
 		private static List<string> FindConflicts(List<ModMetaData> allMods, List<string> modsToCheck, Func<ModMetaData, bool> predicate)
 		{
 			List<string> list = new List<string>();
@@ -360,7 +360,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06000EB8 RID: 3768 RVA: 0x00053DBC File Offset: 0x00051FBC
+		
 		public static void TrySortMods()
 		{
 			List<ModMetaData> list = ModsConfig.ActiveModsInLoadOrder.ToList<ModMetaData>();
@@ -402,7 +402,7 @@ namespace Verse
 			ModsConfig.Reorder(directedAcyclicGraph.TopologicalSort());
 		}
 
-		// Token: 0x06000EB9 RID: 3769 RVA: 0x00053F34 File Offset: 0x00052134
+		
 		private static void RecacheActiveMods()
 		{
 			ModsConfig.activeModsHashSet.Clear();
@@ -414,32 +414,32 @@ namespace Verse
 			ModsConfig.activeModsInLoadOrderCachedDirty = true;
 		}
 
-		// Token: 0x04000AE7 RID: 2791
+		
 		private static ModsConfig.ModsConfigData data;
 
-		// Token: 0x04000AE8 RID: 2792
+		
 		private static bool royaltyActive;
 
-		// Token: 0x04000AE9 RID: 2793
+		
 		private static HashSet<string> activeModsHashSet = new HashSet<string>();
 
-		// Token: 0x04000AEA RID: 2794
+		
 		private static List<ModMetaData> activeModsInLoadOrderCached = new List<ModMetaData>();
 
-		// Token: 0x04000AEB RID: 2795
+		
 		private static bool activeModsInLoadOrderCachedDirty;
 
-		// Token: 0x02001411 RID: 5137
+		
 		private class ModsConfigData
 		{
-			// Token: 0x04004C58 RID: 19544
+			
 			[LoadAlias("buildNumber")]
 			public string version;
 
-			// Token: 0x04004C59 RID: 19545
+			
 			public List<string> activeMods = new List<string>();
 
-			// Token: 0x04004C5A RID: 19546
+			
 			public List<string> knownExpansions = new List<string>();
 		}
 	}

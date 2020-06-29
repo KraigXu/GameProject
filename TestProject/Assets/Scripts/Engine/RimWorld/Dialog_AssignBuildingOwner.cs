@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E4F RID: 3663
+	
 	public class Dialog_AssignBuildingOwner : Window
 	{
-		// Token: 0x17000FDE RID: 4062
+		
 		// (get) Token: 0x06005883 RID: 22659 RVA: 0x001D60A3 File Offset: 0x001D42A3
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005884 RID: 22660 RVA: 0x001D60B4 File Offset: 0x001D42B4
+		
 		public Dialog_AssignBuildingOwner(CompAssignableToPawn assignable)
 		{
 			this.assignable = assignable;
@@ -29,7 +29,7 @@ namespace RimWorld
 			this.absorbInputAroundWindow = true;
 		}
 
-		// Token: 0x06005885 RID: 22661 RVA: 0x001D60E0 File Offset: 0x001D42E0
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Small;
@@ -107,16 +107,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002FBE RID: 12222
+		
 		private CompAssignableToPawn assignable;
 
-		// Token: 0x04002FBF RID: 12223
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04002FC0 RID: 12224
+		
 		private const float EntryHeight = 35f;
 
-		// Token: 0x04002FC1 RID: 12225
+		
 		private const float LineSpacing = 8f;
 	}
 }

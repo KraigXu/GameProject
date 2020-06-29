@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse.Sound
 {
-	// Token: 0x020004D3 RID: 1235
+	
 	public static class ReverbCustomPresets
 	{
-		// Token: 0x0600243B RID: 9275 RVA: 0x000D8728 File Offset: 0x000D6928
+		
 		public static void SetupAs(this ReverbSetup setup, AudioReverbPreset preset)
 		{
 			GameObject gameObject = new GameObject("OneFrameTemp");

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C92 RID: 3218
+	
 	public class PlaceWorker_MonumentMarker : PlaceWorker
 	{
-		// Token: 0x06004DA3 RID: 19875 RVA: 0x001A14EC File Offset: 0x0019F6EC
+		
 		public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
 			MonumentMarker monumentMarker = thing as MonumentMarker;
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004DA4 RID: 19876 RVA: 0x001A1510 File Offset: 0x0019F710
+		
 		public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
 		{
 			MonumentMarker monumentMarker = thing as MonumentMarker;
@@ -108,7 +108,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04002B70 RID: 11120
+		
 		private static List<Thing> tmpMonumentThings = new List<Thing>();
 	}
 }

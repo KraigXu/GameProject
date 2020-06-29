@@ -8,10 +8,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A24 RID: 2596
+	
 	public static class StorytellerUtility
 	{
-		// Token: 0x06003D63 RID: 15715 RVA: 0x00144014 File Offset: 0x00142214
+		
 		public static IncidentParms DefaultParmsNow(IncidentCategoryDef incCat, IIncidentTarget target)
 		{
 			if (incCat == null)
@@ -27,7 +27,7 @@ namespace RimWorld
 			return incidentParms;
 		}
 
-		// Token: 0x06003D64 RID: 15716 RVA: 0x00144054 File Offset: 0x00142254
+		
 		public static float GetProgressScore(IIncidentTarget target)
 		{
 			int num = 0;
@@ -41,7 +41,7 @@ namespace RimWorld
 			return (float)num * 1f + target.PlayerWealthForStoryteller * 0.0001f;
 		}
 
-		// Token: 0x06003D65 RID: 15717 RVA: 0x001440C8 File Offset: 0x001422C8
+		
 		public static float DefaultThreatPointsNow(IIncidentTarget target)
 		{
 			float playerWealthForStoryteller = target.PlayerWealthForStoryteller;
@@ -81,13 +81,13 @@ namespace RimWorld
 			return Mathf.Clamp(num4 * num5 * Find.Storyteller.difficulty.threatScale * Find.Storyteller.def.pointsFactorFromDaysPassed.Evaluate((float)GenDate.DaysPassed), 35f, 10000f);
 		}
 
-		// Token: 0x06003D66 RID: 15718 RVA: 0x00144294 File Offset: 0x00142494
+		
 		public static float DefaultSiteThreatPointsNow()
 		{
 			return SiteTuning.ThreatPointsToSiteThreatPointsCurve.Evaluate(StorytellerUtility.DefaultThreatPointsNow(Find.World)) * SiteTuning.SitePointRandomFactorRange.RandomInRange;
 		}
 
-		// Token: 0x06003D67 RID: 15719 RVA: 0x001442C4 File Offset: 0x001424C4
+		
 		public static float AllyIncidentFraction(bool fullAlliesOnly)
 		{
 			List<Faction> allFactionsListForReading = Find.FactionManager.AllFactionsListForReading;
@@ -115,7 +115,7 @@ namespace RimWorld
 			return StorytellerUtility.AllyIncidentFractionFromAllyFraction.Evaluate(x);
 		}
 
-		// Token: 0x06003D68 RID: 15720 RVA: 0x00144380 File Offset: 0x00142580
+		
 		public static void ShowFutureIncidentsDebugLogFloatMenu(bool currentMapOnly)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -135,7 +135,7 @@ namespace RimWorld
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06003D69 RID: 15721 RVA: 0x00144440 File Offset: 0x00142640
+		
 		public static void DebugLogTestFutureIncidents(bool currentMapOnly, StorytellerComp onlyThisComp = null, QuestPart onlyThisQuestPart = null, int numTestDays = 100)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -168,7 +168,7 @@ namespace RimWorld
 			StorytellerUtility.DebugLogIncidentsInternal(allIncidents, threatBigCount, incCountsForTarget, incCountsForComp, numTestDays, stringBuilder.ToString(), text);
 		}
 
-		// Token: 0x06003D6A RID: 15722 RVA: 0x00144534 File Offset: 0x00142734
+		
 		public static void DebugLogTestFutureIncidents(ThreatsGeneratorParams parms)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -191,7 +191,7 @@ namespace RimWorld
 			StorytellerUtility.DebugLogIncidentsInternal(allIncidents, threatBigCount, incCountsForTarget, incCountsForComp, 20, stringBuilder.ToString(), header);
 		}
 
-		// Token: 0x06003D6B RID: 15723 RVA: 0x001445C0 File Offset: 0x001427C0
+		
 		private static void DebugLogIncidentsInternal(List<Pair<IncidentDef, IncidentParms>> allIncidents, int threatBigCount, Dictionary<IIncidentTarget, int> incCountsForTarget, int[] incCountsForComp, int numTestDays, string incidentList, string header)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -252,7 +252,7 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06003D6C RID: 15724 RVA: 0x00144930 File Offset: 0x00142B30
+		
 		public static void DebugGetFutureIncidents(int numTestDays, bool currentMapOnly, out Dictionary<IIncidentTarget, int> incCountsForTarget, out int[] incCountsForComp, out List<Pair<IncidentDef, IncidentParms>> allIncidents, out int threatBigCount, StringBuilder outputSb = null, StorytellerComp onlyThisComp = null, ThreatsGeneratorParams onlyThisThreatsGenerator = null, QuestPart onlyThisQuestPart = null)
 		{
 			int ticksGame = Find.TickManager.TicksGame;
@@ -271,7 +271,6 @@ namespace RimWorld
 			incCountsForTarget = new Dictionary<IIncidentTarget, int>();
 			allIncidents = new List<Pair<IncidentDef, IncidentParms>>();
 			threatBigCount = 0;
-			Func<FiringIncident, bool> <>9__0;
 			for (int j = 0; j < num; j++)
 			{
 				IEnumerable<FiringIncident> enumerable;
@@ -286,11 +285,8 @@ namespace RimWorld
 				else if (onlyThisQuestPart != null)
 				{
 					IEnumerable<FiringIncident> source = Find.Storyteller.MakeIncidentsForInterval();
-					Func<FiringIncident, bool> predicate;
-					if ((predicate = <>9__0) == null)
-					{
-						predicate = (<>9__0 = ((FiringIncident x) => x.sourceQuestPart == onlyThisQuestPart));
-					}
+					Func<FiringIncident, bool> predicate = ((FiringIncident x) => x.sourceQuestPart == onlyThisQuestPart);
+
 					enumerable = source.Where(predicate);
 				}
 				else
@@ -372,7 +368,7 @@ namespace RimWorld
 			StorytellerUtility.tmpOldStoryStates.Clear();
 		}
 
-		// Token: 0x06003D6D RID: 15725 RVA: 0x00144CFC File Offset: 0x00142EFC
+		
 		public static void DebugLogTestIncidentTargets()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -389,16 +385,16 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x040023D1 RID: 9169
+		
 		public const float GlobalPointsMin = 35f;
 
-		// Token: 0x040023D2 RID: 9170
+		
 		public const float GlobalPointsMax = 10000f;
 
-		// Token: 0x040023D3 RID: 9171
+		
 		public const float BuildingWealthFactor = 0.5f;
 
-		// Token: 0x040023D4 RID: 9172
+		
 		private static readonly SimpleCurve PointsPerWealthCurve = new SimpleCurve
 		{
 			{
@@ -423,16 +419,16 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040023D5 RID: 9173
+		
 		private const float PointsPerTameNonDownedCombatTrainableAnimalCombatPower = 0.08f;
 
-		// Token: 0x040023D6 RID: 9174
+		
 		private const float PointsPerPlayerPawnFactorInContainer = 0.3f;
 
-		// Token: 0x040023D7 RID: 9175
+		
 		private const float PointsPerPlayerPawnHealthSummaryLerpAmount = 0.65f;
 
-		// Token: 0x040023D8 RID: 9176
+		
 		private static readonly SimpleCurve PointsPerColonistByWealthCurve = new SimpleCurve
 		{
 			{
@@ -453,16 +449,16 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040023D9 RID: 9177
+		
 		public const float CaravanWealthPointsFactor = 0.7f;
 
-		// Token: 0x040023DA RID: 9178
+		
 		public const float CaravanAnimalPointsFactor = 0.7f;
 
-		// Token: 0x040023DB RID: 9179
+		
 		public static readonly FloatRange CaravanPointsRandomFactorRange = new FloatRange(0.7f, 0.9f);
 
-		// Token: 0x040023DC RID: 9180
+		
 		private static readonly SimpleCurve AllyIncidentFractionFromAllyFraction = new SimpleCurve
 		{
 			{
@@ -475,13 +471,13 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040023DD RID: 9181
+		
 		public const float ProgressScorePerWealth = 0.0001f;
 
-		// Token: 0x040023DE RID: 9182
+		
 		public const float ProgressScorePerFreeColonist = 1f;
 
-		// Token: 0x040023DF RID: 9183
+		
 		private static Dictionary<IIncidentTarget, StoryState> tmpOldStoryStates = new Dictionary<IIncidentTarget, StoryState>();
 	}
 }

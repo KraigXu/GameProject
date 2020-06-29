@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E0E RID: 3598
+	
 	public static class AreaAllowedGUI
 	{
-		// Token: 0x060056E3 RID: 22243 RVA: 0x001CD598 File Offset: 0x001CB798
+		
 		public static void DoAllowedAreaSelectors(Rect rect, Pawn p)
 		{
 			if (Find.CurrentMap == null)
@@ -43,7 +43,7 @@ namespace RimWorld
 			Text.Font = GameFont.Small;
 		}
 
-		// Token: 0x060056E4 RID: 22244 RVA: 0x001CD690 File Offset: 0x001CB890
+		
 		private static void DoAreaSelector(Rect rect, Pawn p, Area area)
 		{
 			MouseoverSounds.DoRegion(rect);
@@ -87,7 +87,7 @@ namespace RimWorld
 			TooltipHandler.TipRegion(rect, text);
 		}
 
-		// Token: 0x04002F59 RID: 12121
+		
 		private static bool dragging;
 	}
 }

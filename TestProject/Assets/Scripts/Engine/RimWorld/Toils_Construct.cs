@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200063A RID: 1594
+	
 	public static class Toils_Construct
 	{
-		// Token: 0x06002BA5 RID: 11173 RVA: 0x000FB724 File Offset: 0x000F9924
+		
 		public static Toil MakeSolidThingFromBlueprintIfNecessary(TargetIndex blueTarget, TargetIndex targetToUpdate = TargetIndex.None)
 		{
 			Toil toil = new Toil();
@@ -39,7 +39,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002BA6 RID: 11174 RVA: 0x000FB770 File Offset: 0x000F9970
+		
 		public static Toil UninstallIfMinifiable(TargetIndex thingInd)
 		{
 			Toil uninstallIfMinifiable = new Toil().FailOnDestroyedNullOrForbidden(thingInd);

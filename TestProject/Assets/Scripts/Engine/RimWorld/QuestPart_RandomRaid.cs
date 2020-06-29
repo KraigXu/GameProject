@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A7 RID: 2471
+	
 	public class QuestPart_RandomRaid : QuestPart
 	{
-		// Token: 0x17000A95 RID: 2709
+		
 		// (get) Token: 0x06003AB1 RID: 15025 RVA: 0x00136BF8 File Offset: 0x00134DF8
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -28,13 +28,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A96 RID: 2710
+		
 		// (get) Token: 0x06003AB2 RID: 15026 RVA: 0x00136C08 File Offset: 0x00134E08
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__1())
+				foreach (Faction faction in this.n__1())
 				{
 					yield return faction;
 				}
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AB3 RID: 15027 RVA: 0x00136C18 File Offset: 0x00134E18
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -76,7 +76,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AB4 RID: 15028 RVA: 0x00136D04 File Offset: 0x00134F04
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -87,7 +87,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.useCurrentThreatPoints, "useCurrentThreatPoints", false, false);
 		}
 
-		// Token: 0x06003AB5 RID: 15029 RVA: 0x00136D78 File Offset: 0x00134F78
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -99,19 +99,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040022A6 RID: 8870
+		
 		public string inSignal;
 
-		// Token: 0x040022A7 RID: 8871
+		
 		public MapParent mapParent;
 
-		// Token: 0x040022A8 RID: 8872
+		
 		public FloatRange pointsRange;
 
-		// Token: 0x040022A9 RID: 8873
+		
 		public Faction faction;
 
-		// Token: 0x040022AA RID: 8874
+		
 		public bool useCurrentThreatPoints;
 	}
 }

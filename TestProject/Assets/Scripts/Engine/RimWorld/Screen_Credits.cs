@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E8F RID: 3727
+	
 	public class Screen_Credits : Window
 	{
-		// Token: 0x1700104C RID: 4172
+		
 		// (get) Token: 0x06005ADA RID: 23258 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700104D RID: 4173
+		
 		// (get) Token: 0x06005ADB RID: 23259 RVA: 0x0005AC15 File Offset: 0x00058E15
 		protected override float Margin
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700104E RID: 4174
+		
 		// (get) Token: 0x06005ADC RID: 23260 RVA: 0x001EF835 File Offset: 0x001EDA35
 		private float ViewWidth
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700104F RID: 4175
+		
 		// (get) Token: 0x06005ADD RID: 23261 RVA: 0x001EF83C File Offset: 0x001EDA3C
 		private float ViewHeight
 		{
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001050 RID: 4176
+		
 		// (get) Token: 0x06005ADE RID: 23262 RVA: 0x001EF878 File Offset: 0x001EDA78
 		private float MaxScrollPosition
 		{
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001051 RID: 4177
+		
 		// (get) Token: 0x06005ADF RID: 23263 RVA: 0x001EF898 File Offset: 0x001EDA98
 		private float AutoScrollRate
 		{
@@ -83,12 +83,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AE0 RID: 23264 RVA: 0x001EF91D File Offset: 0x001EDB1D
+		
 		public Screen_Credits() : this("")
 		{
 		}
 
-		// Token: 0x06005AE1 RID: 23265 RVA: 0x001EF92C File Offset: 0x001EDB2C
+		
 		public Screen_Credits(string preCreditsMessage)
 		{
 			this.doWindowBackground = false;
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AE2 RID: 23266 RVA: 0x001EFAAC File Offset: 0x001EDCAC
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -136,7 +136,7 @@ namespace RimWorld
 			this.timeUntilAutoScroll = 1f;
 		}
 
-		// Token: 0x06005AE3 RID: 23267 RVA: 0x001EFAE0 File Offset: 0x001EDCE0
+		
 		public override void WindowUpdate()
 		{
 			base.WindowUpdate();
@@ -155,7 +155,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AE4 RID: 23268 RVA: 0x001EFB68 File Offset: 0x001EDD68
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = new Rect(0f, 0f, (float)UI.screenWidth, (float)UI.screenHeight);
@@ -203,56 +203,56 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AE5 RID: 23269 RVA: 0x001EFD64 File Offset: 0x001EDF64
+		
 		private void Scroll(float offset)
 		{
 			this.scrollPosition += offset;
 			this.timeUntilAutoScroll = 3f;
 		}
 
-		// Token: 0x04003187 RID: 12679
+		
 		private List<CreditsEntry> creds;
 
-		// Token: 0x04003188 RID: 12680
+		
 		public bool wonGame;
 
-		// Token: 0x04003189 RID: 12681
+		
 		private float timeUntilAutoScroll;
 
-		// Token: 0x0400318A RID: 12682
+		
 		private float scrollPosition;
 
-		// Token: 0x0400318B RID: 12683
+		
 		private bool playedMusic;
 
-		// Token: 0x0400318C RID: 12684
+		
 		public float creationRealtime = -1f;
 
-		// Token: 0x0400318D RID: 12685
+		
 		private float victoryTextHeight;
 
-		// Token: 0x0400318E RID: 12686
+		
 		private const int ColumnWidth = 800;
 
-		// Token: 0x0400318F RID: 12687
+		
 		private const float InitialAutoScrollDelay = 1f;
 
-		// Token: 0x04003190 RID: 12688
+		
 		private const float InitialAutoScrollDelayWonGame = 6f;
 
-		// Token: 0x04003191 RID: 12689
+		
 		private const float AutoScrollDelayAfterManualScroll = 3f;
 
-		// Token: 0x04003192 RID: 12690
+		
 		private const float SongStartDelay = 5f;
 
-		// Token: 0x04003193 RID: 12691
+		
 		private const float VictoryTextScrollSpeed = 20f;
 
-		// Token: 0x04003194 RID: 12692
+		
 		private const float ScrollSpeedLerpHeight = 200f;
 
-		// Token: 0x04003195 RID: 12693
+		
 		private const GameFont Font = GameFont.Medium;
 	}
 }

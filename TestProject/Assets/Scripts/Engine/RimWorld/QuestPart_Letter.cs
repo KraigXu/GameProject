@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000981 RID: 2433
+	
 	public class QuestPart_Letter : QuestPart
 	{
-		// Token: 0x17000A53 RID: 2643
+		
 		// (get) Token: 0x06003999 RID: 14745 RVA: 0x00132389 File Offset: 0x00130589
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -30,13 +30,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A54 RID: 2644
+		
 		// (get) Token: 0x0600399A RID: 14746 RVA: 0x00132399 File Offset: 0x00130599
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__1())
+				foreach (Faction faction in this.n__1())
 				{
 					yield return faction;
 				}
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600399B RID: 14747 RVA: 0x001323AC File Offset: 0x001305AC
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -118,7 +118,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600399C RID: 14748 RVA: 0x001325F4 File Offset: 0x001307F4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -131,7 +131,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.filterDeadPawnsFromLookTargets, "filterDeadPawnsFromLookTargets", false, false);
 		}
 
-		// Token: 0x0600399D RID: 14749 RVA: 0x00132688 File Offset: 0x00130888
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -139,25 +139,25 @@ namespace RimWorld
 			this.letter = LetterMaker.MakeLetter("Dev: Test", "Test text", LetterDefOf.PositiveEvent, null, null);
 		}
 
-		// Token: 0x040021F0 RID: 8688
+		
 		public string inSignal;
 
-		// Token: 0x040021F1 RID: 8689
+		
 		public Letter letter;
 
-		// Token: 0x040021F2 RID: 8690
+		
 		public bool getLookTargetsFromSignal = true;
 
-		// Token: 0x040021F3 RID: 8691
+		
 		public MapParent useColonistsOnMap;
 
-		// Token: 0x040021F4 RID: 8692
+		
 		public bool useColonistsFromCaravanArg;
 
-		// Token: 0x040021F5 RID: 8693
+		
 		public string chosenPawnSignal;
 
-		// Token: 0x040021F6 RID: 8694
+		
 		public bool filterDeadPawnsFromLookTargets;
 	}
 }

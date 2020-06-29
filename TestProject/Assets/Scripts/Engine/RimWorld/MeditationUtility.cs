@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000707 RID: 1799
+	
 	public class MeditationUtility
 	{
-		// Token: 0x06002F7F RID: 12159 RVA: 0x0010B794 File Offset: 0x00109994
+		
 		public static Job GetMeditationJob(Pawn pawn, bool forJoy = false)
 		{
 			MeditationSpotAndFocus meditationSpotAndFocus = MeditationUtility.FindMeditationSpot(pawn);
@@ -32,7 +32,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002F80 RID: 12160 RVA: 0x0010B810 File Offset: 0x00109A10
+		
 		public static MeditationSpotAndFocus FindMeditationSpot(Pawn pawn)
 		{
 			float num = float.MinValue;
@@ -79,7 +79,7 @@ namespace RimWorld
 			return new MeditationSpotAndFocus(spot, focus);
 		}
 
-		// Token: 0x06002F81 RID: 12161 RVA: 0x0010B9C4 File Offset: 0x00109BC4
+		
 		public static IEnumerable<LocalTargetInfo> AllMeditationSpotCandidates(Pawn pawn, bool allowFallbackSpots = true)
 		{
 			bool flag = false;
@@ -95,11 +95,11 @@ namespace RimWorld
 			if (!pawn.IsPrisonerOfColony)
 			{
 				IEnumerable<Building> source = pawn.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.MeditationSpot);
-				Func<Building, bool> <>9__2;
+				
 				Func<Building, bool> predicate;
-				if ((predicate = <>9__2) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__2 = delegate(Building s)
+					predicate = (9__2 = delegate(Building s)
 					{
 						if (s.IsForbidden(pawn) || !s.Position.Standable(s.Map))
 						{
@@ -180,19 +180,19 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002F82 RID: 12162 RVA: 0x0010B9DB File Offset: 0x00109BDB
+		
 		public static bool SafeEnvironmentalConditions(Pawn pawn, IntVec3 cell, Map map)
 		{
 			return (!map.gameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout) || cell.Roofed(map)) && cell.GetDangerFor(pawn, map) == Danger.None;
 		}
 
-		// Token: 0x06002F83 RID: 12163 RVA: 0x0010BA08 File Offset: 0x00109C08
+		
 		public static bool CanMeditateNow(Pawn pawn)
 		{
 			return (pawn.needs.rest == null || pawn.needs.rest.CurCategory < RestCategory.VeryTired) && !pawn.needs.food.Starving && pawn.Awake() && pawn.health.hediffSet.BleedRateTotal <= 0f;
 		}
 
-		// Token: 0x06002F84 RID: 12164 RVA: 0x0010BA70 File Offset: 0x00109C70
+		
 		public static LocalTargetInfo BestFocusAt(LocalTargetInfo spot, Pawn pawn)
 		{
 			float num = 0f;
@@ -216,7 +216,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06002F85 RID: 12165 RVA: 0x0010BB28 File Offset: 0x00109D28
+		
 		public static IEnumerable<LocalTargetInfo> FocusSpotsInTheRoom(Pawn pawn, Room r)
 		{
 			foreach (Thing thing in r.ContainedAndAdjacentThings)
@@ -236,7 +236,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002F86 RID: 12166 RVA: 0x0010BB40 File Offset: 0x00109D40
+		
 		public static LocalTargetInfo MeditationSpotForFocus(Thing t, Pawn p, Func<IntVec3, bool> validator = null)
 		{
 			return (from cell in t.OccupiedRect().ExpandedBy(2).AdjacentCellsCardinal
@@ -244,7 +244,7 @@ namespace RimWorld
 			select cell).RandomElementWithFallback(IntVec3.Invalid);
 		}
 
-		// Token: 0x06002F87 RID: 12167 RVA: 0x0010BB98 File Offset: 0x00109D98
+		
 		public static IEnumerable<MeditationFocusDef> FocusTypesAvailableForPawn(Pawn pawn)
 		{
 			int num;
@@ -260,14 +260,14 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002F88 RID: 12168 RVA: 0x0010BBA8 File Offset: 0x00109DA8
+		
 		public static string FocusTypesAvailableForPawnString(Pawn pawn)
 		{
 			return (from f in MeditationUtility.FocusTypesAvailableForPawn(pawn)
 			select f.label).ToCommaList(false);
 		}
 
-		// Token: 0x06002F89 RID: 12169 RVA: 0x0010BBDC File Offset: 0x00109DDC
+		
 		public static string FocusTypeAvailableExplanation(Pawn pawn)
 		{
 			string text = "";
@@ -303,7 +303,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06002F8A RID: 12170 RVA: 0x0010BD50 File Offset: 0x00109F50
+		
 		public static void DrawMeditationSpotOverlay(IntVec3 center, Map map)
 		{
 			GenDraw.DrawRadiusRing(center, MeditationUtility.FocusObjectSearchRadius);
@@ -316,13 +316,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F8B RID: 12171 RVA: 0x0010BE04 File Offset: 0x0010A004
+		
 		public static bool CanUseRoomToMeditate(Room r, Pawn p)
 		{
 			return (r.Owners.EnumerableNullOrEmpty<Pawn>() || r.Owners.Contains(p)) && (!r.isPrisonCell || p.IsPrisoner);
 		}
 
-		// Token: 0x06002F8C RID: 12172 RVA: 0x0010BE36 File Offset: 0x0010A036
+		
 		public static IEnumerable<Thing> GetMeditationFociAffectedByBuilding(Map map, ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
 			if (!MeditationUtility.CountsAsArtificialBuilding(def, faction))
@@ -342,7 +342,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002F8D RID: 12173 RVA: 0x0010BE64 File Offset: 0x0010A064
+		
 		public static void DrawMeditationFociAffectedByBuildingOverlay(Map map, ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
 			int num = 0;
@@ -361,19 +361,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F8E RID: 12174 RVA: 0x0010BF00 File Offset: 0x0010A100
+		
 		public static bool CountsAsArtificialBuilding(ThingDef def, Faction faction)
 		{
 			return typeof(Building).IsAssignableFrom(def.thingClass) && faction != null && def.building.artificialForMeditationPurposes;
 		}
 
-		// Token: 0x06002F8F RID: 12175 RVA: 0x0010BF29 File Offset: 0x0010A129
+		
 		public static bool CountsAsArtificialBuilding(Thing t)
 		{
 			return MeditationUtility.CountsAsArtificialBuilding(t.def, t.Faction);
 		}
 
-		// Token: 0x06002F90 RID: 12176 RVA: 0x0010BF3C File Offset: 0x0010A13C
+		
 		public static void DrawArtificialBuildingOverlay(IntVec3 pos, ThingDef def, Map map, float radius)
 		{
 			GenDraw.DrawRadiusRing(pos, radius);
@@ -388,7 +388,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F91 RID: 12177 RVA: 0x0010BFC8 File Offset: 0x0010A1C8
+		
 		public static float PsyfocusGainPerTick(Pawn pawn, Thing focus = null)
 		{
 			float num = pawn.GetStatValue(StatDefOf.MeditationFocusGain, true);
@@ -399,7 +399,7 @@ namespace RimWorld
 			return num / 60000f;
 		}
 
-		// Token: 0x06002F92 RID: 12178 RVA: 0x0010C004 File Offset: 0x0010A204
+		
 		public static void CheckMeditationScheduleTeachOpportunity(Pawn pawn)
 		{
 			if (pawn.Dead || !pawn.Spawned || !pawn.HasPsylink)
@@ -414,13 +414,13 @@ namespace RimWorld
 			LessonAutoActivator.TeachOpportunity(ConceptDefOf.MeditationDesiredPsyfocus, pawn, OpportunityType.GoodToKnow);
 		}
 
-		// Token: 0x04001AC6 RID: 6854
+		
 		public static float FocusObjectSearchRadius = 3.9f;
 
-		// Token: 0x04001AC7 RID: 6855
+		
 		private static float WanderRadius = 10f;
 
-		// Token: 0x04001AC8 RID: 6856
+		
 		private static Dictionary<MeditationFocusDef, string> focusObjectsPerTypeCache = new Dictionary<MeditationFocusDef, string>();
 	}
 }

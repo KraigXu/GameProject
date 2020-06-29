@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A23 RID: 2595
+	
 	public class StorytellerComp_Triggered : StorytellerComp
 	{
-		// Token: 0x17000AE1 RID: 2785
+		
 		// (get) Token: 0x06003D5F RID: 15711 RVA: 0x00143EDF File Offset: 0x001420DF
 		private StorytellerCompProperties_Triggered Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D60 RID: 15712 RVA: 0x00143EEC File Offset: 0x001420EC
+		
 		public override void Notify_PawnEvent(Pawn p, AdaptationEvent ev, DamageInfo? dinfo = null)
 		{
 			if (!p.RaceProps.Humanlike || !p.IsColonist)
@@ -45,7 +45,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D61 RID: 15713 RVA: 0x00143FF4 File Offset: 0x001421F4
+		
 		public override string ToString()
 		{
 			return base.ToString() + " " + this.Props.incident;

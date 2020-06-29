@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EBF RID: 3775
+	
 	public class MainTabsRoot
 	{
-		// Token: 0x170010A4 RID: 4260
+		
 		// (get) Token: 0x06005C3A RID: 23610 RVA: 0x001FD9E8 File Offset: 0x001FBBE8
 		public MainButtonDef OpenTab
 		{
@@ -24,7 +24,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C3B RID: 23611 RVA: 0x001FDA0C File Offset: 0x001FBC0C
+		
 		public void HandleLowPriorityShortcuts()
 		{
 			if (this.OpenTab == MainButtonDefOf.Inspect && (Find.Selector.NumSelected == 0 || WorldRendererUtility.WorldRenderedNow))
@@ -47,13 +47,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C3C RID: 23612 RVA: 0x001FDADA File Offset: 0x001FBCDA
+		
 		public void EscapeCurrentTab(bool playSound = true)
 		{
 			this.SetCurrentTab(null, playSound);
 		}
 
-		// Token: 0x06005C3D RID: 23613 RVA: 0x001FDAE4 File Offset: 0x001FBCE4
+		
 		public void SetCurrentTab(MainButtonDef tab, bool playSound = true)
 		{
 			if (tab == this.OpenTab)
@@ -63,7 +63,7 @@ namespace RimWorld
 			this.ToggleTab(tab, playSound);
 		}
 
-		// Token: 0x06005C3E RID: 23614 RVA: 0x001FDAF8 File Offset: 0x001FBCF8
+		
 		public void ToggleTab(MainButtonDef newTab, bool playSound = true)
 		{
 			if (this.OpenTab == null && newTab == null)

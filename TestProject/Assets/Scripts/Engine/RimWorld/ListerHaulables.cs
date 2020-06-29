@@ -6,58 +6,58 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A3F RID: 2623
+	
 	public class ListerHaulables
 	{
-		// Token: 0x06003DF9 RID: 15865 RVA: 0x00146B58 File Offset: 0x00144D58
+		
 		public ListerHaulables(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06003DFA RID: 15866 RVA: 0x00146B88 File Offset: 0x00144D88
+		
 		public List<Thing> ThingsPotentiallyNeedingHauling()
 		{
 			return this.haulables;
 		}
 
-		// Token: 0x06003DFB RID: 15867 RVA: 0x00146B90 File Offset: 0x00144D90
+		
 		public void Notify_Spawned(Thing t)
 		{
 			this.CheckAdd(t);
 		}
 
-		// Token: 0x06003DFC RID: 15868 RVA: 0x00146B99 File Offset: 0x00144D99
+		
 		public void Notify_DeSpawned(Thing t)
 		{
 			this.TryRemove(t);
 		}
 
-		// Token: 0x06003DFD RID: 15869 RVA: 0x00146B90 File Offset: 0x00144D90
+		
 		public void HaulDesignationAdded(Thing t)
 		{
 			this.CheckAdd(t);
 		}
 
-		// Token: 0x06003DFE RID: 15870 RVA: 0x00146B99 File Offset: 0x00144D99
+		
 		public void HaulDesignationRemoved(Thing t)
 		{
 			this.TryRemove(t);
 		}
 
-		// Token: 0x06003DFF RID: 15871 RVA: 0x00146B90 File Offset: 0x00144D90
+		
 		public void Notify_Unforbidden(Thing t)
 		{
 			this.CheckAdd(t);
 		}
 
-		// Token: 0x06003E00 RID: 15872 RVA: 0x00146B99 File Offset: 0x00144D99
+		
 		public void Notify_Forbidden(Thing t)
 		{
 			this.TryRemove(t);
 		}
 
-		// Token: 0x06003E01 RID: 15873 RVA: 0x00146BA4 File Offset: 0x00144DA4
+		
 		public void Notify_SlotGroupChanged(SlotGroup sg)
 		{
 			List<IntVec3> cellsList = sg.CellsList;
@@ -70,7 +70,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E02 RID: 15874 RVA: 0x00146BDC File Offset: 0x00144DDC
+		
 		public void ListerHaulablesTick()
 		{
 			ListerHaulables.groupCycleIndex++;
@@ -114,7 +114,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E03 RID: 15875 RVA: 0x00146D2C File Offset: 0x00144F2C
+		
 		public void RecalcAllInCell(IntVec3 c)
 		{
 			List<Thing> thingList = c.GetThingList(this.map);
@@ -124,7 +124,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E04 RID: 15876 RVA: 0x00146D64 File Offset: 0x00144F64
+		
 		public void RecalcAllInCells(IEnumerable<IntVec3> cells)
 		{
 			foreach (IntVec3 c in cells)
@@ -133,7 +133,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E05 RID: 15877 RVA: 0x00146DAC File Offset: 0x00144FAC
+		
 		private void Check(Thing t)
 		{
 			if (this.ShouldBeHaulable(t))
@@ -150,7 +150,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E06 RID: 15878 RVA: 0x00146DF8 File Offset: 0x00144FF8
+		
 		private bool ShouldBeHaulable(Thing t)
 		{
 			if (t.IsForbidden(Faction.OfPlayer))
@@ -171,7 +171,7 @@ namespace RimWorld
 			return !t.IsInValidBestStorage();
 		}
 
-		// Token: 0x06003E07 RID: 15879 RVA: 0x00146E5D File Offset: 0x0014505D
+		
 		private void CheckAdd(Thing t)
 		{
 			if (this.ShouldBeHaulable(t) && !this.haulables.Contains(t))
@@ -180,7 +180,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E08 RID: 15880 RVA: 0x00146E82 File Offset: 0x00145082
+		
 		private void TryRemove(Thing t)
 		{
 			if (t.def.category == ThingCategory.Item && this.haulables.Contains(t))
@@ -189,7 +189,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E09 RID: 15881 RVA: 0x00146EB0 File Offset: 0x001450B0
+		
 		internal string DebugString()
 		{
 			if (Time.frameCount % 10 == 0)
@@ -211,22 +211,22 @@ namespace RimWorld
 			return this.debugOutput;
 		}
 
-		// Token: 0x04002424 RID: 9252
+		
 		private Map map;
 
-		// Token: 0x04002425 RID: 9253
+		
 		private List<Thing> haulables = new List<Thing>();
 
-		// Token: 0x04002426 RID: 9254
+		
 		private const int CellsPerTick = 4;
 
-		// Token: 0x04002427 RID: 9255
+		
 		private static int groupCycleIndex;
 
-		// Token: 0x04002428 RID: 9256
+		
 		private List<int> cellCycleIndices = new List<int>();
 
-		// Token: 0x04002429 RID: 9257
+		
 		private string debugOutput = "uninitialized";
 	}
 }

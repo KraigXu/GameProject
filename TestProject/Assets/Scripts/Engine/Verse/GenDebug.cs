@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000440 RID: 1088
+	
 	public static class GenDebug
 	{
-		// Token: 0x06002082 RID: 8322 RVA: 0x000C69D4 File Offset: 0x000C4BD4
+		
 		public static void DebugPlaceSphere(Vector3 Loc, float Scale)
 		{
 			GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -16,7 +16,7 @@ namespace Verse
 			gameObject.transform.localScale = new Vector3(Scale, Scale, Scale);
 		}
 
-		// Token: 0x06002083 RID: 8323 RVA: 0x000C69FC File Offset: 0x000C4BFC
+		
 		public static void LogList<T>(IEnumerable<T> list)
 		{
 			foreach (T t in list)
@@ -25,7 +25,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002084 RID: 8324 RVA: 0x000C6A5C File Offset: 0x000C4C5C
+		
 		public static void ClearArea(CellRect r, Map map)
 		{
 			r.ClipInsideMap(map);

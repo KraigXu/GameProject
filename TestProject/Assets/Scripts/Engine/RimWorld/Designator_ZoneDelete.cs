@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E47 RID: 3655
+	
 	public class Designator_ZoneDelete : Designator_Zone
 	{
-		// Token: 0x06005860 RID: 22624 RVA: 0x001D53BC File Offset: 0x001D35BC
+		
 		public Designator_ZoneDelete()
 		{
 			this.defaultLabel = "DesignatorZoneDelete".Translate();
@@ -21,7 +21,7 @@ namespace RimWorld
 			this.hotKey = KeyBindingDefOf.Misc3;
 		}
 
-		// Token: 0x06005861 RID: 22625 RVA: 0x001D5444 File Offset: 0x001D3644
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 sq)
 		{
 			if (!sq.InBounds(base.Map))
@@ -39,7 +39,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005862 RID: 22626 RVA: 0x001D549C File Offset: 0x001D369C
+		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			Zone zone = base.Map.zoneManager.ZoneAt(c);
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005863 RID: 22627 RVA: 0x001D54DC File Offset: 0x001D36DC
+		
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();
@@ -61,7 +61,7 @@ namespace RimWorld
 			this.justDesignated.Clear();
 		}
 
-		// Token: 0x04002FB5 RID: 12213
+		
 		private List<Zone> justDesignated = new List<Zone>();
 	}
 }

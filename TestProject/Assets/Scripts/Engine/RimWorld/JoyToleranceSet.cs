@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B82 RID: 2946
+	
 	public class JoyToleranceSet : IExposable
 	{
-		// Token: 0x17000C10 RID: 3088
+		
 		public float this[JoyKindDef d]
 		{
 			get
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004512 RID: 17682 RVA: 0x001757F6 File Offset: 0x001739F6
+		
 		public void ExposeData()
 		{
 			Scribe_Deep.Look<DefMap<JoyKindDef, float>>(ref this.tolerances, "tolerances", Array.Empty<object>());
@@ -29,13 +29,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004513 RID: 17683 RVA: 0x00175835 File Offset: 0x00173A35
+		
 		public bool BoredOf(JoyKindDef def)
 		{
 			return this.bored[def];
 		}
 
-		// Token: 0x06004514 RID: 17684 RVA: 0x00175844 File Offset: 0x00173A44
+		
 		public void Notify_JoyGained(float amount, JoyKindDef joyKind)
 		{
 			float num = Mathf.Min(this.tolerances[joyKind] + amount * 0.65f, 1f);
@@ -46,13 +46,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004515 RID: 17685 RVA: 0x00175892 File Offset: 0x00173A92
+		
 		public float JoyFactorFromTolerance(JoyKindDef joyKind)
 		{
 			return 1f - this.tolerances[joyKind];
 		}
 
-		// Token: 0x06004516 RID: 17686 RVA: 0x001758A8 File Offset: 0x00173AA8
+		
 		public void NeedInterval(Pawn pawn)
 		{
 			float num = ExpectationsUtility.CurrentExpectationFor(pawn).joyToleranceDropPerDay * 150f / 60000f;
@@ -72,7 +72,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004517 RID: 17687 RVA: 0x00175934 File Offset: 0x00173B34
+		
 		public string TolerancesString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -98,7 +98,7 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x06004518 RID: 17688 RVA: 0x00175A2C File Offset: 0x00173C2C
+		
 		public bool BoredOfAllAvailableJoyKinds(Pawn pawn)
 		{
 			List<JoyKindDef> list = JoyUtility.JoyKindsOnMapTempList(pawn.MapHeld);
@@ -115,10 +115,10 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x0400277B RID: 10107
+		
 		private DefMap<JoyKindDef, float> tolerances = new DefMap<JoyKindDef, float>();
 
-		// Token: 0x0400277C RID: 10108
+		
 		private DefMap<JoyKindDef, bool> bored = new DefMap<JoyKindDef, bool>();
 	}
 }

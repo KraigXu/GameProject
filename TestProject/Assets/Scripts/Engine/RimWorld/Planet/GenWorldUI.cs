@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200128D RID: 4749
+	
 	public static class GenWorldUI
 	{
-		// Token: 0x170012D2 RID: 4818
+		
 		// (get) Token: 0x06006FB5 RID: 28597 RVA: 0x0026E45E File Offset: 0x0026C65E
 		public static float CaravanDirectClickRadius
 		{
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012D3 RID: 4819
+		
 		// (get) Token: 0x06006FB6 RID: 28598 RVA: 0x0026E470 File Offset: 0x0026C670
 		private static float CaravanWideClickRadius
 		{
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012D4 RID: 4820
+		
 		// (get) Token: 0x06006FB7 RID: 28599 RVA: 0x0026E45E File Offset: 0x0026C65E
 		private static float DynamicallyDrawnObjectDirectClickRadius
 		{
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FB8 RID: 28600 RVA: 0x0026E484 File Offset: 0x0026C684
+		
 		public static List<WorldObject> WorldObjectsUnderMouse(Vector2 mousePos)
 		{
 			List<WorldObject> list = new List<WorldObject>();
@@ -113,14 +113,14 @@ namespace RimWorld.Planet
 			return list;
 		}
 
-		// Token: 0x06006FB9 RID: 28601 RVA: 0x0026E738 File Offset: 0x0026C938
+		
 		public static Vector2 WorldToUIPosition(Vector3 worldLoc)
 		{
 			Vector3 vector = Find.WorldCamera.WorldToScreenPoint(worldLoc) / Prefs.UIScale;
 			return new Vector2(vector.x, (float)UI.screenHeight - vector.y);
 		}
 
-		// Token: 0x06006FBA RID: 28602 RVA: 0x0026E774 File Offset: 0x0026C974
+		
 		public static float CurUITileSize()
 		{
 			Vector3 localPosition = Find.WorldCamera.transform.localPosition;
@@ -133,10 +133,10 @@ namespace RimWorld.Planet
 			return x;
 		}
 
-		// Token: 0x040044B3 RID: 17587
+		
 		private static List<Caravan> clickedCaravans = new List<Caravan>();
 
-		// Token: 0x040044B4 RID: 17588
+		
 		private static List<WorldObject> clickedDynamicallyDrawnObjects = new List<WorldObject>();
 	}
 }

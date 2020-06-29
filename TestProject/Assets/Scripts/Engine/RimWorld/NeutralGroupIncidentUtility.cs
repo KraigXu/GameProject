@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020009FD RID: 2557
+	
 	public static class NeutralGroupIncidentUtility
 	{
-		// Token: 0x06003CD7 RID: 15575 RVA: 0x00141BE4 File Offset: 0x0013FDE4
+		
 		public static bool AnyBlockingHostileLord(Map map, Faction forFaction)
 		{
 			Faction faction = map.ParentFaction ?? Faction.OfPlayer;

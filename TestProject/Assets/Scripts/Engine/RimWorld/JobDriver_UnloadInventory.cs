@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000679 RID: 1657
+	
 	public class JobDriver_UnloadInventory : JobDriver
 	{
-		// Token: 0x17000882 RID: 2178
+		
 		// (get) Token: 0x06002D2C RID: 11564 RVA: 0x000FF588 File Offset: 0x000FD788
 		private Pawn OtherPawn
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D2D RID: 11565 RVA: 0x000FF5AE File Offset: 0x000FD7AE
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.OtherPawn, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D2E RID: 11566 RVA: 0x000FF5D0 File Offset: 0x000FD7D0
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -71,16 +71,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A14 RID: 6676
+		
 		private const TargetIndex OtherPawnInd = TargetIndex.A;
 
-		// Token: 0x04001A15 RID: 6677
+		
 		private const TargetIndex ItemToHaulInd = TargetIndex.B;
 
-		// Token: 0x04001A16 RID: 6678
+		
 		private const TargetIndex StoreCellInd = TargetIndex.C;
 
-		// Token: 0x04001A17 RID: 6679
+		
 		private const int UnloadDuration = 10;
 	}
 }

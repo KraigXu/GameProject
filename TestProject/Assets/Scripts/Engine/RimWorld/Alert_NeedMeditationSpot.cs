@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E07 RID: 3591
+	
 	public class Alert_NeedMeditationSpot : Alert
 	{
-		// Token: 0x17000F7C RID: 3964
+		
 		// (get) Token: 0x060056C5 RID: 22213 RVA: 0x001CC584 File Offset: 0x001CA784
 		private List<GlobalTargetInfo> Targets
 		{
@@ -38,19 +38,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060056C6 RID: 22214 RVA: 0x001CC664 File Offset: 0x001CA864
+		
 		public Alert_NeedMeditationSpot()
 		{
 			this.defaultLabel = "NeedMeditationSpotAlert".Translate();
 		}
 
-		// Token: 0x060056C7 RID: 22215 RVA: 0x001CC697 File Offset: 0x001CA897
+		
 		public override TaggedString GetExplanation()
 		{
 			return "NeedMeditationSpotAlertDesc".Translate(this.pawnNames.ToLineList("  - "));
 		}
 
-		// Token: 0x060056C8 RID: 22216 RVA: 0x001CC6B8 File Offset: 0x001CA8B8
+		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
@@ -60,10 +60,10 @@ namespace RimWorld
 			return AlertReport.CulpritsAre(this.Targets);
 		}
 
-		// Token: 0x04002F45 RID: 12101
+		
 		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
 
-		// Token: 0x04002F46 RID: 12102
+		
 		private List<string> pawnNames = new List<string>();
 	}
 }

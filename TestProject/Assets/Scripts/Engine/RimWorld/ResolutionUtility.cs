@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E65 RID: 3685
+	
 	public static class ResolutionUtility
 	{
-		// Token: 0x17001012 RID: 4114
+		
 		// (get) Token: 0x0600594B RID: 22859 RVA: 0x001DDEA0 File Offset: 0x001DC0A0
 		public static Resolution NativeResolution
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600594C RID: 22860 RVA: 0x001DDF1C File Offset: 0x001DC11C
+		
 		public static void SafeSetResolution(Resolution res)
 		{
 			if (Screen.width == res.width && Screen.height == res.height)
@@ -44,7 +44,7 @@ namespace RimWorld
 			Find.WindowStack.Add(new Dialog_ResolutionConfirm(oldRes));
 		}
 
-		// Token: 0x0600594D RID: 22861 RVA: 0x001DDF98 File Offset: 0x001DC198
+		
 		public static void SafeSetFullscreen(bool fullScreen)
 		{
 			if (Screen.fullScreen == fullScreen)
@@ -57,7 +57,7 @@ namespace RimWorld
 			Find.WindowStack.Add(new Dialog_ResolutionConfirm(fullScreen2));
 		}
 
-		// Token: 0x0600594E RID: 22862 RVA: 0x001DDFD0 File Offset: 0x001DC1D0
+		
 		public static void SafeSetUIScale(float newScale)
 		{
 			if (Prefs.UIScale == newScale)
@@ -70,13 +70,13 @@ namespace RimWorld
 			Find.WindowStack.Add(new Dialog_ResolutionConfirm(uiscale));
 		}
 
-		// Token: 0x0600594F RID: 22863 RVA: 0x001DE007 File Offset: 0x001DC207
+		
 		public static bool UIScaleSafeWithResolution(float scale, int w, int h)
 		{
 			return (float)w / scale >= 1024f && (float)h / scale >= 768f;
 		}
 
-		// Token: 0x06005950 RID: 22864 RVA: 0x001DE024 File Offset: 0x001DC224
+		
 		public static void SetResolutionRaw(int w, int h, bool fullScreen)
 		{
 			if (Application.isBatchMode)
@@ -100,14 +100,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005951 RID: 22865 RVA: 0x001DE098 File Offset: 0x001DC298
+		
 		public static void SetNativeResolutionRaw()
 		{
 			Resolution nativeResolution = ResolutionUtility.NativeResolution;
 			ResolutionUtility.SetResolutionRaw(nativeResolution.width, nativeResolution.height, true);
 		}
 
-		// Token: 0x06005952 RID: 22866 RVA: 0x001DE0C0 File Offset: 0x001DC2C0
+		
 		public static float GetRecommendedUIScale(int screenWidth, int screenHeight)
 		{
 			if (screenWidth == 0 || screenHeight == 0)
@@ -132,7 +132,7 @@ namespace RimWorld
 			return 1f;
 		}
 
-		// Token: 0x06005953 RID: 22867 RVA: 0x001DE150 File Offset: 0x001DC350
+		
 		public static void Update()
 		{
 			if (RealTime.frameCount % 30 == 0 && !LongEventHandler.AnyEventNowOrWaiting && !Screen.fullScreen)
@@ -155,16 +155,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003054 RID: 12372
+		
 		public const int MinResolutionWidth = 1024;
 
-		// Token: 0x04003055 RID: 12373
+		
 		public const int MinResolutionHeight = 768;
 
-		// Token: 0x04003056 RID: 12374
+		
 		public const int MinRecommendedResolutionWidth = 1700;
 
-		// Token: 0x04003057 RID: 12375
+		
 		public const int MinRecommendedResolutionHeight = 910;
 	}
 }

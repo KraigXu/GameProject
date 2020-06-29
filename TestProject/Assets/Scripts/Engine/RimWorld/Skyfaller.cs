@@ -7,11 +7,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000CBF RID: 3263
+	
 	[StaticConstructorOnStartup]
 	public class Skyfaller : Thing, IThingHolder
 	{
-		// Token: 0x17000E02 RID: 3586
+		
 		// (get) Token: 0x06004F1A RID: 20250 RVA: 0x001AA244 File Offset: 0x001A8444
 		public override Graphic Graphic
 		{
@@ -26,7 +26,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E03 RID: 3587
+		
 		// (get) Token: 0x06004F1B RID: 20251 RVA: 0x001AA274 File Offset: 0x001A8474
 		public override Vector3 DrawPos
 		{
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E04 RID: 3588
+		
 		// (get) Token: 0x06004F1C RID: 20252 RVA: 0x001AA350 File Offset: 0x001A8550
 		private Material ShadowMaterial
 		{
@@ -61,7 +61,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E05 RID: 3589
+		
 		// (get) Token: 0x06004F1D RID: 20253 RVA: 0x001AA3A8 File Offset: 0x001A85A8
 		private float TimeInAnimation
 		{
@@ -75,7 +75,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E06 RID: 3590
+		
 		// (get) Token: 0x06004F1E RID: 20254 RVA: 0x001AA3E0 File Offset: 0x001A85E0
 		private float CurrentSpeed
 		{
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E07 RID: 3591
+		
 		// (get) Token: 0x06004F1F RID: 20255 RVA: 0x001AA43C File Offset: 0x001A863C
 		private bool SpawnTimedMotes
 		{
@@ -99,13 +99,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F20 RID: 20256 RVA: 0x001AA472 File Offset: 0x001A8672
+		
 		public Skyfaller()
 		{
 			this.innerContainer = new ThingOwner<Thing>(this);
 		}
 
-		// Token: 0x06004F21 RID: 20257 RVA: 0x001AA494 File Offset: 0x001A8694
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -119,7 +119,7 @@ namespace RimWorld
 			Scribe_Values.Look<float>(ref this.shrapnelDirection, "shrapnelDirection", 0f, false);
 		}
 
-		// Token: 0x06004F22 RID: 20258 RVA: 0x001AA515 File Offset: 0x001A8715
+		
 		public override void PostMake()
 		{
 			base.PostMake();
@@ -129,7 +129,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F23 RID: 20259 RVA: 0x001AA544 File Offset: 0x001A8744
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -163,14 +163,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F24 RID: 20260 RVA: 0x001AA654 File Offset: 0x001A8854
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.Destroy(mode);
 			this.innerContainer.ClearAndDestroyContents(DestroyMode.Vanish);
 		}
 
-		// Token: 0x06004F25 RID: 20261 RVA: 0x001AA66C File Offset: 0x001A886C
+		
 		public override void DrawAt(Vector3 drawLoc, bool flip = false)
 		{
 			Thing thingForGraphic = this.GetThingForGraphic();
@@ -199,7 +199,7 @@ namespace RimWorld
 			this.DrawDropSpotShadow();
 		}
 
-		// Token: 0x06004F26 RID: 20262 RVA: 0x001AA7A0 File Offset: 0x001A89A0
+		
 		public override void Tick()
 		{
 			this.innerContainer.ThingOwnerTick(true);
@@ -256,7 +256,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F27 RID: 20263 RVA: 0x001AA970 File Offset: 0x001A8B70
+		
 		protected virtual void HitRoof()
 		{
 			if (!this.def.skyfaller.hitRoof)
@@ -291,7 +291,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F28 RID: 20264 RVA: 0x001AAA60 File Offset: 0x001A8C60
+		
 		protected virtual void SpawnThings()
 		{
 			for (int i = this.innerContainer.Count - 1; i >= 0; i--)
@@ -307,7 +307,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F29 RID: 20265 RVA: 0x001AAAC8 File Offset: 0x001A8CC8
+		
 		protected virtual void Impact()
 		{
 			if (this.def.skyfaller.CausesExplosion)
@@ -336,25 +336,25 @@ namespace RimWorld
 			this.Destroy(DestroyMode.Vanish);
 		}
 
-		// Token: 0x06004F2A RID: 20266 RVA: 0x001AACCF File Offset: 0x001A8ECF
+		
 		protected virtual void LeaveMap()
 		{
 			this.Destroy(DestroyMode.Vanish);
 		}
 
-		// Token: 0x06004F2B RID: 20267 RVA: 0x001AACD8 File Offset: 0x001A8ED8
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return this.innerContainer;
 		}
 
-		// Token: 0x06004F2C RID: 20268 RVA: 0x001AACE0 File Offset: 0x001A8EE0
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
 		}
 
-		// Token: 0x06004F2D RID: 20269 RVA: 0x001AACEE File Offset: 0x001A8EEE
+		
 		private Thing GetThingForGraphic()
 		{
 			if (this.def.graphicData != null || !this.innerContainer.Any)
@@ -364,7 +364,7 @@ namespace RimWorld
 			return this.innerContainer[0];
 		}
 
-		// Token: 0x06004F2E RID: 20270 RVA: 0x001AAD18 File Offset: 0x001A8F18
+		
 		private void DrawDropSpotShadow()
 		{
 			Material shadowMaterial = this.ShadowMaterial;
@@ -375,7 +375,7 @@ namespace RimWorld
 			Skyfaller.DrawDropSpotShadow(base.DrawPos, base.Rotation, shadowMaterial, this.def.skyfaller.shadowSize, this.ticksToImpact);
 		}
 
-		// Token: 0x06004F2F RID: 20271 RVA: 0x001AAD60 File Offset: 0x001A8F60
+		
 		public static void DrawDropSpotShadow(Vector3 center, Rot4 rot, Material material, Vector2 shadowSize, int ticksToImpact)
 		{
 			if (rot.IsHorizontal)
@@ -398,37 +398,37 @@ namespace RimWorld
 			Graphics.DrawMesh(MeshPool.plane10Back, matrix, material, 0, null, 0, Skyfaller.shadowPropertyBlock);
 		}
 
-		// Token: 0x04002C6C RID: 11372
+		
 		public ThingOwner innerContainer;
 
-		// Token: 0x04002C6D RID: 11373
+		
 		public int ticksToImpact;
 
-		// Token: 0x04002C6E RID: 11374
+		
 		public float angle;
 
-		// Token: 0x04002C6F RID: 11375
+		
 		public float shrapnelDirection;
 
-		// Token: 0x04002C70 RID: 11376
+		
 		private int ticksToImpactMax = 220;
 
-		// Token: 0x04002C71 RID: 11377
+		
 		private Material cachedShadowMaterial;
 
-		// Token: 0x04002C72 RID: 11378
+		
 		private bool anticipationSoundPlayed;
 
-		// Token: 0x04002C73 RID: 11379
+		
 		private static MaterialPropertyBlock shadowPropertyBlock = new MaterialPropertyBlock();
 
-		// Token: 0x04002C74 RID: 11380
+		
 		public const float DefaultAngle = -33.7f;
 
-		// Token: 0x04002C75 RID: 11381
+		
 		private const int RoofHitPreDelay = 15;
 
-		// Token: 0x04002C76 RID: 11382
+		
 		private const int LeaveMapAfterTicks = 220;
 	}
 }

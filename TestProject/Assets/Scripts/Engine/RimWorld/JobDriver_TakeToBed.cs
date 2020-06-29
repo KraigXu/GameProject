@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000677 RID: 1655
+	
 	public class JobDriver_TakeToBed : JobDriver
 	{
-		// Token: 0x1700087F RID: 2175
+		
 		// (get) Token: 0x06002D19 RID: 11545 RVA: 0x000FF07C File Offset: 0x000FD27C
 		protected Pawn Takee
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000880 RID: 2176
+		
 		// (get) Token: 0x06002D1A RID: 11546 RVA: 0x000FF0A4 File Offset: 0x000FD2A4
 		protected Building_Bed DropBed
 		{
@@ -29,13 +29,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D1B RID: 11547 RVA: 0x000FF0CC File Offset: 0x000FD2CC
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Takee, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.DropBed, this.job, this.DropBed.SleepingSlotsCount, 0, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D1C RID: 11548 RVA: 0x000FF127 File Offset: 0x000FD327
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -131,7 +131,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D1D RID: 11549 RVA: 0x000FF138 File Offset: 0x000FD338
+		
 		private void CheckMakeTakeePrisoner()
 		{
 			if (this.job.def.makeTargetPrisoner)
@@ -149,7 +149,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D1E RID: 11550 RVA: 0x000FF1C4 File Offset: 0x000FD3C4
+		
 		private void CheckMakeTakeeGuest()
 		{
 			if (!this.job.def.makeTargetPrisoner && this.Takee.Faction != Faction.OfPlayer && this.Takee.HostFaction != Faction.OfPlayer && this.Takee.guest != null && !this.Takee.IsWildMan())
@@ -158,10 +158,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001A12 RID: 6674
+		
 		private const TargetIndex TakeeIndex = TargetIndex.A;
 
-		// Token: 0x04001A13 RID: 6675
+		
 		private const TargetIndex BedIndex = TargetIndex.B;
 	}
 }

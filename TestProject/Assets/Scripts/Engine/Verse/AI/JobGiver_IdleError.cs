@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x020005A6 RID: 1446
+	
 	public class JobGiver_IdleError : ThinkNode_JobGiver
 	{
-		// Token: 0x060028A1 RID: 10401 RVA: 0x000EF535 File Offset: 0x000ED735
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Log.ErrorOnce(pawn + " issued IdleError wait job. The behavior tree should never get here.", 532983, false);
@@ -15,7 +15,7 @@ namespace Verse.AI
 			return job;
 		}
 
-		// Token: 0x04001862 RID: 6242
+		
 		private const int WaitTime = 100;
 	}
 }

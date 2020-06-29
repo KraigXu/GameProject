@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001133 RID: 4403
+	
 	public class QuestNode_GetPawn : QuestNode
 	{
-		// Token: 0x060066E8 RID: 26344 RVA: 0x002405AC File Offset: 0x0023E7AC
+		
 		private IEnumerable<Pawn> ExistingUsablePawns(Slate slate)
 		{
 			return from x in PawnsFinder.AllMapsWorldAndTemporary_Alive
@@ -18,7 +18,7 @@ namespace RimWorld.QuestGen
 			select x;
 		}
 
-		// Token: 0x060066E9 RID: 26345 RVA: 0x002405E4 File Offset: 0x0023E7E4
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			if (this.mustHaveNoFaction.GetValue(slate) && this.mustHaveRoyalTitleInCurrentFaction.GetValue(slate))
@@ -54,7 +54,7 @@ namespace RimWorld.QuestGen
 			return !this.mustHaveRoyalTitleInCurrentFaction.GetValue(slate) || !this.requireResearchedBedroomFurnitureIfRoyal.GetValue(slate) || DefDatabase<RoyalTitleDef>.AllDefsListForReading.Any((RoyalTitleDef x) => (senRange.max <= 0f || senRange.IncludesEpsilon((float)x.seniority)) && this.PlayerHasResearchedBedroomRequirementsFor(x));
 		}
 
-		// Token: 0x060066EA RID: 26346 RVA: 0x00240734 File Offset: 0x0023E934
+		
 		private bool TryFindFactionForPawnGeneration(Slate slate, out Faction faction)
 		{
 			return (from x in Find.FactionManager.GetFactions(false, false, false, TechLevel.Undefined)
@@ -82,7 +82,7 @@ namespace RimWorld.QuestGen
 			}, out faction);
 		}
 
-		// Token: 0x060066EB RID: 26347 RVA: 0x00240788 File Offset: 0x0023E988
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -131,7 +131,7 @@ namespace RimWorld.QuestGen
 			QuestGen.slate.Set<Pawn>(this.storeAs.GetValue(slate), pawn, false);
 		}
 
-		// Token: 0x060066EC RID: 26348 RVA: 0x002408D4 File Offset: 0x0023EAD4
+		
 		private Pawn GeneratePawn(Slate slate, Faction faction = null)
 		{
 			PawnKindDef pawnKindDef = this.mustBeOfKind.GetValue(slate);
@@ -194,7 +194,7 @@ namespace RimWorld.QuestGen
 			return pawn;
 		}
 
-		// Token: 0x060066ED RID: 26349 RVA: 0x00240B54 File Offset: 0x0023ED54
+		
 		private bool IsGoodPawn(Pawn pawn, Slate slate)
 		{
 			if (this.mustBeFactionLeader.GetValue(slate))
@@ -276,7 +276,7 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x060066EE RID: 26350 RVA: 0x00240E68 File Offset: 0x0023F068
+		
 		private bool PlayerHasResearchedBedroomRequirementsFor(RoyalTitleDef title)
 		{
 			if (title.bedroomRequirements == null)
@@ -293,68 +293,68 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x04003F01 RID: 16129
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003F02 RID: 16130
+		
 		public SlateRef<bool> mustBeFactionLeader;
 
-		// Token: 0x04003F03 RID: 16131
+		
 		public SlateRef<bool> mustBeWorldPawn;
 
-		// Token: 0x04003F04 RID: 16132
+		
 		public SlateRef<bool> ifWorldPawnThenMustBeFree;
 
-		// Token: 0x04003F05 RID: 16133
+		
 		public SlateRef<bool> ifWorldPawnThenMustBeFreeOrLeader;
 
-		// Token: 0x04003F06 RID: 16134
+		
 		public SlateRef<bool> mustHaveNoFaction;
 
-		// Token: 0x04003F07 RID: 16135
+		
 		public SlateRef<bool> mustBeFreeColonist;
 
-		// Token: 0x04003F08 RID: 16136
+		
 		public SlateRef<bool> mustBePlayerPrisoner;
 
-		// Token: 0x04003F09 RID: 16137
+		
 		public SlateRef<bool> mustBeNotSuspended;
 
-		// Token: 0x04003F0A RID: 16138
+		
 		public SlateRef<bool> mustHaveRoyalTitleInCurrentFaction;
 
-		// Token: 0x04003F0B RID: 16139
+		
 		public SlateRef<bool> mustBeNonHostileToPlayer;
 
-		// Token: 0x04003F0C RID: 16140
+		
 		public SlateRef<bool?> allowPermanentEnemyFaction;
 
-		// Token: 0x04003F0D RID: 16141
+		
 		public SlateRef<bool> canGeneratePawn;
 
-		// Token: 0x04003F0E RID: 16142
+		
 		public SlateRef<bool> requireResearchedBedroomFurnitureIfRoyal;
 
-		// Token: 0x04003F0F RID: 16143
+		
 		public SlateRef<PawnKindDef> mustBeOfKind;
 
-		// Token: 0x04003F10 RID: 16144
+		
 		public SlateRef<FloatRange> seniorityRange;
 
-		// Token: 0x04003F11 RID: 16145
+		
 		public SlateRef<TechLevel> minTechLevel;
 
-		// Token: 0x04003F12 RID: 16146
+		
 		public SlateRef<List<FactionDef>> excludeFactionDefs;
 
-		// Token: 0x04003F13 RID: 16147
+		
 		public SlateRef<float?> hostileWeight;
 
-		// Token: 0x04003F14 RID: 16148
+		
 		public SlateRef<float?> nonHostileWeight;
 
-		// Token: 0x04003F15 RID: 16149
+		
 		public SlateRef<int> maxUsablePawnsToGenerate = 10;
 	}
 }

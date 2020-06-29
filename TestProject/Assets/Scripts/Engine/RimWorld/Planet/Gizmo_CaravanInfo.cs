@@ -5,23 +5,23 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001244 RID: 4676
+	
 	public class Gizmo_CaravanInfo : Gizmo
 	{
-		// Token: 0x06006CFC RID: 27900 RVA: 0x002624A8 File Offset: 0x002606A8
+		
 		public Gizmo_CaravanInfo(Caravan caravan)
 		{
 			this.caravan = caravan;
 			this.order = -100f;
 		}
 
-		// Token: 0x06006CFD RID: 27901 RVA: 0x002624C2 File Offset: 0x002606C2
+		
 		public override float GetWidth(float maxWidth)
 		{
 			return Mathf.Min(520f, maxWidth);
 		}
 
-		// Token: 0x06006CFE RID: 27902 RVA: 0x002624D0 File Offset: 0x002606D0
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			if (!this.caravan.Spawned)
@@ -41,7 +41,7 @@ namespace RimWorld.Planet
 			return new GizmoResult(GizmoState.Clear);
 		}
 
-		// Token: 0x040043BF RID: 17343
+		
 		private Caravan caravan;
 	}
 }

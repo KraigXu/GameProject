@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200068C RID: 1676
+	
 	public class JobDriver_Ingest : JobDriver
 	{
-		// Token: 0x1700088D RID: 2189
+		
 		// (get) Token: 0x06002D87 RID: 11655 RVA: 0x00100734 File Offset: 0x000FE934
 		private Thing IngestibleSource
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700088E RID: 2190
+		
 		// (get) Token: 0x06002D88 RID: 11656 RVA: 0x00100758 File Offset: 0x000FE958
 		private float ChewDurationMultiplier
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D89 RID: 11657 RVA: 0x001007A8 File Offset: 0x000FE9A8
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -42,7 +42,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.eatingFromInventory, "eatingFromInventory", false, false);
 		}
 
-		// Token: 0x06002D8A RID: 11658 RVA: 0x001007D4 File Offset: 0x000FE9D4
+		
 		public override string GetReport()
 		{
 			if (this.usingNutrientPasteDispenser)
@@ -64,7 +64,7 @@ namespace RimWorld
 			return base.GetReport();
 		}
 
-		// Token: 0x06002D8B RID: 11659 RVA: 0x0010093C File Offset: 0x000FEB3C
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
@@ -72,7 +72,7 @@ namespace RimWorld
 			this.eatingFromInventory = (this.pawn.inventory != null && this.pawn.inventory.Contains(this.IngestibleSource));
 		}
 
-		// Token: 0x06002D8C RID: 11660 RVA: 0x00100990 File Offset: 0x000FEB90
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			if (this.pawn.Faction != null && !(this.IngestibleSource is Building_NutrientPasteDispenser))
@@ -86,7 +86,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002D8D RID: 11661 RVA: 0x001009F5 File Offset: 0x000FEBF5
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			if (!this.usingNutrientPasteDispenser)
@@ -106,7 +106,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D8E RID: 11662 RVA: 0x00100A05 File Offset: 0x000FEC05
+		
 		private IEnumerable<Toil> PrepareToIngestToils(Toil chewToil)
 		{
 			if (this.usingNutrientPasteDispenser)
@@ -120,7 +120,7 @@ namespace RimWorld
 			return this.PrepareToIngestToils_NonToolUser();
 		}
 
-		// Token: 0x06002D8F RID: 11663 RVA: 0x00100A36 File Offset: 0x000FEC36
+		
 		private IEnumerable<Toil> PrepareToIngestToils_Dispenser()
 		{
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -130,57 +130,57 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D90 RID: 11664 RVA: 0x00100A46 File Offset: 0x000FEC46
+		
 		private IEnumerable<Toil> PrepareToIngestToils_ToolUser(Toil chewToil)
 		{
-			if (this.eatingFromInventory)
-			{
-				yield return Toils_Misc.TakeItemFromInventoryToCarrier(this.pawn, TargetIndex.A);
-			}
-			else
-			{
-				yield return this.ReserveFood();
-				Toil gotoToPickup = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
-				yield return Toils_Jump.JumpIf(gotoToPickup, () => this.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation));
-				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
-				yield return Toils_Jump.Jump(chewToil);
-				yield return gotoToPickup;
-				yield return Toils_Ingest.PickupIngestible(TargetIndex.A, this.pawn);
-				JobDriver_Ingest.<>c__DisplayClass17_0 <>c__DisplayClass17_ = new JobDriver_Ingest.<>c__DisplayClass17_0();
-				<>c__DisplayClass17_.<>4__this = this;
-				<>c__DisplayClass17_.reserveExtraFoodToCollect = Toils_Ingest.ReserveFoodFromStackForIngesting(TargetIndex.C, null);
-				Toil findExtraFoodToCollect = new Toil();
-				findExtraFoodToCollect.initAction = delegate
-				{
-					if (<>c__DisplayClass17_.<>4__this.pawn.inventory.innerContainer.TotalStackCountOfDef(<>c__DisplayClass17_.<>4__this.IngestibleSource.def) < <>c__DisplayClass17_.<>4__this.job.takeExtraIngestibles)
-					{
-						Thing thing = GenClosest.ClosestThingReachable(<>c__DisplayClass17_.<>4__this.pawn.Position, <>c__DisplayClass17_.<>4__this.pawn.Map, ThingRequest.ForDef(<>c__DisplayClass17_.<>4__this.IngestibleSource.def), PathEndMode.Touch, TraverseParms.For(<>c__DisplayClass17_.<>4__this.pawn, Danger.Deadly, TraverseMode.ByPawn, false), 12f, (Thing x) => <>c__DisplayClass17_.<>4__this.pawn.CanReserve(x, 10, 1, null, false) && !x.IsForbidden(<>c__DisplayClass17_.<>4__this.pawn) && x.IsSociallyProper(<>c__DisplayClass17_.<>4__this.pawn), null, 0, -1, false, RegionType.Set_Passable, false);
-						if (thing != null)
-						{
-							<>c__DisplayClass17_.<>4__this.job.SetTarget(TargetIndex.C, thing);
-							<>c__DisplayClass17_.<>4__this.JumpToToil(<>c__DisplayClass17_.reserveExtraFoodToCollect);
-						}
-					}
-				};
-				findExtraFoodToCollect.defaultCompleteMode = ToilCompleteMode.Instant;
-				yield return Toils_Jump.Jump(findExtraFoodToCollect);
-				yield return <>c__DisplayClass17_.reserveExtraFoodToCollect;
-				yield return Toils_Goto.GotoThing(TargetIndex.C, PathEndMode.Touch);
-				yield return Toils_Haul.TakeToInventory(TargetIndex.C, () => this.job.takeExtraIngestibles - this.pawn.inventory.innerContainer.TotalStackCountOfDef(this.IngestibleSource.def));
-				yield return findExtraFoodToCollect;
-				<>c__DisplayClass17_ = null;
-				findExtraFoodToCollect = null;
-				gotoToPickup = null;
-			}
-			if (!this.IngestibleSource.def.IsDrug)
-			{
-				yield return Toils_Ingest.CarryIngestibleToChewSpot(this.pawn, TargetIndex.A).FailOnDestroyedOrNull(TargetIndex.A);
-			}
-			yield return Toils_Ingest.FindAdjacentEatSurface(TargetIndex.B, TargetIndex.A);
+			//if (this.eatingFromInventory)
+			//{
+			//	yield return Toils_Misc.TakeItemFromInventoryToCarrier(this.pawn, TargetIndex.A);
+			//}
+			//else
+			//{
+			//	yield return this.ReserveFood();
+			//	Toil gotoToPickup = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
+			//	yield return Toils_Jump.JumpIf(gotoToPickup, () => this.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation));
+			//	yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
+			//	yield return Toils_Jump.Jump(chewToil);
+			//	yield return gotoToPickup;
+			//	yield return Toils_Ingest.PickupIngestible(TargetIndex.A, this.pawn);
+			//	JobDriver_Ingest.c__DisplayClass17_0 c__DisplayClass17_ = new JobDriver_Ingest.c__DisplayClass17_0();
+			//	c__DisplayClass17_.4__this = this;
+			//	c__DisplayClass17_.reserveExtraFoodToCollect = Toils_Ingest.ReserveFoodFromStackForIngesting(TargetIndex.C, null);
+			//	Toil findExtraFoodToCollect = new Toil();
+			//	findExtraFoodToCollect.initAction = delegate
+			//	{
+			//		if (c__DisplayClass17_.4__this.pawn.inventory.innerContainer.TotalStackCountOfDef(c__DisplayClass17_.4__this.IngestibleSource.def) < c__DisplayClass17_.4__this.job.takeExtraIngestibles)
+			//		{
+			//			Thing thing = GenClosest.ClosestThingReachable(c__DisplayClass17_.4__this.pawn.Position, c__DisplayClass17_.4__this.pawn.Map, ThingRequest.ForDef(c__DisplayClass17_.4__this.IngestibleSource.def), PathEndMode.Touch, TraverseParms.For(c__DisplayClass17_.4__this.pawn, Danger.Deadly, TraverseMode.ByPawn, false), 12f, (Thing x) => c__DisplayClass17_.4__this.pawn.CanReserve(x, 10, 1, null, false) && !x.IsForbidden(c__DisplayClass17_.4__this.pawn) && x.IsSociallyProper(c__DisplayClass17_.4__this.pawn), null, 0, -1, false, RegionType.Set_Passable, false);
+			//			if (thing != null)
+			//			{
+			//				c__DisplayClass17_.4__this.job.SetTarget(TargetIndex.C, thing);
+			//				c__DisplayClass17_.4__this.JumpToToil(c__DisplayClass17_.reserveExtraFoodToCollect);
+			//			}
+			//		}
+			//	};
+			//	findExtraFoodToCollect.defaultCompleteMode = ToilCompleteMode.Instant;
+			//	yield return Toils_Jump.Jump(findExtraFoodToCollect);
+			//	yield return c__DisplayClass17_.reserveExtraFoodToCollect;
+			//	yield return Toils_Goto.GotoThing(TargetIndex.C, PathEndMode.Touch);
+			//	yield return Toils_Haul.TakeToInventory(TargetIndex.C, () => this.job.takeExtraIngestibles - this.pawn.inventory.innerContainer.TotalStackCountOfDef(this.IngestibleSource.def));
+			//	yield return findExtraFoodToCollect;
+			//	c__DisplayClass17_ = null;
+			//	findExtraFoodToCollect = null;
+			//	gotoToPickup = null;
+			//}
+			//if (!this.IngestibleSource.def.IsDrug)
+			//{
+			//	yield return Toils_Ingest.CarryIngestibleToChewSpot(this.pawn, TargetIndex.A).FailOnDestroyedOrNull(TargetIndex.A);
+			//}
+			//yield return Toils_Ingest.FindAdjacentEatSurface(TargetIndex.B, TargetIndex.A);
 			yield break;
 		}
 
-		// Token: 0x06002D91 RID: 11665 RVA: 0x00100A5D File Offset: 0x000FEC5D
+		
 		private IEnumerable<Toil> PrepareToIngestToils_NonToolUser()
 		{
 			yield return this.ReserveFood();
@@ -188,7 +188,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D92 RID: 11666 RVA: 0x00100A6D File Offset: 0x000FEC6D
+		
 		private Toil ReserveFood()
 		{
 			return new Toil
@@ -231,14 +231,14 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002D93 RID: 11667 RVA: 0x00100A94 File Offset: 0x000FEC94
+		
 		public override bool ModifyCarriedThingDrawPos(ref Vector3 drawPos, ref bool behind, ref bool flip)
 		{
 			IntVec3 cell = this.job.GetTarget(TargetIndex.B).Cell;
 			return JobDriver_Ingest.ModifyCarriedThingDrawPosWorker(ref drawPos, ref behind, ref flip, cell, this.pawn);
 		}
 
-		// Token: 0x06002D94 RID: 11668 RVA: 0x00100AC8 File Offset: 0x000FECC8
+		
 		public static bool ModifyCarriedThingDrawPosWorker(ref Vector3 drawPos, ref bool behind, ref bool flip, IntVec3 placeCell, Pawn pawn)
 		{
 			if (pawn.pather.Moving)
@@ -269,22 +269,22 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04001A29 RID: 6697
+		
 		private bool usingNutrientPasteDispenser;
 
-		// Token: 0x04001A2A RID: 6698
+		
 		private bool eatingFromInventory;
 
-		// Token: 0x04001A2B RID: 6699
+		
 		public const float EatCorpseBodyPartsUntilFoodLevelPct = 0.9f;
 
-		// Token: 0x04001A2C RID: 6700
+		
 		public const TargetIndex IngestibleSourceInd = TargetIndex.A;
 
-		// Token: 0x04001A2D RID: 6701
+		
 		private const TargetIndex TableCellInd = TargetIndex.B;
 
-		// Token: 0x04001A2E RID: 6702
+		
 		private const TargetIndex ExtraIngestiblesToCollectInd = TargetIndex.C;
 	}
 }

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000745 RID: 1861
+	
 	public class WorkGiver_GrowerSow : WorkGiver_Grower
 	{
-		// Token: 0x170008D5 RID: 2261
+		
 		// (get) Token: 0x060030D2 RID: 12498 RVA: 0x000E3FA9 File Offset: 0x000E21A9
 		public override PathEndMode PathEndMode
 		{
@@ -18,14 +18,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060030D3 RID: 12499 RVA: 0x00111B2B File Offset: 0x0010FD2B
+		
 		public static void ResetStaticData()
 		{
 			WorkGiver_GrowerSow.CantSowCavePlantBecauseOfLightTrans = "CantSowCavePlantBecauseOfLight".Translate();
 			WorkGiver_GrowerSow.CantSowCavePlantBecauseUnroofedTrans = "CantSowCavePlantBecauseUnroofed".Translate();
 		}
 
-		// Token: 0x060030D4 RID: 12500 RVA: 0x00111B58 File Offset: 0x0010FD58
+		
 		protected override bool ExtraRequirements(IPlantToGrowSettable settable, Pawn pawn)
 		{
 			if (!settable.CanAcceptSowNow())
@@ -50,7 +50,7 @@ namespace RimWorld
 			return WorkGiver_Grower.wantedPlantDef != null;
 		}
 
-		// Token: 0x060030D5 RID: 12501 RVA: 0x00111BBC File Offset: 0x0010FDBC
+		
 		public override Job JobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
 		{
 			Map map = pawn.Map;
@@ -181,10 +181,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001AFB RID: 6907
+		
 		protected static string CantSowCavePlantBecauseOfLightTrans;
 
-		// Token: 0x04001AFC RID: 6908
+		
 		protected static string CantSowCavePlantBecauseUnroofedTrans;
 	}
 }

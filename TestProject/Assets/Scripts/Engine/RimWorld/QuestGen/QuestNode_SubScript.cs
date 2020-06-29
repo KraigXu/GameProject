@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001110 RID: 4368
+	
 	public class QuestNode_SubScript : QuestNode
 	{
-		// Token: 0x06006660 RID: 26208 RVA: 0x0023DC18 File Offset: 0x0023BE18
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			string value = this.prefix.GetValue(slate);
@@ -33,7 +33,7 @@ namespace RimWorld.QuestGen
 			return result;
 		}
 
-		// Token: 0x06006661 RID: 26209 RVA: 0x0023DCAC File Offset: 0x0023BEAC
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -58,7 +58,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x06006662 RID: 26210 RVA: 0x0023DD50 File Offset: 0x0023BF50
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -70,21 +70,21 @@ namespace RimWorld.QuestGen
 			});
 		}
 
-		// Token: 0x04003E7A RID: 15994
+		
 		[TranslationHandle(Priority = 100)]
 		public SlateRef<QuestScriptDef> def;
 
-		// Token: 0x04003E7B RID: 15995
+		
 		[NoTranslate]
 		public SlateRef<string> prefix;
 
-		// Token: 0x04003E7C RID: 15996
+		
 		public SlateRef<bool> allowNonPrefixedLookup;
 
-		// Token: 0x04003E7D RID: 15997
+		
 		public List<PrefixCapturedVar> parms = new List<PrefixCapturedVar>();
 
-		// Token: 0x04003E7E RID: 15998
+		
 		[NoTranslate]
 		public List<SlateRef<string>> returnVarNames = new List<SlateRef<string>>();
 	}

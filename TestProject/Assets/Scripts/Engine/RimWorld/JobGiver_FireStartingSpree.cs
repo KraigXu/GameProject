@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200070D RID: 1805
+	
 	internal class JobGiver_FireStartingSpree : ThinkNode_JobGiver
 	{
-		// Token: 0x06002FA4 RID: 12196 RVA: 0x0010C5BD File Offset: 0x0010A7BD
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_FireStartingSpree jobGiver_FireStartingSpree = (JobGiver_FireStartingSpree)base.DeepCopy(resolve);
@@ -16,7 +16,7 @@ namespace RimWorld
 			return jobGiver_FireStartingSpree;
 		}
 
-		// Token: 0x06002FA5 RID: 12197 RVA: 0x0010C5D8 File Offset: 0x0010A7D8
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.mindState.nextMoveOrderIsWait)
@@ -44,7 +44,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002FA6 RID: 12198 RVA: 0x0010C68C File Offset: 0x0010A88C
+		
 		private Thing TryFindRandomIgniteTarget(Pawn pawn)
 		{
 			Region region;
@@ -69,13 +69,13 @@ namespace RimWorld
 			return JobGiver_FireStartingSpree.potentialTargets.RandomElement<Thing>();
 		}
 
-		// Token: 0x04001ACF RID: 6863
+		
 		private IntRange waitTicks = new IntRange(80, 140);
 
-		// Token: 0x04001AD0 RID: 6864
+		
 		private const float FireStartChance = 0.75f;
 
-		// Token: 0x04001AD1 RID: 6865
+		
 		private static List<Thing> potentialTargets = new List<Thing>();
 	}
 }

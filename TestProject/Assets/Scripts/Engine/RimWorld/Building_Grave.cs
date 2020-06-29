@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C7C RID: 3196
+	
 	public class Building_Grave : Building_Casket, IStoreSettingsParent, IHaulDestination
 	{
-		// Token: 0x17000D96 RID: 3478
+		
 		// (get) Token: 0x06004CD3 RID: 19667 RVA: 0x0019C303 File Offset: 0x0019A503
 		public Pawn AssignedPawn
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D97 RID: 3479
+		
 		// (get) Token: 0x06004CD4 RID: 19668 RVA: 0x0019C332 File Offset: 0x0019A532
 		public CompAssignableToPawn_Grave CompAssignableToPawn
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D98 RID: 3480
+		
 		// (get) Token: 0x06004CD5 RID: 19669 RVA: 0x0019C33C File Offset: 0x0019A53C
 		public override Graphic Graphic
 		{
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D99 RID: 3481
+		
 		// (get) Token: 0x06004CD6 RID: 19670 RVA: 0x0019C39B File Offset: 0x0019A59B
 		public bool HasCorpse
 		{
@@ -64,7 +64,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D9A RID: 3482
+		
 		// (get) Token: 0x06004CD7 RID: 19671 RVA: 0x0019C3A8 File Offset: 0x0019A5A8
 		public Corpse Corpse
 		{
@@ -82,7 +82,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D9B RID: 3483
+		
 		// (get) Token: 0x06004CD8 RID: 19672 RVA: 0x0019C3E3 File Offset: 0x0019A5E3
 		public bool StorageTabVisible
 		{
@@ -92,19 +92,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004CD9 RID: 19673 RVA: 0x0019C3F8 File Offset: 0x0019A5F8
+		
 		public StorageSettings GetStoreSettings()
 		{
 			return this.storageSettings;
 		}
 
-		// Token: 0x06004CDA RID: 19674 RVA: 0x00198C46 File Offset: 0x00196E46
+		
 		public StorageSettings GetParentStoreSettings()
 		{
 			return this.def.building.fixedStorageSettings;
 		}
 
-		// Token: 0x06004CDB RID: 19675 RVA: 0x0019C400 File Offset: 0x0019A600
+		
 		public override void PostMake()
 		{
 			base.PostMake();
@@ -115,7 +115,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004CDC RID: 19676 RVA: 0x0019C44C File Offset: 0x0019A64C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -125,7 +125,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004CDD RID: 19677 RVA: 0x0019C46E File Offset: 0x0019A66E
+		
 		public override void EjectContents()
 		{
 			base.EjectContents();
@@ -135,7 +135,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004CDE RID: 19678 RVA: 0x0019C498 File Offset: 0x0019A698
+		
 		public virtual void Notify_CorpseBuried(Pawn worker)
 		{
 			CompArt comp = base.GetComp<CompArt>();
@@ -153,7 +153,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004CDF RID: 19679 RVA: 0x0019C524 File Offset: 0x0019A724
+		
 		public override bool Accepts(Thing thing)
 		{
 			if (!base.Accepts(thing))
@@ -183,7 +183,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004CE0 RID: 19680 RVA: 0x0019C57C File Offset: 0x0019A77C
+		
 		public override bool TryAcceptThing(Thing thing, bool allowSpecialEffects = true)
 		{
 			if (base.TryAcceptThing(thing, allowSpecialEffects))
@@ -202,13 +202,10 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004CE1 RID: 19681 RVA: 0x0019C5F0 File Offset: 0x0019A7F0
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.StorageTabVisible)
 			{
@@ -222,7 +219,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004CE2 RID: 19682 RVA: 0x0019C600 File Offset: 0x0019A800
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -246,10 +243,10 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x04002B1D RID: 11037
+		
 		private StorageSettings storageSettings;
 
-		// Token: 0x04002B1E RID: 11038
+		
 		private Graphic cachedGraphicFull;
 	}
 }

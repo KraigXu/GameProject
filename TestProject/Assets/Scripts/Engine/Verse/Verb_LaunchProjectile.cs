@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000485 RID: 1157
+	
 	public class Verb_LaunchProjectile : Verb
 	{
-		// Token: 0x170006C5 RID: 1733
+		
 		// (get) Token: 0x06002250 RID: 8784 RVA: 0x000D11E4 File Offset: 0x000CF3E4
 		public virtual ThingDef Projectile
 		{
@@ -25,14 +25,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002251 RID: 8785 RVA: 0x000D1224 File Offset: 0x000CF424
+		
 		public override void WarmupComplete()
 		{
 			base.WarmupComplete();
 			Find.BattleLog.Add(new BattleLogEntry_RangedFire(this.caster, this.currentTarget.HasThing ? this.currentTarget.Thing : null, (base.EquipmentSource != null) ? base.EquipmentSource.def : null, this.Projectile, this.ShotsPerBurst > 1));
 		}
 
-		// Token: 0x06002252 RID: 8786 RVA: 0x000D128C File Offset: 0x000CF48C
+		
 		protected override bool TryCastShot()
 		{
 			if (this.currentTarget.HasThing && this.currentTarget.Thing.Map != this.caster.Map)
@@ -145,7 +145,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06002253 RID: 8787 RVA: 0x000D1693 File Offset: 0x000CF893
+		
 		private void ThrowDebugText(string text)
 		{
 			if (DebugViewSettings.drawShooting)
@@ -154,7 +154,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002254 RID: 8788 RVA: 0x000D16BD File Offset: 0x000CF8BD
+		
 		private void ThrowDebugText(string text, IntVec3 c)
 		{
 			if (DebugViewSettings.drawShooting)
@@ -163,7 +163,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002255 RID: 8789 RVA: 0x000D16E4 File Offset: 0x000CF8E4
+		
 		public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
 		{
 			needLOSToCenter = true;
@@ -175,7 +175,7 @@ namespace Verse
 			return projectile.projectile.explosionRadius;
 		}
 
-		// Token: 0x06002256 RID: 8790 RVA: 0x000D1710 File Offset: 0x000CF910
+		
 		public override bool Available()
 		{
 			if (!base.Available())

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E0D RID: 3597
+	
 	public class AlertsReadout
 	{
-		// Token: 0x060056DF RID: 22239 RVA: 0x001CCFB4 File Offset: 0x001CB1B4
+		
 		public AlertsReadout()
 		{
 			this.AllAlerts.Clear();
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060056E0 RID: 22240 RVA: 0x001CD0E4 File Offset: 0x001CB2E4
+		
 		public void AlertsReadoutUpdate()
 		{
 			if (Mathf.Max(Find.TickManager.TicksGame, Find.TutorialState.endTick) < 600)
@@ -106,7 +106,7 @@ namespace RimWorld
 			this.mouseoverAlertIndex = -1;
 		}
 
-		// Token: 0x060056E1 RID: 22241 RVA: 0x001CD340 File Offset: 0x001CB540
+		
 		private void CheckAddOrRemoveAlert(Alert alert, bool forceRemove = false)
 		{
 			try
@@ -132,7 +132,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060056E2 RID: 22242 RVA: 0x001CD3D8 File Offset: 0x001CB5D8
+		
 		public void AlertsReadoutOnGUI()
 		{
 			if (Event.current.type == EventType.Layout || Event.current.type == EventType.MouseDrag)
@@ -198,34 +198,34 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002F4F RID: 12111
+		
 		private List<Alert> activeAlerts = new List<Alert>(16);
 
-		// Token: 0x04002F50 RID: 12112
+		
 		private int curAlertIndex;
 
-		// Token: 0x04002F51 RID: 12113
+		
 		private float lastFinalY;
 
-		// Token: 0x04002F52 RID: 12114
+		
 		private int mouseoverAlertIndex = -1;
 
-		// Token: 0x04002F53 RID: 12115
+		
 		private readonly List<Alert> AllAlerts = new List<Alert>();
 
-		// Token: 0x04002F54 RID: 12116
+		
 		private const int StartTickDelay = 600;
 
-		// Token: 0x04002F55 RID: 12117
+		
 		public const float AlertListWidth = 164f;
 
-		// Token: 0x04002F56 RID: 12118
+		
 		private const int AlertCycleLength = 24;
 
-		// Token: 0x04002F57 RID: 12119
+		
 		private const int UpdateAlertsFromQuestsIntervalFrames = 20;
 
-		// Token: 0x04002F58 RID: 12120
+		
 		private readonly List<AlertPriority> PriosInDrawOrder;
 	}
 }

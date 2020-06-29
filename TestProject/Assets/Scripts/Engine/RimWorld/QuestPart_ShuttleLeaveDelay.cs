@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200095E RID: 2398
+	
 	public class QuestPart_ShuttleLeaveDelay : QuestPart_Delay
 	{
-		// Token: 0x17000A28 RID: 2600
+		
 		// (get) Token: 0x060038BF RID: 14527 RVA: 0x0012F274 File Offset: 0x0012D474
 		public override AlertReport AlertReport
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A29 RID: 2601
+		
 		// (get) Token: 0x060038C0 RID: 14528 RVA: 0x0012F295 File Offset: 0x0012D495
 		public override bool AlertCritical
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A2A RID: 2602
+		
 		// (get) Token: 0x060038C1 RID: 14529 RVA: 0x0012F2A4 File Offset: 0x0012D4A4
 		public override string AlertLabel
 		{
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A2B RID: 2603
+		
 		// (get) Token: 0x060038C2 RID: 14530 RVA: 0x0012F2CC File Offset: 0x0012D4CC
 		public override string AlertExplanation
 		{
@@ -52,13 +52,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A2C RID: 2604
+		
 		// (get) Token: 0x060038C3 RID: 14531 RVA: 0x0012F32B File Offset: 0x0012D52B
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -72,7 +72,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038C4 RID: 14532 RVA: 0x0012F33B File Offset: 0x0012D53B
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -82,7 +82,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038C5 RID: 14533 RVA: 0x0012F35D File Offset: 0x0012D55D
+		
 		public override string ExtraInspectString(ISelectable target)
 		{
 			if (target == this.shuttle)
@@ -92,7 +92,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060038C6 RID: 14534 RVA: 0x0012F390 File Offset: 0x0012D590
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -104,7 +104,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038C7 RID: 14535 RVA: 0x0012F3E5 File Offset: 0x0012D5E5
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			if (this.shuttle != null)
@@ -113,10 +113,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002183 RID: 8579
+		
 		public Thing shuttle;
 
-		// Token: 0x04002184 RID: 8580
+		
 		public List<string> inSignalsDisable = new List<string>();
 	}
 }

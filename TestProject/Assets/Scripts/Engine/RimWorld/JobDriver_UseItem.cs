@@ -5,30 +5,30 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200067C RID: 1660
+	
 	public class JobDriver_UseItem : JobDriver
 	{
-		// Token: 0x06002D3A RID: 11578 RVA: 0x000FF905 File Offset: 0x000FDB05
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.useDuration, "useDuration", 0, false);
 		}
 
-		// Token: 0x06002D3B RID: 11579 RVA: 0x000FF920 File Offset: 0x000FDB20
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
 			this.useDuration = this.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompUsable>().Props.useDuration;
 		}
 
-		// Token: 0x06002D3C RID: 11580 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D3D RID: 11581 RVA: 0x000FF95C File Offset: 0x000FDB5C
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
@@ -58,7 +58,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A1C RID: 6684
+		
 		private int useDuration = -1;
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009DA RID: 2522
+	
 	public class IncidentWorker_DeepDrillInfestation : IncidentWorker
 	{
-		// Token: 0x06003C32 RID: 15410 RVA: 0x0013DE25 File Offset: 0x0013C025
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -21,7 +21,7 @@ namespace RimWorld
 			return IncidentWorker_DeepDrillInfestation.tmpDrills.Any<Thing>();
 		}
 
-		// Token: 0x06003C33 RID: 15411 RVA: 0x0013DE5C File Offset: 0x0013C05C
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -47,19 +47,19 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0400237E RID: 9086
+		
 		private static List<Thing> tmpDrills = new List<Thing>();
 
-		// Token: 0x0400237F RID: 9087
+		
 		private const float MinPointsFactor = 0.3f;
 
-		// Token: 0x04002380 RID: 9088
+		
 		private const float MaxPointsFactor = 0.6f;
 
-		// Token: 0x04002381 RID: 9089
+		
 		private const float MinPoints = 200f;
 
-		// Token: 0x04002382 RID: 9090
+		
 		private const float MaxPoints = 1000f;
 	}
 }

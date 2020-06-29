@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x02000391 RID: 913
+	
 	public class Command_VerbTarget : Command
 	{
-		// Token: 0x17000526 RID: 1318
+		
 		// (get) Token: 0x06001AEC RID: 6892 RVA: 0x000A56D2 File Offset: 0x000A38D2
 		public override Color IconDrawColor
 		{
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AED RID: 6893 RVA: 0x000A56F8 File Offset: 0x000A38F8
+		
 		public override void GizmoUpdateOnMouseover()
 		{
 			if (!this.drawRadius)
@@ -40,7 +40,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AEE RID: 6894 RVA: 0x000A5790 File Offset: 0x000A3990
+		
 		public override void MergeWith(Gizmo other)
 		{
 			base.MergeWith(other);
@@ -61,7 +61,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001AEF RID: 6895 RVA: 0x000A57FC File Offset: 0x000A39FC
+		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
@@ -82,13 +82,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000FEE RID: 4078
+		
 		public Verb verb;
 
-		// Token: 0x04000FEF RID: 4079
+		
 		private List<Verb> groupedVerbs;
 
-		// Token: 0x04000FF0 RID: 4080
+		
 		public bool drawRadius = true;
 	}
 }

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FDA RID: 4058
+	
 	public static class RewardsGenerator
 	{
-		// Token: 0x0600617E RID: 24958 RVA: 0x0021D5B8 File Offset: 0x0021B7B8
+		
 		public static void ResetStaticData()
 		{
 			RewardsGenerator.MarketValueFillers.Clear();
@@ -20,14 +20,14 @@ namespace RimWorld
 			RewardsGenerator.MarketValueFillers.Add(ThingDefOf.Plasteel);
 		}
 
-		// Token: 0x0600617F RID: 24959 RVA: 0x0021D61C File Offset: 0x0021B81C
+		
 		public static List<Reward> Generate(RewardsGeneratorParams parms)
 		{
 			float num;
 			return RewardsGenerator.Generate(parms, out num);
 		}
 
-		// Token: 0x06006180 RID: 24960 RVA: 0x0021D634 File Offset: 0x0021B834
+		
 		public static List<Reward> Generate(RewardsGeneratorParams parms, out float generatedRewardValue)
 		{
 			List<Reward> result;
@@ -41,7 +41,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06006181 RID: 24961 RVA: 0x0021D660 File Offset: 0x0021B860
+		
 		private static List<Reward> DoGenerate(RewardsGeneratorParams parms, out float generatedRewardValue)
 		{
 			List<Reward> list = new List<Reward>();
@@ -180,7 +180,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06006182 RID: 24962 RVA: 0x0021D9AC File Offset: 0x0021BBAC
+		
 		private static Reward GenerateSocialReward(float rewardValue, RewardsGeneratorParams parms, bool allowGoodwill, bool allowRoyalFavor, out float valueActuallyUsed)
 		{
 			if (!allowGoodwill && !allowRoyalFavor)
@@ -204,7 +204,7 @@ namespace RimWorld
 			return result2;
 		}
 
-		// Token: 0x06006183 RID: 24963 RVA: 0x0021DA88 File Offset: 0x0021BC88
+		
 		private static Reward GenerateThingReward(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
 			float valueActuallyUsedLocal = 0f;
@@ -222,7 +222,7 @@ namespace RimWorld
 			return result2;
 		}
 
-		// Token: 0x06006184 RID: 24964 RVA: 0x0021DB20 File Offset: 0x0021BD20
+		
 		private static T GenerateReward<T>(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed) where T : Reward, new()
 		{
 			T result;
@@ -238,7 +238,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06006185 RID: 24965 RVA: 0x0021DB58 File Offset: 0x0021BD58
+		
 		private static Reward_Items AddMarketValueFillers(float remainingValue, ref float generatedRewardValue, Reward thingReward)
 		{
 			IEnumerable<ThingDef> source = from x in RewardsGenerator.MarketValueFillers
@@ -280,49 +280,49 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04003B49 RID: 15177
+		
 		private const float ThingRewardOnlyChance = 0.3f;
 
-		// Token: 0x04003B4A RID: 15178
+		
 		private const float SocialRewardOnlyChance = 0.3f;
 
-		// Token: 0x04003B4B RID: 15179
+		
 		private const float SocialRewardOnlyChance_RoyalFavorPossible = 0.6f;
 
-		// Token: 0x04003B4C RID: 15180
+		
 		private const float ThingRewardMinFractionOfTotal = 0.3f;
 
-		// Token: 0x04003B4D RID: 15181
+		
 		private const float SocialRewardMinFractionOfTotal = 0.3f;
 
-		// Token: 0x04003B4E RID: 15182
+		
 		public const float ItemsValueFractionMaxVariance = 0.3f;
 
-		// Token: 0x04003B4F RID: 15183
+		
 		private const float ThingRewardGenerateFirstChance = 0.65f;
 
-		// Token: 0x04003B50 RID: 15184
+		
 		private const float ThingRewardSelectionWeight_Items = 3f;
 
-		// Token: 0x04003B51 RID: 15185
+		
 		private const float ThingRewardSelectionWeight_Pawn = 1f;
 
-		// Token: 0x04003B52 RID: 15186
+		
 		private const float SocialRewardSelectionWeight_RoyalFavor = 9f;
 
-		// Token: 0x04003B53 RID: 15187
+		
 		private const float SocialRewardSelectionWeight_Goodwill = 1f;
 
-		// Token: 0x04003B54 RID: 15188
+		
 		private const float MinValueForExtraSilverReward = 200f;
 
-		// Token: 0x04003B55 RID: 15189
+		
 		private const float MinValueToGenerateSecondRewardType = 600f;
 
-		// Token: 0x04003B56 RID: 15190
+		
 		private static readonly List<ThingDef> MarketValueFillers = new List<ThingDef>();
 
-		// Token: 0x04003B57 RID: 15191
+		
 		public static readonly SimpleCurve RewardValueToRoyalFavorCurve = new SimpleCurve
 		{
 			{
@@ -343,7 +343,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04003B58 RID: 15192
+		
 		public static readonly SimpleCurve RewardValueToGoodwillCurve = new SimpleCurve
 		{
 			{

@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200078D RID: 1933
+	
 	public class LordToil_AssaultColonySappers : LordToil
 	{
-		// Token: 0x1700092D RID: 2349
+		
 		// (get) Token: 0x06003278 RID: 12920 RVA: 0x00118D77 File Offset: 0x00116F77
 		private LordToilData_AssaultColonySappers Data
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700092E RID: 2350
+		
 		// (get) Token: 0x06003279 RID: 12921 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowSatisfyLongNeeds
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700092F RID: 2351
+		
 		// (get) Token: 0x0600327A RID: 12922 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool ForceHighStoryDanger
 		{
@@ -39,20 +39,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600327B RID: 12923 RVA: 0x00118D84 File Offset: 0x00116F84
+		
 		public LordToil_AssaultColonySappers()
 		{
 			this.data = new LordToilData_AssaultColonySappers();
 		}
 
-		// Token: 0x0600327C RID: 12924 RVA: 0x00118CF0 File Offset: 0x00116EF0
+		
 		public override void Init()
 		{
 			base.Init();
 			LessonAutoActivator.TeachOpportunity(ConceptDefOf.Drafting, OpportunityType.Critical);
 		}
 
-		// Token: 0x0600327D RID: 12925 RVA: 0x00118D98 File Offset: 0x00116F98
+		
 		public override void UpdateAllDuties()
 		{
 			if (!this.Data.sapperDest.IsValid && this.lord.ownedPawns.Any<Pawn>())
@@ -120,17 +120,17 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600327E RID: 12926 RVA: 0x00119008 File Offset: 0x00117208
+		
 		public override void Notify_ReachedDutyLocation(Pawn pawn)
 		{
 			this.Data.sapperDest = IntVec3.Invalid;
 			this.UpdateAllDuties();
 		}
 
-		// Token: 0x04001B57 RID: 6999
+		
 		private static readonly FloatRange EscortRadiusRanged = new FloatRange(15f, 19f);
 
-		// Token: 0x04001B58 RID: 7000
+		
 		private static readonly FloatRange EscortRadiusMelee = new FloatRange(23f, 26f);
 	}
 }

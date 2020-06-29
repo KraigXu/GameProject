@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000940 RID: 2368
+	
 	public class QuestPart_Delay : QuestPartActivable
 	{
-		// Token: 0x17000A13 RID: 2579
+		
 		// (get) Token: 0x0600382A RID: 14378 RVA: 0x0012D3B3 File Offset: 0x0012B5B3
 		public int TicksLeft
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A14 RID: 2580
+		
 		// (get) Token: 0x0600382B RID: 14379 RVA: 0x0012D3D8 File Offset: 0x0012B5D8
 		public override string ExpiryInfoPart
 		{
@@ -37,7 +37,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A15 RID: 2581
+		
 		// (get) Token: 0x0600382C RID: 14380 RVA: 0x0012D40D File Offset: 0x0012B60D
 		public override string ExpiryInfoPartTip
 		{
@@ -47,13 +47,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A16 RID: 2582
+		
 		// (get) Token: 0x0600382D RID: 14381 RVA: 0x0012D441 File Offset: 0x0012B641
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -80,7 +80,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600382E RID: 14382 RVA: 0x0012D451 File Offset: 0x0012B651
+		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
@@ -90,13 +90,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600382F RID: 14383 RVA: 0x0012D478 File Offset: 0x0012B678
+		
 		protected virtual void DelayFinished()
 		{
 			base.Complete();
 		}
 
-		// Token: 0x06003830 RID: 14384 RVA: 0x0012D480 File Offset: 0x0012B680
+		
 		public override string ExtraInspectString(ISelectable target)
 		{
 			if (this.inspectStringTargets != null && this.inspectStringTargets.Contains(target))
@@ -106,7 +106,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003831 RID: 14385 RVA: 0x0012D4C0 File Offset: 0x0012B6C0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -118,7 +118,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.isBad, "isBad", false, false);
 		}
 
-		// Token: 0x06003832 RID: 14386 RVA: 0x0012D544 File Offset: 0x0012B744
+		
 		public override void DoDebugWindowContents(Rect innerRect, ref float curY)
 		{
 			if (base.State != QuestPartState.Enabled)
@@ -133,35 +133,35 @@ namespace RimWorld
 			curY += rect.height + 4f;
 		}
 
-		// Token: 0x06003833 RID: 14387 RVA: 0x0012D5A8 File Offset: 0x0012B7A8
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
 			this.delayTicks = Rand.RangeInclusive(833, 2500);
 		}
 
-		// Token: 0x06003834 RID: 14388 RVA: 0x0012D5C5 File Offset: 0x0012B7C5
+		
 		public void DebugForceEnd()
 		{
 			this.DelayFinished();
 		}
 
-		// Token: 0x0400213B RID: 8507
+		
 		public int delayTicks;
 
-		// Token: 0x0400213C RID: 8508
+		
 		public string expiryInfoPart;
 
-		// Token: 0x0400213D RID: 8509
+		
 		public string expiryInfoPartTip;
 
-		// Token: 0x0400213E RID: 8510
+		
 		public string inspectString;
 
-		// Token: 0x0400213F RID: 8511
+		
 		public List<ISelectable> inspectStringTargets;
 
-		// Token: 0x04002140 RID: 8512
+		
 		public bool isBad;
 	}
 }

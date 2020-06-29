@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000EA6 RID: 3750
+	
 	public class ITab_ContentsTransporter : ITab_ContentsBase
 	{
-		// Token: 0x17001076 RID: 4214
+		
 		// (get) Token: 0x06005B86 RID: 23430 RVA: 0x001F8372 File Offset: 0x001F6572
 		public override IList<Thing> container
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001077 RID: 4215
+		
 		// (get) Token: 0x06005B87 RID: 23431 RVA: 0x001F837F File Offset: 0x001F657F
 		public CompTransporter Transporter
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001078 RID: 4216
+		
 		// (get) Token: 0x06005B88 RID: 23432 RVA: 0x001F838C File Offset: 0x001F658C
 		public override bool IsVisible
 		{
@@ -40,14 +40,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B89 RID: 23433 RVA: 0x001F83E1 File Offset: 0x001F65E1
+		
 		public ITab_ContentsTransporter()
 		{
 			this.labelKey = "TabTransporterContents";
 			this.containedItemsKey = "ContainedItems";
 		}
 
-		// Token: 0x06005B8A RID: 23434 RVA: 0x001F8400 File Offset: 0x001F6600
+		
 		protected override void DoItemsLists(Rect inRect, ref float curY)
 		{
 			CompTransporter transporter = this.Transporter;
@@ -83,7 +83,7 @@ namespace RimWorld
 			curY += Mathf.Max(a, b);
 		}
 
-		// Token: 0x06005B8B RID: 23435 RVA: 0x001F8588 File Offset: 0x001F6788
+		
 		protected override void OnDropThing(Thing t, int count)
 		{
 			base.OnDropThing(t, count);
@@ -94,7 +94,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B8C RID: 23436 RVA: 0x001F85B0 File Offset: 0x001F67B0
+		
 		private void RemovePawnFromLoadLord(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
@@ -104,7 +104,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B8D RID: 23437 RVA: 0x001F85E8 File Offset: 0x001F67E8
+		
 		private void OnDropToLoadThing(TransferableOneWay t, int count)
 		{
 			t.ForceTo(t.CountToTransfer - count);
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B8E RID: 23438 RVA: 0x001F8658 File Offset: 0x001F6858
+		
 		private void EndJobForEveryoneHauling(TransferableOneWay t)
 		{
 			List<Pawn> allPawnsSpawned = base.SelThing.Map.mapPawns.AllPawnsSpawned;

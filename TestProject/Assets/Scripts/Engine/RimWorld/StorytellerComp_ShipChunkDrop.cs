@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A1A RID: 2586
+	
 	public class StorytellerComp_ShipChunkDrop : StorytellerComp
 	{
-		// Token: 0x17000ADC RID: 2780
+		
 		// (get) Token: 0x06003D4B RID: 15691 RVA: 0x00143D18 File Offset: 0x00141F18
 		private float ShipChunkDropMTBDays
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D4C RID: 15692 RVA: 0x00143D42 File Offset: 0x00141F42
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (Rand.MTBEventOccurs(this.ShipChunkDropMTBDays, 60000f, 1000f))
@@ -33,7 +33,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040023C6 RID: 9158
+		
 		private static readonly SimpleCurve ShipChunkDropMTBDaysCurve = new SimpleCurve
 		{
 			{

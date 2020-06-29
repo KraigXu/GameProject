@@ -6,11 +6,11 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200123F RID: 4671
+	
 	[StaticConstructorOnStartup]
 	public static class CaravanVisitUtility
 	{
-		// Token: 0x06006CD3 RID: 27859 RVA: 0x0025FC04 File Offset: 0x0025DE04
+		
 		public static Settlement SettlementVisitedNow(Caravan caravan)
 		{
 			if (!caravan.Spawned || caravan.pather.Moving)
@@ -29,7 +29,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006CD4 RID: 27860 RVA: 0x0025FC74 File Offset: 0x0025DE74
+		
 		public static Command TradeCommand(Caravan caravan, Faction faction = null, TraderKindDef trader = null)
 		{
 			Pawn bestNegotiator = BestCaravanPawnUtility.FindBestNegotiator(caravan, faction, trader);
@@ -64,7 +64,7 @@ namespace RimWorld.Planet
 			return command_Action;
 		}
 
-		// Token: 0x040043A3 RID: 17315
+		
 		private static readonly Texture2D TradeCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/Trade", true);
 	}
 }

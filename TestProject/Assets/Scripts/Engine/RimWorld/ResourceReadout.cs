@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EF9 RID: 3833
+	
 	public class ResourceReadout
 	{
-		// Token: 0x06005E05 RID: 24069 RVA: 0x00207A34 File Offset: 0x00205C34
+		
 		public ResourceReadout()
 		{
 			this.RootThingCategories = (from cat in DefDatabase<ThingCategoryDef>.AllDefs
@@ -17,7 +17,7 @@ namespace RimWorld
 			select cat).ToList<ThingCategoryDef>();
 		}
 
-		// Token: 0x06005E06 RID: 24070 RVA: 0x00207A70 File Offset: 0x00205C70
+		
 		public void ResourceReadoutOnGUI()
 		{
 			if (Event.current.type == EventType.Layout)
@@ -62,7 +62,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005E07 RID: 24071 RVA: 0x00207B98 File Offset: 0x00205D98
+		
 		private void DoReadoutCategorized(Rect rect)
 		{
 			Listing_ResourceReadout listing_ResourceReadout = new Listing_ResourceReadout(Find.CurrentMap);
@@ -78,7 +78,7 @@ namespace RimWorld
 			this.lastDrawnHeight = listing_ResourceReadout.CurHeight;
 		}
 
-		// Token: 0x06005E08 RID: 24072 RVA: 0x00207C1C File Offset: 0x00205E1C
+		
 		private void DoReadoutSimple(Rect rect, float outRectHeight)
 		{
 			GUI.BeginGroup(rect);
@@ -101,7 +101,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005E09 RID: 24073 RVA: 0x00207D04 File Offset: 0x00205F04
+		
 		public void DrawResourceSimple(Rect rect, ThingDef thingDef)
 		{
 			this.DrawIcon(rect.x, rect.y, thingDef);
@@ -110,7 +110,7 @@ namespace RimWorld
 			Widgets.Label(new Rect(34f, rect.y, rect.width - 34f, rect.height), count.ToStringCached());
 		}
 
-		// Token: 0x06005E0A RID: 24074 RVA: 0x00207D7C File Offset: 0x00205F7C
+		
 		private void DrawIcon(float x, float y, ThingDef thingDef)
 		{
 			Rect rect = new Rect(x, y, 27f, 27f);
@@ -124,22 +124,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040032EF RID: 13039
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x040032F0 RID: 13040
+		
 		private float lastDrawnHeight;
 
-		// Token: 0x040032F1 RID: 13041
+		
 		private readonly List<ThingCategoryDef> RootThingCategories;
 
-		// Token: 0x040032F2 RID: 13042
+		
 		private const float LineHeightSimple = 24f;
 
-		// Token: 0x040032F3 RID: 13043
+		
 		private const float LineHeightCategorized = 24f;
 
-		// Token: 0x040032F4 RID: 13044
+		
 		private const float DistFromScreenBottom = 200f;
 	}
 }

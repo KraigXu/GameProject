@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CDE RID: 3294
+	
 	public static class PsychicDroneLevelUtility
 	{
-		// Token: 0x06004FEB RID: 20459 RVA: 0x001AF51C File Offset: 0x001AD71C
+		
 		public static string GetLabel(this PsychicDroneLevel level)
 		{
 			switch (level)
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004FEC RID: 20460 RVA: 0x001AF5AE File Offset: 0x001AD7AE
+		
 		public static string GetLabelCap(this PsychicDroneLevel level)
 		{
 			return level.GetLabel().CapitalizeFirst();

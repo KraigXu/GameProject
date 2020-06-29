@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C09 RID: 3081
+	
 	public static class ScenarioLister
 	{
-		// Token: 0x0600494F RID: 18767 RVA: 0x0018E27A File Offset: 0x0018C47A
+		
 		public static IEnumerable<Scenario> AllScenarios()
 		{
 			ScenarioLister.RecacheIfDirty();
@@ -30,7 +30,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004950 RID: 18768 RVA: 0x0018E283 File Offset: 0x0018C483
+		
 		public static IEnumerable<Scenario> ScenariosInCategory(ScenarioCategory cat)
 		{
 			ScenarioLister.RecacheIfDirty();
@@ -62,7 +62,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004951 RID: 18769 RVA: 0x0018E294 File Offset: 0x0018C494
+		
 		public static bool ScenarioIsListedAnywhere(Scenario scen)
 		{
 			ScenarioLister.RecacheIfDirty();
@@ -86,13 +86,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004952 RID: 18770 RVA: 0x0018E328 File Offset: 0x0018C528
+		
 		public static void MarkDirty()
 		{
 			ScenarioLister.dirty = true;
 		}
 
-		// Token: 0x06004953 RID: 18771 RVA: 0x0018E330 File Offset: 0x0018C530
+		
 		private static void RecacheIfDirty()
 		{
 			if (ScenarioLister.dirty)
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004954 RID: 18772 RVA: 0x0018E340 File Offset: 0x0018C540
+		
 		private static void RecacheData()
 		{
 			ScenarioLister.dirty = false;
@@ -117,7 +117,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004955 RID: 18773 RVA: 0x0018E384 File Offset: 0x0018C584
+		
 		public static int ScenarioListHash()
 		{
 			int num = 9826121;
@@ -128,7 +128,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x040029E1 RID: 10721
+		
 		private static bool dirty = true;
 	}
 }

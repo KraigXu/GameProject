@@ -6,10 +6,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020000BC RID: 188
+	
 	public static class HediffStatsUtility
 	{
-		// Token: 0x06000590 RID: 1424 RVA: 0x0001B87D File Offset: 0x00019A7D
+		
 		public static IEnumerable<StatDrawEntry> SpecialDisplayStats(HediffStage stage, Hediff instance)
 		{
 			if (instance != null && instance.Bleeding)

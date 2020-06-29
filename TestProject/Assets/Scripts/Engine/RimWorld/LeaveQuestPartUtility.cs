@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200097F RID: 2431
+	
 	public static class LeaveQuestPartUtility
 	{
-		// Token: 0x0600398E RID: 14734 RVA: 0x00131C2C File Offset: 0x0012FE2C
+		
 		public static void MakePawnLeave(Pawn pawn, Quest quest)
 		{
 			Caravan caravan = pawn.GetCaravan();
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600398F RID: 14735 RVA: 0x00131DD8 File Offset: 0x0012FFD8
+		
 		public static void MakePawnsLeave(IEnumerable<Pawn> pawns, bool sendLetter, Quest quest)
 		{
 			bool flag = pawns.Any((Pawn x) => x.Faction == Faction.OfPlayer || x.HostFaction == Faction.OfPlayer);

@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000B77 RID: 2935
+	
 	public class Pawn_DraftController : IExposable
 	{
-		// Token: 0x17000BFC RID: 3068
+		
 		// (get) Token: 0x060044B1 RID: 17585 RVA: 0x0017333F File Offset: 0x0017153F
 		// (set) Token: 0x060044B2 RID: 17586 RVA: 0x00173348 File Offset: 0x00171548
 		public bool Drafted
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BFD RID: 3069
+		
 		// (get) Token: 0x060044B3 RID: 17587 RVA: 0x001734A4 File Offset: 0x001716A4
 		// (set) Token: 0x060044B4 RID: 17588 RVA: 0x001734AC File Offset: 0x001716AC
 		public bool FireAtWill
@@ -75,14 +75,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044B5 RID: 17589 RVA: 0x001734E4 File Offset: 0x001716E4
+		
 		public Pawn_DraftController(Pawn pawn)
 		{
 			this.pawn = pawn;
 			this.autoUndrafter = new AutoUndrafter(pawn);
 		}
 
-		// Token: 0x060044B6 RID: 17590 RVA: 0x00173508 File Offset: 0x00171708
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.draftedInt, "drafted", false, false);
@@ -93,13 +93,13 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x060044B7 RID: 17591 RVA: 0x00173558 File Offset: 0x00171758
+		
 		public void DraftControllerTick()
 		{
 			this.autoUndrafter.AutoUndraftTick();
 		}
 
-		// Token: 0x060044B8 RID: 17592 RVA: 0x00173565 File Offset: 0x00171765
+		
 		internal IEnumerable<Gizmo> GetGizmos()
 		{
 			Command_Toggle command_Toggle = new Command_Toggle();
@@ -154,22 +154,22 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060044B9 RID: 17593 RVA: 0x00173575 File Offset: 0x00171775
+		
 		internal void Notify_PrimaryWeaponChanged()
 		{
 			this.fireAtWillInt = true;
 		}
 
-		// Token: 0x0400273C RID: 10044
+		
 		public Pawn pawn;
 
-		// Token: 0x0400273D RID: 10045
+		
 		private bool draftedInt;
 
-		// Token: 0x0400273E RID: 10046
+		
 		private bool fireAtWillInt = true;
 
-		// Token: 0x0400273F RID: 10047
+		
 		private AutoUndrafter autoUndrafter;
 	}
 }

@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A5 RID: 2469
+	
 	public class QuestPart_Incident : QuestPart
 	{
-		// Token: 0x17000A91 RID: 2705
+		
 		// (get) Token: 0x06003AA1 RID: 15009 RVA: 0x0013671A File Offset: 0x0013491A
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AA2 RID: 15010 RVA: 0x0013672C File Offset: 0x0013492C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -60,7 +60,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AA3 RID: 15011 RVA: 0x00136854 File Offset: 0x00134A54
+		
 		public void SetIncidentParmsAndRemoveTarget(IncidentParms value)
 		{
 			this.incidentParms = value;
@@ -74,7 +74,7 @@ namespace RimWorld
 			this.mapParent = null;
 		}
 
-		// Token: 0x06003AA4 RID: 15012 RVA: 0x0013689C File Offset: 0x00134A9C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -84,7 +84,7 @@ namespace RimWorld
 			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
 		}
 
-		// Token: 0x06003AA5 RID: 15013 RVA: 0x001368F8 File Offset: 0x00134AF8
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -100,16 +100,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002299 RID: 8857
+		
 		public string inSignal;
 
-		// Token: 0x0400229A RID: 8858
+		
 		public IncidentDef incident;
 
-		// Token: 0x0400229B RID: 8859
+		
 		private IncidentParms incidentParms;
 
-		// Token: 0x0400229C RID: 8860
+		
 		private MapParent mapParent;
 	}
 }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x02000422 RID: 1058
+	
 	public class DebugLogsUtility
 	{
-		// Token: 0x06001FB9 RID: 8121 RVA: 0x000C1E0C File Offset: 0x000C000C
+		
 		public static string ThingListToUniqueCountString(IEnumerable<Thing> things)
 		{
 			if (things == null)

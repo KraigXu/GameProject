@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200095A RID: 2394
+	
 	public class QuestPart_MoodBelow : QuestPartActivable
 	{
-		// Token: 0x17000A22 RID: 2594
+		
 		// (get) Token: 0x060038A4 RID: 14500 RVA: 0x0012EC98 File Offset: 0x0012CE98
 		public override AlertReport AlertReport
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A23 RID: 2595
+		
 		// (get) Token: 0x060038A5 RID: 14501 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool AlertCritical
 		{
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A24 RID: 2596
+		
 		// (get) Token: 0x060038A6 RID: 14502 RVA: 0x0012ED14 File Offset: 0x0012CF14
 		public override string AlertLabel
 		{
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A25 RID: 2597
+		
 		// (get) Token: 0x060038A7 RID: 14503 RVA: 0x0012ED28 File Offset: 0x0012CF28
 		public override string AlertExplanation
 		{
@@ -60,7 +60,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038A8 RID: 14504 RVA: 0x0012ED80 File Offset: 0x0012CF80
+		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038A9 RID: 14505 RVA: 0x0012EE3C File Offset: 0x0012D03C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -104,7 +104,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038AA RID: 14506 RVA: 0x0012EEE8 File Offset: 0x0012D0E8
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -117,34 +117,34 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038AB RID: 14507 RVA: 0x0012EF39 File Offset: 0x0012D139
+		
 		private bool MoodBelowThreshold(Pawn pawn)
 		{
 			return pawn.needs != null && pawn.needs.mood != null && pawn.needs.mood.CurLevelPercentage < this.threshold;
 		}
 
-		// Token: 0x060038AC RID: 14508 RVA: 0x0012EF6A File Offset: 0x0012D16A
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x04002175 RID: 8565
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x04002176 RID: 8566
+		
 		public float threshold;
 
-		// Token: 0x04002177 RID: 8567
+		
 		public int minTicksBelowThreshold;
 
-		// Token: 0x04002178 RID: 8568
+		
 		public bool showAlert = true;
 
-		// Token: 0x04002179 RID: 8569
+		
 		private List<int> moodBelowThresholdTicks = new List<int>();
 
-		// Token: 0x0400217A RID: 8570
+		
 		private List<Pawn> culpritsResult = new List<Pawn>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000617 RID: 1559
+	
 	public static class BillUtility
 	{
-		// Token: 0x06002A8E RID: 10894 RVA: 0x000F7F2B File Offset: 0x000F612B
+		
 		public static void TryDrawIngredientSearchRadiusOnMap(this Bill bill, IntVec3 center)
 		{
 			if (bill.ingredientSearchRadius < GenRadial.MaxRadialPatternRadius)
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A8F RID: 10895 RVA: 0x000F7F46 File Offset: 0x000F6146
+		
 		public static Bill MakeNewBill(this RecipeDef recipe)
 		{
 			if (recipe.UsesUnfinishedThing)
@@ -27,7 +27,7 @@ namespace RimWorld
 			return new Bill_Production(recipe);
 		}
 
-		// Token: 0x06002A90 RID: 10896 RVA: 0x000F7F5D File Offset: 0x000F615D
+		
 		public static IEnumerable<IBillGiver> GlobalBillGivers()
 		{
 			foreach (Map map in Find.Maps)
@@ -74,7 +74,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002A91 RID: 10897 RVA: 0x000F7F66 File Offset: 0x000F6166
+		
 		public static IEnumerable<Bill> GlobalBills()
 		{
 			foreach (IBillGiver billGiver in BillUtility.GlobalBillGivers())
@@ -94,7 +94,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002A92 RID: 10898 RVA: 0x000F7F70 File Offset: 0x000F6170
+		
 		public static void Notify_ZoneStockpileRemoved(Zone_Stockpile stockpile)
 		{
 			foreach (Bill bill in BillUtility.GlobalBills())
@@ -103,7 +103,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A93 RID: 10899 RVA: 0x000F7FBC File Offset: 0x000F61BC
+		
 		public static void Notify_ColonistUnavailable(Pawn pawn)
 		{
 			try
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A94 RID: 10900 RVA: 0x000F8028 File Offset: 0x000F6228
+		
 		public static WorkGiverDef GetWorkgiver(this IBillGiver billGiver)
 		{
 			Thing thing = billGiver as Thing;
@@ -142,7 +142,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001966 RID: 6502
+		
 		public static Bill Clipboard;
 	}
 }

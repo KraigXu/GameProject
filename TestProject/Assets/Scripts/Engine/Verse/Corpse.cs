@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002E0 RID: 736
+	
 	public class Corpse : ThingWithComps, IThingHolder, IThoughtGiver, IStrippable, IBillGiver
 	{
-		// Token: 0x1700042D RID: 1069
+		
 		// (get) Token: 0x060014A9 RID: 5289 RVA: 0x0007A1AE File Offset: 0x000783AE
 		// (set) Token: 0x060014AA RID: 5290 RVA: 0x0007A1CC File Offset: 0x000783CC
 		public Pawn InnerPawn
@@ -39,7 +39,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700042E RID: 1070
+		
 		// (get) Token: 0x060014AB RID: 5291 RVA: 0x0007A21A File Offset: 0x0007841A
 		// (set) Token: 0x060014AC RID: 5292 RVA: 0x0007A22D File Offset: 0x0007842D
 		public int Age
@@ -54,7 +54,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700042F RID: 1071
+		
 		// (get) Token: 0x060014AD RID: 5293 RVA: 0x0007A244 File Offset: 0x00078444
 		public override string LabelNoCount
 		{
@@ -69,7 +69,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000430 RID: 1072
+		
 		// (get) Token: 0x060014AE RID: 5294 RVA: 0x0007A299 File Offset: 0x00078499
 		public override bool IngestibleNow
 		{
@@ -84,7 +84,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000431 RID: 1073
+		
 		// (get) Token: 0x060014AF RID: 5295 RVA: 0x0007A2DC File Offset: 0x000784DC
 		public RotDrawMode CurRotDrawMode
 		{
@@ -106,7 +106,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000432 RID: 1074
+		
 		// (get) Token: 0x060014B0 RID: 5296 RVA: 0x0007A30C File Offset: 0x0007850C
 		private bool ShouldVanish
 		{
@@ -116,7 +116,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000433 RID: 1075
+		
 		// (get) Token: 0x060014B1 RID: 5297 RVA: 0x0007A37C File Offset: 0x0007857C
 		public BillStack BillStack
 		{
@@ -126,7 +126,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000434 RID: 1076
+		
 		// (get) Token: 0x060014B2 RID: 5298 RVA: 0x0007A384 File Offset: 0x00078584
 		public IEnumerable<IntVec3> IngredientStackCells
 		{
@@ -137,7 +137,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000435 RID: 1077
+		
 		// (get) Token: 0x060014B3 RID: 5299 RVA: 0x0007A394 File Offset: 0x00078594
 		public bool Bugged
 		{
@@ -147,51 +147,51 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014B4 RID: 5300 RVA: 0x0007A3E5 File Offset: 0x000785E5
+		
 		public Corpse()
 		{
 			this.operationsBillStack = new BillStack(this);
 			this.innerContainer = new ThingOwner<Pawn>(this, true, LookMode.Reference);
 		}
 
-		// Token: 0x060014B5 RID: 5301 RVA: 0x0007A418 File Offset: 0x00078618
+		
 		public bool CurrentlyUsableForBills()
 		{
 			return this.InteractionCell.IsValid;
 		}
 
-		// Token: 0x060014B6 RID: 5302 RVA: 0x0007A433 File Offset: 0x00078633
+		
 		public bool UsableForBillsAfterFueling()
 		{
 			return this.CurrentlyUsableForBills();
 		}
 
-		// Token: 0x060014B7 RID: 5303 RVA: 0x0007A43B File Offset: 0x0007863B
+		
 		public bool AnythingToStrip()
 		{
 			return this.InnerPawn.AnythingToStrip();
 		}
 
-		// Token: 0x060014B8 RID: 5304 RVA: 0x0007A448 File Offset: 0x00078648
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return this.innerContainer;
 		}
 
-		// Token: 0x060014B9 RID: 5305 RVA: 0x0007A450 File Offset: 0x00078650
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
 		}
 
-		// Token: 0x060014BA RID: 5306 RVA: 0x0007A45E File Offset: 0x0007865E
+		
 		public override void PostMake()
 		{
 			base.PostMake();
 			this.timeOfDeath = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x060014BB RID: 5307 RVA: 0x0007A476 File Offset: 0x00078676
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			if (this.Bugged)
@@ -204,7 +204,7 @@ namespace Verse
 			this.NotifyColonistBar();
 		}
 
-		// Token: 0x060014BC RID: 5308 RVA: 0x0007A4B0 File Offset: 0x000786B0
+		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.DeSpawn(mode);
@@ -214,7 +214,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014BD RID: 5309 RVA: 0x0007A4C8 File Offset: 0x000786C8
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Pawn pawn = null;
@@ -231,7 +231,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014BE RID: 5310 RVA: 0x0007A508 File Offset: 0x00078708
+		
 		public static void PostCorpseDestroy(Pawn pawn)
 		{
 			if (pawn.ownership != null)
@@ -249,7 +249,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014BF RID: 5311 RVA: 0x0007A55C File Offset: 0x0007875C
+		
 		public override void TickRare()
 		{
 			base.TickRare();
@@ -274,7 +274,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014C0 RID: 5312 RVA: 0x0007A5D8 File Offset: 0x000787D8
+		
 		protected override void IngestedCalculateAmounts(Pawn ingester, float nutritionWanted, out int numTaken, out float nutritionIngested)
 		{
 			BodyPartRecord bodyPartRecord = this.GetBestBodyPartToEat(ingester, nutritionWanted);
@@ -309,7 +309,7 @@ namespace Verse
 			nutritionIngested = bodyPartNutrition;
 		}
 
-		// Token: 0x060014C1 RID: 5313 RVA: 0x0007A714 File Offset: 0x00078914
+		
 		public override IEnumerable<Thing> ButcherProducts(Pawn butcher, float efficiency)
 		{
 			foreach (Thing thing in this.InnerPawn.ButcherProducts(butcher, efficiency))
@@ -343,7 +343,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060014C2 RID: 5314 RVA: 0x0007A734 File Offset: 0x00078934
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -360,19 +360,19 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060014C3 RID: 5315 RVA: 0x0007A7B1 File Offset: 0x000789B1
+		
 		public void Strip()
 		{
 			this.InnerPawn.Strip();
 		}
 
-		// Token: 0x060014C4 RID: 5316 RVA: 0x0007A7BE File Offset: 0x000789BE
+		
 		public override void DrawAt(Vector3 drawLoc, bool flip = false)
 		{
 			this.InnerPawn.Drawer.renderer.RenderPawnAt(drawLoc);
 		}
 
-		// Token: 0x060014C5 RID: 5317 RVA: 0x0007A7D8 File Offset: 0x000789D8
+		
 		public Thought_Memory GiveObservedThought()
 		{
 			if (!this.InnerPawn.RaceProps.Humanlike)
@@ -396,7 +396,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x060014C6 RID: 5318 RVA: 0x0007A838 File Offset: 0x00078A38
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -414,10 +414,10 @@ namespace Verse
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x060014C7 RID: 5319 RVA: 0x0007A92B File Offset: 0x00078B2B
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
-			foreach (StatDrawEntry statDrawEntry in this.<>n__0())
+			foreach (StatDrawEntry statDrawEntry in this.n__0())
 			{
 				yield return statDrawEntry;
 			}
@@ -433,14 +433,14 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060014C8 RID: 5320 RVA: 0x0007A93B File Offset: 0x00078B3B
+		
 		public void RotStageChanged()
 		{
 			PortraitsCache.SetDirty(this.InnerPawn);
 			this.NotifyColonistBar();
 		}
 
-		// Token: 0x060014C9 RID: 5321 RVA: 0x0007A950 File Offset: 0x00078B50
+		
 		private BodyPartRecord GetBestBodyPartToEat(Pawn ingester, float nutritionWanted)
 		{
 			IEnumerable<BodyPartRecord> source = from x in this.InnerPawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null)
@@ -453,7 +453,7 @@ namespace Verse
 			return source.MinBy((BodyPartRecord x) => Mathf.Abs(FoodUtility.GetBodyPartNutrition(this, x) - nutritionWanted));
 		}
 
-		// Token: 0x060014CA RID: 5322 RVA: 0x0007A9B8 File Offset: 0x00078BB8
+		
 		private void NotifyColonistBar()
 		{
 			if (this.InnerPawn.Faction == Faction.OfPlayer && Current.ProgramState == ProgramState.Playing)
@@ -462,22 +462,22 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000DBF RID: 3519
+		
 		private ThingOwner<Pawn> innerContainer;
 
-		// Token: 0x04000DC0 RID: 3520
+		
 		public int timeOfDeath = -1;
 
-		// Token: 0x04000DC1 RID: 3521
+		
 		private int vanishAfterTimestamp = -1;
 
-		// Token: 0x04000DC2 RID: 3522
+		
 		private BillStack operationsBillStack;
 
-		// Token: 0x04000DC3 RID: 3523
+		
 		public bool everBuriedInSarcophagus;
 
-		// Token: 0x04000DC4 RID: 3524
+		
 		private const int VanishAfterTicksSinceDessicated = 6000000;
 	}
 }

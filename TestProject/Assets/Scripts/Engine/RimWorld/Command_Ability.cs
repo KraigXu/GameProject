@@ -5,11 +5,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000AC3 RID: 2755
+	
 	[StaticConstructorOnStartup]
 	public class Command_Ability : Command
 	{
-		// Token: 0x17000B9E RID: 2974
+		
 		// (get) Token: 0x06004170 RID: 16752 RVA: 0x0015DE32 File Offset: 0x0015C032
 		public override Texture2D BGTexture
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B9F RID: 2975
+		
 		// (get) Token: 0x06004171 RID: 16753 RVA: 0x0015DE39 File Offset: 0x0015C039
 		public virtual string Tooltip
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004172 RID: 16754 RVA: 0x0015DE58 File Offset: 0x0015C058
+		
 		public Command_Ability(Ability ability)
 		{
 			this.ability = ability;
@@ -39,7 +39,7 @@ namespace RimWorld
 			this.icon = ability.def.uiIcon;
 		}
 
-		// Token: 0x06004173 RID: 16755 RVA: 0x0015DEB8 File Offset: 0x0015C0B8
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			this.defaultDesc = this.Tooltip;
@@ -70,7 +70,7 @@ namespace RimWorld
 			return new GizmoResult(result.State);
 		}
 
-		// Token: 0x06004174 RID: 16756 RVA: 0x0015DFC0 File Offset: 0x0015C1C0
+		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
@@ -83,7 +83,7 @@ namespace RimWorld
 			this.ability.verb.TryStartCastOn(this.ability.pawn, false, true);
 		}
 
-		// Token: 0x06004175 RID: 16757 RVA: 0x0015E02C File Offset: 0x0015C22C
+		
 		public override void GizmoUpdateOnMouseover()
 		{
 			Verb_CastAbility verb_CastAbility;
@@ -93,20 +93,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004176 RID: 16758 RVA: 0x0015E065 File Offset: 0x0015C265
+		
 		protected void DisableWithReason(string reason)
 		{
 			this.disabledReason = reason;
 			this.disabled = true;
 		}
 
-		// Token: 0x040025EB RID: 9707
+		
 		protected Ability ability;
 
-		// Token: 0x040025EC RID: 9708
+		
 		public new static readonly Texture2D BGTex = ContentFinder<Texture2D>.Get("UI/Widgets/AbilityButBG", true);
 
-		// Token: 0x040025ED RID: 9709
+		
 		private static readonly Texture2D cooldownBarTex = SolidColorMaterials.NewSolidColorTexture(new Color32(9, 203, 4, 64));
 	}
 }

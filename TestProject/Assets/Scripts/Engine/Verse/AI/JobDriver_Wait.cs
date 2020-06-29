@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200051B RID: 1307
+	
 	public class JobDriver_Wait : JobDriver
 	{
-		// Token: 0x0600255D RID: 9565 RVA: 0x000DDC18 File Offset: 0x000DBE18
+		
 		public override string GetReport()
 		{
 			if (this.job.def != JobDefOf.Wait_Combat)
@@ -21,13 +21,13 @@ namespace Verse.AI
 			return base.GetReport();
 		}
 
-		// Token: 0x0600255E RID: 9566 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x0600255F RID: 9567 RVA: 0x000DDC74 File Offset: 0x000DBE74
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			Toil toil = new Toil();
@@ -56,12 +56,12 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x06002560 RID: 9568 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void DecorateWaitToil(Toil wait)
 		{
 		}
 
-		// Token: 0x06002561 RID: 9569 RVA: 0x000DDC84 File Offset: 0x000DBE84
+		
 		public override void Notify_StanceChanged()
 		{
 			if (this.pawn.stances.curStance is Stance_Mobile)
@@ -70,7 +70,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002562 RID: 9570 RVA: 0x000DDCA4 File Offset: 0x000DBEA4
+		
 		private void CheckForAutoAttack()
 		{
 			if (this.pawn.Downed)
@@ -143,7 +143,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x040016DC RID: 5852
+		
 		private const int TargetSearchInterval = 4;
 	}
 }

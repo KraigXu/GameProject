@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000912 RID: 2322
+	
 	public abstract class ThingSetMaker
 	{
-		// Token: 0x06003720 RID: 14112 RVA: 0x00128F20 File Offset: 0x00127120
+		
 		public List<Thing> Generate()
 		{
 			return this.Generate(default(ThingSetMakerParams));
 		}
 
-		// Token: 0x06003721 RID: 14113 RVA: 0x00128F3C File Offset: 0x0012713C
+		
 		public List<Thing> Generate(ThingSetMakerParams parms)
 		{
 			List<Thing> list = new List<Thing>();
@@ -41,29 +41,29 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06003722 RID: 14114 RVA: 0x00128FD8 File Offset: 0x001271D8
+		
 		public bool CanGenerate(ThingSetMakerParams parms)
 		{
 			ThingSetMakerParams parms2 = this.ApplyFixedParams(parms);
 			return this.CanGenerateSub(parms2);
 		}
 
-		// Token: 0x06003723 RID: 14115 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x06003724 RID: 14116
+		
 		protected abstract void Generate(ThingSetMakerParams parms, List<Thing> outThings);
 
-		// Token: 0x06003725 RID: 14117 RVA: 0x00128FF4 File Offset: 0x001271F4
+		
 		public IEnumerable<ThingDef> AllGeneratableThingsDebug()
 		{
 			return this.AllGeneratableThingsDebug(default(ThingSetMakerParams));
 		}
 
-		// Token: 0x06003726 RID: 14118 RVA: 0x00129010 File Offset: 0x00127210
+		
 		public IEnumerable<ThingDef> AllGeneratableThingsDebug(ThingSetMakerParams parms)
 		{
 			if (!this.CanGenerate(parms))
@@ -80,16 +80,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003727 RID: 14119 RVA: 0x0001BFCE File Offset: 0x0001A1CE
+		
 		public virtual float ExtraSelectionWeightFactor(ThingSetMakerParams parms)
 		{
 			return 1f;
 		}
 
-		// Token: 0x06003728 RID: 14120
+		
 		protected abstract IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms);
 
-		// Token: 0x06003729 RID: 14121 RVA: 0x00129028 File Offset: 0x00127228
+		
 		private void PostProcess(List<Thing> things)
 		{
 			if (things.RemoveAll((Thing x) => x == null) != 0)
@@ -120,7 +120,7 @@ namespace RimWorld
 			this.Minify(things);
 		}
 
-		// Token: 0x0600372A RID: 14122 RVA: 0x00129138 File Offset: 0x00127338
+		
 		private void Minify(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -136,7 +136,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600372B RID: 14123 RVA: 0x001291A0 File Offset: 0x001273A0
+		
 		private void ChangeDeadPawnsToTheirCorpses(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -148,7 +148,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600372C RID: 14124 RVA: 0x001291EC File Offset: 0x001273EC
+		
 		private ThingSetMakerParams ApplyFixedParams(ThingSetMakerParams parms)
 		{
 			ThingSetMakerParams result = this.fixedParams;
@@ -156,7 +156,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x0600372D RID: 14125 RVA: 0x00129209 File Offset: 0x00127409
+		
 		public virtual void ResolveReferences()
 		{
 			if (this.fixedParams.filter != null)
@@ -165,10 +165,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400204B RID: 8267
+		
 		public ThingSetMakerParams fixedParams;
 
-		// Token: 0x0400204C RID: 8268
+		
 		public static List<List<Thing>> thingsBeingGeneratedNow = new List<List<Thing>>();
 	}
 }

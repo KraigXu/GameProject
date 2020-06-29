@@ -8,16 +8,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000401 RID: 1025
+	
 	public static class ConvertHelper
 	{
-		// Token: 0x06001E53 RID: 7763 RVA: 0x000BD097 File Offset: 0x000BB297
+		
 		public static bool CanConvert<T>(object obj)
 		{
 			return ConvertHelper.CanConvert(obj, typeof(T));
 		}
 
-		// Token: 0x06001E54 RID: 7764 RVA: 0x000BD0AC File Offset: 0x000BB2AC
+		
 		public static bool CanConvert(object obj, Type to)
 		{
 			if (obj == null)
@@ -52,7 +52,7 @@ namespace Verse
 			{
 				return true;
 			}
-			if (to.IsGenericType && (to.GetGenericTypeDefinition() == typeof(IEnumerable<>) || to.GetGenericTypeDefinition() == typeof(List<>)) && to.GetGenericArguments().Length >= 1 && (!(to.GetGenericArguments()[0] == typeof(string)) || !(obj is string)))
+			if (to.IsGenericType && (to.GetGenericTypeDefinition() == typeof(IEnumerable) || to.GetGenericTypeDefinition() == typeof(List)) && to.GetGenericArguments().Length >= 1 && (!(to.GetGenericArguments()[0] == typeof(string)) || !(obj is string)))
 			{
 				IEnumerable enumerable = obj as IEnumerable;
 				if (enumerable != null)
@@ -93,7 +93,7 @@ namespace Verse
 			{
 				return true;
 			}
-			if (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+			if (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable))
 			{
 				Type[] genericArguments2 = to.GetGenericArguments();
 				return genericArguments2.Length < 1 || ConvertHelper.CanConvert(obj, genericArguments2[0]);
@@ -119,13 +119,13 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06001E55 RID: 7765 RVA: 0x000BD440 File Offset: 0x000BB640
+		
 		public static T Convert<T>(object obj)
 		{
 			return (T)((object)ConvertHelper.Convert(obj, typeof(T), default(T)));
 		}
 
-		// Token: 0x06001E56 RID: 7766 RVA: 0x000BD470 File Offset: 0x000BB670
+		
 		public static object Convert(object obj, Type to)
 		{
 			if (to.IsValueType)
@@ -135,7 +135,7 @@ namespace Verse
 			return ConvertHelper.Convert(obj, to, null);
 		}
 
-		// Token: 0x06001E57 RID: 7767 RVA: 0x000BD490 File Offset: 0x000BB690
+		
 		public static object Convert(object obj, Type to, object defaultValue)
 		{
 			if (obj == null)
@@ -212,9 +212,9 @@ namespace Verse
 						{
 							type = typeof(List<string>);
 						}
-						if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>) && type.GetGenericArguments().Length >= 1)
+						if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable) && type.GetGenericArguments().Length >= 1)
 						{
-							type = typeof(List<>).MakeGenericType(new Type[]
+							type = typeof(List).MakeGenericType(new Type[]
 							{
 								type.GetGenericArguments()[0]
 							});
@@ -230,7 +230,7 @@ namespace Verse
 						DirectXmlCrossRefLoader.Clear();
 					}
 				}
-				if (to.IsGenericType && (to.GetGenericTypeDefinition() == typeof(IEnumerable<>) || to.GetGenericTypeDefinition() == typeof(List<>)) && to.GetGenericArguments().Length >= 1 && (!(to.GetGenericArguments()[0] == typeof(string)) || !(obj is string)))
+				if (to.IsGenericType && (to.GetGenericTypeDefinition() == typeof(IEnumerable) || to.GetGenericTypeDefinition() == typeof(List)) && to.GetGenericArguments().Length >= 1 && (!(to.GetGenericArguments()[0] == typeof(string)) || !(obj is string)))
 				{
 					IEnumerable enumerable = obj as IEnumerable;
 					if (enumerable != null)
@@ -250,7 +250,7 @@ namespace Verse
 						}
 						if (flag)
 						{
-							IList list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[]
+							IList list = (IList)Activator.CreateInstance(typeof(List).MakeGenericType(new Type[]
 							{
 								type2
 							}));
@@ -293,12 +293,12 @@ namespace Verse
 					return Gen.YieldSingleNonGeneric<object>(obj);
 				}
 				object result2;
-				if (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+				if (to.IsGenericType && to.GetGenericTypeDefinition() == typeof(IEnumerable))
 				{
 					Type[] genericArguments2 = to.GetGenericArguments();
 					if (genericArguments2.Length >= 1)
 					{
-						IList list3 = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[]
+						IList list3 = (IList)Activator.CreateInstance(typeof(List).MakeGenericType(new Type[]
 						{
 							genericArguments2[0]
 						}));
@@ -327,7 +327,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001E58 RID: 7768 RVA: 0x000BD994 File Offset: 0x000BBB94
+		
 		public static bool IsXml(object obj)
 		{
 			if (obj is TaggedString)
@@ -343,7 +343,7 @@ namespace Verse
 			return text2[0] == '<' && text2[text2.Length - 1] == '>';
 		}
 
-		// Token: 0x06001E59 RID: 7769 RVA: 0x000BD9F4 File Offset: 0x000BBBF4
+		
 		private static object ConvertToPrimitive(IConvertible obj, Type to, object defaultValue)
 		{
 			CultureInfo invariantCulture = CultureInfo.InvariantCulture;
@@ -411,13 +411,13 @@ namespace Verse
 			return defaultValue;
 		}
 
-		// Token: 0x06001E5A RID: 7770 RVA: 0x000BDBE0 File Offset: 0x000BBDE0
+		
 		private static bool CanConvertBetweenDataTypes(Type from, Type to)
 		{
 			return (from == typeof(IntRange) && to == typeof(FloatRange)) || (from == typeof(FloatRange) && to == typeof(IntRange));
 		}
 
-		// Token: 0x06001E5B RID: 7771 RVA: 0x000BDC38 File Offset: 0x000BBE38
+		
 		private static object ConvertBetweenDataTypes(object from, Type to)
 		{
 			if (from is IntRange)

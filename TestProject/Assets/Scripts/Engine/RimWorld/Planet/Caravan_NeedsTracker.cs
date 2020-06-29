@@ -5,32 +5,32 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200124E RID: 4686
+	
 	public class Caravan_NeedsTracker : IExposable
 	{
-		// Token: 0x06006D38 RID: 27960 RVA: 0x0000F2A9 File Offset: 0x0000D4A9
+		
 		public Caravan_NeedsTracker()
 		{
 		}
 
-		// Token: 0x06006D39 RID: 27961 RVA: 0x00263ADF File Offset: 0x00261CDF
+		
 		public Caravan_NeedsTracker(Caravan caravan)
 		{
 			this.caravan = caravan;
 		}
 
-		// Token: 0x06006D3A RID: 27962 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public void ExposeData()
 		{
 		}
 
-		// Token: 0x06006D3B RID: 27963 RVA: 0x00263AEE File Offset: 0x00261CEE
+		
 		public void NeedsTrackerTick()
 		{
 			this.TrySatisfyPawnsNeeds();
 		}
 
-		// Token: 0x06006D3C RID: 27964 RVA: 0x00263AF8 File Offset: 0x00261CF8
+		
 		public void TrySatisfyPawnsNeeds()
 		{
 			List<Pawn> pawnsListForReading = this.caravan.PawnsListForReading;
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D3D RID: 27965 RVA: 0x00263B34 File Offset: 0x00261D34
+		
 		private void TrySatisfyPawnNeeds(Pawn pawn)
 		{
 			if (pawn.Dead)
@@ -79,7 +79,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D3E RID: 27966 RVA: 0x00263BDC File Offset: 0x00261DDC
+		
 		private void TrySatisfyRestNeed(Pawn pawn, Need_Rest rest)
 		{
 			if (!this.caravan.pather.MovingNow || pawn.InCaravanBed() || pawn.CarriedByCaravan())
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D3F RID: 27967 RVA: 0x00263C38 File Offset: 0x00261E38
+		
 		private void TrySatisfyFoodNeed(Pawn pawn, Need_Food food)
 		{
 			if (food.CurCategory < HungerCategory.Hungry)
@@ -124,7 +124,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D40 RID: 27968 RVA: 0x00263D3C File Offset: 0x00261F3C
+		
 		private void TrySatisfyChemicalNeed(Pawn pawn, Need_Chemical chemical)
 		{
 			if (chemical.CurCategory >= DrugDesireCategory.Satisfied)
@@ -139,7 +139,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D41 RID: 27969 RVA: 0x00263D70 File Offset: 0x00261F70
+		
 		public void IngestDrug(Pawn pawn, Thing drug, Pawn drugOwner)
 		{
 			float num = drug.Ingested(pawn, 0f);
@@ -156,7 +156,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D42 RID: 27970 RVA: 0x00263DDC File Offset: 0x00261FDC
+		
 		private void TrySatisfyJoyNeed(Pawn pawn, Need_Joy joy)
 		{
 			if (pawn.IsHashIntervalTick(1250))
@@ -179,7 +179,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D43 RID: 27971 RVA: 0x00263E6E File Offset: 0x0026206E
+		
 		public float GetCurrentJoyGainPerTick(Pawn pawn)
 		{
 			if (this.caravan.pather.MovingNow)
@@ -189,7 +189,7 @@ namespace RimWorld.Planet
 			return 4E-05f;
 		}
 
-		// Token: 0x06006D44 RID: 27972 RVA: 0x00263E8D File Offset: 0x0026208D
+		
 		public void TryGainPsyfocus(Pawn_PsychicEntropyTracker tracker)
 		{
 			if (!this.caravan.pather.MovingNow && !this.caravan.NightResting)
@@ -198,7 +198,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006D45 RID: 27973 RVA: 0x00263EB8 File Offset: 0x002620B8
+		
 		public bool AnyPawnOutOfFood(out string malnutritionHediff)
 		{
 			Caravan_NeedsTracker.tmpInvFood.Clear();
@@ -249,7 +249,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006D46 RID: 27974 RVA: 0x00264018 File Offset: 0x00262218
+		
 		private void GetAvailableJoyKindsFor(Pawn p, List<JoyKindDef> outJoyKinds)
 		{
 			outJoyKinds.Clear();
@@ -274,13 +274,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x040043D8 RID: 17368
+		
 		public Caravan caravan;
 
-		// Token: 0x040043D9 RID: 17369
+		
 		private static List<JoyKindDef> tmpAvailableJoyKinds = new List<JoyKindDef>();
 
-		// Token: 0x040043DA RID: 17370
+		
 		private static List<Thing> tmpInvFood = new List<Thing>();
 	}
 }

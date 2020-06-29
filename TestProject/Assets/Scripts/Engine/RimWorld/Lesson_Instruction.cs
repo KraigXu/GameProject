@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000F26 RID: 3878
+	
 	public abstract class Lesson_Instruction : Lesson
 	{
-		// Token: 0x1700110D RID: 4365
+		
 		// (get) Token: 0x06005EF6 RID: 24310 RVA: 0x0020C6AF File Offset: 0x0020A8AF
 		protected Map Map
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700110E RID: 4366
+		
 		// (get) Token: 0x06005EF7 RID: 24311 RVA: 0x0004E475 File Offset: 0x0004C675
 		protected virtual float ProgressPercent
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700110F RID: 4367
+		
 		// (get) Token: 0x06005EF8 RID: 24312 RVA: 0x0020C6B6 File Offset: 0x0020A8B6
 		protected virtual bool ShowProgressBar
 		{
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001110 RID: 4368
+		
 		// (get) Token: 0x06005EF9 RID: 24313 RVA: 0x0020C6C8 File Offset: 0x0020A8C8
 		public override string DefaultRejectInputMessage
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001111 RID: 4369
+		
 		// (get) Token: 0x06005EFA RID: 24314 RVA: 0x0020C6D5 File Offset: 0x0020A8D5
 		public override InstructionDef Instruction
 		{
@@ -58,14 +58,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005EFB RID: 24315 RVA: 0x0020C6DD File Offset: 0x0020A8DD
+		
 		public override void ExposeData()
 		{
 			Scribe_Defs.Look<InstructionDef>(ref this.def, "def");
 			base.ExposeData();
 		}
 
-		// Token: 0x06005EFC RID: 24316 RVA: 0x0020C6F8 File Offset: 0x0020A8F8
+		
 		public override void OnActivated()
 		{
 			base.OnActivated();
@@ -91,7 +91,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005EFD RID: 24317 RVA: 0x0020C7EC File Offset: 0x0020A9EC
+		
 		public override void LessonOnGUI()
 		{
 			Text.Font = GameFont.Small;
@@ -177,7 +177,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005EFE RID: 24318 RVA: 0x0020CAA7 File Offset: 0x0020ACA7
+		
 		public override void Notify_Event(EventPack ep)
 		{
 			if (this.def.eventTagsEnd != null && this.def.eventTagsEnd.Contains(ep.Tag))
@@ -186,13 +186,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005EFF RID: 24319 RVA: 0x0020CAD9 File Offset: 0x0020ACD9
+		
 		public override AcceptanceReport AllowAction(EventPack ep)
 		{
 			return this.def.actionTagsAllowed != null && this.def.actionTagsAllowed.Contains(ep.Tag);
 		}
 
-		// Token: 0x06005F00 RID: 24320 RVA: 0x0020CB08 File Offset: 0x0020AD08
+		
 		public override void PostDeactivated()
 		{
 			SoundDefOf.CommsWindow_Close.PlayOneShotOnCamera(null);
@@ -205,13 +205,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003378 RID: 13176
+		
 		public InstructionDef def;
 
-		// Token: 0x04003379 RID: 13177
+		
 		private const float RectWidth = 310f;
 
-		// Token: 0x0400337A RID: 13178
+		
 		private const float BarHeight = 30f;
 	}
 }

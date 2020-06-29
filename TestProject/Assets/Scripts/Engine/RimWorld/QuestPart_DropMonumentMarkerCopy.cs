@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000974 RID: 2420
+	
 	public class QuestPart_DropMonumentMarkerCopy : QuestPart
 	{
-		// Token: 0x17000A48 RID: 2632
+		
 		// (get) Token: 0x06003955 RID: 14677 RVA: 0x00131149 File Offset: 0x0012F349
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003956 RID: 14678 RVA: 0x0013115C File Offset: 0x0012F35C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003957 RID: 14679 RVA: 0x001312A0 File Offset: 0x0012F4A0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -75,7 +75,7 @@ namespace RimWorld
 			Scribe_References.Look<MonumentMarker>(ref this.copy, "copy", false);
 		}
 
-		// Token: 0x06003958 RID: 14680 RVA: 0x001312F9 File Offset: 0x0012F4F9
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -86,16 +86,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040021C8 RID: 8648
+		
 		public MapParent mapParent;
 
-		// Token: 0x040021C9 RID: 8649
+		
 		public string inSignal;
 
-		// Token: 0x040021CA RID: 8650
+		
 		public string outSignalResult;
 
-		// Token: 0x040021CB RID: 8651
+		
 		private MonumentMarker copy;
 	}
 }

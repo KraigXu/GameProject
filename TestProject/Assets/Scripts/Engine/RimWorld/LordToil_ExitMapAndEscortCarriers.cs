@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000795 RID: 1941
+	
 	public class LordToil_ExitMapAndEscortCarriers : LordToil
 	{
-		// Token: 0x17000935 RID: 2357
+		
 		// (get) Token: 0x06003298 RID: 12952 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowSatisfyLongNeeds
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000936 RID: 2358
+		
 		// (get) Token: 0x06003299 RID: 12953 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowSelfTend
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600329A RID: 12954 RVA: 0x00119624 File Offset: 0x00117824
+		
 		public override void UpdateAllDuties()
 		{
 			Pawn trader;
@@ -46,7 +46,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600329B RID: 12955 RVA: 0x00119684 File Offset: 0x00117884
+		
 		private void UpdateTraderDuty(out Pawn trader)
 		{
 			trader = TraderCaravanUtility.FindTrader(this.lord);
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600329C RID: 12956 RVA: 0x001196E0 File Offset: 0x001178E0
+		
 		private void UpdateCarriersDuties(Pawn trader)
 		{
 			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600329D RID: 12957 RVA: 0x00119770 File Offset: 0x00117970
+		
 		private void UpdateDutyForChattelOrGuard(Pawn p, Pawn trader)
 		{
 			if (p.GetTraderCaravanRole() == TraderCaravanRole.Chattel)
@@ -110,7 +110,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600329E RID: 12958 RVA: 0x00119864 File Offset: 0x00117A64
+		
 		private bool TryToDefendClosestCarrier(Pawn p, float escortRadius)
 		{
 			Pawn closestCarrier = this.GetClosestCarrier(p);
@@ -154,13 +154,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600329F RID: 12959 RVA: 0x00119A21 File Offset: 0x00117C21
+		
 		public static bool IsDefendingPosition(Pawn pawn)
 		{
 			return pawn.mindState.duty != null && pawn.mindState.duty.def == DutyDefOf.Defend;
 		}
 
-		// Token: 0x060032A0 RID: 12960 RVA: 0x00119A4C File Offset: 0x00117C4C
+		
 		public static bool IsAnyDefendingPosition(List<Pawn> pawns)
 		{
 			for (int i = 0; i < pawns.Count; i++)
@@ -173,7 +173,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060032A1 RID: 12961 RVA: 0x00119A7C File Offset: 0x00117C7C
+		
 		private Pawn GetClosestCarrier(Pawn closestTo)
 		{
 			Pawn pawn = null;

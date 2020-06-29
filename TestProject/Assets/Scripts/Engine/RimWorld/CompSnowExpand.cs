@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000D56 RID: 3414
+	
 	public class CompSnowExpand : ThingComp
 	{
-		// Token: 0x17000EC6 RID: 3782
+		
 		// (get) Token: 0x0600531F RID: 21279 RVA: 0x001BCF0D File Offset: 0x001BB10D
 		public CompProperties_SnowExpand Props
 		{
@@ -19,13 +19,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005320 RID: 21280 RVA: 0x001BCF1A File Offset: 0x001BB11A
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<float>(ref this.snowRadius, "snowRadius", 0f, false);
 		}
 
-		// Token: 0x06005321 RID: 21281 RVA: 0x001BCF32 File Offset: 0x001BB132
+		
 		public override void CompTick()
 		{
 			if (!this.parent.Spawned)
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005322 RID: 21282 RVA: 0x001BCF60 File Offset: 0x001BB160
+		
 		private void TryExpandSnow()
 		{
 			if (this.parent.Map.mapTemperature.OutdoorTemp > 10f)
@@ -96,16 +96,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002DE2 RID: 11746
+		
 		private float snowRadius;
 
-		// Token: 0x04002DE3 RID: 11747
+		
 		private ModuleBase snowNoise;
 
-		// Token: 0x04002DE4 RID: 11748
+		
 		private const float MaxOutdoorTemp = 10f;
 
-		// Token: 0x04002DE5 RID: 11749
+		
 		private static HashSet<IntVec3> reachableCells = new HashSet<IntVec3>();
 	}
 }

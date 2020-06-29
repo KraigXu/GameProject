@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x0200108D RID: 4237
+	
 	public class SketchResolver_FloorFill : SketchResolver
 	{
-		// Token: 0x0600647E RID: 25726 RVA: 0x0022E3F4 File Offset: 0x0022C5F4
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			CellRect cellRect = parms.rect ?? parms.sketch.OccupiedRect;
@@ -67,7 +67,7 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600647F RID: 25727 RVA: 0x0022E66C File Offset: 0x0022C86C
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			TerrainDef terrainDef;
@@ -75,7 +75,7 @@ namespace RimWorld.SketchGen
 			return SketchResolver_FloorFill.TryFindFloors(out terrainDef, out terrainDef2, parms);
 		}
 
-		// Token: 0x06006480 RID: 25728 RVA: 0x0022E688 File Offset: 0x0022C888
+		
 		private static bool TryFindFloors(out TerrainDef floor1, out TerrainDef floor2, ResolveParams parms)
 		{
 			Predicate<TerrainDef> validator = (TerrainDef x) => SketchGenUtility.IsFloorAllowed_NewTmp(x, parms.allowWood ?? true, parms.allowConcrete ?? true, parms.useOnlyStonesAvailableOnMap, parms.onlyBuildableByPlayer ?? false, parms.onlyStoneFloors ?? true);
@@ -93,14 +93,14 @@ namespace RimWorld.SketchGen
 			return BaseGenUtility.TryRandomInexpensiveFloor(out floor2, (TerrainDef x) => x != floor1Local && (validator == null || validator(x)));
 		}
 
-		// Token: 0x06006481 RID: 25729 RVA: 0x0022E708 File Offset: 0x0022C908
+		
 		[Obsolete("Obsolete. Only needed for mod back-compatibility.")]
 		private void FloorFillRoom(IntVec3 c, HashSet<IntVec3> walls, HashSet<IntVec3> visited, Sketch sketch, TerrainDef def1, TerrainDef def2, CellRect outerRect)
 		{
 			this.FloorFillRoom_NewTmp(c, walls, visited, sketch, def1, def2, outerRect, false);
 		}
 
-		// Token: 0x06006482 RID: 25730 RVA: 0x0022E728 File Offset: 0x0022C928
+		
 		private void FloorFillRoom_NewTmp(IntVec3 c, HashSet<IntVec3> walls, HashSet<IntVec3> visited, Sketch sketch, TerrainDef def1, TerrainDef def2, CellRect outerRect, bool singleFloorType)
 		{
 			if (visited.Contains(c))
@@ -172,16 +172,16 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x04003D31 RID: 15665
+		
 		private static HashSet<IntVec3> tmpWalls = new HashSet<IntVec3>();
 
-		// Token: 0x04003D32 RID: 15666
+		
 		private static HashSet<IntVec3> tmpVisited = new HashSet<IntVec3>();
 
-		// Token: 0x04003D33 RID: 15667
+		
 		private static Stack<Pair<int, int>> tmpStack = new Stack<Pair<int, int>>();
 
-		// Token: 0x04003D34 RID: 15668
+		
 		private static List<IntVec3> tmpCells = new List<IntVec3>();
 	}
 }

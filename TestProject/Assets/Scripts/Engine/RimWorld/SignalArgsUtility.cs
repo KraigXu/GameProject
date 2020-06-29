@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009B0 RID: 2480
+	
 	public static class SignalArgsUtility
 	{
-		// Token: 0x06003B0E RID: 15118 RVA: 0x00138DB4 File Offset: 0x00136FB4
+		
 		public static bool TryGetLookTargets(SignalArgs args, string name, out LookTargets lookTargets)
 		{
 			if (args.TryGetArg<LookTargets>(name, out lookTargets))

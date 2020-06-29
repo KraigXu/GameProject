@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000773 RID: 1907
+	
 	public class LordJob_MechanoidsDefend : LordJob_MechanoidDefendBase
 	{
-		// Token: 0x17000903 RID: 2307
+		
 		// (get) Token: 0x060031D0 RID: 12752 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool CanBlockHostileVisitors
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000904 RID: 2308
+		
 		// (get) Token: 0x060031D1 RID: 12753 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AddFleeToil
 		{
@@ -28,12 +28,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031D2 RID: 12754 RVA: 0x0011591C File Offset: 0x00113B1C
+		
 		public LordJob_MechanoidsDefend()
 		{
 		}
 
-		// Token: 0x060031D3 RID: 12755 RVA: 0x00115924 File Offset: 0x00113B24
+		
 		public LordJob_MechanoidsDefend(List<Thing> things, Faction faction, float defendRadius, IntVec3 defSpot, bool canAssaultColony, bool isMechCluster)
 		{
 			this.things.AddRange(things);
@@ -44,7 +44,7 @@ namespace RimWorld
 			this.isMechCluster = isMechCluster;
 		}
 
-		// Token: 0x060031D4 RID: 12756 RVA: 0x00115960 File Offset: 0x00113B60
+		
 		public LordJob_MechanoidsDefend(SpawnedPawnParams parms)
 		{
 			this.things.Add(parms.spawnerThing);
@@ -54,7 +54,7 @@ namespace RimWorld
 			this.canAssaultColony = false;
 		}
 
-		// Token: 0x060031D5 RID: 12757 RVA: 0x001159B4 File Offset: 0x00113BB4
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -107,7 +107,7 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x060031D6 RID: 12758 RVA: 0x00115B94 File Offset: 0x00113D94
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -127,10 +127,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001B2F RID: 6959
+		
 		private Thing shipPart;
 
-		// Token: 0x04001B30 RID: 6960
+		
 		public static readonly string MemoDamaged = "ShipPartDamaged";
 	}
 }

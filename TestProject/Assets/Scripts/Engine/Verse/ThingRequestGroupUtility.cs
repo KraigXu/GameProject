@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200017C RID: 380
+	
 	public static class ThingRequestGroupUtility
 	{
-		// Token: 0x06000ADB RID: 2779 RVA: 0x000396A4 File Offset: 0x000378A4
+		
 		public static bool StoreInRegion(this ThingRequestGroup group)
 		{
 			switch (group)

@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000D63 RID: 3427
+	
 	public class CompSpawnSubplant : ThingComp
 	{
-		// Token: 0x17000ED6 RID: 3798
+		
 		// (get) Token: 0x06005376 RID: 21366 RVA: 0x001BED1E File Offset: 0x001BCF1E
 		public CompProperties_SpawnSubplant Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000ED7 RID: 3799
+		
 		// (get) Token: 0x06005377 RID: 21367 RVA: 0x001BED2B File Offset: 0x001BCF2B
 		public List<Thing> SubplantsForReading
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005378 RID: 21368 RVA: 0x001BED39 File Offset: 0x001BCF39
+		
 		public void AddProgress(float progress)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -41,19 +41,19 @@ namespace RimWorld
 			this.TryGrowSubplants();
 		}
 
-		// Token: 0x06005379 RID: 21369 RVA: 0x001BED67 File Offset: 0x001BCF67
+		
 		public void Cleanup()
 		{
 			this.subplants.RemoveAll((Thing p) => !p.Spawned);
 		}
 
-		// Token: 0x0600537A RID: 21370 RVA: 0x001BED94 File Offset: 0x001BCF94
+		
 		public override string CompInspectStringExtra()
 		{
 			return this.Props.subplant.LabelCap + ": " + this.SubplantsForReading.Count + "\n" + "ProgressToNextSubplant".Translate(this.Props.subplant.label, this.progressToNextSubplant.ToStringPercent());
 		}
 
-		// Token: 0x0600537B RID: 21371 RVA: 0x001BEE13 File Offset: 0x001BD013
+		
 		private void TryGrowSubplants()
 		{
 			while (this.progressToNextSubplant >= 1f)
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600537C RID: 21372 RVA: 0x001BEE3C File Offset: 0x001BD03C
+		
 		private void DoGrowSubplant()
 		{
 			IntVec3 position = this.parent.Position;
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600537D RID: 21373 RVA: 0x001BEFC4 File Offset: 0x001BD1C4
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (!Prefs.DevMode)
@@ -129,7 +129,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600537E RID: 21374 RVA: 0x001BEFD4 File Offset: 0x001BD1D4
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<float>(ref this.progressToNextSubplant, "progressToNextSubplant", 0f, false);
@@ -140,13 +140,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002E24 RID: 11812
+		
 		private float progressToNextSubplant;
 
-		// Token: 0x04002E25 RID: 11813
+		
 		private List<Thing> subplants = new List<Thing>();
 
-		// Token: 0x04002E26 RID: 11814
+		
 		public Action onGrassGrown;
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A59 RID: 2649
+	
 	public class GenStep_ScatterShrines : GenStep_ScatterRuinsSimple
 	{
-		// Token: 0x17000B1A RID: 2842
+		
 		// (get) Token: 0x06003EA1 RID: 16033 RVA: 0x0014C2A7 File Offset: 0x0014A4A7
 		public override int SeedPart
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EA2 RID: 16034 RVA: 0x0014C2B0 File Offset: 0x0014A4B0
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -29,7 +29,7 @@ namespace RimWorld
 			return edifice != null && edifice.def.building.isNaturalRock;
 		}
 
-		// Token: 0x06003EA3 RID: 16035 RVA: 0x0014C2EC File Offset: 0x0014A4EC
+		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int stackCount = 1)
 		{
 			int randomInRange = GenStep_ScatterShrines.SizeRange.RandomInRange;
@@ -65,7 +65,7 @@ namespace RimWorld
 			BaseGen.Generate();
 		}
 
-		// Token: 0x04002478 RID: 9336
+		
 		private static readonly IntRange SizeRange = new IntRange(15, 20);
 	}
 }

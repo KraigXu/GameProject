@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E53 RID: 3667
+	
 	public abstract class Dialog_GiveName : Window
 	{
-		// Token: 0x17000FF2 RID: 4082
+		
 		// (get) Token: 0x060058BF RID: 22719 RVA: 0x001D841C File Offset: 0x001D661C
 		private float Height
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FF3 RID: 4083
+		
 		// (get) Token: 0x060058C0 RID: 22720 RVA: 0x001D8431 File Offset: 0x001D6631
 		public override Vector2 InitialSize
 		{
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060058C1 RID: 22721 RVA: 0x001D8444 File Offset: 0x001D6644
+		
 		public Dialog_GiveName()
 		{
 			if (Find.AnyPlayerHomeMap != null && Find.AnyPlayerHomeMap.mapPawns.FreeColonistsCount != 0)
@@ -55,7 +55,7 @@ namespace RimWorld
 			this.absorbInputAroundWindow = true;
 		}
 
-		// Token: 0x060058C2 RID: 22722 RVA: 0x001D84E4 File Offset: 0x001D66E4
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			Text.Font = GameFont.Small;
@@ -125,54 +125,54 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060058C3 RID: 22723
+		
 		protected abstract bool IsValidName(string s);
 
-		// Token: 0x060058C4 RID: 22724
+		
 		protected abstract void Named(string s);
 
-		// Token: 0x060058C5 RID: 22725 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool IsValidSecondName(string s)
 		{
 			return true;
 		}
 
-		// Token: 0x060058C6 RID: 22726 RVA: 0x00002681 File Offset: 0x00000881
+		
 		protected virtual void NamedSecond(string s)
 		{
 		}
 
-		// Token: 0x04002FF0 RID: 12272
+		
 		protected Pawn suggestingPawn;
 
-		// Token: 0x04002FF1 RID: 12273
+		
 		protected string curName;
 
-		// Token: 0x04002FF2 RID: 12274
+		
 		protected Func<string> nameGenerator;
 
-		// Token: 0x04002FF3 RID: 12275
+		
 		protected string nameMessageKey;
 
-		// Token: 0x04002FF4 RID: 12276
+		
 		protected string gainedNameMessageKey;
 
-		// Token: 0x04002FF5 RID: 12277
+		
 		protected string invalidNameMessageKey;
 
-		// Token: 0x04002FF6 RID: 12278
+		
 		protected bool useSecondName;
 
-		// Token: 0x04002FF7 RID: 12279
+		
 		protected string curSecondName;
 
-		// Token: 0x04002FF8 RID: 12280
+		
 		protected Func<string> secondNameGenerator;
 
-		// Token: 0x04002FF9 RID: 12281
+		
 		protected string secondNameMessageKey;
 
-		// Token: 0x04002FFA RID: 12282
+		
 		protected string invalidSecondNameMessageKey;
 	}
 }

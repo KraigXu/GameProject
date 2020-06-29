@@ -7,11 +7,11 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001226 RID: 4646
+	
 	[StaticConstructorOnStartup]
 	public class Caravan : WorldObject, IThingHolder, IIncidentTarget, ILoadReferenceable, ITrader
 	{
-		// Token: 0x17001209 RID: 4617
+		
 		// (get) Token: 0x06006BCB RID: 27595 RVA: 0x00259A45 File Offset: 0x00257C45
 		public List<Pawn> PawnsListForReading
 		{
@@ -21,7 +21,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120A RID: 4618
+		
 		// (get) Token: 0x06006BCC RID: 27596 RVA: 0x00259A54 File Offset: 0x00257C54
 		public override Material Material
 		{
@@ -48,7 +48,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120B RID: 4619
+		
 		// (get) Token: 0x06006BCD RID: 27597 RVA: 0x00259AC7 File Offset: 0x00257CC7
 		// (set) Token: 0x06006BCE RID: 27598 RVA: 0x00259ACF File Offset: 0x00257CCF
 		public string Name
@@ -63,7 +63,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120C RID: 4620
+		
 		// (get) Token: 0x06006BCF RID: 27599 RVA: 0x00259AD8 File Offset: 0x00257CD8
 		public override Vector3 DrawPos
 		{
@@ -73,7 +73,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120D RID: 4621
+		
 		// (get) Token: 0x06006BD0 RID: 27600 RVA: 0x00259AE5 File Offset: 0x00257CE5
 		public bool IsPlayerControlled
 		{
@@ -83,7 +83,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120E RID: 4622
+		
 		// (get) Token: 0x06006BD1 RID: 27601 RVA: 0x00259AF4 File Offset: 0x00257CF4
 		public bool ImmobilizedByMass
 		{
@@ -99,7 +99,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700120F RID: 4623
+		
 		// (get) Token: 0x06006BD2 RID: 27602 RVA: 0x00259B48 File Offset: 0x00257D48
 		public Pair<float, float> DaysWorthOfFood
 		{
@@ -115,7 +115,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001210 RID: 4624
+		
 		// (get) Token: 0x06006BD3 RID: 27603 RVA: 0x00259BA1 File Offset: 0x00257DA1
 		public bool CantMove
 		{
@@ -125,7 +125,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001211 RID: 4625
+		
 		// (get) Token: 0x06006BD4 RID: 27604 RVA: 0x00259BC3 File Offset: 0x00257DC3
 		public float MassCapacity
 		{
@@ -135,7 +135,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001212 RID: 4626
+		
 		// (get) Token: 0x06006BD5 RID: 27605 RVA: 0x00259BD4 File Offset: 0x00257DD4
 		public string MassCapacityExplanation
 		{
@@ -147,7 +147,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001213 RID: 4627
+		
 		// (get) Token: 0x06006BD6 RID: 27606 RVA: 0x00259BFA File Offset: 0x00257DFA
 		public float MassUsage
 		{
@@ -157,7 +157,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001214 RID: 4628
+		
 		// (get) Token: 0x06006BD7 RID: 27607 RVA: 0x00259C0C File Offset: 0x00257E0C
 		public bool AllOwnersDowned
 		{
@@ -174,7 +174,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001215 RID: 4629
+		
 		// (get) Token: 0x06006BD8 RID: 27608 RVA: 0x00259C5C File Offset: 0x00257E5C
 		public bool AllOwnersHaveMentalBreak
 		{
@@ -191,7 +191,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001216 RID: 4630
+		
 		// (get) Token: 0x06006BD9 RID: 27609 RVA: 0x00259CAC File Offset: 0x00257EAC
 		public bool NightResting
 		{
@@ -201,7 +201,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001217 RID: 4631
+		
 		// (get) Token: 0x06006BDA RID: 27610 RVA: 0x00259D24 File Offset: 0x00257F24
 		public int LeftRestTicks
 		{
@@ -215,7 +215,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001218 RID: 4632
+		
 		// (get) Token: 0x06006BDB RID: 27611 RVA: 0x00259D3B File Offset: 0x00257F3B
 		public int LeftNonRestTicks
 		{
@@ -229,7 +229,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001219 RID: 4633
+		
 		// (get) Token: 0x06006BDC RID: 27612 RVA: 0x00259D52 File Offset: 0x00257F52
 		public override string Label
 		{
@@ -243,7 +243,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121A RID: 4634
+		
 		// (get) Token: 0x06006BDD RID: 27613 RVA: 0x00259D69 File Offset: 0x00257F69
 		public override bool HasName
 		{
@@ -253,7 +253,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121B RID: 4635
+		
 		// (get) Token: 0x06006BDE RID: 27614 RVA: 0x00259D79 File Offset: 0x00257F79
 		public int TicksPerMove
 		{
@@ -263,7 +263,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121C RID: 4636
+		
 		// (get) Token: 0x06006BDF RID: 27615 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AppendFactionToInspectString
 		{
@@ -273,7 +273,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121D RID: 4637
+		
 		// (get) Token: 0x06006BE0 RID: 27616 RVA: 0x00259D82 File Offset: 0x00257F82
 		public float Visibility
 		{
@@ -283,7 +283,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121E RID: 4638
+		
 		// (get) Token: 0x06006BE1 RID: 27617 RVA: 0x00259D8C File Offset: 0x00257F8C
 		public string VisibilityExplanation
 		{
@@ -295,7 +295,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700121F RID: 4639
+		
 		// (get) Token: 0x06006BE2 RID: 27618 RVA: 0x00259DB0 File Offset: 0x00257FB0
 		public string TicksPerMoveExplanation
 		{
@@ -307,7 +307,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001220 RID: 4640
+		
 		// (get) Token: 0x06006BE3 RID: 27619 RVA: 0x00259DD1 File Offset: 0x00257FD1
 		public IEnumerable<Thing> AllThings
 		{
@@ -317,7 +317,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001221 RID: 4641
+		
 		// (get) Token: 0x06006BE4 RID: 27620 RVA: 0x00259DE4 File Offset: 0x00257FE4
 		public int ConstantRandSeed
 		{
@@ -327,7 +327,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001222 RID: 4642
+		
 		// (get) Token: 0x06006BE5 RID: 27621 RVA: 0x00259DF2 File Offset: 0x00257FF2
 		public StoryState StoryState
 		{
@@ -337,7 +337,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001223 RID: 4643
+		
 		// (get) Token: 0x06006BE6 RID: 27622 RVA: 0x00259DFA File Offset: 0x00257FFA
 		public GameConditionManager GameConditionManager
 		{
@@ -348,7 +348,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001224 RID: 4644
+		
 		// (get) Token: 0x06006BE7 RID: 27623 RVA: 0x00259E10 File Offset: 0x00258010
 		public float PlayerWealthForStoryteller
 		{
@@ -371,7 +371,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001225 RID: 4645
+		
 		// (get) Token: 0x06006BE8 RID: 27624 RVA: 0x00259E8E File Offset: 0x0025808E
 		public IEnumerable<Pawn> PlayerPawnsForStoryteller
 		{
@@ -387,7 +387,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001226 RID: 4646
+		
 		// (get) Token: 0x06006BE9 RID: 27625 RVA: 0x00259EC8 File Offset: 0x002580C8
 		public FloatRange IncidentPointsRandomFactorRange
 		{
@@ -397,7 +397,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006BEA RID: 27626 RVA: 0x00259ED0 File Offset: 0x002580D0
+		
 		public void SetUniqueId(int newId)
 		{
 			if (this.uniqueId != -1 || newId < 0)
@@ -413,7 +413,7 @@ namespace RimWorld.Planet
 			this.uniqueId = newId;
 		}
 
-		// Token: 0x17001227 RID: 4647
+		
 		// (get) Token: 0x06006BEB RID: 27627 RVA: 0x00259F29 File Offset: 0x00258129
 		public TraderKindDef TraderKind
 		{
@@ -423,7 +423,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001228 RID: 4648
+		
 		// (get) Token: 0x06006BEC RID: 27628 RVA: 0x00259F36 File Offset: 0x00258136
 		public IEnumerable<Thing> Goods
 		{
@@ -433,7 +433,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001229 RID: 4649
+		
 		// (get) Token: 0x06006BED RID: 27629 RVA: 0x00259F43 File Offset: 0x00258143
 		public int RandomPriceFactorSeed
 		{
@@ -443,7 +443,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700122A RID: 4650
+		
 		// (get) Token: 0x06006BEE RID: 27630 RVA: 0x00259F50 File Offset: 0x00258150
 		public string TraderName
 		{
@@ -453,7 +453,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700122B RID: 4651
+		
 		// (get) Token: 0x06006BEF RID: 27631 RVA: 0x00259F5D File Offset: 0x0025815D
 		public bool CanTradeNow
 		{
@@ -463,7 +463,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700122C RID: 4652
+		
 		// (get) Token: 0x06006BF0 RID: 27632 RVA: 0x0005AC15 File Offset: 0x00058E15
 		public float TradePriceImprovementOffsetForPlayer
 		{
@@ -473,7 +473,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700122D RID: 4653
+		
 		// (get) Token: 0x06006BF1 RID: 27633 RVA: 0x00259F6A File Offset: 0x0025816A
 		public TradeCurrency TradeCurrency
 		{
@@ -483,25 +483,25 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006BF2 RID: 27634 RVA: 0x00259F77 File Offset: 0x00258177
+		
 		public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
 		{
 			return this.trader.ColonyThingsWillingToBuy(playerNegotiator);
 		}
 
-		// Token: 0x06006BF3 RID: 27635 RVA: 0x00259F85 File Offset: 0x00258185
+		
 		public void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			this.trader.GiveSoldThingToTrader(toGive, countToGive, playerNegotiator);
 		}
 
-		// Token: 0x06006BF4 RID: 27636 RVA: 0x00259F95 File Offset: 0x00258195
+		
 		public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			this.trader.GiveSoldThingToPlayer(toGive, countToGive, playerNegotiator);
 		}
 
-		// Token: 0x06006BF5 RID: 27637 RVA: 0x00259FA8 File Offset: 0x002581A8
+		
 		public Caravan()
 		{
 			this.pawns = new ThingOwner<Pawn>(this, false, LookMode.Reference);
@@ -516,7 +516,7 @@ namespace RimWorld.Planet
 			this.storyState = new StoryState(this);
 		}
 
-		// Token: 0x06006BF6 RID: 27638 RVA: 0x0025A054 File Offset: 0x00258254
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -562,7 +562,7 @@ namespace RimWorld.Planet
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06006BF7 RID: 27639 RVA: 0x0025A1A6 File Offset: 0x002583A6
+		
 		public override void PostAdd()
 		{
 			base.PostAdd();
@@ -571,7 +571,7 @@ namespace RimWorld.Planet
 			Find.ColonistBar.MarkColonistsDirty();
 		}
 
-		// Token: 0x06006BF8 RID: 27640 RVA: 0x0025A1CE File Offset: 0x002583CE
+		
 		public override void PostRemove()
 		{
 			base.PostRemove();
@@ -579,7 +579,7 @@ namespace RimWorld.Planet
 			Find.ColonistBar.MarkColonistsDirty();
 		}
 
-		// Token: 0x06006BF9 RID: 27641 RVA: 0x0025A1EC File Offset: 0x002583EC
+		
 		public override void Tick()
 		{
 			base.Tick();
@@ -594,14 +594,14 @@ namespace RimWorld.Planet
 			CaravanTendUtility.CheckTend(this);
 		}
 
-		// Token: 0x06006BFA RID: 27642 RVA: 0x0025A253 File Offset: 0x00258453
+		
 		public override void SpawnSetup()
 		{
 			base.SpawnSetup();
 			this.tweener.ResetTweenedPosToRoot();
 		}
 
-		// Token: 0x06006BFB RID: 27643 RVA: 0x0025A266 File Offset: 0x00258466
+		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
@@ -612,7 +612,7 @@ namespace RimWorld.Planet
 			this.gotoMote.RenderMote();
 		}
 
-		// Token: 0x06006BFC RID: 27644 RVA: 0x0025A2A0 File Offset: 0x002584A0
+		
 		public void AddPawn(Pawn p, bool addCarriedPawnToWorldPawnsIfAny)
 		{
 			if (p == null)
@@ -667,7 +667,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006BFD RID: 27645 RVA: 0x0025A3A8 File Offset: 0x002585A8
+		
 		public void AddPawnOrItem(Thing thing, bool addCarriedPawnToWorldPawnsIfAny)
 		{
 			if (thing == null)
@@ -684,31 +684,31 @@ namespace RimWorld.Planet
 			CaravanInventoryUtility.GiveThing(this, thing);
 		}
 
-		// Token: 0x06006BFE RID: 27646 RVA: 0x0025A3E4 File Offset: 0x002585E4
+		
 		public bool ContainsPawn(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x06006BFF RID: 27647 RVA: 0x0025A3F2 File Offset: 0x002585F2
+		
 		public void RemovePawn(Pawn p)
 		{
 			this.pawns.Remove(p);
 		}
 
-		// Token: 0x06006C00 RID: 27648 RVA: 0x0025A401 File Offset: 0x00258601
+		
 		public void RemoveAllPawns()
 		{
 			this.pawns.Clear();
 		}
 
-		// Token: 0x06006C01 RID: 27649 RVA: 0x0025A40E File Offset: 0x0025860E
+		
 		public bool IsOwner(Pawn p)
 		{
 			return this.pawns.Contains(p) && CaravanUtility.IsOwner(p, base.Faction);
 		}
 
-		// Token: 0x06006C02 RID: 27650 RVA: 0x0025A42C File Offset: 0x0025862C
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -859,17 +859,14 @@ namespace RimWorld.Planet
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06006C03 RID: 27651 RVA: 0x0025A895 File Offset: 0x00258A95
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
 			if (Find.WorldSelector.SingleSelectedObject == this)
 			{
 				yield return new Gizmo_CaravanInfo(this);
 			}
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.IsPlayerControlled)
 			{
@@ -1034,10 +1031,10 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006C04 RID: 27652 RVA: 0x0025A8A5 File Offset: 0x00258AA5
+		
 		public override IEnumerable<FloatMenuOption> GetTransportPodsFloatMenuOptions(IEnumerable<IThingHolder> pods, CompLaunchable representative)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.<>n__1(pods, representative))
+			foreach (FloatMenuOption floatMenuOption in this.n__1(pods, representative))
 			{
 				yield return floatMenuOption;
 			}
@@ -1051,19 +1048,19 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006C05 RID: 27653 RVA: 0x0025A8C3 File Offset: 0x00258AC3
+		
 		public void RecacheImmobilizedNow()
 		{
 			this.cachedImmobilizedForTicks = -99999;
 		}
 
-		// Token: 0x06006C06 RID: 27654 RVA: 0x0025A8D0 File Offset: 0x00258AD0
+		
 		public void RecacheDaysWorthOfFood()
 		{
 			this.cachedDaysWorthOfFoodForTicks = -99999;
 		}
 
-		// Token: 0x06006C07 RID: 27655 RVA: 0x0025A8E0 File Offset: 0x00258AE0
+		
 		public virtual void Notify_MemberDied(Pawn member)
 		{
 			if (!base.Spawned)
@@ -1085,19 +1082,19 @@ namespace RimWorld.Planet
 			this.RemovePawn(member);
 		}
 
-		// Token: 0x06006C08 RID: 27656 RVA: 0x0025A9B9 File Offset: 0x00258BB9
+		
 		public virtual void Notify_Merged(List<Caravan> group)
 		{
 			this.notifiedOutOfFood = false;
 		}
 
-		// Token: 0x06006C09 RID: 27657 RVA: 0x0025A9B9 File Offset: 0x00258BB9
+		
 		public virtual void Notify_StartedTrading()
 		{
 			this.notifiedOutOfFood = false;
 		}
 
-		// Token: 0x06006C0A RID: 27658 RVA: 0x0025A9C4 File Offset: 0x00258BC4
+		
 		private void CheckAnyNonWorldPawns()
 		{
 			for (int i = this.pawns.Count - 1; i >= 0; i--)
@@ -1110,13 +1107,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006C0B RID: 27659 RVA: 0x0025AA35 File Offset: 0x00258C35
+		
 		private bool ShouldAutoCapture(Pawn p)
 		{
 			return CaravanUtility.ShouldAutoCapture(p, base.Faction);
 		}
 
-		// Token: 0x06006C0C RID: 27660 RVA: 0x0025AA43 File Offset: 0x00258C43
+		
 		public void Notify_PawnRemoved(Pawn p)
 		{
 			Find.ColonistBar.MarkColonistsDirty();
@@ -1126,7 +1123,7 @@ namespace RimWorld.Planet
 			this.beds.Notify_PawnRemoved();
 		}
 
-		// Token: 0x06006C0D RID: 27661 RVA: 0x0025AA71 File Offset: 0x00258C71
+		
 		public void Notify_PawnAdded(Pawn p)
 		{
 			Find.ColonistBar.MarkColonistsDirty();
@@ -1134,98 +1131,98 @@ namespace RimWorld.Planet
 			this.RecacheDaysWorthOfFood();
 		}
 
-		// Token: 0x06006C0E RID: 27662 RVA: 0x0025AA89 File Offset: 0x00258C89
+		
 		public void Notify_DestinationOrPauseStatusChanged()
 		{
 			this.RecacheDaysWorthOfFood();
 		}
 
-		// Token: 0x06006C0F RID: 27663 RVA: 0x0025AA91 File Offset: 0x00258C91
+		
 		public void Notify_Teleported()
 		{
 			this.tweener.ResetTweenedPosToRoot();
 			this.pather.Notify_Teleported_Int();
 		}
 
-		// Token: 0x06006C10 RID: 27664 RVA: 0x0025AAA9 File Offset: 0x00258CA9
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return this.pawns;
 		}
 
-		// Token: 0x06006C11 RID: 27665 RVA: 0x0025AAB1 File Offset: 0x00258CB1
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
 		}
 
-		// Token: 0x0400433D RID: 17213
+		
 		private int uniqueId = -1;
 
-		// Token: 0x0400433E RID: 17214
+		
 		private string nameInt;
 
-		// Token: 0x0400433F RID: 17215
+		
 		public ThingOwner<Pawn> pawns;
 
-		// Token: 0x04004340 RID: 17216
+		
 		public bool autoJoinable;
 
-		// Token: 0x04004341 RID: 17217
+		
 		public Caravan_PathFollower pather;
 
-		// Token: 0x04004342 RID: 17218
+		
 		public Caravan_GotoMoteRenderer gotoMote;
 
-		// Token: 0x04004343 RID: 17219
+		
 		public Caravan_Tweener tweener;
 
-		// Token: 0x04004344 RID: 17220
+		
 		public Caravan_TraderTracker trader;
 
-		// Token: 0x04004345 RID: 17221
+		
 		public Caravan_ForageTracker forage;
 
-		// Token: 0x04004346 RID: 17222
+		
 		public Caravan_NeedsTracker needs;
 
-		// Token: 0x04004347 RID: 17223
+		
 		public Caravan_CarryTracker carryTracker;
 
-		// Token: 0x04004348 RID: 17224
+		
 		public Caravan_BedsTracker beds;
 
-		// Token: 0x04004349 RID: 17225
+		
 		public StoryState storyState;
 
-		// Token: 0x0400434A RID: 17226
+		
 		private Material cachedMat;
 
-		// Token: 0x0400434B RID: 17227
+		
 		private bool cachedImmobilized;
 
-		// Token: 0x0400434C RID: 17228
+		
 		private int cachedImmobilizedForTicks = -99999;
 
-		// Token: 0x0400434D RID: 17229
+		
 		private Pair<float, float> cachedDaysWorthOfFood;
 
-		// Token: 0x0400434E RID: 17230
+		
 		private int cachedDaysWorthOfFoodForTicks = -99999;
 
-		// Token: 0x0400434F RID: 17231
+		
 		public bool notifiedOutOfFood;
 
-		// Token: 0x04004350 RID: 17232
+		
 		private const int ImmobilizedCacheDuration = 60;
 
-		// Token: 0x04004351 RID: 17233
+		
 		private const int DaysWorthOfFoodCacheDuration = 3000;
 
-		// Token: 0x04004352 RID: 17234
+		
 		private static readonly Texture2D SplitCommand = ContentFinder<Texture2D>.Get("UI/Commands/SplitCaravan", true);
 
-		// Token: 0x04004353 RID: 17235
+		
 		private static readonly Color PlayerCaravanColor = new Color(1f, 0.863f, 0.33f);
 	}
 }

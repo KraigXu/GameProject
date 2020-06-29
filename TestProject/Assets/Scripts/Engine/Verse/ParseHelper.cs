@@ -10,16 +10,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000029 RID: 41
+	
 	public static class ParseHelper
 	{
-		// Token: 0x060002B3 RID: 691 RVA: 0x0000E357 File Offset: 0x0000C557
+		
 		public static string ParseString(string str)
 		{
 			return str.Replace("\\n", "\n");
 		}
 
-		// Token: 0x060002B4 RID: 692 RVA: 0x0000E36C File Offset: 0x0000C56C
+		
 		public static int ParseIntPermissive(string str)
 		{
 			int result;
@@ -31,7 +31,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060002B5 RID: 693 RVA: 0x0000E3B4 File Offset: 0x0000C5B4
+		
 		public static Vector3 FromStringVector3(string Str)
 		{
 			Str = Str.TrimStart(new char[]
@@ -53,7 +53,7 @@ namespace Verse
 			return new Vector3(x, y, z);
 		}
 
-		// Token: 0x060002B6 RID: 694 RVA: 0x0000E424 File Offset: 0x0000C624
+		
 		public static Vector2 FromStringVector2(string Str)
 		{
 			Str = Str.TrimStart(new char[]
@@ -87,7 +87,7 @@ namespace Verse
 			return new Vector2(x, y);
 		}
 
-		// Token: 0x060002B7 RID: 695 RVA: 0x0000E4AC File Offset: 0x0000C6AC
+		
 		public static Vector4 FromStringVector4Adaptive(string Str)
 		{
 			Str = Str.TrimStart(new char[]
@@ -130,7 +130,7 @@ namespace Verse
 			return new Vector4(x, y, z, w);
 		}
 
-		// Token: 0x060002B8 RID: 696 RVA: 0x0000E57C File Offset: 0x0000C77C
+		
 		public static Rect FromStringRect(string str)
 		{
 			str = str.TrimStart(new char[]
@@ -153,37 +153,37 @@ namespace Verse
 			return new Rect(x, y, width, height);
 		}
 
-		// Token: 0x060002B9 RID: 697 RVA: 0x0000E5F8 File Offset: 0x0000C7F8
+		
 		public static float ParseFloat(string str)
 		{
 			return float.Parse(str, CultureInfo.InvariantCulture);
 		}
 
-		// Token: 0x060002BA RID: 698 RVA: 0x0000E605 File Offset: 0x0000C805
+		
 		public static bool ParseBool(string str)
 		{
 			return bool.Parse(str);
 		}
 
-		// Token: 0x060002BB RID: 699 RVA: 0x0000E60D File Offset: 0x0000C80D
+		
 		public static long ParseLong(string str)
 		{
 			return long.Parse(str, CultureInfo.InvariantCulture);
 		}
 
-		// Token: 0x060002BC RID: 700 RVA: 0x0000E61A File Offset: 0x0000C81A
+		
 		public static double ParseDouble(string str)
 		{
 			return double.Parse(str, CultureInfo.InvariantCulture);
 		}
 
-		// Token: 0x060002BD RID: 701 RVA: 0x0000E627 File Offset: 0x0000C827
+		
 		public static sbyte ParseSByte(string str)
 		{
 			return sbyte.Parse(str, CultureInfo.InvariantCulture);
 		}
 
-		// Token: 0x060002BE RID: 702 RVA: 0x0000E634 File Offset: 0x0000C834
+		
 		public static Type ParseType(string str)
 		{
 			if (str == "null" || str == "Null")
@@ -198,7 +198,7 @@ namespace Verse
 			return typeInAnyAssembly;
 		}
 
-		// Token: 0x060002BF RID: 703 RVA: 0x0000E674 File Offset: 0x0000C874
+		
 		public static Action ParseAction(string str)
 		{
 			string[] array = str.Split(new char[]
@@ -219,7 +219,7 @@ namespace Verse
 			return (Action)Delegate.CreateDelegate(typeof(Action), method);
 		}
 
-		// Token: 0x060002C0 RID: 704 RVA: 0x0000E6F8 File Offset: 0x0000C8F8
+		
 		public static Color ParseColor(string str)
 		{
 			str = str.TrimStart(ParseHelper.colorTrimStartParameters);
@@ -252,43 +252,43 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060002C1 RID: 705 RVA: 0x0000E7CC File Offset: 0x0000C9CC
+		
 		public static PublishedFileId_t ParsePublishedFileId(string str)
 		{
 			return new PublishedFileId_t(ulong.Parse(str));
 		}
 
-		// Token: 0x060002C2 RID: 706 RVA: 0x0000E7D9 File Offset: 0x0000C9D9
+		
 		public static IntVec2 ParseIntVec2(string str)
 		{
 			return IntVec2.FromString(str);
 		}
 
-		// Token: 0x060002C3 RID: 707 RVA: 0x0000E7E1 File Offset: 0x0000C9E1
+		
 		public static IntVec3 ParseIntVec3(string str)
 		{
 			return IntVec3.FromString(str);
 		}
 
-		// Token: 0x060002C4 RID: 708 RVA: 0x0000E7E9 File Offset: 0x0000C9E9
+		
 		public static Rot4 ParseRot4(string str)
 		{
 			return Rot4.FromString(str);
 		}
 
-		// Token: 0x060002C5 RID: 709 RVA: 0x0000E7F1 File Offset: 0x0000C9F1
+		
 		public static CellRect ParseCellRect(string str)
 		{
 			return CellRect.FromString(str);
 		}
 
-		// Token: 0x060002C6 RID: 710 RVA: 0x0000E7F9 File Offset: 0x0000C9F9
+		
 		public static CurvePoint ParseCurvePoint(string str)
 		{
 			return CurvePoint.FromString(str);
 		}
 
-		// Token: 0x060002C7 RID: 711 RVA: 0x0000E801 File Offset: 0x0000CA01
+		
 		public static NameTriple ParseNameTriple(string str)
 		{
 			NameTriple nameTriple = NameTriple.FromString(str);
@@ -296,25 +296,25 @@ namespace Verse
 			return nameTriple;
 		}
 
-		// Token: 0x060002C8 RID: 712 RVA: 0x0000E810 File Offset: 0x0000CA10
+		
 		public static FloatRange ParseFloatRange(string str)
 		{
 			return FloatRange.FromString(str);
 		}
 
-		// Token: 0x060002C9 RID: 713 RVA: 0x0000E818 File Offset: 0x0000CA18
+		
 		public static IntRange ParseIntRange(string str)
 		{
 			return IntRange.FromString(str);
 		}
 
-		// Token: 0x060002CA RID: 714 RVA: 0x0000E820 File Offset: 0x0000CA20
+		
 		public static QualityRange ParseQualityRange(string str)
 		{
 			return QualityRange.FromString(str);
 		}
 
-		// Token: 0x060002CB RID: 715 RVA: 0x0000E828 File Offset: 0x0000CA28
+		
 		public static ColorInt ParseColorInt(string str)
 		{
 			str = str.TrimStart(ParseHelper.colorTrimStartParameters);
@@ -338,13 +338,13 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060002CC RID: 716 RVA: 0x0000E8CD File Offset: 0x0000CACD
+		
 		public static TaggedString ParseTaggedString(string str)
 		{
 			return str;
 		}
 
-		// Token: 0x060002CD RID: 717 RVA: 0x0000E8D8 File Offset: 0x0000CAD8
+		
 		static ParseHelper()
 		{
 			ParseHelper.Parsers<string>.Register(new Func<string, string>(ParseHelper.ParseString));
@@ -375,7 +375,7 @@ namespace Verse
 			ParseHelper.Parsers<TaggedString>.Register(new Func<string, TaggedString>(ParseHelper.ParseTaggedString));
 		}
 
-		// Token: 0x060002CE RID: 718 RVA: 0x0000EAD0 File Offset: 0x0000CCD0
+		
 		public static T FromString<T>(string str)
 		{
 			Func<string, T> parser = ParseHelper.Parsers<T>.parser;
@@ -386,7 +386,7 @@ namespace Verse
 			return (T)((object)ParseHelper.FromString(str, typeof(T)));
 		}
 
-		// Token: 0x060002CF RID: 719 RVA: 0x0000EB04 File Offset: 0x0000CD04
+		
 		public static object FromString(string str, Type itemType)
 		{
 			object result;
@@ -453,14 +453,14 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060002D0 RID: 720 RVA: 0x0000EC54 File Offset: 0x0000CE54
+		
 		public static bool HandlesType(Type type)
 		{
 			type = (Nullable.GetUnderlyingType(type) ?? type);
 			return type.IsPrimitive || type.IsEnum || ParseHelper.parsers.ContainsKey(type) || typeof(ISlateRef).IsAssignableFrom(type);
 		}
 
-		// Token: 0x060002D1 RID: 721 RVA: 0x0000EC94 File Offset: 0x0000CE94
+		
 		public static bool CanParse(Type type, string str)
 		{
 			if (!ParseHelper.HandlesType(type))
@@ -482,10 +482,10 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x04000077 RID: 119
+		
 		private static Dictionary<Type, Func<string, object>> parsers = new Dictionary<Type, Func<string, object>>();
 
-		// Token: 0x04000078 RID: 120
+		
 		private static readonly char[] colorTrimStartParameters = new char[]
 		{
 			'(',
@@ -495,26 +495,26 @@ namespace Verse
 			'A'
 		};
 
-		// Token: 0x04000079 RID: 121
+		
 		private static readonly char[] colorTrimEndParameters = new char[]
 		{
 			')'
 		};
 
-		// Token: 0x02001305 RID: 4869
+		
 		public static class Parsers<T>
 		{
-			// Token: 0x06007380 RID: 29568 RVA: 0x00282394 File Offset: 0x00280594
+			
 			public static void Register(Func<string, T> method)
 			{
 				ParseHelper.Parsers<T>.parser = method;
 				ParseHelper.parsers.Add(typeof(T), (string str) => method(str));
 			}
 
-			// Token: 0x04004807 RID: 18439
+			
 			public static Func<string, T> parser;
 
-			// Token: 0x04004808 RID: 18440
+			
 			public static readonly string profilerLabel = "ParseHelper.FromString<" + typeof(T).FullName + ">()";
 		}
 	}

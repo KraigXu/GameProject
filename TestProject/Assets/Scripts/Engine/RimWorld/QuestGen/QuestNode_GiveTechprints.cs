@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001173 RID: 4467
+	
 	public class QuestNode_GiveTechprints : QuestNode
 	{
-		// Token: 0x060067D9 RID: 26585 RVA: 0x0024511C File Offset: 0x0024331C
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			ResearchProjectDef researchProjectDef = this.FindTargetProject(slate);
@@ -22,7 +22,7 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x060067DA RID: 26586 RVA: 0x00245164 File Offset: 0x00243364
+		
 		private ResearchProjectDef FindTargetProject(Slate slate)
 		{
 			if (this.fixedProject.GetValue(slate) != null)
@@ -34,7 +34,7 @@ namespace RimWorld.QuestGen
 			select p).RandomElement<ResearchProjectDef>();
 		}
 
-		// Token: 0x060067DB RID: 26587 RVA: 0x002451BC File Offset: 0x002433BC
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -51,14 +51,14 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x0400400A RID: 16394
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x0400400B RID: 16395
+		
 		public SlateRef<ResearchProjectDef> fixedProject;
 
-		// Token: 0x0400400C RID: 16396
+		
 		[NoTranslate]
 		public SlateRef<string> storeProjectAs;
 	}

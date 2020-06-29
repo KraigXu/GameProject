@@ -6,14 +6,14 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E3E RID: 3646
+	
 	public abstract class Designator_Place : Designator
 	{
-		// Token: 0x17000FD3 RID: 4051
+		
 		// (get) Token: 0x06005837 RID: 22583
 		public abstract BuildableDef PlacingDef { get; }
 
-		// Token: 0x06005838 RID: 22584 RVA: 0x001D463E File Offset: 0x001D283E
+		
 		public Designator_Place()
 		{
 			this.soundDragSustain = SoundDefOf.Designate_DragBuilding;
@@ -21,7 +21,7 @@ namespace RimWorld
 			this.soundSucceeded = SoundDefOf.Designate_PlaceBuilding;
 		}
 
-		// Token: 0x06005839 RID: 22585 RVA: 0x001D4670 File Offset: 0x001D2870
+		
 		public override void DrawMouseAttachments()
 		{
 			base.DrawMouseAttachments();
@@ -61,13 +61,13 @@ namespace RimWorld
 			Designator_Place.tmpThings.Clear();
 		}
 
-		// Token: 0x0600583A RID: 22586 RVA: 0x001D48E0 File Offset: 0x001D2AE0
+		
 		protected virtual bool CanDrawNumbersBetween(Thing thing, ThingDef def, IntVec3 a, IntVec3 b, Map map)
 		{
 			return !GenThing.CloserThingBetween(def, a, b, map, null);
 		}
 
-		// Token: 0x0600583B RID: 22587 RVA: 0x001D48F4 File Offset: 0x001D2AF4
+		
 		public override void DoExtraGuiControls(float leftX, float bottomY)
 		{
 			ThingDef thingDef = this.PlacingDef as ThingDef;
@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600583C RID: 22588 RVA: 0x001D496C File Offset: 0x001D2B6C
+		
 		public override void SelectedProcessInput(Event ev)
 		{
 			base.SelectedProcessInput(ev);
@@ -116,7 +116,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600583D RID: 22589 RVA: 0x001D49A0 File Offset: 0x001D2BA0
+		
 		public override void SelectedUpdate()
 		{
 			GenDraw.DrawNoBuildEdgeLines();
@@ -146,7 +146,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600583E RID: 22590 RVA: 0x001D4A64 File Offset: 0x001D2C64
+		
 		protected virtual void DrawGhost(Color ghostCol)
 		{
 			ThingDef def;
@@ -157,7 +157,7 @@ namespace RimWorld
 			GhostDrawer.DrawGhostThing(UI.MouseCell(), this.placingRot, (ThingDef)this.PlacingDef, null, ghostCol, AltitudeLayer.Blueprint, null);
 		}
 
-		// Token: 0x0600583F RID: 22591 RVA: 0x001D4ABC File Offset: 0x001D2CBC
+		
 		private void HandleRotationShortcuts()
 		{
 			RotationDirection rotationDirection = RotationDirection.None;
@@ -193,31 +193,31 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005840 RID: 22592 RVA: 0x001D4B6B File Offset: 0x001D2D6B
+		
 		public override void Selected()
 		{
 			this.placingRot = this.PlacingDef.defaultPlacingRot;
 		}
 
-		// Token: 0x04002FAC RID: 12204
+		
 		protected Rot4 placingRot = Rot4.North;
 
-		// Token: 0x04002FAD RID: 12205
+		
 		protected static float middleMouseDownTime;
 
-		// Token: 0x04002FAE RID: 12206
+		
 		private const float RotButSize = 64f;
 
-		// Token: 0x04002FAF RID: 12207
+		
 		private const float RotButSpacing = 10f;
 
-		// Token: 0x04002FB0 RID: 12208
+		
 		public static readonly Color CanPlaceColor = new Color(0.5f, 1f, 0.6f, 0.4f);
 
-		// Token: 0x04002FB1 RID: 12209
+		
 		public static readonly Color CannotPlaceColor = new Color(1f, 0f, 0f, 0.4f);
 
-		// Token: 0x04002FB2 RID: 12210
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

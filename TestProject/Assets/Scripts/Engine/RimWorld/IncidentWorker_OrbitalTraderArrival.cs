@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009EA RID: 2538
+	
 	public class IncidentWorker_OrbitalTraderArrival : IncidentWorker
 	{
-		// Token: 0x06003C6D RID: 15469 RVA: 0x0013F4B1 File Offset: 0x0013D6B1
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			return base.CanFireNowSub(parms) && ((Map)parms.target).passingShipManager.passingShips.Count < 5;
 		}
 
-		// Token: 0x06003C6E RID: 15470 RVA: 0x0013F4E0 File Offset: 0x0013D6E0
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -39,7 +39,7 @@ namespace RimWorld
 			throw new InvalidOperationException();
 		}
 
-		// Token: 0x06003C6F RID: 15471 RVA: 0x0013F640 File Offset: 0x0013D840
+		
 		private Faction GetFaction(TraderKindDef trader)
 		{
 			if (trader.faction == null)
@@ -56,7 +56,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06003C70 RID: 15472 RVA: 0x0013F690 File Offset: 0x0013D890
+		
 		private bool CanSpawn(Map map, TraderKindDef trader)
 		{
 			if (!trader.orbital)
@@ -85,7 +85,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0400238D RID: 9101
+		
 		private const int MaxShips = 5;
 	}
 }

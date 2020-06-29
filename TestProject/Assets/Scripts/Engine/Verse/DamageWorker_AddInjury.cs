@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000223 RID: 547
+	
 	public class DamageWorker_AddInjury : DamageWorker
 	{
-		// Token: 0x06000F4F RID: 3919 RVA: 0x0005814C File Offset: 0x0005634C
+		
 		public override DamageWorker.DamageResult Apply(DamageInfo dinfo, Thing thing)
 		{
 			Pawn pawn = thing as Pawn;
@@ -19,7 +19,7 @@ namespace Verse
 			return this.ApplyToPawn(dinfo, pawn);
 		}
 
-		// Token: 0x06000F50 RID: 3920 RVA: 0x00058174 File Offset: 0x00056374
+		
 		private DamageWorker.DamageResult ApplyToPawn(DamageInfo dinfo, Pawn pawn)
 		{
 			DamageWorker.DamageResult damageResult = new DamageWorker.DamageResult();
@@ -130,7 +130,7 @@ namespace Verse
 			return damageResult;
 		}
 
-		// Token: 0x06000F51 RID: 3921 RVA: 0x000584A4 File Offset: 0x000566A4
+		
 		private void CheckApplySpreadDamage(DamageInfo dinfo, Thing t)
 		{
 			if (dinfo.Def == DamageDefOf.Flame && !t.FlammableNow)
@@ -144,7 +144,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F52 RID: 3922 RVA: 0x00058500 File Offset: 0x00056700
+		
 		private void ApplySmallPawnDamagePropagation(DamageInfo dinfo, Pawn pawn, DamageWorker.DamageResult result)
 		{
 			if (!dinfo.AllowDamagePropagation)
@@ -159,7 +159,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F53 RID: 3923 RVA: 0x000585CC File Offset: 0x000567CC
+		
 		private void ApplyDamageToPart(DamageInfo dinfo, Pawn pawn, DamageWorker.DamageResult result)
 		{
 			BodyPartRecord exactPartFromDamageInfo = this.GetExactPartFromDamageInfo(dinfo, pawn);
@@ -210,7 +210,7 @@ namespace Verse
 			this.ApplySpecialEffectsToPart(pawn, num, dinfo, result);
 		}
 
-		// Token: 0x06000F54 RID: 3924 RVA: 0x00058728 File Offset: 0x00056928
+		
 		protected virtual void ApplySpecialEffectsToPart(Pawn pawn, float totalDamage, DamageInfo dinfo, DamageWorker.DamageResult result)
 		{
 			totalDamage = this.ReduceDamageToPreserveOutsideParts(totalDamage, dinfo, pawn);
@@ -218,7 +218,7 @@ namespace Verse
 			this.CheckDuplicateDamageToOuterParts(dinfo, pawn, totalDamage, result);
 		}
 
-		// Token: 0x06000F55 RID: 3925 RVA: 0x0005874C File Offset: 0x0005694C
+		
 		protected float FinalizeAndAddInjury(Pawn pawn, float totalDamage, DamageInfo dinfo, DamageWorker.DamageResult result)
 		{
 			if (pawn.health.hediffSet.PartIsMissing(dinfo.HitPart))
@@ -253,7 +253,7 @@ namespace Verse
 			return this.FinalizeAndAddInjury(pawn, hediff_Injury, dinfo, result);
 		}
 
-		// Token: 0x06000F56 RID: 3926 RVA: 0x00058828 File Offset: 0x00056A28
+		
 		protected float FinalizeAndAddInjury(Pawn pawn, Hediff_Injury injury, DamageInfo dinfo, DamageWorker.DamageResult result)
 		{
 			HediffComp_GetsPermanent hediffComp_GetsPermanent = injury.TryGetComp<HediffComp_GetsPermanent>();
@@ -270,7 +270,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x06000F57 RID: 3927 RVA: 0x000588AC File Offset: 0x00056AAC
+		
 		private void CheckDuplicateDamageToOuterParts(DamageInfo dinfo, Pawn pawn, float totalDamage, DamageWorker.DamageResult result)
 		{
 			if (!dinfo.AllowDamagePropagation)
@@ -305,13 +305,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F58 RID: 3928 RVA: 0x00058995 File Offset: 0x00056B95
+		
 		private static bool IsHeadshot(DamageInfo dinfo, Pawn pawn)
 		{
 			return !dinfo.InstantPermanentInjury && dinfo.HitPart.groups.Contains(BodyPartGroupDefOf.FullHead) && dinfo.Def == DamageDefOf.Bullet;
 		}
 
-		// Token: 0x06000F59 RID: 3929 RVA: 0x000589CC File Offset: 0x00056BCC
+		
 		private BodyPartRecord GetExactPartFromDamageInfo(DamageInfo dinfo, Pawn pawn)
 		{
 			if (dinfo.HitPart == null)
@@ -330,13 +330,13 @@ namespace Verse
 			return dinfo.HitPart;
 		}
 
-		// Token: 0x06000F5A RID: 3930 RVA: 0x00058A43 File Offset: 0x00056C43
+		
 		protected virtual BodyPartRecord ChooseHitPart(DamageInfo dinfo, Pawn pawn)
 		{
 			return pawn.health.hediffSet.GetRandomNotMissingPart(dinfo.Def, dinfo.Height, dinfo.Depth, null);
 		}
 
-		// Token: 0x06000F5B RID: 3931 RVA: 0x00058A6C File Offset: 0x00056C6C
+		
 		private static void PlayWoundedVoiceSound(DamageInfo dinfo, Pawn pawn)
 		{
 			if (pawn.Dead)
@@ -357,7 +357,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000F5C RID: 3932 RVA: 0x00058AD0 File Offset: 0x00056CD0
+		
 		protected float ReduceDamageToPreserveOutsideParts(float postArmorDamage, DamageInfo dinfo, Pawn pawn)
 		{
 			if (!DamageWorker_AddInjury.ShouldReduceDamageToPreservePart(dinfo.HitPart))
@@ -378,7 +378,7 @@ namespace Verse
 			return postArmorDamage = partHealth - 1f;
 		}
 
-		// Token: 0x06000F5D RID: 3933 RVA: 0x00058B48 File Offset: 0x00056D48
+		
 		public static bool ShouldReduceDamageToPreservePart(BodyPartRecord bodyPart)
 		{
 			return bodyPart.depth == BodyPartDepth.Outside && !bodyPart.IsCorePart;

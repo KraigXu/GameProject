@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D85 RID: 3461
+	
 	public class CompLongRangeMineralScanner : CompScanner
 	{
-		// Token: 0x17000EFB RID: 3835
+		
 		// (get) Token: 0x06005457 RID: 21591 RVA: 0x001C2857 File Offset: 0x001C0A57
 		public new CompProperties_LongRangeMineralScanner Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005458 RID: 21592 RVA: 0x001C2864 File Offset: 0x001C0A64
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -30,20 +30,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005459 RID: 21593 RVA: 0x001C2892 File Offset: 0x001C0A92
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
 			this.SetDefaultTargetMineral();
 		}
 
-		// Token: 0x0600545A RID: 21594 RVA: 0x001C28A1 File Offset: 0x001C0AA1
+		
 		private void SetDefaultTargetMineral()
 		{
 			this.targetMineable = ThingDefOf.MineableGold;
 		}
 
-		// Token: 0x0600545B RID: 21595 RVA: 0x001C28B0 File Offset: 0x001C0AB0
+		
 		protected override void DoFind(Pawn worker)
 		{
 			Slate slate = new Slate();
@@ -58,13 +58,10 @@ namespace RimWorld
 			Find.LetterStack.ReceiveLetter(quest.name, quest.description, LetterDefOf.PositiveEvent, null, null, quest, null, null);
 		}
 
-		// Token: 0x0600545C RID: 21596 RVA: 0x001C2938 File Offset: 0x001C0B38
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.parent.Faction == Faction.OfPlayer)
 			{
@@ -106,7 +103,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002E73 RID: 11891
+		
 		private ThingDef targetMineable;
 	}
 }

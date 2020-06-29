@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000256 RID: 598
+	
 	public class HediffComp_EntropyLink : HediffComp
 	{
-		// Token: 0x17000341 RID: 833
+		
 		// (get) Token: 0x06001068 RID: 4200 RVA: 0x0005DDFF File Offset: 0x0005BFFF
 		public HediffCompProperties_EntropyLink Props
 		{
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001069 RID: 4201 RVA: 0x0005DE0C File Offset: 0x0005C00C
+		
 		public override void Notify_EntropyGained(float baseAmount, float finalAmount, Thing source = null)
 		{
 			base.Notify_EntropyGained(baseAmount, finalAmount, source);

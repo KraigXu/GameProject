@@ -9,10 +9,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x02000233 RID: 563
+	
 	public class Hediff : IExposable, ILoadReferenceable
 	{
-		// Token: 0x170002F9 RID: 761
+		
 		// (get) Token: 0x06000F94 RID: 3988 RVA: 0x0005AA52 File Offset: 0x00058C52
 		public virtual string LabelBase
 		{
@@ -22,7 +22,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FA RID: 762
+		
 		// (get) Token: 0x06000F95 RID: 3989 RVA: 0x0005AA5F File Offset: 0x00058C5F
 		public string LabelBaseCap
 		{
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FB RID: 763
+		
 		// (get) Token: 0x06000F96 RID: 3990 RVA: 0x0005AA74 File Offset: 0x00058C74
 		public virtual string Label
 		{
@@ -43,7 +43,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FC RID: 764
+		
 		// (get) Token: 0x06000F97 RID: 3991 RVA: 0x0005AAB2 File Offset: 0x00058CB2
 		public string LabelCap
 		{
@@ -53,7 +53,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FD RID: 765
+		
 		// (get) Token: 0x06000F98 RID: 3992 RVA: 0x0005AAC5 File Offset: 0x00058CC5
 		public virtual Color LabelColor
 		{
@@ -63,7 +63,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FE RID: 766
+		
 		// (get) Token: 0x06000F99 RID: 3993 RVA: 0x0005AAD2 File Offset: 0x00058CD2
 		public virtual string LabelInBrackets
 		{
@@ -77,7 +77,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002FF RID: 767
+		
 		// (get) Token: 0x06000F9A RID: 3994 RVA: 0x0005AAFB File Offset: 0x00058CFB
 		public virtual string SeverityLabel
 		{
@@ -91,7 +91,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000300 RID: 768
+		
 		// (get) Token: 0x06000F9B RID: 3995 RVA: 0x0005AB28 File Offset: 0x00058D28
 		public virtual int UIGroupKey
 		{
@@ -101,7 +101,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000301 RID: 769
+		
 		// (get) Token: 0x06000F9C RID: 3996 RVA: 0x0005AB38 File Offset: 0x00058D38
 		public virtual string TipStringExtra
 		{
@@ -119,7 +119,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000302 RID: 770
+		
 		// (get) Token: 0x06000F9D RID: 3997 RVA: 0x0005ABB8 File Offset: 0x00058DB8
 		public virtual HediffStage CurStage
 		{
@@ -133,7 +133,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000303 RID: 771
+		
 		// (get) Token: 0x06000F9E RID: 3998 RVA: 0x0005ABE4 File Offset: 0x00058DE4
 		public virtual bool ShouldRemove
 		{
@@ -143,7 +143,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000304 RID: 772
+		
 		// (get) Token: 0x06000F9F RID: 3999 RVA: 0x0005ABF6 File Offset: 0x00058DF6
 		public virtual bool Visible
 		{
@@ -153,7 +153,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000305 RID: 773
+		
 		// (get) Token: 0x06000FA0 RID: 4000 RVA: 0x0005AC15 File Offset: 0x00058E15
 		public virtual float BleedRate
 		{
@@ -163,7 +163,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000306 RID: 774
+		
 		// (get) Token: 0x06000FA1 RID: 4001 RVA: 0x0005AC1C File Offset: 0x00058E1C
 		public bool Bleeding
 		{
@@ -173,7 +173,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000307 RID: 775
+		
 		// (get) Token: 0x06000FA2 RID: 4002 RVA: 0x0005AC2B File Offset: 0x00058E2B
 		public virtual float PainOffset
 		{
@@ -187,7 +187,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000308 RID: 776
+		
 		// (get) Token: 0x06000FA3 RID: 4003 RVA: 0x0005AC4E File Offset: 0x00058E4E
 		public virtual float PainFactor
 		{
@@ -201,7 +201,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000309 RID: 777
+		
 		// (get) Token: 0x06000FA4 RID: 4004 RVA: 0x0005AC69 File Offset: 0x00058E69
 		public List<PawnCapacityModifier> CapMods
 		{
@@ -215,7 +215,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030A RID: 778
+		
 		// (get) Token: 0x06000FA5 RID: 4005 RVA: 0x0005AC15 File Offset: 0x00058E15
 		public virtual float SummaryHealthPercentImpact
 		{
@@ -225,7 +225,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030B RID: 779
+		
 		// (get) Token: 0x06000FA6 RID: 4006 RVA: 0x0005AC80 File Offset: 0x00058E80
 		public virtual float TendPriority
 		{
@@ -247,7 +247,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030C RID: 780
+		
 		// (get) Token: 0x06000FA7 RID: 4007 RVA: 0x0005ACED File Offset: 0x00058EED
 		public virtual TextureAndColor StateIcon
 		{
@@ -257,7 +257,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030D RID: 781
+		
 		// (get) Token: 0x06000FA8 RID: 4008 RVA: 0x0005ACF4 File Offset: 0x00058EF4
 		public virtual int CurStageIndex
 		{
@@ -280,7 +280,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030E RID: 782
+		
 		// (get) Token: 0x06000FA9 RID: 4009 RVA: 0x0005AD48 File Offset: 0x00058F48
 		// (set) Token: 0x06000FAA RID: 4010 RVA: 0x0005AD50 File Offset: 0x00058F50
 		public virtual float Severity
@@ -311,7 +311,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700030F RID: 783
+		
 		// (get) Token: 0x06000FAB RID: 4011 RVA: 0x0005AE60 File Offset: 0x00059060
 		// (set) Token: 0x06000FAC RID: 4012 RVA: 0x0005AE68 File Offset: 0x00059068
 		public BodyPartRecord Part
@@ -331,7 +331,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FAD RID: 4013 RVA: 0x0005AE90 File Offset: 0x00059090
+		
 		public virtual bool TendableNow(bool ignoreTimer = false)
 		{
 			if (!this.def.tendable || this.Severity <= 0f || this.FullyImmune() || !this.Visible || this.IsPermanent())
@@ -349,7 +349,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000FAE RID: 4014 RVA: 0x0005AEEC File Offset: 0x000590EC
+		
 		public virtual void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving && this.combatLogEntry != null)
@@ -376,7 +376,7 @@ namespace Verse
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06000FAF RID: 4015 RVA: 0x0005B01C File Offset: 0x0005921C
+		
 		public virtual void Tick()
 		{
 			this.ageTicks++;
@@ -459,7 +459,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FB0 RID: 4016 RVA: 0x0005B45C File Offset: 0x0005965C
+		
 		private void TryDoRandomMentalBreak()
 		{
 			HediffStage curStage = this.CurStage;
@@ -476,14 +476,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FB1 RID: 4017 RVA: 0x0005B4E3 File Offset: 0x000596E3
+		
 		public virtual void PostMake()
 		{
 			this.Severity = Mathf.Max(this.Severity, this.def.initialSeverity);
 			this.causesNoPain = (Rand.Value < this.def.chanceToCauseNoPain);
 		}
 
-		// Token: 0x06000FB2 RID: 4018 RVA: 0x0005B519 File Offset: 0x00059719
+		
 		public virtual void PostAdd(DamageInfo? dinfo)
 		{
 			if (this.def.disablesNeed != null)
@@ -492,7 +492,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FB3 RID: 4019 RVA: 0x0005B538 File Offset: 0x00059738
+		
 		public virtual void PostRemoved()
 		{
 			if ((this.def.causesNeed != null || this.def.disablesNeed != null) && !this.pawn.Dead)
@@ -501,17 +501,17 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FB4 RID: 4020 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void PostTick()
 		{
 		}
 
-		// Token: 0x06000FB5 RID: 4021 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Tended(float quality, int batchPosition = 0)
 		{
 		}
 
-		// Token: 0x06000FB6 RID: 4022 RVA: 0x0005B571 File Offset: 0x00059771
+		
 		public virtual void Heal(float amount)
 		{
 			if (amount <= 0f)
@@ -522,12 +522,12 @@ namespace Verse
 			this.pawn.health.Notify_HediffChanged(this);
 		}
 
-		// Token: 0x06000FB7 RID: 4023 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void ModifyChemicalEffect(ChemicalDef chem, ref float effect)
 		{
 		}
 
-		// Token: 0x06000FB8 RID: 4024 RVA: 0x0005B59B File Offset: 0x0005979B
+		
 		public virtual bool TryMergeWith(Hediff other)
 		{
 			if (other == null || other.def != this.def || other.Part != this.Part)
@@ -539,43 +539,43 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000FB9 RID: 4025 RVA: 0x0005B5D9 File Offset: 0x000597D9
+		
 		public virtual bool CauseDeathNow()
 		{
 			return this.def.lethalSeverity >= 0f && this.Severity >= this.def.lethalSeverity;
 		}
 
-		// Token: 0x06000FBA RID: 4026 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_PawnDied()
 		{
 		}
 
-		// Token: 0x06000FBB RID: 4027 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_PawnKilled()
 		{
 		}
 
-		// Token: 0x06000FBC RID: 4028 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 		}
 
-		// Token: 0x06000FBD RID: 4029 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_PawnUsedVerb(Verb verb, LocalTargetInfo targets)
 		{
 		}
 
-		// Token: 0x06000FBE RID: 4030 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_EntropyGained(float baseAmount, float finalAmount, Thing source = null)
 		{
 		}
 
-		// Token: 0x06000FBF RID: 4031 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void Notify_ImplantUsed(string violationSourceName, float detectionChance, int violationSourceLevel = -1)
 		{
 		}
 
-		// Token: 0x06000FC0 RID: 4032 RVA: 0x0005B608 File Offset: 0x00059808
+		
 		public virtual string DebugString()
 		{
 			string text = "";
@@ -591,7 +591,7 @@ namespace Verse
 			return text.Indented("    ");
 		}
 
-		// Token: 0x06000FC1 RID: 4033 RVA: 0x0005B698 File Offset: 0x00059898
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -605,55 +605,55 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000FC2 RID: 4034 RVA: 0x0005B70B File Offset: 0x0005990B
+		
 		public string GetUniqueLoadID()
 		{
 			return "Hediff_" + this.loadID;
 		}
 
-		// Token: 0x04000BB9 RID: 3001
+		
 		public HediffDef def;
 
-		// Token: 0x04000BBA RID: 3002
+		
 		public int ageTicks;
 
-		// Token: 0x04000BBB RID: 3003
+		
 		private BodyPartRecord part;
 
-		// Token: 0x04000BBC RID: 3004
+		
 		public ThingDef source;
 
-		// Token: 0x04000BBD RID: 3005
+		
 		public BodyPartGroupDef sourceBodyPartGroup;
 
-		// Token: 0x04000BBE RID: 3006
+		
 		public HediffDef sourceHediffDef;
 
-		// Token: 0x04000BBF RID: 3007
+		
 		public int loadID = -1;
 
-		// Token: 0x04000BC0 RID: 3008
+		
 		protected float severityInt;
 
-		// Token: 0x04000BC1 RID: 3009
+		
 		private bool recordedTale;
 
-		// Token: 0x04000BC2 RID: 3010
+		
 		protected bool causesNoPain;
 
-		// Token: 0x04000BC3 RID: 3011
+		
 		private bool visible;
 
-		// Token: 0x04000BC4 RID: 3012
+		
 		public WeakReference<LogEntry> combatLogEntry;
 
-		// Token: 0x04000BC5 RID: 3013
+		
 		public string combatLogText;
 
-		// Token: 0x04000BC6 RID: 3014
+		
 		public int temp_partIndexToSetLater = -1;
 
-		// Token: 0x04000BC7 RID: 3015
+		
 		[Unsaved(false)]
 		public Pawn pawn;
 	}

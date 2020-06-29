@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000836 RID: 2102
+	
 	public class ThoughtWorker_ColonistLeftUnburied : ThoughtWorker
 	{
-		// Token: 0x0600347B RID: 13435 RVA: 0x0011FF70 File Offset: 0x0011E170
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.Faction != Faction.OfPlayer)

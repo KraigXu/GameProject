@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A66 RID: 2662
+	
 	public class GenStep_ConditionCauser : GenStep_Scatterer
 	{
-		// Token: 0x17000B22 RID: 2850
+		
 		// (get) Token: 0x06003ED7 RID: 16087 RVA: 0x0014E131 File Offset: 0x0014C331
 		public override int SeedPart
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003ED8 RID: 16088 RVA: 0x0014E138 File Offset: 0x0014C338
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			this.currentParams = parms;
@@ -26,7 +26,7 @@ namespace RimWorld
 			base.Generate(map, parms);
 		}
 
-		// Token: 0x06003ED9 RID: 16089 RVA: 0x0014E150 File Offset: 0x0014C350
+		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
 		{
 			Faction faction;
@@ -50,10 +50,10 @@ namespace RimWorld
 			BaseGen.Generate();
 		}
 
-		// Token: 0x04002497 RID: 9367
+		
 		private const int Size = 10;
 
-		// Token: 0x04002498 RID: 9368
+		
 		private GenStepParams currentParams;
 	}
 }

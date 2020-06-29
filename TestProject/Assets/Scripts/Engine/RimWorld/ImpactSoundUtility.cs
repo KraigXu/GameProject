@@ -4,10 +4,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000FC5 RID: 4037
+	
 	public static class ImpactSoundUtility
 	{
-		// Token: 0x0600610E RID: 24846 RVA: 0x0021AF68 File Offset: 0x00219168
+		
 		public static void PlayImpactSound(Thing hitThing, ImpactSoundTypeDef ist, Map map)
 		{
 			if (ist == null)

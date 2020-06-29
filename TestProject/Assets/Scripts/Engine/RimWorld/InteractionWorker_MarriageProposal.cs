@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B47 RID: 2887
+	
 	public class InteractionWorker_MarriageProposal : InteractionWorker
 	{
-		// Token: 0x060043D2 RID: 17362 RVA: 0x0016D9A4 File Offset: 0x0016BBA4
+		
 		public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
 		{
 			DirectPawnRelation directRelation = initiator.relations.GetDirectRelation(PawnRelationDefOf.Lover, recipient);
@@ -38,7 +38,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060043D3 RID: 17363 RVA: 0x0016DA74 File Offset: 0x0016BC74
+		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			float num = this.AcceptanceChance(initiator, recipient);
@@ -130,19 +130,19 @@ namespace RimWorld
 			lookTargets = null;
 		}
 
-		// Token: 0x060043D4 RID: 17364 RVA: 0x0016DE16 File Offset: 0x0016C016
+		
 		public float AcceptanceChance(Pawn initiator, Pawn recipient)
 		{
 			return Mathf.Clamp01(0.9f * Mathf.Clamp01(GenMath.LerpDouble(-20f, 60f, 0f, 1f, (float)recipient.relations.OpinionOf(initiator))));
 		}
 
-		// Token: 0x040026D3 RID: 9939
+		
 		private const float BaseSelectionWeight = 0.4f;
 
-		// Token: 0x040026D4 RID: 9940
+		
 		private const float BaseAcceptanceChance = 0.9f;
 
-		// Token: 0x040026D5 RID: 9941
+		
 		private const float BreakupChanceOnRejection = 0.4f;
 	}
 }

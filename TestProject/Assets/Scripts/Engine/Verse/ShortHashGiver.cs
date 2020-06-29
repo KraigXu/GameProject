@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x0200006D RID: 109
+	
 	public static class ShortHashGiver
 	{
-		// Token: 0x0600044B RID: 1099 RVA: 0x00016AA4 File Offset: 0x00014CA4
+		
 		public static void GiveAllShortHashes()
 		{
 			ShortHashGiver.takenHashesPerDeftype.Clear();
 			List<Def> list = new List<Def>();
 			foreach (Type type in GenDefDatabase.AllDefTypesWithDatabases())
 			{
-				IEnumerable enumerable = (IEnumerable)typeof(DefDatabase<>).MakeGenericType(new Type[]
+				IEnumerable enumerable = (IEnumerable)typeof(DefDatabase).MakeGenericType(new Type[]
 				{
 					type
 				}).GetProperty("AllDefs").GetGetMethod().Invoke(null, null);
@@ -32,7 +32,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600044C RID: 1100 RVA: 0x00016BC8 File Offset: 0x00014DC8
+		
 		private static void GiveShortHash(Def def, Type defType)
 		{
 			if (def.shortHash != 0)
@@ -61,7 +61,7 @@ namespace Verse
 			hashSet.Add(num);
 		}
 
-		// Token: 0x04000169 RID: 361
+		
 		private static Dictionary<Type, HashSet<ushort>> takenHashesPerDeftype = new Dictionary<Type, HashSet<ushort>>();
 	}
 }

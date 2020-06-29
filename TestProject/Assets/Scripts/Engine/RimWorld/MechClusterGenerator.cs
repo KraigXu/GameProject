@@ -7,17 +7,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AA0 RID: 2720
+	
 	public static class MechClusterGenerator
 	{
-		// Token: 0x06004008 RID: 16392 RVA: 0x001549D0 File Offset: 0x00152BD0
+		
 		[Obsolete]
 		public static MechClusterSketch GenerateClusterSketch(float points, bool startDormant = true)
 		{
 			return MechClusterGenerator.GenerateClusterSketch(points, null, startDormant);
 		}
 
-		// Token: 0x06004009 RID: 16393 RVA: 0x001549DC File Offset: 0x00152BDC
+		
 		public static MechClusterSketch GenerateClusterSketch(float points, Map map, bool startDormant = true)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -37,14 +37,14 @@ namespace RimWorld
 				float num2 = Rand.ByCurve(MechClusterGenerator.PawnPointsRandomPercentOfTotalCurve) * num;
 				num2 = Mathf.Max(num2, list2.Min((PawnKindDef x) => x.combatPower));
 				float pawnPointsLeft = num2;
-				Func<PawnKindDef, bool> <>9__2;
+				
 				while (pawnPointsLeft > 0f)
 				{
 					IEnumerable<PawnKindDef> source = list2;
 					Func<PawnKindDef, bool> predicate;
-					if ((predicate = <>9__2) == null)
+					if ((predicate ) == null)
 					{
-						predicate = (<>9__2 = ((PawnKindDef def) => def.combatPower <= pawnPointsLeft));
+						predicate = (9__2 = ((PawnKindDef def) => def.combatPower <= pawnPointsLeft));
 					}
 					PawnKindDef pawnKindDef;
 					if (!source.Where(predicate).TryRandomElement(out pawnKindDef))
@@ -67,15 +67,15 @@ namespace RimWorld
 			if (list != null)
 			{
 				List<IntVec3> pawnUsedSpots = new List<IntVec3>();
-				Func<IntVec3, bool> <>9__3;
+				
 				for (int i = 0; i < list.Count; i++)
 				{
 					MechClusterSketch.Mech pawn = list[i];
 					IEnumerable<IntVec3> source2 = buildingsSketch.OccupiedRect;
 					Func<IntVec3, bool> predicate2;
-					if ((predicate2 = <>9__3) == null)
+					if ((predicate2 ) == null)
 					{
-						predicate2 = (<>9__3 = ((IntVec3 c) => !buildingsSketch.ThingsAt(c).Any<SketchThing>() && !pawnUsedSpots.Contains(c)));
+						predicate2 = (9__3 = ((IntVec3 c) => !buildingsSketch.ThingsAt(c).Any<SketchThing>() && !pawnUsedSpots.Contains(c)));
 					}
 					IntVec3 intVec;
 					if (!source2.Where(predicate2).TryRandomElement(out intVec))
@@ -83,14 +83,14 @@ namespace RimWorld
 						CellRect cellRect = buildingsSketch.OccupiedRect;
 						IEnumerable<IntVec3> source3;
 						Func<IntVec3, bool> predicate3;
-						Func<IntVec3, bool> <>9__4;
+						
 						do
 						{
 							cellRect = cellRect.ExpandedBy(1);
 							source3 = cellRect;
-							if ((predicate3 = <>9__4) == null)
+							if ((predicate3 ) == null)
 							{
-								predicate3 = (<>9__4 = ((IntVec3 x) => !buildingsSketch.WouldCollide(pawn.kindDef.race, x, Rot4.North) && !pawnUsedSpots.Contains(x)));
+								predicate3 = (9__4 = ((IntVec3 x) => !buildingsSketch.WouldCollide(pawn.kindDef.race, x, Rot4.North) && !pawnUsedSpots.Contains(x)));
 							}
 						}
 						while (!source3.Where(predicate3).TryRandomElement(out intVec));
@@ -103,7 +103,7 @@ namespace RimWorld
 			return new MechClusterSketch(buildingsSketch, list, startDormant);
 		}
 
-		// Token: 0x0600400A RID: 16394 RVA: 0x00154CD0 File Offset: 0x00152ED0
+		
 		public static void ResolveSketch(ResolveParams parms)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -153,14 +153,14 @@ namespace RimWorld
 			parms.sketch.MergeAt(sketch, default(IntVec3), Sketch.SpawnPosType.OccupiedCenter, true);
 		}
 
-		// Token: 0x0600400B RID: 16395 RVA: 0x00154ED7 File Offset: 0x001530D7
+		
 		[Obsolete("Only need this overload to not break mod compatibility.")]
 		private static List<ThingDef> GetBuildingDefsForCluster(float points, IntVec2 size, bool canBeDormant)
 		{
 			return MechClusterGenerator.GetBuildingDefsForCluster_NewTemp(points, size, canBeDormant, new float?(0f));
 		}
 
-		// Token: 0x0600400C RID: 16396 RVA: 0x00154EEC File Offset: 0x001530EC
+		
 		private static List<ThingDef> GetBuildingDefsForCluster_NewTemp(float points, IntVec2 size, bool canBeDormant, float? totalPoints)
 		{
 			List<ThingDef> list = new List<ThingDef>();
@@ -238,15 +238,15 @@ namespace RimWorld
 			ThingDef thingDef = (from x in list2
 			where x.building.buildingTags.Contains("MechClusterCombatThreat")
 			select x).MinBy((ThingDef x) => x.building.combatPower);
-			Func<ThingDef, bool> <>9__6;
+			
 			ThingDef thingDef2;
 			for (pointsLeft = Mathf.Max(pointsLeft, thingDef.building.combatPower); pointsLeft > 0f; pointsLeft -= thingDef2.building.combatPower)
 			{
 				IEnumerable<ThingDef> source = list2;
 				Func<ThingDef, bool> predicate;
-				if ((predicate = <>9__6) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__6 = ((ThingDef x) => x.building.combatPower <= pointsLeft && x.building.buildingTags.Contains("MechClusterCombatThreat")));
+					predicate = (9__6 = ((ThingDef x) => x.building.combatPower <= pointsLeft && x.building.buildingTags.Contains("MechClusterCombatThreat")));
 				}
 				if (!source.Where(predicate).TryRandomElement(out thingDef2))
 				{
@@ -257,7 +257,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x0600400D RID: 16397 RVA: 0x001551B8 File Offset: 0x001533B8
+		
 		private static bool TryRandomBuildingWithTag(string tag, List<ThingDef> allowedBuildings, List<ThingDef> generatedBuildings, IntVec2 size, out ThingDef result)
 		{
 			return (from x in allowedBuildings
@@ -265,7 +265,7 @@ namespace RimWorld
 			select x).TryRandomElement(out result);
 		}
 
-		// Token: 0x0600400E RID: 16398 RVA: 0x001551EC File Offset: 0x001533EC
+		
 		private static void AddBuildingsToSketch(Sketch sketch, IntVec2 size, List<ThingDef> buildings)
 		{
 			List<CellRect> edgeWallRects = new List<CellRect>
@@ -318,7 +318,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600400F RID: 16399 RVA: 0x001556C0 File Offset: 0x001538C0
+		
 		private static bool TryFindRandomPlaceFor(ThingDef thingDef, Sketch sketch, IntVec2 size, out IntVec3 pos, bool lowerLeftQuarterOnly, bool avoidCenter, bool requireLOSToEdge, bool avoidEdge, List<CellRect> edgeWallRects)
 		{
 			int i = 0;
@@ -407,7 +407,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004010 RID: 16400 RVA: 0x00155958 File Offset: 0x00153B58
+		
 		[DebugOutput]
 		public static void MechClusterBuildingSelection()
 		{
@@ -442,25 +442,25 @@ namespace RimWorld
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0400252F RID: 9519
+		
 		public const string MechClusterMemberTag = "MechClusterMember";
 
-		// Token: 0x04002530 RID: 9520
+		
 		public const string MechClusterMemberGoodTag = "MechClusterMemberGood";
 
-		// Token: 0x04002531 RID: 9521
+		
 		public const string MechClusterActivatorTag = "MechClusterActivator";
 
-		// Token: 0x04002532 RID: 9522
+		
 		public const string MechClusterCombatThreatTag = "MechClusterCombatThreat";
 
-		// Token: 0x04002533 RID: 9523
+		
 		public const string MechClusterProblemCauserTag = "MechClusterProblemCauser";
 
-		// Token: 0x04002534 RID: 9524
+		
 		public const float MaxPoints = 10000f;
 
-		// Token: 0x04002535 RID: 9525
+		
 		public static readonly SimpleCurve PointsToPawnsChanceCurve = new SimpleCurve
 		{
 			{
@@ -469,7 +469,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002536 RID: 9526
+		
 		public static readonly SimpleCurve PawnPointsRandomPercentOfTotalCurve = new SimpleCurve
 		{
 			{
@@ -486,10 +486,10 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002537 RID: 9527
+		
 		private static readonly FloatRange SizeRandomFactorRange = new FloatRange(0.8f, 2f);
 
-		// Token: 0x04002538 RID: 9528
+		
 		private static readonly SimpleCurve PointsToSizeCurve = new SimpleCurve
 		{
 			{
@@ -510,7 +510,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002539 RID: 9529
+		
 		private static readonly SimpleCurve ProblemCauserCountCurve = new SimpleCurve
 		{
 			{
@@ -527,7 +527,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400253A RID: 9530
+		
 		private static readonly SimpleCurve WallsChanceCurve = new SimpleCurve
 		{
 			{
@@ -540,13 +540,13 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400253B RID: 9531
+		
 		private const float ActivatorCountdownChance = 0.5f;
 
-		// Token: 0x0400253C RID: 9532
+		
 		private const float ActivatorProximityChance = 0.5f;
 
-		// Token: 0x0400253D RID: 9533
+		
 		private static readonly SimpleCurve ActivatorProximitysCountCurve = new SimpleCurve
 		{
 			{
@@ -567,7 +567,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400253E RID: 9534
+		
 		private static readonly SimpleCurve GoodBuildingChanceCurve = new SimpleCurve
 		{
 			{
@@ -576,7 +576,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x0400253F RID: 9535
+		
 		private static readonly SimpleCurve GoodBuildingMaxCountCurve = new SimpleCurve
 		{
 			{
@@ -609,7 +609,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002540 RID: 9536
+		
 		private static readonly SimpleCurve BulletShieldChanceCurve = new SimpleCurve
 		{
 			{
@@ -626,10 +626,10 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002541 RID: 9537
+		
 		private const float BulletShieldTotalPointsFactor = 0.85f;
 
-		// Token: 0x04002542 RID: 9538
+		
 		private static readonly SimpleCurve BulletShieldMaxCountCurve = new SimpleCurve
 		{
 			{
@@ -642,10 +642,10 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002543 RID: 9539
+		
 		private const float MortarShieldTotalPointsFactor = 0.9f;
 
-		// Token: 0x04002544 RID: 9540
+		
 		private static readonly SimpleCurve MortarShieldChanceCurve = new SimpleCurve
 		{
 			{
@@ -662,7 +662,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002545 RID: 9541
+		
 		private const float BuildingRechooseWeight = 200f;
 	}
 }

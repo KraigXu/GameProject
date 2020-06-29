@@ -3,11 +3,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CBB RID: 3259
+	
 	[StaticConstructorOnStartup]
 	public class DropPodIncoming : Skyfaller, IActiveDropPod, IThingHolder
 	{
-		// Token: 0x17000DFE RID: 3582
+		
 		// (get) Token: 0x06004F02 RID: 20226 RVA: 0x001A993D File Offset: 0x001A7B3D
 		// (set) Token: 0x06004F03 RID: 20227 RVA: 0x001A9955 File Offset: 0x001A7B55
 		public ActiveDropPodInfo Contents
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F04 RID: 20228 RVA: 0x001A9970 File Offset: 0x001A7B70
+		
 		protected override void SpawnThings()
 		{
 			if (this.Contents.spawnWipeMode == null)
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F05 RID: 20229 RVA: 0x001A99DC File Offset: 0x001A7BDC
+		
 		protected override void Impact()
 		{
 			for (int i = 0; i < 6; i++)

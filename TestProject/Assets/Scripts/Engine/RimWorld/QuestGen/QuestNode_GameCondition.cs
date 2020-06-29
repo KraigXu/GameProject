@@ -5,10 +5,10 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011A8 RID: 4520
+	
 	public class QuestNode_GameCondition : QuestNode
 	{
-		// Token: 0x0600688B RID: 26763 RVA: 0x00247F2C File Offset: 0x0024612C
+		
 		private static Map GetMap(Slate slate)
 		{
 			Map randomPlayerHomeMap;
@@ -19,13 +19,13 @@ namespace RimWorld.QuestGen
 			return randomPlayerHomeMap;
 		}
 
-		// Token: 0x0600688C RID: 26764 RVA: 0x00247F50 File Offset: 0x00246150
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.targetWorld.GetValue(slate) || QuestNode_GameCondition.GetMap(slate) != null;
 		}
 
-		// Token: 0x0600688D RID: 26765 RVA: 0x00247F6C File Offset: 0x0024616C
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -57,20 +57,20 @@ namespace RimWorld.QuestGen
 			QuestGen.AddQuestDescriptionConstants(dictionary);
 		}
 
-		// Token: 0x040040DC RID: 16604
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x040040DD RID: 16605
+		
 		public SlateRef<GameConditionDef> gameCondition;
 
-		// Token: 0x040040DE RID: 16606
+		
 		public SlateRef<bool> targetWorld;
 
-		// Token: 0x040040DF RID: 16607
+		
 		public SlateRef<int> duration;
 
-		// Token: 0x040040E0 RID: 16608
+		
 		[NoTranslate]
 		public SlateRef<string> storeGameConditionDescriptionFutureAs;
 	}

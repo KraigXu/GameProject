@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B6A RID: 2922
+	
 	public static class SpouseRelationUtility
 	{
-		// Token: 0x0600445E RID: 17502 RVA: 0x00171BA0 File Offset: 0x0016FDA0
+		
 		public static Pawn GetSpouse(this Pawn pawn)
 		{
 			if (!pawn.RaceProps.IsFlesh)
@@ -16,7 +16,7 @@ namespace RimWorld
 			return pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Spouse, null);
 		}
 
-		// Token: 0x0600445F RID: 17503 RVA: 0x00171BC4 File Offset: 0x0016FDC4
+		
 		public static Pawn GetSpouseOppositeGender(this Pawn pawn)
 		{
 			Pawn spouse = pawn.GetSpouse();
@@ -31,7 +31,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004460 RID: 17504 RVA: 0x00171C04 File Offset: 0x0016FE04
+		
 		public static MarriageNameChange Roll_NameChangeOnMarriage()
 		{
 			float value = Rand.Value;
@@ -46,13 +46,13 @@ namespace RimWorld
 			return MarriageNameChange.MansName;
 		}
 
-		// Token: 0x06004461 RID: 17505 RVA: 0x00171C2C File Offset: 0x0016FE2C
+		
 		public static bool Roll_BackToBirthNameAfterDivorce()
 		{
 			return Rand.Value < 0.6f;
 		}
 
-		// Token: 0x06004462 RID: 17506 RVA: 0x00171C3A File Offset: 0x0016FE3A
+		
 		public static void DetermineManAndWomanSpouses(Pawn firstPawn, Pawn secondPawn, out Pawn man, out Pawn woman)
 		{
 			if (firstPawn.gender == secondPawn.gender)
@@ -65,7 +65,7 @@ namespace RimWorld
 			woman = ((firstPawn.gender == Gender.Female) ? firstPawn : secondPawn);
 		}
 
-		// Token: 0x06004463 RID: 17507 RVA: 0x00171C70 File Offset: 0x0016FE70
+		
 		public static bool ChangeNameAfterMarriage(Pawn firstPawn, Pawn secondPawn, MarriageNameChange changeName)
 		{
 			if (changeName == MarriageNameChange.NoChange)
@@ -87,7 +87,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004464 RID: 17508 RVA: 0x00171CF8 File Offset: 0x0016FEF8
+		
 		public static bool ChangeNameAfterDivorce(Pawn pawn, float chance = -1f)
 		{
 			NameTriple nameTriple = pawn.Name as NameTriple;
@@ -99,7 +99,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004465 RID: 17509 RVA: 0x00171D70 File Offset: 0x0016FF70
+		
 		public static void Notify_PawnRegenerated(Pawn regenerated)
 		{
 			if (regenerated.relations != null)
@@ -113,13 +113,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004466 RID: 17510 RVA: 0x00171DDD File Offset: 0x0016FFDD
+		
 		public static string GetRandomBirthName(Pawn forPawn)
 		{
 			return (PawnBioAndNameGenerator.GeneratePawnName(forPawn, NameStyle.Full, null) as NameTriple).Last;
 		}
 
-		// Token: 0x06004467 RID: 17511 RVA: 0x00171DF4 File Offset: 0x0016FFF4
+		
 		public static void ResolveNameForSpouseOnGeneration(ref PawnGenerationRequest request, Pawn generated)
 		{
 			if (request.FixedLastName != null)
@@ -169,16 +169,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040026EB RID: 9963
+		
 		public const float NoNameChangeOnMarriageChance = 0.25f;
 
-		// Token: 0x040026EC RID: 9964
+		
 		public const float WomansNameChangeOnMarriageChance = 0.05f;
 
-		// Token: 0x040026ED RID: 9965
+		
 		public const float MansNameOnMarriageChance = 0.7f;
 
-		// Token: 0x040026EE RID: 9966
+		
 		public const float ChanceForSpousesToHaveTheSameName = 0.75f;
 	}
 }

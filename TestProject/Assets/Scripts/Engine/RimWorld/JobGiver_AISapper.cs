@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006B5 RID: 1717
+	
 	public class JobGiver_AISapper : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E5A RID: 11866 RVA: 0x00104583 File Offset: 0x00102783
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_AISapper jobGiver_AISapper = (JobGiver_AISapper)base.DeepCopy(resolve);
@@ -18,7 +18,7 @@ namespace RimWorld
 			return jobGiver_AISapper;
 		}
 
-		// Token: 0x06002E5B RID: 11867 RVA: 0x001045AC File Offset: 0x001027AC
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			IntVec3 intVec = (IntVec3)pawn.mindState.duty.focus;
@@ -58,16 +58,16 @@ namespace RimWorld
 			return JobMaker.MakeJob(JobDefOf.Goto, intVec, 500, true);
 		}
 
-		// Token: 0x04001A66 RID: 6758
+		
 		private bool canMineMineables = true;
 
-		// Token: 0x04001A67 RID: 6759
+		
 		private bool canMineNonMineables = true;
 
-		// Token: 0x04001A68 RID: 6760
+		
 		private const float ReachDestDist = 10f;
 
-		// Token: 0x04001A69 RID: 6761
+		
 		private const int CheckOverrideInterval = 500;
 	}
 }

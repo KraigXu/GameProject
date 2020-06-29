@@ -6,16 +6,16 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02001025 RID: 4133
+	
 	public class SteadyEnvironmentEffects
 	{
-		// Token: 0x060062EB RID: 25323 RVA: 0x0022598E File Offset: 0x00223B8E
+		
 		public SteadyEnvironmentEffects(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x060062EC RID: 25324 RVA: 0x002259A0 File Offset: 0x00223BA0
+		
 		public void SteadyEnvironmentEffectsTick()
 		{
 			if ((float)Find.TickManager.TicksGame % 97f == 0f && Rand.Chance(0.02f))
@@ -40,7 +40,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060062ED RID: 25325 RVA: 0x00225AA8 File Offset: 0x00223CA8
+		
 		private void DoCellSteadyEffects(IntVec3 c)
 		{
 			Room room = c.GetRoom(this.map, RegionType.Set_All);
@@ -110,14 +110,14 @@ namespace RimWorld
 			this.map.gameConditionManager.DoSteadyEffects(c, this.map);
 		}
 
-		// Token: 0x060062EE RID: 25326 RVA: 0x00225CC4 File Offset: 0x00223EC4
+		
 		private static bool ProtectedByEdifice(IntVec3 c, Map map)
 		{
 			Building edifice = c.GetEdifice(map);
 			return edifice != null && edifice.def.building != null && edifice.def.building.preventDeteriorationOnTop;
 		}
 
-		// Token: 0x060062EF RID: 25327 RVA: 0x00225CFE File Offset: 0x00223EFE
+		
 		private float MeltAmountAt(float temperature)
 		{
 			if (temperature < 0f)
@@ -131,7 +131,7 @@ namespace RimWorld
 			return temperature * 0.0058f;
 		}
 
-		// Token: 0x060062F0 RID: 25328 RVA: 0x00225D30 File Offset: 0x00223F30
+		
 		public void AddFallenSnowAt(IntVec3 c, float baseAmount)
 		{
 			if (this.snowNoise == null)
@@ -149,7 +149,7 @@ namespace RimWorld
 			this.map.snowGrid.AddDepth(c, depthToAdd);
 		}
 
-		// Token: 0x060062F1 RID: 25329 RVA: 0x00225DBC File Offset: 0x00223FBC
+		
 		public static float FinalDeteriorationRate(Thing t, List<string> reasons = null)
 		{
 			if (t.Spawned)
@@ -160,7 +160,7 @@ namespace RimWorld
 			return SteadyEnvironmentEffects.FinalDeteriorationRate(t, false, false, false, null, reasons);
 		}
 
-		// Token: 0x060062F2 RID: 25330 RVA: 0x00225E2C File Offset: 0x0022402C
+		
 		public static float FinalDeteriorationRate(Thing t, bool roofed, bool roomUsesOutdoorTemperature, bool protectedByEdifice, TerrainDef terrain, List<string> reasons = null)
 		{
 			if (!t.def.CanEverDeteriorate)
@@ -208,7 +208,7 @@ namespace RimWorld
 			return statValue * num;
 		}
 
-		// Token: 0x060062F3 RID: 25331 RVA: 0x00225F00 File Offset: 0x00224100
+		
 		private void TryDoDeteriorate(Thing t, bool roofed, bool roomUsesOutdoorTemperature, bool protectedByEdifice, TerrainDef terrain)
 		{
 			Corpse corpse = t as Corpse;
@@ -238,7 +238,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060062F4 RID: 25332 RVA: 0x00226010 File Offset: 0x00224210
+		
 		private void RollForRainFire()
 		{
 			if (!Rand.Chance(0.2f * (float)this.map.listerBuildings.allBuildingsColonistElecFire.Count * this.map.weatherManager.RainRate))
@@ -252,52 +252,52 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003C0D RID: 15373
+		
 		private Map map;
 
-		// Token: 0x04003C0E RID: 15374
+		
 		private ModuleBase snowNoise;
 
-		// Token: 0x04003C0F RID: 15375
+		
 		private int cycleIndex;
 
-		// Token: 0x04003C10 RID: 15376
+		
 		private float outdoorMeltAmount;
 
-		// Token: 0x04003C11 RID: 15377
+		
 		private float snowRate;
 
-		// Token: 0x04003C12 RID: 15378
+		
 		private float rainRate;
 
-		// Token: 0x04003C13 RID: 15379
+		
 		private float deteriorationRate;
 
-		// Token: 0x04003C14 RID: 15380
+		
 		private const float MapFractionCheckPerTick = 0.0006f;
 
-		// Token: 0x04003C15 RID: 15381
+		
 		private const float RainFireCheckInterval = 97f;
 
-		// Token: 0x04003C16 RID: 15382
+		
 		private const float RainFireChanceOverall = 0.02f;
 
-		// Token: 0x04003C17 RID: 15383
+		
 		private const float RainFireChancePerBuilding = 0.2f;
 
-		// Token: 0x04003C18 RID: 15384
+		
 		private const float SnowFallRateFactor = 0.046f;
 
-		// Token: 0x04003C19 RID: 15385
+		
 		private const float SnowMeltRateFactor = 0.0058f;
 
-		// Token: 0x04003C1A RID: 15386
+		
 		private static readonly FloatRange AutoIgnitionTemperatureRange = new FloatRange(240f, 1000f);
 
-		// Token: 0x04003C1B RID: 15387
+		
 		private const float AutoIgnitionChanceFactor = 0.7f;
 
-		// Token: 0x04003C1C RID: 15388
+		
 		private const float FireGlowRate = 0.33f;
 	}
 }

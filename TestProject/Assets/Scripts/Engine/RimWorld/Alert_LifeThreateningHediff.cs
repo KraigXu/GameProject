@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DD8 RID: 3544
+	
 	public class Alert_LifeThreateningHediff : Alert_Critical
 	{
-		// Token: 0x17000F5B RID: 3931
+		
 		// (get) Token: 0x0600560D RID: 22029 RVA: 0x001C8790 File Offset: 0x001C6990
 		private List<Pawn> SickPawns
 		{
@@ -31,13 +31,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600560E RID: 22030 RVA: 0x001C8850 File Offset: 0x001C6A50
+		
 		public override string GetLabel()
 		{
 			return "PawnsWithLifeThreateningDisease".Translate();
 		}
 
-		// Token: 0x0600560F RID: 22031 RVA: 0x001C8864 File Offset: 0x001C6A64
+		
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -61,13 +61,13 @@ namespace RimWorld
 			return "PawnsWithLifeThreateningDiseaseDesc".Translate(stringBuilder.ToString());
 		}
 
-		// Token: 0x06005610 RID: 22032 RVA: 0x001C8990 File Offset: 0x001C6B90
+		
 		public override AlertReport GetReport()
 		{
 			return AlertReport.CulpritsAre(this.SickPawns);
 		}
 
-		// Token: 0x04002F12 RID: 12050
+		
 		private List<Pawn> sickPawnsResult = new List<Pawn>();
 	}
 }

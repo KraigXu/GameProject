@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000A6F RID: 2671
+	
 	public class GenStep_SleepingMechanoids : GenStep
 	{
-		// Token: 0x17000B2A RID: 2858
+		
 		// (get) Token: 0x06003EF9 RID: 16121 RVA: 0x0014E680 File Offset: 0x0014C880
 		public override int SeedPart
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EFA RID: 16122 RVA: 0x0014EFFC File Offset: 0x0014D1FC
+		
 		public static void SendMechanoidsToSleepImmediately(List<Pawn> spawnedMechanoids)
 		{
 			for (int i = 0; i < spawnedMechanoids.Count; i++)
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EFB RID: 16123 RVA: 0x0014F0A0 File Offset: 0x0014D2A0
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			CellRect around;
@@ -81,7 +81,7 @@ namespace RimWorld
 			GenStep_SleepingMechanoids.SendMechanoidsToSleepImmediately(list);
 		}
 
-		// Token: 0x06003EFC RID: 16124 RVA: 0x0014F1A8 File Offset: 0x0014D3A8
+		
 		private IEnumerable<Pawn> GeneratePawns(GenStepParams parms, Map map)
 		{
 			float points = (parms.sitePart != null) ? parms.sitePart.parms.threatPoints : this.defaultPointsRange.RandomInRange;
@@ -97,7 +97,7 @@ namespace RimWorld
 			return PawnGroupMakerUtility.GeneratePawns(pawnGroupMakerParms, true);
 		}
 
-		// Token: 0x040024A5 RID: 9381
+		
 		public FloatRange defaultPointsRange = new FloatRange(340f, 1000f);
 	}
 }

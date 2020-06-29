@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x0200109E RID: 4254
+	
 	public class SymbolResolver_BasePart_Outdoors_Division_Grid : SymbolResolver
 	{
-		// Token: 0x060064CC RID: 25804 RVA: 0x00231A2C File Offset: 0x0022FC2C
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			if (!base.CanResolve(rp))
@@ -23,7 +23,7 @@ namespace RimWorld.BaseGen
 			return this.optionsX.Any<Pair<int, int>>() && this.optionsZ.Any<Pair<int, int>>();
 		}
 
-		// Token: 0x060064CD RID: 25805 RVA: 0x00231A8C File Offset: 0x0022FC8C
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			this.FillOptions(rp.rect);
@@ -57,7 +57,7 @@ namespace RimWorld.BaseGen
 			Log.Warning("Grid resolver could not resolve any grid size. params=" + rp, false);
 		}
 
-		// Token: 0x060064CE RID: 25806 RVA: 0x00231B18 File Offset: 0x0022FD18
+		
 		private void FillOptions(CellRect rect)
 		{
 			this.FillOptions(this.optionsX, rect.Width);
@@ -72,7 +72,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x060064CF RID: 25807 RVA: 0x00231BF0 File Offset: 0x0022FDF0
+		
 		private void FillOptions(List<Pair<int, int>> outOptions, int length)
 		{
 			outOptions.Clear();
@@ -89,7 +89,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x060064D0 RID: 25808 RVA: 0x00231C44 File Offset: 0x0022FE44
+		
 		private int GetRoomSize(int roomsPerRow, int pathwayWidth, int totalLength)
 		{
 			int num = totalLength - (roomsPerRow - 1) * pathwayWidth;
@@ -100,7 +100,7 @@ namespace RimWorld.BaseGen
 			return num / roomsPerRow;
 		}
 
-		// Token: 0x060064D1 RID: 25809 RVA: 0x00231C64 File Offset: 0x0022FE64
+		
 		private bool TryResolveRandomOption(int maxWidthHeightDiff, int maxPathwayWidthDiff, ResolveParams rp)
 		{
 			SymbolResolver_BasePart_Outdoors_Division_Grid.options.Clear();
@@ -129,7 +129,7 @@ namespace RimWorld.BaseGen
 			return false;
 		}
 
-		// Token: 0x060064D2 RID: 25810 RVA: 0x00231DE4 File Offset: 0x0022FFE4
+		
 		private void ResolveOption(int roomsPerRowX, int pathwayWidthX, int roomsPerRowZ, int pathwayWidthZ, ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -208,7 +208,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x060064D3 RID: 25811 RVA: 0x002320F4 File Offset: 0x002302F4
+		
 		private void MergeRandomChildren()
 		{
 			if (this.children.Count < 4)
@@ -238,52 +238,52 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003D94 RID: 15764
+		
 		private List<Pair<int, int>> optionsX = new List<Pair<int, int>>();
 
-		// Token: 0x04003D95 RID: 15765
+		
 		private List<Pair<int, int>> optionsZ = new List<Pair<int, int>>();
 
-		// Token: 0x04003D96 RID: 15766
+		
 		private List<SymbolResolver_BasePart_Outdoors_Division_Grid.Child> children = new List<SymbolResolver_BasePart_Outdoors_Division_Grid.Child>();
 
-		// Token: 0x04003D97 RID: 15767
+		
 		private const int MinWidthOrHeight = 13;
 
-		// Token: 0x04003D98 RID: 15768
+		
 		private const int MinRoomsPerRow = 2;
 
-		// Token: 0x04003D99 RID: 15769
+		
 		private const int MaxRoomsPerRow = 4;
 
-		// Token: 0x04003D9A RID: 15770
+		
 		private const int MinPathwayWidth = 1;
 
-		// Token: 0x04003D9B RID: 15771
+		
 		private const int MaxPathwayWidth = 5;
 
-		// Token: 0x04003D9C RID: 15772
+		
 		private const int MinRoomSize = 6;
 
-		// Token: 0x04003D9D RID: 15773
+		
 		private const float AllowNonSquareRoomsInTheFirstStepChance = 0.2f;
 
-		// Token: 0x04003D9E RID: 15774
+		
 		private static List<Pair<Pair<int, int>, Pair<int, int>>> options = new List<Pair<Pair<int, int>, Pair<int, int>>>();
 
-		// Token: 0x02001EE4 RID: 7908
+		
 		private class Child
 		{
-			// Token: 0x04007457 RID: 29783
+			
 			public CellRect rect;
 
-			// Token: 0x04007458 RID: 29784
+			
 			public int gridX;
 
-			// Token: 0x04007459 RID: 29785
+			
 			public int gridY;
 
-			// Token: 0x0400745A RID: 29786
+			
 			public bool merged;
 		}
 	}

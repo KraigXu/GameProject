@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020008DF RID: 2271
+	
 	public abstract class MainButtonWorker
 	{
-		// Token: 0x170009BB RID: 2491
+		
 		// (get) Token: 0x0600366C RID: 13932 RVA: 0x0005AC15 File Offset: 0x00058E15
 		public virtual float ButtonBarPercent
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170009BC RID: 2492
+		
 		// (get) Token: 0x0600366D RID: 13933 RVA: 0x00126E24 File Offset: 0x00125024
 		public virtual bool Disabled
 		{
@@ -27,10 +27,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600366E RID: 13934
+		
 		public abstract void Activate();
 
-		// Token: 0x0600366F RID: 13935 RVA: 0x00126E8C File Offset: 0x0012508C
+		
 		public virtual void InterfaceTryActivate()
 		{
 			if (TutorSystem.TutorialMode && this.def.canBeTutorDenied && Find.MainTabsRoot.OpenTab != this.def && !TutorSystem.AllowAction("MainTab-" + this.def.defName + "-Open"))
@@ -40,7 +40,7 @@ namespace RimWorld
 			this.Activate();
 		}
 
-		// Token: 0x06003670 RID: 13936 RVA: 0x00126EEC File Offset: 0x001250EC
+		
 		public virtual void DoButton(Rect rect)
 		{
 			Text.Font = GameFont.Small;
@@ -91,13 +91,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001EED RID: 7917
+		
 		public MainButtonDef def;
 
-		// Token: 0x04001EEE RID: 7918
+		
 		private const float CompactModeMargin = 2f;
 
-		// Token: 0x04001EEF RID: 7919
+		
 		private const float IconSize = 32f;
 	}
 }

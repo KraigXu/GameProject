@@ -7,10 +7,10 @@ using System.Xml.Xsl;
 
 namespace Verse
 {
-	// Token: 0x02000035 RID: 53
+	
 	public static class MathEvaluator
 	{
-		// Token: 0x17000084 RID: 132
+		
 		// (get) Token: 0x06000318 RID: 792 RVA: 0x0001011B File Offset: 0x0000E31B
 		private static XPathNavigator Navigator
 		{
@@ -28,7 +28,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000319 RID: 793 RVA: 0x00010154 File Offset: 0x0000E354
+		
 		public static double Evaluate(string expr)
 		{
 			if (expr.NullOrEmpty())
@@ -65,16 +65,16 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x040000B0 RID: 176
+		
 		private static XPathDocument doc;
 
-		// Token: 0x040000B1 RID: 177
+		
 		private static XPathNavigator navigator;
 
-		// Token: 0x040000B2 RID: 178
+		
 		private static readonly Regex AddSpacesRegex = new Regex("([\\+\\-\\*])");
 
-		// Token: 0x040000B3 RID: 179
+		
 		private static readonly MathEvaluatorCustomContext Context = new MathEvaluatorCustomContext(new NameTable(), new XsltArgumentList());
 	}
 }

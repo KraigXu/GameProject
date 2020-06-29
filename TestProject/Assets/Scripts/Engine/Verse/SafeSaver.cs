@@ -4,28 +4,28 @@ using System.Threading;
 
 namespace Verse
 {
-	// Token: 0x020002C2 RID: 706
+	
 	public static class SafeSaver
 	{
-		// Token: 0x06001401 RID: 5121 RVA: 0x000744B8 File Offset: 0x000726B8
+		
 		private static string GetFileFullPath(string path)
 		{
 			return Path.GetFullPath(path);
 		}
 
-		// Token: 0x06001402 RID: 5122 RVA: 0x000744C0 File Offset: 0x000726C0
+		
 		private static string GetNewFileFullPath(string path)
 		{
 			return Path.GetFullPath(path + SafeSaver.NewFileSuffix);
 		}
 
-		// Token: 0x06001403 RID: 5123 RVA: 0x000744D2 File Offset: 0x000726D2
+		
 		private static string GetOldFileFullPath(string path)
 		{
 			return Path.GetFullPath(path + SafeSaver.OldFileSuffix);
 		}
 
-		// Token: 0x06001404 RID: 5124 RVA: 0x000744E4 File Offset: 0x000726E4
+		
 		public static void Save(string path, string documentElementName, Action saveAction, bool leaveOldFile = false)
 		{
 			try
@@ -103,14 +103,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001405 RID: 5125 RVA: 0x000746E0 File Offset: 0x000728E0
+		
 		private static void CleanSafeSaverFiles(string path)
 		{
 			SafeSaver.RemoveFileIfExists(SafeSaver.GetOldFileFullPath(path), true);
 			SafeSaver.RemoveFileIfExists(SafeSaver.GetNewFileFullPath(path), true);
 		}
 
-		// Token: 0x06001406 RID: 5126 RVA: 0x000746FC File Offset: 0x000728FC
+		
 		private static void DoSave(string fullPath, string documentElementName, Action saveAction)
 		{
 			try
@@ -134,7 +134,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001407 RID: 5127 RVA: 0x00074774 File Offset: 0x00072974
+		
 		private static void RemoveFileIfExists(string path, bool rethrow)
 		{
 			try
@@ -160,7 +160,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001408 RID: 5128 RVA: 0x000747D4 File Offset: 0x000729D4
+		
 		private static void SafeMove(string from, string to)
 		{
 			Exception ex = null;
@@ -183,10 +183,10 @@ namespace Verse
 			throw ex;
 		}
 
-		// Token: 0x04000D79 RID: 3449
+		
 		private static readonly string NewFileSuffix = ".new";
 
-		// Token: 0x04000D7A RID: 3450
+		
 		private static readonly string OldFileSuffix = ".old";
 	}
 }

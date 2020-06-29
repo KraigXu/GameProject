@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200096A RID: 2410
+	
 	public class QuestPart_ChangeNeed : QuestPart
 	{
-		// Token: 0x17000A3D RID: 2621
+		
 		// (get) Token: 0x06003916 RID: 14614 RVA: 0x00130289 File Offset: 0x0012E489
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003917 RID: 14615 RVA: 0x0013029C File Offset: 0x0012E49C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003918 RID: 14616 RVA: 0x00130308 File Offset: 0x0012E508
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -53,7 +53,7 @@ namespace RimWorld
 			Scribe_Values.Look<float>(ref this.offset, "offset", 0f, false);
 		}
 
-		// Token: 0x06003919 RID: 14617 RVA: 0x00130364 File Offset: 0x0012E564
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600391A RID: 14618 RVA: 0x0013039E File Offset: 0x0012E59E
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			if (this.pawn == replace)
@@ -74,16 +74,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040021A9 RID: 8617
+		
 		public string inSignal;
 
-		// Token: 0x040021AA RID: 8618
+		
 		public Pawn pawn;
 
-		// Token: 0x040021AB RID: 8619
+		
 		public NeedDef need;
 
-		// Token: 0x040021AC RID: 8620
+		
 		public float offset;
 	}
 }

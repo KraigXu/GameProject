@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x020001BD RID: 445
+	
 	public sealed class RegionGrid
 	{
-		// Token: 0x17000268 RID: 616
+		
 		// (get) Token: 0x06000C75 RID: 3189 RVA: 0x00047648 File Offset: 0x00045848
 		public Region[] DirectGrid
 		{
@@ -21,7 +21,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000269 RID: 617
+		
 		// (get) Token: 0x06000C76 RID: 3190 RVA: 0x0004769A File Offset: 0x0004589A
 		public IEnumerable<Region> AllRegions_NoRebuild_InvalidAllowed
 		{
@@ -51,7 +51,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700026A RID: 618
+		
 		// (get) Token: 0x06000C77 RID: 3191 RVA: 0x000476AA File Offset: 0x000458AA
 		public IEnumerable<Region> AllRegions
 		{
@@ -86,14 +86,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C78 RID: 3192 RVA: 0x000476BA File Offset: 0x000458BA
+		
 		public RegionGrid(Map map)
 		{
 			this.map = map;
 			this.regionGrid = new Region[map.cellIndices.NumGridCells];
 		}
 
-		// Token: 0x06000C79 RID: 3193 RVA: 0x000476F8 File Offset: 0x000458F8
+		
 		public Region GetValidRegionAt(IntVec3 c)
 		{
 			if (!c.InBounds(this.map))
@@ -114,7 +114,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000C7A RID: 3194 RVA: 0x000477A4 File Offset: 0x000459A4
+		
 		public Region GetValidRegionAt_NoRebuild(IntVec3 c)
 		{
 			if (!c.InBounds(this.map))
@@ -130,19 +130,19 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000C7B RID: 3195 RVA: 0x000477FE File Offset: 0x000459FE
+		
 		public Region GetRegionAt_NoRebuild_InvalidAllowed(IntVec3 c)
 		{
 			return this.regionGrid[this.map.cellIndices.CellToIndex(c)];
 		}
 
-		// Token: 0x06000C7C RID: 3196 RVA: 0x00047818 File Offset: 0x00045A18
+		
 		public void SetRegionAt(IntVec3 c, Region reg)
 		{
 			this.regionGrid[this.map.cellIndices.CellToIndex(c)] = reg;
 		}
 
-		// Token: 0x06000C7D RID: 3197 RVA: 0x00047834 File Offset: 0x00045A34
+		
 		public void UpdateClean()
 		{
 			for (int i = 0; i < 16; i++)
@@ -160,7 +160,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C7E RID: 3198 RVA: 0x0004789C File Offset: 0x00045A9C
+		
 		public void DebugDraw()
 		{
 			if (this.map != Find.CurrentMap)
@@ -212,25 +212,25 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040009DA RID: 2522
+		
 		private Map map;
 
-		// Token: 0x040009DB RID: 2523
+		
 		private Region[] regionGrid;
 
-		// Token: 0x040009DC RID: 2524
+		
 		private int curCleanIndex;
 
-		// Token: 0x040009DD RID: 2525
+		
 		public List<Room> allRooms = new List<Room>();
 
-		// Token: 0x040009DE RID: 2526
+		
 		public static HashSet<Region> allRegionsYielded = new HashSet<Region>();
 
-		// Token: 0x040009DF RID: 2527
+		
 		private const int CleanSquaresPerFrame = 16;
 
-		// Token: 0x040009E0 RID: 2528
+		
 		public HashSet<Region> drawnRegions = new HashSet<Region>();
 	}
 }

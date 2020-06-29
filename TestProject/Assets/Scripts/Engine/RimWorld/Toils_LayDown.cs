@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000693 RID: 1683
+	
 	public static class Toils_LayDown
 	{
-		// Token: 0x06002DCD RID: 11725 RVA: 0x00101D64 File Offset: 0x000FFF64
+		
 		public static Toil LayDown(TargetIndex bedOrRestSpotIndex, bool hasBed, bool lookForOtherJobs, bool canSleep = true, bool gainRestAndHealth = true)
 		{
 			Toil layDown = new Toil();
@@ -132,7 +132,7 @@ namespace RimWorld
 			return layDown;
 		}
 
-		// Token: 0x06002DCE RID: 11726 RVA: 0x00101E18 File Offset: 0x00100018
+		
 		private static void ApplyBedThoughts(Pawn actor)
 		{
 			if (actor.needs.mood == null)
@@ -184,10 +184,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001A3E RID: 6718
+		
 		private const int TicksBetweenSleepZs = 100;
 
-		// Token: 0x04001A3F RID: 6719
+		
 		private const int GetUpOrStartJobWhileInBedCheckInterval = 211;
 	}
 }

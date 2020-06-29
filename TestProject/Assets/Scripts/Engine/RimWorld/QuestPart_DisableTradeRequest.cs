@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000973 RID: 2419
+	
 	public class QuestPart_DisableTradeRequest : QuestPart
 	{
-		// Token: 0x17000A46 RID: 2630
+		
 		// (get) Token: 0x0600394D RID: 14669 RVA: 0x00131033 File Offset: 0x0012F233
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,13 +29,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A47 RID: 2631
+		
 		// (get) Token: 0x0600394E RID: 14670 RVA: 0x00131043 File Offset: 0x0012F243
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__1())
+				foreach (Faction faction in this.n__1())
 				{
 					yield return faction;
 				}
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600394F RID: 14671 RVA: 0x00131054 File Offset: 0x0012F254
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003950 RID: 14672 RVA: 0x00131098 File Offset: 0x0012F298
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -71,7 +71,7 @@ namespace RimWorld
 			Scribe_References.Look<Settlement>(ref this.settlement, "settlement", false);
 		}
 
-		// Token: 0x06003951 RID: 14673 RVA: 0x001310C4 File Offset: 0x0012F2C4
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -87,10 +87,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040021C6 RID: 8646
+		
 		public string inSignal;
 
-		// Token: 0x040021C7 RID: 8647
+		
 		public Settlement settlement;
 	}
 }

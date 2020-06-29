@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000835 RID: 2101
+	
 	public class Thought_SharedBed : Thought_Situational
 	{
-		// Token: 0x17000967 RID: 2407
+		
 		// (get) Token: 0x06003479 RID: 13433 RVA: 0x0011FF24 File Offset: 0x0011E124
 		protected override float BaseMoodOffset
 		{

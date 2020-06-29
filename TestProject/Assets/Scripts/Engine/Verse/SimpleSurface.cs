@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000415 RID: 1045
+	
 	public class SimpleSurface : IEnumerable<SurfaceColumn>, IEnumerable
 	{
-		// Token: 0x06001F33 RID: 7987 RVA: 0x000C08A8 File Offset: 0x000BEAA8
+		
 		public float Evaluate(float x, float y)
 		{
 			if (this.columns.Count == 0)
@@ -48,19 +48,19 @@ namespace Verse
 			return Mathf.Lerp(surfaceColumn.y.Evaluate(y), surfaceColumn2.y.Evaluate(y), t);
 		}
 
-		// Token: 0x06001F34 RID: 7988 RVA: 0x000C09EA File Offset: 0x000BEBEA
+		
 		public void Add(SurfaceColumn newColumn)
 		{
 			this.columns.Add(newColumn);
 		}
 
-		// Token: 0x06001F35 RID: 7989 RVA: 0x000C09F8 File Offset: 0x000BEBF8
+		
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
 		}
 
-		// Token: 0x06001F36 RID: 7990 RVA: 0x000C0A00 File Offset: 0x000BEC00
+		
 		public IEnumerator<SurfaceColumn> GetEnumerator()
 		{
 			foreach (SurfaceColumn surfaceColumn in this.columns)
@@ -72,7 +72,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06001F37 RID: 7991 RVA: 0x000C0A0F File Offset: 0x000BEC0F
+		
 		public IEnumerable<string> ConfigErrors(string prefix)
 		{
 			for (int i = 0; i < this.columns.Count - 1; i++)
@@ -86,7 +86,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x04001312 RID: 4882
+		
 		private List<SurfaceColumn> columns = new List<SurfaceColumn>();
 	}
 }

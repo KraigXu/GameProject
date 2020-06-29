@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace Verse
 {
-	// Token: 0x0200001B RID: 27
+	
 	public static class GenCollection
 	{
-		// Token: 0x060001B7 RID: 439 RVA: 0x00008198 File Offset: 0x00006398
+		
 		public static void AddRange<T>(this HashSet<T> hashSet, IEnumerable<T> enumerable)
 		{
 			foreach (T item in enumerable)
@@ -17,7 +17,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001B8 RID: 440 RVA: 0x000081E4 File Offset: 0x000063E4
+		
 		public static void SetOrAdd<K, V>(this Dictionary<K, V> dict, K key, V value)
 		{
 			if (dict.ContainsKey(key))
@@ -28,7 +28,7 @@ namespace Verse
 			dict.Add(key, value);
 		}
 
-		// Token: 0x060001B9 RID: 441 RVA: 0x00008200 File Offset: 0x00006400
+		
 		public static void Increment<K>(this Dictionary<K, int> dict, K key)
 		{
 			if (dict.ContainsKey(key))
@@ -40,13 +40,13 @@ namespace Verse
 			dict[key] = 1;
 		}
 
-		// Token: 0x060001BA RID: 442 RVA: 0x00008234 File Offset: 0x00006434
+		
 		public static bool SharesElementWith<T>(this IEnumerable<T> source, IEnumerable<T> other)
 		{
 			return source.Any((T item) => other.Contains(item));
 		}
 
-		// Token: 0x060001BB RID: 443 RVA: 0x00008260 File Offset: 0x00006460
+		
 		public static IEnumerable<T> InRandomOrder<T>(this IEnumerable<T> source, IList<T> workingList = null)
 		{
 			if (source == null)
@@ -80,7 +80,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001BC RID: 444 RVA: 0x00008278 File Offset: 0x00006478
+		
 		public static T RandomElement<T>(this IEnumerable<T> source)
 		{
 			if (source == null)
@@ -100,7 +100,7 @@ namespace Verse
 			return list[Rand.Range(0, list.Count)];
 		}
 
-		// Token: 0x060001BD RID: 445 RVA: 0x000082D4 File Offset: 0x000064D4
+		
 		public static T RandomElementWithFallback<T>(this IEnumerable<T> source, T fallback = default(T))
 		{
 			T result;
@@ -111,7 +111,7 @@ namespace Verse
 			return fallback;
 		}
 
-		// Token: 0x060001BE RID: 446 RVA: 0x000082F0 File Offset: 0x000064F0
+		
 		public static bool TryRandomElement<T>(this IEnumerable<T> source, out T result)
 		{
 			if (source == null)
@@ -140,7 +140,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060001BF RID: 447 RVA: 0x0000834C File Offset: 0x0000654C
+		
 		public static T RandomElementByWeight<T>(this IEnumerable<T> source, Func<T, float> weightSelector)
 		{
 			float num = 0f;
@@ -233,7 +233,7 @@ namespace Verse
 			return default(T);
 		}
 
-		// Token: 0x060001C0 RID: 448 RVA: 0x00008594 File Offset: 0x00006794
+		
 		public static T RandomElementByWeightWithFallback<T>(this IEnumerable<T> source, Func<T, float> weightSelector, T fallback = default(T))
 		{
 			T result;
@@ -244,7 +244,7 @@ namespace Verse
 			return fallback;
 		}
 
-		// Token: 0x060001C1 RID: 449 RVA: 0x000085B0 File Offset: 0x000067B0
+		
 		public static bool TryRandomElementByWeight<T>(this IEnumerable<T> source, Func<T, float> weightSelector, out T result)
 		{
 			IList<T> list = source as IList<T>;
@@ -340,7 +340,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060001C2 RID: 450 RVA: 0x000087E8 File Offset: 0x000069E8
+		
 		public static T RandomElementByWeightWithDefault<T>(this IEnumerable<T> source, Func<T, float> weightSelector, float defaultValueWeight)
 		{
 			if (defaultValueWeight < 0f)
@@ -378,7 +378,7 @@ namespace Verse
 			return source.RandomElementByWeight(weightSelector);
 		}
 
-		// Token: 0x060001C3 RID: 451 RVA: 0x000088EC File Offset: 0x00006AEC
+		
 		public static T FirstOrFallback<T>(this IEnumerable<T> source, T fallback = default(T))
 		{
 			using (IEnumerator<T> enumerator = source.GetEnumerator())
@@ -391,19 +391,19 @@ namespace Verse
 			return fallback;
 		}
 
-		// Token: 0x060001C4 RID: 452 RVA: 0x00008934 File Offset: 0x00006B34
+		
 		public static T FirstOrFallback<T>(this IEnumerable<T> source, Func<T, bool> predicate, T fallback = default(T))
 		{
 			return source.Where(predicate).FirstOrFallback(fallback);
 		}
 
-		// Token: 0x060001C5 RID: 453 RVA: 0x00008943 File Offset: 0x00006B43
+		
 		public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
 		{
 			return source.MaxBy(selector, Comparer<TKey>.Default);
 		}
 
-		// Token: 0x060001C6 RID: 454 RVA: 0x00008954 File Offset: 0x00006B54
+		
 		public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
 		{
 			if (source == null)
@@ -442,13 +442,13 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001C7 RID: 455 RVA: 0x00008A00 File Offset: 0x00006C00
+		
 		public static TSource MaxByWithFallback<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, TSource fallback = default(TSource))
 		{
 			return source.MaxByWithFallback(selector, Comparer<TKey>.Default, fallback);
 		}
 
-		// Token: 0x060001C8 RID: 456 RVA: 0x00008A10 File Offset: 0x00006C10
+		
 		public static TSource MaxByWithFallback<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer, TSource fallback = default(TSource))
 		{
 			if (source == null)
@@ -490,13 +490,13 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001C9 RID: 457 RVA: 0x00008AB8 File Offset: 0x00006CB8
+		
 		public static bool TryMaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, out TSource value)
 		{
 			return source.TryMaxBy(selector, Comparer<TKey>.Default, out value);
 		}
 
-		// Token: 0x060001CA RID: 458 RVA: 0x00008AC8 File Offset: 0x00006CC8
+		
 		public static bool TryMaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer, out TSource value)
 		{
 			if (source == null)
@@ -540,13 +540,13 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001CB RID: 459 RVA: 0x00008B7C File Offset: 0x00006D7C
+		
 		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
 		{
 			return source.MinBy(selector, Comparer<TKey>.Default);
 		}
 
-		// Token: 0x060001CC RID: 460 RVA: 0x00008B8C File Offset: 0x00006D8C
+		
 		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
 		{
 			if (source == null)
@@ -585,13 +585,13 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001CD RID: 461 RVA: 0x00008C38 File Offset: 0x00006E38
+		
 		public static bool TryMinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, out TSource value)
 		{
 			return source.TryMinBy(selector, Comparer<TKey>.Default, out value);
 		}
 
-		// Token: 0x060001CE RID: 462 RVA: 0x00008C48 File Offset: 0x00006E48
+		
 		public static bool TryMinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer, out TSource value)
 		{
 			if (source == null)
@@ -635,7 +635,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001CF RID: 463 RVA: 0x00008CFC File Offset: 0x00006EFC
+		
 		public static void SortBy<T, TSortBy>(this List<T> list, Func<T, TSortBy> selector) where TSortBy : IComparable<TSortBy>
 		{
 			if (list.Count <= 1)
@@ -649,7 +649,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060001D0 RID: 464 RVA: 0x00008D34 File Offset: 0x00006F34
+		
 		public static void SortBy<T, TSortBy, TThenBy>(this List<T> list, Func<T, TSortBy> selector, Func<T, TThenBy> thenBySelector) where TSortBy : IComparable<TSortBy>, IEquatable<TSortBy> where TThenBy : IComparable<TThenBy>
 		{
 			if (list.Count <= 1)
@@ -669,7 +669,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060001D1 RID: 465 RVA: 0x00008D74 File Offset: 0x00006F74
+		
 		public static void SortByDescending<T, TSortByDescending>(this List<T> list, Func<T, TSortByDescending> selector) where TSortByDescending : IComparable<TSortByDescending>
 		{
 			if (list.Count <= 1)
@@ -683,7 +683,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060001D2 RID: 466 RVA: 0x00008DAC File Offset: 0x00006FAC
+		
 		public static void SortByDescending<T, TSortByDescending, TThenByDescending>(this List<T> list, Func<T, TSortByDescending> selector, Func<T, TThenByDescending> thenByDescendingSelector) where TSortByDescending : IComparable<TSortByDescending>, IEquatable<TSortByDescending> where TThenByDescending : IComparable<TThenByDescending>
 		{
 			if (list.Count <= 1)
@@ -703,7 +703,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060001D3 RID: 467 RVA: 0x00008DEC File Offset: 0x00006FEC
+		
 		public static void SortStable<T>(this IList<T> list, Func<T, T, int> comparator)
 		{
 			if (list.Count <= 1)
@@ -755,7 +755,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001D4 RID: 468 RVA: 0x00008EC0 File Offset: 0x000070C0
+		
 		public static int RemoveAll<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Predicate<KeyValuePair<TKey, TValue>> predicate)
 		{
 			List<TKey> list = null;
@@ -800,7 +800,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001D5 RID: 469 RVA: 0x00008F7C File Offset: 0x0000717C
+		
 		public static void RemoveAll<T>(this List<T> list, Func<T, int, bool> predicate)
 		{
 			int num = 0;
@@ -827,13 +827,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001D6 RID: 470 RVA: 0x00008FED File Offset: 0x000071ED
+		
 		public static void RemoveLast<T>(this List<T> list)
 		{
 			list.RemoveAt(list.Count - 1);
 		}
 
-		// Token: 0x060001D7 RID: 471 RVA: 0x00008FFD File Offset: 0x000071FD
+		
 		public static T Pop<T>(this List<T> list)
 		{
 			T result = list[list.Count - 1];
@@ -841,31 +841,31 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001D8 RID: 472 RVA: 0x0000901B File Offset: 0x0000721B
+		
 		public static bool Any<T>(this List<T> list, Predicate<T> predicate)
 		{
 			return list.FindIndex(predicate) != -1;
 		}
 
-		// Token: 0x060001D9 RID: 473 RVA: 0x0000902A File Offset: 0x0000722A
+		
 		public static bool Any<T>(this List<T> list)
 		{
 			return list.Count != 0;
 		}
 
-		// Token: 0x060001DA RID: 474 RVA: 0x00009035 File Offset: 0x00007235
+		
 		public static bool Any<T>(this HashSet<T> list)
 		{
 			return list.Count != 0;
 		}
 
-		// Token: 0x060001DB RID: 475 RVA: 0x00009040 File Offset: 0x00007240
+		
 		public static bool Any<T>(this Stack<T> list)
 		{
 			return list.Count != 0;
 		}
 
-		// Token: 0x060001DC RID: 476 RVA: 0x0000904C File Offset: 0x0000724C
+		
 		public static void AddRange<T>(this HashSet<T> set, List<T> list)
 		{
 			for (int i = 0; i < list.Count; i++)
@@ -874,7 +874,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001DD RID: 477 RVA: 0x00009078 File Offset: 0x00007278
+		
 		public static void AddRange<T>(this HashSet<T> set, HashSet<T> other)
 		{
 			foreach (T item in other)
@@ -883,7 +883,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001DE RID: 478 RVA: 0x000090C8 File Offset: 0x000072C8
+		
 		public static int Count_EnumerableBase(IEnumerable e)
 		{
 			if (e == null)
@@ -903,7 +903,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x060001DF RID: 479 RVA: 0x00009130 File Offset: 0x00007330
+		
 		public static object FirstOrDefault_EnumerableBase(IEnumerable e)
 		{
 			if (e == null)
@@ -929,7 +929,7 @@ namespace Verse
 			return list[0];
 		}
 
-		// Token: 0x060001E0 RID: 480 RVA: 0x000091A0 File Offset: 0x000073A0
+		
 		public static float AverageWeighted<T>(this IEnumerable<T> list, Func<T, float> weight, Func<T, float> value)
 		{
 			float num = 0f;
@@ -943,7 +943,7 @@ namespace Verse
 			return num2 / num;
 		}
 
-		// Token: 0x060001E1 RID: 481 RVA: 0x0000920C File Offset: 0x0000740C
+		
 		public static void ExecuteEnumerable(this IEnumerable enumerable)
 		{
 			foreach (object obj in enumerable)
@@ -951,7 +951,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060001E2 RID: 482 RVA: 0x00009254 File Offset: 0x00007454
+		
 		public static bool EnumerableNullOrEmpty<T>(this IEnumerable<T> enumerable)
 		{
 			if (enumerable == null)
@@ -966,7 +966,7 @@ namespace Verse
 			return !enumerable.Any<T>();
 		}
 
-		// Token: 0x060001E3 RID: 483 RVA: 0x00009284 File Offset: 0x00007484
+		
 		public static int EnumerableCount(this IEnumerable enumerable)
 		{
 			if (enumerable == null)
@@ -986,7 +986,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x060001E4 RID: 484 RVA: 0x000092EC File Offset: 0x000074EC
+		
 		public static int FirstIndexOf<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
 		{
 			int num = 0;
@@ -1001,7 +1001,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x060001E5 RID: 485 RVA: 0x00009340 File Offset: 0x00007540
+		
 		public static V TryGetValue<T, V>(this IDictionary<T, V> dict, T key, V fallback = default(V))
 		{
 			V result;
@@ -1012,7 +1012,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060001E6 RID: 486 RVA: 0x0000935B File Offset: 0x0000755B
+		
 		public static IEnumerable<Pair<T, V>> Cross<T, V>(this IEnumerable<T> lhs, IEnumerable<V> rhs)
 		{
 			T[] lhsv = lhs.ToArray<T>();
@@ -1030,7 +1030,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001E7 RID: 487 RVA: 0x00009372 File Offset: 0x00007572
+		
 		public static IEnumerable<T> Concat<T>(this IEnumerable<T> lhs, T rhs)
 		{
 			foreach (T t in lhs)
@@ -1043,7 +1043,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001E8 RID: 488 RVA: 0x0000938C File Offset: 0x0000758C
+		
 		public static LocalTargetInfo FirstValid(this List<LocalTargetInfo> source)
 		{
 			if (source == null)
@@ -1060,7 +1060,7 @@ namespace Verse
 			return LocalTargetInfo.Invalid;
 		}
 
-		// Token: 0x060001E9 RID: 489 RVA: 0x000093D1 File Offset: 0x000075D1
+		
 		public static IEnumerable<T> Except<T>(this IEnumerable<T> lhs, T rhs) where T : class
 		{
 			foreach (T t in lhs)
@@ -1075,7 +1075,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001EA RID: 490 RVA: 0x000093E8 File Offset: 0x000075E8
+		
 		public static bool ListsEqual<T>(List<T> a, List<T> b) where T : class
 		{
 			if (a == b)
@@ -1105,7 +1105,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060001EB RID: 491 RVA: 0x00009460 File Offset: 0x00007660
+		
 		public static bool ListsEqualIgnoreOrder<T>(this List<T> a, List<T> b)
 		{
 			if (a == b)
@@ -1137,7 +1137,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060001EC RID: 492 RVA: 0x000094DC File Offset: 0x000076DC
+		
 		public static IEnumerable<T> TakeRandom<T>(this List<T> list, int count)
 		{
 			if (list.NullOrEmpty<T>())
@@ -1153,7 +1153,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060001ED RID: 493 RVA: 0x000094F4 File Offset: 0x000076F4
+		
 		public static void AddDistinct<T>(this List<T> list, T element) where T : class
 		{
 			for (int i = 0; i < list.Count; i++)
@@ -1166,7 +1166,7 @@ namespace Verse
 			list.Add(element);
 		}
 
-		// Token: 0x060001EE RID: 494 RVA: 0x00009530 File Offset: 0x00007730
+		
 		public static int Replace<T>(this IList<T> list, T replace, T with) where T : class
 		{
 			if (list == null)
@@ -1185,13 +1185,13 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x020012E4 RID: 4836
+		
 		private static class SortStableTempList<T>
 		{
-			// Token: 0x04004768 RID: 18280
+			
 			public static List<Pair<T, int>> list = new List<Pair<T, int>>();
 
-			// Token: 0x04004769 RID: 18281
+			
 			public static bool working;
 		}
 	}

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E9A RID: 3738
+	
 	public class ChoiceLetter_RansomDemand : ChoiceLetter
 	{
-		// Token: 0x17001059 RID: 4185
+		
 		// (get) Token: 0x06005B25 RID: 23333 RVA: 0x001F6029 File Offset: 0x001F4229
 		public override IEnumerable<DiaOption> Choices
 		{
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700105A RID: 4186
+		
 		// (get) Token: 0x06005B26 RID: 23334 RVA: 0x001F6039 File Offset: 0x001F4239
 		public override bool CanShowInLetterStack
 		{
@@ -64,7 +64,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B27 RID: 23335 RVA: 0x001F6074 File Offset: 0x001F4274
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -74,16 +74,16 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.fee, "fee", 0, false);
 		}
 
-		// Token: 0x040031C5 RID: 12741
+		
 		public Map map;
 
-		// Token: 0x040031C6 RID: 12742
+		
 		public Faction faction;
 
-		// Token: 0x040031C7 RID: 12743
+		
 		public Pawn kidnapped;
 
-		// Token: 0x040031C8 RID: 12744
+		
 		public int fee;
 	}
 }

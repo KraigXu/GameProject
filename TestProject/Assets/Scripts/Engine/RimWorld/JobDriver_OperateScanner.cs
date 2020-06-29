@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200066E RID: 1646
+	
 	public class JobDriver_OperateScanner : JobDriver
 	{
-		// Token: 0x06002CDC RID: 11484 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002CDD RID: 11485 RVA: 0x000FE961 File Offset: 0x000FCB61
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			CompScanner scannerComp = this.job.targetA.Thing.TryGetComp<CompScanner>();

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B46 RID: 2886
+	
 	public static class NegativeInteractionUtility
 	{
-		// Token: 0x060043D0 RID: 17360 RVA: 0x0016D7E0 File Offset: 0x0016B9E0
+		
 		public static float NegativeInteractionChanceFactor(Pawn initiator, Pawn recipient)
 		{
 			if (initiator.story.traits.HasTrait(TraitDefOf.Kind))
@@ -23,10 +23,10 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x040026D0 RID: 9936
+		
 		public const float AbrasiveSelectionChanceFactor = 2.3f;
 
-		// Token: 0x040026D1 RID: 9937
+		
 		private static readonly SimpleCurve CompatibilityFactorCurve = new SimpleCurve
 		{
 			{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026D2 RID: 9938
+		
 		private static readonly SimpleCurve OpinionFactorCurve = new SimpleCurve
 		{
 			{

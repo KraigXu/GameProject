@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A25 RID: 2597
+	
 	public static class StorytellerUtilityPopulation
 	{
-		// Token: 0x17000AE2 RID: 2786
+		
 		// (get) Token: 0x06003D6F RID: 15727 RVA: 0x00144F07 File Offset: 0x00143107
 		private static StorytellerDef StorytellerDef
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE3 RID: 2787
+		
 		// (get) Token: 0x06003D70 RID: 15728 RVA: 0x00144F13 File Offset: 0x00143113
 		public static float PopulationIntent
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE4 RID: 2788
+		
 		// (get) Token: 0x06003D71 RID: 15729 RVA: 0x00144F33 File Offset: 0x00143133
 		public static float PopulationIntentForQuest
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE5 RID: 2789
+		
 		// (get) Token: 0x06003D72 RID: 15730 RVA: 0x00144F53 File Offset: 0x00143153
 		public static float AdjustedPopulation
 		{
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AE6 RID: 2790
+		
 		// (get) Token: 0x06003D73 RID: 15731 RVA: 0x00144F80 File Offset: 0x00143180
 		public static float AdjustedPopulationIncludingQuests
 		{
@@ -68,7 +68,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D74 RID: 15732 RVA: 0x00144FD4 File Offset: 0x001431D4
+		
 		private static float CalculatePopulationIntent(StorytellerDef def, float curPop, float popAdaptation)
 		{
 			float num = def.populationIntentFactorFromPopCurve.Evaluate(curPop);
@@ -79,7 +79,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06003D75 RID: 15733 RVA: 0x00145008 File Offset: 0x00143208
+		
 		public static string DebugReadout()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -92,7 +92,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06003D76 RID: 15734 RVA: 0x00145120 File Offset: 0x00143320
+		
 		[DebugOutput]
 		public static void PopulationIntents()
 		{
@@ -109,7 +109,7 @@ namespace RimWorld
 			DebugTables.MakeTablesDialog<float, float>(list2, (float ds) => "d-" + ds.ToString("F0"), list, (float rv) => rv.ToString("F2"), (float ds, float p) => StorytellerUtilityPopulation.CalculatePopulationIntent(StorytellerUtilityPopulation.StorytellerDef, p, (float)((int)ds)).ToString("F2"), "pop");
 		}
 
-		// Token: 0x040023E0 RID: 9184
+		
 		private static float PopulationValue_Prisoner = 0.5f;
 	}
 }

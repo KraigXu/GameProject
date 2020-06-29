@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002E9 RID: 745
+	
 	public class Graphic_Flicker : Graphic_Collection
 	{
-		// Token: 0x17000448 RID: 1096
+		
 		// (get) Token: 0x0600151A RID: 5402 RVA: 0x0007BCD4 File Offset: 0x00079ED4
 		public override Material MatSingle
 		{
@@ -17,7 +17,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600151B RID: 5403 RVA: 0x0007C0A8 File Offset: 0x0007A2A8
+		
 		public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
 		{
 			if (thingDef == null)
@@ -72,7 +72,7 @@ namespace Verse
 			Graphics.DrawMesh(MeshPool.plane10, matrix, graphic.MatSingle, 0);
 		}
 
-		// Token: 0x0600151C RID: 5404 RVA: 0x0007C254 File Offset: 0x0007A454
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -85,13 +85,13 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x04000DF2 RID: 3570
+		
 		private const int BaseTicksPerFrameChange = 15;
 
-		// Token: 0x04000DF3 RID: 3571
+		
 		private const int ExtraTicksPerFrameChange = 10;
 
-		// Token: 0x04000DF4 RID: 3572
+		
 		private const float MaxOffset = 0.05f;
 	}
 }

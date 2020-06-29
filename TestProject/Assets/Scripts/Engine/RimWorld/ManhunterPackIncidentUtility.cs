@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009E7 RID: 2535
+	
 	public static class ManhunterPackIncidentUtility
 	{
-		// Token: 0x06003C61 RID: 15457 RVA: 0x0013F014 File Offset: 0x0013D214
+		
 		public static float ManhunterAnimalWeight(PawnKindDef animal, float points)
 		{
 			points = Mathf.Max(points, 70f);
@@ -21,7 +21,7 @@ namespace RimWorld
 			return Mathf.Clamp01(Mathf.InverseLerp(100f, 10f, (float)num));
 		}
 
-		// Token: 0x06003C62 RID: 15458 RVA: 0x0013F068 File Offset: 0x0013D268
+		
 		public static bool TryFindManhunterAnimalKind(float points, int tile, out PawnKindDef animalKind)
 		{
 			IEnumerable<PawnKindDef> source = from k in DefDatabase<PawnKindDef>.AllDefs
@@ -40,20 +40,20 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003C63 RID: 15459 RVA: 0x0013F117 File Offset: 0x0013D317
+		
 		public static int GetAnimalsCount(PawnKindDef animalKind, float points)
 		{
 			return Mathf.Max(Mathf.RoundToInt(points / animalKind.combatPower), 2);
 		}
 
-		// Token: 0x06003C64 RID: 15460 RVA: 0x0013F12C File Offset: 0x0013D32C
+		
 		[Obsolete("Obsolete, only used to avoid error when patching")]
 		public static List<Pawn> GenerateAnimals(PawnKindDef animalKind, int tile, float points)
 		{
 			return ManhunterPackIncidentUtility.GenerateAnimals_NewTmp(animalKind, tile, points, 0);
 		}
 
-		// Token: 0x06003C65 RID: 15461 RVA: 0x0013F138 File Offset: 0x0013D338
+		
 		public static List<Pawn> GenerateAnimals_NewTmp(PawnKindDef animalKind, int tile, float points, int animalCount = 0)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -66,7 +66,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06003C66 RID: 15462 RVA: 0x0013F1D4 File Offset: 0x0013D3D4
+		
 		[DebugOutput]
 		public static void ManhunterResults()
 		{
@@ -91,10 +91,10 @@ namespace RimWorld
 			}, "");
 		}
 
-		// Token: 0x0400238B RID: 9099
+		
 		public const int MinAnimalCount = 2;
 
-		// Token: 0x0400238C RID: 9100
+		
 		public const float MinPoints = 70f;
 	}
 }

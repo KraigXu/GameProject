@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000A4B RID: 2635
+	
 	public class GenStep_ElevationFertility : GenStep
 	{
-		// Token: 0x17000B10 RID: 2832
+		
 		// (get) Token: 0x06003E51 RID: 15953 RVA: 0x00148CD4 File Offset: 0x00146ED4
 		public override int SeedPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E52 RID: 15954 RVA: 0x00148CDC File Offset: 0x00146EDC
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			NoiseRenderer.renderSize = new IntVec2(map.Size.x, map.Size.z);
@@ -96,13 +96,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002453 RID: 9299
+		
 		private const float ElevationFreq = 0.021f;
 
-		// Token: 0x04002454 RID: 9300
+		
 		private const float FertilityFreq = 0.021f;
 
-		// Token: 0x04002455 RID: 9301
+		
 		private const float EdgeMountainSpan = 0.42f;
 	}
 }

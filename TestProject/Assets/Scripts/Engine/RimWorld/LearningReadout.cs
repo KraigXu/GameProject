@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E98 RID: 3736
+	
 	[StaticConstructorOnStartup]
 	public class LearningReadout : IExposable
 	{
-		// Token: 0x17001054 RID: 4180
+		
 		// (get) Token: 0x06005B0E RID: 23310 RVA: 0x001F554F File Offset: 0x001F374F
 		public int ActiveConceptsCount
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001055 RID: 4181
+		
 		// (get) Token: 0x06005B0F RID: 23311 RVA: 0x001F555C File Offset: 0x001F375C
 		public bool ShowAllMode
 		{
@@ -30,13 +30,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B10 RID: 23312 RVA: 0x001F5564 File Offset: 0x001F3764
+		
 		public LearningReadout()
 		{
 			this.windowOnGUICached = new Action(this.WindowOnGUI);
 		}
 
-		// Token: 0x06005B11 RID: 23313 RVA: 0x001F55B8 File Offset: 0x001F37B8
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<ConceptDef>(ref this.activeConcepts, "activeConcepts", LookMode.Undefined, Array.Empty<object>());
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B12 RID: 23314 RVA: 0x001F561E File Offset: 0x001F381E
+		
 		public bool TryActivateConcept(ConceptDef conc)
 		{
 			if (this.activeConcepts.Contains(conc))
@@ -60,18 +60,18 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005B13 RID: 23315 RVA: 0x001F5653 File Offset: 0x001F3853
+		
 		public bool IsActive(ConceptDef conc)
 		{
 			return this.activeConcepts.Contains(conc);
 		}
 
-		// Token: 0x06005B14 RID: 23316 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public void LearningReadoutUpdate()
 		{
 		}
 
-		// Token: 0x06005B15 RID: 23317 RVA: 0x001F5664 File Offset: 0x001F3864
+		
 		public void Notify_ConceptNewlyLearned(ConceptDef conc)
 		{
 			if (this.activeConcepts.Contains(conc) || this.selectedConcept == conc)
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B16 RID: 23318 RVA: 0x001F56C9 File Offset: 0x001F38C9
+		
 		private string FilterSearchStringInput(string input)
 		{
 			if (input == this.searchString)
@@ -103,7 +103,7 @@ namespace RimWorld
 			return input;
 		}
 
-		// Token: 0x06005B17 RID: 23319 RVA: 0x001F56F4 File Offset: 0x001F38F4
+		
 		public void LearningReadoutOnGUI()
 		{
 			if (TutorSystem.TutorialMode || !TutorSystem.AdaptiveTrainingEnabled)
@@ -137,7 +137,7 @@ namespace RimWorld
 			this.mouseoverConcept = null;
 		}
 
-		// Token: 0x06005B18 RID: 23320 RVA: 0x001F5848 File Offset: 0x001F3A48
+		
 		private void WindowOnGUI()
 		{
 			Rect rect = this.windowRect.AtZero().ContractedBy(7f);
@@ -228,7 +228,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005B19 RID: 23321 RVA: 0x001F5BD4 File Offset: 0x001F3DD4
+		
 		private int DisplayPriority(ConceptDef conc)
 		{
 			int num = 1;
@@ -239,13 +239,13 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06005B1A RID: 23322 RVA: 0x001F5BF5 File Offset: 0x001F3DF5
+		
 		private bool MatchesSearchString(ConceptDef conc)
 		{
 			return this.searchString != "" && conc.label.IndexOf(this.searchString, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 
-		// Token: 0x06005B1B RID: 23323 RVA: 0x001F5C24 File Offset: 0x001F3E24
+		
 		private Rect DrawConceptListRow(float x, float y, float width, ConceptDef conc)
 		{
 			float knowledge = PlayerKnowledgeDatabase.GetKnowledge(conc);
@@ -298,7 +298,7 @@ namespace RimWorld
 			return rect;
 		}
 
-		// Token: 0x06005B1C RID: 23324 RVA: 0x001F5D50 File Offset: 0x001F3F50
+		
 		private Rect DrawInfoPane(ConceptDef conc)
 		{
 			float knowledge = PlayerKnowledgeDatabase.GetKnowledge(conc);
@@ -373,58 +373,58 @@ namespace RimWorld
 			return outRect2;
 		}
 
-		// Token: 0x040031B1 RID: 12721
+		
 		private List<ConceptDef> activeConcepts = new List<ConceptDef>();
 
-		// Token: 0x040031B2 RID: 12722
+		
 		private ConceptDef selectedConcept;
 
-		// Token: 0x040031B3 RID: 12723
+		
 		private bool showAllMode;
 
-		// Token: 0x040031B4 RID: 12724
+		
 		private float contentHeight;
 
-		// Token: 0x040031B5 RID: 12725
+		
 		private Vector2 scrollPosition = Vector2.zero;
 
-		// Token: 0x040031B6 RID: 12726
+		
 		private string searchString = "";
 
-		// Token: 0x040031B7 RID: 12727
+		
 		private float lastConceptActivateRealTime = -999f;
 
-		// Token: 0x040031B8 RID: 12728
+		
 		private ConceptDef mouseoverConcept;
 
-		// Token: 0x040031B9 RID: 12729
+		
 		private Rect windowRect;
 
-		// Token: 0x040031BA RID: 12730
+		
 		private Action windowOnGUICached;
 
-		// Token: 0x040031BB RID: 12731
+		
 		private const float OuterMargin = 8f;
 
-		// Token: 0x040031BC RID: 12732
+		
 		private const float InnerMargin = 7f;
 
-		// Token: 0x040031BD RID: 12733
+		
 		private const float ReadoutWidth = 200f;
 
-		// Token: 0x040031BE RID: 12734
+		
 		private const float InfoPaneWidth = 310f;
 
-		// Token: 0x040031BF RID: 12735
+		
 		private const float OpenButtonSize = 24f;
 
-		// Token: 0x040031C0 RID: 12736
+		
 		public static readonly Texture2D ProgressBarFillTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.745098054f, 0.6039216f, 0.2f));
 
-		// Token: 0x040031C1 RID: 12737
+		
 		public static readonly Texture2D ProgressBarBGTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.509803951f, 0.407843143f, 0.13333334f));
 
-		// Token: 0x040031C2 RID: 12738
+		
 		private static List<ConceptDef> tmpConceptsToShow = new List<ConceptDef>();
 	}
 }

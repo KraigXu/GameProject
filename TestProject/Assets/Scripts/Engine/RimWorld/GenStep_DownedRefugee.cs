@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A67 RID: 2663
+	
 	public class GenStep_DownedRefugee : GenStep_Scatterer
 	{
-		// Token: 0x17000B23 RID: 2851
+		
 		// (get) Token: 0x06003EDB RID: 16091 RVA: 0x0014E1F8 File Offset: 0x0014C3F8
 		public override int SeedPart
 		{
@@ -17,13 +17,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003EDC RID: 16092 RVA: 0x0014E1FF File Offset: 0x0014C3FF
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			return base.CanScatterAt(c, map) && c.Standable(map);
 		}
 
-		// Token: 0x06003EDD RID: 16093 RVA: 0x0014E214 File Offset: 0x0014C414
+		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
 		{
 			Pawn pawn;

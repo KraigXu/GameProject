@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E23 RID: 3619
+	
 	public class Designator_Cancel : Designator
 	{
-		// Token: 0x17000F9E RID: 3998
+		
 		// (get) Token: 0x06005761 RID: 22369 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
 		public override int DraggableDimensions
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005762 RID: 22370 RVA: 0x001D0928 File Offset: 0x001CEB28
+		
 		public Designator_Cancel()
 		{
 			this.defaultLabel = "DesignatorCancel".Translate();
@@ -33,7 +33,7 @@ namespace RimWorld
 			this.tutorTag = "Cancel";
 		}
 
-		// Token: 0x06005763 RID: 22371 RVA: 0x001D09B4 File Offset: 0x001CEBB4
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -55,7 +55,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005764 RID: 22372 RVA: 0x001D0A30 File Offset: 0x001CEC30
+		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			foreach (Designation designation in this.CancelableDesignationsAt(c).ToList<Designation>())
@@ -75,7 +75,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005765 RID: 22373 RVA: 0x001D0AE8 File Offset: 0x001CECE8
+		
 		public override AcceptanceReport CanDesignateThing(Thing t)
 		{
 			if (base.Map.designationManager.DesignationOn(t) != null)
@@ -102,7 +102,7 @@ namespace RimWorld
 			return t.Faction == Faction.OfPlayer && (t is Frame || t is Blueprint);
 		}
 
-		// Token: 0x06005766 RID: 22374 RVA: 0x001D0BF0 File Offset: 0x001CEDF0
+		
 		public override void DesignateThing(Thing t)
 		{
 			if (t is Frame || t is Blueprint)
@@ -129,13 +129,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005767 RID: 22375 RVA: 0x001D0CA1 File Offset: 0x001CEEA1
+		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();
 		}
 
-		// Token: 0x06005768 RID: 22376 RVA: 0x001D0CA8 File Offset: 0x001CEEA8
+		
 		private IEnumerable<Designation> CancelableDesignationsAt(IntVec3 c)
 		{
 			return from x in base.Map.designationManager.AllDesignationsAt(c)
@@ -143,7 +143,7 @@ namespace RimWorld
 			select x;
 		}
 
-		// Token: 0x06005769 RID: 22377 RVA: 0x001D0CE0 File Offset: 0x001CEEE0
+		
 		public override void RenderHighlight(List<IntVec3> dragCells)
 		{
 			Designator_Cancel.seenThings.Clear();
@@ -180,7 +180,7 @@ namespace RimWorld
 			Designator_Cancel.seenThings.Clear();
 		}
 
-		// Token: 0x04002F9B RID: 12187
+		
 		private static HashSet<Thing> seenThings = new HashSet<Thing>();
 	}
 }

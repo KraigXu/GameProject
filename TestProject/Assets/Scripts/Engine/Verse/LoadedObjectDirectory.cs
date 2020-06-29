@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x020002C9 RID: 713
+	
 	public class LoadedObjectDirectory
 	{
-		// Token: 0x0600141F RID: 5151 RVA: 0x00074DE6 File Offset: 0x00072FE6
+		
 		public void Clear()
 		{
 			this.allObjectsByLoadID.Clear();
 		}
 
-		// Token: 0x06001420 RID: 5152 RVA: 0x00074DF4 File Offset: 0x00072FF4
+		
 		public void RegisterLoaded(ILoadReferenceable reffable)
 		{
 			if (Prefs.DevMode)
@@ -91,7 +91,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001421 RID: 5153 RVA: 0x00074F7C File Offset: 0x0007317C
+		
 		public T ObjectWithLoadID<T>(string loadID)
 		{
 			if (loadID.NullOrEmpty() || loadID == "null")
@@ -141,7 +141,7 @@ namespace Verse
 			return default(T);
 		}
 
-		// Token: 0x04000D89 RID: 3465
+		
 		private Dictionary<string, ILoadReferenceable> allObjectsByLoadID = new Dictionary<string, ILoadReferenceable>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006C1 RID: 1729
+	
 	public class JobGiver_PickUpOpportunisticWeapon : ThinkNode_JobGiver
 	{
-		// Token: 0x17000899 RID: 2201
+		
 		// (get) Token: 0x06002E80 RID: 11904 RVA: 0x001056E0 File Offset: 0x001038E0
 		private float MinMeleeWeaponDPSThreshold
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002E81 RID: 11905 RVA: 0x00105758 File Offset: 0x00103958
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_PickUpOpportunisticWeapon jobGiver_PickUpOpportunisticWeapon = (JobGiver_PickUpOpportunisticWeapon)base.DeepCopy(resolve);
@@ -36,7 +36,7 @@ namespace RimWorld
 			return jobGiver_PickUpOpportunisticWeapon;
 		}
 
-		// Token: 0x06002E82 RID: 11906 RVA: 0x00105774 File Offset: 0x00103974
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.equipment == null)
@@ -67,7 +67,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002E83 RID: 11907 RVA: 0x00105864 File Offset: 0x00103A64
+		
 		private bool AlreadySatisfiedWithCurrentWeapon(Pawn pawn)
 		{
 			ThingWithComps primary = pawn.equipment.Primary;
@@ -89,13 +89,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002E84 RID: 11908 RVA: 0x001058B8 File Offset: 0x00103AB8
+		
 		private bool ShouldEquip(Thing newWep, Pawn pawn)
 		{
 			return EquipmentUtility.CanEquip(newWep, pawn) && this.GetWeaponScore(newWep) > this.GetWeaponScore(pawn.equipment.Primary);
 		}
 
-		// Token: 0x06002E85 RID: 11909 RVA: 0x001058E0 File Offset: 0x00103AE0
+		
 		private int GetWeaponScore(Thing wep)
 		{
 			if (wep == null)
@@ -117,7 +117,7 @@ namespace RimWorld
 			return 1;
 		}
 
-		// Token: 0x04001A72 RID: 6770
+		
 		private bool preferBuildingDestroyers;
 	}
 }

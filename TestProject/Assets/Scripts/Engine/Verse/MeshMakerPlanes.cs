@@ -3,34 +3,34 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002AE RID: 686
+	
 	public static class MeshMakerPlanes
 	{
-		// Token: 0x0600139E RID: 5022 RVA: 0x0007098F File Offset: 0x0006EB8F
+		
 		public static Mesh NewPlaneMesh(float size)
 		{
 			return MeshMakerPlanes.NewPlaneMesh(size, false);
 		}
 
-		// Token: 0x0600139F RID: 5023 RVA: 0x00070998 File Offset: 0x0006EB98
+		
 		public static Mesh NewPlaneMesh(float size, bool flipped)
 		{
 			return MeshMakerPlanes.NewPlaneMesh(size, flipped, false);
 		}
 
-		// Token: 0x060013A0 RID: 5024 RVA: 0x000709A2 File Offset: 0x0006EBA2
+		
 		public static Mesh NewPlaneMesh(float size, bool flipped, bool backLift)
 		{
 			return MeshMakerPlanes.NewPlaneMesh(new Vector2(size, size), flipped, backLift, false);
 		}
 
-		// Token: 0x060013A1 RID: 5025 RVA: 0x000709B3 File Offset: 0x0006EBB3
+		
 		public static Mesh NewPlaneMesh(float size, bool flipped, bool backLift, bool twist)
 		{
 			return MeshMakerPlanes.NewPlaneMesh(new Vector2(size, size), flipped, backLift, twist);
 		}
 
-		// Token: 0x060013A2 RID: 5026 RVA: 0x000709C4 File Offset: 0x0006EBC4
+		
 		public static Mesh NewPlaneMesh(Vector2 size, bool flipped, bool backLift, bool twist)
 		{
 			Vector3[] array = new Vector3[4];
@@ -83,7 +83,7 @@ namespace Verse
 			return mesh;
 		}
 
-		// Token: 0x060013A3 RID: 5027 RVA: 0x00070C08 File Offset: 0x0006EE08
+		
 		public static Mesh NewWholeMapPlane()
 		{
 			Mesh mesh = MeshMakerPlanes.NewPlaneMesh(2000f, false, false);
@@ -96,10 +96,10 @@ namespace Verse
 			return mesh;
 		}
 
-		// Token: 0x04000D2F RID: 3375
+		
 		private const float BackLiftAmount = 0.00227272743f;
 
-		// Token: 0x04000D30 RID: 3376
+		
 		private const float TwistAmount = 0.00113636372f;
 	}
 }

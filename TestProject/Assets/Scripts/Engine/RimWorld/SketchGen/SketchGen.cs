@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001083 RID: 4227
+	
 	public static class SketchGen
 	{
-		// Token: 0x06006459 RID: 25689 RVA: 0x0022C35C File Offset: 0x0022A55C
+		
 		public static Sketch Generate(SketchResolverDef root, ResolveParams parms)
 		{
 			if (SketchGen.working)
@@ -33,7 +33,7 @@ namespace RimWorld.SketchGen
 			return sketch;
 		}
 
-		// Token: 0x04003D1E RID: 15646
+		
 		private static bool working;
 	}
 }

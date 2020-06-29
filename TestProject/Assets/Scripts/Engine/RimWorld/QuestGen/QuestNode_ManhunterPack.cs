@@ -5,17 +5,17 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011AD RID: 4525
+	
 	public class QuestNode_ManhunterPack : QuestNode
 	{
-		// Token: 0x0600689B RID: 26779 RVA: 0x00248688 File Offset: 0x00246888
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			PawnKindDef pawnKindDef;
 			return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(slate.Get<float>("points", 0f, false), slate.Get<Map>("map", null, false).Tile, out pawnKindDef);
 		}
 
-		// Token: 0x0600689C RID: 26780 RVA: 0x002486E8 File Offset: 0x002468E8
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -62,33 +62,33 @@ namespace RimWorld.QuestGen
 			QuestGen.AddQuestNameRules(list);
 		}
 
-		// Token: 0x040040F9 RID: 16633
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x040040FA RID: 16634
+		
 		public SlateRef<string> customLetterLabel;
 
-		// Token: 0x040040FB RID: 16635
+		
 		public SlateRef<string> customLetterText;
 
-		// Token: 0x040040FC RID: 16636
+		
 		public SlateRef<RulePack> customLetterLabelRules;
 
-		// Token: 0x040040FD RID: 16637
+		
 		public SlateRef<RulePack> customLetterTextRules;
 
-		// Token: 0x040040FE RID: 16638
+		
 		public SlateRef<IntVec3?> walkInSpot;
 
-		// Token: 0x040040FF RID: 16639
+		
 		public SlateRef<int> animalCount;
 
-		// Token: 0x04004100 RID: 16640
+		
 		[NoTranslate]
 		public SlateRef<string> tag;
 
-		// Token: 0x04004101 RID: 16641
+		
 		private const string RootSymbol = "root";
 	}
 }

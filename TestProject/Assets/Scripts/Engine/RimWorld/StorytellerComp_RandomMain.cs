@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A13 RID: 2579
+	
 	public class StorytellerComp_RandomMain : StorytellerComp
 	{
-		// Token: 0x17000AD9 RID: 2777
+		
 		// (get) Token: 0x06003D39 RID: 15673 RVA: 0x00143AB9 File Offset: 0x00141CB9
 		protected StorytellerCompProperties_RandomMain Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D3A RID: 15674 RVA: 0x00143AC6 File Offset: 0x00141CC6
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (Rand.MTBEventOccurs(this.Props.mtbDays, 60000f, 1000f))
@@ -50,7 +50,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D3B RID: 15675 RVA: 0x00143AE0 File Offset: 0x00141CE0
+		
 		private IncidentCategoryDef ChooseRandomCategory(IIncidentTarget target, List<IncidentCategoryDef> skipCategories)
 		{
 			if (!skipCategories.Contains(IncidentCategoryDefOf.ThreatBig))
@@ -66,7 +66,7 @@ namespace RimWorld
 			select cw).RandomElementByWeight((IncidentCategoryEntry cw) => cw.weight).category;
 		}
 
-		// Token: 0x06003D3C RID: 15676 RVA: 0x00143B94 File Offset: 0x00141D94
+		
 		public override IncidentParms GenerateParms(IncidentCategoryDef incCat, IIncidentTarget target)
 		{
 			IncidentParms incidentParms = StorytellerUtility.DefaultParmsNow(incCat, target);

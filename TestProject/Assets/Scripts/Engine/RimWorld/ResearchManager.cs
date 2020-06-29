@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009AB RID: 2475
+	
 	public sealed class ResearchManager : IExposable
 	{
-		// Token: 0x17000A97 RID: 2711
+		
 		// (get) Token: 0x06003AE5 RID: 15077 RVA: 0x00137CE9 File Offset: 0x00135EE9
 		public bool AnyProjectIsAvailable
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AE6 RID: 15078 RVA: 0x00137D18 File Offset: 0x00135F18
+		
 		public void ExposeData()
 		{
 			Scribe_Defs.Look<ResearchProjectDef>(ref this.currentProj, "currentProj");
@@ -35,7 +35,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AE7 RID: 15079 RVA: 0x00137D84 File Offset: 0x00135F84
+		
 		public float GetProgress(ResearchProjectDef proj)
 		{
 			float result;
@@ -47,7 +47,7 @@ namespace RimWorld
 			return 0f;
 		}
 
-		// Token: 0x06003AE8 RID: 15080 RVA: 0x00137DBC File Offset: 0x00135FBC
+		
 		public int GetTechprints(ResearchProjectDef proj)
 		{
 			int result;
@@ -58,7 +58,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06003AE9 RID: 15081 RVA: 0x00137DDC File Offset: 0x00135FDC
+		
 		public void ApplyTechprint(ResearchProjectDef proj, Pawn applyingPawn)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -114,7 +114,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AEA RID: 15082 RVA: 0x00138030 File Offset: 0x00136230
+		
 		public void AddTechprints(ResearchProjectDef proj, int amount)
 		{
 			int num;
@@ -131,7 +131,7 @@ namespace RimWorld
 			this.techprints.Add(proj, amount);
 		}
 
-		// Token: 0x06003AEB RID: 15083 RVA: 0x0013807C File Offset: 0x0013627C
+		
 		public void ResearchPerformed(float amount, Pawn researcher)
 		{
 			if (this.currentProj == null)
@@ -162,7 +162,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AEC RID: 15084 RVA: 0x00138148 File Offset: 0x00136348
+		
 		public void ReapplyAllMods()
 		{
 			foreach (ResearchProjectDef researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
@@ -174,7 +174,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AED RID: 15085 RVA: 0x0013819C File Offset: 0x0013639C
+		
 		public void FinishProject(ResearchProjectDef proj, bool doCompletionDialog = false, Pawn researcher = null)
 		{
 			if (proj.prerequisites != null)
@@ -230,7 +230,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003AEE RID: 15086 RVA: 0x00138380 File Offset: 0x00136580
+		
 		public void DebugSetAllProjectsFinished()
 		{
 			this.progress.Clear();
@@ -241,19 +241,19 @@ namespace RimWorld
 			this.ReapplyAllMods();
 		}
 
-		// Token: 0x040022DE RID: 8926
+		
 		public ResearchProjectDef currentProj;
 
-		// Token: 0x040022DF RID: 8927
+		
 		private Dictionary<ResearchProjectDef, float> progress = new Dictionary<ResearchProjectDef, float>();
 
-		// Token: 0x040022E0 RID: 8928
+		
 		private Dictionary<ResearchProjectDef, int> techprints = new Dictionary<ResearchProjectDef, int>();
 
-		// Token: 0x040022E1 RID: 8929
+		
 		private float ResearchPointsPerWorkTick = 0.00825f;
 
-		// Token: 0x040022E2 RID: 8930
+		
 		public const int IntellectualExpPerTechprint = 2000;
 	}
 }

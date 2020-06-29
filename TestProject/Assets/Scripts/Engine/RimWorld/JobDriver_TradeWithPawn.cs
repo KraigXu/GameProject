@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000678 RID: 1656
+	
 	public class JobDriver_TradeWithPawn : JobDriver
 	{
-		// Token: 0x17000881 RID: 2177
+		
 		// (get) Token: 0x06002D28 RID: 11560 RVA: 0x000FF549 File Offset: 0x000FD749
 		private Pawn Trader
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D29 RID: 11561 RVA: 0x000FF556 File Offset: 0x000FD756
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Trader, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D2A RID: 11562 RVA: 0x000FF578 File Offset: 0x000FD778
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);

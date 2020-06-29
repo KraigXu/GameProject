@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E71 RID: 3697
+	
 	public static class InteractionCardUtility
 	{
-		// Token: 0x06005999 RID: 22937 RVA: 0x001E378C File Offset: 0x001E198C
+		
 		public static void DrawInteractionsLog(Rect rect, Pawn pawn, List<LogEntry> entries, int maxEntries)
 		{
 			float width = rect.width - 29f - 16f - 10f;
@@ -63,19 +63,19 @@ namespace RimWorld
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x040030A1 RID: 12449
+		
 		private static Vector2 logScrollPosition = Vector2.zero;
 
-		// Token: 0x040030A2 RID: 12450
+		
 		public const float ImageSize = 26f;
 
-		// Token: 0x040030A3 RID: 12451
+		
 		public const float ImagePadRight = 3f;
 
-		// Token: 0x040030A4 RID: 12452
+		
 		public const float TextOffset = 29f;
 
-		// Token: 0x040030A5 RID: 12453
+		
 		private static List<Pair<string, int>> logStrings = new List<Pair<string, int>>();
 	}
 }

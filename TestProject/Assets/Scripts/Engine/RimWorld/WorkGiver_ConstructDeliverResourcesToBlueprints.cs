@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000729 RID: 1833
+	
 	public class WorkGiver_ConstructDeliverResourcesToBlueprints : WorkGiver_ConstructDeliverResources
 	{
-		// Token: 0x170008B0 RID: 2224
+		
 		// (get) Token: 0x06003034 RID: 12340 RVA: 0x0010F16D File Offset: 0x0010D36D
 		public override ThingRequest PotentialWorkThingRequest
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003035 RID: 12341 RVA: 0x0010F178 File Offset: 0x0010D378
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (t.Faction != pawn.Faction)
@@ -63,7 +63,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003036 RID: 12342 RVA: 0x0010F222 File Offset: 0x0010D422
+		
 		private Job NoCostFrameMakeJobFor(Pawn pawn, IConstructible c)
 		{
 			if (c is Blueprint_Install)

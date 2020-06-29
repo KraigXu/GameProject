@@ -6,28 +6,28 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200074D RID: 1869
+	
 	public class WorkGiver_Merge : WorkGiver_Scanner
 	{
-		// Token: 0x060030F7 RID: 12535 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		// Token: 0x060030F8 RID: 12536 RVA: 0x00112626 File Offset: 0x00110826
+		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.listerMergeables.ThingsPotentiallyNeedingMerging();
 		}
 
-		// Token: 0x060030F9 RID: 12537 RVA: 0x00112638 File Offset: 0x00110838
+		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return pawn.Map.listerMergeables.ThingsPotentiallyNeedingMerging().Count == 0;
 		}
 
-		// Token: 0x060030FA RID: 12538 RVA: 0x00112654 File Offset: 0x00110854
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (t.stackCount == t.def.stackLimit)

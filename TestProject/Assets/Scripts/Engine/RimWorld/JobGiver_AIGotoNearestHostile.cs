@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006B4 RID: 1716
+	
 	public class JobGiver_AIGotoNearestHostile : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E58 RID: 11864 RVA: 0x001044C4 File Offset: 0x001026C4
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			float num = float.MaxValue;

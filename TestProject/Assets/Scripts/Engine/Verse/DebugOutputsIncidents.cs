@@ -6,10 +6,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000343 RID: 835
+	
 	public static class DebugOutputsIncidents
 	{
-		// Token: 0x06001961 RID: 6497 RVA: 0x00096DE8 File Offset: 0x00094FE8
+		
 		[DebugOutput("Incidents", false)]
 		public static void IncidentChances()
 		{
@@ -24,28 +24,28 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001962 RID: 6498 RVA: 0x00096E3E File Offset: 0x0009503E
+		
 		[DebugOutput("Incidents", true)]
 		public static void FutureIncidents()
 		{
 			StorytellerUtility.ShowFutureIncidentsDebugLogFloatMenu(false);
 		}
 
-		// Token: 0x06001963 RID: 6499 RVA: 0x00096E46 File Offset: 0x00095046
+		
 		[DebugOutput("Incidents", true)]
 		public static void FutureIncidentsCurrentMap()
 		{
 			StorytellerUtility.ShowFutureIncidentsDebugLogFloatMenu(true);
 		}
 
-		// Token: 0x06001964 RID: 6500 RVA: 0x00096E4E File Offset: 0x0009504E
+		
 		[DebugOutput("Incidents", true)]
 		public static void IncidentTargetsList()
 		{
 			StorytellerUtility.DebugLogTestIncidentTargets();
 		}
 
-		// Token: 0x06001965 RID: 6501 RVA: 0x00096E58 File Offset: 0x00095058
+		
 		[DebugOutput("Incidents", false)]
 		public static void PawnArrivalCandidates()
 		{
@@ -63,7 +63,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001966 RID: 6502 RVA: 0x00096F54 File Offset: 0x00095154
+		
 		[DebugOutput("Incidents", false)]
 		public static void TraderKinds()
 		{
@@ -94,7 +94,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<TraderKindDef>(allDefs, array);
 		}
 
-		// Token: 0x06001967 RID: 6503 RVA: 0x000970D4 File Offset: 0x000952D4
+		
 		[DebugOutput("Incidents", false)]
 		public static void TraderKindThings()
 		{
@@ -120,7 +120,7 @@ namespace Verse
 			}).ThenBy((ThingDef d) => d.BaseMarketValue), list.ToArray());
 		}
 
-		// Token: 0x06001968 RID: 6504 RVA: 0x0009721C File Offset: 0x0009541C
+		
 		[DebugOutput("Incidents", false)]
 		public static void TraderStockMarketValues()
 		{
@@ -132,7 +132,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001969 RID: 6505 RVA: 0x000972AC File Offset: 0x000954AC
+		
 		[DebugOutput("Incidents", false)]
 		public static void TraderStockGeneration()
 		{
@@ -149,7 +149,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x0600196A RID: 6506 RVA: 0x00097344 File Offset: 0x00095544
+		
 		[DebugOutput("Incidents", false)]
 		public static void TraderStockGeneratorsDefs()
 		{
@@ -164,12 +164,7 @@ namespace Verse
 				sb.AppendLine(gen.GetType().ToString());
 				sb.AppendLine("ALLOWED DEFS:");
 				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-				Func<ThingDef, bool> <>9__1;
-				Func<ThingDef, bool> predicate;
-				if ((predicate = <>9__1) == null)
-				{
-					predicate = (<>9__1 = ((ThingDef d) => gen.HandlesThingDef(d)));
-				}
+				Func<ThingDef, bool> predicate = ((ThingDef d) => gen.HandlesThingDef(d));
 				foreach (ThingDef thingDef in allDefs.Where(predicate))
 				{
 					sb.AppendLine(string.Concat(new object[]
@@ -205,7 +200,7 @@ namespace Verse
 			Log.Message(sb.ToString(), false);
 		}
 
-		// Token: 0x0600196B RID: 6507 RVA: 0x000973C0 File Offset: 0x000955C0
+		
 		[DebugOutput("Incidents", false)]
 		public static void PawnGroupGenSampled()
 		{
@@ -303,39 +298,35 @@ namespace Verse
 									orderby x.IsMeleeWeapon descending, x.techLevel, x.BaseMarketValue
 									select x).Select(delegate(ThingDef x)
 									{
-										Func<Dictionary<ThingDef, int>, int> <>9__19;
 										return new TableDataGetter<int>(x.label.Shorten(), delegate(int y)
 										{
 											IEnumerable<Dictionary<ThingDef, int>> weaponsCount;
-											if (y == 20)
-											{
-												string str = " ";
-												weaponsCount = weaponsCount;
-												Func<Dictionary<ThingDef, int>, int> selector;
-												if ((selector = <>9__19) == null)
-												{
-													selector = (<>9__19 = delegate(Dictionary<ThingDef, int> z)
-													{
-														if (!z.ContainsKey(x))
-														{
-															return 0;
-														}
-														return z[x];
-													});
-												}
-												return str + ((float)weaponsCount.Sum(selector) / 20f).ToString("0.#");
-											}
-											if (!weaponsCount[y].ContainsKey(x))
-											{
-												return "";
-											}
-											object[] array = new object[5];
-											array[0] = " ";
-											array[1] = weaponsCount[y][x];
-											array[2] = " (";
-											array[3] = ((float)weaponsCount[y][x] / (float)weaponsCount[y].Sum((KeyValuePair<ThingDef, int> z) => z.Value)).ToStringPercent("F0");
-											array[4] = ")";
-											return string.Concat(array);
+											//if (y == 20)
+											//{
+											//	string str = " ";
+											//	Func<Dictionary<ThingDef, int>, int> selector= delegate (Dictionary<ThingDef, int> z)
+											//	{
+											//		if (!z.ContainsKey(x))
+											//		{
+											//			return 0;
+											//		}
+											//		return z[x];
+											//	};
+
+											//	return str + ((float)weaponsCount.Sum(selector) / 20f).ToString("0.#");
+											//}
+											//if (!weaponsCount[y].ContainsKey(x))
+											//{
+											//	return "";
+											//}
+											//object[] array = new object[5];
+											//array[0] = " ";
+											//array[1] = weaponsCount[y][x];
+											//array[2] = " (";
+											//array[3] = ((float)weaponsCount[y][x] / (float)weaponsCount[y].Sum((KeyValuePair<ThingDef, int> z) => z.Value)).ToStringPercent("F0");
+											//array[4] = ")";
+											//return string.Concat(array);
+											return "";
 										});
 									}));
 									DebugTables.MakeTablesDialog<int>(Enumerable.Range(0, 21), list4.ToArray());
@@ -349,14 +340,14 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600196C RID: 6508 RVA: 0x000974B4 File Offset: 0x000956B4
+		
 		[DebugOutput("Incidents", false)]
 		public static void RaidFactionSampled()
 		{
 			((IncidentWorker_Raid)IncidentDefOf.RaidEnemy.Worker).DoTable_RaidFactionSampled();
 		}
 
-		// Token: 0x0600196D RID: 6509 RVA: 0x000974CC File Offset: 0x000956CC
+		
 		[DebugOutput("Incidents", false)]
 		public static void RaidStrategySampled()
 		{
@@ -380,7 +371,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x0600196E RID: 6510 RVA: 0x000975B8 File Offset: 0x000957B8
+		
 		[DebugOutput("Incidents", false)]
 		public static void RaidArrivemodeSampled()
 		{
@@ -404,7 +395,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x0600196F RID: 6511 RVA: 0x000976A4 File Offset: 0x000958A4
+		
 		[DebugOutput("Incidents", false)]
 		public static void ThreatsGenerator()
 		{

@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FD1 RID: 4049
+	
 	public static class PriceUtility
 	{
-		// Token: 0x06006134 RID: 24884 RVA: 0x0021C4D4 File Offset: 0x0021A6D4
+		
 		public static float PawnQualityPriceFactor(Pawn pawn, StringBuilder explanation = null)
 		{
 			float num = 1f;
@@ -53,7 +53,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06006135 RID: 24885 RVA: 0x0021C67C File Offset: 0x0021A87C
+		
 		public static float PawnQualityPriceOffset(Pawn pawn, StringBuilder explanation = null)
 		{
 			float num = 0f;
@@ -80,19 +80,19 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04003B31 RID: 15153
+		
 		private const float MinFactor = 0.1f;
 
-		// Token: 0x04003B32 RID: 15154
+		
 		private const float SummaryHealthImpact = 0.8f;
 
-		// Token: 0x04003B33 RID: 15155
+		
 		private const float CapacityImpact = 0.5f;
 
-		// Token: 0x04003B34 RID: 15156
+		
 		private const float MissingCapacityFactor = 0.6f;
 
-		// Token: 0x04003B35 RID: 15157
+		
 		private static readonly SimpleCurve AverageSkillCurve = new SimpleCurve
 		{
 			{

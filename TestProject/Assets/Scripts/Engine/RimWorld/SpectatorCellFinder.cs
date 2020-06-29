@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000F3D RID: 3901
+	
 	public static class SpectatorCellFinder
 	{
-		// Token: 0x06005FA8 RID: 24488 RVA: 0x00213ABC File Offset: 0x00211CBC
+		
 		public static bool TryFindSpectatorCellFor(Pawn p, CellRect spectateRect, Map map, out IntVec3 cell, SpectateRectSide allowedSides = SpectateRectSide.All, int margin = 1, List<IntVec3> extraDisallowedCells = null)
 		{
 			spectateRect.ClipInsideMap(map);
@@ -19,7 +19,7 @@ namespace RimWorld
 				return false;
 			}
 			CellRect rectWithMargin = spectateRect.ExpandedBy(margin).ClipInsideMap(map);
-			Predicate<Thing> <>9__1;
+			Predicate<Thing> 9__1;
 			Predicate<IntVec3> predicate = delegate(IntVec3 x)
 			{
 				if (!x.InBounds(map))
@@ -53,9 +53,9 @@ namespace RimWorld
 				}
 				List<Thing> thingList = x.GetThingList(map);
 				Predicate<Thing> match;
-				if ((match = <>9__1) == null)
+				if ((match ) == null)
 				{
-					match = (<>9__1 = ((Thing y) => y is Pawn && y != p));
+					match = (9__1 = ((Thing y) => y is Pawn && y != p));
 				}
 				if (thingList.Find(match) != null)
 				{
@@ -150,13 +150,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005FA9 RID: 24489 RVA: 0x00213C59 File Offset: 0x00211E59
+		
 		private static bool CorrectlyRotatedChairAt(IntVec3 x, Map map, CellRect spectateRect)
 		{
 			return SpectatorCellFinder.GetCorrectlyRotatedChairAt(x, map, spectateRect) != null;
 		}
 
-		// Token: 0x06005FAA RID: 24490 RVA: 0x00213C68 File Offset: 0x00211E68
+		
 		private static Building GetCorrectlyRotatedChairAt(IntVec3 x, Map map, CellRect spectateRect)
 		{
 			if (!x.InBounds(map))
@@ -175,7 +175,7 @@ namespace RimWorld
 			return edifice;
 		}
 
-		// Token: 0x06005FAB RID: 24491 RVA: 0x00213CE8 File Offset: 0x00211EE8
+		
 		private static int DistanceToClosestChair(IntVec3 from, IntVec3 step, Map map, int maxDist, CellRect spectateRect)
 		{
 			int num = 0;
@@ -204,7 +204,7 @@ namespace RimWorld
 			return -1;
 		}
 
-		// Token: 0x06005FAC RID: 24492 RVA: 0x00213D30 File Offset: 0x00211F30
+		
 		public static void DebugFlashPotentialSpectatorCells(CellRect spectateRect, Map map, SpectateRectSide allowedSides = SpectateRectSide.All, int margin = 1)
 		{
 			List<IntVec3> list = new List<IntVec3>();
@@ -244,13 +244,13 @@ namespace RimWorld
 			map.debugDrawer.FlashLine(spectateRect.CenterCell, centerCell, 50, SimpleColor.White);
 		}
 
-		// Token: 0x06005FAD RID: 24493 RVA: 0x00213E68 File Offset: 0x00212068
+		
 		public static SpectateRectSide FindSingleBestSide(CellRect spectateRect, Map map, SpectateRectSide allowedSides = SpectateRectSide.All, int margin = 1)
 		{
 			return SpectatorCellFinder.FindSingleBestSide_NewTemp(spectateRect, map, allowedSides, margin, null);
 		}
 
-		// Token: 0x06005FAE RID: 24494 RVA: 0x00213E74 File Offset: 0x00212074
+		
 		public static SpectateRectSide FindSingleBestSide_NewTemp(CellRect spectateRect, Map map, SpectateRectSide allowedSides = SpectateRectSide.All, int margin = 1, Func<IntVec3, SpectateRectSide, int, float> scoreOffset = null)
 		{
 			for (int i = 0; i < SpectatorCellFinder.scorePerSide.Length; i++)
@@ -312,7 +312,7 @@ namespace RimWorld
 			return num6.ToSpectatorSide();
 		}
 
-		// Token: 0x06005FAF RID: 24495 RVA: 0x0021409C File Offset: 0x0021229C
+		
 		public static bool ValidSingleSide(this SpectateRectSide side)
 		{
 			switch (side)
@@ -335,7 +335,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005FB0 RID: 24496 RVA: 0x002140C5 File Offset: 0x002122C5
+		
 		public static Rot4 AsRot4(this SpectateRectSide side)
 		{
 			switch (side)
@@ -358,7 +358,7 @@ namespace RimWorld
 			return Rot4.Invalid;
 		}
 
-		// Token: 0x06005FB1 RID: 24497 RVA: 0x00214102 File Offset: 0x00212302
+		
 		public static int AsInt(this SpectateRectSide side)
 		{
 			switch (side)
@@ -381,7 +381,7 @@ namespace RimWorld
 			return 0;
 		}
 
-		// Token: 0x06005FB2 RID: 24498 RVA: 0x0021412B File Offset: 0x0021232B
+		
 		public static SpectateRectSide ToSpectatorSide(this int side)
 		{
 			switch (side)
@@ -399,13 +399,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040033F1 RID: 13297
+		
 		private const float MaxDistanceToSpectateRect = 14.5f;
 
-		// Token: 0x040033F2 RID: 13298
+		
 		private static float[] scorePerSide = new float[4];
 
-		// Token: 0x040033F3 RID: 13299
+		
 		private static List<IntVec3> usedCells = new List<IntVec3>();
 	}
 }

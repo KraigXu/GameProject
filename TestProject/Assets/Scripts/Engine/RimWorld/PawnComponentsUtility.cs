@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000B0A RID: 2826
+	
 	public class PawnComponentsUtility
 	{
-		// Token: 0x06004294 RID: 17044 RVA: 0x00163834 File Offset: 0x00161A34
+		
 		public static void CreateInitialComponents(Pawn pawn)
 		{
 			if (pawn.ageTracker == null)
@@ -106,7 +106,7 @@ namespace RimWorld
 			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, false);
 		}
 
-		// Token: 0x06004295 RID: 17045 RVA: 0x00163A18 File Offset: 0x00161C18
+		
 		public static void AddComponentsForSpawn(Pawn pawn)
 		{
 			if (pawn.rotationTracker == null)
@@ -159,7 +159,7 @@ namespace RimWorld
 			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, true);
 		}
 
-		// Token: 0x06004296 RID: 17046 RVA: 0x00163B23 File Offset: 0x00161D23
+		
 		public static void RemoveComponentsOnKilled(Pawn pawn)
 		{
 			pawn.carryTracker = null;
@@ -169,7 +169,7 @@ namespace RimWorld
 			pawn.trader = null;
 		}
 
-		// Token: 0x06004297 RID: 17047 RVA: 0x00163B48 File Offset: 0x00161D48
+		
 		public static void RemoveComponentsOnDespawned(Pawn pawn)
 		{
 			pawn.rotationTracker = null;
@@ -184,7 +184,7 @@ namespace RimWorld
 			pawn.drafter = null;
 		}
 
-		// Token: 0x06004298 RID: 17048 RVA: 0x00163B9C File Offset: 0x00161D9C
+		
 		public static void AddAndRemoveDynamicComponents(Pawn pawn, bool actAsIfSpawned = false)
 		{
 			bool flag = pawn.Faction != null && pawn.Faction.IsPlayer;
@@ -247,7 +247,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004299 RID: 17049 RVA: 0x00163D05 File Offset: 0x00161F05
+		
 		public static bool HasSpawnedComponents(Pawn p)
 		{
 			return p.pather != null;

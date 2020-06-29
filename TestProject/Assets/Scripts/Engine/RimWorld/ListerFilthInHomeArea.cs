@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A3E RID: 2622
+	
 	public class ListerFilthInHomeArea
 	{
-		// Token: 0x17000B06 RID: 2822
+		
 		// (get) Token: 0x06003DF2 RID: 15858 RVA: 0x00146942 File Offset: 0x00144B42
 		public List<Thing> FilthInHomeArea
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003DF3 RID: 15859 RVA: 0x0014694A File Offset: 0x00144B4A
+		
 		public ListerFilthInHomeArea(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06003DF4 RID: 15860 RVA: 0x00146964 File Offset: 0x00144B64
+		
 		public void RebuildAll()
 		{
 			this.filthInHomeArea.Clear();
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003DF5 RID: 15861 RVA: 0x001469C4 File Offset: 0x00144BC4
+		
 		public void Notify_FilthSpawned(Filth f)
 		{
 			if (this.map.areaManager.Home[f.Position])
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003DF6 RID: 15862 RVA: 0x001469F0 File Offset: 0x00144BF0
+		
 		public void Notify_FilthDespawned(Filth f)
 		{
 			for (int i = 0; i < this.filthInHomeArea.Count; i++)
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003DF7 RID: 15863 RVA: 0x00146A30 File Offset: 0x00144C30
+		
 		public void Notify_HomeAreaChanged(IntVec3 c)
 		{
 			if (this.map.areaManager.Home[c])
@@ -81,7 +81,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003DF8 RID: 15864 RVA: 0x00146AD0 File Offset: 0x00144CD0
+		
 		internal string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -93,10 +93,10 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x04002422 RID: 9250
+		
 		private Map map;
 
-		// Token: 0x04002423 RID: 9251
+		
 		private List<Thing> filthInHomeArea = new List<Thing>();
 	}
 }

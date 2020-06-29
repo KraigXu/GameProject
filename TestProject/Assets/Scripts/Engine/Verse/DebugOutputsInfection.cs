@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000344 RID: 836
+	
 	public static class DebugOutputsInfection
 	{
-		// Token: 0x06001970 RID: 6512 RVA: 0x00097704 File Offset: 0x00095904
+		
 		private static List<Pawn> GenerateDoctorArray()
 		{
 			PawnGenerationRequest request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, (Pawn p) => !p.WorkTypeIsDisabled(WorkTypeDefOf.Doctor) && p.health.hediffSet.hediffs.Count == 0, null, null, null, null, null, null, null, null, null, null, null);
@@ -24,7 +24,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06001971 RID: 6513 RVA: 0x000977D4 File Offset: 0x000959D4
+		
 		private static IEnumerable<HediffDef> InfectionList()
 		{
 			return from hediff in DefDatabase<HediffDef>.AllDefs
@@ -32,12 +32,12 @@ namespace Verse
 			select hediff;
 		}
 
-		// Token: 0x06001972 RID: 6514 RVA: 0x00097800 File Offset: 0x00095A00
+		
 		[DebugOutput]
 		public static void Infections()
 		{
-			//DebugOutputsInfection.<>c__DisplayClass3_0 <>c__DisplayClass3_ = new DebugOutputsInfection.<>c__DisplayClass3_0();
-			//<>c__DisplayClass3_.ilc = delegate(DebugOutputsInfection.InfectionLuck il)
+			//DebugOutputsInfection.c__DisplayClass3_0 c__DisplayClass3_ = new DebugOutputsInfection.c__DisplayClass3_0();
+			//c__DisplayClass3_.ilc = delegate(DebugOutputsInfection.InfectionLuck il)
 			//{
 			//	float result = 1f;
 			//	if (il == DebugOutputsInfection.InfectionLuck.Bad)
@@ -50,28 +50,28 @@ namespace Verse
 			//	}
 			//	return result;
 			//};
-			//<>c__DisplayClass3_.stringizeWithLuck = ((Func<DebugOutputsInfection.InfectionLuck, float> func) => string.Format("{0:F2} / {1:F2}", func(DebugOutputsInfection.InfectionLuck.Bad), func(DebugOutputsInfection.InfectionLuck.Good)));
-			//<>c__DisplayClass3_.baseImmunityIncrease = ((HediffDef d, DebugOutputsInfection.InfectionLuck il) => d.CompProps<HediffCompProperties_Immunizable>().immunityPerDaySick * <>c__DisplayClass3_.ilc(il));
-			//<>c__DisplayClass3_.tendedSeverityIncrease = ((HediffDef d, float tend) => DebugOutputsInfection.<Infections>g__baseSeverityIncrease|3_3(d) + d.CompProps<HediffCompProperties_TendDuration>().severityPerDayTended * tend);
-			//<>c__DisplayClass3_.immunityIncrease = delegate(HediffDef d, DebugOutputsInfection.InfectionLuck il, bool bedridden)
+			//c__DisplayClass3_.stringizeWithLuck = ((Func<DebugOutputsInfection.InfectionLuck, float> func) => string.Format("{0:F2} / {1:F2}", func(DebugOutputsInfection.InfectionLuck.Bad), func(DebugOutputsInfection.InfectionLuck.Good)));
+			//c__DisplayClass3_.baseImmunityIncrease = ((HediffDef d, DebugOutputsInfection.InfectionLuck il) => d.CompProps<HediffCompProperties_Immunizable>().immunityPerDaySick * c__DisplayClass3_.ilc(il));
+			//c__DisplayClass3_.tendedSeverityIncrease = ((HediffDef d, float tend) => DebugOutputsInfection.<Infections>g__baseSeverityIncrease|3_3(d) + d.CompProps<HediffCompProperties_TendDuration>().severityPerDayTended * tend);
+			//c__DisplayClass3_.immunityIncrease = delegate(HediffDef d, DebugOutputsInfection.InfectionLuck il, bool bedridden)
 			//{
 			//	float b = DebugOutputsInfection.<Infections>g__isAnimal|3_2(d) ? 1f : ThingDefOf.Bed.GetStatValueAbstract(StatDefOf.ImmunityGainSpeedFactor, null);
 			//	float num = Mathf.Lerp(1f, b, bedridden ? 1f : 0.3f) * StatDefOf.ImmunityGainSpeed.GetStatPart<StatPart_Resting>().factor;
-			//	return <>c__DisplayClass3_.baseImmunityIncrease(d, il) * num;
+			//	return c__DisplayClass3_.baseImmunityIncrease(d, il) * num;
 			//};
-			//<>c__DisplayClass3_.immunityOnLethality = delegate(HediffDef d, DebugOutputsInfection.InfectionLuck il, float tend)
+			//c__DisplayClass3_.immunityOnLethality = delegate(HediffDef d, DebugOutputsInfection.InfectionLuck il, float tend)
 			//{
-			//	if (<>c__DisplayClass3_.tendedSeverityIncrease(d, tend) <= 0f)
+			//	if (c__DisplayClass3_.tendedSeverityIncrease(d, tend) <= 0f)
 			//	{
 			//		return float.PositiveInfinity;
 			//	}
-			//	return d.lethalSeverity / <>c__DisplayClass3_.tendedSeverityIncrease(d, tend) * <>c__DisplayClass3_.immunityIncrease(d, il, true);
+			//	return d.lethalSeverity / c__DisplayClass3_.tendedSeverityIncrease(d, tend) * c__DisplayClass3_.immunityIncrease(d, il, true);
 			//};
 			//List<TableDataGetter<HediffDef>> list = new List<TableDataGetter<HediffDef>>();
 			//list.Add(new TableDataGetter<HediffDef>("defName", (HediffDef d) => d.defName + (d.stages.Any((HediffStage stage) => stage.capMods.Any((PawnCapacityModifier cap) => cap.capacity == PawnCapacityDefOf.BloodFiltration)) ? " (inaccurate)" : "")));
 			//list.Add(new TableDataGetter<HediffDef>("lethal\nseverity", (HediffDef d) => d.lethalSeverity.ToString("F2")));
 			//list.Add(new TableDataGetter<HediffDef>("base\nseverity\nincrease", (HediffDef d) => DebugOutputsInfection.<Infections>g__baseSeverityIncrease|3_3(d).ToString("F2")));
-			//list.Add(new TableDataGetter<HediffDef>("base\nimmunity\nincrease", (HediffDef d) => <>c__DisplayClass3_.stringizeWithLuck((DebugOutputsInfection.InfectionLuck il) => <>c__DisplayClass3_.baseImmunityIncrease(d, il))));
+			//list.Add(new TableDataGetter<HediffDef>("base\nimmunity\nincrease", (HediffDef d) => c__DisplayClass3_.stringizeWithLuck((DebugOutputsInfection.InfectionLuck il) => c__DisplayClass3_.baseImmunityIncrease(d, il))));
 			//List<Pawn> source = DebugOutputsInfection.GenerateDoctorArray();
 			//float tendquality;
 			//for (tendquality = 0f; tendquality <= 1.01f; tendquality += 0.1f)
@@ -110,8 +110,8 @@ namespace Verse
 			//		text4
 			//	}), delegate(HediffDef d)
 			//	{
-			//		float num = <>c__DisplayClass3_.immunityOnLethality(d, DebugOutputsInfection.InfectionLuck.Bad, tq);
-			//		float num2 = <>c__DisplayClass3_.immunityOnLethality(d, DebugOutputsInfection.InfectionLuck.Good, tq);
+			//		float num = c__DisplayClass3_.immunityOnLethality(d, DebugOutputsInfection.InfectionLuck.Bad, tq);
+			//		float num2 = c__DisplayClass3_.immunityOnLethality(d, DebugOutputsInfection.InfectionLuck.Good, tq);
 			//		if (num == float.PositiveInfinity)
 			//		{
 			//			return float.PositiveInfinity.ToString();
@@ -122,14 +122,14 @@ namespace Verse
 			//DebugTables.MakeTablesDialog<HediffDef>(DebugOutputsInfection.InfectionList(), list.ToArray());
 		}
 
-		// Token: 0x06001973 RID: 6515 RVA: 0x00097BE0 File Offset: 0x00095DE0
+		
 		[DebugOutput]
 		public static void InfectionSimulator()
 		{
 			LongEventHandler.QueueLongEvent(DebugOutputsInfection.InfectionSimulatorWorker(), "Simulating . . .", null, true);
 		}
 
-		// Token: 0x06001974 RID: 6516 RVA: 0x00097BF3 File Offset: 0x00095DF3
+		
 		private static IEnumerable InfectionSimulatorWorker()
 		{
 			int trials = 2;
@@ -239,36 +239,36 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x02001598 RID: 5528
+		
 		private enum InfectionLuck
 		{
-			// Token: 0x0400524F RID: 21071
+			
 			Bad,
-			// Token: 0x04005250 RID: 21072
+			
 			Normal,
-			// Token: 0x04005251 RID: 21073
+			
 			Good
 		}
 
-		// Token: 0x02001599 RID: 5529
+		
 		private struct InfectionSimRow
 		{
-			// Token: 0x04005252 RID: 21074
+			
 			public HediffDef illness;
 
-			// Token: 0x04005253 RID: 21075
+			
 			public int skill;
 
-			// Token: 0x04005254 RID: 21076
+			
 			public ThingDef medicine;
 
-			// Token: 0x04005255 RID: 21077
+			
 			public float deathChance;
 
-			// Token: 0x04005256 RID: 21078
+			
 			public float recoveryTimeDays;
 
-			// Token: 0x04005257 RID: 21079
+			
 			public float medicineUsed;
 		}
 	}

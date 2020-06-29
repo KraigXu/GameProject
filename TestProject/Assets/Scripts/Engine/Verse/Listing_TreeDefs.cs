@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020003A2 RID: 930
+	
 	public class Listing_TreeDefs : Listing_Tree
 	{
-		// Token: 0x17000546 RID: 1350
+		
 		// (get) Token: 0x06001B52 RID: 6994 RVA: 0x000A7370 File Offset: 0x000A5570
 		protected override float LabelWidth
 		{
@@ -19,13 +19,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B53 RID: 6995 RVA: 0x000A7378 File Offset: 0x000A5578
+		
 		public Listing_TreeDefs(float labelColumnWidth)
 		{
 			this.labelWidthInt = labelColumnWidth;
 		}
 
-		// Token: 0x06001B54 RID: 6996 RVA: 0x000A7388 File Offset: 0x000A5588
+		
 		public void ContentLines(TreeNode_Editor node, int indentLevel)
 		{
 			node.DoSpecialPreElements(this);
@@ -40,7 +40,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B55 RID: 6997 RVA: 0x000A73E8 File Offset: 0x000A55E8
+		
 		private void Node(TreeNode_Editor node, int indentLevel, int openMask)
 		{
 			if (node.nodeType == EditTreeNodeType.TerminalValue)
@@ -70,7 +70,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B56 RID: 6998 RVA: 0x000A74B8 File Offset: 0x000A56B8
+		
 		private void ControlButtonsRight(TreeNode_Editor node, WidgetRow widgetRow)
 		{
 			if (node.HasNewButton && widgetRow.ButtonIcon(TexButton.NewItem, null, null, true))
@@ -100,7 +100,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B57 RID: 6999 RVA: 0x000A75C4 File Offset: 0x000A57C4
+		
 		private void ExtraInfoText(TreeNode_Editor node, WidgetRow widgetRow)
 		{
 			string extraInfoText = node.ExtraInfoText;
@@ -119,7 +119,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001B58 RID: 7000 RVA: 0x000A7648 File Offset: 0x000A5848
+		
 		protected void NodeLabelLeft(TreeNode_Editor node, int indentLevel)
 		{
 			string tipText = "";
@@ -134,7 +134,7 @@ namespace Verse
 			base.LabelLeft(node.LabelText, tipText, indentLevel, 0f);
 		}
 
-		// Token: 0x06001B59 RID: 7001 RVA: 0x000A76A8 File Offset: 0x000A58A8
+		
 		protected void MakeCreateNewObjectMenu(TreeNode_Editor owningNode, FieldInfo owningField, Type baseType, Action<object> addAction)
 		{
 			List<Type> list = baseType.InstantiableDescendantsAndSelf().ToList<Type>();
@@ -165,7 +165,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list2));
 		}
 
-		// Token: 0x06001B5A RID: 7002 RVA: 0x000A7764 File Offset: 0x000A5964
+		
 		protected void ValueEditWidgetRight(TreeNode_Editor node, float leftX)
 		{
 			if (node.nodeType != EditTreeNodeType.TerminalValue)
@@ -263,7 +263,7 @@ namespace Verse
 			node.Value = obj;
 		}
 
-		// Token: 0x04001031 RID: 4145
+		
 		private float labelWidthInt;
 	}
 }

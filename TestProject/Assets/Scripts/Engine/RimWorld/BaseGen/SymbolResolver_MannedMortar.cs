@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010CF RID: 4303
+	
 	public class SymbolResolver_MannedMortar : SymbolResolver
 	{
-		// Token: 0x06006572 RID: 25970 RVA: 0x002376F4 File Offset: 0x002358F4
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -137,7 +137,7 @@ namespace RimWorld.BaseGen
 			}, out cell);
 		}
 
-		// Token: 0x04003DC6 RID: 15814
+		
 		private const float MaxShellDefMarketValue = 250f;
 	}
 }

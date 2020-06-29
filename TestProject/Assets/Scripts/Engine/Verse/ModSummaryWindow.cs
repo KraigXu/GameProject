@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200003A RID: 58
+	
 	public class ModSummaryWindow
 	{
-		// Token: 0x1700008E RID: 142
+		
 		// (get) Token: 0x0600033A RID: 826 RVA: 0x00010836 File Offset: 0x0000EA36
 		private static bool AnyMods
 		{
@@ -20,7 +20,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600033B RID: 827 RVA: 0x00010864 File Offset: 0x0000EA64
+		
 		public static void DrawWindow(Vector2 offset, bool useWindowStack)
 		{
 			Rect rect = new Rect(offset.x, offset.y, ModSummaryWindow.WindowSize.x, ModSummaryWindow.GetEffectiveSize().y);
@@ -37,7 +37,7 @@ namespace Verse
 			ModSummaryWindow.DrawContents(rect);
 		}
 
-		// Token: 0x0600033C RID: 828 RVA: 0x000108F0 File Offset: 0x0000EAF0
+		
 		private static void DrawContents(Rect rect)
 		{
 			Text.Font = GameFont.Small;
@@ -175,49 +175,49 @@ namespace Verse
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x0600033D RID: 829 RVA: 0x00010D28 File Offset: 0x0000EF28
+		
 		public static Vector2 GetEffectiveSize()
 		{
 			return new Vector2(ModSummaryWindow.WindowSize.x, ModSummaryWindow.AnyMods ? ModSummaryWindow.WindowSize.y : 226f);
 		}
 
-		// Token: 0x040000BA RID: 186
+		
 		private static Vector2 modListScrollPos;
 
-		// Token: 0x040000BB RID: 187
+		
 		private static float modListLastHeight;
 
-		// Token: 0x040000BC RID: 188
+		
 		private static readonly Vector2 WindowSize = new Vector2(776f, 410f);
 
-		// Token: 0x040000BD RID: 189
+		
 		private static readonly Vector2 ListElementSize = new Vector2(238f, 36f);
 
-		// Token: 0x040000BE RID: 190
+		
 		private const float WindowHeightCollapsed = 226f;
 
-		// Token: 0x040000BF RID: 191
+		
 		private const float ExpansionListHeight = 94f;
 
-		// Token: 0x040000C0 RID: 192
+		
 		private const float ModListHeight = 224f;
 
-		// Token: 0x040000C1 RID: 193
+		
 		private const float ModListHeightCollapsed = 40f;
 
-		// Token: 0x040000C2 RID: 194
+		
 		private const float ListElementIconSize = 32f;
 
-		// Token: 0x040000C3 RID: 195
+		
 		private static readonly Color DisabledIconTint = new Color(0.35f, 0.35f, 0.35f);
 
-		// Token: 0x040000C4 RID: 196
+		
 		private static readonly Color ModInfoListBackground = new Color(0.13f, 0.13f, 0.13f);
 
-		// Token: 0x040000C5 RID: 197
+		
 		private static readonly Color ModInfoListItemBackground = new Color(0.32f, 0.32f, 0.32f);
 
-		// Token: 0x040000C6 RID: 198
+		
 		private static readonly Color ModInfoListItemBackgroundDisabled = new Color(0.1f, 0.1f, 0.1f);
 	}
 }

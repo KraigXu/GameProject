@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000193 RID: 403
+	
 	public class SectionLayer_LightingOverlay : SectionLayer
 	{
-		// Token: 0x1700023F RID: 575
+		
 		// (get) Token: 0x06000B8F RID: 2959 RVA: 0x000402B4 File Offset: 0x0003E4B4
 		public override bool Visible
 		{
@@ -17,13 +17,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B90 RID: 2960 RVA: 0x000402BB File Offset: 0x0003E4BB
+		
 		public SectionLayer_LightingOverlay(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.GroundGlow;
 		}
 
-		// Token: 0x06000B91 RID: 2961 RVA: 0x000402CC File Offset: 0x0003E4CC
+		
 		public string GlowReportAt(IntVec3 c)
 		{
 			Color32[] colors = base.GetSubMesh(MatBases.LightOverlay).mesh.colors32;
@@ -42,7 +42,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000B92 RID: 2962 RVA: 0x000403A8 File Offset: 0x0003E5A8
+		
 		public override void Regenerate()
 		{
 			LayerSubMesh subMesh = base.GetSubMesh(MatBases.LightOverlay);
@@ -163,7 +163,7 @@ namespace Verse
 			subMesh.mesh.colors32 = array;
 		}
 
-		// Token: 0x06000B93 RID: 2963 RVA: 0x00040810 File Offset: 0x0003EA10
+		
 		private void MakeBaseGeometry(LayerSubMesh sm)
 		{
 			this.glowGrid = base.Map.glowGrid.glowGrid;
@@ -215,7 +215,7 @@ namespace Verse
 			sm.FinalizeMesh(MeshParts.Verts | MeshParts.Tris);
 		}
 
-		// Token: 0x06000B94 RID: 2964 RVA: 0x00040AAC File Offset: 0x0003ECAC
+		
 		private void CalculateVertexIndices(int worldX, int worldZ, out int botLeft, out int topLeft, out int topRight, out int botRight, out int center)
 		{
 			int num = worldX - this.sectRect.minX;
@@ -227,16 +227,16 @@ namespace Verse
 			center = this.firstCenterInd + (num2 * this.sectRect.Width + num);
 		}
 
-		// Token: 0x04000948 RID: 2376
+		
 		private Color32[] glowGrid;
 
-		// Token: 0x04000949 RID: 2377
+		
 		private int firstCenterInd;
 
-		// Token: 0x0400094A RID: 2378
+		
 		private CellRect sectRect;
 
-		// Token: 0x0400094B RID: 2379
+		
 		private const byte RoofedAreaMinSkyCover = 100;
 	}
 }

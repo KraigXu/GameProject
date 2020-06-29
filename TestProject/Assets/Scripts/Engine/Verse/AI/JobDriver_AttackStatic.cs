@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200051F RID: 1311
+	
 	public class JobDriver_AttackStatic : JobDriver
 	{
-		// Token: 0x06002573 RID: 9587 RVA: 0x000DE2A7 File Offset: 0x000DC4A7
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -15,13 +15,13 @@ namespace Verse.AI
 			Scribe_Values.Look<int>(ref this.numAttacksMade, "numAttacksMade", 0, false);
 		}
 
-		// Token: 0x06002574 RID: 9588 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002575 RID: 9589 RVA: 0x000DE2D3 File Offset: 0x000DC4D3
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Misc.ThrowColonistAttackingMote(TargetIndex.A);
@@ -91,10 +91,10 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x040016DE RID: 5854
+		
 		private bool startedIncapacitated;
 
-		// Token: 0x040016DF RID: 5855
+		
 		private int numAttacksMade;
 	}
 }

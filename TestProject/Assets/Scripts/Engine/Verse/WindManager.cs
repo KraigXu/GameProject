@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace Verse
 {
-	// Token: 0x020001E2 RID: 482
+	
 	public class WindManager
 	{
-		// Token: 0x1700029B RID: 667
+		
 		// (get) Token: 0x06000D99 RID: 3481 RVA: 0x0004DEE4 File Offset: 0x0004C0E4
 		public float WindSpeed
 		{
@@ -19,13 +19,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D9A RID: 3482 RVA: 0x0004DEEC File Offset: 0x0004C0EC
+		
 		public WindManager(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000D9B RID: 3483 RVA: 0x0004DEFC File Offset: 0x0004C0FC
+		
 		public void WindManagerTick()
 		{
 			this.cachedWindSpeed = this.BaseWindSpeedAt(Find.TickManager.TicksAbs) * this.map.weatherManager.CurWindSpeedFactor;
@@ -59,13 +59,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D9C RID: 3484 RVA: 0x0004E054 File Offset: 0x0004C254
+		
 		public static void Notify_PlantMaterialCreated(Material newMat)
 		{
 			WindManager.plantMaterials.Add(newMat);
 		}
 
-		// Token: 0x06000D9D RID: 3485 RVA: 0x0004E064 File Offset: 0x0004C264
+		
 		private float BaseWindSpeedAt(int ticksAbs)
 		{
 			if (this.windNoise == null)
@@ -78,7 +78,7 @@ namespace Verse
 			return (float)this.windNoise.GetValue((double)ticksAbs, 0.0, 0.0);
 		}
 
-		// Token: 0x06000D9E RID: 3486 RVA: 0x0004E135 File Offset: 0x0004C335
+		
 		public string DebugString()
 		{
 			return string.Concat(new object[]
@@ -90,7 +90,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000D9F RID: 3487 RVA: 0x0004E170 File Offset: 0x0004C370
+		
 		public void LogWindSpeeds()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -108,22 +108,22 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x04000A6E RID: 2670
+		
 		private static readonly FloatRange WindSpeedRange = new FloatRange(0.04f, 2f);
 
-		// Token: 0x04000A6F RID: 2671
+		
 		private Map map;
 
-		// Token: 0x04000A70 RID: 2672
+		
 		private static List<Material> plantMaterials = new List<Material>();
 
-		// Token: 0x04000A71 RID: 2673
+		
 		private float cachedWindSpeed;
 
-		// Token: 0x04000A72 RID: 2674
+		
 		private ModuleBase windNoise;
 
-		// Token: 0x04000A73 RID: 2675
+		
 		private float plantSwayHead;
 	}
 }

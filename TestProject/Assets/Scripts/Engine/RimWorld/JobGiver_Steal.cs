@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006D4 RID: 1748
+	
 	public class JobGiver_Steal : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EB6 RID: 11958 RVA: 0x0010649C File Offset: 0x0010469C
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			IntVec3 c;
@@ -28,10 +28,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001A7F RID: 6783
+		
 		public const float ItemsSearchRadiusInitial = 7f;
 
-		// Token: 0x04001A80 RID: 6784
+		
 		private const float ItemsSearchRadiusOngoing = 12f;
 	}
 }

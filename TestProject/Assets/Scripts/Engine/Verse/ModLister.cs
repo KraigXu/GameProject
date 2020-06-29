@@ -8,10 +8,10 @@ using Verse.Steam;
 
 namespace Verse
 {
-	// Token: 0x020001F7 RID: 503
+	
 	public static class ModLister
 	{
-		// Token: 0x170002BB RID: 699
+		
 		// (get) Token: 0x06000E3E RID: 3646 RVA: 0x00051B1C File Offset: 0x0004FD1C
 		public static IEnumerable<ModMetaData> AllInstalledMods
 		{
@@ -21,7 +21,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002BC RID: 700
+		
 		// (get) Token: 0x06000E3F RID: 3647 RVA: 0x00051B24 File Offset: 0x0004FD24
 		public static IEnumerable<DirectoryInfo> AllActiveModDirs
 		{
@@ -33,7 +33,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002BD RID: 701
+		
 		// (get) Token: 0x06000E40 RID: 3648 RVA: 0x00051B80 File Offset: 0x0004FD80
 		public static List<ExpansionDef> AllExpansions
 		{
@@ -51,7 +51,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002BE RID: 702
+		
 		// (get) Token: 0x06000E41 RID: 3649 RVA: 0x00051BD1 File Offset: 0x0004FDD1
 		public static bool RoyaltyInstalled
 		{
@@ -61,7 +61,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170002BF RID: 703
+		
 		// (get) Token: 0x06000E42 RID: 3650 RVA: 0x00051BE4 File Offset: 0x0004FDE4
 		public static bool ShouldLogIssues
 		{
@@ -71,19 +71,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000E43 RID: 3651 RVA: 0x00051BF7 File Offset: 0x0004FDF7
+		
 		static ModLister()
 		{
 			ModLister.RebuildModList();
 			ModLister.modListBuilt = true;
 		}
 
-		// Token: 0x06000E44 RID: 3652 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public static void EnsureInit()
 		{
 		}
 
-		// Token: 0x06000E45 RID: 3653 RVA: 0x00051C10 File Offset: 0x0004FE10
+		
 		public static void RebuildModList()
 		{
 			ModLister.nestedRebuildInProgress = ModLister.rebuildingModList;
@@ -145,7 +145,7 @@ namespace Verse
 			ModLister.nestedRebuildInProgress = false;
 		}
 
-		// Token: 0x06000E46 RID: 3654 RVA: 0x00051F04 File Offset: 0x00050104
+		
 		public static int InstalledModsListHash(bool activeOnly)
 		{
 			int num = 17;
@@ -162,7 +162,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x06000E47 RID: 3655 RVA: 0x00051F7C File Offset: 0x0005017C
+		
 		public static ModMetaData GetModWithIdentifier(string identifier, bool ignorePostfix = false)
 		{
 			for (int i = 0; i < ModLister.mods.Count; i++)
@@ -175,7 +175,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000E48 RID: 3656 RVA: 0x00051FC0 File Offset: 0x000501C0
+		
 		public static ModMetaData GetActiveModWithIdentifier(string identifier)
 		{
 			for (int i = 0; i < ModLister.mods.Count; i++)
@@ -188,7 +188,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000E49 RID: 3657 RVA: 0x00052018 File Offset: 0x00050218
+		
 		public static ExpansionDef GetExpansionWithIdentifier(string packageId)
 		{
 			for (int i = 0; i < ModLister.AllExpansions.Count; i++)
@@ -201,7 +201,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000E4A RID: 3658 RVA: 0x00052060 File Offset: 0x00050260
+		
 		public static bool HasActiveModWithName(string name)
 		{
 			for (int i = 0; i < ModLister.mods.Count; i++)
@@ -214,7 +214,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000E4B RID: 3659 RVA: 0x000520B0 File Offset: 0x000502B0
+		
 		public static bool AnyFromListActive(List<string> mods)
 		{
 			using (List<string>.Enumerator enumerator = mods.GetEnumerator())
@@ -230,7 +230,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000E4C RID: 3660 RVA: 0x00052104 File Offset: 0x00050304
+		
 		private static void RecacheRoyaltyInstalled()
 		{
 			for (int i = 0; i < ModLister.mods.Count; i++)
@@ -244,7 +244,7 @@ namespace Verse
 			ModLister.royaltyInstalled = false;
 		}
 
-		// Token: 0x06000E4D RID: 3661 RVA: 0x0005214C File Offset: 0x0005034C
+		
 		private static bool TryAddMod(ModMetaData mod)
 		{
 			if (mod.Official && !mod.IsCoreMod && SteamManager.Initialized && mod.SteamAppId != 0)
@@ -294,22 +294,22 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x04000AC2 RID: 2754
+		
 		private static List<ModMetaData> mods = new List<ModMetaData>();
 
-		// Token: 0x04000AC3 RID: 2755
+		
 		private static bool royaltyInstalled;
 
-		// Token: 0x04000AC4 RID: 2756
+		
 		private static bool modListBuilt;
 
-		// Token: 0x04000AC5 RID: 2757
+		
 		private static bool rebuildingModList;
 
-		// Token: 0x04000AC6 RID: 2758
+		
 		private static bool nestedRebuildInProgress;
 
-		// Token: 0x04000AC7 RID: 2759
+		
 		private static List<ExpansionDef> AllExpansionsCached;
 	}
 }

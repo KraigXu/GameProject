@@ -11,10 +11,10 @@ using Verse.Steam;
 
 namespace Verse
 {
-	// Token: 0x02000122 RID: 290
+	
 	public abstract class Root : MonoBehaviour
 	{
-		// Token: 0x06000827 RID: 2087 RVA: 0x0002579C File Offset: 0x0002399C
+		
 		public virtual void Start()
 		{
 			try
@@ -68,7 +68,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000828 RID: 2088 RVA: 0x00025838 File Offset: 0x00023A38
+		
 		private static void CheckGlobalInit()
 		{
 			if (Root.globalInitDone)
@@ -94,7 +94,7 @@ namespace Verse
 			Root.globalInitDone = true;
 		}
 
-		// Token: 0x06000829 RID: 2089 RVA: 0x000258C0 File Offset: 0x00023AC0
+		
 		public virtual void Update()
 		{
 			try
@@ -132,7 +132,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600082A RID: 2090 RVA: 0x00025974 File Offset: 0x00023B74
+		
 		public void OnGUI()
 		{
 			try
@@ -167,7 +167,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600082B RID: 2091 RVA: 0x00025A4C File Offset: 0x00023C4C
+		
 		public static void Shutdown()
 		{
 			SteamManager.ShutdownSteam();
@@ -185,22 +185,22 @@ namespace Verse
 			Application.Quit();
 		}
 
-		// Token: 0x0400073B RID: 1851
+		
 		private static bool globalInitDone;
 
-		// Token: 0x0400073C RID: 1852
+		
 		private static bool prefsApplied;
 
-		// Token: 0x0400073D RID: 1853
+		
 		protected static bool checkedAutostartSaveFile;
 
-		// Token: 0x0400073E RID: 1854
+		
 		protected bool destroyed;
 
-		// Token: 0x0400073F RID: 1855
+		
 		public SoundRoot soundRoot;
 
-		// Token: 0x04000740 RID: 1856
+		
 		public UIRoot uiRoot;
 	}
 }

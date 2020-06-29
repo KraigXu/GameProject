@@ -2,10 +2,10 @@
 
 namespace Ionic.Zlib
 {
-	// Token: 0x020012B1 RID: 4785
+	
 	internal sealed class InflateManager
 	{
-		// Token: 0x17001335 RID: 4917
+		
 		// (get) Token: 0x06007151 RID: 29009 RVA: 0x0027A2C3 File Offset: 0x002784C3
 		// (set) Token: 0x06007152 RID: 29010 RVA: 0x0027A2CB File Offset: 0x002784CB
 		internal bool HandleRfc1950HeaderBytes
@@ -20,18 +20,18 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x06007153 RID: 29011 RVA: 0x0027A2D4 File Offset: 0x002784D4
+		
 		public InflateManager()
 		{
 		}
 
-		// Token: 0x06007154 RID: 29012 RVA: 0x0027A2E3 File Offset: 0x002784E3
+		
 		public InflateManager(bool expectRfc1950HeaderBytes)
 		{
 			this._handleRfc1950HeaderBytes = expectRfc1950HeaderBytes;
 		}
 
-		// Token: 0x06007155 RID: 29013 RVA: 0x0027A2FC File Offset: 0x002784FC
+		
 		internal int Reset()
 		{
 			this._codec.TotalBytesIn = (this._codec.TotalBytesOut = 0L);
@@ -41,7 +41,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x06007156 RID: 29014 RVA: 0x0027A34F File Offset: 0x0027854F
+		
 		internal int End()
 		{
 			if (this.blocks != null)
@@ -52,7 +52,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x06007157 RID: 29015 RVA: 0x0027A36C File Offset: 0x0027856C
+		
 		internal int Initialize(ZlibCodec codec, int w)
 		{
 			this._codec = codec;
@@ -69,7 +69,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x06007158 RID: 29016 RVA: 0x0027A3DC File Offset: 0x002785DC
+		
 		internal int Inflate(FlushType flush)
 		{
 			if (this._codec.InputBuffer == null)
@@ -334,7 +334,7 @@ namespace Ionic.Zlib
 			throw new ZlibException(string.Format("Bad state ({0})", this._codec.Message));
 		}
 
-		// Token: 0x06007159 RID: 29017 RVA: 0x0027AAC8 File Offset: 0x00278CC8
+		
 		internal int SetDictionary(byte[] dictionary)
 		{
 			int start = 0;
@@ -358,7 +358,7 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x0600715A RID: 29018 RVA: 0x0027AB58 File Offset: 0x00278D58
+		
 		internal int Sync()
 		{
 			if (this.mode != InflateManager.InflateManagerMode.BAD)
@@ -407,46 +407,46 @@ namespace Ionic.Zlib
 			return 0;
 		}
 
-		// Token: 0x0600715B RID: 29019 RVA: 0x0027AC6E File Offset: 0x00278E6E
+		
 		internal int SyncPoint(ZlibCodec z)
 		{
 			return this.blocks.SyncPoint();
 		}
 
-		// Token: 0x040045C6 RID: 17862
+		
 		private const int PRESET_DICT = 32;
 
-		// Token: 0x040045C7 RID: 17863
+		
 		private const int Z_DEFLATED = 8;
 
-		// Token: 0x040045C8 RID: 17864
+		
 		private InflateManager.InflateManagerMode mode;
 
-		// Token: 0x040045C9 RID: 17865
+		
 		internal ZlibCodec _codec;
 
-		// Token: 0x040045CA RID: 17866
+		
 		internal int method;
 
-		// Token: 0x040045CB RID: 17867
+		
 		internal uint computedCheck;
 
-		// Token: 0x040045CC RID: 17868
+		
 		internal uint expectedCheck;
 
-		// Token: 0x040045CD RID: 17869
+		
 		internal int marker;
 
-		// Token: 0x040045CE RID: 17870
+		
 		private bool _handleRfc1950HeaderBytes = true;
 
-		// Token: 0x040045CF RID: 17871
+		
 		internal int wbits;
 
-		// Token: 0x040045D0 RID: 17872
+		
 		internal InflateBlocks blocks;
 
-		// Token: 0x040045D1 RID: 17873
+		
 		private static readonly byte[] mark = new byte[]
 		{
 			0,
@@ -455,36 +455,36 @@ namespace Ionic.Zlib
 			byte.MaxValue
 		};
 
-		// Token: 0x02002065 RID: 8293
+		
 		private enum InflateManagerMode
 		{
-			// Token: 0x0400797F RID: 31103
+			
 			METHOD,
-			// Token: 0x04007980 RID: 31104
+			
 			FLAG,
-			// Token: 0x04007981 RID: 31105
+			
 			DICT4,
-			// Token: 0x04007982 RID: 31106
+			
 			DICT3,
-			// Token: 0x04007983 RID: 31107
+			
 			DICT2,
-			// Token: 0x04007984 RID: 31108
+			
 			DICT1,
-			// Token: 0x04007985 RID: 31109
+			
 			DICT0,
-			// Token: 0x04007986 RID: 31110
+			
 			BLOCKS,
-			// Token: 0x04007987 RID: 31111
+			
 			CHECK4,
-			// Token: 0x04007988 RID: 31112
+			
 			CHECK3,
-			// Token: 0x04007989 RID: 31113
+			
 			CHECK2,
-			// Token: 0x0400798A RID: 31114
+			
 			CHECK1,
-			// Token: 0x0400798B RID: 31115
+			
 			DONE,
-			// Token: 0x0400798C RID: 31116
+			
 			BAD
 		}
 	}

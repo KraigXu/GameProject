@@ -7,28 +7,28 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020007AE RID: 1966
+	
 	public class RaidStrategyWorker_ImmediateAttackSappers : RaidStrategyWorker
 	{
-		// Token: 0x0600330C RID: 13068 RVA: 0x0011B7A7 File Offset: 0x001199A7
+		
 		public override bool CanUseWith(IncidentParms parms, PawnGroupKindDef groupKind)
 		{
 			return this.PawnGenOptionsWithSappers(parms.faction, groupKind).Any<PawnGroupMaker>() && base.CanUseWith(parms, groupKind);
 		}
 
-		// Token: 0x0600330D RID: 13069 RVA: 0x0011B7CC File Offset: 0x001199CC
+		
 		public override float MinimumPoints(Faction faction, PawnGroupKindDef groupKind)
 		{
 			return Mathf.Max(base.MinimumPoints(faction, groupKind), this.CheapestSapperCost(faction, groupKind));
 		}
 
-		// Token: 0x0600330E RID: 13070 RVA: 0x0011B7E3 File Offset: 0x001199E3
+		
 		public override float MinMaxAllowedPawnGenOptionCost(Faction faction, PawnGroupKindDef groupKind)
 		{
 			return this.CheapestSapperCost(faction, groupKind);
 		}
 
-		// Token: 0x0600330F RID: 13071 RVA: 0x0011B7F0 File Offset: 0x001199F0
+		
 		private float CheapestSapperCost(Faction faction, PawnGroupKindDef groupKind)
 		{
 			IEnumerable<PawnGroupMaker> enumerable = this.PawnGenOptionsWithSappers(faction, groupKind);
@@ -61,19 +61,19 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06003310 RID: 13072 RVA: 0x0011B900 File Offset: 0x00119B00
+		
 		public override bool CanUsePawnGenOption(PawnGenOption opt, List<PawnGenOption> chosenOpts)
 		{
 			return chosenOpts.Count != 0 || opt.kind.canBeSapper;
 		}
 
-		// Token: 0x06003311 RID: 13073 RVA: 0x0011B91A File Offset: 0x00119B1A
+		
 		public override bool CanUsePawn(Pawn p, List<Pawn> otherPawns)
 		{
 			return (otherPawns.Count != 0 || SappersUtility.IsGoodSapper(p) || SappersUtility.IsGoodBackupSapper(p)) && (!p.kindDef.canBeSapper || !SappersUtility.HasBuildingDestroyerWeapon(p) || SappersUtility.IsGoodSapper(p));
 		}
 
-		// Token: 0x06003312 RID: 13074 RVA: 0x0011B958 File Offset: 0x00119B58
+		
 		private IEnumerable<PawnGroupMaker> PawnGenOptionsWithSappers(Faction faction, PawnGroupKindDef groupKind)
 		{
 			if (faction.def.pawnGroupMakers == null)
@@ -90,7 +90,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06003313 RID: 13075 RVA: 0x0011B9A1 File Offset: 0x00119BA1
+		
 		protected override LordJob MakeLordJob(IncidentParms parms, Map map, List<Pawn> pawns, int raidSeed)
 		{
 			return new LordJob_AssaultColony(parms.faction, true, true, true, true, true);

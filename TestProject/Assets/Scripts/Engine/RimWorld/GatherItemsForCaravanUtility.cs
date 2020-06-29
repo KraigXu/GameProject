@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006BD RID: 1725
+	
 	public static class GatherItemsForCaravanUtility
 	{
-		// Token: 0x06002E76 RID: 11894 RVA: 0x001052DC File Offset: 0x001034DC
+		
 		public static Thing FindThingToHaul(Pawn p, Lord lord)
 		{
 			GatherItemsForCaravanUtility.neededItems.Clear();
@@ -35,7 +35,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06002E77 RID: 11895 RVA: 0x001053CB File Offset: 0x001035CB
+		
 		public static int CountLeftToTransfer(Pawn pawn, TransferableOneWay transferable, Lord lord)
 		{
 			if (transferable.CountToTransfer <= 0 || !transferable.HasAnyThing)
@@ -45,7 +45,7 @@ namespace RimWorld
 			return Mathf.Max(transferable.CountToTransfer - GatherItemsForCaravanUtility.TransferableCountHauledByOthers(pawn, transferable, lord), 0);
 		}
 
-		// Token: 0x06002E78 RID: 11896 RVA: 0x001053F8 File Offset: 0x001035F8
+		
 		private static int TransferableCountHauledByOthers(Pawn pawn, TransferableOneWay transferable, Lord lord)
 		{
 			if (!transferable.HasAnyThing)
@@ -70,7 +70,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04001A71 RID: 6769
+		
 		private static HashSet<Thing> neededItems = new HashSet<Thing>();
 	}
 }

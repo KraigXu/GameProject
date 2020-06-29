@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000317 RID: 791
+	
 	public class ThingWithComps : Thing
 	{
-		// Token: 0x170004BB RID: 1211
+		
 		// (get) Token: 0x060016EC RID: 5868 RVA: 0x0008412F File Offset: 0x0008232F
 		public List<ThingComp> AllComps
 		{
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004BC RID: 1212
+		
 		// (get) Token: 0x060016ED RID: 5869 RVA: 0x00084148 File Offset: 0x00082348
 		// (set) Token: 0x060016EE RID: 5870 RVA: 0x00084174 File Offset: 0x00082374
 		public override Color DrawColor
@@ -43,7 +43,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004BD RID: 1213
+		
 		// (get) Token: 0x060016EF RID: 5871 RVA: 0x00084180 File Offset: 0x00082380
 		public override string LabelNoCount
 		{
@@ -64,7 +64,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004BE RID: 1214
+		
 		// (get) Token: 0x060016F0 RID: 5872 RVA: 0x000841C8 File Offset: 0x000823C8
 		public override string DescriptionFlavor
 		{
@@ -92,7 +92,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016F1 RID: 5873 RVA: 0x00084248 File Offset: 0x00082448
+		
 		public override void PostMake()
 		{
 			base.PostMake();
@@ -106,7 +106,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016F2 RID: 5874 RVA: 0x00084290 File Offset: 0x00082490
+		
 		public T GetComp<T>() where T : ThingComp
 		{
 			if (this.comps != null)
@@ -126,7 +126,7 @@ namespace Verse
 			return default(T);
 		}
 
-		// Token: 0x060016F3 RID: 5875 RVA: 0x000842E7 File Offset: 0x000824E7
+		
 		public IEnumerable<T> GetComps<T>() where T : ThingComp
 		{
 			if (this.comps != null)
@@ -145,7 +145,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060016F4 RID: 5876 RVA: 0x000842F8 File Offset: 0x000824F8
+		
 		public ThingComp GetCompByDef(CompProperties def)
 		{
 			if (this.comps != null)
@@ -164,7 +164,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x060016F5 RID: 5877 RVA: 0x00084348 File Offset: 0x00082548
+		
 		public void InitializeComps()
 		{
 			if (this.def.comps.Any<CompProperties>())
@@ -189,7 +189,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016F6 RID: 5878 RVA: 0x00084414 File Offset: 0x00082614
+		
 		public override string GetCustomLabelNoCount(bool includeHp = true)
 		{
 			string text = base.GetCustomLabelNoCount(includeHp);
@@ -206,7 +206,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x060016F7 RID: 5879 RVA: 0x00084460 File Offset: 0x00082660
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -223,7 +223,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016F8 RID: 5880 RVA: 0x000844B0 File Offset: 0x000826B0
+		
 		public void BroadcastCompSignal(string signal)
 		{
 			this.ReceiveCompSignal(signal);
@@ -239,12 +239,12 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016F9 RID: 5881 RVA: 0x00002681 File Offset: 0x00000881
+		
 		protected virtual void ReceiveCompSignal(string signal)
 		{
 		}
 
-		// Token: 0x060016FA RID: 5882 RVA: 0x000844F8 File Offset: 0x000826F8
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -257,7 +257,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016FB RID: 5883 RVA: 0x00084540 File Offset: 0x00082740
+		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -271,7 +271,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016FC RID: 5884 RVA: 0x0008458C File Offset: 0x0008278C
+		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -285,7 +285,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016FD RID: 5885 RVA: 0x000845D8 File Offset: 0x000827D8
+		
 		public override void Tick()
 		{
 			if (this.comps != null)
@@ -300,7 +300,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016FE RID: 5886 RVA: 0x00084618 File Offset: 0x00082818
+		
 		public override void TickRare()
 		{
 			if (this.comps != null)
@@ -315,7 +315,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060016FF RID: 5887 RVA: 0x00084658 File Offset: 0x00082858
+		
 		public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
 		{
 			base.PreApplyDamage(ref dinfo, out absorbed);
@@ -336,7 +336,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001700 RID: 5888 RVA: 0x000846B0 File Offset: 0x000828B0
+		
 		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			base.PostApplyDamage(dinfo, totalDamageDealt);
@@ -349,14 +349,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001701 RID: 5889 RVA: 0x000846F6 File Offset: 0x000828F6
+		
 		public override void Draw()
 		{
 			base.Draw();
 			this.Comps_PostDraw();
 		}
 
-		// Token: 0x06001702 RID: 5890 RVA: 0x00084704 File Offset: 0x00082904
+		
 		protected void Comps_PostDraw()
 		{
 			if (this.comps != null)
@@ -368,7 +368,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001703 RID: 5891 RVA: 0x00084740 File Offset: 0x00082940
+		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
@@ -381,7 +381,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001704 RID: 5892 RVA: 0x00084784 File Offset: 0x00082984
+		
 		public override void Print(SectionLayer layer)
 		{
 			base.Print(layer);
@@ -394,7 +394,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001705 RID: 5893 RVA: 0x000847C8 File Offset: 0x000829C8
+		
 		public virtual void PrintForPowerGrid(SectionLayer layer)
 		{
 			if (this.comps != null)
@@ -406,7 +406,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001706 RID: 5894 RVA: 0x00084805 File Offset: 0x00082A05
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
 			if (this.comps != null)
@@ -426,7 +426,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06001707 RID: 5895 RVA: 0x00084818 File Offset: 0x00082A18
+		
 		public override bool TryAbsorbStack(Thing other, bool respectStackLimit)
 		{
 			if (!this.CanStackWith(other))
@@ -444,7 +444,7 @@ namespace Verse
 			return base.TryAbsorbStack(other, respectStackLimit);
 		}
 
-		// Token: 0x06001708 RID: 5896 RVA: 0x00084874 File Offset: 0x00082A74
+		
 		public override Thing SplitOff(int count)
 		{
 			Thing thing = base.SplitOff(count);
@@ -458,7 +458,7 @@ namespace Verse
 			return thing;
 		}
 
-		// Token: 0x06001709 RID: 5897 RVA: 0x000848C0 File Offset: 0x00082AC0
+		
 		public override bool CanStackWith(Thing other)
 		{
 			if (!base.CanStackWith(other))
@@ -478,7 +478,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x0600170A RID: 5898 RVA: 0x00084910 File Offset: 0x00082B10
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -495,7 +495,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600170B RID: 5899 RVA: 0x00084960 File Offset: 0x00082B60
+		
 		protected string InspectStringPartsFromComps()
 		{
 			if (this.comps == null)
@@ -523,7 +523,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600170C RID: 5900 RVA: 0x00084A18 File Offset: 0x00082C18
+		
 		public override void DrawGUIOverlay()
 		{
 			base.DrawGUIOverlay();
@@ -536,10 +536,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600170D RID: 5901 RVA: 0x00084A5A File Offset: 0x00082C5A
+		
 		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
 		{
-			foreach (FloatMenuOption floatMenuOption in this.<>n__0(selPawn))
+			foreach (FloatMenuOption floatMenuOption in this.n__0(selPawn))
 			{
 				yield return floatMenuOption;
 			}
@@ -561,7 +561,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x0600170E RID: 5902 RVA: 0x00084A74 File Offset: 0x00082C74
+		
 		public override void PreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
 		{
 			if (this.comps != null)
@@ -574,7 +574,7 @@ namespace Verse
 			base.PreTraded(action, playerNegotiator, trader);
 		}
 
-		// Token: 0x0600170F RID: 5903 RVA: 0x00084ABC File Offset: 0x00082CBC
+		
 		public override void PostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
 		{
 			base.PostGeneratedForTrader(trader, forTile, forFaction);
@@ -587,7 +587,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001710 RID: 5904 RVA: 0x00084B04 File Offset: 0x00082D04
+		
 		protected override void PrePostIngested(Pawn ingester)
 		{
 			base.PrePostIngested(ingester);
@@ -600,7 +600,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001711 RID: 5905 RVA: 0x00084B48 File Offset: 0x00082D48
+		
 		protected override void PostIngested(Pawn ingester)
 		{
 			base.PostIngested(ingester);
@@ -613,7 +613,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001712 RID: 5906 RVA: 0x00084B8C File Offset: 0x00082D8C
+		
 		public override void Notify_SignalReceived(Signal signal)
 		{
 			base.Notify_SignalReceived(signal);
@@ -626,7 +626,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001713 RID: 5907 RVA: 0x00084BD0 File Offset: 0x00082DD0
+		
 		public override void Notify_LordDestroyed()
 		{
 			base.Notify_LordDestroyed();
@@ -639,7 +639,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001714 RID: 5908 RVA: 0x00084C14 File Offset: 0x00082E14
+		
 		public override void Notify_Equipped(Pawn pawn)
 		{
 			base.Notify_Equipped(pawn);
@@ -652,7 +652,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001715 RID: 5909 RVA: 0x00084C58 File Offset: 0x00082E58
+		
 		public override void Notify_UsedWeapon(Pawn pawn)
 		{
 			base.Notify_UsedWeapon(pawn);
@@ -665,10 +665,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001716 RID: 5910 RVA: 0x00084C9C File Offset: 0x00082E9C
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
-			foreach (StatDrawEntry statDrawEntry in this.<>n__1())
+			foreach (StatDrawEntry statDrawEntry in this.n__1())
 			{
 				yield return statDrawEntry;
 			}
@@ -694,7 +694,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06001717 RID: 5911 RVA: 0x00084CAC File Offset: 0x00082EAC
+		
 		public override void Notify_Explosion(Explosion explosion)
 		{
 			base.Notify_Explosion(explosion);
@@ -705,10 +705,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000E92 RID: 3730
+		
 		private List<ThingComp> comps;
 
-		// Token: 0x04000E93 RID: 3731
+		
 		private static readonly List<ThingComp> EmptyCompsList = new List<ThingComp>();
 	}
 }

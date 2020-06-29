@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000163 RID: 355
+	
 	public class GlowFlooder
 	{
-		// Token: 0x060009ED RID: 2541 RVA: 0x000360B8 File Offset: 0x000342B8
+		
 		public GlowFlooder(Map map)
 		{
 			this.map = map;
@@ -17,7 +17,7 @@ namespace Verse
 			this.openSet = new FastPriorityQueue<int>(new GlowFlooder.CompareGlowFlooderLightSquares(this.calcGrid));
 		}
 
-		// Token: 0x060009EE RID: 2542 RVA: 0x0003613C File Offset: 0x0003433C
+		
 		public void AddFloodGlowFor(CompGlower theGlower, Color32[] glowGrid)
 		{
 			this.cellIndices = this.map.cellIndices;
@@ -116,7 +116,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060009EF RID: 2543 RVA: 0x0003643C File Offset: 0x0003463C
+		
 		private void InitStatusesAndPushStartNode(ref int curIndex, IntVec3 start)
 		{
 			this.statusUnseenValue += 3u;
@@ -129,7 +129,7 @@ namespace Verse
 			this.openSet.Push(curIndex);
 		}
 
-		// Token: 0x060009F0 RID: 2544 RVA: 0x000364B8 File Offset: 0x000346B8
+		
 		private void SetGlowGridFromDist(int index)
 		{
 			float num = (float)this.calcGrid[index].intDist / 100f;
@@ -154,46 +154,46 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0400080A RID: 2058
+		
 		private Map map;
 
-		// Token: 0x0400080B RID: 2059
+		
 		private GlowFlooder.GlowFloodCell[] calcGrid;
 
-		// Token: 0x0400080C RID: 2060
+		
 		private FastPriorityQueue<int> openSet;
 
-		// Token: 0x0400080D RID: 2061
+		
 		private uint statusUnseenValue;
 
-		// Token: 0x0400080E RID: 2062
+		
 		private uint statusOpenValue = 1u;
 
-		// Token: 0x0400080F RID: 2063
+		
 		private uint statusFinalizedValue = 2u;
 
-		// Token: 0x04000810 RID: 2064
+		
 		private int mapSizeX;
 
-		// Token: 0x04000811 RID: 2065
+		
 		private int mapSizeZ;
 
-		// Token: 0x04000812 RID: 2066
+		
 		private CompGlower glower;
 
-		// Token: 0x04000813 RID: 2067
+		
 		private CellIndices cellIndices;
 
-		// Token: 0x04000814 RID: 2068
+		
 		private Color32[] glowGrid;
 
-		// Token: 0x04000815 RID: 2069
+		
 		private float attenLinearSlope;
 
-		// Token: 0x04000816 RID: 2070
+		
 		private Thing[] blockers = new Thing[8];
 
-		// Token: 0x04000817 RID: 2071
+		
 		private static readonly sbyte[,] Directions = new sbyte[,]
 		{
 			{
@@ -230,32 +230,32 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x020013B7 RID: 5047
+		
 		private struct GlowFloodCell
 		{
-			// Token: 0x04004AF2 RID: 19186
+			
 			public int intDist;
 
-			// Token: 0x04004AF3 RID: 19187
+			
 			public uint status;
 		}
 
-		// Token: 0x020013B8 RID: 5048
+		
 		private class CompareGlowFlooderLightSquares : IComparer<int>
 		{
-			// Token: 0x06007741 RID: 30529 RVA: 0x00290995 File Offset: 0x0028EB95
+			
 			public CompareGlowFlooderLightSquares(GlowFlooder.GlowFloodCell[] grid)
 			{
 				this.grid = grid;
 			}
 
-			// Token: 0x06007742 RID: 30530 RVA: 0x002909A4 File Offset: 0x0028EBA4
+			
 			public int Compare(int a, int b)
 			{
 				return this.grid[a].intDist.CompareTo(this.grid[b].intDist);
 			}
 
-			// Token: 0x04004AF4 RID: 19188
+			
 			private GlowFlooder.GlowFloodCell[] grid;
 		}
 	}

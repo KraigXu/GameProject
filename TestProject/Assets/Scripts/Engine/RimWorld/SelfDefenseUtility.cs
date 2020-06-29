@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006A0 RID: 1696
+	
 	public static class SelfDefenseUtility
 	{
-		// Token: 0x06002DFF RID: 11775 RVA: 0x00102D18 File Offset: 0x00100F18
+		
 		public static bool ShouldStartFleeing(Pawn pawn)
 		{
 			List<Thing> list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.AlwaysFlee);
@@ -41,7 +41,7 @@ namespace RimWorld
 			return foundThreat;
 		}
 
-		// Token: 0x06002E00 RID: 11776 RVA: 0x00102DC8 File Offset: 0x00100FC8
+		
 		public static bool ShouldFleeFrom(Thing t, Pawn pawn, bool checkDistance, bool checkLOS)
 		{
 			if (t == pawn || (checkDistance && !t.Position.InHorDistOf(pawn.Position, 8f)))
@@ -60,7 +60,7 @@ namespace RimWorld
 			return attackTarget != null && !attackTarget.ThreatDisabled(pawn) && t is IAttackTargetSearcher && (!checkLOS || GenSight.LineOfSight(pawn.Position, t.Position, pawn.Map, false, null, 0, 0));
 		}
 
-		// Token: 0x04001A4B RID: 6731
+		
 		public const float FleeWhenDistToHostileLessThan = 8f;
 	}
 }

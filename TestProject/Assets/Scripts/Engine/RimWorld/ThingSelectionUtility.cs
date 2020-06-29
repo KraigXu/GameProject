@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EB7 RID: 3767
+	
 	public static class ThingSelectionUtility
 	{
-		// Token: 0x06005BEC RID: 23532 RVA: 0x001FBE78 File Offset: 0x001FA078
+		
 		public static bool SelectableByMapClick(Thing t)
 		{
 			if (!t.def.selectable)
@@ -38,13 +38,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005BED RID: 23533 RVA: 0x001FBF30 File Offset: 0x001FA130
+		
 		public static bool SelectableByHotkey(Thing t)
 		{
 			return t.def.selectable && t.Spawned;
 		}
 
-		// Token: 0x06005BEE RID: 23534 RVA: 0x001FBF47 File Offset: 0x001FA147
+		
 		public static IEnumerable<Thing> MultiSelectableThingsInScreenRectDistinct(Rect rect)
 		{
 			CellRect mapRect = ThingSelectionUtility.GetMapRect(rect);
@@ -83,7 +83,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005BEF RID: 23535 RVA: 0x001FBF57 File Offset: 0x001FA157
+		
 		public static IEnumerable<Zone> MultiSelectableZonesInScreenRectDistinct(Rect rect)
 		{
 			CellRect mapRect = ThingSelectionUtility.GetMapRect(rect);
@@ -115,7 +115,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005BF0 RID: 23536 RVA: 0x001FBF68 File Offset: 0x001FA168
+		
 		private static CellRect GetMapRect(Rect rect)
 		{
 			Vector2 screenLoc = new Vector2(rect.x, (float)UI.screenHeight - rect.y);
@@ -131,7 +131,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06005BF1 RID: 23537 RVA: 0x001FC01C File Offset: 0x001FA21C
+		
 		public static void SelectNextColonist()
 		{
 			ThingSelectionUtility.tmpColonists.Clear();
@@ -161,7 +161,7 @@ namespace RimWorld
 			ThingSelectionUtility.tmpColonists.Clear();
 		}
 
-		// Token: 0x06005BF2 RID: 23538 RVA: 0x001FC11C File Offset: 0x001FA31C
+		
 		public static void SelectPreviousColonist()
 		{
 			ThingSelectionUtility.tmpColonists.Clear();
@@ -191,13 +191,13 @@ namespace RimWorld
 			ThingSelectionUtility.tmpColonists.Clear();
 		}
 
-		// Token: 0x04003237 RID: 12855
+		
 		private static HashSet<Thing> yieldedThings = new HashSet<Thing>();
 
-		// Token: 0x04003238 RID: 12856
+		
 		private static HashSet<Zone> yieldedZones = new HashSet<Zone>();
 
-		// Token: 0x04003239 RID: 12857
+		
 		private static List<Pawn> tmpColonists = new List<Pawn>();
 	}
 }

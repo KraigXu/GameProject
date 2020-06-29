@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000922 RID: 2338
+	
 	public class FoodRestrictionDatabase : IExposable
 	{
-		// Token: 0x170009EE RID: 2542
+		
 		// (get) Token: 0x06003786 RID: 14214 RVA: 0x0012A2E7 File Offset: 0x001284E7
 		public List<FoodRestriction> AllFoodRestrictions
 		{
@@ -18,20 +18,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003787 RID: 14215 RVA: 0x0012A2EF File Offset: 0x001284EF
+		
 		public FoodRestrictionDatabase()
 		{
 			this.GenerateStartingFoodRestrictions();
 		}
 
-		// Token: 0x06003788 RID: 14216 RVA: 0x0012A308 File Offset: 0x00128508
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<FoodRestriction>(ref this.foodRestrictions, "foodRestrictions", LookMode.Deep, Array.Empty<object>());
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06003789 RID: 14217 RVA: 0x0012A326 File Offset: 0x00128526
+		
 		public FoodRestriction DefaultFoodRestriction()
 		{
 			if (this.foodRestrictions.Count == 0)
@@ -41,7 +41,7 @@ namespace RimWorld
 			return this.foodRestrictions[0];
 		}
 
-		// Token: 0x0600378A RID: 14218 RVA: 0x0012A348 File Offset: 0x00128548
+		
 		public AcceptanceReport TryDelete(FoodRestriction foodRestriction)
 		{
 			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
@@ -62,7 +62,7 @@ namespace RimWorld
 			return AcceptanceReport.WasAccepted;
 		}
 
-		// Token: 0x0600378B RID: 14219 RVA: 0x0012A438 File Offset: 0x00128638
+		
 		public FoodRestriction MakeNewFoodRestriction()
 		{
 			int num;
@@ -83,7 +83,7 @@ namespace RimWorld
 			return foodRestriction;
 		}
 
-		// Token: 0x0600378C RID: 14220 RVA: 0x0012A4F4 File Offset: 0x001286F4
+		
 		private void GenerateStartingFoodRestrictions()
 		{
 			this.MakeNewFoodRestriction().label = "FoodRestrictionLavish".Translate();
@@ -130,7 +130,7 @@ namespace RimWorld
 			foodRestriction5.filter.SetDisallowAll(null, null);
 		}
 
-		// Token: 0x040020EA RID: 8426
+		
 		private List<FoodRestriction> foodRestrictions = new List<FoodRestriction>();
 	}
 }

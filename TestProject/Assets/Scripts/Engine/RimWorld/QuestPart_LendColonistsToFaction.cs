@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000980 RID: 2432
+	
 	public class QuestPart_LendColonistsToFaction : QuestPartActivable
 	{
-		// Token: 0x17000A51 RID: 2641
+		
 		// (get) Token: 0x06003990 RID: 14736 RVA: 0x00131FD8 File Offset: 0x001301D8
 		public List<Thing> LentColonistsListForReading
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003991 RID: 14737 RVA: 0x00131FE0 File Offset: 0x001301E0
+		
 		protected override void Enable(SignalArgs receivedArgs)
 		{
 			base.Enable(receivedArgs);
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A52 RID: 2642
+		
 		// (get) Token: 0x06003992 RID: 14738 RVA: 0x00132074 File Offset: 0x00130274
 		public override string DescriptionPart
 		{
@@ -57,7 +57,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003993 RID: 14739 RVA: 0x001320FE File Offset: 0x001302FE
+		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
@@ -67,7 +67,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003994 RID: 14740 RVA: 0x00132128 File Offset: 0x00130328
+		
 		protected override void Complete(SignalArgs signalArgs)
 		{
 			Map map = (this.returnMap == null) ? Find.AnyPlayerHomeMap : this.returnMap.Map;
@@ -85,7 +85,7 @@ namespace RimWorld
 			DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(map), map, this.lentColonists, 110, false, false, true, false);
 		}
 
-		// Token: 0x06003995 RID: 14741 RVA: 0x001321E8 File Offset: 0x001303E8
+		
 		public override void Notify_PawnKilled(Pawn pawn, DamageInfo? dinfo)
 		{
 			if (this.lentColonists.Contains(pawn))
@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003996 RID: 14742 RVA: 0x00132258 File Offset: 0x00130458
+		
 		public override void DoDebugWindowContents(Rect innerRect, ref float curY)
 		{
 			if (base.State != QuestPartState.Enabled)
@@ -120,7 +120,7 @@ namespace RimWorld
 			curY += rect.height + 4f;
 		}
 
-		// Token: 0x06003997 RID: 14743 RVA: 0x001322BC File Offset: 0x001304BC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -136,22 +136,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040021EA RID: 8682
+		
 		public Thing shuttle;
 
-		// Token: 0x040021EB RID: 8683
+		
 		public Faction lendColonistsToFaction;
 
-		// Token: 0x040021EC RID: 8684
+		
 		public int returnLentColonistsInTicks = -1;
 
-		// Token: 0x040021ED RID: 8685
+		
 		public MapParent returnMap;
 
-		// Token: 0x040021EE RID: 8686
+		
 		private int returnColonistsOnTick;
 
-		// Token: 0x040021EF RID: 8687
+		
 		private List<Thing> lentColonists = new List<Thing>();
 	}
 }

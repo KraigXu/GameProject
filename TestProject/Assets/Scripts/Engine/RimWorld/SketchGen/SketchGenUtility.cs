@@ -5,23 +5,23 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001084 RID: 4228
+	
 	public static class SketchGenUtility
 	{
-		// Token: 0x0600645A RID: 25690 RVA: 0x0022C3D8 File Offset: 0x0022A5D8
+		
 		public static bool IsStuffAllowed(ThingDef stuff, bool allowWood, Map useOnlyStonesAvailableOnMap, bool allowFlammableWalls, ThingDef stuffFor)
 		{
 			return (allowWood || stuff != ThingDefOf.WoodLog) && (allowFlammableWalls || stuffFor != ThingDefOf.Wall || StatDefOf.Flammability.Worker.GetValueAbstract(stuffFor, stuff) <= 0f) && (useOnlyStonesAvailableOnMap == null || stuff.stuffProps.SourceNaturalRock == null || !stuff.stuffProps.SourceNaturalRock.IsNonResourceNaturalRock || Find.World.NaturalRockTypesIn(useOnlyStonesAvailableOnMap.Tile).Contains(stuff.stuffProps.SourceNaturalRock));
 		}
 
-		// Token: 0x0600645B RID: 25691 RVA: 0x0022C460 File Offset: 0x0022A660
+		
 		[Obsolete("Only used for mod compatibility")]
 		public static bool IsFloorAllowed(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer)
 		{
 			return SketchGenUtility.IsFloorAllowed_NewTmp(floor, allowWoodenFloor, allowConcrete, useOnlyStonesAvailableOnMap, onlyBuildableByPlayer, true);
 		}
 
-		// Token: 0x0600645C RID: 25692 RVA: 0x0022C470 File Offset: 0x0022A670
+		
 		public static bool IsFloorAllowed_NewTmp(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer, bool onlyStoneFloor)
 		{
 			if (!allowWoodenFloor && floor == TerrainDefOf.WoodPlankFloor)
@@ -64,7 +64,7 @@ namespace RimWorld.SketchGen
 			return !onlyBuildableByPlayer || SketchGenUtility.PlayerCanBuildNow(floor);
 		}
 
-		// Token: 0x0600645D RID: 25693 RVA: 0x0022C5B8 File Offset: 0x0022A7B8
+		
 		public static CellRect FindBiggestRectAt(IntVec3 c, CellRect outerRect, Sketch sketch, HashSet<IntVec3> processed, Predicate<IntVec3> canTraverse)
 		{
 			if (processed.Contains(c) || !canTraverse(c))
@@ -157,7 +157,7 @@ namespace RimWorld.SketchGen
 			return cellRect;
 		}
 
-		// Token: 0x0600645E RID: 25694 RVA: 0x0022C848 File Offset: 0x0022AA48
+		
 		public static CellRect FindBiggestRect(Sketch sketch, Predicate<IntVec3> canTraverse)
 		{
 			CellRect result;
@@ -185,13 +185,13 @@ namespace RimWorld.SketchGen
 			return result;
 		}
 
-		// Token: 0x0600645F RID: 25695 RVA: 0x0022C8F8 File Offset: 0x0022AAF8
+		
 		public static bool PlayerCanBuildNow(BuildableDef buildable)
 		{
 			return buildable.BuildableByPlayer && buildable.IsResearchFinished;
 		}
 
-		// Token: 0x04003D1F RID: 15647
+		
 		private static HashSet<IntVec3> tmpProcessed = new HashSet<IntVec3>();
 	}
 }

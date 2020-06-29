@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001E3 RID: 483
+	
 	public abstract class SkyOverlay
 	{
-		// Token: 0x1700029C RID: 668
+		
 		// (set) Token: 0x06000DA1 RID: 3489 RVA: 0x0004E21B File Offset: 0x0004C41B
 		public Color OverlayColor
 		{
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000DA2 RID: 3490 RVA: 0x0004E251 File Offset: 0x0004C451
+		
 		public SkyOverlay()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
@@ -32,7 +32,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000DA3 RID: 3491 RVA: 0x0004E26C File Offset: 0x0004C46C
+		
 		public virtual void TickOverlay(Map map)
 		{
 			if (this.worldOverlayMat != null)
@@ -45,7 +45,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000DA4 RID: 3492 RVA: 0x0004E354 File Offset: 0x0004C554
+		
 		public void DrawOverlay(Map map)
 		{
 			if (this.worldOverlayMat != null)
@@ -65,7 +65,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000DA5 RID: 3493 RVA: 0x0004E41E File Offset: 0x0004C61E
+		
 		public override string ToString()
 		{
 			if (this.worldOverlayMat != null)
@@ -79,22 +79,22 @@ namespace Verse
 			return "NoOverlayOverlay";
 		}
 
-		// Token: 0x04000A74 RID: 2676
+		
 		public Material worldOverlayMat;
 
-		// Token: 0x04000A75 RID: 2677
+		
 		public Material screenOverlayMat;
 
-		// Token: 0x04000A76 RID: 2678
+		
 		protected float worldOverlayPanSpeed1;
 
-		// Token: 0x04000A77 RID: 2679
+		
 		protected float worldOverlayPanSpeed2;
 
-		// Token: 0x04000A78 RID: 2680
+		
 		protected Vector2 worldPanDir1;
 
-		// Token: 0x04000A79 RID: 2681
+		
 		protected Vector2 worldPanDir2;
 	}
 }

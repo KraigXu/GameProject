@@ -10,10 +10,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x02000334 RID: 820
+	
 	public static class DebugActionsMisc
 	{
-		// Token: 0x0600181E RID: 6174 RVA: 0x00089B48 File Offset: 0x00087D48
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void DestroyAllPlants()
 		{
@@ -26,7 +26,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600181F RID: 6175 RVA: 0x00089BB4 File Offset: 0x00087DB4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void DestroyAllThings()
 		{
@@ -36,7 +36,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001820 RID: 6176 RVA: 0x00089C14 File Offset: 0x00087E14
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void FinishAllResearch()
 		{
@@ -44,7 +44,7 @@ namespace Verse
 			Messages.Message("All research finished.", MessageTypeDefOf.TaskCompletion, false);
 		}
 
-		// Token: 0x06001821 RID: 6177 RVA: 0x00089C30 File Offset: 0x00087E30
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ReplaceAllTradeShips()
 		{
@@ -57,7 +57,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001822 RID: 6178 RVA: 0x00089C7C File Offset: 0x00087E7C
+		
 		[DebugAction("General", "Change weather...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ChangeWeather()
 		{
@@ -73,7 +73,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001823 RID: 6179 RVA: 0x00089D0C File Offset: 0x00087F0C
+		
 		[DebugAction("General", "Play song...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void PlaySong()
 		{
@@ -89,7 +89,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001824 RID: 6180 RVA: 0x00089D98 File Offset: 0x00087F98
+		
 		[DebugAction("General", "Play sound...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void PlaySound()
 		{
@@ -112,7 +112,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001825 RID: 6181 RVA: 0x00089E48 File Offset: 0x00088048
+		
 		[DebugAction("General", "End game condition...", allowedGameStates = (AllowedGameStates.Playing | AllowedGameStates.IsCurrentlyOnMap | AllowedGameStates.HasGameCondition))]
 		private static void EndGameCondition()
 		{
@@ -128,21 +128,21 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001826 RID: 6182 RVA: 0x00089EE4 File Offset: 0x000880E4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void AddPrisoner()
 		{
 			DebugActionsMisc.AddGuest(true);
 		}
 
-		// Token: 0x06001827 RID: 6183 RVA: 0x00089EEC File Offset: 0x000880EC
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void AddGuest()
 		{
 			DebugActionsMisc.AddGuest(false);
 		}
 
-		// Token: 0x06001828 RID: 6184 RVA: 0x00089EF4 File Offset: 0x000880F4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ForceEnemyAssault()
 		{
@@ -164,7 +164,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001829 RID: 6185 RVA: 0x00089FE8 File Offset: 0x000881E8
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ForceEnemyFlee()
 		{
@@ -181,21 +181,21 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600182A RID: 6186 RVA: 0x0008A0A4 File Offset: 0x000882A4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void AdaptionProgress10Days()
 		{
 			Find.StoryWatcher.watcherAdaptation.Debug_OffsetAdaptDays(10f);
 		}
 
-		// Token: 0x0600182B RID: 6187 RVA: 0x0008A0BA File Offset: 0x000882BA
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void UnloadUnusedAssets()
 		{
 			MemoryUtility.UnloadUnusedUnityAssets();
 		}
 
-		// Token: 0x0600182C RID: 6188 RVA: 0x0008A0C4 File Offset: 0x000882C4
+		
 		[DebugAction("General", "Name settlement...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void NameSettlement()
 		{
@@ -219,21 +219,21 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600182D RID: 6189 RVA: 0x0008A190 File Offset: 0x00088390
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void NextLesson()
 		{
 			LessonAutoActivator.DebugForceInitiateBestLessonNow();
 		}
 
-		// Token: 0x0600182E RID: 6190 RVA: 0x0008A197 File Offset: 0x00088397
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void RegenAllMapMeshSections()
 		{
 			Find.CurrentMap.mapDrawer.RegenerateEverythingNow();
 		}
 
-		// Token: 0x0600182F RID: 6191 RVA: 0x0008A1A8 File Offset: 0x000883A8
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ChangeCameraConfig()
 		{
@@ -254,14 +254,14 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001830 RID: 6192 RVA: 0x0008A264 File Offset: 0x00088464
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ForceShipCountdown()
 		{
-			ShipCountdown.InitiateCountdown(null);
+			//ShipCountdown.InitiateCountdown(null);
 		}
 
-		// Token: 0x06001831 RID: 6193 RVA: 0x0008A26C File Offset: 0x0008846C
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ForceStartShip()
 		{
@@ -278,7 +278,7 @@ namespace Verse
 			building_ShipComputerCore.ForceLaunch();
 		}
 
-		// Token: 0x06001832 RID: 6194 RVA: 0x0008A2B8 File Offset: 0x000884B8
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void FlashTradeDropSpot()
 		{
@@ -287,7 +287,7 @@ namespace Verse
 			Log.Message("trade drop spot: " + intVec, false);
 		}
 
-		// Token: 0x06001833 RID: 6195 RVA: 0x0008A300 File Offset: 0x00088500
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void KillFactionLeader()
 		{
@@ -306,7 +306,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001834 RID: 6196 RVA: 0x0008A390 File Offset: 0x00088590
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void KillKidnappedPawn()
 		{
@@ -319,7 +319,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001835 RID: 6197 RVA: 0x0008A3E4 File Offset: 0x000885E4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void SetFactionRelations()
 		{
@@ -341,7 +341,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001836 RID: 6198 RVA: 0x0008A50C File Offset: 0x0008870C
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void VisitorGift()
 		{
@@ -357,14 +357,14 @@ namespace Verse
 			VisitorGiftForPlayerUtility.GiveGift(list, list[0].Faction);
 		}
 
-		// Token: 0x06001837 RID: 6199 RVA: 0x0008A5AC File Offset: 0x000887AC
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void RefogMap()
 		{
 			FloodFillerFog.DebugRefogMap(Find.CurrentMap);
 		}
 
-		// Token: 0x06001838 RID: 6200 RVA: 0x0008A5B8 File Offset: 0x000887B8
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void UseGenStep()
 		{
@@ -380,35 +380,35 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001839 RID: 6201 RVA: 0x0008A650 File Offset: 0x00088850
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void IncrementTime1Hour()
 		{
 			Find.TickManager.DebugSetTicksGame(Find.TickManager.TicksGame + 2500);
 		}
 
-		// Token: 0x0600183A RID: 6202 RVA: 0x0008A66C File Offset: 0x0008886C
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void IncrementTime6Hours()
 		{
 			Find.TickManager.DebugSetTicksGame(Find.TickManager.TicksGame + 15000);
 		}
 
-		// Token: 0x0600183B RID: 6203 RVA: 0x0008A688 File Offset: 0x00088888
+		
 		[DebugAction("General", "Increment time 1 day", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void IncrementTime1Day()
 		{
 			Find.TickManager.DebugSetTicksGame(Find.TickManager.TicksGame + 60000);
 		}
 
-		// Token: 0x0600183C RID: 6204 RVA: 0x0008A6A4 File Offset: 0x000888A4
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void IncrementTime1Season()
 		{
 			Find.TickManager.DebugSetTicksGame(Find.TickManager.TicksGame + 900000);
 		}
 
-		// Token: 0x0600183D RID: 6205 RVA: 0x0008A6C0 File Offset: 0x000888C0
+		
 		[DebugAction("General", "Storywatcher tick 1 day", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void StorywatcherTick1Day()
 		{
@@ -419,7 +419,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600183E RID: 6206 RVA: 0x0008A700 File Offset: 0x00088900
+		
 		[DebugAction("General", "Add techprint to project", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void AddTechprintsForProject()
 		{
@@ -437,47 +437,47 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600183F RID: 6207 RVA: 0x0008A7B4 File Offset: 0x000889B4
+		
 		[DebugAction("General", "Apply techprint on project", allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void ApplyTechprintsForProject()
 		{
-			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (ResearchProjectDef localProject2 in from p in DefDatabase<ResearchProjectDef>.AllDefsListForReading
-			where !p.TechprintRequirementMet
-			select p)
-			{
-				ResearchProjectDef localProject = localProject2;
-				Action <>9__2;
-				list.Add(new DebugMenuOption(localProject.LabelCap, DebugMenuOptionMode.Action, delegate
-				{
-					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-					List<DebugMenuOption> list3 = list2;
-					string label = "None";
-					DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
-					Action method;
-					if ((method = <>9__2) == null)
-					{
-						method = (<>9__2 = delegate
-						{
-							Find.ResearchManager.ApplyTechprint(localProject, null);
-						});
-					}
-					list3.Add(new DebugMenuOption(label, mode, method));
-					foreach (Pawn localColonist2 in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
-					{
-						Pawn localColonist = localColonist2;
-						list2.Add(new DebugMenuOption(localColonist.LabelCap, DebugMenuOptionMode.Action, delegate
-						{
-							Find.ResearchManager.ApplyTechprint(localProject, localColonist);
-						}));
-					}
-					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-				}));
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+			//List<DebugMenuOption> list = new List<DebugMenuOption>();
+			//foreach (ResearchProjectDef localProject2 in from p in DefDatabase<ResearchProjectDef>.AllDefsListForReading
+			//where !p.TechprintRequirementMet
+			//select p)
+			//{
+			//	ResearchProjectDef localProject = localProject2;
+			//	Action 9__2;
+			//	list.Add(new DebugMenuOption(localProject.LabelCap, DebugMenuOptionMode.Action, delegate
+			//	{
+			//		List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+			//		List<DebugMenuOption> list3 = list2;
+			//		string label = "None";
+			//		DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
+			//		Action method;
+			//		if ((method ) == null)
+			//		{
+			//			method = (9__2 = delegate
+			//			{
+			//				Find.ResearchManager.ApplyTechprint(localProject, null);
+			//			});
+			//		}
+			//		list3.Add(new DebugMenuOption(label, mode, method));
+			//		foreach (Pawn localColonist2 in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
+			//		{
+			//			Pawn localColonist = localColonist2;
+			//			list2.Add(new DebugMenuOption(localColonist.LabelCap, DebugMenuOptionMode.Action, delegate
+			//			{
+			//				Find.ResearchManager.ApplyTechprint(localProject, localColonist);
+			//			}));
+			//		}
+			//		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			//	}));
+			//}
+			//Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001840 RID: 6208 RVA: 0x0008A868 File Offset: 0x00088A68
+		
 		private static void AddGuest(bool prisoner)
 		{
 			foreach (Building_Bed building_Bed in Find.CurrentMap.listerBuildings.AllBuildingsColonistOfClass<Building_Bed>())
@@ -514,7 +514,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001841 RID: 6209 RVA: 0x0008AA00 File Offset: 0x00088C00
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void KillRandomLentColonist()
 		{
@@ -551,7 +551,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001842 RID: 6210 RVA: 0x0008AB3C File Offset: 0x00088D3C
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void DestroyAllHats()
 		{
@@ -571,7 +571,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001843 RID: 6211 RVA: 0x0008AC08 File Offset: 0x00088E08
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void PawnKindApparelCheck()
 		{
@@ -605,7 +605,7 @@ namespace Verse
 											mostSeniorTitle.def.label,
 											")  does not have its title requirements met. index=",
 											j,
-											DebugActionsMisc.<PawnKindApparelCheck>g__logApparel|41_0(pawn)
+											//DebugActionsMisc.<PawnKindApparelCheck>g__logApparel|41_0(pawn)
 										}), false);
 										flag = true;
 									}
@@ -615,12 +615,12 @@ namespace Verse
 						List<Apparel> wornApparel = pawn.apparel.WornApparel;
 						for (int k = 0; k < wornApparel.Count; k++)
 						{
-							string text = DebugActionsMisc.<PawnKindApparelCheck>g__apparelOkayToWear|41_1(pawn, wornApparel[k]);
-							if (text != "OK")
-							{
-								Log.Error(text + " - " + wornApparel[k].Label + DebugActionsMisc.<PawnKindApparelCheck>g__logApparel|41_0(pawn), false);
-								flag = true;
-							}
+							//string text = DebugActionsMisc.<PawnKindApparelCheck>g__apparelOkayToWear|41_1(pawn, wornApparel[k]);
+							//if (text != "OK")
+							//{
+							//	Log.Error(text + " - " + wornApparel[k].Label + DebugActionsMisc.<PawnKindApparelCheck>g__logApparel|41_0(pawn), false);
+							//	flag = true;
+							//}
 						}
 						Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
 					}
@@ -633,7 +633,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001844 RID: 6212 RVA: 0x0008ACDC File Offset: 0x00088EDC
+		
 		[DebugAction("General", null, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		private static void PawnKindAbilityCheck()
 		{
@@ -710,16 +710,16 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x04000F07 RID: 3847
+		
 		private static List<Pawn> tmpLentColonists = new List<Pawn>();
 
-		// Token: 0x04000F08 RID: 3848
+		
 		private const string NoErrorString = "OK";
 
-		// Token: 0x04000F09 RID: 3849
+		
 		private const string RoyalApparelTag = "Royal";
 
-		// Token: 0x04000F0A RID: 3850
+		
 		private const int PawnsToGenerate = 100;
 	}
 }

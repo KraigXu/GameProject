@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011A7 RID: 4519
+	
 	public class QuestNode_CreateIncidents : QuestNode
 	{
-		// Token: 0x06006887 RID: 26759 RVA: 0x00247D05 File Offset: 0x00245F05
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.incidentDef.GetValue(slate) != null && this.points.GetValue(slate) >= this.incidentDef.GetValue(slate).minThreatPoints;
 		}
 
-		// Token: 0x06006888 RID: 26760 RVA: 0x00247D38 File Offset: 0x00245F38
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -54,7 +54,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x06006889 RID: 26761 RVA: 0x00247E78 File Offset: 0x00246078
+		
 		private void CreateDelayedIncident(int delayTicks, string delayInSignal, string disableSignal, IncidentDef incident, Map map, float points, Faction faction)
 		{
 			Quest quest = QuestGen.quest;
@@ -77,33 +77,33 @@ namespace RimWorld.QuestGen
 			quest.AddPart(questPart_Incident);
 		}
 
-		// Token: 0x040040D3 RID: 16595
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x040040D4 RID: 16596
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalDisable;
 
-		// Token: 0x040040D5 RID: 16597
+		
 		public SlateRef<IncidentDef> incidentDef;
 
-		// Token: 0x040040D6 RID: 16598
+		
 		public SlateRef<int?> intervalTicks;
 
-		// Token: 0x040040D7 RID: 16599
+		
 		public SlateRef<int?> randomIncidents;
 
-		// Token: 0x040040D8 RID: 16600
+		
 		public SlateRef<int> startOffsetTicks;
 
-		// Token: 0x040040D9 RID: 16601
+		
 		public SlateRef<int> duration;
 
-		// Token: 0x040040DA RID: 16602
+		
 		public SlateRef<float> points;
 
-		// Token: 0x040040DB RID: 16603
+		
 		public SlateRef<Faction> faction;
 	}
 }

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B8F RID: 2959
+	
 	public static class HungerLevelUtility
 	{
-		// Token: 0x06004562 RID: 17762 RVA: 0x00177000 File Offset: 0x00175200
+		
 		public static string GetLabel(this HungerCategory hunger)
 		{
 			switch (hunger)

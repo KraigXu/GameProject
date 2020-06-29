@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x0200047F RID: 1151
+	
 	public static class ThingFilterUI
 	{
-		// Token: 0x06002209 RID: 8713 RVA: 0x000CFB80 File Offset: 0x000CDD80
+		
 		public static void DoThingFilterConfigWindow(Rect rect, ref Vector2 scrollPosition, ThingFilter filter, ThingFilter parentFilter = null, int openMask = 1, IEnumerable<ThingDef> forceHiddenDefs = null, IEnumerable<SpecialThingFilterDef> forceHiddenFilters = null, bool forceHideHitPointsConfig = false, List<ThingDef> suppressSmallVolumeTags = null, Map map = null)
 		{
 			Widgets.DrawMenuSection(rect);
@@ -61,7 +61,7 @@ namespace Verse
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x0600220A RID: 8714 RVA: 0x000CFD70 File Offset: 0x000CDF70
+		
 		private static void DrawHitPointsFilterConfig(ref float y, float width, ThingFilter filter)
 		{
 			Rect rect = new Rect(20f, y, width - 20f, 28f);
@@ -73,7 +73,7 @@ namespace Verse
 			Text.Font = GameFont.Small;
 		}
 
-		// Token: 0x0600220B RID: 8715 RVA: 0x000CFDD8 File Offset: 0x000CDFD8
+		
 		private static void DrawQualityFilterConfig(ref float y, float width, ThingFilter filter)
 		{
 			Rect rect = new Rect(20f, y, width - 20f, 28f);
@@ -85,22 +85,22 @@ namespace Verse
 			Text.Font = GameFont.Small;
 		}
 
-		// Token: 0x040014F3 RID: 5363
+		
 		private static float viewHeight;
 
-		// Token: 0x040014F4 RID: 5364
+		
 		private const float ExtraViewHeight = 90f;
 
-		// Token: 0x040014F5 RID: 5365
+		
 		private const float RangeLabelTab = 10f;
 
-		// Token: 0x040014F6 RID: 5366
+		
 		private const float RangeLabelHeight = 19f;
 
-		// Token: 0x040014F7 RID: 5367
+		
 		private const float SliderHeight = 28f;
 
-		// Token: 0x040014F8 RID: 5368
+		
 		private const float SliderTab = 20f;
 	}
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x020000CF RID: 207
+	
 	public class PawnInventoryOption
 	{
-		// Token: 0x060005C7 RID: 1479 RVA: 0x0001C257 File Offset: 0x0001A457
+		
 		public IEnumerable<Thing> GenerateThings()
 		{
 			if (Rand.Value < this.skipChance)
@@ -44,22 +44,22 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x040004C7 RID: 1223
+		
 		public ThingDef thingDef;
 
-		// Token: 0x040004C8 RID: 1224
+		
 		public IntRange countRange = IntRange.one;
 
-		// Token: 0x040004C9 RID: 1225
+		
 		public float choiceChance = 1f;
 
-		// Token: 0x040004CA RID: 1226
+		
 		public float skipChance;
 
-		// Token: 0x040004CB RID: 1227
+		
 		public List<PawnInventoryOption> subOptionsTakeAll;
 
-		// Token: 0x040004CC RID: 1228
+		
 		public List<PawnInventoryOption> subOptionsChooseOne;
 	}
 }

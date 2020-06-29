@@ -3,16 +3,16 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x02001097 RID: 4247
+	
 	public class SymbolResolver_BasePart_Indoors_Division_Split : SymbolResolver
 	{
-		// Token: 0x060064B9 RID: 25785 RVA: 0x0023157F File Offset: 0x0022F77F
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			return base.CanResolve(rp) && (rp.rect.Width >= 9 || rp.rect.Height >= 9);
 		}
 
-		// Token: 0x060064BA RID: 25786 RVA: 0x002315B4 File Offset: 0x0022F7B4
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			if (rp.rect.Width < 9 && rp.rect.Height < 9)
@@ -40,10 +40,10 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("basePart_indoors", resolveParams4, null);
 		}
 
-		// Token: 0x04003D90 RID: 15760
+		
 		private const int MinLengthAfterSplit = 5;
 
-		// Token: 0x04003D91 RID: 15761
+		
 		private const int MinWidthOrHeight = 9;
 	}
 }

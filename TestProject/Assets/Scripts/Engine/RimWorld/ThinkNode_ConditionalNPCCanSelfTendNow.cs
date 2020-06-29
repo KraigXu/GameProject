@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020007F7 RID: 2039
+	
 	public class ThinkNode_ConditionalNPCCanSelfTendNow : ThinkNode_Conditional
 	{
-		// Token: 0x060033E5 RID: 13285 RVA: 0x0011E0D4 File Offset: 0x0011C2D4
+		
 		protected override bool Satisfied(Pawn pawn)
 		{
 			if (!pawn.health.hediffSet.hediffs.Any<Hediff>())

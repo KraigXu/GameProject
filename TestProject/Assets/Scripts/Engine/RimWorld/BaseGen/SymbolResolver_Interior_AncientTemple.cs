@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D9 RID: 4313
+	
 	public class SymbolResolver_Interior_AncientTemple : SymbolResolver
 	{
-		// Token: 0x06006595 RID: 26005 RVA: 0x00238F00 File Offset: 0x00237100
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			List<Thing> list = ThingSetMakerDefOf.MapGen_AncientTempleContents.root.Generate();
@@ -38,16 +38,16 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DD4 RID: 15828
+		
 		private const float MechanoidsChance = 0.65f;
 
-		// Token: 0x04003DD5 RID: 15829
+		
 		private static readonly IntRange MechanoidCountRange = new IntRange(1, 5);
 
-		// Token: 0x04003DD6 RID: 15830
+		
 		private static readonly IntRange HivesCountRange = new IntRange(1, 2);
 
-		// Token: 0x04003DD7 RID: 15831
+		
 		private static readonly IntVec2 MinSizeForShrines = new IntVec2(4, 3);
 	}
 }

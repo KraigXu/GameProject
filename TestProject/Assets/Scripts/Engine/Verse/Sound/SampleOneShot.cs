@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse.Sound
 {
-	// Token: 0x020004FA RID: 1274
+	
 	public class SampleOneShot : Sample
 	{
-		// Token: 0x1700074D RID: 1869
+		
 		// (get) Token: 0x060024AF RID: 9391 RVA: 0x000D9DE2 File Offset: 0x000D7FE2
 		public override float ParentStartRealTime
 		{
@@ -17,7 +17,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x1700074E RID: 1870
+		
 		// (get) Token: 0x060024B0 RID: 9392 RVA: 0x000D9DEA File Offset: 0x000D7FEA
 		public override float ParentStartTick
 		{
@@ -27,7 +27,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x1700074F RID: 1871
+		
 		// (get) Token: 0x060024B1 RID: 9393 RVA: 0x000D9DF3 File Offset: 0x000D7FF3
 		public override float ParentHashCode
 		{
@@ -37,7 +37,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x17000750 RID: 1872
+		
 		// (get) Token: 0x060024B2 RID: 9394 RVA: 0x000D9DFC File Offset: 0x000D7FFC
 		public override SoundParams ExternalParams
 		{
@@ -47,7 +47,7 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x17000751 RID: 1873
+		
 		// (get) Token: 0x060024B3 RID: 9395 RVA: 0x000D9E04 File Offset: 0x000D8004
 		public override SoundInfo Info
 		{
@@ -57,12 +57,12 @@ namespace Verse.Sound
 			}
 		}
 
-		// Token: 0x060024B4 RID: 9396 RVA: 0x000D9E0C File Offset: 0x000D800C
+		
 		private SampleOneShot(SubSoundDef def) : base(def)
 		{
 		}
 
-		// Token: 0x060024B5 RID: 9397 RVA: 0x000D9E20 File Offset: 0x000D8020
+		
 		public static SampleOneShot TryMakeAndPlay(SubSoundDef def, AudioClip clip, SoundInfo info)
 		{
 			if ((double)info.pitchFactor <= 0.0001)
@@ -115,10 +115,10 @@ namespace Verse.Sound
 			return sampleOneShot;
 		}
 
-		// Token: 0x0400164B RID: 5707
+		
 		public SoundInfo info;
 
-		// Token: 0x0400164C RID: 5708
+		
 		private SoundParams externalParams = new SoundParams();
 	}
 }

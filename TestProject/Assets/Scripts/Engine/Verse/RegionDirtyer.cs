@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x020001BC RID: 444
+	
 	public class RegionDirtyer
 	{
-		// Token: 0x17000266 RID: 614
+		
 		// (get) Token: 0x06000C6C RID: 3180 RVA: 0x000470FF File Offset: 0x000452FF
 		public bool AnyDirty
 		{
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000267 RID: 615
+		
 		// (get) Token: 0x06000C6D RID: 3181 RVA: 0x0004710F File Offset: 0x0004530F
 		public List<IntVec3> DirtyCells
 		{
@@ -26,13 +26,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C6E RID: 3182 RVA: 0x00047117 File Offset: 0x00045317
+		
 		public RegionDirtyer(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000C6F RID: 3183 RVA: 0x0004713C File Offset: 0x0004533C
+		
 		internal void Notify_WalkabilityChanged(IntVec3 c)
 		{
 			this.regionsToDirty.Clear();
@@ -60,7 +60,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C70 RID: 3184 RVA: 0x00047218 File Offset: 0x00045418
+		
 		internal void Notify_ThingAffectingRegionsSpawned(Thing b)
 		{
 			this.regionsToDirty.Clear();
@@ -80,7 +80,7 @@ namespace Verse
 			this.regionsToDirty.Clear();
 		}
 
-		// Token: 0x06000C71 RID: 3185 RVA: 0x000472FC File Offset: 0x000454FC
+		
 		internal void Notify_ThingAffectingRegionsDespawned(Thing b)
 		{
 			this.regionsToDirty.Clear();
@@ -123,7 +123,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C72 RID: 3186 RVA: 0x00047498 File Offset: 0x00045698
+		
 		internal void SetAllClean()
 		{
 			for (int i = 0; i < this.dirtyCells.Count; i++)
@@ -133,7 +133,7 @@ namespace Verse
 			this.dirtyCells.Clear();
 		}
 
-		// Token: 0x06000C73 RID: 3187 RVA: 0x000474E4 File Offset: 0x000456E4
+		
 		private void SetRegionDirty(Region reg, bool addCellsToDirtyCells = true)
 		{
 			if (!reg.valid)
@@ -160,7 +160,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000C74 RID: 3188 RVA: 0x000475A4 File Offset: 0x000457A4
+		
 		internal void SetAllDirty()
 		{
 			this.dirtyCells.Clear();
@@ -174,13 +174,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040009D7 RID: 2519
+		
 		private Map map;
 
-		// Token: 0x040009D8 RID: 2520
+		
 		private List<IntVec3> dirtyCells = new List<IntVec3>();
 
-		// Token: 0x040009D9 RID: 2521
+		
 		private List<Region> regionsToDirty = new List<Region>();
 	}
 }

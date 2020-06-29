@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001242 RID: 4674
+	
 	public static class DaysWorthOfFoodCalculator
 	{
-		// Token: 0x06006CE6 RID: 27878 RVA: 0x00261274 File Offset: 0x0025F474
+		
 		private static float ApproxDaysWorthOfFood(List<Pawn> pawns, List<ThingDefCount> extraFood, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300, bool assumeCaravanMoving = true)
 		{
 			if (!DaysWorthOfFoodCalculator.AnyFoodEatingPawn(pawns))
@@ -246,13 +246,13 @@ namespace RimWorld.Planet
 			return num18;
 		}
 
-		// Token: 0x06006CE7 RID: 27879 RVA: 0x002618C4 File Offset: 0x0025FAC4
+		
 		public static float ApproxDaysWorthOfFood(Caravan caravan)
 		{
 			return DaysWorthOfFoodCalculator.ApproxDaysWorthOfFood(caravan.PawnsListForReading, null, caravan.Tile, IgnorePawnsInventoryMode.DontIgnore, caravan.Faction, caravan.pather.curPath, caravan.pather.nextTileCostLeft, caravan.TicksPerMove, caravan.pather.Moving && !caravan.pather.Paused);
 		}
 
-		// Token: 0x06006CE8 RID: 27880 RVA: 0x00261924 File Offset: 0x0025FB24
+		
 		public static float ApproxDaysWorthOfFood(List<TransferableOneWay> transferables, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysWorthOfFoodCalculator.tmpThingDefCounts.Clear();
@@ -285,7 +285,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CE9 RID: 27881 RVA: 0x002619FC File Offset: 0x0025FBFC
+		
 		public static float ApproxDaysWorthOfFoodLeftAfterTransfer(List<TransferableOneWay> transferables, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysWorthOfFoodCalculator.tmpThingDefCounts.Clear();
@@ -318,7 +318,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CEA RID: 27882 RVA: 0x00261AEC File Offset: 0x0025FCEC
+		
 		public static float ApproxDaysWorthOfFood(List<Pawn> pawns, List<Thing> potentiallyFood, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction)
 		{
 			DaysWorthOfFoodCalculator.tmpThingDefCounts.Clear();
@@ -341,7 +341,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CEB RID: 27883 RVA: 0x00261BAC File Offset: 0x0025FDAC
+		
 		public static float ApproxDaysWorthOfFood(List<Pawn> pawns, List<ThingCount> potentiallyFood, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction)
 		{
 			DaysWorthOfFoodCalculator.tmpThingDefCounts.Clear();
@@ -357,7 +357,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CEC RID: 27884 RVA: 0x00261C40 File Offset: 0x0025FE40
+		
 		public static float ApproxDaysWorthOfFoodLeftAfterTradeableTransfer(List<Thing> allCurrentThings, List<Tradeable> tradeables, int tile, IgnorePawnsInventoryMode ignoreInventory, Faction faction)
 		{
 			DaysWorthOfFoodCalculator.tmpThingCounts.Clear();
@@ -389,7 +389,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CED RID: 27885 RVA: 0x00261D58 File Offset: 0x0025FF58
+		
 		private static bool AnyFoodEatingPawn(List<Pawn> pawns)
 		{
 			int i = 0;
@@ -405,7 +405,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006CEE RID: 27886 RVA: 0x00261D90 File Offset: 0x0025FF90
+		
 		private static int BestEverEdibleFoodIndexFor(Pawn pawn, List<ThingDefCount> food)
 		{
 			int num = -1;
@@ -432,37 +432,37 @@ namespace RimWorld.Planet
 			return num;
 		}
 
-		// Token: 0x040043B0 RID: 17328
+		
 		private static List<Pawn> tmpPawns = new List<Pawn>();
 
-		// Token: 0x040043B1 RID: 17329
+		
 		private static List<ThingDefCount> tmpThingDefCounts = new List<ThingDefCount>();
 
-		// Token: 0x040043B2 RID: 17330
+		
 		private static List<ThingCount> tmpThingCounts = new List<ThingCount>();
 
-		// Token: 0x040043B3 RID: 17331
+		
 		public const float InfiniteDaysWorthOfFood = 600f;
 
-		// Token: 0x040043B4 RID: 17332
+		
 		private static List<float> tmpDaysWorthOfFoodForPawn = new List<float>();
 
-		// Token: 0x040043B5 RID: 17333
+		
 		private static List<ThingDefCount> tmpFood = new List<ThingDefCount>();
 
-		// Token: 0x040043B6 RID: 17334
+		
 		private static List<ThingDefCount> tmpFood2 = new List<ThingDefCount>();
 
-		// Token: 0x040043B7 RID: 17335
+		
 		private static List<Pair<int, int>> tmpTicksToArrive = new List<Pair<int, int>>();
 
-		// Token: 0x040043B8 RID: 17336
+		
 		private static List<float> cachedNutritionBetweenHungryAndFed = new List<float>();
 
-		// Token: 0x040043B9 RID: 17337
+		
 		private static List<int> cachedTicksUntilHungryWhenFed = new List<int>();
 
-		// Token: 0x040043BA RID: 17338
+		
 		private static List<float> cachedMaxFoodLevel = new List<float>();
 	}
 }

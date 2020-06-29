@@ -4,10 +4,10 @@ using Verse.Sound;
 
 namespace Verse.AI
 {
-	// Token: 0x02000516 RID: 1302
+	
 	public class JobDriver_Equip : JobDriver
 	{
-		// Token: 0x0600253E RID: 9534 RVA: 0x000DD414 File Offset: 0x000DB614
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			int maxPawns = 1;
@@ -20,7 +20,7 @@ namespace Verse.AI
 			return this.pawn.Reserve(this.job.targetA, this.job, maxPawns, stackCount, null, errorOnFailed);
 		}
 
-		// Token: 0x0600253F RID: 9535 RVA: 0x000DD48F File Offset: 0x000DB68F
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AD8 RID: 2776
+	
 	public class CompAbilityEffect_Teleport : CompAbilityEffect_WithDest
 	{
-		// Token: 0x17000BA8 RID: 2984
+		
 		// (get) Token: 0x060041A8 RID: 16808 RVA: 0x0015F086 File Offset: 0x0015D286
 		public new CompProperties_AbilityTeleport Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041A9 RID: 16809 RVA: 0x0015F094 File Offset: 0x0015D294
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			if (target.HasThing)

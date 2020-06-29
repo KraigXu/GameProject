@@ -5,17 +5,17 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011B9 RID: 4537
+	
 	public class WorldPathFinder
 	{
-		// Token: 0x060068E1 RID: 26849 RVA: 0x00249D6A File Offset: 0x00247F6A
+		
 		public WorldPathFinder()
 		{
 			this.calcGrid = new WorldPathFinder.PathFinderNodeFast[Find.WorldGrid.TilesCount];
 			this.openList = new FastPriorityQueue<WorldPathFinder.CostNode>(new WorldPathFinder.CostNodeComparer());
 		}
 
-		// Token: 0x060068E2 RID: 26850 RVA: 0x00249DA8 File Offset: 0x00247FA8
+		
 		public WorldPath FindPath(int startTile, int destTile, Caravan caravan, Func<float, bool> terminator = null)
 		{
 			if (startTile < 0)
@@ -146,7 +146,7 @@ namespace RimWorld.Planet
 			return WorldPath.NotFound;
 		}
 
-		// Token: 0x060068E3 RID: 26851 RVA: 0x0024A264 File Offset: 0x00248464
+		
 		public void FloodPathsWithCost(List<int> startTiles, Func<int, int, int> costFunc, Func<int, bool> impassable = null, Func<int, float, bool> terminator = null)
 		{
 			if (startTiles.Count < 1 || startTiles.Contains(-1))
@@ -222,7 +222,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x060068E4 RID: 26852 RVA: 0x0024A584 File Offset: 0x00248784
+		
 		public List<int>[] FloodPathsWithCostForTree(List<int> startTiles, Func<int, int, int> costFunc, Func<int, bool> impassable = null, Func<int, float, bool> terminator = null)
 		{
 			this.FloodPathsWithCost(startTiles, costFunc, impassable, terminator);
@@ -246,7 +246,7 @@ namespace RimWorld.Planet
 			return array;
 		}
 
-		// Token: 0x060068E5 RID: 26853 RVA: 0x0024A60C File Offset: 0x0024880C
+		
 		private WorldPath FinalizedPath(int lastTile)
 		{
 			WorldPath emptyWorldPath = Find.WorldPathPool.GetEmptyWorldPath();
@@ -266,7 +266,7 @@ namespace RimWorld.Planet
 			return emptyWorldPath;
 		}
 
-		// Token: 0x060068E6 RID: 26854 RVA: 0x0024A664 File Offset: 0x00248864
+		
 		private void ResetStatuses()
 		{
 			int num = this.calcGrid.Length;
@@ -278,29 +278,29 @@ namespace RimWorld.Planet
 			this.statusClosedValue = 2;
 		}
 
-		// Token: 0x060068E7 RID: 26855 RVA: 0x0024A6A8 File Offset: 0x002488A8
+		
 		private int CalculateHeuristicStrength(int startTile, int destTile)
 		{
 			float x = Find.WorldGrid.ApproxDistanceInTiles(startTile, destTile);
 			return Mathf.RoundToInt(WorldPathFinder.HeuristicStrength_DistanceCurve.Evaluate(x));
 		}
 
-		// Token: 0x04004146 RID: 16710
+		
 		private FastPriorityQueue<WorldPathFinder.CostNode> openList;
 
-		// Token: 0x04004147 RID: 16711
+		
 		private WorldPathFinder.PathFinderNodeFast[] calcGrid;
 
-		// Token: 0x04004148 RID: 16712
+		
 		private ushort statusOpenValue = 1;
 
-		// Token: 0x04004149 RID: 16713
+		
 		private ushort statusClosedValue = 2;
 
-		// Token: 0x0400414A RID: 16714
+		
 		private const int SearchLimit = 500000;
 
-		// Token: 0x0400414B RID: 16715
+		
 		private static readonly SimpleCurve HeuristicStrength_DistanceCurve = new SimpleCurve
 		{
 			{
@@ -317,49 +317,49 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x0400414C RID: 16716
+		
 		private const float BestRoadDiscount = 0.5f;
 
-		// Token: 0x02001F66 RID: 8038
+		
 		private struct CostNode
 		{
-			// Token: 0x0600AD21 RID: 44321 RVA: 0x00322098 File Offset: 0x00320298
+			
 			public CostNode(int tile, int cost)
 			{
 				this.tile = tile;
 				this.cost = cost;
 			}
 
-			// Token: 0x0400758B RID: 30091
+			
 			public int tile;
 
-			// Token: 0x0400758C RID: 30092
+			
 			public int cost;
 		}
 
-		// Token: 0x02001F67 RID: 8039
+		
 		private struct PathFinderNodeFast
 		{
-			// Token: 0x0400758D RID: 30093
+			
 			public int knownCost;
 
-			// Token: 0x0400758E RID: 30094
+			
 			public int heuristicCost;
 
-			// Token: 0x0400758F RID: 30095
+			
 			public int parentTile;
 
-			// Token: 0x04007590 RID: 30096
+			
 			public int costNodeCost;
 
-			// Token: 0x04007591 RID: 30097
+			
 			public ushort status;
 		}
 
-		// Token: 0x02001F68 RID: 8040
+		
 		private class CostNodeComparer : IComparer<WorldPathFinder.CostNode>
 		{
-			// Token: 0x0600AD22 RID: 44322 RVA: 0x003220A8 File Offset: 0x003202A8
+			
 			public int Compare(WorldPathFinder.CostNode a, WorldPathFinder.CostNode b)
 			{
 				int cost = a.cost;

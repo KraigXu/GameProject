@@ -3,16 +3,16 @@ using System.Xml;
 
 namespace Verse
 {
-	// Token: 0x020002D5 RID: 725
+	
 	public class Scribe_Deep
 	{
-		// Token: 0x0600145F RID: 5215 RVA: 0x00077E50 File Offset: 0x00076050
+		
 		public static void Look<T>(ref T target, string label, params object[] ctorArgs)
 		{
 			Scribe_Deep.Look<T>(ref target, false, label, ctorArgs);
 		}
 
-		// Token: 0x06001460 RID: 5216 RVA: 0x00077E5C File Offset: 0x0007605C
+		
 		public static void Look<T>(ref T target, bool saveDestroyedThings, string label, params object[] ctorArgs)
 		{
 			if (Scribe.mode != LoadSaveMode.Saving)

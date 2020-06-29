@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E03 RID: 3587
+	
 	public class Alert_CannotBeUsedRoofed : Alert
 	{
-		// Token: 0x17000F78 RID: 3960
+		
 		// (get) Token: 0x060056B9 RID: 22201 RVA: 0x001CC138 File Offset: 0x001CA338
 		private List<Thing> UnusableBuildings
 		{
@@ -45,23 +45,23 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060056BA RID: 22202 RVA: 0x001CC268 File Offset: 0x001CA468
+		
 		public Alert_CannotBeUsedRoofed()
 		{
 			this.defaultLabel = "BuildingCantBeUsedRoofed".Translate();
 			this.defaultExplanation = "BuildingCantBeUsedRoofedDesc".Translate();
 		}
 
-		// Token: 0x060056BB RID: 22203 RVA: 0x001CC2A5 File Offset: 0x001CA4A5
+		
 		public override AlertReport GetReport()
 		{
 			return AlertReport.CulpritsAre(this.UnusableBuildings);
 		}
 
-		// Token: 0x04002F40 RID: 12096
+		
 		private List<ThingDef> thingDefsToCheck;
 
-		// Token: 0x04002F41 RID: 12097
+		
 		private List<Thing> unusableBuildingsResult = new List<Thing>();
 	}
 }

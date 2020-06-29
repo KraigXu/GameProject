@@ -5,10 +5,10 @@ using System.Xml.Linq;
 
 namespace Verse
 {
-	// Token: 0x020002B8 RID: 696
+	
 	public static class DirectXmlSaveLoadUtility
 	{
-		// Token: 0x060013CE RID: 5070 RVA: 0x00071C84 File Offset: 0x0006FE84
+		
 		public static string GetXPath(this XmlNode node)
 		{
 			string text = "";
@@ -58,7 +58,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x060013CF RID: 5071 RVA: 0x00071D74 File Offset: 0x0006FF74
+		
 		public static string GetInnerXml(this XElement element)
 		{
 			if (element == null)
@@ -74,7 +74,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060013D0 RID: 5072 RVA: 0x00071DBC File Offset: 0x0006FFBC
+		
 		private static int GetElementIndexForXPath(XmlElement element, out bool multiple)
 		{
 			multiple = false;
@@ -112,7 +112,7 @@ namespace Verse
 			return 1;
 		}
 
-		// Token: 0x04000D51 RID: 3409
+		
 		public const BindingFlags FieldGetFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 	}
 }

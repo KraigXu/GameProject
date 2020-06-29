@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse.AI
 {
-	// Token: 0x02000576 RID: 1398
+	
 	public class Pawn_PathFollower : IExposable
 	{
-		// Token: 0x1700079A RID: 1946
+		
 		// (get) Token: 0x06002775 RID: 10101 RVA: 0x000E71B8 File Offset: 0x000E53B8
 		public LocalTargetInfo Destination
 		{
@@ -18,7 +18,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x1700079B RID: 1947
+		
 		// (get) Token: 0x06002776 RID: 10102 RVA: 0x000E71C0 File Offset: 0x000E53C0
 		public bool Moving
 		{
@@ -28,7 +28,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x1700079C RID: 1948
+		
 		// (get) Token: 0x06002777 RID: 10103 RVA: 0x000E71C8 File Offset: 0x000E53C8
 		public bool MovingNow
 		{
@@ -38,7 +38,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x1700079D RID: 1949
+		
 		// (get) Token: 0x06002778 RID: 10104 RVA: 0x000E71E0 File Offset: 0x000E53E0
 		public IntVec3 LastPassableCellInPath
 		{
@@ -68,13 +68,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002779 RID: 10105 RVA: 0x000E72A0 File Offset: 0x000E54A0
+		
 		public Pawn_PathFollower(Pawn newPawn)
 		{
 			this.pawn = newPawn;
 		}
 
-		// Token: 0x0600277A RID: 10106 RVA: 0x000E72F4 File Offset: 0x000E54F4
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.moving, "moving", true, false);
@@ -90,7 +90,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600277B RID: 10107 RVA: 0x000E73AC File Offset: 0x000E55AC
+		
 		public void StartPath(LocalTargetInfo dest, PathEndMode peMode)
 		{
 			dest = (LocalTargetInfo)GenPath.ResolvePathMode(this.pawn, dest.ToTargetInfo(this.pawn.Map), ref peMode);
@@ -144,7 +144,7 @@ namespace Verse.AI
 			this.pawn.jobs.posture = PawnPosture.Standing;
 		}
 
-		// Token: 0x0600277C RID: 10108 RVA: 0x000E75C9 File Offset: 0x000E57C9
+		
 		public void StopDead()
 		{
 			if (this.curPath != null)
@@ -156,7 +156,7 @@ namespace Verse.AI
 			this.nextCell = this.pawn.Position;
 		}
 
-		// Token: 0x0600277D RID: 10109 RVA: 0x000E7600 File Offset: 0x000E5800
+		
 		public void PatherTick()
 		{
 			if (this.WillCollideWithPawnAt(this.pawn.Position))
@@ -224,7 +224,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600277E RID: 10110 RVA: 0x000E77DB File Offset: 0x000E59DB
+		
 		public void TryResumePathingAfterLoading()
 		{
 			if (this.moving)
@@ -233,14 +233,14 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600277F RID: 10111 RVA: 0x000E77F7 File Offset: 0x000E59F7
+		
 		public void Notify_Teleported_Int()
 		{
 			this.StopDead();
 			this.ResetToCurrentPosition();
 		}
 
-		// Token: 0x06002780 RID: 10112 RVA: 0x000E7805 File Offset: 0x000E5A05
+		
 		public void ResetToCurrentPosition()
 		{
 			this.nextCell = this.pawn.Position;
@@ -248,7 +248,7 @@ namespace Verse.AI
 			this.nextCellCostTotal = 1f;
 		}
 
-		// Token: 0x06002781 RID: 10113 RVA: 0x000E7830 File Offset: 0x000E5A30
+		
 		private bool PawnCanOccupy(IntVec3 c)
 		{
 			if (!c.Walkable(this.pawn.Map))
@@ -267,7 +267,7 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x06002782 RID: 10114 RVA: 0x000E788C File Offset: 0x000E5A8C
+		
 		public Building BuildingBlockingNextPathCell()
 		{
 			Building edifice = this.nextCell.GetEdifice(this.pawn.Map);
@@ -278,25 +278,25 @@ namespace Verse.AI
 			return null;
 		}
 
-		// Token: 0x06002783 RID: 10115 RVA: 0x000E78C4 File Offset: 0x000E5AC4
+		
 		public bool WillCollideWithPawnOnNextPathCell()
 		{
 			return this.WillCollideWithPawnAt(this.nextCell);
 		}
 
-		// Token: 0x06002784 RID: 10116 RVA: 0x000E78D2 File Offset: 0x000E5AD2
+		
 		private bool IsNextCellWalkable()
 		{
 			return this.nextCell.Walkable(this.pawn.Map) && !this.WillCollideWithPawnAt(this.nextCell);
 		}
 
-		// Token: 0x06002785 RID: 10117 RVA: 0x000E78FF File Offset: 0x000E5AFF
+		
 		private bool WillCollideWithPawnAt(IntVec3 c)
 		{
 			return PawnUtility.ShouldCollideWithPawns(this.pawn) && PawnUtility.AnyPawnBlockingPathAt(c, this.pawn, false, false, false);
 		}
 
-		// Token: 0x06002786 RID: 10118 RVA: 0x000E7920 File Offset: 0x000E5B20
+		
 		public Building_Door NextCellDoorToWaitForOrManuallyOpen()
 		{
 			Building_Door building_Door = this.pawn.Map.thingGrid.ThingAt<Building_Door>(this.nextCell);
@@ -307,7 +307,7 @@ namespace Verse.AI
 			return null;
 		}
 
-		// Token: 0x06002787 RID: 10119 RVA: 0x000E7976 File Offset: 0x000E5B76
+		
 		public void PatherDraw()
 		{
 			if (DebugViewSettings.drawPaths && this.curPath != null && Find.Selector.IsSelected(this.pawn))
@@ -316,13 +316,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x06002788 RID: 10120 RVA: 0x000E79AA File Offset: 0x000E5BAA
+		
 		public bool MovedRecently(int ticks)
 		{
 			return Find.TickManager.TicksGame - this.lastMovedTick <= ticks;
 		}
 
-		// Token: 0x06002789 RID: 10121 RVA: 0x000E79C4 File Offset: 0x000E5BC4
+		
 		public bool TryRecoverFromUnwalkablePosition(bool error = true)
 		{
 			bool flag = false;
@@ -371,7 +371,7 @@ namespace Verse.AI
 			return flag;
 		}
 
-		// Token: 0x0600278A RID: 10122 RVA: 0x000E7ADD File Offset: 0x000E5CDD
+		
 		private void PatherArrived()
 		{
 			this.StopDead();
@@ -381,14 +381,14 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600278B RID: 10123 RVA: 0x000E7B0C File Offset: 0x000E5D0C
+		
 		private void PatherFailed()
 		{
 			this.StopDead();
 			this.pawn.jobs.curDriver.Notify_PatherFailed();
 		}
 
-		// Token: 0x0600278C RID: 10124 RVA: 0x000E7B2C File Offset: 0x000E5D2C
+		
 		private void TryEnterNextPathCell()
 		{
 			Building building = this.BuildingBlockingNextPathCell();
@@ -459,7 +459,7 @@ namespace Verse.AI
 			this.SetupMoveIntoNextCell();
 		}
 
-		// Token: 0x0600278D RID: 10125 RVA: 0x000E7D68 File Offset: 0x000E5F68
+		
 		private void SetupMoveIntoNextCell()
 		{
 			if (this.curPath.NodesLeftCount <= 1)
@@ -497,13 +497,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600278E RID: 10126 RVA: 0x000E7E87 File Offset: 0x000E6087
+		
 		private int CostToMoveIntoCell(IntVec3 c)
 		{
 			return Pawn_PathFollower.CostToMoveIntoCell(this.pawn, c);
 		}
 
-		// Token: 0x0600278F RID: 10127 RVA: 0x000E7E98 File Offset: 0x000E6098
+		
 		private static int CostToMoveIntoCell(Pawn pawn, IntVec3 c)
 		{
 			int num;
@@ -566,7 +566,7 @@ namespace Verse.AI
 			return Mathf.Max(num, 1);
 		}
 
-		// Token: 0x06002790 RID: 10128 RVA: 0x000E7FBC File Offset: 0x000E61BC
+		
 		private float CostToPayThisTick()
 		{
 			float num = 1f;
@@ -581,7 +581,7 @@ namespace Verse.AI
 			return num;
 		}
 
-		// Token: 0x06002791 RID: 10129 RVA: 0x000E8008 File Offset: 0x000E6208
+		
 		private bool TrySetNewPath()
 		{
 			PawnPath pawnPath = this.GenerateNewPath();
@@ -616,20 +616,20 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x06002792 RID: 10130 RVA: 0x000E80F0 File Offset: 0x000E62F0
+		
 		private PawnPath GenerateNewPath()
 		{
 			this.lastPathedTargetPosition = this.destination.Cell;
 			return this.pawn.Map.pathFinder.FindPath(this.pawn.Position, this.destination, this.pawn, this.peMode);
 		}
 
-		// Token: 0x06002793 RID: 10131 RVA: 0x000E8140 File Offset: 0x000E6340
+		
 		private bool AtDestinationPosition()
 		{
 			return this.pawn.CanReachImmediate(this.destination, this.peMode);
 		}
 
-		// Token: 0x06002794 RID: 10132 RVA: 0x000E815C File Offset: 0x000E635C
+		
 		private bool NeedNewPath()
 		{
 			if (!this.destination.IsValid || this.curPath == null || !this.curPath.Found || this.curPath.NodesLeftCount == 0)
@@ -718,94 +718,94 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x06002795 RID: 10133 RVA: 0x000E847C File Offset: 0x000E667C
+		
 		private bool BestPathHadPawnsInTheWayRecently()
 		{
 			return this.foundPathWhichCollidesWithPawns + 240 > Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06002796 RID: 10134 RVA: 0x000E8496 File Offset: 0x000E6696
+		
 		private bool BestPathHadDangerRecently()
 		{
 			return this.foundPathWithDanger + 240 > Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06002797 RID: 10135 RVA: 0x000E84B0 File Offset: 0x000E66B0
+		
 		private bool FailedToFindCloseUnoccupiedCellRecently()
 		{
 			return this.failedToFindCloseUnoccupiedCellTicks + 100 > Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x04001791 RID: 6033
+		
 		protected Pawn pawn;
 
-		// Token: 0x04001792 RID: 6034
+		
 		private bool moving;
 
-		// Token: 0x04001793 RID: 6035
+		
 		public IntVec3 nextCell;
 
-		// Token: 0x04001794 RID: 6036
+		
 		private IntVec3 lastCell;
 
-		// Token: 0x04001795 RID: 6037
+		
 		public float nextCellCostLeft;
 
-		// Token: 0x04001796 RID: 6038
+		
 		public float nextCellCostTotal = 1f;
 
-		// Token: 0x04001797 RID: 6039
+		
 		private int cellsUntilClamor;
 
-		// Token: 0x04001798 RID: 6040
+		
 		private int lastMovedTick = -999999;
 
-		// Token: 0x04001799 RID: 6041
+		
 		private LocalTargetInfo destination;
 
-		// Token: 0x0400179A RID: 6042
+		
 		private PathEndMode peMode;
 
-		// Token: 0x0400179B RID: 6043
+		
 		public PawnPath curPath;
 
-		// Token: 0x0400179C RID: 6044
+		
 		public IntVec3 lastPathedTargetPosition;
 
-		// Token: 0x0400179D RID: 6045
+		
 		private int foundPathWhichCollidesWithPawns = -999999;
 
-		// Token: 0x0400179E RID: 6046
+		
 		private int foundPathWithDanger = -999999;
 
-		// Token: 0x0400179F RID: 6047
+		
 		private int failedToFindCloseUnoccupiedCellTicks = -999999;
 
-		// Token: 0x040017A0 RID: 6048
+		
 		private const int MaxMoveTicks = 450;
 
-		// Token: 0x040017A1 RID: 6049
+		
 		private const int MaxCheckAheadNodes = 20;
 
-		// Token: 0x040017A2 RID: 6050
+		
 		private const float SnowReductionFromWalking = 0.001f;
 
-		// Token: 0x040017A3 RID: 6051
+		
 		private const int ClamorCellsInterval = 12;
 
-		// Token: 0x040017A4 RID: 6052
+		
 		private const int MinCostWalk = 50;
 
-		// Token: 0x040017A5 RID: 6053
+		
 		private const int MinCostAmble = 60;
 
-		// Token: 0x040017A6 RID: 6054
+		
 		private const float StaggerMoveSpeedFactor = 0.17f;
 
-		// Token: 0x040017A7 RID: 6055
+		
 		private const int CheckForMovingCollidingPawnsIfCloserToTargetThanX = 30;
 
-		// Token: 0x040017A8 RID: 6056
+		
 		private const int AttackBlockingHostilePawnAfterTicks = 180;
 	}
 }

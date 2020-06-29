@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000CB1 RID: 3249
+	
 	public class Bullet : Projectile
 	{
-		// Token: 0x06004ED3 RID: 20179 RVA: 0x001A8988 File Offset: 0x001A6B88
+		
 		protected override void Impact(Thing hitThing)
 		{
 			Map map = base.Map;

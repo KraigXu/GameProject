@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200043D RID: 1085
+	
 	public static class GenClamor
 	{
-		// Token: 0x06002075 RID: 8309 RVA: 0x000C5F15 File Offset: 0x000C4115
+		
 		public static void DoClamor(Thing source, float radius, ClamorDef type)
 		{
 			GenClamor.DoClamor(source, source.Position, radius, type);
 		}
 
-		// Token: 0x06002076 RID: 8310 RVA: 0x000C5F28 File Offset: 0x000C4128
+		
 		public static void DoClamor(Thing source, IntVec3 position, float radius, ClamorDef type)
 		{
 			if (source.MapHeld == null)

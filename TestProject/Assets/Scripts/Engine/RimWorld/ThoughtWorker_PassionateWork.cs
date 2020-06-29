@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000848 RID: 2120
+	
 	public class ThoughtWorker_PassionateWork : ThoughtWorker
 	{
-		// Token: 0x060034A1 RID: 13473 RVA: 0x00120788 File Offset: 0x0011E988
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			JobDriver curDriver = p.jobs.curDriver;

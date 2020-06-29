@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EFB RID: 3835
+	
 	public static class TargetHighlighter
 	{
-		// Token: 0x06005E11 RID: 24081 RVA: 0x0020837C File Offset: 0x0020657C
+		
 		public static void Highlight(GlobalTargetInfo target, bool arrow = true, bool colonistBar = true, bool circleOverlay = false)
 		{
 			if (!target.IsValid)
@@ -78,7 +78,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E12 RID: 24082 RVA: 0x00208594 File Offset: 0x00206794
+		
 		public static void TargetHighlighterUpdate()
 		{
 			for (int i = 0; i < TargetHighlighter.arrowPositions.Count; i++)
@@ -93,10 +93,10 @@ namespace RimWorld
 			TargetHighlighter.circleOverlays.Clear();
 		}
 
-		// Token: 0x04003301 RID: 13057
+		
 		private static List<Vector3> arrowPositions = new List<Vector3>();
 
-		// Token: 0x04003302 RID: 13058
+		
 		private static List<Pair<Vector3, float>> circleOverlays = new List<Pair<Vector3, float>>();
 	}
 }

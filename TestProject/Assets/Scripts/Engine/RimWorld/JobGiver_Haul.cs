@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006DE RID: 1758
+	
 	public class JobGiver_Haul : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EDA RID: 11994 RVA: 0x0010749C File Offset: 0x0010569C
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Predicate<Thing> validator = delegate(Thing t)

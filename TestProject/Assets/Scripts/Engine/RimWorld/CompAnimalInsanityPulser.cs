@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000CE5 RID: 3301
+	
 	public class CompAnimalInsanityPulser : ThingComp
 	{
-		// Token: 0x17000E13 RID: 3603
+		
 		// (get) Token: 0x06005035 RID: 20533 RVA: 0x001B0764 File Offset: 0x001AE964
 		public CompProperties_AnimalInsanityPulser Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005036 RID: 20534 RVA: 0x001B0771 File Offset: 0x001AE971
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
@@ -29,14 +29,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005037 RID: 20535 RVA: 0x001B0793 File Offset: 0x001AE993
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
 			Scribe_Values.Look<int>(ref this.ticksToInsanityPulse, "ticksToInsanityPulse", 0, false);
 		}
 
-		// Token: 0x06005038 RID: 20536 RVA: 0x001B07B0 File Offset: 0x001AE9B0
+		
 		public override void CompTick()
 		{
 			if (!this.parent.Spawned)
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005039 RID: 20537 RVA: 0x001B0800 File Offset: 0x001AEA00
+		
 		private void DoAnimalInsanityPulse()
 		{
 			IEnumerable<Pawn> enumerable = from p in this.parent.Map.mapPawns.AllPawnsSpawned
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002CBB RID: 11451
+		
 		private int ticksToInsanityPulse;
 	}
 }

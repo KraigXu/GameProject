@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D86 RID: 3462
+	
 	public class CompShipPart : ThingComp
 	{
-		// Token: 0x0600545F RID: 21599 RVA: 0x001C2950 File Offset: 0x001C0B50
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			yield return new Command_Action
@@ -24,7 +24,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005460 RID: 21600 RVA: 0x001C2960 File Offset: 0x001C0B60
+		
 		public void ShowReport()
 		{
 			StringBuilder stringBuilder = new StringBuilder();

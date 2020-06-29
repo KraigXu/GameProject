@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000487 RID: 1159
+	
 	public class VerbTracker : IExposable
 	{
-		// Token: 0x170006C7 RID: 1735
+		
 		// (get) Token: 0x0600225C RID: 8796 RVA: 0x000D184B File Offset: 0x000CFA4B
 		public List<Verb> AllVerbs
 		{
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170006C8 RID: 1736
+		
 		// (get) Token: 0x0600225D RID: 8797 RVA: 0x000D1864 File Offset: 0x000CFA64
 		public Verb PrimaryVerb
 		{
@@ -44,13 +44,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600225E RID: 8798 RVA: 0x000D18BB File Offset: 0x000CFABB
+		
 		public VerbTracker(IVerbOwner directOwner)
 		{
 			this.directOwner = directOwner;
 		}
 
-		// Token: 0x0600225F RID: 8799 RVA: 0x000D18CC File Offset: 0x000CFACC
+		
 		public void VerbsTick()
 		{
 			if (this.verbs == null)
@@ -63,7 +63,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002260 RID: 8800 RVA: 0x000D1909 File Offset: 0x000CFB09
+		
 		public IEnumerable<Command> GetVerbsCommands(KeyCode hotKey = KeyCode.None)
 		{
 			CompEquippable ce = this.directOwner as CompEquippable;
@@ -92,7 +92,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06002261 RID: 8801 RVA: 0x000D191C File Offset: 0x000CFB1C
+		
 		private Command_VerbTarget CreateVerbTargetCommand(Thing ownerThing, Verb verb)
 		{
 			Command_VerbTarget command_VerbTarget = new Command_VerbTarget();
@@ -120,7 +120,7 @@ namespace Verse
 			return command_VerbTarget;
 		}
 
-		// Token: 0x06002262 RID: 8802 RVA: 0x000D1A54 File Offset: 0x000CFC54
+		
 		public Verb GetVerb(VerbCategory category)
 		{
 			List<Verb> allVerbs = this.AllVerbs;
@@ -137,7 +137,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06002263 RID: 8803 RVA: 0x000D1A9C File Offset: 0x000CFC9C
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Verb>(ref this.verbs, "verbs", LookMode.Deep, Array.Empty<object>());
@@ -163,7 +163,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002264 RID: 8804 RVA: 0x000D1B4F File Offset: 0x000CFD4F
+		
 		private void InitVerbsFromZero()
 		{
 			this.verbs = new List<Verb>();
@@ -175,7 +175,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06002265 RID: 8805 RVA: 0x000D1B70 File Offset: 0x000CFD70
+		
 		private void InitVerbs(Func<Type, string, Verb> creator)
 		{
 			List<VerbProperties> verbProperties = this.directOwner.VerbProperties;
@@ -230,7 +230,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002266 RID: 8806 RVA: 0x000D1D0C File Offset: 0x000CFF0C
+		
 		private void InitVerb(Verb verb, VerbProperties properties, Tool tool, ManeuverDef maneuver, string id)
 		{
 			verb.loadID = id;
@@ -241,10 +241,10 @@ namespace Verse
 			verb.caster = this.directOwner.ConstantCaster;
 		}
 
-		// Token: 0x04001510 RID: 5392
+		
 		public IVerbOwner directOwner;
 
-		// Token: 0x04001511 RID: 5393
+		
 		private List<Verb> verbs;
 	}
 }

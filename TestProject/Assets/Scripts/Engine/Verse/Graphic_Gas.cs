@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002EA RID: 746
+	
 	public class Graphic_Gas : Graphic_Single
 	{
-		// Token: 0x0600151E RID: 5406 RVA: 0x0007C2A4 File Offset: 0x0007A4A4
+		
 		public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
 		{
 			Rand.PushState();
@@ -22,10 +22,10 @@ namespace Verse
 			Rand.PopState();
 		}
 
-		// Token: 0x04000DF5 RID: 3573
+		
 		private const float PositionVariance = 0.45f;
 
-		// Token: 0x04000DF6 RID: 3574
+		
 		private const float SizeVariance = 0.2f;
 	}
 }

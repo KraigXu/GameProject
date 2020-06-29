@@ -4,11 +4,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E9E RID: 3742
+	
 	[StaticConstructorOnStartup]
 	public class InspectPaneFiller
 	{
-		// Token: 0x06005B4B RID: 23371 RVA: 0x001F6588 File Offset: 0x001F4788
+		
 		public static void DoPaneContentsFor(ISelectable sel, Rect rect)
 		{
 			try
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B4C RID: 23372 RVA: 0x001F6680 File Offset: 0x001F4880
+		
 		public static void DrawHealth(WidgetRow row, Thing t)
 		{
 			Pawn pawn = t as Pawn;
@@ -94,7 +94,7 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x06005B4D RID: 23373 RVA: 0x001F6780 File Offset: 0x001F4980
+		
 		private static void DrawMood(WidgetRow row, Pawn pawn)
 		{
 			if (pawn.needs == null || pawn.needs.mood == null)
@@ -105,14 +105,14 @@ namespace RimWorld
 			row.FillableBar(93f, 16f, pawn.needs.mood.CurLevelPercentage, pawn.needs.mood.MoodString.CapitalizeFirst(), InspectPaneFiller.MoodTex, InspectPaneFiller.BarBGTex);
 		}
 
-		// Token: 0x06005B4E RID: 23374 RVA: 0x001F67F0 File Offset: 0x001F49F0
+		
 		private static void DrawTimetableSetting(WidgetRow row, Pawn pawn)
 		{
 			row.Gap(6f);
 			row.FillableBar(93f, 16f, 1f, pawn.timetable.CurrentAssignment.LabelCap, pawn.timetable.CurrentAssignment.ColorTexture, null);
 		}
 
-		// Token: 0x06005B4F RID: 23375 RVA: 0x001F6844 File Offset: 0x001F4A44
+		
 		private static void DrawAreaAllowed(WidgetRow row, Pawn pawn)
 		{
 			if (pawn.playerSettings == null || !pawn.playerSettings.RespectsAllowedArea)
@@ -148,7 +148,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005B50 RID: 23376 RVA: 0x001F694C File Offset: 0x001F4B4C
+		
 		public static void DrawInspectStringFor(ISelectable sel, Rect rect)
 		{
 			string text;
@@ -185,35 +185,35 @@ namespace RimWorld
 			InspectPaneFiller.DrawInspectString(text, rect);
 		}
 
-		// Token: 0x06005B51 RID: 23377 RVA: 0x001F6A10 File Offset: 0x001F4C10
+		
 		public static void DrawInspectString(string str, Rect rect)
 		{
 			Text.Font = GameFont.Small;
 			Widgets.LabelScrollable(rect, str, ref InspectPaneFiller.inspectStringScrollPos, true, true, false);
 		}
 
-		// Token: 0x040031CE RID: 12750
+		
 		private const float BarHeight = 16f;
 
-		// Token: 0x040031CF RID: 12751
+		
 		private static readonly Texture2D MoodTex = SolidColorMaterials.NewSolidColorTexture(new ColorInt(26, 52, 52).ToColor);
 
-		// Token: 0x040031D0 RID: 12752
+		
 		private static readonly Texture2D BarBGTex = SolidColorMaterials.NewSolidColorTexture(new ColorInt(10, 10, 10).ToColor);
 
-		// Token: 0x040031D1 RID: 12753
+		
 		private static readonly Texture2D HealthTex = SolidColorMaterials.NewSolidColorTexture(new ColorInt(35, 35, 35).ToColor);
 
-		// Token: 0x040031D2 RID: 12754
+		
 		private const float BarWidth = 93f;
 
-		// Token: 0x040031D3 RID: 12755
+		
 		private const float BarSpacing = 6f;
 
-		// Token: 0x040031D4 RID: 12756
+		
 		private static bool debug_inspectStringExceptionErrored = false;
 
-		// Token: 0x040031D5 RID: 12757
+		
 		private static Vector2 inspectStringScrollPos;
 	}
 }

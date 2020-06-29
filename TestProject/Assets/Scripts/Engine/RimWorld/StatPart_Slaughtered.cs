@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200100D RID: 4109
+	
 	public class StatPart_Slaughtered : StatPart
 	{
-		// Token: 0x06006256 RID: 25174 RVA: 0x00221704 File Offset: 0x0021F904
+		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
 			if (this.CanApply(req))
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006257 RID: 25175 RVA: 0x0022171A File Offset: 0x0021F91A
+		
 		public override string ExplanationPart(StatRequest req)
 		{
 			if (this.CanApply(req))
@@ -26,7 +26,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06006258 RID: 25176 RVA: 0x00221750 File Offset: 0x0021F950
+		
 		private bool CanApply(StatRequest req)
 		{
 			Pawn pawn;
@@ -58,7 +58,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04003BFB RID: 15355
+		
 		private float factor;
 	}
 }

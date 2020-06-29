@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EE6 RID: 3814
+	
 	public static class DrugPolicyUIUtility
 	{
-		// Token: 0x06005D75 RID: 23925 RVA: 0x00204E4C File Offset: 0x0020304C
+		
 		public static void DoAssignDrugPolicyButtons(Rect rect, Pawn pawn)
 		{
 			int num = Mathf.FloorToInt((rect.width - 4f) * 0.714285731f);
@@ -40,7 +40,7 @@ namespace RimWorld
 			num3 += (float)num2;
 		}
 
-		// Token: 0x06005D76 RID: 23926 RVA: 0x00205003 File Offset: 0x00203203
+		
 		private static IEnumerable<Widgets.DropdownMenuElement<DrugPolicy>> Button_GenerateMenu(Pawn pawn)
 		{
 			using (List<DrugPolicy>.Enumerator enumerator = Current.Game.drugPolicyDatabase.AllPolicies.GetEnumerator())
@@ -63,7 +63,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040032C8 RID: 13000
+		
 		public const string AssigningDrugsTutorHighlightTag = "ButtonAssignDrugs";
 	}
 }

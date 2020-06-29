@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000708 RID: 1800
+	
 	public static class MeditationFocusTypeAvailabilityCache
 	{
-		// Token: 0x06002F95 RID: 12181 RVA: 0x0010C078 File Offset: 0x0010A278
+		
 		public static bool PawnCanUse(Pawn p, MeditationFocusDef type)
 		{
 			if (!MeditationFocusTypeAvailabilityCache.pawnCanUseMeditationTypeCached.ContainsKey(p))
@@ -21,7 +21,7 @@ namespace RimWorld
 			return MeditationFocusTypeAvailabilityCache.pawnCanUseMeditationTypeCached[p][type];
 		}
 
-		// Token: 0x06002F96 RID: 12182 RVA: 0x0010C0DE File Offset: 0x0010A2DE
+		
 		public static void ClearFor(Pawn p)
 		{
 			if (MeditationFocusTypeAvailabilityCache.pawnCanUseMeditationTypeCached.ContainsKey(p))
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F97 RID: 12183 RVA: 0x0010C100 File Offset: 0x0010A300
+		
 		private static bool PawnCanUseInt(Pawn p, MeditationFocusDef type)
 		{
 			if (p.story != null)
@@ -115,7 +115,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04001AC9 RID: 6857
+		
 		private static Dictionary<Pawn, Dictionary<MeditationFocusDef, bool>> pawnCanUseMeditationTypeCached = new Dictionary<Pawn, Dictionary<MeditationFocusDef, bool>>();
 	}
 }

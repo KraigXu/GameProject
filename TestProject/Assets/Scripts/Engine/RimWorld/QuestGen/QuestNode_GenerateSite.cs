@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001119 RID: 4377
+	
 	public class QuestNode_GenerateSite : QuestNode
 	{
-		// Token: 0x0600667C RID: 26236 RVA: 0x0023E2A4 File Offset: 0x0023C4A4
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			if (!Find.Storyteller.difficulty.allowViolentQuests && this.sitePartsParams.GetValue(slate) != null)
@@ -30,7 +30,7 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x0600667D RID: 26237 RVA: 0x0023E324 File Offset: 0x0023C524
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -145,26 +145,26 @@ namespace RimWorld.QuestGen
 			});
 		}
 
-		// Token: 0x04003EA0 RID: 16032
+		
 		public SlateRef<IEnumerable<SitePartDefWithParams>> sitePartsParams;
 
-		// Token: 0x04003EA1 RID: 16033
+		
 		public SlateRef<Faction> faction;
 
-		// Token: 0x04003EA2 RID: 16034
+		
 		public SlateRef<int> tile;
 
-		// Token: 0x04003EA3 RID: 16035
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003EA4 RID: 16036
+		
 		public SlateRef<RulePack> singleSitePartRules;
 
-		// Token: 0x04003EA5 RID: 16037
+		
 		public SlateRef<bool> hiddenSitePartsPossible;
 
-		// Token: 0x04003EA6 RID: 16038
+		
 		private const string RootSymbol = "root";
 	}
 }

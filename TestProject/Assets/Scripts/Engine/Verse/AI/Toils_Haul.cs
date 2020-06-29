@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace Verse.AI
 {
-	// Token: 0x02000527 RID: 1319
+	
 	public class Toils_Haul
 	{
-		// Token: 0x060025A3 RID: 9635 RVA: 0x000DF05C File Offset: 0x000DD25C
+		
 		public static bool ErrorCheckForCarry(Pawn pawn, Thing haulThing)
 		{
 			if (!haulThing.Spawned)
@@ -51,7 +51,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x060025A4 RID: 9636 RVA: 0x000DF158 File Offset: 0x000DD358
+		
 		public static Toil StartCarryThing(TargetIndex haulableInd, bool putRemainderInQueue = false, bool subtractNumTakenFromJobCount = false, bool failIfStackCountLessThanJobCount = false)
 		{
 			Toil toil = new Toil();
@@ -135,7 +135,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025A5 RID: 9637 RVA: 0x000DF1B0 File Offset: 0x000DD3B0
+		
 		public static Toil JumpIfAlsoCollectingNextTargetInQueue(Toil gotoGetTargetToil, TargetIndex ind)
 		{
 			Toil toil = new Toil();
@@ -180,7 +180,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025A6 RID: 9638 RVA: 0x000DF1FC File Offset: 0x000DD3FC
+		
 		public static Toil CheckForGetOpportunityDuplicate(Toil getHaulTargetToil, TargetIndex haulableInd, TargetIndex storeCellInd, bool takeFromValidStorage = false, Predicate<Thing> extraValidator = null)
 		{
 			Toil toil = new Toil();
@@ -211,7 +211,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025A7 RID: 9639 RVA: 0x000DF25C File Offset: 0x000DD45C
+		
 		public static Toil CarryHauledThingToCell(TargetIndex squareIndex)
 		{
 			Toil toil = new Toil();
@@ -230,7 +230,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025A8 RID: 9640 RVA: 0x000DF2C4 File Offset: 0x000DD4C4
+		
 		public static Toil PlaceCarriedThingInCellFacing(TargetIndex facingTargetInd)
 		{
 			Toil toil = new Toil();
@@ -262,7 +262,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025A9 RID: 9641 RVA: 0x000DF308 File Offset: 0x000DD508
+		
 		public static Toil PlaceHauledThingInCell(TargetIndex cellInd, Toil nextToilOnPlaceFailOrIncomplete, bool storageMode, bool tryStoreInSameStorageIfSpotCantHoldWholeStack = false)
 		{
 			Toil toil = new Toil();
@@ -350,7 +350,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025AA RID: 9642 RVA: 0x000DF360 File Offset: 0x000DD560
+		
 		public static Toil CarryHauledThingToContainer()
 		{
 			Toil gotoDest = new Toil();
@@ -372,7 +372,7 @@ namespace Verse.AI
 			return gotoDest;
 		}
 
-		// Token: 0x060025AB RID: 9643 RVA: 0x000DF3C0 File Offset: 0x000DD5C0
+		
 		public static Toil DepositHauledThingInContainer(TargetIndex containerInd, TargetIndex reserveForContainerInd)
 		{
 			Toil toil = new Toil();
@@ -426,7 +426,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x060025AC RID: 9644 RVA: 0x000DF40C File Offset: 0x000DD60C
+		
 		public static Toil JumpToCarryToNextContainerIfPossible(Toil carryToContainerToil, TargetIndex primaryTargetInd)
 		{
 			Toil toil = new Toil();
@@ -470,7 +470,7 @@ namespace Verse.AI
 			return Toils_Haul.TakeToInventory(ind, () => count);
 		}
 
-		// Token: 0x060025AE RID: 9646 RVA: 0x000DF484 File Offset: 0x000DD684
+		
 		public static Toil TakeToInventory(TargetIndex ind, Func<int> countGetter)
 		{
 			Toil takeThing = new Toil();

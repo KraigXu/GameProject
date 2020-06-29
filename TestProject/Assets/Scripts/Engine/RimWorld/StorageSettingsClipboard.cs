@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C6A RID: 3178
+	
 	public static class StorageSettingsClipboard
 	{
-		// Token: 0x17000D6E RID: 3438
+		
 		// (get) Token: 0x06004C1D RID: 19485 RVA: 0x00199256 File Offset: 0x00197456
 		public static bool HasCopiedSettings
 		{
@@ -19,20 +19,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004C1E RID: 19486 RVA: 0x0019925D File Offset: 0x0019745D
+		
 		public static void Copy(StorageSettings s)
 		{
 			StorageSettingsClipboard.clipboard.CopyFrom(s);
 			StorageSettingsClipboard.copied = true;
 		}
 
-		// Token: 0x06004C1F RID: 19487 RVA: 0x00199270 File Offset: 0x00197470
+		
 		public static void PasteInto(StorageSettings s)
 		{
 			s.CopyFrom(StorageSettingsClipboard.clipboard);
 		}
 
-		// Token: 0x06004C20 RID: 19488 RVA: 0x0019927D File Offset: 0x0019747D
+		
 		public static IEnumerable<Gizmo> CopyPasteGizmosFor(StorageSettings s)
 		{
 			yield return new Command_Action
@@ -65,10 +65,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002AE4 RID: 10980
+		
 		private static StorageSettings clipboard = new StorageSettings();
 
-		// Token: 0x04002AE5 RID: 10981
+		
 		private static bool copied = false;
 	}
 }

@@ -8,11 +8,11 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000D55 RID: 3413
+	
 	[StaticConstructorOnStartup]
 	public class CompShuttle : ThingComp
 	{
-		// Token: 0x17000EBD RID: 3773
+		
 		// (get) Token: 0x06005303 RID: 21251 RVA: 0x001BBD28 File Offset: 0x001B9F28
 		public bool Autoload
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EBE RID: 3774
+		
 		// (get) Token: 0x06005304 RID: 21252 RVA: 0x001BBD30 File Offset: 0x001B9F30
 		public bool LoadingInProgressOrReadyToLaunch
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EBF RID: 3775
+		
 		// (get) Token: 0x06005305 RID: 21253 RVA: 0x001BBD3D File Offset: 0x001B9F3D
 		public List<CompTransporter> TransportersInGroup
 		{
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC0 RID: 3776
+		
 		// (get) Token: 0x06005306 RID: 21254 RVA: 0x001BBD55 File Offset: 0x001B9F55
 		public CompTransporter Transporter
 		{
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC1 RID: 3777
+		
 		// (get) Token: 0x06005307 RID: 21255 RVA: 0x001BBD76 File Offset: 0x001B9F76
 		public bool ShowLoadingGizmos
 		{
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC2 RID: 3778
+		
 		// (get) Token: 0x06005308 RID: 21256 RVA: 0x001BBD9C File Offset: 0x001B9F9C
 		public bool AnyInGroupIsUnderRoof
 		{
@@ -84,7 +84,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC3 RID: 3779
+		
 		// (get) Token: 0x06005309 RID: 21257 RVA: 0x001BBDE8 File Offset: 0x001B9FE8
 		private bool Autoloadable
 		{
@@ -115,7 +115,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC4 RID: 3780
+		
 		// (get) Token: 0x0600530A RID: 21258 RVA: 0x001BBEC4 File Offset: 0x001BA0C4
 		public bool AllRequiredThingsLoaded
 		{
@@ -182,7 +182,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EC5 RID: 3781
+		
 		// (get) Token: 0x0600530B RID: 21259 RVA: 0x001BC0B8 File Offset: 0x001BA2B8
 		public TaggedString RequiredThingsLabel
 		{
@@ -201,7 +201,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600530C RID: 21260 RVA: 0x001BC157 File Offset: 0x001BA357
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -212,13 +212,10 @@ namespace RimWorld
 			base.PostSpawnSetup(respawningAfterLoad);
 		}
 
-		// Token: 0x0600530D RID: 21261 RVA: 0x001BC178 File Offset: 0x001BA378
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.ShowLoadingGizmos)
 			{
@@ -265,7 +262,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600530E RID: 21262 RVA: 0x001BC188 File Offset: 0x001BA388
+		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
 		{
 			if (!selPawn.CanReach(this.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
@@ -290,7 +287,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600530F RID: 21263 RVA: 0x001BC1A0 File Offset: 0x001BA3A0
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -334,7 +331,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005310 RID: 21264 RVA: 0x001BC2D0 File Offset: 0x001BA4D0
+		
 		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -363,7 +360,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06005311 RID: 21265 RVA: 0x001BC404 File Offset: 0x001BA604
+		
 		public void Send()
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -454,7 +451,7 @@ namespace RimWorld
 			this.sending = false;
 		}
 
-		// Token: 0x06005312 RID: 21266 RVA: 0x001BC720 File Offset: 0x001BA920
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -475,7 +472,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005313 RID: 21267 RVA: 0x001BC834 File Offset: 0x001BAA34
+		
 		private void CheckAutoload()
 		{
 			if (!this.autoload || !this.LoadingInProgressOrReadyToLaunch || !this.parent.Spawned)
@@ -582,7 +579,7 @@ namespace RimWorld
 			TransporterUtility.MakeLordsAsAppropriate(CompShuttle.tmpRequiredPawnsPossibleToSend, this.TransportersInGroup, this.parent.Map);
 		}
 
-		// Token: 0x06005314 RID: 21268 RVA: 0x001BCCA0 File Offset: 0x001BAEA0
+		
 		public bool IsRequired(Thing thing)
 		{
 			Pawn pawn = thing as Pawn;
@@ -600,7 +597,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005315 RID: 21269 RVA: 0x001BCD10 File Offset: 0x001BAF10
+		
 		public bool IsAllowed(Thing t)
 		{
 			if (this.IsRequired(t))
@@ -618,94 +615,94 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005316 RID: 21270 RVA: 0x001BCD88 File Offset: 0x001BAF88
+		
 		private bool PawnIsHealthyEnoughForShuttle(Pawn p)
 		{
 			return !p.Downed && !p.InMentalState && p.health.capacities.CanBeAwake && p.health.capacities.CapableOf(PawnCapacityDefOf.Moving) && p.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation);
 		}
 
-		// Token: 0x06005317 RID: 21271 RVA: 0x001BCDE8 File Offset: 0x001BAFE8
+		
 		public void CleanUpLoadingVars()
 		{
 			this.autoload = false;
 		}
 
-		// Token: 0x04002DC8 RID: 11720
+		
 		public List<ThingDefCount> requiredItems = new List<ThingDefCount>();
 
-		// Token: 0x04002DC9 RID: 11721
+		
 		public List<Pawn> requiredPawns = new List<Pawn>();
 
-		// Token: 0x04002DCA RID: 11722
+		
 		public int requiredColonistCount;
 
-		// Token: 0x04002DCB RID: 11723
+		
 		public bool acceptColonists;
 
-		// Token: 0x04002DCC RID: 11724
+		
 		public bool onlyAcceptColonists;
 
-		// Token: 0x04002DCD RID: 11725
+		
 		public bool onlyAcceptHealthy;
 
-		// Token: 0x04002DCE RID: 11726
+		
 		public bool dropEverythingIfUnsatisfied;
 
-		// Token: 0x04002DCF RID: 11727
+		
 		public bool dropNonRequiredIfUnsatisfied = true;
 
-		// Token: 0x04002DD0 RID: 11728
+		
 		public bool leaveImmediatelyWhenSatisfied;
 
-		// Token: 0x04002DD1 RID: 11729
+		
 		public bool dropEverythingOnArrival;
 
-		// Token: 0x04002DD2 RID: 11730
+		
 		private bool autoload;
 
-		// Token: 0x04002DD3 RID: 11731
+		
 		public bool leaveASAP;
 
-		// Token: 0x04002DD4 RID: 11732
+		
 		private CompTransporter cachedCompTransporter;
 
-		// Token: 0x04002DD5 RID: 11733
+		
 		private List<CompTransporter> cachedTransporterList;
 
-		// Token: 0x04002DD6 RID: 11734
+		
 		private bool sending;
 
-		// Token: 0x04002DD7 RID: 11735
+		
 		private const int CheckAutoloadIntervalTicks = 120;
 
-		// Token: 0x04002DD8 RID: 11736
+		
 		private const int DropInterval = 60;
 
-		// Token: 0x04002DD9 RID: 11737
+		
 		private static readonly Texture2D AutoloadToggleTex = ContentFinder<Texture2D>.Get("UI/Commands/Autoload", true);
 
-		// Token: 0x04002DDA RID: 11738
+		
 		private static readonly Texture2D SendCommandTex = CompLaunchable.LaunchCommandTex;
 
-		// Token: 0x04002DDB RID: 11739
+		
 		private static List<ThingDefCount> tmpRequiredItemsWithoutDuplicates = new List<ThingDefCount>();
 
-		// Token: 0x04002DDC RID: 11740
+		
 		private static List<string> tmpRequiredLabels = new List<string>();
 
-		// Token: 0x04002DDD RID: 11741
+		
 		private static List<ThingDefCount> tmpRequiredItems = new List<ThingDefCount>();
 
-		// Token: 0x04002DDE RID: 11742
+		
 		private static List<Pawn> tmpRequiredPawns = new List<Pawn>();
 
-		// Token: 0x04002DDF RID: 11743
+		
 		private static List<Pawn> tmpAllSendablePawns = new List<Pawn>();
 
-		// Token: 0x04002DE0 RID: 11744
+		
 		private static List<Thing> tmpAllSendableItems = new List<Thing>();
 
-		// Token: 0x04002DE1 RID: 11745
+		
 		private static List<Pawn> tmpRequiredPawnsPossibleToSend = new List<Pawn>();
 	}
 }

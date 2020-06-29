@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000640 RID: 1600
+	
 	public class JobDriver_StandAndBeSociallyActive : JobDriver
 	{
-		// Token: 0x06002BCA RID: 11210 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002BCB RID: 11211 RVA: 0x000FBBF8 File Offset: 0x000F9DF8
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return new Toil
@@ -35,7 +35,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002BCC RID: 11212 RVA: 0x000FBC08 File Offset: 0x000F9E08
+		
 		private Pawn FindClosePawn()
 		{
 			IntVec3 position = this.pawn.Position;

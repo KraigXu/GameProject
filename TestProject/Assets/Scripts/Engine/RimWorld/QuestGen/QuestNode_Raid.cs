@@ -6,16 +6,16 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011AE RID: 4526
+	
 	public class QuestNode_Raid : QuestNode
 	{
-		// Token: 0x0600689E RID: 26782 RVA: 0x00248996 File Offset: 0x00246B96
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return Find.Storyteller.difficulty.allowViolentQuests && slate.Exists("map", false) && slate.Exists("enemyFaction", false);
 		}
 
-		// Token: 0x0600689F RID: 26783 RVA: 0x002489CC File Offset: 0x00246BCC
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -67,34 +67,34 @@ namespace RimWorld.QuestGen
 			});
 		}
 
-		// Token: 0x04004102 RID: 16642
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04004103 RID: 16643
+		
 		public SlateRef<IntVec3?> walkInSpot;
 
-		// Token: 0x04004104 RID: 16644
+		
 		public SlateRef<string> customLetterLabel;
 
-		// Token: 0x04004105 RID: 16645
+		
 		public SlateRef<string> customLetterText;
 
-		// Token: 0x04004106 RID: 16646
+		
 		public SlateRef<RulePack> customLetterLabelRules;
 
-		// Token: 0x04004107 RID: 16647
+		
 		public SlateRef<RulePack> customLetterTextRules;
 
-		// Token: 0x04004108 RID: 16648
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalLeave;
 
-		// Token: 0x04004109 RID: 16649
+		
 		[NoTranslate]
 		public SlateRef<string> tag;
 
-		// Token: 0x0400410A RID: 16650
+		
 		private const string RootSymbol = "root";
 	}
 }

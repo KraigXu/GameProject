@@ -7,16 +7,16 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001171 RID: 4465
+	
 	public class QuestNode_GiveRewards : QuestNode
 	{
-		// Token: 0x060067CC RID: 26572 RVA: 0x0024445E File Offset: 0x0024265E
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.nodeIfChosenPawnSignalUsed == null || this.nodeIfChosenPawnSignalUsed.TestRun(slate);
 		}
 
-		// Token: 0x060067CD RID: 26573 RVA: 0x00244478 File Offset: 0x00242678
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -121,7 +121,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060067CE RID: 26574 RVA: 0x00244880 File Offset: 0x00242A80
+		
 		private List<Reward> GenerateRewards(RewardsGeneratorParams parmsResolved, Slate slate, bool addDescriptionRules, ref bool chosenPawnSignalUsed, QuestPart_Choice.Choice choice, int variants)
 		{
 			List<string> list;
@@ -274,7 +274,7 @@ namespace RimWorld.QuestGen
 			return list3;
 		}
 
-		// Token: 0x060067CF RID: 26575 RVA: 0x00244DA4 File Offset: 0x00242FA4
+		
 		private List<Reward> TryGenerateRewards_SocialOnly(RewardsGeneratorParams parms, bool disallowRoyalFavor)
 		{
 			parms.thingRewardDisallowed = true;
@@ -285,7 +285,7 @@ namespace RimWorld.QuestGen
 			return this.TryGenerateNonRepeatingRewards(parms);
 		}
 
-		// Token: 0x060067D0 RID: 26576 RVA: 0x00244DC0 File Offset: 0x00242FC0
+		
 		private List<Reward> TryGenerateRewards_RoyalFavorOnly(RewardsGeneratorParams parms)
 		{
 			parms.allowGoodwill = false;
@@ -293,7 +293,7 @@ namespace RimWorld.QuestGen
 			return this.TryGenerateNonRepeatingRewards(parms);
 		}
 
-		// Token: 0x060067D1 RID: 26577 RVA: 0x00244DD9 File Offset: 0x00242FD9
+		
 		private List<Reward> TryGenerateRewards_ThingsOnly(RewardsGeneratorParams parms)
 		{
 			if (parms.thingRewardDisallowed)
@@ -305,7 +305,7 @@ namespace RimWorld.QuestGen
 			return this.TryGenerateNonRepeatingRewards(parms);
 		}
 
-		// Token: 0x060067D2 RID: 26578 RVA: 0x00244DFC File Offset: 0x00242FFC
+		
 		private List<Reward> TryGenerateNonRepeatingRewards(RewardsGeneratorParams parms)
 		{
 			List<Reward> list = null;
@@ -362,7 +362,7 @@ namespace RimWorld.QuestGen
 			return list;
 		}
 
-		// Token: 0x060067D3 RID: 26579 RVA: 0x00244F78 File Offset: 0x00243178
+		
 		private int GetDisplayPriority(QuestPart_Choice.Choice choice)
 		{
 			for (int i = 0; i < choice.rewards.Count; i++)
@@ -382,47 +382,47 @@ namespace RimWorld.QuestGen
 			return 0;
 		}
 
-		// Token: 0x04003FF5 RID: 16373
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04003FF6 RID: 16374
+		
 		public SlateRef<RewardsGeneratorParams> parms;
 
-		// Token: 0x04003FF7 RID: 16375
+		
 		public SlateRef<string> customLetterLabel;
 
-		// Token: 0x04003FF8 RID: 16376
+		
 		public SlateRef<string> customLetterText;
 
-		// Token: 0x04003FF9 RID: 16377
+		
 		public SlateRef<RulePack> customLetterLabelRules;
 
-		// Token: 0x04003FFA RID: 16378
+		
 		public SlateRef<RulePack> customLetterTextRules;
 
-		// Token: 0x04003FFB RID: 16379
+		
 		public SlateRef<bool?> useDifficultyFactor;
 
-		// Token: 0x04003FFC RID: 16380
+		
 		public QuestNode nodeIfChosenPawnSignalUsed;
 
-		// Token: 0x04003FFD RID: 16381
+		
 		public SlateRef<int?> variants;
 
-		// Token: 0x04003FFE RID: 16382
+		
 		public SlateRef<bool> addCampLootReward;
 
-		// Token: 0x04003FFF RID: 16383
+		
 		private List<List<Reward>> generatedRewards = new List<List<Reward>>();
 
-		// Token: 0x04004000 RID: 16384
+		
 		private const float MinRewardValue = 250f;
 
-		// Token: 0x04004001 RID: 16385
+		
 		private const int DefaultVariants = 3;
 
-		// Token: 0x04004002 RID: 16386
+		
 		private static List<QuestPart> tmpPrevQuestParts = new List<QuestPart>();
 	}
 }

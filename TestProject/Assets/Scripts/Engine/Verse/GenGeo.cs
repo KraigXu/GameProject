@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000446 RID: 1094
+	
 	public static class GenGeo
 	{
-		// Token: 0x060020CB RID: 8395 RVA: 0x000C8AAC File Offset: 0x000C6CAC
+		
 		public static float AngleDifferenceBetween(float A, float B)
 		{
 			float num = A + 360f;
@@ -42,19 +42,19 @@ namespace Verse
 			return num3;
 		}
 
-		// Token: 0x060020CC RID: 8396 RVA: 0x000C8B22 File Offset: 0x000C6D22
+		
 		public static float MagnitudeHorizontal(this Vector3 v)
 		{
 			return (float)Math.Sqrt((double)(v.x * v.x + v.z * v.z));
 		}
 
-		// Token: 0x060020CD RID: 8397 RVA: 0x000C8B46 File Offset: 0x000C6D46
+		
 		public static float MagnitudeHorizontalSquared(this Vector3 v)
 		{
 			return v.x * v.x + v.z * v.z;
 		}
 
-		// Token: 0x060020CE RID: 8398 RVA: 0x000C8B64 File Offset: 0x000C6D64
+		
 		public static bool LinesIntersect(Vector3 line1V1, Vector3 line1V2, Vector3 line2V1, Vector3 line2V2)
 		{
 			float num = line1V2.z - line1V1.z;
@@ -73,7 +73,7 @@ namespace Verse
 			return (num8 <= line1V1.x || num8 <= line1V2.x) && (num8 <= line2V1.x || num8 <= line2V2.x) && (num8 >= line1V1.x || num8 >= line1V2.x) && (num8 >= line2V1.x || num8 >= line2V2.x) && (num9 <= line1V1.z || num9 <= line1V2.z) && (num9 <= line2V1.z || num9 <= line2V2.z) && (num9 >= line1V1.z || num9 >= line1V2.z) && (num9 >= line2V1.z || num9 >= line2V2.z);
 		}
 
-		// Token: 0x060020CF RID: 8399 RVA: 0x000C8CA8 File Offset: 0x000C6EA8
+		
 		public static bool IntersectLineCircle(Vector2 center, float radius, Vector2 lineA, Vector2 lineB)
 		{
 			Vector2 lhs = center - lineA;
@@ -92,7 +92,7 @@ namespace Verse
 			return Vector2.Dot(vector2, vector2) <= radius * radius;
 		}
 
-		// Token: 0x060020D0 RID: 8400 RVA: 0x000C8D14 File Offset: 0x000C6F14
+		
 		public static bool IntersectLineCircleOutline(Vector2 center, float radius, Vector2 lineA, Vector2 lineB)
 		{
 			bool flag = (lineA - center).sqrMagnitude <= radius * radius;
@@ -100,14 +100,14 @@ namespace Verse
 			return (!flag || !flag2) && GenGeo.IntersectLineCircle(center, radius, lineA, lineB);
 		}
 
-		// Token: 0x060020D1 RID: 8401 RVA: 0x000C8D60 File Offset: 0x000C6F60
+		
 		public static Vector3 RegularPolygonVertexPositionVec3(int polygonVertices, int vertexIndex)
 		{
 			Vector2 vector = GenGeo.RegularPolygonVertexPosition(polygonVertices, vertexIndex);
 			return new Vector3(vector.x, 0f, vector.y);
 		}
 
-		// Token: 0x060020D2 RID: 8402 RVA: 0x000C8D8C File Offset: 0x000C6F8C
+		
 		public static Vector2 RegularPolygonVertexPosition(int polygonVertices, int vertexIndex)
 		{
 			if (vertexIndex < 0 || vertexIndex >= polygonVertices)
@@ -128,7 +128,7 @@ namespace Verse
 			return GenGeo.CalculatePolygonVertexPosition(polygonVertices, vertexIndex);
 		}
 
-		// Token: 0x060020D3 RID: 8403 RVA: 0x000C8DEC File Offset: 0x000C6FEC
+		
 		private static Vector2 CalculatePolygonVertexPosition(int polygonVertices, int vertexIndex)
 		{
 			float num = 6.28318548f / (float)polygonVertices * (float)vertexIndex;
@@ -136,7 +136,7 @@ namespace Verse
 			return new Vector3(Mathf.Cos(num), Mathf.Sin(num));
 		}
 
-		// Token: 0x060020D4 RID: 8404 RVA: 0x000C8E24 File Offset: 0x000C7024
+		
 		public static Vector2 InverseQuadBilinear(Vector2 p, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
 		{
 			float num = (p0 - p).Cross(p0 - p2);

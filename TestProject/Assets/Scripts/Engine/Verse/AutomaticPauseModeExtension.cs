@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x0200046E RID: 1134
+	
 	public static class AutomaticPauseModeExtension
 	{
-		// Token: 0x060021A3 RID: 8611 RVA: 0x000CCE88 File Offset: 0x000CB088
+		
 		public static string ToStringHuman(this AutomaticPauseMode mode)
 		{
 			switch (mode)

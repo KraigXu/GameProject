@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200069D RID: 1693
+	
 	public class JobGiver_Mate : ThinkNode_JobGiver
 	{
-		// Token: 0x06002DF6 RID: 11766 RVA: 0x00102894 File Offset: 0x00100A94
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.gender != Gender.Male || !pawn.ageTracker.CurLifeStage.reproductive)

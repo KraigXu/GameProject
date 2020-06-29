@@ -6,17 +6,17 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001233 RID: 4659
+	
 	public static class CaravanExitMapUtility
 	{
-		// Token: 0x06006C6B RID: 27755 RVA: 0x0025CB1C File Offset: 0x0025AD1C
+		
 		public static Caravan ExitMapAndCreateCaravan(IEnumerable<Pawn> pawns, Faction faction, int exitFromTile, Direction8Way dir, int destinationTile, bool sendMessage = true)
 		{
 			int directionTile = CaravanExitMapUtility.FindRandomStartingTileBasedOnExitDir(exitFromTile, dir);
 			return CaravanExitMapUtility.ExitMapAndCreateCaravan(pawns, faction, exitFromTile, directionTile, destinationTile, sendMessage);
 		}
 
-		// Token: 0x06006C6C RID: 27756 RVA: 0x0025CB40 File Offset: 0x0025AD40
+		
 		public static Caravan ExitMapAndCreateCaravan(IEnumerable<Pawn> pawns, Faction faction, int exitFromTile, int directionTile, int destinationTile, bool sendMessage = true)
 		{
 			if (!GenWorldClosest.TryFindClosestPassableTile(exitFromTile, out exitFromTile))
@@ -89,7 +89,7 @@ namespace RimWorld.Planet
 			return caravan;
 		}
 
-		// Token: 0x06006C6D RID: 27757 RVA: 0x0025CDD8 File Offset: 0x0025AFD8
+		
 		public static void ExitMapAndJoinOrCreateCaravan(Pawn pawn, Rot4 exitDir)
 		{
 			Caravan caravan = CaravanExitMapUtility.FindCaravanToJoinFor(pawn);
@@ -131,13 +131,13 @@ namespace RimWorld.Planet
 			Log.Error("Pawn " + pawn + " didn't find any caravan to join, and he can't create one.", false);
 		}
 
-		// Token: 0x06006C6E RID: 27758 RVA: 0x0025CF4C File Offset: 0x0025B14C
+		
 		public static bool CanExitMapAndJoinOrCreateCaravanNow(Pawn pawn)
 		{
 			return pawn.Spawned && pawn.Map.exitMapGrid.MapUsesExitGrid && (pawn.IsColonist || CaravanExitMapUtility.FindCaravanToJoinFor(pawn) != null);
 		}
 
-		// Token: 0x06006C6F RID: 27759 RVA: 0x0025CF80 File Offset: 0x0025B180
+		
 		public static List<int> AvailableExitTilesAt(Map map)
 		{
 			CaravanExitMapUtility.retTiles.Clear();
@@ -145,8 +145,8 @@ namespace RimWorld.Planet
 			World world = Find.World;
 			WorldGrid grid = world.grid;
 			grid.GetTileNeighbors(currentTileID, CaravanExitMapUtility.tmpNeighbors);
-			Predicate<IntVec3> <>9__1;
-			Predicate<IntVec3> <>9__2;
+			Predicate<IntVec3> 9__1;
+			Predicate<IntVec3> 9__2;
 			for (int i = 0; i < CaravanExitMapUtility.tmpNeighbors.Count; i++)
 			{
 				int num = CaravanExitMapUtility.tmpNeighbors[i];
@@ -159,9 +159,9 @@ namespace RimWorld.Planet
 					if (rot != Rot4.Invalid)
 					{
 						Predicate<IntVec3> validator;
-						if ((validator = <>9__1) == null)
+						if ((validator ) == null)
 						{
-							validator = (<>9__1 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
+							validator = (9__1 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
 						}
 						if (CellFinder.TryFindRandomEdgeCellWith(validator, map, rot, CellFinder.EdgeRoadChance_Ignore, out intVec))
 						{
@@ -173,9 +173,9 @@ namespace RimWorld.Planet
 						goto IL_126;
 					}
 					Predicate<IntVec3> validator2;
-					if ((validator2 = <>9__2) == null)
+					if ((validator2 ) == null)
 					{
-						validator2 = (<>9__2 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
+						validator2 = (9__2 = ((IntVec3 x) => x.Walkable(map) && !x.Fogged(map)));
 					}
 					if (!CellFinder.TryFindRandomEdgeCellWith(validator2, map, rot2, CellFinder.EdgeRoadChance_Ignore, out intVec))
 					{
@@ -193,7 +193,7 @@ namespace RimWorld.Planet
 			return CaravanExitMapUtility.retTiles;
 		}
 
-		// Token: 0x06006C70 RID: 27760 RVA: 0x0025D0E4 File Offset: 0x0025B2E4
+		
 		public static void GetExitMapEdges(WorldGrid grid, int fromTileID, int toTileID, out Rot4 primary, out Rot4 secondary)
 		{
 			primary = (secondary = Rot4.Invalid);
@@ -226,39 +226,39 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006C71 RID: 27761 RVA: 0x0025D21C File Offset: 0x0025B41C
+		
 		public static int RandomBestExitTileFrom(Map map)
 		{
-			CaravanExitMapUtility.<>c__DisplayClass10_0 <>c__DisplayClass10_ = new CaravanExitMapUtility.<>c__DisplayClass10_0();
+			CaravanExitMapUtility.c__DisplayClass10_0 c__DisplayClass10_ = new CaravanExitMapUtility.c__DisplayClass10_0();
 			Tile tileInfo = map.TileInfo;
-			<>c__DisplayClass10_.options = CaravanExitMapUtility.AvailableExitTilesAt(map);
-			if (!<>c__DisplayClass10_.options.Any<int>())
+			c__DisplayClass10_.options = CaravanExitMapUtility.AvailableExitTilesAt(map);
+			if (!c__DisplayClass10_.options.Any<int>())
 			{
 				return -1;
 			}
-			<>c__DisplayClass10_.roads = tileInfo.Roads;
-			if (<>c__DisplayClass10_.roads == null)
+			c__DisplayClass10_.roads = tileInfo.Roads;
+			if (c__DisplayClass10_.roads == null)
 			{
-				return <>c__DisplayClass10_.options.RandomElement<int>();
+				return c__DisplayClass10_.options.RandomElement<int>();
 			}
 			int bestRoadIndex = -1;
-			for (int i = 0; i < <>c__DisplayClass10_.roads.Count; i++)
+			for (int i = 0; i < c__DisplayClass10_.roads.Count; i++)
 			{
-				if (<>c__DisplayClass10_.options.Contains(<>c__DisplayClass10_.roads[i].neighbor) && (bestRoadIndex == -1 || <>c__DisplayClass10_.roads[i].road.priority > <>c__DisplayClass10_.roads[bestRoadIndex].road.priority))
+				if (c__DisplayClass10_.options.Contains(c__DisplayClass10_.roads[i].neighbor) && (bestRoadIndex == -1 || c__DisplayClass10_.roads[i].road.priority > c__DisplayClass10_.roads[bestRoadIndex].road.priority))
 				{
 					bestRoadIndex = i;
 				}
 			}
 			if (bestRoadIndex == -1)
 			{
-				return <>c__DisplayClass10_.options.RandomElement<int>();
+				return c__DisplayClass10_.options.RandomElement<int>();
 			}
-			return (from rl in <>c__DisplayClass10_.roads
-			where <>c__DisplayClass10_.options.Contains(rl.neighbor) && rl.road == <>c__DisplayClass10_.roads[bestRoadIndex].road
+			return (from rl in c__DisplayClass10_.roads
+			where c__DisplayClass10_.options.Contains(rl.neighbor) && rl.road == c__DisplayClass10_.roads[bestRoadIndex].road
 			select rl).RandomElement<Tile.RoadLink>().neighbor;
 		}
 
-		// Token: 0x06006C72 RID: 27762 RVA: 0x0025D358 File Offset: 0x0025B558
+		
 		public static int BestExitTileToGoTo(int destinationTile, Map from)
 		{
 			int num = -1;
@@ -292,7 +292,7 @@ namespace RimWorld.Planet
 			return num3;
 		}
 
-		// Token: 0x06006C73 RID: 27763 RVA: 0x0025D44C File Offset: 0x0025B64C
+		
 		private static int FindRandomStartingTileBasedOnExitDir(int tileID, Rot4 exitDir)
 		{
 			CaravanExitMapUtility.tileCandidates.Clear();
@@ -333,7 +333,7 @@ namespace RimWorld.Planet
 			return tileID;
 		}
 
-		// Token: 0x06006C74 RID: 27764 RVA: 0x0025D570 File Offset: 0x0025B770
+		
 		private static int FindRandomStartingTileBasedOnExitDir(int tileID, Direction8Way exitDir)
 		{
 			CaravanExitMapUtility.tileCandidates.Clear();
@@ -361,13 +361,13 @@ namespace RimWorld.Planet
 			return tileID;
 		}
 
-		// Token: 0x06006C75 RID: 27765 RVA: 0x0025D622 File Offset: 0x0025B822
+		
 		private static bool IsGoodCaravanStartingTile(int tile)
 		{
 			return !Find.World.Impassable(tile);
 		}
 
-		// Token: 0x06006C76 RID: 27766 RVA: 0x0025D634 File Offset: 0x0025B834
+		
 		public static Caravan FindCaravanToJoinFor(Pawn pawn)
 		{
 			if (pawn.Faction != Faction.OfPlayer && pawn.HostFaction != Faction.OfPlayer)
@@ -403,7 +403,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006C77 RID: 27767 RVA: 0x0025D700 File Offset: 0x0025B900
+		
 		public static bool AnyoneTryingToJoinCaravan(Caravan c)
 		{
 			List<Map> maps = Find.Maps;
@@ -425,13 +425,13 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006C78 RID: 27768 RVA: 0x0025D7A1 File Offset: 0x0025B9A1
+		
 		public static void OpenSomeoneTryingToJoinCaravanDialog(Caravan c, Action confirmAction)
 		{
 			Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmMoveAutoJoinableCaravan".Translate(), confirmAction, false, null));
 		}
 
-		// Token: 0x06006C79 RID: 27769 RVA: 0x0025D7C0 File Offset: 0x0025B9C0
+		
 		private static void AddCaravanExitTaleIfShould(Pawn pawn)
 		{
 			if (pawn.Spawned && pawn.IsFreeColonist)
@@ -454,19 +454,19 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x04004383 RID: 17283
+		
 		private static List<int> tmpNeighbors = new List<int>();
 
-		// Token: 0x04004384 RID: 17284
+		
 		private static List<Pawn> tmpPawns = new List<Pawn>();
 
-		// Token: 0x04004385 RID: 17285
+		
 		private static List<int> retTiles = new List<int>();
 
-		// Token: 0x04004386 RID: 17286
+		
 		private static readonly Rot4[] rotTmp = new Rot4[2];
 
-		// Token: 0x04004387 RID: 17287
+		
 		private static List<int> tileCandidates = new List<int>();
 	}
 }

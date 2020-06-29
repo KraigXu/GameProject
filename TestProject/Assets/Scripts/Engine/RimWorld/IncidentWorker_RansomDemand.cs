@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009EE RID: 2542
+	
 	public class IncidentWorker_RansomDemand : IncidentWorker
 	{
-		// Token: 0x06003C7C RID: 15484 RVA: 0x0013F924 File Offset: 0x0013DB24
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			return CommsConsoleUtility.PlayerHasPoweredCommsConsole((Map)parms.target) && this.RandomKidnappedColonist() != null && base.CanFireNowSub(parms);
 		}
 
-		// Token: 0x06003C7D RID: 15485 RVA: 0x0013F94C File Offset: 0x0013DB4C
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -38,7 +38,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C7E RID: 15486 RVA: 0x0013FA68 File Offset: 0x0013DC68
+		
 		private Pawn RandomKidnappedColonist()
 		{
 			IncidentWorker_RansomDemand.candidates.Clear();
@@ -72,22 +72,22 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06003C7F RID: 15487 RVA: 0x0013FB64 File Offset: 0x0013DD64
+		
 		private Faction FactionWhichKidnapped(Pawn pawn)
 		{
 			return Find.FactionManager.AllFactionsListForReading.Find((Faction x) => x.kidnapped.KidnappedPawnsListForReading.Contains(pawn));
 		}
 
-		// Token: 0x06003C80 RID: 15488 RVA: 0x0013FB9C File Offset: 0x0013DD9C
+		
 		private int RandomFee(Pawn pawn)
 		{
 			return (int)(pawn.MarketValue * DiplomacyTuning.RansomFeeMarketValueFactorRange.RandomInRange);
 		}
 
-		// Token: 0x04002390 RID: 9104
+		
 		private const int TimeoutTicks = 60000;
 
-		// Token: 0x04002391 RID: 9105
+		
 		private static List<Pawn> candidates = new List<Pawn>();
 	}
 }

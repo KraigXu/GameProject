@@ -7,11 +7,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CE4 RID: 3300
+	
 	[StaticConstructorOnStartup]
 	public class CompAffectedByFacilities : ThingComp
 	{
-		// Token: 0x17000E11 RID: 3601
+		
 		// (get) Token: 0x06005016 RID: 20502 RVA: 0x001AFC8E File Offset: 0x001ADE8E
 		public List<Thing> LinkedFacilitiesListForReading
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005017 RID: 20503 RVA: 0x001AFC98 File Offset: 0x001ADE98
+		
 		public bool CanLinkTo(Thing facility)
 		{
 			if (!this.CanPotentiallyLinkTo(facility.def, facility.Position, facility.Rotation))
@@ -42,13 +42,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005018 RID: 20504 RVA: 0x001AFCF4 File Offset: 0x001ADEF4
+		
 		public static bool CanPotentiallyLinkTo_Static(Thing facility, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
 			return CompAffectedByFacilities.CanPotentiallyLinkTo_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot) && CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility, myDef, myPos, myRot);
 		}
 
-		// Token: 0x06005019 RID: 20505 RVA: 0x001AFD24 File Offset: 0x001ADF24
+		
 		public bool CanPotentiallyLinkTo(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
 			if (!CompAffectedByFacilities.CanPotentiallyLinkTo_Static(facilityDef, facilityPos, facilityRot, this.parent.def, this.parent.Position, this.parent.Rotation))
@@ -81,7 +81,7 @@ namespace RimWorld
 			return num + 1 <= compProperties.maxSimultaneous;
 		}
 
-		// Token: 0x0600501A RID: 20506 RVA: 0x001AFDD4 File Offset: 0x001ADFD4
+		
 		public static bool CanPotentiallyLinkTo_Static(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
 			CompProperties_Facility compProperties = facilityDef.GetCompProperties<CompProperties_Facility>();
@@ -127,13 +127,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600501B RID: 20507 RVA: 0x001AFEC3 File Offset: 0x001AE0C3
+		
 		public bool IsValidFacilityForMe(Thing facility)
 		{
 			return CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility, this.parent.def, this.parent.Position, this.parent.Rotation);
 		}
 
-		// Token: 0x0600501C RID: 20508 RVA: 0x001AFEF4 File Offset: 0x001AE0F4
+		
 		private bool IsPotentiallyValidFacilityForMe(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
 			if (!CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facilityDef, facilityPos, facilityRot, this.parent.def, this.parent.Position, this.parent.Rotation, this.parent.Map))
@@ -151,13 +151,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600501D RID: 20509 RVA: 0x001AFF60 File Offset: 0x001AE160
+		
 		private static bool IsPotentiallyValidFacilityForMe_Static(Thing facility, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
 			return CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot, facility.Map);
 		}
 
-		// Token: 0x0600501E RID: 20510 RVA: 0x001AFF84 File Offset: 0x001AE184
+		
 		private static bool IsPotentiallyValidFacilityForMe_Static(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(myPos, myRot, myDef.size);
@@ -184,7 +184,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x0600501F RID: 20511 RVA: 0x001B0048 File Offset: 0x001AE248
+		
 		public void Notify_NewLink(Thing facility)
 		{
 			for (int i = 0; i < this.linkedFacilities.Count; i++)
@@ -204,7 +204,7 @@ namespace RimWorld
 			this.linkedFacilities.Add(facility);
 		}
 
-		// Token: 0x06005020 RID: 20512 RVA: 0x001B00CC File Offset: 0x001AE2CC
+		
 		public void Notify_LinkRemoved(Thing thing)
 		{
 			for (int i = 0; i < this.linkedFacilities.Count; i++)
@@ -218,37 +218,37 @@ namespace RimWorld
 			Log.Error("Notify_LinkRemoved was called but there is no such link here.", false);
 		}
 
-		// Token: 0x06005021 RID: 20513 RVA: 0x001B0116 File Offset: 0x001AE316
+		
 		public void Notify_FacilityDespawned()
 		{
 			this.RelinkAll();
 		}
 
-		// Token: 0x06005022 RID: 20514 RVA: 0x001B0116 File Offset: 0x001AE316
+		
 		public void Notify_LOSBlockerSpawnedOrDespawned()
 		{
 			this.RelinkAll();
 		}
 
-		// Token: 0x06005023 RID: 20515 RVA: 0x001B0116 File Offset: 0x001AE316
+		
 		public void Notify_ThingChanged()
 		{
 			this.RelinkAll();
 		}
 
-		// Token: 0x06005024 RID: 20516 RVA: 0x001B011E File Offset: 0x001AE31E
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			this.LinkToNearbyFacilities();
 		}
 
-		// Token: 0x06005025 RID: 20517 RVA: 0x001B0126 File Offset: 0x001AE326
+		
 		public override void PostDeSpawn(Map map)
 		{
 			this.UnlinkAll();
 		}
 
-		// Token: 0x06005026 RID: 20518 RVA: 0x001B0130 File Offset: 0x001AE330
+		
 		public override void PostDrawExtraSelectionOverlays()
 		{
 			for (int i = 0; i < this.linkedFacilities.Count; i++)
@@ -264,7 +264,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005027 RID: 20519 RVA: 0x001B01B0 File Offset: 0x001AE3B0
+		
 		private bool IsBetter(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, Thing thanThisFacility)
 		{
 			if (facilityDef != thanThisFacility.def)
@@ -287,7 +287,7 @@ namespace RimWorld
 			return facilityPos.z < thanThisFacility.Position.z;
 		}
 
-		// Token: 0x17000E12 RID: 3602
+		
 		// (get) Token: 0x06005028 RID: 20520 RVA: 0x001B024E File Offset: 0x001AE44E
 		private IEnumerable<Thing> ThingsICanLinkTo
 		{
@@ -311,7 +311,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005029 RID: 20521 RVA: 0x001B025E File Offset: 0x001AE45E
+		
 		public static IEnumerable<Thing> PotentialThingsToLinkTo(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
 			CompAffectedByFacilities.alreadyReturnedCount.Clear();
@@ -357,7 +357,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600502A RID: 20522 RVA: 0x001B0284 File Offset: 0x001AE484
+		
 		public static void DrawLinesToPotentialThingsToLinkTo(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
 			Vector3 a = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
@@ -367,7 +367,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600502B RID: 20523 RVA: 0x001B02F0 File Offset: 0x001AE4F0
+		
 		public void DrawRedLineToPotentiallySupplantedFacility(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
 			Thing potentiallySupplantedFacility = this.GetPotentiallySupplantedFacility(facilityDef, facilityPos, facilityRot);
@@ -377,7 +377,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600502C RID: 20524 RVA: 0x001B0328 File Offset: 0x001AE528
+		
 		private Thing GetPotentiallySupplantedFacility(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
 			Thing thing = null;
@@ -413,7 +413,7 @@ namespace RimWorld
 			return thing2;
 		}
 
-		// Token: 0x0600502D RID: 20525 RVA: 0x001B0400 File Offset: 0x001AE600
+		
 		public float GetStatOffset(StatDef stat)
 		{
 			float num = 0f;
@@ -431,7 +431,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x0600502E RID: 20526 RVA: 0x001B046C File Offset: 0x001AE66C
+		
 		public void GetStatsExplanation(StatDef stat, StringBuilder sb)
 		{
 			this.alreadyUsed.Clear();
@@ -483,19 +483,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600502F RID: 20527 RVA: 0x001B011E File Offset: 0x001AE31E
+		
 		private void RelinkAll()
 		{
 			this.LinkToNearbyFacilities();
 		}
 
-		// Token: 0x06005030 RID: 20528 RVA: 0x001B0641 File Offset: 0x001AE841
+		
 		public bool IsFacilityActive(Thing facility)
 		{
 			return facility.TryGetComp<CompFacility>().CanBeActive;
 		}
 
-		// Token: 0x06005031 RID: 20529 RVA: 0x001B0650 File Offset: 0x001AE850
+		
 		private void LinkToNearbyFacilities()
 		{
 			this.UnlinkAll();
@@ -509,7 +509,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005032 RID: 20530 RVA: 0x001B06C8 File Offset: 0x001AE8C8
+		
 		private void UnlinkAll()
 		{
 			for (int i = 0; i < this.linkedFacilities.Count; i++)
@@ -519,16 +519,16 @@ namespace RimWorld
 			this.linkedFacilities.Clear();
 		}
 
-		// Token: 0x04002CB7 RID: 11447
+		
 		private List<Thing> linkedFacilities = new List<Thing>();
 
-		// Token: 0x04002CB8 RID: 11448
+		
 		public static Material InactiveFacilityLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
 
-		// Token: 0x04002CB9 RID: 11449
+		
 		private static Dictionary<ThingDef, int> alreadyReturnedCount = new Dictionary<ThingDef, int>();
 
-		// Token: 0x04002CBA RID: 11450
+		
 		private List<ThingDef> alreadyUsed = new List<ThingDef>();
 	}
 }

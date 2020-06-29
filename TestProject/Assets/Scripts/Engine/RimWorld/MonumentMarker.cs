@@ -9,11 +9,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C91 RID: 3217
+	
 	[StaticConstructorOnStartup]
 	public class MonumentMarker : Thing
 	{
-		// Token: 0x17000DBA RID: 3514
+		
 		// (get) Token: 0x06004D83 RID: 19843 RVA: 0x001A03AC File Offset: 0x0019E5AC
 		public override CellRect? CustomRectForSelector
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DBB RID: 3515
+		
 		// (get) Token: 0x06004D84 RID: 19844 RVA: 0x001A03EC File Offset: 0x0019E5EC
 		public bool AllDone
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DBC RID: 3516
+		
 		// (get) Token: 0x06004D85 RID: 19845 RVA: 0x001A0470 File Offset: 0x0019E670
 		public IntVec2 Size
 		{
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DBD RID: 3517
+		
 		// (get) Token: 0x06004D86 RID: 19846 RVA: 0x001A0480 File Offset: 0x0019E680
 		public Thing FirstDisallowedBuilding
 		{
@@ -99,7 +99,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DBE RID: 3518
+		
 		// (get) Token: 0x06004D87 RID: 19847 RVA: 0x001A05BF File Offset: 0x0019E7BF
 		public bool AnyDisallowedBuilding
 		{
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000DBF RID: 3519
+		
 		// (get) Token: 0x06004D88 RID: 19848 RVA: 0x001A05CC File Offset: 0x0019E7CC
 		public SketchEntity FirstEntityWithMissingBlueprint
 		{
@@ -130,7 +130,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D89 RID: 19849 RVA: 0x001A0650 File Offset: 0x0019E850
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -145,7 +145,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D8A RID: 19850 RVA: 0x001A068C File Offset: 0x0019E88C
+		
 		public override void Tick()
 		{
 			if (this.IsHashIntervalTick(177))
@@ -185,7 +185,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D8B RID: 19851 RVA: 0x001A0780 File Offset: 0x0019E980
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -194,20 +194,20 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.complete, "complete", false, false);
 		}
 
-		// Token: 0x06004D8C RID: 19852 RVA: 0x001A07CC File Offset: 0x0019E9CC
+		
 		public override void DrawAt(Vector3 drawLoc, bool flip = false)
 		{
 			this.DrawGhost_NewTmp(drawLoc.ToIntVec3(), false, base.Rotation);
 		}
 
-		// Token: 0x06004D8D RID: 19853 RVA: 0x001A07E1 File Offset: 0x0019E9E1
+		
 		[Obsolete]
 		public void DrawGhost(IntVec3 at, bool placingMode)
 		{
 			this.DrawGhost_NewTmp(at, placingMode, base.Rotation);
 		}
 
-		// Token: 0x06004D8E RID: 19854 RVA: 0x001A07F4 File Offset: 0x0019E9F4
+		
 		public void DrawGhost_NewTmp(IntVec3 at, bool placingMode, Rot4 rotation)
 		{
 			CellRect rect = this.sketch.OccupiedRect.MovedBy(at);
@@ -216,7 +216,7 @@ namespace RimWorld
 			this.sketch.DrawGhost(at, Sketch.SpawnPosType.Unchanged, placingMode, thingToIgnore);
 		}
 
-		// Token: 0x06004D8F RID: 19855 RVA: 0x001A0840 File Offset: 0x0019EA40
+		
 		public Blueprint_Install FindMyBlueprint(CellRect rect, Map map)
 		{
 			foreach (IntVec3 c in rect)
@@ -237,13 +237,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004D90 RID: 19856 RVA: 0x001A08D0 File Offset: 0x0019EAD0
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (!this.AllDone)
 			{
@@ -413,13 +410,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004D91 RID: 19857 RVA: 0x001A08E0 File Offset: 0x0019EAE0
+		
 		public void DebugBuildAll()
 		{
 			this.sketch.Spawn(base.Map, base.Position, Faction.OfPlayer, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, false, false, null, false, false, null, null);
 		}
 
-		// Token: 0x06004D92 RID: 19858 RVA: 0x001A0914 File Offset: 0x0019EB14
+		
 		private void PlaceAllBlueprints(ThingDef preferredStuffIfNone)
 		{
 			foreach (SketchEntity sketchEntity in this.sketch.Entities)
@@ -449,7 +446,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D93 RID: 19859 RVA: 0x001A0AC0 File Offset: 0x0019ECC0
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -499,7 +496,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06004D94 RID: 19860 RVA: 0x001A0CCC File Offset: 0x0019EECC
+		
 		private void RemovePossiblyRelatedBlueprints()
 		{
 			if (!base.Spawned)
@@ -516,95 +513,96 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D95 RID: 19861 RVA: 0x001A0D54 File Offset: 0x0019EF54
+		
 		public bool IsPart(Thing thing)
 		{
-			MonumentMarker.<>c__DisplayClass34_0 <>c__DisplayClass34_;
-			<>c__DisplayClass34_.thing = thing;
-			<>c__DisplayClass34_.<>4__this = this;
-			if (!base.Spawned)
-			{
-				return false;
-			}
-			if (!this.sketch.OccupiedRect.MovedBy(base.Position).Contains(<>c__DisplayClass34_.thing.Position))
-			{
-				return false;
-			}
-			SketchThing sketchThing;
-			List<SketchThing> list;
-			this.sketch.ThingsAt(<>c__DisplayClass34_.thing.Position - base.Position, out sketchThing, out list);
-			if (sketchThing != null && this.<IsPart>g__IsPartInternal|34_0(sketchThing, ref <>c__DisplayClass34_))
-			{
-				return true;
-			}
-			if (list != null)
-			{
-				for (int i = 0; i < list.Count; i++)
-				{
-					if (this.<IsPart>g__IsPartInternal|34_0(list[i], ref <>c__DisplayClass34_))
-					{
-						return true;
-					}
-				}
-			}
-			if (<>c__DisplayClass34_.thing.def.entityDefToBuild != null)
-			{
-				SketchTerrain sketchTerrain = this.sketch.SketchTerrainAt(<>c__DisplayClass34_.thing.Position - base.Position);
-				if (sketchTerrain != null && this.<IsPart>g__IsPartInternal|34_0(sketchTerrain, ref <>c__DisplayClass34_))
-				{
-					return true;
-				}
-			}
+			//MonumentMarker.c__DisplayClass34_0 c__DisplayClass34_;
+			//c__DisplayClass34_.thing = thing;
+			//c__DisplayClass34_.4__this = this;
+			//if (!base.Spawned)
+			//{
+			//	return false;
+			//}
+			//if (!this.sketch.OccupiedRect.MovedBy(base.Position).Contains(c__DisplayClass34_.thing.Position))
+			//{
+			//	return false;
+			//}
+			//SketchThing sketchThing;
+			//List<SketchThing> list;
+			//this.sketch.ThingsAt(c__DisplayClass34_.thing.Position - base.Position, out sketchThing, out list);
+			//if (sketchThing != null && this.<IsPart>g__IsPartInternal|34_0(sketchThing, ref c__DisplayClass34_))
+			//{
+			//	return true;
+			//}
+			//if (list != null)
+			//{
+			//	for (int i = 0; i < list.Count; i++)
+			//	{
+			//		if (this.<IsPart>g__IsPartInternal|34_0(list[i], ref c__DisplayClass34_))
+			//		{
+			//			return true;
+			//		}
+			//	}
+			//}
+			//if (c__DisplayClass34_.thing.def.entityDefToBuild != null)
+			//{
+			//	SketchTerrain sketchTerrain = this.sketch.SketchTerrainAt(c__DisplayClass34_.thing.Position - base.Position);
+			//	if (sketchTerrain != null && this.<IsPart>g__IsPartInternal|34_0(sketchTerrain, ref c__DisplayClass34_))
+			//	{
+			//		return true;
+			//	}
+			//}
 			return false;
 		}
 
-		// Token: 0x06004D96 RID: 19862 RVA: 0x001A0E54 File Offset: 0x0019F054
+		
 		public bool AllowsPlacingBlueprint(BuildableDef buildable, IntVec3 pos, Rot4 rot, ThingDef stuff)
 		{
-			MonumentMarker.<>c__DisplayClass35_0 <>c__DisplayClass35_;
-			<>c__DisplayClass35_.buildable = buildable;
-			<>c__DisplayClass35_.<>4__this = this;
-			<>c__DisplayClass35_.stuff = stuff;
-			<>c__DisplayClass35_.rot = rot;
-			if (!base.Spawned)
-			{
-				return true;
-			}
-			<>c__DisplayClass35_.newRect = GenAdj.OccupiedRect(pos, <>c__DisplayClass35_.rot, <>c__DisplayClass35_.buildable.Size);
-			if (!this.sketch.OccupiedRect.MovedBy(base.Position).Overlaps(<>c__DisplayClass35_.newRect))
-			{
-				return true;
-			}
-			<>c__DisplayClass35_.collided = false;
-			foreach (IntVec3 a in <>c__DisplayClass35_.newRect)
-			{
-				SketchThing sketchThing;
-				List<SketchThing> list;
-				this.sketch.ThingsAt(a - base.Position, out sketchThing, out list);
-				if (sketchThing != null && this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(sketchThing, ref <>c__DisplayClass35_))
-				{
-					return true;
-				}
-				if (list != null)
-				{
-					for (int i = 0; i < list.Count; i++)
-					{
-						if (this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(list[i], ref <>c__DisplayClass35_))
-						{
-							return true;
-						}
-					}
-				}
-				SketchTerrain sketchTerrain = this.sketch.SketchTerrainAt(a - base.Position);
-				if (sketchTerrain != null && this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(sketchTerrain, ref <>c__DisplayClass35_))
-				{
-					return true;
-				}
-			}
-			return !<>c__DisplayClass35_.collided;
+			//MonumentMarker.c__DisplayClass35_0 c__DisplayClass35_;
+			//c__DisplayClass35_.buildable = buildable;
+			//c__DisplayClass35_.4__this = this;
+			//c__DisplayClass35_.stuff = stuff;
+			//c__DisplayClass35_.rot = rot;
+			//if (!base.Spawned)
+			//{
+			//	return true;
+			//}
+			//c__DisplayClass35_.newRect = GenAdj.OccupiedRect(pos, c__DisplayClass35_.rot, c__DisplayClass35_.buildable.Size);
+			//if (!this.sketch.OccupiedRect.MovedBy(base.Position).Overlaps(c__DisplayClass35_.newRect))
+			//{
+			//	return true;
+			//}
+			//c__DisplayClass35_.collided = false;
+			//foreach (IntVec3 a in c__DisplayClass35_.newRect)
+			//{
+			//	SketchThing sketchThing;
+			//	List<SketchThing> list;
+			//	this.sketch.ThingsAt(a - base.Position, out sketchThing, out list);
+			//	if (sketchThing != null && this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(sketchThing, ref c__DisplayClass35_))
+			//	{
+			//		return true;
+			//	}
+			//	if (list != null)
+			//	{
+			//		for (int i = 0; i < list.Count; i++)
+			//		{
+			//			if (this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(list[i], ref c__DisplayClass35_))
+			//			{
+			//				return true;
+			//			}
+			//		}
+			//	}
+			//	SketchTerrain sketchTerrain = this.sketch.SketchTerrainAt(a - base.Position);
+			//	if (sketchTerrain != null && this.<AllowsPlacingBlueprint>g__CheckEntity|35_1(sketchTerrain, ref c__DisplayClass35_))
+			//	{
+			//		return true;
+			//	}
+			//}
+			//return !c__DisplayClass35_.collided;
+			return false;
 		}
 
-		// Token: 0x06004D97 RID: 19863 RVA: 0x001A0FC4 File Offset: 0x0019F1C4
+		
 		public IEnumerable<ThingDef> AllowedStuffs()
 		{
 			MonumentMarker.tmpStuffCategories.Clear();
@@ -646,37 +644,37 @@ namespace RimWorld
 			return GenStuff.AllowedStuffs(MonumentMarker.tmpStuffCategories, TechLevel.Undefined);
 		}
 
-		// Token: 0x04002B65 RID: 11109
+		
 		public Sketch sketch = new Sketch();
 
-		// Token: 0x04002B66 RID: 11110
+		
 		public int ticksSinceDisallowedBuilding;
 
-		// Token: 0x04002B67 RID: 11111
+		
 		public bool complete;
 
-		// Token: 0x04002B68 RID: 11112
+		
 		private static readonly Texture2D PlaceBlueprintsCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/PlaceBlueprints", true);
 
-		// Token: 0x04002B69 RID: 11113
+		
 		private static readonly Texture2D CancelCommandTex = ContentFinder<Texture2D>.Get("UI/Designators/Cancel", true);
 
-		// Token: 0x04002B6A RID: 11114
+		
 		public const int DestroyAfterTicksSinceDisallowedBuilding = 60000;
 
-		// Token: 0x04002B6B RID: 11115
+		
 		private const int MonumentCompletedCheckIntervalTicks = 177;
 
-		// Token: 0x04002B6C RID: 11116
+		
 		private static List<ThingDef> tmpAllowedBuildings = new List<ThingDef>();
 
-		// Token: 0x04002B6D RID: 11117
+		
 		private static HashSet<Pair<BuildableDef, ThingDef>> tmpUniqueBuildableDefs = new HashSet<Pair<BuildableDef, ThingDef>>();
 
-		// Token: 0x04002B6E RID: 11118
+		
 		private static Dictionary<string, Pair<int, int>> tmpBuiltParts = new Dictionary<string, Pair<int, int>>();
 
-		// Token: 0x04002B6F RID: 11119
+		
 		private static List<StuffCategoryDef> tmpStuffCategories = new List<StuffCategoryDef>();
 	}
 }

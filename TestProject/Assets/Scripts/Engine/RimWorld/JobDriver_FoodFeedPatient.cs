@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200068B RID: 1675
+	
 	public class JobDriver_FoodFeedPatient : JobDriver
 	{
-		// Token: 0x1700088B RID: 2187
+		
 		// (get) Token: 0x06002D80 RID: 11648 RVA: 0x000DF68D File Offset: 0x000DD88D
 		protected Thing Food
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700088C RID: 2188
+		
 		// (get) Token: 0x06002D81 RID: 11649 RVA: 0x001004A2 File Offset: 0x000FE6A2
 		protected Pawn Deliveree
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D82 RID: 11650 RVA: 0x001005E8 File Offset: 0x000FE7E8
+		
 		public override string GetReport()
 		{
 			if (this.job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && this.Deliveree != null)
@@ -38,7 +38,7 @@ namespace RimWorld
 			return base.GetReport();
 		}
 
-		// Token: 0x06002D83 RID: 11651 RVA: 0x00100660 File Offset: 0x000FE860
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			if (!this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed))
@@ -57,7 +57,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002D84 RID: 11652 RVA: 0x00100712 File Offset: 0x000FE912
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.B);
@@ -82,13 +82,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A26 RID: 6694
+		
 		private const TargetIndex FoodSourceInd = TargetIndex.A;
 
-		// Token: 0x04001A27 RID: 6695
+		
 		private const TargetIndex DelivereeInd = TargetIndex.B;
 
-		// Token: 0x04001A28 RID: 6696
+		
 		private const float FeedDurationMultiplier = 1.5f;
 	}
 }

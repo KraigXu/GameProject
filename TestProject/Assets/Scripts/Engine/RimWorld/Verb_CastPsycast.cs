@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AE7 RID: 2791
+	
 	public class Verb_CastPsycast : Verb_CastAbility
 	{
-		// Token: 0x17000BBD RID: 3005
+		
 		// (get) Token: 0x060041F7 RID: 16887 RVA: 0x00160748 File Offset: 0x0015E948
 		public Psycast Psycast
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041F8 RID: 16888 RVA: 0x00160758 File Offset: 0x0015E958
+		
 		public override bool IsApplicableTo(LocalTargetInfo target, bool showMessages = false)
 		{
 			if (!base.IsApplicableTo(target, showMessages))
@@ -35,7 +35,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060041F9 RID: 16889 RVA: 0x001607D0 File Offset: 0x0015E9D0
+		
 		public override void OrderForceTarget(LocalTargetInfo target)
 		{
 			if (!this.IsApplicableTo(target, false))
@@ -45,7 +45,7 @@ namespace RimWorld
 			base.OrderForceTarget(target);
 		}
 
-		// Token: 0x060041FA RID: 16890 RVA: 0x001607E4 File Offset: 0x0015E9E4
+		
 		public override bool ValidateTarget(LocalTargetInfo target)
 		{
 			if (!base.ValidateTarget(target))
@@ -65,7 +65,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060041FB RID: 16891 RVA: 0x001608A8 File Offset: 0x0015EAA8
+		
 		public override void OnGUI(LocalTargetInfo target)
 		{
 			bool flag = this.ability.EffectComps.Any((CompAbilityEffect e) => e.Props.psychic);
@@ -110,7 +110,7 @@ namespace RimWorld
 			GenUI.DrawMouseAttachment(texture2D);
 		}
 
-		// Token: 0x060041FC RID: 16892 RVA: 0x00160AB4 File Offset: 0x0015ECB4
+		
 		private void DrawIneffectiveWarning(LocalTargetInfo target)
 		{
 			if (target.Pawn != null)
@@ -121,7 +121,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041FD RID: 16893 RVA: 0x00160B14 File Offset: 0x0015ED14
+		
 		private void DrawSensitivityStat(LocalTargetInfo target)
 		{
 			if (target.Pawn != null)
@@ -134,7 +134,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400261F RID: 9759
+		
 		private const float StatLabelOffsetY = 1f;
 	}
 }

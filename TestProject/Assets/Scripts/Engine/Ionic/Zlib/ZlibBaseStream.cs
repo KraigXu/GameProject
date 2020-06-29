@@ -6,10 +6,10 @@ using Ionic.Crc;
 
 namespace Ionic.Zlib
 {
-	// Token: 0x020012C0 RID: 4800
+	
 	internal class ZlibBaseStream : Stream
 	{
-		// Token: 0x17001340 RID: 4928
+		
 		// (get) Token: 0x0600719D RID: 29085 RVA: 0x0027C71E File Offset: 0x0027A91E
 		internal int Crc32
 		{
@@ -23,7 +23,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x0600719E RID: 29086 RVA: 0x0027C738 File Offset: 0x0027A938
+		
 		public ZlibBaseStream(Stream stream, CompressionMode compressionMode, CompressionLevel level, ZlibStreamFlavor flavor, bool leaveOpen)
 		{
 			this._flushMode = FlushType.None;
@@ -38,7 +38,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001341 RID: 4929
+		
 		// (get) Token: 0x0600719F RID: 29087 RVA: 0x0027C7A9 File Offset: 0x0027A9A9
 		protected internal bool _wantCompress
 		{
@@ -48,7 +48,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001342 RID: 4930
+		
 		// (get) Token: 0x060071A0 RID: 29088 RVA: 0x0027C7B4 File Offset: 0x0027A9B4
 		private ZlibCodec z
 		{
@@ -72,7 +72,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001343 RID: 4931
+		
 		// (get) Token: 0x060071A1 RID: 29089 RVA: 0x0027C824 File Offset: 0x0027AA24
 		private byte[] workingBuffer
 		{
@@ -86,7 +86,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071A2 RID: 29090 RVA: 0x0027C848 File Offset: 0x0027AA48
+		
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (this.crc != null)
@@ -132,7 +132,7 @@ namespace Ionic.Zlib
 			throw new ZlibException((this._wantCompress ? "de" : "in") + "flating: " + this._z.Message);
 		}
 
-		// Token: 0x060071A3 RID: 29091 RVA: 0x0027C9D0 File Offset: 0x0027ABD0
+		
 		private void finish()
 		{
 			if (this._z == null)
@@ -227,7 +227,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071A4 RID: 29092 RVA: 0x0027CD20 File Offset: 0x0027AF20
+		
 		private void end()
 		{
 			if (this.z == null)
@@ -245,7 +245,7 @@ namespace Ionic.Zlib
 			this._z = null;
 		}
 
-		// Token: 0x060071A5 RID: 29093 RVA: 0x0027CD54 File Offset: 0x0027AF54
+		
 		public override void Close()
 		{
 			if (this._stream == null)
@@ -267,25 +267,25 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071A6 RID: 29094 RVA: 0x0027CDA4 File Offset: 0x0027AFA4
+		
 		public override void Flush()
 		{
 			this._stream.Flush();
 		}
 
-		// Token: 0x060071A7 RID: 29095 RVA: 0x000255BF File Offset: 0x000237BF
+		
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			throw new NotImplementedException();
 		}
 
-		// Token: 0x060071A8 RID: 29096 RVA: 0x0027CDB1 File Offset: 0x0027AFB1
+		
 		public override void SetLength(long value)
 		{
 			this._stream.SetLength(value);
 		}
 
-		// Token: 0x060071A9 RID: 29097 RVA: 0x0027CDC0 File Offset: 0x0027AFC0
+		
 		private string ReadZeroTerminatedString()
 		{
 			List<byte> list = new List<byte>();
@@ -309,7 +309,7 @@ namespace Ionic.Zlib
 			throw new ZlibException("Unexpected EOF reading GZIP header.");
 		}
 
-		// Token: 0x060071AA RID: 29098 RVA: 0x0027CE2C File Offset: 0x0027B02C
+		
 		private int _ReadAndValidateGzipHeader()
 		{
 			int num = 0;
@@ -358,7 +358,7 @@ namespace Ionic.Zlib
 			return num;
 		}
 
-		// Token: 0x060071AB RID: 29099 RVA: 0x0027CF4C File Offset: 0x0027B14C
+		
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (this._streamMode == ZlibBaseStream.StreamMode.Undefined)
@@ -463,7 +463,7 @@ namespace Ionic.Zlib
 			return num;
 		}
 
-		// Token: 0x17001344 RID: 4932
+		
 		// (get) Token: 0x060071AC RID: 29100 RVA: 0x0027D1EA File Offset: 0x0027B3EA
 		public override bool CanRead
 		{
@@ -473,7 +473,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001345 RID: 4933
+		
 		// (get) Token: 0x060071AD RID: 29101 RVA: 0x0027D1F7 File Offset: 0x0027B3F7
 		public override bool CanSeek
 		{
@@ -483,7 +483,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001346 RID: 4934
+		
 		// (get) Token: 0x060071AE RID: 29102 RVA: 0x0027D204 File Offset: 0x0027B404
 		public override bool CanWrite
 		{
@@ -493,7 +493,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001347 RID: 4935
+		
 		// (get) Token: 0x060071AF RID: 29103 RVA: 0x0027D211 File Offset: 0x0027B411
 		public override long Length
 		{
@@ -503,7 +503,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x17001348 RID: 4936
+		
 		// (get) Token: 0x060071B0 RID: 29104 RVA: 0x000255BF File Offset: 0x000237BF
 		// (set) Token: 0x060071B1 RID: 29105 RVA: 0x000255BF File Offset: 0x000237BF
 		public override long Position
@@ -518,7 +518,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071B2 RID: 29106 RVA: 0x0027D220 File Offset: 0x0027B420
+		
 		public static void CompressString(string s, Stream compressor)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(s);
@@ -535,7 +535,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071B3 RID: 29107 RVA: 0x0027D264 File Offset: 0x0027B464
+		
 		public static void CompressBuffer(byte[] b, Stream compressor)
 		{
 			try
@@ -551,7 +551,7 @@ namespace Ionic.Zlib
 			}
 		}
 
-		// Token: 0x060071B4 RID: 29108 RVA: 0x0027D29C File Offset: 0x0027B49C
+		
 		public static string UncompressString(byte[] compressed, Stream decompressor)
 		{
 			byte[] array = new byte[1024];
@@ -580,7 +580,7 @@ namespace Ionic.Zlib
 			return result;
 		}
 
-		// Token: 0x060071B5 RID: 29109 RVA: 0x0027D32C File Offset: 0x0027B52C
+		
 		public static byte[] UncompressBuffer(byte[] compressed, Stream decompressor)
 		{
 			byte[] array = new byte[1024];
@@ -607,68 +607,68 @@ namespace Ionic.Zlib
 			return result;
 		}
 
-		// Token: 0x04004652 RID: 18002
+		
 		protected internal ZlibCodec _z;
 
-		// Token: 0x04004653 RID: 18003
+		
 		protected internal ZlibBaseStream.StreamMode _streamMode = ZlibBaseStream.StreamMode.Undefined;
 
-		// Token: 0x04004654 RID: 18004
+		
 		protected internal FlushType _flushMode;
 
-		// Token: 0x04004655 RID: 18005
+		
 		protected internal ZlibStreamFlavor _flavor;
 
-		// Token: 0x04004656 RID: 18006
+		
 		protected internal CompressionMode _compressionMode;
 
-		// Token: 0x04004657 RID: 18007
+		
 		protected internal CompressionLevel _level;
 
-		// Token: 0x04004658 RID: 18008
+		
 		protected internal bool _leaveOpen;
 
-		// Token: 0x04004659 RID: 18009
+		
 		protected internal byte[] _workingBuffer;
 
-		// Token: 0x0400465A RID: 18010
+		
 		protected internal int _bufferSize = 16384;
 
-		// Token: 0x0400465B RID: 18011
+		
 		protected internal byte[] _buf1 = new byte[1];
 
-		// Token: 0x0400465C RID: 18012
+		
 		protected internal Stream _stream;
 
-		// Token: 0x0400465D RID: 18013
+		
 		protected internal CompressionStrategy Strategy;
 
-		// Token: 0x0400465E RID: 18014
+		
 		private CRC32 crc;
 
-		// Token: 0x0400465F RID: 18015
+		
 		protected internal string _GzipFileName;
 
-		// Token: 0x04004660 RID: 18016
+		
 		protected internal string _GzipComment;
 
-		// Token: 0x04004661 RID: 18017
+		
 		protected internal DateTime _GzipMtime;
 
-		// Token: 0x04004662 RID: 18018
+		
 		protected internal int _gzipHeaderByteCount;
 
-		// Token: 0x04004663 RID: 18019
+		
 		private bool nomoreinput;
 
-		// Token: 0x02002067 RID: 8295
+		
 		internal enum StreamMode
 		{
-			// Token: 0x040079A1 RID: 31137
+			
 			Writer,
-			// Token: 0x040079A2 RID: 31138
+			
 			Reader,
-			// Token: 0x040079A3 RID: 31139
+			
 			Undefined
 		}
 	}

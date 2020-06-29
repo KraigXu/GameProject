@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BEA RID: 3050
+	
 	public static class FactionGenerator
 	{
-		// Token: 0x06004881 RID: 18561 RVA: 0x0018A7A4 File Offset: 0x001889A4
+		
 		public static void GenerateFactionsIntoWorld()
 		{
 			int num = 0;
@@ -58,7 +58,7 @@ namespace RimWorld
 			goto IL_5F;
 		}
 
-		// Token: 0x06004882 RID: 18562 RVA: 0x0018A970 File Offset: 0x00188B70
+		
 		public static void EnsureRequiredEnemies(Faction player)
 		{
 			using (IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator())
@@ -80,7 +80,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004883 RID: 18563 RVA: 0x0018AAC8 File Offset: 0x00188CC8
+		
 		public static Faction NewGeneratedFaction(FactionDef facDef)
 		{
 			Faction faction = new Faction();
@@ -130,7 +130,7 @@ namespace RimWorld
 			return faction;
 		}
 
-		// Token: 0x06004884 RID: 18564 RVA: 0x0018AC7C File Offset: 0x00188E7C
+		
 		public static float NewRandomColorFromSpectrum(Faction faction)
 		{
 			float num = -1f;
@@ -161,13 +161,13 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04002990 RID: 10640
+		
 		private const int MinStartVisibleFactions = 5;
 
-		// Token: 0x04002991 RID: 10641
+		
 		private const int MaxPreferredFactionNameLength = 20;
 
-		// Token: 0x04002992 RID: 10642
+		
 		private static readonly FloatRange SettlementsPer100kTiles = new FloatRange(75f, 85f);
 	}
 }

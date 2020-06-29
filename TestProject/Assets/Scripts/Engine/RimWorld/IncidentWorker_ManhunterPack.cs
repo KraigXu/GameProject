@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009E6 RID: 2534
+	
 	public class IncidentWorker_ManhunterPack : IncidentWorker
 	{
-		// Token: 0x06003C5E RID: 15454 RVA: 0x0013EE1C File Offset: 0x0013D01C
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -20,7 +20,7 @@ namespace RimWorld
 			return ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(parms.points, map.Tile, out pawnKindDef) && RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, CellFinder.EdgeRoadChance_Animal, false, null);
 		}
 
-		// Token: 0x06003C5F RID: 15455 RVA: 0x0013EE68 File Offset: 0x0013D068
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -52,13 +52,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04002388 RID: 9096
+		
 		private const float PointsFactor = 1f;
 
-		// Token: 0x04002389 RID: 9097
+		
 		private const int AnimalsStayDurationMin = 60000;
 
-		// Token: 0x0400238A RID: 9098
+		
 		private const int AnimalsStayDurationMax = 120000;
 	}
 }

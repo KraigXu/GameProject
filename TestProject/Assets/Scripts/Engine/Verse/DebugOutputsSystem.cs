@@ -6,10 +6,10 @@ using UnityEngine.Profiling;
 
 namespace Verse
 {
-	// Token: 0x02000348 RID: 840
+	
 	public static class DebugOutputsSystem
 	{
-		// Token: 0x060019C1 RID: 6593 RVA: 0x0009D274 File Offset: 0x0009B474
+		
 		[DebugOutput("System", false)]
 		public static void LoadedAssets()
 		{
@@ -66,7 +66,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x060019C2 RID: 6594 RVA: 0x0009D470 File Offset: 0x0009B670
+		
 		private static long TotalBytes(UnityEngine.Object[] arr)
 		{
 			long num = 0L;
@@ -77,14 +77,14 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x060019C3 RID: 6595 RVA: 0x0009D49E File Offset: 0x0009B69E
+		
 		[DebugOutput("System", true)]
 		public static void DynamicDrawThingsList()
 		{
 			Find.CurrentMap.dynamicDrawManager.LogDynamicDrawThings();
 		}
 
-		// Token: 0x060019C4 RID: 6596 RVA: 0x0009D4B0 File Offset: 0x0009B6B0
+		
 		[DebugOutput("System", false)]
 		public static void RandByCurveTests()
 		{

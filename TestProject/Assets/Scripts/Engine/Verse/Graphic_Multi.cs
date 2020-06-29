@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002F0 RID: 752
+	
 	public class Graphic_Multi : Graphic
 	{
-		// Token: 0x1700044F RID: 1103
+		
 		// (get) Token: 0x0600153C RID: 5436 RVA: 0x0007CB48 File Offset: 0x0007AD48
 		public string GraphicPath
 		{
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000450 RID: 1104
+		
 		// (get) Token: 0x0600153D RID: 5437 RVA: 0x0007CB50 File Offset: 0x0007AD50
 		public override Material MatSingle
 		{
@@ -26,7 +26,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000451 RID: 1105
+		
 		// (get) Token: 0x0600153E RID: 5438 RVA: 0x0007CB58 File Offset: 0x0007AD58
 		public override Material MatWest
 		{
@@ -36,7 +36,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000452 RID: 1106
+		
 		// (get) Token: 0x0600153F RID: 5439 RVA: 0x0007CB62 File Offset: 0x0007AD62
 		public override Material MatSouth
 		{
@@ -46,7 +46,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000453 RID: 1107
+		
 		// (get) Token: 0x06001540 RID: 5440 RVA: 0x0007CB6C File Offset: 0x0007AD6C
 		public override Material MatEast
 		{
@@ -56,7 +56,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000454 RID: 1108
+		
 		// (get) Token: 0x06001541 RID: 5441 RVA: 0x0007CB76 File Offset: 0x0007AD76
 		public override Material MatNorth
 		{
@@ -66,7 +66,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000455 RID: 1109
+		
 		// (get) Token: 0x06001542 RID: 5442 RVA: 0x0007CB80 File Offset: 0x0007AD80
 		public override bool WestFlipped
 		{
@@ -76,7 +76,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000456 RID: 1110
+		
 		// (get) Token: 0x06001543 RID: 5443 RVA: 0x0007CB88 File Offset: 0x0007AD88
 		public override bool EastFlipped
 		{
@@ -86,7 +86,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000457 RID: 1111
+		
 		// (get) Token: 0x06001544 RID: 5444 RVA: 0x0007CB90 File Offset: 0x0007AD90
 		public override bool ShouldDrawRotated
 		{
@@ -96,7 +96,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000458 RID: 1112
+		
 		// (get) Token: 0x06001545 RID: 5445 RVA: 0x0007CBCF File Offset: 0x0007ADCF
 		public override float DrawRotatedExtraAngleOffset
 		{
@@ -106,7 +106,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001546 RID: 5446 RVA: 0x0007CBD8 File Offset: 0x0007ADD8
+		
 		public override void Init(GraphicRequest req)
 		{
 			this.data = req.graphicData;
@@ -236,13 +236,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001547 RID: 5447 RVA: 0x0007CF33 File Offset: 0x0007B133
+		
 		public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
 		{
 			return GraphicDatabase.Get<Graphic_Multi>(this.path, newShader, this.drawSize, newColor, newColorTwo, this.data);
 		}
 
-		// Token: 0x06001548 RID: 5448 RVA: 0x0007CF50 File Offset: 0x0007B150
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -257,22 +257,22 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06001549 RID: 5449 RVA: 0x0007CFAD File Offset: 0x0007B1AD
+		
 		public override int GetHashCode()
 		{
 			return Gen.HashCombineStruct<Color>(Gen.HashCombineStruct<Color>(Gen.HashCombine<string>(0, this.path), this.color), this.colorTwo);
 		}
 
-		// Token: 0x04000DFF RID: 3583
+		
 		private Material[] mats = new Material[4];
 
-		// Token: 0x04000E00 RID: 3584
+		
 		private bool westFlipped;
 
-		// Token: 0x04000E01 RID: 3585
+		
 		private bool eastFlipped;
 
-		// Token: 0x04000E02 RID: 3586
+		
 		private float drawRotatedExtraAngleOffset;
 	}
 }

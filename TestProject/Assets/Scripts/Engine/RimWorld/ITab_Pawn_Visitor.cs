@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EAA RID: 3754
+	
 	public abstract class ITab_Pawn_Visitor : ITab
 	{
-		// Token: 0x06005BB7 RID: 23479 RVA: 0x001FA2DB File Offset: 0x001F84DB
+		
 		public ITab_Pawn_Visitor()
 		{
 			this.size = new Vector2(280f, 0f);
 		}
 
-		// Token: 0x06005BB8 RID: 23480 RVA: 0x001FA2F8 File Offset: 0x001F84F8
+		
 		protected override void FillTab()
 		{
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.PrisonerTab, KnowledgeAmount.FrameDisplayed);
@@ -166,7 +166,7 @@ namespace RimWorld
 			this.size = new Vector2(280f, listing_Standard.CurHeight + 10f + 24f);
 		}
 
-		// Token: 0x06005BB9 RID: 23481 RVA: 0x001FAB74 File Offset: 0x001F8D74
+		
 		private bool ColonyHasAnyWardenCapableOfViolence(Map map)
 		{
 			foreach (Pawn pawn in map.mapPawns.FreeColonistsSpawned)
@@ -179,10 +179,10 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04003212 RID: 12818
+		
 		private const float CheckboxInterval = 30f;
 
-		// Token: 0x04003213 RID: 12819
+		
 		private const float CheckboxMargin = 50f;
 	}
 }

@@ -8,11 +8,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C9A RID: 3226
+	
 	[StaticConstructorOnStartup]
 	public class TunnelHiveSpawner : ThingWithComps
 	{
-		// Token: 0x06004DD5 RID: 19925 RVA: 0x001A2CE8 File Offset: 0x001A0EE8
+		
 		public static void ResetStaticData()
 		{
 			TunnelHiveSpawner.filthTypes.Clear();
@@ -22,7 +22,7 @@ namespace RimWorld
 			TunnelHiveSpawner.filthTypes.Add(ThingDefOf.Filth_RubbleRock);
 		}
 
-		// Token: 0x06004DD6 RID: 19926 RVA: 0x001A2D3C File Offset: 0x001A0F3C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -32,7 +32,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.spawnedByInfestationThingComp, "spawnedByInfestationThingComp", false, false);
 		}
 
-		// Token: 0x06004DD7 RID: 19927 RVA: 0x001A2D9C File Offset: 0x001A0F9C
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -43,7 +43,7 @@ namespace RimWorld
 			this.CreateSustainer();
 		}
 
-		// Token: 0x06004DD8 RID: 19928 RVA: 0x001A2DE0 File Offset: 0x001A0FE0
+		
 		public override void Tick()
 		{
 			if (base.Spawned)
@@ -88,7 +88,7 @@ namespace RimWorld
 						float pointsLeft = this.insectsPoints;
 						List<Pawn> list = new List<Pawn>();
 						int num = 0;
-						Func<PawnKindDef, bool> <>9__1;
+						
 						while (pointsLeft > 0f)
 						{
 							num++;
@@ -99,9 +99,9 @@ namespace RimWorld
 							}
 							IEnumerable<PawnKindDef> spawnablePawnKinds = Hive.spawnablePawnKinds;
 							Func<PawnKindDef, bool> predicate;
-							if ((predicate = <>9__1) == null)
+							if ((predicate ) == null)
 							{
-								predicate = (<>9__1 = ((PawnKindDef x) => x.combatPower <= pointsLeft));
+								predicate = (9__1 = ((PawnKindDef x) => x.combatPower <= pointsLeft));
 							}
 							PawnKindDef pawnKindDef;
 							if (!spawnablePawnKinds.Where(predicate).TryRandomElement(out pawnKindDef))
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004DD9 RID: 19929 RVA: 0x001A30F8 File Offset: 0x001A12F8
+		
 		public override void Draw()
 		{
 			Rand.PushState();
@@ -135,7 +135,7 @@ namespace RimWorld
 			Rand.PopState();
 		}
 
-		// Token: 0x06004DDA RID: 19930 RVA: 0x001A3168 File Offset: 0x001A1368
+		
 		private void DrawDustPart(float initialAngle, float speedMultiplier, float scale)
 		{
 			float num = (Find.TickManager.TicksGame - this.secondarySpawnTick).TicksToSeconds();
@@ -147,7 +147,7 @@ namespace RimWorld
 			Graphics.DrawMesh(MeshPool.plane10, matrix, TunnelHiveSpawner.TunnelMaterial, 0, null, 0, TunnelHiveSpawner.matPropertyBlock);
 		}
 
-		// Token: 0x06004DDB RID: 19931 RVA: 0x001A3226 File Offset: 0x001A1426
+		
 		private void CreateSustainer()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
@@ -157,43 +157,43 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x04002BAE RID: 11182
+		
 		private int secondarySpawnTick;
 
-		// Token: 0x04002BAF RID: 11183
+		
 		public bool spawnHive = true;
 
-		// Token: 0x04002BB0 RID: 11184
+		
 		public float insectsPoints;
 
-		// Token: 0x04002BB1 RID: 11185
+		
 		public bool spawnedByInfestationThingComp;
 
-		// Token: 0x04002BB2 RID: 11186
+		
 		private Sustainer sustainer;
 
-		// Token: 0x04002BB3 RID: 11187
+		
 		private static MaterialPropertyBlock matPropertyBlock = new MaterialPropertyBlock();
 
-		// Token: 0x04002BB4 RID: 11188
+		
 		private readonly FloatRange ResultSpawnDelay = new FloatRange(26f, 30f);
 
-		// Token: 0x04002BB5 RID: 11189
+		
 		[TweakValue("Gameplay", 0f, 1f)]
 		private static float DustMoteSpawnMTB = 0.2f;
 
-		// Token: 0x04002BB6 RID: 11190
+		
 		[TweakValue("Gameplay", 0f, 1f)]
 		private static float FilthSpawnMTB = 0.3f;
 
-		// Token: 0x04002BB7 RID: 11191
+		
 		[TweakValue("Gameplay", 0f, 10f)]
 		private static float FilthSpawnRadius = 3f;
 
-		// Token: 0x04002BB8 RID: 11192
+		
 		private static readonly Material TunnelMaterial = MaterialPool.MatFrom("Things/Filth/Grainy/GrainyA", ShaderDatabase.Transparent);
 
-		// Token: 0x04002BB9 RID: 11193
+		
 		private static List<ThingDef> filthTypes = new List<ThingDef>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000859 RID: 2137
+	
 	public static class RecipeDefGenerator
 	{
-		// Token: 0x060034D8 RID: 13528 RVA: 0x0012137A File Offset: 0x0011F57A
+		
 		public static IEnumerable<RecipeDef> ImpliedRecipeDefs()
 		{
 			foreach (RecipeDef recipeDef in RecipeDefGenerator.DefsFromRecipeMakers().Concat(RecipeDefGenerator.DrugAdministerDefs()))
@@ -20,7 +20,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034D9 RID: 13529 RVA: 0x00121383 File Offset: 0x0011F583
+		
 		private static IEnumerable<RecipeDef> DefsFromRecipeMakers()
 		{
 			foreach (ThingDef def in from d in DefDatabase<ThingDef>.AllDefs
@@ -39,7 +39,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034DA RID: 13530 RVA: 0x0012138C File Offset: 0x0011F58C
+		
 		private static RecipeDef CreateRecipeDefFromMaker(ThingDef def, int adjustedCount = 1)
 		{
 			RecipeMakerProperties recipeMaker = def.recipeMaker;
@@ -112,7 +112,7 @@ namespace RimWorld
 			return recipeDef;
 		}
 
-		// Token: 0x060034DB RID: 13531 RVA: 0x00121694 File Offset: 0x0011F894
+		
 		private static IEnumerable<RecipeDef> DrugAdministerDefs()
 		{
 			foreach (ThingDef thingDef in from d in DefDatabase<ThingDef>.AllDefs

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A1E RID: 2590
+	
 	public class StorytellerComp_SingleOnceFixed : StorytellerComp
 	{
-		// Token: 0x17000ADE RID: 2782
+		
 		// (get) Token: 0x06003D55 RID: 15701 RVA: 0x0013B2B7 File Offset: 0x001394B7
 		protected int IntervalsPassed
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000ADF RID: 2783
+		
 		// (get) Token: 0x06003D56 RID: 15702 RVA: 0x00143E47 File Offset: 0x00142047
 		private StorytellerCompProperties_SingleOnceFixed Props
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D57 RID: 15703 RVA: 0x00143E54 File Offset: 0x00142054
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			int num = this.IntervalsPassed;

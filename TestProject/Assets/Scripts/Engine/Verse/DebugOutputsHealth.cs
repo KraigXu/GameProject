@@ -6,10 +6,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x02000342 RID: 834
+	
 	public static class DebugOutputsHealth
 	{
-		// Token: 0x0600195A RID: 6490 RVA: 0x00095FF0 File Offset: 0x000941F0
+		
 		[DebugOutput]
 		public static void Bodies()
 		{
@@ -36,7 +36,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x0600195B RID: 6491 RVA: 0x00096084 File Offset: 0x00094284
+		
 		[DebugOutput]
 		public static void InstallableBodyParts()
 		{
@@ -156,7 +156,7 @@ namespace Verse
 			select r, list2.ToArray());
 		}
 
-		// Token: 0x0600195C RID: 6492 RVA: 0x000964A8 File Offset: 0x000946A8
+		
 		[DebugOutput]
 		public static void BodyParts()
 		{
@@ -253,7 +253,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<BodyPartDef>(allDefs, array);
 		}
 
-		// Token: 0x0600195D RID: 6493 RVA: 0x00096790 File Offset: 0x00094990
+		
 		[DebugOutput]
 		public static void Surgeries()
 		{
@@ -280,185 +280,185 @@ namespace Verse
 			DebugTables.MakeTablesDialog<RecipeDef>(dataSources, array);
 		}
 
-		// Token: 0x0600195E RID: 6494 RVA: 0x00096900 File Offset: 0x00094B00
+		
 		[DebugOutput]
 		public static void HitsToKill()
 		{
-			Dictionary<ThingDef, <>f__AnonymousType1<ThingDef, float, int>> data = (from d in DefDatabase<ThingDef>.AllDefs
-			where d.race != null
-			select d).Select(delegate(ThingDef x)
-			{
-				int num = 0;
-				int num2 = 0;
-				for (int i = 0; i < 15; i++)
-				{
-					Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(x.race.AnyPawnKind, null, PawnGenerationContext.NonPlayer, -1, true, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-					for (int j = 0; j < 1000; j++)
-					{
-						pawn.TakeDamage(new DamageInfo(DamageDefOf.Crush, 10f, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
-						if (pawn.Destroyed)
-						{
-							num += j + 1;
-							break;
-						}
-					}
-					if (!pawn.Destroyed)
-					{
-						Log.Error("Could not kill pawn " + pawn.ToStringSafe<Pawn>(), false);
-					}
-					if (pawn.health.ShouldBeDeadFromLethalDamageThreshold())
-					{
-						num2++;
-					}
-					if (Find.WorldPawns.Contains(pawn))
-					{
-						Find.WorldPawns.RemovePawn(pawn);
-					}
-					Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
-				}
-				float hits = (float)num / 15f;
-				return new
-				{
-					Race = x,
-					Hits = hits,
-					DiedDueToDamageThreshold = num2
-				};
-			}).ToDictionary(x => x.Race);
-			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
-			where d.race != null
-			orderby d.race.baseHealthScale descending
-			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[4];
-			array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[1] = new TableDataGetter<ThingDef>("10 damage hits", (ThingDef d) => data[d].Hits.ToString("F0"));
-			array[2] = new TableDataGetter<ThingDef>("died due to\ndam. thresh.", (ThingDef d) => data[d].DiedDueToDamageThreshold + "/" + 15);
-			array[3] = new TableDataGetter<ThingDef>("mech", delegate(ThingDef d)
-			{
-				if (!d.race.IsMechanoid)
-				{
-					return "";
-				}
-				return "mech";
-			});
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			//Dictionary<ThingDef, f__AnonymousType1<ThingDef, float, int>> data = (from d in DefDatabase<ThingDef>.AllDefs
+			//where d.race != null
+			//select d).Select(delegate(ThingDef x)
+			//{
+			//	int num = 0;
+			//	int num2 = 0;
+			//	for (int i = 0; i < 15; i++)
+			//	{
+			//		Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(x.race.AnyPawnKind, null, PawnGenerationContext.NonPlayer, -1, true, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
+			//		for (int j = 0; j < 1000; j++)
+			//		{
+			//			pawn.TakeDamage(new DamageInfo(DamageDefOf.Crush, 10f, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+			//			if (pawn.Destroyed)
+			//			{
+			//				num += j + 1;
+			//				break;
+			//			}
+			//		}
+			//		if (!pawn.Destroyed)
+			//		{
+			//			Log.Error("Could not kill pawn " + pawn.ToStringSafe<Pawn>(), false);
+			//		}
+			//		if (pawn.health.ShouldBeDeadFromLethalDamageThreshold())
+			//		{
+			//			num2++;
+			//		}
+			//		if (Find.WorldPawns.Contains(pawn))
+			//		{
+			//			Find.WorldPawns.RemovePawn(pawn);
+			//		}
+			//		Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
+			//	}
+			//	float hits = (float)num / 15f;
+			//	return new
+			//	{
+			//		Race = x,
+			//		Hits = hits,
+			//		DiedDueToDamageThreshold = num2
+			//	};
+			//}).ToDictionary(x => x.Race);
+			//IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
+			//where d.race != null
+			//orderby d.race.baseHealthScale descending
+			//select d;
+			//TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[4];
+			//array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
+			//array[1] = new TableDataGetter<ThingDef>("10 damage hits", (ThingDef d) => data[d].Hits.ToString("F0"));
+			//array[2] = new TableDataGetter<ThingDef>("died due to\ndam. thresh.", (ThingDef d) => data[d].DiedDueToDamageThreshold + "/" + 15);
+			//array[3] = new TableDataGetter<ThingDef>("mech", delegate(ThingDef d)
+			//{
+			//	if (!d.race.IsMechanoid)
+			//	{
+			//		return "";
+			//	}
+			//	return "mech";
+			//});
+			//DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600195F RID: 6495 RVA: 0x00096A6C File Offset: 0x00094C6C
+		
 		[DebugOutput]
 		public static void Prosthetics()
 		{
-			PawnGenerationRequest request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, (Pawn p) => p.health.hediffSet.hediffs.Count == 0, null, null, null, null, null, null, null, null, null, null, null);
-			Pawn pawn = PawnGenerator.GeneratePawn(request);
-			Action refreshPawn = delegate
-			{
-				while (pawn.health.hediffSet.hediffs.Count > 0)
-				{
-					pawn.health.RemoveHediff(pawn.health.hediffSet.hediffs[0]);
-				}
-			};
-			Func<BodyPartDef, IEnumerable<BodyPartRecord>> <>9__13;
-			Func<BodyPartGroupDef, IEnumerable<BodyPartRecord>> <>9__14;
-			Func<RecipeDef, BodyPartRecord> getApplicationPoint = delegate(RecipeDef recipe)
-			{
-				IEnumerable<BodyPartDef> appliedOnFixedBodyParts = recipe.appliedOnFixedBodyParts;
-				Func<BodyPartDef, IEnumerable<BodyPartRecord>> selector;
-				if ((selector = <>9__13) == null)
-				{
-					selector = (<>9__13 = ((BodyPartDef bpd) => pawn.def.race.body.GetPartsWithDef(bpd)));
-				}
-				IEnumerable<BodyPartRecord> first = appliedOnFixedBodyParts.SelectMany(selector);
-				IEnumerable<BodyPartGroupDef> appliedOnFixedBodyPartGroups = recipe.appliedOnFixedBodyPartGroups;
-				Func<BodyPartGroupDef, IEnumerable<BodyPartRecord>> selector2;
-				if ((selector2 = <>9__14) == null)
-				{
-					selector2 = (<>9__14 = ((BodyPartGroupDef g) => from r in pawn.def.race.body.AllParts
-					where r.groups != null && r.groups.Contains(g)
-					select r));
-				}
-				return first.Concat(appliedOnFixedBodyPartGroups.SelectMany(selector2)).FirstOrDefault<BodyPartRecord>();
-			};
-			Func<RecipeDef, ThingDef> getProstheticItem = (RecipeDef recipe) => (from ic in recipe.ingredients
-			select ic.filter.AnyAllowedDef).FirstOrDefault((ThingDef td) => !td.IsMedicine);
-			List<TableDataGetter<RecipeDef>> list = new List<TableDataGetter<RecipeDef>>();
-			list.Add(new TableDataGetter<RecipeDef>("defName", (RecipeDef r) => r.defName));
-			list.Add(new TableDataGetter<RecipeDef>("price", delegate(RecipeDef r)
-			{
-				ThingDef thingDef = getProstheticItem(r);
-				if (thingDef == null)
-				{
-					return 0f;
-				}
-				return thingDef.BaseMarketValue;
-			}));
-			list.Add(new TableDataGetter<RecipeDef>("install time", (RecipeDef r) => r.workAmount));
-			list.Add(new TableDataGetter<RecipeDef>("install total cost", delegate(RecipeDef r)
-			{
-				float num = r.ingredients.Sum((IngredientCount ic) => ic.filter.AnyAllowedDef.BaseMarketValue * ic.GetBaseCount());
-				float num2 = r.workAmount * 0.0036f;
-				return num + num2;
-			}));
-			list.Add(new TableDataGetter<RecipeDef>("install skill", (RecipeDef r) => (from sr in r.skillRequirements
-			select sr.minLevel).Max()));
-			using (IEnumerator<PawnCapacityDef> enumerator = (from pc in DefDatabase<PawnCapacityDef>.AllDefs
-			orderby pc.listOrder
-			select pc).GetEnumerator())
-			{
-				while (enumerator.MoveNext())
-				{
-					PawnCapacityDef cap = enumerator.Current;
-					list.Add(new TableDataGetter<RecipeDef>(cap.defName, delegate(RecipeDef r)
-					{
-						refreshPawn();
-						r.Worker.ApplyOnPawn(pawn, getApplicationPoint(r), null, null, null);
-						float num = pawn.health.capacities.GetLevel(cap) - 1f;
-						if ((double)Math.Abs(num) > 0.001)
-						{
-							return num.ToStringPercent();
-						}
-						refreshPawn();
-						BodyPartRecord bodyPartRecord = getApplicationPoint(r);
-						pawn.TakeDamage(new DamageInfo(DamageDefOf.ExecutionCut, pawn.health.hediffSet.GetPartHealth(bodyPartRecord) / 2f, 999f, -1f, null, bodyPartRecord, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
-						List<PawnCapacityUtility.CapacityImpactor> list2 = new List<PawnCapacityUtility.CapacityImpactor>();
-						PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, cap, list2, false);
-						if (list2.Any((PawnCapacityUtility.CapacityImpactor imp) => imp.IsDirect))
-						{
-							return 0f.ToStringPercent();
-						}
-						return "";
-					}));
-				}
-			}
-			list.Add(new TableDataGetter<RecipeDef>("tech level", delegate(RecipeDef r)
-			{
-				if (getProstheticItem(r) != null)
-				{
-					return getProstheticItem(r).techLevel.ToStringHuman();
-				}
-				return "";
-			}));
-			list.Add(new TableDataGetter<RecipeDef>("thingSetMakerTags", delegate(RecipeDef r)
-			{
-				if (getProstheticItem(r) != null)
-				{
-					return getProstheticItem(r).thingSetMakerTags.ToCommaList(false);
-				}
-				return "";
-			}));
-			list.Add(new TableDataGetter<RecipeDef>("techHediffsTags", delegate(RecipeDef r)
-			{
-				if (getProstheticItem(r) != null)
-				{
-					return getProstheticItem(r).techHediffsTags.ToCommaList(false);
-				}
-				return "";
-			}));
-			DebugTables.MakeTablesDialog<RecipeDef>(from r in ThingDefOf.Human.AllRecipes
-			where r.workerClass == typeof(Recipe_InstallArtificialBodyPart) || r.workerClass == typeof(Recipe_InstallNaturalBodyPart)
-			select r, list.ToArray());
-			Messages.Clear();
+			//PawnGenerationRequest request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, (Pawn p) => p.health.hediffSet.hediffs.Count == 0, null, null, null, null, null, null, null, null, null, null, null);
+			//Pawn pawn = PawnGenerator.GeneratePawn(request);
+			//Action refreshPawn = delegate
+			//{
+			//	while (pawn.health.hediffSet.hediffs.Count > 0)
+			//	{
+			//		pawn.health.RemoveHediff(pawn.health.hediffSet.hediffs[0]);
+			//	}
+			//};
+			//Func<BodyPartDef, IEnumerable<BodyPartRecord>> 9__13;
+			//Func<BodyPartGroupDef, IEnumerable<BodyPartRecord>> 9__14;
+			//Func<RecipeDef, BodyPartRecord> getApplicationPoint = delegate(RecipeDef recipe)
+			//{
+			//	IEnumerable<BodyPartDef> appliedOnFixedBodyParts = recipe.appliedOnFixedBodyParts;
+			//	Func<BodyPartDef, IEnumerable<BodyPartRecord>> selector;
+			//	if ((selector 3) == null)
+			//	{
+			//		selector = (9__13 = ((BodyPartDef bpd) => pawn.def.race.body.GetPartsWithDef(bpd)));
+			//	}
+			//	IEnumerable<BodyPartRecord> first = appliedOnFixedBodyParts.SelectMany(selector);
+			//	IEnumerable<BodyPartGroupDef> appliedOnFixedBodyPartGroups = recipe.appliedOnFixedBodyPartGroups;
+			//	Func<BodyPartGroupDef, IEnumerable<BodyPartRecord>> selector2;
+			//	if ((selector2 4) == null)
+			//	{
+			//		selector2 = (9__14 = ((BodyPartGroupDef g) => from r in pawn.def.race.body.AllParts
+			//		where r.groups != null && r.groups.Contains(g)
+			//		select r));
+			//	}
+			//	return first.Concat(appliedOnFixedBodyPartGroups.SelectMany(selector2)).FirstOrDefault<BodyPartRecord>();
+			//};
+			//Func<RecipeDef, ThingDef> getProstheticItem = (RecipeDef recipe) => (from ic in recipe.ingredients
+			//select ic.filter.AnyAllowedDef).FirstOrDefault((ThingDef td) => !td.IsMedicine);
+			//List<TableDataGetter<RecipeDef>> list = new List<TableDataGetter<RecipeDef>>();
+			//list.Add(new TableDataGetter<RecipeDef>("defName", (RecipeDef r) => r.defName));
+			//list.Add(new TableDataGetter<RecipeDef>("price", delegate(RecipeDef r)
+			//{
+			//	ThingDef thingDef = getProstheticItem(r);
+			//	if (thingDef == null)
+			//	{
+			//		return 0f;
+			//	}
+			//	return thingDef.BaseMarketValue;
+			//}));
+			//list.Add(new TableDataGetter<RecipeDef>("install time", (RecipeDef r) => r.workAmount));
+			//list.Add(new TableDataGetter<RecipeDef>("install total cost", delegate(RecipeDef r)
+			//{
+			//	float num = r.ingredients.Sum((IngredientCount ic) => ic.filter.AnyAllowedDef.BaseMarketValue * ic.GetBaseCount());
+			//	float num2 = r.workAmount * 0.0036f;
+			//	return num + num2;
+			//}));
+			//list.Add(new TableDataGetter<RecipeDef>("install skill", (RecipeDef r) => (from sr in r.skillRequirements
+			//select sr.minLevel).Max()));
+			//using (IEnumerator<PawnCapacityDef> enumerator = (from pc in DefDatabase<PawnCapacityDef>.AllDefs
+			//orderby pc.listOrder
+			//select pc).GetEnumerator())
+			//{
+			//	while (enumerator.MoveNext())
+			//	{
+			//		PawnCapacityDef cap = enumerator.Current;
+			//		list.Add(new TableDataGetter<RecipeDef>(cap.defName, delegate(RecipeDef r)
+			//		{
+			//			refreshPawn();
+			//			r.Worker.ApplyOnPawn(pawn, getApplicationPoint(r), null, null, null);
+			//			float num = pawn.health.capacities.GetLevel(cap) - 1f;
+			//			if ((double)Math.Abs(num) > 0.001)
+			//			{
+			//				return num.ToStringPercent();
+			//			}
+			//			refreshPawn();
+			//			BodyPartRecord bodyPartRecord = getApplicationPoint(r);
+			//			pawn.TakeDamage(new DamageInfo(DamageDefOf.ExecutionCut, pawn.health.hediffSet.GetPartHealth(bodyPartRecord) / 2f, 999f, -1f, null, bodyPartRecord, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+			//			List<PawnCapacityUtility.CapacityImpactor> list2 = new List<PawnCapacityUtility.CapacityImpactor>();
+			//			PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, cap, list2, false);
+			//			if (list2.Any((PawnCapacityUtility.CapacityImpactor imp) => imp.IsDirect))
+			//			{
+			//				return 0f.ToStringPercent();
+			//			}
+			//			return "";
+			//		}));
+			//	}
+			//}
+			//list.Add(new TableDataGetter<RecipeDef>("tech level", delegate(RecipeDef r)
+			//{
+			//	if (getProstheticItem(r) != null)
+			//	{
+			//		return getProstheticItem(r).techLevel.ToStringHuman();
+			//	}
+			//	return "";
+			//}));
+			//list.Add(new TableDataGetter<RecipeDef>("thingSetMakerTags", delegate(RecipeDef r)
+			//{
+			//	if (getProstheticItem(r) != null)
+			//	{
+			//		return getProstheticItem(r).thingSetMakerTags.ToCommaList(false);
+			//	}
+			//	return "";
+			//}));
+			//list.Add(new TableDataGetter<RecipeDef>("techHediffsTags", delegate(RecipeDef r)
+			//{
+			//	if (getProstheticItem(r) != null)
+			//	{
+			//		return getProstheticItem(r).techHediffsTags.ToCommaList(false);
+			//	}
+			//	return "";
+			//}));
+			//DebugTables.MakeTablesDialog<RecipeDef>(from r in ThingDefOf.Human.AllRecipes
+			//where r.workerClass == typeof(Recipe_InstallArtificialBodyPart) || r.workerClass == typeof(Recipe_InstallNaturalBodyPart)
+			//select r, list.ToArray());
+			//Messages.Clear();
 		}
 
-		// Token: 0x06001960 RID: 6496 RVA: 0x00096D64 File Offset: 0x00094F64
+		
 		[DebugOutput]
 		public static void TranshumanistBodyParts()
 		{

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CCC RID: 3276
+	
 	public class ThingSetMaker_Sum : ThingSetMaker
 	{
-		// Token: 0x06004F61 RID: 20321 RVA: 0x001AB8EC File Offset: 0x001A9AEC
+		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			for (int i = 0; i < this.options.Count; i++)
@@ -21,7 +21,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004F62 RID: 20322 RVA: 0x001AB944 File Offset: 0x001A9B44
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			int num = 0;
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F63 RID: 20323 RVA: 0x001ABD20 File Offset: 0x001A9F20
+		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F64 RID: 20324 RVA: 0x001ABD5F File Offset: 0x001A9F5F
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			int num;
@@ -131,34 +131,34 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002C8A RID: 11402
+		
 		public List<ThingSetMaker_Sum.Option> options;
 
-		// Token: 0x04002C8B RID: 11403
+		
 		public bool resolveInOrder;
 
-		// Token: 0x04002C8C RID: 11404
+		
 		private List<ThingSetMaker_Sum.Option> optionsInResolveOrder = new List<ThingSetMaker_Sum.Option>();
 
-		// Token: 0x02001C1A RID: 7194
+		
 		public class Option
 		{
-			// Token: 0x04006A85 RID: 27269
+			
 			public ThingSetMaker thingSetMaker;
 
-			// Token: 0x04006A86 RID: 27270
+			
 			public float chance = 1f;
 
-			// Token: 0x04006A87 RID: 27271
+			
 			public float? maxMarketValue;
 
-			// Token: 0x04006A88 RID: 27272
+			
 			public float minMarketValue;
 
-			// Token: 0x04006A89 RID: 27273
+			
 			public float minTotalMarketValue;
 
-			// Token: 0x04006A8A RID: 27274
+			
 			public const float MaxMarketValueLeewayFactor = 0.8f;
 		}
 	}

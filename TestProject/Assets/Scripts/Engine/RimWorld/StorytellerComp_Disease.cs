@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A0E RID: 2574
+	
 	public class StorytellerComp_Disease : StorytellerComp
 	{
-		// Token: 0x17000AD5 RID: 2773
+		
 		// (get) Token: 0x06003D28 RID: 15656 RVA: 0x0014387C File Offset: 0x00141A7C
 		protected StorytellerCompProperties_Disease Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D29 RID: 15657 RVA: 0x00143889 File Offset: 0x00141A89
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			if (!DebugSettings.enableRandomDiseases)
@@ -48,13 +48,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003D2A RID: 15658 RVA: 0x001438A0 File Offset: 0x00141AA0
+		
 		public override string ToString()
 		{
 			return base.ToString() + " " + this.Props.category;
 		}
 
-		// Token: 0x040023AC RID: 9132
+		
 		private float CaravanDiseaseMTBFactor = 4f;
 	}
 }

@@ -4,7 +4,7 @@ using NAudio.Wave;
 
 namespace NVorbis.NAudioSupport
 {
-	// Token: 0x02000004 RID: 4
+
 	internal class VorbisWaveReader : WaveStream, IDisposable, ISampleProvider, IWaveProvider
 	{
 		// Token: 0x0600000E RID: 14 RVA: 0x0000234B File Offset: 0x0000054B

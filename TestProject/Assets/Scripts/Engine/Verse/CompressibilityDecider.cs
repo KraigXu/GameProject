@@ -7,16 +7,16 @@ using Verse.AI.Group;
 
 namespace Verse
 {
-	// Token: 0x02000151 RID: 337
+	
 	public class CompressibilityDecider
 	{
-		// Token: 0x0600098E RID: 2446 RVA: 0x00033E94 File Offset: 0x00032094
+		
 		public CompressibilityDecider(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x0600098F RID: 2447 RVA: 0x00033EB0 File Offset: 0x000320B0
+		
 		public void DetermineReferences()
 		{
 			this.referencedThings.Clear();
@@ -96,16 +96,16 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000990 RID: 2448 RVA: 0x00034214 File Offset: 0x00032414
+		
 		public bool IsReferenced(Thing th)
 		{
 			return this.referencedThings.Contains(th);
 		}
 
-		// Token: 0x040007DC RID: 2012
+		
 		private Map map;
 
-		// Token: 0x040007DD RID: 2013
+		
 		private HashSet<Thing> referencedThings = new HashSet<Thing>();
 	}
 }

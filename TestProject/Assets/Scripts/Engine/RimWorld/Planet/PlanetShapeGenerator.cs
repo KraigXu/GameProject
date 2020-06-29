@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200120B RID: 4619
+	
 	public static class PlanetShapeGenerator
 	{
-		// Token: 0x06006AD9 RID: 27353 RVA: 0x00254281 File Offset: 0x00252481
+		
 		public static void Generate(int subdivisionsCount, out List<Vector3> outVerts, out List<int> outTileIDToVerts_offsets, out List<int> outTileIDToNeighbors_offsets, out List<int> outTileIDToNeighbors_values, float radius, Vector3 viewCenter, float viewAngle)
 		{
 			PlanetShapeGenerator.subdivisionsCount = subdivisionsCount;
@@ -22,7 +22,7 @@ namespace RimWorld.Planet
 			outTileIDToNeighbors_values = PlanetShapeGenerator.tileIDToNeighbors_values;
 		}
 
-		// Token: 0x06006ADA RID: 27354 RVA: 0x002542C0 File Offset: 0x002524C0
+		
 		private static void DoGenerate()
 		{
 			PlanetShapeGenerator.ClearOrCreateMeshStaticData();
@@ -36,7 +36,7 @@ namespace RimWorld.Planet
 			PlanetShapeGenerator.ClearAndDeallocateWorkingLists();
 		}
 
-		// Token: 0x06006ADB RID: 27355 RVA: 0x0025431E File Offset: 0x0025251E
+		
 		private static void ClearOrCreateMeshStaticData()
 		{
 			PlanetShapeGenerator.tris.Clear();
@@ -44,7 +44,7 @@ namespace RimWorld.Planet
 			PlanetShapeGenerator.finalVerts = new List<Vector3>();
 		}
 
-		// Token: 0x06006ADC RID: 27356 RVA: 0x0025433E File Offset: 0x0025253E
+		
 		private static void CreateTileInfoStaticData()
 		{
 			PlanetShapeGenerator.tileIDToFinalVerts_offsets = new List<int>();
@@ -52,7 +52,7 @@ namespace RimWorld.Planet
 			PlanetShapeGenerator.tileIDToNeighbors_values = new List<int>();
 		}
 
-		// Token: 0x06006ADD RID: 27357 RVA: 0x00254360 File Offset: 0x00252560
+		
 		private static void ClearAndDeallocateWorkingLists()
 		{
 			PlanetShapeGenerator.ClearAndDeallocate<TriangleIndices>(ref PlanetShapeGenerator.tris);
@@ -71,7 +71,7 @@ namespace RimWorld.Planet
 			PlanetShapeGenerator.ClearAndDeallocate<int>(ref PlanetShapeGenerator.tileIDToVerts_values);
 		}
 
-		// Token: 0x06006ADE RID: 27358 RVA: 0x002543F9 File Offset: 0x002525F9
+		
 		private static void ClearAndDeallocate<T>(ref List<T> list)
 		{
 			list.Clear();
@@ -79,7 +79,7 @@ namespace RimWorld.Planet
 			list = new List<T>();
 		}
 
-		// Token: 0x06006ADF RID: 27359 RVA: 0x00254410 File Offset: 0x00252610
+		
 		private static void Subdivide(bool lastPass)
 		{
 			PackedListOfLists.GenerateVertToTrisPackedList(PlanetShapeGenerator.verts, PlanetShapeGenerator.tris, PlanetShapeGenerator.vertToTris_offsets, PlanetShapeGenerator.vertToTris_values);
@@ -169,7 +169,7 @@ namespace RimWorld.Planet
 			PlanetShapeGenerator.tris.AddRange(PlanetShapeGenerator.newTris);
 		}
 
-		// Token: 0x06006AE0 RID: 27360 RVA: 0x00254720 File Offset: 0x00252920
+		
 		private static void FinalizeGeneratedTile(List<int> generatedTileVerts)
 		{
 			if ((generatedTileVerts.Count != 5 && generatedTileVerts.Count != 6) || generatedTileVerts.Count > 6)
@@ -195,7 +195,7 @@ namespace RimWorld.Planet
 			PackedListOfLists.AddList<int>(PlanetShapeGenerator.tileIDToVerts_offsets, PlanetShapeGenerator.tileIDToVerts_values, generatedTileVerts);
 		}
 
-		// Token: 0x06006AE1 RID: 27361 RVA: 0x002547F4 File Offset: 0x002529F4
+		
 		private static bool ShouldDiscardGeneratedTile(List<int> generatedTileVerts)
 		{
 			Vector3 a = Vector3.zero;
@@ -209,7 +209,7 @@ namespace RimWorld.Planet
 			return !MeshUtility.VisibleForWorldgen(a / (float)generatedTileVerts.Count, PlanetShapeGenerator.radius, PlanetShapeGenerator.viewCenter, PlanetShapeGenerator.viewAngle);
 		}
 
-		// Token: 0x06006AE2 RID: 27362 RVA: 0x00254858 File Offset: 0x00252A58
+		
 		private static void CalculateTileNeighbors()
 		{
 			List<int> list = new List<int>();
@@ -243,7 +243,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006AE3 RID: 27363 RVA: 0x0025496C File Offset: 0x00252B6C
+		
 		private static int GetNextAdjacentTriangle(int currentAdjTriangleIndex, int currentTriangleVertex, List<int> adjacentTris)
 		{
 			int i = 0;
@@ -264,73 +264,73 @@ namespace RimWorld.Planet
 			return -1;
 		}
 
-		// Token: 0x040042B4 RID: 17076
+		
 		private static int subdivisionsCount;
 
-		// Token: 0x040042B5 RID: 17077
+		
 		private static float radius;
 
-		// Token: 0x040042B6 RID: 17078
+		
 		private static Vector3 viewCenter;
 
-		// Token: 0x040042B7 RID: 17079
+		
 		private static float viewAngle;
 
-		// Token: 0x040042B8 RID: 17080
+		
 		private static List<TriangleIndices> tris = new List<TriangleIndices>();
 
-		// Token: 0x040042B9 RID: 17081
+		
 		private static List<Vector3> verts = new List<Vector3>();
 
-		// Token: 0x040042BA RID: 17082
+		
 		private static List<Vector3> finalVerts;
 
-		// Token: 0x040042BB RID: 17083
+		
 		private static List<int> tileIDToFinalVerts_offsets;
 
-		// Token: 0x040042BC RID: 17084
+		
 		private static List<int> tileIDToNeighbors_offsets;
 
-		// Token: 0x040042BD RID: 17085
+		
 		private static List<int> tileIDToNeighbors_values;
 
-		// Token: 0x040042BE RID: 17086
+		
 		private static List<TriangleIndices> newTris = new List<TriangleIndices>();
 
-		// Token: 0x040042BF RID: 17087
+		
 		private static List<int> generatedTileVerts = new List<int>();
 
-		// Token: 0x040042C0 RID: 17088
+		
 		private static List<int> adjacentTris = new List<int>();
 
-		// Token: 0x040042C1 RID: 17089
+		
 		private static List<int> tmpTileIDs = new List<int>();
 
-		// Token: 0x040042C2 RID: 17090
+		
 		private static List<int> tmpVerts = new List<int>();
 
-		// Token: 0x040042C3 RID: 17091
+		
 		private static List<int> tmpNeighborsToAdd = new List<int>();
 
-		// Token: 0x040042C4 RID: 17092
+		
 		private static List<int> vertToTris_offsets = new List<int>();
 
-		// Token: 0x040042C5 RID: 17093
+		
 		private static List<int> vertToTris_values = new List<int>();
 
-		// Token: 0x040042C6 RID: 17094
+		
 		private static List<int> vertToTileIDs_offsets = new List<int>();
 
-		// Token: 0x040042C7 RID: 17095
+		
 		private static List<int> vertToTileIDs_values = new List<int>();
 
-		// Token: 0x040042C8 RID: 17096
+		
 		private static List<int> tileIDToVerts_offsets = new List<int>();
 
-		// Token: 0x040042C9 RID: 17097
+		
 		private static List<int> tileIDToVerts_values = new List<int>();
 
-		// Token: 0x040042CA RID: 17098
+		
 		private const int MaxTileVertices = 6;
 	}
 }

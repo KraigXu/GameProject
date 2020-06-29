@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000BBC RID: 3004
+	
 	public class Pawn_PlayerSettings : IExposable
 	{
-		// Token: 0x17000C9A RID: 3226
+		
 		// (get) Token: 0x060046F5 RID: 18165 RVA: 0x0018012B File Offset: 0x0017E32B
 		// (set) Token: 0x060046F6 RID: 18166 RVA: 0x00180134 File Offset: 0x0017E334
 		public Pawn Master
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C9B RID: 3227
+		
 		// (get) Token: 0x060046F7 RID: 18167 RVA: 0x001801B9 File Offset: 0x0017E3B9
 		public Area EffectiveAreaRestrictionInPawnCurrentMap
 		{
@@ -52,7 +52,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C9C RID: 3228
+		
 		// (get) Token: 0x060046F8 RID: 18168 RVA: 0x001801E3 File Offset: 0x0017E3E3
 		public Area EffectiveAreaRestriction
 		{
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C9D RID: 3229
+		
 		// (get) Token: 0x060046F9 RID: 18169 RVA: 0x001801F5 File Offset: 0x0017E3F5
 		// (set) Token: 0x060046FA RID: 18170 RVA: 0x00180200 File Offset: 0x0017E400
 		public Area AreaRestriction
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C9E RID: 3230
+		
 		// (get) Token: 0x060046FB RID: 18171 RVA: 0x00180297 File Offset: 0x0017E497
 		public bool RespectsAllowedArea
 		{
@@ -99,7 +99,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C9F RID: 3231
+		
 		// (get) Token: 0x060046FC RID: 18172 RVA: 0x001802CA File Offset: 0x0017E4CA
 		public bool RespectsMaster
 		{
@@ -109,7 +109,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000CA0 RID: 3232
+		
 		// (get) Token: 0x060046FD RID: 18173 RVA: 0x00180302 File Offset: 0x0017E502
 		public Pawn RespectedMaster
 		{
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000CA1 RID: 3233
+		
 		// (get) Token: 0x060046FE RID: 18174 RVA: 0x00180314 File Offset: 0x0017E514
 		public bool UsesConfigurableHostilityResponse
 		{
@@ -133,7 +133,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046FF RID: 18175 RVA: 0x00180334 File Offset: 0x0017E534
+		
 		public Pawn_PlayerSettings(Pawn pawn)
 		{
 			this.pawn = pawn;
@@ -148,7 +148,7 @@ namespace RimWorld
 			this.Notify_FactionChanged();
 		}
 
-		// Token: 0x06004700 RID: 18176 RVA: 0x0018038C File Offset: 0x0017E58C
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<int>(ref this.joinTick, "joinTick", 0, false);
@@ -163,7 +163,7 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.displayOrder, "displayOrder", 0, false);
 		}
 
-		// Token: 0x06004701 RID: 18177 RVA: 0x0018044B File Offset: 0x0017E64B
+		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
 			if (this.pawn.Drafted)
@@ -214,20 +214,20 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004702 RID: 18178 RVA: 0x0018045B File Offset: 0x0017E65B
+		
 		public void Notify_FactionChanged()
 		{
 			this.ResetMedicalCare();
 			this.areaAllowedInt = null;
 		}
 
-		// Token: 0x06004703 RID: 18179 RVA: 0x0018046A File Offset: 0x0017E66A
+		
 		public void Notify_MadePrisoner()
 		{
 			this.ResetMedicalCare();
 		}
 
-		// Token: 0x06004704 RID: 18180 RVA: 0x00180474 File Offset: 0x0017E674
+		
 		public void ResetMedicalCare()
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
@@ -266,7 +266,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004705 RID: 18181 RVA: 0x00180563 File Offset: 0x0017E763
+		
 		public void Notify_AreaRemoved(Area area)
 		{
 			if (this.areaAllowedInt == area)
@@ -275,37 +275,37 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040028BD RID: 10429
+		
 		private Pawn pawn;
 
-		// Token: 0x040028BE RID: 10430
+		
 		private Area areaAllowedInt;
 
-		// Token: 0x040028BF RID: 10431
+		
 		public int joinTick = -1;
 
-		// Token: 0x040028C0 RID: 10432
+		
 		private Pawn master;
 
-		// Token: 0x040028C1 RID: 10433
+		
 		public bool followDrafted;
 
-		// Token: 0x040028C2 RID: 10434
+		
 		public bool followFieldwork;
 
-		// Token: 0x040028C3 RID: 10435
+		
 		public bool animalsReleased;
 
-		// Token: 0x040028C4 RID: 10436
+		
 		public MedicalCareCategory medCare = MedicalCareCategory.NoMeds;
 
-		// Token: 0x040028C5 RID: 10437
+		
 		public HostilityResponseMode hostilityResponse = HostilityResponseMode.Flee;
 
-		// Token: 0x040028C6 RID: 10438
+		
 		public bool selfTend;
 
-		// Token: 0x040028C7 RID: 10439
+		
 		public int displayOrder;
 	}
 }

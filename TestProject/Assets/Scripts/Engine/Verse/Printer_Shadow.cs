@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200019B RID: 411
+	
 	public static class Printer_Shadow
 	{
-		// Token: 0x06000BAF RID: 2991 RVA: 0x000421FF File Offset: 0x000403FF
+		
 		public static void PrintShadow(SectionLayer layer, Vector3 center, ShadowData shadow, Rot4 rotation)
 		{
 			Printer_Shadow.PrintShadow(layer, center, shadow.volume, rotation);
 		}
 
-		// Token: 0x06000BB0 RID: 2992 RVA: 0x00042210 File Offset: 0x00040410
+		
 		public static void PrintShadow(SectionLayer layer, Vector3 center, Vector3 volume, Rot4 rotation)
 		{
 			if (!DebugViewSettings.drawShadows)
@@ -74,18 +74,18 @@ namespace Verse
 			subMesh.tris.Add(count4);
 		}
 
-		// Token: 0x04000958 RID: 2392
+		
 		private static readonly Color32 LowVertexColor = new Color32(0, 0, 0, 0);
 
-		// Token: 0x04000959 RID: 2393
+		
 		[TweakValue("Graphics_Shadow", -5f, 5f)]
 		private static float GlobalShadowSizeOffsetX = 0f;
 
-		// Token: 0x0400095A RID: 2394
+		
 		[TweakValue("Graphics_Shadow", -5f, 5f)]
 		private static float GlobalShadowSizeOffsetY = 0f;
 
-		// Token: 0x0400095B RID: 2395
+		
 		[TweakValue("Graphics_Shadow", -5f, 5f)]
 		private static float GlobalShadowSizeOffsetZ = 0f;
 	}

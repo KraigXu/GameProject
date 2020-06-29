@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000777 RID: 1911
+	
 	public class LordJob_SleepThenMechanoidsDefend : LordJob_MechanoidDefendBase
 	{
-		// Token: 0x17000909 RID: 2313
+		
 		// (get) Token: 0x060031ED RID: 12781 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool GuiltyOnDowned
 		{
@@ -20,12 +20,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031EE RID: 12782 RVA: 0x0011591C File Offset: 0x00113B1C
+		
 		public LordJob_SleepThenMechanoidsDefend()
 		{
 		}
 
-		// Token: 0x060031EF RID: 12783 RVA: 0x00116274 File Offset: 0x00114474
+		
 		public LordJob_SleepThenMechanoidsDefend(List<Thing> things, Faction faction, float defendRadius, IntVec3 defSpot, bool canAssaultColony, bool isMechCluster)
 		{
 			if (things != null)
@@ -39,7 +39,7 @@ namespace RimWorld
 			this.isMechCluster = isMechCluster;
 		}
 
-		// Token: 0x060031F0 RID: 12784 RVA: 0x001162B4 File Offset: 0x001144B4
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();

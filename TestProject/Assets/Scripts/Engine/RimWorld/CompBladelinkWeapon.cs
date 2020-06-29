@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CF5 RID: 3317
+	
 	public class CompBladelinkWeapon : ThingComp
 	{
-		// Token: 0x0600509E RID: 20638 RVA: 0x001B184C File Offset: 0x001AFA4C
+		
 		public override void Notify_Equipped(Pawn pawn)
 		{
 			if (!ModLister.RoyaltyInstalled)
@@ -24,7 +24,7 @@ namespace RimWorld
 			this.bondedPawn = pawn;
 		}
 
-		// Token: 0x0600509F RID: 20639 RVA: 0x001B1908 File Offset: 0x001AFB08
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.bondedPawn == null)
@@ -34,7 +34,7 @@ namespace RimWorld
 			return "BondedWith".Translate(this.bondedPawnLabel.ApplyTag(TagType.Name, null)).Resolve();
 		}
 
-		// Token: 0x060050A0 RID: 20640 RVA: 0x001B1954 File Offset: 0x001AFB54
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060050A1 RID: 20641 RVA: 0x001B19DE File Offset: 0x001AFBDE
+		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
 		{
 			foreach (Faction faction in Find.FactionManager.AllFactions)
@@ -64,19 +64,19 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060050A2 RID: 20642 RVA: 0x00002681 File Offset: 0x00000881
+		
 		[Obsolete("Will be removed in the future")]
 		public override void Notify_UsedWeapon(Pawn pawn)
 		{
 		}
 
-		// Token: 0x04002CCA RID: 11466
+		
 		private bool bonded;
 
-		// Token: 0x04002CCB RID: 11467
+		
 		private string bondedPawnLabel;
 
-		// Token: 0x04002CCC RID: 11468
+		
 		public Pawn bondedPawn;
 	}
 }

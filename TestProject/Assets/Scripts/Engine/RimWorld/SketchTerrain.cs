@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AA6 RID: 2726
+	
 	public class SketchTerrain : SketchBuildable
 	{
-		// Token: 0x17000B5E RID: 2910
+		
 		// (get) Token: 0x0600406F RID: 16495 RVA: 0x0015847B File Offset: 0x0015667B
 		public override BuildableDef Buildable
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B5F RID: 2911
+		
 		// (get) Token: 0x06004070 RID: 16496 RVA: 0x00158483 File Offset: 0x00156683
 		public override ThingDef Stuff
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B60 RID: 2912
+		
 		// (get) Token: 0x06004071 RID: 16497 RVA: 0x0015848B File Offset: 0x0015668B
 		public override CellRect OccupiedRect
 		{
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B61 RID: 2913
+		
 		// (get) Token: 0x06004072 RID: 16498 RVA: 0x0001BFCE File Offset: 0x0001A1CE
 		public override float SpawnOrder
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B62 RID: 2914
+		
 		// (get) Token: 0x06004073 RID: 16499 RVA: 0x00158498 File Offset: 0x00156698
 		public override string Label
 		{
@@ -62,20 +62,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004074 RID: 16500 RVA: 0x001584F0 File Offset: 0x001566F0
+		
 		public override void DrawGhost(IntVec3 at, Color color)
 		{
 			ThingDef blueprintDef = this.def.blueprintDef;
 			GraphicDatabase.Get(blueprintDef.graphic.GetType(), blueprintDef.graphic.path, blueprintDef.graphic.Shader, blueprintDef.graphic.drawSize, color, Color.white, blueprintDef.graphicData, null).DrawFromDef(at.ToVector3ShiftedWithAltitude(AltitudeLayer.Blueprint), Rot4.North, this.def.blueprintDef, 0f);
 		}
 
-		// Token: 0x06004075 RID: 16501 RVA: 0x0015856A File Offset: 0x0015676A
+		
 		public override bool IsSameSpawned(IntVec3 at, Map map)
 		{
 			return at.InBounds(map) && this.IsSameOrSimilar(at.GetTerrain(map));
 		}
 
-		// Token: 0x06004076 RID: 16502 RVA: 0x00158584 File Offset: 0x00156784
+		
 		public bool IsSameOrSimilar(BuildableDef other)
 		{
 			if (other == null)
@@ -97,7 +97,7 @@ namespace RimWorld
 			return other.designatorDropdown == this.def.designatorDropdown;
 		}
 
-		// Token: 0x06004077 RID: 16503 RVA: 0x001585FC File Offset: 0x001567FC
+		
 		public override Thing GetSpawnedBlueprintOrFrame(IntVec3 at, Map map)
 		{
 			if (!at.InBounds(map))
@@ -115,13 +115,13 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06004078 RID: 16504 RVA: 0x00158664 File Offset: 0x00156864
+		
 		public override bool IsSpawningBlocked(IntVec3 at, Map map, Thing thingToIgnore = null, bool wipeIfCollides = false)
 		{
 			return this.IsSpawningBlockedPermanently(at, map, thingToIgnore, wipeIfCollides) || !at.InBounds(map) || !GenConstruct.CanPlaceBlueprintAt(this.def, at, Rot4.North, map, wipeIfCollides, thingToIgnore, null, null).Accepted;
 		}
 
-		// Token: 0x06004079 RID: 16505 RVA: 0x001586B0 File Offset: 0x001568B0
+		
 		public override bool IsSpawningBlockedPermanently(IntVec3 at, Map map, Thing thingToIgnore = null, bool wipeIfCollides = false)
 		{
 			if (!at.InBounds(map))
@@ -150,13 +150,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600407A RID: 16506 RVA: 0x00158788 File Offset: 0x00156988
+		
 		public override bool CanBuildOnTerrain(IntVec3 at, Map map)
 		{
 			return GenConstruct.CanBuildOnTerrain(this.def, at, map, Rot4.North, null, null);
 		}
 
-		// Token: 0x0600407B RID: 16507 RVA: 0x001587A0 File Offset: 0x001569A0
+		
 		public override bool Spawn(IntVec3 at, Map map, Faction faction, Sketch.SpawnMode spawnMode = Sketch.SpawnMode.Normal, bool wipeIfCollides = false, List<Thing> spawnedThings = null, bool dormant = false)
 		{
 			if (this.IsSpawningBlocked(at, map, null, wipeIfCollides))
@@ -178,7 +178,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600407C RID: 16508 RVA: 0x00158810 File Offset: 0x00156A10
+		
 		private TerrainDef GetDefFromStuff()
 		{
 			if (this.stuffForComparingSimilar == null)
@@ -195,14 +195,14 @@ namespace RimWorld
 			return this.def;
 		}
 
-		// Token: 0x0600407D RID: 16509 RVA: 0x001588A0 File Offset: 0x00156AA0
+		
 		public override bool SameForSubtracting(SketchEntity other)
 		{
 			SketchTerrain sketchTerrain = other as SketchTerrain;
 			return sketchTerrain != null && (sketchTerrain == this || (this.IsSameOrSimilar(sketchTerrain.Buildable) && this.pos == sketchTerrain.pos));
 		}
 
-		// Token: 0x0600407E RID: 16510 RVA: 0x001588E0 File Offset: 0x00156AE0
+		
 		public override SketchEntity DeepCopy()
 		{
 			SketchTerrain sketchTerrain = (SketchTerrain)base.DeepCopy();
@@ -211,7 +211,7 @@ namespace RimWorld
 			return sketchTerrain;
 		}
 
-		// Token: 0x0600407F RID: 16511 RVA: 0x00158905 File Offset: 0x00156B05
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -220,13 +220,13 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.treatSimilarAsSame, "treatSimilarAsSame", false, false);
 		}
 
-		// Token: 0x04002569 RID: 9577
+		
 		public TerrainDef def;
 
-		// Token: 0x0400256A RID: 9578
+		
 		public ThingDef stuffForComparingSimilar;
 
-		// Token: 0x0400256B RID: 9579
+		
 		public bool treatSimilarAsSame;
 	}
 }

@@ -6,22 +6,22 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001130 RID: 4400
+	
 	public class QuestNode_GetMonumentSketch : QuestNode
 	{
-		// Token: 0x060066DB RID: 26331 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x060066DC RID: 26332 RVA: 0x002400A4 File Offset: 0x0023E2A4
+		
 		protected override void RunInt()
 		{
 			this.DoWork(QuestGen.slate);
 		}
 
-		// Token: 0x060066DD RID: 26333 RVA: 0x002400B4 File Offset: 0x0023E2B4
+		
 		private bool DoWork(Slate slate)
 		{
 			float num = slate.Get<float>("points", 0f, false);
@@ -77,29 +77,29 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x04003EF2 RID: 16114
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003EF3 RID: 16115
+		
 		public SlateRef<Map> useOnlyResourcesAvailableOnMap;
 
-		// Token: 0x04003EF4 RID: 16116
+		
 		public SlateRef<int?> maxSize;
 
-		// Token: 0x04003EF5 RID: 16117
+		
 		public SlateRef<float> pointsPerArea;
 
-		// Token: 0x04003EF6 RID: 16118
+		
 		public SlateRef<bool?> clearStuff;
 
-		// Token: 0x04003EF7 RID: 16119
+		
 		private static readonly FloatRange RandomAspectRatioRange = new FloatRange(1f, 3f);
 
-		// Token: 0x04003EF8 RID: 16120
+		
 		private const int MinEdgeLength = 3;
 
-		// Token: 0x04003EF9 RID: 16121
+		
 		private const int MaxArea = 2500;
 	}
 }

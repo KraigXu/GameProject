@@ -5,28 +5,28 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200067D RID: 1661
+	
 	public class JobDriver_Vomit : JobDriver
 	{
-		// Token: 0x06002D3F RID: 11583 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public override void SetInitialPosture()
 		{
 		}
 
-		// Token: 0x06002D40 RID: 11584 RVA: 0x000FF97B File Offset: 0x000FDB7B
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.ticksLeft, "ticksLeft", 0, false);
 		}
 
-		// Token: 0x06002D41 RID: 11585 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002D42 RID: 11586 RVA: 0x000FF995 File Offset: 0x000FDB95
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			Toil toil = new Toil();
@@ -80,7 +80,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A1D RID: 6685
+		
 		private int ticksLeft;
 	}
 }

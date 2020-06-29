@@ -7,10 +7,10 @@ using System.Threading;
 
 namespace Verse
 {
-	// Token: 0x02000426 RID: 1062
+	
 	public class ThreadLocalDeepProfiler
 	{
-		// Token: 0x06001FC3 RID: 8131 RVA: 0x000C22F0 File Offset: 0x000C04F0
+		
 		static ThreadLocalDeepProfiler()
 		{
 			for (int i = 0; i < 50; i++)
@@ -25,7 +25,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001FC4 RID: 8132 RVA: 0x000C2346 File Offset: 0x000C0546
+		
 		public void Start(string label = null)
 		{
 			if (!Prefs.LogVerbose)
@@ -35,7 +35,7 @@ namespace Verse
 			this.watchers.Push(new ThreadLocalDeepProfiler.Watcher(label));
 		}
 
-		// Token: 0x06001FC5 RID: 8133 RVA: 0x000C2364 File Offset: 0x000C0564
+		
 		public void End()
 		{
 			if (!Prefs.LogVerbose)
@@ -57,7 +57,7 @@ namespace Verse
 			this.Output(watcher);
 		}
 
-		// Token: 0x06001FC6 RID: 8134 RVA: 0x000C23D0 File Offset: 0x000C05D0
+		
 		private void Output(ThreadLocalDeepProfiler.Watcher root)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -78,7 +78,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001FC7 RID: 8135 RVA: 0x000C2468 File Offset: 0x000C0668
+		
 		private void HotspotAnalysis(StringBuilder sb, List<ThreadLocalDeepProfiler.Watcher> allWatchers)
 		{
 			List<ThreadLocalDeepProfiler.LabelTimeTuple> list = new List<ThreadLocalDeepProfiler.LabelTimeTuple>();
@@ -128,7 +128,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001FC8 RID: 8136 RVA: 0x000C26A4 File Offset: 0x000C08A4
+		
 		private void AppendStringRecursive(StringBuilder sb, string label, List<ThreadLocalDeepProfiler.Watcher> children, double elapsedTime, int depth, List<ThreadLocalDeepProfiler.Watcher> allWatchers)
 		{
 			if (children != null)
@@ -193,19 +193,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0400139E RID: 5022
+		
 		private Stack<ThreadLocalDeepProfiler.Watcher> watchers = new Stack<ThreadLocalDeepProfiler.Watcher>();
 
-		// Token: 0x0400139F RID: 5023
+		
 		private static readonly string[] Prefixes = new string[50];
 
-		// Token: 0x040013A0 RID: 5024
+		
 		private const int MaxDepth = 50;
 
-		// Token: 0x02001672 RID: 5746
+		
 		private class Watcher
 		{
-			// Token: 0x17001500 RID: 5376
+			
 			// (get) Token: 0x060084B8 RID: 33976 RVA: 0x002B0A04 File Offset: 0x002AEC04
 			public double ElapsedMilliseconds
 			{
@@ -215,7 +215,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x17001501 RID: 5377
+			
 			// (get) Token: 0x060084B9 RID: 33977 RVA: 0x002B0A24 File Offset: 0x002AEC24
 			public string Label
 			{
@@ -225,7 +225,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x17001502 RID: 5378
+			
 			// (get) Token: 0x060084BA RID: 33978 RVA: 0x002B0A2C File Offset: 0x002AEC2C
 			public Stopwatch Watch
 			{
@@ -235,7 +235,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x17001503 RID: 5379
+			
 			// (get) Token: 0x060084BB RID: 33979 RVA: 0x002B0A34 File Offset: 0x002AEC34
 			public List<ThreadLocalDeepProfiler.Watcher> Children
 			{
@@ -245,7 +245,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x060084BC RID: 33980 RVA: 0x002B0A3C File Offset: 0x002AEC3C
+			
 			public Watcher(string label)
 			{
 				this.label = label;
@@ -253,7 +253,7 @@ namespace Verse
 				this.children = null;
 			}
 
-			// Token: 0x060084BD RID: 33981 RVA: 0x002B0A5D File Offset: 0x002AEC5D
+			
 			public Watcher(string label, Stopwatch stopwatch)
 			{
 				this.label = label;
@@ -261,7 +261,7 @@ namespace Verse
 				this.children = null;
 			}
 
-			// Token: 0x060084BE RID: 33982 RVA: 0x002B0A7A File Offset: 0x002AEC7A
+			
 			public void AddChildResult(ThreadLocalDeepProfiler.Watcher w)
 			{
 				if (this.children == null)
@@ -271,26 +271,26 @@ namespace Verse
 				this.children.Add(w);
 			}
 
-			// Token: 0x04005602 RID: 22018
+			
 			private string label;
 
-			// Token: 0x04005603 RID: 22019
+			
 			private Stopwatch watch;
 
-			// Token: 0x04005604 RID: 22020
+			
 			private List<ThreadLocalDeepProfiler.Watcher> children;
 		}
 
-		// Token: 0x02001673 RID: 5747
+		
 		private struct LabelTimeTuple
 		{
-			// Token: 0x04005605 RID: 22021
+			
 			public string label;
 
-			// Token: 0x04005606 RID: 22022
+			
 			public double totalTime;
 
-			// Token: 0x04005607 RID: 22023
+			
 			public double selfTime;
 		}
 	}

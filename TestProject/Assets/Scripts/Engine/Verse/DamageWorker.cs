@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200008D RID: 141
+	
 	public class DamageWorker
 	{
-		// Token: 0x060004CA RID: 1226 RVA: 0x00017FF0 File Offset: 0x000161F0
+		
 		public virtual DamageWorker.DamageResult Apply(DamageInfo dinfo, Thing victim)
 		{
 			DamageWorker.DamageResult damageResult = new DamageWorker.DamageResult();
@@ -39,7 +39,7 @@ namespace Verse
 			return damageResult;
 		}
 
-		// Token: 0x060004CB RID: 1227 RVA: 0x000180D4 File Offset: 0x000162D4
+		
 		public virtual void ExplosionStart(Explosion explosion, List<IntVec3> cellsToAffect)
 		{
 			if (this.def.explosionHeatEnergyPerCell > 1.401298E-45f)
@@ -55,7 +55,7 @@ namespace Verse
 			this.ExplosionVisualEffectCenter(explosion);
 		}
 
-		// Token: 0x060004CC RID: 1228 RVA: 0x00018198 File Offset: 0x00016398
+		
 		protected virtual void ExplosionVisualEffectCenter(Explosion explosion)
 		{
 			for (int i = 0; i < 4; i++)
@@ -72,7 +72,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060004CD RID: 1229 RVA: 0x00018260 File Offset: 0x00016460
+		
 		public virtual void ExplosionAffectCell(Explosion explosion, IntVec3 c, List<Thing> damagedThings, List<Thing> ignoredThings, bool canThrowMotes)
 		{
 			if (this.def.explosionCellMote != null && canThrowMotes)
@@ -140,7 +140,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060004CE RID: 1230 RVA: 0x000184E0 File Offset: 0x000166E0
+		
 		protected virtual void ExplosionDamageThing(Explosion explosion, Thing t, List<Thing> damagedThings, List<Thing> ignoredThings, IntVec3 cell)
 		{
 			if (t.def.category == ThingCategory.Mote || t.def.category == ThingCategory.Ethereal)
@@ -190,7 +190,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060004CF RID: 1231 RVA: 0x00018644 File Offset: 0x00016844
+		
 		protected virtual void ExplosionDamageTerrain(Explosion explosion, IntVec3 c)
 		{
 			if (this.def != DamageDefOf.Bomb)
@@ -212,13 +212,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060004D0 RID: 1232 RVA: 0x000186AF File Offset: 0x000168AF
+		
 		public IEnumerable<IntVec3> ExplosionCellsToHit(Explosion explosion)
 		{
 			return this.ExplosionCellsToHit(explosion.Position, explosion.Map, explosion.radius, explosion.needLOSToCell1, explosion.needLOSToCell2);
 		}
 
-		// Token: 0x060004D1 RID: 1233 RVA: 0x000186D8 File Offset: 0x000168D8
+		
 		public virtual IEnumerable<IntVec3> ExplosionCellsToHit(IntVec3 center, Map map, float radius, IntVec3? needLOSToCell1 = null, IntVec3? needLOSToCell2 = null)
 		{
 			DamageWorker.openCells.Clear();
@@ -260,25 +260,25 @@ namespace Verse
 			return DamageWorker.openCells.Concat(DamageWorker.adjWallCells);
 		}
 
-		// Token: 0x0400023E RID: 574
+		
 		public DamageDef def;
 
-		// Token: 0x0400023F RID: 575
+		
 		private const float ExplosionCamShakeMultiplier = 4f;
 
-		// Token: 0x04000240 RID: 576
+		
 		private static List<Thing> thingsToAffect = new List<Thing>();
 
-		// Token: 0x04000241 RID: 577
+		
 		private static List<IntVec3> openCells = new List<IntVec3>();
 
-		// Token: 0x04000242 RID: 578
+		
 		private static List<IntVec3> adjWallCells = new List<IntVec3>();
 
-		// Token: 0x02001338 RID: 4920
+		
 		public class DamageResult
 		{
-			// Token: 0x170013CD RID: 5069
+			
 			// (get) Token: 0x06007469 RID: 29801 RVA: 0x0028495B File Offset: 0x00282B5B
 			public BodyPartRecord LastHitPart
 			{
@@ -296,7 +296,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x0600746A RID: 29802 RVA: 0x00284990 File Offset: 0x00282B90
+			
 			public void AddPart(Thing hitThing, BodyPartRecord part)
 			{
 				if (this.hitThing != null && this.hitThing != hitThing)
@@ -311,7 +311,7 @@ namespace Verse
 				this.parts.Add(part);
 			}
 
-			// Token: 0x0600746B RID: 29803 RVA: 0x002849E4 File Offset: 0x00282BE4
+			
 			public void AddHediff(Hediff hediff)
 			{
 				if (this.hediffs == null)
@@ -321,7 +321,7 @@ namespace Verse
 				this.hediffs.Add(hediff);
 			}
 
-			// Token: 0x0600746C RID: 29804 RVA: 0x00284A08 File Offset: 0x00282C08
+			
 			public void AssociateWithLog(LogEntry_DamageResult log)
 			{
 				if (log == null)
@@ -351,37 +351,37 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x040048B8 RID: 18616
+			
 			public bool wounded;
 
-			// Token: 0x040048B9 RID: 18617
+			
 			public bool headshot;
 
-			// Token: 0x040048BA RID: 18618
+			
 			public bool deflected;
 
-			// Token: 0x040048BB RID: 18619
+			
 			public bool stunned;
 
-			// Token: 0x040048BC RID: 18620
+			
 			public bool deflectedByMetalArmor;
 
-			// Token: 0x040048BD RID: 18621
+			
 			public bool diminished;
 
-			// Token: 0x040048BE RID: 18622
+			
 			public bool diminishedByMetalArmor;
 
-			// Token: 0x040048BF RID: 18623
+			
 			public Thing hitThing;
 
-			// Token: 0x040048C0 RID: 18624
+			
 			public List<BodyPartRecord> parts;
 
-			// Token: 0x040048C1 RID: 18625
+			
 			public List<Hediff> hediffs;
 
-			// Token: 0x040048C2 RID: 18626
+			
 			public float totalDamageDealt;
 		}
 	}

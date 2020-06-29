@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000620 RID: 1568
+	
 	public class JobDriver_PredatorHunt : JobDriver
 	{
-		// Token: 0x17000819 RID: 2073
+		
 		// (get) Token: 0x06002AE6 RID: 10982 RVA: 0x000F9FC0 File Offset: 0x000F81C0
 		public Pawn Prey
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700081A RID: 2074
+		
 		// (get) Token: 0x06002AE7 RID: 10983 RVA: 0x000F9FF8 File Offset: 0x000F81F8
 		private Corpse Corpse
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002AE8 RID: 10984 RVA: 0x000FA01E File Offset: 0x000F821E
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -41,7 +41,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.notifiedPlayerAttacking, "notifiedPlayerAttacking", false, false);
 		}
 
-		// Token: 0x06002AE9 RID: 10985 RVA: 0x000FA04A File Offset: 0x000F824A
+		
 		public override string GetReport()
 		{
 			if (this.Corpse != null)
@@ -51,13 +51,13 @@ namespace RimWorld
 			return base.GetReport();
 		}
 
-		// Token: 0x06002AEA RID: 10986 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002AEB RID: 10987 RVA: 0x000FA06B File Offset: 0x000F826B
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			base.AddFinishAction(delegate
@@ -126,7 +126,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002AEC RID: 10988 RVA: 0x000FA07C File Offset: 0x000F827C
+		
 		public override void Notify_DamageTaken(DamageInfo dinfo)
 		{
 			base.Notify_DamageTaken(dinfo);
@@ -136,7 +136,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002AED RID: 10989 RVA: 0x000FA0FC File Offset: 0x000F82FC
+		
 		private void CheckWarnPlayer()
 		{
 			if (this.notifiedPlayerAttacking)
@@ -168,22 +168,22 @@ namespace RimWorld
 			this.notifiedPlayerAttacking = true;
 		}
 
-		// Token: 0x0400197E RID: 6526
+		
 		private bool notifiedPlayerAttacked;
 
-		// Token: 0x0400197F RID: 6527
+		
 		private bool notifiedPlayerAttacking;
 
-		// Token: 0x04001980 RID: 6528
+		
 		private bool firstHit = true;
 
-		// Token: 0x04001981 RID: 6529
+		
 		public const TargetIndex PreyInd = TargetIndex.A;
 
-		// Token: 0x04001982 RID: 6530
+		
 		private const TargetIndex CorpseInd = TargetIndex.A;
 
-		// Token: 0x04001983 RID: 6531
+		
 		private const int MaxHuntTicks = 5000;
 	}
 }

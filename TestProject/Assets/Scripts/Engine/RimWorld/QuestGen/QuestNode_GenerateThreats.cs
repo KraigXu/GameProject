@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011A9 RID: 4521
+	
 	public class QuestNode_GenerateThreats : QuestNode
 	{
-		// Token: 0x0600688F RID: 26767 RVA: 0x00246B9C File Offset: 0x00244D9C
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return Find.Storyteller.difficulty.allowViolentQuests && slate.Get<Map>("map", null, false) != null;
 		}
 
-		// Token: 0x06006890 RID: 26768 RVA: 0x00248094 File Offset: 0x00246294
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -54,26 +54,26 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x040040E1 RID: 16609
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x040040E2 RID: 16610
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalDisable;
 
-		// Token: 0x040040E3 RID: 16611
+		
 		[NoTranslate]
 		public SlateRef<string> storeThreatExampleAs;
 
-		// Token: 0x040040E4 RID: 16612
+		
 		[NoTranslate]
 		public SlateRef<int> threatStartTicks;
 
-		// Token: 0x040040E5 RID: 16613
+		
 		public SlateRef<ThreatsGeneratorParams> parms;
 
-		// Token: 0x040040E6 RID: 16614
+		
 		public SlateRef<Faction> faction;
 	}
 }

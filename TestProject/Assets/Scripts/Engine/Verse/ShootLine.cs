@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000478 RID: 1144
+	
 	public struct ShootLine
 	{
-		// Token: 0x17000691 RID: 1681
+		
 		// (get) Token: 0x060021C3 RID: 8643 RVA: 0x000CDA00 File Offset: 0x000CBC00
 		public IntVec3 Source
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000692 RID: 1682
+		
 		// (get) Token: 0x060021C4 RID: 8644 RVA: 0x000CDA08 File Offset: 0x000CBC08
 		public IntVec3 Dest
 		{
@@ -28,14 +28,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060021C5 RID: 8645 RVA: 0x000CDA10 File Offset: 0x000CBC10
+		
 		public ShootLine(IntVec3 source, IntVec3 dest)
 		{
 			this.source = source;
 			this.dest = dest;
 		}
 
-		// Token: 0x060021C6 RID: 8646 RVA: 0x000CDA20 File Offset: 0x000CBC20
+		
 		public void ChangeDestToMissWild(float aimOnChance)
 		{
 			float num = ShootTuning.MissDistanceFromAimOnChanceCurves.Evaluate(aimOnChance, Rand.Value);
@@ -54,13 +54,13 @@ namespace Verse
 			this.dest = a;
 		}
 
-		// Token: 0x060021C7 RID: 8647 RVA: 0x000CDAD1 File Offset: 0x000CBCD1
+		
 		public IEnumerable<IntVec3> Points()
 		{
 			return GenSight.PointsOnLineOfSight(this.source, this.dest);
 		}
 
-		// Token: 0x060021C8 RID: 8648 RVA: 0x000CDAE4 File Offset: 0x000CBCE4
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -73,7 +73,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060021C9 RID: 8649 RVA: 0x000CDB30 File Offset: 0x000CBD30
+		
 		[DebugOutput]
 		public static void WildMissResults()
 		{
@@ -105,10 +105,10 @@ namespace Verse
 			}, "");
 		}
 
-		// Token: 0x040014A8 RID: 5288
+		
 		private IntVec3 source;
 
-		// Token: 0x040014A9 RID: 5289
+		
 		private IntVec3 dest;
 	}
 }

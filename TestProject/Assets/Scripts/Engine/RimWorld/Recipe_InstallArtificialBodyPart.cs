@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AF5 RID: 2805
+	
 	public class Recipe_InstallArtificialBodyPart : Recipe_Surgery
 	{
-		// Token: 0x06004244 RID: 16964 RVA: 0x00161EB8 File Offset: 0x001600B8
+		
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
 			return MedicalRecipesUtility.GetFixedPartsToApplyOn(recipe, pawn, delegate(BodyPartRecord record)
@@ -20,7 +20,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004245 RID: 16965 RVA: 0x00161EF8 File Offset: 0x001600F8
+		
 		public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			bool flag = MedicalRecipesUtility.IsClean(pawn, part);
@@ -57,7 +57,7 @@ namespace RimWorld
 			pawn.health.AddHediff(this.recipe.addsHediff, part, null, null);
 		}
 
-		// Token: 0x06004246 RID: 16966 RVA: 0x00162008 File Offset: 0x00160208
+		
 		public override bool IsViolationOnPawn(Pawn pawn, BodyPartRecord part, Faction billDoerFaction)
 		{
 			return ((pawn.Faction != billDoerFaction && pawn.Faction != null) || pawn.IsQuestLodger()) && (this.recipe.addsHediff.addedPartProps == null || !this.recipe.addsHediff.addedPartProps.betterThanNatural) && HealthUtility.PartRemovalIntent(pawn, part) == BodyPartRemovalIntent.Harvest;

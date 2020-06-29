@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000346 RID: 838
+	
 	public static class DebugOutputsMisc
 	{
-		// Token: 0x0600197A RID: 6522 RVA: 0x00098010 File Offset: 0x00096210
+		
 		[DebugOutput]
 		public static void MiningResourceGeneration()
 		{
@@ -71,7 +71,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600197B RID: 6523 RVA: 0x000982D4 File Offset: 0x000964D4
+		
 		[DebugOutput]
 		public static void NaturalRocks()
 		{
@@ -114,31 +114,31 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600197C RID: 6524 RVA: 0x000984EC File Offset: 0x000966EC
+		
 		[DebugOutput]
 		public static void MeditationFoci()
 		{
 			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
 			where d.StatBaseDefined(StatDefOf.MeditationFocusStrength)
 			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[13];
-			array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[1] = new TableDataGetter<ThingDef>("base", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MeditationFocusStrength, null).ToStringPercent());
-			array[2] = new TableDataGetter<ThingDef>("max\ntotal", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__TotalMax|2_3(d).ToStringPercent());
-			array[3] = new TableDataGetter<ThingDef>("offset 0\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 0));
-			array[4] = new TableDataGetter<ThingDef>("offset 0\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 0).ToStringPercentEmptyZero("F0"));
-			array[5] = new TableDataGetter<ThingDef>("offset 1\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 1));
-			array[6] = new TableDataGetter<ThingDef>("offset 1\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 1).ToStringPercentEmptyZero("F0"));
-			array[7] = new TableDataGetter<ThingDef>("offset 2\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 2));
-			array[8] = new TableDataGetter<ThingDef>("offset 2\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 2).ToStringPercentEmptyZero("F0"));
-			array[9] = new TableDataGetter<ThingDef>("offset 3\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 3));
-			array[10] = new TableDataGetter<ThingDef>("offset 3\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 3).ToStringPercentEmptyZero("F0"));
-			array[11] = new TableDataGetter<ThingDef>("offset 4\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 4));
-			array[12] = new TableDataGetter<ThingDef>("offset 4\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 4).ToStringPercentEmptyZero("F0"));
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			//TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[13];
+			//array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
+			//array[1] = new TableDataGetter<ThingDef>("base", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MeditationFocusStrength, null).ToStringPercent());
+			//array[2] = new TableDataGetter<ThingDef>("max\ntotal", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__TotalMax|2_3(d).ToStringPercent());
+			//array[3] = new TableDataGetter<ThingDef>("offset 0\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 0));
+			//array[4] = new TableDataGetter<ThingDef>("offset 0\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 0).ToStringPercentEmptyZero("F0"));
+			//array[5] = new TableDataGetter<ThingDef>("offset 1\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 1));
+			//array[6] = new TableDataGetter<ThingDef>("offset 1\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 1).ToStringPercentEmptyZero("F0"));
+			//array[7] = new TableDataGetter<ThingDef>("offset 2\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 2));
+			//array[8] = new TableDataGetter<ThingDef>("offset 2\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 2).ToStringPercentEmptyZero("F0"));
+			//array[9] = new TableDataGetter<ThingDef>("offset 3\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 3));
+			//array[10] = new TableDataGetter<ThingDef>("offset 3\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 3).ToStringPercentEmptyZero("F0"));
+			//array[11] = new TableDataGetter<ThingDef>("offset 4\nname", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetClassName|2_1(d, 4));
+			//array[12] = new TableDataGetter<ThingDef>("offset 4\nmax", (ThingDef d) => DebugOutputsMisc.<MeditationFoci>g__GetOffsetMax|2_2(d, 4).ToStringPercentEmptyZero("F0"));
+			//DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600197D RID: 6525 RVA: 0x00098770 File Offset: 0x00096970
+		
 		[DebugOutput]
 		public static void DefaultStuffs()
 		{
@@ -154,7 +154,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600197E RID: 6526 RVA: 0x00098864 File Offset: 0x00096A64
+		
 		[DebugOutput]
 		public static void Beauties()
 		{
@@ -193,31 +193,31 @@ namespace Verse
 			DebugTables.MakeTablesDialog<BuildableDef>(dataSources, array);
 		}
 
-		// Token: 0x0600197F RID: 6527 RVA: 0x000989E8 File Offset: 0x00096BE8
+		
 		[DebugOutput]
 		public static void StuffBeauty()
 		{
-			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
-			where d.IsStuff
-			orderby DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) descending
-			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[5];
-			array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[1] = new TableDataGetter<ThingDef>("beauty factor", (ThingDef d) => DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty).ToString());
-			array[2] = new TableDataGetter<ThingDef>("beauty offset", (ThingDef d) => DebugOutputsMisc.<StuffBeauty>g__getStatOffsetVal|5_1(d, StatDefOf.Beauty).ToString());
-			array[3] = new TableDataGetter<ThingDef>("market value", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MarketValue, null).ToString("F1"));
-			array[4] = new TableDataGetter<ThingDef>("beauty factor per market value", delegate(ThingDef d)
-			{
-				if (DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) <= 0f)
-				{
-					return "";
-				}
-				return (DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) / d.GetStatValueAbstract(StatDefOf.MarketValue, null)).ToString("F5");
-			});
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			//IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
+			//where d.IsStuff
+			//orderby DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) descending
+			//select d;
+			//TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[5];
+			//array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
+			//array[1] = new TableDataGetter<ThingDef>("beauty factor", (ThingDef d) => DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty).ToString());
+			//array[2] = new TableDataGetter<ThingDef>("beauty offset", (ThingDef d) => DebugOutputsMisc.<StuffBeauty>g__getStatOffsetVal|5_1(d, StatDefOf.Beauty).ToString());
+			//array[3] = new TableDataGetter<ThingDef>("market value", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MarketValue, null).ToString("F1"));
+			//array[4] = new TableDataGetter<ThingDef>("beauty factor per market value", delegate(ThingDef d)
+			//{
+			//	if (DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) <= 0f)
+			//	{
+			//		return "";
+			//	}
+			//	return (DebugOutputsMisc.<StuffBeauty>g__getStatFactorVal|5_0(d, StatDefOf.Beauty) / d.GetStatValueAbstract(StatDefOf.MarketValue, null)).ToString("F5");
+			//});
+			//DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001980 RID: 6528 RVA: 0x00098B2C File Offset: 0x00096D2C
+		
 		[DebugOutput]
 		public static void ThingsPowerAndHeat()
 		{
@@ -311,7 +311,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001981 RID: 6529 RVA: 0x00098CF4 File Offset: 0x00096EF4
+		
 		[DebugOutput]
 		public static void FoodPoisonChances()
 		{
@@ -337,7 +337,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001982 RID: 6530 RVA: 0x00098DBC File Offset: 0x00096FBC
+		
 		[DebugOutput]
 		public static void TechLevels()
 		{
@@ -353,7 +353,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001983 RID: 6531 RVA: 0x00098ECC File Offset: 0x000970CC
+		
 		[DebugOutput]
 		public static void Stuffs()
 		{
@@ -361,37 +361,37 @@ namespace Verse
 			where d.IsStuff
 			orderby d.BaseMarketValue
 			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[26];
-			array[0] = new TableDataGetter<ThingDef>("fabric", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Fabric).ToStringCheckBlank());
-			array[1] = new TableDataGetter<ThingDef>("leather", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Leathery).ToStringCheckBlank());
-			array[2] = new TableDataGetter<ThingDef>("metal", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Metallic).ToStringCheckBlank());
-			array[3] = new TableDataGetter<ThingDef>("stony", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Stony).ToStringCheckBlank());
-			array[4] = new TableDataGetter<ThingDef>("woody", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Woody).ToStringCheckBlank());
-			array[5] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[6] = new TableDataGetter<ThingDef>("burnable", (ThingDef d) => d.burnableByRecipe.ToStringCheckBlank());
-			array[7] = new TableDataGetter<ThingDef>("smeltable", (ThingDef d) => d.smeltable.ToStringCheckBlank());
-			array[8] = new TableDataGetter<ThingDef>("base\nmarket\nvalue", (ThingDef d) => d.BaseMarketValue.ToStringMoney(null));
-			array[9] = new TableDataGetter<ThingDef>("melee\ncooldown\nmultiplier", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.MeleeWeapon_CooldownMultiplier));
-			array[10] = new TableDataGetter<ThingDef>("melee\nsharp\ndamage\nmultiplier", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.SharpDamageMultiplier, null).ToString("F2"));
-			array[11] = new TableDataGetter<ThingDef>("melee\nsharp\ndps factor\noverall", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__meleeDpsSharpFactorOverall|9_1(d).ToString("F2"));
-			array[12] = new TableDataGetter<ThingDef>("melee\nblunt\ndamage\nmultiplier", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.BluntDamageMultiplier, null).ToString("F2"));
-			array[13] = new TableDataGetter<ThingDef>("melee\nblunt\ndps factor\noverall", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__meleeDpsBluntFactorOverall|9_2(d).ToString("F2"));
-			array[14] = new TableDataGetter<ThingDef>("armor power\nsharp", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Sharp, null).ToString("F2"));
-			array[15] = new TableDataGetter<ThingDef>("armor power\nblunt", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Blunt, null).ToString("F2"));
-			array[16] = new TableDataGetter<ThingDef>("armor power\nheat", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Heat, null).ToString("F2"));
-			array[17] = new TableDataGetter<ThingDef>("insulation\ncold", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Insulation_Cold, null).ToString("F2"));
-			array[18] = new TableDataGetter<ThingDef>("insulation\nheat", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Insulation_Heat, null).ToString("F2"));
-			array[19] = new TableDataGetter<ThingDef>("flammability", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.Flammability, null).ToString("F2"));
-			array[20] = new TableDataGetter<ThingDef>("factor\nFlammability", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.Flammability));
-			array[21] = new TableDataGetter<ThingDef>("factor\nWorkToMake", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.WorkToMake));
-			array[22] = new TableDataGetter<ThingDef>("factor\nWorkToBuild", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.WorkToBuild));
-			array[23] = new TableDataGetter<ThingDef>("factor\nMaxHp", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.MaxHitPoints));
-			array[24] = new TableDataGetter<ThingDef>("factor\nBeauty", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.Beauty));
-			array[25] = new TableDataGetter<ThingDef>("factor\nDoorspeed", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.DoorOpenSpeed));
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			//TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[26];
+			//array[0] = new TableDataGetter<ThingDef>("fabric", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Fabric).ToStringCheckBlank());
+			//array[1] = new TableDataGetter<ThingDef>("leather", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Leathery).ToStringCheckBlank());
+			//array[2] = new TableDataGetter<ThingDef>("metal", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Metallic).ToStringCheckBlank());
+			//array[3] = new TableDataGetter<ThingDef>("stony", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Stony).ToStringCheckBlank());
+			//array[4] = new TableDataGetter<ThingDef>("woody", (ThingDef d) => d.stuffProps.categories.Contains(StuffCategoryDefOf.Woody).ToStringCheckBlank());
+			//array[5] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
+			//array[6] = new TableDataGetter<ThingDef>("burnable", (ThingDef d) => d.burnableByRecipe.ToStringCheckBlank());
+			//array[7] = new TableDataGetter<ThingDef>("smeltable", (ThingDef d) => d.smeltable.ToStringCheckBlank());
+			//array[8] = new TableDataGetter<ThingDef>("base\nmarket\nvalue", (ThingDef d) => d.BaseMarketValue.ToStringMoney(null));
+			//array[9] = new TableDataGetter<ThingDef>("melee\ncooldown\nmultiplier", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.MeleeWeapon_CooldownMultiplier));
+			//array[10] = new TableDataGetter<ThingDef>("melee\nsharp\ndamage\nmultiplier", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.SharpDamageMultiplier, null).ToString("F2"));
+			//array[11] = new TableDataGetter<ThingDef>("melee\nsharp\ndps factor\noverall", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__meleeDpsSharpFactorOverall|9_1(d).ToString("F2"));
+			//array[12] = new TableDataGetter<ThingDef>("melee\nblunt\ndamage\nmultiplier", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.BluntDamageMultiplier, null).ToString("F2"));
+			//array[13] = new TableDataGetter<ThingDef>("melee\nblunt\ndps factor\noverall", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__meleeDpsBluntFactorOverall|9_2(d).ToString("F2"));
+			//array[14] = new TableDataGetter<ThingDef>("armor power\nsharp", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Sharp, null).ToString("F2"));
+			//array[15] = new TableDataGetter<ThingDef>("armor power\nblunt", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Blunt, null).ToString("F2"));
+			//array[16] = new TableDataGetter<ThingDef>("armor power\nheat", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Armor_Heat, null).ToString("F2"));
+			//array[17] = new TableDataGetter<ThingDef>("insulation\ncold", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Insulation_Cold, null).ToString("F2"));
+			//array[18] = new TableDataGetter<ThingDef>("insulation\nheat", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.StuffPower_Insulation_Heat, null).ToString("F2"));
+			//array[19] = new TableDataGetter<ThingDef>("flammability", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.Flammability, null).ToString("F2"));
+			//array[20] = new TableDataGetter<ThingDef>("factor\nFlammability", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.Flammability));
+			//array[21] = new TableDataGetter<ThingDef>("factor\nWorkToMake", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.WorkToMake));
+			//array[22] = new TableDataGetter<ThingDef>("factor\nWorkToBuild", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.WorkToBuild));
+			//array[23] = new TableDataGetter<ThingDef>("factor\nMaxHp", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.MaxHitPoints));
+			//array[24] = new TableDataGetter<ThingDef>("factor\nBeauty", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.Beauty));
+			//array[25] = new TableDataGetter<ThingDef>("factor\nDoorspeed", (ThingDef d) => DebugOutputsMisc.<Stuffs>g__getStatFactorString|9_0(d, StatDefOf.DoorOpenSpeed));
+			//DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001984 RID: 6532 RVA: 0x000993BC File Offset: 0x000975BC
+		
 		[DebugOutput]
 		public static void BurningAndSmeltingThings()
 		{
@@ -452,7 +452,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(allDefs, array);
 		}
 
-		// Token: 0x06001985 RID: 6533 RVA: 0x000995E8 File Offset: 0x000977E8
+		
 		[DebugOutput]
 		public static void Medicines()
 		{
@@ -472,126 +472,126 @@ namespace Verse
 			DebugTables.MakeTablesDialog<float>(list, array);
 		}
 
-		// Token: 0x06001986 RID: 6534 RVA: 0x000996F4 File Offset: 0x000978F4
+		
 		[DebugOutput]
 		public static void ShootingAccuracy()
 		{
-			StatDef stat = StatDefOf.ShootingAccuracyPawn;
-			Func<StatModifier, bool> <>9__19;
-			Func<int, float, int, float> accAtDistance = delegate(int level, float dist, int traitDegree)
-			{
-				float num = 1f;
-				if (traitDegree != 0)
-				{
-					IEnumerable<StatModifier> statOffsets = TraitDef.Named("ShootingAccuracy").DataAtDegree(traitDegree).statOffsets;
-					Func<StatModifier, bool> predicate;
-					if ((predicate = <>9__19) == null)
-					{
-						predicate = (<>9__19 = ((StatModifier so) => so.stat == stat));
-					}
-					float value = statOffsets.First(predicate).value;
-					num += value;
-				}
-				foreach (SkillNeed skillNeed in stat.skillNeedFactors)
-				{
-					SkillNeed_Direct skillNeed_Direct = skillNeed as SkillNeed_Direct;
-					num *= skillNeed_Direct.valuesPerLevel[level];
-				}
-				num = stat.postProcessCurve.Evaluate(num);
-				return Mathf.Pow(num, dist);
-			};
-			List<int> list = new List<int>();
-			for (int i = 0; i <= 20; i++)
-			{
-				list.Add(i);
-			}
-			IEnumerable<int> dataSources = list;
-			TableDataGetter<int>[] array = new TableDataGetter<int>[18];
-			array[0] = new TableDataGetter<int>("No trait skill", (int lev) => lev.ToString());
-			array[1] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, 0).ToStringPercent("F2"));
-			array[2] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, 0).ToStringPercent("F2"));
-			array[3] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, 0).ToStringPercent("F2"));
-			array[4] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, 0).ToStringPercent("F2"));
-			array[5] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, 0).ToStringPercent("F2"));
-			array[6] = new TableDataGetter<int>("Careful shooter skill", (int lev) => lev.ToString());
-			array[7] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, 1).ToStringPercent("F2"));
-			array[8] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, 1).ToStringPercent("F2"));
-			array[9] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, 1).ToStringPercent("F2"));
-			array[10] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, 1).ToStringPercent("F2"));
-			array[11] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, 1).ToStringPercent("F2"));
-			array[12] = new TableDataGetter<int>("Trigger-happy skill", (int lev) => lev.ToString());
-			array[13] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, -1).ToStringPercent("F2"));
-			array[14] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, -1).ToStringPercent("F2"));
-			array[15] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, -1).ToStringPercent("F2"));
-			array[16] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, -1).ToStringPercent("F2"));
-			array[17] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, -1).ToStringPercent("F2"));
-			DebugTables.MakeTablesDialog<int>(dataSources, array);
+			//StatDef stat = StatDefOf.ShootingAccuracyPawn;
+			//Func<StatModifier, bool> 9__19;
+			//Func<int, float, int, float> accAtDistance = delegate(int level, float dist, int traitDegree)
+			//{
+			//	float num = 1f;
+			//	if (traitDegree != 0)
+			//	{
+			//		IEnumerable<StatModifier> statOffsets = TraitDef.Named("ShootingAccuracy").DataAtDegree(traitDegree).statOffsets;
+			//		Func<StatModifier, bool> predicate;
+			//		if ((predicate 9) == null)
+			//		{
+			//			predicate = (9__19 = ((StatModifier so) => so.stat == stat));
+			//		}
+			//		float value = statOffsets.First(predicate).value;
+			//		num += value;
+			//	}
+			//	foreach (SkillNeed skillNeed in stat.skillNeedFactors)
+			//	{
+			//		SkillNeed_Direct skillNeed_Direct = skillNeed as SkillNeed_Direct;
+			//		num *= skillNeed_Direct.valuesPerLevel[level];
+			//	}
+			//	num = stat.postProcessCurve.Evaluate(num);
+			//	return Mathf.Pow(num, dist);
+			//};
+			//List<int> list = new List<int>();
+			//for (int i = 0; i <= 20; i++)
+			//{
+			//	list.Add(i);
+			//}
+			//IEnumerable<int> dataSources = list;
+			//TableDataGetter<int>[] array = new TableDataGetter<int>[18];
+			//array[0] = new TableDataGetter<int>("No trait skill", (int lev) => lev.ToString());
+			//array[1] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, 0).ToStringPercent("F2"));
+			//array[2] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, 0).ToStringPercent("F2"));
+			//array[3] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, 0).ToStringPercent("F2"));
+			//array[4] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, 0).ToStringPercent("F2"));
+			//array[5] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, 0).ToStringPercent("F2"));
+			//array[6] = new TableDataGetter<int>("Careful shooter skill", (int lev) => lev.ToString());
+			//array[7] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, 1).ToStringPercent("F2"));
+			//array[8] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, 1).ToStringPercent("F2"));
+			//array[9] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, 1).ToStringPercent("F2"));
+			//array[10] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, 1).ToStringPercent("F2"));
+			//array[11] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, 1).ToStringPercent("F2"));
+			//array[12] = new TableDataGetter<int>("Trigger-happy skill", (int lev) => lev.ToString());
+			//array[13] = new TableDataGetter<int>("acc at 1", (int lev) => accAtDistance(lev, 1f, -1).ToStringPercent("F2"));
+			//array[14] = new TableDataGetter<int>("acc at 10", (int lev) => accAtDistance(lev, 10f, -1).ToStringPercent("F2"));
+			//array[15] = new TableDataGetter<int>("acc at 20", (int lev) => accAtDistance(lev, 20f, -1).ToStringPercent("F2"));
+			//array[16] = new TableDataGetter<int>("acc at 30", (int lev) => accAtDistance(lev, 30f, -1).ToStringPercent("F2"));
+			//array[17] = new TableDataGetter<int>("acc at 50", (int lev) => accAtDistance(lev, 50f, -1).ToStringPercent("F2"));
+			//DebugTables.MakeTablesDialog<int>(dataSources, array);
 		}
 
-		// Token: 0x06001987 RID: 6535 RVA: 0x0009994F File Offset: 0x00097B4F
+		
 		[DebugOutput(true)]
 		public static void TemperatureData()
 		{
 			Find.CurrentMap.mapTemperature.DebugLogTemps();
 		}
 
-		// Token: 0x06001988 RID: 6536 RVA: 0x00099960 File Offset: 0x00097B60
+		
 		[DebugOutput(true)]
 		public static void WeatherChances()
 		{
 			Find.CurrentMap.weatherDecider.LogWeatherChances();
 		}
 
-		// Token: 0x06001989 RID: 6537 RVA: 0x00099971 File Offset: 0x00097B71
+		
 		[DebugOutput(true)]
 		public static void CelestialGlow()
 		{
 			GenCelestial.LogSunGlowForYear();
 		}
 
-		// Token: 0x0600198A RID: 6538 RVA: 0x00099978 File Offset: 0x00097B78
+		
 		[DebugOutput(true)]
 		public static void SunAngle()
 		{
 			GenCelestial.LogSunAngleForYear();
 		}
 
-		// Token: 0x0600198B RID: 6539 RVA: 0x0009997F File Offset: 0x00097B7F
+		
 		[DebugOutput(true)]
 		public static void FallColor()
 		{
 			PlantUtility.LogFallColorForYear();
 		}
 
-		// Token: 0x0600198C RID: 6540 RVA: 0x00099986 File Offset: 0x00097B86
+		
 		[DebugOutput(true)]
 		public static void PawnsListAllOnMap()
 		{
 			Find.CurrentMap.mapPawns.LogListedPawns();
 		}
 
-		// Token: 0x0600198D RID: 6541 RVA: 0x00099997 File Offset: 0x00097B97
+		
 		[DebugOutput(true)]
 		public static void WindSpeeds()
 		{
 			Find.CurrentMap.windManager.LogWindSpeeds();
 		}
 
-		// Token: 0x0600198E RID: 6542 RVA: 0x00099986 File Offset: 0x00097B86
+		
 		[DebugOutput(true)]
 		public static void MapPawnsList()
 		{
 			Find.CurrentMap.mapPawns.LogListedPawns();
 		}
 
-		// Token: 0x0600198F RID: 6543 RVA: 0x000999A8 File Offset: 0x00097BA8
+		
 		[DebugOutput]
 		public static void Lords()
 		{
 			Find.CurrentMap.lordManager.LogLords();
 		}
 
-		// Token: 0x06001990 RID: 6544 RVA: 0x000999BC File Offset: 0x00097BBC
+		
 		[DebugOutput]
 		public static void BodyPartTagGroups()
 		{
@@ -612,12 +612,8 @@ namespace Verse
 							BodyPartTagDef tag = enumerator2.Current;
 							stringBuilder.AppendLine(tag.defName);
 							IEnumerable<BodyPartRecord> allParts = localBd.AllParts;
-							Func<BodyPartRecord, bool> predicate;
-							Func<BodyPartRecord, bool> <>9__3;
-							if ((predicate = <>9__3) == null)
-							{
-								predicate = (<>9__3 = ((BodyPartRecord part) => part.def.tags.Contains(tag)));
-							}
+							Func<BodyPartRecord, bool> predicate = ((BodyPartRecord part) => part.def.tags.Contains(tag));
+							
 							foreach (BodyPartRecord bodyPartRecord in from part in allParts.Where(predicate)
 							orderby part.def.defName
 							select part)
@@ -633,7 +629,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001991 RID: 6545 RVA: 0x00099A54 File Offset: 0x00097C54
+		
 		[DebugOutput]
 		public static void MinifiableTags()
 		{
@@ -654,111 +650,111 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001992 RID: 6546 RVA: 0x00099AF4 File Offset: 0x00097CF4
+		
 		[DebugOutput]
 		public static void ThingSetMakerTest()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
-			{
-				ThingSetMakerDef localDef = localDef2;
-				Action<ThingSetMakerParams> <>9__1;
-				DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
-				{
-					DebugOutputsMisc.<>c__DisplayClass24_1 <>c__DisplayClass24_2 = new DebugOutputsMisc.<>c__DisplayClass24_1();
-					DebugOutputsMisc.<>c__DisplayClass24_1 <>c__DisplayClass24_3 = <>c__DisplayClass24_2;
-					Action<ThingSetMakerParams> generate;
-					if ((generate = <>9__1) == null)
-					{
-						generate = (<>9__1 = delegate(ThingSetMakerParams parms)
-						{
-							StringBuilder stringBuilder = new StringBuilder();
-							float num = 0f;
-							float num2 = 0f;
-							for (int i = 0; i < 50; i++)
-							{
-								List<Thing> list3 = localDef.root.Generate(parms);
-								if (stringBuilder.Length > 0)
-								{
-									stringBuilder.AppendLine();
-								}
-								if (list3.NullOrEmpty<Thing>())
-								{
-									stringBuilder.AppendLine("-(nothing generated)");
-								}
-								float num3 = 0f;
-								float num4 = 0f;
-								for (int j = 0; j < list3.Count; j++)
-								{
-									stringBuilder.AppendLine("-" + list3[j].LabelCap + " - $" + (list3[j].MarketValue * (float)list3[j].stackCount).ToString("F0"));
-									num3 += list3[j].MarketValue * (float)list3[j].stackCount;
-									if (!(list3[j] is Pawn))
-									{
-										num4 += list3[j].GetStatValue(StatDefOf.Mass, true) * (float)list3[j].stackCount;
-									}
-									list3[j].Destroy(DestroyMode.Vanish);
-								}
-								num += num3;
-								num2 += num4;
-								stringBuilder.AppendLine("   Total market value: $" + num3.ToString("F0"));
-								stringBuilder.AppendLine("   Total mass: " + num4.ToStringMass());
-							}
-							StringBuilder stringBuilder2 = new StringBuilder();
-							stringBuilder2.AppendLine("Default thing sets generated by: " + localDef.defName);
-							string nonNullFieldsDebugInfo = Gen.GetNonNullFieldsDebugInfo(localDef.root.fixedParams);
-							stringBuilder2.AppendLine("root fixedParams: " + (nonNullFieldsDebugInfo.NullOrEmpty() ? "none" : nonNullFieldsDebugInfo));
-							string nonNullFieldsDebugInfo2 = Gen.GetNonNullFieldsDebugInfo(parms);
-							if (!nonNullFieldsDebugInfo2.NullOrEmpty())
-							{
-								stringBuilder2.AppendLine("(used custom debug params: " + nonNullFieldsDebugInfo2 + ")");
-							}
-							stringBuilder2.AppendLine("Average market value: $" + (num / 50f).ToString("F1"));
-							stringBuilder2.AppendLine("Average mass: " + (num2 / 50f).ToStringMass());
-							stringBuilder2.AppendLine();
-							stringBuilder2.Append(stringBuilder.ToString());
-							Log.Message(stringBuilder2.ToString(), false);
-						});
-					}
-					<>c__DisplayClass24_3.generate = generate;
-					if (localDef == ThingSetMakerDefOf.TraderStock)
-					{
-						List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-						foreach (Faction faction in Find.FactionManager.AllFactions)
-						{
-							if (faction != Faction.OfPlayer)
-							{
-								Faction localF = faction;
-								list2.Add(new DebugMenuOption(localF.Name + " (" + localF.def.defName + ")", DebugMenuOptionMode.Action, delegate
-								{
-									List<DebugMenuOption> list3 = new List<DebugMenuOption>();
-									foreach (TraderKindDef localKind2 in (from x in DefDatabase<TraderKindDef>.AllDefs
-									where x.orbital
-									select x).Concat(localF.def.caravanTraderKinds).Concat(localF.def.visitorTraderKinds).Concat(localF.def.baseTraderKinds))
-									{
-										TraderKindDef localKind = localKind2;
-										list3.Add(new DebugMenuOption(localKind.defName, DebugMenuOptionMode.Action, delegate
-										{
-											ThingSetMakerParams obj = default(ThingSetMakerParams);
-											obj.makingFaction = localF;
-											obj.traderDef = localKind;
-											<>c__DisplayClass24_2.generate(obj);
-										}));
-									}
-									Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
-								}));
-							}
-						}
-						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-						return;
-					}
-					<>c__DisplayClass24_2.generate(localDef.debugParams);
-				});
-				list.Add(item);
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+			//foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
+			//{
+			//	ThingSetMakerDef localDef = localDef2;
+			//	Action<ThingSetMakerParams> 9__1;
+			//	DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
+			//	{
+			//		DebugOutputsMisc.c__DisplayClass24_1 c__DisplayClass24_2 = new DebugOutputsMisc.c__DisplayClass24_1();
+			//		DebugOutputsMisc.c__DisplayClass24_1 c__DisplayClass24_3 = c__DisplayClass24_2;
+			//		Action<ThingSetMakerParams> generate;
+			//		if ((generate ) == null)
+			//		{
+			//			generate = (9__1 = delegate(ThingSetMakerParams parms)
+			//			{
+			//				StringBuilder stringBuilder = new StringBuilder();
+			//				float num = 0f;
+			//				float num2 = 0f;
+			//				for (int i = 0; i < 50; i++)
+			//				{
+			//					List<Thing> list3 = localDef.root.Generate(parms);
+			//					if (stringBuilder.Length > 0)
+			//					{
+			//						stringBuilder.AppendLine();
+			//					}
+			//					if (list3.NullOrEmpty<Thing>())
+			//					{
+			//						stringBuilder.AppendLine("-(nothing generated)");
+			//					}
+			//					float num3 = 0f;
+			//					float num4 = 0f;
+			//					for (int j = 0; j < list3.Count; j++)
+			//					{
+			//						stringBuilder.AppendLine("-" + list3[j].LabelCap + " - $" + (list3[j].MarketValue * (float)list3[j].stackCount).ToString("F0"));
+			//						num3 += list3[j].MarketValue * (float)list3[j].stackCount;
+			//						if (!(list3[j] is Pawn))
+			//						{
+			//							num4 += list3[j].GetStatValue(StatDefOf.Mass, true) * (float)list3[j].stackCount;
+			//						}
+			//						list3[j].Destroy(DestroyMode.Vanish);
+			//					}
+			//					num += num3;
+			//					num2 += num4;
+			//					stringBuilder.AppendLine("   Total market value: $" + num3.ToString("F0"));
+			//					stringBuilder.AppendLine("   Total mass: " + num4.ToStringMass());
+			//				}
+			//				StringBuilder stringBuilder2 = new StringBuilder();
+			//				stringBuilder2.AppendLine("Default thing sets generated by: " + localDef.defName);
+			//				string nonNullFieldsDebugInfo = Gen.GetNonNullFieldsDebugInfo(localDef.root.fixedParams);
+			//				stringBuilder2.AppendLine("root fixedParams: " + (nonNullFieldsDebugInfo.NullOrEmpty() ? "none" : nonNullFieldsDebugInfo));
+			//				string nonNullFieldsDebugInfo2 = Gen.GetNonNullFieldsDebugInfo(parms);
+			//				if (!nonNullFieldsDebugInfo2.NullOrEmpty())
+			//				{
+			//					stringBuilder2.AppendLine("(used custom debug params: " + nonNullFieldsDebugInfo2 + ")");
+			//				}
+			//				stringBuilder2.AppendLine("Average market value: $" + (num / 50f).ToString("F1"));
+			//				stringBuilder2.AppendLine("Average mass: " + (num2 / 50f).ToStringMass());
+			//				stringBuilder2.AppendLine();
+			//				stringBuilder2.Append(stringBuilder.ToString());
+			//				Log.Message(stringBuilder2.ToString(), false);
+			//			});
+			//		}
+			//		c__DisplayClass24_3.generate = generate;
+			//		if (localDef == ThingSetMakerDefOf.TraderStock)
+			//		{
+			//			List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+			//			foreach (Faction faction in Find.FactionManager.AllFactions)
+			//			{
+			//				if (faction != Faction.OfPlayer)
+			//				{
+			//					Faction localF = faction;
+			//					list2.Add(new DebugMenuOption(localF.Name + " (" + localF.def.defName + ")", DebugMenuOptionMode.Action, delegate
+			//					{
+			//						List<DebugMenuOption> list3 = new List<DebugMenuOption>();
+			//						foreach (TraderKindDef localKind2 in (from x in DefDatabase<TraderKindDef>.AllDefs
+			//						where x.orbital
+			//						select x).Concat(localF.def.caravanTraderKinds).Concat(localF.def.visitorTraderKinds).Concat(localF.def.baseTraderKinds))
+			//						{
+			//							TraderKindDef localKind = localKind2;
+			//							list3.Add(new DebugMenuOption(localKind.defName, DebugMenuOptionMode.Action, delegate
+			//							{
+			//								ThingSetMakerParams obj = default(ThingSetMakerParams);
+			//								obj.makingFaction = localF;
+			//								obj.traderDef = localKind;
+			//								c__DisplayClass24_2.generate(obj);
+			//							}));
+			//						}
+			//						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
+			//					}));
+			//				}
+			//			}
+			//			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			//			return;
+			//		}
+			//		c__DisplayClass24_2.generate(localDef.debugParams);
+			//	});
+			//	list.Add(item);
+			//}
+			//Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001993 RID: 6547 RVA: 0x00099B84 File Offset: 0x00097D84
+		
 		[DebugOutput]
 		public static void ThingSetMakerPossibleDefs()
 		{
@@ -791,97 +787,97 @@ namespace Verse
 			select d, list.ToArray());
 		}
 
-		// Token: 0x06001994 RID: 6548 RVA: 0x00099D94 File Offset: 0x00097F94
+		
 		[DebugOutput]
 		public static void ThingSetMakerSampled()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
-			{
-				ThingSetMakerDef localDef = localDef2;
-				Action<ThingSetMakerParams> <>9__1;
-				DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
-				{
-					DebugOutputsMisc.<>c__DisplayClass26_1 <>c__DisplayClass26_2 = new DebugOutputsMisc.<>c__DisplayClass26_1();
-					DebugOutputsMisc.<>c__DisplayClass26_1 <>c__DisplayClass26_3 = <>c__DisplayClass26_2;
-					Action<ThingSetMakerParams> generate;
-					if ((generate = <>9__1) == null)
-					{
-						generate = (<>9__1 = delegate(ThingSetMakerParams parms)
-						{
-							Dictionary<ThingDef, int> counts = new Dictionary<ThingDef, int>();
-							for (int i = 0; i < 500; i++)
-							{
-								List<Thing> list3 = localDef.root.Generate(parms);
-								foreach (ThingDef thingDef in (from th in list3
-								select th.GetInnerIfMinified().def).Distinct<ThingDef>())
-								{
-									if (!counts.ContainsKey(thingDef))
-									{
-										counts.Add(thingDef, 0);
-									}
-									Dictionary<ThingDef, int> counts2 = counts;
-									ThingDef key = thingDef;
-									int num = counts2[key];
-									counts2[key] = num + 1;
-								}
-								for (int j = 0; j < list3.Count; j++)
-								{
-									list3[j].Destroy(DestroyMode.Vanish);
-								}
-							}
-							IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
-							where counts.ContainsKey(d)
-							orderby counts[d] descending
-							select d;
-							TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[4];
-							array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-							array[1] = new TableDataGetter<ThingDef>("market\nvalue", (ThingDef d) => d.BaseMarketValue.ToStringMoney(null));
-							array[2] = new TableDataGetter<ThingDef>("mass", (ThingDef d) => d.BaseMass.ToStringMass());
-							array[3] = new TableDataGetter<ThingDef>("appearance rate in " + localDef.defName, (ThingDef d) => ((float)counts[d] / 500f).ToStringPercent());
-							DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
-						});
-					}
-					<>c__DisplayClass26_3.generate = generate;
-					if (localDef == ThingSetMakerDefOf.TraderStock)
-					{
-						List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-						foreach (Faction faction in Find.FactionManager.AllFactions)
-						{
-							if (faction != Faction.OfPlayer)
-							{
-								Faction localF = faction;
-								list2.Add(new DebugMenuOption(localF.Name + " (" + localF.def.defName + ")", DebugMenuOptionMode.Action, delegate
-								{
-									List<DebugMenuOption> list3 = new List<DebugMenuOption>();
-									foreach (TraderKindDef localKind2 in (from x in DefDatabase<TraderKindDef>.AllDefs
-									where x.orbital
-									select x).Concat(localF.def.caravanTraderKinds).Concat(localF.def.visitorTraderKinds).Concat(localF.def.baseTraderKinds))
-									{
-										TraderKindDef localKind = localKind2;
-										list3.Add(new DebugMenuOption(localKind.defName, DebugMenuOptionMode.Action, delegate
-										{
-											ThingSetMakerParams obj = default(ThingSetMakerParams);
-											obj.makingFaction = localF;
-											obj.traderDef = localKind;
-											<>c__DisplayClass26_2.generate(obj);
-										}));
-									}
-									Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
-								}));
-							}
-						}
-						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-						return;
-					}
-					<>c__DisplayClass26_2.generate(localDef.debugParams);
-				});
-				list.Add(item);
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+			//foreach (ThingSetMakerDef localDef2 in DefDatabase<ThingSetMakerDef>.AllDefs)
+			//{
+			//	ThingSetMakerDef localDef = localDef2;
+			//	Action<ThingSetMakerParams> 9__1;
+			//	DebugMenuOption item = new DebugMenuOption(localDef.defName, DebugMenuOptionMode.Action, delegate
+			//	{
+			//		DebugOutputsMisc.c__DisplayClass26_1 c__DisplayClass26_2 = new DebugOutputsMisc.c__DisplayClass26_1();
+			//		DebugOutputsMisc.c__DisplayClass26_1 c__DisplayClass26_3 = c__DisplayClass26_2;
+			//		Action<ThingSetMakerParams> generate;
+			//		if ((generate ) == null)
+			//		{
+			//			generate = (9__1 = delegate(ThingSetMakerParams parms)
+			//			{
+			//				Dictionary<ThingDef, int> counts = new Dictionary<ThingDef, int>();
+			//				for (int i = 0; i < 500; i++)
+			//				{
+			//					List<Thing> list3 = localDef.root.Generate(parms);
+			//					foreach (ThingDef thingDef in (from th in list3
+			//					select th.GetInnerIfMinified().def).Distinct<ThingDef>())
+			//					{
+			//						if (!counts.ContainsKey(thingDef))
+			//						{
+			//							counts.Add(thingDef, 0);
+			//						}
+			//						Dictionary<ThingDef, int> counts2 = counts;
+			//						ThingDef key = thingDef;
+			//						int num = counts2[key];
+			//						counts2[key] = num + 1;
+			//					}
+			//					for (int j = 0; j < list3.Count; j++)
+			//					{
+			//						list3[j].Destroy(DestroyMode.Vanish);
+			//					}
+			//				}
+			//				IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
+			//				where counts.ContainsKey(d)
+			//				orderby counts[d] descending
+			//				select d;
+			//				TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[4];
+			//				array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
+			//				array[1] = new TableDataGetter<ThingDef>("market\nvalue", (ThingDef d) => d.BaseMarketValue.ToStringMoney(null));
+			//				array[2] = new TableDataGetter<ThingDef>("mass", (ThingDef d) => d.BaseMass.ToStringMass());
+			//				array[3] = new TableDataGetter<ThingDef>("appearance rate in " + localDef.defName, (ThingDef d) => ((float)counts[d] / 500f).ToStringPercent());
+			//				DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			//			});
+			//		}
+			//		c__DisplayClass26_3.generate = generate;
+			//		if (localDef == ThingSetMakerDefOf.TraderStock)
+			//		{
+			//			List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+			//			foreach (Faction faction in Find.FactionManager.AllFactions)
+			//			{
+			//				if (faction != Faction.OfPlayer)
+			//				{
+			//					Faction localF = faction;
+			//					list2.Add(new DebugMenuOption(localF.Name + " (" + localF.def.defName + ")", DebugMenuOptionMode.Action, delegate
+			//					{
+			//						List<DebugMenuOption> list3 = new List<DebugMenuOption>();
+			//						foreach (TraderKindDef localKind2 in (from x in DefDatabase<TraderKindDef>.AllDefs
+			//						where x.orbital
+			//						select x).Concat(localF.def.caravanTraderKinds).Concat(localF.def.visitorTraderKinds).Concat(localF.def.baseTraderKinds))
+			//						{
+			//							TraderKindDef localKind = localKind2;
+			//							list3.Add(new DebugMenuOption(localKind.defName, DebugMenuOptionMode.Action, delegate
+			//							{
+			//								ThingSetMakerParams obj = default(ThingSetMakerParams);
+			//								obj.makingFaction = localF;
+			//								obj.traderDef = localKind;
+			//								c__DisplayClass26_2.generate(obj);
+			//							}));
+			//						}
+			//						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
+			//					}));
+			//				}
+			//			}
+			//			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			//			return;
+			//		}
+			//		c__DisplayClass26_2.generate(localDef.debugParams);
+			//	});
+			//	list.Add(item);
+			//}
+			//Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001995 RID: 6549 RVA: 0x00099E24 File Offset: 0x00098024
+		
 		[DebugOutput]
 		public static void RewardsGeneration()
 		{
@@ -936,7 +932,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001996 RID: 6550 RVA: 0x00099EDC File Offset: 0x000980DC
+		
 		[DebugOutput]
 		public static void RewardsGenerationSampled()
 		{
@@ -1014,7 +1010,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001997 RID: 6551 RVA: 0x00099FF0 File Offset: 0x000981F0
+		
 		[DebugOutput]
 		public static void WorkDisables()
 		{
@@ -1078,15 +1074,12 @@ namespace Verse
 						{
 							WorkTypeDef wt = enumerator3.Current;
 							int num3 = 0;
-							Func<WorkTypeDef, bool> <>9__3;
+							
 							foreach (Backstory backstory in enumerable)
 							{
 								IEnumerable<WorkTypeDef> disabledWorkTypes = backstory.DisabledWorkTypes;
-								Func<WorkTypeDef, bool> predicate;
-								if ((predicate = <>9__3) == null)
-								{
-									predicate = (<>9__3 = ((WorkTypeDef wd) => wt == wd));
-								}
+								Func<WorkTypeDef, bool> predicate = ((WorkTypeDef wd) => wt == wd);
+		
 								if (disabledWorkTypes.Any(predicate))
 								{
 									num3++;
@@ -1133,7 +1126,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001998 RID: 6552 RVA: 0x0009A0C4 File Offset: 0x000982C4
+		
 		[DebugOutput]
 		public static void FoodPreferability()
 		{
@@ -1149,14 +1142,14 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06001999 RID: 6553 RVA: 0x0009A198 File Offset: 0x00098398
+		
 		[DebugOutput]
 		public static void IngestibleMaxSatisfiedTitle()
 		{
 			RoyalTitleUtility.DoTable_IngestibleMaxSatisfiedTitle();
 		}
 
-		// Token: 0x0600199A RID: 6554 RVA: 0x0009A1A0 File Offset: 0x000983A0
+		
 		[DebugOutput]
 		public static void MapDanger()
 		{
@@ -1169,7 +1162,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x0600199B RID: 6555 RVA: 0x0009A22C File Offset: 0x0009842C
+		
 		[DebugOutput]
 		public static void GenSteps()
 		{
@@ -1191,7 +1184,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<GenStepDef>(dataSources, array);
 		}
 
-		// Token: 0x0600199C RID: 6556 RVA: 0x0009A344 File Offset: 0x00098544
+		
 		[DebugOutput]
 		public static void WorldGenSteps()
 		{
@@ -1205,7 +1198,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<WorldGenStepDef>(dataSources, array);
 		}
 
-		// Token: 0x0600199D RID: 6557 RVA: 0x0009A430 File Offset: 0x00098630
+		
 		[DebugOutput]
 		public static void ShuttleDefsToAvoid()
 		{

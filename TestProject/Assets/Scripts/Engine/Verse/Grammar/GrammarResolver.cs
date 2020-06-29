@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace Verse.Grammar
 {
-	// Token: 0x020004C3 RID: 1219
+	
 	public static class GrammarResolver
 	{
-		// Token: 0x060023EF RID: 9199 RVA: 0x000D6C70 File Offset: 0x000D4E70
+		
 		public static string Resolve(string rootKeyword, GrammarRequest request, string debugLabel = null, bool forceLog = false, string untranslatedRootKeyword = null, List<string> extraTags = null, List<string> outTags = null, bool capitalizeFirstSentence = true)
 		{
 			if (LanguageDatabase.activeLanguage == LanguageDatabase.defaultLanguage)
@@ -49,14 +49,14 @@ namespace Verse.Grammar
 			return GrammarResolver.ResolveUnsafe(untranslatedRootKeyword ?? rootKeyword, request, out flag, debugLabel, forceLog, true, extraTags, outTags, capitalizeFirstSentence);
 		}
 
-		// Token: 0x060023F0 RID: 9200 RVA: 0x000D6D18 File Offset: 0x000D4F18
+		
 		public static string ResolveUnsafe(string rootKeyword, GrammarRequest request, string debugLabel = null, bool forceLog = false, bool useUntranslatedRules = false, List<string> extraTags = null, List<string> outTags = null, bool capitalizeFirstSentence = true)
 		{
 			bool flag;
 			return GrammarResolver.ResolveUnsafe(rootKeyword, request, out flag, debugLabel, forceLog, useUntranslatedRules, extraTags, outTags, capitalizeFirstSentence);
 		}
 
-		// Token: 0x060023F1 RID: 9201 RVA: 0x000D6D38 File Offset: 0x000D4F38
+		
 		public static string ResolveUnsafe(string rootKeyword, GrammarRequest request, out bool success, string debugLabel = null, bool forceLog = false, bool useUntranslatedRules = false, List<string> extraTags = null, List<string> outTags = null, bool capitalizeFirstSentence = true)
 		{
 			bool flag = forceLog || DebugViewSettings.logGrammarResolution;
@@ -239,7 +239,7 @@ namespace Verse.Grammar
 			return text;
 		}
 
-		// Token: 0x060023F2 RID: 9202 RVA: 0x000D72F4 File Offset: 0x000D54F4
+		
 		private static void AddRule(Rule rule)
 		{
 			List<GrammarResolver.RuleEntry> list = null;
@@ -252,7 +252,7 @@ namespace Verse.Grammar
 			list.Add(new GrammarResolver.RuleEntry(rule));
 		}
 
-		// Token: 0x060023F3 RID: 9203 RVA: 0x000D7348 File Offset: 0x000D5548
+		
 		private static bool TryResolveRecursive(GrammarResolver.RuleEntry entry, int depth, Dictionary<string, string> constants, out string output, bool log, List<string> extraTags, List<string> resolvedTags)
 		{
 			string text = "";
@@ -356,7 +356,7 @@ namespace Verse.Grammar
 			return !flag;
 		}
 
-		// Token: 0x060023F4 RID: 9204 RVA: 0x000D75E0 File Offset: 0x000D57E0
+		
 		private static GrammarResolver.RuleEntry RandomPossiblyResolvableEntry(string keyword, Dictionary<string, string> constants, List<string> extraTags, List<string> resolvedTags)
 		{
 			List<GrammarResolver.RuleEntry> list = GrammarResolver.rules.TryGetValue(keyword, null);
@@ -383,46 +383,46 @@ namespace Verse.Grammar
 			}, null);
 		}
 
-		// Token: 0x060023F5 RID: 9205 RVA: 0x000D769F File Offset: 0x000D589F
+		
 		public static bool ContainsSpecialChars(string str)
 		{
 			return str.IndexOfAny(GrammarResolver.SpecialChars) >= 0;
 		}
 
-		// Token: 0x040015B0 RID: 5552
+		
 		private static SimpleLinearPool<List<GrammarResolver.RuleEntry>> rulePool = new SimpleLinearPool<List<GrammarResolver.RuleEntry>>();
 
-		// Token: 0x040015B1 RID: 5553
+		
 		private static Dictionary<string, List<GrammarResolver.RuleEntry>> rules = new Dictionary<string, List<GrammarResolver.RuleEntry>>();
 
-		// Token: 0x040015B2 RID: 5554
+		
 		private static int loopCount;
 
-		// Token: 0x040015B3 RID: 5555
+		
 		private static StringBuilder logSbTrace;
 
-		// Token: 0x040015B4 RID: 5556
+		
 		private static StringBuilder logSbMid;
 
-		// Token: 0x040015B5 RID: 5557
+		
 		private static StringBuilder logSbRules;
 
-		// Token: 0x040015B6 RID: 5558
+		
 		private const int DepthLimit = 50;
 
-		// Token: 0x040015B7 RID: 5559
+		
 		private const int LoopsLimit = 1000;
 
-		// Token: 0x040015B8 RID: 5560
+		
 		private static Regex Spaces = new Regex(" +([,.])");
 
-		// Token: 0x040015B9 RID: 5561
+		
 		public const char SymbolStartChar = '[';
 
-		// Token: 0x040015BA RID: 5562
+		
 		public const char SymbolEndChar = ']';
 
-		// Token: 0x040015BB RID: 5563
+		
 		private static readonly char[] SpecialChars = new char[]
 		{
 			'[',
@@ -431,10 +431,10 @@ namespace Verse.Grammar
 			'}'
 		};
 
-		// Token: 0x020016C6 RID: 5830
+		
 		private class RuleEntry
 		{
-			// Token: 0x1700151A RID: 5402
+			
 			// (get) Token: 0x060085C7 RID: 34247 RVA: 0x002B3475 File Offset: 0x002B1675
 			public float SelectionWeight
 			{
@@ -444,7 +444,7 @@ namespace Verse.Grammar
 				}
 			}
 
-			// Token: 0x1700151B RID: 5403
+			
 			// (get) Token: 0x060085C8 RID: 34248 RVA: 0x002B3498 File Offset: 0x002B1698
 			public float Priority
 			{
@@ -454,20 +454,20 @@ namespace Verse.Grammar
 				}
 			}
 
-			// Token: 0x060085C9 RID: 34249 RVA: 0x002B34A5 File Offset: 0x002B16A5
+			
 			public RuleEntry(Rule rule)
 			{
 				this.rule = rule;
 				this.knownUnresolvable = false;
 			}
 
-			// Token: 0x060085CA RID: 34250 RVA: 0x002B34BB File Offset: 0x002B16BB
+			
 			public void MarkKnownUnresolvable()
 			{
 				this.knownUnresolvable = true;
 			}
 
-			// Token: 0x060085CB RID: 34251 RVA: 0x002B34C4 File Offset: 0x002B16C4
+			
 			public bool ValidateConstantConstraints(Dictionary<string, string> constraints)
 			{
 				if (!this.constantConstraintsChecked)
@@ -520,31 +520,31 @@ namespace Verse.Grammar
 				return this.constantConstraintsValid;
 			}
 
-			// Token: 0x060085CC RID: 34252 RVA: 0x002B364A File Offset: 0x002B184A
+			
 			public bool ValidateRequiredTag(List<string> extraTags, List<string> resolvedTags)
 			{
 				return this.rule.requiredTag.NullOrEmpty() || (extraTags != null && extraTags.Contains(this.rule.requiredTag)) || resolvedTags.Contains(this.rule.requiredTag);
 			}
 
-			// Token: 0x060085CD RID: 34253 RVA: 0x002B3689 File Offset: 0x002B1889
+			
 			public override string ToString()
 			{
 				return this.rule.ToString();
 			}
 
-			// Token: 0x04005748 RID: 22344
+			
 			public Rule rule;
 
-			// Token: 0x04005749 RID: 22345
+			
 			public bool knownUnresolvable;
 
-			// Token: 0x0400574A RID: 22346
+			
 			public bool constantConstraintsChecked;
 
-			// Token: 0x0400574B RID: 22347
+			
 			public bool constantConstraintsValid;
 
-			// Token: 0x0400574C RID: 22348
+			
 			public int uses;
 		}
 	}

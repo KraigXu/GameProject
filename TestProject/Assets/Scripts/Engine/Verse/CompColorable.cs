@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200031C RID: 796
+	
 	public class CompColorable : ThingComp
 	{
-		// Token: 0x170004CC RID: 1228
+		
 		// (get) Token: 0x06001741 RID: 5953 RVA: 0x00085508 File Offset: 0x00083708
 		// (set) Token: 0x06001742 RID: 5954 RVA: 0x0008552E File Offset: 0x0008372E
 		public Color Color
@@ -31,7 +31,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004CD RID: 1229
+		
 		// (get) Token: 0x06001743 RID: 5955 RVA: 0x00085558 File Offset: 0x00083758
 		public bool Active
 		{
@@ -41,7 +41,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001744 RID: 5956 RVA: 0x00085560 File Offset: 0x00083760
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
@@ -51,7 +51,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001745 RID: 5957 RVA: 0x000855C8 File Offset: 0x000837C8
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -63,7 +63,7 @@ namespace Verse
 			Scribe_Values.Look<bool>(ref this.active, "colorActive", false, false);
 		}
 
-		// Token: 0x06001746 RID: 5958 RVA: 0x00085618 File Offset: 0x00083818
+		
 		public override void PostSplitOff(Thing piece)
 		{
 			base.PostSplitOff(piece);
@@ -73,10 +73,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000EA1 RID: 3745
+		
 		private Color color = Color.white;
 
-		// Token: 0x04000EA2 RID: 3746
+		
 		private bool active;
 	}
 }

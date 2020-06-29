@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x0200024E RID: 590
+	
 	public class HediffComp_Discoverable : HediffComp
 	{
-		// Token: 0x1700033B RID: 827
+		
 		// (get) Token: 0x0600104C RID: 4172 RVA: 0x0005D5FD File Offset: 0x0005B7FD
 		public HediffCompProperties_Discoverable Props
 		{
@@ -16,19 +16,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600104D RID: 4173 RVA: 0x0005D60A File Offset: 0x0005B80A
+		
 		public override void CompExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.discovered, "discovered", false, false);
 		}
 
-		// Token: 0x0600104E RID: 4174 RVA: 0x0005D61E File Offset: 0x0005B81E
+		
 		public override bool CompDisallowVisible()
 		{
 			return !this.discovered;
 		}
 
-		// Token: 0x0600104F RID: 4175 RVA: 0x0005D629 File Offset: 0x0005B829
+		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			if (Find.TickManager.TicksGame % 103 == 0)
@@ -37,13 +37,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001050 RID: 4176 RVA: 0x0005D640 File Offset: 0x0005B840
+		
 		public override void CompPostPostAdd(DamageInfo? dinfo)
 		{
 			this.CheckDiscovered();
 		}
 
-		// Token: 0x06001051 RID: 4177 RVA: 0x0005D648 File Offset: 0x0005B848
+		
 		private void CheckDiscovered()
 		{
 			if (this.discovered)
@@ -112,19 +112,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001052 RID: 4178 RVA: 0x0005D640 File Offset: 0x0005B840
+		
 		public override void Notify_PawnDied()
 		{
 			this.CheckDiscovered();
 		}
 
-		// Token: 0x06001053 RID: 4179 RVA: 0x0005DA93 File Offset: 0x0005BC93
+		
 		public override string CompDebugString()
 		{
 			return "discovered: " + this.discovered.ToString();
 		}
 
-		// Token: 0x04000BEF RID: 3055
+		
 		private bool discovered;
 	}
 }

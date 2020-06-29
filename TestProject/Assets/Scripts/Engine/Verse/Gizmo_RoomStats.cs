@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002DF RID: 735
+	
 	public class Gizmo_RoomStats : Gizmo
 	{
-		// Token: 0x1700042C RID: 1068
+		
 		// (get) Token: 0x060014A1 RID: 5281 RVA: 0x00079D3E File Offset: 0x00077F3E
 		private Room Room
 		{
@@ -18,20 +18,20 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014A2 RID: 5282 RVA: 0x00079D4B File Offset: 0x00077F4B
+		
 		public Gizmo_RoomStats(Building building)
 		{
 			this.building = building;
 			this.order = -100f;
 		}
 
-		// Token: 0x060014A3 RID: 5283 RVA: 0x00079D65 File Offset: 0x00077F65
+		
 		public override float GetWidth(float maxWidth)
 		{
 			return Mathf.Min(300f, maxWidth);
 		}
 
-		// Token: 0x060014A4 RID: 5284 RVA: 0x00079D74 File Offset: 0x00077F74
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			Room room = this.Room;
@@ -97,7 +97,7 @@ namespace Verse
 			return new GizmoResult(GizmoState.Clear);
 		}
 
-		// Token: 0x060014A5 RID: 5285 RVA: 0x0007A068 File Offset: 0x00078268
+		
 		public override void GizmoUpdateOnMouseover()
 		{
 			base.GizmoUpdateOnMouseover();
@@ -109,7 +109,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060014A6 RID: 5286 RVA: 0x0007A098 File Offset: 0x00078298
+		
 		public static Room GetRoomToShowStatsFor(Building building)
 		{
 			if (!building.Spawned || building.Fogged())
@@ -133,24 +133,24 @@ namespace Verse
 					if (cellRect.IsOnEdge(intVec))
 					{
 						room = intVec.GetRoom(building.Map, RegionType.Set_Passable);
-						if (Gizmo_RoomStats.<GetRoomToShowStatsFor>g__IsValid|8_0(room))
-						{
-							break;
-						}
+						//if (Gizmo_RoomStats.<GetRoomToShowStatsFor>g__IsValid|8_0(room))
+						//{
+						//	break;
+						//}
 					}
 				}
 			}
-			if (!Gizmo_RoomStats.<GetRoomToShowStatsFor>g__IsValid|8_0(room))
-			{
-				return null;
-			}
+			//if (!Gizmo_RoomStats.<GetRoomToShowStatsFor>g__IsValid|8_0(room))
+			//{
+			//	return null;
+			//}
 			return room;
 		}
 
-		// Token: 0x04000DBD RID: 3517
+		
 		private Building building;
 
-		// Token: 0x04000DBE RID: 3518
+		
 		private static readonly Color RoomStatsColor = new Color(0.75f, 0.75f, 0.75f);
 	}
 }

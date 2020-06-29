@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x0200115A RID: 4442
+	
 	public class QuestNode_AddContentsToShuttle : QuestNode
 	{
-		// Token: 0x06006786 RID: 26502 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x06006787 RID: 26503 RVA: 0x00243578 File Offset: 0x00241778
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -28,14 +28,14 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_AddContentsToShuttle);
 		}
 
-		// Token: 0x04003FA1 RID: 16289
+		
 		[NoTranslate]
 		public SlateRef<string> inSignal;
 
-		// Token: 0x04003FA2 RID: 16290
+		
 		public SlateRef<Thing> shuttle;
 
-		// Token: 0x04003FA3 RID: 16291
+		
 		public SlateRef<IEnumerable<Thing>> contents;
 	}
 }

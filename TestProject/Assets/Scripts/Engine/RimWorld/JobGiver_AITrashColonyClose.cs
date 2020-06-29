@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006B7 RID: 1719
+	
 	public class JobGiver_AITrashColonyClose : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E61 RID: 11873 RVA: 0x00104958 File Offset: 0x00102B58
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!pawn.HostileTo(Faction.OfPlayer))
@@ -59,7 +59,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001A6B RID: 6763
+		
 		private const int CloseSearchRadius = 5;
 	}
 }

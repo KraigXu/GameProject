@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse.AI
 {
-	// Token: 0x02000570 RID: 1392
+	
 	public static class TantrumMentalStateUtility
 	{
-		// Token: 0x06002748 RID: 10056 RVA: 0x000E5640 File Offset: 0x000E3840
+		
 		public static bool CanSmash(Pawn pawn, Thing thing, bool skipReachabilityCheck = false, Predicate<Thing> customValidator = null, int extraMinBuildingOrItemMarketValue = 0)
 		{
 			if (customValidator != null)
@@ -23,7 +23,7 @@ namespace Verse.AI
 			return !thing.Destroyed && thing.Spawned && thing != pawn && (thing.def.category == ThingCategory.Pawn || thing.def.useHitPoints) && (thing.def.category == ThingCategory.Pawn || !thing.def.CanHaveFaction || thing.Faction == pawn.Faction) && (thing.def.category != ThingCategory.Item || thing.MarketValue * (float)thing.stackCount >= 75f) && (thing.def.category != ThingCategory.Pawn || !((Pawn)thing).Downed) && ((thing.def.category != ThingCategory.Item && thing.def.category != ThingCategory.Building) || thing.MarketValue * (float)thing.stackCount >= (float)extraMinBuildingOrItemMarketValue) && (skipReachabilityCheck || pawn.CanReach(thing, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn));
 		}
 
-		// Token: 0x06002749 RID: 10057 RVA: 0x000E5764 File Offset: 0x000E3964
+		
 		public static void GetSmashableThingsNear(Pawn pawn, IntVec3 near, List<Thing> outCandidates, Predicate<Thing> customValidator = null, int extraMinBuildingOrItemMarketValue = 0, int maxDistance = 40)
 		{
 			outCandidates.Clear();
@@ -67,7 +67,7 @@ namespace Verse.AI
 			}, 40, RegionType.Set_Passable);
 		}
 
-		// Token: 0x0600274A RID: 10058 RVA: 0x000E581C File Offset: 0x000E3A1C
+		
 		public static void GetSmashableThingsIn(Room room, Pawn pawn, List<Thing> outCandidates, Predicate<Thing> customValidator = null, int extraMinBuildingOrItemMarketValue = 0)
 		{
 			outCandidates.Clear();
@@ -81,17 +81,17 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600274B RID: 10059 RVA: 0x000E5868 File Offset: 0x000E3A68
+		
 		public static bool CanAttackPrisoner(Pawn pawn, Thing prisoner)
 		{
 			Pawn pawn2 = prisoner as Pawn;
 			return pawn2 != null && pawn2.IsPrisoner && !pawn2.Downed && pawn2.HostFaction == pawn.Faction;
 		}
 
-		// Token: 0x04001763 RID: 5987
+		
 		private const int MaxRegionsToSearch = 40;
 
-		// Token: 0x04001764 RID: 5988
+		
 		private const int AbsoluteMinItemMarketValue = 75;
 	}
 }

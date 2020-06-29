@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D66 RID: 3430
+	
 	public class CompProperties_Techprint : CompProperties
 	{
-		// Token: 0x0600538B RID: 21387 RVA: 0x001BF0F5 File Offset: 0x001BD2F5
+		
 		public CompProperties_Techprint()
 		{
 			this.compClass = typeof(CompTechprint);
 		}
 
-		// Token: 0x0600538C RID: 21388 RVA: 0x001BF110 File Offset: 0x001BD310
+		
 		public override void ResolveReferences(ThingDef parentDef)
 		{
 			if (parentDef.descriptionHyperlinks == null)
@@ -42,7 +42,7 @@ namespace RimWorld
 			select x.label).ToCommaList(false).CapitalizeFirst();
 		}
 
-		// Token: 0x04002E2A RID: 11818
+		
 		public ResearchProjectDef project;
 	}
 }

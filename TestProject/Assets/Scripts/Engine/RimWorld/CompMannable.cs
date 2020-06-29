@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000D1E RID: 3358
+	
 	public class CompMannable : ThingComp
 	{
-		// Token: 0x17000E6A RID: 3690
+		
 		// (get) Token: 0x060051B3 RID: 20915 RVA: 0x001B5B55 File Offset: 0x001B3D55
 		public bool MannedNow
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E6B RID: 3691
+		
 		// (get) Token: 0x060051B4 RID: 20916 RVA: 0x001B5B80 File Offset: 0x001B3D80
 		public Pawn ManningPawn
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E6C RID: 3692
+		
 		// (get) Token: 0x060051B5 RID: 20917 RVA: 0x001B5B92 File Offset: 0x001B3D92
 		public CompProperties_Mannable Props
 		{
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060051B6 RID: 20918 RVA: 0x001B5B9F File Offset: 0x001B3D9F
+		
 		public void ManForATick(Pawn pawn)
 		{
 			this.lastManTick = Find.TickManager.TicksGame;
@@ -50,7 +50,7 @@ namespace RimWorld
 			pawn.mindState.lastMannedThing = this.parent;
 		}
 
-		// Token: 0x060051B7 RID: 20919 RVA: 0x001B5BC9 File Offset: 0x001B3DC9
+		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
 		{
 			if (!pawn.RaceProps.ToolUser)
@@ -78,10 +78,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002D25 RID: 11557
+		
 		private int lastManTick = -1;
 
-		// Token: 0x04002D26 RID: 11558
+		
 		private Pawn lastManPawn;
 	}
 }

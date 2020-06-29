@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000655 RID: 1621
+	
 	public class JobDriver_ApplyTechprint : JobDriver
 	{
-		// Token: 0x17000856 RID: 2134
+		
 		// (get) Token: 0x06002C3A RID: 11322 RVA: 0x000FD228 File Offset: 0x000FB428
 		protected Building_ResearchBench ResearchBench
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000857 RID: 2135
+		
 		// (get) Token: 0x06002C3B RID: 11323 RVA: 0x000FD250 File Offset: 0x000FB450
 		protected Thing Techprint
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000858 RID: 2136
+		
 		// (get) Token: 0x06002C3C RID: 11324 RVA: 0x000FD271 File Offset: 0x000FB471
 		protected CompTechprint TechprintComp
 		{
@@ -39,13 +39,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C3D RID: 11325 RVA: 0x000FD280 File Offset: 0x000FB480
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.ResearchBench, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.Techprint, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002C3E RID: 11326 RVA: 0x000FD2D1 File Offset: 0x000FB4D1
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -74,16 +74,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019CC RID: 6604
+		
 		private const TargetIndex ResearchBenchInd = TargetIndex.A;
 
-		// Token: 0x040019CD RID: 6605
+		
 		private const TargetIndex TechprintInd = TargetIndex.B;
 
-		// Token: 0x040019CE RID: 6606
+		
 		private const TargetIndex HaulCell = TargetIndex.C;
 
-		// Token: 0x040019CF RID: 6607
+		
 		private const int Duration = 600;
 	}
 }

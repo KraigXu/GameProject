@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020009FE RID: 2558
+	
 	public class IncidentWorker_TraderCaravanArrival : IncidentWorker_NeutralGroup
 	{
-		// Token: 0x17000ACE RID: 2766
+		
 		// (get) Token: 0x06003CD8 RID: 15576 RVA: 0x00141CA9 File Offset: 0x0013FEA9
 		protected override PawnGroupKindDef PawnGroupKindDef
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003CD9 RID: 15577 RVA: 0x00141CB0 File Offset: 0x0013FEB0
+		
 		protected override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
 		{
 			return base.FactionCanBeGroupSource(f, map, desperate) && f.def.caravanTraderKinds.Count != 0 && f.def.caravanTraderKinds.Any((TraderKindDef t) => this.TraderKindCommonality(t, map, f) > 0f);
 		}
 
-		// Token: 0x06003CDA RID: 15578 RVA: 0x00141D28 File Offset: 0x0013FF28
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -35,7 +35,7 @@ namespace RimWorld
 			return parms.faction == null || !NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, parms.faction);
 		}
 
-		// Token: 0x06003CDB RID: 15579 RVA: 0x00141D68 File Offset: 0x0013FF68
+		
 		protected override bool TryResolveParmsGeneral(IncidentParms parms)
 		{
 			if (!base.TryResolveParmsGeneral(parms))
@@ -53,7 +53,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003CDC RID: 15580 RVA: 0x00141E10 File Offset: 0x00140010
+		
 		protected virtual float TraderKindCommonality(TraderKindDef traderKind, Map map, Faction faction)
 		{
 			if (traderKind.faction == null)
@@ -71,7 +71,7 @@ namespace RimWorld
 			return traderKind.CalculatedCommonality;
 		}
 
-		// Token: 0x06003CDD RID: 15581 RVA: 0x00141EA4 File Offset: 0x001400A4
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -113,7 +113,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003CDE RID: 15582 RVA: 0x00141FC0 File Offset: 0x001401C0
+		
 		protected virtual void SendLetter(IncidentParms parms, List<Pawn> pawns, TraderKindDef traderKind)
 		{
 			TaggedString baseLetterLabel = "LetterLabelTraderCaravanArrival".Translate(parms.faction.Name, traderKind.label).CapitalizeFirst();
@@ -123,7 +123,7 @@ namespace RimWorld
 			base.SendStandardLetter(baseLetterLabel, taggedString, LetterDefOf.PositiveEvent, parms, pawns[0], Array.Empty<NamedArgument>());
 		}
 
-		// Token: 0x06003CDF RID: 15583 RVA: 0x00142092 File Offset: 0x00140292
+		
 		protected override void ResolveParmsPoints(IncidentParms parms)
 		{
 			parms.points = TraderCaravanUtility.GenerateGuardPoints();

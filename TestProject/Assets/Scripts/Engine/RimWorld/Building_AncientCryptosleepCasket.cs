@@ -6,17 +6,17 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000C70 RID: 3184
+	
 	public class Building_AncientCryptosleepCasket : Building_CryptosleepCasket
 	{
-		// Token: 0x06004C39 RID: 19513 RVA: 0x00199850 File Offset: 0x00197A50
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.groupID, "groupID", 0, false);
 		}
 
-		// Token: 0x06004C3A RID: 19514 RVA: 0x0019986C File Offset: 0x00197A6C
+		
 		public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
 		{
 			base.PreApplyDamage(ref dinfo, out absorbed);
@@ -46,7 +46,7 @@ namespace RimWorld
 			absorbed = false;
 		}
 
-		// Token: 0x06004C3B RID: 19515 RVA: 0x00199910 File Offset: 0x00197B10
+		
 		public override void EjectContents()
 		{
 			bool contentsKnown = this.contentsKnown;
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004C3C RID: 19516 RVA: 0x00199A44 File Offset: 0x00197C44
+		
 		private IEnumerable<Building_AncientCryptosleepCasket> UnopenedCasketsInGroup()
 		{
 			yield return this;
@@ -99,7 +99,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002AEF RID: 10991
+		
 		public int groupID = -1;
 	}
 }

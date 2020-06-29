@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A1 RID: 2465
+	
 	public class QuestPart_PawnsArrive : QuestPart
 	{
-		// Token: 0x17000A8E RID: 2702
+		
 		// (get) Token: 0x06003A8F RID: 14991 RVA: 0x00135F6C File Offset: 0x0013416C
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A8F RID: 2703
+		
 		// (get) Token: 0x06003A90 RID: 14992 RVA: 0x00135F7C File Offset: 0x0013417C
 		public override bool IncreasesPopulation
 		{
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A91 RID: 14993 RVA: 0x00135F90 File Offset: 0x00134190
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -98,7 +98,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A92 RID: 14994 RVA: 0x00136274 File Offset: 0x00134474
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -118,7 +118,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A93 RID: 14995 RVA: 0x00136378 File Offset: 0x00134578
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -138,46 +138,46 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A94 RID: 14996 RVA: 0x00136462 File Offset: 0x00134662
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x06003A95 RID: 14997 RVA: 0x00136470 File Offset: 0x00134670
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x0400228A RID: 8842
+		
 		public string inSignal;
 
-		// Token: 0x0400228B RID: 8843
+		
 		public MapParent mapParent;
 
-		// Token: 0x0400228C RID: 8844
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x0400228D RID: 8845
+		
 		public PawnsArrivalModeDef arrivalMode;
 
-		// Token: 0x0400228E RID: 8846
+		
 		public IntVec3 spawnNear = IntVec3.Invalid;
 
-		// Token: 0x0400228F RID: 8847
+		
 		public bool joinPlayer;
 
-		// Token: 0x04002290 RID: 8848
+		
 		public string customLetterText;
 
-		// Token: 0x04002291 RID: 8849
+		
 		public string customLetterLabel;
 
-		// Token: 0x04002292 RID: 8850
+		
 		public LetterDef customLetterDef;
 
-		// Token: 0x04002293 RID: 8851
+		
 		public bool sendStandardLetter = true;
 	}
 }

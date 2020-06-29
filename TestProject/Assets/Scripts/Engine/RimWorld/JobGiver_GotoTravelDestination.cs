@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006CD RID: 1741
+	
 	public class JobGiver_GotoTravelDestination : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EA4 RID: 11940 RVA: 0x00106071 File Offset: 0x00104271
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_GotoTravelDestination jobGiver_GotoTravelDestination = (JobGiver_GotoTravelDestination)base.DeepCopy(resolve);
@@ -18,7 +18,7 @@ namespace RimWorld
 			return jobGiver_GotoTravelDestination;
 		}
 
-		// Token: 0x06002EA5 RID: 11941 RVA: 0x001060B0 File Offset: 0x001042B0
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			pawn.mindState.nextMoveOrderIsWait = !pawn.mindState.nextMoveOrderIsWait;
@@ -48,19 +48,19 @@ namespace RimWorld
 			return job2;
 		}
 
-		// Token: 0x04001A76 RID: 6774
+		
 		private LocomotionUrgency locomotionUrgency = LocomotionUrgency.Walk;
 
-		// Token: 0x04001A77 RID: 6775
+		
 		private Danger maxDanger = Danger.Some;
 
-		// Token: 0x04001A78 RID: 6776
+		
 		private int jobMaxDuration = 999999;
 
-		// Token: 0x04001A79 RID: 6777
+		
 		private bool exactCell;
 
-		// Token: 0x04001A7A RID: 6778
+		
 		private IntRange WaitTicks = new IntRange(30, 80);
 	}
 }

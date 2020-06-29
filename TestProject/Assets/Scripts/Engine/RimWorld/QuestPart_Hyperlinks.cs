@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200097A RID: 2426
+	
 	public class QuestPart_Hyperlinks : QuestPart
 	{
-		// Token: 0x17000A4A RID: 2634
+		
 		// (get) Token: 0x0600396B RID: 14699 RVA: 0x00131637 File Offset: 0x0012F837
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600396C RID: 14700 RVA: 0x00131653 File Offset: 0x0012F853
+		
 		private IEnumerable<Dialog_InfoCard.Hyperlink> GetHyperlinks()
 		{
 			if (this.thingDefs != null)
@@ -52,7 +52,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600396D RID: 14701 RVA: 0x00131664 File Offset: 0x0012F864
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -73,19 +73,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600396E RID: 14702 RVA: 0x00131727 File Offset: 0x0012F927
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x040021D8 RID: 8664
+		
 		public List<ThingDef> thingDefs = new List<ThingDef>();
 
-		// Token: 0x040021D9 RID: 8665
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x040021DA RID: 8666
+		
 		private IEnumerable<Dialog_InfoCard.Hyperlink> cachedHyperlinks;
 	}
 }

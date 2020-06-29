@@ -5,10 +5,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x020002CC RID: 716
+	
 	public static class ScribeExtractor
 	{
-		// Token: 0x06001430 RID: 5168 RVA: 0x0007579C File Offset: 0x0007399C
+		
 		public static T ValueFromNode<T>(XmlNode subNode, T defaultValue)
 		{
 			if (subNode == null)
@@ -50,7 +50,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06001431 RID: 5169 RVA: 0x00075880 File Offset: 0x00073A80
+		
 		public static T DefFromNode<T>(XmlNode subNode) where T : Def, new()
 		{
 			if (subNode == null || subNode.InnerText == null || subNode.InnerText == "null")
@@ -88,7 +88,7 @@ namespace Verse
 			return namedSilentFail;
 		}
 
-		// Token: 0x06001432 RID: 5170 RVA: 0x0007598E File Offset: 0x00073B8E
+		
 		public static T DefFromNodeUnsafe<T>(XmlNode subNode)
 		{
 			return (T)((object)GenGeneric.InvokeStaticGenericMethod(typeof(ScribeExtractor), typeof(T), "DefFromNode", new object[]
@@ -97,7 +97,7 @@ namespace Verse
 			}));
 		}
 
-		// Token: 0x06001433 RID: 5171 RVA: 0x000759C0 File Offset: 0x00073BC0
+		
 		public static T SaveableFromNode<T>(XmlNode subNode, object[] ctorArgs)
 		{
 			if (Scribe.mode != LoadSaveMode.LoadingVars)
@@ -185,7 +185,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06001434 RID: 5172 RVA: 0x00075C54 File Offset: 0x00073E54
+		
 		private static Type GetBestFallbackType<T>(XmlNode node)
 		{
 			if (typeof(Thing).IsAssignableFrom(typeof(T)))
@@ -223,7 +223,7 @@ namespace Verse
 			return typeof(T);
 		}
 
-		// Token: 0x06001435 RID: 5173 RVA: 0x00075D34 File Offset: 0x00073F34
+		
 		private static TDef TryFindDef<TDef>(XmlNode node, string defNodeName) where TDef : Def, new()
 		{
 			XmlElement xmlElement = node[defNodeName];
@@ -234,7 +234,7 @@ namespace Verse
 			return DefDatabase<TDef>.GetNamedSilentFail(BackCompatibility.BackCompatibleDefName(typeof(TDef), xmlElement.InnerText, false, null));
 		}
 
-		// Token: 0x06001436 RID: 5174 RVA: 0x00075D74 File Offset: 0x00073F74
+		
 		public static LocalTargetInfo LocalTargetInfoFromNode(XmlNode node, string label, LocalTargetInfo defaultValue)
 		{
 			LoadIDsWantedBank loadIDs = Scribe.loader.crossRefs.loadIDs;
@@ -260,7 +260,7 @@ namespace Verse
 			return defaultValue;
 		}
 
-		// Token: 0x06001437 RID: 5175 RVA: 0x00075E30 File Offset: 0x00074030
+		
 		public static TargetInfo TargetInfoFromNode(XmlNode node, string label, TargetInfo defaultValue)
 		{
 			LoadIDsWantedBank loadIDs = Scribe.loader.crossRefs.loadIDs;
@@ -292,7 +292,7 @@ namespace Verse
 			return defaultValue;
 		}
 
-		// Token: 0x06001438 RID: 5176 RVA: 0x00075F48 File Offset: 0x00074148
+		
 		public static GlobalTargetInfo GlobalTargetInfoFromNode(XmlNode node, string label, GlobalTargetInfo defaultValue)
 		{
 			LoadIDsWantedBank loadIDs = Scribe.loader.crossRefs.loadIDs;
@@ -342,7 +342,7 @@ namespace Verse
 			return defaultValue;
 		}
 
-		// Token: 0x06001439 RID: 5177 RVA: 0x00076178 File Offset: 0x00074378
+		
 		public static LocalTargetInfo ResolveLocalTargetInfo(LocalTargetInfo loaded, string label)
 		{
 			if (Scribe.EnterNode(label))
@@ -366,7 +366,7 @@ namespace Verse
 			return loaded;
 		}
 
-		// Token: 0x0600143A RID: 5178 RVA: 0x000761D8 File Offset: 0x000743D8
+		
 		public static TargetInfo ResolveTargetInfo(TargetInfo loaded, string label)
 		{
 			if (Scribe.EnterNode(label))
@@ -395,7 +395,7 @@ namespace Verse
 			return loaded;
 		}
 
-		// Token: 0x0600143B RID: 5179 RVA: 0x00076264 File Offset: 0x00074464
+		
 		public static GlobalTargetInfo ResolveGlobalTargetInfo(GlobalTargetInfo loaded, string label)
 		{
 			if (Scribe.EnterNode(label))
@@ -441,7 +441,7 @@ namespace Verse
 			return loaded;
 		}
 
-		// Token: 0x0600143C RID: 5180 RVA: 0x0007633C File Offset: 0x0007453C
+		
 		public static BodyPartRecord BodyPartFromNode(XmlNode node, string label, BodyPartRecord defaultValue)
 		{
 			if (node != null && Scribe.EnterNode(label))
@@ -472,7 +472,7 @@ namespace Verse
 			return defaultValue;
 		}
 
-		// Token: 0x0600143D RID: 5181 RVA: 0x00076400 File Offset: 0x00074600
+		
 		private static void ExtractCellAndMapPairFromTargetInfo(string str, out string cell, out string map)
 		{
 			int num = str.IndexOf(')');

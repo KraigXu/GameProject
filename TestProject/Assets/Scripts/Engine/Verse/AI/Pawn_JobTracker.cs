@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace Verse.AI
 {
-	// Token: 0x0200057D RID: 1405
+	
 	public class Pawn_JobTracker : IExposable
 	{
-		// Token: 0x170007A8 RID: 1960
+		
 		// (get) Token: 0x060027D3 RID: 10195 RVA: 0x000E9E84 File Offset: 0x000E8084
 		public bool HandlingFacing
 		{
@@ -19,13 +19,13 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027D4 RID: 10196 RVA: 0x000E9E9C File Offset: 0x000E809C
+		
 		public Pawn_JobTracker(Pawn newPawn)
 		{
 			this.pawn = newPawn;
 		}
 
-		// Token: 0x060027D5 RID: 10197 RVA: 0x000E9EF8 File Offset: 0x000E80F8
+		
 		public virtual void ExposeData()
 		{
 			Scribe_Deep.Look<Job>(ref this.curJob, "curJob", Array.Empty<object>());
@@ -48,7 +48,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027D6 RID: 10198 RVA: 0x000E9FC0 File Offset: 0x000E81C0
+		
 		public void Notify_WorkTypeDisabled(WorkTypeDef wType)
 		{
 			bool flag = this.pawn.WorkTypeIsDisabled(wType);
@@ -76,7 +76,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027D7 RID: 10199 RVA: 0x000EA0F8 File Offset: 0x000E82F8
+		
 		public void Notify_JoyKindDisabled(JoyKindDef joyKind)
 		{
 			try
@@ -103,7 +103,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027D8 RID: 10200 RVA: 0x000EA1E8 File Offset: 0x000E83E8
+		
 		public virtual void JobTrackerTick()
 		{
 			this.jobsGivenThisTick = 0;
@@ -163,7 +163,7 @@ namespace Verse.AI
 			this.FinalizeTick();
 		}
 
-		// Token: 0x060027D9 RID: 10201 RVA: 0x000EA3B8 File Offset: 0x000E85B8
+		
 		private void FinalizeTick()
 		{
 			this.jobsGivenRecentTicks.Add(this.jobsGivenThisTick);
@@ -199,7 +199,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DA RID: 10202 RVA: 0x000EA4C0 File Offset: 0x000E86C0
+		
 		public void StartJob(Job newJob, JobCondition lastJobEndCondition = JobCondition.None, ThinkNode jobGiver = null, bool resumeCurJobAfterwards = false, bool cancelBusyStances = true, ThinkTreeDef thinkTree = null, JobTag? tag = null, bool fromQueue = false, bool canReturnCurJobToPool = false)
 		{
 			this.startingNewJob = true;
@@ -339,7 +339,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DB RID: 10203 RVA: 0x000EA898 File Offset: 0x000E8A98
+		
 		public void EndCurrentOrQueuedJob(Job job, JobCondition condition, bool canReturnToPool = true)
 		{
 			if (this.debugLog)
@@ -367,7 +367,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DC RID: 10204 RVA: 0x000EA91C File Offset: 0x000E8B1C
+		
 		public void EndCurrentJob(JobCondition condition, bool startNewJob = true, bool canReturnToPool = true)
 		{
 			if (this.debugLog)
@@ -408,7 +408,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DD RID: 10205 RVA: 0x000EAA90 File Offset: 0x000E8C90
+		
 		private void CleanupCurrentJob(JobCondition condition, bool releaseReservations, bool cancelBusyStancesSoft = true, bool canReturnToPool = false)
 		{
 			if (this.debugLog)
@@ -453,7 +453,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DE RID: 10206 RVA: 0x000EABBC File Offset: 0x000E8DBC
+		
 		public void ClearQueuedJobs(bool canReturnToPool = true)
 		{
 			if (this.debugLog)
@@ -471,7 +471,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027DF RID: 10207 RVA: 0x000EAC14 File Offset: 0x000E8E14
+		
 		public void CheckForJobOverride()
 		{
 			if (this.debugLog)
@@ -495,7 +495,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027E0 RID: 10208 RVA: 0x000EACB0 File Offset: 0x000E8EB0
+		
 		public void StopAll(bool ifLayingKeepLaying = false, bool canReturnToPool = true)
 		{
 			if ((!this.pawn.InBed() && (this.pawn.CurJob == null || this.pawn.CurJob.def != JobDefOf.LayDown || !this.pawn.GetPosture().Laying())) || !ifLayingKeepLaying)
@@ -505,7 +505,7 @@ namespace Verse.AI
 			this.ClearQueuedJobs(canReturnToPool);
 		}
 
-		// Token: 0x060027E1 RID: 10209 RVA: 0x000EAD1C File Offset: 0x000E8F1C
+		
 		private void TryFindAndStartJob()
 		{
 			if (this.pawn.thinker == null)
@@ -539,7 +539,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027E2 RID: 10210 RVA: 0x000EADEC File Offset: 0x000E8FEC
+		
 		public Job TryOpportunisticJob(Job job)
 		{
 			if (this.pawn.def.race.intelligence < Intelligence.Humanlike)
@@ -613,7 +613,7 @@ namespace Verse.AI
 			return null;
 		}
 
-		// Token: 0x060027E3 RID: 10211 RVA: 0x000EB128 File Offset: 0x000E9328
+		
 		private ThinkResult DetermineNextJob(out ThinkTreeDef thinkTree)
 		{
 			ThinkResult result = this.DetermineNextConstantThinkTreeJob();
@@ -640,7 +640,7 @@ namespace Verse.AI
 			return result2;
 		}
 
-		// Token: 0x060027E4 RID: 10212 RVA: 0x000EB1E8 File Offset: 0x000E93E8
+		
 		private ThinkResult DetermineNextConstantThinkTreeJob()
 		{
 			if (this.pawn.thinker.ConstantThinkTree == null)
@@ -661,7 +661,7 @@ namespace Verse.AI
 			return ThinkResult.NoJob;
 		}
 
-		// Token: 0x060027E5 RID: 10213 RVA: 0x000EB280 File Offset: 0x000E9480
+		
 		private void CheckLeaveJoinableLordBecauseJobIssued(ThinkResult result)
 		{
 			if (!result.IsValid || result.SourceNode == null)
@@ -692,25 +692,25 @@ namespace Verse.AI
 			goto IL_50;
 		}
 
-		// Token: 0x060027E6 RID: 10214 RVA: 0x000EB2F6 File Offset: 0x000E94F6
+		
 		private bool CanDoAnyJob()
 		{
 			return this.pawn.Spawned;
 		}
 
-		// Token: 0x060027E7 RID: 10215 RVA: 0x000EB304 File Offset: 0x000E9504
+		
 		private bool ShouldStartJobFromThinkTree(ThinkResult thinkResult)
 		{
 			return this.curJob == null || (this.curJob != thinkResult.Job && (thinkResult.FromQueue || (thinkResult.Job.def != this.curJob.def || thinkResult.SourceNode != this.curJob.jobGiver || !this.curDriver.IsContinuation(thinkResult.Job))));
 		}
 
-		// Token: 0x060027E8 RID: 10216 RVA: 0x000EB37B File Offset: 0x000E957B
+		
 		public bool IsCurrentJobPlayerInterruptible()
 		{
 			return (this.curJob == null || this.curJob.def.playerInterruptible) && !this.pawn.HasAttachment(ThingDefOf.Fire);
 		}
 
-		// Token: 0x060027E9 RID: 10217 RVA: 0x000EB3B0 File Offset: 0x000E95B0
+		
 		public bool TryTakeOrderedJobPrioritizedWork(Job job, WorkGiver giver, IntVec3 cell)
 		{
 			if (this.TryTakeOrderedJob(job, giver.def.tagToGive))
@@ -725,7 +725,7 @@ namespace Verse.AI
 			return false;
 		}
 
-		// Token: 0x060027EA RID: 10218 RVA: 0x000EB40C File Offset: 0x000E960C
+		
 		public bool TryTakeOrderedJob(Job job, JobTag tag = JobTag.Misc)
 		{
 			if (this.debugLog)
@@ -794,7 +794,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027EB RID: 10219 RVA: 0x000EB5E8 File Offset: 0x000E97E8
+		
 		public void Notify_TuckedIntoBed(Building_Bed bed)
 		{
 			this.pawn.Position = RestUtility.GetBedSleepingSlotPosFor(this.pawn, bed);
@@ -803,7 +803,7 @@ namespace Verse.AI
 			this.StartJob(JobMaker.MakeJob(JobDefOf.LayDown, bed), JobCondition.InterruptForced, null, false, true, null, new JobTag?(JobTag.TuckedIntoBed), false, false);
 		}
 
-		// Token: 0x060027EC RID: 10220 RVA: 0x000EB650 File Offset: 0x000E9850
+		
 		public void Notify_DamageTaken(DamageInfo dinfo)
 		{
 			if (this.curJob == null)
@@ -823,7 +823,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027ED RID: 10221 RVA: 0x000EB728 File Offset: 0x000E9928
+		
 		internal void Notify_MasterDraftedOrUndrafted()
 		{
 			Pawn master = this.pawn.playerSettings.Master;
@@ -833,7 +833,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027EE RID: 10222 RVA: 0x000EB77C File Offset: 0x000E997C
+		
 		public void DrawLinesBetweenTargets()
 		{
 			Vector3 a = this.pawn.Position.ToVector3Shifted();
@@ -876,7 +876,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027EF RID: 10223 RVA: 0x000EB9F0 File Offset: 0x000E9BF0
+		
 		public void DebugLogEvent(string s)
 		{
 			if (this.debugLog)
@@ -892,55 +892,55 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x040017D3 RID: 6099
+		
 		protected Pawn pawn;
 
-		// Token: 0x040017D4 RID: 6100
+		
 		public Job curJob;
 
-		// Token: 0x040017D5 RID: 6101
+		
 		public JobDriver curDriver;
 
-		// Token: 0x040017D6 RID: 6102
+		
 		public JobQueue jobQueue = new JobQueue();
 
-		// Token: 0x040017D7 RID: 6103
+		
 		public PawnPosture posture;
 
-		// Token: 0x040017D8 RID: 6104
+		
 		public bool startingNewJob;
 
-		// Token: 0x040017D9 RID: 6105
+		
 		private int jobsGivenThisTick;
 
-		// Token: 0x040017DA RID: 6106
+		
 		private string jobsGivenThisTickTextual = "";
 
-		// Token: 0x040017DB RID: 6107
+		
 		private int lastJobGivenAtFrame = -1;
 
-		// Token: 0x040017DC RID: 6108
+		
 		private List<int> jobsGivenRecentTicks = new List<int>(10);
 
-		// Token: 0x040017DD RID: 6109
+		
 		private List<string> jobsGivenRecentTicksTextual = new List<string>(10);
 
-		// Token: 0x040017DE RID: 6110
+		
 		public bool debugLog;
 
-		// Token: 0x040017DF RID: 6111
+		
 		private const int RecentJobQueueMaxLength = 10;
 
-		// Token: 0x040017E0 RID: 6112
+		
 		private const int MaxRecentJobs = 10;
 
-		// Token: 0x040017E1 RID: 6113
+		
 		private static List<Job> tmpJobsToDequeue = new List<Job>();
 
-		// Token: 0x040017E2 RID: 6114
+		
 		private int lastDamageCheckTick = -99999;
 
-		// Token: 0x040017E3 RID: 6115
+		
 		private const int DamageCheckMinInterval = 180;
 	}
 }

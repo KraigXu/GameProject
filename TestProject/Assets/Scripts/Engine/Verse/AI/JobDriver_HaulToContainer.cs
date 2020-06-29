@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000526 RID: 1318
+	
 	public class JobDriver_HaulToContainer : JobDriver
 	{
-		// Token: 0x1700076B RID: 1899
+		
 		// (get) Token: 0x0600259A RID: 9626 RVA: 0x000DEE22 File Offset: 0x000DD022
 		public Thing ThingToCarry
 		{
@@ -17,7 +17,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x1700076C RID: 1900
+		
 		// (get) Token: 0x0600259B RID: 9627 RVA: 0x000DEE35 File Offset: 0x000DD035
 		public Thing Container
 		{
@@ -27,7 +27,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x1700076D RID: 1901
+		
 		// (get) Token: 0x0600259C RID: 9628 RVA: 0x000DEE48 File Offset: 0x000DD048
 		private int Duration
 		{
@@ -41,7 +41,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x0600259D RID: 9629 RVA: 0x000DEE78 File Offset: 0x000DD078
+		
 		public override string GetReport()
 		{
 			Thing thing;
@@ -60,7 +60,7 @@ namespace Verse.AI
 			return ((this.job.GetTarget(TargetIndex.B).Thing is Building_Grave) ? "ReportHaulingToGrave" : "ReportHaulingTo").Translate(thing.Label, this.job.targetB.Thing.LabelShort.Named("DESTINATION"), thing.Named("THING"));
 		}
 
-		// Token: 0x0600259E RID: 9630 RVA: 0x000DEF54 File Offset: 0x000DD154
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			if (!this.pawn.Reserve(this.job.GetTarget(TargetIndex.A), this.job, 1, -1, null, errorOnFailed))
@@ -76,7 +76,7 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x0600259F RID: 9631 RVA: 0x000DEFEC File Offset: 0x000DD1EC
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -109,13 +109,13 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x040016EC RID: 5868
+		
 		protected const TargetIndex CarryThingIndex = TargetIndex.A;
 
-		// Token: 0x040016ED RID: 5869
+		
 		public const TargetIndex DestIndex = TargetIndex.B;
 
-		// Token: 0x040016EE RID: 5870
+		
 		protected const TargetIndex PrimaryDestIndex = TargetIndex.C;
 	}
 }

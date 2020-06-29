@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000339 RID: 825
+	
 	public static class DebugActionsUtility
 	{
-		// Token: 0x0600185C RID: 6236 RVA: 0x0008C044 File Offset: 0x0008A244
+		
 		public static void DustPuffFrom(Thing t)
 		{
 			Pawn pawn = t as Pawn;
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600185D RID: 6237 RVA: 0x0008C066 File Offset: 0x0008A266
+		
 		public static IEnumerable<float> PointsOptions(bool extended)
 		{
 			if (!extended)

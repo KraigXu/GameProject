@@ -62,7 +62,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060006E0 RID: 1760 RVA: 0x0001FB70 File Offset: 0x0001DD70
+		
 		public bool TryGetThinkNodeWithSaveKey(int key, out ThinkNode outNode)
 		{
 			outNode = null;
@@ -86,7 +86,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x060006E1 RID: 1761 RVA: 0x0001FBF0 File Offset: 0x0001DDF0
+		
 		private void ResolveParentNodes(ThinkNode node)
 		{
 			for (int i = 0; i < node.subNodes.Count; i++)
@@ -112,14 +112,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000649 RID: 1609
+		
 		public ThinkNode thinkRoot;
 
-		// Token: 0x0400064A RID: 1610
+		
 		[NoTranslate]
 		public string insertTag;
 
-		// Token: 0x0400064B RID: 1611
+		
 		public float insertPriority;
 	}
 }

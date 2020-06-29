@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000A00 RID: 2560
+	
 	public class IncidentWorker_VisitorGroup : IncidentWorker_NeutralGroup
 	{
-		// Token: 0x06003CE5 RID: 15589 RVA: 0x001422CC File Offset: 0x001404CC
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -52,7 +52,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003CE6 RID: 15590 RVA: 0x001425AC File Offset: 0x001407AC
+		
 		protected override void ResolveParmsPoints(IncidentParms parms)
 		{
 			if (parms.points >= 0f)
@@ -62,7 +62,7 @@ namespace RimWorld
 			parms.points = Rand.ByCurve(IncidentWorker_VisitorGroup.PointsCurve);
 		}
 
-		// Token: 0x06003CE7 RID: 15591 RVA: 0x001425CC File Offset: 0x001407CC
+		
 		private bool TryConvertOnePawnToSmallTrader(List<Pawn> pawns, Faction faction, Map map)
 		{
 			if (faction.def.visitorTraderKinds.NullOrEmpty<TraderKindDef>())
@@ -102,10 +102,10 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04002396 RID: 9110
+		
 		private const float TraderChance = 0.75f;
 
-		// Token: 0x04002397 RID: 9111
+		
 		private static readonly SimpleCurve PointsCurve = new SimpleCurve
 		{
 			{

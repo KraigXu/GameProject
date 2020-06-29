@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AFD RID: 2813
+	
 	public static class PawnAttackGizmoUtility
 	{
-		// Token: 0x06004262 RID: 16994 RVA: 0x00162A79 File Offset: 0x00160C79
+		
 		public static IEnumerable<Gizmo> GetAttackGizmos(Pawn pawn)
 		{
 			if (PawnAttackGizmoUtility.ShouldUseMeleeAttackGizmo(pawn))
@@ -22,19 +22,19 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004263 RID: 16995 RVA: 0x00162A89 File Offset: 0x00160C89
+		
 		public static bool CanShowEquipmentGizmos()
 		{
 			return !PawnAttackGizmoUtility.AtLeastTwoSelectedColonistsHaveDifferentWeapons();
 		}
 
-		// Token: 0x06004264 RID: 16996 RVA: 0x00162A93 File Offset: 0x00160C93
+		
 		private static bool ShouldUseSquadAttackGizmo()
 		{
 			return PawnAttackGizmoUtility.AtLeastOneSelectedColonistHasRangedWeapon() && PawnAttackGizmoUtility.AtLeastTwoSelectedColonistsHaveDifferentWeapons();
 		}
 
-		// Token: 0x06004265 RID: 16997 RVA: 0x00162AA4 File Offset: 0x00160CA4
+		
 		private static Gizmo GetSquadAttackGizmo(Pawn pawn)
 		{
 			Command_Target command_Target = new Command_Target();
@@ -67,13 +67,13 @@ namespace RimWorld
 			return command_Target;
 		}
 
-		// Token: 0x06004266 RID: 16998 RVA: 0x00162B4D File Offset: 0x00160D4D
+		
 		private static bool ShouldUseMeleeAttackGizmo(Pawn pawn)
 		{
 			return pawn.Drafted && (PawnAttackGizmoUtility.AtLeastOneSelectedColonistHasRangedWeapon() || PawnAttackGizmoUtility.AtLeastOneSelectedColonistHasNoWeapon() || PawnAttackGizmoUtility.AtLeastTwoSelectedColonistsHaveDifferentWeapons());
 		}
 
-		// Token: 0x06004267 RID: 16999 RVA: 0x00162B70 File Offset: 0x00160D70
+		
 		private static Gizmo GetMeleeAttackGizmo(Pawn pawn)
 		{
 			Command_Target command_Target = new Command_Target();
@@ -106,7 +106,7 @@ namespace RimWorld
 			return command_Target;
 		}
 
-		// Token: 0x06004268 RID: 17000 RVA: 0x00162C1C File Offset: 0x00160E1C
+		
 		private static bool AtLeastOneSelectedColonistHasRangedWeapon()
 		{
 			List<object> selectedObjectsListForReading = Find.Selector.SelectedObjectsListForReading;
@@ -121,7 +121,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06004269 RID: 17001 RVA: 0x00162C8C File Offset: 0x00160E8C
+		
 		private static bool AtLeastOneSelectedColonistHasNoWeapon()
 		{
 			List<object> selectedObjectsListForReading = Find.Selector.SelectedObjectsListForReading;
@@ -136,7 +136,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600426A RID: 17002 RVA: 0x00162CE8 File Offset: 0x00160EE8
+		
 		private static bool AtLeastTwoSelectedColonistsHaveDifferentWeapons()
 		{
 			if (Find.Selector.NumSelected <= 1)

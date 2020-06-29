@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EB4 RID: 3764
+	
 	public class ITab_Storage : ITab
 	{
-		// Token: 0x1700108A RID: 4234
+		
 		// (get) Token: 0x06005BDB RID: 23515 RVA: 0x001FB67C File Offset: 0x001F987C
 		protected virtual IStoreSettingsParent SelStoreSettingsParent
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700108B RID: 4235
+		
 		// (get) Token: 0x06005BDC RID: 23516 RVA: 0x001FB6B4 File Offset: 0x001F98B4
 		public override bool IsVisible
 		{
@@ -45,7 +45,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700108C RID: 4236
+		
 		// (get) Token: 0x06005BDD RID: 23517 RVA: 0x0001028D File Offset: 0x0000E48D
 		protected virtual bool IsPrioritySettingVisible
 		{
@@ -55,7 +55,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700108D RID: 4237
+		
 		// (get) Token: 0x06005BDE RID: 23518 RVA: 0x001FB6F9 File Offset: 0x001F98F9
 		private float TopAreaHeight
 		{
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005BDF RID: 23519 RVA: 0x001FB70A File Offset: 0x001F990A
+		
 		public ITab_Storage()
 		{
 			this.size = ITab_Storage.WinSize;
@@ -73,7 +73,7 @@ namespace RimWorld
 			this.tutorTag = "Storage";
 		}
 
-		// Token: 0x06005BE0 RID: 23520 RVA: 0x001FB734 File Offset: 0x001F9934
+		
 		protected override void FillTab()
 		{
 			IStoreSettingsParent storeSettingsParent = this.SelStoreSettingsParent;
@@ -124,7 +124,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005BE1 RID: 23521 RVA: 0x001FBA28 File Offset: 0x001F9C28
+		
 		protected IStoreSettingsParent GetThingOrThingCompStoreSettingsParent(Thing t)
 		{
 			IStoreSettingsParent storeSettingsParent = t as IStoreSettingsParent;
@@ -148,10 +148,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x0400322F RID: 12847
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04003230 RID: 12848
+		
 		private static readonly Vector2 WinSize = new Vector2(300f, 480f);
 	}
 }

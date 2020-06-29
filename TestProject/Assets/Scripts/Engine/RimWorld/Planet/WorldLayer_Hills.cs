@@ -5,13 +5,13 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011E8 RID: 4584
+	
 	public class WorldLayer_Hills : WorldLayer
 	{
-		// Token: 0x06006A17 RID: 27159 RVA: 0x00250409 File Offset: 0x0024E609
+		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.<>n__0())
+			foreach (object obj in this.n__0())
 			{
 				yield return obj;
 			}
@@ -63,22 +63,22 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x0400421A RID: 16922
+		
 		private static readonly FloatRange BaseSizeRange = new FloatRange(0.9f, 1.1f);
 
-		// Token: 0x0400421B RID: 16923
+		
 		private static readonly IntVec2 TexturesInAtlas = new IntVec2(2, 2);
 
-		// Token: 0x0400421C RID: 16924
+		
 		private static readonly FloatRange BasePosOffsetRange_SmallHills = new FloatRange(0f, 0.37f);
 
-		// Token: 0x0400421D RID: 16925
+		
 		private static readonly FloatRange BasePosOffsetRange_LargeHills = new FloatRange(0f, 0.2f);
 
-		// Token: 0x0400421E RID: 16926
+		
 		private static readonly FloatRange BasePosOffsetRange_Mountains = new FloatRange(0f, 0.08f);
 
-		// Token: 0x0400421F RID: 16927
+		
 		private static readonly FloatRange BasePosOffsetRange_ImpassableMountains = new FloatRange(0f, 0.08f);
 	}
 }

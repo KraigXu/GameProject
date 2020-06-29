@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E8E RID: 3726
+	
 	[StaticConstructorOnStartup]
 	public static class StorytellerUI
 	{
-		// Token: 0x06005AD8 RID: 23256 RVA: 0x001EF3C8 File Offset: 0x001ED5C8
+		
 		public static void DrawStorytellerSelectionInterface(Rect rect, ref StorytellerDef chosenStoryteller, ref DifficultyDef difficulty, Listing_Standard infoListing)
 		{
 			GUI.BeginGroup(rect);
@@ -89,10 +89,10 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x04003185 RID: 12677
+		
 		private static Vector2 scrollPosition = default(Vector2);
 
-		// Token: 0x04003186 RID: 12678
+		
 		private static readonly Texture2D StorytellerHighlightTex = ContentFinder<Texture2D>.Get("UI/HeroArt/Storytellers/Highlight", true);
 	}
 }

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C45 RID: 3141
+	
 	public static class TaleUtility
 	{
-		// Token: 0x06004AE9 RID: 19177 RVA: 0x00194918 File Offset: 0x00192B18
+		
 		public static void Notify_PawnDied(Pawn victim, DamageInfo? dinfo)
 		{
 			if (Current.ProgramState == ProgramState.Playing && dinfo != null)
@@ -110,16 +110,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002A75 RID: 10869
+		
 		private const float KilledTaleLongRangeThreshold = 35f;
 
-		// Token: 0x04002A76 RID: 10870
+		
 		private const float KilledTaleMeleeRangeThreshold = 2f;
 
-		// Token: 0x04002A77 RID: 10871
+		
 		private const float MajorEnemyThreshold = 250f;
 
-		// Token: 0x04002A78 RID: 10872
+		
 		private static readonly SimpleCurve MajorThreatCurve = new SimpleCurve
 		{
 			{

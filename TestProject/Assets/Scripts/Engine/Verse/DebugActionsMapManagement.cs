@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000333 RID: 819
+	
 	public static class DebugActionsMapManagement
 	{
-		// Token: 0x0600180F RID: 6159 RVA: 0x00089590 File Offset: 0x00087790
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void GenerateMap()
 		{
@@ -21,7 +21,7 @@ namespace Verse
 			GetOrGenerateMapUtility.GetOrGenerateMap(mapParent.Tile, new IntVec3(50, 1, 50), null);
 		}
 
-		// Token: 0x06001810 RID: 6160 RVA: 0x000895E8 File Offset: 0x000877E8
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void DestroyMap()
 		{
@@ -38,7 +38,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001811 RID: 6161 RVA: 0x00089658 File Offset: 0x00087858
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void LeakMap()
 		{
@@ -55,28 +55,28 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001812 RID: 6162 RVA: 0x000896C8 File Offset: 0x000878C8
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void PrintLeakedMap()
 		{
 			Log.Message(string.Format("Leaked map {0}", DebugActionsMapManagement.mapLeak), false);
 		}
 
-		// Token: 0x06001813 RID: 6163 RVA: 0x000896DF File Offset: 0x000878DF
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void AddGameCondition()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugActionsMapManagement.Options_Add_GameCondition()));
 		}
 
-		// Token: 0x06001814 RID: 6164 RVA: 0x000896F5 File Offset: 0x000878F5
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void RemoveGameCondition()
 		{
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(DebugActionsMapManagement.Options_Remove_GameCondition()));
 		}
 
-		// Token: 0x06001815 RID: 6165 RVA: 0x0008970C File Offset: 0x0008790C
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing, actionType = DebugActionType.ToolMap)]
 		private static void Transfer()
 		{
@@ -92,7 +92,7 @@ namespace Verse
 				Map map = maps[i];
 				if (map != Find.CurrentMap)
 				{
-					Predicate<IntVec3> <>9__1;
+					Predicate<IntVec3> 9__1;
 					list.Add(new DebugMenuOption(map.ToString(), DebugMenuOptionMode.Action, delegate
 					{
 						for (int j = 0; j < toTransfer.Count; j++)
@@ -102,9 +102,9 @@ namespace Verse
 							map = map;
 							int squareRadius = Mathf.Max(map.Size.x, map.Size.z);
 							Predicate<IntVec3> validator;
-							if ((validator = <>9__1) == null)
+							if ((validator ) == null)
 							{
-								validator = (<>9__1 = ((IntVec3 x) => !x.Fogged(map) && x.Standable(map)));
+								validator = (9__1 = ((IntVec3 x) => !x.Fogged(map) && x.Standable(map)));
 							}
 							IntVec3 center2;
 							if (CellFinder.TryFindRandomCellNear(center, map, squareRadius, validator, out center2, -1))
@@ -123,7 +123,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001816 RID: 6166 RVA: 0x000897CC File Offset: 0x000879CC
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void ChangeMap()
 		{
@@ -143,7 +143,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x06001817 RID: 6167 RVA: 0x0008984C File Offset: 0x00087A4C
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void RegenerateCurrentMap()
 		{
@@ -158,7 +158,7 @@ namespace Verse
 			Find.CameraDriver.SetRootPosAndSize(rememberedCameraPos.rootPos, rememberedCameraPos.rootSize);
 		}
 
-		// Token: 0x06001818 RID: 6168 RVA: 0x000898D4 File Offset: 0x00087AD4
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void GenerateMapWithCaves()
 		{
@@ -176,7 +176,7 @@ namespace Verse
 			Find.World.renderer.wantedMode = WorldRenderMode.None;
 		}
 
-		// Token: 0x06001819 RID: 6169 RVA: 0x00089984 File Offset: 0x00087B84
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void RunMapGenerator()
 		{
@@ -202,7 +202,7 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x0600181A RID: 6170 RVA: 0x00089A14 File Offset: 0x00087C14
+		
 		[DebugAction("Map management", null, allowedGameStates = AllowedGameStates.Playing)]
 		private static void ForceReformInCurrentMap()
 		{
@@ -212,7 +212,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600181B RID: 6171 RVA: 0x00089A2C File Offset: 0x00087C2C
+		
 		public static List<DebugMenuOption> Options_Add_GameCondition()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -227,7 +227,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x0600181C RID: 6172 RVA: 0x00089AB0 File Offset: 0x00087CB0
+		
 		public static List<DebugMenuOption> Options_Remove_GameCondition()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -242,7 +242,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x04000F06 RID: 3846
+		
 		private static Map mapLeak;
 	}
 }

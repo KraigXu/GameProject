@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x0200115C RID: 4444
+	
 	public class QuestNode_AddItemsReward : QuestNode
 	{
-		// Token: 0x0600678C RID: 26508 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x0600678D RID: 26509 RVA: 0x002436E4 File Offset: 0x002418E4
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -32,10 +32,10 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_Choice);
 		}
 
-		// Token: 0x04003FAA RID: 16298
+		
 		public SlateRef<IEnumerable<Thing>> items;
 
-		// Token: 0x04003FAB RID: 16299
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalChoiceUsed;
 	}

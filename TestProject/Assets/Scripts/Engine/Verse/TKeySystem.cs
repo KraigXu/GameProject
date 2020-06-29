@@ -6,10 +6,10 @@ using System.Xml;
 
 namespace Verse
 {
-    // Token: 0x02000211 RID: 529
+    
     public static class TKeySystem
     {
-        // Token: 0x06000EE6 RID: 3814 RVA: 0x000549B0 File Offset: 0x00052BB0
+        
         public static void Clear()
         {
             TKeySystem.keys.Clear();
@@ -19,7 +19,7 @@ namespace Verse
             TKeySystem.treatAsList.Clear();
         }
 
-        // Token: 0x06000EE7 RID: 3815 RVA: 0x000549E4 File Offset: 0x00052BE4
+        
         public static void Parse(XmlDocument document)
         {
             foreach (object obj in document.ChildNodes[0].ChildNodes)
@@ -28,13 +28,13 @@ namespace Verse
             }
         }
 
-        // Token: 0x06000EE8 RID: 3816 RVA: 0x00054A48 File Offset: 0x00052C48
+        
         public static void MarkTreatAsList(XmlNode node)
         {
             TKeySystem.treatAsList.Add(node);
         }
 
-        // Token: 0x06000EE9 RID: 3817 RVA: 0x00054A58 File Offset: 0x00052C58
+        
         public static void BuildMappings()
         {
             Dictionary<string, string> tmpTranslationKeyToTKey = new Dictionary<string, string>();
@@ -83,7 +83,7 @@ namespace Verse
             }
         }
 
-        // Token: 0x06000EEA RID: 3818 RVA: 0x00054C24 File Offset: 0x00052E24
+        
         public static bool TryGetNormalizedPath(string tKeyPath, out string normalizedPath)
         {
             return TKeySystem.TryFindShortestReplacementPath(tKeyPath, delegate (string path, out string result)
@@ -92,7 +92,7 @@ namespace Verse
             }, out normalizedPath);
         }
 
-        // Token: 0x06000EEB RID: 3819 RVA: 0x00054C4C File Offset: 0x00052E4C
+        
         private static bool TryFindShortestReplacementPath(string path, TKeySystem.PathMatcher matcher, out string result)
         {
             if (matcher(path, out result))
@@ -132,7 +132,7 @@ namespace Verse
             return false;
         }
 
-        // Token: 0x06000EEC RID: 3820 RVA: 0x00054CCC File Offset: 0x00052ECC
+        
         public static bool TrySuggestTKeyPath(string translationPath, out string tKeyPath, Dictionary<string, string> lookup = null)
         {
             if (lookup == null)
@@ -145,7 +145,7 @@ namespace Verse
             }, out tKeyPath);
         }
 
-        // Token: 0x06000EED RID: 3821 RVA: 0x00054D0C File Offset: 0x00052F0C
+        
         private static string GetNormalizedTranslationKey(TKeySystem.TKeyRef tKeyRef)
         {
             string text = "";
@@ -175,69 +175,69 @@ namespace Verse
             }
 
 
-            //TKeySystem.<> c__DisplayClass17_0 <> c__DisplayClass17_;
+            //TKeySystem. c__DisplayClass17_0  c__DisplayClass17_;
 
-            //<> c__DisplayClass17_.tKeyRefTemplate = default(TKeySystem.TKeyRef);
+            // c__DisplayClass17_.tKeyRefTemplate = default(TKeySystem.TKeyRef);
 
-            //<> c__DisplayClass17_.tKeyRefTemplate.defName = text;
+            // c__DisplayClass17_.tKeyRefTemplate.defName = text;
 
-            //<> c__DisplayClass17_.tKeyRefTemplate.defTypeName = node.Name;
+            // c__DisplayClass17_.tKeyRefTemplate.defTypeName = node.Name;
 
-            //<> c__DisplayClass17_.tKeyRefTemplate.defRootNode = node;
-            //TKeySystem.< ParseDefNode > g__CrawlNodesRecursive | 17_3(node, ref <> c__DisplayClass17_);
+            // c__DisplayClass17_.tKeyRefTemplate.defRootNode = node;
+            //TKeySystem.< ParseDefNode > g__CrawlNodesRecursive | 17_3(node, ref  c__DisplayClass17_);
         }
 
 
         private static List<TKeySystem.TKeyRef> keys = new List<TKeySystem.TKeyRef>();
 
-        // Token: 0x04000B04 RID: 2820
+        
         public static List<string> loadErrors = new List<string>();
 
-        // Token: 0x04000B05 RID: 2821
+        
         private static Dictionary<string, string> tKeyToNormalizedTranslationKey = new Dictionary<string, string>();
 
-        // Token: 0x04000B06 RID: 2822
+        
         private static Dictionary<string, string> translationKeyToTKey = new Dictionary<string, string>();
 
-        // Token: 0x04000B07 RID: 2823
+        
         private static HashSet<XmlNode> treatAsList = new HashSet<XmlNode>();
 
-        // Token: 0x04000B08 RID: 2824
+        
         public const string AttributeName = "TKey";
 
-        // Token: 0x0200141D RID: 5149
+        
         private struct TKeyRef
         {
-            // Token: 0x04004C72 RID: 19570
+            
             public string defName;
 
-            // Token: 0x04004C73 RID: 19571
+            
             public string defTypeName;
 
-            // Token: 0x04004C74 RID: 19572
+            
             public XmlNode defRootNode;
 
-            // Token: 0x04004C75 RID: 19573
+            
             public XmlNode node;
 
-            // Token: 0x04004C76 RID: 19574
+            
             public string tKey;
 
-            // Token: 0x04004C77 RID: 19575
+            
             public string tKeyPath;
         }
 
-        // Token: 0x0200141E RID: 5150
+        
         private struct PossibleDefInjection
         {
-            // Token: 0x04004C78 RID: 19576
+            
             public string normalizedPath;
 
-            // Token: 0x04004C79 RID: 19577
+            
             public string path;
         }
 
-        // Token: 0x0200141F RID: 5151
+        
         // (Invoke) Token: 0x06007928 RID: 31016
         private delegate bool PathMatcher(string path, out string match);
     }

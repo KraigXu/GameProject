@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000689 RID: 1673
+	
 	public static class Toils_Interpersonal
 	{
-		// Token: 0x06002D71 RID: 11633 RVA: 0x00100190 File Offset: 0x000FE390
+		
 		public static Toil GotoInteractablePosition(TargetIndex target)
 		{
 			Toil toil = new Toil();
@@ -60,7 +60,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D72 RID: 11634 RVA: 0x00100204 File Offset: 0x000FE404
+		
 		public static Toil GotoPrisoner(Pawn pawn, Pawn talkee, PrisonerInteractionModeDef mode)
 		{
 			Toil toil = new Toil();
@@ -74,7 +74,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D73 RID: 11635 RVA: 0x00100264 File Offset: 0x000FE464
+		
 		public static Toil WaitToBeAbleToInteract(Pawn pawn)
 		{
 			return new Toil
@@ -98,7 +98,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002D74 RID: 11636 RVA: 0x001002B8 File Offset: 0x000FE4B8
+		
 		public static Toil ConvinceRecruitee(Pawn pawn, Pawn talkee)
 		{
 			Toil toil = new Toil();
@@ -118,7 +118,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D75 RID: 11637 RVA: 0x0010031C File Offset: 0x000FE51C
+		
 		public static Toil SetLastInteractTime(TargetIndex targetInd)
 		{
 			Toil toil = new Toil();
@@ -132,7 +132,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D76 RID: 11638 RVA: 0x0010036C File Offset: 0x000FE56C
+		
 		public static Toil TryRecruit(TargetIndex recruiteeInd)
 		{
 			Toil toil = new Toil();
@@ -153,7 +153,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D77 RID: 11639 RVA: 0x001003D8 File Offset: 0x000FE5D8
+		
 		public static Toil TryTrain(TargetIndex traineeInd)
 		{
 			Toil toil = new Toil();
@@ -213,7 +213,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D78 RID: 11640 RVA: 0x00100434 File Offset: 0x000FE634
+		
 		public static Toil Interact(TargetIndex otherPawnInd, InteractionDef interaction)
 		{
 			Toil toil = new Toil();

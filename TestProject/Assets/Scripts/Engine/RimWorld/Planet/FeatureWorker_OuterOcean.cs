@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011C3 RID: 4547
+	
 	public class FeatureWorker_OuterOcean : FeatureWorker
 	{
-		// Token: 0x0600692B RID: 26923 RVA: 0x0024BDAC File Offset: 0x00249FAC
+		
 		public override void GenerateWhereAppropriate()
 		{
 			WorldGrid worldGrid = Find.WorldGrid;
@@ -38,24 +38,24 @@ namespace RimWorld.Planet
 			base.AddFeature(this.group, this.group);
 		}
 
-		// Token: 0x0600692C RID: 26924 RVA: 0x0024BEAC File Offset: 0x0024A0AC
+		
 		private bool IsRoot(int tile)
 		{
 			WorldGrid worldGrid = Find.WorldGrid;
 			return worldGrid.IsOnEdge(tile) && this.CanTraverse(tile) && worldGrid[tile].feature == null;
 		}
 
-		// Token: 0x0600692D RID: 26925 RVA: 0x0024BEE4 File Offset: 0x0024A0E4
+		
 		private bool CanTraverse(int tile)
 		{
 			BiomeDef biome = Find.WorldGrid[tile].biome;
 			return biome == BiomeDefOf.Ocean || biome == BiomeDefOf.Lake;
 		}
 
-		// Token: 0x04004162 RID: 16738
+		
 		private List<int> group = new List<int>();
 
-		// Token: 0x04004163 RID: 16739
+		
 		private List<int> edgeTiles = new List<int>();
 	}
 }

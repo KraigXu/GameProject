@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001043 RID: 4163
+	
 	public class RoomRequirement_ThingAnyOf : RoomRequirement
 	{
-		// Token: 0x0600637E RID: 25470 RVA: 0x0022885C File Offset: 0x00226A5C
+		
 		public override string Label(Room r = null)
 		{
 			return ((!this.labelKey.NullOrEmpty()) ? this.labelKey.Translate() : this.things[0].label) + ((r != null) ? " 0/1" : "");
 		}
 
-		// Token: 0x0600637F RID: 25471 RVA: 0x002288B0 File Offset: 0x00226AB0
+		
 		public override bool Met(Room r, Pawn p = null)
 		{
 			foreach (ThingDef def in this.things)
@@ -26,7 +26,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06006380 RID: 25472 RVA: 0x0022890C File Offset: 0x00226B0C
+		
 		public override bool SameOrSubsetOf(RoomRequirement other)
 		{
 			if (!base.SameOrSubsetOf(other))
@@ -44,10 +44,10 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06006381 RID: 25473 RVA: 0x00228980 File Offset: 0x00226B80
+		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.<>n__0())
+			foreach (string text in this.n__0())
 			{
 				yield return text;
 			}
@@ -60,7 +60,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006382 RID: 25474 RVA: 0x00228990 File Offset: 0x00226B90
+		
 		public override bool PlayerHasResearched()
 		{
 			for (int i = 0; i < this.things.Count; i++)
@@ -73,7 +73,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04003C92 RID: 15506
+		
 		public List<ThingDef> things;
 	}
 }

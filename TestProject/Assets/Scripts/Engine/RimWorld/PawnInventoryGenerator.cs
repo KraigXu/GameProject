@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B1A RID: 2842
+	
 	public static class PawnInventoryGenerator
 	{
-		// Token: 0x060042E1 RID: 17121 RVA: 0x00167744 File Offset: 0x00165944
+		
 		public static void GenerateInventoryFor(Pawn p, PawnGenerationRequest request)
 		{
 			p.inventory.DestroyAll(DestroyMode.Vanish);
@@ -34,7 +34,7 @@ namespace RimWorld
 			PawnInventoryGenerator.GiveCombatEnhancingDrugs(p);
 		}
 
-		// Token: 0x060042E2 RID: 17122 RVA: 0x00167838 File Offset: 0x00165A38
+		
 		public static void GiveRandomFood(Pawn p)
 		{
 			if (p.kindDef.invNutrition > 0.001f)
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042E3 RID: 17123 RVA: 0x001678E0 File Offset: 0x00165AE0
+		
 		private static void GiveDrugsIfAddicted(Pawn p)
 		{
 			if (!p.RaceProps.Humanlike)
@@ -102,7 +102,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042E4 RID: 17124 RVA: 0x001679B8 File Offset: 0x00165BB8
+		
 		private static void GiveCombatEnhancingDrugs(Pawn pawn)
 		{
 			if (Rand.Value >= pawn.kindDef.combatEnhancingDrugsChance)

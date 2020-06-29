@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FC2 RID: 4034
+	
 	public static class GenThing
 	{
-		// Token: 0x060060F8 RID: 24824 RVA: 0x002198C0 File Offset: 0x00217AC0
+		
 		public static Vector3 TrueCenter(this Thing t)
 		{
 			Pawn pawn = t as Pawn;
@@ -19,7 +19,7 @@ namespace RimWorld
 			return GenThing.TrueCenter(t.Position, t.Rotation, t.def.size, t.def.Altitude);
 		}
 
-		// Token: 0x060060F9 RID: 24825 RVA: 0x0021990C File Offset: 0x00217B0C
+		
 		public static Vector3 TrueCenter(IntVec3 loc, Rot4 rotation, IntVec2 thingSize, float altitude)
 		{
 			Vector3 result = loc.ToVector3ShiftedWithAltitude(altitude);
@@ -78,7 +78,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060060FA RID: 24826 RVA: 0x00219A5C File Offset: 0x00217C5C
+		
 		public static bool TryDropAndSetForbidden(Thing th, IntVec3 pos, Map map, ThingPlaceMode mode, out Thing resultingThing, bool forbidden)
 		{
 			if (GenDrop.TryDropSpawn_NewTmp(th, pos, map, ThingPlaceMode.Near, out resultingThing, null, null, true))
@@ -93,7 +93,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x060060FB RID: 24827 RVA: 0x00219A88 File Offset: 0x00217C88
+		
 		public static string ThingsToCommaList(IList<Thing> things, bool useAnd = false, bool aggregate = true, int maxCount = -1)
 		{
 			GenThing.tmpThings.Clear();
@@ -150,7 +150,7 @@ namespace RimWorld
 			return text3;
 		}
 
-		// Token: 0x060060FC RID: 24828 RVA: 0x00219CD8 File Offset: 0x00217ED8
+		
 		public static float GetMarketValue(IList<Thing> things)
 		{
 			float num = 0f;
@@ -161,7 +161,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060060FD RID: 24829 RVA: 0x00219D1C File Offset: 0x00217F1C
+		
 		public static bool CloserThingBetween(ThingDef thingDef, IntVec3 a, IntVec3 b, Map map, Thing thingToIgnore = null)
 		{
 			foreach (IntVec3 intVec in CellRect.FromLimits(a, b))
@@ -180,13 +180,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04003B10 RID: 15120
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 
-		// Token: 0x04003B11 RID: 15121
+		
 		private static List<string> tmpThingLabels = new List<string>();
 
-		// Token: 0x04003B12 RID: 15122
+		
 		private static List<Pair<string, int>> tmpThingCounts = new List<Pair<string, int>>();
 	}
 }

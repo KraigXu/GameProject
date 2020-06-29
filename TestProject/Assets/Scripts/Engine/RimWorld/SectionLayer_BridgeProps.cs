@@ -4,11 +4,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A42 RID: 2626
+	
 	[StaticConstructorOnStartup]
 	public class SectionLayer_BridgeProps : SectionLayer
 	{
-		// Token: 0x17000B09 RID: 2825
+		
 		// (get) Token: 0x06003E1D RID: 15901 RVA: 0x000414B0 File Offset: 0x0003F6B0
 		public override bool Visible
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E1E RID: 15902 RVA: 0x000414B7 File Offset: 0x0003F6B7
+		
 		public SectionLayer_BridgeProps(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.Terrain;
 		}
 
-		// Token: 0x06003E1F RID: 15903 RVA: 0x001471CC File Offset: 0x001453CC
+		
 		public override void Regenerate()
 		{
 			base.ClearSubMeshes(MeshParts.All);
@@ -68,7 +68,7 @@ namespace RimWorld
 			base.FinalizeMesh(MeshParts.All);
 		}
 
-		// Token: 0x06003E20 RID: 15904 RVA: 0x00147410 File Offset: 0x00145610
+		
 		private bool ShouldDrawPropsBelow(IntVec3 c, TerrainGrid terrGrid)
 		{
 			TerrainDef terrainDef = terrGrid.TerrainAt(c);
@@ -87,10 +87,10 @@ namespace RimWorld
 			return terrainDef2 != TerrainDefOf.Bridge && (terrainDef2.passability == Traversability.Impassable || c2.SupportsStructureType(map, TerrainDefOf.Bridge.terrainAffordanceNeeded));
 		}
 
-		// Token: 0x0400242F RID: 9263
+		
 		private static readonly Material PropsLoopMat = MaterialPool.MatFrom("Terrain/Misc/BridgeProps_Loop", ShaderDatabase.Transparent);
 
-		// Token: 0x04002430 RID: 9264
+		
 		private static readonly Material PropsRightMat = MaterialPool.MatFrom("Terrain/Misc/BridgeProps_Right", ShaderDatabase.Transparent);
 	}
 }

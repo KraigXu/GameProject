@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001087 RID: 4231
+	
 	public class SketchResolver_AddCornerThings : SketchResolver
 	{
-		// Token: 0x0600646A RID: 25706 RVA: 0x0022CEA0 File Offset: 0x0022B0A0
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			this.wallPositions.Clear();
@@ -52,16 +52,16 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600646B RID: 25707 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x04003D23 RID: 15651
+		
 		private HashSet<IntVec3> wallPositions = new HashSet<IntVec3>();
 
-		// Token: 0x04003D24 RID: 15652
+		
 		private const float Chance = 0.09f;
 	}
 }

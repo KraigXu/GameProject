@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000D67 RID: 3431
+	
 	public class CompTechprint : ThingComp
 	{
-		// Token: 0x17000EDA RID: 3802
+		
 		// (get) Token: 0x0600538D RID: 21389 RVA: 0x001BF242 File Offset: 0x001BD442
 		public CompProperties_Techprint Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600538E RID: 21390 RVA: 0x001BF24F File Offset: 0x001BD44F
+		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
 		{
 			if (!ModLister.RoyaltyInstalled)

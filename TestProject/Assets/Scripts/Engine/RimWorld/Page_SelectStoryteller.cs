@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E8C RID: 3724
+	
 	public class Page_SelectStoryteller : Page
 	{
-		// Token: 0x1700104A RID: 4170
+		
 		// (get) Token: 0x06005ACE RID: 23246 RVA: 0x001EF0BE File Offset: 0x001ED2BE
 		public override string PageTitle
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005ACF RID: 23247 RVA: 0x001EF0D0 File Offset: 0x001ED2D0
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005AD0 RID: 23248 RVA: 0x001EF144 File Offset: 0x001ED344
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			base.DrawPageTitle(rect);
@@ -54,7 +54,7 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x06005AD1 RID: 23249 RVA: 0x001EF215 File Offset: 0x001ED415
+		
 		private void OpenDifficultyUnlockConfirmation()
 		{
 			Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmUnlockExtremeDifficulty".Translate(), delegate
@@ -64,7 +64,7 @@ namespace RimWorld
 			}, true, null));
 		}
 
-		// Token: 0x06005AD2 RID: 23250 RVA: 0x001EF254 File Offset: 0x001ED454
+		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
@@ -96,13 +96,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04003181 RID: 12673
+		
 		private StorytellerDef storyteller;
 
-		// Token: 0x04003182 RID: 12674
+		
 		private DifficultyDef difficulty;
 
-		// Token: 0x04003183 RID: 12675
+		
 		private Listing_Standard selectedStorytellerInfoListing = new Listing_Standard();
 	}
 }

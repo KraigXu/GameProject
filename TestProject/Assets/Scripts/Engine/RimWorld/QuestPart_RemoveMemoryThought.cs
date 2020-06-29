@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000987 RID: 2439
+	
 	public class QuestPart_RemoveMemoryThought : QuestPart
 	{
-		// Token: 0x17000A5B RID: 2651
+		
 		// (get) Token: 0x060039BF RID: 14783 RVA: 0x00132E05 File Offset: 0x00131005
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039C0 RID: 14784 RVA: 0x00132E18 File Offset: 0x00131018
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -57,7 +57,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039C1 RID: 14785 RVA: 0x00132F34 File Offset: 0x00131134
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -69,7 +69,7 @@ namespace RimWorld
 			Scribe_References.Look<Pawn>(ref this.otherPawn, "otherPawn", false);
 		}
 
-		// Token: 0x060039C2 RID: 14786 RVA: 0x00132FB7 File Offset: 0x001311B7
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -77,7 +77,7 @@ namespace RimWorld
 			this.pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>();
 		}
 
-		// Token: 0x060039C3 RID: 14787 RVA: 0x00132FE3 File Offset: 0x001311E3
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			if (this.pawn == replace)
@@ -90,22 +90,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400220D RID: 8717
+		
 		public string inSignal;
 
-		// Token: 0x0400220E RID: 8718
+		
 		public ThoughtDef def;
 
-		// Token: 0x0400220F RID: 8719
+		
 		public Pawn pawn;
 
-		// Token: 0x04002210 RID: 8720
+		
 		public Pawn otherPawn;
 
-		// Token: 0x04002211 RID: 8721
+		
 		public int? count;
 
-		// Token: 0x04002212 RID: 8722
+		
 		public bool addToLookTargets = true;
 	}
 }

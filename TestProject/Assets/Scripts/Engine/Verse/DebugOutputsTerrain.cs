@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x0200034A RID: 842
+	
 	public static class DebugOutputsTerrain
 	{
-		// Token: 0x060019CB RID: 6603 RVA: 0x0009DE58 File Offset: 0x0009C058
+		
 		[DebugOutput]
 		public static void Terrains()
 		{
@@ -49,7 +49,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<TerrainDef>(allDefs, array);
 		}
 
-		// Token: 0x060019CC RID: 6604 RVA: 0x0009E110 File Offset: 0x0009C310
+		
 		[DebugOutput]
 		public static void TerrainAffordances()
 		{

@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001ED RID: 493
+	
 	public static class ContentFinder<T> where T : class
 	{
-		// Token: 0x06000DEE RID: 3566 RVA: 0x0004F574 File Offset: 0x0004D774
+		
 		public static T Get(string itemPath, bool reportFailure = true)
 		{
 			if (!UnityData.IsInMainThread)
@@ -86,7 +86,7 @@ namespace Verse
 			return default(T);
 		}
 
-		// Token: 0x06000DEF RID: 3567 RVA: 0x0004F7F9 File Offset: 0x0004D9F9
+		
 		public static IEnumerable<T> GetAllInFolder(string folderPath)
 		{
 			if (!UnityData.IsInMainThread)

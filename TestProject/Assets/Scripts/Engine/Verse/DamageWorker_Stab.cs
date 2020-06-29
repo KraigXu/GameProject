@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x0200022A RID: 554
+	
 	public class DamageWorker_Stab : DamageWorker_AddInjury
 	{
-		// Token: 0x06000F71 RID: 3953 RVA: 0x00059650 File Offset: 0x00057850
+		
 		protected override BodyPartRecord ChooseHitPart(DamageInfo dinfo, Pawn pawn)
 		{
 			BodyPartRecord randomNotMissingPart = pawn.health.hediffSet.GetRandomNotMissingPart(dinfo.Def, dinfo.Height, dinfo.Depth, null);
@@ -21,7 +21,7 @@ namespace Verse
 			return randomNotMissingPart;
 		}
 
-		// Token: 0x06000F72 RID: 3954 RVA: 0x000596C0 File Offset: 0x000578C0
+		
 		protected override void ApplySpecialEffectsToPart(Pawn pawn, float totalDamage, DamageInfo dinfo, DamageWorker.DamageResult result)
 		{
 			totalDamage = base.ReduceDamageToPreserveOutsideParts(totalDamage, dinfo, pawn);
@@ -52,10 +52,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000B77 RID: 2935
+		
 		private const float DamageFractionOnOuterParts = 0.75f;
 
-		// Token: 0x04000B78 RID: 2936
+		
 		private const float DamageFractionOnInnerParts = 0.4f;
 	}
 }

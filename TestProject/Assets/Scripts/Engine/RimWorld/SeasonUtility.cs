@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F48 RID: 3912
+	
 	public static class SeasonUtility
 	{
-		// Token: 0x17001126 RID: 4390
+		
 		// (get) Token: 0x06006038 RID: 24632 RVA: 0x0001028D File Offset: 0x0000E48D
 		public static Season FirstSeason
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006039 RID: 24633 RVA: 0x0021634C File Offset: 0x0021454C
+		
 		public static Season GetReportedSeason(float yearPct, float latitude)
 		{
 			float by;
@@ -39,7 +39,7 @@ namespace RimWorld
 			return GenMath.MaxBy<Season>(Season.Spring, by, Season.Summer, by2, Season.Fall, by3, Season.Winter, by4);
 		}
 
-		// Token: 0x0600603A RID: 24634 RVA: 0x00216390 File Offset: 0x00214590
+		
 		public static Season GetDominantSeason(float yearPct, float latitude)
 		{
 			float by;
@@ -52,7 +52,7 @@ namespace RimWorld
 			return GenMath.MaxBy<Season>(Season.Spring, by, Season.Summer, by2, Season.Fall, by3, Season.Winter, by4, Season.PermanentSummer, by5, Season.PermanentWinter, by6);
 		}
 
-		// Token: 0x0600603B RID: 24635 RVA: 0x002163C4 File Offset: 0x002145C4
+		
 		public static void GetSeason(float yearPct, float latitude, out float spring, out float summer, out float fall, out float winter, out float permanentSummer, out float permanentWinter)
 		{
 			yearPct = Mathf.Clamp01(yearPct);
@@ -83,7 +83,7 @@ namespace RimWorld
 			permanentWinter = num3;
 		}
 
-		// Token: 0x0600603C RID: 24636 RVA: 0x00216484 File Offset: 0x00214684
+		
 		private static void GetSeasonalAreaSeason(float yearPct, out float spring, out float summer, out float fall, out float winter, bool northernHemisphere)
 		{
 			yearPct = Mathf.Clamp01(yearPct);
@@ -127,7 +127,7 @@ namespace RimWorld
 			fall = 0f;
 		}
 
-		// Token: 0x0600603D RID: 24637 RVA: 0x00216598 File Offset: 0x00214798
+		
 		public static Twelfth GetFirstTwelfth(this Season season, float latitude)
 		{
 			if (latitude >= 0f)
@@ -169,7 +169,7 @@ namespace RimWorld
 			return Twelfth.Undefined;
 		}
 
-		// Token: 0x0600603E RID: 24638 RVA: 0x00216610 File Offset: 0x00214810
+		
 		public static Twelfth GetMiddleTwelfth(this Season season, float latitude)
 		{
 			if (latitude >= 0f)
@@ -211,7 +211,7 @@ namespace RimWorld
 			return Twelfth.Undefined;
 		}
 
-		// Token: 0x0600603F RID: 24639 RVA: 0x00216685 File Offset: 0x00214885
+		
 		public static Season GetPreviousSeason(this Season season)
 		{
 			switch (season)
@@ -235,7 +235,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006040 RID: 24640 RVA: 0x002166BA File Offset: 0x002148BA
+		
 		public static float GetMiddleYearPct(this Season season, float latitude)
 		{
 			if (season == Season.Undefined)
@@ -245,7 +245,7 @@ namespace RimWorld
 			return season.GetMiddleTwelfth(latitude).GetMiddleYearPct();
 		}
 
-		// Token: 0x06006041 RID: 24641 RVA: 0x002166D4 File Offset: 0x002148D4
+		
 		public static string Label(this Season season)
 		{
 			switch (season)
@@ -267,13 +267,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006042 RID: 24642 RVA: 0x00216768 File Offset: 0x00214968
+		
 		public static string LabelCap(this Season season)
 		{
 			return season.Label().CapitalizeFirst();
 		}
 
-		// Token: 0x06006043 RID: 24643 RVA: 0x00216778 File Offset: 0x00214978
+		
 		public static string SeasonsRangeLabel(List<Twelfth> twelfths, Vector2 longLat)
 		{
 			if (twelfths.Count == 0)
@@ -300,7 +300,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006044 RID: 24644 RVA: 0x002167F0 File Offset: 0x002149F0
+		
 		private static string SeasonsContinuousRangeLabel(List<Twelfth> twelfths, Twelfth rootTwelfth, Vector2 longLat)
 		{
 			Twelfth leftMostTwelfth = TwelfthUtility.GetLeftMostTwelfth(twelfths, rootTwelfth);
@@ -327,13 +327,13 @@ namespace RimWorld
 			return GenDate.SeasonDateStringAt(leftMostTwelfth, longLat) + " - " + GenDate.SeasonDateStringAt(rightMostTwelfth, longLat);
 		}
 
-		// Token: 0x04003420 RID: 13344
+		
 		private const float HemisphereLerpDistance = 5f;
 
-		// Token: 0x04003421 RID: 13345
+		
 		private const float SeasonYearPctLerpDistance = 0.085f;
 
-		// Token: 0x04003422 RID: 13346
+		
 		private static readonly SimpleCurve SeasonalAreaSeasons = new SimpleCurve
 		{
 			{

@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace Verse
 {
-	// Token: 0x0200010B RID: 267
+	
 	public class BattleLogEntry_RangedImpact : LogEntry_DamageResult
 	{
-		// Token: 0x17000194 RID: 404
+		
 		// (get) Token: 0x0600075B RID: 1883 RVA: 0x00021CD8 File Offset: 0x0001FED8
 		private string InitiatorName
 		{
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000195 RID: 405
+		
 		// (get) Token: 0x0600075C RID: 1884 RVA: 0x00021D07 File Offset: 0x0001FF07
 		private string RecipientName
 		{
@@ -45,12 +45,12 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600075D RID: 1885 RVA: 0x00020AF5 File Offset: 0x0001ECF5
+		
 		public BattleLogEntry_RangedImpact() : base(null)
 		{
 		}
 
-		// Token: 0x0600075E RID: 1886 RVA: 0x00021D38 File Offset: 0x0001FF38
+		
 		public BattleLogEntry_RangedImpact(Thing initiator, Thing recipient, Thing originalTarget, ThingDef weaponDef, ThingDef projectileDef, ThingDef coverDef) : base(null)
 		{
 			if (initiator is Pawn)
@@ -83,13 +83,13 @@ namespace Verse
 			this.coverDef = coverDef;
 		}
 
-		// Token: 0x0600075F RID: 1887 RVA: 0x00021E01 File Offset: 0x00020001
+		
 		public override bool Concerns(Thing t)
 		{
 			return t == this.initiatorPawn || t == this.recipientPawn || t == this.originalTargetPawn;
 		}
 
-		// Token: 0x06000760 RID: 1888 RVA: 0x00021E20 File Offset: 0x00020020
+		
 		public override IEnumerable<Thing> GetConcerns()
 		{
 			if (this.initiatorPawn != null)
@@ -107,13 +107,13 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000761 RID: 1889 RVA: 0x00021E30 File Offset: 0x00020030
+		
 		public override bool CanBeClickedFromPOV(Thing pov)
 		{
 			return this.recipientPawn != null && ((pov == this.initiatorPawn && CameraJumper.CanJump(this.recipientPawn)) || (pov == this.recipientPawn && CameraJumper.CanJump(this.initiatorPawn)));
 		}
 
-		// Token: 0x06000762 RID: 1890 RVA: 0x00021E80 File Offset: 0x00020080
+		
 		public override void ClickedFromPOV(Thing pov)
 		{
 			if (this.recipientPawn == null)
@@ -133,7 +133,7 @@ namespace Verse
 			throw new NotImplementedException();
 		}
 
-		// Token: 0x06000763 RID: 1891 RVA: 0x00021ECF File Offset: 0x000200CF
+		
 		public override Texture2D IconFromPOV(Thing pov)
 		{
 			if (this.damagedParts.NullOrEmpty<BodyPartRecord>())
@@ -155,7 +155,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000764 RID: 1892 RVA: 0x00021F0C File Offset: 0x0002010C
+		
 		protected override BodyDef DamagedBody()
 		{
 			if (this.recipientPawn == null)
@@ -165,7 +165,7 @@ namespace Verse
 			return this.recipientPawn.RaceProps.body;
 		}
 
-		// Token: 0x06000765 RID: 1893 RVA: 0x00021F28 File Offset: 0x00020128
+		
 		protected override GrammarRequest GenerateGrammarRequest()
 		{
 			GrammarRequest result = base.GenerateGrammarRequest();
@@ -234,7 +234,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06000766 RID: 1894 RVA: 0x000221F4 File Offset: 0x000203F4
+		
 		public override bool ShowInCompactView()
 		{
 			if (!this.deflected)
@@ -256,7 +256,7 @@ namespace Verse
 			return Rand.ChanceSeeded(BattleLogEntry_RangedImpact.DisplayChanceOnMiss / (float)num, this.logID);
 		}
 
-		// Token: 0x06000767 RID: 1895 RVA: 0x00022274 File Offset: 0x00020474
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -272,43 +272,43 @@ namespace Verse
 			Scribe_Defs.Look<ThingDef>(ref this.coverDef, "coverDef");
 		}
 
-		// Token: 0x06000768 RID: 1896 RVA: 0x0002232C File Offset: 0x0002052C
+		
 		public override string ToString()
 		{
 			return "BattleLogEntry_RangedImpact: " + this.InitiatorName + "->" + this.RecipientName;
 		}
 
-		// Token: 0x040006B8 RID: 1720
+		
 		private Pawn initiatorPawn;
 
-		// Token: 0x040006B9 RID: 1721
+		
 		private ThingDef initiatorThing;
 
-		// Token: 0x040006BA RID: 1722
+		
 		private Pawn recipientPawn;
 
-		// Token: 0x040006BB RID: 1723
+		
 		private ThingDef recipientThing;
 
-		// Token: 0x040006BC RID: 1724
+		
 		private Pawn originalTargetPawn;
 
-		// Token: 0x040006BD RID: 1725
+		
 		private ThingDef originalTargetThing;
 
-		// Token: 0x040006BE RID: 1726
+		
 		private bool originalTargetMobile;
 
-		// Token: 0x040006BF RID: 1727
+		
 		private ThingDef weaponDef;
 
-		// Token: 0x040006C0 RID: 1728
+		
 		private ThingDef projectileDef;
 
-		// Token: 0x040006C1 RID: 1729
+		
 		private ThingDef coverDef;
 
-		// Token: 0x040006C2 RID: 1730
+		
 		[TweakValue("LogFilter", 0f, 1f)]
 		private static float DisplayChanceOnMiss = 0.25f;
 	}

@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001F5 RID: 501
+	
 	public static class ModContentLoader<T> where T : class
 	{
-		// Token: 0x06000E1B RID: 3611 RVA: 0x00050C7C File Offset: 0x0004EE7C
+		
 		public static bool IsAcceptableExtension(string extension)
 		{
 			string[] array;
@@ -41,7 +41,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000E1C RID: 3612 RVA: 0x00050D33 File Offset: 0x0004EF33
+		
 		public static IEnumerable<Pair<string, LoadedContentItem<T>>> LoadAllForMod(ModContentPack mod)
 		{
 			DeepProfiler.Start(string.Concat(new object[]
@@ -66,7 +66,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000E1D RID: 3613 RVA: 0x00050D44 File Offset: 0x0004EF44
+		
 		public static LoadedContentItem<T> LoadItem(VirtualFile file)
 		{
 			try
@@ -136,7 +136,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000E1E RID: 3614 RVA: 0x00050F40 File Offset: 0x0004F140
+		
 		private static AudioFormat GetFormat(string filename)
 		{
 			string extension = Path.GetExtension(filename);
@@ -159,7 +159,7 @@ namespace Verse
 			return AudioFormat.wav;
 		}
 
-		// Token: 0x06000E1F RID: 3615 RVA: 0x00050FAD File Offset: 0x0004F1AD
+		
 		private static AudioType GetAudioTypeFromURI(string uri)
 		{
 			if (uri.EndsWith(".ogg"))
@@ -169,13 +169,13 @@ namespace Verse
 			return AudioType.WAV;
 		}
 
-		// Token: 0x06000E20 RID: 3616 RVA: 0x00050FC1 File Offset: 0x0004F1C1
+		
 		private static bool ShouldStreamAudioClipFromFile(VirtualFile file)
 		{
 			return file is FilesystemFile && file.Exists && file.Length > 307200L;
 		}
 
-		// Token: 0x06000E21 RID: 3617 RVA: 0x00050FE4 File Offset: 0x0004F1E4
+		
 		private static Texture2D LoadTexture(VirtualFile file)
 		{
 			Texture2D texture2D = null;
@@ -193,7 +193,7 @@ namespace Verse
 			return texture2D;
 		}
 
-		// Token: 0x04000AAC RID: 2732
+		
 		private static string[] AcceptableExtensionsAudio = new string[]
 		{
 			".wav",
@@ -205,7 +205,7 @@ namespace Verse
 			".s3m"
 		};
 
-		// Token: 0x04000AAD RID: 2733
+		
 		private static string[] AcceptableExtensionsTexture = new string[]
 		{
 			".png",
@@ -214,7 +214,7 @@ namespace Verse
 			".psd"
 		};
 
-		// Token: 0x04000AAE RID: 2734
+		
 		private static string[] AcceptableExtensionsString = new string[]
 		{
 			".txt"

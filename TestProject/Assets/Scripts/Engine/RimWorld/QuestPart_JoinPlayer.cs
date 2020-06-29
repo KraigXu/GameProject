@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A0 RID: 2464
+	
 	public class QuestPart_JoinPlayer : QuestPart
 	{
-		// Token: 0x17000A8C RID: 2700
+		
 		// (get) Token: 0x06003A87 RID: 14983 RVA: 0x00135D40 File Offset: 0x00133F40
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A8D RID: 2701
+		
 		// (get) Token: 0x06003A88 RID: 14984 RVA: 0x00135D50 File Offset: 0x00133F50
 		public override bool IncreasesPopulation
 		{
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A89 RID: 14985 RVA: 0x00135D6C File Offset: 0x00133F6C
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -78,19 +78,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A8A RID: 14986 RVA: 0x00135E86 File Offset: 0x00134086
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x06003A8B RID: 14987 RVA: 0x00135E94 File Offset: 0x00134094
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x06003A8C RID: 14988 RVA: 0x00135EA4 File Offset: 0x001340A4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -106,22 +106,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002284 RID: 8836
+		
 		public string inSignal;
 
-		// Token: 0x04002285 RID: 8837
+		
 		public string outSignalResult;
 
-		// Token: 0x04002286 RID: 8838
+		
 		public List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x04002287 RID: 8839
+		
 		public bool joinPlayer;
 
-		// Token: 0x04002288 RID: 8840
+		
 		public bool makePrisoners;
 
-		// Token: 0x04002289 RID: 8841
+		
 		public MapParent mapParent;
 	}
 }

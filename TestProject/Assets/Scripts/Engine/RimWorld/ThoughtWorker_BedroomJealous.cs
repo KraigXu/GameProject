@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000840 RID: 2112
+	
 	public class ThoughtWorker_BedroomJealous : ThoughtWorker
 	{
-		// Token: 0x06003490 RID: 13456 RVA: 0x0012025C File Offset: 0x0011E45C
+		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (!p.IsColonist)

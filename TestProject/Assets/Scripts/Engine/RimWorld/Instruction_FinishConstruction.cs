@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F1C RID: 3868
+	
 	public class Instruction_FinishConstruction : Lesson_Instruction
 	{
-		// Token: 0x170010FF RID: 4351
+		
 		// (get) Token: 0x06005EB4 RID: 24244 RVA: 0x0020BD9C File Offset: 0x00209F9C
 		protected override float ProgressPercent
 		{
@@ -26,7 +26,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005EB5 RID: 24245 RVA: 0x0020BDEC File Offset: 0x00209FEC
+		
 		private IEnumerable<Thing> ConstructionNeeders()
 		{
 			return from b in base.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint).Concat(base.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingFrame))
@@ -34,7 +34,7 @@ namespace RimWorld
 			select b;
 		}
 
-		// Token: 0x06005EB6 RID: 24246 RVA: 0x0020BE48 File Offset: 0x0020A048
+		
 		public override void LessonUpdate()
 		{
 			base.LessonUpdate();
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400336D RID: 13165
+		
 		private int initialBlueprintsCount = -1;
 	}
 }

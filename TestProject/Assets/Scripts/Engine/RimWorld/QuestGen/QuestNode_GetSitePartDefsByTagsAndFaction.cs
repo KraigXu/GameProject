@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001144 RID: 4420
+	
 	public class QuestNode_GetSitePartDefsByTagsAndFaction : QuestNode
 	{
-		// Token: 0x06006731 RID: 26417 RVA: 0x00241D64 File Offset: 0x0023FF64
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return this.TrySetVars(slate);
 		}
 
-		// Token: 0x06006732 RID: 26418 RVA: 0x00241D6D File Offset: 0x0023FF6D
+		
 		protected override void RunInt()
 		{
 			if (!this.TrySetVars(QuestGen.slate))
@@ -86,31 +86,31 @@ namespace RimWorld.QuestGen
 			return false;
 		}
 
-		// Token: 0x04003F4F RID: 16207
+		
 		public SlateRef<IEnumerable<QuestNode_GetSitePartDefsByTagsAndFaction.SitePartOption>> sitePartsTags;
 
-		// Token: 0x04003F50 RID: 16208
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003F51 RID: 16209
+		
 		[NoTranslate]
 		public SlateRef<string> storeFactionAs;
 
-		// Token: 0x04003F52 RID: 16210
+		
 		public SlateRef<Thing> mustBeHostileToFactionOf;
 
-		// Token: 0x04003F53 RID: 16211
+		
 		private static List<string> tmpTags = new List<string>();
 
-		// Token: 0x02001F3D RID: 7997
+		
 		public class SitePartOption
 		{
-			// Token: 0x0400752C RID: 29996
+			
 			[NoTranslate]
 			public string tag;
 
-			// Token: 0x0400752D RID: 29997
+			
 			public float chance = 1f;
 		}
 	}

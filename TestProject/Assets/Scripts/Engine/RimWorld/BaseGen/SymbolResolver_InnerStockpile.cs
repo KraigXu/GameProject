@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010CE RID: 4302
+	
 	public class SymbolResolver_InnerStockpile : SymbolResolver
 	{
-		// Token: 0x0600656E RID: 25966 RVA: 0x002375A8 File Offset: 0x002357A8
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			CellRect rect;
@@ -36,7 +36,7 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("stockpile", resolveParams, null);
 		}
 
-		// Token: 0x0600656F RID: 25967 RVA: 0x0023764C File Offset: 0x0023584C
+		
 		private bool TryFindPerfectPlaceThenBest(CellRect outerRect, int size, out CellRect rect)
 		{
 			int num;
@@ -55,7 +55,7 @@ namespace RimWorld.BaseGen
 			return true;
 		}
 
-		// Token: 0x06006570 RID: 25968 RVA: 0x00237680 File Offset: 0x00235880
+		
 		private bool TryFindRandomInnerRect(CellRect outerRect, int size, out CellRect rect, int minValidCells, out int maxValidCellsFound)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -78,7 +78,7 @@ namespace RimWorld.BaseGen
 			return result;
 		}
 
-		// Token: 0x04003DC5 RID: 15813
+		
 		private const int DefaultSize = 3;
 	}
 }

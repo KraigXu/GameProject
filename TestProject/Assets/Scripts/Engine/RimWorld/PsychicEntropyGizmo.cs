@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000BB0 RID: 2992
+	
 	[StaticConstructorOnStartup]
 	public class PsychicEntropyGizmo : Gizmo
 	{
-		// Token: 0x06004676 RID: 18038 RVA: 0x0017C1C3 File Offset: 0x0017A3C3
+		
 		public PsychicEntropyGizmo(Pawn_PsychicEntropyTracker tracker)
 		{
 			this.tracker = tracker;
@@ -19,7 +19,7 @@ namespace RimWorld
 			this.UnlimitedTex = ContentFinder<Texture2D>.Get("UI/Icons/EntropyLimit/Unlimited", true);
 		}
 
-		// Token: 0x06004677 RID: 18039 RVA: 0x0017C200 File Offset: 0x0017A400
+		
 		private void DrawThreshold(Rect rect, float percent, float entropyValue)
 		{
 			Rect position = new Rect
@@ -37,7 +37,7 @@ namespace RimWorld
 			GUI.DrawTexture(position, BaseContent.BlackTex);
 		}
 
-		// Token: 0x06004678 RID: 18040 RVA: 0x0017C28C File Offset: 0x0017A48C
+		
 		private void DrawPsyfocusTarget(Rect rect, float percent)
 		{
 			float num = Mathf.Round((rect.width - 8f) * percent);
@@ -63,7 +63,7 @@ namespace RimWorld
 			GUI.DrawTexture(position, PsychicEntropyGizmo.PsyfocusTargetTex);
 		}
 
-		// Token: 0x06004679 RID: 18041 RVA: 0x0017C388 File Offset: 0x0017A588
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			Rect rect = new Rect(topLeft.x, topLeft.y, this.GetWidth(maxWidth), 75f);
@@ -190,46 +190,46 @@ namespace RimWorld
 			return new GizmoResult(GizmoState.Clear);
 		}
 
-		// Token: 0x0600467A RID: 18042 RVA: 0x0017C9A0 File Offset: 0x0017ABA0
+		
 		public override float GetWidth(float maxWidth)
 		{
 			return 212f;
 		}
 
-		// Token: 0x0400286F RID: 10351
+		
 		private Pawn_PsychicEntropyTracker tracker;
 
-		// Token: 0x04002870 RID: 10352
+		
 		private Texture2D LimitedTex;
 
-		// Token: 0x04002871 RID: 10353
+		
 		private Texture2D UnlimitedTex;
 
-		// Token: 0x04002872 RID: 10354
+		
 		private const string LimitedIconPath = "UI/Icons/EntropyLimit/Limited";
 
-		// Token: 0x04002873 RID: 10355
+		
 		private const string UnlimitedIconPath = "UI/Icons/EntropyLimit/Unlimited";
 
-		// Token: 0x04002874 RID: 10356
+		
 		private static readonly Color PainBoostColor = new Color(0.2f, 0.65f, 0.35f);
 
-		// Token: 0x04002875 RID: 10357
+		
 		private static readonly Texture2D EntropyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.46f, 0.34f, 0.35f));
 
-		// Token: 0x04002876 RID: 10358
+		
 		private static readonly Texture2D OverLimitBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.75f, 0.2f, 0.15f));
 
-		// Token: 0x04002877 RID: 10359
+		
 		private static readonly Texture2D PsyfocusBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.34f, 0.42f, 0.43f));
 
-		// Token: 0x04002878 RID: 10360
+		
 		private static readonly Texture2D PsyfocusBarHighlightTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.43f, 0.54f, 0.55f));
 
-		// Token: 0x04002879 RID: 10361
+		
 		private static readonly Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
 
-		// Token: 0x0400287A RID: 10362
+		
 		private static readonly Texture2D PsyfocusTargetTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.74f, 0.97f, 0.8f));
 	}
 }

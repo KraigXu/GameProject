@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200128F RID: 4751
+	
 	public static class CaravanNeedsTabUtility
 	{
-		// Token: 0x06006FC0 RID: 28608 RVA: 0x0026EB5C File Offset: 0x0026CD5C
+		
 		public static void DoRows(Vector2 size, List<Pawn> pawns, Caravan caravan, ref Vector2 scrollPosition, ref float scrollViewHeight, ref Pawn specificNeedsTabForPawn, bool doNeeds = true)
 		{
 			if (specificNeedsTabForPawn != null && (!pawns.Contains(specificNeedsTabForPawn) || specificNeedsTabForPawn.Dead))
@@ -56,7 +56,7 @@ namespace RimWorld.Planet
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06006FC1 RID: 28609 RVA: 0x0026ECC8 File Offset: 0x0026CEC8
+		
 		public static Vector2 GetSize(List<Pawn> pawns, float paneTopY, bool doNeeds = true)
 		{
 			float num = 100f;
@@ -71,7 +71,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006FC2 RID: 28610 RVA: 0x0026ED24 File Offset: 0x0026CF24
+		
 		private static int MaxNeedsCount(List<Pawn> pawns)
 		{
 			int num = 0;
@@ -83,7 +83,7 @@ namespace RimWorld.Planet
 			return num;
 		}
 
-		// Token: 0x06006FC3 RID: 28611 RVA: 0x0026ED68 File Offset: 0x0026CF68
+		
 		private static void DoRow(ref float curY, Rect viewRect, Rect scrollOutRect, Vector2 scrollPosition, Pawn pawn, Caravan caravan, ref Pawn specificNeedsTabForPawn, bool doNeeds)
 		{
 			float num = scrollPosition.y - 50f;
@@ -95,7 +95,7 @@ namespace RimWorld.Planet
 			curY += 50f;
 		}
 
-		// Token: 0x06006FC4 RID: 28612 RVA: 0x0026EDCC File Offset: 0x0026CFCC
+		
 		private static void DoRow(Rect rect, Pawn pawn, Caravan caravan, ref Pawn specificNeedsTabForPawn, bool doNeeds)
 		{
 			GUI.BeginGroup(rect);
@@ -147,7 +147,7 @@ namespace RimWorld.Planet
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06006FC5 RID: 28613 RVA: 0x0026EFF8 File Offset: 0x0026D1F8
+		
 		private static void GetNeedsToDisplay(Pawn p, List<Need> outNeeds)
 		{
 			outNeeds.Clear();
@@ -163,7 +163,7 @@ namespace RimWorld.Planet
 			PawnNeedsUIUtility.SortInDisplayOrder(outNeeds);
 		}
 
-		// Token: 0x06006FC6 RID: 28614 RVA: 0x0026F04C File Offset: 0x0026D24C
+		
 		private static string CustomMoodNeedTooltip(Need_Mood mood)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -195,28 +195,28 @@ namespace RimWorld.Planet
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x040044B7 RID: 17591
+		
 		private const float RowHeight = 50f;
 
-		// Token: 0x040044B8 RID: 17592
+		
 		private const float LabelHeight = 18f;
 
-		// Token: 0x040044B9 RID: 17593
+		
 		private const float LabelColumnWidth = 100f;
 
-		// Token: 0x040044BA RID: 17594
+		
 		private const float NeedWidth = 100f;
 
-		// Token: 0x040044BB RID: 17595
+		
 		private const float NeedMargin = 10f;
 
-		// Token: 0x040044BC RID: 17596
+		
 		private static List<Need> tmpNeeds = new List<Need>();
 
-		// Token: 0x040044BD RID: 17597
+		
 		private static List<Thought> thoughtGroupsPresent = new List<Thought>();
 
-		// Token: 0x040044BE RID: 17598
+		
 		private static List<Thought> thoughtGroup = new List<Thought>();
 	}
 }

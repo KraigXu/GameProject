@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x02000550 RID: 1360
+	
 	public class MentalState_BingingDrug : MentalState_Binging
 	{
-		// Token: 0x17000797 RID: 1943
+		
 		// (get) Token: 0x060026DC RID: 9948 RVA: 0x000E44EA File Offset: 0x000E26EA
 		public override string InspectLine
 		{
@@ -18,7 +18,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060026DD RID: 9949 RVA: 0x000E4502 File Offset: 0x000E2702
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -26,7 +26,7 @@ namespace Verse.AI
 			Scribe_Values.Look<DrugCategory>(ref this.drugCategory, "drugCategory", DrugCategory.None, false);
 		}
 
-		// Token: 0x060026DE RID: 9950 RVA: 0x000E452C File Offset: 0x000E272C
+		
 		public override void PostStart(string reason)
 		{
 			base.PostStart(reason);
@@ -43,7 +43,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060026DF RID: 9951 RVA: 0x000E461C File Offset: 0x000E281C
+		
 		public override void PostEnd()
 		{
 			base.PostEnd();
@@ -53,7 +53,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060026E0 RID: 9952 RVA: 0x000E468C File Offset: 0x000E288C
+		
 		private void ChooseRandomChemical()
 		{
 			MentalState_BingingDrug.addictions.Clear();
@@ -93,13 +93,13 @@ namespace Verse.AI
 			this.drugCategory = DrugCategory.Any;
 		}
 
-		// Token: 0x0400174B RID: 5963
+		
 		public ChemicalDef chemical;
 
-		// Token: 0x0400174C RID: 5964
+		
 		public DrugCategory drugCategory;
 
-		// Token: 0x0400174D RID: 5965
+		
 		private static List<ChemicalDef> addictions = new List<ChemicalDef>();
 	}
 }

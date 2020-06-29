@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002A8 RID: 680
+	
 	internal static class MaterialAllocator
 	{
-		// Token: 0x0600137A RID: 4986 RVA: 0x0006FCD0 File Offset: 0x0006DED0
+		
 		public static Material Create(Material material)
 		{
 			Material material2 = new Material(material);
@@ -20,7 +20,7 @@ namespace Verse
 			return material2;
 		}
 
-		// Token: 0x0600137B RID: 4987 RVA: 0x0006FD18 File Offset: 0x0006DF18
+		
 		public static Material Create(Shader shader)
 		{
 			Material material = new Material(shader);
@@ -32,7 +32,7 @@ namespace Verse
 			return material;
 		}
 
-		// Token: 0x0600137C RID: 4988 RVA: 0x0006FD60 File Offset: 0x0006DF60
+		
 		public static void Destroy(Material material)
 		{
 			if (!MaterialAllocator.references.ContainsKey(material))
@@ -43,7 +43,7 @@ namespace Verse
 			UnityEngine.Object.Destroy(material);
 		}
 
-		// Token: 0x0600137D RID: 4989 RVA: 0x0006FD94 File Offset: 0x0006DF94
+		
 		public static void TryReport()
 		{
 			if (MaterialAllocator.MaterialWarningThreshold() > MaterialAllocator.nextWarningThreshold)
@@ -61,13 +61,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600137E RID: 4990 RVA: 0x0006FDFF File Offset: 0x0006DFFF
+		
 		public static int MaterialWarningThreshold()
 		{
 			return int.MaxValue;
 		}
 
-		// Token: 0x0600137F RID: 4991 RVA: 0x0006FE08 File Offset: 0x0006E008
+		
 		[DebugOutput("System", false)]
 		public static void MaterialReport()
 		{
@@ -80,7 +80,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001380 RID: 4992 RVA: 0x0006FEC8 File Offset: 0x0006E0C8
+		
 		[DebugOutput("System", false)]
 		public static void MaterialSnapshot()
 		{
@@ -92,7 +92,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001381 RID: 4993 RVA: 0x0006FF54 File Offset: 0x0006E154
+		
 		[DebugOutput("System", false)]
 		public static void MaterialDelta()
 		{
@@ -114,19 +114,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000D23 RID: 3363
+		
 		private static Dictionary<Material, MaterialAllocator.MaterialInfo> references = new Dictionary<Material, MaterialAllocator.MaterialInfo>();
 
-		// Token: 0x04000D24 RID: 3364
+		
 		public static int nextWarningThreshold;
 
-		// Token: 0x04000D25 RID: 3365
+		
 		private static Dictionary<string, int> snapshot = new Dictionary<string, int>();
 
-		// Token: 0x02001476 RID: 5238
+		
 		private struct MaterialInfo
 		{
-			// Token: 0x04004DA0 RID: 19872
+			
 			public string stackTrace;
 		}
 	}

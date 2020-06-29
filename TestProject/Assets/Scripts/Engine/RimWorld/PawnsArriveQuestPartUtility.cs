@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009A2 RID: 2466
+	
 	public static class PawnsArriveQuestPartUtility
 	{
-		// Token: 0x06003A98 RID: 15000 RVA: 0x001364A5 File Offset: 0x001346A5
+		
 		public static IEnumerable<Pawn> GetQuestLookTargets(IEnumerable<Pawn> pawns)
 		{
 			if (pawns.Count<Pawn>() == 1)
@@ -33,7 +33,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003A99 RID: 15001 RVA: 0x001364B8 File Offset: 0x001346B8
+		
 		public static bool IncreasesPopulation(IEnumerable<Pawn> pawns, bool joinPlayer, bool makePrisoners)
 		{
 			foreach (Pawn pawn in pawns)

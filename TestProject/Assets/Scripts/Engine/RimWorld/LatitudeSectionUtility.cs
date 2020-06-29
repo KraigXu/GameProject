@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F44 RID: 3908
+	
 	public static class LatitudeSectionUtility
 	{
-		// Token: 0x0600602B RID: 24619 RVA: 0x00215E38 File Offset: 0x00214038
+		
 		public static LatitudeSection GetReportedLatitudeSection(float latitude)
 		{
 			float num;
@@ -30,7 +30,7 @@ namespace RimWorld
 			return LatitudeSection.Seasonal;
 		}
 
-		// Token: 0x0600602C RID: 24620 RVA: 0x00215E80 File Offset: 0x00214080
+		
 		public static LatitudeSection GetDominantLatitudeSection(float latitude)
 		{
 			float num;
@@ -44,7 +44,7 @@ namespace RimWorld
 			return GenMath.MaxBy<LatitudeSection>(LatitudeSection.Equatorial, num, LatitudeSection.Seasonal, num2, LatitudeSection.Polar, num3);
 		}
 
-		// Token: 0x0600602D RID: 24621 RVA: 0x00215EC0 File Offset: 0x002140C0
+		
 		public static void GetLatitudeSection(float latitude, out float equatorial, out float seasonal, out float polar)
 		{
 			float num = Mathf.Abs(latitude);
@@ -80,7 +80,7 @@ namespace RimWorld
 			polar = 0f;
 		}
 
-		// Token: 0x0600602E RID: 24622 RVA: 0x00215F80 File Offset: 0x00214180
+		
 		public static float GetMaxLatitude(this LatitudeSection latitudeSection)
 		{
 			switch (Find.World.info.overallTemperature)
@@ -166,7 +166,7 @@ namespace RimWorld
 			return -1f;
 		}
 
-		// Token: 0x04003411 RID: 13329
+		
 		private const float LerpDistance = 5f;
 	}
 }

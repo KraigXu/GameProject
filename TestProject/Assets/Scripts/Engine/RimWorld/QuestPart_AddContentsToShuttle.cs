@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000963 RID: 2403
+	
 	public class QuestPart_AddContentsToShuttle : QuestPart
 	{
-		// Token: 0x17000A31 RID: 2609
+		
 		// (get) Token: 0x060038E3 RID: 14563 RVA: 0x0012F78C File Offset: 0x0012D98C
 		// (set) Token: 0x060038E4 RID: 14564 RVA: 0x0012F7A4 File Offset: 0x0012D9A4
 		public IEnumerable<Thing> Things
@@ -47,16 +47,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A32 RID: 2610
+		
 		// (get) Token: 0x060038E5 RID: 14565 RVA: 0x0012F844 File Offset: 0x0012DA44
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-				foreach (Dialog_InfoCard.Hyperlink hyperlink in this.<>n__0())
-				{
-					yield return hyperlink;
-				}
+
 				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
 				foreach (Thing outerThing in this.items)
 				{
@@ -69,13 +66,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A33 RID: 2611
+		
 		// (get) Token: 0x060038E6 RID: 14566 RVA: 0x0012F854 File Offset: 0x0012DA54
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__1())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__1())
 				{
 					yield return globalTargetInfo;
 				}
@@ -90,7 +87,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038E7 RID: 14567 RVA: 0x0012F864 File Offset: 0x0012DA64
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -112,19 +109,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038E8 RID: 14568 RVA: 0x0012F969 File Offset: 0x0012DB69
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x060038E9 RID: 14569 RVA: 0x0012F977 File Offset: 0x0012DB77
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x060038EA RID: 14570 RVA: 0x0012F988 File Offset: 0x0012DB88
+		
 		public override void Cleanup()
 		{
 			base.Cleanup();
@@ -138,7 +135,7 @@ namespace RimWorld
 			this.items.Clear();
 		}
 
-		// Token: 0x060038EB RID: 14571 RVA: 0x0012F9E4 File Offset: 0x0012DBE4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -153,23 +150,23 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060038EC RID: 14572 RVA: 0x0012FAA4 File Offset: 0x0012DCA4
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
 			this.inSignal = "DebugSignal" + Rand.Int;
 		}
 
-		// Token: 0x0400218B RID: 8587
+		
 		public string inSignal;
 
-		// Token: 0x0400218C RID: 8588
+		
 		public Thing shuttle;
 
-		// Token: 0x0400218D RID: 8589
+		
 		private List<Thing> items = new List<Thing>();
 
-		// Token: 0x0400218E RID: 8590
+		
 		private List<Pawn> pawns = new List<Pawn>();
 	}
 }

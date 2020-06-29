@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001020 RID: 4128
+	
 	public class StatWorker_PossibleCompOffsets : StatWorker
 	{
-		// Token: 0x060062DD RID: 25309 RVA: 0x0022558C File Offset: 0x0022378C
+		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			float num = base.GetValueUnfinalized(req, applyPostProcess);
@@ -23,7 +23,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060062DE RID: 25310 RVA: 0x002255E0 File Offset: 0x002237E0
+		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			string explanationUnfinalized = base.GetExplanationUnfinalized(req, numberSense);
@@ -77,7 +77,7 @@ namespace RimWorld
 			return explanationUnfinalized + stringBuilder;
 		}
 
-		// Token: 0x060062DF RID: 25311 RVA: 0x00225788 File Offset: 0x00223988
+		
 		public override string GetStatDrawEntryLabel(StatDef stat, float value, ToStringNumberSense numberSense, StatRequest optionalReq, bool finalized = true)
 		{
 			float num = 0f;

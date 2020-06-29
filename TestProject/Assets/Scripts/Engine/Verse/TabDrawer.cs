@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x020003CF RID: 975
+	
 	public static class TabDrawer
 	{
-		// Token: 0x06001CA7 RID: 7335 RVA: 0x000AE7AC File Offset: 0x000AC9AC
+		
 		public static TabRecord DrawTabs(Rect baseRect, List<TabRecord> tabs, int rows)
 		{
 			if (rows <= 1)
@@ -44,7 +44,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x06001CA8 RID: 7336 RVA: 0x000AE8A4 File Offset: 0x000ACAA4
+		
 		public static TabRecord DrawTabs(Rect baseRect, List<TabRecord> tabs, float maxTabWidth = 200f)
 		{
 			TabRecord tabRecord = null;
@@ -103,16 +103,16 @@ namespace Verse
 			return tabRecord;
 		}
 
-		// Token: 0x040010F5 RID: 4341
+		
 		private const float MaxTabWidth = 200f;
 
-		// Token: 0x040010F6 RID: 4342
+		
 		public const float TabHeight = 32f;
 
-		// Token: 0x040010F7 RID: 4343
+		
 		public const float TabHoriztonalOverlap = 10f;
 
-		// Token: 0x040010F8 RID: 4344
+		
 		private static List<TabRecord> tmpTabs = new List<TabRecord>();
 	}
 }

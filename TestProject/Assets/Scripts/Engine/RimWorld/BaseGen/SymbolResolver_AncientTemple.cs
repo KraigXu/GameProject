@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010C3 RID: 4291
+	
 	public class SymbolResolver_AncientTemple : SymbolResolver
 	{
-		// Token: 0x06006550 RID: 25936 RVA: 0x002361C0 File Offset: 0x002343C0
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;

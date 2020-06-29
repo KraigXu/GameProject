@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000E54 RID: 3668
+	
 	public class Dialog_KeyBindings : Window
 	{
-		// Token: 0x17000FF4 RID: 4084
+		
 		// (get) Token: 0x060058C7 RID: 22727 RVA: 0x001D89BA File Offset: 0x001D6BBA
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FF5 RID: 4085
+		
 		// (get) Token: 0x060058C8 RID: 22728 RVA: 0x0005AC15 File Offset: 0x00058E15
 		protected override float Margin
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060058C9 RID: 22729 RVA: 0x001D89C4 File Offset: 0x001D6BC4
+		
 		public Dialog_KeyBindings()
 		{
 			this.forcePause = true;
@@ -50,7 +50,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060058CA RID: 22730 RVA: 0x001D8AA0 File Offset: 0x001D6CA0
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Vector2 vector = new Vector2(120f, 40f);
@@ -118,7 +118,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x060058CB RID: 22731 RVA: 0x001D8E78 File Offset: 0x001D7078
+		
 		private void DrawCategoryEntry(KeyBindingCategoryDef category, float width, ref float curY, bool skipDrawing)
 		{
 			if (!skipDrawing)
@@ -143,7 +143,7 @@ namespace RimWorld
 			curY += 4f;
 		}
 
-		// Token: 0x060058CC RID: 22732 RVA: 0x001D8F2C File Offset: 0x001D712C
+		
 		private void DrawKeyEntry(KeyBindingDef keyDef, Rect parentRect, ref float curY, bool skipDrawing)
 		{
 			if (!skipDrawing)
@@ -170,7 +170,7 @@ namespace RimWorld
 			curY += 34f;
 		}
 
-		// Token: 0x060058CD RID: 22733 RVA: 0x001D906C File Offset: 0x001D726C
+		
 		private void SettingButtonClicked(KeyBindingDef keyDef, KeyPrefs.BindingSlot slot)
 		{
 			if (Event.current.button == 0)
@@ -195,25 +195,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002FFB RID: 12283
+		
 		protected Vector2 scrollPosition;
 
-		// Token: 0x04002FFC RID: 12284
+		
 		protected float contentHeight;
 
-		// Token: 0x04002FFD RID: 12285
+		
 		protected KeyPrefsData keyPrefsData;
 
-		// Token: 0x04002FFE RID: 12286
+		
 		protected Vector2 WindowSize = new Vector2(900f, 760f);
 
-		// Token: 0x04002FFF RID: 12287
+		
 		protected const float EntryHeight = 34f;
 
-		// Token: 0x04003000 RID: 12288
+		
 		protected const float CategoryHeadingHeight = 40f;
 
-		// Token: 0x04003001 RID: 12289
+		
 		private static List<KeyBindingDef> keyBindingsWorkingList = new List<KeyBindingDef>();
 	}
 }

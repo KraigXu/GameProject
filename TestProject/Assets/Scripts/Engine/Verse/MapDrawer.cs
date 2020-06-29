@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200018A RID: 394
+	
 	public sealed class MapDrawer
 	{
-		// Token: 0x17000237 RID: 567
+		
 		// (get) Token: 0x06000B53 RID: 2899 RVA: 0x0003D1CC File Offset: 0x0003B3CC
 		private IntVec2 SectionCount
 		{
@@ -21,7 +21,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000238 RID: 568
+		
 		// (get) Token: 0x06000B54 RID: 2900 RVA: 0x0003D228 File Offset: 0x0003B428
 		private CellRect VisibleSections
 		{
@@ -40,13 +40,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B55 RID: 2901 RVA: 0x0003D2B1 File Offset: 0x0003B4B1
+		
 		public MapDrawer(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x06000B56 RID: 2902 RVA: 0x0003D2C0 File Offset: 0x0003B4C0
+		
 		public void MapMeshDirty(IntVec3 loc, MapMeshFlag dirtyFlags)
 		{
 			bool regenAdjacentCells = (dirtyFlags & (MapMeshFlag.FogOfWar | MapMeshFlag.Buildings)) > MapMeshFlag.None;
@@ -54,7 +54,7 @@ namespace Verse
 			this.MapMeshDirty(loc, dirtyFlags, regenAdjacentCells, regenAdjacentSections);
 		}
 
-		// Token: 0x06000B57 RID: 2903 RVA: 0x0003D2E8 File Offset: 0x0003B4E8
+		
 		public void MapMeshDirty(IntVec3 loc, MapMeshFlag dirtyFlags, bool regenAdjacentCells, bool regenAdjacentSections)
 		{
 			if (Current.ProgramState != ProgramState.Playing)
@@ -89,7 +89,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B58 RID: 2904 RVA: 0x0003D404 File Offset: 0x0003B604
+		
 		public void MapMeshDrawerUpdate_First()
 		{
 			CellRect visibleSections = this.VisibleSections;
@@ -117,7 +117,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B59 RID: 2905 RVA: 0x0003D4CC File Offset: 0x0003B6CC
+		
 		private bool TryUpdateSection(Section sect)
 		{
 			if (sect.dirtyFlags == MapMeshFlag.None)
@@ -136,7 +136,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000B5A RID: 2906 RVA: 0x0003D520 File Offset: 0x0003B720
+		
 		public void DrawMapMesh()
 		{
 			CellRect currentViewRect = Find.CameraDriver.CurrentViewRect;
@@ -149,20 +149,20 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B5B RID: 2907 RVA: 0x0003D5C8 File Offset: 0x0003B7C8
+		
 		private IntVec2 SectionCoordsAt(IntVec3 loc)
 		{
 			return new IntVec2(Mathf.FloorToInt((float)(loc.x / 17)), Mathf.FloorToInt((float)(loc.z / 17)));
 		}
 
-		// Token: 0x06000B5C RID: 2908 RVA: 0x0003D5F0 File Offset: 0x0003B7F0
+		
 		public Section SectionAt(IntVec3 loc)
 		{
 			IntVec2 intVec = this.SectionCoordsAt(loc);
 			return this.sections[intVec.x, intVec.z];
 		}
 
-		// Token: 0x06000B5D RID: 2909 RVA: 0x0003D61C File Offset: 0x0003B81C
+		
 		public void RegenerateEverythingNow()
 		{
 			if (this.sections == null)
@@ -182,7 +182,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B5E RID: 2910 RVA: 0x0003D6C0 File Offset: 0x0003B8C0
+		
 		public void WholeMapChanged(MapMeshFlag change)
 		{
 			for (int i = 0; i < this.SectionCount.x; i++)
@@ -194,7 +194,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B5F RID: 2911 RVA: 0x0003D714 File Offset: 0x0003B914
+		
 		private CellRect GetSunShadowsViewRect(CellRect rect)
 		{
 			GenCelestial.LightInfo lightSourceInfo = GenCelestial.GetLightSourceInfo(this.map, GenCelestial.LightType.Shadow);
@@ -217,10 +217,10 @@ namespace Verse
 			return rect;
 		}
 
-		// Token: 0x04000927 RID: 2343
+		
 		private Map map;
 
-		// Token: 0x04000928 RID: 2344
+		
 		private Section[,] sections;
 	}
 }

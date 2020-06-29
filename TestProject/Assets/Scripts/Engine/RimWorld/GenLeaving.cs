@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FC0 RID: 4032
+	
 	public static class GenLeaving
 	{
-		// Token: 0x060060E8 RID: 24808 RVA: 0x00218DB6 File Offset: 0x00216FB6
+		
 		public static void DoLeavingsFor(Thing diedThing, Map map, DestroyMode mode, List<Thing> listOfLeavingsOut = null)
 		{
 			GenLeaving.DoLeavingsFor(diedThing, map, mode, diedThing.OccupiedRect(), null, listOfLeavingsOut);
 		}
 
-		// Token: 0x060060E9 RID: 24809 RVA: 0x00218DC8 File Offset: 0x00216FC8
+		
 		public static void DoLeavingsFor(Thing diedThing, Map map, DestroyMode mode, CellRect leavingsRect, Predicate<IntVec3> nearPlaceValidator = null, List<Thing> listOfLeavingsOut = null)
 		{
 			if ((Current.ProgramState != ProgramState.Playing && mode != DestroyMode.Refund) || mode == DestroyMode.Vanish || mode == DestroyMode.QuestLogic)
@@ -116,7 +116,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060060EA RID: 24810 RVA: 0x00219138 File Offset: 0x00217338
+		
 		public static void DoLeavingsFor(TerrainDef terrain, IntVec3 cell, Map map)
 		{
 			if (Current.ProgramState != ProgramState.Playing)
@@ -153,7 +153,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060060EB RID: 24811 RVA: 0x00219204 File Offset: 0x00217404
+		
 		public static bool CanBuildingLeaveResources(Thing destroyedThing, DestroyMode mode)
 		{
 			if (!(destroyedThing is Building))
@@ -187,7 +187,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060060EC RID: 24812 RVA: 0x002192A4 File Offset: 0x002174A4
+		
 		private static Func<int, int> GetBuildingResourcesLeaveCalculator(Thing destroyedThing, DestroyMode mode)
 		{
 			if (!GenLeaving.CanBuildingLeaveResources(destroyedThing, mode))
@@ -221,7 +221,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060060ED RID: 24813 RVA: 0x0021943C File Offset: 0x0021763C
+		
 		public static void DropFilthDueToDamage(Thing t, float damageDealt)
 		{
 			if (!t.def.useHitPoints || !t.Spawned || t.def.filthLeaving == null)
@@ -249,19 +249,19 @@ namespace RimWorld
 			GenLeaving.tmpCellsCandidates.Clear();
 		}
 
-		// Token: 0x04003B0B RID: 15115
+		
 		private const float LeaveFraction_Kill = 0.5f;
 
-		// Token: 0x04003B0C RID: 15116
+		
 		private const float LeaveFraction_Cancel = 1f;
 
-		// Token: 0x04003B0D RID: 15117
+		
 		public const float LeaveFraction_DeconstructDefault = 0.75f;
 
-		// Token: 0x04003B0E RID: 15118
+		
 		private const float LeaveFraction_FailConstruction = 0.5f;
 
-		// Token: 0x04003B0F RID: 15119
+		
 		private static List<IntVec3> tmpCellsCandidates = new List<IntVec3>();
 	}
 }

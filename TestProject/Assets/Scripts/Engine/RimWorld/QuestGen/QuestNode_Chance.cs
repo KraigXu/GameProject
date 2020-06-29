@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001103 RID: 4355
+	
 	public class QuestNode_Chance : QuestNode
 	{
-		// Token: 0x06006637 RID: 26167 RVA: 0x0023CE7C File Offset: 0x0023B07C
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			if (this.node == null || this.elseNode == null)
@@ -26,7 +26,7 @@ namespace RimWorld.QuestGen
 			return false;
 		}
 
-		// Token: 0x06006638 RID: 26168 RVA: 0x0023CEE0 File Offset: 0x0023B0E0
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -65,13 +65,13 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x04003E45 RID: 15941
+		
 		public SlateRef<float> chance;
 
-		// Token: 0x04003E46 RID: 15942
+		
 		public QuestNode node;
 
-		// Token: 0x04003E47 RID: 15943
+		
 		public QuestNode elseNode;
 	}
 }

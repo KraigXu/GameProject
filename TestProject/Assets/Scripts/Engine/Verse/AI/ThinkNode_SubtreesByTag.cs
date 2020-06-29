@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse.AI
 {
-	// Token: 0x0200059D RID: 1437
+	
 	public class ThinkNode_SubtreesByTag : ThinkNode
 	{
-		// Token: 0x0600288B RID: 10379 RVA: 0x000EF113 File Offset: 0x000ED313
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			ThinkNode_SubtreesByTag thinkNode_SubtreesByTag = (ThinkNode_SubtreesByTag)base.DeepCopy(resolve);
@@ -15,12 +15,12 @@ namespace Verse.AI
 			return thinkNode_SubtreesByTag;
 		}
 
-		// Token: 0x0600288C RID: 10380 RVA: 0x00002681 File Offset: 0x00000881
+		
 		protected override void ResolveSubnodes()
 		{
 		}
 
-		// Token: 0x0600288D RID: 10381 RVA: 0x000EF130 File Offset: 0x000ED330
+		
 		public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
 		{
 			if (this.matchedTrees == null)
@@ -48,11 +48,11 @@ namespace Verse.AI
 			return ThinkResult.NoJob;
 		}
 
-		// Token: 0x04001858 RID: 6232
+		
 		[NoTranslate]
 		public string insertTag;
 
-		// Token: 0x04001859 RID: 6233
+		
 		[Unsaved(false)]
 		private List<ThinkTreeDef> matchedTrees;
 	}

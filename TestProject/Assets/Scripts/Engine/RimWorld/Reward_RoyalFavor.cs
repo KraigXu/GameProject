@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000FD9 RID: 4057
+	
 	public class Reward_RoyalFavor : Reward
 	{
-		// Token: 0x17001132 RID: 4402
+		
 		// (get) Token: 0x06006174 RID: 24948 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool MakesUseOfChosenPawnSignal
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001133 RID: 4403
+		
 		// (get) Token: 0x06006175 RID: 24949 RVA: 0x0021D3A3 File Offset: 0x0021B5A3
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006176 RID: 24950 RVA: 0x0021D3B4 File Offset: 0x0021B5B4
+		
 		public override void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
 			this.amount = GenMath.RoundRandom(RewardsGenerator.RewardValueToRoyalFavorCurve.Evaluate(rewardValue));
@@ -43,7 +43,7 @@ namespace RimWorld
 			this.faction = parms.giverFaction;
 		}
 
-		// Token: 0x06006177 RID: 24951 RVA: 0x0021D40A File Offset: 0x0021B60A
+		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
 			Slate slate = QuestGen.slate;
@@ -65,7 +65,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006178 RID: 24952 RVA: 0x0021D424 File Offset: 0x0021B624
+		
 		public override string GetDescription(RewardsGeneratorParams parms)
 		{
 			if (!parms.chosenPawnSignal.NullOrEmpty())
@@ -75,7 +75,7 @@ namespace RimWorld
 			return "Reward_RoyalFavor".Translate(this.faction, this.amount).Resolve();
 		}
 
-		// Token: 0x06006179 RID: 24953 RVA: 0x0021D4A4 File Offset: 0x0021B6A4
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -89,7 +89,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x0600617A RID: 24954 RVA: 0x0021D4FE File Offset: 0x0021B6FE
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -97,10 +97,10 @@ namespace RimWorld
 			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
 		}
 
-		// Token: 0x04003B47 RID: 15175
+		
 		public int amount;
 
-		// Token: 0x04003B48 RID: 15176
+		
 		public Faction faction;
 	}
 }

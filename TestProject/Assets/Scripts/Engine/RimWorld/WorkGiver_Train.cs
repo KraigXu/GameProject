@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000722 RID: 1826
+	
 	public class WorkGiver_Train : WorkGiver_InteractAnimal
 	{
-		// Token: 0x0600300C RID: 12300 RVA: 0x0010E07D File Offset: 0x0010C27D
+		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction);
 		}
 
-		// Token: 0x0600300D RID: 12301 RVA: 0x0010E584 File Offset: 0x0010C784
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;

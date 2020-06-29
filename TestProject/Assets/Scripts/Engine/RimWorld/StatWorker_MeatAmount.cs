@@ -4,13 +4,13 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001023 RID: 4131
+	
 	public class StatWorker_MeatAmount : StatWorker
 	{
-		// Token: 0x060062E5 RID: 25317 RVA: 0x00225957 File Offset: 0x00223B57
+		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> GetInfoCardHyperlinks(StatRequest statRequest)
 		{
-			foreach (Dialog_InfoCard.Hyperlink hyperlink in this.<>n__0(statRequest))
+			foreach (Dialog_InfoCard.Hyperlink hyperlink in this.n__0(statRequest))
 			{
 				yield return hyperlink;
 			}

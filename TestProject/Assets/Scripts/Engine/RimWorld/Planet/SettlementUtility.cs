@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200125B RID: 4699
+	
 	public class SettlementUtility
 	{
-		// Token: 0x06006DE4 RID: 28132 RVA: 0x0026652C File Offset: 0x0026472C
+		
 		public static bool IsPlayerAttackingAnySettlementOf(Faction faction)
 		{
 			if (faction == Faction.OfPlayer)
@@ -30,7 +30,7 @@ namespace RimWorld.Planet
 			return false;
 		}
 
-		// Token: 0x06006DE5 RID: 28133 RVA: 0x00266590 File Offset: 0x00264790
+		
 		public static void Attack(Caravan caravan, Settlement settlement)
 		{
 			if (!settlement.HasMap)
@@ -44,7 +44,7 @@ namespace RimWorld.Planet
 			SettlementUtility.AttackNow(caravan, settlement);
 		}
 
-		// Token: 0x06006DE6 RID: 28134 RVA: 0x002665EC File Offset: 0x002647EC
+		
 		private static void AttackNow(Caravan caravan, Settlement settlement)
 		{
 			bool flag = !settlement.HasMap;
@@ -61,7 +61,7 @@ namespace RimWorld.Planet
 			CaravanEnterMapUtility.Enter(caravan, orGenerateMap, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, true, null);
 		}
 
-		// Token: 0x06006DE7 RID: 28135 RVA: 0x002666D4 File Offset: 0x002648D4
+		
 		public static void AffectRelationsOnAttacked(Settlement settlement, ref TaggedString letterText)
 		{
 			if (settlement.Faction != null && settlement.Faction != Faction.OfPlayer)

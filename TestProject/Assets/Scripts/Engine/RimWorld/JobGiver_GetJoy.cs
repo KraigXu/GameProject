@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006F5 RID: 1781
+	
 	public class JobGiver_GetJoy : ThinkNode_JobGiver
 	{
-		// Token: 0x1700089C RID: 2204
+		
 		// (get) Token: 0x06002F2B RID: 12075 RVA: 0x00010306 File Offset: 0x0000E506
 		protected virtual bool CanDoDuringMedicalRest
 		{
@@ -19,25 +19,25 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F2C RID: 12076 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected virtual bool JoyGiverAllowed(JoyGiverDef def)
 		{
 			return true;
 		}
 
-		// Token: 0x06002F2D RID: 12077 RVA: 0x0010964F File Offset: 0x0010784F
+		
 		protected virtual Job TryGiveJobFromJoyGiverDefDirect(JoyGiverDef def, Pawn pawn)
 		{
 			return def.Worker.TryGiveJob(pawn);
 		}
 
-		// Token: 0x06002F2E RID: 12078 RVA: 0x0010965D File Offset: 0x0010785D
+		
 		public override void ResolveReferences()
 		{
 			this.joyGiverChances = new DefMap<JoyGiverDef, float>();
 		}
 
-		// Token: 0x06002F2F RID: 12079 RVA: 0x0010966C File Offset: 0x0010786C
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!this.CanDoDuringMedicalRest && pawn.InBed() && HealthAIUtility.ShouldSeekMedicalRest(pawn))
@@ -84,7 +84,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001AAA RID: 6826
+		
 		[Unsaved(false)]
 		private DefMap<JoyGiverDef, float> joyGiverChances;
 	}

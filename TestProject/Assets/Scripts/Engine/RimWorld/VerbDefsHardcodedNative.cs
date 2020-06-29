@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FCF RID: 4047
+	
 	public static class VerbDefsHardcodedNative
 	{
-		// Token: 0x0600612B RID: 24875 RVA: 0x0021B7A7 File Offset: 0x002199A7
+		
 		public static IEnumerable<VerbProperties> AllVerbDefs()
 		{
 			yield return new VerbProperties

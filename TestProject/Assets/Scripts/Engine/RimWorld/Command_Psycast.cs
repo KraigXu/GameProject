@@ -5,15 +5,15 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AC5 RID: 2757
+	
 	public class Command_Psycast : Command_Ability
 	{
-		// Token: 0x0600417A RID: 16762 RVA: 0x0015E171 File Offset: 0x0015C371
+		
 		public Command_Psycast(Psycast ability) : base(ability)
 		{
 		}
 
-		// Token: 0x0600417B RID: 16763 RVA: 0x0015E17C File Offset: 0x0015C37C
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			AbilityDef def = this.ability.def;

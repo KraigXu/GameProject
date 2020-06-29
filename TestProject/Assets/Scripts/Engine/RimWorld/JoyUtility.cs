@@ -7,10 +7,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000705 RID: 1797
+	
 	public static class JoyUtility
 	{
-		// Token: 0x06002F70 RID: 12144 RVA: 0x0010AED0 File Offset: 0x001090D0
+		
 		public static bool EnjoyableOutsideNow(Map map, StringBuilder outFailReason = null)
 		{
 			if (map.weatherManager.RainRate >= 0.25f)
@@ -33,7 +33,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002F71 RID: 12145 RVA: 0x0010AF30 File Offset: 0x00109130
+		
 		public static bool EnjoyableOutsideNow(Pawn pawn, StringBuilder outFailReason = null)
 		{
 			Map mapHeld = pawn.MapHeld;
@@ -56,7 +56,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002F72 RID: 12146 RVA: 0x0010AF8C File Offset: 0x0010918C
+		
 		public static void JoyTickCheckEnd(Pawn pawn, JoyTickFullJoyAction fullJoyAction = JoyTickFullJoyAction.EndJob, float extraJoyGainFactor = 1f, Building joySource = null)
 		{
 			Job curJob = pawn.CurJob;
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F73 RID: 12147 RVA: 0x0010B124 File Offset: 0x00109324
+		
 		public static void TryGainRecRoomThought(Pawn pawn)
 		{
 			Room room = pawn.GetRoom(RegionType.Set_Passable);
@@ -115,20 +115,20 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002F74 RID: 12148 RVA: 0x0010B198 File Offset: 0x00109398
+		
 		public static bool LordPreventsGettingJoy(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
 			return lord != null && !lord.CurLordToil.AllowSatisfyLongNeeds;
 		}
 
-		// Token: 0x06002F75 RID: 12149 RVA: 0x0010B1BF File Offset: 0x001093BF
+		
 		public static bool TimetablePreventsGettingJoy(Pawn pawn)
 		{
 			return !((pawn.timetable == null) ? TimeAssignmentDefOf.Anything : pawn.timetable.CurrentAssignment).allowJoy;
 		}
 
-		// Token: 0x06002F76 RID: 12150 RVA: 0x0010B1E8 File Offset: 0x001093E8
+		
 		public static int JoyKindsOnMapCount(Map map)
 		{
 			List<JoyKindDef> list = JoyUtility.JoyKindsOnMapTempList(map);
@@ -137,7 +137,7 @@ namespace RimWorld
 			return count;
 		}
 
-		// Token: 0x06002F77 RID: 12151 RVA: 0x0010B208 File Offset: 0x00109408
+		
 		public static List<JoyKindDef> JoyKindsOnMapTempList(Map map)
 		{
 			for (int i = 0; i < DefDatabase<JoyKindDef>.AllDefsListForReading.Count; i++)
@@ -172,7 +172,7 @@ namespace RimWorld
 			return JoyUtility.tempKindList;
 		}
 
-		// Token: 0x06002F78 RID: 12152 RVA: 0x0010B434 File Offset: 0x00109634
+		
 		public static string JoyKindsOnMapString(Map map)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -209,7 +209,7 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x06002F79 RID: 12153 RVA: 0x0010B600 File Offset: 0x00109800
+		
 		private static void CheckAppendJoyKind(StringBuilder sb, Thing t, JoyKindDef kind, Map map)
 		{
 			if (JoyUtility.listedJoyKinds.Contains(kind))
@@ -231,7 +231,7 @@ namespace RimWorld
 			JoyUtility.listedJoyKinds.Add(kind);
 		}
 
-		// Token: 0x06002F7A RID: 12154 RVA: 0x0010B6A4 File Offset: 0x001098A4
+		
 		public static string JoyKindsNotOnMapString(Map map)
 		{
 			List<JoyKindDef> allDefsListForReading = DefDatabase<JoyKindDef>.AllDefsListForReading;
@@ -253,10 +253,10 @@ namespace RimWorld
 			return text.TrimEndNewlines();
 		}
 
-		// Token: 0x04001AC2 RID: 6850
+		
 		private static List<JoyKindDef> tempKindList = new List<JoyKindDef>();
 
-		// Token: 0x04001AC3 RID: 6851
+		
 		private static List<JoyKindDef> listedJoyKinds = new List<JoyKindDef>();
 	}
 }

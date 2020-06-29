@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200067F RID: 1663
+	
 	public class Toils_Refuel
 	{
-		// Token: 0x06002D4B RID: 11595 RVA: 0x000FFC8C File Offset: 0x000FDE8C
+		
 		public static Toil FinalizeRefueling(TargetIndex refuelableInd, TargetIndex fuelInd)
 		{
 			Toil toil = new Toil();

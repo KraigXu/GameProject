@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E6E RID: 3694
+	
 	public static class FactionUIUtility
 	{
-		// Token: 0x0600597B RID: 22907 RVA: 0x001E08F0 File Offset: 0x001DEAF0
+		
 		public static void DoWindowContents(Rect fillRect, ref Vector2 scrollPosition, ref float scrollViewHeight)
 		{
 			Rect position = new Rect(0f, 0f, fillRect.width, fillRect.height);
@@ -45,7 +45,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x0600597C RID: 22908 RVA: 0x001E0A84 File Offset: 0x001DEC84
+		
 		private static float DrawFactionRow(Faction faction, float rowY, Rect fillRect)
 		{
 			float num = fillRect.width - 250f - 40f - 90f - 16f - 120f;
@@ -138,7 +138,7 @@ namespace RimWorld
 			return Mathf.Max(80f, num2);
 		}
 
-		// Token: 0x0600597D RID: 22909 RVA: 0x001E1074 File Offset: 0x001DF274
+		
 		public static void DrawFactionIconWithTooltip(Rect r, Faction faction)
 		{
 			GUI.color = faction.Color;
@@ -152,7 +152,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600597E RID: 22910 RVA: 0x001E10F8 File Offset: 0x001DF2F8
+		
 		public static void DrawRelatedFactionInfo(Rect rect, Faction faction, ref float curY)
 		{
 			Text.Anchor = TextAnchor.LowerRight;
@@ -171,28 +171,28 @@ namespace RimWorld
 			GenUI.ResetLabelAlign();
 		}
 
-		// Token: 0x0400307E RID: 12414
+		
 		private static bool showAll;
 
-		// Token: 0x0400307F RID: 12415
+		
 		private const float FactionIconRectSize = 42f;
 
-		// Token: 0x04003080 RID: 12416
+		
 		private const float FactionIconRectGapX = 24f;
 
-		// Token: 0x04003081 RID: 12417
+		
 		private const float FactionIconRectGapY = 4f;
 
-		// Token: 0x04003082 RID: 12418
+		
 		private const float RowMinHeight = 80f;
 
-		// Token: 0x04003083 RID: 12419
+		
 		private const float LabelRowHeight = 50f;
 
-		// Token: 0x04003084 RID: 12420
+		
 		private const float NameLeftMargin = 15f;
 
-		// Token: 0x04003085 RID: 12421
+		
 		private const float FactionIconSpacing = 5f;
 	}
 }

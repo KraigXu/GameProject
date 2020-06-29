@@ -4,18 +4,18 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CA8 RID: 3240
+	
 	[StaticConstructorOnStartup]
 	public class MoteBubble : MoteDualAttached
 	{
-		// Token: 0x06004E58 RID: 20056 RVA: 0x001A552D File Offset: 0x001A372D
+		
 		public void SetupMoteBubble(Texture2D icon, Pawn target)
 		{
 			this.iconMat = MaterialPool.MatFrom(icon, ShaderDatabase.TransparentPostLight, Color.white);
 			this.arrowTarget = target;
 		}
 
-		// Token: 0x06004E59 RID: 20057 RVA: 0x001A554C File Offset: 0x001A374C
+		
 		public override void Draw()
 		{
 			base.Draw();
@@ -50,13 +50,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002C0A RID: 11274
+		
 		public Material iconMat;
 
-		// Token: 0x04002C0B RID: 11275
+		
 		public Pawn arrowTarget;
 
-		// Token: 0x04002C0C RID: 11276
+		
 		private static readonly Material InteractionArrowTex = MaterialPool.MatFrom("Things/Mote/InteractionArrow");
 	}
 }

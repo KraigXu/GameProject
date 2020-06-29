@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DF0 RID: 3568
+	
 	public class Alert_ActivatorCountdown : Alert
 	{
-		// Token: 0x06005670 RID: 22128 RVA: 0x001CA8D4 File Offset: 0x001C8AD4
+		
 		public Alert_ActivatorCountdown()
 		{
 			this.defaultPriority = AlertPriority.High;
 		}
 
-		// Token: 0x17000F6A RID: 3946
+		
 		// (get) Token: 0x06005671 RID: 22129 RVA: 0x001CA8F0 File Offset: 0x001C8AF0
 		private List<Thing> ActivatorCountdowns
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005672 RID: 22130 RVA: 0x001CA9C8 File Offset: 0x001C8BC8
+		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
@@ -49,7 +49,7 @@ namespace RimWorld
 			return AlertReport.CulpritsAre(this.ActivatorCountdowns);
 		}
 
-		// Token: 0x06005673 RID: 22131 RVA: 0x001CA9E4 File Offset: 0x001C8BE4
+		
 		public override string GetLabel()
 		{
 			int count = this.ActivatorCountdowns.Count;
@@ -65,7 +65,7 @@ namespace RimWorld
 			return "ActivatorCountdown".Translate(compSendSignalOnCountdown.ticksLeft.ToStringTicksToPeriod(true, false, true, true));
 		}
 
-		// Token: 0x06005674 RID: 22132 RVA: 0x001CAA58 File Offset: 0x001C8C58
+		
 		public override TaggedString GetExplanation()
 		{
 			int num = this.ActivatorCountdowns.Count<Thing>();
@@ -80,7 +80,7 @@ namespace RimWorld
 			return "ActivatorCountdownDesc".Translate();
 		}
 
-		// Token: 0x04002F2F RID: 12079
+		
 		private List<Thing> activatorCountdownsResult = new List<Thing>();
 	}
 }

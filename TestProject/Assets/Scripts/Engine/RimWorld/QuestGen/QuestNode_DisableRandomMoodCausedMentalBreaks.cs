@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001169 RID: 4457
+	
 	public class QuestNode_DisableRandomMoodCausedMentalBreaks : QuestNode
 	{
-		// Token: 0x060067B3 RID: 26547 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x060067B4 RID: 26548 RVA: 0x00243D60 File Offset: 0x00241F60
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -29,15 +29,15 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_DisableRandomMoodCausedMentalBreaks);
 		}
 
-		// Token: 0x04003FCD RID: 16333
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x04003FCE RID: 16334
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalDisable;
 
-		// Token: 0x04003FCF RID: 16335
+		
 		public SlateRef<IEnumerable<Pawn>> pawns;
 	}
 }

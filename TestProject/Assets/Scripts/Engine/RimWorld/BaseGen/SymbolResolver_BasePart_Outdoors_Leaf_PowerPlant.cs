@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010A5 RID: 4261
+	
 	public class SymbolResolver_BasePart_Outdoors_Leaf_PowerPlant : SymbolResolver
 	{
-		// Token: 0x060064E9 RID: 25833 RVA: 0x00232948 File Offset: 0x00230B48
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			if (!base.CanResolve(rp))
@@ -39,7 +39,7 @@ namespace RimWorld.BaseGen
 			return SymbolResolver_BasePart_Outdoors_Leaf_PowerPlant.availablePowerPlants.Any<ThingDef>();
 		}
 
-		// Token: 0x060064EA RID: 25834 RVA: 0x00232A18 File Offset: 0x00230C18
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			this.CalculateAvailablePowerPlants(rp.rect);
@@ -56,7 +56,7 @@ namespace RimWorld.BaseGen
 			BaseGen.globalSettings.basePart_powerPlantsCoverage += (float)rp.rect.Area / (float)BaseGen.globalSettings.mainRect.Area;
 		}
 
-		// Token: 0x060064EB RID: 25835 RVA: 0x00232ADC File Offset: 0x00230CDC
+		
 		private void CalculateAvailablePowerPlants(CellRect rect)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -85,10 +85,10 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DA4 RID: 15780
+		
 		private static List<ThingDef> availablePowerPlants = new List<ThingDef>();
 
-		// Token: 0x04003DA5 RID: 15781
+		
 		private const float MaxCoverage = 0.09f;
 	}
 }

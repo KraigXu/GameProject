@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200065B RID: 1627
+	
 	public class JobDriver_FillFermentingBarrel : JobDriver
 	{
-		// Token: 0x1700085E RID: 2142
+		
 		// (get) Token: 0x06002C5F RID: 11359 RVA: 0x000FD5DC File Offset: 0x000FB7DC
 		protected Building_FermentingBarrel Barrel
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700085F RID: 2143
+		
 		// (get) Token: 0x06002C60 RID: 11360 RVA: 0x000FD604 File Offset: 0x000FB804
 		protected Thing Wort
 		{
@@ -28,13 +28,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C61 RID: 11361 RVA: 0x000FD628 File Offset: 0x000FB828
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Barrel, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.Wort, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002C62 RID: 11362 RVA: 0x000FD679 File Offset: 0x000FB879
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -69,13 +69,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019D9 RID: 6617
+		
 		private const TargetIndex BarrelInd = TargetIndex.A;
 
-		// Token: 0x040019DA RID: 6618
+		
 		private const TargetIndex WortInd = TargetIndex.B;
 
-		// Token: 0x040019DB RID: 6619
+		
 		private const int Duration = 200;
 	}
 }

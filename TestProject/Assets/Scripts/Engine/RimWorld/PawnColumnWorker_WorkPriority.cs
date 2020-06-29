@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EEF RID: 3823
+	
 	public class PawnColumnWorker_WorkPriority : PawnColumnWorker
 	{
-		// Token: 0x06005DBA RID: 23994 RVA: 0x00205EAC File Offset: 0x002040AC
+		
 		public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
 		{
 			if (pawn.Dead || pawn.workSettings == null || !pawn.workSettings.EverWork)
@@ -30,7 +30,7 @@ namespace RimWorld
 			Text.Font = GameFont.Small;
 		}
 
-		// Token: 0x06005DBB RID: 23995 RVA: 0x00205FB4 File Offset: 0x002041B4
+		
 		public override void DoHeader(Rect rect, PawnTable table)
 		{
 			base.DoHeader(rect, table);
@@ -50,31 +50,31 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x06005DBC RID: 23996 RVA: 0x002060D0 File Offset: 0x002042D0
+		
 		public override int GetMinHeaderHeight(PawnTable table)
 		{
 			return 50;
 		}
 
-		// Token: 0x06005DBD RID: 23997 RVA: 0x002060D4 File Offset: 0x002042D4
+		
 		public override int GetMinWidth(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinWidth(table), 32);
 		}
 
-		// Token: 0x06005DBE RID: 23998 RVA: 0x002060E4 File Offset: 0x002042E4
+		
 		public override int GetOptimalWidth(PawnTable table)
 		{
 			return Mathf.Clamp(39, this.GetMinWidth(table), this.GetMaxWidth(table));
 		}
 
-		// Token: 0x06005DBF RID: 23999 RVA: 0x002060FB File Offset: 0x002042FB
+		
 		public override int GetMaxWidth(PawnTable table)
 		{
 			return Mathf.Min(base.GetMaxWidth(table), 80);
 		}
 
-		// Token: 0x06005DC0 RID: 24000 RVA: 0x0020610C File Offset: 0x0020430C
+		
 		private bool IsIncapableOfWholeWorkType(Pawn p, WorkTypeDef work)
 		{
 			for (int i = 0; i < work.workGiversByPriority.Count; i++)
@@ -97,19 +97,19 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005DC1 RID: 24001 RVA: 0x00206187 File Offset: 0x00204387
+		
 		protected override Rect GetInteractableHeaderRect(Rect headerRect, PawnTable table)
 		{
 			return this.GetLabelRect(headerRect);
 		}
 
-		// Token: 0x06005DC2 RID: 24002 RVA: 0x00206190 File Offset: 0x00204390
+		
 		public override int Compare(Pawn a, Pawn b)
 		{
 			return this.GetValueToCompare(a).CompareTo(this.GetValueToCompare(b));
 		}
 
-		// Token: 0x06005DC3 RID: 24003 RVA: 0x002061B4 File Offset: 0x002043B4
+		
 		private float GetValueToCompare(Pawn pawn)
 		{
 			if (pawn.workSettings == null || !pawn.workSettings.EverWork)
@@ -123,7 +123,7 @@ namespace RimWorld
 			return pawn.skills.AverageOfRelevantSkillsFor(this.def.workType);
 		}
 
-		// Token: 0x06005DC4 RID: 24004 RVA: 0x0020620C File Offset: 0x0020440C
+		
 		private Rect GetLabelRect(Rect headerRect)
 		{
 			float x = headerRect.center.x;
@@ -135,7 +135,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06005DC5 RID: 24005 RVA: 0x00206280 File Offset: 0x00204480
+		
 		protected override string GetHeaderTip(PawnTable table)
 		{
 			string text = string.Concat(new string[]
@@ -162,7 +162,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06005DC6 RID: 24006 RVA: 0x00206370 File Offset: 0x00204570
+		
 		private static string SpecificWorkListString(WorkTypeDef def)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -181,7 +181,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06005DC7 RID: 24007 RVA: 0x00206414 File Offset: 0x00204614
+		
 		protected override void HeaderClicked(Rect headerRect, PawnTable table)
 		{
 			base.HeaderClicked(headerRect, table);
@@ -245,10 +245,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040032D2 RID: 13010
+		
 		private const int LabelRowHeight = 50;
 
-		// Token: 0x040032D3 RID: 13011
+		
 		private Vector2 cachedWorkLabelSize;
 	}
 }

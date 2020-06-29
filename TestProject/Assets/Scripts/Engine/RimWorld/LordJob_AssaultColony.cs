@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000769 RID: 1897
+	
 	public class LordJob_AssaultColony : LordJob
 	{
-		// Token: 0x170008F8 RID: 2296
+		
 		// (get) Token: 0x06003192 RID: 12690 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool GuiltyOnDowned
 		{
@@ -18,12 +18,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003193 RID: 12691 RVA: 0x0011408A File Offset: 0x0011228A
+		
 		public LordJob_AssaultColony()
 		{
 		}
 
-		// Token: 0x06003194 RID: 12692 RVA: 0x001140A8 File Offset: 0x001122A8
+		
 		public LordJob_AssaultColony(SpawnedPawnParams parms)
 		{
 			this.assaulterFaction = parms.spawnerThing.Faction;
@@ -32,7 +32,7 @@ namespace RimWorld
 			this.canSteal = false;
 		}
 
-		// Token: 0x06003195 RID: 12693 RVA: 0x001140F8 File Offset: 0x001122F8
+		
 		public LordJob_AssaultColony(Faction assaulterFaction, bool canKidnap = true, bool canTimeoutOrFlee = true, bool sappers = false, bool useAvoidGridSmart = false, bool canSteal = true)
 		{
 			this.assaulterFaction = assaulterFaction;
@@ -43,7 +43,7 @@ namespace RimWorld
 			this.canSteal = canSteal;
 		}
 
-		// Token: 0x06003196 RID: 12694 RVA: 0x00114150 File Offset: 0x00112350
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -134,7 +134,7 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x06003197 RID: 12695 RVA: 0x00114504 File Offset: 0x00112704
+		
 		public override void ExposeData()
 		{
 			Scribe_References.Look<Faction>(ref this.assaulterFaction, "assaulterFaction", false);
@@ -145,28 +145,28 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.canSteal, "canSteal", true, false);
 		}
 
-		// Token: 0x04001B06 RID: 6918
+		
 		private Faction assaulterFaction;
 
-		// Token: 0x04001B07 RID: 6919
+		
 		private bool canKidnap = true;
 
-		// Token: 0x04001B08 RID: 6920
+		
 		private bool canTimeoutOrFlee = true;
 
-		// Token: 0x04001B09 RID: 6921
+		
 		private bool sappers;
 
-		// Token: 0x04001B0A RID: 6922
+		
 		private bool useAvoidGridSmart;
 
-		// Token: 0x04001B0B RID: 6923
+		
 		private bool canSteal = true;
 
-		// Token: 0x04001B0C RID: 6924
+		
 		private static readonly IntRange AssaultTimeBeforeGiveUp = new IntRange(26000, 38000);
 
-		// Token: 0x04001B0D RID: 6925
+		
 		private static readonly IntRange SapTimeBeforeGiveUp = new IntRange(33000, 38000);
 	}
 }

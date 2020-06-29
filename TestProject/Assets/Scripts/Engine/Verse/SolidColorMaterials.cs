@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000464 RID: 1124
+	
 	public static class SolidColorMaterials
 	{
-		// Token: 0x1700066D RID: 1645
+		
 		// (get) Token: 0x06002148 RID: 8520 RVA: 0x000CC29E File Offset: 0x000CA49E
 		public static int SimpleColorMatCount
 		{
@@ -17,7 +17,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06002149 RID: 8521 RVA: 0x000CC2B8 File Offset: 0x000CA4B8
+		
 		public static Material SimpleSolidColorMaterial(Color col, bool careAboutVertexColors = false)
 		{
 			col = col;
@@ -38,7 +38,7 @@ namespace Verse
 			return material;
 		}
 
-		// Token: 0x0600214A RID: 8522 RVA: 0x000CC328 File Offset: 0x000CA528
+		
 		public static Material NewSolidColorMaterial(Color col, Shader shader)
 		{
 			if (!UnityData.IsInMainThread)
@@ -58,13 +58,13 @@ namespace Verse
 			return material;
 		}
 
-		// Token: 0x0600214B RID: 8523 RVA: 0x000CC38B File Offset: 0x000CA58B
+		
 		public static Texture2D NewSolidColorTexture(float r, float g, float b, float a)
 		{
 			return SolidColorMaterials.NewSolidColorTexture(new Color(r, g, b, a));
 		}
 
-		// Token: 0x0600214C RID: 8524 RVA: 0x000CC39C File Offset: 0x000CA59C
+		
 		public static Texture2D NewSolidColorTexture(Color color)
 		{
 			if (!UnityData.IsInMainThread)
@@ -79,10 +79,10 @@ namespace Verse
 			return texture2D;
 		}
 
-		// Token: 0x04001462 RID: 5218
+		
 		private static Dictionary<Color, Material> simpleColorMats = new Dictionary<Color, Material>();
 
-		// Token: 0x04001463 RID: 5219
+		
 		private static Dictionary<Color, Material> simpleColorAndVertexColorMats = new Dictionary<Color, Material>();
 	}
 }

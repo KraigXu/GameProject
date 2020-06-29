@@ -12,11 +12,11 @@ namespace Verse
         [DebugOutput("Text generation", false)]
         public static void FlavorfulCombatTest()
         {
-            //DebugOutputsTextGen.<> c__DisplayClass0_0 <> c__DisplayClass0_ = new DebugOutputsTextGen.<> c__DisplayClass0_0();
+            //DebugOutputsTextGen. c__DisplayClass0_0  c__DisplayClass0_ = new DebugOutputsTextGen. c__DisplayClass0_0();
             List<DebugMenuOption> list = new List<DebugMenuOption>();
 
-            //<> c__DisplayClass0_.maneuvers = DefDatabase<ManeuverDef>.AllDefsListForReading;
-            //DebugOutputsTextGen.<> c__DisplayClass0_0 <> c__DisplayClass0_2 = <> c__DisplayClass0_;
+            // c__DisplayClass0_.maneuvers = DefDatabase<ManeuverDef>.AllDefsListForReading;
+            //DebugOutputsTextGen. c__DisplayClass0_0  c__DisplayClass0_2 =  c__DisplayClass0_;
             Func<ManeuverDef, RulePackDef>[] array = new Func<ManeuverDef, RulePackDef>[5];
             array[0] = ((ManeuverDef m) => new RulePackDef[]
             {
@@ -30,7 +30,7 @@ namespace Verse
             array[3] = ((ManeuverDef m) => m.combatLogRulesMiss);
             array[4] = ((ManeuverDef m) => m.combatLogRulesDodge);
 
-          //  <> c__DisplayClass0_2.results = array;
+          //   c__DisplayClass0_2.results = array;
             string[] array2 = new string[]
             {
                 "(random)",
@@ -39,18 +39,18 @@ namespace Verse
                 "Miss",
                 "Dodge"
             };
-            //using (IEnumerator<Pair<ManeuverDef, int>> enumerator = <> c__DisplayClass0_.maneuvers.Concat(null).Cross(Enumerable.Range(0, array2.Length)).GetEnumerator())
+            //using (IEnumerator<Pair<ManeuverDef, int>> enumerator =  c__DisplayClass0_.maneuvers.Concat(null).Cross(Enumerable.Range(0, array2.Length)).GetEnumerator())
             //{
             //    while (enumerator.MoveNext())
             //    {
             //        Pair<ManeuverDef, int> maneuverresult = enumerator.Current;
-            //        Action<Action<List<BodyPartRecord>, List<bool>>> <> 9__9;
+            //        Action<Action<List<BodyPartRecord>, List<bool>>>  9__9;
             //        DebugMenuOption item = new DebugMenuOption(string.Format("{0}/{1}", (maneuverresult.First == null) ? "(random)" : maneuverresult.First.defName, array2[maneuverresult.Second]), DebugMenuOptionMode.Action, delegate
             //        {
             //            Action<Action<List<BodyPartRecord>, List<bool>>> callback;
-            //            if ((callback = <> 9__9) == null)
+            //            if ((callback =  9__9) == null)
             //            {
-            //                callback = (<> 9__9 = delegate (Action<List<BodyPartRecord>, List<bool>> bodyPartCreator)
+            //                callback = ( 9__9 = delegate (Action<List<BodyPartRecord>, List<bool>> bodyPartCreator)
             //                 {
             //                     StringBuilder stringBuilder = new StringBuilder();
             //                     for (int i = 0; i < 100; i++)
@@ -58,9 +58,9 @@ namespace Verse
             //                         ManeuverDef maneuver = maneuverresult.First;
             //                         if (maneuver == null)
             //                         {
-            //                             maneuver = <> c__DisplayClass0_.maneuvers.RandomElement<ManeuverDef>();
+            //                             maneuver =  c__DisplayClass0_.maneuvers.RandomElement<ManeuverDef>();
             //                         }
-            //                         RulePackDef rulePackDef = <> c__DisplayClass0_.results[maneuverresult.Second](maneuver);
+            //                         RulePackDef rulePackDef =  c__DisplayClass0_.results[maneuverresult.Second](maneuver);
             //                         List<BodyPartRecord> list2 = null;
             //                         List<bool> list3 = null;
             //                         if (rulePackDef == maneuver.combatLogRulesHit)
@@ -235,7 +235,7 @@ namespace Verse
             Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
         }
 
-        // Token: 0x060019CE RID: 6606 RVA: 0x0009E5D0 File Offset: 0x0009C7D0
+        
         public static Pawn RandomPawnForCombat()
         {
             PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.AllDefsListForReading.RandomElementByWeight(delegate (PawnKindDef pawnkind)
@@ -254,7 +254,7 @@ namespace Verse
             return PawnGenerator.GeneratePawn(pawnKindDef, faction);
         }
 
-        // Token: 0x060019CF RID: 6607 RVA: 0x0009E618 File Offset: 0x0009C818
+        
         private static void CreateDamagedDestroyedMenu(Action<Action<List<BodyPartRecord>, List<bool>>> callback)
         {
             List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -299,7 +299,7 @@ namespace Verse
             Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
         }
 
-        // Token: 0x060019D0 RID: 6608 RVA: 0x0009E744 File Offset: 0x0009C944
+        
         [DebugOutput("Text generation", false)]
         public static void ArtDescsSpecificTale()
         {
@@ -318,7 +318,7 @@ namespace Verse
             Find.WindowStack.Add(new FloatMenu(list));
         }
 
-        // Token: 0x060019D1 RID: 6609 RVA: 0x0009E800 File Offset: 0x0009CA00
+        
         [DebugOutput("Text generation", false)]
         public static void NamesFromRulepack()
         {
@@ -358,21 +358,21 @@ namespace Verse
             Find.WindowStack.Add(new FloatMenu(list));
         }
 
-        // Token: 0x060019D2 RID: 6610 RVA: 0x0009E9D8 File Offset: 0x0009CBD8
+        
         [DebugOutput("Text generation", true)]
         public static void DatabaseTalesList()
         {
             Find.TaleManager.LogTales();
         }
 
-        // Token: 0x060019D3 RID: 6611 RVA: 0x0009E9E4 File Offset: 0x0009CBE4
+        
         [DebugOutput("Text generation", true)]
         public static void DatabaseTalesInterest()
         {
             Find.TaleManager.LogTaleInterestSummary();
         }
 
-        // Token: 0x060019D4 RID: 6612 RVA: 0x0009E9F0 File Offset: 0x0009CBF0
+        
         [DebugOutput("Text generation", true)]
         public static void ArtDescsDatabaseTales()
         {
@@ -381,7 +381,7 @@ namespace Verse
                                          select t);
         }
 
-        // Token: 0x060019D5 RID: 6613 RVA: 0x0009EA28 File Offset: 0x0009CC28
+        
         [DebugOutput("Text generation", true)]
         public static void ArtDescsRandomTales()
         {
@@ -394,7 +394,7 @@ namespace Verse
             DebugOutputsTextGen.LogTales(list);
         }
 
-        // Token: 0x060019D6 RID: 6614 RVA: 0x0009EA5C File Offset: 0x0009CC5C
+        
         [DebugOutput("Text generation", true)]
         public static void ArtDescsTaleless()
         {
@@ -406,7 +406,7 @@ namespace Verse
             DebugOutputsTextGen.LogTales(list);
         }
 
-        // Token: 0x060019D7 RID: 6615 RVA: 0x0009EA8C File Offset: 0x0009CC8C
+        
         [DebugOutput("Text generation", false)]
         public static void InteractionLogs()
         {
@@ -433,7 +433,7 @@ namespace Verse
             Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
         }
 
-        // Token: 0x060019D8 RID: 6616 RVA: 0x0009EB1C File Offset: 0x0009CD1C
+        
         private static void LogSpecificTale(TaleDef def, int count)
         {
             List<Tale> list = new List<Tale>();
@@ -444,7 +444,7 @@ namespace Verse
             DebugOutputsTextGen.LogTales(list);
         }
 
-        // Token: 0x060019D9 RID: 6617 RVA: 0x0009EB50 File Offset: 0x0009CD50
+        
         private static void LogTales(IEnumerable<Tale> tales)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -468,7 +468,7 @@ namespace Verse
             }
         }
 
-        // Token: 0x060019DA RID: 6618 RVA: 0x0009EBF4 File Offset: 0x0009CDF4
+        
         private static string RandomArtworkName(TaleReference tr)
         {
             RulePackDef extraInclude = null;
@@ -493,7 +493,7 @@ namespace Verse
             return tr.GenerateText(TextGenerationPurpose.ArtName, extraInclude);
         }
 
-        // Token: 0x060019DB RID: 6619 RVA: 0x0009EC5C File Offset: 0x0009CE5C
+        
         private static string RandomArtworkDescription(TaleReference tr)
         {
             RulePackDef extraInclude = null;

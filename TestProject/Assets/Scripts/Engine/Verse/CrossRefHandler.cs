@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x020002C8 RID: 712
+	
 	public class CrossRefHandler
 	{
-		// Token: 0x06001417 RID: 5143 RVA: 0x00074AB0 File Offset: 0x00072CB0
+		
 		public void RegisterForCrossRefResolve(IExposable s)
 		{
 			if (Scribe.mode != LoadSaveMode.LoadingVars)
@@ -31,7 +31,7 @@ namespace Verse
 			this.crossReferencingExposables.Add(s);
 		}
 
-		// Token: 0x06001418 RID: 5144 RVA: 0x00074B34 File Offset: 0x00072D34
+		
 		public void ResolveAllCrossReferences()
 		{
 			Scribe.mode = LoadSaveMode.ResolvingCrossRefs;
@@ -78,14 +78,14 @@ namespace Verse
 			this.Clear(true);
 		}
 
-		// Token: 0x06001419 RID: 5145 RVA: 0x00074C94 File Offset: 0x00072E94
+		
 		public T TakeResolvedRef<T>(string pathRelToParent, IExposable parent) where T : ILoadReferenceable
 		{
 			string loadID = this.loadIDs.Take<T>(pathRelToParent, parent);
 			return this.loadedObjectDirectory.ObjectWithLoadID<T>(loadID);
 		}
 
-		// Token: 0x0600141A RID: 5146 RVA: 0x00074CBC File Offset: 0x00072EBC
+		
 		public T TakeResolvedRef<T>(string toAppendToPathRelToParent) where T : ILoadReferenceable
 		{
 			string text = Scribe.loader.curPathRelToParent;
@@ -96,7 +96,7 @@ namespace Verse
 			return this.TakeResolvedRef<T>(text, Scribe.loader.curParent);
 		}
 
-		// Token: 0x0600141B RID: 5147 RVA: 0x00074CFC File Offset: 0x00072EFC
+		
 		public List<T> TakeResolvedRefList<T>(string pathRelToParent, IExposable parent)
 		{
 			List<string> list = this.loadIDs.TakeList(pathRelToParent, parent);
@@ -111,7 +111,7 @@ namespace Verse
 			return list2;
 		}
 
-		// Token: 0x0600141C RID: 5148 RVA: 0x00074D4C File Offset: 0x00072F4C
+		
 		public List<T> TakeResolvedRefList<T>(string toAppendToPathRelToParent)
 		{
 			string text = Scribe.loader.curPathRelToParent;
@@ -122,7 +122,7 @@ namespace Verse
 			return this.TakeResolvedRefList<T>(text, Scribe.loader.curParent);
 		}
 
-		// Token: 0x0600141D RID: 5149 RVA: 0x00074D8A File Offset: 0x00072F8A
+		
 		public void Clear(bool errorIfNotEmpty)
 		{
 			if (errorIfNotEmpty)
@@ -137,13 +137,13 @@ namespace Verse
 			this.loadedObjectDirectory.Clear();
 		}
 
-		// Token: 0x04000D86 RID: 3462
+		
 		private LoadedObjectDirectory loadedObjectDirectory = new LoadedObjectDirectory();
 
-		// Token: 0x04000D87 RID: 3463
+		
 		public LoadIDsWantedBank loadIDs = new LoadIDsWantedBank();
 
-		// Token: 0x04000D88 RID: 3464
+		
 		public List<IExposable> crossReferencingExposables = new List<IExposable>();
 	}
 }

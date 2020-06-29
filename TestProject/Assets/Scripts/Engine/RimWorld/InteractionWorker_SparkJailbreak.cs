@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000B4C RID: 2892
+	
 	public class InteractionWorker_SparkJailbreak : InteractionWorker
 	{
-		// Token: 0x060043E8 RID: 17384 RVA: 0x0016F2BC File Offset: 0x0016D4BC
+		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			if (!recipient.IsPrisoner || !recipient.guest.PrisonerIsSecure || !PrisonBreakUtility.CanParticipateInPrisonBreak(recipient))

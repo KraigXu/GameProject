@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010DE RID: 4318
+	
 	public class SymbolResolver_Interior_DiningRoom : SymbolResolver
 	{
-		// Token: 0x060065A1 RID: 26017 RVA: 0x0023926C File Offset: 0x0023746C
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			BaseGen.symbolStack.Push("indoorLighting", rp, null);

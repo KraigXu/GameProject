@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000652 RID: 1618
+	
 	public class JobDriver_VisitSickPawn : JobDriver
 	{
-		// Token: 0x17000854 RID: 2132
+		
 		// (get) Token: 0x06002C2B RID: 11307 RVA: 0x000FCE34 File Offset: 0x000FB034
 		private Pawn Patient
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000855 RID: 2133
+		
 		// (get) Token: 0x06002C2C RID: 11308 RVA: 0x000FCE5C File Offset: 0x000FB05C
 		private Thing Chair
 		{
@@ -28,13 +28,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002C2D RID: 11309 RVA: 0x000FCE80 File Offset: 0x000FB080
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Patient, this.job, 1, -1, null, errorOnFailed) && (this.Chair == null || this.pawn.Reserve(this.Chair, this.job, 1, -1, null, errorOnFailed));
 		}
 
-		// Token: 0x06002C2E RID: 11310 RVA: 0x000FCEDE File Offset: 0x000FB0DE
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -78,10 +78,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019CA RID: 6602
+		
 		private const TargetIndex PatientInd = TargetIndex.A;
 
-		// Token: 0x040019CB RID: 6603
+		
 		private const TargetIndex ChairInd = TargetIndex.B;
 	}
 }

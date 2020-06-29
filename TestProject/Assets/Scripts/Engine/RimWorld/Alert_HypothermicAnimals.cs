@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DDE RID: 3550
+	
 	public class Alert_HypothermicAnimals : Alert
 	{
-		// Token: 0x17000F60 RID: 3936
+		
 		// (get) Token: 0x06005625 RID: 22053 RVA: 0x001C8D00 File Offset: 0x001C6F00
 		private List<Pawn> HypothermicAnimals
 		{
@@ -27,13 +27,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005626 RID: 22054 RVA: 0x001C8D86 File Offset: 0x001C6F86
+		
 		public override string GetLabel()
 		{
 			return "Hypothermic wild animals (debug)";
 		}
 
-		// Token: 0x06005627 RID: 22055 RVA: 0x001C8D90 File Offset: 0x001C6F90
+		
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -51,7 +51,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06005628 RID: 22056 RVA: 0x001C8E30 File Offset: 0x001C7030
+		
 		public override AlertReport GetReport()
 		{
 			if (!Prefs.DevMode)
@@ -61,7 +61,7 @@ namespace RimWorld
 			return AlertReport.CulpritsAre(this.HypothermicAnimals);
 		}
 
-		// Token: 0x04002F1B RID: 12059
+		
 		private List<Pawn> hypothermicAnimalsResult = new List<Pawn>();
 	}
 }

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AFE RID: 2814
+	
 	public static class PawnBanishUtility
 	{
-		// Token: 0x0600426B RID: 17003 RVA: 0x00162D80 File Offset: 0x00160F80
+		
 		public static void Banish(Pawn pawn, int tile = -1)
 		{
 			if (pawn.Faction != Faction.OfPlayer && pawn.HostFaction != Faction.OfPlayer)
@@ -62,7 +62,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600426C RID: 17004 RVA: 0x00162EAC File Offset: 0x001610AC
+		
 		public static bool WouldBeLeftToDie(Pawn p, int tile)
 		{
 			if (p.Downed)
@@ -93,7 +93,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600426D RID: 17005 RVA: 0x00162F40 File Offset: 0x00161140
+		
 		public static string GetBanishPawnDialogText(Pawn banishedPawn)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -143,7 +143,7 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x0600426E RID: 17006 RVA: 0x001631A4 File Offset: 0x001613A4
+		
 		public static void ShowBanishPawnConfirmationDialog(Pawn pawn)
 		{
 			Dialog_MessageBox window = Dialog_MessageBox.CreateConfirmation(PawnBanishUtility.GetBanishPawnDialogText(pawn), delegate
@@ -153,7 +153,7 @@ namespace RimWorld
 			Find.WindowStack.Add(window);
 		}
 
-		// Token: 0x0600426F RID: 17007 RVA: 0x001631F0 File Offset: 0x001613F0
+		
 		public static string GetBanishButtonTip(Pawn pawn)
 		{
 			if (PawnBanishUtility.WouldBeLeftToDie(pawn, pawn.Tile))
@@ -163,7 +163,7 @@ namespace RimWorld
 			return "BanishTip".Translate();
 		}
 
-		// Token: 0x06004270 RID: 17008 RVA: 0x0016325C File Offset: 0x0016145C
+		
 		private static void HealIfPossible(Pawn p)
 		{
 			PawnBanishUtility.tmpHediffs.Clear();
@@ -186,16 +186,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004271 RID: 17009 RVA: 0x001632FB File Offset: 0x001614FB
+		
 		private static bool WillTakeInventoryIfBanished(Pawn pawn)
 		{
 			return !pawn.IsCaravanMember();
 		}
 
-		// Token: 0x0400263C RID: 9788
+		
 		private const float DeathChanceForCaravanPawnBanishedToDie = 0.8f;
 
-		// Token: 0x0400263D RID: 9789
+		
 		private static List<Hediff> tmpHediffs = new List<Hediff>();
 	}
 }

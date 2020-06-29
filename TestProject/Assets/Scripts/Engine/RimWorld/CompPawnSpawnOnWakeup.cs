@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000D35 RID: 3381
+	
 	public class CompPawnSpawnOnWakeup : ThingComp
 	{
-		// Token: 0x17000E7F RID: 3711
+		
 		// (get) Token: 0x0600521E RID: 21022 RVA: 0x001B6E7D File Offset: 0x001B507D
 		private CompProperties_PawnSpawnOnWakeup Props
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E80 RID: 3712
+		
 		// (get) Token: 0x0600521F RID: 21023 RVA: 0x001B6E8A File Offset: 0x001B508A
 		public bool CanSpawn
 		{
@@ -30,14 +30,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005220 RID: 21024 RVA: 0x001B6E99 File Offset: 0x001B5099
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
 			this.points = this.Props.points.RandomInRange;
 		}
 
-		// Token: 0x06005221 RID: 21025 RVA: 0x001B6EB8 File Offset: 0x001B50B8
+		
 		public override void CompTick()
 		{
 			for (int i = this.spawnedPawns.Count - 1; i >= 0; i--)
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005222 RID: 21026 RVA: 0x001B6F48 File Offset: 0x001B5148
+		
 		private IntVec3 GetSpawnPosition()
 		{
 			if (!this.Props.dropInPods)
@@ -83,20 +83,20 @@ namespace RimWorld
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x06005223 RID: 21027 RVA: 0x001B6FB4 File Offset: 0x001B51B4
+		
 		private List<Thing> GeneratePawns()
 		{
 			List<Thing> list = new List<Thing>();
 			float pointsLeft;
-			Func<PawnKindDef, bool> <>9__0;
+			
 			PawnKindDef pawnKindDef;
 			for (pointsLeft = this.points; pointsLeft > 0f; pointsLeft -= pawnKindDef.combatPower)
 			{
 				IEnumerable<PawnKindDef> spawnablePawnKinds = this.Props.spawnablePawnKinds;
 				Func<PawnKindDef, bool> predicate;
-				if ((predicate = <>9__0) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__0 = ((PawnKindDef p) => p.combatPower <= pointsLeft));
+					predicate = (9__0 = ((PawnKindDef p) => p.combatPower <= pointsLeft));
 				}
 				if (!spawnablePawnKinds.Where(predicate).TryRandomElement(out pawnKindDef))
 				{
@@ -109,7 +109,7 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06005224 RID: 21028 RVA: 0x001B70E4 File Offset: 0x001B52E4
+		
 		private void Spawn()
 		{
 			Lord lord = CompSpawnerPawn.FindLordToJoin(this.parent, this.Props.lordJob, this.Props.shouldJoinParentLord, delegate(Thing spawner)
@@ -136,7 +136,7 @@ namespace RimWorld
 				DropPodUtility.DropThingsNear(spawnPosition, this.parent.MapHeld, list, 110, false, false, true, true);
 			}
 			List<IntVec3> occupiedCells = new List<IntVec3>();
-			Predicate<IntVec3> <>9__1;
+			Predicate<IntVec3> 9__1;
 			foreach (Thing thing in list)
 			{
 				if (!this.Props.dropInPods)
@@ -145,9 +145,9 @@ namespace RimWorld
 					Map map = this.parent.Map;
 					int randomInRange = this.Props.pawnSpawnRadius.RandomInRange;
 					Predicate<IntVec3> extraValidator;
-					if ((extraValidator = <>9__1) == null)
+					if ((extraValidator ) == null)
 					{
-						extraValidator = (<>9__1 = ((IntVec3 c) => !occupiedCells.Contains(c)));
+						extraValidator = (9__1 = ((IntVec3 c) => !occupiedCells.Contains(c)));
 					}
 					IntVec3 intVec = CellFinder.RandomClosewalkCellNear(root, map, randomInRange, extraValidator);
 					if (!intVec.IsValid)
@@ -181,7 +181,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005225 RID: 21029 RVA: 0x001B7364 File Offset: 0x001B5564
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (!Prefs.DevMode)
@@ -196,7 +196,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005226 RID: 21030 RVA: 0x001B7374 File Offset: 0x001B5574
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -208,10 +208,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002D51 RID: 11601
+		
 		public float points;
 
-		// Token: 0x04002D52 RID: 11602
+		
 		public List<Pawn> spawnedPawns = new List<Pawn>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009F0 RID: 2544
+	
 	public class IncidentWorker_SelfTame : IncidentWorker
 	{
-		// Token: 0x06003C85 RID: 15493 RVA: 0x0013FC3D File Offset: 0x0013DE3D
+		
 		private IEnumerable<Pawn> Candidates(Map map)
 		{
 			return from x in map.mapPawns.AllPawnsSpawned
@@ -16,14 +16,14 @@ namespace RimWorld
 			select x;
 		}
 
-		// Token: 0x06003C86 RID: 15494 RVA: 0x0013FC70 File Offset: 0x0013DE70
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
 			return this.Candidates(map).Any<Pawn>();
 		}
 
-		// Token: 0x06003C87 RID: 15495 RVA: 0x0013FC98 File Offset: 0x0013DE98
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;

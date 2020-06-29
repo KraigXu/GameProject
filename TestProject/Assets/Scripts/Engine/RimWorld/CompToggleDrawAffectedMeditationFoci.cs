@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D72 RID: 3442
+	
 	[StaticConstructorOnStartup]
 	public class CompToggleDrawAffectedMeditationFoci : ThingComp
 	{
-		// Token: 0x17000EE7 RID: 3815
+		
 		// (get) Token: 0x060053C8 RID: 21448 RVA: 0x001BFD47 File Offset: 0x001BDF47
 		public bool Enabled
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EE8 RID: 3816
+		
 		// (get) Token: 0x060053C9 RID: 21449 RVA: 0x001BFD4F File Offset: 0x001BDF4F
 		public CompProperties_ToggleDrawAffectedMeditationFoci Props
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060053CA RID: 21450 RVA: 0x001BFD5C File Offset: 0x001BDF5C
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!respawningAfterLoad)
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060053CB RID: 21451 RVA: 0x001BFD72 File Offset: 0x001BDF72
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			Command_Toggle command_Toggle = new Command_Toggle();
@@ -55,16 +55,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060053CC RID: 21452 RVA: 0x001BFD82 File Offset: 0x001BDF82
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.enabled, "enabled", false, false);
 		}
 
-		// Token: 0x04002E45 RID: 11845
+		
 		private bool enabled;
 
-		// Token: 0x04002E46 RID: 11846
+		
 		private static readonly Texture2D CommandTex = ContentFinder<Texture2D>.Get("UI/Commands/PlaceBlueprints", true);
 	}
 }

@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006DC RID: 1756
+	
 	public class JobGiver_GetFood : ThinkNode_JobGiver
 	{
-		// Token: 0x06002ED1 RID: 11985 RVA: 0x00106F5F File Offset: 0x0010515F
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_GetFood jobGiver_GetFood = (JobGiver_GetFood)base.DeepCopy(resolve);
@@ -17,7 +17,7 @@ namespace RimWorld
 			return jobGiver_GetFood;
 		}
 
-		// Token: 0x06002ED2 RID: 11986 RVA: 0x00106F94 File Offset: 0x00105194
+		
 		public override float GetPriority(Pawn pawn)
 		{
 			Need_Food food = pawn.needs.food;
@@ -44,7 +44,7 @@ namespace RimWorld
 			return 0f;
 		}
 
-		// Token: 0x06002ED3 RID: 11987 RVA: 0x00107020 File Offset: 0x00105220
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Need_Food food = pawn.needs.food;
@@ -105,13 +105,13 @@ namespace RimWorld
 			return job3;
 		}
 
-		// Token: 0x04001A8C RID: 6796
+		
 		private HungerCategory minCategory;
 
-		// Token: 0x04001A8D RID: 6797
+		
 		private float maxLevelPercentage = 1f;
 
-		// Token: 0x04001A8E RID: 6798
+		
 		public bool forceScanWholeMap;
 	}
 }

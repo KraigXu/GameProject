@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C00 RID: 3072
+	
 	public class SitePartWorker_MechCluster : SitePartWorker
 	{
-		// Token: 0x06004908 RID: 18696 RVA: 0x0018CE44 File Offset: 0x0018B044
+		
 		public override string GetArrivedLetterPart(Map map, out LetterDef preferredLetterDef, out LookTargets lookTargets)
 		{
 			string arrivedLetterPart = base.GetArrivedLetterPart(map, out preferredLetterDef, out lookTargets);
@@ -25,7 +25,7 @@ namespace RimWorld
 			return arrivedLetterPart;
 		}
 
-		// Token: 0x06004909 RID: 18697 RVA: 0x0018CF0C File Offset: 0x0018B10C
+		
 		public override SitePartParams GenerateDefaultParams(float myThreatPoints, int tile, Faction faction)
 		{
 			SitePartParams sitePartParams = base.GenerateDefaultParams(myThreatPoints, tile, faction);
@@ -33,7 +33,7 @@ namespace RimWorld
 			return sitePartParams;
 		}
 
-		// Token: 0x040029CC RID: 10700
+		
 		public const float MinPoints = 750f;
 	}
 }

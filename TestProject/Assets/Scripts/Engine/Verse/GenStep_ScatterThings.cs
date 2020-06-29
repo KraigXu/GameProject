@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020001A6 RID: 422
+	
 	public class GenStep_ScatterThings : GenStep_Scatterer
 	{
-		// Token: 0x1700024D RID: 589
+		
 		// (get) Token: 0x06000BD6 RID: 3030 RVA: 0x000432C7 File Offset: 0x000414C7
 		public override int SeedPart
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700024E RID: 590
+		
 		// (get) Token: 0x06000BD7 RID: 3031 RVA: 0x000432D0 File Offset: 0x000414D0
 		private List<Rot4> PossibleRotations
 		{
@@ -43,7 +43,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000BD8 RID: 3032 RVA: 0x00043358 File Offset: 0x00041558
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			if (!this.allowInWaterBiome && map.TileInfo.WaterCovered)
@@ -80,7 +80,7 @@ namespace Verse
 			this.leftInCluster = 0;
 		}
 
-		// Token: 0x06000BD9 RID: 3033 RVA: 0x0004346C File Offset: 0x0004166C
+		
 		protected override bool TryFindScatterCell(Map map, out IntVec3 result)
 		{
 			if (this.clusterSize > 1)
@@ -104,7 +104,7 @@ namespace Verse
 			return base.TryFindScatterCell(map, out result);
 		}
 
-		// Token: 0x06000BDA RID: 3034 RVA: 0x0004351C File Offset: 0x0004171C
+		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int stackCount = 1)
 		{
 			Rot4 rot;
@@ -147,7 +147,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000BDB RID: 3035 RVA: 0x0004363C File Offset: 0x0004183C
+		
 		protected override bool CanScatterAt(IntVec3 loc, Map map)
 		{
 			if (!base.CanScatterAt(loc, map))
@@ -180,7 +180,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06000BDC RID: 3036 RVA: 0x000436FC File Offset: 0x000418FC
+		
 		private bool TryGetRandomValidRotation(IntVec3 loc, Map map, out Rot4 rot)
 		{
 			List<Rot4> possibleRotations = this.PossibleRotations;
@@ -200,13 +200,13 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000BDD RID: 3037 RVA: 0x00043768 File Offset: 0x00041968
+		
 		private bool IsRotationValid(IntVec3 loc, Rot4 rot, Map map)
 		{
 			return GenAdj.OccupiedRect(loc, rot, this.thingDef.size).InBounds(map) && !GenSpawn.WouldWipeAnythingWith(loc, rot, this.thingDef, map, (Thing x) => x.def == this.thingDef || (x.def.category != ThingCategory.Plant && x.def.category != ThingCategory.Filth));
 		}
 
-		// Token: 0x06000BDE RID: 3038 RVA: 0x000437B4 File Offset: 0x000419B4
+		
 		public static List<int> CountDividedIntoStacks(int count, IntRange stackSizeRange)
 		{
 			List<int> list = new List<int>();
@@ -237,40 +237,40 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x04000975 RID: 2421
+		
 		public ThingDef thingDef;
 
-		// Token: 0x04000976 RID: 2422
+		
 		public ThingDef stuff;
 
-		// Token: 0x04000977 RID: 2423
+		
 		public int clearSpaceSize;
 
-		// Token: 0x04000978 RID: 2424
+		
 		public int clusterSize = 1;
 
-		// Token: 0x04000979 RID: 2425
+		
 		public float terrainValidationRadius;
 
-		// Token: 0x0400097A RID: 2426
+		
 		[NoTranslate]
 		private List<string> terrainValidationDisallowed;
 
-		// Token: 0x0400097B RID: 2427
+		
 		[Unsaved(false)]
 		private IntVec3 clusterCenter;
 
-		// Token: 0x0400097C RID: 2428
+		
 		[Unsaved(false)]
 		private int leftInCluster;
 
-		// Token: 0x0400097D RID: 2429
+		
 		private const int ClusterRadius = 4;
 
-		// Token: 0x0400097E RID: 2430
+		
 		private List<Rot4> possibleRotationsInt;
 
-		// Token: 0x0400097F RID: 2431
+		
 		private static List<Rot4> tmpRotations = new List<Rot4>();
 	}
 }

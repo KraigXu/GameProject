@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse
 {
-	// Token: 0x02000100 RID: 256
+	
 	public static class WorkTypeDefsUtility
 	{
-		// Token: 0x17000183 RID: 387
+		
 		// (get) Token: 0x060006F5 RID: 1781 RVA: 0x0001FEB0 File Offset: 0x0001E0B0
 		public static IEnumerable<WorkTypeDef> WorkTypeDefsInPriorityOrder
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060006F6 RID: 1782 RVA: 0x0001FEDC File Offset: 0x0001E0DC
+		
 		public static string LabelTranslated(this WorkTags tags)
 		{
 			if (tags <= WorkTags.Artistic)
@@ -137,7 +137,7 @@ namespace Verse
 			return "Worktag";
 		}
 
-		// Token: 0x060006F7 RID: 1783 RVA: 0x0002014C File Offset: 0x0001E34C
+		
 		public static bool OverlapsWithOnAnyWorkType(this WorkTags a, WorkTags b)
 		{
 			List<WorkTypeDef> allDefsListForReading = DefDatabase<WorkTypeDef>.AllDefsListForReading;

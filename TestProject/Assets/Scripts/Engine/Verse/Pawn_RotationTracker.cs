@@ -3,22 +3,22 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020002A0 RID: 672
+	
 	public class Pawn_RotationTracker : IExposable
 	{
-		// Token: 0x06001347 RID: 4935 RVA: 0x0006F02B File Offset: 0x0006D22B
+		
 		public Pawn_RotationTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x06001348 RID: 4936 RVA: 0x0006F03A File Offset: 0x0006D23A
+		
 		public void Notify_Spawned()
 		{
 			this.UpdateRotation();
 		}
 
-		// Token: 0x06001349 RID: 4937 RVA: 0x0006F044 File Offset: 0x0006D244
+		
 		public void UpdateRotation()
 		{
 			if (this.pawn.Destroyed)
@@ -64,13 +64,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600134A RID: 4938 RVA: 0x0006F03A File Offset: 0x0006D23A
+		
 		public void RotationTrackerTick()
 		{
 			this.UpdateRotation();
 		}
 
-		// Token: 0x0600134B RID: 4939 RVA: 0x0006F180 File Offset: 0x0006D380
+		
 		private void FaceAdjacentCell(IntVec3 c)
 		{
 			if (c == this.pawn.Position)
@@ -96,7 +96,7 @@ namespace Verse
 			this.pawn.Rotation = Rot4.South;
 		}
 
-		// Token: 0x0600134C RID: 4940 RVA: 0x0006F214 File Offset: 0x0006D414
+		
 		public void FaceCell(IntVec3 c)
 		{
 			if (c == this.pawn.Position)
@@ -107,7 +107,7 @@ namespace Verse
 			this.pawn.Rotation = Pawn_RotationTracker.RotFromAngleBiased(angle);
 		}
 
-		// Token: 0x0600134D RID: 4941 RVA: 0x0006F268 File Offset: 0x0006D468
+		
 		public void Face(Vector3 p)
 		{
 			if (p == this.pawn.DrawPos)
@@ -118,7 +118,7 @@ namespace Verse
 			this.pawn.Rotation = Pawn_RotationTracker.RotFromAngleBiased(angle);
 		}
 
-		// Token: 0x0600134E RID: 4942 RVA: 0x0006F2B4 File Offset: 0x0006D4B4
+		
 		public void FaceTarget(LocalTargetInfo target)
 		{
 			if (!target.IsValid)
@@ -195,7 +195,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600134F RID: 4943 RVA: 0x0006F520 File Offset: 0x0006D720
+		
 		public static Rot4 RotFromAngleBiased(float angle)
 		{
 			if (angle < 30f)
@@ -217,12 +217,12 @@ namespace Verse
 			return Rot4.North;
 		}
 
-		// Token: 0x06001350 RID: 4944 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public void ExposeData()
 		{
 		}
 
-		// Token: 0x04000D0E RID: 3342
+		
 		private Pawn pawn;
 	}
 }

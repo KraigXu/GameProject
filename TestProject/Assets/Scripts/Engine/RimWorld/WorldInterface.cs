@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F30 RID: 3888
+	
 	public class WorldInterface
 	{
-		// Token: 0x17001117 RID: 4375
+		
 		// (get) Token: 0x06005F39 RID: 24377 RVA: 0x0020E1E9 File Offset: 0x0020C3E9
 		// (set) Token: 0x06005F3A RID: 24378 RVA: 0x0020E1F6 File Offset: 0x0020C3F6
 		public int SelectedTile
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F3B RID: 24379 RVA: 0x0020E204 File Offset: 0x0020C404
+		
 		public void Reset()
 		{
 			this.everReset = true;
@@ -63,7 +63,7 @@ namespace RimWorld
 			Find.WorldCameraDriver.ResetAltitude();
 		}
 
-		// Token: 0x06005F3C RID: 24380 RVA: 0x0020E2FB File Offset: 0x0020C4FB
+		
 		public void WorldInterfaceUpdate()
 		{
 			if (WorldRendererUtility.WorldRenderedNow)
@@ -79,7 +79,7 @@ namespace RimWorld
 			this.routePlanner.WorldRoutePlannerUpdate();
 		}
 
-		// Token: 0x06005F3D RID: 24381 RVA: 0x0020E338 File Offset: 0x0020C538
+		
 		public void WorldInterfaceOnGUI()
 		{
 			bool worldRenderedNow = WorldRendererUtility.WorldRenderedNow;
@@ -104,7 +104,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F3E RID: 24382 RVA: 0x0020E3C2 File Offset: 0x0020C5C2
+		
 		public void HandleLowPriorityInput()
 		{
 			if (WorldRendererUtility.WorldRenderedNow)
@@ -114,7 +114,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F3F RID: 24383 RVA: 0x0020E3E4 File Offset: 0x0020C5E4
+		
 		private void CheckOpenOrCloseInspectPane()
 		{
 			if (this.selector.AnyObjectOrTileSelected && WorldRendererUtility.WorldRenderedNow && (Current.ProgramState != ProgramState.Playing || Find.MainTabsRoot.OpenTab == null))
@@ -131,22 +131,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040033A8 RID: 13224
+		
 		public WorldSelector selector = new WorldSelector();
 
-		// Token: 0x040033A9 RID: 13225
+		
 		public WorldTargeter targeter = new WorldTargeter();
 
-		// Token: 0x040033AA RID: 13226
+		
 		public WorldInspectPane inspectPane = new WorldInspectPane();
 
-		// Token: 0x040033AB RID: 13227
+		
 		public WorldGlobalControls globalControls = new WorldGlobalControls();
 
-		// Token: 0x040033AC RID: 13228
+		
 		public WorldRoutePlanner routePlanner = new WorldRoutePlanner();
 
-		// Token: 0x040033AD RID: 13229
+		
 		public bool everReset;
 	}
 }

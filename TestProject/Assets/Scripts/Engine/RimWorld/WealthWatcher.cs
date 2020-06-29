@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AAB RID: 2731
+	
 	public class WealthWatcher
 	{
-		// Token: 0x17000B6A RID: 2922
+		
 		// (get) Token: 0x060040A5 RID: 16549 RVA: 0x0015A4A6 File Offset: 0x001586A6
 		public int HealthTotal
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B6B RID: 2923
+		
 		// (get) Token: 0x060040A6 RID: 16550 RVA: 0x0015A4B4 File Offset: 0x001586B4
 		public float WealthTotal
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B6C RID: 2924
+		
 		// (get) Token: 0x060040A7 RID: 16551 RVA: 0x0015A4D0 File Offset: 0x001586D0
 		public float WealthItems
 		{
@@ -41,7 +41,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B6D RID: 2925
+		
 		// (get) Token: 0x060040A8 RID: 16552 RVA: 0x0015A4DE File Offset: 0x001586DE
 		public float WealthBuildings
 		{
@@ -52,7 +52,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B6E RID: 2926
+		
 		// (get) Token: 0x060040A9 RID: 16553 RVA: 0x0015A4EC File Offset: 0x001586EC
 		public float WealthFloorsOnly
 		{
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B6F RID: 2927
+		
 		// (get) Token: 0x060040AA RID: 16554 RVA: 0x0015A4FA File Offset: 0x001586FA
 		public float WealthPawns
 		{
@@ -74,7 +74,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040AB RID: 16555 RVA: 0x0015A508 File Offset: 0x00158708
+		
 		public static void ResetStaticData()
 		{
 			int num = -1;
@@ -90,13 +90,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040AC RID: 16556 RVA: 0x0015A583 File Offset: 0x00158783
+		
 		public WealthWatcher(Map map)
 		{
 			this.map = map;
 		}
 
-		// Token: 0x060040AD RID: 16557 RVA: 0x0015A5A8 File Offset: 0x001587A8
+		
 		private void RecountIfNeeded()
 		{
 			if ((float)Find.TickManager.TicksGame - this.lastCountTick > 5000f)
@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040AE RID: 16558 RVA: 0x0015A5CC File Offset: 0x001587CC
+		
 		public void ForceRecount(bool allowDuringInit = false)
 		{
 			if (!allowDuringInit && Current.ProgramState != ProgramState.Playing)
@@ -144,7 +144,7 @@ namespace RimWorld
 			this.lastCountTick = (float)Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x060040AF RID: 16559 RVA: 0x0015A760 File Offset: 0x00158960
+		
 		public static float GetEquipmentApparelAndInventoryWealth(Pawn p)
 		{
 			float num = 0f;
@@ -175,7 +175,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060040B0 RID: 16560 RVA: 0x0015A84C File Offset: 0x00158A4C
+		
 		private float CalculateWealthItems()
 		{
 			this.tmpThings.Clear();
@@ -200,7 +200,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060040B1 RID: 16561 RVA: 0x0015A91C File Offset: 0x00158B1C
+		
 		private float CalculateWealthFloors()
 		{
 			TerrainDef[] topGrid = this.map.terrainGrid.topGrid;
@@ -220,34 +220,34 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04002580 RID: 9600
+		
 		private Map map;
 
-		// Token: 0x04002581 RID: 9601
+		
 		private float wealthItems;
 
-		// Token: 0x04002582 RID: 9602
+		
 		private float wealthBuildings;
 
-		// Token: 0x04002583 RID: 9603
+		
 		private float wealthPawns;
 
-		// Token: 0x04002584 RID: 9604
+		
 		private float wealthFloorsOnly;
 
-		// Token: 0x04002585 RID: 9605
+		
 		private int totalHealth;
 
-		// Token: 0x04002586 RID: 9606
+		
 		private float lastCountTick = -99999f;
 
-		// Token: 0x04002587 RID: 9607
+		
 		private static float[] cachedTerrainMarketValue;
 
-		// Token: 0x04002588 RID: 9608
+		
 		private const int MinCountInterval = 5000;
 
-		// Token: 0x04002589 RID: 9609
+		
 		private List<Thing> tmpThings = new List<Thing>();
 	}
 }

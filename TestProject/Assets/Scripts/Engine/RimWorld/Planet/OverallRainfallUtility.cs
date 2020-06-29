@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011D3 RID: 4563
+	
 	public static class OverallRainfallUtility
 	{
-		// Token: 0x170011AB RID: 4523
+		
 		// (get) Token: 0x060069C0 RID: 27072 RVA: 0x0024E214 File Offset: 0x0024C414
 		public static int EnumValuesCount
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x060069C1 RID: 27073 RVA: 0x0024E23C File Offset: 0x0024C43C
+		
 		public static SimpleCurve GetRainfallCurve(this OverallRainfall overallRainfall)
 		{
 			switch (overallRainfall)
@@ -41,10 +41,10 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x040041AF RID: 16815
+		
 		private static int cachedEnumValuesCount = -1;
 
-		// Token: 0x040041B0 RID: 16816
+		
 		private static readonly SimpleCurve Curve_AlmostNone = new SimpleCurve
 		{
 			{
@@ -69,7 +69,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041B1 RID: 16817
+		
 		private static readonly SimpleCurve Curve_Little = new SimpleCurve
 		{
 			{
@@ -90,7 +90,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041B2 RID: 16818
+		
 		private static readonly SimpleCurve Curve_LittleBitLess = new SimpleCurve
 		{
 			{
@@ -115,7 +115,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041B3 RID: 16819
+		
 		private static readonly SimpleCurve Curve_LittleBitMore = new SimpleCurve
 		{
 			{
@@ -136,7 +136,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041B4 RID: 16820
+		
 		private static readonly SimpleCurve Curve_High = new SimpleCurve
 		{
 			{
@@ -169,7 +169,7 @@ namespace RimWorld.Planet
 			}
 		};
 
-		// Token: 0x040041B5 RID: 16821
+		
 		private static readonly SimpleCurve Curve_VeryHigh = new SimpleCurve
 		{
 			{

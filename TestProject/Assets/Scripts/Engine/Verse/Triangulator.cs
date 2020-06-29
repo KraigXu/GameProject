@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000480 RID: 1152
+	
 	public class Triangulator
 	{
-		// Token: 0x0600220C RID: 8716 RVA: 0x000CFE31 File Offset: 0x000CE031
+		
 		public Triangulator(Vector2[] points)
 		{
 			this.m_points = new List<Vector2>(points);
 		}
 
-		// Token: 0x0600220D RID: 8717 RVA: 0x000CFE50 File Offset: 0x000CE050
+		
 		public int[] Triangulate()
 		{
 			List<int> list = new List<int>();
@@ -85,7 +85,7 @@ namespace Verse
 			return list.ToArray();
 		}
 
-		// Token: 0x0600220E RID: 8718 RVA: 0x000CFF90 File Offset: 0x000CE190
+		
 		private float Area()
 		{
 			int count = this.m_points.Count;
@@ -102,7 +102,7 @@ namespace Verse
 			return num * 0.5f;
 		}
 
-		// Token: 0x0600220F RID: 8719 RVA: 0x000D0008 File Offset: 0x000CE208
+		
 		private bool Snip(int u, int v, int w, int n, int[] V)
 		{
 			Vector2 vector = this.m_points[V[u]];
@@ -126,7 +126,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06002210 RID: 8720 RVA: 0x000D00C0 File Offset: 0x000CE2C0
+		
 		private bool InsideTriangle(Vector2 A, Vector2 B, Vector2 C, Vector2 P)
 		{
 			float num = C.x - B.x;
@@ -147,7 +147,7 @@ namespace Verse
 			return num13 >= 0f && num15 >= 0f && num14 >= 0f;
 		}
 
-		// Token: 0x040014F9 RID: 5369
+		
 		private List<Vector2> m_points = new List<Vector2>();
 	}
 }

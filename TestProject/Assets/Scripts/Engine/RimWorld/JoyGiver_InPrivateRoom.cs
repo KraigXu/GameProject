@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200070A RID: 1802
+	
 	public class JoyGiver_InPrivateRoom : JoyGiver
 	{
-		// Token: 0x06002F9C RID: 12188 RVA: 0x0010C3D8 File Offset: 0x0010A5D8
+		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.ownership == null)
@@ -30,7 +30,7 @@ namespace RimWorld
 			return JobMaker.MakeJob(this.def.jobDef, c2);
 		}
 
-		// Token: 0x06002F9D RID: 12189 RVA: 0x0010C44F File Offset: 0x0010A64F
+		
 		public override Job TryGiveJobWhileInBed(Pawn pawn)
 		{
 			return JobMaker.MakeJob(this.def.jobDef, pawn.CurrentBed());

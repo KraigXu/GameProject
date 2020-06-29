@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020007C2 RID: 1986
+	
 	public class ThinkNode_JoinVoluntarilyJoinableLord : ThinkNode_Priority
 	{
-		// Token: 0x06003372 RID: 13170 RVA: 0x0011D628 File Offset: 0x0011B828
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			ThinkNode_JoinVoluntarilyJoinableLord thinkNode_JoinVoluntarilyJoinableLord = (ThinkNode_JoinVoluntarilyJoinableLord)base.DeepCopy(resolve);
@@ -17,7 +17,7 @@ namespace RimWorld
 			return thinkNode_JoinVoluntarilyJoinableLord;
 		}
 
-		// Token: 0x06003373 RID: 13171 RVA: 0x0011D644 File Offset: 0x0011B844
+		
 		public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
 		{
 			this.CheckLeaveCurrentVoluntarilyJoinableLord(pawn);
@@ -29,7 +29,7 @@ namespace RimWorld
 			return ThinkResult.NoJob;
 		}
 
-		// Token: 0x06003374 RID: 13172 RVA: 0x0011D6A0 File Offset: 0x0011B8A0
+		
 		private void CheckLeaveCurrentVoluntarilyJoinableLord(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003375 RID: 13173 RVA: 0x0011D6E8 File Offset: 0x0011B8E8
+		
 		private void JoinVoluntarilyJoinableLord(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
@@ -88,7 +88,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001BA4 RID: 7076
+		
 		public ThinkTreeDutyHook dutyHook;
 	}
 }

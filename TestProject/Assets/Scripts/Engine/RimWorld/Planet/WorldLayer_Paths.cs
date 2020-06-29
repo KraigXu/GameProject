@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011EA RID: 4586
+	
 	public abstract class WorldLayer_Paths : WorldLayer
 	{
-		// Token: 0x06006A1E RID: 27166 RVA: 0x002504F0 File Offset: 0x0024E6F0
+		
 		public void GeneratePaths(LayerSubMesh subMesh, int tileID, List<WorldLayer_Paths.OutputDirection> nodes, Color32 color, bool allowSmoothTransition)
 		{
 			WorldGrid worldGrid = Find.WorldGrid;
@@ -100,7 +100,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006A1F RID: 27167 RVA: 0x00250A18 File Offset: 0x0024EC18
+		
 		private void AddPathEndpoint(LayerSubMesh subMesh, List<Vector3> verts, int index, Color32 color, int tileID, WorldLayer_Paths.OutputDirection data)
 		{
 			int index2 = (index + 1) % verts.Count;
@@ -117,40 +117,40 @@ namespace RimWorld.Planet
 			subMesh.colors.Add(color.MutateAlpha(0));
 		}
 
-		// Token: 0x06006A20 RID: 27168
+		
 		public abstract Vector3 FinalizePoint(Vector3 inp, float distortionFrequency, float distortionIntensity);
 
-		// Token: 0x04004220 RID: 16928
+		
 		protected bool pointyEnds;
 
-		// Token: 0x04004221 RID: 16929
+		
 		private List<Vector3> tmpVerts = new List<Vector3>();
 
-		// Token: 0x04004222 RID: 16930
+		
 		private List<Vector3> tmpHexVerts = new List<Vector3>();
 
-		// Token: 0x04004223 RID: 16931
+		
 		private List<int> tmpNeighbors = new List<int>();
 
-		// Token: 0x04004224 RID: 16932
+		
 		private static List<int> lhsID = new List<int>();
 
-		// Token: 0x04004225 RID: 16933
+		
 		private static List<int> rhsID = new List<int>();
 
-		// Token: 0x02001F7A RID: 8058
+		
 		public struct OutputDirection
 		{
-			// Token: 0x040075DC RID: 30172
+			
 			public int neighbor;
 
-			// Token: 0x040075DD RID: 30173
+			
 			public float width;
 
-			// Token: 0x040075DE RID: 30174
+			
 			public float distortionFrequency;
 
-			// Token: 0x040075DF RID: 30175
+			
 			public float distortionIntensity;
 		}
 	}

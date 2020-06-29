@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000AC1 RID: 2753
+	
 	public class Ability : IVerbOwner, IExposable
 	{
-		// Token: 0x17000B92 RID: 2962
+		
 		// (get) Token: 0x06004149 RID: 16713 RVA: 0x0015D575 File Offset: 0x0015B775
 		public Verb verb
 		{
@@ -19,24 +19,24 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600414A RID: 16714 RVA: 0x0015D582 File Offset: 0x0015B782
+		
 		public string UniqueVerbOwnerID()
 		{
 			return "Ability_" + this.def.label + this.pawn.ThingID;
 		}
 
-		// Token: 0x0600414B RID: 16715 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public bool VerbsStillUsableBy(Pawn p)
 		{
 			return true;
 		}
 
-		// Token: 0x17000B93 RID: 2963
+		
 		// (get) Token: 0x0600414C RID: 16716 RVA: 0x0015D5A4 File Offset: 0x0015B7A4
 		// (set) Token: 0x0600414D RID: 16717 RVA: 0x0015D5AC File Offset: 0x0015B7AC
 		public List<Tool> Tools { get; private set; }
 
-		// Token: 0x17000B94 RID: 2964
+		
 		// (get) Token: 0x0600414E RID: 16718 RVA: 0x0015D5B5 File Offset: 0x0015B7B5
 		public Thing ConstantCaster
 		{
@@ -46,7 +46,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B95 RID: 2965
+		
 		// (get) Token: 0x0600414F RID: 16719 RVA: 0x0015D5BD File Offset: 0x0015B7BD
 		public List<VerbProperties> VerbProperties
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B96 RID: 2966
+		
 		// (get) Token: 0x06004150 RID: 16720 RVA: 0x0015D5D5 File Offset: 0x0015B7D5
 		public ImplementOwnerTypeDef ImplementOwnerTypeDef
 		{
@@ -69,7 +69,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B97 RID: 2967
+		
 		// (get) Token: 0x06004151 RID: 16721 RVA: 0x0015D5DC File Offset: 0x0015B7DC
 		public int CooldownTicksRemaining
 		{
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B98 RID: 2968
+		
 		// (get) Token: 0x06004152 RID: 16722 RVA: 0x0015D5E4 File Offset: 0x0015B7E4
 		public int CooldownTicksTotal
 		{
@@ -89,7 +89,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B99 RID: 2969
+		
 		// (get) Token: 0x06004153 RID: 16723 RVA: 0x0015D5EC File Offset: 0x0015B7EC
 		public VerbTracker VerbTracker
 		{
@@ -103,7 +103,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B9A RID: 2970
+		
 		// (get) Token: 0x06004154 RID: 16724 RVA: 0x0015D608 File Offset: 0x0015B808
 		public bool HasCooldown
 		{
@@ -113,7 +113,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B9B RID: 2971
+		
 		// (get) Token: 0x06004155 RID: 16725 RVA: 0x0015D62E File Offset: 0x0015B82E
 		public virtual bool CanCast
 		{
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B9C RID: 2972
+		
 		// (get) Token: 0x06004156 RID: 16726 RVA: 0x0015D63C File Offset: 0x0015B83C
 		public virtual bool CanQueueCast
 		{
@@ -135,7 +135,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B9D RID: 2973
+		
 		// (get) Token: 0x06004157 RID: 16727 RVA: 0x0015D6AD File Offset: 0x0015B8AD
 		public List<CompAbilityEffect> EffectComps
 		{
@@ -149,13 +149,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004158 RID: 16728 RVA: 0x0015D6CE File Offset: 0x0015B8CE
+		
 		public Ability(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x06004159 RID: 16729 RVA: 0x0015D6DD File Offset: 0x0015B8DD
+		
 		public Ability(Pawn pawn, AbilityDef def)
 		{
 			this.pawn = pawn;
@@ -163,7 +163,7 @@ namespace RimWorld
 			this.Initialize();
 		}
 
-		// Token: 0x0600415A RID: 16730 RVA: 0x0015D6FC File Offset: 0x0015B8FC
+		
 		public virtual bool CanApplyOn(LocalTargetInfo target)
 		{
 			using (List<CompAbilityEffect>.Enumerator enumerator = this.effectComps.GetEnumerator())
@@ -179,7 +179,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600415B RID: 16731 RVA: 0x0015D75C File Offset: 0x0015B95C
+		
 		public virtual bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			if (!this.EffectComps.Any<CompAbilityEffect>())
@@ -191,7 +191,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600415C RID: 16732 RVA: 0x0015D7B4 File Offset: 0x0015B9B4
+		
 		public IEnumerable<LocalTargetInfo> GetAffectedTargets(LocalTargetInfo target)
 		{
 			if (this.def.HasAreaOfEffect && this.def.canUseAoeToGetTargets)
@@ -212,7 +212,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600415D RID: 16733 RVA: 0x0015D7CC File Offset: 0x0015B9CC
+		
 		public virtual void QueueCastingJob(LocalTargetInfo target, LocalTargetInfo destination)
 		{
 			if (!this.CanQueueCast || !this.CanApplyOn(target))
@@ -226,7 +226,7 @@ namespace RimWorld
 			this.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		}
 
-		// Token: 0x0600415E RID: 16734 RVA: 0x0015D834 File Offset: 0x0015BA34
+		
 		public virtual bool GizmoDisabled(out string reason)
 		{
 			if (!this.CanCast)
@@ -260,7 +260,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600415F RID: 16735 RVA: 0x0015D924 File Offset: 0x0015BB24
+		
 		public virtual void AbilityTick()
 		{
 			this.VerbTracker.VerbsTick();
@@ -294,7 +294,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004160 RID: 16736 RVA: 0x0015DA88 File Offset: 0x0015BC88
+		
 		public void DrawEffectPreviews(LocalTargetInfo target)
 		{
 			for (int i = 0; i < this.EffectComps.Count; i++)
@@ -303,7 +303,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004161 RID: 16737 RVA: 0x0015DABD File Offset: 0x0015BCBD
+		
 		public virtual IEnumerable<Command> GetGizmos()
 		{
 			if (this.gizmo == null)
@@ -328,7 +328,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004162 RID: 16738 RVA: 0x0015DAD0 File Offset: 0x0015BCD0
+		
 		private void ApplyEffects(IEnumerable<CompAbilityEffect> effects, IEnumerable<LocalTargetInfo> targets, LocalTargetInfo dest)
 		{
 			foreach (LocalTargetInfo target in targets)
@@ -341,14 +341,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004163 RID: 16739 RVA: 0x0015DB38 File Offset: 0x0015BD38
+		
 		public void StartCooldown(int ticks)
 		{
 			this.cooldownTicksDuration = ticks;
 			this.cooldownTicks = this.cooldownTicksDuration;
 		}
 
-		// Token: 0x06004164 RID: 16740 RVA: 0x0015DB50 File Offset: 0x0015BD50
+		
 		protected virtual void ApplyEffects(IEnumerable<CompAbilityEffect> effects, LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			foreach (CompAbilityEffect compAbilityEffect in effects)
@@ -357,7 +357,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004165 RID: 16741 RVA: 0x0015DB98 File Offset: 0x0015BD98
+		
 		public IEnumerable<T> CompsOfType<T>() where T : AbilityComp
 		{
 			if (this.comps == null)
@@ -369,7 +369,7 @@ namespace RimWorld
 			select c).Cast<T>();
 		}
 
-		// Token: 0x06004166 RID: 16742 RVA: 0x0015DBD4 File Offset: 0x0015BDD4
+		
 		public T CompOfType<T>() where T : AbilityComp
 		{
 			if (this.comps == null)
@@ -379,7 +379,7 @@ namespace RimWorld
 			return this.comps.FirstOrDefault((AbilityComp c) => c is T) as T;
 		}
 
-		// Token: 0x06004167 RID: 16743 RVA: 0x0015DC28 File Offset: 0x0015BE28
+		
 		public void Initialize()
 		{
 			if (this.def.comps.Any<AbilityCompProperties>())
@@ -409,7 +409,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004168 RID: 16744 RVA: 0x0015DD10 File Offset: 0x0015BF10
+		
 		public virtual void ExposeData()
 		{
 			Scribe_Defs.Look<AbilityDef>(ref this.def, "def");
@@ -429,31 +429,31 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040025DF RID: 9695
+		
 		public Pawn pawn;
 
-		// Token: 0x040025E0 RID: 9696
+		
 		public AbilityDef def;
 
-		// Token: 0x040025E1 RID: 9697
+		
 		public List<AbilityComp> comps;
 
-		// Token: 0x040025E2 RID: 9698
+		
 		protected Command gizmo;
 
-		// Token: 0x040025E3 RID: 9699
+		
 		private VerbTracker verbTracker;
 
-		// Token: 0x040025E4 RID: 9700
+		
 		private int cooldownTicks;
 
-		// Token: 0x040025E5 RID: 9701
+		
 		private int cooldownTicksDuration;
 
-		// Token: 0x040025E6 RID: 9702
+		
 		private Mote warmupMote;
 
-		// Token: 0x040025E7 RID: 9703
+		
 		private List<CompAbilityEffect> effectComps;
 	}
 }

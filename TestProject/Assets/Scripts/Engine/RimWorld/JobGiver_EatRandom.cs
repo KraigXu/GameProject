@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200069B RID: 1691
+	
 	public class JobGiver_EatRandom : ThinkNode_JobGiver
 	{
-		// Token: 0x06002DF2 RID: 11762 RVA: 0x001027C4 File Offset: 0x001009C4
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.Downed)

@@ -6,17 +6,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DF4 RID: 3572
+	
 	public class Alert_UndignifiedThroneroom : Alert
 	{
-		// Token: 0x06005682 RID: 22146 RVA: 0x001CAEF9 File Offset: 0x001C90F9
+		
 		public Alert_UndignifiedThroneroom()
 		{
 			this.defaultLabel = "UndignifiedThroneroom".Translate();
 			this.defaultExplanation = "UndignifiedThroneroomDesc".Translate();
 		}
 
-		// Token: 0x17000F6E RID: 3950
+		
 		// (get) Token: 0x06005683 RID: 22147 RVA: 0x001CAF38 File Offset: 0x001C9138
 		public List<Pawn> Targets
 		{
@@ -38,13 +38,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005684 RID: 22148 RVA: 0x001CAFE0 File Offset: 0x001C91E0
+		
 		public override AlertReport GetReport()
 		{
 			return AlertReport.CulpritsAre(this.Targets);
 		}
 
-		// Token: 0x06005685 RID: 22149 RVA: 0x001CAFF0 File Offset: 0x001C91F0
+		
 		public override TaggedString GetExplanation()
 		{
 			return this.defaultExplanation + "\n" + this.Targets.Select(delegate(Pawn t)
@@ -77,7 +77,7 @@ namespace RimWorld
 			}).ToLineList("\n", false);
 		}
 
-		// Token: 0x04002F34 RID: 12084
+		
 		private List<Pawn> targetsResult = new List<Pawn>();
 	}
 }

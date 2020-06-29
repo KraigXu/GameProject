@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F15 RID: 3861
+	
 	public class Instruction_BuildSandbags : Lesson_Instruction
 	{
-		// Token: 0x170010F7 RID: 4343
+		
 		// (get) Token: 0x06005E93 RID: 24211 RVA: 0x0020B560 File Offset: 0x00209760
 		protected override float ProgressPercent
 		{
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E94 RID: 24212 RVA: 0x0020B5D0 File Offset: 0x002097D0
+		
 		public override void OnActivated()
 		{
 			base.OnActivated();
@@ -61,21 +61,21 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E95 RID: 24213 RVA: 0x0020B764 File Offset: 0x00209964
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Collections.Look<IntVec3>(ref this.sandbagCells, "sandbagCells", LookMode.Undefined, Array.Empty<object>());
 		}
 
-		// Token: 0x06005E96 RID: 24214 RVA: 0x0020B782 File Offset: 0x00209982
+		
 		public override void LessonOnGUI()
 		{
 			TutorUtility.DrawLabelOnGUI(Gen.AveragePosition(this.sandbagCells), this.def.onMapInstruction);
 			base.LessonOnGUI();
 		}
 
-		// Token: 0x06005E97 RID: 24215 RVA: 0x0020B7A8 File Offset: 0x002099A8
+		
 		public override void LessonUpdate()
 		{
 			GenDraw.DrawFieldEdges((from c in this.sandbagCells
@@ -88,7 +88,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005E98 RID: 24216 RVA: 0x0020B7FE File Offset: 0x002099FE
+		
 		public override AcceptanceReport AllowAction(EventPack ep)
 		{
 			if (ep.Tag == "Designate-Sandbags")
@@ -98,7 +98,7 @@ namespace RimWorld
 			return base.AllowAction(ep);
 		}
 
-		// Token: 0x0400336A RID: 13162
+		
 		private List<IntVec3> sandbagCells;
 	}
 }

@@ -6,16 +6,16 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011F4 RID: 4596
+	
 	public abstract class WorldLayer_WorldObjects : WorldLayer
 	{
-		// Token: 0x06006A4E RID: 27214
+		
 		protected abstract bool ShouldSkip(WorldObject worldObject);
 
-		// Token: 0x06006A4F RID: 27215 RVA: 0x0025108A File Offset: 0x0024F28A
+		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.<>n__0())
+			foreach (object obj in this.n__0())
 			{
 				yield return obj;
 			}

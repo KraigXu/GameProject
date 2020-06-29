@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C81 RID: 3201
+	
 	public class Building_OrbitalTradeBeacon : Building
 	{
-		// Token: 0x17000DA2 RID: 3490
+		
 		// (get) Token: 0x06004D06 RID: 19718 RVA: 0x0019D09F File Offset: 0x0019B29F
 		public IEnumerable<IntVec3> TradeableCells
 		{
@@ -19,13 +19,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D07 RID: 19719 RVA: 0x0019D0B2 File Offset: 0x0019B2B2
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (DesignatorUtility.FindAllowedDesignator<Designator_ZoneAddStockpile_Resources>() != null)
 			{
@@ -42,7 +39,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004D08 RID: 19720 RVA: 0x0019D0C4 File Offset: 0x0019B2C4
+		
 		private void MakeMatchingStockpile()
 		{
 			Designator des = DesignatorUtility.FindAllowedDesignator<Designator_ZoneAddStockpile_Resources>();
@@ -51,7 +48,7 @@ namespace RimWorld
 			select c);
 		}
 
-		// Token: 0x06004D09 RID: 19721 RVA: 0x0019D104 File Offset: 0x0019B304
+		
 		public static List<IntVec3> TradeableCellsAround(IntVec3 pos, Map map)
 		{
 			Building_OrbitalTradeBeacon.tradeableCells.Clear();
@@ -78,7 +75,7 @@ namespace RimWorld
 			return Building_OrbitalTradeBeacon.tradeableCells;
 		}
 
-		// Token: 0x06004D0A RID: 19722 RVA: 0x0019D18C File Offset: 0x0019B38C
+		
 		public static IEnumerable<Building_OrbitalTradeBeacon> AllPowered(Map map)
 		{
 			foreach (Building_OrbitalTradeBeacon building_OrbitalTradeBeacon in map.listerBuildings.AllBuildingsColonistOfClass<Building_OrbitalTradeBeacon>())
@@ -94,10 +91,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002B24 RID: 11044
+		
 		private const float TradeRadius = 7.9f;
 
-		// Token: 0x04002B25 RID: 11045
+		
 		private static List<IntVec3> tradeableCells = new List<IntVec3>();
 	}
 }

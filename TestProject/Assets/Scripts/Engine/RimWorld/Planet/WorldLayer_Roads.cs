@@ -8,13 +8,13 @@ using Verse.Noise;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011EC RID: 4588
+	
 	public class WorldLayer_Roads : WorldLayer_Paths
 	{
-		// Token: 0x06006A27 RID: 27175 RVA: 0x00250CD9 File Offset: 0x0024EED9
+		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.<>n__0())
+			foreach (object obj in this.n__0())
 			{
 				yield return obj;
 			}
@@ -83,7 +83,7 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006A28 RID: 27176 RVA: 0x00250CEC File Offset: 0x0024EEEC
+		
 		public override Vector3 FinalizePoint(Vector3 inp, float distortionFrequency, float distortionIntensity)
 		{
 			Vector3 coordinate = inp * distortionFrequency;
@@ -98,13 +98,13 @@ namespace RimWorld.Planet
 			return inp + inp.normalized * 0.012f;
 		}
 
-		// Token: 0x0400422C RID: 16940
+		
 		private ModuleBase roadDisplacementX = new Perlin(1.0, 2.0, 0.5, 3, 74173887, QualityMode.Medium);
 
-		// Token: 0x0400422D RID: 16941
+		
 		private ModuleBase roadDisplacementY = new Perlin(1.0, 2.0, 0.5, 3, 67515931, QualityMode.Medium);
 
-		// Token: 0x0400422E RID: 16942
+		
 		private ModuleBase roadDisplacementZ = new Perlin(1.0, 2.0, 0.5, 3, 87116801, QualityMode.Medium);
 	}
 }

@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000670 RID: 1648
+	
 	public class JobDriver_RefuelAtomic : JobDriver
 	{
-		// Token: 0x17000874 RID: 2164
+		
 		// (get) Token: 0x06002CE9 RID: 11497 RVA: 0x000FEA94 File Offset: 0x000FCC94
 		protected Thing Refuelable
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000875 RID: 2165
+		
 		// (get) Token: 0x06002CEA RID: 11498 RVA: 0x000FEAB5 File Offset: 0x000FCCB5
 		protected CompRefuelable RefuelableComp
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000876 RID: 2166
+		
 		// (get) Token: 0x06002CEB RID: 11499 RVA: 0x000FEAC4 File Offset: 0x000FCCC4
 		protected Thing Fuel
 		{
@@ -38,14 +38,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002CEC RID: 11500 RVA: 0x000FEAE8 File Offset: 0x000FCCE8
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			this.pawn.ReserveAsManyAsPossible(this.job.GetTargetQueue(TargetIndex.B), this.job, 1, -1, null);
 			return this.pawn.Reserve(this.Refuelable, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002CED RID: 11501 RVA: 0x000FEB35 File Offset: 0x000FCD35
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -79,16 +79,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A02 RID: 6658
+		
 		private const TargetIndex RefuelableInd = TargetIndex.A;
 
-		// Token: 0x04001A03 RID: 6659
+		
 		private const TargetIndex FuelInd = TargetIndex.B;
 
-		// Token: 0x04001A04 RID: 6660
+		
 		private const TargetIndex FuelPlaceCellInd = TargetIndex.C;
 
-		// Token: 0x04001A05 RID: 6661
+		
 		private const int RefuelingDuration = 240;
 	}
 }

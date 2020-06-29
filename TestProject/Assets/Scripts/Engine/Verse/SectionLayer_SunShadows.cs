@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000195 RID: 405
+	
 	internal class SectionLayer_SunShadows : SectionLayer
 	{
-		// Token: 0x17000241 RID: 577
+		
 		// (get) Token: 0x06000B9B RID: 2971 RVA: 0x0003F2D9 File Offset: 0x0003D4D9
 		public override bool Visible
 		{
@@ -16,13 +16,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B9C RID: 2972 RVA: 0x0003F2E0 File Offset: 0x0003D4E0
+		
 		public SectionLayer_SunShadows(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.Buildings;
 		}
 
-		// Token: 0x06000B9D RID: 2973 RVA: 0x00040EEC File Offset: 0x0003F0EC
+		
 		public override void Regenerate()
 		{
 			if (!MatBases.SunShadow.shader.isSupported)
@@ -132,7 +132,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0400094F RID: 2383
+		
 		private static readonly Color32 LowVertexColor = new Color32(0, 0, 0, 0);
 	}
 }

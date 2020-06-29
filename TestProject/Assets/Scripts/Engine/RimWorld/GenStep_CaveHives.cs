@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A48 RID: 2632
+	
 	public class GenStep_CaveHives : GenStep
 	{
-		// Token: 0x17000B0D RID: 2829
+		
 		// (get) Token: 0x06003E38 RID: 15928 RVA: 0x00147B4E File Offset: 0x00145D4E
 		public override int SeedPart
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E39 RID: 15929 RVA: 0x00147B58 File Offset: 0x00145D58
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			if (!Find.Storyteller.difficulty.allowCaveHives)
@@ -64,7 +64,7 @@ namespace RimWorld
 			this.spawnedHives.Clear();
 		}
 
-		// Token: 0x06003E3A RID: 15930 RVA: 0x00147D10 File Offset: 0x00145F10
+		
 		private void TrySpawnHive(Map map)
 		{
 			IntVec3 intVec;
@@ -85,19 +85,19 @@ namespace RimWorld
 			this.spawnedHives.Add(hive);
 		}
 
-		// Token: 0x06003E3B RID: 15931 RVA: 0x00147DDC File Offset: 0x00145FDC
+		
 		private bool TryFindHiveSpawnCell(Map map, out IntVec3 spawnCell)
 		{
 			float num = -1f;
 			IntVec3 intVec = IntVec3.Invalid;
-			Func<IntVec3, bool> <>9__0;
+			
 			for (int i = 0; i < 3; i++)
 			{
 				IEnumerable<IntVec3> source = this.possibleSpawnCells;
 				Func<IntVec3, bool> predicate;
-				if ((predicate = <>9__0) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__0 = ((IntVec3 x) => x.Standable(map) && x.GetFirstItem(map) == null && x.GetFirstBuilding(map) == null && x.GetFirstPawn(map) == null));
+					predicate = (9__0 = ((IntVec3 x) => x.Standable(map) && x.GetFirstItem(map) == null && x.GetFirstBuilding(map) == null && x.GetFirstPawn(map) == null));
 				}
 				IntVec3 intVec2;
 				if (!source.Where(predicate).TryRandomElement(out intVec2))
@@ -123,22 +123,22 @@ namespace RimWorld
 			return spawnCell.IsValid;
 		}
 
-		// Token: 0x04002436 RID: 9270
+		
 		private List<IntVec3> rockCells = new List<IntVec3>();
 
-		// Token: 0x04002437 RID: 9271
+		
 		private List<IntVec3> possibleSpawnCells = new List<IntVec3>();
 
-		// Token: 0x04002438 RID: 9272
+		
 		private List<Hive> spawnedHives = new List<Hive>();
 
-		// Token: 0x04002439 RID: 9273
+		
 		private const int MinDistToOpenSpace = 10;
 
-		// Token: 0x0400243A RID: 9274
+		
 		private const int MinDistFromFactionBase = 50;
 
-		// Token: 0x0400243B RID: 9275
+		
 		private const float CaveCellsPerHive = 1000f;
 	}
 }

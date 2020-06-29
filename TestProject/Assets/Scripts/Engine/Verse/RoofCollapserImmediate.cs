@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x020001D0 RID: 464
+	
 	public static class RoofCollapserImmediate
 	{
-		// Token: 0x06000D27 RID: 3367 RVA: 0x0004AFEC File Offset: 0x000491EC
+		
 		public static void DropRoofInCells(IntVec3 c, Map map, List<Thing> outCrushedThings = null)
 		{
 			if (!c.Roofed(map))
@@ -21,7 +21,7 @@ namespace Verse
 			SoundDefOf.Roof_Collapse.PlayOneShot(new TargetInfo(c, map, false));
 		}
 
-		// Token: 0x06000D28 RID: 3368 RVA: 0x0004B020 File Offset: 0x00049220
+		
 		public static void DropRoofInCells(IEnumerable<IntVec3> cells, Map map, List<Thing> outCrushedThings = null)
 		{
 			IntVec3 cell = IntVec3.Invalid;
@@ -46,7 +46,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D29 RID: 3369 RVA: 0x0004B0DC File Offset: 0x000492DC
+		
 		public static void DropRoofInCells(List<IntVec3> cells, Map map, List<Thing> outCrushedThings = null)
 		{
 			if (cells.NullOrEmpty<IntVec3>())
@@ -75,7 +75,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D2A RID: 3370 RVA: 0x0004B17C File Offset: 0x0004937C
+		
 		private static void DropRoofInCellPhaseOne(IntVec3 c, Map map, List<Thing> outCrushedThings)
 		{
 			RoofDef roofDef = map.roofGrid.RoofAt(c);
@@ -157,7 +157,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D2B RID: 3371 RVA: 0x0004B458 File Offset: 0x00049658
+		
 		private static void DropRoofInCellPhaseTwo(IntVec3 c, Map map)
 		{
 			RoofDef roofDef = map.roofGrid.RoofAt(c);
@@ -175,11 +175,11 @@ namespace Verse
 			}
 			CellRect bound = CellRect.CenteredOn(c, 2);
 			IEnumerable<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
-			Func<Pawn, bool> <>9__0;
+			
 			Func<Pawn, bool> predicate;
-			if ((predicate = <>9__0) == null)
+			if ((predicate ) == null)
 			{
-				predicate = (<>9__0 = ((Pawn pawn) => bound.Contains(pawn.Position)));
+				predicate = (9__0 = ((Pawn pawn) => bound.Contains(pawn.Position)));
 			}
 			foreach (Pawn pawn2 in allPawnsSpawned.Where(predicate))
 			{
@@ -190,7 +190,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D2C RID: 3372 RVA: 0x0004B530 File Offset: 0x00049730
+		
 		private static void TryAddToCrushedThingsList(Thing t, List<Thing> outCrushedThings)
 		{
 			if (outCrushedThings == null)
@@ -203,7 +203,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000D2D RID: 3373 RVA: 0x0004B550 File Offset: 0x00049750
+		
 		private static bool WorthMentioningInCrushLetter(Thing t)
 		{
 			if (!t.def.destroyable)
@@ -223,7 +223,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000A33 RID: 2611
+		
 		private static readonly IntRange ThinRoofCrushDamageRange = new IntRange(15, 30);
 	}
 }

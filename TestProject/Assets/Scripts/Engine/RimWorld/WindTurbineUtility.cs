@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A7E RID: 2686
+	
 	public static class WindTurbineUtility
 	{
-		// Token: 0x06003F78 RID: 16248 RVA: 0x00151742 File Offset: 0x0014F942
+		
 		public static IEnumerable<IntVec3> CalculateWindCells(IntVec3 center, Rot4 rot, IntVec2 size)
 		{
 			CellRect rectA = default(CellRect);

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001258 RID: 4696
+	
 	public class Settlement_TraderTracker : IThingHolder, IExposable
 	{
-		// Token: 0x17001260 RID: 4704
+		
 		// (get) Token: 0x06006DC4 RID: 28100 RVA: 0x00127946 File Offset: 0x00125B46
 		protected virtual int RegenerateStockEveryDays
 		{
@@ -18,7 +18,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001261 RID: 4705
+		
 		// (get) Token: 0x06006DC5 RID: 28101 RVA: 0x00265951 File Offset: 0x00263B51
 		public IThingHolder ParentHolder
 		{
@@ -28,7 +28,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001262 RID: 4706
+		
 		// (get) Token: 0x06006DC6 RID: 28102 RVA: 0x00265959 File Offset: 0x00263B59
 		public List<Thing> StockListForReading
 		{
@@ -42,7 +42,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001263 RID: 4707
+		
 		// (get) Token: 0x06006DC7 RID: 28103 RVA: 0x00265974 File Offset: 0x00263B74
 		public TraderKindDef TraderKind
 		{
@@ -58,7 +58,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001264 RID: 4708
+		
 		// (get) Token: 0x06006DC8 RID: 28104 RVA: 0x002659C0 File Offset: 0x00263BC0
 		public int RandomPriceFactorSeed
 		{
@@ -68,7 +68,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001265 RID: 4709
+		
 		// (get) Token: 0x06006DC9 RID: 28105 RVA: 0x002659D7 File Offset: 0x00263BD7
 		public bool EverVisited
 		{
@@ -78,7 +78,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001266 RID: 4710
+		
 		// (get) Token: 0x06006DCA RID: 28106 RVA: 0x002659DF File Offset: 0x00263BDF
 		public bool RestockedSinceLastVisit
 		{
@@ -88,7 +88,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001267 RID: 4711
+		
 		// (get) Token: 0x06006DCB RID: 28107 RVA: 0x002659F4 File Offset: 0x00263BF4
 		public int NextRestockTick
 		{
@@ -102,7 +102,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001268 RID: 4712
+		
 		// (get) Token: 0x06006DCC RID: 28108 RVA: 0x00265A28 File Offset: 0x00263C28
 		public virtual string TraderName
 		{
@@ -116,7 +116,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x17001269 RID: 4713
+		
 		// (get) Token: 0x06006DCD RID: 28109 RVA: 0x00265A82 File Offset: 0x00263C82
 		public virtual bool CanTradeNow
 		{
@@ -126,7 +126,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x1700126A RID: 4714
+		
 		// (get) Token: 0x06006DCE RID: 28110 RVA: 0x00265AB4 File Offset: 0x00263CB4
 		public virtual float TradePriceImprovementOffsetForPlayer
 		{
@@ -136,13 +136,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DCF RID: 28111 RVA: 0x00265ABB File Offset: 0x00263CBB
+		
 		public Settlement_TraderTracker(Settlement settlement)
 		{
 			this.settlement = settlement;
 		}
 
-		// Token: 0x06006DD0 RID: 28112 RVA: 0x00265ADC File Offset: 0x00263CDC
+		
 		public virtual void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -175,7 +175,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DD1 RID: 28113 RVA: 0x00265BE3 File Offset: 0x00263DE3
+		
 		public virtual IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
 		{
 			Caravan caravan = playerNegotiator.GetCaravan();
@@ -198,7 +198,7 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x06006DD2 RID: 28114 RVA: 0x00265BF4 File Offset: 0x00263DF4
+		
 		public virtual void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			if (this.stock == null)
@@ -228,7 +228,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DD3 RID: 28115 RVA: 0x00265C80 File Offset: 0x00263E80
+		
 		public virtual void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			Caravan caravan = playerNegotiator.GetCaravan();
@@ -254,7 +254,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DD4 RID: 28116 RVA: 0x00265D08 File Offset: 0x00263F08
+		
 		public virtual void TraderTrackerTick()
 		{
 			if (this.stock != null)
@@ -284,7 +284,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DD5 RID: 28117 RVA: 0x00265DD8 File Offset: 0x00263FD8
+		
 		public void TryDestroyStock()
 		{
 			if (this.stock != null)
@@ -302,13 +302,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006DD6 RID: 28118 RVA: 0x00265E3D File Offset: 0x0026403D
+		
 		public bool ContainsPawn(Pawn p)
 		{
 			return this.stock != null && this.stock.Contains(p);
 		}
 
-		// Token: 0x06006DD7 RID: 28119 RVA: 0x00265E58 File Offset: 0x00264058
+		
 		protected virtual void RegenerateStock()
 		{
 			this.TryDestroyStock();
@@ -333,34 +333,34 @@ namespace RimWorld.Planet
 			this.lastStockGenerationTicks = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06006DD8 RID: 28120 RVA: 0x00265F3F File Offset: 0x0026413F
+		
 		public ThingOwner GetDirectlyHeldThings()
 		{
 			return this.stock;
 		}
 
-		// Token: 0x06006DD9 RID: 28121 RVA: 0x00265F47 File Offset: 0x00264147
+		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
 			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
 		}
 
-		// Token: 0x040043F4 RID: 17396
+		
 		public Settlement settlement;
 
-		// Token: 0x040043F5 RID: 17397
+		
 		private ThingOwner<Thing> stock;
 
-		// Token: 0x040043F6 RID: 17398
+		
 		private int lastStockGenerationTicks = -1;
 
-		// Token: 0x040043F7 RID: 17399
+		
 		private bool everGeneratedStock;
 
-		// Token: 0x040043F8 RID: 17400
+		
 		private const float DefaultTradePriceImprovement = 0.02f;
 
-		// Token: 0x040043F9 RID: 17401
+		
 		private List<Pawn> tmpSavedPawns = new List<Pawn>();
 	}
 }

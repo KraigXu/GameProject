@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000306 RID: 774
+	
 	public class MoteLeaf : Mote
 	{
-		// Token: 0x1700046D RID: 1133
+		
 		// (get) Token: 0x060015C3 RID: 5571 RVA: 0x0007EB39 File Offset: 0x0007CD39
 		protected override bool EndOfLife
 		{
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700046E RID: 1134
+		
 		// (get) Token: 0x060015C4 RID: 5572 RVA: 0x0007EB6B File Offset: 0x0007CD6B
 		private float FallTime
 		{
@@ -26,7 +26,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700046F RID: 1135
+		
 		// (get) Token: 0x060015C5 RID: 5573 RVA: 0x0007EB80 File Offset: 0x0007CD80
 		public override float Alpha
 		{
@@ -63,7 +63,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060015C6 RID: 5574 RVA: 0x0007EC62 File Offset: 0x0007CE62
+		
 		public void Initialize(Vector3 position, float spawnDelay, bool front, float treeHeight)
 		{
 			this.startSpatialPosition = position;
@@ -73,7 +73,7 @@ namespace Verse
 			this.TimeInterval(0f);
 		}
 
-		// Token: 0x060015C7 RID: 5575 RVA: 0x0007EC8C File Offset: 0x0007CE8C
+		
 		protected override void TimeInterval(float deltaTime)
 		{
 			base.TimeInterval(deltaTime);
@@ -93,28 +93,28 @@ namespace Verse
 			this.exactPosition.y = 0f;
 		}
 
-		// Token: 0x060015C8 RID: 5576 RVA: 0x0007ED38 File Offset: 0x0007CF38
+		
 		public override void Draw()
 		{
 			base.Draw(this.front ? (this.def.altitudeLayer.AltitudeFor() + 0.1f * GenMath.InverseLerp(0f, this.treeHeight, this.currentSpatialPosition.y) * 2f) : this.def.altitudeLayer.AltitudeFor());
 		}
 
-		// Token: 0x04000E39 RID: 3641
+		
 		private Vector3 startSpatialPosition;
 
-		// Token: 0x04000E3A RID: 3642
+		
 		private Vector3 currentSpatialPosition;
 
-		// Token: 0x04000E3B RID: 3643
+		
 		private float spawnDelay;
 
-		// Token: 0x04000E3C RID: 3644
+		
 		private bool front;
 
-		// Token: 0x04000E3D RID: 3645
+		
 		private float treeHeight;
 
-		// Token: 0x04000E3E RID: 3646
+		
 		[TweakValue("Graphics", 0f, 5f)]
 		private static float FallSpeed = 0.5f;
 	}

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000813 RID: 2067
+	
 	public class ThoughtWorker_HardWorkerVsLazy : ThoughtWorker
 	{
-		// Token: 0x06003433 RID: 13363 RVA: 0x0011F07C File Offset: 0x0011D27C
+		
 		protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn other)
 		{
 			if (!p.RaceProps.Humanlike)

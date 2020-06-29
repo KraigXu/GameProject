@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace Verse
 {
-	// Token: 0x02000250 RID: 592
+	
 	public class HediffComp_Disorientation : HediffComp
 	{
-		// Token: 0x1700033C RID: 828
+		
 		// (get) Token: 0x06001058 RID: 4184 RVA: 0x0005DAEB File Offset: 0x0005BCEB
 		private HediffCompProperties_Disorientation Props
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001059 RID: 4185 RVA: 0x0005DAF8 File Offset: 0x0005BCF8
+		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			if (this.Props.wanderMtbHours > 0f && base.Pawn.Spawned && !base.Pawn.Downed && base.Pawn.Awake() && base.Pawn.CurJobDef.suspendable && this.Props.wanderMtbHours > 0f && base.Pawn.IsHashIntervalTick(60) && Rand.MTBEventOccurs(this.Props.wanderMtbHours, 2500f, 60f) && base.Pawn.CurJob.def != JobDefOf.GotoMindControlled)
@@ -36,7 +36,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000BF3 RID: 3059
+		
 		private const string moteTexPath = "Things/Mote/Disoriented";
 	}
 }

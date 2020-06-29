@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D8A RID: 3466
+	
 	public abstract class CompTargetable : CompUseEffect
 	{
-		// Token: 0x17000EFD RID: 3837
+		
 		// (get) Token: 0x06005474 RID: 21620 RVA: 0x001C317E File Offset: 0x001C137E
 		public CompProperties_Targetable Props
 		{
@@ -18,18 +18,18 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EFE RID: 3838
+		
 		// (get) Token: 0x06005475 RID: 21621
 		protected abstract bool PlayerChoosesTarget { get; }
 
-		// Token: 0x06005476 RID: 21622 RVA: 0x001C318B File Offset: 0x001C138B
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
 			Scribe_References.Look<Thing>(ref this.target, "target", false);
 		}
 
-		// Token: 0x06005477 RID: 21623 RVA: 0x001C31A4 File Offset: 0x001C13A4
+		
 		public override bool SelectedUseOption(Pawn p)
 		{
 			if (this.PlayerChoosesTarget)
@@ -45,7 +45,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005478 RID: 21624 RVA: 0x001C31FC File Offset: 0x001C13FC
+		
 		public override void DoEffect(Pawn usedBy)
 		{
 			if (this.PlayerChoosesTarget && this.target == null)
@@ -75,13 +75,13 @@ namespace RimWorld
 			this.target = null;
 		}
 
-		// Token: 0x06005479 RID: 21625
+		
 		protected abstract TargetingParameters GetTargetingParameters();
 
-		// Token: 0x0600547A RID: 21626
+		
 		public abstract IEnumerable<Thing> GetTargets(Thing targetChosenByPlayer = null);
 
-		// Token: 0x0600547B RID: 21627 RVA: 0x001C3334 File Offset: 0x001C1534
+		
 		public bool BaseTargetValidator(Thing t)
 		{
 			Pawn pawn = t as Pawn;
@@ -119,7 +119,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04002E7B RID: 11899
+		
 		private Thing target;
 	}
 }

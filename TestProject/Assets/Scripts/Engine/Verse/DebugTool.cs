@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200034E RID: 846
+	
 	public class DebugTool
 	{
-		// Token: 0x060019E7 RID: 6631 RVA: 0x0009EEEA File Offset: 0x0009D0EA
+		
 		public DebugTool(string label, Action clickAction, Action onGUIAction = null)
 		{
 			this.label = label;
@@ -14,7 +14,7 @@ namespace Verse
 			this.onGUIAction = onGUIAction;
 		}
 
-		// Token: 0x060019E8 RID: 6632 RVA: 0x0009EF08 File Offset: 0x0009D108
+		
 		public DebugTool(string label, Action clickAction, IntVec3 firstRectCorner)
 		{
 			this.label = label;
@@ -50,7 +50,7 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x060019E9 RID: 6633 RVA: 0x0009EF48 File Offset: 0x0009D148
+		
 		public void DebugToolOnGUI()
 		{
 			if (Event.current.type == EventType.MouseDown)
@@ -75,13 +75,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000F0F RID: 3855
+		
 		private string label;
 
-		// Token: 0x04000F10 RID: 3856
+		
 		private Action clickAction;
 
-		// Token: 0x04000F11 RID: 3857
+		
 		private Action onGUIAction;
 	}
 }

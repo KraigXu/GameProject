@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000C8D RID: 3213
+	
 	public class Dialog_RewardPrefsConfig : Window
 	{
-		// Token: 0x17000DB6 RID: 3510
+		
 		// (get) Token: 0x06004D62 RID: 19810 RVA: 0x0019F8BB File Offset: 0x0019DABB
 		public override Vector2 InitialSize
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D63 RID: 19811 RVA: 0x0019F8CC File Offset: 0x0019DACC
+		
 		public Dialog_RewardPrefsConfig()
 		{
 			this.forcePause = true;
@@ -28,7 +28,7 @@ namespace RimWorld
 			this.closeOnClickedOutside = true;
 		}
 
-		// Token: 0x06004D64 RID: 19812 RVA: 0x0019F8F8 File Offset: 0x0019DAF8
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Medium;
@@ -94,7 +94,7 @@ namespace RimWorld
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06004D65 RID: 19813 RVA: 0x0019FC78 File Offset: 0x0019DE78
+		
 		private void DoFactionInfo(Rect rect, Faction faction, ref float curX, ref float curY, ref int index)
 		{
 			if (index % 2 == 1)
@@ -124,28 +124,28 @@ namespace RimWorld
 			index++;
 		}
 
-		// Token: 0x04002B49 RID: 11081
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04002B4A RID: 11082
+		
 		private float viewRectHeight;
 
-		// Token: 0x04002B4B RID: 11083
+		
 		private const float TitleHeight = 40f;
 
-		// Token: 0x04002B4C RID: 11084
+		
 		private const float RowHeight = 45f;
 
-		// Token: 0x04002B4D RID: 11085
+		
 		private const float IconSize = 35f;
 
-		// Token: 0x04002B4E RID: 11086
+		
 		private const float GoodwillWidth = 100f;
 
-		// Token: 0x04002B4F RID: 11087
+		
 		private const float CheckboxOffset = 150f;
 
-		// Token: 0x04002B50 RID: 11088
+		
 		private const float FactionNameWidth = 250f;
 	}
 }

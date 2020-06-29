@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A62 RID: 2658
+	
 	public static class RoomOutlinesGenerator
 	{
-		// Token: 0x06003EC8 RID: 16072 RVA: 0x0014DC60 File Offset: 0x0014BE60
+		
 		public static List<RoomOutline> GenerateRoomOutlines(CellRect initialRect, Map map, int divisionsCount, int finalRoomsCount, int maxRoomCells, int minTotalRoomsNonWallCellsCount)
 		{
 			int num = 0;
@@ -35,12 +35,12 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x06003EC9 RID: 16073 RVA: 0x0014DCB0 File Offset: 0x0014BEB0
+		
 		public static List<RoomOutline> GenerateRoomOutlines(CellRect initialRect, Map map, int divisionsCount, int finalRoomsCount, int maxRoomCells)
 		{
 			List<RoomOutline> list = new List<RoomOutline>();
 			list.Add(new RoomOutline(initialRect));
-			Func<RoomOutline, bool> <>9__3;
+			
 			for (int i = 0; i < divisionsCount; i++)
 			{
 				RoomOutline roomOutline;
@@ -53,9 +53,9 @@ namespace RimWorld
 					{
 						IEnumerable<RoomOutline> source = list;
 						Func<RoomOutline, bool> predicate;
-						if ((predicate = <>9__3) == null)
+						if ((predicate ) == null)
 						{
-							predicate = (<>9__3 = ((RoomOutline x) => x.CellsCountIgnoringWalls > maxRoomCells));
+							predicate = (9__3 = ((RoomOutline x) => x.CellsCountIgnoringWalls > maxRoomCells));
 						}
 						RoomOutline roomOutline2 = source.Where(predicate).RandomElement<RoomOutline>();
 						bool horizontalWall = roomOutline2.rect.Height > roomOutline2.rect.Width;
@@ -76,7 +76,7 @@ namespace RimWorld
 			goto IL_11F;
 		}
 
-		// Token: 0x06003ECA RID: 16074 RVA: 0x0014DE0C File Offset: 0x0014C00C
+		
 		private static void Split(RoomOutline room, List<RoomOutline> allRooms, bool horizontalWall)
 		{
 			allRooms.Remove(room);
@@ -92,10 +92,10 @@ namespace RimWorld
 			allRooms.Add(new RoomOutline(new CellRect(x, room.rect.minZ, room.rect.maxX - x + 1, room.rect.Height)));
 		}
 
-		// Token: 0x04002494 RID: 9364
+		
 		private const int MinFreeRoomCellsToDivide = 32;
 
-		// Token: 0x04002495 RID: 9365
+		
 		private const int MinAllowedRoomWidthAndHeight = 2;
 	}
 }

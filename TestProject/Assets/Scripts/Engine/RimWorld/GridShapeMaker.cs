@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A57 RID: 2647
+	
 	public static class GridShapeMaker
 	{
-		// Token: 0x06003E99 RID: 16025 RVA: 0x0014BF34 File Offset: 0x0014A134
+		
 		public static IEnumerable<IntVec3> IrregularLump(IntVec3 center, Map map, int numCells)
 		{
 			List<IntVec3> lumpCells = new List<IntVec3>();

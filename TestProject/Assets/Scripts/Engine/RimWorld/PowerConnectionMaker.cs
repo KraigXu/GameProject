@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A82 RID: 2690
+	
 	public static class PowerConnectionMaker
 	{
-		// Token: 0x06003F94 RID: 16276 RVA: 0x00151D54 File Offset: 0x0014FF54
+		
 		public static void ConnectAllConnectorsToTransmitter(CompPower newTransmitter)
 		{
 			foreach (CompPower compPower in PowerConnectionMaker.PotentialConnectorsForTransmitter(newTransmitter))
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F95 RID: 16277 RVA: 0x00151DAC File Offset: 0x0014FFAC
+		
 		public static void DisconnectAllFromTransmitterAndSetWantConnect(CompPower deadPc, Map map)
 		{
 			if (deadPc.connectChildren == null)
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F96 RID: 16278 RVA: 0x00151E0C File Offset: 0x0015000C
+		
 		public static void TryConnectToAnyPowerNet(CompPower pc, List<PowerNet> disallowedNets = null)
 		{
 			if (pc.connectParent != null)
@@ -59,7 +59,7 @@ namespace RimWorld
 			pc.connectParent = null;
 		}
 
-		// Token: 0x06003F97 RID: 16279 RVA: 0x00151E60 File Offset: 0x00150060
+		
 		public static void DisconnectFromPowerNet(CompPower pc)
 		{
 			if (pc.connectParent == null)
@@ -81,7 +81,7 @@ namespace RimWorld
 			pc.connectParent = null;
 		}
 
-		// Token: 0x06003F98 RID: 16280 RVA: 0x00151ECE File Offset: 0x001500CE
+		
 		private static IEnumerable<CompPower> PotentialConnectorsForTransmitter(CompPower b)
 		{
 			if (!b.parent.Spawned)
@@ -113,7 +113,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003F99 RID: 16281 RVA: 0x00151EE0 File Offset: 0x001500E0
+		
 		public static CompPower BestTransmitterForConnector(IntVec3 connectorPos, Map map, List<PowerNet> disallowedNets = null)
 		{
 			CellRect cellRect = CellRect.SingleCell(connectorPos).ExpandedBy(6).ClipInsideMap(map);
@@ -143,7 +143,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x040024FC RID: 9468
+		
 		private const int ConnectMaxDist = 6;
 	}
 }

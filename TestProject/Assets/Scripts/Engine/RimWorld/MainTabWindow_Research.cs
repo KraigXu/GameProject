@@ -8,11 +8,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EC9 RID: 3785
+	
 	[StaticConstructorOnStartup]
 	public class MainTabWindow_Research : MainTabWindow
 	{
-		// Token: 0x170010C2 RID: 4290
+		
 		// (get) Token: 0x06005CB3 RID: 23731 RVA: 0x00201C64 File Offset: 0x001FFE64
 		// (set) Token: 0x06005CB4 RID: 23732 RVA: 0x00201C6C File Offset: 0x001FFE6C
 		private ResearchTabDef CurTab
@@ -35,7 +35,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170010C3 RID: 4291
+		
 		// (get) Token: 0x06005CB5 RID: 23733 RVA: 0x00201CBC File Offset: 0x001FFEBC
 		private bool ColonistsHaveResearchBench
 		{
@@ -55,7 +55,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170010C4 RID: 4292
+		
 		// (get) Token: 0x06005CB6 RID: 23734 RVA: 0x00201CFC File Offset: 0x001FFEFC
 		public override Vector2 InitialSize
 		{
@@ -70,7 +70,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CB7 RID: 23735 RVA: 0x00201D7C File Offset: 0x001FFF7C
+		
 		private Vector2 ViewSize(ResearchTabDef tab)
 		{
 			List<ResearchProjectDef> allDefsListForReading = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
@@ -91,7 +91,7 @@ namespace RimWorld
 			return new Vector2(num + 20f, num2 + 20f);
 		}
 
-		// Token: 0x06005CB8 RID: 23736 RVA: 0x00201E40 File Offset: 0x00200040
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -107,7 +107,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CB9 RID: 23737 RVA: 0x00201E90 File Offset: 0x00200090
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			base.DoWindowContents(inRect);
@@ -121,7 +121,7 @@ namespace RimWorld
 			this.DrawRightRect(rightOutRect);
 		}
 
-		// Token: 0x06005CBA RID: 23738 RVA: 0x00201F38 File Offset: 0x00200138
+		
 		private void DrawLeftRect(Rect leftOutRect)
 		{
 			Rect position = leftOutRect;
@@ -235,43 +235,43 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005CBB RID: 23739 RVA: 0x002025C4 File Offset: 0x002007C4
+		
 		private float CoordToPixelsX(float x)
 		{
 			return x * 190f;
 		}
 
-		// Token: 0x06005CBC RID: 23740 RVA: 0x002025CD File Offset: 0x002007CD
+		
 		private float CoordToPixelsY(float y)
 		{
 			return y * 100f;
 		}
 
-		// Token: 0x06005CBD RID: 23741 RVA: 0x002025D6 File Offset: 0x002007D6
+		
 		private float PixelsToCoordX(float x)
 		{
 			return x / 190f;
 		}
 
-		// Token: 0x06005CBE RID: 23742 RVA: 0x002025DF File Offset: 0x002007DF
+		
 		private float PixelsToCoordY(float y)
 		{
 			return y / 100f;
 		}
 
-		// Token: 0x06005CBF RID: 23743 RVA: 0x002025E8 File Offset: 0x002007E8
+		
 		private float PosX(ResearchProjectDef d)
 		{
 			return this.CoordToPixelsX(d.ResearchViewX);
 		}
 
-		// Token: 0x06005CC0 RID: 23744 RVA: 0x002025F6 File Offset: 0x002007F6
+		
 		private float PosY(ResearchProjectDef d)
 		{
 			return this.CoordToPixelsY(d.ResearchViewY);
 		}
 
-		// Token: 0x06005CC1 RID: 23745 RVA: 0x00202604 File Offset: 0x00200804
+		
 		public override void PostOpen()
 		{
 			base.PostOpen();
@@ -286,7 +286,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CC2 RID: 23746 RVA: 0x002026A8 File Offset: 0x002008A8
+		
 		private void DrawRightRect(Rect rightOutRect)
 		{
 			rightOutRect.yMin += 32f;
@@ -516,7 +516,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005CC3 RID: 23747 RVA: 0x00202F34 File Offset: 0x00201134
+		
 		private float DrawResearchPrereqs(ResearchProjectDef project, Rect rect)
 		{
 			if (project.prerequisites.NullOrEmpty<ResearchProjectDef>())
@@ -548,7 +548,7 @@ namespace RimWorld
 			return rect.yMin - yMin;
 		}
 
-		// Token: 0x06005CC4 RID: 23748 RVA: 0x00203095 File Offset: 0x00201295
+		
 		private string GetLabelWithNewlineCached(string label)
 		{
 			if (!MainTabWindow_Research.labelsWithNewlineCached.ContainsKey(label))
@@ -558,7 +558,7 @@ namespace RimWorld
 			return MainTabWindow_Research.labelsWithNewlineCached[label];
 		}
 
-		// Token: 0x06005CC5 RID: 23749 RVA: 0x002030C8 File Offset: 0x002012C8
+		
 		private string GetTechprintsInfoCached(int applied, int total)
 		{
 			Pair<int, int> key = new Pair<int, int>(applied, total);
@@ -620,7 +620,7 @@ namespace RimWorld
 			return rect.yMin - yMin;
 		}
 
-		// Token: 0x06005CC7 RID: 23751 RVA: 0x00203350 File Offset: 0x00201550
+		
 		private float DrawUnlockableHyperlinks(Rect rect, ResearchProjectDef project)
 		{
 			List<Dialog_InfoCard.Hyperlink> infoCardHyperlinks = project.InfoCardHyperlinks;
@@ -640,7 +640,7 @@ namespace RimWorld
 			return rect.yMin - yMin;
 		}
 
-		// Token: 0x06005CC8 RID: 23752 RVA: 0x00203428 File Offset: 0x00201628
+		
 		private float DrawTechprintInfo(Rect rect, ResearchProjectDef project)
 		{
 			if (this.selectedProject.techprintCount == 0)
@@ -673,13 +673,13 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06005CC9 RID: 23753 RVA: 0x002035A0 File Offset: 0x002017A0
+		
 		private string GetLabel(ResearchProjectDef r)
 		{
 			return r.LabelCap;
 		}
 
-		// Token: 0x06005CCA RID: 23754 RVA: 0x002035AD File Offset: 0x002017AD
+		
 		private void SetPrerequisiteStatusColor(bool present, ResearchProjectDef project)
 		{
 			if (project.IsFinished)
@@ -694,7 +694,7 @@ namespace RimWorld
 			GUI.color = MainTabWindow_Research.MissingPrerequisiteColor;
 		}
 
-		// Token: 0x06005CCB RID: 23755 RVA: 0x002035D0 File Offset: 0x002017D0
+		
 		private void DrawResearchBenchFacilityRequirement(ThingDef requiredFacility, CompAffectedByFacilities bestMatchingBench, ResearchProjectDef project, ref Rect rect)
 		{
 			Thing thing = null;
@@ -713,7 +713,7 @@ namespace RimWorld
 			Widgets.LabelCacheHeight(ref rect, text, true, false);
 		}
 
-		// Token: 0x06005CCC RID: 23756 RVA: 0x00203690 File Offset: 0x00201890
+		
 		private Building_ResearchBench FindBenchFulfillingMostRequirements(ThingDef requiredResearchBench, List<ThingDef> requiredFacilities)
 		{
 			MainTabWindow_Research.tmpAllBuildings.Clear();
@@ -741,7 +741,7 @@ namespace RimWorld
 			return building_ResearchBench;
 		}
 
-		// Token: 0x06005CCD RID: 23757 RVA: 0x00203744 File Offset: 0x00201944
+		
 		private float GetResearchBenchRequirementsScore(Building_ResearchBench bench, List<ThingDef> requiredFacilities)
 		{
 
@@ -768,106 +768,106 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x0400328D RID: 12941
+		
 		protected ResearchProjectDef selectedProject;
 
-		// Token: 0x0400328E RID: 12942
+		
 		private bool requiredByThisFound;
 
-		// Token: 0x0400328F RID: 12943
+		
 		private Vector2 leftScrollPosition = Vector2.zero;
 
-		// Token: 0x04003290 RID: 12944
+		
 		private float leftScrollViewHeight;
 
-		// Token: 0x04003291 RID: 12945
+		
 		private Vector2 rightScrollPosition;
 
-		// Token: 0x04003292 RID: 12946
+		
 		private float rightViewWidth;
 
-		// Token: 0x04003293 RID: 12947
+		
 		private float rightViewHeight;
 
-		// Token: 0x04003294 RID: 12948
+		
 		private ResearchTabDef curTabInt;
 
-		// Token: 0x04003295 RID: 12949
+		
 		private bool editMode;
 
-		// Token: 0x04003296 RID: 12950
+		
 		private List<ResearchProjectDef> draggingTabs = new List<ResearchProjectDef>();
 
-		// Token: 0x04003297 RID: 12951
+		
 		private List<TabRecord> tabs = new List<TabRecord>();
 
-		// Token: 0x04003298 RID: 12952
+		
 		private const float leftAreaWidthPercent = 0.22f;
 
-		// Token: 0x04003299 RID: 12953
+		
 		private const float LeftAreaWidthMin = 200f;
 
-		// Token: 0x0400329A RID: 12954
+		
 		private const int ModeSelectButHeight = 40;
 
-		// Token: 0x0400329B RID: 12955
+		
 		private const float ProjectTitleHeight = 50f;
 
-		// Token: 0x0400329C RID: 12956
+		
 		private const float ProjectTitleLeftMargin = 0f;
 
-		// Token: 0x0400329D RID: 12957
+		
 		private const int ResearchItemW = 140;
 
-		// Token: 0x0400329E RID: 12958
+		
 		private const int ResearchItemH = 50;
 
-		// Token: 0x0400329F RID: 12959
+		
 		private const int ResearchItemPaddingW = 50;
 
-		// Token: 0x040032A0 RID: 12960
+		
 		private const int ResearchItemPaddingH = 50;
 
-		// Token: 0x040032A1 RID: 12961
+		
 		private const int ColumnMaxProjects = 6;
 
-		// Token: 0x040032A2 RID: 12962
+		
 		private const float LineOffsetFactor = 0.48f;
 
-		// Token: 0x040032A3 RID: 12963
+		
 		private const float IndentSpacing = 6f;
 
-		// Token: 0x040032A4 RID: 12964
+		
 		private const float RowHeight = 24f;
 
-		// Token: 0x040032A5 RID: 12965
+		
 		private const KeyCode SelectMultipleKey = KeyCode.LeftShift;
 
-		// Token: 0x040032A6 RID: 12966
+		
 		private const KeyCode DeselectKey = KeyCode.LeftControl;
 
-		// Token: 0x040032A7 RID: 12967
+		
 		private static readonly Texture2D ResearchBarFillTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.8f, 0.85f));
 
-		// Token: 0x040032A8 RID: 12968
+		
 		private static readonly Texture2D ResearchBarBGTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.1f, 0.1f, 0.1f));
 
-		// Token: 0x040032A9 RID: 12969
+		
 		private static readonly Color FulfilledPrerequisiteColor = Color.green;
 
-		// Token: 0x040032AA RID: 12970
+		
 		private static readonly Color MissingPrerequisiteColor = ColoredText.RedReadable;
 
-		// Token: 0x040032AB RID: 12971
+		
 		private static readonly Color ProjectWithMissingPrerequisiteLabelColor = Color.gray;
 
-		// Token: 0x040032AC RID: 12972
+		
 		private static Dictionary<string, string> labelsWithNewlineCached = new Dictionary<string, string>();
 
-		// Token: 0x040032AD RID: 12973
+		
 		private static Dictionary<Pair<int, int>, string> techprintsInfoCached = new Dictionary<Pair<int, int>, string>();
 
-		// Token: 0x040032AE RID: 12974
+		
 		private static List<Building> tmpAllBuildings = new List<Building>();
 	}
 }

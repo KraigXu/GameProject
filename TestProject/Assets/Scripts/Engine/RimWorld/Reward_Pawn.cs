@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000FD8 RID: 4056
+	
 	public class Reward_Pawn : Reward
 	{
-		// Token: 0x17001131 RID: 4401
+		
 		// (get) Token: 0x0600616D RID: 24941 RVA: 0x0021D1F3 File Offset: 0x0021B3F3
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600616E RID: 24942 RVA: 0x0021D203 File Offset: 0x0021B403
+		
 		public override void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
 			this.pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.SpaceRefugee, null);
@@ -38,7 +38,7 @@ namespace RimWorld
 			valueActuallyUsed = rewardValue;
 		}
 
-		// Token: 0x0600616F RID: 24943 RVA: 0x0021D22A File Offset: 0x0021B42A
+		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
 			Slate slate = QuestGen.slate;
@@ -82,7 +82,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006170 RID: 24944 RVA: 0x0021D260 File Offset: 0x0021B460
+		
 		public override string GetDescription(RewardsGeneratorParams parms)
 		{
 			if (parms.giveToCaravan)
@@ -101,7 +101,7 @@ namespace RimWorld
 			return "Reward_Pawn_DropPod".Translate(this.pawn);
 		}
 
-		// Token: 0x06006171 RID: 24945 RVA: 0x0021D2F0 File Offset: 0x0021B4F0
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -117,7 +117,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06006172 RID: 24946 RVA: 0x0021D366 File Offset: 0x0021B566
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -126,24 +126,24 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.detailsHidden, "detailsHidden", false, false);
 		}
 
-		// Token: 0x04003B43 RID: 15171
+		
 		public Pawn pawn;
 
-		// Token: 0x04003B44 RID: 15172
+		
 		public Reward_Pawn.ArrivalMode arrivalMode;
 
-		// Token: 0x04003B45 RID: 15173
+		
 		public bool detailsHidden;
 
-		// Token: 0x04003B46 RID: 15174
+		
 		private const string RootSymbol = "root";
 
-		// Token: 0x02001E7B RID: 7803
+		
 		public enum ArrivalMode
 		{
-			// Token: 0x040072A7 RID: 29351
+			
 			WalkIn,
-			// Token: 0x040072A8 RID: 29352
+			
 			DropPod
 		}
 	}

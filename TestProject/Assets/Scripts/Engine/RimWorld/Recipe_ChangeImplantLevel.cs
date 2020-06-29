@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AF4 RID: 2804
+	
 	public class Recipe_ChangeImplantLevel : Recipe_Surgery
 	{
-		// Token: 0x06004240 RID: 16960 RVA: 0x00161D64 File Offset: 0x0015FF64
+		
 		private bool Operable(Hediff target, RecipeDef recipe)
 		{
 			int hediffLevelOffset = recipe.hediffLevelOffset;
@@ -33,13 +33,13 @@ namespace RimWorld
 			return (float)level < hediff_ImplantWithLevel.def.maxSeverity;
 		}
 
-		// Token: 0x06004241 RID: 16961 RVA: 0x00161DB8 File Offset: 0x0015FFB8
+		
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
 			return MedicalRecipesUtility.GetFixedPartsToApplyOn(recipe, pawn, (BodyPartRecord record) => pawn.health.hediffSet.hediffs.Any((Hediff x) => x.Part == record && this.Operable(x, recipe)));
 		}
 
-		// Token: 0x06004242 RID: 16962 RVA: 0x00161E00 File Offset: 0x00160000
+		
 		public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			if (billDoer != null)

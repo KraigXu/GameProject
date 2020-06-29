@@ -8,10 +8,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000A50 RID: 2640
+	
 	public class GenStep_Roads : GenStep
 	{
-		// Token: 0x17000B15 RID: 2837
+		
 		// (get) Token: 0x06003E75 RID: 15989 RVA: 0x0014A07A File Offset: 0x0014827A
 		public override int SeedPart
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E76 RID: 15990 RVA: 0x0014A084 File Offset: 0x00148284
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			List<GenStep_Roads.NeededRoad> neededRoads = this.CalculateNeededRoads(map);
@@ -78,7 +78,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E77 RID: 15991 RVA: 0x0014A35C File Offset: 0x0014855C
+		
 		private List<GenStep_Roads.NeededRoad> CalculateNeededRoads(Map map)
 		{
 			List<int> list = new List<int>();
@@ -118,18 +118,18 @@ namespace RimWorld
 			return list2;
 		}
 
-		// Token: 0x06003E78 RID: 15992 RVA: 0x0014A50C File Offset: 0x0014870C
+		
 		private IntVec3 FindRoadExitCell(Map map, float angle, IntVec3 crossroads, ref RoadPathingDef pathingDef)
 		{
-			//GenStep_Roads.<>c__DisplayClass8_0 <>c__DisplayClass8_ = new GenStep_Roads.<>c__DisplayClass8_0();
-			//<>c__DisplayClass8_.map = map;
-			//<>c__DisplayClass8_.angle = angle;
-			//<>c__DisplayClass8_.crossroads = crossroads;
-			//<>c__DisplayClass8_.tileValidator = delegate(IntVec3 pos)
+			//GenStep_Roads.c__DisplayClass8_0 c__DisplayClass8_ = new GenStep_Roads.c__DisplayClass8_0();
+			//c__DisplayClass8_.map = map;
+			//c__DisplayClass8_.angle = angle;
+			//c__DisplayClass8_.crossroads = crossroads;
+			//c__DisplayClass8_.tileValidator = delegate(IntVec3 pos)
 			//{
 			//	foreach (IntVec3 c in GenRadial.RadialCellsAround(pos, 8f, true))
 			//	{
-			//		if (c.InBounds(<>c__DisplayClass8_.map) && c.GetTerrain(<>c__DisplayClass8_.map).IsWater)
+			//		if (c.InBounds(c__DisplayClass8_.map) && c.GetTerrain(c__DisplayClass8_.map).IsWater)
 			//		{
 			//			return false;
 			//		}
@@ -139,9 +139,9 @@ namespace RimWorld
 			//float validAngleSpan2;
 			//for (validAngleSpan2 = 10f; validAngleSpan2 < 90f; validAngleSpan2 += 10f)
 			//{
-			//	Predicate<IntVec3> angleValidator = (IntVec3 pos) => GenGeo.AngleDifferenceBetween((pos - <>c__DisplayClass8_.map.Center).AngleFlat, <>c__DisplayClass8_.angle) < validAngleSpan2;
+			//	Predicate<IntVec3> angleValidator = (IntVec3 pos) => GenGeo.AngleDifferenceBetween((pos - c__DisplayClass8_.map.Center).AngleFlat, c__DisplayClass8_.angle) < validAngleSpan2;
 			//	IntVec3 result;
-			//	if (CellFinder.TryFindRandomEdgeCellWith((IntVec3 x) => angleValidator(x) && <>c__DisplayClass8_.tileValidator(x) && <>c__DisplayClass8_.map.reachability.CanReach(<>c__DisplayClass8_.crossroads, x, PathEndMode.OnCell, TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false)), <>c__DisplayClass8_.map, 0f, out result))
+			//	if (CellFinder.TryFindRandomEdgeCellWith((IntVec3 x) => angleValidator(x) && c__DisplayClass8_.tileValidator(x) && c__DisplayClass8_.map.reachability.CanReach(c__DisplayClass8_.crossroads, x, PathEndMode.OnCell, TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false)), c__DisplayClass8_.map, 0f, out result))
 			//	{
 			//		return result;
 			//	}
@@ -153,26 +153,26 @@ namespace RimWorld
 			//float validAngleSpan;
 			//for (validAngleSpan = 10f; validAngleSpan < 90f; validAngleSpan += 10f)
 			//{
-			//	Predicate<IntVec3> angleValidator = (IntVec3 pos) => GenGeo.AngleDifferenceBetween((pos - <>c__DisplayClass8_.map.Center).AngleFlat, <>c__DisplayClass8_.angle) < validAngleSpan;
+			//	Predicate<IntVec3> angleValidator = (IntVec3 pos) => GenGeo.AngleDifferenceBetween((pos - c__DisplayClass8_.map.Center).AngleFlat, c__DisplayClass8_.angle) < validAngleSpan;
 			//	IntVec3 result;
-			//	if (CellFinder.TryFindRandomEdgeCellWith((IntVec3 x) => angleValidator(x) && <>c__DisplayClass8_.tileValidator(x) && <>c__DisplayClass8_.map.reachability.CanReach(<>c__DisplayClass8_.crossroads, x, PathEndMode.OnCell, TraverseParms.For(TraverseMode.PassAllDestroyableThings, Danger.Deadly, false)), <>c__DisplayClass8_.map, 0f, out result))
+			//	if (CellFinder.TryFindRandomEdgeCellWith((IntVec3 x) => angleValidator(x) && c__DisplayClass8_.tileValidator(x) && c__DisplayClass8_.map.reachability.CanReach(c__DisplayClass8_.crossroads, x, PathEndMode.OnCell, TraverseParms.For(TraverseMode.PassAllDestroyableThings, Danger.Deadly, false)), c__DisplayClass8_.map, 0f, out result))
 			//	{
 			//		return result;
 			//	}
 			//}
-			//Log.Error(string.Format("Can't find exit from map from {0} to angle {1}", <>c__DisplayClass8_.crossroads, <>c__DisplayClass8_.angle), false);
+			//Log.Error(string.Format("Can't find exit from map from {0} to angle {1}", c__DisplayClass8_.crossroads, c__DisplayClass8_.angle), false);
 
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x06003E79 RID: 15993 RVA: 0x0014A6A4 File Offset: 0x001488A4
+		
 		private Action PrepDrawRoad(Map map, TerrainDef rockDef, IntVec3 start, IntVec3 end, RoadDef roadDef, RoadPathingDef pathingDef)
 		{
 			IntVec3 intVec;
 			return this.PrepDrawRoad(map, rockDef, start, end, roadDef, pathingDef, out intVec);
 		}
 
-		// Token: 0x06003E7A RID: 15994 RVA: 0x0014A6C4 File Offset: 0x001488C4
+		
 		private Action PrepDrawRoad(Map map, TerrainDef rockDef, IntVec3 start, IntVec3 end, RoadDef roadDef, RoadPathingDef pathingDef, out IntVec3 centerpoint)
 		{
 			centerpoint = IntVec3.Invalid;
@@ -218,7 +218,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06003E7B RID: 15995 RVA: 0x0014A8E8 File Offset: 0x00148AE8
+		
 		private void DrawCurveSegment(GenStep_Roads.DistanceElement[,] distance, List<IntVec3> path, int pathStartIndex, int pathEndIndex, RoadPathingDef pathing, Map map, int centerpointIndex, ref IntVec3 centerpoint)
 		{
 			if (pathStartIndex == pathEndIndex)
@@ -285,7 +285,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E7C RID: 15996 RVA: 0x0014AB3C File Offset: 0x00148D3C
+		
 		private GenMath.BezierCubicControls GenerateBezierControls(List<IntVec3> path, int pathStartIndex, int pathEndIndex)
 		{
 			int index = Mathf.Max(0, pathStartIndex - (pathEndIndex - pathStartIndex));
@@ -299,7 +299,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06003E7D RID: 15997 RVA: 0x0014AC30 File Offset: 0x00148E30
+		
 		private void ApplyDistanceField(GenStep_Roads.DistanceElement[,] distance, Map map, TerrainDef rockDef, RoadDef roadDef, RoadPathingDef pathingDef)
 		{
 			for (int i = 0; i < map.Size.x; i++)
@@ -329,7 +329,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E7E RID: 15998 RVA: 0x0014AD54 File Offset: 0x00148F54
+		
 		private void FillDistanceField(GenStep_Roads.DistanceElement[,] field, float cx, float cz, float alongPath, float radius, Map map)
 		{
 			int num = Mathf.Clamp(Mathf.FloorToInt(cx - radius), 0, field.GetLength(0) - 1);
@@ -356,7 +356,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E7F RID: 15999 RVA: 0x0014AEB4 File Offset: 0x001490B4
+		
 		private List<IntVec3> RefinePath(List<IntVec3> input, Map map)
 		{
 			List<IntVec3> list = this.RefineEndcap(input, map);
@@ -364,7 +364,7 @@ namespace RimWorld
 			return this.RefineEndcap(list, map);
 		}
 
-		// Token: 0x06003E80 RID: 16000 RVA: 0x0014AED8 File Offset: 0x001490D8
+		
 		private List<IntVec3> RefineEndcap(List<IntVec3> input, Map map)
 		{
 			float[] array = new float[this.endcapSamples.Length];
@@ -455,13 +455,13 @@ namespace RimWorld
 			return input;
 		}
 
-		// Token: 0x04002464 RID: 9316
+		
 		private const float CurveControlPointDistance = 4f;
 
-		// Token: 0x04002465 RID: 9317
+		
 		private const int CurveSampleMultiplier = 4;
 
-		// Token: 0x04002466 RID: 9318
+		
 		private readonly float[] endcapSamples = new float[]
 		{
 			0.75f,
@@ -471,39 +471,39 @@ namespace RimWorld
 			0.95f
 		};
 
-		// Token: 0x02001A41 RID: 6721
+		
 		private struct NeededRoad
 		{
-			// Token: 0x040063D8 RID: 25560
+			
 			public float angle;
 
-			// Token: 0x040063D9 RID: 25561
+			
 			public RoadDef road;
 		}
 
-		// Token: 0x02001A42 RID: 6722
+		
 		private struct DrawCommand
 		{
-			// Token: 0x040063DA RID: 25562
+			
 			public RoadDef roadDef;
 
-			// Token: 0x040063DB RID: 25563
+			
 			public Action action;
 		}
 
-		// Token: 0x02001A43 RID: 6723
+		
 		public struct DistanceElement
 		{
-			// Token: 0x040063DC RID: 25564
+			
 			public float fromRoad;
 
-			// Token: 0x040063DD RID: 25565
+			
 			public float alongPath;
 
-			// Token: 0x040063DE RID: 25566
+			
 			public bool touched;
 
-			// Token: 0x040063DF RID: 25567
+			
 			public IntVec3 origin;
 		}
 	}

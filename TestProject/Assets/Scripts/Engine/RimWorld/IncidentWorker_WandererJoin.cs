@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009F5 RID: 2549
+	
 	public class IncidentWorker_WandererJoin : IncidentWorker
 	{
-		// Token: 0x06003C9A RID: 15514 RVA: 0x00140350 File Offset: 0x0013E550
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -18,7 +18,7 @@ namespace RimWorld
 			return this.TryFindEntryCell(map, out intVec);
 		}
 
-		// Token: 0x06003C9B RID: 15515 RVA: 0x00140380 File Offset: 0x0013E580
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -41,13 +41,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C9C RID: 15516 RVA: 0x001404D0 File Offset: 0x0013E6D0
+		
 		private bool TryFindEntryCell(Map map, out IntVec3 cell)
 		{
 			return CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => map.reachability.CanReachColony(c) && !c.Fogged(map), map, CellFinder.EdgeRoadChance_Neutral, out cell);
 		}
 
-		// Token: 0x04002393 RID: 9107
+		
 		private const float RelationWithColonistWeight = 20f;
 	}
 }

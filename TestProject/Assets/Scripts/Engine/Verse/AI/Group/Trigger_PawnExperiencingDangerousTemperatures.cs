@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse.AI.Group
 {
-	// Token: 0x02000611 RID: 1553
+	
 	public class Trigger_PawnExperiencingDangerousTemperatures : Trigger
 	{
-		// Token: 0x06002A44 RID: 10820 RVA: 0x000F69D4 File Offset: 0x000F4BD4
+		
 		public override bool ActivateOn(Lord lord, TriggerSignal signal)
 		{
 			if (signal.type == TriggerSignalType.Tick && Find.TickManager.TicksGame % 197 == 0)
@@ -32,7 +32,7 @@ namespace Verse.AI.Group
 			return false;
 		}
 
-		// Token: 0x04001937 RID: 6455
+		
 		private float temperatureHediffThreshold = 0.15f;
 	}
 }

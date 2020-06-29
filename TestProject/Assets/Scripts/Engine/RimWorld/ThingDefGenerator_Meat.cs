@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200085D RID: 2141
+	
 	public static class ThingDefGenerator_Meat
 	{
-		// Token: 0x060034E7 RID: 13543 RVA: 0x00121EE6 File Offset: 0x001200E6
+		
 		public static IEnumerable<ThingDef> ImpliedMeatDefs()
 		{
 			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs.ToList<ThingDef>())

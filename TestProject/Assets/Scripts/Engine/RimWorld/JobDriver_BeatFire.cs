@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200063B RID: 1595
+	
 	public class JobDriver_BeatFire : JobDriver
 	{
-		// Token: 0x17000844 RID: 2116
+		
 		// (get) Token: 0x06002BA7 RID: 11175 RVA: 0x000FB804 File Offset: 0x000F9A04
 		protected Fire TargetFire
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002BA8 RID: 11176 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002BA9 RID: 11177 RVA: 0x000FB81B File Offset: 0x000F9A1B
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -78,7 +78,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002BAA RID: 11178 RVA: 0x000FB82C File Offset: 0x000F9A2C
+		
 		private bool StartBeatingFireIfAnyAt(IntVec3 cell, Toil nextToil)
 		{
 			List<Thing> thingList = cell.GetThingList(base.Map);

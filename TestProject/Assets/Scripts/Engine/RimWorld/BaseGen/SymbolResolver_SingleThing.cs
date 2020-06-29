@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010BC RID: 4284
+	
 	public class SymbolResolver_SingleThing : SymbolResolver
 	{
-		// Token: 0x06006539 RID: 25913 RVA: 0x002351E8 File Offset: 0x002333E8
+		
 		public override bool CanResolve(ResolveParams rp)
 		{
 			if (!base.CanResolve(rp))
@@ -31,7 +31,7 @@ namespace RimWorld.BaseGen
 			return ((rp.singleThingDef == null || rp.singleThingDef.category != ThingCategory.Item) && (rp.singleThingToSpawn == null || rp.singleThingToSpawn.def.category != ThingCategory.Item)) || this.TryFindSpawnCellForItem(rp.rect, out intVec);
 		}
 
-		// Token: 0x0600653A RID: 25914 RVA: 0x00235288 File Offset: 0x00233488
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			if (rp.singleThingToSpawn is Pawn)
@@ -140,7 +140,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600653B RID: 25915 RVA: 0x0023550C File Offset: 0x0023370C
+		
 		private bool TryFindSpawnCellForItem(CellRect rect, out IntVec3 result)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -162,7 +162,7 @@ namespace RimWorld.BaseGen
 			}, out result);
 		}
 
-		// Token: 0x0600653C RID: 25916 RVA: 0x00235544 File Offset: 0x00233744
+		
 		private IntVec3 FindBestSpawnCellForNonItem(CellRect rect, ThingDef thingDef, ref Rot4? rot, out bool hasToWipeBuilding, out bool doesntFit)
 		{
 			if (!thingDef.rotatable)
@@ -196,7 +196,7 @@ namespace RimWorld.BaseGen
 			return this.FindBestSpawnCellForNonItem(rect, thingDef, rot.Value, out hasToWipeBuilding, out doesntFit);
 		}
 
-		// Token: 0x0600653D RID: 25917 RVA: 0x00235648 File Offset: 0x00233848
+		
 		private IntVec3 FindBestSpawnCellForNonItem(CellRect rect, ThingDef thingDef, Rot4 rot, out bool hasToWipeBuilding, out bool doesntFit)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -265,7 +265,7 @@ namespace RimWorld.BaseGen
 			return centerCell;
 		}
 
-		// Token: 0x0600653E RID: 25918 RVA: 0x0023590C File Offset: 0x00233B0C
+		
 		private bool AnyNonStandableCellOrAnyBuildingInside(CellRect rect)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -279,7 +279,7 @@ namespace RimWorld.BaseGen
 			return false;
 		}
 
-		// Token: 0x04003DB5 RID: 15797
+		
 		private static Rot4[] tmpRotations = new Rot4[]
 		{
 			Rot4.North,

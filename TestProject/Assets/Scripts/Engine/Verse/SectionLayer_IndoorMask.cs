@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000192 RID: 402
+	
 	internal class SectionLayer_IndoorMask : SectionLayer
 	{
-		// Token: 0x1700023E RID: 574
+		
 		// (get) Token: 0x06000B8B RID: 2955 RVA: 0x0003F2D9 File Offset: 0x0003D4D9
 		public override bool Visible
 		{
@@ -16,13 +16,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B8C RID: 2956 RVA: 0x0003FF76 File Offset: 0x0003E176
+		
 		public SectionLayer_IndoorMask(Section section) : base(section)
 		{
 			this.relevantChangeTypes = (MapMeshFlag.FogOfWar | MapMeshFlag.Roofs);
 		}
 
-		// Token: 0x06000B8D RID: 2957 RVA: 0x0003FF88 File Offset: 0x0003E188
+		
 		private bool HideRainPrimary(IntVec3 c)
 		{
 			if (base.Map.fogGrid.IsFogged(c))
@@ -48,7 +48,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000B8E RID: 2958 RVA: 0x00040004 File Offset: 0x0003E204
+		
 		public override void Regenerate()
 		{
 			if (!MatBases.SunShadow.shader.isSupported)

@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x0200108C RID: 4236
+	
 	public class SketchResolver_DamageBuildings : SketchResolver
 	{
-		// Token: 0x0600647A RID: 25722 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x0600647B RID: 25723 RVA: 0x0022E238 File Offset: 0x0022C438
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			CellRect occupiedRect = parms.sketch.OccupiedRect;
@@ -36,7 +36,7 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600647C RID: 25724 RVA: 0x0022E2E4 File Offset: 0x0022C4E4
+		
 		private void Damage(SketchBuildable buildable, CellRect rect, Rot4 dir, Sketch sketch, out bool destroyed)
 		{
 			float num;
@@ -74,13 +74,13 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x04003D2E RID: 15662
+		
 		private const float MaxPctOfTotalDestroyed = 0.65f;
 
-		// Token: 0x04003D2F RID: 15663
+		
 		private const float HpRandomFactor = 1.2f;
 
-		// Token: 0x04003D30 RID: 15664
+		
 		private const float DestroyChanceExp = 1.32f;
 	}
 }

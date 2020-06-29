@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000629 RID: 1577
+	
 	public static class GiveToPackAnimalUtility
 	{
-		// Token: 0x06002B27 RID: 11047 RVA: 0x000FA83C File Offset: 0x000F8A3C
+		
 		public static IEnumerable<Pawn> CarrierCandidatesFor(Pawn pawn)
 		{
 			IEnumerable<Pawn> enumerable = pawn.IsFormingCaravan() ? pawn.GetLord().ownedPawns : pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction);
@@ -27,7 +27,7 @@ namespace RimWorld
 			return enumerable;
 		}
 
-		// Token: 0x06002B28 RID: 11048 RVA: 0x000FA8D0 File Offset: 0x000F8AD0
+		
 		public static Pawn UsablePackAnimalWithTheMostFreeSpace(Pawn pawn)
 		{
 			IEnumerable<Pawn> enumerable = GiveToPackAnimalUtility.CarrierCandidatesFor(pawn);

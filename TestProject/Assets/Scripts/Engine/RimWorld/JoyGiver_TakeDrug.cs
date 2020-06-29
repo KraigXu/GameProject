@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006FF RID: 1791
+	
 	public class JoyGiver_TakeDrug : JoyGiver_Ingest
 	{
-		// Token: 0x06002F5F RID: 12127 RVA: 0x0010A860 File Offset: 0x00108A60
+		
 		protected override Thing BestIngestItem(Pawn pawn, Predicate<Thing> extraValidator)
 		{
 			if (pawn.drugs == null)
@@ -54,7 +54,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002F60 RID: 12128 RVA: 0x0010AA08 File Offset: 0x00108C08
+		
 		public override float GetChance(Pawn pawn)
 		{
 			int num = 0;
@@ -78,13 +78,13 @@ namespace RimWorld
 			return num2;
 		}
 
-		// Token: 0x06002F61 RID: 12129 RVA: 0x0010AA64 File Offset: 0x00108C64
+		
 		protected override Job CreateIngestJob(Thing ingestible, Pawn pawn)
 		{
 			return DrugAIUtility.IngestAndTakeToInventoryJob(ingestible, pawn, 9999);
 		}
 
-		// Token: 0x04001ABC RID: 6844
+		
 		private static List<ThingDef> takeableDrugs = new List<ThingDef>();
 	}
 }

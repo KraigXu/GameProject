@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A87 RID: 2695
+	
 	public static class PowerNetMaker
 	{
-		// Token: 0x06003FB4 RID: 16308 RVA: 0x00153000 File Offset: 0x00151200
+		
 		private static IEnumerable<CompPower> ContiguousPowerBuildings(Building root)
 		{
 			PowerNetMaker.closedSet.Clear();
@@ -54,24 +54,24 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06003FB5 RID: 16309 RVA: 0x00153204 File Offset: 0x00151404
+		
 		public static PowerNet NewPowerNetStartingFrom(Building root)
 		{
 			return new PowerNet(PowerNetMaker.ContiguousPowerBuildings(root));
 		}
 
-		// Token: 0x06003FB6 RID: 16310 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public static void UpdateVisualLinkagesFor(PowerNet net)
 		{
 		}
 
-		// Token: 0x0400251C RID: 9500
+		
 		private static HashSet<Building> closedSet = new HashSet<Building>();
 
-		// Token: 0x0400251D RID: 9501
+		
 		private static HashSet<Building> openSet = new HashSet<Building>();
 
-		// Token: 0x0400251E RID: 9502
+		
 		private static HashSet<Building> currentSet = new HashSet<Building>();
 	}
 }

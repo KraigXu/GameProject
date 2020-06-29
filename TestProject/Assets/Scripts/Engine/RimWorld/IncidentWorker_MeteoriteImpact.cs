@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020009E9 RID: 2537
+	
 	public class IncidentWorker_MeteoriteImpact : IncidentWorker
 	{
-		// Token: 0x06003C69 RID: 15465 RVA: 0x0013F354 File Offset: 0x0013D554
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -16,7 +16,7 @@ namespace RimWorld
 			return this.TryFindCell(out intVec, map);
 		}
 
-		// Token: 0x06003C6A RID: 15466 RVA: 0x0013F378 File Offset: 0x0013D578
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -33,7 +33,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C6B RID: 15467 RVA: 0x0013F458 File Offset: 0x0013D658
+		
 		private bool TryFindCell(out IntVec3 cell, Map map)
 		{
 			int maxMineables = ThingSetMaker_Meteorite.MineablesCountRange.max;

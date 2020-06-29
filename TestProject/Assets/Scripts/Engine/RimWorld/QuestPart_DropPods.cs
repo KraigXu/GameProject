@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200099B RID: 2459
+	
 	public class QuestPart_DropPods : QuestPart
 	{
-		// Token: 0x17000A82 RID: 2690
+		
 		// (get) Token: 0x06003A59 RID: 14937 RVA: 0x00134C24 File Offset: 0x00132E24
 		// (set) Token: 0x06003A5A RID: 14938 RVA: 0x00134C3C File Offset: 0x00132E3C
 		public IEnumerable<Thing> Things
@@ -47,13 +47,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A83 RID: 2691
+		
 		// (get) Token: 0x06003A5B RID: 14939 RVA: 0x00134CDC File Offset: 0x00132EDC
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -76,7 +76,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A84 RID: 2692
+		
 		// (get) Token: 0x06003A5C RID: 14940 RVA: 0x00134CEC File Offset: 0x00132EEC
 		public override bool IncreasesPopulation
 		{
@@ -86,7 +86,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A5D RID: 14941 RVA: 0x00134D08 File Offset: 0x00132F08
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -171,19 +171,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A5E RID: 14942 RVA: 0x001351AB File Offset: 0x001333AB
+		
 		public override bool QuestPartReserves(Pawn p)
 		{
 			return this.pawns.Contains(p);
 		}
 
-		// Token: 0x06003A5F RID: 14943 RVA: 0x001351B9 File Offset: 0x001333B9
+		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
 			this.pawns.Replace(replace, with);
 		}
 
-		// Token: 0x06003A60 RID: 14944 RVA: 0x001351CC File Offset: 0x001333CC
+		
 		public override void PostQuestAdded()
 		{
 			base.PostQuestAdded();
@@ -197,7 +197,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A61 RID: 14945 RVA: 0x00135218 File Offset: 0x00133418
+		
 		public override void Cleanup()
 		{
 			base.Cleanup();
@@ -211,7 +211,7 @@ namespace RimWorld
 			this.items.Clear();
 		}
 
-		// Token: 0x06003A62 RID: 14946 RVA: 0x00135274 File Offset: 0x00133474
+		
 		private IntVec3 GetRandomDropSpot()
 		{
 			Map map = this.mapParent.Map;
@@ -227,7 +227,7 @@ namespace RimWorld
 			return DropCellFinder.RandomDropSpot(map);
 		}
 
-		// Token: 0x06003A63 RID: 14947 RVA: 0x001352DC File Offset: 0x001334DC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -257,7 +257,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003A64 RID: 14948 RVA: 0x00135480 File Offset: 0x00133680
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -282,49 +282,49 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400225F RID: 8799
+		
 		public string inSignal;
 
-		// Token: 0x04002260 RID: 8800
+		
 		public string outSignalResult;
 
-		// Token: 0x04002261 RID: 8801
+		
 		public IntVec3 dropSpot = IntVec3.Invalid;
 
-		// Token: 0x04002262 RID: 8802
+		
 		public bool useTradeDropSpot;
 
-		// Token: 0x04002263 RID: 8803
+		
 		public MapParent mapParent;
 
-		// Token: 0x04002264 RID: 8804
+		
 		private List<Thing> items = new List<Thing>();
 
-		// Token: 0x04002265 RID: 8805
+		
 		private List<Pawn> pawns = new List<Pawn>();
 
-		// Token: 0x04002266 RID: 8806
+		
 		public List<ThingDef> thingsToExcludeFromHyperlinks = new List<ThingDef>();
 
-		// Token: 0x04002267 RID: 8807
+		
 		public bool joinPlayer;
 
-		// Token: 0x04002268 RID: 8808
+		
 		public bool makePrisoners;
 
-		// Token: 0x04002269 RID: 8809
+		
 		public string customLetterText;
 
-		// Token: 0x0400226A RID: 8810
+		
 		public string customLetterLabel;
 
-		// Token: 0x0400226B RID: 8811
+		
 		public LetterDef customLetterDef;
 
-		// Token: 0x0400226C RID: 8812
+		
 		public bool sendStandardLetter = true;
 
-		// Token: 0x0400226D RID: 8813
+		
 		private Thing importantLookTarget;
 	}
 }

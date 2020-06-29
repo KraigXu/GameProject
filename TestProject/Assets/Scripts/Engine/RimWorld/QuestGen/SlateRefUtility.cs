@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x020011B5 RID: 4533
+	
 	public static class SlateRefUtility
 	{
-		// Token: 0x060068CB RID: 26827 RVA: 0x002497EC File Offset: 0x002479EC
+		
 		public static bool CheckSingleVariableSyntax(string str, Slate slate, out object obj, out bool exists)
 		{
 			if (str.NullOrEmpty())
@@ -45,7 +45,7 @@ namespace RimWorld.QuestGen
 			return true;
 		}
 
-		// Token: 0x060068CC RID: 26828 RVA: 0x00249878 File Offset: 0x00247A78
+		
 		public static bool MustTranslate(string slateRef, FieldInfo fi)
 		{
 			if (slateRef.NullOrEmpty())
@@ -79,13 +79,13 @@ namespace RimWorld.QuestGen
 			{
 				return false;
 			}
-			if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef<>))
+			if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef))
 			{
 				Type type = fi.DeclaringType.GetGenericArguments()[0];
 				if (type.IsGenericType)
 				{
 					Type genericTypeDefinition = type.GetGenericTypeDefinition();
-					if (genericTypeDefinition == typeof(IEnumerable<>) || genericTypeDefinition == typeof(IList<>) || genericTypeDefinition == typeof(List<>))
+					if (genericTypeDefinition == typeof(IEnumerable) || genericTypeDefinition == typeof(IList) || genericTypeDefinition == typeof(List))
 					{
 						type = type.GetGenericArguments()[0];
 					}

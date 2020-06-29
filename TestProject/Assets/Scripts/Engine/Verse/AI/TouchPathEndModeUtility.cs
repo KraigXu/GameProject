@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse.AI
 {
-	// Token: 0x0200057C RID: 1404
+	
 	public static class TouchPathEndModeUtility
 	{
-		// Token: 0x060027CE RID: 10190 RVA: 0x000E9B54 File Offset: 0x000E7D54
+		
 		public static bool IsCornerTouchAllowed(int cornerX, int cornerZ, int adjCardinal1X, int adjCardinal1Z, int adjCardinal2X, int adjCardinal2Z, Map map)
 		{
 			Building building = map.edificeGrid[new IntVec3(cornerX, 0, cornerZ)];
@@ -19,20 +19,20 @@ namespace Verse.AI
 			return (map.pathGrid.Walkable(intVec) && intVec.GetDoor(map) == null) || (map.pathGrid.Walkable(intVec2) && intVec2.GetDoor(map) == null);
 		}
 
-		// Token: 0x060027CF RID: 10191 RVA: 0x000E9BD4 File Offset: 0x000E7DD4
+		
 		public static bool MakesOccupiedCellsAlwaysReachableDiagonally(ThingDef def)
 		{
 			ThingDef thingDef = def.IsFrame ? (def.entityDefToBuild as ThingDef) : def;
 			return thingDef != null && thingDef.CanInteractThroughCorners;
 		}
 
-		// Token: 0x060027D0 RID: 10192 RVA: 0x000E9C08 File Offset: 0x000E7E08
+		
 		public static bool IsAdjacentCornerAndNotAllowed(IntVec3 cell, IntVec3 BL, IntVec3 TL, IntVec3 TR, IntVec3 BR, Map map)
 		{
 			return (cell == BL && !TouchPathEndModeUtility.IsCornerTouchAllowed(BL.x + 1, BL.z + 1, BL.x + 1, BL.z, BL.x, BL.z + 1, map)) || (cell == TL && !TouchPathEndModeUtility.IsCornerTouchAllowed(TL.x + 1, TL.z - 1, TL.x + 1, TL.z, TL.x, TL.z - 1, map)) || (cell == TR && !TouchPathEndModeUtility.IsCornerTouchAllowed(TR.x - 1, TR.z - 1, TR.x - 1, TR.z, TR.x, TR.z - 1, map)) || (cell == BR && !TouchPathEndModeUtility.IsCornerTouchAllowed(BR.x - 1, BR.z + 1, BR.x - 1, BR.z, BR.x, BR.z + 1, map));
 		}
 
-		// Token: 0x060027D1 RID: 10193 RVA: 0x000E9D20 File Offset: 0x000E7F20
+		
 		public static void AddAllowedAdjacentRegions(LocalTargetInfo dest, TraverseParms traverseParams, Map map, List<Region> regions)
 		{
 			IntVec3 bl;
@@ -71,7 +71,7 @@ namespace Verse.AI
 			}
 		}
 
-		// Token: 0x060027D2 RID: 10194 RVA: 0x000E9E50 File Offset: 0x000E8050
+		
 		public static bool IsAdjacentOrInsideAndAllowedToTouch(IntVec3 root, LocalTargetInfo target, Map map)
 		{
 			IntVec3 bl;

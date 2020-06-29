@@ -8,11 +8,11 @@ using Verse.Profile;
 
 namespace RimWorld
 {
-	// Token: 0x02000E82 RID: 3714
+	
 	[StaticConstructorOnStartup]
 	public static class MainMenuDrawer
 	{
-		// Token: 0x1700103F RID: 4159
+		
 		// (get) Token: 0x06005A58 RID: 23128 RVA: 0x001E9A61 File Offset: 0x001E7C61
 		private static UI_BackgroundMain BackgroundMain
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A59 RID: 23129 RVA: 0x001E9A70 File Offset: 0x001E7C70
+		
 		public static void Init()
 		{
 			PlayerKnowledgeDatabase.Save();
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A5A RID: 23130 RVA: 0x001E9AF8 File Offset: 0x001E7CF8
+		
 		public static void MainMenuOnGUI()
 		{
 			VersionControl.DrawInfoInCorner();
@@ -77,7 +77,7 @@ namespace RimWorld
 			MainMenuDrawer.DoExpansionIcons();
 		}
 
-		// Token: 0x06005A5B RID: 23131 RVA: 0x001E9D78 File Offset: 0x001E7F78
+		
 		public static void DoMainMenuControls(Rect rect, bool anyMapFiles)
 		{
 			GUI.BeginGroup(rect);
@@ -262,7 +262,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005A5C RID: 23132 RVA: 0x001EA428 File Offset: 0x001E8628
+		
 		public static void DoExpansionIcons()
 		{
 			List<ExpansionDef> allExpansions = ModLister.AllExpansions;
@@ -305,7 +305,7 @@ namespace RimWorld
 			MainMenuDrawer.DoExpansionInfo(num, rect.y - 8f);
 		}
 
-		// Token: 0x06005A5D RID: 23133 RVA: 0x001EA5C4 File Offset: 0x001E87C4
+		
 		private static void DoExpansionInfo(int index, float yOffset)
 		{
 			ExpansionDef expansionDef = ModLister.AllExpansions[index];
@@ -337,7 +337,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005A5E RID: 23134 RVA: 0x001EA73C File Offset: 0x001E893C
+		
 		public static void DoTranslationInfoRect(Rect outRect)
 		{
 			if (LanguageDatabase.activeLanguage == LanguageDatabase.defaultLanguage)
@@ -381,14 +381,14 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005A5F RID: 23135 RVA: 0x001EA950 File Offset: 0x001E8B50
+		
 		private static void DoDevBuildWarningRect(Rect outRect)
 		{
 			Widgets.DrawWindowBackground(outRect);
 			Widgets.Label(outRect.ContractedBy(17f), "DevBuildWarning".Translate());
 		}
 
-		// Token: 0x06005A60 RID: 23136 RVA: 0x001EA974 File Offset: 0x001E8B74
+		
 		private static void InitLearnToPlay()
 		{
 			Current.Game = new Game();
@@ -401,7 +401,7 @@ namespace RimWorld
 			Find.WindowStack.Add(next);
 		}
 
-		// Token: 0x06005A61 RID: 23137 RVA: 0x001EA9F8 File Offset: 0x001E8BF8
+		
 		private static void CloseMainTab()
 		{
 			if (Current.ProgramState == ProgramState.Playing)
@@ -410,43 +410,43 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400312A RID: 12586
+		
 		private static bool anyMapFiles;
 
-		// Token: 0x0400312B RID: 12587
+		
 		private static Vector2 translationInfoScrollbarPos;
 
-		// Token: 0x0400312C RID: 12588
+		
 		private const float PlayRectWidth = 170f;
 
-		// Token: 0x0400312D RID: 12589
+		
 		private const float WebRectWidth = 145f;
 
-		// Token: 0x0400312E RID: 12590
+		
 		private const float RightEdgeMargin = 50f;
 
-		// Token: 0x0400312F RID: 12591
+		
 		private static readonly Vector2 PaneSize = new Vector2(450f, 450f);
 
-		// Token: 0x04003130 RID: 12592
+		
 		private static readonly Vector2 TitleSize = new Vector2(1032f, 146f);
 
-		// Token: 0x04003131 RID: 12593
+		
 		private static readonly Texture2D TexTitle = ContentFinder<Texture2D>.Get("UI/HeroArt/GameTitle", true);
 
-		// Token: 0x04003132 RID: 12594
+		
 		private const float TitleShift = 50f;
 
-		// Token: 0x04003133 RID: 12595
+		
 		private static readonly Vector2 LudeonLogoSize = new Vector2(200f, 58f);
 
-		// Token: 0x04003134 RID: 12596
+		
 		private static readonly Texture2D TexLudeonLogo = ContentFinder<Texture2D>.Get("UI/HeroArt/LudeonLogoSmall", true);
 
-		// Token: 0x04003135 RID: 12597
+		
 		private static readonly string TranslationsContributeURL = "https://rimworldgame.com/helptranslate";
 
-		// Token: 0x04003136 RID: 12598
+		
 		private static readonly Color PurchasedColor = new Color(1f, 1f, 1f, 0.35f);
 	}
 }

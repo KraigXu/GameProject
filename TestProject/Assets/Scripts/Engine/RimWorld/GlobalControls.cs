@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E95 RID: 3733
+	
 	public class GlobalControls
 	{
-		// Token: 0x06005B02 RID: 23298 RVA: 0x001F4C10 File Offset: 0x001F2E10
+		
 		public void GlobalControlsOnGUI()
 		{
 			if (Event.current.type == EventType.Layout)
@@ -55,7 +55,7 @@ namespace RimWorld
 			Find.LetterStack.LettersOnGUI(num2);
 		}
 
-		// Token: 0x06005B03 RID: 23299 RVA: 0x001F4DE8 File Offset: 0x001F2FE8
+		
 		private static string TemperatureString()
 		{
 			IntVec3 intVec = UI.MouseCell();
@@ -126,7 +126,7 @@ namespace RimWorld
 			return GlobalControls.cachedTemperatureString;
 		}
 
-		// Token: 0x06005B04 RID: 23300 RVA: 0x001F5068 File Offset: 0x001F3268
+		
 		private static void DoCountdownTimer(Rect rect, TimedForcedExit timedForcedExit)
 		{
 			string forceExitAndRemoveMapCountdownTimeLeftString = timedForcedExit.ForceExitAndRemoveMapCountdownTimeLeftString;
@@ -141,25 +141,25 @@ namespace RimWorld
 			Widgets.Label(rect2, text);
 		}
 
-		// Token: 0x040031A7 RID: 12711
+		
 		public const float Width = 200f;
 
-		// Token: 0x040031A8 RID: 12712
+		
 		private WidgetRow rowVisibility = new WidgetRow();
 
-		// Token: 0x040031A9 RID: 12713
+		
 		private static string indoorsUnroofedStringCached;
 
-		// Token: 0x040031AA RID: 12714
+		
 		private static int indoorsUnroofedStringCachedRoofCount = -1;
 
-		// Token: 0x040031AB RID: 12715
+		
 		private static string cachedTemperatureString;
 
-		// Token: 0x040031AC RID: 12716
+		
 		private static string cachedTemperatureStringForLabel;
 
-		// Token: 0x040031AD RID: 12717
+		
 		private static float cachedTemperatureStringForTemperature;
 	}
 }

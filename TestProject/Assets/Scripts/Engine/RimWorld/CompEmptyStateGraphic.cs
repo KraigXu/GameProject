@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D05 RID: 3333
+	
 	public class CompEmptyStateGraphic : ThingComp
 	{
-		// Token: 0x17000E3D RID: 3645
+		
 		// (get) Token: 0x06005105 RID: 20741 RVA: 0x001B3089 File Offset: 0x001B1289
 		private CompProperties_EmptyStateGraphic Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000E3E RID: 3646
+		
 		// (get) Token: 0x06005106 RID: 20742 RVA: 0x001B3098 File Offset: 0x001B1298
 		public bool ParentIsEmpty
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005107 RID: 20743 RVA: 0x001B30D8 File Offset: 0x001B12D8
+		
 		public override void PostDraw()
 		{
 			base.PostDraw();

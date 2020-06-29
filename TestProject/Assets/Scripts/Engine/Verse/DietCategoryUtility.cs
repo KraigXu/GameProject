@@ -2,10 +2,10 @@
 
 namespace Verse
 {
-	// Token: 0x02000097 RID: 151
+	
 	public static class DietCategoryUtility
 	{
-		// Token: 0x060004EB RID: 1259 RVA: 0x00018F58 File Offset: 0x00017158
+		
 		public static string ToStringHuman(this DietCategory diet)
 		{
 			switch (diet)
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060004EC RID: 1260 RVA: 0x00018FEC File Offset: 0x000171EC
+		
 		public static string ToStringHumanShort(this DietCategory diet)
 		{
 			switch (diet)

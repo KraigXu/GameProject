@@ -4,10 +4,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000A5E RID: 2654
+	
 	public static class BeachMaker
 	{
-		// Token: 0x06003EB9 RID: 16057 RVA: 0x0014D460 File Offset: 0x0014B660
+		
 		public static void Init(Map map)
 		{
 			Rot4 a = Find.World.CoastDirectionAt(map.Tile);
@@ -40,13 +40,13 @@ namespace RimWorld
 			NoiseDebugUI.StoreNoiseRender(BeachMaker.beachNoise, "beachNoise");
 		}
 
-		// Token: 0x06003EBA RID: 16058 RVA: 0x0014D615 File Offset: 0x0014B815
+		
 		public static void Cleanup()
 		{
 			BeachMaker.beachNoise = null;
 		}
 
-		// Token: 0x06003EBB RID: 16059 RVA: 0x0014D620 File Offset: 0x0014B820
+		
 		public static TerrainDef BeachTerrainAt(IntVec3 loc, BiomeDef biome)
 		{
 			if (BeachMaker.beachNoise == null)
@@ -73,22 +73,22 @@ namespace RimWorld
 			return TerrainDefOf.Ice;
 		}
 
-		// Token: 0x04002484 RID: 9348
+		
 		private static ModuleBase beachNoise;
 
-		// Token: 0x04002485 RID: 9349
+		
 		private const float PerlinFrequency = 0.03f;
 
-		// Token: 0x04002486 RID: 9350
+		
 		private const float MaxForDeepWater = 0.1f;
 
-		// Token: 0x04002487 RID: 9351
+		
 		private const float MaxForShallowWater = 0.45f;
 
-		// Token: 0x04002488 RID: 9352
+		
 		private const float MaxForSand = 1f;
 
-		// Token: 0x04002489 RID: 9353
+		
 		private static readonly FloatRange CoastWidthRange = new FloatRange(20f, 60f);
 	}
 }

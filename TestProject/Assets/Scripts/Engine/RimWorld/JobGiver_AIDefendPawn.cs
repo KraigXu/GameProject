@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006AB RID: 1707
+	
 	public abstract class JobGiver_AIDefendPawn : JobGiver_AIFightEnemy
 	{
-		// Token: 0x06002E2C RID: 11820 RVA: 0x00103C22 File Offset: 0x00101E22
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_AIDefendPawn jobGiver_AIDefendPawn = (JobGiver_AIDefendPawn)base.DeepCopy(resolve);
@@ -15,10 +15,10 @@ namespace RimWorld
 			return jobGiver_AIDefendPawn;
 		}
 
-		// Token: 0x06002E2D RID: 11821
+		
 		protected abstract Pawn GetDefendee(Pawn pawn);
 
-		// Token: 0x06002E2E RID: 11822 RVA: 0x00103C3C File Offset: 0x00101E3C
+		
 		protected override IntVec3 GetFlagPosition(Pawn pawn)
 		{
 			Pawn defendee = this.GetDefendee(pawn);
@@ -29,7 +29,7 @@ namespace RimWorld
 			return IntVec3.Invalid;
 		}
 
-		// Token: 0x06002E2F RID: 11823 RVA: 0x00103C70 File Offset: 0x00101E70
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Pawn defendee = this.GetDefendee(pawn);
@@ -53,7 +53,7 @@ namespace RimWorld
 			return base.TryGiveJob(pawn);
 		}
 
-		// Token: 0x06002E30 RID: 11824 RVA: 0x00103CE8 File Offset: 0x00101EE8
+		
 		protected override Thing FindAttackTarget(Pawn pawn)
 		{
 			if (this.attackMeleeThreatEvenIfNotHostile)
@@ -67,7 +67,7 @@ namespace RimWorld
 			return base.FindAttackTarget(pawn);
 		}
 
-		// Token: 0x06002E31 RID: 11825 RVA: 0x00103D60 File Offset: 0x00101F60
+		
 		protected override bool TryFindShootingPosition(Pawn pawn, out IntVec3 dest)
 		{
 			Verb verb = pawn.TryGetAttackVerb(null, !pawn.IsColonist);
@@ -89,7 +89,7 @@ namespace RimWorld
 			}, out dest);
 		}
 
-		// Token: 0x04001A5A RID: 6746
+		
 		private bool attackMeleeThreatEvenIfNotHostile;
 	}
 }

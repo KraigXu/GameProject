@@ -7,16 +7,16 @@ using System.Text;
 
 namespace Verse
 {
-	// Token: 0x020001F1 RID: 497
+	
 	public class ModAssemblyHandler
 	{
-		// Token: 0x06000E0C RID: 3596 RVA: 0x000505BF File Offset: 0x0004E7BF
+		
 		public ModAssemblyHandler(ModContentPack mod)
 		{
 			this.mod = mod;
 		}
 
-		// Token: 0x06000E0D RID: 3597 RVA: 0x000505DC File Offset: 0x0004E7DC
+		
 		public void ReloadAll()
 		{
 			if (!ModAssemblyHandler.globalResolverIsSet)
@@ -55,7 +55,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000E0E RID: 3598 RVA: 0x00050778 File Offset: 0x0004E978
+		
 		private bool AssemblyIsUsable(Assembly asm)
 		{
 			try
@@ -98,13 +98,13 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x04000A9F RID: 2719
+		
 		private ModContentPack mod;
 
-		// Token: 0x04000AA0 RID: 2720
+		
 		public List<Assembly> loadedAssemblies = new List<Assembly>();
 
-		// Token: 0x04000AA1 RID: 2721
+		
 		private static bool globalResolverIsSet;
 	}
 }

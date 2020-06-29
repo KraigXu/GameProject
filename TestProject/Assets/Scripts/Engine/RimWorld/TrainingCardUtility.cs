@@ -5,11 +5,11 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E78 RID: 3704
+	
 	[StaticConstructorOnStartup]
 	public static class TrainingCardUtility
 	{
-		// Token: 0x060059E6 RID: 23014 RVA: 0x001E661C File Offset: 0x001E481C
+		
 		public static void DrawTrainingCard(Rect rect, Pawn pawn)
 		{
 			Text.Font = GameFont.Small;
@@ -58,7 +58,7 @@ namespace RimWorld
 			listing_Standard.End();
 		}
 
-		// Token: 0x060059E7 RID: 23015 RVA: 0x001E6878 File Offset: 0x001E4A78
+		
 		public static float TotalHeightForPawn(Pawn p)
 		{
 			if (p == null)
@@ -84,7 +84,7 @@ namespace RimWorld
 			return num2;
 		}
 
-		// Token: 0x060059E8 RID: 23016 RVA: 0x001E68F8 File Offset: 0x001E4AF8
+		
 		private static bool TryDrawTrainableRow(Rect rect, Pawn pawn, TrainableDef td)
 		{
 			bool flag = pawn.training.HasLearned(td);
@@ -123,7 +123,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060059E9 RID: 23017 RVA: 0x001E6A54 File Offset: 0x001E4C54
+		
 		public static void DoTrainableCheckbox(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain, bool drawLabel, bool doTooltip)
 		{
 			bool flag = pawn.training.HasLearned(td);
@@ -150,7 +150,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060059EA RID: 23018 RVA: 0x001E6B04 File Offset: 0x001E4D04
+		
 		private static void DoTrainableTooltip(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain)
 		{
 			if (!Mouse.IsOver(rect))
@@ -179,24 +179,24 @@ namespace RimWorld
 			}, (int)(rect.y * 612f + rect.x));
 		}
 
-		// Token: 0x040030D9 RID: 12505
+		
 		public const float RowHeight = 28f;
 
-		// Token: 0x040030DA RID: 12506
+		
 		private const float InfoHeaderHeight = 50f;
 
-		// Token: 0x040030DB RID: 12507
+		
 		[TweakValue("Interface", -100f, 300f)]
 		private static float TrainabilityLeft = 220f;
 
-		// Token: 0x040030DC RID: 12508
+		
 		[TweakValue("Interface", -100f, 300f)]
 		private static float TrainabilityTop = 0f;
 
-		// Token: 0x040030DD RID: 12509
+		
 		private static readonly Texture2D LearnedTrainingTex = ContentFinder<Texture2D>.Get("UI/Icons/FixedCheck", true);
 
-		// Token: 0x040030DE RID: 12510
+		
 		private static readonly Texture2D LearnedNotTrainingTex = ContentFinder<Texture2D>.Get("UI/Icons/FixedCheckOff", true);
 	}
 }

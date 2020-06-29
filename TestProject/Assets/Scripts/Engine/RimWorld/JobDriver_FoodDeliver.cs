@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200068A RID: 1674
+	
 	public class JobDriver_FoodDeliver : JobDriver
 	{
-		// Token: 0x1700088A RID: 2186
+		
 		// (get) Token: 0x06002D79 RID: 11641 RVA: 0x001004A2 File Offset: 0x000FE6A2
 		private Pawn Deliveree
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D7A RID: 11642 RVA: 0x001004B9 File Offset: 0x000FE6B9
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -26,7 +26,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.eatingFromInventory, "eatingFromInventory", false, false);
 		}
 
-		// Token: 0x06002D7B RID: 11643 RVA: 0x001004E8 File Offset: 0x000FE6E8
+		
 		public override string GetReport()
 		{
 			if (this.job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && this.Deliveree != null)
@@ -36,7 +36,7 @@ namespace RimWorld
 			return base.GetReport();
 		}
 
-		// Token: 0x06002D7C RID: 11644 RVA: 0x00100560 File Offset: 0x000FE760
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
@@ -44,13 +44,13 @@ namespace RimWorld
 			this.eatingFromInventory = (this.pawn.inventory != null && this.pawn.inventory.Contains(base.TargetThingA));
 		}
 
-		// Token: 0x06002D7D RID: 11645 RVA: 0x001005B3 File Offset: 0x000FE7B3
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002D7E RID: 11646 RVA: 0x001005D5 File Offset: 0x000FE7D5
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.B);
@@ -95,16 +95,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A22 RID: 6690
+		
 		private bool usingNutrientPasteDispenser;
 
-		// Token: 0x04001A23 RID: 6691
+		
 		private bool eatingFromInventory;
 
-		// Token: 0x04001A24 RID: 6692
+		
 		private const TargetIndex FoodSourceInd = TargetIndex.A;
 
-		// Token: 0x04001A25 RID: 6693
+		
 		private const TargetIndex DelivereeInd = TargetIndex.B;
 	}
 }

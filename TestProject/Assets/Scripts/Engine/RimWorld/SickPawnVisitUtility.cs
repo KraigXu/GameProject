@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000703 RID: 1795
+	
 	public static class SickPawnVisitUtility
 	{
-		// Token: 0x06002F6B RID: 12139 RVA: 0x0010AC24 File Offset: 0x00108E24
+		
 		public static Pawn FindRandomSickPawn(Pawn pawn, JoyCategory maxPatientJoy)
 		{
 			Pawn result;
@@ -23,20 +23,20 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06002F6C RID: 12140 RVA: 0x0010AC84 File Offset: 0x00108E84
+		
 		public static bool CanVisit(Pawn pawn, Pawn sick, JoyCategory maxPatientJoy)
 		{
 			return sick.IsColonist && !sick.Dead && pawn != sick && sick.InBed() && sick.Awake() && !sick.IsForbidden(pawn) && sick.needs.joy != null && sick.needs.joy.CurCategory <= maxPatientJoy && InteractionUtility.CanReceiveInteraction(sick, null) && !sick.needs.food.Starving && sick.needs.rest.CurLevel > 0.33f && pawn.CanReserveAndReach(sick, PathEndMode.InteractionCell, Danger.None, 1, -1, null, false) && !SickPawnVisitUtility.AboutToRecover(sick);
 		}
 
-		// Token: 0x06002F6D RID: 12141 RVA: 0x0010AD3C File Offset: 0x00108F3C
+		
 		public static Thing FindChair(Pawn forPawn, Pawn nearPawn)
 		{
 			Predicate<Thing> validator = (Thing x) => x.def.building.isSittable && !x.IsForbidden(forPawn) && GenSight.LineOfSight(x.Position, nearPawn.Position, nearPawn.Map, false, null, 0, 0) && forPawn.CanReserve(x, 1, -1, null, false) && (!x.def.rotatable || GenGeo.AngleDifferenceBetween(x.Rotation.AsAngle, (nearPawn.Position - x.Position).AngleFlat) <= 95f);
 			return GenClosest.ClosestThingReachable(nearPawn.Position, nearPawn.Map, ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.OnCell, TraverseParms.For(forPawn, Danger.Deadly, TraverseMode.ByPawn, false), 2.2f, validator, null, 0, 5, false, RegionType.Set_Passable, false);
 		}
 
-		// Token: 0x06002F6E RID: 12142 RVA: 0x0010ADA8 File Offset: 0x00108FA8
+		
 		private static bool AboutToRecover(Pawn pawn)
 		{
 			if (pawn.Downed)
@@ -64,7 +64,7 @@ namespace RimWorld
 			return num < 8f * pawn.RaceProps.baseHealthScale;
 		}
 
-		// Token: 0x06002F6F RID: 12143 RVA: 0x0010AE54 File Offset: 0x00109054
+		
 		private static float VisitChanceScore(Pawn pawn, Pawn sick)
 		{
 			float num = GenMath.LerpDouble(-100f, 100f, 0.05f, 2f, (float)pawn.relations.OpinionOf(sick));

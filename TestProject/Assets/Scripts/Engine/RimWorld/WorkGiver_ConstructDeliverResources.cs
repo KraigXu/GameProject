@@ -6,16 +6,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000727 RID: 1831
+	
 	public abstract class WorkGiver_ConstructDeliverResources : WorkGiver_Scanner
 	{
-		// Token: 0x06003025 RID: 12325 RVA: 0x000E3FA9 File Offset: 0x000E21A9
+		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		// Token: 0x06003026 RID: 12326 RVA: 0x0010E8FB File Offset: 0x0010CAFB
+		
 		public static void ResetStaticData()
 		{
 			WorkGiver_ConstructDeliverResources.MissingMaterialsTranslated = "MissingMaterials".Translate();
@@ -23,13 +23,13 @@ namespace RimWorld
 			WorkGiver_ConstructDeliverResources.NoPathTranslated = "NoPath".Translate();
 		}
 
-		// Token: 0x06003027 RID: 12327 RVA: 0x0010E939 File Offset: 0x0010CB39
+		
 		private static bool ResourceValidator(Pawn pawn, ThingDefCountClass need, Thing th)
 		{
 			return th.def == need.thingDef && !th.IsForbidden(pawn) && pawn.CanReserve(th, 1, -1, null, false);
 		}
 
-		// Token: 0x06003028 RID: 12328 RVA: 0x0010E96C File Offset: 0x0010CB6C
+		
 		protected Job ResourceDeliverJobFor(Pawn pawn, IConstructible c, bool canRemoveExistingFloorUnderNearbyNeeders = true)
 		{
 			Blueprint_Install blueprint_Install = c as Blueprint_Install;
@@ -111,7 +111,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003029 RID: 12329 RVA: 0x0010ECA0 File Offset: 0x0010CEA0
+		
 		private void FindAvailableNearbyResources(Thing firstFoundResource, Pawn pawn, out int resTotalAvailable)
 		{
 			int num = Mathf.Min(firstFoundResource.def.stackLimit, pawn.carryTracker.MaxStackSpaceEver(firstFoundResource.def));
@@ -136,7 +136,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600302A RID: 12330 RVA: 0x0010ED78 File Offset: 0x0010CF78
+		
 		private HashSet<Thing> FindNearbyNeeders(Pawn pawn, ThingDefCountClass need, IConstructible c, int resTotalAvailable, bool canRemoveExistingFloorUnderNearbyNeeders, out int neededTotal, out Job jobToMakeNeederAvailable)
 		{
 			neededTotal = need.count;
@@ -186,19 +186,19 @@ namespace RimWorld
 			return hashSet;
 		}
 
-		// Token: 0x0600302B RID: 12331 RVA: 0x0010EEEC File Offset: 0x0010D0EC
+		
 		private bool IsNewValidNearbyNeeder(Thing t, HashSet<Thing> nearbyNeeders, IConstructible constructible, Pawn pawn)
 		{
 			return t is IConstructible && t != constructible && !(t is Blueprint_Install) && t.Faction == pawn.Faction && !t.IsForbidden(pawn) && !nearbyNeeders.Contains(t) && GenConstruct.CanConstruct(t, pawn, false, false);
 		}
 
-		// Token: 0x0600302C RID: 12332 RVA: 0x0010EF3E File Offset: 0x0010D13E
+		
 		protected static bool ShouldRemoveExistingFloorFirst(Pawn pawn, Blueprint blue)
 		{
 			return blue.def.entityDefToBuild is TerrainDef && pawn.Map.terrainGrid.CanRemoveTopLayerAt(blue.Position);
 		}
 
-		// Token: 0x0600302D RID: 12333 RVA: 0x0010EF70 File Offset: 0x0010D170
+		
 		protected Job RemoveExistingFloorJob(Pawn pawn, Blueprint blue)
 		{
 			if (!WorkGiver_ConstructDeliverResources.ShouldRemoveExistingFloorFirst(pawn, blue))
@@ -214,7 +214,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x0600302E RID: 12334 RVA: 0x0010EFC4 File Offset: 0x0010D1C4
+		
 		private Job InstallJob(Pawn pawn, Blueprint_Install install)
 		{
 			Thing miniToInstallOrBuildingToReinstall = install.MiniToInstallOrBuildingToReinstall;
@@ -245,22 +245,22 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x04001ADE RID: 6878
+		
 		private static List<Thing> resourcesAvailable = new List<Thing>();
 
-		// Token: 0x04001ADF RID: 6879
+		
 		private const float MultiPickupRadius = 5f;
 
-		// Token: 0x04001AE0 RID: 6880
+		
 		private const float NearbyConstructScanRadius = 8f;
 
-		// Token: 0x04001AE1 RID: 6881
+		
 		private static string MissingMaterialsTranslated;
 
-		// Token: 0x04001AE2 RID: 6882
+		
 		private static string ForbiddenLowerTranslated;
 
-		// Token: 0x04001AE3 RID: 6883
+		
 		private static string NoPathTranslated;
 	}
 }

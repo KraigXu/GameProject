@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000643 RID: 1603
+	
 	public static class TendUtility
 	{
-		// Token: 0x06002BDB RID: 11227 RVA: 0x000FBF34 File Offset: 0x000FA134
+		
 		public static void DoTend(Pawn doctor, Pawn patient, Medicine medicine)
 		{
 			if (!patient.health.HasHediffsNeedingTend(false))
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002BDC RID: 11228 RVA: 0x000FC118 File Offset: 0x000FA318
+		
 		public static float CalculateBaseTendQuality(Pawn doctor, Pawn patient, ThingDef medicine)
 		{
 			float medicinePotency = (medicine != null) ? medicine.GetStatValueAbstract(StatDefOf.MedicalPotency, null) : 0.3f;
@@ -74,7 +74,7 @@ namespace RimWorld
 			return TendUtility.CalculateBaseTendQuality(doctor, patient, medicinePotency, medicineQualityMax);
 		}
 
-		// Token: 0x06002BDD RID: 11229 RVA: 0x000FC15C File Offset: 0x000FA35C
+		
 		public static float CalculateBaseTendQuality(Pawn doctor, Pawn patient, float medicinePotency, float medicineQualityMax)
 		{
 			float num;
@@ -99,7 +99,7 @@ namespace RimWorld
 			return Mathf.Clamp(num, 0f, medicineQualityMax);
 		}
 
-		// Token: 0x06002BDE RID: 11230 RVA: 0x000FC1C4 File Offset: 0x000FA3C4
+		
 		public static void GetOptimalHediffsToTendWithSingleTreatment(Pawn patient, bool usingMedicine, List<Hediff> outHediffsToTend, List<Hediff> tendableHediffsInTendPriorityOrder = null)
 		{
 			outHediffsToTend.Clear();
@@ -160,7 +160,7 @@ namespace RimWorld
 			TendUtility.tmpHediffs.Clear();
 		}
 
-		// Token: 0x06002BDF RID: 11231 RVA: 0x000FC34C File Offset: 0x000FA54C
+		
 		public static void SortByTendPriority(List<Hediff> hediffs)
 		{
 			if (hediffs.Count <= 1)
@@ -181,28 +181,28 @@ namespace RimWorld
 			TendUtility.tmpHediffsWithTendPriority.Clear();
 		}
 
-		// Token: 0x040019B7 RID: 6583
+		
 		public const float NoMedicinePotency = 0.3f;
 
-		// Token: 0x040019B8 RID: 6584
+		
 		public const float NoMedicineQualityMax = 0.7f;
 
-		// Token: 0x040019B9 RID: 6585
+		
 		public const float NoDoctorTendQuality = 0.75f;
 
-		// Token: 0x040019BA RID: 6586
+		
 		public const float SelfTendQualityFactor = 0.7f;
 
-		// Token: 0x040019BB RID: 6587
+		
 		private const float ChanceToDevelopBondRelationOnTended = 0.004f;
 
-		// Token: 0x040019BC RID: 6588
+		
 		private static List<Hediff> tmpHediffsToTend = new List<Hediff>();
 
-		// Token: 0x040019BD RID: 6589
+		
 		private static List<Hediff> tmpHediffs = new List<Hediff>();
 
-		// Token: 0x040019BE RID: 6590
+		
 		private static List<Pair<Hediff, float>> tmpHediffsWithTendPriority = new List<Pair<Hediff, float>>();
 	}
 }

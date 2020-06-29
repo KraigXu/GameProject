@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using GameSystem.Ui;
 
 
-// Token: 0x02000005 RID: 5
+
 public class MessageBoxInstance:MonoBehaviour
 {
     public static MessageBoxInstance Instance
@@ -35,7 +35,7 @@ public class MessageBoxInstance:MonoBehaviour
         _loadingPrefabMap.Add(LoadingType.ShowLoading,(Resources.Load("Prefabs/MessageBoxPrefab/OrderLoading") as GameObject));
     }
 
-    // Token: 0x06000011 RID: 17 RVA: 0x000024FC File Offset: 0x000006FC
+    
     public MessageBoxEventsUI MessageBoxShow(string Content = "", MessageBoxType ElementType = MessageBoxType.Composite_OkAndCANCEL)
     {
         Debug.Log(Content);
@@ -66,7 +66,7 @@ public class MessageBoxInstance:MonoBehaviour
         return this.curWaringMassageInstantiationObject.GetComponent<MessageBoxEventsUI>();
     }
 
-    // Token: 0x06000012 RID: 18 RVA: 0x000025F8 File Offset: 0x000007F8
+    
     public LoadingControl NewLoadingBox(string tip,LoadingType type=LoadingType.ShowLoading)
     {
         this._LoadingObjectReferenceCount++;

@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200073D RID: 1853
+	
 	public class WorkGiver_DoBill : WorkGiver_Scanner
 	{
-		// Token: 0x170008C9 RID: 2249
+		
 		// (get) Token: 0x06003091 RID: 12433 RVA: 0x0010FDBF File Offset: 0x0010DFBF
 		public override PathEndMode PathEndMode
 		{
@@ -20,13 +20,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003092 RID: 12434 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
+		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Some;
 		}
 
-		// Token: 0x170008CA RID: 2250
+		
 		// (get) Token: 0x06003093 RID: 12435 RVA: 0x00110378 File Offset: 0x0010E578
 		public override ThingRequest PotentialWorkThingRequest
 		{
@@ -40,13 +40,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003094 RID: 12436 RVA: 0x001103B8 File Offset: 0x0010E5B8
+		
 		public static void ResetStaticData()
 		{
 			WorkGiver_DoBill.MissingMaterialsTranslated = "MissingMaterials".Translate();
 		}
 
-		// Token: 0x06003095 RID: 12437 RVA: 0x001103D0 File Offset: 0x0010E5D0
+		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			List<Thing> list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.PotentialBillGiver);
@@ -61,7 +61,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003096 RID: 12438 RVA: 0x00110430 File Offset: 0x0010E630
+		
 		public override Job JobOnThing(Pawn pawn, Thing thing, bool forced = false)
 		{
 			IBillGiver billGiver = thing as IBillGiver;
@@ -82,19 +82,19 @@ namespace RimWorld
 			return RefuelWorkGiverUtility.RefuelJob(pawn, thing, forced, null, null);
 		}
 
-		// Token: 0x06003097 RID: 12439 RVA: 0x001104C8 File Offset: 0x0010E6C8
+		
 		private static UnfinishedThing ClosestUnfinishedThingForBill(Pawn pawn, Bill_ProductionWithUft bill)
 		{
-			Predicate<Thing> <>9__1;
+			Predicate<Thing> 9__1;
 			Predicate<Thing> validator = delegate(Thing t)
 			{
 				if (!t.IsForbidden(pawn) && ((UnfinishedThing)t).Recipe == bill.recipe && ((UnfinishedThing)t).Creator == pawn)
 				{
 					List<Thing> ingredients = ((UnfinishedThing)t).ingredients;
 					Predicate<Thing> match;
-					if ((match = <>9__1) == null)
+					if ((match ) == null)
 					{
-						match = (<>9__1 = ((Thing x) => bill.IsFixedOrAllowedIngredient(x.def)));
+						match = (9__1 = ((Thing x) => bill.IsFixedOrAllowedIngredient(x.def)));
 					}
 					if (ingredients.TrueForAll(match))
 					{
@@ -106,7 +106,7 @@ namespace RimWorld
 			return (UnfinishedThing)GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(bill.recipe.unfinishedThingDef), PathEndMode.InteractionCell, TraverseParms.For(pawn, pawn.NormalMaxDanger(), TraverseMode.ByPawn, false), 9999f, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 		}
 
-		// Token: 0x06003098 RID: 12440 RVA: 0x00110550 File Offset: 0x0010E750
+		
 		private static Job FinishUftJob(Pawn pawn, UnfinishedThing uft, Bill_ProductionWithUft bill)
 		{
 			if (uft.Creator != pawn)
@@ -141,7 +141,7 @@ namespace RimWorld
 			return job2;
 		}
 
-		// Token: 0x06003099 RID: 12441 RVA: 0x00110620 File Offset: 0x0010E820
+		
 		private Job StartOrResumeBillJob(Pawn pawn, IBillGiver giver)
 		{
 			for (int i = 0; i < giver.BillStack.Count; i++)
@@ -204,7 +204,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x0600309A RID: 12442 RVA: 0x001107E8 File Offset: 0x0010E9E8
+		
 		public static Job TryStartNewDoBillJob(Pawn pawn, Bill bill, IBillGiver giver, List<ThingCount> chosenIngThings, out Job haulOffJob, bool dontCreateJobIfHaulOffRequired = true)
 		{
 			haulOffJob = WorkGiverUtility.HaulStuffOffBillGiverJob(pawn, giver, null);
@@ -225,7 +225,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x0600309B RID: 12443 RVA: 0x001108A0 File Offset: 0x0010EAA0
+		
 		public bool ThingIsUsableBillGiver(Thing thing)
 		{
 			Pawn pawn = thing as Pawn;
@@ -272,7 +272,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0600309C RID: 12444 RVA: 0x001109A0 File Offset: 0x0010EBA0
+		
 		private static bool TryFindBestBillIngredients(Bill bill, Pawn pawn, Thing billGiver, List<ThingCount> chosen)
 		{
 			chosen.Clear();
@@ -366,7 +366,7 @@ namespace RimWorld
 			return foundAll;
 		}
 
-		// Token: 0x0600309D RID: 12445 RVA: 0x00110C18 File Offset: 0x0010EE18
+		
 		private static IntVec3 GetBillGiverRootCell(Thing billGiver, Pawn forPawn)
 		{
 			Building building = billGiver as Building;
@@ -382,7 +382,7 @@ namespace RimWorld
 			return forPawn.Position;
 		}
 
-		// Token: 0x0600309E RID: 12446 RVA: 0x00110C68 File Offset: 0x0010EE68
+		
 		private static void AddEveryMedicineToRelevantThings(Pawn pawn, Thing billGiver, List<Thing> relevantThings, Predicate<Thing> baseValidator, Map map)
 		{
 			MedicalCareCategory medicalCareCategory = WorkGiver_DoBill.GetMedicalCareCategory(billGiver);
@@ -401,7 +401,7 @@ namespace RimWorld
 			WorkGiver_DoBill.tmpMedicine.Clear();
 		}
 
-		// Token: 0x0600309F RID: 12447 RVA: 0x00110D44 File Offset: 0x0010EF44
+		
 		private static MedicalCareCategory GetMedicalCareCategory(Thing billGiver)
 		{
 			Pawn pawn = billGiver as Pawn;
@@ -412,7 +412,7 @@ namespace RimWorld
 			return MedicalCareCategory.Best;
 		}
 
-		// Token: 0x060030A0 RID: 12448 RVA: 0x00110D70 File Offset: 0x0010EF70
+		
 		private static void MakeIngredientsListInProcessingOrder(List<IngredientCount> ingredientsOrdered, Bill bill)
 		{
 			ingredientsOrdered.Clear();
@@ -441,7 +441,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060030A1 RID: 12449 RVA: 0x00110E30 File Offset: 0x0010F030
+		
 		private static bool TryFindBestBillIngredientsInSet(List<Thing> availableThings, Bill bill, List<ThingCount> chosen, IntVec3 rootCell, bool alreadySorted)
 		{
 			if (bill.recipe.allowMixingIngredients)
@@ -451,7 +451,7 @@ namespace RimWorld
 			return WorkGiver_DoBill.TryFindBestBillIngredientsInSet_NoMix(availableThings, bill, chosen, rootCell, alreadySorted);
 		}
 
-		// Token: 0x060030A2 RID: 12450 RVA: 0x00110E54 File Offset: 0x0010F054
+		
 		private static bool TryFindBestBillIngredientsInSet_NoMix(List<Thing> availableThings, Bill bill, List<ThingCount> chosen, IntVec3 rootCell, bool alreadySorted)
 		{
 			if (!alreadySorted)
@@ -517,7 +517,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060030A3 RID: 12451 RVA: 0x00111064 File Offset: 0x0010F264
+		
 		private static bool TryFindBestBillIngredientsInSet_AllowMix(List<Thing> availableThings, Bill bill, List<ThingCount> chosen)
 		{
 			chosen.Clear();
@@ -549,37 +549,37 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04001AEA RID: 6890
+		
 		private List<ThingCount> chosenIngThings = new List<ThingCount>();
 
-		// Token: 0x04001AEB RID: 6891
+		
 		private static readonly IntRange ReCheckFailedBillTicksRange = new IntRange(500, 600);
 
-		// Token: 0x04001AEC RID: 6892
+		
 		private static string MissingMaterialsTranslated;
 
-		// Token: 0x04001AED RID: 6893
+		
 		private static List<Thing> relevantThings = new List<Thing>();
 
-		// Token: 0x04001AEE RID: 6894
+		
 		private static HashSet<Thing> processedThings = new HashSet<Thing>();
 
-		// Token: 0x04001AEF RID: 6895
+		
 		private static List<Thing> newRelevantThings = new List<Thing>();
 
-		// Token: 0x04001AF0 RID: 6896
+		
 		private static List<IngredientCount> ingredientsOrdered = new List<IngredientCount>();
 
-		// Token: 0x04001AF1 RID: 6897
+		
 		private static List<Thing> tmpMedicine = new List<Thing>();
 
-		// Token: 0x04001AF2 RID: 6898
+		
 		private static WorkGiver_DoBill.DefCountList availableCounts = new WorkGiver_DoBill.DefCountList();
 
-		// Token: 0x0200189D RID: 6301
+		
 		private class DefCountList
 		{
-			// Token: 0x17001645 RID: 5701
+			
 			// (get) Token: 0x06008DC5 RID: 36293 RVA: 0x002CFA8C File Offset: 0x002CDC8C
 			public int Count
 			{
@@ -589,7 +589,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x17001646 RID: 5702
+			
 			public float this[ThingDef def]
 			{
 				get
@@ -618,26 +618,26 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x06008DC8 RID: 36296 RVA: 0x002CFB26 File Offset: 0x002CDD26
+			
 			public float GetCount(int index)
 			{
 				return this.counts[index];
 			}
 
-			// Token: 0x06008DC9 RID: 36297 RVA: 0x002CFB34 File Offset: 0x002CDD34
+			
 			public void SetCount(int index, float val)
 			{
 				this.counts[index] = val;
 				this.CheckRemove(index);
 			}
 
-			// Token: 0x06008DCA RID: 36298 RVA: 0x002CFB4A File Offset: 0x002CDD4A
+			
 			public ThingDef GetDef(int index)
 			{
 				return this.defs[index];
 			}
 
-			// Token: 0x06008DCB RID: 36299 RVA: 0x002CFB58 File Offset: 0x002CDD58
+			
 			private void CheckRemove(int index)
 			{
 				if (this.counts[index] == 0f)
@@ -647,14 +647,14 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x06008DCC RID: 36300 RVA: 0x002CFB85 File Offset: 0x002CDD85
+			
 			public void Clear()
 			{
 				this.defs.Clear();
 				this.counts.Clear();
 			}
 
-			// Token: 0x06008DCD RID: 36301 RVA: 0x002CFBA0 File Offset: 0x002CDDA0
+			
 			public void GenerateFrom(List<Thing> things)
 			{
 				this.Clear();
@@ -665,10 +665,10 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x04005D73 RID: 23923
+			
 			private List<ThingDef> defs = new List<ThingDef>();
 
-			// Token: 0x04005D74 RID: 23924
+			
 			private List<float> counts = new List<float>();
 		}
 	}

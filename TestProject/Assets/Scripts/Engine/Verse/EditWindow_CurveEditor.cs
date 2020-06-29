@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000363 RID: 867
+	
 	public class EditWindow_CurveEditor : EditWindow
 	{
-		// Token: 0x170004FA RID: 1274
+		
 		// (get) Token: 0x06001A2C RID: 6700 RVA: 0x000A0E5C File Offset: 0x0009F05C
 		private bool DraggingView
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004FB RID: 1275
+		
 		// (get) Token: 0x06001A2D RID: 6701 RVA: 0x000A0E6A File Offset: 0x0009F06A
 		public override Vector2 InitialSize
 		{
@@ -28,7 +28,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004FC RID: 1276
+		
 		// (get) Token: 0x06001A2E RID: 6702 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool IsDebug
 		{
@@ -38,14 +38,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A2F RID: 6703 RVA: 0x000A0E7B File Offset: 0x0009F07B
+		
 		public EditWindow_CurveEditor(SimpleCurve curve, string title)
 		{
 			this.curve = curve;
 			this.optionalTitle = title;
 		}
 
-		// Token: 0x06001A30 RID: 6704 RVA: 0x000A0EA0 File Offset: 0x0009F0A0
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			WidgetRow widgetRow = new WidgetRow(0f, 0f, UIDirection.RightThenUp, 99999f, 4f);
@@ -97,7 +97,7 @@ namespace Verse
 			this.DoCurveEditor(screenRect);
 		}
 
-		// Token: 0x06001A31 RID: 6705 RVA: 0x000A1180 File Offset: 0x0009F380
+		
 		private void DoCurveEditor(Rect screenRect)
 		{
 			Widgets.DrawMenuSection(screenRect);
@@ -219,7 +219,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A32 RID: 6706 RVA: 0x000A1854 File Offset: 0x0009FA54
+		
 		private IEnumerable<int> PointsNearMouse(Rect screenRect)
 		{
 			GUI.BeginGroup(screenRect);
@@ -243,25 +243,25 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x04000F46 RID: 3910
+		
 		private SimpleCurve curve;
 
-		// Token: 0x04000F47 RID: 3911
+		
 		public List<float> debugInputValues;
 
-		// Token: 0x04000F48 RID: 3912
+		
 		private int draggingPointIndex = -1;
 
-		// Token: 0x04000F49 RID: 3913
+		
 		private int draggingButton = -1;
 
-		// Token: 0x04000F4A RID: 3914
+		
 		private const float ViewDragPanSpeed = 0.002f;
 
-		// Token: 0x04000F4B RID: 3915
+		
 		private const float ScrollZoomSpeed = 0.025f;
 
-		// Token: 0x04000F4C RID: 3916
+		
 		private const float PointClickDistanceLimit = 7f;
 	}
 }

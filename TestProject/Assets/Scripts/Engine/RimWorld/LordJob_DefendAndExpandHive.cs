@@ -4,10 +4,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200076B RID: 1899
+	
 	public class LordJob_DefendAndExpandHive : LordJob
 	{
-		// Token: 0x170008F9 RID: 2297
+		
 		// (get) Token: 0x0600319D RID: 12701 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool CanBlockHostileVisitors
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x170008FA RID: 2298
+		
 		// (get) Token: 0x0600319E RID: 12702 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AddFleeToil
 		{
@@ -27,18 +27,18 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600319F RID: 12703 RVA: 0x000F4066 File Offset: 0x000F2266
+		
 		public LordJob_DefendAndExpandHive()
 		{
 		}
 
-		// Token: 0x060031A0 RID: 12704 RVA: 0x0011482C File Offset: 0x00112A2C
+		
 		public LordJob_DefendAndExpandHive(SpawnedPawnParams parms)
 		{
 			this.aggressive = parms.aggressive;
 		}
 
-		// Token: 0x060031A1 RID: 12705 RVA: 0x00114840 File Offset: 0x00112A40
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -88,13 +88,13 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x060031A2 RID: 12706 RVA: 0x00114A4C File Offset: 0x00112C4C
+		
 		public override void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.aggressive, "aggressive", false, false);
 		}
 
-		// Token: 0x04001B10 RID: 6928
+		
 		private bool aggressive;
 	}
 }

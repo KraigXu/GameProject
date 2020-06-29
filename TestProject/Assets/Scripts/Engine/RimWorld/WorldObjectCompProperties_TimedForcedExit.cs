@@ -4,19 +4,19 @@ using RimWorld.Planet;
 
 namespace RimWorld
 {
-	// Token: 0x020008A9 RID: 2217
+	
 	public class WorldObjectCompProperties_TimedForcedExit : WorldObjectCompProperties
 	{
-		// Token: 0x0600359F RID: 13727 RVA: 0x00123DDF File Offset: 0x00121FDF
+		
 		public WorldObjectCompProperties_TimedForcedExit()
 		{
 			this.compClass = typeof(TimedForcedExit);
 		}
 
-		// Token: 0x060035A0 RID: 13728 RVA: 0x00123DF7 File Offset: 0x00121FF7
+		
 		public override IEnumerable<string> ConfigErrors(WorldObjectDef parentDef)
 		{
-			foreach (string text in this.<>n__0(parentDef))
+			foreach (string text in this.n__0(parentDef))
 			{
 				yield return text;
 			}

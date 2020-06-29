@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000956 RID: 2390
+	
 	public class QuestPart_FactionRelationKind : QuestPartActivable
 	{
-		// Token: 0x17000A1F RID: 2591
+		
 		// (get) Token: 0x0600388A RID: 14474 RVA: 0x0012E819 File Offset: 0x0012CA19
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__0())
+				foreach (Faction faction in this.n__0())
 				{
 					yield return faction;
 				}
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600388B RID: 14475 RVA: 0x0012E82C File Offset: 0x0012CA2C
+		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
@@ -41,7 +41,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600388C RID: 14476 RVA: 0x0012E87E File Offset: 0x0012CA7E
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -50,7 +50,7 @@ namespace RimWorld
 			Scribe_Values.Look<FactionRelationKind>(ref this.relationKind, "relationKind", FactionRelationKind.Hostile, false);
 		}
 
-		// Token: 0x0600388D RID: 14477 RVA: 0x0012E8BA File Offset: 0x0012CABA
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -59,13 +59,13 @@ namespace RimWorld
 			this.relationKind = FactionRelationKind.Neutral;
 		}
 
-		// Token: 0x0400216D RID: 8557
+		
 		public Faction faction1;
 
-		// Token: 0x0400216E RID: 8558
+		
 		public Faction faction2;
 
-		// Token: 0x0400216F RID: 8559
+		
 		public FactionRelationKind relationKind;
 	}
 }

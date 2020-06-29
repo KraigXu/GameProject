@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000045 RID: 69
+	
 	public static class StaticConstructorOnStartupUtility
 	{
-		// Token: 0x06000382 RID: 898 RVA: 0x000127E8 File Offset: 0x000109E8
+		
 		public static void CallAll()
 		{
 			foreach (Type type in GenTypes.AllTypesWithAttribute<StaticConstructorOnStartup>())
@@ -32,7 +32,7 @@ namespace Verse
 			StaticConstructorOnStartupUtility.coreStaticAssetsLoaded = true;
 		}
 
-		// Token: 0x06000383 RID: 899 RVA: 0x00012878 File Offset: 0x00010A78
+		
 		public static void ReportProbablyMissingAttributes()
 		{
 			BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
@@ -66,7 +66,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040000F8 RID: 248
+		
 		public static bool coreStaticAssetsLoaded;
 	}
 }

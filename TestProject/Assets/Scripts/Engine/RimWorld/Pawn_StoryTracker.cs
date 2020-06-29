@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B70 RID: 2928
+	
 	public class Pawn_StoryTracker : IExposable
 	{
-		// Token: 0x17000BF1 RID: 3057
+		
 		// (get) Token: 0x0600448F RID: 17551 RVA: 0x00172B35 File Offset: 0x00170D35
 		// (set) Token: 0x06004490 RID: 17552 RVA: 0x00172B4C File Offset: 0x00170D4C
 		public string Title
@@ -31,7 +31,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF2 RID: 3058
+		
 		// (get) Token: 0x06004491 RID: 17553 RVA: 0x00172B72 File Offset: 0x00170D72
 		public string TitleCap
 		{
@@ -41,7 +41,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF3 RID: 3059
+		
 		// (get) Token: 0x06004492 RID: 17554 RVA: 0x00172B80 File Offset: 0x00170D80
 		public string TitleDefault
 		{
@@ -59,7 +59,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF4 RID: 3060
+		
 		// (get) Token: 0x06004493 RID: 17555 RVA: 0x00172BD0 File Offset: 0x00170DD0
 		public string TitleDefaultCap
 		{
@@ -69,7 +69,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF5 RID: 3061
+		
 		// (get) Token: 0x06004494 RID: 17556 RVA: 0x00172BE0 File Offset: 0x00170DE0
 		public string TitleShort
 		{
@@ -91,7 +91,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF6 RID: 3062
+		
 		// (get) Token: 0x06004495 RID: 17557 RVA: 0x00172C3F File Offset: 0x00170E3F
 		public string TitleShortCap
 		{
@@ -101,7 +101,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF7 RID: 3063
+		
 		// (get) Token: 0x06004496 RID: 17558 RVA: 0x00172C4C File Offset: 0x00170E4C
 		public Color SkinColor
 		{
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF8 RID: 3064
+		
 		// (get) Token: 0x06004497 RID: 17559 RVA: 0x00172C59 File Offset: 0x00170E59
 		public IEnumerable<Backstory> AllBackstories
 		{
@@ -129,7 +129,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BF9 RID: 3065
+		
 		// (get) Token: 0x06004498 RID: 17560 RVA: 0x00172C6C File Offset: 0x00170E6C
 		public string HeadGraphicPath
 		{
@@ -143,7 +143,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BFA RID: 3066
+		
 		// (get) Token: 0x06004499 RID: 17561 RVA: 0x00172CC4 File Offset: 0x00170EC4
 		public WorkTags DisabledWorkTagsBackstoryAndTraits
 		{
@@ -166,14 +166,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600449A RID: 17562 RVA: 0x00172D39 File Offset: 0x00170F39
+		
 		public Pawn_StoryTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 			this.traits = new TraitSet(pawn);
 		}
 
-		// Token: 0x0600449B RID: 17563 RVA: 0x00172D60 File Offset: 0x00170F60
+		
 		public void ExposeData()
 		{
 			string text = (this.childhood != null) ? this.childhood.identifier : null;
@@ -215,7 +215,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600449C RID: 17564 RVA: 0x00172F45 File Offset: 0x00171145
+		
 		public Backstory GetBackstory(BackstorySlot slot)
 		{
 			if (slot == BackstorySlot.Childhood)
@@ -225,40 +225,40 @@ namespace RimWorld
 			return this.adulthood;
 		}
 
-		// Token: 0x0400271D RID: 10013
+		
 		private Pawn pawn;
 
-		// Token: 0x0400271E RID: 10014
+		
 		public Backstory childhood;
 
-		// Token: 0x0400271F RID: 10015
+		
 		public Backstory adulthood;
 
-		// Token: 0x04002720 RID: 10016
+		
 		public float melanin;
 
-		// Token: 0x04002721 RID: 10017
+		
 		public Color hairColor = Color.white;
 
-		// Token: 0x04002722 RID: 10018
+		
 		public CrownType crownType;
 
-		// Token: 0x04002723 RID: 10019
+		
 		public BodyTypeDef bodyType;
 
-		// Token: 0x04002724 RID: 10020
+		
 		private string headGraphicPath;
 
-		// Token: 0x04002725 RID: 10021
+		
 		public HairDef hairDef;
 
-		// Token: 0x04002726 RID: 10022
+		
 		public TraitSet traits;
 
-		// Token: 0x04002727 RID: 10023
+		
 		public string title;
 
-		// Token: 0x04002728 RID: 10024
+		
 		public string birthLastName;
 	}
 }

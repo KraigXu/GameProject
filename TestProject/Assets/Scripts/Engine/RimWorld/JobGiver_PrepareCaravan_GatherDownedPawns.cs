@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006BB RID: 1723
+	
 	public class JobGiver_PrepareCaravan_GatherDownedPawns : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E6F RID: 11887 RVA: 0x001050E8 File Offset: 0x001032E8
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
@@ -28,7 +28,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002E70 RID: 11888 RVA: 0x00105150 File Offset: 0x00103350
+		
 		private Pawn FindDownedPawn(Pawn pawn)
 		{
 			float num = 0f;
@@ -51,19 +51,19 @@ namespace RimWorld
 			return pawn2;
 		}
 
-		// Token: 0x06002E71 RID: 11889 RVA: 0x00105204 File Offset: 0x00103404
+		
 		private IntVec3 FindRandomDropCell(Pawn pawn, Pawn downedPawn)
 		{
 			return CellFinder.RandomClosewalkCellNear(pawn.mindState.duty.focusSecond.Cell, pawn.Map, 6, (IntVec3 x) => x.Standable(pawn.Map) && StoreUtility.IsGoodStoreCell(x, pawn.Map, downedPawn, pawn, pawn.Faction));
 		}
 
-		// Token: 0x06002E72 RID: 11890 RVA: 0x0010525C File Offset: 0x0010345C
+		
 		public static bool IsDownedPawnNearExitPoint(Pawn downedPawn, IntVec3 exitPoint)
 		{
 			return downedPawn.Spawned && downedPawn.Position.InHorDistOf(exitPoint, 7f);
 		}
 
-		// Token: 0x04001A70 RID: 6768
+		
 		private const float MaxDownedPawnToExitPointDistance = 7f;
 	}
 }

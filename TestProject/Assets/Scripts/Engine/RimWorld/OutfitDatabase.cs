@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000938 RID: 2360
+	
 	public sealed class OutfitDatabase : IExposable
 	{
-		// Token: 0x17000A00 RID: 2560
+		
 		// (get) Token: 0x060037E9 RID: 14313 RVA: 0x0012BC33 File Offset: 0x00129E33
 		public List<Outfit> AllOutfits
 		{
@@ -18,19 +18,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037EA RID: 14314 RVA: 0x0012BC3B File Offset: 0x00129E3B
+		
 		public OutfitDatabase()
 		{
 			this.GenerateStartingOutfits();
 		}
 
-		// Token: 0x060037EB RID: 14315 RVA: 0x0012BC54 File Offset: 0x00129E54
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Outfit>(ref this.outfits, "outfits", LookMode.Deep, Array.Empty<object>());
 		}
 
-		// Token: 0x060037EC RID: 14316 RVA: 0x0012BC6C File Offset: 0x00129E6C
+		
 		public Outfit DefaultOutfit()
 		{
 			if (this.outfits.Count == 0)
@@ -40,7 +40,7 @@ namespace RimWorld
 			return this.outfits[0];
 		}
 
-		// Token: 0x060037ED RID: 14317 RVA: 0x0012BC90 File Offset: 0x00129E90
+		
 		public AcceptanceReport TryDelete(Outfit outfit)
 		{
 			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
@@ -61,7 +61,7 @@ namespace RimWorld
 			return AcceptanceReport.WasAccepted;
 		}
 
-		// Token: 0x060037EE RID: 14318 RVA: 0x0012BD80 File Offset: 0x00129F80
+		
 		public Outfit MakeNewOutfit()
 		{
 			int num;
@@ -80,7 +80,7 @@ namespace RimWorld
 			return outfit;
 		}
 
-		// Token: 0x060037EF RID: 14319 RVA: 0x0012BE18 File Offset: 0x0012A018
+		
 		private void GenerateStartingOutfits()
 		{
 			this.MakeNewOutfit().label = "OutfitAnything".Translate();
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400210F RID: 8463
+		
 		private List<Outfit> outfits = new List<Outfit>();
 	}
 }

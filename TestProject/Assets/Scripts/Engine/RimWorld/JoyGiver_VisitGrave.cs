@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000701 RID: 1793
+	
 	public class JoyGiver_VisitGrave : JoyGiver
 	{
-		// Token: 0x06002F67 RID: 12135 RVA: 0x0010AB58 File Offset: 0x00108D58
+		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			bool allowedOutside = JoyUtility.EnjoyableOutsideNow(pawn, null);

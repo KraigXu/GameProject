@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020009E3 RID: 2531
+	
 	public class IncidentWorker_HerdMigration : IncidentWorker
 	{
-		// Token: 0x06003C53 RID: 15443 RVA: 0x0013E97C File Offset: 0x0013CB7C
+		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -21,7 +21,7 @@ namespace RimWorld
 			return this.TryFindAnimalKind(map.Tile, out pawnKindDef) && this.TryFindStartAndEndCells(map, out intVec, out intVec2);
 		}
 
-		// Token: 0x06003C54 RID: 15444 RVA: 0x0013E9B4 File Offset: 0x0013CBB4
+		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -51,7 +51,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003C55 RID: 15445 RVA: 0x0013EAD8 File Offset: 0x0013CCD8
+		
 		private bool TryFindAnimalKind(int tile, out PawnKindDef animalKind)
 		{
 			return (from k in DefDatabase<PawnKindDef>.AllDefs
@@ -59,7 +59,7 @@ namespace RimWorld
 			select k).TryRandomElementByWeight((PawnKindDef x) => Mathf.Lerp(0.2f, 1f, x.RaceProps.wildness), out animalKind);
 		}
 
-		// Token: 0x06003C56 RID: 15446 RVA: 0x0013EB30 File Offset: 0x0013CD30
+		
 		private bool TryFindStartAndEndCells(Map map, out IntVec3 start, out IntVec3 end)
 		{
 			if (!RCellFinder.TryFindRandomPawnEntryCell(out start, map, CellFinder.EdgeRoadChance_Animal, false, null))
@@ -84,7 +84,7 @@ namespace RimWorld
 			return end.IsValid;
 		}
 
-		// Token: 0x06003C57 RID: 15447 RVA: 0x0013EBF8 File Offset: 0x0013CDF8
+		
 		private List<Pawn> GenerateAnimals(PawnKindDef animalKind, int tile)
 		{
 			int num = IncidentWorker_HerdMigration.AnimalsCount.RandomInRange;
@@ -98,10 +98,10 @@ namespace RimWorld
 			return list;
 		}
 
-		// Token: 0x04002385 RID: 9093
+		
 		private static readonly IntRange AnimalsCount = new IntRange(3, 5);
 
-		// Token: 0x04002386 RID: 9094
+		
 		private const float MinTotalBodySize = 4f;
 	}
 }

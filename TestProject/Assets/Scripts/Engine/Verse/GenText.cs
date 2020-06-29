@@ -12,10 +12,10 @@ using Verse.Grammar;
 
 namespace Verse
 {
-	// Token: 0x02000027 RID: 39
+	
 	public static class GenText
 	{
-		// Token: 0x0600025A RID: 602 RVA: 0x0000BC24 File Offset: 0x00009E24
+		
 		public static string Possessive(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -25,7 +25,7 @@ namespace Verse
 			return "Prohis".Translate();
 		}
 
-		// Token: 0x0600025B RID: 603 RVA: 0x0000BC4E File Offset: 0x00009E4E
+		
 		public static string PossessiveCap(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -35,7 +35,7 @@ namespace Verse
 			return "ProhisCap".Translate();
 		}
 
-		// Token: 0x0600025C RID: 604 RVA: 0x0000BC78 File Offset: 0x00009E78
+		
 		public static string ProObj(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -45,7 +45,7 @@ namespace Verse
 			return "ProhimObj".Translate();
 		}
 
-		// Token: 0x0600025D RID: 605 RVA: 0x0000BCA2 File Offset: 0x00009EA2
+		
 		public static string ProObjCap(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -55,7 +55,7 @@ namespace Verse
 			return "ProhimObjCap".Translate();
 		}
 
-		// Token: 0x0600025E RID: 606 RVA: 0x0000BCCC File Offset: 0x00009ECC
+		
 		public static string ProSubj(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -65,7 +65,7 @@ namespace Verse
 			return "Prohe".Translate();
 		}
 
-		// Token: 0x0600025F RID: 607 RVA: 0x0000BCF6 File Offset: 0x00009EF6
+		
 		public static string ProSubjCap(this Pawn p)
 		{
 			if (p.gender == Gender.Female)
@@ -75,7 +75,7 @@ namespace Verse
 			return "ProheCap".Translate();
 		}
 
-		// Token: 0x06000260 RID: 608 RVA: 0x0000BD20 File Offset: 0x00009F20
+		
 		public static string AdjustedFor(this string text, Pawn p, string pawnSymbol = "PAWN", bool addRelationInfoSymbol = true)
 		{
 			GrammarRequest request = default(GrammarRequest);
@@ -85,7 +85,7 @@ namespace Verse
 			return GrammarResolver.Resolve("r_root", request, null, false, null, null, null, true);
 		}
 
-		// Token: 0x06000261 RID: 609 RVA: 0x0000BD84 File Offset: 0x00009F84
+		
 		public static string AdjustedForKeys(this string text, List<string> outErrors = null, bool resolveKeys = true)
 		{
 			if (outErrors != null)
@@ -164,7 +164,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x06000262 RID: 610 RVA: 0x0000BED6 File Offset: 0x0000A0D6
+		
 		public static string LabelIndefinite(this Pawn pawn)
 		{
 			if (pawn.Name != null && !pawn.Name.Numerical)
@@ -174,7 +174,7 @@ namespace Verse
 			return pawn.KindLabelIndefinite();
 		}
 
-		// Token: 0x06000263 RID: 611 RVA: 0x0000BEFA File Offset: 0x0000A0FA
+		
 		public static string LabelDefinite(this Pawn pawn)
 		{
 			if (pawn.Name != null && !pawn.Name.Numerical)
@@ -184,19 +184,19 @@ namespace Verse
 			return pawn.KindLabelDefinite();
 		}
 
-		// Token: 0x06000264 RID: 612 RVA: 0x0000BF1E File Offset: 0x0000A11E
+		
 		public static string KindLabelIndefinite(this Pawn pawn)
 		{
 			return Find.ActiveLanguageWorker.WithIndefiniteArticlePostProcessed(pawn.KindLabel, pawn.gender, false, false);
 		}
 
-		// Token: 0x06000265 RID: 613 RVA: 0x0000BF38 File Offset: 0x0000A138
+		
 		public static string KindLabelDefinite(this Pawn pawn)
 		{
 			return Find.ActiveLanguageWorker.WithDefiniteArticlePostProcessed(pawn.KindLabel, pawn.gender, false, false);
 		}
 
-		// Token: 0x06000266 RID: 614 RVA: 0x0000BF54 File Offset: 0x0000A154
+		
 		public static string RandomSeedString()
 		{
 			return GrammarResolver.Resolve("r_seed", new GrammarRequest
@@ -208,7 +208,7 @@ namespace Verse
 			}, null, false, null, null, null, true).ToLower();
 		}
 
-		// Token: 0x06000267 RID: 615 RVA: 0x0000BF90 File Offset: 0x0000A190
+		
 		public static string Shorten(this string s)
 		{
 			if (s.NullOrEmpty() || s.Length <= 4)
@@ -235,7 +235,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x06000268 RID: 616 RVA: 0x0000C038 File Offset: 0x0000A238
+		
 		private static string WithoutVowels(this string s)
 		{
 			string vowels = "aeiouy";
@@ -244,7 +244,7 @@ namespace Verse
 			select c).ToArray<char>());
 		}
 
-		// Token: 0x06000269 RID: 617 RVA: 0x0000C074 File Offset: 0x0000A274
+		
 		public static string MarchingEllipsis(float offset = 0f)
 		{
 			switch (Mathf.FloorToInt(Time.realtimeSinceStartup + offset) % 3)
@@ -260,7 +260,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600026A RID: 618 RVA: 0x0000C0BB File Offset: 0x0000A2BB
+		
 		public static void SetTextSizeToFit(string text, Rect r)
 		{
 			Text.Font = GameFont.Small;
@@ -270,7 +270,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600026B RID: 619 RVA: 0x0000C0DF File Offset: 0x0000A2DF
+		
 		public static string TrimEndNewlines(this string s)
 		{
 			return s.TrimEnd(new char[]
@@ -280,7 +280,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x0600026C RID: 620 RVA: 0x0000C0F7 File Offset: 0x0000A2F7
+		
 		public static string Indented(this string s, string indentation = "    ")
 		{
 			if (s.NullOrEmpty())
@@ -290,7 +290,7 @@ namespace Verse
 			return indentation + s.Replace("\r", "").Replace("\n", "\n" + indentation);
 		}
 
-		// Token: 0x0600026D RID: 621 RVA: 0x0000C130 File Offset: 0x0000A330
+		
 		public static string ReplaceFirst(this string source, string key, string replacement)
 		{
 			int num = source.IndexOf(key);
@@ -301,7 +301,7 @@ namespace Verse
 			return source.Substring(0, num) + replacement + source.Substring(num + key.Length);
 		}
 
-		// Token: 0x0600026E RID: 622 RVA: 0x0000C168 File Offset: 0x0000A368
+		
 		public static int StableStringHash(string str)
 		{
 			if (str == null)
@@ -317,7 +317,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x0600026F RID: 623 RVA: 0x0000C1A0 File Offset: 0x0000A3A0
+		
 		public static string StringFromEnumerable(IEnumerable source)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -328,7 +328,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000270 RID: 624 RVA: 0x0000C20C File Offset: 0x0000A40C
+		
 		public static IEnumerable<string> LinesFromString(string text)
 		{
 			string[] separator = new string[]
@@ -356,19 +356,19 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000271 RID: 625 RVA: 0x0000C21C File Offset: 0x0000A41C
+		
 		public static string GetInvalidFilenameCharacters()
 		{
-			return new string(Path.GetInvalidFileNameChars()) + "/\\{}<>:*|!@#$%^&*?";
+			return new string(Path.GetInvalidFileNameChars()) + "/\\{}:*|!@#$%^&*?";
 		}
 
-		// Token: 0x06000272 RID: 626 RVA: 0x0000C232 File Offset: 0x0000A432
+		
 		public static bool IsValidFilename(string str)
 		{
 			return str.Length <= 40 && !new Regex("[" + Regex.Escape(GenText.GetInvalidFilenameCharacters()) + "]").IsMatch(str);
 		}
 
-		// Token: 0x06000273 RID: 627 RVA: 0x0000C267 File Offset: 0x0000A467
+		
 		public static string SanitizeFilename(string str)
 		{
 			return string.Join("_", str.Split(GenText.GetInvalidFilenameCharacters().ToArray<char>(), StringSplitOptions.RemoveEmptyEntries)).TrimEnd(new char[]
@@ -377,19 +377,19 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x06000274 RID: 628 RVA: 0x0000C294 File Offset: 0x0000A494
+		
 		public static bool NullOrEmpty(this string str)
 		{
 			return string.IsNullOrEmpty(str);
 		}
 
-		// Token: 0x06000275 RID: 629 RVA: 0x0000C29C File Offset: 0x0000A49C
+		
 		public static string SplitCamelCase(string Str)
 		{
 			return Regex.Replace(Str, "(\\B[A-Z]+?(?=[A-Z][^A-Z])|\\B[A-Z]+?(?=[^A-Z]))", " $1");
 		}
 
-		// Token: 0x06000276 RID: 630 RVA: 0x0000C2B0 File Offset: 0x0000A4B0
+		
 		public static string CapitalizedNoSpaces(string s)
 		{
 			string[] array = s.Split(new char[]
@@ -411,7 +411,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000277 RID: 631 RVA: 0x0000C320 File Offset: 0x0000A520
+		
 		public static string RemoveNonAlphanumeric(string s)
 		{
 			GenText.tmpSb.Length = 0;
@@ -425,13 +425,13 @@ namespace Verse
 			return GenText.tmpSb.ToString();
 		}
 
-		// Token: 0x06000278 RID: 632 RVA: 0x0000C373 File Offset: 0x0000A573
+		
 		public static bool EqualsIgnoreCase(this string A, string B)
 		{
 			return string.Compare(A, B, true) == 0;
 		}
 
-		// Token: 0x06000279 RID: 633 RVA: 0x0000C380 File Offset: 0x0000A580
+		
 		public static string WithoutByteOrderMark(this string str)
 		{
 			return str.Trim().Trim(new char[]
@@ -440,7 +440,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x0600027A RID: 634 RVA: 0x0000C39C File Offset: 0x0000A59C
+		
 		public static bool NamesOverlap(string A, string B)
 		{
 			A = A.ToLower();
@@ -463,7 +463,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600027B RID: 635 RVA: 0x0000C408 File Offset: 0x0000A608
+		
 		public static int FirstLetterBetweenTags(this string str)
 		{
 			int num = 0;
@@ -474,7 +474,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x0600027C RID: 636 RVA: 0x0000C454 File Offset: 0x0000A654
+		
 		public static string CapitalizeFirst(this string str)
 		{
 			if (str.NullOrEmpty())
@@ -497,7 +497,7 @@ namespace Verse
 			return str.Substring(0, num) + char.ToUpper(str[num]).ToString() + str.Substring(num + 1);
 		}
 
-		// Token: 0x0600027D RID: 637 RVA: 0x0000C4E2 File Offset: 0x0000A6E2
+		
 		public static string CapitalizeFirst(this string str, Def possibleDef)
 		{
 			if (possibleDef != null && str == possibleDef.label)
@@ -507,7 +507,7 @@ namespace Verse
 			return str.CapitalizeFirst();
 		}
 
-		// Token: 0x0600027E RID: 638 RVA: 0x0000C508 File Offset: 0x0000A708
+		
 		public static string UncapitalizeFirst(this string str)
 		{
 			if (str.NullOrEmpty())
@@ -530,7 +530,7 @@ namespace Verse
 			return str.Substring(0, num) + char.ToLower(str[num]).ToString() + str.Substring(num + 1);
 		}
 
-		// Token: 0x0600027F RID: 639 RVA: 0x0000C598 File Offset: 0x0000A798
+		
 		public static string ToNewsCase(string str)
 		{
 			string[] array = str.Split(new char[]
@@ -555,13 +555,13 @@ namespace Verse
 			return string.Join(" ", array);
 		}
 
-		// Token: 0x06000280 RID: 640 RVA: 0x0000C60E File Offset: 0x0000A80E
+		
 		public static string ToTitleCaseSmart(string str)
 		{
 			return Find.ActiveLanguageWorker.ToTitleCase(str);
 		}
 
-		// Token: 0x06000281 RID: 641 RVA: 0x0000C61C File Offset: 0x0000A81C
+		
 		public static string CapitalizeSentences(string input, bool capitalizeFirstSentence = true)
 		{
 			if (input.NullOrEmpty())
@@ -617,13 +617,13 @@ namespace Verse
 			return input;
 		}
 
-		// Token: 0x06000282 RID: 642 RVA: 0x0000C60E File Offset: 0x0000A80E
+		
 		public static string CapitalizeAsTitle(string str)
 		{
 			return Find.ActiveLanguageWorker.ToTitleCase(str);
 		}
 
-		// Token: 0x06000283 RID: 643 RVA: 0x0000C77C File Offset: 0x0000A97C
+		
 		public static string ToCommaList(this IEnumerable<string> items, bool useAnd = false)
 		{
 			if (items == null)
@@ -695,7 +695,7 @@ namespace Verse
 			return "ToCommaListAnd".Translate(stringBuilder.ToString(), text);
 		}
 
-		// Token: 0x06000284 RID: 644 RVA: 0x0000C8D8 File Offset: 0x0000AAD8
+		
 		public static TaggedString ToClauseSequence(this List<string> entries)
 		{
 			switch (entries.Count)
@@ -723,7 +723,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000285 RID: 645 RVA: 0x0000CB44 File Offset: 0x0000AD44
+		
 		public static string ToLineList(this IList<string> entries, string prefix = null)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -742,7 +742,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000286 RID: 646 RVA: 0x0000CB98 File Offset: 0x0000AD98
+		
 		public static string ToLineList(this IEnumerable<string> entries, string prefix = null, bool capitalizeItems = false)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -763,7 +763,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000287 RID: 647 RVA: 0x0000CC18 File Offset: 0x0000AE18
+		
 		public static string ToSpaceList(IEnumerable<string> entries)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -780,7 +780,7 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x06000288 RID: 648 RVA: 0x0000CC80 File Offset: 0x0000AE80
+		
 		public static string ToCamelCase(string str)
 		{
 			string text = "";
@@ -801,7 +801,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x06000289 RID: 649 RVA: 0x0000CCDC File Offset: 0x0000AEDC
+		
 		public static string Truncate(this string str, float width, Dictionary<string, string> cache = null)
 		{
 			string text;
@@ -831,7 +831,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x0600028A RID: 650 RVA: 0x0000CD60 File Offset: 0x0000AF60
+		
 		public static TaggedString Truncate(this TaggedString str, float width, Dictionary<string, TaggedString> cache = null)
 		{
 			TaggedString taggedString;
@@ -861,7 +861,7 @@ namespace Verse
 			return taggedString;
 		}
 
-		// Token: 0x0600028B RID: 651 RVA: 0x0000CE28 File Offset: 0x0000B028
+		
 		public static string TruncateHeight(this string str, float width, float height, Dictionary<string, string> cache = null)
 		{
 			string text;
@@ -891,7 +891,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x0600028C RID: 652 RVA: 0x0000CEA4 File Offset: 0x0000B0A4
+		
 		public static string Flatten(this string str)
 		{
 			if (str.NullOrEmpty())
@@ -916,7 +916,7 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x0600028D RID: 653 RVA: 0x0000CF1C File Offset: 0x0000B11C
+		
 		public static string MergeMultipleSpaces(this string str, bool leaveMultipleSpacesAtLineBeginning = true)
 		{
 			if (str.NullOrEmpty())
@@ -947,7 +947,7 @@ namespace Verse
 			return GenText.tmpStringBuilder.ToString();
 		}
 
-		// Token: 0x0600028E RID: 654 RVA: 0x0000CFC4 File Offset: 0x0000B1C4
+		
 		public static string TrimmedToLength(this string str, int length)
 		{
 			if (str == null || str.Length <= length)
@@ -957,13 +957,13 @@ namespace Verse
 			return str.Substring(0, length);
 		}
 
-		// Token: 0x0600028F RID: 655 RVA: 0x0000CFDC File Offset: 0x0000B1DC
+		
 		public static bool ContainsEmptyLines(string str)
 		{
 			return str.NullOrEmpty() || (str[0] == '\n' || str[0] == '\r') || (str[str.Length - 1] == '\n' || str[str.Length - 1] == '\r') || (str.Contains("\n\n") || str.Contains("\r\n\r\n") || str.Contains("\r\r"));
 		}
 
-		// Token: 0x06000290 RID: 656 RVA: 0x0000D05C File Offset: 0x0000B25C
+		
 		public static string ToStringByStyle(this float f, ToStringStyle style, ToStringNumberSense numberSense = ToStringNumberSense.Absolute)
 		{
 			if (style == ToStringStyle.Temperature && numberSense == ToStringNumberSense.Offset)
@@ -1048,7 +1048,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x06000291 RID: 657 RVA: 0x0000D21C File Offset: 0x0000B41C
+		
 		public static string ToStringDecimalIfSmall(this float f)
 		{
 			if (Mathf.Abs(f) < 1f)
@@ -1062,19 +1062,19 @@ namespace Verse
 			return Mathf.RoundToInt(f).ToStringCached();
 		}
 
-		// Token: 0x06000292 RID: 658 RVA: 0x0000D27A File Offset: 0x0000B47A
+		
 		public static string ToStringPercent(this float f)
 		{
 			return (f * 100f).ToStringDecimalIfSmall() + "%";
 		}
 
-		// Token: 0x06000293 RID: 659 RVA: 0x0000D294 File Offset: 0x0000B494
+		
 		public static string ToStringPercent(this float f, string format)
 		{
 			return ((f + 1E-05f) * 100f).ToString(format) + "%";
 		}
 
-		// Token: 0x06000294 RID: 660 RVA: 0x0000D2C4 File Offset: 0x0000B4C4
+		
 		public static string ToStringMoney(this float f, string format = null)
 		{
 			if (format == null)
@@ -1091,7 +1091,7 @@ namespace Verse
 			return "MoneyFormat".Translate(f.ToString(format));
 		}
 
-		// Token: 0x06000295 RID: 661 RVA: 0x0000D310 File Offset: 0x0000B510
+		
 		public static string ToStringMoneyOffset(this float f, string format = null)
 		{
 			string text = f.ToStringMoney(format);
@@ -1102,13 +1102,13 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x06000296 RID: 662 RVA: 0x0000D347 File Offset: 0x0000B547
+		
 		public static string ToStringWithSign(this int i)
 		{
 			return i.ToString("+#;-#;0");
 		}
 
-		// Token: 0x06000297 RID: 663 RVA: 0x0000D355 File Offset: 0x0000B555
+		
 		public static string ToStringWithSign(this float f, string format = "0.##")
 		{
 			if (f > 0f)
@@ -1118,19 +1118,19 @@ namespace Verse
 			return f.ToString(format);
 		}
 
-		// Token: 0x06000298 RID: 664 RVA: 0x0000D37C File Offset: 0x0000B57C
+		
 		public static string ToStringKilobytes(this int bytes, string format = "F2")
 		{
 			return ((float)bytes / 1024f).ToString(format) + "Kb";
 		}
 
-		// Token: 0x06000299 RID: 665 RVA: 0x0000D3A4 File Offset: 0x0000B5A4
+		
 		public static string ToStringYesNo(this bool b)
 		{
 			return b ? "Yes".Translate() : "No".Translate();
 		}
 
-		// Token: 0x0600029A RID: 666 RVA: 0x0000D3C4 File Offset: 0x0000B5C4
+		
 		public static string ToStringLongitude(this float longitude)
 		{
 			bool flag = longitude < 0f;
@@ -1141,7 +1141,7 @@ namespace Verse
 			return longitude.ToString("F2") + "°" + (flag ? "W" : "E");
 		}
 
-		// Token: 0x0600029B RID: 667 RVA: 0x0000D408 File Offset: 0x0000B608
+		
 		public static string ToStringLatitude(this float latitude)
 		{
 			bool flag = latitude < 0f;
@@ -1152,7 +1152,7 @@ namespace Verse
 			return latitude.ToString("F2") + "°" + (flag ? "S" : "N");
 		}
 
-		// Token: 0x0600029C RID: 668 RVA: 0x0000D44C File Offset: 0x0000B64C
+		
 		public static string ToStringMass(this float mass)
 		{
 			if (mass == 0f)
@@ -1184,7 +1184,7 @@ namespace Verse
 			return num2.ToString("0.##") + " g";
 		}
 
-		// Token: 0x0600029D RID: 669 RVA: 0x0000D528 File Offset: 0x0000B728
+		
 		public static string ToStringMassOffset(this float mass)
 		{
 			string text = mass.ToStringMass();
@@ -1195,7 +1195,7 @@ namespace Verse
 			return text;
 		}
 
-		// Token: 0x0600029E RID: 670 RVA: 0x0000D551 File Offset: 0x0000B751
+		
 		public static string ToStringSign(this float val)
 		{
 			if (val >= 0f)
@@ -1205,7 +1205,7 @@ namespace Verse
 			return "";
 		}
 
-		// Token: 0x0600029F RID: 671 RVA: 0x0000D568 File Offset: 0x0000B768
+		
 		public static string ToStringEnsureThreshold(this float value, float threshold, int decimalPlaces)
 		{
 			if (value > threshold && Math.Round((double)value, decimalPlaces) <= Math.Round((double)threshold, decimalPlaces))
@@ -1215,21 +1215,21 @@ namespace Verse
 			return value.ToString("F" + decimalPlaces);
 		}
 
-		// Token: 0x060002A0 RID: 672 RVA: 0x0000D5CF File Offset: 0x0000B7CF
+		
 		public static string ToStringTemperature(this float celsiusTemp, string format = "F1")
 		{
 			celsiusTemp = GenTemperature.CelsiusTo(celsiusTemp, Prefs.TemperatureMode);
 			return celsiusTemp.ToStringTemperatureRaw(format);
 		}
 
-		// Token: 0x060002A1 RID: 673 RVA: 0x0000D5E5 File Offset: 0x0000B7E5
+		
 		public static string ToStringTemperatureOffset(this float celsiusTemp, string format = "F1")
 		{
 			celsiusTemp = GenTemperature.CelsiusToOffset(celsiusTemp, Prefs.TemperatureMode);
 			return celsiusTemp.ToStringTemperatureRaw(format);
 		}
 
-		// Token: 0x060002A2 RID: 674 RVA: 0x0000D5FC File Offset: 0x0000B7FC
+		
 		public static string ToStringTemperatureRaw(this float temp, string format = "F1")
 		{
 			switch (Prefs.TemperatureMode)
@@ -1245,7 +1245,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060002A3 RID: 675 RVA: 0x0000D664 File Offset: 0x0000B864
+		
 		public static string ToStringTwoDigits(this Vector2 v)
 		{
 			return string.Concat(new string[]
@@ -1258,37 +1258,37 @@ namespace Verse
 			});
 		}
 
-		// Token: 0x060002A4 RID: 676 RVA: 0x0000D6BC File Offset: 0x0000B8BC
+		
 		public static string ToStringWorkAmount(this float workAmount)
 		{
 			return Mathf.CeilToInt(workAmount / 60f).ToString();
 		}
 
-		// Token: 0x060002A5 RID: 677 RVA: 0x0000D6E0 File Offset: 0x0000B8E0
+		
 		public static string ToStringBytes(this int b, string format = "F2")
 		{
 			return ((float)b / 8f / 1024f).ToString(format) + "kb";
 		}
 
-		// Token: 0x060002A6 RID: 678 RVA: 0x0000D710 File Offset: 0x0000B910
+		
 		public static string ToStringBytes(this uint b, string format = "F2")
 		{
 			return (b / 8f / 1024f).ToString(format) + "kb";
 		}
 
-		// Token: 0x060002A7 RID: 679 RVA: 0x0000D740 File Offset: 0x0000B940
+		
 		public static string ToStringBytes(this long b, string format = "F2")
 		{
 			return ((float)b / 8f / 1024f).ToString(format) + "kb";
 		}
 
-		// Token: 0x060002A8 RID: 680 RVA: 0x0000D770 File Offset: 0x0000B970
+		
 		public static string ToStringBytes(this ulong b, string format = "F2")
 		{
 			return (b / 8f / 1024f).ToString(format) + "kb";
 		}
 
-		// Token: 0x060002A9 RID: 681 RVA: 0x0000D7A0 File Offset: 0x0000B9A0
+		
 		public static string ToStringReadable(this KeyCode k)
 		{
 			if (k <= KeyCode.BackQuote)
@@ -1509,19 +1509,19 @@ namespace Verse
 			return k.ToString();
 		}
 
-		// Token: 0x060002AA RID: 682 RVA: 0x0000DBF1 File Offset: 0x0000BDF1
+		
 		public static void AppendWithComma(this StringBuilder sb, string text)
 		{
 			sb.AppendWithSeparator(text, ", ");
 		}
 
-		// Token: 0x060002AB RID: 683 RVA: 0x0000DBFF File Offset: 0x0000BDFF
+		
 		public static void AppendInNewLine(this StringBuilder sb, string text)
 		{
 			sb.AppendWithSeparator(text, "\n");
 		}
 
-		// Token: 0x060002AC RID: 684 RVA: 0x0000DC0D File Offset: 0x0000BE0D
+		
 		public static void AppendWithSeparator(this StringBuilder sb, string text, string separator)
 		{
 			if (text.NullOrEmpty())
@@ -1535,7 +1535,7 @@ namespace Verse
 			sb.Append(text);
 		}
 
-		// Token: 0x060002AD RID: 685 RVA: 0x0000DC34 File Offset: 0x0000BE34
+		
 		public static string WordWrapAt(this string text, float length)
 		{
 			Text.Font = GameFont.Medium;
@@ -1554,7 +1554,7 @@ namespace Verse
 			return text.Substring(0, pair.Second) + "\n" + text.Substring(pair.Second + 1);
 		}
 
-		// Token: 0x060002AE RID: 686 RVA: 0x0000DD0C File Offset: 0x0000BF0C
+		
 		public static string EventTypeToStringCached(EventType eventType)
 		{
 			if (GenText.eventTypesCached == null)
@@ -1577,7 +1577,7 @@ namespace Verse
 			return "Unknown";
 		}
 
-		// Token: 0x060002AF RID: 687 RVA: 0x0000DE00 File Offset: 0x0000C000
+		
 		public static string FieldsToString<T>(T obj)
 		{
 			if (obj == null)
@@ -1606,22 +1606,22 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x04000070 RID: 112
+		
 		private const int SaveNameMaxLength = 40;
 
-		// Token: 0x04000071 RID: 113
+		
 		private const char DegreeSymbol = '°';
 
-		// Token: 0x04000072 RID: 114
+		
 		private static StringBuilder tmpSb = new StringBuilder();
 
-		// Token: 0x04000073 RID: 115
+		
 		private static StringBuilder tmpSbForCapitalizedSentences = new StringBuilder();
 
-		// Token: 0x04000074 RID: 116
+		
 		private static StringBuilder tmpStringBuilder = new StringBuilder();
 
-		// Token: 0x04000075 RID: 117
+		
 		private static string[] eventTypesCached;
 	}
 }

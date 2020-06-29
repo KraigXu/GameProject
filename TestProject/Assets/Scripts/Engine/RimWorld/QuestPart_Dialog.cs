@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000971 RID: 2417
+	
 	public class QuestPart_Dialog : QuestPart
 	{
-		// Token: 0x17000A44 RID: 2628
+		
 		// (get) Token: 0x06003942 RID: 14658 RVA: 0x00130BF0 File Offset: 0x0012EDF0
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -29,13 +29,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A45 RID: 2629
+		
 		// (get) Token: 0x06003943 RID: 14659 RVA: 0x00130C00 File Offset: 0x0012EE00
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-				foreach (Faction faction in this.<>n__1())
+				foreach (Faction faction in this.n__1())
 				{
 					yield return faction;
 				}
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003944 RID: 14660 RVA: 0x00130C10 File Offset: 0x0012EE10
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -100,7 +100,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003945 RID: 14661 RVA: 0x00130E18 File Offset: 0x0012F018
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -115,7 +115,7 @@ namespace RimWorld
 			Scribe_Deep.Look<LookTargets>(ref this.lookTargets, "lookTargets", Array.Empty<object>());
 		}
 
-		// Token: 0x06003946 RID: 14662 RVA: 0x00130ED4 File Offset: 0x0012F0D4
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
@@ -134,47 +134,47 @@ namespace RimWorld
 			this.options.Add(option2);
 		}
 
-		// Token: 0x040021BC RID: 8636
+		
 		public string inSignal;
 
-		// Token: 0x040021BD RID: 8637
+		
 		public string text;
 
-		// Token: 0x040021BE RID: 8638
+		
 		public string title;
 
-		// Token: 0x040021BF RID: 8639
+		
 		public List<QuestPart_Dialog.Option> options = new List<QuestPart_Dialog.Option>();
 
-		// Token: 0x040021C0 RID: 8640
+		
 		public Faction relatedFaction;
 
-		// Token: 0x040021C1 RID: 8641
+		
 		public bool addToArchive = true;
 
-		// Token: 0x040021C2 RID: 8642
+		
 		public bool radioMode;
 
-		// Token: 0x040021C3 RID: 8643
+		
 		public bool getLookTargetsFromSignal;
 
-		// Token: 0x040021C4 RID: 8644
+		
 		public LookTargets lookTargets;
 
-		// Token: 0x02001971 RID: 6513
+		
 		public class Option : IExposable
 		{
-			// Token: 0x060092BD RID: 37565 RVA: 0x002DF617 File Offset: 0x002DD817
+			
 			public void ExposeData()
 			{
 				Scribe_Values.Look<string>(ref this.text, "text", null, false);
 				Scribe_Values.Look<string>(ref this.outSignal, "outSignal", null, false);
 			}
 
-			// Token: 0x040060EB RID: 24811
+			
 			public string text;
 
-			// Token: 0x040060EC RID: 24812
+			
 			public string outSignal;
 		}
 	}

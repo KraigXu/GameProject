@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EED RID: 3821
+	
 	public class PawnColumnWorker_Timetable : PawnColumnWorker
 	{
-		// Token: 0x06005DA6 RID: 23974 RVA: 0x002059D0 File Offset: 0x00203BD0
+		
 		public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
 		{
 			if (pawn.timetable == null)
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005DA7 RID: 23975 RVA: 0x00205A60 File Offset: 0x00203C60
+		
 		public override void DoHeader(Rect rect, PawnTable table)
 		{
 			float num = rect.x;
@@ -46,37 +46,37 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x06005DA8 RID: 23976 RVA: 0x00205AD3 File Offset: 0x00203CD3
+		
 		public override int GetMinWidth(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinWidth(table), 360);
 		}
 
-		// Token: 0x06005DA9 RID: 23977 RVA: 0x00205AE6 File Offset: 0x00203CE6
+		
 		public override int GetOptimalWidth(PawnTable table)
 		{
 			return Mathf.Clamp(504, this.GetMinWidth(table), this.GetMaxWidth(table));
 		}
 
-		// Token: 0x06005DAA RID: 23978 RVA: 0x00205B00 File Offset: 0x00203D00
+		
 		public override int GetMaxWidth(PawnTable table)
 		{
 			return Mathf.Min(base.GetMaxWidth(table), 600);
 		}
 
-		// Token: 0x06005DAB RID: 23979 RVA: 0x00205B13 File Offset: 0x00203D13
+		
 		public override int GetMinHeaderHeight(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinHeaderHeight(table), 15);
 		}
 
-		// Token: 0x06005DAC RID: 23980 RVA: 0x00205B24 File Offset: 0x00203D24
+		
 		public override int Compare(Pawn a, Pawn b)
 		{
 			return this.GetValueToCompare(a).CompareTo(this.GetValueToCompare(b));
 		}
 
-		// Token: 0x06005DAD RID: 23981 RVA: 0x00205B47 File Offset: 0x00203D47
+		
 		private int GetValueToCompare(Pawn pawn)
 		{
 			if (pawn.timetable == null)
@@ -86,7 +86,7 @@ namespace RimWorld
 			return pawn.timetable.times.FirstIndexOf((TimeAssignmentDef x) => x == TimeAssignmentDefOf.Work);
 		}
 
-		// Token: 0x06005DAE RID: 23982 RVA: 0x00205B88 File Offset: 0x00203D88
+		
 		private void DoTimeAssignment(Rect rect, Pawn p, int hour)
 		{
 			rect = rect.ContractedBy(1f);

@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EEC RID: 3820
+	
 	public class PawnColumnWorker_Outfit : PawnColumnWorker
 	{
-		// Token: 0x06005D9D RID: 23965 RVA: 0x0020563C File Offset: 0x0020383C
+		
 		public override void DoHeader(Rect rect, PawnTable table)
 		{
 			base.DoHeader(rect, table);
@@ -23,7 +23,7 @@ namespace RimWorld
 			UIHighlighter.HighlightOpportunity(rect2, "ManageOutfits");
 		}
 
-		// Token: 0x06005D9E RID: 23966 RVA: 0x002056D0 File Offset: 0x002038D0
+		
 		public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
 		{
 			if (pawn.outfits == null)
@@ -82,7 +82,7 @@ namespace RimWorld
 			num3 += (float)num2;
 		}
 
-		// Token: 0x06005D9F RID: 23967 RVA: 0x0020596D File Offset: 0x00203B6D
+		
 		private IEnumerable<Widgets.DropdownMenuElement<Outfit>> Button_GenerateMenu(Pawn pawn)
 		{
 			using (List<Outfit>.Enumerator enumerator = Current.Game.outfitDatabase.AllOutfits.GetEnumerator())
@@ -105,31 +105,31 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005DA0 RID: 23968 RVA: 0x00204DC3 File Offset: 0x00202FC3
+		
 		public override int GetMinWidth(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinWidth(table), Mathf.CeilToInt(194f));
 		}
 
-		// Token: 0x06005DA1 RID: 23969 RVA: 0x00204DDB File Offset: 0x00202FDB
+		
 		public override int GetOptimalWidth(PawnTable table)
 		{
 			return Mathf.Clamp(Mathf.CeilToInt(251f), this.GetMinWidth(table), this.GetMaxWidth(table));
 		}
 
-		// Token: 0x06005DA2 RID: 23970 RVA: 0x00204AFD File Offset: 0x00202CFD
+		
 		public override int GetMinHeaderHeight(PawnTable table)
 		{
 			return Mathf.Max(base.GetMinHeaderHeight(table), 65);
 		}
 
-		// Token: 0x06005DA3 RID: 23971 RVA: 0x00205980 File Offset: 0x00203B80
+		
 		public override int Compare(Pawn a, Pawn b)
 		{
 			return this.GetValueToCompare(a).CompareTo(this.GetValueToCompare(b));
 		}
 
-		// Token: 0x06005DA4 RID: 23972 RVA: 0x002059A3 File Offset: 0x00203BA3
+		
 		private int GetValueToCompare(Pawn pawn)
 		{
 			if (pawn.outfits != null && pawn.outfits.CurrentOutfit != null)
@@ -139,10 +139,10 @@ namespace RimWorld
 			return int.MinValue;
 		}
 
-		// Token: 0x040032D0 RID: 13008
+		
 		public const int TopAreaHeight = 65;
 
-		// Token: 0x040032D1 RID: 13009
+		
 		public const int ManageOutfitsButtonHeight = 32;
 	}
 }

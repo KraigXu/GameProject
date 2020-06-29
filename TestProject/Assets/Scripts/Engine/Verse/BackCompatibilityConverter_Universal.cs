@@ -4,16 +4,16 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x020003F7 RID: 1015
+	
 	public class BackCompatibilityConverter_Universal : BackCompatibilityConverter
 	{
-		// Token: 0x06001E36 RID: 7734 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
 			return true;
 		}
 
-		// Token: 0x06001E37 RID: 7735 RVA: 0x000BC4D8 File Offset: 0x000BA6D8
+		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -46,7 +46,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E38 RID: 7736 RVA: 0x000BC5D2 File Offset: 0x000BA7D2
+		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (providedClassName == "Hediff_PsychicAmplifier")
@@ -56,7 +56,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06001E39 RID: 7737 RVA: 0x000BC5F0 File Offset: 0x000BA7F0
+		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)

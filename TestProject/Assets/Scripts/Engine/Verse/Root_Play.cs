@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000124 RID: 292
+	
 	public class Root_Play : Root
 	{
-		// Token: 0x06000831 RID: 2097 RVA: 0x00025C20 File Offset: 0x00023E20
+		
 		public override void Start()
 		{
 			Log.ResetMessageCount();
@@ -56,7 +56,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000832 RID: 2098 RVA: 0x00025D78 File Offset: 0x00023F78
+		
 		public override void Update()
 		{
 			base.Update();
@@ -77,7 +77,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000833 RID: 2099 RVA: 0x00025DE4 File Offset: 0x00023FE4
+		
 		private static void SetupForQuickTestPlay()
 		{
 			Current.ProgramState = ProgramState.Entry;
@@ -93,7 +93,7 @@ namespace Verse
 			Find.Scenario.PreMapGenerate();
 		}
 
-		// Token: 0x04000742 RID: 1858
+		
 		public MusicManagerPlay musicManagerPlay;
 	}
 }

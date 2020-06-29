@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000F35 RID: 3893
+	
 	public static class Autotests_ColonyMaker
 	{
-		// Token: 0x1700111B RID: 4379
+		
 		// (get) Token: 0x06005F57 RID: 24407 RVA: 0x000885D0 File Offset: 0x000867D0
 		private static Map Map
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F58 RID: 24408 RVA: 0x0020EAED File Offset: 0x0020CCED
+		
 		public static void MakeColony_Full()
 		{
 			Autotests_ColonyMaker.MakeColony(new ColonyMakerFlag[]
@@ -42,13 +42,13 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06005F59 RID: 24409 RVA: 0x0020EB06 File Offset: 0x0020CD06
+		
 		public static void MakeColony_Animals()
 		{
 			Autotests_ColonyMaker.MakeColony(new ColonyMakerFlag[1]);
 		}
 
-		// Token: 0x06005F5A RID: 24410 RVA: 0x0020EB14 File Offset: 0x0020CD14
+		
 		public static void MakeColony(params ColonyMakerFlag[] flags)
 		{
 			bool godMode = DebugSettings.godMode;
@@ -315,12 +315,8 @@ namespace RimWorld
 				Zone_Growing dummyZone = new Zone_Growing(Autotests_ColonyMaker.Map.zoneManager);
 				Autotests_ColonyMaker.Map.zoneManager.RegisterZone(dummyZone);
 				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-				Func<ThingDef, bool> predicate;
-				Func<ThingDef, bool> <>9__11;
-				if ((predicate = <>9__11) == null)
-				{
-					predicate = (<>9__11 = ((ThingDef d) => d.plant != null && PlantUtility.CanSowOnGrower(d, dummyZone)));
-				}
+				Func<ThingDef, bool> predicate = ((ThingDef d) => d.plant != null && PlantUtility.CanSowOnGrower(d, dummyZone));
+
 				foreach (ThingDef plantDefToGrow in allDefs.Where(predicate))
 				{
 					CellRect cellRect6;
@@ -348,7 +344,7 @@ namespace RimWorld
 			Thing.allowDestroyNonDestroyable = false;
 		}
 
-		// Token: 0x06005F5B RID: 24411 RVA: 0x0020F784 File Offset: 0x0020D984
+		
 		private static void FillWithItems(CellRect rect, List<ThingDef> itemDefs)
 		{
 			int num = 0;
@@ -366,7 +362,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F5C RID: 24412 RVA: 0x0020F800 File Offset: 0x0020DA00
+		
 		private static Thing TryMakeBuilding(ThingDef def)
 		{
 			CellRect cellRect;
@@ -382,7 +378,7 @@ namespace RimWorld
 			return cellRect.CenterCell.GetEdifice(Find.CurrentMap);
 		}
 
-		// Token: 0x06005F5D RID: 24413 RVA: 0x0020F8A8 File Offset: 0x0020DAA8
+		
 		private static bool TryGetFreeRect(int width, int height, out CellRect result)
 		{
 			for (int i = Autotests_ColonyMaker.overRect.minZ; i <= Autotests_ColonyMaker.overRect.maxZ - height; i++)
@@ -429,7 +425,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005F5E RID: 24414 RVA: 0x0020F9F0 File Offset: 0x0020DBF0
+		
 		private static void DoToColonists(float fraction, Action<Pawn> funcToDo)
 		{
 			int num = Rand.RangeInclusive(1, Mathf.RoundToInt((float)Autotests_ColonyMaker.Map.mapPawns.FreeColonistsCount * fraction));
@@ -445,7 +441,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F5F RID: 24415 RVA: 0x0020FA78 File Offset: 0x0020DC78
+		
 		private static void MakeColonists(int count, IntVec3 center)
 		{
 			for (int i = 0; i < count; i++)
@@ -464,7 +460,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F60 RID: 24416 RVA: 0x0020FB20 File Offset: 0x0020DD20
+		
 		private static void DeleteAllSpawnedPawns()
 		{
 			foreach (Pawn pawn in Autotests_ColonyMaker.Map.mapPawns.AllPawnsSpawned.ToList<Pawn>())
@@ -475,7 +471,7 @@ namespace RimWorld
 			Find.GameEnder.gameEnding = false;
 		}
 
-		// Token: 0x06005F61 RID: 24417 RVA: 0x0020FB98 File Offset: 0x0020DD98
+		
 		private static void ClearAllHomeArea()
 		{
 			foreach (IntVec3 c in Autotests_ColonyMaker.Map.AllCells)
@@ -484,19 +480,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005F62 RID: 24418 RVA: 0x0020FBF8 File Offset: 0x0020DDF8
+		
 		private static void FillWithHomeArea(CellRect r)
 		{
 			new Designator_AreaHomeExpand().DesignateMultiCell(r.Cells);
 		}
 
-		// Token: 0x040033CE RID: 13262
+		
 		private static CellRect overRect;
 
-		// Token: 0x040033CF RID: 13263
+		
 		private static BoolGrid usedCells;
 
-		// Token: 0x040033D0 RID: 13264
+		
 		private const int OverRectSize = 100;
 	}
 }

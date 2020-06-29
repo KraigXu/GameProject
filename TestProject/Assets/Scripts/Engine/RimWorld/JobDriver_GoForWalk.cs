@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000645 RID: 1605
+	
 	public class JobDriver_GoForWalk : JobDriver
 	{
-		// Token: 0x06002BE5 RID: 11237 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002BE6 RID: 11238 RVA: 0x000FC487 File Offset: 0x000FA687
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOn(() => !JoyUtility.EnjoyableOutsideNow(this.pawn, null));

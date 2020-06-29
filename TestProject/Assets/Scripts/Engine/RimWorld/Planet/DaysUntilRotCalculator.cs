@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001241 RID: 4673
+	
 	public static class DaysUntilRotCalculator
 	{
-		// Token: 0x06006CDE RID: 27870 RVA: 0x00260C44 File Offset: 0x0025EE44
+		
 		public static float ApproxDaysUntilRot(List<ThingCount> potentiallyFood, int tile, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysUntilRotCalculator.tmpTicksToArrive.Clear();
@@ -39,7 +39,7 @@ namespace RimWorld.Planet
 			return GenMath.WeightedMedian(DaysUntilRotCalculator.tmpNutritions, 600f, 0.5f);
 		}
 
-		// Token: 0x06006CDF RID: 27871 RVA: 0x00260D44 File Offset: 0x0025EF44
+		
 		public static int ApproxTicksUntilRot_AssumeTimePassesBy(CompRottable rot, int tile, List<Pair<int, int>> ticksToArrive = null)
 		{
 			float num = 0f;
@@ -76,13 +76,13 @@ namespace RimWorld.Planet
 			return num2 - Find.TickManager.TicksAbs;
 		}
 
-		// Token: 0x06006CE0 RID: 27872 RVA: 0x00260E1D File Offset: 0x0025F01D
+		
 		public static float ApproxDaysUntilRot(Caravan caravan)
 		{
 			return DaysUntilRotCalculator.ApproxDaysUntilRot(CaravanInventoryUtility.AllInventoryItems(caravan), caravan.Tile, caravan.pather.curPath, caravan.pather.nextTileCostLeft, caravan.TicksPerMove);
 		}
 
-		// Token: 0x06006CE1 RID: 27873 RVA: 0x00260E4C File Offset: 0x0025F04C
+		
 		public static float ApproxDaysUntilRot(List<Thing> potentiallyFood, int tile, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysUntilRotCalculator.tmpThingCounts.Clear();
@@ -95,7 +95,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CE2 RID: 27874 RVA: 0x00260EB0 File Offset: 0x0025F0B0
+		
 		public static float ApproxDaysUntilRot(List<TransferableOneWay> transferables, int tile, IgnorePawnsInventoryMode ignoreInventory, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysUntilRotCalculator.tmpThingCounts.Clear();
@@ -133,7 +133,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CE3 RID: 27875 RVA: 0x00260FCC File Offset: 0x0025F1CC
+		
 		public static float ApproxDaysUntilRotLeftAfterTransfer(List<TransferableOneWay> transferables, int tile, IgnorePawnsInventoryMode ignoreInventory, WorldPath path = null, float nextTileCostLeft = 0f, int caravanTicksPerMove = 3300)
 		{
 			DaysUntilRotCalculator.tmpThingCounts.Clear();
@@ -175,7 +175,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006CE4 RID: 27876 RVA: 0x00261130 File Offset: 0x0025F330
+		
 		public static float ApproxDaysUntilRotLeftAfterTradeableTransfer(List<Thing> allCurrentThings, List<Tradeable> tradeables, int tile, IgnorePawnsInventoryMode ignoreInventory)
 		{
 			DaysUntilRotCalculator.tmpThingCountsFromTradeables.Clear();
@@ -209,22 +209,22 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x040043AA RID: 17322
+		
 		private static List<ThingCount> tmpThingCounts = new List<ThingCount>();
 
-		// Token: 0x040043AB RID: 17323
+		
 		private static List<ThingCount> tmpThingCountsFromTradeables = new List<ThingCount>();
 
-		// Token: 0x040043AC RID: 17324
+		
 		private static List<Pair<float, float>> tmpNutritions = new List<Pair<float, float>>();
 
-		// Token: 0x040043AD RID: 17325
+		
 		private static List<Thing> thingsInReverse = new List<Thing>();
 
-		// Token: 0x040043AE RID: 17326
+		
 		private static List<Pair<int, int>> tmpTicksToArrive = new List<Pair<int, int>>();
 
-		// Token: 0x040043AF RID: 17327
+		
 		public const float InfiniteDaysUntilRot = 600f;
 	}
 }

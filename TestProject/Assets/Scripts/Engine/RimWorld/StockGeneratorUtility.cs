@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DAD RID: 3501
+	
 	public class StockGeneratorUtility
 	{
-		// Token: 0x0600550F RID: 21775 RVA: 0x001C4DDA File Offset: 0x001C2FDA
+		
 		public static IEnumerable<Thing> TryMakeForStock(ThingDef thingDef, int count)
 		{
 			if (thingDef.MadeFromStuff)
@@ -35,7 +35,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06005510 RID: 21776 RVA: 0x001C4DF4 File Offset: 0x001C2FF4
+		
 		public static Thing TryMakeForStockSingle(ThingDef thingDef, int stackCount)
 		{
 			if (stackCount <= 0)

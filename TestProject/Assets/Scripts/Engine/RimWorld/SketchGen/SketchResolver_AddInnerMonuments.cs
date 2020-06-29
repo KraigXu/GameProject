@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001088 RID: 4232
+	
 	public class SketchResolver_AddInnerMonuments : SketchResolver
 	{
-		// Token: 0x0600646D RID: 25709 RVA: 0x0022D400 File Offset: 0x0022B600
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			CellRect outerRect = parms.rect ?? parms.sketch.OccupiedRect;
@@ -35,16 +35,16 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600646E RID: 25710 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x04003D25 RID: 15653
+		
 		private const int MinRectWidth = 7;
 
-		// Token: 0x04003D26 RID: 15654
+		
 		private const int MinRectHeight = 7;
 	}
 }

@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000A78 RID: 2680
+	
 	public abstract class CompPower : ThingComp
 	{
-		// Token: 0x17000B38 RID: 2872
+		
 		// (get) Token: 0x06003F3A RID: 16186 RVA: 0x00150222 File Offset: 0x0014E422
 		public bool TransmitsPowerNow
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B39 RID: 2873
+		
 		// (get) Token: 0x06003F3B RID: 16187 RVA: 0x00150234 File Offset: 0x0014E434
 		public PowerNet PowerNet
 		{
@@ -37,7 +37,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B3A RID: 2874
+		
 		// (get) Token: 0x06003F3C RID: 16188 RVA: 0x0015025A File Offset: 0x0014E45A
 		public CompProperties_Power Props
 		{
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F3D RID: 16189 RVA: 0x00150267 File Offset: 0x0014E467
+		
 		public virtual void ResetPowerVars()
 		{
 			this.transNet = null;
@@ -57,12 +57,12 @@ namespace RimWorld
 			CompPower.lastManualReconnector = null;
 		}
 
-		// Token: 0x06003F3E RID: 16190 RVA: 0x00002681 File Offset: 0x00000881
+		
 		public virtual void SetUpPowerVars()
 		{
 		}
 
-		// Token: 0x06003F3F RID: 16191 RVA: 0x00150290 File Offset: 0x0014E490
+		
 		public override void PostExposeData()
 		{
 			Thing thing = null;
@@ -81,7 +81,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F40 RID: 16192 RVA: 0x001502FC File Offset: 0x0014E4FC
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
@@ -100,7 +100,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F41 RID: 16193 RVA: 0x001503A8 File Offset: 0x0014E5A8
+		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
@@ -125,7 +125,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F42 RID: 16194 RVA: 0x00150461 File Offset: 0x0014E661
+		
 		public virtual void LostConnectParent()
 		{
 			this.connectParent = null;
@@ -135,7 +135,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F43 RID: 16195 RVA: 0x0015048D File Offset: 0x0014E68D
+		
 		public override void PostPrintOnto(SectionLayer layer)
 		{
 			base.PostPrintOnto(layer);
@@ -145,7 +145,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F44 RID: 16196 RVA: 0x001504B8 File Offset: 0x0014E6B8
+		
 		public override void CompPrintForPowerGrid(SectionLayer layer)
 		{
 			if (this.TransmitsPowerNow)
@@ -162,13 +162,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F45 RID: 16197 RVA: 0x0015051C File Offset: 0x0014E71C
+		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.connectParent != null && this.parent.Faction == Faction.OfPlayer)
 			{
@@ -189,7 +186,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003F46 RID: 16198 RVA: 0x0015052C File Offset: 0x0014E72C
+		
 		private void TryManualReconnect()
 		{
 			if (CompPower.lastManualReconnector != this)
@@ -220,7 +217,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F47 RID: 16199 RVA: 0x00150640 File Offset: 0x0014E840
+		
 		public void ConnectToTransmitter(CompPower transmitter, bool reconnectingAfterLoading = false)
 		{
 			if (this.connectParent != null && (!reconnectingAfterLoading || this.connectParent != transmitter))
@@ -250,7 +247,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F48 RID: 16200 RVA: 0x001506E8 File Offset: 0x0014E8E8
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.PowerNet == null)
@@ -262,22 +259,22 @@ namespace RimWorld
 			return "PowerConnectedRateStored".Translate(value, value2);
 		}
 
-		// Token: 0x040024C4 RID: 9412
+		
 		public PowerNet transNet;
 
-		// Token: 0x040024C5 RID: 9413
+		
 		public CompPower connectParent;
 
-		// Token: 0x040024C6 RID: 9414
+		
 		public List<CompPower> connectChildren;
 
-		// Token: 0x040024C7 RID: 9415
+		
 		private static List<PowerNet> recentlyConnectedNets = new List<PowerNet>();
 
-		// Token: 0x040024C8 RID: 9416
+		
 		private static CompPower lastManualReconnector = null;
 
-		// Token: 0x040024C9 RID: 9417
+		
 		public static readonly float WattsToWattDaysPerTick = 1.66666669E-05f;
 	}
 }

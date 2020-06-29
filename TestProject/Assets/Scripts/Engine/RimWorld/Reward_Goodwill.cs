@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000FD5 RID: 4053
+	
 	public class Reward_Goodwill : Reward
 	{
-		// Token: 0x1700112C RID: 4396
+		
 		// (get) Token: 0x06006150 RID: 24912 RVA: 0x0021CA33 File Offset: 0x0021AC33
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006151 RID: 24913 RVA: 0x0021CA44 File Offset: 0x0021AC44
+		
 		public override void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
 			this.amount = GenMath.RoundRandom(RewardsGenerator.RewardValueToGoodwillCurve.Evaluate(rewardValue));
@@ -45,7 +45,7 @@ namespace RimWorld
 			this.faction = parms.giverFaction;
 		}
 
-		// Token: 0x06006152 RID: 24914 RVA: 0x0021CB21 File Offset: 0x0021AD21
+		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
 			yield return new QuestPart_FactionGoodwillChange
@@ -57,13 +57,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006153 RID: 24915 RVA: 0x0021CB34 File Offset: 0x0021AD34
+		
 		public override string GetDescription(RewardsGeneratorParams parms)
 		{
 			return "Reward_Goodwill".Translate(this.faction, this.amount).Resolve();
 		}
 
-		// Token: 0x06006154 RID: 24916 RVA: 0x0021CB6C File Offset: 0x0021AD6C
+		
 		public override string ToString()
 		{
 			return string.Concat(new object[]
@@ -77,7 +77,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06006155 RID: 24917 RVA: 0x0021CBC6 File Offset: 0x0021ADC6
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -85,10 +85,10 @@ namespace RimWorld
 			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
 		}
 
-		// Token: 0x04003B3C RID: 15164
+		
 		public int amount;
 
-		// Token: 0x04003B3D RID: 15165
+		
 		public Faction faction;
 	}
 }

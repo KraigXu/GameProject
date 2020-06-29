@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B93 RID: 2963
+	
 	public class Need_Joy : Need
 	{
-		// Token: 0x17000C43 RID: 3139
+		
 		// (get) Token: 0x06004579 RID: 17785 RVA: 0x00177540 File Offset: 0x00175740
 		public JoyCategory CurCategory
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C44 RID: 3140
+		
 		// (get) Token: 0x0600457A RID: 17786 RVA: 0x0017759C File Offset: 0x0017579C
 		private float FallPerInterval
 		{
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C45 RID: 3141
+		
 		// (get) Token: 0x0600457B RID: 17787 RVA: 0x001775F9 File Offset: 0x001757F9
 		public override int GUIChangeArrow
 		{
@@ -83,7 +83,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C46 RID: 3142
+		
 		// (get) Token: 0x0600457C RID: 17788 RVA: 0x00177610 File Offset: 0x00175810
 		private bool GainingJoy
 		{
@@ -93,7 +93,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600457D RID: 17789 RVA: 0x00177628 File Offset: 0x00175828
+		
 		public Need_Joy(Pawn pawn) : base(pawn)
 		{
 			this.threshPercents = new List<float>();
@@ -103,20 +103,20 @@ namespace RimWorld
 			this.threshPercents.Add(0.85f);
 		}
 
-		// Token: 0x0600457E RID: 17790 RVA: 0x0017769D File Offset: 0x0017589D
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			this.tolerances.ExposeData();
 		}
 
-		// Token: 0x0600457F RID: 17791 RVA: 0x001776B0 File Offset: 0x001758B0
+		
 		public override void SetInitialLevel()
 		{
 			this.CurLevel = Rand.Range(0.5f, 0.6f);
 		}
 
-		// Token: 0x06004580 RID: 17792 RVA: 0x001776C8 File Offset: 0x001758C8
+		
 		public void GainJoy(float amount, JoyKindDef joyKind)
 		{
 			if (amount <= 0f)
@@ -133,7 +133,7 @@ namespace RimWorld
 			this.lastGainTick = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x06004581 RID: 17793 RVA: 0x00177730 File Offset: 0x00175930
+		
 		public override void NeedInterval()
 		{
 			if (!this.IsFrozen)
@@ -146,7 +146,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004582 RID: 17794 RVA: 0x00177768 File Offset: 0x00175968
+		
 		public override string GetTipString()
 		{
 			string text = base.GetTipString();
@@ -176,10 +176,10 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x040027DC RID: 10204
+		
 		public JoyToleranceSet tolerances = new JoyToleranceSet();
 
-		// Token: 0x040027DD RID: 10205
+		
 		private int lastGainTick = -999;
 	}
 }

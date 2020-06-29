@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CCF RID: 3279
+	
 	public class ThingSetMaker_Nutrition : ThingSetMaker
 	{
-		// Token: 0x06004F75 RID: 20341 RVA: 0x001AC2EE File Offset: 0x001AA4EE
+		
 		public ThingSetMaker_Nutrition()
 		{
 			this.nextSeed = Rand.Int;
 		}
 
-		// Token: 0x06004F76 RID: 20342 RVA: 0x001AC304 File Offset: 0x001AA504
+		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			if (!this.AllowedThingDefs(parms).Any<ThingDef>())
@@ -42,7 +42,7 @@ namespace RimWorld
 			return this.GeneratePossibleDefs(parms, out maxValue, this.nextSeed).Any<ThingStuffPairWithQuality>();
 		}
 
-		// Token: 0x06004F77 RID: 20343 RVA: 0x001AC410 File Offset: 0x001AA610
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			float maxMass = parms.maxTotalMass ?? float.MaxValue;
@@ -56,13 +56,13 @@ namespace RimWorld
 			this.nextSeed++;
 		}
 
-		// Token: 0x06004F78 RID: 20344 RVA: 0x001ABF6B File Offset: 0x001AA16B
+		
 		protected virtual IEnumerable<ThingDef> AllowedThingDefs(ThingSetMakerParams parms)
 		{
 			return ThingSetMakerUtility.GetAllowedThingDefs(parms);
 		}
 
-		// Token: 0x06004F79 RID: 20345 RVA: 0x001AC4AE File Offset: 0x001AA6AE
+		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalNutrition, int seed)
 		{
 			Rand.PushState(seed);
@@ -71,7 +71,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06004F7A RID: 20346 RVA: 0x001AC4C4 File Offset: 0x001AA6C4
+		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalNutrition)
 		{
 			IEnumerable<ThingDef> enumerable = this.AllowedThingDefs(parms);
@@ -92,7 +92,7 @@ namespace RimWorld
 			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp3(countRange, totalNutrition, enumerable, techLevel, qualityGenerator, (ThingStuffPairWithQuality x) => x.GetStatValue(StatDefOf.Nutrition), (ThingStuffPairWithQuality x) => x.GetStatValue(StatDefOf.Nutrition) * (float)x.thing.stackLimit, (ThingStuffPairWithQuality x) => x.GetStatValue(StatDefOf.Nutrition), weightSelector, 100, maxMass, true, 0f);
 		}
 
-		// Token: 0x06004F7B RID: 20347 RVA: 0x001AC674 File Offset: 0x001AA874
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
@@ -122,7 +122,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002C8E RID: 11406
+		
 		private int nextSeed;
 	}
 }

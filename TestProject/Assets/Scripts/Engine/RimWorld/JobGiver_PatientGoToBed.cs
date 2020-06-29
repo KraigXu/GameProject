@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006E5 RID: 1765
+	
 	public class JobGiver_PatientGoToBed : ThinkNode
 	{
-		// Token: 0x06002EF1 RID: 12017 RVA: 0x0010819C File Offset: 0x0010639C
+		
 		public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
 		{
 			if (!HealthAIUtility.ShouldSeekMedicalRest(pawn))
@@ -30,7 +30,7 @@ namespace RimWorld
 			return new ThinkResult(JobMaker.MakeJob(JobDefOf.LayDown, thing), this, null, false);
 		}
 
-		// Token: 0x04001AA2 RID: 6818
+		
 		public bool respectTimetable = true;
 	}
 }

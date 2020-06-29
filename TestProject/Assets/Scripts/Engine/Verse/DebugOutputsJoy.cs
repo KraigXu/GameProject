@@ -5,10 +5,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000345 RID: 837
+	
 	public static class DebugOutputsJoy
 	{
-		// Token: 0x06001977 RID: 6519 RVA: 0x00097C1C File Offset: 0x00095E1C
+		
 		[DebugOutput]
 		public static void JoyGivers()
 		{
@@ -66,7 +66,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<JoyGiverDef>(allDefs, array);
 		}
 
-		// Token: 0x06001978 RID: 6520 RVA: 0x00097E20 File Offset: 0x00096020
+		
 		[DebugOutput]
 		public static void JoyKinds()
 		{
@@ -85,7 +85,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<JoyKindDef>(allDefs, array);
 		}
 
-		// Token: 0x06001979 RID: 6521 RVA: 0x00097E98 File Offset: 0x00096098
+		
 		[DebugOutput]
 		public static void JoyJobs()
 		{

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x0200119C RID: 4508
+	
 	public class QuestNode_TradeRequest_GetRequestedThing : QuestNode
 	{
-		// Token: 0x06006861 RID: 26721 RVA: 0x00247418 File Offset: 0x00245618
+		
 		private static int RandomRequestCount(ThingDef thingDef, Map map)
 		{
 			Rand.PushState(Find.TickManager.TicksGame ^ thingDef.GetHashCode() ^ 876093659);
@@ -19,7 +19,7 @@ namespace RimWorld.QuestGen
 			return ThingUtility.RoundedResourceStackCount(Mathf.Max(1, Mathf.RoundToInt(num / thingDef.BaseMarketValue)));
 		}
 
-		// Token: 0x06006862 RID: 26722 RVA: 0x00247488 File Offset: 0x00245688
+		
 		private static bool TryFindRandomRequestedThingDef(Map map, out ThingDef thingDef, out int count)
 		{
 			QuestNode_TradeRequest_GetRequestedThing.requestCountDict.Clear();
@@ -65,7 +65,7 @@ namespace RimWorld.QuestGen
 			return false;
 		}
 
-		// Token: 0x06006863 RID: 26723 RVA: 0x002474F0 File Offset: 0x002456F0
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -80,7 +80,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x06006864 RID: 26724 RVA: 0x00247588 File Offset: 0x00245788
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			ThingDef thingDef;
@@ -95,10 +95,10 @@ namespace RimWorld.QuestGen
 			return false;
 		}
 
-		// Token: 0x040040AE RID: 16558
+		
 		private static readonly IntRange BaseValueWantedRange = new IntRange(500, 2500);
 
-		// Token: 0x040040AF RID: 16559
+		
 		private static readonly SimpleCurve ValueWantedFactorFromWealthCurve = new SimpleCurve
 		{
 			{
@@ -115,22 +115,22 @@ namespace RimWorld.QuestGen
 			}
 		};
 
-		// Token: 0x040040B0 RID: 16560
+		
 		private static Dictionary<ThingDef, int> requestCountDict = new Dictionary<ThingDef, int>();
 
-		// Token: 0x040040B1 RID: 16561
+		
 		[NoTranslate]
 		public SlateRef<string> storeThingAs;
 
-		// Token: 0x040040B2 RID: 16562
+		
 		[NoTranslate]
 		public SlateRef<string> storeThingCountAs;
 
-		// Token: 0x040040B3 RID: 16563
+		
 		[NoTranslate]
 		public SlateRef<string> storeMarketValueAs;
 
-		// Token: 0x040040B4 RID: 16564
+		
 		[NoTranslate]
 		public SlateRef<string> storeHasQualityAs;
 	}

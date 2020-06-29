@@ -5,10 +5,10 @@ using System.Xml;
 
 namespace Verse
 {
-	// Token: 0x020002D1 RID: 721
+	
 	public class ScribeSaver
 	{
-		// Token: 0x0600144A RID: 5194 RVA: 0x00076AA0 File Offset: 0x00074CA0
+		
 		public void InitSaving(string filePath, string documentElementName)
 		{
 			if (Scribe.mode != LoadSaveMode.Inactive)
@@ -48,7 +48,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600144B RID: 5195 RVA: 0x00076B98 File Offset: 0x00074D98
+		
 		public void FinalizeSaving()
 		{
 			if (Scribe.mode != LoadSaveMode.Saving)
@@ -93,7 +93,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600144C RID: 5196 RVA: 0x00076CA4 File Offset: 0x00074EA4
+		
 		public void WriteElement(string elementName, string value)
 		{
 			if (this.writer == null)
@@ -112,7 +112,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600144D RID: 5197 RVA: 0x00076CF0 File Offset: 0x00074EF0
+		
 		public void WriteAttribute(string attributeName, string value)
 		{
 			if (this.writer == null)
@@ -131,7 +131,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600144E RID: 5198 RVA: 0x00076D3C File Offset: 0x00074F3C
+		
 		public string DebugOutputFor(IExposable saveable)
 		{
 			if (Scribe.mode != LoadSaveMode.Inactive)
@@ -173,7 +173,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x0600144F RID: 5199 RVA: 0x00076E38 File Offset: 0x00075038
+		
 		public bool EnterNode(string nodeName)
 		{
 			if (this.writer == null)
@@ -192,7 +192,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06001450 RID: 5200 RVA: 0x00076E7C File Offset: 0x0007507C
+		
 		public void ExitNode()
 		{
 			if (this.writer == null)
@@ -210,7 +210,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001451 RID: 5201 RVA: 0x00076EBC File Offset: 0x000750BC
+		
 		public void ForceStop()
 		{
 			if (this.writer != null)
@@ -235,28 +235,28 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000DA4 RID: 3492
+		
 		public DebugLoadIDsSavingErrorsChecker loadIDsErrorsChecker = new DebugLoadIDsSavingErrorsChecker();
 
-		// Token: 0x04000DA5 RID: 3493
+		
 		public bool savingForDebug;
 
-		// Token: 0x04000DA6 RID: 3494
+		
 		private Stream saveStream;
 
-		// Token: 0x04000DA7 RID: 3495
+		
 		private XmlWriter writer;
 
-		// Token: 0x04000DA8 RID: 3496
+		
 		private string curPath;
 
-		// Token: 0x04000DA9 RID: 3497
+		
 		private HashSet<string> savedNodes = new HashSet<string>();
 
-		// Token: 0x04000DAA RID: 3498
+		
 		private int nextListElementTemporaryId;
 
-		// Token: 0x04000DAB RID: 3499
+		
 		private bool anyInternalException;
 	}
 }

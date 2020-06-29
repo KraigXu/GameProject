@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A0B RID: 2571
+	
 	public class StorytellerComp_DeepDrillInfestation : StorytellerComp
 	{
-		// Token: 0x17000AD3 RID: 2771
+		
 		// (get) Token: 0x06003D21 RID: 15649 RVA: 0x001437DC File Offset: 0x001419DC
 		protected StorytellerCompProperties_DeepDrillInfestation Props
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000AD4 RID: 2772
+		
 		// (get) Token: 0x06003D22 RID: 15650 RVA: 0x001437EC File Offset: 0x001419EC
 		private float DeepDrillInfestationMTBDaysPerDrill
 		{
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003D23 RID: 15651 RVA: 0x00143829 File Offset: 0x00141A29
+		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			Map map = (Map)target;
@@ -64,7 +64,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040023A9 RID: 9129
+		
 		private static List<Thing> tmpDrills = new List<Thing>();
 	}
 }

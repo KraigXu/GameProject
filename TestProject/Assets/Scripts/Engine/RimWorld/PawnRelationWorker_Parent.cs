@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B61 RID: 2913
+	
 	public class PawnRelationWorker_Parent : PawnRelationWorker
 	{
-		// Token: 0x06004443 RID: 17475 RVA: 0x0017100C File Offset: 0x0016F20C
+		
 		public override float GenerationChance(Pawn generated, Pawn other, PawnGenerationRequest request)
 		{
 			float num = 0f;
@@ -21,7 +21,7 @@ namespace RimWorld
 			return num * base.BaseGenerationChanceFactor(generated, other, request);
 		}
 
-		// Token: 0x06004444 RID: 17476 RVA: 0x0017108C File Offset: 0x0016F28C
+		
 		public override void CreateRelation(Pawn generated, Pawn other, ref PawnGenerationRequest request)
 		{
 			if (other.gender == Gender.Male)
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004445 RID: 17477 RVA: 0x001710F8 File Offset: 0x0016F2F8
+		
 		private static void ResolveMyName(ref PawnGenerationRequest request, Pawn generatedChild)
 		{
 			if (request.FixedLastName != null)
@@ -72,7 +72,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004446 RID: 17478 RVA: 0x00171174 File Offset: 0x0016F374
+		
 		private static void ResolveMySkinColor(ref PawnGenerationRequest request, Pawn generatedChild)
 		{
 			if (request.FixedMelanin != null)

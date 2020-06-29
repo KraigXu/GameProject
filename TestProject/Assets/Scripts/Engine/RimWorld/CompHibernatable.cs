@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A77 RID: 2679
+	
 	public class CompHibernatable : ThingComp
 	{
-		// Token: 0x17000B35 RID: 2869
+		
 		// (get) Token: 0x06003F2F RID: 16175 RVA: 0x0014FFDB File Offset: 0x0014E1DB
 		public CompProperties_Hibernatable Props
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B36 RID: 2870
+		
 		// (get) Token: 0x06003F30 RID: 16176 RVA: 0x0014FFE8 File Offset: 0x0014E1E8
 		// (set) Token: 0x06003F31 RID: 16177 RVA: 0x0014FFF0 File Offset: 0x0014E1F0
 		public HibernatableStateDef State
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B37 RID: 2871
+		
 		// (get) Token: 0x06003F32 RID: 16178 RVA: 0x0015001D File Offset: 0x0014E21D
 		public bool Running
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F33 RID: 16179 RVA: 0x0015002C File Offset: 0x0014E22C
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
@@ -58,14 +58,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F34 RID: 16180 RVA: 0x00150052 File Offset: 0x0014E252
+		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
 			map.info.parent.Notify_HibernatableChanged();
 		}
 
-		// Token: 0x06003F35 RID: 16181 RVA: 0x0015006C File Offset: 0x0014E26C
+		
 		public void Startup()
 		{
 			if (this.State != HibernatableStateDefOf.Hibernating)
@@ -77,7 +77,7 @@ namespace RimWorld
 			this.endStartupTick = Mathf.RoundToInt((float)Find.TickManager.TicksGame + this.Props.startupDays * 60000f);
 		}
 
-		// Token: 0x06003F36 RID: 16182 RVA: 0x001500CC File Offset: 0x0014E2CC
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.State == HibernatableStateDefOf.Hibernating)
@@ -91,7 +91,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003F37 RID: 16183 RVA: 0x00150138 File Offset: 0x0014E338
+		
 		public override void CompTick()
 		{
 			if (this.State == HibernatableStateDefOf.Starting && Find.TickManager.TicksGame > this.endStartupTick)
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003F38 RID: 16184 RVA: 0x001501E5 File Offset: 0x0014E3E5
+		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
@@ -119,10 +119,10 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.endStartupTick, "hibernateendStartupTick", 0, false);
 		}
 
-		// Token: 0x040024C2 RID: 9410
+		
 		private HibernatableStateDef state = HibernatableStateDefOf.Hibernating;
 
-		// Token: 0x040024C3 RID: 9411
+		
 		private int endStartupTick;
 	}
 }

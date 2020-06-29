@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace Verse
 {
-	// Token: 0x02000108 RID: 264
+	
 	public class BattleLogEntry_ExplosionImpact : LogEntry_DamageResult
 	{
-		// Token: 0x1700018D RID: 397
+		
 		// (get) Token: 0x06000730 RID: 1840 RVA: 0x00020EB2 File Offset: 0x0001F0B2
 		private string InitiatorName
 		{
@@ -27,7 +27,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700018E RID: 398
+		
 		// (get) Token: 0x06000731 RID: 1841 RVA: 0x00020EE1 File Offset: 0x0001F0E1
 		private string RecipientName
 		{
@@ -45,12 +45,12 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000732 RID: 1842 RVA: 0x00020AF5 File Offset: 0x0001ECF5
+		
 		public BattleLogEntry_ExplosionImpact() : base(null)
 		{
 		}
 
-		// Token: 0x06000733 RID: 1843 RVA: 0x00020F10 File Offset: 0x0001F110
+		
 		public BattleLogEntry_ExplosionImpact(Thing initiator, Thing recipient, ThingDef weaponDef, ThingDef projectileDef, DamageDef damageDef) : base(null)
 		{
 			if (initiator is Pawn)
@@ -74,13 +74,13 @@ namespace Verse
 			this.damageDef = damageDef;
 		}
 
-		// Token: 0x06000734 RID: 1844 RVA: 0x00020F85 File Offset: 0x0001F185
+		
 		public override bool Concerns(Thing t)
 		{
 			return t == this.initiatorPawn || t == this.recipientPawn;
 		}
 
-		// Token: 0x06000735 RID: 1845 RVA: 0x00020F9B File Offset: 0x0001F19B
+		
 		public override IEnumerable<Thing> GetConcerns()
 		{
 			if (this.initiatorPawn != null)
@@ -94,13 +94,13 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x06000736 RID: 1846 RVA: 0x00020FAC File Offset: 0x0001F1AC
+		
 		public override bool CanBeClickedFromPOV(Thing pov)
 		{
 			return (pov == this.initiatorPawn && this.recipientPawn != null && CameraJumper.CanJump(this.recipientPawn)) || (pov == this.recipientPawn && CameraJumper.CanJump(this.initiatorPawn));
 		}
 
-		// Token: 0x06000737 RID: 1847 RVA: 0x00020FFC File Offset: 0x0001F1FC
+		
 		public override void ClickedFromPOV(Thing pov)
 		{
 			if (this.recipientPawn == null)
@@ -120,7 +120,7 @@ namespace Verse
 			throw new NotImplementedException();
 		}
 
-		// Token: 0x06000738 RID: 1848 RVA: 0x0002104B File Offset: 0x0001F24B
+		
 		public override Texture2D IconFromPOV(Thing pov)
 		{
 			if (this.damagedParts.NullOrEmpty<BodyPartRecord>())
@@ -138,7 +138,7 @@ namespace Verse
 			return null;
 		}
 
-		// Token: 0x06000739 RID: 1849 RVA: 0x0002107E File Offset: 0x0001F27E
+		
 		protected override BodyDef DamagedBody()
 		{
 			if (this.recipientPawn == null)
@@ -148,7 +148,7 @@ namespace Verse
 			return this.recipientPawn.RaceProps.body;
 		}
 
-		// Token: 0x0600073A RID: 1850 RVA: 0x0002109C File Offset: 0x0001F29C
+		
 		protected override GrammarRequest GenerateGrammarRequest()
 		{
 			GrammarRequest result = base.GenerateGrammarRequest();
@@ -189,7 +189,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x0600073B RID: 1851 RVA: 0x0002120C File Offset: 0x0001F40C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -202,31 +202,31 @@ namespace Verse
 			Scribe_Defs.Look<DamageDef>(ref this.damageDef, "damageDef");
 		}
 
-		// Token: 0x0600073C RID: 1852 RVA: 0x00021291 File Offset: 0x0001F491
+		
 		public override string ToString()
 		{
 			return "BattleLogEntry_ExplosionImpact: " + this.InitiatorName + "->" + this.RecipientName;
 		}
 
-		// Token: 0x0400069F RID: 1695
+		
 		private Pawn initiatorPawn;
 
-		// Token: 0x040006A0 RID: 1696
+		
 		private ThingDef initiatorThing;
 
-		// Token: 0x040006A1 RID: 1697
+		
 		private Pawn recipientPawn;
 
-		// Token: 0x040006A2 RID: 1698
+		
 		private ThingDef recipientThing;
 
-		// Token: 0x040006A3 RID: 1699
+		
 		private ThingDef weaponDef;
 
-		// Token: 0x040006A4 RID: 1700
+		
 		private ThingDef projectileDef;
 
-		// Token: 0x040006A5 RID: 1701
+		
 		private DamageDef damageDef;
 	}
 }

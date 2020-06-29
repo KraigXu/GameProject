@@ -4,10 +4,10 @@ using System.Xml;
 
 namespace Verse
 {
-	// Token: 0x020002BD RID: 701
+	
 	public class LoadableXmlAsset
 	{
-		// Token: 0x17000420 RID: 1056
+		
 		// (get) Token: 0x060013E6 RID: 5094 RVA: 0x000734C0 File Offset: 0x000716C0
 		public string FullFilePath
 		{
@@ -17,7 +17,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060013E7 RID: 5095 RVA: 0x000734EC File Offset: 0x000716EC
+		
 		public LoadableXmlAsset(string name, string fullFolderPath, string contents)
 		{
 			this.name = name;
@@ -50,25 +50,25 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060013E8 RID: 5096 RVA: 0x000735C4 File Offset: 0x000717C4
+		
 		public override string ToString()
 		{
 			return this.name;
 		}
 
-		// Token: 0x04000D63 RID: 3427
+		
 		private static XmlReader reader;
 
-		// Token: 0x04000D64 RID: 3428
+		
 		public string name;
 
-		// Token: 0x04000D65 RID: 3429
+		
 		public string fullFolderPath;
 
-		// Token: 0x04000D66 RID: 3430
+		
 		public XmlDocument xmlDoc;
 
-		// Token: 0x04000D67 RID: 3431
+		
 		public ModContentPack mod;
 	}
 }

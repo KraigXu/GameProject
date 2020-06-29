@@ -9,11 +9,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C5D RID: 3165
+	
 	[StaticConstructorOnStartup]
 	public class Building_TurretGun : Building_Turret
 	{
-		// Token: 0x17000D4D RID: 3405
+		
 		// (get) Token: 0x06004BA4 RID: 19364 RVA: 0x00197A1C File Offset: 0x00195C1C
 		public bool Active
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D4E RID: 3406
+		
 		// (get) Token: 0x06004BA5 RID: 19365 RVA: 0x00197A6A File Offset: 0x00195C6A
 		public CompEquippable GunCompEq
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D4F RID: 3407
+		
 		// (get) Token: 0x06004BA6 RID: 19366 RVA: 0x00197A77 File Offset: 0x00195C77
 		public override LocalTargetInfo CurrentTarget
 		{
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D50 RID: 3408
+		
 		// (get) Token: 0x06004BA7 RID: 19367 RVA: 0x00197A7F File Offset: 0x00195C7F
 		private bool WarmingUp
 		{
@@ -53,7 +53,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D51 RID: 3409
+		
 		// (get) Token: 0x06004BA8 RID: 19368 RVA: 0x00197A8A File Offset: 0x00195C8A
 		public override Verb AttackVerb
 		{
@@ -63,7 +63,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D52 RID: 3410
+		
 		// (get) Token: 0x06004BA9 RID: 19369 RVA: 0x00197A97 File Offset: 0x00195C97
 		public bool IsMannable
 		{
@@ -73,7 +73,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D53 RID: 3411
+		
 		// (get) Token: 0x06004BAA RID: 19370 RVA: 0x00197AA2 File Offset: 0x00195CA2
 		private bool PlayerControlled
 		{
@@ -83,7 +83,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D54 RID: 3412
+		
 		// (get) Token: 0x06004BAB RID: 19371 RVA: 0x00197AC4 File Offset: 0x00195CC4
 		private bool CanSetForcedTarget
 		{
@@ -93,7 +93,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D55 RID: 3413
+		
 		// (get) Token: 0x06004BAC RID: 19372 RVA: 0x00197AD6 File Offset: 0x00195CD6
 		private bool CanToggleHoldFire
 		{
@@ -103,7 +103,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D56 RID: 3414
+		
 		// (get) Token: 0x06004BAD RID: 19373 RVA: 0x00197ADE File Offset: 0x00195CDE
 		private bool IsMortar
 		{
@@ -113,7 +113,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D57 RID: 3415
+		
 		// (get) Token: 0x06004BAE RID: 19374 RVA: 0x00197AF0 File Offset: 0x00195CF0
 		private bool IsMortarOrProjectileFliesOverhead
 		{
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D58 RID: 3416
+		
 		// (get) Token: 0x06004BAF RID: 19375 RVA: 0x00197B08 File Offset: 0x00195D08
 		private bool CanExtractShell
 		{
@@ -138,7 +138,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D59 RID: 3417
+		
 		// (get) Token: 0x06004BB0 RID: 19376 RVA: 0x00197B36 File Offset: 0x00195D36
 		private bool MannedByColonist
 		{
@@ -148,7 +148,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000D5A RID: 3418
+		
 		// (get) Token: 0x06004BB1 RID: 19377 RVA: 0x00197B66 File Offset: 0x00195D66
 		private bool MannedByNonColonist
 		{
@@ -158,13 +158,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BB2 RID: 19378 RVA: 0x00197B99 File Offset: 0x00195D99
+		
 		public Building_TurretGun()
 		{
 			this.top = new TurretTop(this);
 		}
 
-		// Token: 0x06004BB3 RID: 19379 RVA: 0x00197BB8 File Offset: 0x00195DB8
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -179,14 +179,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BB4 RID: 19380 RVA: 0x00197C26 File Offset: 0x00195E26
+		
 		public override void PostMake()
 		{
 			base.PostMake();
 			this.MakeGun();
 		}
 
-		// Token: 0x06004BB5 RID: 19381 RVA: 0x00197C34 File Offset: 0x00195E34
+		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.DeSpawn(mode);
@@ -199,7 +199,7 @@ namespace RimWorld
 			effecter.Cleanup();
 		}
 
-		// Token: 0x06004BB6 RID: 19382 RVA: 0x00197C54 File Offset: 0x00195E54
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -215,13 +215,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BB7 RID: 19383 RVA: 0x00197CD8 File Offset: 0x00195ED8
+		
 		public override bool ClaimableBy(Faction by)
 		{
 			return base.ClaimableBy(by) && (this.mannableComp == null || this.mannableComp.ManningPawn == null) && (!this.Active || this.mannableComp != null) && (((this.dormantComp == null || this.dormantComp.Awake) && (this.initiatableComp == null || this.initiatableComp.Initiated)) || (this.powerComp != null && !this.powerComp.PowerOn));
 		}
 
-		// Token: 0x06004BB8 RID: 19384 RVA: 0x00197D5C File Offset: 0x00195F5C
+		
 		public override void OrderAttack(LocalTargetInfo targ)
 		{
 			if (!targ.IsValid)
@@ -256,7 +256,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BB9 RID: 19385 RVA: 0x00197E80 File Offset: 0x00196080
+		
 		public override void Tick()
 		{
 			base.Tick();
@@ -325,7 +325,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BBA RID: 19386 RVA: 0x0019805C File Offset: 0x0019625C
+		
 		protected void TryStartShootSomething(bool canBeginBurstImmediately)
 		{
 			if (this.progressBarEffecter != null)
@@ -369,7 +369,7 @@ namespace RimWorld
 			this.burstWarmupTicksLeft = 1;
 		}
 
-		// Token: 0x06004BBB RID: 19387 RVA: 0x00198190 File Offset: 0x00196390
+		
 		protected LocalTargetInfo TryFindNewTarget()
 		{
 			IAttackTargetSearcher attackTargetSearcher = this.TargSearcher();
@@ -398,7 +398,7 @@ namespace RimWorld
 			return (Thing)AttackTargetFinder.BestShootTargetFromCurrentPosition(attackTargetSearcher, targetScanFlags, new Predicate<Thing>(this.IsValidTarget), 0f, 9999f);
 		}
 
-		// Token: 0x06004BBC RID: 19388 RVA: 0x00198283 File Offset: 0x00196483
+		
 		private IAttackTargetSearcher TargSearcher()
 		{
 			if (this.mannableComp != null && this.mannableComp.MannedNow)
@@ -408,7 +408,7 @@ namespace RimWorld
 			return this;
 		}
 
-		// Token: 0x06004BBD RID: 19389 RVA: 0x001982A8 File Offset: 0x001964A8
+		
 		private bool IsValidTarget(Thing t)
 		{
 			Pawn pawn = t as Pawn;
@@ -434,20 +434,20 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004BBE RID: 19390 RVA: 0x00198325 File Offset: 0x00196525
+		
 		protected void BeginBurst()
 		{
 			this.AttackVerb.TryStartCastOn(this.CurrentTarget, false, true);
 			base.OnAttackedTarget(this.CurrentTarget);
 		}
 
-		// Token: 0x06004BBF RID: 19391 RVA: 0x00198347 File Offset: 0x00196547
+		
 		protected void BurstComplete()
 		{
 			this.burstCooldownTicksLeft = this.BurstCooldownTime().SecondsToTicks();
 		}
 
-		// Token: 0x06004BC0 RID: 19392 RVA: 0x0019835A File Offset: 0x0019655A
+		
 		protected float BurstCooldownTime()
 		{
 			if (this.def.building.turretBurstCooldownTime >= 0f)
@@ -457,7 +457,7 @@ namespace RimWorld
 			return this.AttackVerb.verbProps.defaultCooldownTime;
 		}
 
-		// Token: 0x06004BC1 RID: 19393 RVA: 0x00198394 File Offset: 0x00196594
+		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -493,14 +493,14 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x06004BC2 RID: 19394 RVA: 0x00198529 File Offset: 0x00196729
+		
 		public override void Draw()
 		{
 			this.top.DrawTurret();
 			base.Draw();
 		}
 
-		// Token: 0x06004BC3 RID: 19395 RVA: 0x0019853C File Offset: 0x0019673C
+		
 		public override void DrawExtraSelectionOverlays()
 		{
 			float range = this.AttackVerb.verbProps.range;
@@ -536,13 +536,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BC4 RID: 19396 RVA: 0x0019866B File Offset: 0x0019686B
+		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-			foreach (Gizmo gizmo in this.<>n__0())
-			{
-				yield return gizmo;
-			}
+
 			IEnumerator<Gizmo> enumerator = null;
 			if (this.CanExtractShell)
 			{
@@ -627,13 +624,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004BC5 RID: 19397 RVA: 0x0019867C File Offset: 0x0019687C
+		
 		private void ExtractShell()
 		{
 			GenPlace.TryPlaceThing(this.gun.TryGetComp<CompChangeableProjectile>().RemoveShell(), base.Position, base.Map, ThingPlaceMode.Near, null, null, default(Rot4));
 		}
 
-		// Token: 0x06004BC6 RID: 19398 RVA: 0x001986B7 File Offset: 0x001968B7
+		
 		private void ResetForcedTarget()
 		{
 			this.forcedTarget = LocalTargetInfo.Invalid;
@@ -644,21 +641,21 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004BC7 RID: 19399 RVA: 0x001986DB File Offset: 0x001968DB
+		
 		private void ResetCurrentTarget()
 		{
 			this.currentTargetInt = LocalTargetInfo.Invalid;
 			this.burstWarmupTicksLeft = 0;
 		}
 
-		// Token: 0x06004BC8 RID: 19400 RVA: 0x001986EF File Offset: 0x001968EF
+		
 		public void MakeGun()
 		{
 			this.gun = ThingMaker.MakeThing(this.def.building.turretGunDef, null);
 			this.UpdateGunVerbs();
 		}
 
-		// Token: 0x06004BC9 RID: 19401 RVA: 0x00198714 File Offset: 0x00196914
+		
 		private void UpdateGunVerbs()
 		{
 			List<Verb> allVerbs = this.gun.TryGetComp<CompEquippable>().AllVerbs;
@@ -670,43 +667,43 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002ABD RID: 10941
+		
 		protected int burstCooldownTicksLeft;
 
-		// Token: 0x04002ABE RID: 10942
+		
 		protected int burstWarmupTicksLeft;
 
-		// Token: 0x04002ABF RID: 10943
+		
 		protected LocalTargetInfo currentTargetInt = LocalTargetInfo.Invalid;
 
-		// Token: 0x04002AC0 RID: 10944
+		
 		private bool holdFire;
 
-		// Token: 0x04002AC1 RID: 10945
+		
 		public Thing gun;
 
-		// Token: 0x04002AC2 RID: 10946
+		
 		protected TurretTop top;
 
-		// Token: 0x04002AC3 RID: 10947
+		
 		protected CompPowerTrader powerComp;
 
-		// Token: 0x04002AC4 RID: 10948
+		
 		protected CompCanBeDormant dormantComp;
 
-		// Token: 0x04002AC5 RID: 10949
+		
 		protected CompInitiatable initiatableComp;
 
-		// Token: 0x04002AC6 RID: 10950
+		
 		protected CompMannable mannableComp;
 
-		// Token: 0x04002AC7 RID: 10951
+		
 		protected Effecter progressBarEffecter;
 
-		// Token: 0x04002AC8 RID: 10952
+		
 		private const int TryStartShootSomethingIntervalTicks = 10;
 
-		// Token: 0x04002AC9 RID: 10953
+		
 		public static Material ForcedTargetLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
 	}
 }

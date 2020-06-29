@@ -6,10 +6,10 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	// Token: 0x02000BDF RID: 3039
+	
 	public class BiomeWorker_SeaIce : BiomeWorker
 	{
-		// Token: 0x0600481E RID: 18462 RVA: 0x00186A9C File Offset: 0x00184C9C
+		
 		public override float GetScore(Tile tile, int tileID)
 		{
 			if (!tile.WaterCovered)
@@ -23,7 +23,7 @@ namespace RimWorld
 			return BiomeWorker_IceSheet.PermaIceScore(tile) - 23f;
 		}
 
-		// Token: 0x0600481F RID: 18463 RVA: 0x00186AC8 File Offset: 0x00184CC8
+		
 		private bool AllowedAt(int tile)
 		{
 			Vector3 tileCenter = Find.WorldGrid.GetTileCenter(tile);
@@ -46,10 +46,10 @@ namespace RimWorld
 			return num2 <= num3;
 		}
 
-		// Token: 0x04002946 RID: 10566
+		
 		private ModuleBase cachedSeaIceAllowedNoise;
 
-		// Token: 0x04002947 RID: 10567
+		
 		private int cachedSeaIceAllowedNoiseForSeed;
 	}
 }

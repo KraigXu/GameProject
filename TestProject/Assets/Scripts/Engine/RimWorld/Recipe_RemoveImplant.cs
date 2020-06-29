@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AFB RID: 2811
+	
 	public class Recipe_RemoveImplant : Recipe_Surgery
 	{
-		// Token: 0x06004259 RID: 16985 RVA: 0x0016255A File Offset: 0x0016075A
+		
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
 			List<Hediff> allHediffs = pawn.health.hediffSet.hediffs;
@@ -24,7 +24,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600425A RID: 16986 RVA: 0x00162574 File Offset: 0x00160774
+		
 		public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			MedicalRecipesUtility.IsClean(pawn, part);

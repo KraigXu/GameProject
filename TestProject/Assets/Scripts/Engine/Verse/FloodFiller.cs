@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000439 RID: 1081
+	
 	public class FloodFiller
 	{
-		// Token: 0x0600204B RID: 8267 RVA: 0x000C3E8C File Offset: 0x000C208C
+		
 		public FloodFiller(Map map)
 		{
 			this.map = map;
@@ -14,7 +14,7 @@ namespace Verse
 			this.traversalDistance.Clear(-1);
 		}
 
-		// Token: 0x0600204C RID: 8268 RVA: 0x000C3ECC File Offset: 0x000C20CC
+		
 		public void FloodFill(IntVec3 root, Predicate<IntVec3> passCheck, Action<IntVec3> processor, int maxCellsToProcess = 2147483647, bool rememberParents = false, IEnumerable<IntVec3> extraRoots = null)
 		{
 			this.FloodFill(root, passCheck, delegate(IntVec3 cell, int traversalDist)
@@ -24,7 +24,7 @@ namespace Verse
 			}, maxCellsToProcess, rememberParents, extraRoots);
 		}
 
-		// Token: 0x0600204D RID: 8269 RVA: 0x000C3F00 File Offset: 0x000C2100
+		
 		public void FloodFill(IntVec3 root, Predicate<IntVec3> passCheck, Action<IntVec3, int> processor, int maxCellsToProcess = 2147483647, bool rememberParents = false, IEnumerable<IntVec3> extraRoots = null)
 		{
 			this.FloodFill(root, passCheck, delegate(IntVec3 cell, int traversalDist)
@@ -34,13 +34,13 @@ namespace Verse
 			}, maxCellsToProcess, rememberParents, extraRoots);
 		}
 
-		// Token: 0x0600204E RID: 8270 RVA: 0x000C3F34 File Offset: 0x000C2134
+		
 		public void FloodFill(IntVec3 root, Predicate<IntVec3> passCheck, Func<IntVec3, bool> processor, int maxCellsToProcess = 2147483647, bool rememberParents = false, IEnumerable<IntVec3> extraRoots = null)
 		{
 			this.FloodFill(root, passCheck, (IntVec3 cell, int traversalDist) => processor(cell), maxCellsToProcess, rememberParents, extraRoots);
 		}
 
-		// Token: 0x0600204F RID: 8271 RVA: 0x000C3F68 File Offset: 0x000C2168
+		
 		public void FloodFill(IntVec3 root, Predicate<IntVec3> passCheck, Func<IntVec3, int, bool> processor, int maxCellsToProcess = 2147483647, bool rememberParents = false, IEnumerable<IntVec3> extraRoots = null)
 		{
 			if (this.working)
@@ -145,7 +145,7 @@ namespace Verse
 			this.working = false;
 		}
 
-		// Token: 0x06002050 RID: 8272 RVA: 0x000C42B0 File Offset: 0x000C24B0
+		
 		public void ReconstructLastFloodFillPath(IntVec3 dest, List<IntVec3> outPath)
 		{
 			outPath.Clear();
@@ -179,7 +179,7 @@ namespace Verse
 			outPath.Reverse();
 		}
 
-		// Token: 0x06002051 RID: 8273 RVA: 0x000C4350 File Offset: 0x000C2550
+		
 		private void ClearVisited()
 		{
 			int i = 0;
@@ -198,22 +198,22 @@ namespace Verse
 			this.openSet.Clear();
 		}
 
-		// Token: 0x040013B7 RID: 5047
+		
 		private Map map;
 
-		// Token: 0x040013B8 RID: 5048
+		
 		private bool working;
 
-		// Token: 0x040013B9 RID: 5049
+		
 		private Queue<IntVec3> openSet = new Queue<IntVec3>();
 
-		// Token: 0x040013BA RID: 5050
+		
 		private IntGrid traversalDistance;
 
-		// Token: 0x040013BB RID: 5051
+		
 		private CellGrid parentGrid;
 
-		// Token: 0x040013BC RID: 5052
+		
 		private List<int> visited = new List<int>();
 	}
 }

@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D45 RID: 3397
+	
 	public class CompReportWorkSpeed : ThingComp
 	{
-		// Token: 0x060052A2 RID: 21154 RVA: 0x001B9BB4 File Offset: 0x001B7DB4
+		
 		public override string CompInspectStringExtra()
 		{
 			if (this.parent.def.statBases == null)

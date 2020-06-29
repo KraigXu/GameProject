@@ -7,10 +7,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000681 RID: 1665
+	
 	public abstract class JobDriver_PlantWork : JobDriver
 	{
-		// Token: 0x17000884 RID: 2180
+		
 		// (get) Token: 0x06002D52 RID: 11602 RVA: 0x000FFD38 File Offset: 0x000FDF38
 		protected Plant Plant
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000885 RID: 2181
+		
 		// (get) Token: 0x06002D53 RID: 11603 RVA: 0x00019EA1 File Offset: 0x000180A1
 		protected virtual DesignationDef RequiredDesignation
 		{
@@ -30,7 +30,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002D54 RID: 11604 RVA: 0x000FFD50 File Offset: 0x000FDF50
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			LocalTargetInfo target = this.job.GetTarget(TargetIndex.A);
@@ -42,7 +42,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06002D55 RID: 11605 RVA: 0x000FFDAE File Offset: 0x000FDFAE
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.Init();
@@ -122,31 +122,31 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06002D56 RID: 11606 RVA: 0x000FFDBE File Offset: 0x000FDFBE
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<float>(ref this.workDone, "workDone", 0f, false);
 		}
 
-		// Token: 0x06002D57 RID: 11607 RVA: 0x00002681 File Offset: 0x00000881
+		
 		protected virtual void Init()
 		{
 		}
 
-		// Token: 0x06002D58 RID: 11608 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		protected virtual Toil PlantWorkDoneToil()
 		{
 			return null;
 		}
 
-		// Token: 0x04001A1F RID: 6687
+		
 		private float workDone;
 
-		// Token: 0x04001A20 RID: 6688
+		
 		protected float xpPerTick;
 
-		// Token: 0x04001A21 RID: 6689
+		
 		protected const TargetIndex PlantInd = TargetIndex.A;
 	}
 }

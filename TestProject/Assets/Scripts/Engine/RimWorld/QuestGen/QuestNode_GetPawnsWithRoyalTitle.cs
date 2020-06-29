@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001136 RID: 4406
+	
 	public class QuestNode_GetPawnsWithRoyalTitle : QuestNode
 	{
-		// Token: 0x060066F8 RID: 26360 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x060066F9 RID: 26361 RVA: 0x002410FC File Offset: 0x0023F2FC
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -34,7 +34,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060066FA RID: 26362 RVA: 0x002411BA File Offset: 0x0023F3BA
+		
 		private IEnumerable<Pawn> GetFilteredPawns(List<Pawn> pawns)
 		{
 			Slate slate = QuestGen.slate;
@@ -50,18 +50,18 @@ namespace RimWorld.QuestGen
 			yield break;
 		}
 
-		// Token: 0x04003F20 RID: 16160
+		
 		public SlateRef<List<Pawn>> pawns;
 
-		// Token: 0x04003F21 RID: 16161
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003F22 RID: 16162
+		
 		[NoTranslate]
 		public SlateRef<string> storeCountAs;
 
-		// Token: 0x04003F23 RID: 16163
+		
 		[NoTranslate]
 		public SlateRef<string> storePawnsLabelAs;
 	}

@@ -5,10 +5,10 @@ using Verse.Sound;
 
 namespace Verse
 {
-	// Token: 0x02000330 RID: 816
+	
 	public class DesignatorManager
 	{
-		// Token: 0x170004F1 RID: 1265
+		
 		// (get) Token: 0x060017F6 RID: 6134 RVA: 0x00088ABD File Offset: 0x00086CBD
 		public Designator SelectedDesignator
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004F2 RID: 1266
+		
 		// (get) Token: 0x060017F7 RID: 6135 RVA: 0x00088AC5 File Offset: 0x00086CC5
 		public DesignationDragger Dragger
 		{
@@ -28,7 +28,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017F8 RID: 6136 RVA: 0x00088ACD File Offset: 0x00086CCD
+		
 		public void Select(Designator des)
 		{
 			this.Deselect();
@@ -36,7 +36,7 @@ namespace Verse
 			this.selectedDesignator.Selected();
 		}
 
-		// Token: 0x060017F9 RID: 6137 RVA: 0x00088AE7 File Offset: 0x00086CE7
+		
 		public void Deselect()
 		{
 			if (this.selectedDesignator != null)
@@ -46,7 +46,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017FA RID: 6138 RVA: 0x00088B03 File Offset: 0x00086D03
+		
 		private bool CheckSelectedDesignatorValid()
 		{
 			if (this.selectedDesignator == null)
@@ -61,7 +61,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060017FB RID: 6139 RVA: 0x00088B28 File Offset: 0x00086D28
+		
 		public void ProcessInputEvents()
 		{
 			if (!this.CheckSelectedDesignatorValid())
@@ -107,7 +107,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017FC RID: 6140 RVA: 0x00088C7B File Offset: 0x00086E7B
+		
 		public void DesignationManagerOnGUI()
 		{
 			this.dragger.DraggerOnGUI();
@@ -117,7 +117,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060017FD RID: 6141 RVA: 0x00088C9B File Offset: 0x00086E9B
+		
 		public void DesignatorManagerUpdate()
 		{
 			this.dragger.DraggerUpdate();
@@ -127,10 +127,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000F03 RID: 3843
+		
 		private Designator selectedDesignator;
 
-		// Token: 0x04000F04 RID: 3844
+		
 		private DesignationDragger dragger = new DesignationDragger();
 	}
 }

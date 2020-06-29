@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000AB2 RID: 2738
+	
 	public sealed class WeatherManager : IExposable
 	{
-		// Token: 0x17000B79 RID: 2937
+		
 		// (get) Token: 0x060040DA RID: 16602 RVA: 0x0015B650 File Offset: 0x00159850
 		public float TransitionLerpFactor
 		{
@@ -24,7 +24,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7A RID: 2938
+		
 		// (get) Token: 0x060040DB RID: 16603 RVA: 0x0015B67A File Offset: 0x0015987A
 		public float RainRate
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7B RID: 2939
+		
 		// (get) Token: 0x060040DC RID: 16604 RVA: 0x0015B69D File Offset: 0x0015989D
 		public float SnowRate
 		{
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7C RID: 2940
+		
 		// (get) Token: 0x060040DD RID: 16605 RVA: 0x0015B6C0 File Offset: 0x001598C0
 		public float CurWindSpeedFactor
 		{
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7D RID: 2941
+		
 		// (get) Token: 0x060040DE RID: 16606 RVA: 0x0015B6E3 File Offset: 0x001598E3
 		public float CurWindSpeedOffset
 		{
@@ -64,7 +64,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7E RID: 2942
+		
 		// (get) Token: 0x060040DF RID: 16607 RVA: 0x0015B706 File Offset: 0x00159906
 		public float CurMoveSpeedMultiplier
 		{
@@ -74,7 +74,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B7F RID: 2943
+		
 		// (get) Token: 0x060040E0 RID: 16608 RVA: 0x0015B729 File Offset: 0x00159929
 		public float CurWeatherAccuracyMultiplier
 		{
@@ -84,7 +84,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B80 RID: 2944
+		
 		// (get) Token: 0x060040E1 RID: 16609 RVA: 0x0015B74C File Offset: 0x0015994C
 		public WeatherDef CurWeatherPerceived
 		{
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000B81 RID: 2945
+		
 		// (get) Token: 0x060040E2 RID: 16610 RVA: 0x0015B7D9 File Offset: 0x001599D9
 		public WeatherDef CurWeatherLerped
 		{
@@ -141,14 +141,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040E3 RID: 16611 RVA: 0x0015B814 File Offset: 0x00159A14
+		
 		public WeatherManager(Map map)
 		{
 			this.map = map;
 			this.growthSeasonMemory = new TemperatureMemory(map);
 		}
 
-		// Token: 0x060040E4 RID: 16612 RVA: 0x0015B868 File Offset: 0x00159A68
+		
 		public void ExposeData()
 		{
 			Scribe_Defs.Look<WeatherDef>(ref this.curWeather, "curWeather");
@@ -164,7 +164,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040E5 RID: 16613 RVA: 0x0015B8D9 File Offset: 0x00159AD9
+		
 		public void TransitionTo(WeatherDef newWeather)
 		{
 			this.lastWeather = this.curWeather;
@@ -172,7 +172,7 @@ namespace RimWorld
 			this.curWeatherAge = 0;
 		}
 
-		// Token: 0x060040E6 RID: 16614 RVA: 0x0015B8F8 File Offset: 0x00159AF8
+		
 		public void DoWeatherGUI(Rect rect)
 		{
 			WeatherDef curWeatherPerceived = this.CurWeatherPerceived;
@@ -188,7 +188,7 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		// Token: 0x060040E7 RID: 16615 RVA: 0x0015B964 File Offset: 0x00159B64
+		
 		public void WeatherManagerTick()
 		{
 			this.eventHandler.WeatherEventHandlerTick();
@@ -219,13 +219,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040E8 RID: 16616 RVA: 0x0015BA88 File Offset: 0x00159C88
+		
 		public void WeatherManagerUpdate()
 		{
 			this.SetAmbienceSustainersVolume();
 		}
 
-		// Token: 0x060040E9 RID: 16617 RVA: 0x0015BA90 File Offset: 0x00159C90
+		
 		public void EndAllSustainers()
 		{
 			for (int i = 0; i < this.ambienceSustainers.Count; i++)
@@ -235,7 +235,7 @@ namespace RimWorld
 			this.ambienceSustainers.Clear();
 		}
 
-		// Token: 0x060040EA RID: 16618 RVA: 0x0015BAD0 File Offset: 0x00159CD0
+		
 		private void SetAmbienceSustainersVolume()
 		{
 			for (int i = this.ambienceSustainers.Count - 1; i >= 0; i--)
@@ -253,7 +253,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060040EB RID: 16619 RVA: 0x0015BB50 File Offset: 0x00159D50
+		
 		private float VolumeOfAmbientSound(SoundDef soundDef)
 		{
 			if (this.map != Find.CurrentMap)
@@ -285,7 +285,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x060040EC RID: 16620 RVA: 0x0015BC1A File Offset: 0x00159E1A
+		
 		public void DrawAllWeather()
 		{
 			this.eventHandler.WeatherEventsDraw();
@@ -293,28 +293,28 @@ namespace RimWorld
 			this.curWeather.Worker.DrawWeather(this.map);
 		}
 
-		// Token: 0x040025AA RID: 9642
+		
 		public Map map;
 
-		// Token: 0x040025AB RID: 9643
+		
 		public WeatherEventHandler eventHandler = new WeatherEventHandler();
 
-		// Token: 0x040025AC RID: 9644
+		
 		public WeatherDef curWeather = WeatherDefOf.Clear;
 
-		// Token: 0x040025AD RID: 9645
+		
 		public WeatherDef lastWeather = WeatherDefOf.Clear;
 
-		// Token: 0x040025AE RID: 9646
+		
 		public int curWeatherAge;
 
-		// Token: 0x040025AF RID: 9647
+		
 		private List<Sustainer> ambienceSustainers = new List<Sustainer>();
 
-		// Token: 0x040025B0 RID: 9648
+		
 		public TemperatureMemory growthSeasonMemory;
 
-		// Token: 0x040025B1 RID: 9649
+		
 		public const float TransitionTicks = 4000f;
 	}
 }

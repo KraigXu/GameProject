@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000ADA RID: 2778
+	
 	public class CompAbilityEffect_TransferEntropy : CompAbilityEffect
 	{
-		// Token: 0x17000BA9 RID: 2985
+		
 		// (get) Token: 0x060041AC RID: 16812 RVA: 0x0015F1CD File Offset: 0x0015D3CD
 		public new CompProperties_AbilityTransferEntropy Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041AD RID: 16813 RVA: 0x0015F1DC File Offset: 0x0015D3DC
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -35,7 +35,7 @@ namespace RimWorld
 			Log.Error("CompAbilityEffect_TransferEntropy is only applicable to pawns.", false);
 		}
 
-		// Token: 0x060041AE RID: 16814 RVA: 0x0015F267 File Offset: 0x0015D467
+		
 		public override bool GizmoDisabled(out string reason)
 		{
 			if (this.parent.pawn.psychicEntropy.EntropyValue <= 0f)
@@ -46,7 +46,7 @@ namespace RimWorld
 			return base.GizmoDisabled(out reason);
 		}
 
-		// Token: 0x060041AF RID: 16815 RVA: 0x0015F2A0 File Offset: 0x0015D4A0
+		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			Pawn pawn = target.Pawn;

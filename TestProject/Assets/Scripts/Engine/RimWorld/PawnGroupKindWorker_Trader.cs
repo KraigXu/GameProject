@@ -6,22 +6,22 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B1E RID: 2846
+	
 	public class PawnGroupKindWorker_Trader : PawnGroupKindWorker
 	{
-		// Token: 0x060042F4 RID: 17140 RVA: 0x0005AC15 File Offset: 0x00058E15
+		
 		public override float MinPointsToGenerateAnything(PawnGroupMaker groupMaker)
 		{
 			return 0f;
 		}
 
-		// Token: 0x060042F5 RID: 17141 RVA: 0x00168580 File Offset: 0x00166780
+		
 		public override bool CanGenerateFrom(PawnGroupMakerParms parms, PawnGroupMaker groupMaker)
 		{
 			return base.CanGenerateFrom(parms, groupMaker) && groupMaker.traders.Any<PawnGenOption>() && (parms.tile == -1 || groupMaker.carriers.Any((PawnGenOption x) => Find.WorldGrid[parms.tile].biome.IsPackAnimalAllowed(x.kind.race)));
 		}
 
-		// Token: 0x060042F6 RID: 17142 RVA: 0x001685E0 File Offset: 0x001667E0
+		
 		protected override void GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker groupMaker, List<Pawn> outPawns, bool errorOnZeroResults = true)
 		{
 			if (!this.CanGenerateFrom(parms, groupMaker))
@@ -78,7 +78,7 @@ namespace RimWorld
 			this.GenerateGuards(parms, groupMaker, pawn, wares, outPawns);
 		}
 
-		// Token: 0x060042F7 RID: 17143 RVA: 0x0016883C File Offset: 0x00166A3C
+		
 		private Pawn GenerateTrader(PawnGroupMakerParms parms, PawnGroupMaker groupMaker, TraderKindDef traderKind)
 		{
 			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(groupMaker.traders.RandomElementByWeight((PawnGenOption x) => x.selectionWeight).kind, parms.faction, PawnGenerationContext.NonPlayer, parms.tile, false, false, false, false, true, false, 1f, false, true, true, true, parms.inhabitants, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
@@ -89,7 +89,7 @@ namespace RimWorld
 			return pawn;
 		}
 
-		// Token: 0x060042F8 RID: 17144 RVA: 0x00168920 File Offset: 0x00166B20
+		
 		private void GenerateCarriers(PawnGroupMakerParms parms, PawnGroupMaker groupMaker, Pawn trader, List<Thing> wares, List<Pawn> outPawns)
 		{
 			List<Thing> list = (from x in wares
@@ -119,7 +119,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042F9 RID: 17145 RVA: 0x00168AC7 File Offset: 0x00166CC7
+		
 		private IEnumerable<Pawn> GetSlavesAndAnimalsFromWares(PawnGroupMakerParms parms, Pawn trader, List<Thing> wares)
 		{
 			int num;
@@ -139,7 +139,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060042FA RID: 17146 RVA: 0x00168AE0 File Offset: 0x00166CE0
+		
 		private void GenerateGuards(PawnGroupMakerParms parms, PawnGroupMaker groupMaker, Pawn trader, List<Thing> wares, List<Pawn> outPawns)
 		{
 			if (!groupMaker.guards.Any<PawnGenOption>())
@@ -160,7 +160,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042FB RID: 17147 RVA: 0x000255BF File Offset: 0x000237BF
+		
 		public override IEnumerable<PawnKindDef> GeneratePawnKindsExample(PawnGroupMakerParms parms, PawnGroupMaker groupMaker)
 		{
 			throw new NotImplementedException();

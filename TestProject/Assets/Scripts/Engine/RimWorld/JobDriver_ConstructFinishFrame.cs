@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000631 RID: 1585
+	
 	public class JobDriver_ConstructFinishFrame : JobDriver
 	{
-		// Token: 0x17000836 RID: 2102
+		
 		// (get) Token: 0x06002B6D RID: 11117 RVA: 0x000FB20C File Offset: 0x000F940C
 		private Frame Frame
 		{
@@ -19,13 +19,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002B6E RID: 11118 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002B6F RID: 11119 RVA: 0x000FB232 File Offset: 0x000F9432
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -81,7 +81,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0400199D RID: 6557
+		
 		private const int JobEndInterval = 5000;
 	}
 }

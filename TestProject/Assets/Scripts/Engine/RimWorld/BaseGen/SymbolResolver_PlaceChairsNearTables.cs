@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D1 RID: 4305
+	
 	public class SymbolResolver_PlaceChairsNearTables : SymbolResolver
 	{
-		// Token: 0x0600657B RID: 25979 RVA: 0x00237D18 File Offset: 0x00235F18
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -61,7 +61,7 @@ namespace RimWorld.BaseGen
 			SymbolResolver_PlaceChairsNearTables.tables.Clear();
 		}
 
-		// Token: 0x04003DC9 RID: 15817
+		
 		private static List<Thing> tables = new List<Thing>();
 	}
 }

@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BD0 RID: 3024
+	
 	public class Thought_MemoryObservation : Thought_Memory
 	{
-		// Token: 0x17000CC3 RID: 3267
+		
 		// (set) Token: 0x060047C3 RID: 18371 RVA: 0x001855A0 File Offset: 0x001837A0
 		public Thing Target
 		{
@@ -17,14 +17,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060047C4 RID: 18372 RVA: 0x001855AE File Offset: 0x001837AE
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.targetThingID, "targetThingID", 0, false);
 		}
 
-		// Token: 0x060047C5 RID: 18373 RVA: 0x001855C8 File Offset: 0x001837C8
+		
 		public override bool TryMergeWithExistingMemory(out bool showBubble)
 		{
 			ThoughtHandler thoughts = this.pawn.needs.mood.thoughts;
@@ -48,7 +48,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x04002937 RID: 10551
+		
 		private int targetThingID;
 	}
 }

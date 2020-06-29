@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200072C RID: 1836
+	
 	public class WorkGiver_ConstructSmoothWall : WorkGiver_Scanner
 	{
-		// Token: 0x170008B4 RID: 2228
+		
 		// (get) Token: 0x06003040 RID: 12352 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
 		public override PathEndMode PathEndMode
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003041 RID: 12353 RVA: 0x0010F340 File Offset: 0x0010D540
+		
 		public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
 		{
 			foreach (Designation designation in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.SmoothWall))
@@ -30,13 +30,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06003042 RID: 12354 RVA: 0x0010F350 File Offset: 0x0010D550
+		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return !pawn.Map.designationManager.AnySpawnedDesignationOfDef(DesignationDefOf.SmoothWall);
 		}
 
-		// Token: 0x06003043 RID: 12355 RVA: 0x0010F36C File Offset: 0x0010D56C
+		
 		public override bool HasJobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
 		{
 			if (c.IsForbidden(pawn) || pawn.Map.designationManager.DesignationAt(c, DesignationDefOf.SmoothWall) == null)
@@ -53,7 +53,7 @@ namespace RimWorld
 			return pawn.CanReserve(edifice, 1, -1, null, forced) && pawn.CanReserve(c, 1, -1, null, forced);
 		}
 
-		// Token: 0x06003044 RID: 12356 RVA: 0x0010F408 File Offset: 0x0010D608
+		
 		public override Job JobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
 		{
 			return JobMaker.MakeJob(JobDefOf.SmoothWall, c.GetEdifice(pawn.Map));

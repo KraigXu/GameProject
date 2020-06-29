@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B18 RID: 2840
+	
 	public static class PawnBioAndNameGenerator
 	{
-		// Token: 0x060042CE RID: 17102 RVA: 0x00166AA0 File Offset: 0x00164CA0
+		
 		public static void GiveAppropriateBioAndNameTo(Pawn pawn, string requiredLastName, FactionDef factionType)
 		{
 			List<BackstoryCategoryFilter> backstoryCategoryFiltersFor = PawnBioAndNameGenerator.GetBackstoryCategoryFiltersFor(pawn, factionType);
@@ -19,7 +19,7 @@ namespace RimWorld
 			PawnBioAndNameGenerator.GiveShuffledBioTo(pawn, factionType, requiredLastName, backstoryCategoryFiltersFor);
 		}
 
-		// Token: 0x060042CF RID: 17103 RVA: 0x00166AE4 File Offset: 0x00164CE4
+		
 		private static void GiveShuffledBioTo(Pawn pawn, FactionDef factionType, string requiredLastName, List<BackstoryCategoryFilter> backstoryCategories)
 		{
 			PawnBioAndNameGenerator.FillBackstorySlotShuffled(pawn, BackstorySlot.Childhood, ref pawn.story.childhood, pawn.story.adulthood, backstoryCategories, factionType);
@@ -30,7 +30,7 @@ namespace RimWorld
 			pawn.Name = PawnBioAndNameGenerator.GeneratePawnName(pawn, NameStyle.Full, requiredLastName);
 		}
 
-		// Token: 0x060042D0 RID: 17104 RVA: 0x00166B50 File Offset: 0x00164D50
+		
 		private static void FillBackstorySlotShuffled(Pawn pawn, BackstorySlot slot, ref Backstory backstory, Backstory backstoryOtherSlot, List<BackstoryCategoryFilter> backstoryCategories, FactionDef factionType)
 		{
 			BackstoryCategoryFilter backstoryCategoryFilter = backstoryCategories.RandomElementByWeight((BackstoryCategoryFilter c) => c.commonality);
@@ -58,7 +58,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042D1 RID: 17105 RVA: 0x00166C58 File Offset: 0x00164E58
+		
 		private static bool TryGiveSolidBioTo(Pawn pawn, string requiredLastName, List<BackstoryCategoryFilter> backstoryCategories)
 		{
 			PawnBio pawnBio;
@@ -79,7 +79,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060042D2 RID: 17106 RVA: 0x00166D14 File Offset: 0x00164F14
+		
 		private static bool IsBioUseable(PawnBio bio, BackstoryCategoryFilter categoryFilter, PawnKindDef kind, Gender gender, string requiredLastName)
 		{
 			if (bio.gender != GenderPossibility.Either)
@@ -123,7 +123,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060042D3 RID: 17107 RVA: 0x00166DD8 File Offset: 0x00164FD8
+		
 		private static bool TryGetRandomUnusedSolidBioFor(List<BackstoryCategoryFilter> backstoryCategories, PawnKindDef kind, Gender gender, string requiredLastName, out PawnBio result)
 		{
 			BackstoryCategoryFilter categoryFilter = backstoryCategories.RandomElementByWeight((BackstoryCategoryFilter c) => c.commonality);
@@ -153,7 +153,7 @@ namespace RimWorld
 			select bio).TryRandomElementByWeight(new Func<PawnBio, float>(PawnBioAndNameGenerator.BioSelectionWeight), out result);
 		}
 
-		// Token: 0x060042D4 RID: 17108 RVA: 0x00166F5C File Offset: 0x0016515C
+		
 		public static NameTriple TryGetRandomUnusedSolidName(Gender gender, string requiredLastName = null)
 		{
 			List<NameTriple> listForGender = PawnNameDatabaseSolid.GetListForGender(GenderPossibility.Either);
@@ -193,7 +193,7 @@ namespace RimWorld
 			select name).FirstOrDefault<NameTriple>();
 		}
 
-		// Token: 0x060042D5 RID: 17109 RVA: 0x001670B4 File Offset: 0x001652B4
+		
 		private static List<BackstoryCategoryFilter> GetBackstoryCategoryFiltersFor(Pawn pawn, FactionDef faction)
 		{
 			if (!pawn.kindDef.backstoryFiltersOverride.NullOrEmpty<BackstoryCategoryFilter>())
@@ -234,7 +234,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x060042D6 RID: 17110 RVA: 0x0016719C File Offset: 0x0016539C
+		
 		public static Name GeneratePawnName(Pawn pawn, NameStyle style = NameStyle.Full, string forcedLastName = null)
 		{
 			if (style != NameStyle.Full)
@@ -313,7 +313,7 @@ namespace RimWorld
 			return nameTriple2;
 		}
 
-		// Token: 0x060042D7 RID: 17111 RVA: 0x001673B0 File Offset: 0x001655B0
+		
 		private static Name NameResolvedFrom(RulePackDef nameMaker, string forcedLastName)
 		{
 			NameTriple nameTriple = NameTriple.FromString(NameGenerator.GenerateName(nameMaker, delegate(string x)
@@ -327,7 +327,7 @@ namespace RimWorld
 			return nameTriple;
 		}
 
-		// Token: 0x060042D8 RID: 17112 RVA: 0x001673F8 File Offset: 0x001655F8
+		
 		private static NameTriple GeneratePawnName_Shuffled(Pawn pawn, string forcedLastName = null)
 		{
 			PawnNameCategory pawnNameCategory = pawn.RaceProps.nameCategory;
@@ -378,19 +378,19 @@ namespace RimWorld
 			return new NameTriple(name, nick, text);
 		}
 
-		// Token: 0x060042D9 RID: 17113 RVA: 0x001674D7 File Offset: 0x001656D7
+		
 		private static float BackstorySelectionWeight(Backstory bs)
 		{
 			return PawnBioAndNameGenerator.SelectionWeightFactorFromWorkTagsDisabled(bs.workDisables);
 		}
 
-		// Token: 0x060042DA RID: 17114 RVA: 0x001674E4 File Offset: 0x001656E4
+		
 		private static float BioSelectionWeight(PawnBio bio)
 		{
 			return PawnBioAndNameGenerator.SelectionWeightFactorFromWorkTagsDisabled(bio.adulthood.workDisables | bio.childhood.workDisables);
 		}
 
-		// Token: 0x060042DB RID: 17115 RVA: 0x00167504 File Offset: 0x00165704
+		
 		private static float SelectionWeightFactorFromWorkTagsDisabled(WorkTags wt)
 		{
 			float num = 1f;
@@ -421,31 +421,31 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x0400266D RID: 9837
+		
 		private const float MinAgeForAdulthood = 20f;
 
-		// Token: 0x0400266E RID: 9838
+		
 		private const float SolidBioChance = 0.25f;
 
-		// Token: 0x0400266F RID: 9839
+		
 		private const float SolidNameChance = 0.5f;
 
-		// Token: 0x04002670 RID: 9840
+		
 		private const float TryPreferredNameChance_Bio = 0.5f;
 
-		// Token: 0x04002671 RID: 9841
+		
 		private const float TryPreferredNameChance_Name = 0.5f;
 
-		// Token: 0x04002672 RID: 9842
+		
 		private const float ShuffledNicknameChance = 0.15f;
 
-		// Token: 0x04002673 RID: 9843
+		
 		private const float ShuffledNicknameChanceImperial = 0.05f;
 
-		// Token: 0x04002674 RID: 9844
+		
 		private const float ShuffledNicknameChanceUnisex = 0.8f;
 
-		// Token: 0x04002675 RID: 9845
+		
 		private static readonly BackstoryCategoryFilter FallbackCategoryGroup = new BackstoryCategoryFilter
 		{
 			categories = new List<string>
@@ -455,10 +455,10 @@ namespace RimWorld
 			commonality = 1f
 		};
 
-		// Token: 0x04002676 RID: 9846
+		
 		private static List<string> tmpNames = new List<string>();
 
-		// Token: 0x04002677 RID: 9847
+		
 		private static HashSet<string> usedNamesTmp = new HashSet<string>();
 	}
 }

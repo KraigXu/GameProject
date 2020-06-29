@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006E9 RID: 1769
+	
 	public class JobGiver_ReactToCloseMeleeThreat : ThinkNode_JobGiver
 	{
-		// Token: 0x06002EFD RID: 12029 RVA: 0x001086F4 File Offset: 0x001068F4
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Pawn meleeThreat = pawn.mindState.meleeThreat;
@@ -46,7 +46,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06002EFE RID: 12030 RVA: 0x001087A0 File Offset: 0x001069A0
+		
 		private bool IsHunting(Pawn pawn, Pawn prey)
 		{
 			if (pawn.CurJob == null)
@@ -62,7 +62,7 @@ namespace RimWorld
 			return jobDriver_PredatorHunt != null && jobDriver_PredatorHunt.Prey == prey;
 		}
 
-		// Token: 0x04001AA4 RID: 6820
+		
 		private const int MaxMeleeChaseTicks = 200;
 	}
 }

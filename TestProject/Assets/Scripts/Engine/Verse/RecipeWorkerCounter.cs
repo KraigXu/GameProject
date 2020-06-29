@@ -4,16 +4,16 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x0200009E RID: 158
+	
 	public class RecipeWorkerCounter
 	{
-		// Token: 0x06000518 RID: 1304 RVA: 0x00019A88 File Offset: 0x00017C88
+		
 		public virtual bool CanCountProducts(Bill_Production bill)
 		{
 			return this.recipe.specialProducts == null && this.recipe.products != null && this.recipe.products.Count == 1;
 		}
 
-		// Token: 0x06000519 RID: 1305 RVA: 0x00019ABC File Offset: 0x00017CBC
+		
 		public virtual int CountProducts(Bill_Production bill)
 		{
 			ThingDefCountClass thingDefCountClass = this.recipe.products[0];
@@ -84,7 +84,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x0600051A RID: 1306 RVA: 0x00019DC8 File Offset: 0x00017FC8
+		
 		public int CountValidThings(List<Thing> things, Bill_Production bill, ThingDef def)
 		{
 			int num = 0;
@@ -98,7 +98,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x0600051B RID: 1307 RVA: 0x00019E00 File Offset: 0x00018000
+		
 		public bool CountValidThing(Thing thing, Bill_Production bill, ThingDef def)
 		{
 			ThingDef def2 = thing.def;
@@ -118,19 +118,19 @@ namespace Verse
 			return (compQuality == null || bill.qualityRange.Includes(compQuality.Quality)) && (!bill.limitToAllowedStuff || bill.ingredientFilter.Allows(thing.Stuff));
 		}
 
-		// Token: 0x0600051C RID: 1308 RVA: 0x00019EA1 File Offset: 0x000180A1
+		
 		public virtual string ProductsDescription(Bill_Production bill)
 		{
 			return null;
 		}
 
-		// Token: 0x0600051D RID: 1309 RVA: 0x00019EA4 File Offset: 0x000180A4
+		
 		public virtual bool CanPossiblyStoreInStockpile(Bill_Production bill, Zone_Stockpile stockpile)
 		{
 			return !this.CanCountProducts(bill) || stockpile.GetStoreSettings().AllowedToAccept(this.recipe.products[0].thingDef);
 		}
 
-		// Token: 0x0600051E RID: 1310 RVA: 0x00019ED4 File Offset: 0x000180D4
+		
 		private int GetCarriedCount(Bill_Production bill, ThingDef prodDef)
 		{
 			int num = 0;
@@ -150,7 +150,7 @@ namespace Verse
 			return num;
 		}
 
-		// Token: 0x04000301 RID: 769
+		
 		public RecipeDef recipe;
 	}
 }

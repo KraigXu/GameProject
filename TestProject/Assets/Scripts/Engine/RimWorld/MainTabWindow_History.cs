@@ -8,11 +8,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000EC4 RID: 3780
+	
 	[StaticConstructorOnStartup]
 	public class MainTabWindow_History : MainTabWindow
 	{
-		// Token: 0x170010AB RID: 4267
+		
 		// (get) Token: 0x06005C53 RID: 23635 RVA: 0x001FDEDF File Offset: 0x001FC0DF
 		public override Vector2 RequestedTabSize
 		{
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C54 RID: 23636 RVA: 0x001FDEF0 File Offset: 0x001FC0F0
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C55 RID: 23637 RVA: 0x001FE08C File Offset: 0x001FC28C
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			base.DoWindowContents(rect);
@@ -74,7 +74,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C56 RID: 23638 RVA: 0x001FE0F8 File Offset: 0x001FC2F8
+		
 		private void DoStatisticsPage(Rect rect)
 		{
 			rect.yMin += 17f;
@@ -110,7 +110,7 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06005C57 RID: 23639 RVA: 0x001FE4F8 File Offset: 0x001FC6F8
+		
 		private void DoMessagesPage(Rect rect)
 		{
 			rect.yMin += 10f;
@@ -158,7 +158,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C58 RID: 23640 RVA: 0x001FE7C4 File Offset: 0x001FC9C4
+		
 		private void DoArchivableRow(Rect rect, IArchivable archivable, int index)
 		{
 			if (index % 2 == 1)
@@ -258,7 +258,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C59 RID: 23641 RVA: 0x001FEAA8 File Offset: 0x001FCCA8
+		
 		private void DoGraphPage(Rect rect)
 		{
 			rect.yMin += 17f;
@@ -325,74 +325,74 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x04003251 RID: 12881
+		
 		private HistoryAutoRecorderGroup historyAutoRecorderGroup;
 
-		// Token: 0x04003252 RID: 12882
+		
 		private FloatRange graphSection;
 
-		// Token: 0x04003253 RID: 12883
+		
 		private Vector2 messagesScrollPos;
 
-		// Token: 0x04003254 RID: 12884
+		
 		private float messagesLastHeight;
 
-		// Token: 0x04003255 RID: 12885
+		
 		private List<TabRecord> tabs = new List<TabRecord>();
 
-		// Token: 0x04003256 RID: 12886
+		
 		private int displayedMessageIndex;
 
-		// Token: 0x04003257 RID: 12887
+		
 		private static MainTabWindow_History.HistoryTab curTab = MainTabWindow_History.HistoryTab.Graph;
 
-		// Token: 0x04003258 RID: 12888
+		
 		private static bool showLetters = true;
 
-		// Token: 0x04003259 RID: 12889
+		
 		private static bool showMessages;
 
-		// Token: 0x0400325A RID: 12890
+		
 		private const float MessagesRowHeight = 30f;
 
-		// Token: 0x0400325B RID: 12891
+		
 		private const float PinColumnSize = 30f;
 
-		// Token: 0x0400325C RID: 12892
+		
 		private const float PinSize = 22f;
 
-		// Token: 0x0400325D RID: 12893
+		
 		private const float IconColumnSize = 30f;
 
-		// Token: 0x0400325E RID: 12894
+		
 		private const float DateSize = 80f;
 
-		// Token: 0x0400325F RID: 12895
+		
 		private const float SpaceBetweenColumns = 5f;
 
-		// Token: 0x04003260 RID: 12896
+		
 		private static readonly Texture2D PinTex = ContentFinder<Texture2D>.Get("UI/Icons/Pin", true);
 
-		// Token: 0x04003261 RID: 12897
+		
 		private static readonly Texture2D PinOutlineTex = ContentFinder<Texture2D>.Get("UI/Icons/Pin-Outline", true);
 
-		// Token: 0x04003262 RID: 12898
+		
 		private static readonly Color PinOutlineColor = new Color(0.25f, 0.25f, 0.25f, 0.5f);
 
-		// Token: 0x04003263 RID: 12899
+		
 		private Dictionary<string, string> truncationCache = new Dictionary<string, string>();
 
-		// Token: 0x04003264 RID: 12900
+		
 		private static List<CurveMark> marks = new List<CurveMark>();
 
-		// Token: 0x02001DE6 RID: 7654
+		
 		private enum HistoryTab : byte
 		{
-			// Token: 0x040070BF RID: 28863
+			
 			Graph,
-			// Token: 0x040070C0 RID: 28864
+			
 			Messages,
-			// Token: 0x040070C1 RID: 28865
+			
 			Statistics
 		}
 	}

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x020003E2 RID: 994
+	
 	public class Dialog_NodeTree : Window
 	{
-		// Token: 0x17000593 RID: 1427
+		
 		// (get) Token: 0x06001D8F RID: 7567 RVA: 0x000B5730 File Offset: 0x000B3930
 		public override Vector2 InitialSize
 		{
@@ -23,7 +23,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x17000594 RID: 1428
+		
 		// (get) Token: 0x06001D90 RID: 7568 RVA: 0x000B5794 File Offset: 0x000B3994
 		private bool InteractiveNow
 		{
@@ -33,7 +33,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001D91 RID: 7569 RVA: 0x000B57A8 File Offset: 0x000B39A8
+		
 		public Dialog_NodeTree(DiaNode nodeRoot, bool delayInteractivity = false, bool radioMode = false, string title = null)
 		{
 			this.title = title;
@@ -54,14 +54,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001D92 RID: 7570 RVA: 0x000B5829 File Offset: 0x000B3A29
+		
 		public override void PreClose()
 		{
 			base.PreClose();
 			this.curNode.PreClose();
 		}
 
-		// Token: 0x06001D93 RID: 7571 RVA: 0x000B583C File Offset: 0x000B3A3C
+		
 		public override void PostClose()
 		{
 			base.PostClose();
@@ -71,7 +71,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001D94 RID: 7572 RVA: 0x000B5858 File Offset: 0x000B3A58
+		
 		public override void WindowOnGUI()
 		{
 			if (this.screenFillColor != Color.clear)
@@ -83,7 +83,7 @@ namespace Verse
 			base.WindowOnGUI();
 		}
 
-		// Token: 0x06001D95 RID: 7573 RVA: 0x000B58B8 File Offset: 0x000B3AB8
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = inRect.AtZero();
@@ -101,7 +101,7 @@ namespace Verse
 			this.DrawNode(rect);
 		}
 
-		// Token: 0x06001D96 RID: 7574 RVA: 0x000B593C File Offset: 0x000B3B3C
+		
 		protected void DrawNode(Rect rect)
 		{
 			GUI.BeginGroup(rect);
@@ -131,7 +131,7 @@ namespace Verse
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06001D97 RID: 7575 RVA: 0x000B5AF0 File Offset: 0x000B3CF0
+		
 		public void GotoNode(DiaNode node)
 		{
 			foreach (DiaOption diaOption in node.options)
@@ -141,49 +141,49 @@ namespace Verse
 			this.curNode = node;
 		}
 
-		// Token: 0x040011F7 RID: 4599
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x040011F8 RID: 4600
+		
 		private Vector2 optsScrollPosition;
 
-		// Token: 0x040011F9 RID: 4601
+		
 		protected string title;
 
-		// Token: 0x040011FA RID: 4602
+		
 		protected DiaNode curNode;
 
-		// Token: 0x040011FB RID: 4603
+		
 		public Action closeAction;
 
-		// Token: 0x040011FC RID: 4604
+		
 		private float makeInteractiveAtTime;
 
-		// Token: 0x040011FD RID: 4605
+		
 		public Color screenFillColor = Color.clear;
 
-		// Token: 0x040011FE RID: 4606
+		
 		protected float minOptionsAreaHeight;
 
-		// Token: 0x040011FF RID: 4607
+		
 		private const float InteractivityDelay = 0.5f;
 
-		// Token: 0x04001200 RID: 4608
+		
 		private const float TitleHeight = 36f;
 
-		// Token: 0x04001201 RID: 4609
+		
 		protected const float OptHorMargin = 15f;
 
-		// Token: 0x04001202 RID: 4610
+		
 		protected const float OptVerticalSpace = 7f;
 
-		// Token: 0x04001203 RID: 4611
+		
 		private const int ResizeIfMoreOptionsThan = 5;
 
-		// Token: 0x04001204 RID: 4612
+		
 		private const float MinSpaceLeftForTextAfterOptionsResizing = 100f;
 
-		// Token: 0x04001205 RID: 4613
+		
 		private float optTotalHeight;
 	}
 }

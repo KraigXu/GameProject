@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x020009B7 RID: 2487
+	
 	public class GameCondition_Flashstorm : GameCondition
 	{
-		// Token: 0x17000AAD RID: 2733
+		
 		// (get) Token: 0x06003B50 RID: 15184 RVA: 0x0013994E File Offset: 0x00137B4E
 		public int AreaRadius
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B51 RID: 15185 RVA: 0x00139958 File Offset: 0x00137B58
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -31,7 +31,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.ambientSound, "ambientSound", false, false);
 		}
 
-		// Token: 0x06003B52 RID: 15186 RVA: 0x001399F0 File Offset: 0x00137BF0
+		
 		public override void Init()
 		{
 			base.Init();
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B53 RID: 15187 RVA: 0x00139A64 File Offset: 0x00137C64
+		
 		public override void GameConditionTick()
 		{
 			if (Find.TickManager.TicksGame > this.nextLightningTicks)
@@ -67,14 +67,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B54 RID: 15188 RVA: 0x00139B7A File Offset: 0x00137D7A
+		
 		public override void End()
 		{
 			base.SingleMap.weatherDecider.DisableRainFor(30000);
 			base.End();
 		}
 
-		// Token: 0x06003B55 RID: 15189 RVA: 0x00139B98 File Offset: 0x00137D98
+		
 		private void FindGoodCenterLocation()
 		{
 			if (base.SingleMap.Size.x <= 16 || base.SingleMap.Size.z <= 16)
@@ -91,13 +91,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003B56 RID: 15190 RVA: 0x00139C2E File Offset: 0x00137E2E
+		
 		private bool IsGoodLocationForStrike(IntVec3 loc)
 		{
 			return loc.InBounds(base.SingleMap) && !loc.Roofed(base.SingleMap) && loc.Standable(base.SingleMap);
 		}
 
-		// Token: 0x06003B57 RID: 15191 RVA: 0x00139C5C File Offset: 0x00137E5C
+		
 		private bool IsGoodCenterLocation(IntVec2 loc)
 		{
 			int num = 0;
@@ -116,7 +116,7 @@ namespace RimWorld
 			return num >= num2;
 		}
 
-		// Token: 0x06003B58 RID: 15192 RVA: 0x00139CDC File Offset: 0x00137EDC
+		
 		private IEnumerable<IntVec3> GetPotentiallyAffectedCells(IntVec2 center)
 		{
 			int num;
@@ -135,34 +135,34 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002311 RID: 8977
+		
 		private static readonly IntRange AreaRadiusRange = new IntRange(45, 60);
 
-		// Token: 0x04002312 RID: 8978
+		
 		private static readonly IntRange TicksBetweenStrikes = new IntRange(320, 800);
 
-		// Token: 0x04002313 RID: 8979
+		
 		private const int RainDisableTicksAfterConditionEnds = 30000;
 
-		// Token: 0x04002314 RID: 8980
+		
 		public IntVec2 centerLocation = IntVec2.Invalid;
 
-		// Token: 0x04002315 RID: 8981
+		
 		public IntRange areaRadiusOverride = IntRange.zero;
 
-		// Token: 0x04002316 RID: 8982
+		
 		public IntRange initialStrikeDelay = IntRange.zero;
 
-		// Token: 0x04002317 RID: 8983
+		
 		public bool ambientSound;
 
-		// Token: 0x04002318 RID: 8984
+		
 		private int areaRadius;
 
-		// Token: 0x04002319 RID: 8985
+		
 		private int nextLightningTicks;
 
-		// Token: 0x0400231A RID: 8986
+		
 		private Sustainer soundSustainer;
 	}
 }

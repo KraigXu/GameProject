@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x02000477 RID: 1143
+	
 	public static class ShootLeanUtility
 	{
-		// Token: 0x060021BE RID: 8638 RVA: 0x000CD6A7 File Offset: 0x000CB8A7
+		
 		private static bool[] GetWorkingBlockedArray()
 		{
 			if (ShootLeanUtility.blockedArrays.Count > 0)
@@ -16,7 +16,7 @@ namespace Verse
 			return new bool[8];
 		}
 
-		// Token: 0x060021BF RID: 8639 RVA: 0x000CD6C7 File Offset: 0x000CB8C7
+		
 		private static void ReturnWorkingBlockedArray(bool[] ar)
 		{
 			ShootLeanUtility.blockedArrays.Enqueue(ar);
@@ -26,7 +26,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060021C0 RID: 8640 RVA: 0x000CD6F8 File Offset: 0x000CB8F8
+		
 		public static void LeanShootingSourcesFromTo(IntVec3 shooterLoc, IntVec3 targetPos, Map map, List<IntVec3> listToFill)
 		{
 			listToFill.Clear();
@@ -66,7 +66,7 @@ namespace Verse
 			ShootLeanUtility.ReturnWorkingBlockedArray(workingBlockedArray);
 		}
 
-		// Token: 0x060021C1 RID: 8641 RVA: 0x000CD908 File Offset: 0x000CBB08
+		
 		public static void CalcShootableCellsOf(List<IntVec3> outCells, Thing t)
 		{
 			outCells.Clear();
@@ -96,7 +96,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x040014A7 RID: 5287
+		
 		private static Queue<bool[]> blockedArrays = new Queue<bool[]>();
 	}
 }

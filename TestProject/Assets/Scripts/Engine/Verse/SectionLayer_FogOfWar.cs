@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000191 RID: 401
+	
 	public class SectionLayer_FogOfWar : SectionLayer
 	{
-		// Token: 0x1700023D RID: 573
+		
 		// (get) Token: 0x06000B88 RID: 2952 RVA: 0x0003FC73 File Offset: 0x0003DE73
 		public override bool Visible
 		{
@@ -16,13 +16,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000B89 RID: 2953 RVA: 0x0003FC7A File Offset: 0x0003DE7A
+		
 		public SectionLayer_FogOfWar(Section section) : base(section)
 		{
 			this.relevantChangeTypes = MapMeshFlag.FogOfWar;
 		}
 
-		// Token: 0x06000B8A RID: 2954 RVA: 0x0003FC98 File Offset: 0x0003DE98
+		
 		public override void Regenerate()
 		{
 			LayerSubMesh subMesh = base.GetSubMesh(MatBases.FogOfWar);
@@ -120,10 +120,10 @@ namespace Verse
 			subMesh.disabled = true;
 		}
 
-		// Token: 0x04000946 RID: 2374
+		
 		private bool[] vertsCovered = new bool[9];
 
-		// Token: 0x04000947 RID: 2375
+		
 		private const byte FogBrightness = 35;
 	}
 }

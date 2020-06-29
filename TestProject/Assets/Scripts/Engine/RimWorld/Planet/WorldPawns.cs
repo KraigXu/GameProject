@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001288 RID: 4744
+	
 	public class WorldPawns : IExposable
 	{
-		// Token: 0x170012BD RID: 4797
+		
 		// (get) Token: 0x06006F71 RID: 28529 RVA: 0x0026C521 File Offset: 0x0026A721
 		public List<Pawn> AllPawnsAliveOrDead
 		{
@@ -22,7 +22,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012BE RID: 4798
+		
 		// (get) Token: 0x06006F72 RID: 28530 RVA: 0x0026C556 File Offset: 0x0026A756
 		public List<Pawn> AllPawnsAlive
 		{
@@ -35,7 +35,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012BF RID: 4799
+		
 		// (get) Token: 0x06006F73 RID: 28531 RVA: 0x0026C58B File Offset: 0x0026A78B
 		public HashSet<Pawn> AllPawnsDead
 		{
@@ -45,7 +45,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012C0 RID: 4800
+		
 		// (get) Token: 0x06006F74 RID: 28532 RVA: 0x0026C593 File Offset: 0x0026A793
 		public HashSet<Pawn> ForcefullyKeptPawns
 		{
@@ -55,7 +55,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F75 RID: 28533 RVA: 0x0026C59C File Offset: 0x0026A79C
+		
 		public void WorldPawnsTick()
 		{
 			WorldPawns.tmpPawnsToTick.Clear();
@@ -128,7 +128,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F76 RID: 28534 RVA: 0x0026C7F8 File Offset: 0x0026A9F8
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Pawn>(ref this.pawnsForcefullyKeptAsWorldPawns, true, "pawnsForcefullyKeptAsWorldPawns", LookMode.Reference);
@@ -174,13 +174,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F77 RID: 28535 RVA: 0x0026CA05 File Offset: 0x0026AC05
+		
 		public bool Contains(Pawn p)
 		{
 			return this.pawnsAlive.Contains(p) || this.pawnsMothballed.Contains(p) || this.pawnsDead.Contains(p);
 		}
 
-		// Token: 0x06006F78 RID: 28536 RVA: 0x0026CA34 File Offset: 0x0026AC34
+		
 		public void PassToWorld(Pawn pawn, PawnDiscardDecideMode discardMode = PawnDiscardDecideMode.Decide)
 		{
 			if (pawn.Spawned)
@@ -219,7 +219,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F79 RID: 28537 RVA: 0x0026CAEC File Offset: 0x0026ACEC
+		
 		public void RemovePawn(Pawn p)
 		{
 			if (!this.Contains(p))
@@ -252,14 +252,14 @@ namespace RimWorld.Planet
 			p.becameWorldPawnTickAbs = -1;
 		}
 
-		// Token: 0x06006F7A RID: 28538 RVA: 0x0026CBDC File Offset: 0x0026ADDC
+		
 		public void RemoveAndDiscardPawnViaGC(Pawn p)
 		{
 			this.RemovePawn(p);
 			this.DiscardPawn(p, true);
 		}
 
-		// Token: 0x06006F7B RID: 28539 RVA: 0x0026CBF0 File Offset: 0x0026ADF0
+		
 		public WorldPawnSituation GetSituation(Pawn p)
 		{
 			if (!this.Contains(p))
@@ -301,7 +301,7 @@ namespace RimWorld.Planet
 			return WorldPawnSituation.Free;
 		}
 
-		// Token: 0x06006F7C RID: 28540 RVA: 0x0026CC64 File Offset: 0x0026AE64
+		
 		public IEnumerable<Pawn> GetPawnsBySituation(WorldPawnSituation situation)
 		{
 			return from x in this.AllPawnsAliveOrDead
@@ -309,7 +309,7 @@ namespace RimWorld.Planet
 			select x;
 		}
 
-		// Token: 0x06006F7D RID: 28541 RVA: 0x0026CC9C File Offset: 0x0026AE9C
+		
 		public int GetPawnsBySituationCount(WorldPawnSituation situation)
 		{
 			int num = 0;
@@ -330,19 +330,19 @@ namespace RimWorld.Planet
 			return num;
 		}
 
-		// Token: 0x06006F7E RID: 28542 RVA: 0x0026CD44 File Offset: 0x0026AF44
+		
 		private bool ShouldAutoTendTo(Pawn pawn)
 		{
 			return !pawn.Dead && !pawn.Destroyed && pawn.IsHashIntervalTick(7500) && !pawn.IsCaravanMember() && !PawnUtility.IsTravelingInTransportPodWorldObject(pawn);
 		}
 
-		// Token: 0x06006F7F RID: 28543 RVA: 0x0026CD76 File Offset: 0x0026AF76
+		
 		public bool IsBeingDiscarded(Pawn p)
 		{
 			return this.pawnsBeingDiscarded.Contains(p);
 		}
 
-		// Token: 0x06006F80 RID: 28544 RVA: 0x0026CD84 File Offset: 0x0026AF84
+		
 		public void Notify_PawnDestroyed(Pawn p)
 		{
 			if (this.pawnsAlive.Contains(p) || this.pawnsMothballed.Contains(p))
@@ -353,13 +353,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F81 RID: 28545 RVA: 0x0026CDD4 File Offset: 0x0026AFD4
+		
 		private bool ShouldMothball(Pawn p)
 		{
 			return this.DefPreventingMothball(p) == null && !p.IsCaravanMember() && !PawnUtility.IsTravelingInTransportPodWorldObject(p);
 		}
 
-		// Token: 0x06006F82 RID: 28546 RVA: 0x0026CDF4 File Offset: 0x0026AFF4
+		
 		private HediffDef DefPreventingMothball(Pawn p)
 		{
 			List<Hediff> hediffs = p.health.hediffSet.hediffs;
@@ -373,7 +373,7 @@ namespace RimWorld.Planet
 			return null;
 		}
 
-		// Token: 0x06006F83 RID: 28547 RVA: 0x0026CE52 File Offset: 0x0026B052
+		
 		private void AddPawn(Pawn p)
 		{
 			this.gc.CancelGCPass();
@@ -388,7 +388,7 @@ namespace RimWorld.Planet
 			p.Notify_PassedToWorld();
 		}
 
-		// Token: 0x06006F84 RID: 28548 RVA: 0x0026CE94 File Offset: 0x0026B094
+		
 		private void DiscardPawn(Pawn p, bool silentlyRemoveReferences = false)
 		{
 			this.pawnsBeingDiscarded.Push(p);
@@ -409,7 +409,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006F85 RID: 28549 RVA: 0x0026CEEC File Offset: 0x0026B0EC
+		
 		private void DoMothballProcessing()
 		{
 			WorldPawns.tmpPawnsToTick.AddRange(this.pawnsMothballed);
@@ -438,20 +438,20 @@ namespace RimWorld.Planet
 			WorldPawns.tmpPawnsToTick.Clear();
 		}
 
-		// Token: 0x06006F86 RID: 28550 RVA: 0x0026CFD8 File Offset: 0x0026B1D8
+		
 		public void DebugRunMothballProcessing()
 		{
 			this.DoMothballProcessing();
 			Log.Message(string.Format("World pawn mothball run complete", Array.Empty<object>()), false);
 		}
 
-		// Token: 0x06006F87 RID: 28551 RVA: 0x0026CFF5 File Offset: 0x0026B1F5
+		
 		public void UnpinAllForcefullyKeptPawns()
 		{
 			this.pawnsForcefullyKeptAsWorldPawns.Clear();
 		}
 
-		// Token: 0x06006F88 RID: 28552 RVA: 0x0026D004 File Offset: 0x0026B204
+		
 		public void LogWorldPawns()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -497,7 +497,7 @@ namespace RimWorld.Planet
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x06006F89 RID: 28553 RVA: 0x0026D250 File Offset: 0x0026B450
+		
 		public void LogWorldPawnMothballPrevention()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -536,40 +536,40 @@ namespace RimWorld.Planet
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x04004479 RID: 17529
+		
 		private HashSet<Pawn> pawnsAlive = new HashSet<Pawn>();
 
-		// Token: 0x0400447A RID: 17530
+		
 		private HashSet<Pawn> pawnsMothballed = new HashSet<Pawn>();
 
-		// Token: 0x0400447B RID: 17531
+		
 		private HashSet<Pawn> pawnsDead = new HashSet<Pawn>();
 
-		// Token: 0x0400447C RID: 17532
+		
 		private HashSet<Pawn> pawnsForcefullyKeptAsWorldPawns = new HashSet<Pawn>();
 
-		// Token: 0x0400447D RID: 17533
+		
 		public WorldPawnGC gc = new WorldPawnGC();
 
-		// Token: 0x0400447E RID: 17534
+		
 		private Stack<Pawn> pawnsBeingDiscarded = new Stack<Pawn>();
 
-		// Token: 0x0400447F RID: 17535
+		
 		private const int TendIntervalTicks = 7500;
 
-		// Token: 0x04004480 RID: 17536
+		
 		private const int MothballUpdateInterval = 15000;
 
-		// Token: 0x04004481 RID: 17537
+		
 		private List<Pawn> allPawnsAliveOrDeadResult = new List<Pawn>();
 
-		// Token: 0x04004482 RID: 17538
+		
 		private List<Pawn> allPawnsAliveResult = new List<Pawn>();
 
-		// Token: 0x04004483 RID: 17539
+		
 		private static List<Pawn> tmpPawnsToTick = new List<Pawn>();
 
-		// Token: 0x04004484 RID: 17540
+		
 		private static List<Pawn> tmpPawnsToRemove = new List<Pawn>();
 	}
 }

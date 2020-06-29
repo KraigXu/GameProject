@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200092A RID: 2346
+	
 	public sealed class History : IExposable
 	{
-		// Token: 0x060037C1 RID: 14273 RVA: 0x0012B22C File Offset: 0x0012942C
+		
 		public History()
 		{
 			this.autoRecorderGroups = new List<HistoryAutoRecorderGroup>();
@@ -29,7 +29,7 @@ namespace RimWorld
 			this.curveDrawerStyle.LabelX = "Day".Translate();
 		}
 
-		// Token: 0x060037C2 RID: 14274 RVA: 0x0012B328 File Offset: 0x00129528
+		
 		public void HistoryTick()
 		{
 			for (int i = 0; i < this.autoRecorderGroups.Count; i++)
@@ -38,13 +38,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037C3 RID: 14275 RVA: 0x0012B35C File Offset: 0x0012955C
+		
 		public List<HistoryAutoRecorderGroup> Groups()
 		{
 			return this.autoRecorderGroups;
 		}
 
-		// Token: 0x060037C4 RID: 14276 RVA: 0x0012B364 File Offset: 0x00129564
+		
 		public void ExposeData()
 		{
 			Scribe_Deep.Look<Archive>(ref this.archive, "archive", Array.Empty<object>());
@@ -61,19 +61,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037C5 RID: 14277 RVA: 0x0012B3E3 File Offset: 0x001295E3
+		
 		public void Notify_PsylinkAvailable()
 		{
 			this.lastPsylinkAvailable = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x060037C6 RID: 14278 RVA: 0x0012B3E3 File Offset: 0x001295E3
+		
 		public void FinalizeInit()
 		{
 			this.lastPsylinkAvailable = Find.TickManager.TicksGame;
 		}
 
-		// Token: 0x060037C7 RID: 14279 RVA: 0x0012B3F8 File Offset: 0x001295F8
+		
 		private void AddOrRemoveHistoryRecorderGroups()
 		{
 			if (this.autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x == null) != 0)
@@ -97,16 +97,16 @@ namespace RimWorld
 			this.autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x.def == null);
 		}
 
-		// Token: 0x04002105 RID: 8453
+		
 		public Archive archive = new Archive();
 
-		// Token: 0x04002106 RID: 8454
+		
 		private List<HistoryAutoRecorderGroup> autoRecorderGroups;
 
-		// Token: 0x04002107 RID: 8455
+		
 		public SimpleCurveDrawerStyle curveDrawerStyle;
 
-		// Token: 0x04002108 RID: 8456
+		
 		public int lastPsylinkAvailable = -999999;
 	}
 }

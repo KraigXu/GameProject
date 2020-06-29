@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001028 RID: 4136
+	
 	public static class ThoughtUtility
 	{
-		// Token: 0x06006303 RID: 25347 RVA: 0x00226610 File Offset: 0x00224810
+		
 		public static void Reset()
 		{
 			ThoughtUtility.situationalSocialThoughtDefs = (from x in DefDatabase<ThoughtDef>.AllDefs
@@ -19,7 +19,7 @@ namespace RimWorld
 			select x).ToList<ThoughtDef>();
 		}
 
-		// Token: 0x06006304 RID: 25348 RVA: 0x00226684 File Offset: 0x00224884
+		
 		public static void GiveThoughtsForPawnExecuted(Pawn victim, PawnExecutionKind kind)
 		{
 			if (!victim.RaceProps.Humanlike)
@@ -64,7 +64,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006305 RID: 25349 RVA: 0x0022675C File Offset: 0x0022495C
+		
 		public static void GiveThoughtsForPawnOrganHarvested(Pawn victim)
 		{
 			if (!victim.RaceProps.Humanlike)
@@ -96,7 +96,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006306 RID: 25350 RVA: 0x0022682C File Offset: 0x00224A2C
+		
 		public static Hediff NullifyingHediff(ThoughtDef def, Pawn pawn)
 		{
 			if (def.IsMemory)
@@ -130,7 +130,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06006307 RID: 25351 RVA: 0x002268D8 File Offset: 0x00224AD8
+		
 		public static Trait NullifyingTrait(ThoughtDef def, Pawn pawn)
 		{
 			if (def.nullifyingTraits != null)
@@ -147,7 +147,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06006308 RID: 25352 RVA: 0x00226928 File Offset: 0x00224B28
+		
 		public static TaleDef NullifyingTale(ThoughtDef def, Pawn pawn)
 		{
 			if (def.nullifyingOwnTales != null)
@@ -163,7 +163,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06006309 RID: 25353 RVA: 0x0022697C File Offset: 0x00224B7C
+		
 		public static void RemovePositiveBedroomThoughts(Pawn pawn)
 		{
 			if (pawn.needs.mood == null)
@@ -174,14 +174,14 @@ namespace RimWorld
 			pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefIf(ThoughtDefOf.SleptInBarracks, (Thought_Memory thought) => thought.MoodOffset() > 0f);
 		}
 
-		// Token: 0x0600630A RID: 25354 RVA: 0x00226A13 File Offset: 0x00224C13
+		
 		[Obsolete("Only need this overload to not break mod compatibility.")]
 		public static bool CanGetThought(Pawn pawn, ThoughtDef def)
 		{
 			return ThoughtUtility.CanGetThought_NewTemp(pawn, def, false);
 		}
 
-		// Token: 0x0600630B RID: 25355 RVA: 0x00226A20 File Offset: 0x00224C20
+		
 		public static bool CanGetThought_NewTemp(Pawn pawn, ThoughtDef def, bool checkIfNullified = false)
 		{
 			try
@@ -221,13 +221,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600630C RID: 25356 RVA: 0x00226B00 File Offset: 0x00224D00
+		
 		public static bool ThoughtNullified(Pawn pawn, ThoughtDef def)
 		{
 			return ThoughtUtility.NullifyingTrait(def, pawn) != null || ThoughtUtility.NullifyingHediff(def, pawn) != null || ThoughtUtility.NullifyingTale(def, pawn) != null;
 		}
 
-		// Token: 0x0600630D RID: 25357 RVA: 0x00226B24 File Offset: 0x00224D24
+		
 		public static string ThoughtNullifiedMessage(Pawn pawn, ThoughtDef def)
 		{
 			TaggedString t = "ThoughtNullifiedBy".Translate().CapitalizeFirst() + ": ";
@@ -249,10 +249,10 @@ namespace RimWorld
 			return "";
 		}
 
-		// Token: 0x04003C38 RID: 15416
+		
 		public static List<ThoughtDef> situationalSocialThoughtDefs;
 
-		// Token: 0x04003C39 RID: 15417
+		
 		public static List<ThoughtDef> situationalNonSocialThoughtDefs;
 	}
 }

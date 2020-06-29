@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000190 RID: 400
+	
 	internal class SectionLayer_EdgeShadows : SectionLayer
 	{
-		// Token: 0x1700023C RID: 572
+		
 		// (get) Token: 0x06000B84 RID: 2948 RVA: 0x0003F2D9 File Offset: 0x0003D4D9
 		public override bool Visible
 		{
@@ -262,16 +262,16 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000942 RID: 2370
+		
 		private const float InDist = 0.45f;
 
-		// Token: 0x04000943 RID: 2371
+		
 		private const byte ShadowBrightness = 195;
 
-		// Token: 0x04000944 RID: 2372
+		
 		private static readonly Color32 Shadowed = new Color32(195, 195, 195, byte.MaxValue);
 
-		// Token: 0x04000945 RID: 2373
+		
 		private static readonly Color32 Lit = new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 	}
 }

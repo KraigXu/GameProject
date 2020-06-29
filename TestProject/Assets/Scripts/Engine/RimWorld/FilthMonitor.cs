@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FBC RID: 4028
+	
 	internal static class FilthMonitor
 	{
-		// Token: 0x060060CA RID: 24778 RVA: 0x0021797C File Offset: 0x00215B7C
+		
 		public static void FilthMonitorTick()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060060CB RID: 24779 RVA: 0x00217AFD File Offset: 0x00215CFD
+		
 		public static void Notify_FilthAccumulated()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -46,7 +46,7 @@ namespace RimWorld
 			FilthMonitor.filthAccumulated++;
 		}
 
-		// Token: 0x060060CC RID: 24780 RVA: 0x00217B13 File Offset: 0x00215D13
+		
 		public static void Notify_FilthDropped()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -56,7 +56,7 @@ namespace RimWorld
 			FilthMonitor.filthDropped++;
 		}
 
-		// Token: 0x060060CD RID: 24781 RVA: 0x00217B29 File Offset: 0x00215D29
+		
 		public static void Notify_FilthAnimalGenerated()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -66,7 +66,7 @@ namespace RimWorld
 			FilthMonitor.filthAnimalGenerated++;
 		}
 
-		// Token: 0x060060CE RID: 24782 RVA: 0x00217B3F File Offset: 0x00215D3F
+		
 		public static void Notify_FilthHumanGenerated()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -76,7 +76,7 @@ namespace RimWorld
 			FilthMonitor.filthHumanGenerated++;
 		}
 
-		// Token: 0x060060CF RID: 24783 RVA: 0x00217B55 File Offset: 0x00215D55
+		
 		public static void Notify_FilthSpawned()
 		{
 			if (!DebugViewSettings.logFilthSummary)
@@ -86,25 +86,25 @@ namespace RimWorld
 			FilthMonitor.filthSpawned++;
 		}
 
-		// Token: 0x04003B00 RID: 15104
+		
 		private static int lastUpdate;
 
-		// Token: 0x04003B01 RID: 15105
+		
 		private static int filthAccumulated;
 
-		// Token: 0x04003B02 RID: 15106
+		
 		private static int filthDropped;
 
-		// Token: 0x04003B03 RID: 15107
+		
 		private static int filthAnimalGenerated;
 
-		// Token: 0x04003B04 RID: 15108
+		
 		private static int filthHumanGenerated;
 
-		// Token: 0x04003B05 RID: 15109
+		
 		private static int filthSpawned;
 
-		// Token: 0x04003B06 RID: 15110
+		
 		private const int SampleDuration = 2500;
 	}
 }

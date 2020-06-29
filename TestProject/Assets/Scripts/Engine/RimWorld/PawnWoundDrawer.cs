@@ -5,17 +5,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AEC RID: 2796
+	
 	[StaticConstructorOnStartup]
 	public class PawnWoundDrawer
 	{
-		// Token: 0x0600420F RID: 16911 RVA: 0x0016100E File Offset: 0x0015F20E
+		
 		public PawnWoundDrawer(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x06004210 RID: 16912 RVA: 0x00161030 File Offset: 0x0015F230
+		
 		public void RenderOverBody(Vector3 drawLoc, Mesh bodyMesh, Quaternion quat, bool forPortrait)
 		{
 			int num = 0;
@@ -52,19 +52,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0400262F RID: 9775
+		
 		protected Pawn pawn;
 
-		// Token: 0x04002630 RID: 9776
+		
 		private List<PawnWoundDrawer.Wound> wounds = new List<PawnWoundDrawer.Wound>();
 
-		// Token: 0x04002631 RID: 9777
+		
 		private int MaxDisplayWounds = 3;
 
-		// Token: 0x02001AA0 RID: 6816
+		
 		private class Wound
 		{
-			// Token: 0x06009832 RID: 38962 RVA: 0x002EC8AC File Offset: 0x002EAAAC
+			
 			public Wound(Pawn pawn)
 			{
 				this.mat = pawn.RaceProps.FleshType.ChooseWoundOverlay();
@@ -80,7 +80,7 @@ namespace RimWorld
 				}
 			}
 
-			// Token: 0x06009833 RID: 38963 RVA: 0x002EC960 File Offset: 0x002EAB60
+			
 			public void DrawWound(Vector3 drawLoc, Quaternion bodyQuat, Rot4 bodyRot, bool forPortrait)
 			{
 				Vector2 vector = this.locsPerSide[bodyRot.AsInt];
@@ -89,16 +89,16 @@ namespace RimWorld
 				GenDraw.DrawMeshNowOrLater(MeshPool.plane025, drawLoc, this.quat, this.mat, forPortrait);
 			}
 
-			// Token: 0x04006522 RID: 25890
+			
 			private List<Vector2> locsPerSide = new List<Vector2>();
 
-			// Token: 0x04006523 RID: 25891
+			
 			private Material mat;
 
-			// Token: 0x04006524 RID: 25892
+			
 			private Quaternion quat;
 
-			// Token: 0x04006525 RID: 25893
+			
 			private static readonly Vector2 WoundSpan = new Vector2(0.18f, 0.3f);
 		}
 	}

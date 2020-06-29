@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Verse
 {
-	// Token: 0x0200004A RID: 74
+	
 	public static class InspectTabManager
 	{
-		// Token: 0x060003A2 RID: 930 RVA: 0x00012E54 File Offset: 0x00011054
+		
 		public static InspectTabBase GetSharedInstance(Type tabType)
 		{
 			InspectTabBase inspectTabBase;
@@ -19,7 +19,7 @@ namespace Verse
 			return inspectTabBase;
 		}
 
-		// Token: 0x04000104 RID: 260
+		
 		private static Dictionary<Type, InspectTabBase> sharedInstances = new Dictionary<Type, InspectTabBase>();
 	}
 }

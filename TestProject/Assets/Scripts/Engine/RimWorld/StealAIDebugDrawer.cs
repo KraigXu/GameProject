@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006D6 RID: 1750
+	
 	public static class StealAIDebugDrawer
 	{
-		// Token: 0x06002EBD RID: 11965 RVA: 0x00106768 File Offset: 0x00104968
+		
 		public static void DebugDraw()
 		{
 			if (!DebugViewSettings.drawStealDebug)
@@ -52,7 +52,7 @@ namespace RimWorld
 			StealAIDebugDrawer.tmpToSteal.Clear();
 		}
 
-		// Token: 0x06002EBE RID: 11966 RVA: 0x001068F4 File Offset: 0x00104AF4
+		
 		public static void Notify_ThingChanged(Thing thing)
 		{
 			if (StealAIDebugDrawer.debugDrawLord == null)
@@ -81,7 +81,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002EBF RID: 11967 RVA: 0x001069C0 File Offset: 0x00104BC0
+		
 		private static float TotalMarketValueAround(IntVec3 center, Map map, int pawnsCount)
 		{
 			if (center.Impassable(map))
@@ -108,7 +108,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06002EC0 RID: 11968 RVA: 0x00106A64 File Offset: 0x00104C64
+		
 		private static Lord FindHostileLord()
 		{
 			Lord lord = null;
@@ -123,7 +123,7 @@ namespace RimWorld
 			return lord;
 		}
 
-		// Token: 0x06002EC1 RID: 11969 RVA: 0x00106AE4 File Offset: 0x00104CE4
+		
 		private static void CheckInitDebugDrawGrid()
 		{
 			if (StealAIDebugDrawer.debugDrawGrid == null)
@@ -137,13 +137,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001A85 RID: 6789
+		
 		private static List<Thing> tmpToSteal = new List<Thing>();
 
-		// Token: 0x04001A86 RID: 6790
+		
 		private static BoolGrid debugDrawGrid;
 
-		// Token: 0x04001A87 RID: 6791
+		
 		private static Lord debugDrawLord = null;
 	}
 }

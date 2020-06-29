@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000EBB RID: 3771
+	
 	public class MainButtonsRoot
 	{
-		// Token: 0x170010A2 RID: 4258
+		
 		// (get) Token: 0x06005C2F RID: 23599 RVA: 0x001FD60C File Offset: 0x001FB80C
 		private int VisibleButtonsCount
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C30 RID: 23600 RVA: 0x001FD64C File Offset: 0x001FB84C
+		
 		public MainButtonsRoot()
 		{
 			this.allButtonsInOrder = (from x in DefDatabase<MainButtonDef>.AllDefs
@@ -36,7 +36,7 @@ namespace RimWorld
 			select x).ToList<MainButtonDef>();
 		}
 
-		// Token: 0x06005C31 RID: 23601 RVA: 0x001FD6A0 File Offset: 0x001FB8A0
+		
 		public void MainButtonsOnGUI()
 		{
 			if (Event.current.type == EventType.Layout)
@@ -55,7 +55,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C32 RID: 23602 RVA: 0x001FD73C File Offset: 0x001FB93C
+		
 		public void HandleLowPriorityShortcuts()
 		{
 			this.tabs.HandleLowPriorityShortcuts();
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005C33 RID: 23603 RVA: 0x001FD790 File Offset: 0x001FB990
+		
 		private void DoButtons()
 		{
 			float num = 0f;
@@ -98,10 +98,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003248 RID: 12872
+		
 		public MainTabsRoot tabs = new MainTabsRoot();
 
-		// Token: 0x04003249 RID: 12873
+		
 		private List<MainButtonDef> allButtonsInOrder;
 	}
 }

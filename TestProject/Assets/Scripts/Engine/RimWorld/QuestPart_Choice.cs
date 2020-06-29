@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200096B RID: 2411
+	
 	public class QuestPart_Choice : QuestPart
 	{
-		// Token: 0x17000A3E RID: 2622
+		
 		// (get) Token: 0x0600391D RID: 14621 RVA: 0x001303B0 File Offset: 0x0012E5B0
 		public override bool PreventsAutoAccept
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600391E RID: 14622 RVA: 0x001303C4 File Offset: 0x0012E5C4
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600391F RID: 14623 RVA: 0x00130448 File Offset: 0x0012E648
+		
 		public override void Notify_PreCleanup()
 		{
 			base.Notify_PreCleanup();
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003920 RID: 14624 RVA: 0x001304B0 File Offset: 0x0012E6B0
+		
 		public void Choose(QuestPart_Choice.Choice choice)
 		{
 			for (int i = this.choices.Count - 1; i >= 0; i--)
@@ -68,7 +68,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003921 RID: 14625 RVA: 0x001305A0 File Offset: 0x0012E7A0
+		
 		public override void PreQuestAccept()
 		{
 			base.PreQuestAccept();
@@ -79,7 +79,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003922 RID: 14626 RVA: 0x001305F4 File Offset: 0x0012E7F4
+		
 		public override void PostQuestAdded()
 		{
 			base.PostQuestAdded();
@@ -103,7 +103,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003923 RID: 14627 RVA: 0x0013069C File Offset: 0x0012E89C
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -112,29 +112,29 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.choiceUsed, "choiceUsed", false, false);
 		}
 
-		// Token: 0x040021AD RID: 8621
+		
 		public string inSignalChoiceUsed;
 
-		// Token: 0x040021AE RID: 8622
+		
 		public List<QuestPart_Choice.Choice> choices = new List<QuestPart_Choice.Choice>();
 
-		// Token: 0x040021AF RID: 8623
+		
 		public bool choiceUsed;
 
-		// Token: 0x02001969 RID: 6505
+		
 		public class Choice : IExposable
 		{
-			// Token: 0x06009290 RID: 37520 RVA: 0x002DEFF3 File Offset: 0x002DD1F3
+			
 			public void ExposeData()
 			{
 				Scribe_Collections.Look<QuestPart>(ref this.questParts, "questParts", LookMode.Reference, Array.Empty<object>());
 				Scribe_Collections.Look<Reward>(ref this.rewards, "rewards", LookMode.Deep, Array.Empty<object>());
 			}
 
-			// Token: 0x040060CE RID: 24782
+			
 			public List<QuestPart> questParts = new List<QuestPart>();
 
-			// Token: 0x040060CF RID: 24783
+			
 			public List<Reward> rewards = new List<Reward>();
 		}
 	}

@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001298 RID: 4760
+	
 	public class WITab_Terrain : WITab
 	{
-		// Token: 0x170012E5 RID: 4837
+		
 		// (get) Token: 0x06007021 RID: 28705 RVA: 0x00271AE6 File Offset: 0x0026FCE6
 		public override bool IsVisible
 		{
@@ -19,7 +19,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06007022 RID: 28706 RVA: 0x00271C31 File Offset: 0x0026FE31
+		
 		public WITab_Terrain()
 		{
 			this.size = WITab_Terrain.WinSize;
@@ -27,7 +27,7 @@ namespace RimWorld.Planet
 			this.tutorTag = "Terrain";
 		}
 
-		// Token: 0x06007023 RID: 28707 RVA: 0x00271C5C File Offset: 0x0026FE5C
+		
 		protected override void FillTab()
 		{
 			Rect outRect = new Rect(0f, 0f, WITab_Terrain.WinSize.x, WITab_Terrain.WinSize.y).ContractedBy(10f);
@@ -121,13 +121,13 @@ namespace RimWorld.Planet
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x04004501 RID: 17665
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x04004502 RID: 17666
+		
 		private float lastDrawnHeight;
 
-		// Token: 0x04004503 RID: 17667
+		
 		private static readonly Vector2 WinSize = new Vector2(440f, 540f);
 	}
 }

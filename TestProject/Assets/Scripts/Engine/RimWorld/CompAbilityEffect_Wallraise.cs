@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000ADC RID: 2780
+	
 	public class CompAbilityEffect_Wallraise : CompAbilityEffect
 	{
-		// Token: 0x17000BAA RID: 2986
+		
 		// (get) Token: 0x060041B2 RID: 16818 RVA: 0x0015F307 File Offset: 0x0015D507
 		public new CompProperties_AbilityWallraise Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041B3 RID: 16819 RVA: 0x0015F314 File Offset: 0x0015D514
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -64,19 +64,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060041B4 RID: 16820 RVA: 0x0015F548 File Offset: 0x0015D748
+		
 		public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			return this.Valid(target, true);
 		}
 
-		// Token: 0x060041B5 RID: 16821 RVA: 0x0015F552 File Offset: 0x0015D752
+		
 		public override void DrawEffectPreview(LocalTargetInfo target)
 		{
 			GenDraw.DrawFieldEdges(this.AffectedCells(target, this.parent.pawn.Map).ToList<IntVec3>(), this.Valid(target, false) ? Color.white : Color.red);
 		}
 
-		// Token: 0x060041B6 RID: 16822 RVA: 0x0015F58B File Offset: 0x0015D78B
+		
 		private IEnumerable<IntVec3> AffectedCells(LocalTargetInfo target, Map map)
 		{
 			foreach (IntVec2 intVec in this.Props.pattern)
@@ -92,7 +92,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060041B7 RID: 16823 RVA: 0x0015F5AC File Offset: 0x0015D7AC
+		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			if (this.AffectedCells(target, this.parent.pawn.Map).Any((IntVec3 c) => c.Filled(this.parent.pawn.Map)))
@@ -114,7 +114,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0400260B RID: 9739
+		
 		public static Color DustColor = new Color(0.55f, 0.55f, 0.55f, 4f);
 	}
 }

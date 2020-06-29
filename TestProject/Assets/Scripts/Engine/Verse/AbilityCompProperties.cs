@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000046 RID: 70
+	
 	public class AbilityCompProperties
 	{
-		// Token: 0x06000384 RID: 900 RVA: 0x00012958 File Offset: 0x00010B58
+		
 		public virtual IEnumerable<string> ConfigErrors(AbilityDef parentDef)
 		{
 			if (this.compClass == null)
@@ -26,7 +26,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x040000F9 RID: 249
+		
 		[TranslationHandle]
 		public Type compClass;
 	}

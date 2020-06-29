@@ -5,16 +5,16 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200061F RID: 1567
+	
 	public class JobDriver_Nuzzle : JobDriver
 	{
-		// Token: 0x06002AE2 RID: 10978 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002AE3 RID: 10979 RVA: 0x000F9F70 File Offset: 0x000F8170
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -31,7 +31,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0400197D RID: 6525
+		
 		private const int NuzzleDuration = 100;
 	}
 }

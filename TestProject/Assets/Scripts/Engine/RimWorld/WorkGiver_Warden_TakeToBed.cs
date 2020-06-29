@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000738 RID: 1848
+	
 	public class WorkGiver_Warden_TakeToBed : WorkGiver_Warden
 	{
-		// Token: 0x06003073 RID: 12403 RVA: 0x0010FC98 File Offset: 0x0010DE98
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (!base.ShouldTakeCareOfPrisoner(pawn, t))
@@ -28,7 +28,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003074 RID: 12404 RVA: 0x0010FCD8 File Offset: 0x0010DED8
+		
 		private Job TakeToPreferredBedJob(Pawn prisoner, Pawn warden)
 		{
 			if (prisoner.Downed || !warden.CanReserve(prisoner, 1, -1, null, false))
@@ -50,7 +50,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06003075 RID: 12405 RVA: 0x0010FD50 File Offset: 0x0010DF50
+		
 		private Job TakeDownedToBedJob(Pawn prisoner, Pawn warden)
 		{
 			if (!prisoner.Downed || !HealthAIUtility.ShouldSeekMedicalRestUrgent(prisoner) || prisoner.InBed() || !warden.CanReserve(prisoner, 1, -1, null, false))

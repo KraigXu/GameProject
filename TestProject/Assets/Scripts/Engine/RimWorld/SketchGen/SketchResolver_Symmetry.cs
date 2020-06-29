@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x02001092 RID: 4242
+	
 	public class SketchResolver_Symmetry : SketchResolver
 	{
-		// Token: 0x06006498 RID: 25752 RVA: 0x0022FBCC File Offset: 0x0022DDCC
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			bool flag = parms.symmetryClear ?? true;
@@ -64,13 +64,13 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x06006499 RID: 25753 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x0600649A RID: 25754 RVA: 0x0022FE0C File Offset: 0x0022E00C
+		
 		private void Clear(Sketch sketch, int origin, bool vertical, bool originIncluded)
 		{
 			foreach (SketchBuildable sketchBuildable in sketch.Buildables.ToList<SketchBuildable>())
@@ -83,7 +83,7 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600649B RID: 25755 RVA: 0x0022FE98 File Offset: 0x0022E098
+		
 		private bool ShouldKeepAlreadySymmetricalInTheMiddle(SketchBuildable buildable, int origin, bool vertical, bool originIncluded)
 		{
 			CellRect occupiedRect = buildable.OccupiedRect;
@@ -105,7 +105,7 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x0600649C RID: 25756 RVA: 0x0022FF08 File Offset: 0x0022E108
+		
 		private void MoveUntilSymmetrical(SketchBuildable buildable, CellRect initial, int origin, bool vertical, bool originIncluded)
 		{
 			if (vertical)

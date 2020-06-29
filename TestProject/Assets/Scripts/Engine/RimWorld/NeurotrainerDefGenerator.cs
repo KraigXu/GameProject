@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000857 RID: 2135
+	
 	public class NeurotrainerDefGenerator
 	{
-		// Token: 0x060034D2 RID: 13522 RVA: 0x001211CC File Offset: 0x0011F3CC
+		
 		public static IEnumerable<ThingDef> ImpliedThingDefs()
 		{
 			foreach (AbilityDef abilityDef in DefDatabase<AbilityDef>.AllDefs)
@@ -91,7 +91,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060034D3 RID: 13523 RVA: 0x001211D8 File Offset: 0x0011F3D8
+		
 		private static ThingDef BaseNeurotrainer()
 		{
 			return new ThingDef
@@ -155,13 +155,13 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x04001BBB RID: 7099
+		
 		public static string NeurotrainerDefPrefix = "Neurotrainer";
 
-		// Token: 0x04001BBC RID: 7100
+		
 		public static string PsytrainerDefPrefix = "Psytrainer";
 
-		// Token: 0x04001BBD RID: 7101
+		
 		private const int MaxAbilityLevel = 6;
 	}
 }

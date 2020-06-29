@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200128C RID: 4748
+	
 	public static class FloatMenuMakerWorld
 	{
-		// Token: 0x06006FB2 RID: 28594 RVA: 0x0026E380 File Offset: 0x0026C580
+		
 		public static bool TryMakeFloatMenu(Caravan caravan)
 		{
 			if (!caravan.IsPlayerControlled)
@@ -26,7 +26,7 @@ namespace RimWorld.Planet
 			return true;
 		}
 
-		// Token: 0x06006FB3 RID: 28595 RVA: 0x0026E3CC File Offset: 0x0026C5CC
+		
 		public static List<FloatMenuOption> ChoicesAtFor(Vector2 mousePos, Caravan caravan)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -38,7 +38,7 @@ namespace RimWorld.Planet
 			return list;
 		}
 
-		// Token: 0x06006FB4 RID: 28596 RVA: 0x0026E40C File Offset: 0x0026C60C
+		
 		public static List<FloatMenuOption> ChoicesAtFor(int tile, Caravan caravan)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();

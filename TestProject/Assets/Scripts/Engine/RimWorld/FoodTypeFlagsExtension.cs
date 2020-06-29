@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000891 RID: 2193
+	
 	public static class FoodTypeFlagsExtension
 	{
-		// Token: 0x06003552 RID: 13650 RVA: 0x0012333C File Offset: 0x0012153C
+		
 		public static string ToHumanString(this FoodTypeFlags ft)
 		{
 			string text = "";

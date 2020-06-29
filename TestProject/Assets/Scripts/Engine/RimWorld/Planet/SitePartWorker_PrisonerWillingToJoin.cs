@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001266 RID: 4710
+	
 	public class SitePartWorker_PrisonerWillingToJoin : SitePartWorker
 	{
-		// Token: 0x06006E38 RID: 28216 RVA: 0x00267F28 File Offset: 0x00266128
+		
 		public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);
@@ -31,7 +31,7 @@ namespace RimWorld.Planet
 			outExtraDescriptionRules.Add(new Rule_String("prisonerFullRelationInfo", output));
 		}
 
-		// Token: 0x06006E39 RID: 28217 RVA: 0x00267FF0 File Offset: 0x002661F0
+		
 		public override string GetPostProcessedThreatLabel(Site site, SitePart sitePart)
 		{
 			string text = base.GetPostProcessedThreatLabel(site, sitePart);

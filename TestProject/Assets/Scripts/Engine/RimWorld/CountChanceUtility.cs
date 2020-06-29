@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DB5 RID: 3509
+	
 	public static class CountChanceUtility
 	{
-		// Token: 0x0600552D RID: 21805 RVA: 0x001C53B4 File Offset: 0x001C35B4
+		
 		public static int RandomCount(List<CountChance> chances)
 		{
 			float value = Rand.Value;

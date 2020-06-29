@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000698 RID: 1688
+	
 	public class JobGiver_MaintainHives : JobGiver_AIFightEnemies
 	{
-		// Token: 0x06002DEA RID: 11754 RVA: 0x0010257A File Offset: 0x0010077A
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_MaintainHives jobGiver_MaintainHives = (JobGiver_MaintainHives)base.DeepCopy(resolve);
@@ -15,7 +15,7 @@ namespace RimWorld
 			return jobGiver_MaintainHives;
 		}
 
-		// Token: 0x06002DEB RID: 11755 RVA: 0x00102594 File Offset: 0x00100794
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Room room = pawn.GetRoom(RegionType.Set_Passable);
@@ -40,10 +40,10 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001A46 RID: 6726
+		
 		private bool onlyIfDamagingState;
 
-		// Token: 0x04001A47 RID: 6727
+		
 		private static readonly float CellsInScanRadius = (float)GenRadial.NumCellsInRadius(7.9f);
 	}
 }

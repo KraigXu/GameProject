@@ -7,10 +7,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000700 RID: 1792
+	
 	public class JoyGiver_ViewArt : JoyGiver
 	{
-		// Token: 0x06002F64 RID: 12132 RVA: 0x0010AA88 File Offset: 0x00108C88
+		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			bool allowedOutside = JoyUtility.EnjoyableOutsideNow(pawn, null);
@@ -53,7 +53,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04001ABD RID: 6845
+		
 		private static List<Thing> candidates = new List<Thing>();
 	}
 }

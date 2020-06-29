@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x0200067E RID: 1662
+	
 	public static class Toils_Misc
 	{
-		// Token: 0x06002D46 RID: 11590 RVA: 0x000FFB2C File Offset: 0x000FDD2C
+		
 		public static Toil Learn(SkillDef skill, float xp)
 		{
 			Toil toil = new Toil();
@@ -19,7 +19,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D47 RID: 11591 RVA: 0x000FFB78 File Offset: 0x000FDD78
+		
 		public static Toil SetForbidden(TargetIndex ind, bool forbidden)
 		{
 			Toil toil = new Toil();
@@ -30,7 +30,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D48 RID: 11592 RVA: 0x000FFBC4 File Offset: 0x000FDDC4
+		
 		public static Toil TakeItemFromInventoryToCarrier(Pawn pawn, TargetIndex itemInd)
 		{
 			return new Toil
@@ -46,7 +46,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06002D49 RID: 11593 RVA: 0x000FFBFC File Offset: 0x000FDDFC
+		
 		public static Toil ThrowColonistAttackingMote(TargetIndex target)
 		{
 			Toil toil = new Toil();
@@ -62,7 +62,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002D4A RID: 11594 RVA: 0x000FFC40 File Offset: 0x000FDE40
+		
 		public static Toil FindRandomAdjacentReachableCell(TargetIndex adjacentToInd, TargetIndex cellInd)
 		{
 			Toil findCell = new Toil();

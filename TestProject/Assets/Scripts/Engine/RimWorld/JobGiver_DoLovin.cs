@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006D9 RID: 1753
+	
 	public class JobGiver_DoLovin : ThinkNode_JobGiver
 	{
-		// Token: 0x06002ECA RID: 11978 RVA: 0x00106CDC File Offset: 0x00104EDC
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (Find.TickManager.TicksGame < pawn.mindState.canLovinTick)

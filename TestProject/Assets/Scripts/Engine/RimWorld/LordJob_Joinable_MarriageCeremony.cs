@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x0200077E RID: 1918
+	
 	public class LordJob_Joinable_MarriageCeremony : LordJob_VoluntarilyJoinable
 	{
-		// Token: 0x17000912 RID: 2322
+		
 		// (get) Token: 0x06003217 RID: 12823 RVA: 0x00117067 File Offset: 0x00115267
 		public override bool LostImportantReferenceDuringLoading
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000913 RID: 2323
+		
 		// (get) Token: 0x06003218 RID: 12824 RVA: 0x00010306 File Offset: 0x0000E506
 		public override bool AllowStartNewGatherings
 		{
@@ -28,12 +28,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003219 RID: 12825 RVA: 0x00116F32 File Offset: 0x00115132
+		
 		public LordJob_Joinable_MarriageCeremony()
 		{
 		}
 
-		// Token: 0x0600321A RID: 12826 RVA: 0x0011707C File Offset: 0x0011527C
+		
 		public LordJob_Joinable_MarriageCeremony(Pawn firstPawn, Pawn secondPawn, IntVec3 spot)
 		{
 			this.firstPawn = firstPawn;
@@ -41,7 +41,7 @@ namespace RimWorld
 			this.spot = spot;
 		}
 
-		// Token: 0x0600321B RID: 12827 RVA: 0x0011709C File Offset: 0x0011529C
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -88,25 +88,25 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x0600321C RID: 12828 RVA: 0x001174B0 File Offset: 0x001156B0
+		
 		private bool AreFiancesInPartyArea()
 		{
 			return this.lord.ownedPawns.Contains(this.firstPawn) && this.lord.ownedPawns.Contains(this.secondPawn) && this.firstPawn.Map == base.Map && GatheringsUtility.InGatheringArea(this.firstPawn.Position, this.spot, base.Map) && this.secondPawn.Map == base.Map && GatheringsUtility.InGatheringArea(this.secondPawn.Position, this.spot, base.Map);
 		}
 
-		// Token: 0x0600321D RID: 12829 RVA: 0x00117558 File Offset: 0x00115758
+		
 		private bool ShouldCeremonyBeCalledOff()
 		{
 			return this.firstPawn.Destroyed || this.secondPawn.Destroyed || !this.firstPawn.relations.DirectRelationExists(PawnRelationDefOf.Fiance, this.secondPawn) || (this.spot.GetDangerFor(this.firstPawn, base.Map) != Danger.None || this.spot.GetDangerFor(this.secondPawn, base.Map) != Danger.None) || (!GatheringsUtility.AcceptableGameConditionsToContinueGathering(base.Map) || !MarriageCeremonyUtility.FianceCanContinueCeremony(this.firstPawn, this.secondPawn) || !MarriageCeremonyUtility.FianceCanContinueCeremony(this.secondPawn, this.firstPawn));
 		}
 
-		// Token: 0x0600321E RID: 12830 RVA: 0x0011760C File Offset: 0x0011580C
+		
 		private bool ShouldAfterPartyBeCalledOff()
 		{
 			return this.firstPawn.Destroyed || this.secondPawn.Destroyed || (this.firstPawn.Downed || this.secondPawn.Downed) || (this.spot.GetDangerFor(this.firstPawn, base.Map) != Danger.None || this.spot.GetDangerFor(this.secondPawn, base.Map) != Danger.None) || !GatheringsUtility.AcceptableGameConditionsToContinueGathering(base.Map);
 		}
 
-		// Token: 0x0600321F RID: 12831 RVA: 0x00117698 File Offset: 0x00115898
+		
 		public override float VoluntaryJoinPriorityFor(Pawn p)
 		{
 			if (this.IsFiance(p))
@@ -144,7 +144,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003220 RID: 12832 RVA: 0x00117760 File Offset: 0x00115960
+		
 		public override void ExposeData()
 		{
 			Scribe_References.Look<Pawn>(ref this.firstPawn, "firstPawn", false);
@@ -152,31 +152,31 @@ namespace RimWorld
 			Scribe_Values.Look<IntVec3>(ref this.spot, "spot", default(IntVec3), false);
 		}
 
-		// Token: 0x06003221 RID: 12833 RVA: 0x001177A9 File Offset: 0x001159A9
+		
 		public override string GetReport(Pawn pawn)
 		{
 			return "LordReportAttendingMarriageCeremony".Translate();
 		}
 
-		// Token: 0x06003222 RID: 12834 RVA: 0x001177BA File Offset: 0x001159BA
+		
 		private bool IsCeremonyAboutToEnd()
 		{
 			return this.afterPartyTimeoutTrigger.TicksLeft < 1200;
 		}
 
-		// Token: 0x06003223 RID: 12835 RVA: 0x001177D1 File Offset: 0x001159D1
+		
 		private bool IsFiance(Pawn p)
 		{
 			return p == this.firstPawn || p == this.secondPawn;
 		}
 
-		// Token: 0x06003224 RID: 12836 RVA: 0x001177E8 File Offset: 0x001159E8
+		
 		private bool IsGuest(Pawn p)
 		{
 			return p.RaceProps.Humanlike && p != this.firstPawn && p != this.secondPawn && (p.Faction == this.firstPawn.Faction || p.Faction == this.secondPawn.Faction);
 		}
 
-		// Token: 0x06003225 RID: 12837 RVA: 0x00117840 File Offset: 0x00115A40
+		
 		private void AddAttendedWeddingThoughts()
 		{
 			List<Pawn> ownedPawns = this.lord.ownedPawns;
@@ -189,16 +189,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04001B43 RID: 6979
+		
 		public Pawn firstPawn;
 
-		// Token: 0x04001B44 RID: 6980
+		
 		public Pawn secondPawn;
 
-		// Token: 0x04001B45 RID: 6981
+		
 		private IntVec3 spot;
 
-		// Token: 0x04001B46 RID: 6982
+		
 		private Trigger_TicksPassed afterPartyTimeoutTrigger;
 	}
 }

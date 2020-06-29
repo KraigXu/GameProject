@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A58 RID: 2648
+	
 	public class GenStep_ScatterRuinsSimple : GenStep_Scatterer
 	{
-		// Token: 0x17000B19 RID: 2841
+		
 		// (get) Token: 0x06003E9A RID: 16026 RVA: 0x0014C05E File Offset: 0x0014A25E
 		public override int SeedPart
 		{
@@ -18,14 +18,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E9B RID: 16027 RVA: 0x0014C065 File Offset: 0x0014A265
+		
 		protected override bool TryFindScatterCell(Map map, out IntVec3 result)
 		{
 			this.randomSize = Mathf.RoundToInt(Rand.ByCurve(GenStep_ScatterRuinsSimple.RuinSizeChanceCurve));
 			return base.TryFindScatterCell(map, out result);
 		}
 
-		// Token: 0x06003E9C RID: 16028 RVA: 0x0014C084 File Offset: 0x0014A284
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -40,7 +40,7 @@ namespace RimWorld
 			return this.CanPlaceAncientBuildingInRange(rect, map);
 		}
 
-		// Token: 0x06003E9D RID: 16029 RVA: 0x0014C0E4 File Offset: 0x0014A2E4
+		
 		protected bool CanPlaceAncientBuildingInRange(CellRect rect, Map map)
 		{
 			foreach (IntVec3 c in rect.Cells)
@@ -61,7 +61,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003E9E RID: 16030 RVA: 0x0014C17C File Offset: 0x0014A37C
+		
 		protected override void ScatterAt(IntVec3 c, Map map, GenStepParams parms, int stackCount = 1)
 		{
 			CellRect rect = new CellRect(c.x, c.z, this.randomSize, this.randomSize).ClipInsideMap(map);
@@ -91,7 +91,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002476 RID: 9334
+		
 		private static readonly SimpleCurve RuinSizeChanceCurve = new SimpleCurve
 		{
 			{
@@ -112,7 +112,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002477 RID: 9335
+		
 		private int randomSize;
 	}
 }

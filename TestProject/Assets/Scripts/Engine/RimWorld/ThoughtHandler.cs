@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BCB RID: 3019
+	
 	public sealed class ThoughtHandler : IExposable
 	{
-		// Token: 0x06004792 RID: 18322 RVA: 0x001849A8 File Offset: 0x00182BA8
+		
 		public ThoughtHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
@@ -16,7 +16,7 @@ namespace RimWorld
 			this.situational = new SituationalThoughtHandler(pawn);
 		}
 
-		// Token: 0x06004793 RID: 18323 RVA: 0x001849CF File Offset: 0x00182BCF
+		
 		public void ExposeData()
 		{
 			Scribe_Deep.Look<MemoryThoughtHandler>(ref this.memories, "memories", new object[]
@@ -25,14 +25,14 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x06004794 RID: 18324 RVA: 0x001849F0 File Offset: 0x00182BF0
+		
 		public void ThoughtInterval()
 		{
 			this.situational.SituationalThoughtInterval();
 			this.memories.MemoryThoughtInterval();
 		}
 
-		// Token: 0x06004795 RID: 18325 RVA: 0x00184A08 File Offset: 0x00182C08
+		
 		public void GetAllMoodThoughts(List<Thought> outThoughts)
 		{
 			outThoughts.Clear();
@@ -48,7 +48,7 @@ namespace RimWorld
 			this.situational.AppendMoodThoughts(outThoughts);
 		}
 
-		// Token: 0x06004796 RID: 18326 RVA: 0x00184A60 File Offset: 0x00182C60
+		
 		public void GetMoodThoughts(Thought group, List<Thought> outThoughts)
 		{
 			this.GetAllMoodThoughts(outThoughts);
@@ -61,7 +61,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004797 RID: 18327 RVA: 0x00184AA0 File Offset: 0x00182CA0
+		
 		public float MoodOffsetOfGroup(Thought group)
 		{
 			this.GetMoodThoughts(group, ThoughtHandler.tmpThoughts);
@@ -84,7 +84,7 @@ namespace RimWorld
 			return num4 * num3;
 		}
 
-		// Token: 0x06004798 RID: 18328 RVA: 0x00184B38 File Offset: 0x00182D38
+		
 		public void GetDistinctMoodThoughtGroups(List<Thought> outThoughts)
 		{
 			this.GetAllMoodThoughts(outThoughts);
@@ -102,7 +102,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004799 RID: 18329 RVA: 0x00184B8C File Offset: 0x00182D8C
+		
 		public float TotalMoodOffset()
 		{
 			this.GetDistinctMoodThoughtGroups(ThoughtHandler.tmpTotalMoodOffsetThoughts);
@@ -115,7 +115,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x0600479A RID: 18330 RVA: 0x00184BE0 File Offset: 0x00182DE0
+		
 		public void GetSocialThoughts(Pawn otherPawn, List<ISocialThought> outThoughts)
 		{
 			outThoughts.Clear();
@@ -131,7 +131,7 @@ namespace RimWorld
 			this.situational.AppendSocialThoughts(otherPawn, outThoughts);
 		}
 
-		// Token: 0x0600479B RID: 18331 RVA: 0x00184C40 File Offset: 0x00182E40
+		
 		public void GetSocialThoughts(Pawn otherPawn, ISocialThought group, List<ISocialThought> outThoughts)
 		{
 			this.GetSocialThoughts(otherPawn, outThoughts);
@@ -144,7 +144,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600479C RID: 18332 RVA: 0x00184C88 File Offset: 0x00182E88
+		
 		public int OpinionOffsetOfGroup(ISocialThought group, Pawn otherPawn)
 		{
 			this.GetSocialThoughts(otherPawn, group, ThoughtHandler.tmpSocialThoughts);
@@ -183,7 +183,7 @@ namespace RimWorld
 			return Mathf.Min(Mathf.RoundToInt(num), -1);
 		}
 
-		// Token: 0x0600479D RID: 18333 RVA: 0x00184DC4 File Offset: 0x00182FC4
+		
 		public void GetDistinctSocialThoughtGroups(Pawn otherPawn, List<ISocialThought> outThoughts)
 		{
 			this.GetSocialThoughts(otherPawn, outThoughts);
@@ -201,7 +201,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600479E RID: 18334 RVA: 0x00184E24 File Offset: 0x00183024
+		
 		public int TotalOpinionOffset(Pawn otherPawn)
 		{
 			this.GetDistinctSocialThoughtGroups(otherPawn, ThoughtHandler.tmpTotalOpinionOffsetThoughts);
@@ -214,25 +214,25 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x04002924 RID: 10532
+		
 		public Pawn pawn;
 
-		// Token: 0x04002925 RID: 10533
+		
 		public MemoryThoughtHandler memories;
 
-		// Token: 0x04002926 RID: 10534
+		
 		public SituationalThoughtHandler situational;
 
-		// Token: 0x04002927 RID: 10535
+		
 		private static List<Thought> tmpThoughts = new List<Thought>();
 
-		// Token: 0x04002928 RID: 10536
+		
 		private static List<Thought> tmpTotalMoodOffsetThoughts = new List<Thought>();
 
-		// Token: 0x04002929 RID: 10537
+		
 		private static List<ISocialThought> tmpSocialThoughts = new List<ISocialThought>();
 
-		// Token: 0x0400292A RID: 10538
+		
 		private static List<ISocialThought> tmpTotalOpinionOffsetThoughts = new List<ISocialThought>();
 	}
 }

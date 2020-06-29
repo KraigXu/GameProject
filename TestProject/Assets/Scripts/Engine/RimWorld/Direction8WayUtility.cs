@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FB8 RID: 4024
+	
 	public static class Direction8WayUtility
 	{
-		// Token: 0x060060BF RID: 24767 RVA: 0x00217460 File Offset: 0x00215660
+		
 		public static string LabelShort(this Direction8Way dir)
 		{
 			switch (dir)

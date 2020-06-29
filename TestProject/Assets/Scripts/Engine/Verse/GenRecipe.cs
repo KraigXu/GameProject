@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000449 RID: 1097
+	
 	public static class GenRecipe
 	{
-		// Token: 0x060020EA RID: 8426 RVA: 0x000C953B File Offset: 0x000C773B
+		
 		public static IEnumerable<Thing> MakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
 		{
 			float efficiency;
@@ -111,7 +111,7 @@ namespace Verse
 			yield break;
 		}
 
-		// Token: 0x060020EB RID: 8427 RVA: 0x000C9568 File Offset: 0x000C7768
+		
 		private static Thing PostProcessProduct(Thing product, RecipeDef recipeDef, Pawn worker)
 		{
 			CompQuality compQuality = product.TryGetComp<CompQuality>();

@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000123 RID: 291
+	
 	public class Root_Entry : Root
 	{
-		// Token: 0x0600082E RID: 2094 RVA: 0x00025B34 File Offset: 0x00023D34
+		
 		public override void Start()
 		{
 			base.Start();
@@ -28,7 +28,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600082F RID: 2095 RVA: 0x00025BA0 File Offset: 0x00023DA0
+		
 		public override void Update()
 		{
 			base.Update();
@@ -54,7 +54,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000741 RID: 1857
+		
 		public MusicManagerEntry musicManagerEntry;
 	}
 }

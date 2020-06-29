@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E3B RID: 3643
+	
 	public class Designator_Build : Designator_Place
 	{
-		// Token: 0x17000FC2 RID: 4034
+		
 		// (get) Token: 0x0600580C RID: 22540 RVA: 0x001D34A3 File Offset: 0x001D16A3
 		public override BuildableDef PlacingDef
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC3 RID: 4035
+		
 		// (get) Token: 0x0600580D RID: 22541 RVA: 0x001D34AC File Offset: 0x001D16AC
 		public override string Label
 		{
@@ -38,7 +38,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC4 RID: 4036
+		
 		// (get) Token: 0x0600580E RID: 22542 RVA: 0x001D350A File Offset: 0x001D170A
 		public override string Desc
 		{
@@ -48,7 +48,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC5 RID: 4037
+		
 		// (get) Token: 0x0600580F RID: 22543 RVA: 0x001D3517 File Offset: 0x001D1717
 		public override Color IconDrawColor
 		{
@@ -62,7 +62,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC6 RID: 4038
+		
 		// (get) Token: 0x06005810 RID: 22544 RVA: 0x001D3540 File Offset: 0x001D1740
 		public override bool Visible
 		{
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC7 RID: 4039
+		
 		// (get) Token: 0x06005811 RID: 22545 RVA: 0x001D366C File Offset: 0x001D186C
 		public override int DraggableDimensions
 		{
@@ -121,7 +121,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC8 RID: 4040
+		
 		// (get) Token: 0x06005812 RID: 22546 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool DragDrawMeasurements
 		{
@@ -131,7 +131,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC9 RID: 4041
+		
 		// (get) Token: 0x06005813 RID: 22547 RVA: 0x001D3679 File Offset: 0x001D1879
 		public override float PanelReadoutTitleExtraRightMargin
 		{
@@ -141,7 +141,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FCA RID: 4042
+		
 		// (get) Token: 0x06005814 RID: 22548 RVA: 0x001D3680 File Offset: 0x001D1880
 		public override string HighlightTag
 		{
@@ -155,7 +155,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005815 RID: 22549 RVA: 0x001D36B0 File Offset: 0x001D18B0
+		
 		public Designator_Build(BuildableDef entDef)
 		{
 			this.entDef = entDef;
@@ -183,7 +183,7 @@ namespace RimWorld
 			this.ResetStuffToDefault();
 		}
 
-		// Token: 0x06005816 RID: 22550 RVA: 0x001D3784 File Offset: 0x001D1984
+		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			GizmoResult result = base.GizmoOnGUI(topLeft, maxWidth);
@@ -195,13 +195,13 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06005817 RID: 22551 RVA: 0x001D37BD File Offset: 0x001D19BD
+		
 		protected override void DrawIcon(Rect rect, Material buttonMat = null)
 		{
 			Widgets.DefIcon(rect, this.PlacingDef, this.stuffDef, 0.85f, false);
 		}
 
-		// Token: 0x06005818 RID: 22552 RVA: 0x001D37D8 File Offset: 0x001D19D8
+		
 		public Texture2D ResolvedIcon()
 		{
 			Graphic_Appearances graphic_Appearances;
@@ -212,7 +212,7 @@ namespace RimWorld
 			return this.icon;
 		}
 
-		// Token: 0x06005819 RID: 22553 RVA: 0x001D3830 File Offset: 0x001D1A30
+		
 		public void ResetStuffToDefault()
 		{
 			ThingDef thingDef = this.entDef as ThingDef;
@@ -222,7 +222,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600581A RID: 22554 RVA: 0x001D3860 File Offset: 0x001D1A60
+		
 		public override void DrawMouseAttachments()
 		{
 			base.DrawMouseAttachments();
@@ -264,7 +264,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600581B RID: 22555 RVA: 0x001D39E8 File Offset: 0x001D1BE8
+		
 		public override void ProcessInput(Event ev)
 		{
 			if (!base.CheckCanInteract())
@@ -285,7 +285,7 @@ namespace RimWorld
 					ThingDef localStuffDef = thingDef2;
 					list.Add(new FloatMenuOption(GenLabel.ThingLabel(this.entDef, localStuffDef, 1).CapitalizeFirst(), delegate
 					{
-						this.<>n__0(ev);
+						this.n__0(ev);
 						Find.DesignatorManager.Select(this);
 						this.stuffDef = localStuffDef;
 						this.writeStuff = true;
@@ -310,13 +310,13 @@ namespace RimWorld
 			Find.DesignatorManager.Select(this);
 		}
 
-		// Token: 0x0600581C RID: 22556 RVA: 0x001D3BB0 File Offset: 0x001D1DB0
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			return GenConstruct.CanPlaceBlueprintAt(this.entDef, c, this.placingRot, base.Map, DebugSettings.godMode, null, null, this.stuffDef);
 		}
 
-		// Token: 0x0600581D RID: 22557 RVA: 0x001D3BD8 File Offset: 0x001D1DD8
+		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			if (TutorSystem.TutorialMode && !TutorSystem.AllowAction(new EventPack(base.TutorTagDesignate, c)))
@@ -360,14 +360,14 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600581E RID: 22558 RVA: 0x001D3D76 File Offset: 0x001D1F76
+		
 		public override void SelectedUpdate()
 		{
 			base.SelectedUpdate();
 			BuildDesignatorUtility.TryDrawPowerGridAndAnticipatedConnection(this.entDef, this.placingRot);
 		}
 
-		// Token: 0x0600581F RID: 22559 RVA: 0x001D3D90 File Offset: 0x001D1F90
+		
 		public override void DrawPanelReadout(ref float curY, float width)
 		{
 			if (this.entDef.costStuffCount <= 0 && this.stuffDef != null)
@@ -440,7 +440,7 @@ namespace RimWorld
 			curY += 4f;
 		}
 
-		// Token: 0x06005820 RID: 22560 RVA: 0x001D40CC File Offset: 0x001D22CC
+		
 		private bool AnyColonistWithSkill(int skill, SkillDef skillDef, bool careIfDisabled)
 		{
 			foreach (Pawn pawn in Find.CurrentMap.mapPawns.FreeColonists)
@@ -453,7 +453,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005821 RID: 22561 RVA: 0x001D4154 File Offset: 0x001D2354
+		
 		private void DrawSkillRequirement(SkillDef skillDef, int requirement, float width, ref float curY)
 		{
 			Rect rect = new Rect(0f, curY + 2f, width, 24f);
@@ -476,31 +476,31 @@ namespace RimWorld
 			curY += 18f;
 		}
 
-		// Token: 0x06005822 RID: 22562 RVA: 0x001D4256 File Offset: 0x001D2456
+		
 		public void SetStuffDef(ThingDef stuffDef)
 		{
 			this.stuffDef = stuffDef;
 		}
 
-		// Token: 0x06005823 RID: 22563 RVA: 0x001CFE8D File Offset: 0x001CE08D
+		
 		public override void RenderHighlight(List<IntVec3> dragCells)
 		{
 			DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
 		}
 
-		// Token: 0x04002FA7 RID: 12199
+		
 		protected BuildableDef entDef;
 
-		// Token: 0x04002FA8 RID: 12200
+		
 		private ThingDef stuffDef;
 
-		// Token: 0x04002FA9 RID: 12201
+		
 		private bool writeStuff;
 
-		// Token: 0x04002FAA RID: 12202
+		
 		private static readonly Vector2 DragPriceDrawOffset = new Vector2(19f, 17f);
 
-		// Token: 0x04002FAB RID: 12203
+		
 		private const float DragPriceDrawNumberX = 29f;
 	}
 }

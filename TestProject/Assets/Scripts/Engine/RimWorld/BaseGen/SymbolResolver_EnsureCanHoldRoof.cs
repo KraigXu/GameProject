@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010B2 RID: 4274
+	
 	public class SymbolResolver_EnsureCanHoldRoof : SymbolResolver
 	{
-		// Token: 0x06006511 RID: 25873 RVA: 0x00233E90 File Offset: 0x00232090
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			ThingDef wallStuff = rp.wallStuff ?? BaseGenUtility.RandomCheapWallStuff(rp.faction, false);
@@ -19,13 +19,13 @@ namespace RimWorld.BaseGen
 			while (this.TrySpawnPillar(rp.faction, wallStuff));
 		}
 
-		// Token: 0x06006512 RID: 25874 RVA: 0x00233EDC File Offset: 0x002320DC
+		
 		private void CalculateRoofsAboutToCollapse(CellRect rect)
 		{
 			Map map = BaseGen.globalSettings.map;
 			SymbolResolver_EnsureCanHoldRoof.roofsAboutToCollapse.Clear();
 			SymbolResolver_EnsureCanHoldRoof.visited.Clear();
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			foreach (IntVec3 intVec in rect)
 			{
 				if (intVec.Roofed(map) && !RoofCollapseCellsFinder.ConnectsToRoofHolder(intVec, map, SymbolResolver_EnsureCanHoldRoof.visited))
@@ -33,9 +33,9 @@ namespace RimWorld.BaseGen
 					FloodFiller floodFiller = map.floodFiller;
 					IntVec3 root = intVec;
 					Predicate<IntVec3> passCheck;
-					if ((passCheck = <>9__0) == null)
+					if ((passCheck ) == null)
 					{
-						passCheck = (<>9__0 = ((IntVec3 x) => x.Roofed(map)));
+						passCheck = (9__0 = ((IntVec3 x) => x.Roofed(map)));
 					}
 					floodFiller.FloodFill(root, passCheck, delegate(IntVec3 x)
 					{
@@ -52,7 +52,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x06006513 RID: 25875 RVA: 0x0023403C File Offset: 0x0023223C
+		
 		private void CalculateEdgeRoofs(CellRect rect)
 		{
 			SymbolResolver_EnsureCanHoldRoof.edgeRoofs.Clear();
@@ -70,7 +70,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x06006514 RID: 25876 RVA: 0x002340CC File Offset: 0x002322CC
+		
 		private bool TrySpawnPillar(Faction faction, ThingDef wallStuff)
 		{
 			if (!SymbolResolver_EnsureCanHoldRoof.roofsAboutToCollapse.Any<IntVec3>())
@@ -99,7 +99,7 @@ namespace RimWorld.BaseGen
 			return false;
 		}
 
-		// Token: 0x06006515 RID: 25877 RVA: 0x0023418C File Offset: 0x0023238C
+		
 		private float GetPillarSpawnScore(IntVec3 c)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -124,13 +124,13 @@ namespace RimWorld.BaseGen
 			return 1f;
 		}
 
-		// Token: 0x04003DAE RID: 15790
+		
 		private static HashSet<IntVec3> roofsAboutToCollapse = new HashSet<IntVec3>();
 
-		// Token: 0x04003DAF RID: 15791
+		
 		private static List<IntVec3> edgeRoofs = new List<IntVec3>();
 
-		// Token: 0x04003DB0 RID: 15792
+		
 		private static HashSet<IntVec3> visited = new HashSet<IntVec3>();
 	}
 }

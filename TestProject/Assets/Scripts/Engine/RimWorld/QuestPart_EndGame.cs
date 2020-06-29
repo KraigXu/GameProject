@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000975 RID: 2421
+	
 	public class QuestPart_EndGame : QuestPart
 	{
-		// Token: 0x0600395B RID: 14683 RVA: 0x00131334 File Offset: 0x0012F534
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -46,7 +46,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600395C RID: 14684 RVA: 0x00131434 File Offset: 0x0012F634
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -55,20 +55,20 @@ namespace RimWorld
 			Scribe_Values.Look<string>(ref this.endingText, "endingText", null, false);
 		}
 
-		// Token: 0x0600395D RID: 14685 RVA: 0x00131472 File Offset: 0x0012F672
+		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
 			this.inSignal = "DebugSignal" + Rand.Int;
 		}
 
-		// Token: 0x040021CC RID: 8652
+		
 		public string inSignal;
 
-		// Token: 0x040021CD RID: 8653
+		
 		public string introText;
 
-		// Token: 0x040021CE RID: 8654
+		
 		public string endingText;
 	}
 }

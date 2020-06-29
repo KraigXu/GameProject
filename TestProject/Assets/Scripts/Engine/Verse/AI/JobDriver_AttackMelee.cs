@@ -4,17 +4,17 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200051E RID: 1310
+	
 	public class JobDriver_AttackMelee : JobDriver
 	{
-		// Token: 0x0600256B RID: 9579 RVA: 0x000DE03A File Offset: 0x000DC23A
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.numMeleeAttacksMade, "numMeleeAttacksMade", 0, false);
 		}
 
-		// Token: 0x0600256C RID: 9580 RVA: 0x000DE054 File Offset: 0x000DC254
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			IAttackTarget attackTarget = this.job.targetA.Thing as IAttackTarget;
@@ -25,7 +25,7 @@ namespace Verse.AI
 			return true;
 		}
 
-		// Token: 0x0600256D RID: 9581 RVA: 0x000DE09D File Offset: 0x000DC29D
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			yield return Toils_General.DoAtomic(delegate
@@ -57,7 +57,7 @@ namespace Verse.AI
 			yield break;
 		}
 
-		// Token: 0x0600256E RID: 9582 RVA: 0x000DE0B0 File Offset: 0x000DC2B0
+		
 		public override void Notify_PatherFailed()
 		{
 			if (this.job.attackDoorIfTargetLost)
@@ -87,13 +87,13 @@ namespace Verse.AI
 			base.Notify_PatherFailed();
 		}
 
-		// Token: 0x0600256F RID: 9583 RVA: 0x000DD564 File Offset: 0x000DB764
+		
 		public override bool IsContinuation(Job j)
 		{
 			return this.job.GetTarget(TargetIndex.A) == j.GetTarget(TargetIndex.A);
 		}
 
-		// Token: 0x040016DD RID: 5853
+		
 		private int numMeleeAttacksMade;
 	}
 }

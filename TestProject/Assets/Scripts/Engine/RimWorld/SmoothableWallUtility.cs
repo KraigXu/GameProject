@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000FDE RID: 4062
+	
 	public static class SmoothableWallUtility
 	{
-		// Token: 0x0600619E RID: 24990 RVA: 0x0021F7D4 File Offset: 0x0021D9D4
+		
 		public static void Notify_SmoothedByPawn(Thing t, Pawn p)
 		{
 			for (int i = 0; i < GenAdj.CardinalDirections.Length; i++)
@@ -49,7 +49,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600619F RID: 24991 RVA: 0x0021F900 File Offset: 0x0021DB00
+		
 		public static void Notify_BuildingDestroying(Thing t, DestroyMode mode)
 		{
 			if (mode != DestroyMode.KillFinalize && mode != DestroyMode.Deconstruct)
@@ -87,7 +87,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060061A0 RID: 24992 RVA: 0x0021FA04 File Offset: 0x0021DC04
+		
 		public static Thing SmoothWall(Thing target, Pawn smoother)
 		{
 			Map map = target.Map;
@@ -99,7 +99,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x060061A1 RID: 24993 RVA: 0x0021FA74 File Offset: 0x0021DC74
+		
 		private static bool IsBlocked(IntVec3 pos, Map map)
 		{
 			if (!pos.InBounds(map))

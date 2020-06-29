@@ -7,10 +7,10 @@ using RimWorld.QuestGen;
 
 namespace Verse
 {
-	// Token: 0x020002BA RID: 698
+	
 	public static class DirectXmlToObject
 	{
-		// Token: 0x060013D6 RID: 5078 RVA: 0x000723C0 File Offset: 0x000705C0
+		
 		public static Func<XmlNode, bool, object> GetObjectFromXmlMethod(Type type)
 		{
 			Func<XmlNode, bool, object> func;
@@ -24,13 +24,13 @@ namespace Verse
 			return func;
 		}
 
-		// Token: 0x060013D7 RID: 5079 RVA: 0x00072428 File Offset: 0x00070628
+		
 		private static object ObjectFromXmlReflection<T>(XmlNode xmlRoot, bool doPostLoad)
 		{
 			return DirectXmlToObject.ObjectFromXml<T>(xmlRoot, doPostLoad);
 		}
 
-		// Token: 0x060013D8 RID: 5080 RVA: 0x00072438 File Offset: 0x00070638
+		
 		public static T ObjectFromXml<T>(XmlNode xmlRoot, bool doPostLoad)
 		{
 			MethodInfo methodInfo = DirectXmlToObject.CustomDataLoadMethodOf(typeof(T));
@@ -136,7 +136,7 @@ namespace Verse
 					}
 					return (T)((object)num);
 				}
-				if (typeof(T).HasGenericDefinition(typeof(List<>)))
+				if (typeof(T).HasGenericDefinition(typeof(List)))
 				{
 					Func<XmlNode, object> func = null;
 					if (!DirectXmlToObject.listFromXmlMethods.TryGetValue(typeof(T), out func))
@@ -174,7 +174,7 @@ namespace Verse
 					if (typeof(T).IsGenericType)
 					{
 						Type genericTypeDefinition = typeof(T).GetGenericTypeDefinition();
-						if (genericTypeDefinition == typeof(List<>) || genericTypeDefinition == typeof(HashSet<>) || genericTypeDefinition == typeof(Dictionary<, >))
+						if (genericTypeDefinition == typeof(List) || genericTypeDefinition == typeof(HashSet) || genericTypeDefinition == typeof(Dictionary<, >))
 						{
 							return Activator.CreateInstance<T>();
 						}
@@ -373,7 +373,7 @@ namespace Verse
 			return result;
 		}
 
-		// Token: 0x060013D9 RID: 5081 RVA: 0x00072E48 File Offset: 0x00071048
+		
 		private static Type ClassTypeOf<T>(XmlNode xmlRoot)
 		{
 			XmlAttribute xmlAttribute = xmlRoot.Attributes["Class"];
@@ -390,7 +390,7 @@ namespace Verse
 			return typeInAnyAssembly;
 		}
 
-		// Token: 0x060013DA RID: 5082 RVA: 0x00072EC8 File Offset: 0x000710C8
+		
 		private static void TryDoPostLoad(object obj)
 		{
 			DeepProfiler.Start("TryDoPostLoad");
@@ -418,13 +418,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060013DB RID: 5083 RVA: 0x00072F58 File Offset: 0x00071158
+		
 		private static object ListFromXmlReflection<T>(XmlNode listRootNode)
 		{
 			return DirectXmlToObject.ListFromXml<T>(listRootNode);
 		}
 
-		// Token: 0x060013DC RID: 5084 RVA: 0x00072F60 File Offset: 0x00071160
+		
 		private static List<T> ListFromXml<T>(XmlNode listRootNode)
 		{
 			List<T> list = new List<T>();
@@ -477,13 +477,13 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x060013DD RID: 5085 RVA: 0x00073100 File Offset: 0x00071300
+		
 		private static object DictionaryFromXmlReflection<K, V>(XmlNode dictRootNode)
 		{
 			return DirectXmlToObject.DictionaryFromXml<K, V>(dictRootNode);
 		}
 
-		// Token: 0x060013DE RID: 5086 RVA: 0x00073108 File Offset: 0x00071308
+		
 		private static Dictionary<K, V> DictionaryFromXml<K, V>(XmlNode dictRootNode)
 		{
 			Dictionary<K, V> dictionary = new Dictionary<K, V>();
@@ -532,13 +532,13 @@ namespace Verse
 			return dictionary;
 		}
 
-		// Token: 0x060013DF RID: 5087 RVA: 0x000732AC File Offset: 0x000714AC
+		
 		private static MethodInfo CustomDataLoadMethodOf(Type type)
 		{
 			return type.GetMethod("LoadDataFromXmlCustom", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
-		// Token: 0x060013E0 RID: 5088 RVA: 0x000732BC File Offset: 0x000714BC
+		
 		private static bool ValidateListNode(XmlNode listEntryNode, XmlNode listRootNode, Type listItemType)
 		{
 			if (listEntryNode is XmlComment)
@@ -558,7 +558,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x060013E1 RID: 5089 RVA: 0x0007332C File Offset: 0x0007152C
+		
 		private static FieldInfo GetFieldInfoForType(Type type, string token, XmlNode debugXmlNode)
 		{
 			Dictionary<string, FieldInfo> dictionary = DirectXmlToObject.fieldInfoLookup.TryGetValue(type, null);
@@ -589,7 +589,7 @@ namespace Verse
 			return fieldInfo;
 		}
 
-		// Token: 0x060013E2 RID: 5090 RVA: 0x000733DC File Offset: 0x000715DC
+		
 		private static FieldInfo SearchTypeHierarchy(Type type, string token, BindingFlags extraFlags)
 		{
 			FieldInfo field;
@@ -605,7 +605,7 @@ namespace Verse
 			return field;
 		}
 
-		// Token: 0x060013E3 RID: 5091 RVA: 0x00073427 File Offset: 0x00071627
+		
 		public static string InnerTextWithReplacedNewlinesOrXML(XmlNode xmlNode)
 		{
 			if (xmlNode.ChildNodes.Count == 1 && xmlNode.FirstChild.NodeType == XmlNodeType.Text)
@@ -615,68 +615,68 @@ namespace Verse
 			return xmlNode.InnerXml;
 		}
 
-		// Token: 0x04000D52 RID: 3410
+		
 		public static Stack<Type> currentlyInstantiatingObjectOfType = new Stack<Type>();
 
-		// Token: 0x04000D53 RID: 3411
+		
 		public const string DictionaryKeyName = "key";
 
-		// Token: 0x04000D54 RID: 3412
+		
 		public const string DictionaryValueName = "value";
 
-		// Token: 0x04000D55 RID: 3413
+		
 		public const string LoadDataFromXmlCustomMethodName = "LoadDataFromXmlCustom";
 
-		// Token: 0x04000D56 RID: 3414
+		
 		public const string PostLoadMethodName = "PostLoad";
 
-		// Token: 0x04000D57 RID: 3415
+		
 		public const string ObjectFromXmlMethodName = "ObjectFromXmlReflection";
 
-		// Token: 0x04000D58 RID: 3416
+		
 		public const string ListFromXmlMethodName = "ListFromXmlReflection";
 
-		// Token: 0x04000D59 RID: 3417
+		
 		public const string DictionaryFromXmlMethodName = "DictionaryFromXmlReflection";
 
-		// Token: 0x04000D5A RID: 3418
+		
 		private static Dictionary<Type, Func<XmlNode, object>> listFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
 
-		// Token: 0x04000D5B RID: 3419
+		
 		private static Dictionary<Type, Func<XmlNode, object>> dictionaryFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
 
-		// Token: 0x04000D5C RID: 3420
+		
 		private static readonly Type[] tmpOneTypeArray = new Type[1];
 
-		// Token: 0x04000D5D RID: 3421
+		
 		private static readonly Dictionary<Type, Func<XmlNode, bool, object>> objectFromXmlMethods = new Dictionary<Type, Func<XmlNode, bool, object>>();
 
-		// Token: 0x04000D5E RID: 3422
+		
 		private static Dictionary<DirectXmlToObject.FieldAliasCache, FieldInfo> fieldAliases = new Dictionary<DirectXmlToObject.FieldAliasCache, FieldInfo>(EqualityComparer<DirectXmlToObject.FieldAliasCache>.Default);
 
-		// Token: 0x04000D5F RID: 3423
+		
 		private static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoLookup = new Dictionary<Type, Dictionary<string, FieldInfo>>();
 
-		// Token: 0x02001488 RID: 5256
+		
 		private struct FieldAliasCache : IEquatable<DirectXmlToObject.FieldAliasCache>
 		{
-			// Token: 0x06007B05 RID: 31493 RVA: 0x0029A0EB File Offset: 0x002982EB
+			
 			public FieldAliasCache(Type type, string fieldName)
 			{
 				this.type = type;
 				this.fieldName = fieldName.ToLower();
 			}
 
-			// Token: 0x06007B06 RID: 31494 RVA: 0x0029A100 File Offset: 0x00298300
+			
 			public bool Equals(DirectXmlToObject.FieldAliasCache other)
 			{
 				return this.type == other.type && string.Equals(this.fieldName, other.fieldName);
 			}
 
-			// Token: 0x04004DDD RID: 19933
+			
 			public Type type;
 
-			// Token: 0x04004DDE RID: 19934
+			
 			public string fieldName;
 		}
 	}

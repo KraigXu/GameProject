@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A45 RID: 2629
+	
 	public class GenStep_EscapeShip : GenStep_Scatterer
 	{
-		// Token: 0x17000B0A RID: 2826
+		
 		// (get) Token: 0x06003E29 RID: 15913 RVA: 0x001475D3 File Offset: 0x001457D3
 		public override int SeedPart
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E2A RID: 15914 RVA: 0x001475DC File Offset: 0x001457DC
+		
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -53,7 +53,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003E2B RID: 15915 RVA: 0x00147710 File Offset: 0x00145910
+		
 		protected override void ScatterAt(IntVec3 c, Map map, GenStepParams parms, int stackCount = 1)
 		{
 			int randomInRange = GenStep_EscapeShip.EscapeShipSizeWidth.RandomInRange;
@@ -83,10 +83,10 @@ namespace RimWorld
 			BaseGen.Generate();
 		}
 
-		// Token: 0x04002431 RID: 9265
+		
 		private static readonly IntRange EscapeShipSizeWidth = new IntRange(20, 28);
 
-		// Token: 0x04002432 RID: 9266
+		
 		private static readonly IntRange EscapeShipSizeHeight = new IntRange(34, 42);
 	}
 }

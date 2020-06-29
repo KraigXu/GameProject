@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000362 RID: 866
+	
 	public class Dialog_PawnTableTest : Window
 	{
-		// Token: 0x170004F8 RID: 1272
+		
 		// (get) Token: 0x06001A24 RID: 6692 RVA: 0x000A0AE8 File Offset: 0x0009ECE8
 		public override Vector2 InitialSize
 		{
@@ -19,7 +19,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x170004F9 RID: 1273
+		
 		// (get) Token: 0x06001A25 RID: 6693 RVA: 0x000A0AFB File Offset: 0x0009ECFB
 		private List<Pawn> Pawns
 		{
@@ -29,13 +29,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001A26 RID: 6694 RVA: 0x000A0B16 File Offset: 0x0009ED16
+		
 		public Dialog_PawnTableTest(PawnColumnDef singleColumn)
 		{
 			this.singleColumn = singleColumn;
 		}
 
-		// Token: 0x06001A27 RID: 6695 RVA: 0x000A0B28 File Offset: 0x0009ED28
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			int num = ((int)inRect.height - 90) / 3;
@@ -82,7 +82,7 @@ namespace Verse
 			num2 += num;
 		}
 
-		// Token: 0x06001A28 RID: 6696 RVA: 0x000A0DE4 File Offset: 0x0009EFE4
+		
 		[DebugOutput("UI", false)]
 		private static void PawnColumnTest()
 		{
@@ -99,19 +99,19 @@ namespace Verse
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
 
-		// Token: 0x04000F41 RID: 3905
+		
 		private PawnColumnDef singleColumn;
 
-		// Token: 0x04000F42 RID: 3906
+		
 		private PawnTable pawnTableMin;
 
-		// Token: 0x04000F43 RID: 3907
+		
 		private PawnTable pawnTableOptimal;
 
-		// Token: 0x04000F44 RID: 3908
+		
 		private PawnTable pawnTableMax;
 
-		// Token: 0x04000F45 RID: 3909
+		
 		private const int TableTitleHeight = 30;
 	}
 }

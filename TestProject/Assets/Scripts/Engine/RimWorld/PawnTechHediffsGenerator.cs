@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B1B RID: 2843
+	
 	public static class PawnTechHediffsGenerator
 	{
-		// Token: 0x060042E5 RID: 17125 RVA: 0x00167AB4 File Offset: 0x00165CB4
+		
 		public static void GenerateTechHediffsFor(Pawn pawn)
 		{
 			float partsMoney = pawn.kindDef.techHediffsMoney.RandomInRange;
@@ -27,7 +27,7 @@ namespace RimWorld
 				return;
 			}
 			PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Clear();
-			Func<ThingDef, bool> <>9__0;
+			
 			for (int i = 0; i < num; i++)
 			{
 				if (Rand.Value > pawn.kindDef.techHediffsChance)
@@ -36,9 +36,9 @@ namespace RimWorld
 				}
 				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
 				Func<ThingDef, bool> predicate;
-				if ((predicate = <>9__0) == null)
+				if ((predicate ) == null)
 				{
-					predicate = (<>9__0 = ((ThingDef x) => x.isTechHediff && !PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Contains(x) && x.BaseMarketValue <= partsMoney && x.techHediffsTags != null && pawn.kindDef.techHediffsTags.Any((string tag) => x.techHediffsTags.Contains(tag)) && (pawn.kindDef.techHediffsDisallowTags == null || !pawn.kindDef.techHediffsDisallowTags.Any((string tag) => x.techHediffsTags.Contains(tag)))));
+					predicate = (9__0 = ((ThingDef x) => x.isTechHediff && !PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Contains(x) && x.BaseMarketValue <= partsMoney && x.techHediffsTags != null && pawn.kindDef.techHediffsTags.Any((string tag) => x.techHediffsTags.Contains(tag)) && (pawn.kindDef.techHediffsDisallowTags == null || !pawn.kindDef.techHediffsDisallowTags.Any((string tag) => x.techHediffsTags.Contains(tag)))));
 				}
 				IEnumerable<ThingDef> source = allDefs.Where(predicate);
 				if (source.Any<ThingDef>())
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042E6 RID: 17126 RVA: 0x00167C68 File Offset: 0x00165E68
+		
 		private static void InstallPart(Pawn pawn, ThingDef partDef)
 		{
 			IEnumerable<RecipeDef> source = from x in DefDatabase<RecipeDef>.AllDefs
@@ -67,10 +67,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002678 RID: 9848
+		
 		private static List<Thing> emptyIngredientsList = new List<Thing>();
 
-		// Token: 0x04002679 RID: 9849
+		
 		private static List<ThingDef> tmpGeneratedTechHediffsList = new List<ThingDef>();
 	}
 }

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000616 RID: 1558
+	
 	public class BillStack : IExposable
 	{
-		// Token: 0x17000808 RID: 2056
+		
 		// (get) Token: 0x06002A7F RID: 10879 RVA: 0x000F7B6C File Offset: 0x000F5D6C
 		public List<Bill> Bills
 		{
@@ -18,13 +18,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A80 RID: 10880 RVA: 0x000F7B74 File Offset: 0x000F5D74
+		
 		public IEnumerator<Bill> GetEnumerator()
 		{
 			return this.bills.GetEnumerator();
 		}
 
-		// Token: 0x17000809 RID: 2057
+		
 		public Bill this[int index]
 		{
 			get
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700080A RID: 2058
+		
 		// (get) Token: 0x06002A82 RID: 10882 RVA: 0x000F7B94 File Offset: 0x000F5D94
 		public int Count
 		{
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700080B RID: 2059
+		
 		// (get) Token: 0x06002A83 RID: 10883 RVA: 0x000F7BA4 File Offset: 0x000F5DA4
 		public Bill FirstShouldDoNow
 		{
@@ -60,7 +60,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700080C RID: 2060
+		
 		// (get) Token: 0x06002A84 RID: 10884 RVA: 0x000F7BE4 File Offset: 0x000F5DE4
 		public bool AnyShouldDoNow
 		{
@@ -77,33 +77,33 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A85 RID: 10885 RVA: 0x000F7C18 File Offset: 0x000F5E18
+		
 		public BillStack(IBillGiver giver)
 		{
 			this.billGiver = giver;
 		}
 
-		// Token: 0x06002A86 RID: 10886 RVA: 0x000F7C32 File Offset: 0x000F5E32
+		
 		public void AddBill(Bill bill)
 		{
 			bill.billStack = this;
 			this.bills.Add(bill);
 		}
 
-		// Token: 0x06002A87 RID: 10887 RVA: 0x000F7C47 File Offset: 0x000F5E47
+		
 		public void Delete(Bill bill)
 		{
 			bill.deleted = true;
 			this.bills.Remove(bill);
 		}
 
-		// Token: 0x06002A88 RID: 10888 RVA: 0x000F7C5D File Offset: 0x000F5E5D
+		
 		public void Clear()
 		{
 			this.bills.Clear();
 		}
 
-		// Token: 0x06002A89 RID: 10889 RVA: 0x000F7C6C File Offset: 0x000F5E6C
+		
 		public void Reorder(Bill bill, int offset)
 		{
 			int num = this.bills.IndexOf(bill);
@@ -115,7 +115,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A8A RID: 10890 RVA: 0x000F7CA8 File Offset: 0x000F5EA8
+		
 		public void RemoveIncompletableBills()
 		{
 			for (int i = this.bills.Count - 1; i >= 0; i--)
@@ -127,13 +127,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A8B RID: 10891 RVA: 0x000F7CF8 File Offset: 0x000F5EF8
+		
 		public int IndexOf(Bill bill)
 		{
 			return this.bills.IndexOf(bill);
 		}
 
-		// Token: 0x06002A8C RID: 10892 RVA: 0x000F7D08 File Offset: 0x000F5F08
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Bill>(ref this.bills, "bills", LookMode.Deep, Array.Empty<object>());
@@ -154,7 +154,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002A8D RID: 10893 RVA: 0x000F7DCC File Offset: 0x000F5FCC
+		
 		public Bill DoListing(Rect rect, Func<List<FloatMenuOption>> recipeOptionsMaker, ref Vector2 scrollPosition, ref float viewHeight)
 		{
 			Bill result = null;
@@ -194,23 +194,23 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04001960 RID: 6496
+		
 		[Unsaved(false)]
 		public IBillGiver billGiver;
 
-		// Token: 0x04001961 RID: 6497
+		
 		private List<Bill> bills = new List<Bill>();
 
-		// Token: 0x04001962 RID: 6498
+		
 		public const int MaxCount = 15;
 
-		// Token: 0x04001963 RID: 6499
+		
 		private const float TopAreaHeight = 35f;
 
-		// Token: 0x04001964 RID: 6500
+		
 		private const float BillInterfaceSpacing = 6f;
 
-		// Token: 0x04001965 RID: 6501
+		
 		private const float ExtraViewHeight = 60f;
 	}
 }

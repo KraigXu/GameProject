@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x0200093F RID: 2367
+	
 	public class QuestManager : IExposable
 	{
-		// Token: 0x17000A11 RID: 2577
+		
 		// (get) Token: 0x0600381B RID: 14363 RVA: 0x0012CF4C File Offset: 0x0012B14C
 		public List<Quest> QuestsListForReading
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000A12 RID: 2578
+		
 		// (get) Token: 0x0600381C RID: 14364 RVA: 0x0012CF54 File Offset: 0x0012B154
 		public List<QuestPart_SituationalThought> SituationalThoughtQuestParts
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600381D RID: 14365 RVA: 0x0012CF5C File Offset: 0x0012B15C
+		
 		public void Add(Quest quest)
 		{
 			if (quest == null)
@@ -54,7 +54,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600381E RID: 14366 RVA: 0x0012CFE8 File Offset: 0x0012B1E8
+		
 		public void Remove(Quest quest)
 		{
 			if (!this.Contains(quest))
@@ -67,13 +67,13 @@ namespace RimWorld
 			Find.SignalManager.DeregisterReceiver(quest);
 		}
 
-		// Token: 0x0600381F RID: 14367 RVA: 0x0012D034 File Offset: 0x0012B234
+		
 		public bool Contains(Quest quest)
 		{
 			return this.quests.Contains(quest);
 		}
 
-		// Token: 0x06003820 RID: 14368 RVA: 0x0012D044 File Offset: 0x0012B244
+		
 		public void QuestManagerTick()
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -82,7 +82,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003821 RID: 14369 RVA: 0x0012D078 File Offset: 0x0012B278
+		
 		public bool IsReservedByAnyQuest(Pawn p)
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -95,7 +95,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003822 RID: 14370 RVA: 0x0012D0B4 File Offset: 0x0012B2B4
+		
 		private void AddToCache(Quest quest)
 		{
 			this.questsInDisplayOrder.Add(quest);
@@ -110,7 +110,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003823 RID: 14371 RVA: 0x0012D130 File Offset: 0x0012B330
+		
 		private void RemoveFromCache(Quest quest)
 		{
 			this.questsInDisplayOrder.Remove(quest);
@@ -124,7 +124,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003824 RID: 14372 RVA: 0x0012D184 File Offset: 0x0012B384
+		
 		public void Notify_PawnDiscarded(Pawn pawn)
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -133,7 +133,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003825 RID: 14373 RVA: 0x0012D1BC File Offset: 0x0012B3BC
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Quest>(ref this.quests, "quests", LookMode.Deep, Array.Empty<object>());
@@ -161,7 +161,7 @@ namespace RimWorld
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x06003826 RID: 14374 RVA: 0x0012D2A8 File Offset: 0x0012B4A8
+		
 		public void Notify_ThingsProduced(Pawn worker, List<Thing> things)
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -173,7 +173,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003827 RID: 14375 RVA: 0x0012D2F4 File Offset: 0x0012B4F4
+		
 		public void Notify_PlantHarvested(Pawn worker, Thing harvested)
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -185,7 +185,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003828 RID: 14376 RVA: 0x0012D340 File Offset: 0x0012B540
+		
 		public void Notify_PawnKilled(Pawn pawn, DamageInfo? dinfo)
 		{
 			for (int i = 0; i < this.quests.Count; i++)
@@ -197,13 +197,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002138 RID: 8504
+		
 		private List<Quest> quests = new List<Quest>();
 
-		// Token: 0x04002139 RID: 8505
+		
 		public List<Quest> questsInDisplayOrder = new List<Quest>();
 
-		// Token: 0x0400213A RID: 8506
+		
 		private List<QuestPart_SituationalThought> cachedSituationalThoughtQuestParts = new List<QuestPart_SituationalThought>();
 	}
 }

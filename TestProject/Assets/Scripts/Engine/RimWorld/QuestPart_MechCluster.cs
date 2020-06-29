@@ -5,16 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000982 RID: 2434
+	
 	public class QuestPart_MechCluster : QuestPart
 	{
-		// Token: 0x17000A55 RID: 2645
+		
 		// (get) Token: 0x060039A1 RID: 14753 RVA: 0x001326EA File Offset: 0x001308EA
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				foreach (GlobalTargetInfo globalTargetInfo in this.<>n__0())
+				foreach (GlobalTargetInfo globalTargetInfo in this.n__0())
 				{
 					yield return globalTargetInfo;
 				}
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039A2 RID: 14754 RVA: 0x001326FC File Offset: 0x001308FC
+		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
@@ -44,7 +44,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060039A3 RID: 14755 RVA: 0x001327E4 File Offset: 0x001309E4
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -55,19 +55,19 @@ namespace RimWorld
 			Scribe_Values.Look<IntVec3>(ref this.spawnedClusterPos, "spawnedClusterPos", default(IntVec3), false);
 		}
 
-		// Token: 0x040021F7 RID: 8695
+		
 		public MechClusterSketch sketch;
 
-		// Token: 0x040021F8 RID: 8696
+		
 		public string inSignal;
 
-		// Token: 0x040021F9 RID: 8697
+		
 		public string tag;
 
-		// Token: 0x040021FA RID: 8698
+		
 		public MapParent mapParent;
 
-		// Token: 0x040021FB RID: 8699
+		
 		private IntVec3 spawnedClusterPos = IntVec3.Invalid;
 	}
 }

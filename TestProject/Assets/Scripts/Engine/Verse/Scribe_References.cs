@@ -4,10 +4,10 @@ using RimWorld.Planet;
 
 namespace Verse
 {
-	// Token: 0x020002D7 RID: 727
+	
 	public static class Scribe_References
 	{
-		// Token: 0x06001463 RID: 5219 RVA: 0x00078150 File Offset: 0x00076350
+		
 		public static void Look<T>(ref T refee, string label, bool saveDestroyedThings = false) where T : ILoadReferenceable
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -69,7 +69,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001464 RID: 5220 RVA: 0x000782D0 File Offset: 0x000764D0
+		
 		public static void Look<T>(ref WeakReference<T> refee, string label, bool saveDestroyedThings = false) where T : class, ILoadReferenceable
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -95,7 +95,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001465 RID: 5221 RVA: 0x0007834C File Offset: 0x0007654C
+		
 		public static bool CheckSaveReferenceToDestroyedThing(Thing th, string label, bool saveDestroyedThings)
 		{
 			if (!th.Destroyed)
@@ -122,7 +122,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06001466 RID: 5222 RVA: 0x000783BC File Offset: 0x000765BC
+		
 		public static bool CheckSaveReferenceToDestroyedWorldObject(WorldObject w, string label, bool saveDestroyedWorldObjects)
 		{
 			if (!w.Destroyed)

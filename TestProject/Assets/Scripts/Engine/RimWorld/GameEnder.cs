@@ -5,17 +5,17 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000923 RID: 2339
+	
 	public sealed class GameEnder : IExposable
 	{
-		// Token: 0x0600378D RID: 14221 RVA: 0x0012A774 File Offset: 0x00128974
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.gameEnding, "gameEnding", false, false);
 			Scribe_Values.Look<int>(ref this.ticksToGameOver, "ticksToGameOver", -1, false);
 		}
 
-		// Token: 0x0600378E RID: 14222 RVA: 0x0012A79C File Offset: 0x0012899C
+		
 		public void CheckOrUpdateGameOver()
 		{
 			if (Find.TickManager.TicksGame < 300)
@@ -82,7 +82,7 @@ namespace RimWorld
 			this.ticksToGameOver = 400;
 		}
 
-		// Token: 0x0600378F RID: 14223 RVA: 0x0012A90E File Offset: 0x00128B0E
+		
 		public void GameEndTick()
 		{
 			if (this.gameEnding)
@@ -95,7 +95,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003790 RID: 14224 RVA: 0x0012A944 File Offset: 0x00128B44
+		
 		private bool IsPlayerControlledWithFreeColonist(Caravan caravan)
 		{
 			if (!caravan.IsPlayerControlled)
@@ -114,13 +114,13 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x040020EB RID: 8427
+		
 		public bool gameEnding;
 
-		// Token: 0x040020EC RID: 8428
+		
 		private int ticksToGameOver = -1;
 
-		// Token: 0x040020ED RID: 8429
+		
 		private const int GameEndCountdownDuration = 400;
 	}
 }

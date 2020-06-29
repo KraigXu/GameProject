@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000642 RID: 1602
+	
 	public class Toils_Tend
 	{
-		// Token: 0x06002BD7 RID: 11223 RVA: 0x000FBE28 File Offset: 0x000FA028
+		
 		public static Toil ReserveMedicine(TargetIndex ind, Pawn injured)
 		{
 			Toil toil = new Toil();
@@ -28,7 +28,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002BD8 RID: 11224 RVA: 0x000FBE8C File Offset: 0x000FA08C
+		
 		public static Toil PickupMedicine(TargetIndex ind, Pawn injured)
 		{
 			Toil toil = new Toil();
@@ -58,7 +58,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x06002BD9 RID: 11225 RVA: 0x000FBEE4 File Offset: 0x000FA0E4
+		
 		public static Toil FinalizeTend(Pawn patient)
 		{
 			Toil toil = new Toil();
@@ -83,7 +83,7 @@ namespace RimWorld
 			return toil;
 		}
 
-		// Token: 0x040019B6 RID: 6582
+		
 		public const int MaxMedicineReservations = 10;
 	}
 }

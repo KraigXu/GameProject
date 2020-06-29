@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DA3 RID: 3491
+	
 	public class CompUseEffect_InstallImplant : CompUseEffect
 	{
-		// Token: 0x17000F0D RID: 3853
+		
 		// (get) Token: 0x060054D2 RID: 21714 RVA: 0x001C44FF File Offset: 0x001C26FF
 		public CompProperties_UseEffectInstallImplant Props
 		{
@@ -16,7 +16,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060054D3 RID: 21715 RVA: 0x001C450C File Offset: 0x001C270C
+		
 		public override void DoEffect(Pawn user)
 		{
 			BodyPartRecord bodyPartRecord = user.RaceProps.body.GetPartsWithDef(this.Props.bodyPart).FirstOrFallback(null);
@@ -36,7 +36,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060054D4 RID: 21716 RVA: 0x001C459C File Offset: 0x001C279C
+		
 		public override bool CanBeUsedBy(Pawn p, out string failReason)
 		{
 			if ((!p.IsFreeColonist || p.HasExtraHomeFaction(null)) && !this.Props.allowNonColonists)
@@ -68,7 +68,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060054D5 RID: 21717 RVA: 0x001C468C File Offset: 0x001C288C
+		
 		public Hediff GetExistingImplant(Pawn p)
 		{
 			for (int i = 0; i < p.health.hediffSet.hediffs.Count; i++)

@@ -9,10 +9,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000B80 RID: 2944
+	
 	public static class PrisonBreakUtility
 	{
-		// Token: 0x06004503 RID: 17667 RVA: 0x00174F10 File Offset: 0x00173110
+		
 		public static float InitiatePrisonBreakMtbDays(Pawn pawn)
 		{
 			if (!pawn.Awake())
@@ -38,20 +38,20 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06004504 RID: 17668 RVA: 0x00174FB9 File Offset: 0x001731B9
+		
 		public static bool CanParticipateInPrisonBreak(Pawn pawn)
 		{
 			return !pawn.Downed && pawn.IsPrisoner && !PrisonBreakUtility.IsPrisonBreaking(pawn);
 		}
 
-		// Token: 0x06004505 RID: 17669 RVA: 0x00174FDC File Offset: 0x001731DC
+		
 		public static bool IsPrisonBreaking(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
 			return lord != null && lord.LordJob is LordJob_PrisonBreak;
 		}
 
-		// Token: 0x06004506 RID: 17670 RVA: 0x00175004 File Offset: 0x00173204
+		
 		public static void StartPrisonBreak(Pawn initiator)
 		{
 			string str;
@@ -64,7 +64,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004507 RID: 17671 RVA: 0x00175048 File Offset: 0x00173248
+		
 		public static void StartPrisonBreak(Pawn initiator, out string letterText, out string letterLabel, out LetterDef letterDef)
 		{
 			PrisonBreakUtility.participatingRooms.Clear();
@@ -112,7 +112,7 @@ namespace RimWorld
 			Find.TickManager.slower.SignalForceNormalSpeed();
 		}
 
-		// Token: 0x06004508 RID: 17672 RVA: 0x00175210 File Offset: 0x00173410
+		
 		private static bool IsOrCanBePrisonCell(Room room)
 		{
 			if (room.isPrisonCell)
@@ -137,7 +137,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x06004509 RID: 17673 RVA: 0x00175268 File Offset: 0x00173468
+		
 		private static void RemoveRandomRooms(HashSet<Room> participatingRooms, Pawn initiator)
 		{
 			Room room = initiator.GetRoom(RegionType.Set_Passable);
@@ -156,7 +156,7 @@ namespace RimWorld
 			PrisonBreakUtility.tmpToRemove.Clear();
 		}
 
-		// Token: 0x0600450A RID: 17674 RVA: 0x00175310 File Offset: 0x00173510
+		
 		private static void StartPrisonBreakIn(Room room, List<Pawn> outAllEscapingPrisoners, int sapperThingID, HashSet<Room> participatingRooms)
 		{
 			PrisonBreakUtility.escapingPrisonersGroup.Clear();
@@ -201,7 +201,7 @@ namespace RimWorld
 			PrisonBreakUtility.escapingPrisonersGroup.Clear();
 		}
 
-		// Token: 0x0600450B RID: 17675 RVA: 0x00175474 File Offset: 0x00173674
+		
 		private static void AddPrisonersFrom(Room room, List<Pawn> outEscapingPrisoners)
 		{
 			foreach (Thing thing in room.ContainedAndAdjacentThings)
@@ -214,7 +214,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600450C RID: 17676 RVA: 0x001754E0 File Offset: 0x001736E0
+		
 		private static bool TryFindGroupUpLoc(List<Pawn> escapingPrisoners, IntVec3 exitPoint, out IntVec3 groupUpLoc)
 		{
 			groupUpLoc = IntVec3.Invalid;
@@ -226,7 +226,7 @@ namespace RimWorld
 					Log.Warning("Prison break: could not find path for prisoner " + escapingPrisoners[0] + " to the exit point.", false);
 					return false;
 				}
-				Func<IntVec3, bool> <>9__0;
+				
 				for (int i = 0; i < pawnPath.NodesLeftCount; i++)
 				{
 					IntVec3 intVec = pawnPath.Peek(pawnPath.NodesLeftCount - i - 1);
@@ -237,9 +237,9 @@ namespace RimWorld
 						{
 							IEnumerable<IntVec3> cells = room.Cells;
 							Func<IntVec3, bool> predicate;
-							if ((predicate = <>9__0) == null)
+							if ((predicate ) == null)
 							{
-								predicate = (<>9__0 = ((IntVec3 x) => x.Standable(map)));
+								predicate = (9__0 = ((IntVec3 x) => x.Standable(map)));
 							}
 							if (cells.Count(predicate) < 5)
 							{
@@ -258,7 +258,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600450D RID: 17677 RVA: 0x00175644 File Offset: 0x00173844
+		
 		private static bool RoomsAreCloseToEachOther(Room a, Room b)
 		{
 			IntVec3 anyCell = a.Regions[0].AnyCell;
@@ -286,19 +286,19 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x04002772 RID: 10098
+		
 		private const float BaseInitiatePrisonBreakMtbDays = 60f;
 
-		// Token: 0x04002773 RID: 10099
+		
 		private const float DistanceToJoinPrisonBreak = 20f;
 
-		// Token: 0x04002774 RID: 10100
+		
 		private const float ChanceForRoomToJoinPrisonBreak = 0.5f;
 
-		// Token: 0x04002775 RID: 10101
+		
 		private const float SapperChance = 0.5f;
 
-		// Token: 0x04002776 RID: 10102
+		
 		private static readonly SimpleCurve PrisonBreakMTBFactorForDaysSincePrisonBreak = new SimpleCurve
 		{
 			{
@@ -315,16 +315,16 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002777 RID: 10103
+		
 		private static HashSet<Room> participatingRooms = new HashSet<Room>();
 
-		// Token: 0x04002778 RID: 10104
+		
 		private static List<Pawn> allEscapingPrisoners = new List<Pawn>();
 
-		// Token: 0x04002779 RID: 10105
+		
 		private static List<Room> tmpToRemove = new List<Room>();
 
-		// Token: 0x0400277A RID: 10106
+		
 		private static List<Pawn> escapingPrisonersGroup = new List<Pawn>();
 	}
 }

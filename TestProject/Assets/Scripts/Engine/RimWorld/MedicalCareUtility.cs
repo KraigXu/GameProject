@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000BBB RID: 3003
+	
 	[StaticConstructorOnStartup]
 	public static class MedicalCareUtility
 	{
-		// Token: 0x060046ED RID: 18157 RVA: 0x0017FF02 File Offset: 0x0017E102
+		
 		public static void Reset()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
@@ -24,7 +24,7 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x060046EE RID: 18158 RVA: 0x0017FF28 File Offset: 0x0017E128
+		
 		public static void MedicalCareSetter(Rect rect, ref MedicalCareCategory medCare)
 		{
 			Rect rect2 = new Rect(rect.x, rect.y, rect.width / 5f, rect.height);
@@ -60,13 +60,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046EF RID: 18159 RVA: 0x00180035 File Offset: 0x0017E235
+		
 		public static string GetLabel(this MedicalCareCategory cat)
 		{
 			return ("MedicalCareCategory_" + cat).Translate();
 		}
 
-		// Token: 0x060046F0 RID: 18160 RVA: 0x00180054 File Offset: 0x0017E254
+		
 		public static bool AllowsMedicine(this MedicalCareCategory cat, ThingDef meds)
 		{
 			switch (cat)
@@ -86,19 +86,19 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060046F1 RID: 18161 RVA: 0x001800CC File Offset: 0x0017E2CC
+		
 		public static void MedicalCareSelectButton(Rect rect, Pawn pawn)
 		{
 			Widgets.Dropdown<Pawn, MedicalCareCategory>(rect, pawn, new Func<Pawn, MedicalCareCategory>(MedicalCareUtility.MedicalCareSelectButton_GetMedicalCare), new Func<Pawn, IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>>>(MedicalCareUtility.MedicalCareSelectButton_GenerateMenu), null, MedicalCareUtility.careTextures[(int)pawn.playerSettings.medCare], null, null, null, true);
 		}
 
-		// Token: 0x060046F2 RID: 18162 RVA: 0x0018010E File Offset: 0x0017E30E
+		
 		private static MedicalCareCategory MedicalCareSelectButton_GetMedicalCare(Pawn pawn)
 		{
 			return pawn.playerSettings.medCare;
 		}
 
-		// Token: 0x060046F3 RID: 18163 RVA: 0x0018011B File Offset: 0x0017E31B
+		
 		private static IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>> MedicalCareSelectButton_GenerateMenu(Pawn p)
 		{
 			int num;
@@ -118,16 +118,16 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040028B9 RID: 10425
+		
 		private static Texture2D[] careTextures;
 
-		// Token: 0x040028BA RID: 10426
+		
 		public const float CareSetterHeight = 28f;
 
-		// Token: 0x040028BB RID: 10427
+		
 		public const float CareSetterWidth = 140f;
 
-		// Token: 0x040028BC RID: 10428
+		
 		private static bool medicalCarePainting;
 	}
 }

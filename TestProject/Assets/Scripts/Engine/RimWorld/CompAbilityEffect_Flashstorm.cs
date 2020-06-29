@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000AC9 RID: 2761
+	
 	public class CompAbilityEffect_Flashstorm : CompAbilityEffect
 	{
-		// Token: 0x06004185 RID: 16773 RVA: 0x0015E6CC File Offset: 0x0015C8CC
+		
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
@@ -27,7 +27,7 @@ namespace RimWorld
 			this.ApplyGoodwillImpact(target, gameCondition_Flashstorm.AreaRadius);
 		}
 
-		// Token: 0x06004186 RID: 16774 RVA: 0x0015E7D0 File Offset: 0x0015C9D0
+		
 		private void ApplyGoodwillImpact(LocalTargetInfo target, int radius)
 		{
 			this.affectedFactionCache.Clear();
@@ -43,7 +43,7 @@ namespace RimWorld
 			this.affectedFactionCache.Clear();
 		}
 
-		// Token: 0x06004187 RID: 16775 RVA: 0x0015E94C File Offset: 0x0015CB4C
+		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			if (target.Cell.Roofed(this.parent.pawn.Map))
@@ -57,7 +57,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x040025FD RID: 9725
+		
 		private HashSet<Faction> affectedFactionCache = new HashSet<Faction>();
 	}
 }

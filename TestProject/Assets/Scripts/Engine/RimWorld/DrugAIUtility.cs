@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006A9 RID: 1705
+	
 	public static class DrugAIUtility
 	{
-		// Token: 0x06002E29 RID: 11817 RVA: 0x00103AE8 File Offset: 0x00101CE8
+		
 		public static Job IngestAndTakeToInventoryJob(Thing drug, Pawn pawn, int maxNumToCarry = 9999)
 		{
 			Job job = JobMaker.MakeJob(JobDefOf.Ingest, drug);

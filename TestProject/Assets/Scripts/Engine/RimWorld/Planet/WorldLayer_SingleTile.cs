@@ -6,18 +6,18 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x020011EF RID: 4591
+	
 	public abstract class WorldLayer_SingleTile : WorldLayer
 	{
-		// Token: 0x170011C9 RID: 4553
+		
 		// (get) Token: 0x06006A32 RID: 27186
 		protected abstract int Tile { get; }
 
-		// Token: 0x170011CA RID: 4554
+		
 		// (get) Token: 0x06006A33 RID: 27187
 		protected abstract Material Material { get; }
 
-		// Token: 0x170011CB RID: 4555
+		
 		// (get) Token: 0x06006A34 RID: 27188 RVA: 0x00250ECC File Offset: 0x0024F0CC
 		public override bool ShouldRegenerate
 		{
@@ -27,10 +27,10 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006A35 RID: 27189 RVA: 0x00250EE9 File Offset: 0x0024F0E9
+		
 		public override IEnumerable Regenerate()
 		{
-			foreach (object obj in this.<>n__0())
+			foreach (object obj in this.n__0())
 			{
 				yield return obj;
 			}
@@ -62,10 +62,10 @@ namespace RimWorld.Planet
 			yield break;
 		}
 
-		// Token: 0x0400422F RID: 16943
+		
 		private int lastDrawnTile = -1;
 
-		// Token: 0x04004230 RID: 16944
+		
 		private List<Vector3> verts = new List<Vector3>();
 	}
 }

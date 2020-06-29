@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000261 RID: 609
+	
 	public class HediffComp_Infecter : HediffComp
 	{
-		// Token: 0x17000349 RID: 841
+		
 		// (get) Token: 0x0600108C RID: 4236 RVA: 0x0005E729 File Offset: 0x0005C929
 		public HediffCompProperties_Infecter Props
 		{
@@ -16,7 +16,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600108D RID: 4237 RVA: 0x0005E738 File Offset: 0x0005C938
+		
 		public override void CompPostPostAdd(DamageInfo? dinfo)
 		{
 			if (this.parent.IsPermanent())
@@ -47,14 +47,14 @@ namespace Verse
 			this.ticksUntilInfect = -2;
 		}
 
-		// Token: 0x0600108E RID: 4238 RVA: 0x0005E810 File Offset: 0x0005CA10
+		
 		public override void CompExposeData()
 		{
 			Scribe_Values.Look<float>(ref this.infectionChanceFactorFromTendRoom, "infectionChanceFactor", 0f, false);
 			Scribe_Values.Look<int>(ref this.ticksUntilInfect, "ticksUntilInfect", -2, false);
 		}
 
-		// Token: 0x0600108F RID: 4239 RVA: 0x0005E83B File Offset: 0x0005CA3B
+		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			if (this.ticksUntilInfect > 0)
@@ -67,7 +67,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001090 RID: 4240 RVA: 0x0005E864 File Offset: 0x0005CA64
+		
 		public override void CompTended(float quality, int batchPosition = 0)
 		{
 			if (base.Pawn.Spawned)
@@ -80,7 +80,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001091 RID: 4241 RVA: 0x0005E8A0 File Offset: 0x0005CAA0
+		
 		private void CheckMakeInfection()
 		{
 			if (base.Pawn.health.immunity.DiseaseContractChanceFactor(HediffDefOf.WoundInfection, this.parent.Part) <= 0.001f)
@@ -109,7 +109,7 @@ namespace Verse
 			this.ticksUntilInfect = -3;
 		}
 
-		// Token: 0x06001092 RID: 4242 RVA: 0x0005E99C File Offset: 0x0005CB9C
+		
 		public override string CompDebugString()
 		{
 			if (this.ticksUntilInfect > 0)
@@ -141,25 +141,25 @@ namespace Verse
 			return "unexpected ticksUntilInfect = " + this.ticksUntilInfect;
 		}
 
-		// Token: 0x04000C14 RID: 3092
+		
 		private int ticksUntilInfect = -1;
 
-		// Token: 0x04000C15 RID: 3093
+		
 		private float infectionChanceFactorFromTendRoom = 1f;
 
-		// Token: 0x04000C16 RID: 3094
+		
 		private const int UninitializedValue = -1;
 
-		// Token: 0x04000C17 RID: 3095
+		
 		private const int WillNotInfectValue = -2;
 
-		// Token: 0x04000C18 RID: 3096
+		
 		private const int FailedToMakeInfectionValue = -3;
 
-		// Token: 0x04000C19 RID: 3097
+		
 		private const int AlreadyMadeInfectionValue = -4;
 
-		// Token: 0x04000C1A RID: 3098
+		
 		private static readonly SimpleCurve InfectionChanceFactorFromTendQualityCurve = new SimpleCurve
 		{
 			{
@@ -172,7 +172,7 @@ namespace Verse
 			}
 		};
 
-		// Token: 0x04000C1B RID: 3099
+		
 		private static readonly SimpleCurve InfectionChanceFactorFromSeverityCurve = new SimpleCurve
 		{
 			{

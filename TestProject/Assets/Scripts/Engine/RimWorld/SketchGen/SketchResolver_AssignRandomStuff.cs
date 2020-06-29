@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld.SketchGen
 {
-	// Token: 0x0200108B RID: 4235
+	
 	public class SketchResolver_AssignRandomStuff : SketchResolver
 	{
-		// Token: 0x06006477 RID: 25719 RVA: 0x0022DE7C File Offset: 0x0022C07C
+		
 		protected override void ResolveInt(ResolveParams parms)
 		{
 			ThingDef assignRandomStuffTo = parms.assignRandomStuffTo;
@@ -72,19 +72,19 @@ namespace RimWorld.SketchGen
 			}
 		}
 
-		// Token: 0x06006478 RID: 25720 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool CanResolveInt(ResolveParams parms)
 		{
 			return true;
 		}
 
-		// Token: 0x04003D2B RID: 15659
+		
 		private Dictionary<IntVec3, List<SketchThing>> thingsAt = new Dictionary<IntVec3, List<SketchThing>>();
 
-		// Token: 0x04003D2C RID: 15660
+		
 		private HashSet<SketchThing> visited = new HashSet<SketchThing>();
 
-		// Token: 0x04003D2D RID: 15661
+		
 		private Stack<SketchThing> stack = new Stack<SketchThing>();
 	}
 }

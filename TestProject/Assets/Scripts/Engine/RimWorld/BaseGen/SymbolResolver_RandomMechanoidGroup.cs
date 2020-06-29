@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010D3 RID: 4307
+	
 	public class SymbolResolver_RandomMechanoidGroup : SymbolResolver
 	{
-		// Token: 0x06006580 RID: 25984 RVA: 0x002380BC File Offset: 0x002362BC
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			int num = rp.mechanoidsCount ?? SymbolResolver_RandomMechanoidGroup.DefaultMechanoidCountRange.RandomInRange;
@@ -47,7 +47,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x04003DCA RID: 15818
+		
 		private static readonly IntRange DefaultMechanoidCountRange = new IntRange(1, 5);
 	}
 }

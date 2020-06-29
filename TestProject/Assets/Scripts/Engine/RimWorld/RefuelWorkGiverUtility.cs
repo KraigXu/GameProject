@@ -6,10 +6,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000756 RID: 1878
+	
 	public static class RefuelWorkGiverUtility
 	{
-		// Token: 0x06003127 RID: 12583 RVA: 0x00112E00 File Offset: 0x00111000
+		
 		public static bool CanRefuel(Pawn pawn, Thing t, bool forced = false)
 		{
 			CompRefuelable compRefuelable = t.TryGetComp<CompRefuelable>();
@@ -44,7 +44,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06003128 RID: 12584 RVA: 0x00112EF4 File Offset: 0x001110F4
+		
 		public static Job RefuelJob(Pawn pawn, Thing t, bool forced = false, JobDef customRefuelJob = null, JobDef customAtomicRefuelJob = null)
 		{
 			if (!t.TryGetComp<CompRefuelable>().Props.atomicFueling)
@@ -59,7 +59,7 @@ namespace RimWorld
 			return job;
 		}
 
-		// Token: 0x06003129 RID: 12585 RVA: 0x00112F88 File Offset: 0x00111188
+		
 		private static Thing FindBestFuel(Pawn pawn, Thing refuelable)
 		{
 			ThingFilter filter = refuelable.TryGetComp<CompRefuelable>().Props.fuelFilter;
@@ -67,7 +67,7 @@ namespace RimWorld
 			return GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, filter.BestThingRequest, PathEndMode.ClosestTouch, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 		}
 
-		// Token: 0x0600312A RID: 12586 RVA: 0x00113008 File Offset: 0x00111208
+		
 		private static List<Thing> FindAllFuel(Pawn pawn, Thing refuelable)
 		{
 			int quantity = refuelable.TryGetComp<CompRefuelable>().GetFuelCountToFullyRefuel();

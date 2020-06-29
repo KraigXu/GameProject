@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x0200125A RID: 4698
+	
 	public static class SettlementDefeatUtility
 	{
-		// Token: 0x06006DE1 RID: 28129 RVA: 0x00266244 File Offset: 0x00264444
+		
 		public static void CheckDefeated(Settlement factionBase)
 		{
 			if (factionBase.Faction == Faction.OfPlayer)
@@ -56,7 +56,7 @@ namespace RimWorld.Planet
 			});
 		}
 
-		// Token: 0x06006DE2 RID: 28130 RVA: 0x00266498 File Offset: 0x00264698
+		
 		private static bool IsDefeated(Map map, Faction faction)
 		{
 			List<Pawn> list = map.mapPawns.SpawnedPawnsInFaction(faction);
@@ -71,7 +71,7 @@ namespace RimWorld.Planet
 			return true;
 		}
 
-		// Token: 0x06006DE3 RID: 28131 RVA: 0x002664E4 File Offset: 0x002646E4
+		
 		private static bool HasAnyOtherBase(Settlement defeatedFactionBase)
 		{
 			List<Settlement> settlements = Find.WorldObjects.Settlements;

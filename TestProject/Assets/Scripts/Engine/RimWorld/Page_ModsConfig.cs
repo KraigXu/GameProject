@@ -9,17 +9,17 @@ using Verse.Steam;
 
 namespace RimWorld
 {
-	// Token: 0x02000E87 RID: 3719
+	
 	public class Page_ModsConfig : Page
 	{
-		// Token: 0x06005A8D RID: 23181 RVA: 0x001EBFB0 File Offset: 0x001EA1B0
+		
 		public Page_ModsConfig()
 		{
 			this.doCloseButton = true;
 			this.closeOnCancel = true;
 		}
 
-		// Token: 0x06005A8E RID: 23182 RVA: 0x001EC021 File Offset: 0x001EA221
+		
 		public override void PreOpen()
 		{
 			base.PreOpen();
@@ -30,7 +30,7 @@ namespace RimWorld
 			this.RecacheSelectedModRequirements();
 		}
 
-		// Token: 0x06005A8F RID: 23183 RVA: 0x001EC058 File Offset: 0x001EA258
+		
 		private List<ModMetaData> ModsInListOrder()
 		{
 			if (this.modsInListOrderDirty)
@@ -47,7 +47,7 @@ namespace RimWorld
 			return Page_ModsConfig.modsInListOrderCached;
 		}
 
-		// Token: 0x06005A90 RID: 23184 RVA: 0x001EC0EC File Offset: 0x001EA2EC
+		
 		public override void DoWindowContents(Rect rect)
 		{
 			Rect mainRect = base.GetMainRect(rect, 0f, true);
@@ -305,7 +305,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A91 RID: 23185 RVA: 0x001ECC9C File Offset: 0x001EAE9C
+		
 		private void DoModRow(Rect r, ModMetaData mod, int index, int reorderableGroup)
 		{
 			bool active = mod.Active;
@@ -409,7 +409,7 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		// Token: 0x06005A92 RID: 23186 RVA: 0x001ED050 File Offset: 0x001EB250
+		
 		private void DoModRowDownloading(Listing_Standard listing, int index)
 		{
 			Rect rect = new Rect(0f, (float)index * 26f, listing.ColumnWidth, 26f);
@@ -418,7 +418,7 @@ namespace RimWorld
 			Widgets.Label(rect, "Downloading".Translate() + GenText.MarchingEllipsis(0f));
 		}
 
-		// Token: 0x06005A93 RID: 23187 RVA: 0x001ED0B8 File Offset: 0x001EB2B8
+		
 		private float DoRequirementSection(float width)
 		{
 			float num = 0f;
@@ -457,7 +457,7 @@ namespace RimWorld
 			return num;
 		}
 
-		// Token: 0x06005A94 RID: 23188 RVA: 0x001ED208 File Offset: 0x001EB408
+		
 		private void DrawRequirementEntry(ModRequirement entry, Rect entryRect, ref float y)
 		{
 			Widgets.DrawBoxSolid(entryRect, entry.IsSatisfied ? Page_ModsConfig.RequirementRowColor : (Mouse.IsOver(entryRect) ? Page_ModsConfig.UnmetRequirementRowColorHighlighted : Page_ModsConfig.UnmetRequirementRowColor));
@@ -484,7 +484,7 @@ namespace RimWorld
 			y += 26f;
 		}
 
-		// Token: 0x06005A95 RID: 23189 RVA: 0x001ED354 File Offset: 0x001EB554
+		
 		private void RecacheSelectedModRequirements()
 		{
 			this.anyReqsCached = false;
@@ -528,7 +528,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A96 RID: 23190 RVA: 0x001ED4F4 File Offset: 0x001EB6F4
+		
 		public void Notify_ModsListChanged()
 		{
 			string selModId = this.selectedMod.PackageId;
@@ -537,7 +537,7 @@ namespace RimWorld
 			this.modsInListOrderDirty = true;
 		}
 
-		// Token: 0x06005A97 RID: 23191 RVA: 0x001ED541 File Offset: 0x001EB741
+		
 		internal void Notify_SteamItemUnsubscribed(PublishedFileId_t pfid)
 		{
 			if (this.selectedMod != null && this.selectedMod.FolderName == pfid.ToString())
@@ -548,14 +548,14 @@ namespace RimWorld
 			this.modsInListOrderDirty = true;
 		}
 
-		// Token: 0x06005A98 RID: 23192 RVA: 0x001ED57E File Offset: 0x001EB77E
+		
 		public void SelectMod(ModMetaData mod)
 		{
 			this.selectedMod = mod;
 			this.RecacheSelectedModRequirements();
 		}
 
-		// Token: 0x06005A99 RID: 23193 RVA: 0x001ED590 File Offset: 0x001EB790
+		
 		public override void PostClose()
 		{
 			ModsConfig.Save();
@@ -570,7 +570,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005A9A RID: 23194 RVA: 0x001ED5F8 File Offset: 0x001EB7F8
+		
 		private Color FilteredColor(Color color, string label)
 		{
 			if (this.filter.NullOrEmpty())
@@ -584,103 +584,103 @@ namespace RimWorld
 			return color * new Color(1f, 1f, 1f, 0.3f);
 		}
 
-		// Token: 0x04003150 RID: 12624
+		
 		public ModMetaData selectedMod;
 
-		// Token: 0x04003151 RID: 12625
+		
 		private Vector2 modListScrollPosition = Vector2.zero;
 
-		// Token: 0x04003152 RID: 12626
+		
 		private Vector2 modDescriptionScrollPosition = Vector2.zero;
 
-		// Token: 0x04003153 RID: 12627
+		
 		private int activeModsWhenOpenedHash = -1;
 
-		// Token: 0x04003154 RID: 12628
+		
 		private int activeModsHash = -1;
 
-		// Token: 0x04003155 RID: 12629
+		
 		private bool displayFullfilledRequirements;
 
-		// Token: 0x04003156 RID: 12630
+		
 		protected string filter = "";
 
-		// Token: 0x04003157 RID: 12631
+		
 		private Dictionary<string, string> truncatedModNamesCache = new Dictionary<string, string>();
 
-		// Token: 0x04003158 RID: 12632
+		
 		private static List<string> modWarningsCached = new List<string>();
 
-		// Token: 0x04003159 RID: 12633
+		
 		private List<ModRequirement> visibleReqsCached = new List<ModRequirement>();
 
-		// Token: 0x0400315A RID: 12634
+		
 		private bool anyReqsCached;
 
-		// Token: 0x0400315B RID: 12635
+		
 		private bool anyReqsInfoToShowCached;
 
-		// Token: 0x0400315C RID: 12636
+		
 		private bool anyUnfulfilledReqsCached;
 
-		// Token: 0x0400315D RID: 12637
+		
 		private bool anyOrderingIssuesCached;
 
-		// Token: 0x0400315E RID: 12638
+		
 		private float modRequirementsHeightCached;
 
-		// Token: 0x0400315F RID: 12639
+		
 		private bool modsInListOrderDirty;
 
-		// Token: 0x04003160 RID: 12640
+		
 		private static List<ModMetaData> modsInListOrderCached = new List<ModMetaData>();
 
-		// Token: 0x04003161 RID: 12641
+		
 		private const float ModListAreaWidth = 350f;
 
-		// Token: 0x04003162 RID: 12642
+		
 		private const float ModsListButtonHeight = 30f;
 
-		// Token: 0x04003163 RID: 12643
+		
 		private const float ModsFolderButHeight = 30f;
 
-		// Token: 0x04003164 RID: 12644
+		
 		private const float ButtonsGap = 4f;
 
-		// Token: 0x04003165 RID: 12645
+		
 		private const float UploadRowHeight = 40f;
 
-		// Token: 0x04003166 RID: 12646
+		
 		private const float PreviewMaxHeight = 300f;
 
-		// Token: 0x04003167 RID: 12647
+		
 		private const float VersionWidth = 30f;
 
-		// Token: 0x04003168 RID: 12648
+		
 		private const float ModRowHeight = 26f;
 
-		// Token: 0x04003169 RID: 12649
+		
 		private const float RequirementBoxInnerOffset = 10f;
 
-		// Token: 0x0400316A RID: 12650
+		
 		private static readonly Color RequirementBoxOutlineColor = new Color(0.25f, 0.25f, 0.25f);
 
-		// Token: 0x0400316B RID: 12651
+		
 		private static readonly Color UnmetRequirementBoxOutlineColor = new Color(0.62f, 0.18f, 0.18f);
 
-		// Token: 0x0400316C RID: 12652
+		
 		private static readonly Color UnmetRequirementBoxBGColor = new Color(0.1f, 0.065f, 0.072f);
 
-		// Token: 0x0400316D RID: 12653
+		
 		private static readonly Color RequirementRowColor = new Color(0.13f, 0.13f, 0.13f);
 
-		// Token: 0x0400316E RID: 12654
+		
 		private static readonly Color UnmetRequirementRowColor = new Color(0.23f, 0.15f, 0.15f);
 
-		// Token: 0x0400316F RID: 12655
+		
 		private static readonly Color UnmetRequirementRowColorHighlighted = new Color(0.27f, 0.18f, 0.18f);
 
-		// Token: 0x04003170 RID: 12656
+		
 		private Dictionary<string, string> truncatedStringCache = new Dictionary<string, string>();
 	}
 }

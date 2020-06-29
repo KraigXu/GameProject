@@ -3,16 +3,16 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x02001191 RID: 4497
+	
 	public class QuestNode_SituationalThought : QuestNode
 	{
-		// Token: 0x06006838 RID: 26680 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			return true;
 		}
 
-		// Token: 0x06006839 RID: 26681 RVA: 0x002468F0 File Offset: 0x00244AF0
+		
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
@@ -25,21 +25,21 @@ namespace RimWorld.QuestGen
 			QuestGen.quest.AddPart(questPart_SituationalThought);
 		}
 
-		// Token: 0x04004084 RID: 16516
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalEnable;
 
-		// Token: 0x04004085 RID: 16517
+		
 		[NoTranslate]
 		public SlateRef<string> inSignalDisable;
 
-		// Token: 0x04004086 RID: 16518
+		
 		public SlateRef<ThoughtDef> def;
 
-		// Token: 0x04004087 RID: 16519
+		
 		public SlateRef<Pawn> pawn;
 
-		// Token: 0x04004088 RID: 16520
+		
 		public SlateRef<int> delayTicks;
 	}
 }

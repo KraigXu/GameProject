@@ -3,16 +3,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D6D RID: 3437
+	
 	public class CompTerrainPumpDry : CompTerrainPump
 	{
-		// Token: 0x060053B8 RID: 21432 RVA: 0x001BF986 File Offset: 0x001BDB86
+		
 		protected override void AffectCell(IntVec3 c)
 		{
 			CompTerrainPumpDry.AffectCell(this.parent.Map, c);
 		}
 
-		// Token: 0x060053B9 RID: 21433 RVA: 0x001BF99C File Offset: 0x001BDB9C
+		
 		public static void AffectCell(Map map, IntVec3 c)
 		{
 			TerrainDef terrain = c.GetTerrain(map);
@@ -32,7 +32,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060053BA RID: 21434 RVA: 0x001BF9F1 File Offset: 0x001BDBF1
+		
 		private static TerrainDef GetTerrainToDryTo(Map map, TerrainDef terrainDef)
 		{
 			if (terrainDef.driesTo == null)

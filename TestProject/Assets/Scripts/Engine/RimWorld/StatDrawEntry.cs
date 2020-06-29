@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E76 RID: 3702
+	
 	public class StatDrawEntry
 	{
-		// Token: 0x17001017 RID: 4119
+		
 		// (get) Token: 0x060059C0 RID: 22976 RVA: 0x001E5754 File Offset: 0x001E3954
 		public bool ShouldDisplay
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001018 RID: 4120
+		
 		// (get) Token: 0x060059C1 RID: 22977 RVA: 0x001E5779 File Offset: 0x001E3979
 		public string LabelCap
 		{
@@ -33,7 +33,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17001019 RID: 4121
+		
 		// (get) Token: 0x060059C2 RID: 22978 RVA: 0x001E57A0 File Offset: 0x001E39A0
 		public string ValueString
 		{
@@ -51,7 +51,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700101A RID: 4122
+		
 		// (get) Token: 0x060059C3 RID: 22979 RVA: 0x001E5804 File Offset: 0x001E3A04
 		public int DisplayPriorityWithinCategory
 		{
@@ -61,7 +61,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060059C4 RID: 22980 RVA: 0x001E580C File Offset: 0x001E3A0C
+		
 		public StatDrawEntry(StatCategoryDef category, StatDef stat, float value, StatRequest optionalReq, ToStringNumberSense numberSense = ToStringNumberSense.Undefined, int? overrideDisplayPriorityWithinCategory = null, bool forceUnfinalizedMode = false)
 		{
 			this.category = category;
@@ -81,7 +81,7 @@ namespace RimWorld
 			this.numberSense = numberSense;
 		}
 
-		// Token: 0x060059C5 RID: 22981 RVA: 0x001E5890 File Offset: 0x001E3A90
+		
 		public StatDrawEntry(StatCategoryDef category, string label, string valueString, string reportText, int displayPriorityWithinCategory, string overrideReportTitle = null, IEnumerable<Dialog_InfoCard.Hyperlink> hyperlinks = null, bool forceUnfinalizedMode = false)
 		{
 			this.category = category;
@@ -97,7 +97,7 @@ namespace RimWorld
 			this.forceUnfinalizedMode = forceUnfinalizedMode;
 		}
 
-		// Token: 0x060059C6 RID: 22982 RVA: 0x001E58FC File Offset: 0x001E3AFC
+		
 		public StatDrawEntry(StatCategoryDef category, StatDef stat)
 		{
 			this.category = category;
@@ -109,7 +109,7 @@ namespace RimWorld
 			this.numberSense = ToStringNumberSense.Undefined;
 		}
 
-		// Token: 0x060059C7 RID: 22983 RVA: 0x001E594D File Offset: 0x001E3B4D
+		
 		public IEnumerable<Dialog_InfoCard.Hyperlink> GetHyperlinks(StatRequest req)
 		{
 			if (this.hyperlinks != null)
@@ -123,7 +123,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x060059C8 RID: 22984 RVA: 0x001E597C File Offset: 0x001E3B7C
+		
 		public string GetExplanationText(StatRequest optionalReq)
 		{
 			if (this.explanationText == null)
@@ -142,7 +142,7 @@ namespace RimWorld
 			return result;
 		}
 
-		// Token: 0x060059C9 RID: 22985 RVA: 0x001E59E4 File Offset: 0x001E3BE4
+		
 		private void WriteExplanationTextInt()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -162,7 +162,7 @@ namespace RimWorld
 			this.explanationText = stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		// Token: 0x060059CA RID: 22986 RVA: 0x001E5A60 File Offset: 0x001E3C60
+		
 		public float Draw(float x, float y, float width, bool selected, Action clickedCallback, Action mousedOverCallback, Vector2 scrollPosition, Rect scrollOutRect)
 		{
 			float num = width * 0.45f;
@@ -201,7 +201,7 @@ namespace RimWorld
 			return rect.height;
 		}
 
-		// Token: 0x060059CB RID: 22987 RVA: 0x001E5B89 File Offset: 0x001E3D89
+		
 		public override string ToString()
 		{
 			return string.Concat(new string[]
@@ -214,46 +214,46 @@ namespace RimWorld
 			});
 		}
 
-		// Token: 0x040030C4 RID: 12484
+		
 		public StatCategoryDef category;
 
-		// Token: 0x040030C5 RID: 12485
+		
 		private int displayOrderWithinCategory;
 
-		// Token: 0x040030C6 RID: 12486
+		
 		public StatDef stat;
 
-		// Token: 0x040030C7 RID: 12487
+		
 		private float value;
 
-		// Token: 0x040030C8 RID: 12488
+		
 		public StatRequest optionalReq;
 
-		// Token: 0x040030C9 RID: 12489
+		
 		public bool hasOptionalReq;
 
-		// Token: 0x040030CA RID: 12490
+		
 		public bool forceUnfinalizedMode;
 
-		// Token: 0x040030CB RID: 12491
+		
 		private IEnumerable<Dialog_InfoCard.Hyperlink> hyperlinks;
 
-		// Token: 0x040030CC RID: 12492
+		
 		private string labelInt;
 
-		// Token: 0x040030CD RID: 12493
+		
 		private string valueStringInt;
 
-		// Token: 0x040030CE RID: 12494
+		
 		private string overrideReportText;
 
-		// Token: 0x040030CF RID: 12495
+		
 		private string overrideReportTitle;
 
-		// Token: 0x040030D0 RID: 12496
+		
 		private string explanationText;
 
-		// Token: 0x040030D1 RID: 12497
+		
 		private ToStringNumberSense numberSense;
 	}
 }

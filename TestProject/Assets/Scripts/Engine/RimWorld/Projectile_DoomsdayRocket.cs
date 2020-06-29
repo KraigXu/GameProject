@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CB3 RID: 3251
+	
 	public class Projectile_DoomsdayRocket : Projectile
 	{
-		// Token: 0x06004EDB RID: 20187 RVA: 0x001A8C28 File Offset: 0x001A6E28
+		
 		protected override void Impact(Thing hitThing)
 		{
 			Map map = base.Map;
@@ -32,16 +32,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004EDC RID: 20188 RVA: 0x001A8CF0 File Offset: 0x001A6EF0
+		
 		protected void DoFireExplosion(IntVec3 pos, Map map, float radius)
 		{
 			GenExplosion.DoExplosion(pos, map, radius, DamageDefOf.Flame, this.launcher, base.DamageAmount, base.ArmorPenetration, null, this.equipmentDef, this.def, this.intendedTarget.Thing, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
 		}
 
-		// Token: 0x04002C41 RID: 11329
+		
 		private const int ExtraExplosionCount = 3;
 
-		// Token: 0x04002C42 RID: 11330
+		
 		private const int ExtraExplosionRadius = 5;
 	}
 }

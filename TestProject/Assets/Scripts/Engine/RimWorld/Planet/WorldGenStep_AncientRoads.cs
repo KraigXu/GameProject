@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001210 RID: 4624
+	
 	public class WorldGenStep_AncientRoads : WorldGenStep
 	{
-		// Token: 0x170011E7 RID: 4583
+		
 		// (get) Token: 0x06006AF4 RID: 27380 RVA: 0x002551D4 File Offset: 0x002533D4
 		public override int SeedPart
 		{
@@ -18,28 +18,25 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006AF5 RID: 27381 RVA: 0x002551DB File Offset: 0x002533DB
+		
 		public override void GenerateFresh(string seed)
 		{
 			this.GenerateAncientRoads();
 		}
 
-		// Token: 0x06006AF6 RID: 27382 RVA: 0x002551E4 File Offset: 0x002533E4
+		
 		private void GenerateAncientRoads()
 		{
 			Find.WorldPathGrid.RecalculateAllPerceivedPathCosts(new int?(0));
 			List<List<int>> list = this.GenerateProspectiveRoads();
 			list.Sort((List<int> lhs, List<int> rhs) => -lhs.Count.CompareTo(rhs.Count));
 			HashSet<int> used = new HashSet<int>();
-			Predicate<int> <>9__1;
+
 			for (int i = 0; i < list.Count; i++)
 			{
 				List<int> list2 = list[i];
-				Predicate<int> predicate;
-				if ((predicate = <>9__1) == null)
-				{
-					predicate = (<>9__1 = ((int elem) => used.Contains(elem)));
-				}
+				Predicate<int> predicate = ((int elem) => used.Contains(elem));
+
 				if (!list2.Any(predicate))
 				{
 					if (list[i].Count < 4)
@@ -80,7 +77,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006AF7 RID: 27383 RVA: 0x00255480 File Offset: 0x00253680
+		
 		private List<List<int>> GenerateProspectiveRoads()
 		{
 			List<int> ancientSites = Find.World.genData.ancientSites;
@@ -94,27 +91,21 @@ namespace RimWorld.Planet
 					List<int> list3 = ancientSites;
 					float ang = Find.World.grid.GetHeadingFromTo(i, j);
 					int current = ancientSites[i];
-					Func<int, bool> <>9__0;
-					Func<int, float> <>9__1;
+					
+					
 					for (;;)
 					{
 						IEnumerable<int> source = list3;
-						Func<int, bool> predicate;
-						if ((predicate = <>9__0) == null)
-						{
-							predicate = (<>9__0 = ((int idx) => idx != current && Math.Abs(Find.World.grid.GetHeadingFromTo(current, idx) - ang) < this.maximumSiteCurve));
-						}
+						Func<int, bool> predicate = ((int idx) => idx != current && Math.Abs(Find.World.grid.GetHeadingFromTo(current, idx) - ang) < this.maximumSiteCurve);
+
 						list3 = source.Where(predicate).ToList<int>();
 						if (list3.Count == 0)
 						{
 							break;
 						}
 						IEnumerable<int> source2 = list3;
-						Func<int, float> selector;
-						if ((selector = <>9__1) == null)
-						{
-							selector = (<>9__1 = ((int idx) => Find.World.grid.ApproxDistanceInTiles(current, idx)));
-						}
+						Func<int, float> selector = ((int idx) => Find.World.grid.ApproxDistanceInTiles(current, idx));
+
 						int num = source2.MinBy(selector);
 						ang = Find.World.grid.GetHeadingFromTo(current, num);
 						current = num;
@@ -126,13 +117,13 @@ namespace RimWorld.Planet
 			return list;
 		}
 
-		// Token: 0x040042D8 RID: 17112
+		
 		public float maximumSiteCurve;
 
-		// Token: 0x040042D9 RID: 17113
+		
 		public float minimumChain;
 
-		// Token: 0x040042DA RID: 17114
+		
 		public float maximumSegmentCurviness;
 	}
 }

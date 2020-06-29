@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D53 RID: 3411
+	
 	public class CompShipLandingBeacon : ThingComp
 	{
-		// Token: 0x17000EBA RID: 3770
+		
 		// (get) Token: 0x060052F0 RID: 21232 RVA: 0x001BB020 File Offset: 0x001B9220
 		public CompProperties_ShipLandingBeacon Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EBB RID: 3771
+		
 		// (get) Token: 0x060052F1 RID: 21233 RVA: 0x001BB02D File Offset: 0x001B922D
 		public List<ShipLandingArea> LandingAreas
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EBC RID: 3772
+		
 		// (get) Token: 0x060052F2 RID: 21234 RVA: 0x001BB038 File Offset: 0x001B9238
 		public bool Active
 		{
@@ -40,13 +40,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052F3 RID: 21235 RVA: 0x001BB05C File Offset: 0x001B925C
+		
 		private bool CanLinkTo(CompShipLandingBeacon other)
 		{
 			return other != this && ShipLandingBeaconUtility.CanLinkTo(this.parent.Position, other);
 		}
 
-		// Token: 0x060052F4 RID: 21236 RVA: 0x001BB078 File Offset: 0x001B9278
+		
 		public void EstablishConnections()
 		{
 			if (!this.parent.Spawned)
@@ -115,7 +115,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052F5 RID: 21237 RVA: 0x001BB350 File Offset: 0x001B9550
+		
 		private void RemoveArea(ShipLandingArea area)
 		{
 			foreach (CompShipLandingBeacon compShipLandingBeacon in area.beacons)
@@ -128,7 +128,7 @@ namespace RimWorld
 			this.landingAreas.Remove(area);
 		}
 
-		// Token: 0x060052F6 RID: 21238 RVA: 0x001BB3C4 File Offset: 0x001B95C4
+		
 		public bool TryAddArea(ShipLandingArea newArea)
 		{
 			if (!this.landingAreas.Contains(newArea))
@@ -149,7 +149,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x060052F7 RID: 21239 RVA: 0x001BB48C File Offset: 0x001B968C
+		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			CompGlower compGlower = this.parent.TryGetComp<CompGlower>();
@@ -164,7 +164,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052F8 RID: 21240 RVA: 0x001BB50C File Offset: 0x001B970C
+		
 		public override void PostDeSpawn(Map map)
 		{
 			for (int i = this.landingAreas.Count - 1; i >= 0; i--)
@@ -181,7 +181,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052F9 RID: 21241 RVA: 0x001BB59C File Offset: 0x001B979C
+		
 		public override void CompTickRare()
 		{
 			foreach (ShipLandingArea shipLandingArea in this.landingAreas)
@@ -190,7 +190,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052FA RID: 21242 RVA: 0x001BB5EC File Offset: 0x001B97EC
+		
 		public override void PostDrawExtraSelectionOverlays()
 		{
 			foreach (ShipLandingArea shipLandingArea in this.landingAreas)
@@ -211,7 +211,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052FB RID: 21243 RVA: 0x001BB6EC File Offset: 0x001B98EC
+		
 		public override string CompInspectStringExtra()
 		{
 			if (!this.parent.Spawned)
@@ -261,10 +261,10 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x04002DC5 RID: 11717
+		
 		private List<ShipLandingArea> landingAreas = new List<ShipLandingArea>();
 
-		// Token: 0x04002DC6 RID: 11718
+		
 		private Color fieldColor = Color.white;
 	}
 }

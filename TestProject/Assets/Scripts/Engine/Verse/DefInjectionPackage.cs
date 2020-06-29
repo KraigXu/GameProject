@@ -8,16 +8,16 @@ using RimWorld.IO;
 
 namespace Verse
 {
-	// Token: 0x0200012C RID: 300
+	
 	public class DefInjectionPackage
 	{
-		// Token: 0x06000875 RID: 2165 RVA: 0x0002A1DE File Offset: 0x000283DE
+		
 		public DefInjectionPackage(Type defType)
 		{
 			this.defType = defType;
 		}
 
-		// Token: 0x06000876 RID: 2166 RVA: 0x0002A20E File Offset: 0x0002840E
+		
 		private string ProcessedPath(string path)
 		{
 			if (path == null)
@@ -31,13 +31,13 @@ namespace Verse
 			return path.Replace("]", "").Replace('[', '.');
 		}
 
-		// Token: 0x06000877 RID: 2167 RVA: 0x0002A249 File Offset: 0x00028449
+		
 		private string ProcessedTranslation(string rawTranslation)
 		{
 			return rawTranslation.Replace("\\n", "\n");
 		}
 
-		// Token: 0x06000878 RID: 2168 RVA: 0x0002A25C File Offset: 0x0002845C
+		
 		public void AddDataFromFile(VirtualFile file, out bool xmlParseError)
 		{
 			xmlParseError = false;
@@ -120,7 +120,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000879 RID: 2169 RVA: 0x0002A500 File Offset: 0x00028700
+		
 		private void TryAddInjection(VirtualFile file, string key, string translation)
 		{
 			string text = key;
@@ -142,7 +142,7 @@ namespace Verse
 			this.injections.Add(key, defInjection);
 		}
 
-		// Token: 0x0600087A RID: 2170 RVA: 0x0002A574 File Offset: 0x00028774
+		
 		private void TryAddFullListInjection(VirtualFile file, string key, List<string> translation, List<Pair<int, string>> comments)
 		{
 			string text = key;
@@ -164,7 +164,7 @@ namespace Verse
 			this.injections.Add(key, defInjection);
 		}
 
-		// Token: 0x0600087B RID: 2171 RVA: 0x0002A5E0 File Offset: 0x000287E0
+		
 		private string BackCompatibleKey(string key)
 		{
 			string[] array = key.Split(new char[]
@@ -183,7 +183,7 @@ namespace Verse
 			return key;
 		}
 
-		// Token: 0x0600087C RID: 2172 RVA: 0x0002A660 File Offset: 0x00028860
+		
 		private bool CheckErrors(VirtualFile file, string key, string nonBackCompatibleKey, bool replacingFullList)
 		{
 			if (!key.Contains('.'))
@@ -267,7 +267,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x0600087D RID: 2173 RVA: 0x0002A8D4 File Offset: 0x00028AD4
+		
 		public void InjectIntoDefs(bool errorOnDefNotFound)
 		{
 			this.loadSyntaxSuggestions.Clear();
@@ -290,10 +290,10 @@ namespace Verse
 					keyValuePair.Value.suggestedPath = suggestedPath;
 				}
 			}
-			GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), this.defType, "ClearCachedData");
+			GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), this.defType, "ClearCachedData");
 		}
 
-		// Token: 0x0600087E RID: 2174 RVA: 0x0002AA74 File Offset: 0x00028C74
+		
 		private bool SetDefFieldAtPath(Type defType, string path, object value, Type ensureFieldType, bool errorOnDefNotFound, string fileSource, bool isPlaceholder, out string normalizedPath, out string suggestedPath, out string replacedString, out IEnumerable<string> replacedStringsList)
 		{
 			replacedString = null;
@@ -346,7 +346,7 @@ namespace Verse
 				{
 					'.'
 				}).ToList<string>();
-				object obj = GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), defType, "GetNamedSilentFail", new object[]
+				object obj = GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), defType, "GetNamedSilentFail", new object[]
 				{
 					list2[0]
 				});
@@ -844,7 +844,7 @@ namespace Verse
 			return result2;
 		}
 
-		// Token: 0x0600087F RID: 2175 RVA: 0x0002B854 File Offset: 0x00029A54
+		
 		private FieldInfo GetFieldNamed(Type type, string name)
 		{
 			FieldInfo field = type.GetField(name, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
@@ -869,7 +869,7 @@ namespace Verse
 			return field;
 		}
 
-		// Token: 0x06000880 RID: 2176 RVA: 0x0002B8D4 File Offset: 0x00029AD4
+		
 		public List<string> MissingInjections(List<string> outUnnecessaryDefInjections)
 		{
 			List<string> missingInjections = new List<string>();
@@ -981,31 +981,31 @@ namespace Verse
 			return missingInjections;
 		}
 
-		// Token: 0x04000757 RID: 1879
+		
 		public Type defType;
 
-		// Token: 0x04000758 RID: 1880
+		
 		public Dictionary<string, DefInjectionPackage.DefInjection> injections = new Dictionary<string, DefInjectionPackage.DefInjection>();
 
-		// Token: 0x04000759 RID: 1881
+		
 		public List<string> loadErrors = new List<string>();
 
-		// Token: 0x0400075A RID: 1882
+		
 		public List<string> loadSyntaxSuggestions = new List<string>();
 
-		// Token: 0x0400075B RID: 1883
+		
 		public bool usedOldRepSyntax;
 
-		// Token: 0x0400075C RID: 1884
+		
 		public const BindingFlags FieldBindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-		// Token: 0x0400075D RID: 1885
+		
 		public const string RepNodeName = "rep";
 
-		// Token: 0x02001390 RID: 5008
+		
 		public class DefInjection
 		{
-			// Token: 0x1700142C RID: 5164
+			
 			// (get) Token: 0x060076AA RID: 30378 RVA: 0x0028F598 File Offset: 0x0028D798
 			public bool IsFullListInjection
 			{
@@ -1015,7 +1015,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x1700142D RID: 5165
+			
 			// (get) Token: 0x060076AB RID: 30379 RVA: 0x0028F5A3 File Offset: 0x0028D7A3
 			public string DefName
 			{
@@ -1032,7 +1032,7 @@ namespace Verse
 				}
 			}
 
-			// Token: 0x060076AC RID: 30380 RVA: 0x0028F5D0 File Offset: 0x0028D7D0
+			
 			public bool ModifiesDefFromModOrNullCore(ModMetaData mod, Type defType)
 			{
 				Def defSilentFail = GenDefDatabase.GetDefSilentFail(defType, this.DefName, true);
@@ -1047,40 +1047,40 @@ namespace Verse
 				return defSilentFail.modContentPack != null && defSilentFail.modContentPack.FolderName == mod.FolderName;
 			}
 
-			// Token: 0x04004A61 RID: 19041
+			
 			public string path;
 
-			// Token: 0x04004A62 RID: 19042
+			
 			public string normalizedPath;
 
-			// Token: 0x04004A63 RID: 19043
+			
 			public string nonBackCompatiblePath;
 
-			// Token: 0x04004A64 RID: 19044
+			
 			public string suggestedPath;
 
-			// Token: 0x04004A65 RID: 19045
+			
 			public string injection;
 
-			// Token: 0x04004A66 RID: 19046
+			
 			public List<string> fullListInjection;
 
-			// Token: 0x04004A67 RID: 19047
+			
 			public List<Pair<int, string>> fullListInjectionComments;
 
-			// Token: 0x04004A68 RID: 19048
+			
 			public string fileSource;
 
-			// Token: 0x04004A69 RID: 19049
+			
 			public bool injected;
 
-			// Token: 0x04004A6A RID: 19050
+			
 			public string replacedString;
 
-			// Token: 0x04004A6B RID: 19051
+			
 			public IEnumerable<string> replacedList;
 
-			// Token: 0x04004A6C RID: 19052
+			
 			public bool isPlaceholder;
 		}
 	}

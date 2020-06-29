@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001209 RID: 4617
+	
 	public static class IcosahedronGenerator
 	{
-		// Token: 0x06006AD0 RID: 27344 RVA: 0x00253B80 File Offset: 0x00251D80
+		
 		public static void GenerateIcosahedron(List<Vector3> outVerts, List<TriangleIndices> outTris, float radius, Vector3 viewCenter, float viewAngle)
 		{
 			float num = (1f + Mathf.Sqrt(5f)) / 2f;
@@ -39,14 +39,14 @@ namespace RimWorld.Planet
 			MeshUtility.RemoveUnusedVertices(outVerts, outTris);
 		}
 
-		// Token: 0x06006AD1 RID: 27345 RVA: 0x00253DB8 File Offset: 0x00251FB8
+		
 		private static bool IcosahedronFaceNeeded(int v1, int v2, int v3, List<Vector3> verts, float radius, Vector3 viewCenter, float viewAngle)
 		{
 			viewAngle += 18f;
 			return MeshUtility.Visible(verts[v1], radius, viewCenter, viewAngle) || MeshUtility.Visible(verts[v2], radius, viewCenter, viewAngle) || MeshUtility.Visible(verts[v3], radius, viewCenter, viewAngle);
 		}
 
-		// Token: 0x040042B2 RID: 17074
+		
 		private static readonly TriangleIndices[] IcosahedronTris = new TriangleIndices[]
 		{
 			new TriangleIndices(0, 11, 5),

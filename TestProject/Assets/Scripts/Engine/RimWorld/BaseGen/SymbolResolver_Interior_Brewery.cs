@@ -3,10 +3,10 @@ using Verse;
 
 namespace RimWorld.BaseGen
 {
-	// Token: 0x020010DC RID: 4316
+	
 	public class SymbolResolver_Interior_Brewery : SymbolResolver
 	{
-		// Token: 0x17001161 RID: 4449
+		
 		// (get) Token: 0x0600659C RID: 26012 RVA: 0x00239117 File Offset: 0x00237317
 		private float SpawnPassiveCoolerIfTemperatureAbove
 		{
@@ -16,7 +16,7 @@ namespace RimWorld.BaseGen
 			}
 		}
 
-		// Token: 0x0600659D RID: 26013 RVA: 0x00239128 File Offset: 0x00237328
+		
 		public override void Resolve(ResolveParams rp)
 		{
 			Map map = BaseGen.globalSettings.map;
@@ -49,7 +49,7 @@ namespace RimWorld.BaseGen
 			BaseGen.symbolStack.Push("fillWithThings", resolveParams3, null);
 		}
 
-		// Token: 0x04003DD8 RID: 15832
+		
 		private const float SpawnHeaterIfTemperatureBelow = 7f;
 	}
 }

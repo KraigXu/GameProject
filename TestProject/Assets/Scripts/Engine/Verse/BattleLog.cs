@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000104 RID: 260
+	
 	public class BattleLog : IExposable
 	{
-		// Token: 0x1700018A RID: 394
+		
 		// (get) Token: 0x0600070D RID: 1805 RVA: 0x000206FF File Offset: 0x0001E8FF
 		public List<Battle> Battles
 		{
@@ -18,7 +18,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600070E RID: 1806 RVA: 0x00020708 File Offset: 0x0001E908
+		
 		public void Add(LogEntry entry)
 		{
 			Battle battle = null;
@@ -55,7 +55,7 @@ namespace Verse
 			this.ReduceToCapacity();
 		}
 
-		// Token: 0x0600070F RID: 1807 RVA: 0x00020814 File Offset: 0x0001EA14
+		
 		private void ReduceToCapacity()
 		{
 			int num = this.battles.Count((Battle btl) => btl.AbsorbedBy == null);
@@ -70,7 +70,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000710 RID: 1808 RVA: 0x000208CE File Offset: 0x0001EACE
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<Battle>(ref this.battles, "battles", LookMode.Deep, Array.Empty<object>());
@@ -80,7 +80,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000711 RID: 1809 RVA: 0x00020904 File Offset: 0x0001EB04
+		
 		public bool AnyEntryConcerns(Pawn p)
 		{
 			for (int i = 0; i < this.battles.Count; i++)
@@ -93,7 +93,7 @@ namespace Verse
 			return false;
 		}
 
-		// Token: 0x06000712 RID: 1810 RVA: 0x00020940 File Offset: 0x0001EB40
+		
 		public bool IsEntryActive(LogEntry log)
 		{
 			if (this.activeEntries == null)
@@ -111,7 +111,7 @@ namespace Verse
 			return this.activeEntries.Contains(log);
 		}
 
-		// Token: 0x06000713 RID: 1811 RVA: 0x000209B8 File Offset: 0x0001EBB8
+		
 		public void RemoveEntry(LogEntry log)
 		{
 			int num = 0;
@@ -121,7 +121,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000714 RID: 1812 RVA: 0x000209F4 File Offset: 0x0001EBF4
+		
 		public void Notify_PawnDiscarded(Pawn p, bool silentlyRemoveReferences)
 		{
 			for (int i = this.battles.Count - 1; i >= 0; i--)
@@ -130,13 +130,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000693 RID: 1683
+		
 		private List<Battle> battles = new List<Battle>();
 
-		// Token: 0x04000694 RID: 1684
+		
 		private const int BattleHistoryLength = 20;
 
-		// Token: 0x04000695 RID: 1685
+		
 		private HashSet<LogEntry> activeEntries;
 	}
 }

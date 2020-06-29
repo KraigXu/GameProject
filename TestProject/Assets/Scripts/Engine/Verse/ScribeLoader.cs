@@ -4,10 +4,10 @@ using System.Xml;
 
 namespace Verse
 {
-	// Token: 0x020002CD RID: 717
+	
 	public class ScribeLoader
 	{
-		// Token: 0x0600143E RID: 5182 RVA: 0x00076450 File Offset: 0x00074650
+		
 		public void InitLoading(string filePath)
 		{
 			if (Scribe.mode != LoadSaveMode.Inactive)
@@ -52,7 +52,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x0600143F RID: 5183 RVA: 0x0007655C File Offset: 0x0007475C
+		
 		public void InitLoadingMetaHeaderOnly(string filePath)
 		{
 			if (Scribe.mode != LoadSaveMode.Inactive)
@@ -102,7 +102,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001440 RID: 5184 RVA: 0x00076674 File Offset: 0x00074874
+		
 		public void FinalizeLoading()
 		{
 			if (Scribe.mode != LoadSaveMode.LoadingVars)
@@ -128,7 +128,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001441 RID: 5185 RVA: 0x00076708 File Offset: 0x00074908
+		
 		public bool EnterNode(string nodeName)
 		{
 			if (this.curXmlParent != null)
@@ -148,7 +148,7 @@ namespace Verse
 			return true;
 		}
 
-		// Token: 0x06001442 RID: 5186 RVA: 0x00076778 File Offset: 0x00074978
+		
 		public void ExitNode()
 		{
 			if (this.curXmlParent != null)
@@ -162,7 +162,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06001443 RID: 5187 RVA: 0x000767D0 File Offset: 0x000749D0
+		
 		public void ForceStop()
 		{
 			this.curXmlParent = null;
@@ -176,19 +176,19 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000D8D RID: 3469
+		
 		public CrossRefHandler crossRefs = new CrossRefHandler();
 
-		// Token: 0x04000D8E RID: 3470
+		
 		public PostLoadIniter initer = new PostLoadIniter();
 
-		// Token: 0x04000D8F RID: 3471
+		
 		public IExposable curParent;
 
-		// Token: 0x04000D90 RID: 3472
+		
 		public XmlNode curXmlParent;
 
-		// Token: 0x04000D91 RID: 3473
+		
 		public string curPathRelToParent;
 	}
 }

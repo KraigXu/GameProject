@@ -4,10 +4,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200053E RID: 1342
+	
 	public static class JailbreakerMentalStateUtility
 	{
-		// Token: 0x0600265F RID: 9823 RVA: 0x000E2300 File Offset: 0x000E0500
+		
 		public static Pawn FindPrisoner(Pawn pawn)
 		{
 			if (!pawn.Spawned)
@@ -33,7 +33,7 @@ namespace Verse.AI
 			return result;
 		}
 
-		// Token: 0x0400171F RID: 5919
+		
 		private static List<Pawn> tmpPrisoners = new List<Pawn>();
 	}
 }

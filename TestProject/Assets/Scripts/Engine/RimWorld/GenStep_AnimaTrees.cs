@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000A47 RID: 2631
+	
 	public class GenStep_AnimaTrees : GenStep
 	{
-		// Token: 0x17000B0C RID: 2828
+		
 		// (get) Token: 0x06003E31 RID: 15921 RVA: 0x001478BB File Offset: 0x00145ABB
 		public override int SeedPart
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E32 RID: 15922 RVA: 0x001478C4 File Offset: 0x00145AC4
+		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			if (map.Biome.isExtremeBiome)
@@ -28,14 +28,14 @@ namespace RimWorld
 			}
 			int i = GenStep_AnimaTrees.DesiredTreeCountForMap(map);
 			int num = 0;
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			while (i > 0)
 			{
 				int minEdgeDistance = 25;
 				Predicate<IntVec3> validator;
-				if ((validator = <>9__0) == null)
+				if ((validator ) == null)
 				{
-					validator = (<>9__0 = ((IntVec3 x) => GenStep_AnimaTrees.CanSpawnAt(x, map, 0, 50, 22, 10)));
+					validator = (9__0 = ((IntVec3 x) => GenStep_AnimaTrees.CanSpawnAt(x, map, 0, 50, 22, 10)));
 				}
 				IntVec3 cell;
 				if (!CellFinderLoose.TryFindRandomNotEdgeCellWith(minEdgeDistance, validator, map, out cell))
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003E33 RID: 15923 RVA: 0x00147974 File Offset: 0x00145B74
+		
 		public static bool TrySpawnAt(IntVec3 cell, Map map, float growth, out Thing plant)
 		{
 			Plant plant2 = cell.GetPlant(map);
@@ -69,7 +69,7 @@ namespace RimWorld
 			return plant != null;
 		}
 
-		// Token: 0x06003E34 RID: 15924 RVA: 0x001479B4 File Offset: 0x00145BB4
+		
 		public static bool CanSpawnAt(IntVec3 c, Map map, int minProximityToArtificialStructures = 40, int minProximityToCenter = 0, int minFertileUnroofedCells = 22, int maxFertileUnroofedCellRadius = 10)
 		{
 			if (!c.Standable(map) || c.Fogged(map) || !c.GetRoom(map, RegionType.Set_Passable).PsychologicallyOutdoors)
@@ -127,19 +127,19 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06003E35 RID: 15925 RVA: 0x00147B14 File Offset: 0x00145D14
+		
 		public static int DesiredTreeCountForMap(Map map)
 		{
 			return Mathf.Max(Mathf.RoundToInt(GenStep_AnimaTrees.Density * (float)map.Area), 1);
 		}
 
-		// Token: 0x04002433 RID: 9267
+		
 		public static readonly float Density = 1.25E-05f;
 
-		// Token: 0x04002434 RID: 9268
+		
 		private const int MinDistanceToEdge = 25;
 
-		// Token: 0x04002435 RID: 9269
+		
 		private static readonly FloatRange GrowthRange = new FloatRange(0.5f, 0.75f);
 	}
 }

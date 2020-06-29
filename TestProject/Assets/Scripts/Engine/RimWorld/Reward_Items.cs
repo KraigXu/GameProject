@@ -7,10 +7,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000FD6 RID: 4054
+	
 	public class Reward_Items : Reward
 	{
-		// Token: 0x1700112D RID: 4397
+		
 		// (get) Token: 0x0600615A RID: 24922 RVA: 0x0021CCA0 File Offset: 0x0021AEA0
 		public List<Thing> ItemsListForReading
 		{
@@ -20,7 +20,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700112E RID: 4398
+		
 		// (get) Token: 0x0600615B RID: 24923 RVA: 0x0021CCA8 File Offset: 0x0021AEA8
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700112F RID: 4399
+		
 		// (get) Token: 0x0600615C RID: 24924 RVA: 0x0021CCB8 File Offset: 0x0021AEB8
 		public override float TotalMarketValue
 		{
@@ -67,21 +67,21 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600615D RID: 24925 RVA: 0x0021CD1F File Offset: 0x0021AF1F
+		
 		public override void Notify_Used()
 		{
 			this.RememberItems();
 			base.Notify_Used();
 		}
 
-		// Token: 0x0600615E RID: 24926 RVA: 0x0021CD2D File Offset: 0x0021AF2D
+		
 		public override void Notify_PreCleanup()
 		{
 			this.RememberItems();
 			base.Notify_PreCleanup();
 		}
 
-		// Token: 0x0600615F RID: 24927 RVA: 0x0021CD3C File Offset: 0x0021AF3C
+		
 		private void RememberItems()
 		{
 			if (this.usedOrCleanedUp)
@@ -106,7 +106,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06006160 RID: 24928 RVA: 0x0021CE14 File Offset: 0x0021B014
+		
 		public override void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
 			this.items.Clear();
@@ -136,7 +136,7 @@ namespace RimWorld
 			valueActuallyUsed = this.TotalMarketValue;
 		}
 
-		// Token: 0x06006161 RID: 24929 RVA: 0x0021CF6B File Offset: 0x0021B16B
+		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
 			Slate slate = QuestGen.slate;
@@ -188,7 +188,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06006162 RID: 24930 RVA: 0x0021CFA4 File Offset: 0x0021B1A4
+		
 		public override string GetDescription(RewardsGeneratorParams parms)
 		{
 			if (parms.giveToCaravan)
@@ -198,7 +198,7 @@ namespace RimWorld
 			return "Reward_Items".Translate(GenLabel.ThingsLabel(this.items, "  - "), this.TotalMarketValue.ToStringMoney(null));
 		}
 
-		// Token: 0x06006163 RID: 24931 RVA: 0x0021D024 File Offset: 0x0021B224
+		
 		public override string ToString()
 		{
 			string text = base.GetType().Name;
@@ -217,7 +217,7 @@ namespace RimWorld
 			return text;
 		}
 
-		// Token: 0x06006164 RID: 24932 RVA: 0x0021D0DC File Offset: 0x0021B2DC
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -230,22 +230,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003B3E RID: 15166
+		
 		public List<Thing> items = new List<Thing>();
 
-		// Token: 0x04003B3F RID: 15167
+		
 		private List<Reward_Items.RememberedItem> itemDefs = new List<Reward_Items.RememberedItem>();
 
-		// Token: 0x04003B40 RID: 15168
+		
 		private float lastTotalMarketValue;
 
-		// Token: 0x04003B41 RID: 15169
+		
 		private const string RootSymbol = "root";
 
-		// Token: 0x02001E74 RID: 7796
+		
 		public struct RememberedItem : IExposable
 		{
-			// Token: 0x0600A941 RID: 43329 RVA: 0x00319897 File Offset: 0x00317A97
+			
 			public RememberedItem(ThingStuffPairWithQuality thing, int stackCount, string label)
 			{
 				this.thing = thing;
@@ -253,7 +253,7 @@ namespace RimWorld
 				this.label = label;
 			}
 
-			// Token: 0x0600A942 RID: 43330 RVA: 0x003198AE File Offset: 0x00317AAE
+			
 			public void ExposeData()
 			{
 				Scribe_Deep.Look<ThingStuffPairWithQuality>(ref this.thing, "thing", Array.Empty<object>());
@@ -261,13 +261,13 @@ namespace RimWorld
 				Scribe_Values.Look<string>(ref this.label, "label", null, false);
 			}
 
-			// Token: 0x04007287 RID: 29319
+			
 			public ThingStuffPairWithQuality thing;
 
-			// Token: 0x04007288 RID: 29320
+			
 			public int stackCount;
 
-			// Token: 0x04007289 RID: 29321
+			
 			public string label;
 		}
 	}

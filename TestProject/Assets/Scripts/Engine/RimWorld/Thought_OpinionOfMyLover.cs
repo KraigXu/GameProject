@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000807 RID: 2055
+	
 	public class Thought_OpinionOfMyLover : Thought_Situational
 	{
-		// Token: 0x17000960 RID: 2400
+		
 		// (get) Token: 0x06003415 RID: 13333 RVA: 0x0011EA90 File Offset: 0x0011CC90
 		public override string LabelCap
 		{
@@ -23,7 +23,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000961 RID: 2401
+		
 		// (get) Token: 0x06003416 RID: 13334 RVA: 0x0011EB20 File Offset: 0x0011CD20
 		protected override float BaseMoodOffset
 		{

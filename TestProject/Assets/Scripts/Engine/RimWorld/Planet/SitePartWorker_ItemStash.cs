@@ -6,10 +6,10 @@ using Verse.Grammar;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001265 RID: 4709
+	
 	public class SitePartWorker_ItemStash : SitePartWorker
 	{
-		// Token: 0x06006E35 RID: 28213 RVA: 0x00267D74 File Offset: 0x00265F74
+		
 		public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);
@@ -49,7 +49,7 @@ namespace RimWorld.Planet
 			outExtraDescriptionRules.Add(new Rule_String("itemStashContentsValue", GenThing.GetMarketValue(list).ToStringMoney(null)));
 		}
 
-		// Token: 0x06006E36 RID: 28214 RVA: 0x00267EC8 File Offset: 0x002660C8
+		
 		public override string GetPostProcessedThreatLabel(Site site, SitePart sitePart)
 		{
 			string text = base.GetPostProcessedThreatLabel(site, sitePart);

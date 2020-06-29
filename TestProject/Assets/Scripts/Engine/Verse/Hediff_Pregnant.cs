@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200023B RID: 571
+	
 	public class Hediff_Pregnant : HediffWithComps
 	{
-		// Token: 0x17000329 RID: 809
+		
 		// (get) Token: 0x06000FF9 RID: 4089 RVA: 0x0005C54D File Offset: 0x0005A74D
 		// (set) Token: 0x06000FFA RID: 4090 RVA: 0x0005C555 File Offset: 0x0005A755
 		public float GestationProgress
@@ -25,7 +25,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x1700032A RID: 810
+		
 		// (get) Token: 0x06000FFB RID: 4091 RVA: 0x0005C560 File Offset: 0x0005A760
 		private bool IsSeverelyWounded
 		{
@@ -52,7 +52,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FFC RID: 4092 RVA: 0x0005C638 File Offset: 0x0005A838
+		
 		public override void Tick()
 		{
 			this.ageTicks++;
@@ -91,13 +91,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FFD RID: 4093 RVA: 0x0005C900 File Offset: 0x0005AB00
+		
 		private void Miscarry()
 		{
 			this.pawn.health.RemoveHediff(this);
 		}
 
-		// Token: 0x06000FFE RID: 4094 RVA: 0x0005C914 File Offset: 0x0005AB14
+		
 		public static void DoBirthSpawn(Pawn mother, Pawn father)
 		{
 			int num = (mother.RaceProps.litterSizeCurve != null) ? Mathf.RoundToInt(Rand.ByCurve(mother.RaceProps.litterSizeCurve)) : 1;
@@ -149,14 +149,14 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x06000FFF RID: 4095 RVA: 0x0005CAA9 File Offset: 0x0005ACA9
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_References.Look<Pawn>(ref this.father, "father", false);
 		}
 
-		// Token: 0x06001000 RID: 4096 RVA: 0x0005CAC4 File Offset: 0x0005ACC4
+		
 		public override string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -166,16 +166,16 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		// Token: 0x04000BCD RID: 3021
+		
 		public Pawn father;
 
-		// Token: 0x04000BCE RID: 3022
+		
 		private const int MiscarryCheckInterval = 1000;
 
-		// Token: 0x04000BCF RID: 3023
+		
 		private const float MTBMiscarryStarvingDays = 0.5f;
 
-		// Token: 0x04000BD0 RID: 3024
+		
 		private const float MTBMiscarryWoundedDays = 0.5f;
 	}
 }

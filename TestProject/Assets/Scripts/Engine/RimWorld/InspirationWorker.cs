@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x020008D8 RID: 2264
+	
 	public class InspirationWorker
 	{
-		// Token: 0x0600364E RID: 13902 RVA: 0x001265E4 File Offset: 0x001247E4
+		
 		public virtual float CommonalityFor(Pawn pawn)
 		{
 			float num = 1f;
@@ -40,7 +40,7 @@ namespace RimWorld
 			return this.def.baseCommonality * num;
 		}
 
-		// Token: 0x0600364F RID: 13903 RVA: 0x001266E4 File Offset: 0x001248E4
+		
 		public virtual bool InspirationCanOccur(Pawn pawn)
 		{
 			if (!this.def.allowedOnAnimals && pawn.RaceProps.Animal)
@@ -141,16 +141,16 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x04001EA9 RID: 7849
+		
 		public InspirationDef def;
 
-		// Token: 0x04001EAA RID: 7850
+		
 		private const float ChanceFactorPassionNone = 1f;
 
-		// Token: 0x04001EAB RID: 7851
+		
 		private const float ChanceFactorPassionMinor = 2.5f;
 
-		// Token: 0x04001EAC RID: 7852
+		
 		private const float ChanceFactorPassionMajor = 5f;
 	}
 }

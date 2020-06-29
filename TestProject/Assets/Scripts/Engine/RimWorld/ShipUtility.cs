@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000D89 RID: 3465
+	
 	public static class ShipUtility
 	{
-		// Token: 0x0600546D RID: 21613 RVA: 0x001C2EE4 File Offset: 0x001C10E4
+		
 		public static Dictionary<ThingDef, int> RequiredParts()
 		{
 			if (ShipUtility.requiredParts == null)
@@ -26,7 +26,7 @@ namespace RimWorld
 			return ShipUtility.requiredParts;
 		}
 
-		// Token: 0x0600546E RID: 21614 RVA: 0x001C2F67 File Offset: 0x001C1167
+		
 		public static IEnumerable<string> LaunchFailReasons(Building rootBuilding)
 		{
 			List<Building> shipParts = ShipUtility.ShipBuildingsAttachedTo(rootBuilding).ToList<Building>();
@@ -84,7 +84,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x0600546F RID: 21615 RVA: 0x001C2F78 File Offset: 0x001C1178
+		
 		public static bool HasHibernatingParts(Building rootBuilding)
 		{
 			foreach (Building thing in ShipUtility.ShipBuildingsAttachedTo(rootBuilding).ToList<Building>())
@@ -98,7 +98,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x06005470 RID: 21616 RVA: 0x001C2FE8 File Offset: 0x001C11E8
+		
 		public static void StartupHibernatingParts(Building rootBuilding)
 		{
 			foreach (Building thing in ShipUtility.ShipBuildingsAttachedTo(rootBuilding).ToList<Building>())
@@ -111,7 +111,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005471 RID: 21617 RVA: 0x001C3054 File Offset: 0x001C1254
+		
 		public static List<Building> ShipBuildingsAttachedTo(Building root)
 		{
 			ShipUtility.closedSet.Clear();
@@ -138,12 +138,12 @@ namespace RimWorld
 			return ShipUtility.closedSet;
 		}
 
-		// Token: 0x06005472 RID: 21618 RVA: 0x001C3158 File Offset: 0x001C1358
+		
 		public static IEnumerable<Gizmo> ShipStartupGizmos(Building building)
 		{
 			if (ShipUtility.HasHibernatingParts(building))
 			{
-				Action <>9__1;
+
 				yield return new Command_Action
 				{
 					action = delegate
@@ -160,14 +160,11 @@ namespace RimWorld
 						DiaNode diaNode = new DiaNode(text.Translate());
 						DiaOption diaOption = new DiaOption("Confirm".Translate());
 						DiaOption diaOption2 = diaOption;
-						Action action;
-						if ((action = <>9__1) == null)
+						Action action = delegate
 						{
-							action = (<>9__1 = delegate
-							{
-								ShipUtility.StartupHibernatingParts(building);
-							});
-						}
+							ShipUtility.StartupHibernatingParts(building);
+						};
+
 						diaOption2.action = action;
 						diaOption.resolveTree = true;
 						diaNode.options.Add(diaOption);
@@ -185,13 +182,13 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002E78 RID: 11896
+		
 		private static Dictionary<ThingDef, int> requiredParts;
 
-		// Token: 0x04002E79 RID: 11897
+		
 		private static List<Building> closedSet = new List<Building>();
 
-		// Token: 0x04002E7A RID: 11898
+		
 		private static List<Building> openSet = new List<Building>();
 	}
 }

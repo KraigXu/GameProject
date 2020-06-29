@@ -4,16 +4,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B74 RID: 2932
+	
 	public class SolidBioDatabase
 	{
-		// Token: 0x060044A3 RID: 17571 RVA: 0x00173037 File Offset: 0x00171237
+		
 		public static void Clear()
 		{
 			SolidBioDatabase.allBios.Clear();
 		}
 
-		// Token: 0x060044A4 RID: 17572 RVA: 0x00173044 File Offset: 0x00171244
+		
 		public static void LoadAllBios()
 		{
 			foreach (PawnBio pawnBio in DirectXmlLoader.LoadXmlDataInResourcesFolder<PawnBio>("Backstories/Solid"))
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002736 RID: 10038
+		
 		public static List<PawnBio> allBios = new List<PawnBio>();
 	}
 }

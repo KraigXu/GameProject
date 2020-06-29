@@ -3,10 +3,10 @@ using RimWorld;
 
 namespace Verse.AI
 {
-	// Token: 0x0200052E RID: 1326
+	
 	public static class ToilJumpConditions
 	{
-		// Token: 0x0600260E RID: 9742 RVA: 0x000E0E50 File Offset: 0x000DF050
+		
 		public static Toil JumpIf(this Toil toil, Func<bool> jumpCondition, Toil jumpToil)
 		{
 			toil.AddPreTickAction(delegate
@@ -20,7 +20,7 @@ namespace Verse.AI
 			return toil;
 		}
 
-		// Token: 0x0600260F RID: 9743 RVA: 0x000E0E98 File Offset: 0x000DF098
+		
 		public static Toil JumpIfDespawnedOrNull(this Toil toil, TargetIndex ind, Toil jumpToil)
 		{
 			return toil.JumpIf(delegate
@@ -30,7 +30,7 @@ namespace Verse.AI
 			}, jumpToil);
 		}
 
-		// Token: 0x06002610 RID: 9744 RVA: 0x000E0ED4 File Offset: 0x000DF0D4
+		
 		public static Toil JumpIfDespawnedOrNullOrForbidden(this Toil toil, TargetIndex ind, Toil jumpToil)
 		{
 			return toil.JumpIf(delegate
@@ -40,7 +40,7 @@ namespace Verse.AI
 			}, jumpToil);
 		}
 
-		// Token: 0x06002611 RID: 9745 RVA: 0x000E0F10 File Offset: 0x000DF110
+		
 		public static Toil JumpIfOutsideHomeArea(this Toil toil, TargetIndex ind, Toil jumpToil)
 		{
 			return toil.JumpIf(delegate

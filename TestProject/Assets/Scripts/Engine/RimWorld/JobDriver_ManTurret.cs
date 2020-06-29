@@ -6,10 +6,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000669 RID: 1641
+	
 	public class JobDriver_ManTurret : JobDriver
 	{
-		// Token: 0x06002CC3 RID: 11459 RVA: 0x000FE6E0 File Offset: 0x000FC8E0
+		
 		private static bool GunNeedsLoading(Building b)
 		{
 			Building_TurretGun building_TurretGun = b as Building_TurretGun;
@@ -21,7 +21,7 @@ namespace RimWorld
 			return compChangeableProjectile != null && !compChangeableProjectile.Loaded;
 		}
 
-		// Token: 0x06002CC4 RID: 11460 RVA: 0x000FE714 File Offset: 0x000FC914
+		
 		public static Thing FindAmmoForTurret(Pawn pawn, Building_TurretGun gun)
 		{
 			StorageSettings allowedShellsSettings = pawn.IsColonist ? gun.gun.TryGetComp<CompChangeableProjectile>().allowedShellsSettings : null;
@@ -29,13 +29,13 @@ namespace RimWorld
 			return GenClosest.ClosestThingReachable(gun.Position, gun.Map, ThingRequest.ForGroup(ThingRequestGroup.Shell), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 40f, validator, null, 0, -1, false, RegionType.Set_Passable, false);
 		}
 
-		// Token: 0x06002CC5 RID: 11461 RVA: 0x000DDBC6 File Offset: 0x000DBDC6
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
 		}
 
-		// Token: 0x06002CC6 RID: 11462 RVA: 0x000FE794 File Offset: 0x000FC994
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -100,10 +100,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x040019F5 RID: 6645
+		
 		private const float ShellSearchRadius = 40f;
 
-		// Token: 0x040019F6 RID: 6646
+		
 		private const int MaxPawnAmmoReservations = 10;
 	}
 }

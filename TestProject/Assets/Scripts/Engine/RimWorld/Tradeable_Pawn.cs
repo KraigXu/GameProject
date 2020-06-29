@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000DC4 RID: 3524
+	
 	public class Tradeable_Pawn : Tradeable
 	{
-		// Token: 0x17000F33 RID: 3891
+		
 		// (get) Token: 0x06005586 RID: 21894 RVA: 0x001C6816 File Offset: 0x001C4A16
 		public override Window NewInfoDialog
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000F34 RID: 3892
+		
 		// (get) Token: 0x06005587 RID: 21895 RVA: 0x001C6824 File Offset: 0x001C4A24
 		public override string Label
 		{
@@ -42,7 +42,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000F35 RID: 3893
+		
 		// (get) Token: 0x06005588 RID: 21896 RVA: 0x001C68CA File Offset: 0x001C4ACA
 		public override string TipDescription
 		{
@@ -56,7 +56,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000F36 RID: 3894
+		
 		// (get) Token: 0x06005589 RID: 21897 RVA: 0x001C6900 File Offset: 0x001C4B00
 		private Pawn AnyPawn
 		{
@@ -66,7 +66,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600558A RID: 21898 RVA: 0x001C6910 File Offset: 0x001C4B10
+		
 		public override void ResolveTrade()
 		{
 			if (base.ActionToDo == TradeAction.PlayerSells)

@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E3A RID: 3642
+	
 	public class Designator_Uninstall : Designator
 	{
-		// Token: 0x17000FC0 RID: 4032
+		
 		// (get) Token: 0x06005803 RID: 22531 RVA: 0x0007C4F4 File Offset: 0x0007A6F4
 		public override int DraggableDimensions
 		{
@@ -18,7 +18,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000FC1 RID: 4033
+		
 		// (get) Token: 0x06005804 RID: 22532 RVA: 0x000FB6CA File Offset: 0x000F98CA
 		protected override DesignationDef Designation
 		{
@@ -28,7 +28,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06005805 RID: 22533 RVA: 0x001D31F0 File Offset: 0x001D13F0
+		
 		public Designator_Uninstall()
 		{
 			this.defaultLabel = "DesignatorUninstall".Translate();
@@ -41,7 +41,7 @@ namespace RimWorld
 			this.hotKey = KeyBindingDefOf.Misc12;
 		}
 
-		// Token: 0x06005806 RID: 22534 RVA: 0x001D3274 File Offset: 0x001D1474
+		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -59,13 +59,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06005807 RID: 22535 RVA: 0x001D32C8 File Offset: 0x001D14C8
+		
 		public override void DesignateSingleCell(IntVec3 loc)
 		{
 			this.DesignateThing(this.TopUninstallableInCell(loc));
 		}
 
-		// Token: 0x06005808 RID: 22536 RVA: 0x001D32D8 File Offset: 0x001D14D8
+		
 		private Thing TopUninstallableInCell(IntVec3 loc)
 		{
 			foreach (Thing thing in from t in base.Map.thingGrid.ThingsAt(loc)
@@ -80,7 +80,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06005809 RID: 22537 RVA: 0x001D3368 File Offset: 0x001D1568
+		
 		public override void DesignateThing(Thing t)
 		{
 			if (t.Faction != Faction.OfPlayer)
@@ -95,7 +95,7 @@ namespace RimWorld
 			base.Map.designationManager.AddDesignation(new Designation(t, this.Designation));
 		}
 
-		// Token: 0x0600580A RID: 22538 RVA: 0x001D33E0 File Offset: 0x001D15E0
+		
 		public override AcceptanceReport CanDesignateThing(Thing t)
 		{
 			Building building = t as Building;
@@ -133,7 +133,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600580B RID: 22539 RVA: 0x001D0CA1 File Offset: 0x001CEEA1
+		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();

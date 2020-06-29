@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B30 RID: 2864
+	
 	public static class PortraitCameraManager
 	{
-		// Token: 0x17000BEC RID: 3052
+		
 		// (get) Token: 0x06004392 RID: 17298 RVA: 0x0016C35D File Offset: 0x0016A55D
 		public static Camera PortraitCamera
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000BED RID: 3053
+		
 		// (get) Token: 0x06004393 RID: 17299 RVA: 0x0016C364 File Offset: 0x0016A564
 		public static PortraitRenderer PortraitRenderer
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004395 RID: 17301 RVA: 0x0016C388 File Offset: 0x0016A588
+		
 		private static Camera CreatePortraitCamera()
 		{
 			GameObject gameObject = new GameObject("PortraitCamera", new Type[]
@@ -53,10 +53,10 @@ namespace RimWorld
 			return component;
 		}
 
-		// Token: 0x040026BE RID: 9918
+		
 		private static Camera portraitCameraInt = PortraitCameraManager.CreatePortraitCamera();
 
-		// Token: 0x040026BF RID: 9919
+		
 		private static PortraitRenderer portraitRendererInt = PortraitCameraManager.portraitCameraInt.GetComponent<PortraitRenderer>();
 	}
 }

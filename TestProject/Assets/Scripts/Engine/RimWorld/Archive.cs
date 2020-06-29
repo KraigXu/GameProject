@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000925 RID: 2341
+	
 	public class Archive : IExposable
 	{
-		// Token: 0x170009EF RID: 2543
+		
 		// (get) Token: 0x06003797 RID: 14231 RVA: 0x0012AAB6 File Offset: 0x00128CB6
 		public List<IArchivable> ArchivablesListForReading
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003798 RID: 14232 RVA: 0x0012AAC0 File Offset: 0x00128CC0
+		
 		public void ExposeData()
 		{
 			Scribe_Collections.Look<IArchivable>(ref this.archivables, "archivables", LookMode.Deep, Array.Empty<object>());
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06003799 RID: 14233 RVA: 0x0012AB54 File Offset: 0x00128D54
+		
 		public bool Add(IArchivable archivable)
 		{
 			if (archivable == null)
@@ -47,7 +47,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600379A RID: 14234 RVA: 0x0012ABB9 File Offset: 0x00128DB9
+		
 		public bool Remove(IArchivable archivable)
 		{
 			if (!this.Contains(archivable))
@@ -59,13 +59,13 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x0600379B RID: 14235 RVA: 0x0012ABE1 File Offset: 0x00128DE1
+		
 		public bool Contains(IArchivable archivable)
 		{
 			return this.archivables.Contains(archivable);
 		}
 
-		// Token: 0x0600379C RID: 14236 RVA: 0x0012ABEF File Offset: 0x00128DEF
+		
 		public void Pin(IArchivable archivable)
 		{
 			if (!this.Contains(archivable))
@@ -79,7 +79,7 @@ namespace RimWorld
 			this.pinnedArchivables.Add(archivable);
 		}
 
-		// Token: 0x0600379D RID: 14237 RVA: 0x0012AC12 File Offset: 0x00128E12
+		
 		public void Unpin(IArchivable archivable)
 		{
 			if (!this.Contains(archivable))
@@ -93,13 +93,13 @@ namespace RimWorld
 			this.pinnedArchivables.Remove(archivable);
 		}
 
-		// Token: 0x0600379E RID: 14238 RVA: 0x0012AC35 File Offset: 0x00128E35
+		
 		public bool IsPinned(IArchivable archivable)
 		{
 			return this.pinnedArchivables.Contains(archivable);
 		}
 
-		// Token: 0x0600379F RID: 14239 RVA: 0x0012AC44 File Offset: 0x00128E44
+		
 		private void CheckCullArchivables()
 		{
 			int num = 0;
@@ -123,7 +123,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060037A0 RID: 14240 RVA: 0x0012ACFC File Offset: 0x00128EFC
+		
 		public void Notify_MapRemoved(Map map)
 		{
 			for (int i = 0; i < this.archivables.Count; i++)
@@ -136,13 +136,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040020F0 RID: 8432
+		
 		private List<IArchivable> archivables = new List<IArchivable>();
 
-		// Token: 0x040020F1 RID: 8433
+		
 		private HashSet<IArchivable> pinnedArchivables = new HashSet<IArchivable>();
 
-		// Token: 0x040020F2 RID: 8434
+		
 		public const int MaxNonPinnedArchivables = 200;
 	}
 }

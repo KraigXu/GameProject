@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CCD RID: 3277
+	
 	public class ThingSetMaker_Count : ThingSetMaker
 	{
-		// Token: 0x06004F66 RID: 20326 RVA: 0x001ABD8C File Offset: 0x001A9F8C
+		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			if (!this.AllowedThingDefs(parms).Any<ThingDef>())
@@ -32,7 +32,7 @@ namespace RimWorld
 			return true;
 		}
 
-		// Token: 0x06004F67 RID: 20327 RVA: 0x001ABE58 File Offset: 0x001AA058
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			IEnumerable<ThingDef> enumerable = this.AllowedThingDefs(parms);
@@ -60,13 +60,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F68 RID: 20328 RVA: 0x001ABF6B File Offset: 0x001AA16B
+		
 		protected virtual IEnumerable<ThingDef> AllowedThingDefs(ThingSetMakerParams parms)
 		{
 			return ThingSetMakerUtility.GetAllowedThingDefs(parms);
 		}
 
-		// Token: 0x06004F69 RID: 20329 RVA: 0x001ABF73 File Offset: 0x001AA173
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;

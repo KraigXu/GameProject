@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000BF1 RID: 3057
+	
 	public class KidnappedPawnsTracker : IExposable
 	{
-		// Token: 0x17000CF6 RID: 3318
+		
 		// (get) Token: 0x060048B7 RID: 18615 RVA: 0x0018BC11 File Offset: 0x00189E11
 		public List<Pawn> KidnappedPawnsListForReading
 		{
@@ -19,13 +19,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060048B8 RID: 18616 RVA: 0x0018BC19 File Offset: 0x00189E19
+		
 		public KidnappedPawnsTracker(Faction faction)
 		{
 			this.faction = faction;
 		}
 
-		// Token: 0x060048B9 RID: 18617 RVA: 0x0018BC34 File Offset: 0x00189E34
+		
 		public void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
@@ -35,7 +35,7 @@ namespace RimWorld
 			Scribe_Collections.Look<Pawn>(ref this.kidnappedPawns, "kidnappedPawns", LookMode.Reference, Array.Empty<object>());
 		}
 
-		// Token: 0x060048BA RID: 18618 RVA: 0x0018BC8C File Offset: 0x00189E8C
+		
 		public void Kidnap(Pawn pawn, Pawn kidnapper)
 		{
 			if (this.kidnappedPawns.Contains(pawn))
@@ -76,7 +76,7 @@ namespace RimWorld
 			Find.GameEnder.CheckOrUpdateGameOver();
 		}
 
-		// Token: 0x060048BB RID: 18619 RVA: 0x0018BDE3 File Offset: 0x00189FE3
+		
 		public void RemoveKidnappedPawn(Pawn pawn)
 		{
 			if (this.kidnappedPawns.Remove(pawn))
@@ -93,7 +93,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060048BC RID: 18620 RVA: 0x0018BE20 File Offset: 0x0018A020
+		
 		public void LogKidnappedPawns()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -105,7 +105,7 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x060048BD RID: 18621 RVA: 0x0018BE90 File Offset: 0x0018A090
+		
 		public void KidnappedPawnsTrackerTick()
 		{
 			for (int i = this.kidnappedPawns.Count - 1; i >= 0; i--)
@@ -128,16 +128,16 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040029A1 RID: 10657
+		
 		private Faction faction;
 
-		// Token: 0x040029A2 RID: 10658
+		
 		private List<Pawn> kidnappedPawns = new List<Pawn>();
 
-		// Token: 0x040029A3 RID: 10659
+		
 		private const int TryRecruitInterval = 15051;
 
-		// Token: 0x040029A4 RID: 10660
+		
 		private const float RecruitMTBDays = 30f;
 	}
 }

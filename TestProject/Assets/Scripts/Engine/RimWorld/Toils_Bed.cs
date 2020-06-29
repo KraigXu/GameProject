@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000691 RID: 1681
+	
 	public static class Toils_Bed
 	{
-		// Token: 0x06002DBE RID: 11710 RVA: 0x00101628 File Offset: 0x000FF828
+		
 		public static Toil GotoBed(TargetIndex bedIndex)
 		{
 			Toil gotoBed = new Toil();
@@ -38,7 +38,7 @@ namespace RimWorld
 			return gotoBed;
 		}
 
-		// Token: 0x06002DBF RID: 11711 RVA: 0x001016A0 File Offset: 0x000FF8A0
+		
 		public static Toil ClaimBedIfNonMedical(TargetIndex ind, TargetIndex claimantIndex = TargetIndex.None)
 		{
 			Toil claim = new Toil();
@@ -55,7 +55,7 @@ namespace RimWorld
 			return claim;
 		}
 
-		// Token: 0x06002DC0 RID: 11712 RVA: 0x001016FC File Offset: 0x000FF8FC
+		
 		public static T FailOnNonMedicalBedNotOwned<T>(this T f, TargetIndex bedIndex, TargetIndex claimantIndex = TargetIndex.None) where T : IJobEndable
 		{
 			f.AddEndCondition(delegate
@@ -93,7 +93,7 @@ namespace RimWorld
 			return f;
 		}
 
-		// Token: 0x06002DC1 RID: 11713 RVA: 0x00101748 File Offset: 0x000FF948
+		
 		public static void FailOnBedNoLongerUsable(this Toil toil, TargetIndex bedIndex)
 		{
 			toil.FailOnDespawnedOrNull(bedIndex);

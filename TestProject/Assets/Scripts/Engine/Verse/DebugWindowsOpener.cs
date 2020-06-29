@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200034F RID: 847
+	
 	public class DebugWindowsOpener
 	{
-		// Token: 0x060019EA RID: 6634 RVA: 0x0009EFF3 File Offset: 0x0009D1F3
+		
 		public DebugWindowsOpener()
 		{
 			this.drawButtonsCached = new Action(this.DrawButtons);
 		}
 
-		// Token: 0x060019EB RID: 6635 RVA: 0x0009F018 File Offset: 0x0009D218
+		
 		public void DevToolStarterOnGUI()
 		{
 			if (!Prefs.DevMode)
@@ -64,7 +64,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019EC RID: 6636 RVA: 0x0009F168 File Offset: 0x0009D368
+		
 		private void DrawButtons()
 		{
 			this.widgetRow.Init(0f, 0f, UIDirection.RightThenUp, 99999f, 4f);
@@ -109,7 +109,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019ED RID: 6637 RVA: 0x0009F303 File Offset: 0x0009D503
+		
 		private void ToggleLogWindow()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(EditWindow_Log), true))
@@ -118,7 +118,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019EE RID: 6638 RVA: 0x0009F32B File Offset: 0x0009D52B
+		
 		private void ToggleDebugSettingsMenu()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(Dialog_DebugSettingsMenu), true))
@@ -127,7 +127,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019EF RID: 6639 RVA: 0x0009F353 File Offset: 0x0009D553
+		
 		private void ToggleDebugActionsMenu()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(Dialog_DebugActionsMenu), true))
@@ -136,7 +136,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019F0 RID: 6640 RVA: 0x0009F37B File Offset: 0x0009D57B
+		
 		private void ToggleTweakValuesMenu()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(EditWindow_TweakValues), true))
@@ -145,7 +145,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019F1 RID: 6641 RVA: 0x0009F3A3 File Offset: 0x0009D5A3
+		
 		private void ToggleDebugLogMenu()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(Dialog_DebugOutputMenu), true))
@@ -154,7 +154,7 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019F2 RID: 6642 RVA: 0x0009F3CB File Offset: 0x0009D5CB
+		
 		private void ToggleDebugInspector()
 		{
 			if (!Find.WindowStack.TryRemove(typeof(EditWindow_DebugInspector), true))
@@ -163,16 +163,16 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060019F3 RID: 6643 RVA: 0x0009F3F3 File Offset: 0x0009D5F3
+		
 		private void ToggleGodMode()
 		{
 			DebugSettings.godMode = !DebugSettings.godMode;
 		}
 
-		// Token: 0x04000F12 RID: 3858
+		
 		private Action drawButtonsCached;
 
-		// Token: 0x04000F13 RID: 3859
+		
 		private WidgetRow widgetRow = new WidgetRow();
 	}
 }

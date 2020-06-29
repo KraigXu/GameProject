@@ -4,10 +4,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C5B RID: 3163
+	
 	public class Building_TrapDamager : Building_Trap
 	{
-		// Token: 0x06004B90 RID: 19344 RVA: 0x0019777B File Offset: 0x0019597B
+		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004B91 RID: 19345 RVA: 0x001977A4 File Offset: 0x001959A4
+		
 		protected override void SpringSub(Pawn p)
 		{
 			SoundDefOf.TrapSpring.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
@@ -42,10 +42,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002AB6 RID: 10934
+		
 		private static readonly FloatRange DamageRandomFactorRange = new FloatRange(0.8f, 1.2f);
 
-		// Token: 0x04002AB7 RID: 10935
+		
 		private static readonly float DamageCount = 5f;
 	}
 }

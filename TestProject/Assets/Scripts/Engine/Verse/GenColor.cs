@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200001C RID: 28
+	
 	public static class GenColor
 	{
-		// Token: 0x060001EF RID: 495 RVA: 0x00009578 File Offset: 0x00007778
+		
 		public static Color SaturationChanged(this Color col, float change)
 		{
 			float num = col.r;
@@ -20,7 +20,7 @@ namespace Verse
 			return new Color(num, num2, num3);
 		}
 
-		// Token: 0x060001F0 RID: 496 RVA: 0x000095E0 File Offset: 0x000077E0
+		
 		public static bool IndistinguishableFrom(this Color colA, Color colB)
 		{
 			if (GenColor.Colors32Equal(colA, colB))
@@ -31,7 +31,7 @@ namespace Verse
 			return Mathf.Abs(color.r) + Mathf.Abs(color.g) + Mathf.Abs(color.b) + Mathf.Abs(color.a) < 0.001f;
 		}
 
-		// Token: 0x060001F1 RID: 497 RVA: 0x00009638 File Offset: 0x00007838
+		
 		public static bool Colors32Equal(Color a, Color b)
 		{
 			Color32 color = a;
@@ -39,13 +39,13 @@ namespace Verse
 			return color.r == color2.r && color.g == color2.g && color.b == color2.b && color.a == color2.a;
 		}
 
-		// Token: 0x060001F2 RID: 498 RVA: 0x0000968D File Offset: 0x0000788D
+		
 		public static Color RandomColorOpaque()
 		{
 			return new Color(Rand.Value, Rand.Value, Rand.Value, 1f);
 		}
 
-		// Token: 0x060001F3 RID: 499 RVA: 0x000096A8 File Offset: 0x000078A8
+		
 		public static Color FromBytes(int r, int g, int b, int a = 255)
 		{
 			return new Color
@@ -57,7 +57,7 @@ namespace Verse
 			};
 		}
 
-		// Token: 0x060001F4 RID: 500 RVA: 0x000096FC File Offset: 0x000078FC
+		
 		public static Color FromHex(string hex)
 		{
 			if (hex.StartsWith("#"))

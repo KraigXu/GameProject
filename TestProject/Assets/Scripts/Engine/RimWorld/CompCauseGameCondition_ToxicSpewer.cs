@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CE3 RID: 3299
+	
 	public class CompCauseGameCondition_ToxicSpewer : CompCauseGameCondition
 	{
-		// Token: 0x06005014 RID: 20500 RVA: 0x001AFBF0 File Offset: 0x001ADDF0
+		
 		public override void CompTick()
 		{
 			base.CompTick();

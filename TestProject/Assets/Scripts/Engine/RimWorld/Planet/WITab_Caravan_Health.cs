@@ -6,11 +6,11 @@ using Verse.Sound;
 
 namespace RimWorld.Planet
 {
-	// Token: 0x02001293 RID: 4755
+	
 	[StaticConstructorOnStartup]
 	public class WITab_Caravan_Health : WITab
 	{
-		// Token: 0x170012DD RID: 4829
+		
 		// (get) Token: 0x06006FF0 RID: 28656 RVA: 0x0026F60A File Offset: 0x0026D80A
 		private List<Pawn> Pawns
 		{
@@ -20,7 +20,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012DE RID: 4830
+		
 		// (get) Token: 0x06006FF1 RID: 28657 RVA: 0x002706D8 File Offset: 0x0026E8D8
 		private List<PawnCapacityDef> CapacitiesToDisplay
 		{
@@ -40,7 +40,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x170012DF RID: 4831
+		
 		// (get) Token: 0x06006FF2 RID: 28658 RVA: 0x00270753 File Offset: 0x0026E953
 		private float SpecificHealthTabWidth
 		{
@@ -55,13 +55,13 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FF3 RID: 28659 RVA: 0x00270773 File Offset: 0x0026E973
+		
 		public WITab_Caravan_Health()
 		{
 			this.labelKey = "TabCaravanHealth";
 		}
 
-		// Token: 0x06006FF4 RID: 28660 RVA: 0x00270788 File Offset: 0x0026E988
+		
 		protected override void FillTab()
 		{
 			this.EnsureSpecificHealthTabForPawnValid();
@@ -79,7 +79,7 @@ namespace RimWorld.Planet
 			Widgets.EndScrollView();
 		}
 
-		// Token: 0x06006FF5 RID: 28661 RVA: 0x0027083C File Offset: 0x0026EA3C
+		
 		protected override void UpdateSize()
 		{
 			this.EnsureSpecificHealthTabForPawnValid();
@@ -94,7 +94,7 @@ namespace RimWorld.Planet
 			this.compactMode = false;
 		}
 
-		// Token: 0x06006FF6 RID: 28662 RVA: 0x00270898 File Offset: 0x0026EA98
+		
 		protected override void ExtraOnGUI()
 		{
 			this.EnsureSpecificHealthTabForPawnValid();
@@ -121,7 +121,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FF7 RID: 28663 RVA: 0x00270940 File Offset: 0x0026EB40
+		
 		private void DoColumnHeaders(ref float curY)
 		{
 			if (!this.compactMode)
@@ -146,7 +146,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FF8 RID: 28664 RVA: 0x00270A34 File Offset: 0x0026EC34
+		
 		private void DoRows(ref float curY, Rect scrollViewRect, Rect scrollOutRect)
 		{
 			List<Pawn> pawns = this.Pawns;
@@ -184,7 +184,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FF9 RID: 28665 RVA: 0x00270B0C File Offset: 0x0026ED0C
+		
 		private Vector2 GetRawSize(bool compactMode)
 		{
 			float num = 100f;
@@ -200,7 +200,7 @@ namespace RimWorld.Planet
 			return result;
 		}
 
-		// Token: 0x06006FFA RID: 28666 RVA: 0x00270B7C File Offset: 0x0026ED7C
+		
 		private void DoRow(ref float curY, Rect viewRect, Rect scrollOutRect, Pawn p)
 		{
 			float num = this.scrollPosition.y - 50f;
@@ -212,7 +212,7 @@ namespace RimWorld.Planet
 			curY += 50f;
 		}
 
-		// Token: 0x06006FFB RID: 28667 RVA: 0x00270BE4 File Offset: 0x0026EDE4
+		
 		private void DoRow(Rect rect, Pawn p)
 		{
 			GUI.BeginGroup(rect);
@@ -271,7 +271,7 @@ namespace RimWorld.Planet
 			GUI.EndGroup();
 		}
 
-		// Token: 0x06006FFC RID: 28668 RVA: 0x00270EC0 File Offset: 0x0026F0C0
+		
 		private void DoPain(Rect rect, Pawn pawn)
 		{
 			Pair<string, Color> painLabel = HealthCardUtility.GetPainLabel(pawn);
@@ -291,7 +291,7 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FFD RID: 28669 RVA: 0x00270F2C File Offset: 0x0026F12C
+		
 		private void DoCapacity(Rect rect, Pawn pawn, PawnCapacityDef capacity)
 		{
 			Pair<string, Color> efficiencyLabel = HealthCardUtility.GetEfficiencyLabel(pawn, capacity);
@@ -311,14 +311,14 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x06006FFE RID: 28670 RVA: 0x00270F9A File Offset: 0x0026F19A
+		
 		public override void Notify_ClearingAllMapsMemory()
 		{
 			base.Notify_ClearingAllMapsMemory();
 			this.specificHealthTabForPawn = null;
 		}
 
-		// Token: 0x06006FFF RID: 28671 RVA: 0x00270FA9 File Offset: 0x0026F1A9
+		
 		private void EnsureSpecificHealthTabForPawnValid()
 		{
 			if (this.specificHealthTabForPawn != null && (this.specificHealthTabForPawn.Destroyed || !base.SelCaravan.ContainsPawn(this.specificHealthTabForPawn)))
@@ -327,43 +327,43 @@ namespace RimWorld.Planet
 			}
 		}
 
-		// Token: 0x040044DD RID: 17629
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x040044DE RID: 17630
+		
 		private float scrollViewHeight;
 
-		// Token: 0x040044DF RID: 17631
+		
 		private Pawn specificHealthTabForPawn;
 
-		// Token: 0x040044E0 RID: 17632
+		
 		private bool compactMode;
 
-		// Token: 0x040044E1 RID: 17633
+		
 		private static List<PawnCapacityDef> capacitiesToDisplay = new List<PawnCapacityDef>();
 
-		// Token: 0x040044E2 RID: 17634
+		
 		private const float RowHeight = 50f;
 
-		// Token: 0x040044E3 RID: 17635
+		
 		private const float PawnLabelHeight = 18f;
 
-		// Token: 0x040044E4 RID: 17636
+		
 		private const float PawnLabelColumnWidth = 100f;
 
-		// Token: 0x040044E5 RID: 17637
+		
 		private const float SpaceAroundIcon = 4f;
 
-		// Token: 0x040044E6 RID: 17638
+		
 		private const float PawnCapacityColumnWidth = 100f;
 
-		// Token: 0x040044E7 RID: 17639
+		
 		private const float BeCarriedIfSickColumnWidth = 40f;
 
-		// Token: 0x040044E8 RID: 17640
+		
 		private const float BeCarriedIfSickIconSize = 24f;
 
-		// Token: 0x040044E9 RID: 17641
+		
 		private static readonly Texture2D BeCarriedIfSickIcon = ContentFinder<Texture2D>.Get("UI/Icons/CarrySick", true);
 	}
 }

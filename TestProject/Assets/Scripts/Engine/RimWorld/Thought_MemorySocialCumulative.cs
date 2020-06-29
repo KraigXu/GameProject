@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace RimWorld
 {
-	// Token: 0x02000BD3 RID: 3027
+	
 	public class Thought_MemorySocialCumulative : Thought_MemorySocial
 	{
-		// Token: 0x17000CCA RID: 3274
+		
 		// (get) Token: 0x060047D6 RID: 18390 RVA: 0x00185822 File Offset: 0x00183A22
 		public override bool ShouldDiscard
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060047D7 RID: 18391 RVA: 0x00185831 File Offset: 0x00183A31
+		
 		public override float OpinionOffset()
 		{
 			if (ThoughtUtility.ThoughtNullified(this.pawn, this.def))
@@ -31,7 +31,7 @@ namespace RimWorld
 			return Mathf.Min(this.opinionOffset, this.def.maxCumulatedOpinionOffset);
 		}
 
-		// Token: 0x060047D8 RID: 18392 RVA: 0x00185870 File Offset: 0x00183A70
+		
 		public override void ThoughtInterval()
 		{
 			base.ThoughtInterval();
@@ -57,7 +57,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060047D9 RID: 18393 RVA: 0x00185908 File Offset: 0x00183B08
+		
 		public override bool TryMergeWithExistingMemory(out bool showBubble)
 		{
 			showBubble = false;
@@ -77,7 +77,7 @@ namespace RimWorld
 			return false;
 		}
 
-		// Token: 0x0400293A RID: 10554
+		
 		private const float OpinionOffsetChangePerDay = 1f;
 	}
 }

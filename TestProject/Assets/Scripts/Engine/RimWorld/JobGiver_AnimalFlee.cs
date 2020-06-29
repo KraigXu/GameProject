@@ -6,10 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006A1 RID: 1697
+	
 	public class JobGiver_AnimalFlee : ThinkNode_JobGiver
 	{
-		// Token: 0x06002E01 RID: 11777 RVA: 0x00102E54 File Offset: 0x00101054
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.playerSettings != null && pawn.playerSettings.UsesConfigurableHostilityResponse)
@@ -63,7 +63,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002E02 RID: 11778 RVA: 0x00102FDC File Offset: 0x001011DC
+		
 		private Job FleeJob(Pawn pawn, Thing danger)
 		{
 			IntVec3 intVec;
@@ -85,7 +85,7 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002E03 RID: 11779 RVA: 0x0010306C File Offset: 0x0010126C
+		
 		private Job FleeLargeFireJob(Pawn pawn)
 		{
 			if (pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Fire).Count < 60)
@@ -127,25 +127,25 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x04001A4C RID: 6732
+		
 		private const int FleeDistance = 24;
 
-		// Token: 0x04001A4D RID: 6733
+		
 		private const int DistToDangerToFlee = 18;
 
-		// Token: 0x04001A4E RID: 6734
+		
 		private const int DistToFireToFlee = 10;
 
-		// Token: 0x04001A4F RID: 6735
+		
 		private const int MinFiresNearbyToFlee = 60;
 
-		// Token: 0x04001A50 RID: 6736
+		
 		private const int MinFiresNearbyRadius = 20;
 
-		// Token: 0x04001A51 RID: 6737
+		
 		private const int MinFiresNearbyRegionsToScan = 18;
 
-		// Token: 0x04001A52 RID: 6738
+		
 		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

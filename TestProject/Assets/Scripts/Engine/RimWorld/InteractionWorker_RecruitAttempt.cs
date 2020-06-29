@@ -6,10 +6,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B49 RID: 2889
+	
 	public class InteractionWorker_RecruitAttempt : InteractionWorker
 	{
-		// Token: 0x060043DA RID: 17370 RVA: 0x0016DEE8 File Offset: 0x0016C0E8
+		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			letterText = null;
@@ -134,7 +134,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060043DB RID: 17371 RVA: 0x0016E444 File Offset: 0x0016C644
+		
 		public static void DoRecruit(Pawn recruiter, Pawn recruitee, float recruitChance, bool useAudiovisualEffects = true)
 		{
 			string text;
@@ -142,7 +142,7 @@ namespace RimWorld
 			InteractionWorker_RecruitAttempt.DoRecruit(recruiter, recruitee, recruitChance, out text, out text2, useAudiovisualEffects, true);
 		}
 
-		// Token: 0x060043DC RID: 17372 RVA: 0x0016E460 File Offset: 0x0016C660
+		
 		public static void DoRecruit(Pawn recruiter, Pawn recruitee, float recruitChance, out string letterLabel, out string letter, bool useAudiovisualEffects = true, bool sendLetter = true)
 		{
 			letterLabel = null;
@@ -240,10 +240,10 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x040026D6 RID: 9942
+		
 		private const float BaseResistanceReductionPerInteraction = 1f;
 
-		// Token: 0x040026D7 RID: 9943
+		
 		private static readonly SimpleCurve ResistanceImpactFactorCurve_Mood = new SimpleCurve
 		{
 			{
@@ -260,7 +260,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026D8 RID: 9944
+		
 		private static readonly SimpleCurve ResistanceImpactFactorCurve_Opinion = new SimpleCurve
 		{
 			{
@@ -277,19 +277,19 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026D9 RID: 9945
+		
 		private const float MaxMoodForWarning = 0.4f;
 
-		// Token: 0x040026DA RID: 9946
+		
 		private const float MaxOpinionForWarning = -0.01f;
 
-		// Token: 0x040026DB RID: 9947
+		
 		public const float WildmanWildness = 0.75f;
 
-		// Token: 0x040026DC RID: 9948
+		
 		private const float WildmanPrisonerChanceFactor = 0.6f;
 
-		// Token: 0x040026DD RID: 9949
+		
 		private static readonly SimpleCurve TameChanceFactorCurve_Wildness = new SimpleCurve
 		{
 			{
@@ -306,13 +306,13 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x040026DE RID: 9950
+		
 		private const float TameChanceFactor_Bonded = 4f;
 
-		// Token: 0x040026DF RID: 9951
+		
 		private const float ChanceToDevelopBondRelationOnTamed = 0.01f;
 
-		// Token: 0x040026E0 RID: 9952
+		
 		private const int MenagerieTaleThreshold = 5;
 	}
 }

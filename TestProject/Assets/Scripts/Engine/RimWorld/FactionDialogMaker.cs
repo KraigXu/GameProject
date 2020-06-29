@@ -8,98 +8,99 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000BE9 RID: 3049
+	
 	public static class FactionDialogMaker
 	{
-		// Token: 0x06004872 RID: 18546 RVA: 0x001895CC File Offset: 0x001877CC
+		
 		public static DiaNode FactionDialogFor(Pawn negotiator, Faction faction)
 		{
-			FactionDialogMaker.<>c__DisplayClass0_0 <>c__DisplayClass0_;
-			<>c__DisplayClass0_.negotiator = negotiator;
-			Map map = <>c__DisplayClass0_.negotiator.Map;
-			Pawn pawn;
-			string value;
-			if (faction.leader != null)
-			{
-				pawn = faction.leader;
-				value = faction.leader.Name.ToStringFull.Colorize(ColoredText.NameColor);
-			}
-			else
-			{
-				Log.Error("Faction " + faction + " has no leader.", false);
-				pawn = <>c__DisplayClass0_.negotiator;
-				value = faction.Name;
-			}
-			if (faction.PlayerRelationKind == FactionRelationKind.Hostile)
-			{
-				string key;
-				if (!faction.def.permanentEnemy && "FactionGreetingHostileAppreciative".CanTranslate())
-				{
-					key = "FactionGreetingHostileAppreciative";
-				}
-				else
-				{
-					key = "FactionGreetingHostile";
-				}
-				<>c__DisplayClass0_.root = new DiaNode(key.Translate(value).AdjustedFor(pawn, "PAWN", true));
-			}
-			else if (faction.PlayerRelationKind == FactionRelationKind.Neutral)
-			{
-				<>c__DisplayClass0_.root = new DiaNode("FactionGreetingWary".Translate(value, <>c__DisplayClass0_.negotiator.LabelShort, <>c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
-			}
-			else
-			{
-				<>c__DisplayClass0_.root = new DiaNode("FactionGreetingWarm".Translate(value, <>c__DisplayClass0_.negotiator.LabelShort, <>c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
-			}
-			if (map != null && map.IsPlayerHome)
-			{
-				FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestTraderOption(map, faction, <>c__DisplayClass0_.negotiator), true, ref <>c__DisplayClass0_);
-				FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestMilitaryAidOption(map, faction, <>c__DisplayClass0_.negotiator), true, ref <>c__DisplayClass0_);
-				Pawn_RoyaltyTracker royalty = <>c__DisplayClass0_.negotiator.royalty;
-				if (royalty != null && royalty.HasAnyTitleIn(faction))
-				{
-					foreach (RoyalTitle royalTitle in royalty.AllTitlesInEffectForReading)
-					{
-						if (royalTitle.def.permits != null)
-						{
-							foreach (RoyalTitlePermitDef royalTitlePermitDef in royalTitle.def.permits)
-							{
-								IEnumerable<DiaOption> factionCommDialogOptions = royalTitlePermitDef.Worker.GetFactionCommDialogOptions(map, <>c__DisplayClass0_.negotiator, faction);
-								if (factionCommDialogOptions != null)
-								{
-									foreach (DiaOption opt in factionCommDialogOptions)
-									{
-										FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt, true, ref <>c__DisplayClass0_);
-									}
-								}
-							}
-						}
-					}
-					if (royalty.GetCurrentTitle(faction).canBeInherited && !<>c__DisplayClass0_.negotiator.IsQuestLodger())
-					{
-						FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestRoyalHeirChangeOption(map, faction, pawn, <>c__DisplayClass0_.negotiator), false, ref <>c__DisplayClass0_);
-					}
-				}
-				if (DefDatabase<ResearchProjectDef>.AllDefsListForReading.Any((ResearchProjectDef rp) => rp.HasTag(ResearchProjectTagDefOf.ShipRelated) && rp.IsFinished))
-				{
-					FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestAICoreQuest(map, faction, <>c__DisplayClass0_.negotiator), true, ref <>c__DisplayClass0_);
-				}
-			}
-			if (Prefs.DevMode)
-			{
-				foreach (DiaOption opt2 in FactionDialogMaker.DebugOptions(faction, <>c__DisplayClass0_.negotiator))
-				{
-					FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt2, false, ref <>c__DisplayClass0_);
-				}
-			}
-			FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(new DiaOption("(" + "Disconnect".Translate() + ")")
-			{
-				resolveTree = true
-			}, false, ref <>c__DisplayClass0_);
-			return <>c__DisplayClass0_.root;
+			//FactionDialogMaker.c__DisplayClass0_0 c__DisplayClass0_;
+			//c__DisplayClass0_.negotiator = negotiator;
+			//Map map = c__DisplayClass0_.negotiator.Map;
+			//Pawn pawn;
+			//string value;
+			//if (faction.leader != null)
+			//{
+			//	pawn = faction.leader;
+			//	value = faction.leader.Name.ToStringFull.Colorize(ColoredText.NameColor);
+			//}
+			//else
+			//{
+			//	Log.Error("Faction " + faction + " has no leader.", false);
+			//	pawn = c__DisplayClass0_.negotiator;
+			//	value = faction.Name;
+			//}
+			//if (faction.PlayerRelationKind == FactionRelationKind.Hostile)
+			//{
+			//	string key;
+			//	if (!faction.def.permanentEnemy && "FactionGreetingHostileAppreciative".CanTranslate())
+			//	{
+			//		key = "FactionGreetingHostileAppreciative";
+			//	}
+			//	else
+			//	{
+			//		key = "FactionGreetingHostile";
+			//	}
+			//	c__DisplayClass0_.root = new DiaNode(key.Translate(value).AdjustedFor(pawn, "PAWN", true));
+			//}
+			//else if (faction.PlayerRelationKind == FactionRelationKind.Neutral)
+			//{
+			//	c__DisplayClass0_.root = new DiaNode("FactionGreetingWary".Translate(value, c__DisplayClass0_.negotiator.LabelShort, c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
+			//}
+			//else
+			//{
+			//	c__DisplayClass0_.root = new DiaNode("FactionGreetingWarm".Translate(value, c__DisplayClass0_.negotiator.LabelShort, c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
+			//}
+			//if (map != null && map.IsPlayerHome)
+			//{
+			//	FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestTraderOption(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
+			//	FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestMilitaryAidOption(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
+			//	Pawn_RoyaltyTracker royalty = c__DisplayClass0_.negotiator.royalty;
+			//	if (royalty != null && royalty.HasAnyTitleIn(faction))
+			//	{
+			//		foreach (RoyalTitle royalTitle in royalty.AllTitlesInEffectForReading)
+			//		{
+			//			if (royalTitle.def.permits != null)
+			//			{
+			//				foreach (RoyalTitlePermitDef royalTitlePermitDef in royalTitle.def.permits)
+			//				{
+			//					IEnumerable<DiaOption> factionCommDialogOptions = royalTitlePermitDef.Worker.GetFactionCommDialogOptions(map, c__DisplayClass0_.negotiator, faction);
+			//					if (factionCommDialogOptions != null)
+			//					{
+			//						foreach (DiaOption opt in factionCommDialogOptions)
+			//						{
+			//							FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt, true, ref c__DisplayClass0_);
+			//						}
+			//					}
+			//				}
+			//			}
+			//		}
+			//		if (royalty.GetCurrentTitle(faction).canBeInherited && !c__DisplayClass0_.negotiator.IsQuestLodger())
+			//		{
+			//			FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestRoyalHeirChangeOption(map, faction, pawn, c__DisplayClass0_.negotiator), false, ref c__DisplayClass0_);
+			//		}
+			//	}
+			//	if (DefDatabase<ResearchProjectDef>.AllDefsListForReading.Any((ResearchProjectDef rp) => rp.HasTag(ResearchProjectTagDefOf.ShipRelated) && rp.IsFinished))
+			//	{
+			//		FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestAICoreQuest(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
+			//	}
+			//}
+			//if (Prefs.DevMode)
+			//{
+			//	foreach (DiaOption opt2 in FactionDialogMaker.DebugOptions(faction, c__DisplayClass0_.negotiator))
+			//	{
+			//		FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt2, false, ref c__DisplayClass0_);
+			//	}
+			//}
+			//FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(new DiaOption("(" + "Disconnect".Translate() + ")")
+			//{
+			//	resolveTree = true
+			//}, false, ref c__DisplayClass0_);
+			//return c__DisplayClass0_.root;
+			return default;
 		}
 
-		// Token: 0x06004873 RID: 18547 RVA: 0x0018999C File Offset: 0x00187B9C
+		
 		private static IEnumerable<DiaOption> DebugOptions(Faction faction, Pawn negotiator)
 		{
 			yield return new DiaOption("(Debug) Goodwill +10")
@@ -121,7 +122,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004874 RID: 18548 RVA: 0x001899B4 File Offset: 0x00187BB4
+		
 		private static int AmountSendableSilver(Map map)
 		{
 			return (from t in TradeUtility.AllLaunchableThingsForTrade(map, null)
@@ -129,7 +130,7 @@ namespace RimWorld
 			select t).Sum((Thing t) => t.stackCount);
 		}
 
-		// Token: 0x06004875 RID: 18549 RVA: 0x00189A10 File Offset: 0x00187C10
+		
 		private static DiaOption RequestAICoreQuest(Map map, Faction faction, Pawn negotiator)
 		{
 			TaggedString taggedString = "RequestAICoreInformation".Translate(ThingDefOf.AIPersonaCore.label, 1500.ToString());
@@ -175,7 +176,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x06004876 RID: 18550 RVA: 0x00189BCC File Offset: 0x00187DCC
+		
 		private static DiaOption RequestTraderOption(Map map, Faction faction, Pawn negotiator)
 		{
 			TaggedString taggedString = "RequestTrader".Translate(15);
@@ -240,7 +241,7 @@ namespace RimWorld
 			return diaOption4;
 		}
 
-		// Token: 0x06004877 RID: 18551 RVA: 0x00189F28 File Offset: 0x00188128
+		
 		private static DiaOption RequestMilitaryAidOption(Map map, Faction faction, Pawn negotiator)
 		{
 			string text = "RequestMilitaryAid".Translate(25);
@@ -309,40 +310,41 @@ namespace RimWorld
 			return diaOption5;
 		}
 
-		// Token: 0x06004878 RID: 18552 RVA: 0x0018A208 File Offset: 0x00188408
+		
 		private static DiaOption RequestRoyalHeirChangeOption(Map map, Faction faction, Pawn factionRepresentative, Pawn negotiator)
 		{
-			RoyalTitleDef currentTitle = negotiator.royalty.GetCurrentTitle(faction);
-			Pawn heir = negotiator.royalty.GetHeir(faction);
-			DiaOption diaOption = new DiaOption((heir != null) ? "RequestChangeRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE"), heir.Named("HEIR")) : "RequestSetRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE")));
-			Predicate<QuestPart> <>9__1;
-			bool flag = Find.QuestManager.QuestsListForReading.Any(delegate(Quest q)
-			{
-				if (q.root == QuestScriptDefOf.ChangeRoyalHeir && q.State == QuestState.Ongoing)
-				{
-					List<QuestPart> partsListForReading = q.PartsListForReading;
-					Predicate<QuestPart> predicate;
-					if ((predicate = <>9__1) == null)
-					{
-						predicate = (<>9__1 = delegate(QuestPart p)
-						{
-							QuestPart_ChangeHeir questPart_ChangeHeir = p as QuestPart_ChangeHeir;
-							return questPart_ChangeHeir != null && !questPart_ChangeHeir.done && questPart_ChangeHeir.holder == negotiator;
-						});
-					}
-					return partsListForReading.Any(predicate);
-				}
-				return false;
-			});
-			diaOption.link = FactionDialogMaker.RoyalHeirChangeCandidates(faction, factionRepresentative, negotiator);
-			if (flag)
-			{
-				diaOption.Disable("RequestChangeRoyalHeirAlreadyInProgress".Translate(negotiator.Named("PAWN")));
-			}
-			return diaOption;
+			//RoyalTitleDef currentTitle = negotiator.royalty.GetCurrentTitle(faction);
+			//Pawn heir = negotiator.royalty.GetHeir(faction);
+			//DiaOption diaOption = new DiaOption((heir != null) ? "RequestChangeRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE"), heir.Named("HEIR")) : "RequestSetRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE")));
+			//Predicate<QuestPart> 9__1;
+			//bool flag = Find.QuestManager.QuestsListForReading.Any(delegate(Quest q)
+			//{
+			//	if (q.root == QuestScriptDefOf.ChangeRoyalHeir && q.State == QuestState.Ongoing)
+			//	{
+			//		List<QuestPart> partsListForReading = q.PartsListForReading;
+			//		Predicate<QuestPart> predicate;
+			//		if ((predicate ) == null)
+			//		{
+			//			predicate = (9__1 = delegate(QuestPart p)
+			//			{
+			//				QuestPart_ChangeHeir questPart_ChangeHeir = p as QuestPart_ChangeHeir;
+			//				return questPart_ChangeHeir != null && !questPart_ChangeHeir.done && questPart_ChangeHeir.holder == negotiator;
+			//			});
+			//		}
+			//		return partsListForReading.Any(predicate);
+			//	}
+			//	return false;
+			//});
+			//diaOption.link = FactionDialogMaker.RoyalHeirChangeCandidates(faction, factionRepresentative, negotiator);
+			//if (flag)
+			//{
+			//	diaOption.Disable("RequestChangeRoyalHeirAlreadyInProgress".Translate(negotiator.Named("PAWN")));
+			//}
+			//return diaOption;
+			return default;
 		}
 
-		// Token: 0x06004879 RID: 18553 RVA: 0x0018A318 File Offset: 0x00188518
+		
 		public static DiaNode RoyalHeirChangeCandidates(Faction faction, Pawn factionRepresentative, Pawn negotiator)
 		{
 			DiaNode diaNode = new DiaNode("ChooseHeir".Translate(negotiator.Named("HOLDER")));
@@ -386,7 +388,7 @@ namespace RimWorld
 			return diaNode;
 		}
 
-		// Token: 0x0600487A RID: 18554 RVA: 0x0018A4E8 File Offset: 0x001886E8
+		
 		public static DiaNode RoyalHeirChangeConfirm(Faction faction, Pawn negotiator, Pawn currentHeir, Action confirmedAct)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -407,7 +409,7 @@ namespace RimWorld
 			return diaNode;
 		}
 
-		// Token: 0x0600487B RID: 18555 RVA: 0x0018A5F0 File Offset: 0x001887F0
+		
 		public static DiaNode CantMakeItInTime(Faction faction, Pawn negotiator)
 		{
 			return new DiaNode("CantSendMilitaryAidInTime".Translate(faction.leader).CapitalizeFirst())
@@ -419,7 +421,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x0600487C RID: 18556 RVA: 0x0018A634 File Offset: 0x00188834
+		
 		public static DiaNode FightersSent(Faction faction, Pawn negotiator)
 		{
 			return new DiaNode("MilitaryAidSent".Translate(faction.leader).CapitalizeFirst())
@@ -431,7 +433,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x0600487D RID: 18557 RVA: 0x0018A678 File Offset: 0x00188878
+		
 		private static void CallForAid(Map map, Faction faction)
 		{
 			faction.TryAffectGoodwillWith(Faction.OfPlayer, -25, false, true, "GoodwillChangedReason_RequestedMilitaryAid".Translate(), null);
@@ -444,7 +446,7 @@ namespace RimWorld
 			IncidentDefOf.RaidFriendly.Worker.TryExecute(incidentParms);
 		}
 
-		// Token: 0x0600487E RID: 18558 RVA: 0x0018A6FC File Offset: 0x001888FC
+		
 		private static DiaOption OKToRoot(Faction faction, Pawn negotiator)
 		{
 			return new DiaOption("OK".Translate())
@@ -453,7 +455,7 @@ namespace RimWorld
 			};
 		}
 
-		// Token: 0x0600487F RID: 18559 RVA: 0x0018A71F File Offset: 0x0018891F
+		
 		public static Func<DiaNode> ResetToRoot(Faction faction, Pawn negotiator)
 		{
 			return () => FactionDialogMaker.FactionDialogFor(negotiator, faction);

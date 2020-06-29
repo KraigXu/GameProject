@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x0200022C RID: 556
+	
 	public static class ArmorUtility
 	{
-		// Token: 0x06000F76 RID: 3958 RVA: 0x00059770 File Offset: 0x00057970
+		
 		public static float GetPostArmorDamage(Pawn pawn, float amount, float armorPenetration, BodyPartRecord part, ref DamageDef damageDef, out bool deflectedByMetalArmor, out bool diminishedByMetalArmor)
 		{
 			deflectedByMetalArmor = false;
@@ -56,7 +56,7 @@ namespace Verse
 			return amount;
 		}
 
-		// Token: 0x06000F77 RID: 3959 RVA: 0x0005985C File Offset: 0x00057A5C
+		
 		private static void ApplyArmor(ref float damAmount, float armorPenetration, float armorRating, Thing armorThing, ref DamageDef damageDef, Pawn pawn, out bool metalArmor)
 		{
 			if (armorThing != null)
@@ -91,10 +91,10 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x04000B79 RID: 2937
+		
 		public const float MaxArmorRating = 2f;
 
-		// Token: 0x04000B7A RID: 2938
+		
 		public const float DeflectThresholdFactor = 0.5f;
 	}
 }

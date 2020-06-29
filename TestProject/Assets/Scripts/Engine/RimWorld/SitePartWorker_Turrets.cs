@@ -9,10 +9,10 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	// Token: 0x02000C06 RID: 3078
+	
 	public class SitePartWorker_Turrets : SitePartWorker
 	{
-		// Token: 0x0600491D RID: 18717 RVA: 0x0018D3FC File Offset: 0x0018B5FC
+		
 		public override string GetArrivedLetterPart(Map map, out LetterDef preferredLetterDef, out LookTargets lookTargets)
 		{
 			string arrivedLetterPart = base.GetArrivedLetterPart(map, out preferredLetterDef, out lookTargets);
@@ -25,7 +25,7 @@ namespace RimWorld
 			return arrivedLetterPart;
 		}
 
-		// Token: 0x0600491E RID: 18718 RVA: 0x0018D47C File Offset: 0x0018B67C
+		
 		public override SitePartParams GenerateDefaultParams(float myThreatPoints, int tile, Faction faction)
 		{
 			SitePartParams sitePartParams = base.GenerateDefaultParams(myThreatPoints, tile, faction);
@@ -34,7 +34,7 @@ namespace RimWorld
 			return sitePartParams;
 		}
 
-		// Token: 0x0600491F RID: 18719 RVA: 0x0018D4C8 File Offset: 0x0018B6C8
+		
 		public override void Notify_GeneratedByQuestGen(SitePart part, Slate slate, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.Notify_GeneratedByQuestGen(part, slate, outExtraDescriptionRules, outExtraDescriptionConstants);
@@ -42,13 +42,13 @@ namespace RimWorld
 			outExtraDescriptionRules.Add(new Rule_String("threatsInfo", threatsInfo));
 		}
 
-		// Token: 0x06004920 RID: 18720 RVA: 0x0018D4FE File Offset: 0x0018B6FE
+		
 		public override string GetPostProcessedThreatLabel(Site site, SitePart sitePart)
 		{
 			return base.GetPostProcessedThreatLabel(site, sitePart) + ": " + this.GetThreatsInfo(sitePart.parms);
 		}
 
-		// Token: 0x06004921 RID: 18721 RVA: 0x0018D520 File Offset: 0x0018B720
+		
 		private string GetThreatsInfo(SitePartParams parms)
 		{
 			this.threatsTmp.Clear();
@@ -95,13 +95,13 @@ namespace RimWorld
 			return this.threatsTmp.ToCommaList(true);
 		}
 
-		// Token: 0x040029CD RID: 10701
+		
 		private const int MinTurrets = 2;
 
-		// Token: 0x040029CE RID: 10702
+		
 		private const int MaxTurrets = 11;
 
-		// Token: 0x040029CF RID: 10703
+		
 		private List<string> threatsTmp = new List<string>();
 	}
 }

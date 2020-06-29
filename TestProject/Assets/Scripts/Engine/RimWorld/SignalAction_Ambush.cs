@@ -9,10 +9,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000C97 RID: 3223
+	
 	public class SignalAction_Ambush : SignalAction
 	{
-		// Token: 0x06004DBA RID: 19898 RVA: 0x001A1CD0 File Offset: 0x0019FED0
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -23,7 +23,7 @@ namespace RimWorld
 			Scribe_Values.Look<bool>(ref this.spawnPawnsOnEdge, "spawnPawnsOnEdge", false, false);
 		}
 
-		// Token: 0x06004DBB RID: 19899 RVA: 0x001A1D54 File Offset: 0x0019FF54
+		
 		protected override void DoAction(SignalArgs args)
 		{
 			if (this.points <= 0f)
@@ -85,7 +85,7 @@ namespace RimWorld
 			Find.LetterStack.ReceiveLetter("LetterLabelAmbushInExistingMap".Translate(), "LetterAmbushInExistingMap".Translate(Faction.OfPlayer.def.pawnsPlural).CapitalizeFirst(), LetterDefOf.ThreatBig, list[0], null, null, null, null);
 		}
 
-		// Token: 0x06004DBC RID: 19900 RVA: 0x001A1F98 File Offset: 0x001A0198
+		
 		private IEnumerable<Pawn> GenerateAmbushPawns()
 		{
 			if (this.ambushType == SignalActionAmbushType.Manhunters)
@@ -122,22 +122,22 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04002B84 RID: 11140
+		
 		public float points;
 
-		// Token: 0x04002B85 RID: 11141
+		
 		public SignalActionAmbushType ambushType;
 
-		// Token: 0x04002B86 RID: 11142
+		
 		public IntVec3 spawnNear = IntVec3.Invalid;
 
-		// Token: 0x04002B87 RID: 11143
+		
 		public CellRect spawnAround;
 
-		// Token: 0x04002B88 RID: 11144
+		
 		public bool spawnPawnsOnEdge;
 
-		// Token: 0x04002B89 RID: 11145
+		
 		private const int PawnsDelayAfterSpawnTicks = 120;
 	}
 }

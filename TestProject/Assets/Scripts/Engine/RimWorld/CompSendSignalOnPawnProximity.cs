@@ -5,11 +5,11 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000D4F RID: 3407
+	
 	[StaticConstructorOnStartup]
 	public class CompSendSignalOnPawnProximity : ThingComp
 	{
-		// Token: 0x17000EAB RID: 3755
+		
 		// (get) Token: 0x060052D4 RID: 21204 RVA: 0x001BAA28 File Offset: 0x001B8C28
 		public CompProperties_SendSignalOnPawnProximity Props
 		{
@@ -19,7 +19,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EAC RID: 3756
+		
 		// (get) Token: 0x060052D5 RID: 21205 RVA: 0x001BAA35 File Offset: 0x001B8C35
 		public bool Sent
 		{
@@ -29,7 +29,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000EAD RID: 3757
+		
 		// (get) Token: 0x060052D6 RID: 21206 RVA: 0x001BAA3D File Offset: 0x001B8C3D
 		public bool Enabled
 		{
@@ -39,7 +39,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052D7 RID: 21207 RVA: 0x001BAA4B File Offset: 0x001B8C4B
+		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
@@ -47,7 +47,7 @@ namespace RimWorld
 			this.ticksUntilEnabled = this.Props.enableAfterTicks;
 		}
 
-		// Token: 0x060052D8 RID: 21208 RVA: 0x001BAA78 File Offset: 0x001B8C78
+		
 		public override void CompTick()
 		{
 			base.CompTick();
@@ -65,7 +65,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052D9 RID: 21209 RVA: 0x001BAAD8 File Offset: 0x001B8CD8
+		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
@@ -106,13 +106,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052DA RID: 21210 RVA: 0x001BAC80 File Offset: 0x001B8E80
+		
 		public void Expire()
 		{
 			this.sent = true;
 		}
 
-		// Token: 0x060052DB RID: 21211 RVA: 0x001BAC8C File Offset: 0x001B8E8C
+		
 		public override void Notify_SignalReceived(Signal signal)
 		{
 			Thing thing;
@@ -122,7 +122,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060052DC RID: 21212 RVA: 0x001BAD04 File Offset: 0x001B8F04
+		
 		public override string CompInspectStringExtra()
 		{
 			if (!this.Enabled)
@@ -136,7 +136,7 @@ namespace RimWorld
 			return "expired".Translate().CapitalizeFirst();
 		}
 
-		// Token: 0x060052DD RID: 21213 RVA: 0x001BADA1 File Offset: 0x001B8FA1
+		
 		public override void PostExposeData()
 		{
 			Scribe_Values.Look<string>(ref this.signalTag, "signalTag", null, false);
@@ -144,16 +144,16 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.ticksUntilEnabled, "ticksUntilEnabled", 0, false);
 		}
 
-		// Token: 0x04002DBB RID: 11707
+		
 		public string signalTag;
 
-		// Token: 0x04002DBC RID: 11708
+		
 		private bool sent;
 
-		// Token: 0x04002DBD RID: 11709
+		
 		private int ticksUntilEnabled;
 
-		// Token: 0x04002DBE RID: 11710
+		
 		private const float MaxDistActivationByOther = 40f;
 	}
 }

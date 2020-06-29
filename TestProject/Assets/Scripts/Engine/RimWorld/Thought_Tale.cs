@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000825 RID: 2085
+	
 	public class Thought_Tale : Thought_SituationalSocial
 	{
-		// Token: 0x06003457 RID: 13399 RVA: 0x0011F8C0 File Offset: 0x0011DAC0
+		
 		public override float OpinionOffset()
 		{
 			if (ThoughtUtility.ThoughtNullified(this.pawn, this.def))

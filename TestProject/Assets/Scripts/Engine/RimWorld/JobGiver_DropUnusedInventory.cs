@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x020006DA RID: 1754
+	
 	public class JobGiver_DropUnusedInventory : ThinkNode_JobGiver
 	{
-		// Token: 0x06002ECC RID: 11980 RVA: 0x00106DA4 File Offset: 0x00104FA4
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.inventory == null)
@@ -44,14 +44,14 @@ namespace RimWorld
 			return null;
 		}
 
-		// Token: 0x06002ECD RID: 11981 RVA: 0x00106EF0 File Offset: 0x001050F0
+		
 		private void Drop(Pawn pawn, Thing thing)
 		{
 			Thing thing2;
 			pawn.inventory.innerContainer.TryDrop(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out thing2, null, null);
 		}
 
-		// Token: 0x04001A8A RID: 6794
+		
 		private const int RawFoodDropDelay = 150000;
 	}
 }

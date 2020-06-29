@@ -5,10 +5,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000E5A RID: 3674
+	
 	public class Dialog_ManageOutfits : Window
 	{
-		// Token: 0x1700100C RID: 4108
+		
 		// (get) Token: 0x06005917 RID: 22807 RVA: 0x001DBDBE File Offset: 0x001D9FBE
 		// (set) Token: 0x06005918 RID: 22808 RVA: 0x001DBDC6 File Offset: 0x001D9FC6
 		private Outfit SelectedOutfit
@@ -24,7 +24,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x1700100D RID: 4109
+		
 		// (get) Token: 0x06005919 RID: 22809 RVA: 0x001DB9AC File Offset: 0x001D9BAC
 		public override Vector2 InitialSize
 		{
@@ -34,7 +34,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600591A RID: 22810 RVA: 0x001DBDD5 File Offset: 0x001D9FD5
+		
 		private void CheckSelectedOutfitHasName()
 		{
 			if (this.SelectedOutfit != null && this.SelectedOutfit.label.NullOrEmpty())
@@ -43,7 +43,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x0600591B RID: 22811 RVA: 0x001DBE04 File Offset: 0x001DA004
+		
 		public Dialog_ManageOutfits(Outfit selectedOutfit)
 		{
 			this.forcePause = true;
@@ -59,7 +59,7 @@ namespace RimWorld
 			this.SelectedOutfit = selectedOutfit;
 		}
 
-		// Token: 0x0600591C RID: 22812 RVA: 0x001DBE64 File Offset: 0x001DA064
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			float num = 0f;
@@ -126,42 +126,42 @@ namespace RimWorld
 			GUI.EndGroup();
 		}
 
-		// Token: 0x0600591D RID: 22813 RVA: 0x001DC188 File Offset: 0x001DA388
+		
 		private IEnumerable<SpecialThingFilterDef> HiddenSpecialThingFilters()
 		{
 			yield return SpecialThingFilterDefOf.AllowNonDeadmansApparel;
 			yield break;
 		}
 
-		// Token: 0x0600591E RID: 22814 RVA: 0x001DC191 File Offset: 0x001DA391
+		
 		public override void PreClose()
 		{
 			base.PreClose();
 			this.CheckSelectedOutfitHasName();
 		}
 
-		// Token: 0x0600591F RID: 22815 RVA: 0x001DBDAB File Offset: 0x001D9FAB
+		
 		public static void DoNameInputRect(Rect rect, ref string name)
 		{
 			name = Widgets.TextField(rect, name, 30, Outfit.ValidNameRegex);
 		}
 
-		// Token: 0x0400303C RID: 12348
+		
 		private Vector2 scrollPosition;
 
-		// Token: 0x0400303D RID: 12349
+		
 		private Outfit selOutfitInt;
 
-		// Token: 0x0400303E RID: 12350
+		
 		public const float TopAreaHeight = 40f;
 
-		// Token: 0x0400303F RID: 12351
+		
 		public const float TopButtonHeight = 35f;
 
-		// Token: 0x04003040 RID: 12352
+		
 		public const float TopButtonWidth = 150f;
 
-		// Token: 0x04003041 RID: 12353
+		
 		private static ThingFilter apparelGlobalFilter;
 	}
 }

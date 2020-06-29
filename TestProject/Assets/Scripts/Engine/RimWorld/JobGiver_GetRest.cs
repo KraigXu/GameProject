@@ -5,10 +5,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x020006DD RID: 1757
+	
 	public class JobGiver_GetRest : ThinkNode_JobGiver
 	{
-		// Token: 0x06002ED5 RID: 11989 RVA: 0x001071C7 File Offset: 0x001053C7
+		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			JobGiver_GetRest jobGiver_GetRest = (JobGiver_GetRest)base.DeepCopy(resolve);
@@ -17,7 +17,7 @@ namespace RimWorld
 			return jobGiver_GetRest;
 		}
 
-		// Token: 0x06002ED6 RID: 11990 RVA: 0x001071F0 File Offset: 0x001053F0
+		
 		public override float GetPriority(Pawn pawn)
 		{
 			Need_Rest rest = pawn.needs.rest;
@@ -105,7 +105,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002ED7 RID: 11991 RVA: 0x0010734C File Offset: 0x0010554C
+		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Need_Rest rest = pawn.needs.rest;
@@ -134,11 +134,11 @@ namespace RimWorld
 			return JobMaker.MakeJob(JobDefOf.LayDown, this.FindGroundSleepSpotFor(pawn));
 		}
 
-		// Token: 0x06002ED8 RID: 11992 RVA: 0x001073EC File Offset: 0x001055EC
+		
 		private IntVec3 FindGroundSleepSpotFor(Pawn pawn)
 		{
 			Map map = pawn.Map;
-			Predicate<IntVec3> <>9__0;
+			Predicate<IntVec3> 9__0;
 			for (int i = 0; i < 2; i++)
 			{
 				int num = (i == 0) ? 4 : 12;
@@ -146,9 +146,9 @@ namespace RimWorld
 				Map map2 = map;
 				int radius = num;
 				Predicate<IntVec3> extraValidator;
-				if ((extraValidator = <>9__0) == null)
+				if ((extraValidator ) == null)
 				{
-					extraValidator = (<>9__0 = ((IntVec3 x) => !x.IsForbidden(pawn) && !x.GetTerrain(map).avoidWander));
+					extraValidator = (9__0 = ((IntVec3 x) => !x.IsForbidden(pawn) && !x.GetTerrain(map).avoidWander));
 				}
 				IntVec3 result;
 				if (CellFinder.TryRandomClosewalkCellNear(position, map2, radius, out result, extraValidator))
@@ -159,10 +159,10 @@ namespace RimWorld
 			return CellFinder.RandomClosewalkCellNearNotForbidden(pawn.Position, map, 4, pawn);
 		}
 
-		// Token: 0x04001A8F RID: 6799
+		
 		private RestCategory minCategory;
 
-		// Token: 0x04001A90 RID: 6800
+		
 		private float maxLevelPercentage = 1f;
 	}
 }

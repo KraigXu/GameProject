@@ -4,10 +4,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x0200104F RID: 4175
+	
 	public sealed class PlaySettings : IExposable
 	{
-		// Token: 0x060063B7 RID: 25527 RVA: 0x002291C4 File Offset: 0x002273C4
+		
 		public void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.showLearningHelper, "showLearningHelper", false, false);
@@ -34,7 +34,7 @@ namespace RimWorld
 			BackCompatibility.PostExposeData(this);
 		}
 
-		// Token: 0x060063B8 RID: 25528 RVA: 0x00229354 File Offset: 0x00227554
+		
 		public void DoPlaySettingsGlobalControls(WidgetRow row, bool worldView)
 		{
 			bool flag = this.showColonistBar;
@@ -82,7 +82,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060063B9 RID: 25529 RVA: 0x00229641 File Offset: 0x00227841
+		
 		private void CheckKeyBindingToggle(KeyBindingDef keyBinding, ref bool value)
 		{
 			if (keyBinding.KeyDownEvent)
@@ -97,67 +97,67 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x04003CC7 RID: 15559
+		
 		public bool showLearningHelper = true;
 
-		// Token: 0x04003CC8 RID: 15560
+		
 		public bool showZones = true;
 
-		// Token: 0x04003CC9 RID: 15561
+		
 		public bool showBeauty;
 
-		// Token: 0x04003CCA RID: 15562
+		
 		public bool showRoomStats;
 
-		// Token: 0x04003CCB RID: 15563
+		
 		public bool showColonistBar = true;
 
-		// Token: 0x04003CCC RID: 15564
+		
 		public bool showRoofOverlay;
 
-		// Token: 0x04003CCD RID: 15565
+		
 		public bool showFertilityOverlay;
 
-		// Token: 0x04003CCE RID: 15566
+		
 		public bool showTerrainAffordanceOverlay;
 
-		// Token: 0x04003CCF RID: 15567
+		
 		public bool autoHomeArea = true;
 
-		// Token: 0x04003CD0 RID: 15568
+		
 		public bool autoRebuild;
 
-		// Token: 0x04003CD1 RID: 15569
+		
 		public bool lockNorthUp = true;
 
-		// Token: 0x04003CD2 RID: 15570
+		
 		public bool usePlanetDayNightSystem = true;
 
-		// Token: 0x04003CD3 RID: 15571
+		
 		public bool showExpandingIcons = true;
 
-		// Token: 0x04003CD4 RID: 15572
+		
 		public bool showWorldFeatures = true;
 
-		// Token: 0x04003CD5 RID: 15573
+		
 		public bool useWorkPriorities;
 
-		// Token: 0x04003CD6 RID: 15574
+		
 		public MedicalCareCategory defaultCareForColonyHumanlike = MedicalCareCategory.Best;
 
-		// Token: 0x04003CD7 RID: 15575
+		
 		public MedicalCareCategory defaultCareForColonyAnimal = MedicalCareCategory.HerbalOrWorse;
 
-		// Token: 0x04003CD8 RID: 15576
+		
 		public MedicalCareCategory defaultCareForColonyPrisoner = MedicalCareCategory.HerbalOrWorse;
 
-		// Token: 0x04003CD9 RID: 15577
+		
 		public MedicalCareCategory defaultCareForNeutralFaction = MedicalCareCategory.HerbalOrWorse;
 
-		// Token: 0x04003CDA RID: 15578
+		
 		public MedicalCareCategory defaultCareForNeutralAnimal = MedicalCareCategory.HerbalOrWorse;
 
-		// Token: 0x04003CDB RID: 15579
+		
 		public MedicalCareCategory defaultCareForHostileFaction = MedicalCareCategory.HerbalOrWorse;
 	}
 }

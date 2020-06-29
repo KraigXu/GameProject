@@ -8,10 +8,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	// Token: 0x02000C8C RID: 3212
+	
 	public class Dialog_BillConfig : Window
 	{
-		// Token: 0x17000DB5 RID: 3509
+		
 		// (get) Token: 0x06004D57 RID: 19799 RVA: 0x0019E81A File Offset: 0x0019CA1A
 		public override Vector2 InitialSize
 		{
@@ -21,7 +21,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D58 RID: 19800 RVA: 0x0019E82B File Offset: 0x0019CA2B
+		
 		public Dialog_BillConfig(Bill_Production bill, IntVec3 billGiverPos)
 		{
 			this.billGiverPos = billGiverPos;
@@ -33,7 +33,7 @@ namespace RimWorld
 			this.closeOnClickedOutside = true;
 		}
 
-		// Token: 0x06004D59 RID: 19801 RVA: 0x0019E864 File Offset: 0x0019CA64
+		
 		private void AdjustCount(int offset)
 		{
 			SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
@@ -44,13 +44,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D5A RID: 19802 RVA: 0x0019E89E File Offset: 0x0019CA9E
+		
 		public override void WindowUpdate()
 		{
 			this.bill.TryDrawIngredientSearchRadiusOnMap(this.billGiverPos);
 		}
 
-		// Token: 0x06004D5B RID: 19803 RVA: 0x0019E8B4 File Offset: 0x0019CAB4
+		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Medium;
@@ -290,7 +290,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004D5C RID: 19804 RVA: 0x0019F85C File Offset: 0x0019DA5C
+		
 		private IEnumerable<Widgets.DropdownMenuElement<Pawn>> GeneratePawnRestrictionOptions()
 		{
 			yield return new Widgets.DropdownMenuElement<Pawn>
@@ -394,7 +394,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x06004D5D RID: 19805 RVA: 0x0019F86C File Offset: 0x0019DA6C
+		
 		private IEnumerable<Widgets.DropdownMenuElement<Zone_Stockpile>> GenerateStockpileInclusion()
 		{
 			yield return new Widgets.DropdownMenuElement<Zone_Stockpile>
@@ -439,37 +439,37 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002B3F RID: 11071
+		
 		private IntVec3 billGiverPos;
 
-		// Token: 0x04002B40 RID: 11072
+		
 		private Bill_Production bill;
 
-		// Token: 0x04002B41 RID: 11073
+		
 		private Vector2 thingFilterScrollPosition;
 
-		// Token: 0x04002B42 RID: 11074
+		
 		private string repeatCountEditBuffer;
 
-		// Token: 0x04002B43 RID: 11075
+		
 		private string targetCountEditBuffer;
 
-		// Token: 0x04002B44 RID: 11076
+		
 		private string unpauseCountEditBuffer;
 
-		// Token: 0x04002B45 RID: 11077
+		
 		[TweakValue("Interface", 0f, 400f)]
 		private static int RepeatModeSubdialogHeight = 324;
 
-		// Token: 0x04002B46 RID: 11078
+		
 		[TweakValue("Interface", 0f, 400f)]
 		private static int StoreModeSubdialogHeight = 30;
 
-		// Token: 0x04002B47 RID: 11079
+		
 		[TweakValue("Interface", 0f, 400f)]
 		private static int WorkerSelectionSubdialogHeight = 85;
 
-		// Token: 0x04002B48 RID: 11080
+		
 		[TweakValue("Interface", 0f, 400f)]
 		private static int IngredientRadiusSubdialogHeight = 50;
 	}

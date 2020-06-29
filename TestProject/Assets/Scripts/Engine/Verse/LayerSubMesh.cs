@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Verse
 {
-	// Token: 0x02000187 RID: 391
+	
 	public class LayerSubMesh
 	{
-		// Token: 0x06000B4E RID: 2894 RVA: 0x0003CF84 File Offset: 0x0003B184
+		
 		public LayerSubMesh(Mesh mesh, Material material)
 		{
 			this.mesh = mesh;
 			this.material = material;
 		}
 
-		// Token: 0x06000B4F RID: 2895 RVA: 0x0003CFD4 File Offset: 0x0003B1D4
+		
 		public void Clear(MeshParts parts)
 		{
 			if ((parts & MeshParts.Verts) != MeshParts.None)
@@ -36,7 +36,7 @@ namespace Verse
 			this.finalized = false;
 		}
 
-		// Token: 0x06000B50 RID: 2896 RVA: 0x0003D028 File Offset: 0x0003B228
+		
 		public void FinalizeMesh(MeshParts parts)
 		{
 			if (this.finalized)
@@ -80,34 +80,34 @@ namespace Verse
 			this.finalized = true;
 		}
 
-		// Token: 0x06000B51 RID: 2897 RVA: 0x0003D13A File Offset: 0x0003B33A
+		
 		public override string ToString()
 		{
 			return "LayerSubMesh(" + this.material.ToString() + ")";
 		}
 
-		// Token: 0x04000912 RID: 2322
+		
 		public bool finalized;
 
-		// Token: 0x04000913 RID: 2323
+		
 		public bool disabled;
 
-		// Token: 0x04000914 RID: 2324
+		
 		public Material material;
 
-		// Token: 0x04000915 RID: 2325
+		
 		public Mesh mesh;
 
-		// Token: 0x04000916 RID: 2326
+		
 		public List<Vector3> verts = new List<Vector3>();
 
-		// Token: 0x04000917 RID: 2327
+		
 		public List<int> tris = new List<int>();
 
-		// Token: 0x04000918 RID: 2328
+		
 		public List<Color32> colors = new List<Color32>();
 
-		// Token: 0x04000919 RID: 2329
+		
 		public List<Vector3> uvs = new List<Vector3>();
 	}
 }

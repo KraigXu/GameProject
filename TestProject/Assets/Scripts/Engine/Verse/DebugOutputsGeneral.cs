@@ -6,16 +6,16 @@ using RimWorld;
 
 namespace Verse
 {
-	// Token: 0x02000341 RID: 833
+	
 	public static class DebugOutputsGeneral
 	{
-		// Token: 0x06001933 RID: 6451 RVA: 0x00093694 File Offset: 0x00091894
+		
 		private static float damage(ThingDef d)
 		{
 			return (float)((d.Verbs[0].defaultProjectile != null) ? d.Verbs[0].defaultProjectile.projectile.GetDamageAmount(null, null) : 0);
 		}
 
-		// Token: 0x06001934 RID: 6452 RVA: 0x000936CA File Offset: 0x000918CA
+		
 		private static float armorPenetration(ThingDef d)
 		{
 			if (d.Verbs[0].defaultProjectile == null)
@@ -25,7 +25,7 @@ namespace Verse
 			return d.Verbs[0].defaultProjectile.projectile.GetArmorPenetration(null, null);
 		}
 
-		// Token: 0x06001935 RID: 6453 RVA: 0x00093702 File Offset: 0x00091902
+		
 		private static float stoppingPower(ThingDef d)
 		{
 			if (d.Verbs[0].defaultProjectile == null)
@@ -35,67 +35,67 @@ namespace Verse
 			return d.Verbs[0].defaultProjectile.projectile.stoppingPower;
 		}
 
-		// Token: 0x06001936 RID: 6454 RVA: 0x00093738 File Offset: 0x00091938
+		
 		private static float warmup(ThingDef d)
 		{
 			return d.Verbs[0].warmupTime;
 		}
 
-		// Token: 0x06001937 RID: 6455 RVA: 0x0009374B File Offset: 0x0009194B
+		
 		private static float cooldown(ThingDef d)
 		{
 			return d.GetStatValueAbstract(StatDefOf.RangedWeapon_Cooldown, null);
 		}
 
-		// Token: 0x06001938 RID: 6456 RVA: 0x00093759 File Offset: 0x00091959
+		
 		private static int burstShots(ThingDef d)
 		{
 			return d.Verbs[0].burstShotCount;
 		}
 
-		// Token: 0x06001939 RID: 6457 RVA: 0x0009376C File Offset: 0x0009196C
+		
 		private static float fullcycle(ThingDef d)
 		{
 			return DebugOutputsGeneral.warmup(d) + DebugOutputsGeneral.cooldown(d) + ((d.Verbs[0].burstShotCount - 1) * d.Verbs[0].ticksBetweenBurstShots).TicksToSeconds();
 		}
 
-		// Token: 0x0600193A RID: 6458 RVA: 0x000937A6 File Offset: 0x000919A6
+		
 		private static float accTouch(ThingDef d)
 		{
 			return d.GetStatValueAbstract(StatDefOf.AccuracyTouch, null);
 		}
 
-		// Token: 0x0600193B RID: 6459 RVA: 0x000937B4 File Offset: 0x000919B4
+		
 		private static float accShort(ThingDef d)
 		{
 			return d.GetStatValueAbstract(StatDefOf.AccuracyShort, null);
 		}
 
-		// Token: 0x0600193C RID: 6460 RVA: 0x000937C2 File Offset: 0x000919C2
+		
 		private static float accMed(ThingDef d)
 		{
 			return d.GetStatValueAbstract(StatDefOf.AccuracyMedium, null);
 		}
 
-		// Token: 0x0600193D RID: 6461 RVA: 0x000937D0 File Offset: 0x000919D0
+		
 		private static float accLong(ThingDef d)
 		{
 			return d.GetStatValueAbstract(StatDefOf.AccuracyLong, null);
 		}
 
-		// Token: 0x0600193E RID: 6462 RVA: 0x000937DE File Offset: 0x000919DE
+		
 		private static float accAvg(ThingDef d)
 		{
 			return (DebugOutputsGeneral.accTouch(d) + DebugOutputsGeneral.accShort(d) + DebugOutputsGeneral.accMed(d) + DebugOutputsGeneral.accLong(d)) / 4f;
 		}
 
-		// Token: 0x0600193F RID: 6463 RVA: 0x00093801 File Offset: 0x00091A01
+		
 		private static float dpsAvg(ThingDef d)
 		{
 			return DebugOutputsGeneral.dpsMissless(d) * DebugOutputsGeneral.accAvg(d);
 		}
 
-		// Token: 0x06001940 RID: 6464 RVA: 0x00093810 File Offset: 0x00091A10
+		
 		private static float dpsMissless(ThingDef d)
 		{
 			int num = DebugOutputsGeneral.burstShots(d);
@@ -104,7 +104,7 @@ namespace Verse
 			return DebugOutputsGeneral.damage(d) * (float)num / num2;
 		}
 
-		// Token: 0x06001941 RID: 6465 RVA: 0x00093860 File Offset: 0x00091A60
+		
 		[DebugOutput]
 		public static void WeaponsRanged()
 		{
@@ -161,7 +161,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001942 RID: 6466 RVA: 0x00093D60 File Offset: 0x00091F60
+		
 		[DebugOutput]
 		public static void Turrets()
 		{
@@ -231,15 +231,15 @@ namespace Verse
 			array[23] = new TableDataGetter<ThingDef>("dps\nshort", (ThingDef d) => (DebugOutputsGeneral.dpsMissless(d.building.turretGunDef) * DebugOutputsGeneral.accShort(d.building.turretGunDef)).ToString("F2"));
 			array[24] = new TableDataGetter<ThingDef>("dps\nmed", (ThingDef d) => (DebugOutputsGeneral.dpsMissless(d.building.turretGunDef) * DebugOutputsGeneral.accMed(d.building.turretGunDef)).ToString("F2"));
 			array[25] = new TableDataGetter<ThingDef>("dps\nlong", (ThingDef d) => (DebugOutputsGeneral.dpsMissless(d.building.turretGunDef) * DebugOutputsGeneral.accLong(d.building.turretGunDef)).ToString("F2"));
-			array[26] = new TableDataGetter<ThingDef>("dps\navg", (ThingDef d) => DebugOutputsGeneral.dpsAvg(d.building.turretGunDef).ToString("F2"));
-			array[27] = new TableDataGetter<ThingDef>("dpsAvg / $100", (ThingDef d) => (DebugOutputsGeneral.dpsAvg(d.building.turretGunDef) / (d.GetStatValueAbstract(StatDefOf.MarketValue, null) / 100f)).ToString("F3"));
-			array[28] = new TableDataGetter<ThingDef>("fuel\nshot capacity", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelCapacity|15_0(d).ToString());
-			array[29] = new TableDataGetter<ThingDef>("fuel\ntype", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelType|15_1(d));
-			array[30] = new TableDataGetter<ThingDef>("fuel to\nreload", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelToReload|15_2(d).ToString());
+			//array[26] = new TableDataGetter<ThingDef>("dps\navg", (ThingDef d) => DebugOutputsGeneral.dpsAvg(d.building.turretGunDef).ToString("F2"));
+			//array[27] = new TableDataGetter<ThingDef>("dpsAvg / $100", (ThingDef d) => (DebugOutputsGeneral.dpsAvg(d.building.turretGunDef) / (d.GetStatValueAbstract(StatDefOf.MarketValue, null) / 100f)).ToString("F3"));
+			//array[28] = new TableDataGetter<ThingDef>("fuel\nshot capacity", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelCapacity|15_0(d).ToString());
+			//array[29] = new TableDataGetter<ThingDef>("fuel\ntype", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelType|15_1(d));
+			//array[30] = new TableDataGetter<ThingDef>("fuel to\nreload", (ThingDef d) => DebugOutputsGeneral.<Turrets>g__fuelToReload|15_2(d).ToString());
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001943 RID: 6467 RVA: 0x0009435C File Offset: 0x0009255C
+		
 		[DebugOutput]
 		public static void WeaponsMelee()
 		{
@@ -277,169 +277,169 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001944 RID: 6468 RVA: 0x0009452C File Offset: 0x0009272C
+		
 		private static void DoTablesInternalMelee(ThingDef stuff, bool doRaces = false)
 		{
-			DebugOutputsGeneral.<>c__DisplayClass17_0 <>c__DisplayClass17_ = new DebugOutputsGeneral.<>c__DisplayClass17_0();
-			<>c__DisplayClass17_.stuff = stuff;
-			IEnumerable<Def> enumerable = (from d in DefDatabase<ThingDef>.AllDefs
-			where d.IsWeapon
-			select d).Cast<Def>().Concat((from h in DefDatabase<HediffDef>.AllDefs
-			where h.CompProps<HediffCompProperties_VerbGiver>() != null
-			select h).Cast<Def>());
-			if (doRaces)
-			{
-				enumerable = enumerable.Concat((from d in DefDatabase<ThingDef>.AllDefs
-				where d.race != null
-				select d).Cast<Def>());
-			}
-			enumerable = from h in enumerable
-			orderby <>c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDpsGetter|6(h) descending
-			select h;
-			IEnumerable<Def> dataSources = enumerable;
-			TableDataGetter<Def>[] array = new TableDataGetter<Def>[12];
-			array[0] = new TableDataGetter<Def>("defName", (Def d) => d.defName);
-			array[1] = new TableDataGetter<Def>("melee\nDPS", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDpsGetter|6(d).ToString("F2"));
-			array[2] = new TableDataGetter<Def>("melee\ndamage\naverage", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDamageGetter|0(d).ToString("F2"));
-			array[3] = new TableDataGetter<Def>("melee\ncooldown\naverage", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__meleeCooldownGetter|4(d).ToString("F2"));
-			array[4] = new TableDataGetter<Def>("melee\nAP", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__meleeAPGetter|1(d).ToString("F2"));
-			array[5] = new TableDataGetter<Def>("ranged\ndamage", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__rangedDamageGetter|2(d).ToString());
-			array[6] = new TableDataGetter<Def>("ranged\nwarmup", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__rangedWarmupGetter|3(d).ToString("F2"));
-			array[7] = new TableDataGetter<Def>("ranged\ncooldown", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__rangedCooldownGetter|5(d).ToString("F2"));
-			array[8] = new TableDataGetter<Def>("market value", (Def d) => <>c__DisplayClass17_.<DoTablesInternalMelee>g__marketValueGetter|7(d).ToStringMoney(null));
-			array[9] = new TableDataGetter<Def>("work to make", delegate(Def d)
-			{
-				ThingDef thingDef = d as ThingDef;
-				if (thingDef == null)
-				{
-					return "-";
-				}
-				return thingDef.GetStatValueAbstract(StatDefOf.WorkToMake, <>c__DisplayClass17_.stuff).ToString("F0");
-			});
-			array[10] = new TableDataGetter<Def>((<>c__DisplayClass17_.stuff != null) ? (<>c__DisplayClass17_.stuff.defName + " CanMake") : "CanMake", delegate(Def d)
-			{
-				if (<>c__DisplayClass17_.stuff == null)
-				{
-					return "n/a";
-				}
-				ThingDef thingDef = d as ThingDef;
-				if (thingDef == null)
-				{
-					return "-";
-				}
-				return <>c__DisplayClass17_.stuff.stuffProps.CanMake(thingDef).ToStringCheckBlank();
-			});
-			array[11] = new TableDataGetter<Def>("assumed\nmelee\nhit chance", (Def d) => 0.82f.ToStringPercent());
-			DebugTables.MakeTablesDialog<Def>(dataSources, array);
+			//DebugOutputsGeneral.c__DisplayClass17_0 c__DisplayClass17_ = new DebugOutputsGeneral.c__DisplayClass17_0();
+			//c__DisplayClass17_.stuff = stuff;
+			//IEnumerable<Def> enumerable = (from d in DefDatabase<ThingDef>.AllDefs
+			//where d.IsWeapon
+			//select d).Cast<Def>().Concat((from h in DefDatabase<HediffDef>.AllDefs
+			//where h.CompProps<HediffCompProperties_VerbGiver>() != null
+			//select h).Cast<Def>());
+			//if (doRaces)
+			//{
+			//	enumerable = enumerable.Concat((from d in DefDatabase<ThingDef>.AllDefs
+			//	where d.race != null
+			//	select d).Cast<Def>());
+			//}
+			//enumerable = from h in enumerable
+			//orderby c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDpsGetter|6(h) descending
+			//select h;
+			//IEnumerable<Def> dataSources = enumerable;
+			//TableDataGetter<Def>[] array = new TableDataGetter<Def>[12];
+			//array[0] = new TableDataGetter<Def>("defName", (Def d) => d.defName);
+			//array[1] = new TableDataGetter<Def>("melee\nDPS", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDpsGetter|6(d).ToString("F2"));
+			//array[2] = new TableDataGetter<Def>("melee\ndamage\naverage", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__meleeDamageGetter|0(d).ToString("F2"));
+			//array[3] = new TableDataGetter<Def>("melee\ncooldown\naverage", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__meleeCooldownGetter|4(d).ToString("F2"));
+			//array[4] = new TableDataGetter<Def>("melee\nAP", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__meleeAPGetter|1(d).ToString("F2"));
+			//array[5] = new TableDataGetter<Def>("ranged\ndamage", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__rangedDamageGetter|2(d).ToString());
+			//array[6] = new TableDataGetter<Def>("ranged\nwarmup", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__rangedWarmupGetter|3(d).ToString("F2"));
+			//array[7] = new TableDataGetter<Def>("ranged\ncooldown", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__rangedCooldownGetter|5(d).ToString("F2"));
+			//array[8] = new TableDataGetter<Def>("market value", (Def d) => c__DisplayClass17_.<DoTablesInternalMelee>g__marketValueGetter|7(d).ToStringMoney(null));
+			//array[9] = new TableDataGetter<Def>("work to make", delegate(Def d)
+			//{
+			//	ThingDef thingDef = d as ThingDef;
+			//	if (thingDef == null)
+			//	{
+			//		return "-";
+			//	}
+			//	return thingDef.GetStatValueAbstract(StatDefOf.WorkToMake, c__DisplayClass17_.stuff).ToString("F0");
+			//});
+			//array[10] = new TableDataGetter<Def>((c__DisplayClass17_.stuff != null) ? (c__DisplayClass17_.stuff.defName + " CanMake") : "CanMake", delegate(Def d)
+			//{
+			//	if (c__DisplayClass17_.stuff == null)
+			//	{
+			//		return "n/a";
+			//	}
+			//	ThingDef thingDef = d as ThingDef;
+			//	if (thingDef == null)
+			//	{
+			//		return "-";
+			//	}
+			//	return c__DisplayClass17_.stuff.stuffProps.CanMake(thingDef).ToStringCheckBlank();
+			//});
+			//array[11] = new TableDataGetter<Def>("assumed\nmelee\nhit chance", (Def d) => 0.82f.ToStringPercent());
+			//DebugTables.MakeTablesDialog<Def>(dataSources, array);
 		}
 
-		// Token: 0x06001945 RID: 6469 RVA: 0x00094774 File Offset: 0x00092974
+		
 		[DebugOutput]
 		public static void Tools()
 		{
-			List<<>f__AnonymousType0<Def, Tool>> tools = (from x in (from x in DefDatabase<ThingDef>.AllDefs
-			where !x.tools.NullOrEmpty<Tool>()
-			select x).SelectMany((ThingDef x) => from y in x.tools
-			select new
-			{
-				Parent = x,
-				Tool = y
-			}).Concat((from x in DefDatabase<TerrainDef>.AllDefs
-			where !x.tools.NullOrEmpty<Tool>()
-			select x).SelectMany((TerrainDef x) => from y in x.tools
-			select new
-			{
-				Parent = x,
-				Tool = y
-			})).Concat((from x in DefDatabase<HediffDef>.AllDefs
-			where x.HasComp(typeof(HediffComp_VerbGiver)) && !x.CompProps<HediffCompProperties_VerbGiver>().tools.NullOrEmpty<Tool>()
-			select x).SelectMany((HediffDef x) => from y in x.CompProps<HediffCompProperties_VerbGiver>().tools
-			select new
-			{
-				Parent = x,
-				Tool = y
-			}))
-			orderby x.Parent.defName, x.Tool.power descending
-			select x).ToList();
-			Dictionary<Tool, float> selWeight = tools.ToDictionary(x => x.Tool, x => x.Tool.VerbsProperties.Average((VerbProperties y) => y.AdjustedMeleeSelectionWeight(x.Tool, null, null, null, x.Parent is ThingDef && ((ThingDef)x.Parent).category == ThingCategory.Pawn)));
-			Func<<>f__AnonymousType0<Def, Tool>, float> <>9__34;
-			Dictionary<Def, float> selWeightSumInGroup = (from x in tools
-			select x.Parent).Distinct<Def>().ToDictionary((Def x) => x, delegate(Def x)
-			{
-				var source = from y in tools
-				where y.Parent == x
-				select y;
-				var selector;
-				if ((selector = <>9__34) == null)
-				{
-					selector = (<>9__34 = (y => selWeight[y.Tool]));
-				}
-				return source.Sum(selector);
-			});
-			DebugTables.MakeTablesDialog<int>(tools.Select((x, int index) => index), new TableDataGetter<int>[]
-			{
-				new TableDataGetter<int>("label", (int x) => tools[x].Tool.label),
-				new TableDataGetter<int>("source", (int x) => tools[x].Parent.defName),
-				new TableDataGetter<int>("power", (int x) => tools[x].Tool.power.ToString("0.##")),
-				new TableDataGetter<int>("AP", delegate(int x)
-				{
-					float num = tools[x].Tool.armorPenetration;
-					if (num < 0f)
-					{
-						num = tools[x].Tool.power * 0.015f;
-					}
-					return num.ToStringPercent();
-				}),
-				new TableDataGetter<int>("cooldown", (int x) => tools[x].Tool.cooldownTime.ToString("0.##")),
-				new TableDataGetter<int>("selection weight", (int x) => selWeight[tools[x].Tool].ToString("0.##")),
-				new TableDataGetter<int>("selection weight\nwithin def", (int x) => (selWeight[tools[x].Tool] / selWeightSumInGroup[tools[x].Parent]).ToStringPercent()),
-				new TableDataGetter<int>("chance\nfactor", delegate(int x)
-				{
-					if (tools[x].Tool.chanceFactor != 1f)
-					{
-						return tools[x].Tool.chanceFactor.ToString("0.##");
-					}
-					return "";
-				}),
-				new TableDataGetter<int>("adds hediff", delegate(int x)
-				{
-					if (tools[x].Tool.hediff == null)
-					{
-						return "";
-					}
-					return tools[x].Tool.hediff.defName;
-				}),
-				new TableDataGetter<int>("linked body parts", delegate(int x)
-				{
-					if (tools[x].Tool.linkedBodyPartsGroup == null)
-					{
-						return "";
-					}
-					return tools[x].Tool.linkedBodyPartsGroup.defName;
-				}),
-				new TableDataGetter<int>("surprise attack", delegate(int x)
-				{
-					if (tools[x].Tool.surpriseAttack == null || tools[x].Tool.surpriseAttack.extraMeleeDamages.NullOrEmpty<ExtraDamage>())
-					{
-						return "";
-					}
-					return tools[x].Tool.surpriseAttack.extraMeleeDamages[0].amount.ToString("0.##") + " (" + tools[x].Tool.surpriseAttack.extraMeleeDamages[0].def.defName + ")";
-				}),
-				new TableDataGetter<int>("capacities", (int x) => tools[x].Tool.capacities.ToStringSafeEnumerable()),
-				new TableDataGetter<int>("maneuvers", (int x) => tools[x].Tool.Maneuvers.ToStringSafeEnumerable()),
-				new TableDataGetter<int>("always weapon", delegate(int x)
-				{
-					if (!tools[x].Tool.alwaysTreatAsWeapon)
-					{
-						return "";
-					}
-					return "always wep";
-				}),
-				new TableDataGetter<int>("id", (int x) => tools[x].Tool.id)
-			});
+			//List<f__AnonymousType0<Def, Tool>> tools = (from x in (from x in DefDatabase<ThingDef>.AllDefs
+			//where !x.tools.NullOrEmpty<Tool>()
+			//select x).SelectMany((ThingDef x) => from y in x.tools
+			//select new
+			//{
+			//	Parent = x,
+			//	Tool = y
+			//}).Concat((from x in DefDatabase<TerrainDef>.AllDefs
+			//where !x.tools.NullOrEmpty<Tool>()
+			//select x).SelectMany((TerrainDef x) => from y in x.tools
+			//select new
+			//{
+			//	Parent = x,
+			//	Tool = y
+			//})).Concat((from x in DefDatabase<HediffDef>.AllDefs
+			//where x.HasComp(typeof(HediffComp_VerbGiver)) && !x.CompProps<HediffCompProperties_VerbGiver>().tools.NullOrEmpty<Tool>()
+			//select x).SelectMany((HediffDef x) => from y in x.CompProps<HediffCompProperties_VerbGiver>().tools
+			//select new
+			//{
+			//	Parent = x,
+			//	Tool = y
+			//}))
+			//orderby x.Parent.defName, x.Tool.power descending
+			//select x).ToList();
+			//Dictionary<Tool, float> selWeight = tools.ToDictionary(x => x.Tool, x => x.Tool.VerbsProperties.Average((VerbProperties y) => y.AdjustedMeleeSelectionWeight(x.Tool, null, null, null, x.Parent is ThingDef && ((ThingDef)x.Parent).category == ThingCategory.Pawn)));
+			//Func<f__AnonymousType0<Def, Tool>, float> 9__34;
+			//Dictionary<Def, float> selWeightSumInGroup = (from x in tools
+			//select x.Parent).Distinct<Def>().ToDictionary((Def x) => x, delegate(Def x)
+			//{
+			//	var source = from y in tools
+			//	where y.Parent == x
+			//	select y;
+			//	var selector;
+			//	if ((selector 4) == null)
+			//	{
+			//		selector = (9__34 = (y => selWeight[y.Tool]));
+			//	}
+			//	return source.Sum(selector);
+			//});
+			//DebugTables.MakeTablesDialog<int>(tools.Select((x, int index) => index), new TableDataGetter<int>[]
+			//{
+			//	new TableDataGetter<int>("label", (int x) => tools[x].Tool.label),
+			//	new TableDataGetter<int>("source", (int x) => tools[x].Parent.defName),
+			//	new TableDataGetter<int>("power", (int x) => tools[x].Tool.power.ToString("0.##")),
+			//	new TableDataGetter<int>("AP", delegate(int x)
+			//	{
+			//		float num = tools[x].Tool.armorPenetration;
+			//		if (num < 0f)
+			//		{
+			//			num = tools[x].Tool.power * 0.015f;
+			//		}
+			//		return num.ToStringPercent();
+			//	}),
+			//	new TableDataGetter<int>("cooldown", (int x) => tools[x].Tool.cooldownTime.ToString("0.##")),
+			//	new TableDataGetter<int>("selection weight", (int x) => selWeight[tools[x].Tool].ToString("0.##")),
+			//	new TableDataGetter<int>("selection weight\nwithin def", (int x) => (selWeight[tools[x].Tool] / selWeightSumInGroup[tools[x].Parent]).ToStringPercent()),
+			//	new TableDataGetter<int>("chance\nfactor", delegate(int x)
+			//	{
+			//		if (tools[x].Tool.chanceFactor != 1f)
+			//		{
+			//			return tools[x].Tool.chanceFactor.ToString("0.##");
+			//		}
+			//		return "";
+			//	}),
+			//	new TableDataGetter<int>("adds hediff", delegate(int x)
+			//	{
+			//		if (tools[x].Tool.hediff == null)
+			//		{
+			//			return "";
+			//		}
+			//		return tools[x].Tool.hediff.defName;
+			//	}),
+			//	new TableDataGetter<int>("linked body parts", delegate(int x)
+			//	{
+			//		if (tools[x].Tool.linkedBodyPartsGroup == null)
+			//		{
+			//			return "";
+			//		}
+			//		return tools[x].Tool.linkedBodyPartsGroup.defName;
+			//	}),
+			//	new TableDataGetter<int>("surprise attack", delegate(int x)
+			//	{
+			//		if (tools[x].Tool.surpriseAttack == null || tools[x].Tool.surpriseAttack.extraMeleeDamages.NullOrEmpty<ExtraDamage>())
+			//		{
+			//			return "";
+			//		}
+			//		return tools[x].Tool.surpriseAttack.extraMeleeDamages[0].amount.ToString("0.##") + " (" + tools[x].Tool.surpriseAttack.extraMeleeDamages[0].def.defName + ")";
+			//	}),
+			//	new TableDataGetter<int>("capacities", (int x) => tools[x].Tool.capacities.ToStringSafeEnumerable()),
+			//	new TableDataGetter<int>("maneuvers", (int x) => tools[x].Tool.Maneuvers.ToStringSafeEnumerable()),
+			//	new TableDataGetter<int>("always weapon", delegate(int x)
+			//	{
+			//		if (!tools[x].Tool.alwaysTreatAsWeapon)
+			//		{
+			//			return "";
+			//		}
+			//		return "always wep";
+			//	}),
+			//	new TableDataGetter<int>("id", (int x) => tools[x].Tool.id)
+			//});
 		}
 
-		// Token: 0x06001946 RID: 6470 RVA: 0x00094B34 File Offset: 0x00092D34
+		
 		[DebugOutput]
 		public static void ApparelByStuff()
 		{
@@ -461,7 +461,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x06001947 RID: 6471 RVA: 0x00094C28 File Offset: 0x00092E28
+		
 		[DebugOutput]
 		public static void ApparelArmor()
 		{
@@ -541,7 +541,7 @@ namespace Verse
 			select x, list.ToArray());
 		}
 
-		// Token: 0x06001948 RID: 6472 RVA: 0x00094F94 File Offset: 0x00093194
+		
 		[DebugOutput]
 		public static void ApparelInsulation()
 		{
@@ -579,7 +579,7 @@ namespace Verse
 			select x, list.ToArray());
 		}
 
-		// Token: 0x06001949 RID: 6473 RVA: 0x0009512C File Offset: 0x0009332C
+		
 		private static void DoTableInternalApparel(ThingDef stuff)
 		{
 			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
@@ -606,7 +606,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600194A RID: 6474 RVA: 0x00095318 File Offset: 0x00093518
+		
 		[DebugOutput]
 		public static void ResearchProjects()
 		{
@@ -648,7 +648,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ResearchProjectDef>(allDefs, array);
 		}
 
-		// Token: 0x0600194B RID: 6475 RVA: 0x000954C4 File Offset: 0x000936C4
+		
 		[DebugOutput]
 		public static void ThingsExistingList()
 		{
@@ -676,7 +676,7 @@ namespace Verse
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		// Token: 0x0600194C RID: 6476 RVA: 0x0009557C File Offset: 0x0009377C
+		
 		[DebugOutput]
 		public static void ThingFillageAndPassability()
 		{
@@ -707,7 +707,7 @@ namespace Verse
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x0600194D RID: 6477 RVA: 0x0009568C File Offset: 0x0009388C
+		
 		[DebugOutput]
 		public static void ThingDamageData()
 		{
@@ -747,7 +747,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600194E RID: 6478 RVA: 0x0009584C File Offset: 0x00093A4C
+		
 		[DebugOutput]
 		public static void UnfinishedThings()
 		{
@@ -767,7 +767,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x0600194F RID: 6479 RVA: 0x0009595C File Offset: 0x00093B5C
+		
 		[DebugOutput]
 		public static void ThingMasses()
 		{
@@ -795,7 +795,7 @@ namespace Verse
 			array[2] = new TableDataGetter<ThingDef>("per human", (ThingDef d) => perPawn(d, ThingDefOf.Human.race.baseBodySize));
 			array[3] = new TableDataGetter<ThingDef>("per muffalo", (ThingDef d) => perPawn(d, ThingDefOf.Muffalo.race.baseBodySize));
 			array[4] = new TableDataGetter<ThingDef>("per dromedary", (ThingDef d) => perPawn(d, ThingDefOf.Dromedary.race.baseBodySize));
-			array[5] = new TableDataGetter<ThingDef>("per nutrition", (ThingDef d) => DebugOutputsGeneral.<ThingMasses>g__perNutrition|28_5(d));
+			//array[5] = new TableDataGetter<ThingDef>("per nutrition", (ThingDef d) => DebugOutputsGeneral.<ThingMasses>g__perNutrition|28_5(d));
 			array[6] = new TableDataGetter<ThingDef>("small volume", delegate(ThingDef d)
 			{
 				if (!d.smallVolume)
@@ -807,7 +807,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001950 RID: 6480 RVA: 0x00095B30 File Offset: 0x00093D30
+		
 		[DebugOutput]
 		public static void ThingFillPercents()
 		{
@@ -822,7 +822,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001951 RID: 6481 RVA: 0x00095C1C File Offset: 0x00093E1C
+		
 		[DebugOutput]
 		public static void ThingNutritions()
 		{
@@ -837,7 +837,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001952 RID: 6482 RVA: 0x00095D10 File Offset: 0x00093F10
+		
 		public static void MakeTablePairsByThing(List<ThingStuffPair> pairList)
 		{
 			DefMap<ThingDef, float> totalCommMult = new DefMap<ThingDef, float>();
@@ -867,7 +867,7 @@ namespace Verse
 			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
 		}
 
-		// Token: 0x06001953 RID: 6483 RVA: 0x00095EC4 File Offset: 0x000940C4
+		
 		public static string ToStringEmptyZero(this float f, string format)
 		{
 			if (f <= 0f)
@@ -877,7 +877,7 @@ namespace Verse
 			return f.ToString(format);
 		}
 
-		// Token: 0x06001954 RID: 6484 RVA: 0x00095EDC File Offset: 0x000940DC
+		
 		public static string ToStringPercentEmptyZero(this float f, string format = "F0")
 		{
 			if (f <= 0f)
@@ -887,7 +887,7 @@ namespace Verse
 			return f.ToStringPercent(format);
 		}
 
-		// Token: 0x06001955 RID: 6485 RVA: 0x00095EF3 File Offset: 0x000940F3
+		
 		public static string ToStringCheckBlank(this bool b)
 		{
 			if (!b)

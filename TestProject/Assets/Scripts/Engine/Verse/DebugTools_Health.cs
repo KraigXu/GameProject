@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Verse
 {
-	// Token: 0x02000352 RID: 850
+	
 	public static class DebugTools_Health
 	{
-		// Token: 0x060019FC RID: 6652 RVA: 0x0009F908 File Offset: 0x0009DB08
+		
 		public static List<DebugMenuOption> Options_RestorePart(Pawn p)
 		{
 			if (p == null)
@@ -26,7 +26,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x060019FD RID: 6653 RVA: 0x0009F9C4 File Offset: 0x0009DBC4
+		
 		public static List<DebugMenuOption> Options_ApplyDamage()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -45,7 +45,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x060019FE RID: 6654 RVA: 0x0009FA48 File Offset: 0x0009DC48
+		
 		private static List<DebugMenuOption> Options_Damage_BodyParts(Pawn p, DamageDef def)
 		{
 			if (p == null)
@@ -68,7 +68,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x060019FF RID: 6655 RVA: 0x0009FB2C File Offset: 0x0009DD2C
+		
 		public static List<DebugMenuOption> Options_AddHediff()
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
@@ -89,7 +89,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06001A00 RID: 6656 RVA: 0x0009FBD4 File Offset: 0x0009DDD4
+		
 		private static List<DebugMenuOption> Options_Hediff_BodyParts(Pawn p, HediffDef def)
 		{
 			if (p == null)
@@ -114,7 +114,7 @@ namespace Verse
 			return list;
 		}
 
-		// Token: 0x06001A01 RID: 6657 RVA: 0x0009FCD4 File Offset: 0x0009DED4
+		
 		public static List<DebugMenuOption> Options_RemoveHediff(Pawn pawn)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();

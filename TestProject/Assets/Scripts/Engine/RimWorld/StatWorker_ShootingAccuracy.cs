@@ -4,10 +4,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02001021 RID: 4129
+	
 	public class StatWorker_ShootingAccuracy : StatWorker
 	{
-		// Token: 0x060062E1 RID: 25313 RVA: 0x0022587C File Offset: 0x00223A7C
+		
 		public override string GetExplanationFinalizePart(StatRequest req, ToStringNumberSense numberSense, float finalVal)
 		{
 			StringBuilder stringBuilder = new StringBuilder();

@@ -8,16 +8,16 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000B0F RID: 2831
+	
 	public static class AgeInjuryUtility
 	{
-		// Token: 0x060042AB RID: 17067 RVA: 0x00164DCA File Offset: 0x00162FCA
+		
 		public static IEnumerable<HediffGiver_Birthday> RandomHediffsToGainOnBirthday(Pawn pawn, int age)
 		{
 			return AgeInjuryUtility.RandomHediffsToGainOnBirthday(pawn.def, age);
 		}
 
-		// Token: 0x060042AC RID: 17068 RVA: 0x00164DD8 File Offset: 0x00162FD8
+		
 		private static IEnumerable<HediffGiver_Birthday> RandomHediffsToGainOnBirthday(ThingDef raceDef, int age)
 		{
 			List<HediffGiverSetDef> sets = raceDef.race.hediffGiverSets;
@@ -48,7 +48,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x060042AD RID: 17069 RVA: 0x00164DF0 File Offset: 0x00162FF0
+		
 		public static void GenerateRandomOldAgeInjuries(Pawn pawn, bool tryNotToKillPawn)
 		{
 			float num = pawn.RaceProps.IsMechanoid ? 2500f : pawn.RaceProps.lifeExpectancy;
@@ -63,15 +63,10 @@ namespace RimWorld
 					num3++;
 				}
 			}
-			Func<BodyPartRecord, bool> <>9__0;
 			for (int i = 0; i < num3; i++)
 			{
 				IEnumerable<BodyPartRecord> notMissingParts = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
-				Func<BodyPartRecord, bool> predicate;
-				if ((predicate = <>9__0) == null)
-				{
-					predicate = (<>9__0 = ((BodyPartRecord x) => x.depth == BodyPartDepth.Outside && (x.def.permanentInjuryChanceFactor != 0f || x.def.pawnGeneratorCanAmputate) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(x)));
-				}
+				Func<BodyPartRecord, bool> predicate = ((BodyPartRecord x) => x.depth == BodyPartDepth.Outside && (x.def.permanentInjuryChanceFactor != 0f || x.def.pawnGeneratorCanAmputate) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(x));
 				IEnumerable<BodyPartRecord> source = notMissingParts.Where(predicate);
 				if (source.Any<BodyPartRecord>())
 				{
@@ -122,7 +117,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042AE RID: 17070 RVA: 0x00165168 File Offset: 0x00163368
+		
 		private static DamageDef RandomPermanentInjuryDamageType(bool allowFrostbite)
 		{
 			switch (Rand.RangeInclusive(0, 3 + (allowFrostbite ? 1 : 0)))
@@ -142,7 +137,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060042AF RID: 17071 RVA: 0x001651C4 File Offset: 0x001633C4
+		
 		[DebugOutput]
 		public static void PermanentInjuryCalculations()
 		{
@@ -189,10 +184,10 @@ namespace RimWorld
 			Log.Message(stringBuilder.ToString(), false);
 		}
 
-		// Token: 0x0400264B RID: 9803
+		
 		private const int MaxPermanentInjuryAge = 100;
 
-		// Token: 0x0400264C RID: 9804
+		
 		private static List<Thing> emptyIngredientsList = new List<Thing>();
 	}
 }

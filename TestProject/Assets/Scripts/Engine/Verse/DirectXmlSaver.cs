@@ -7,16 +7,16 @@ using System.Xml.Linq;
 
 namespace Verse
 {
-	// Token: 0x020002B9 RID: 697
+	
 	public static class DirectXmlSaver
 	{
-		// Token: 0x060013D1 RID: 5073 RVA: 0x00071ECC File Offset: 0x000700CC
+		
 		public static bool IsSimpleTextType(Type type)
 		{
 			return type == typeof(float) || type == typeof(double) || type == typeof(long) || type == typeof(ulong) || type == typeof(char) || type == typeof(byte) || type == typeof(sbyte) || type == typeof(int) || type == typeof(uint) || type == typeof(bool) || type == typeof(short) || type == typeof(ushort) || type == typeof(string) || type.IsEnum;
 		}
 
-		// Token: 0x060013D2 RID: 5074 RVA: 0x00071FE0 File Offset: 0x000701E0
+		
 		public static void SaveDataObject(object obj, string filePath)
 		{
 			try
@@ -39,13 +39,13 @@ namespace Verse
 			}
 		}
 
-		// Token: 0x060013D3 RID: 5075 RVA: 0x00072074 File Offset: 0x00070274
+		
 		public static XElement XElementFromObject(object obj, Type expectedClass)
 		{
 			return DirectXmlSaver.XElementFromObject(obj, expectedClass, expectedClass.Name, null, false);
 		}
 
-		// Token: 0x060013D4 RID: 5076 RVA: 0x00072088 File Offset: 0x00070288
+		
 		public static XElement XElementFromObject(object obj, Type expectedType, string nodeName, FieldInfo owningField = null, bool saveDefsAsRefs = false)
 		{
 			DefaultValueAttribute defaultValueAttribute;
@@ -70,7 +70,7 @@ namespace Verse
 				string defName = ((Def)obj).defName;
 				xelement2.Add(new XText(defName));
 			}
-			else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+			else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List))
 			{
 				Type expectedType2 = type.GetGenericArguments()[0];
 				int num = (int)type.GetProperty("Count").GetValue(obj, null);
@@ -131,7 +131,7 @@ namespace Verse
 			return xelement2;
 		}
 
-		// Token: 0x060013D5 RID: 5077 RVA: 0x00072390 File Offset: 0x00070590
+		
 		private static XElement XElementFromField(FieldInfo fi, object owningObj)
 		{
 			if (Attribute.IsDefined(fi, typeof(UnsavedAttribute)))

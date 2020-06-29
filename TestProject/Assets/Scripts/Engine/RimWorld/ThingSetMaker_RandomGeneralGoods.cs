@@ -7,10 +7,10 @@ using Verse;
 
 namespace RimWorld
 {
-	// Token: 0x02000CD4 RID: 3284
+	
 	public class ThingSetMaker_RandomGeneralGoods : ThingSetMaker
 	{
-		// Token: 0x06004F92 RID: 20370 RVA: 0x001ACF18 File Offset: 0x001AB118
+		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			IntRange intRange = parms.countRange ?? new IntRange(10, 20);
@@ -22,7 +22,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06004F93 RID: 20371 RVA: 0x001ACF90 File Offset: 0x001AB190
+		
 		private Thing GenerateSingle(TechLevel techLevel)
 		{
 			Thing thing = null;
@@ -56,7 +56,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F94 RID: 20372 RVA: 0x001AD040 File Offset: 0x001AB240
+		
 		private Thing RandomMeals(TechLevel techLevel)
 		{
 			ThingDef thingDef;
@@ -86,7 +86,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F95 RID: 20373 RVA: 0x001AD0B4 File Offset: 0x001AB2B4
+		
 		private Thing RandomRawFood(TechLevel techLevel)
 		{
 			ThingDef thingDef;
@@ -100,7 +100,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F96 RID: 20374 RVA: 0x001AD0F8 File Offset: 0x001AB2F8
+		
 		private IEnumerable<ThingDef> PossibleRawFood(TechLevel techLevel)
 		{
 			return from x in ThingSetMakerUtility.allGeneratableItems
@@ -108,7 +108,7 @@ namespace RimWorld
 			select x;
 		}
 
-		// Token: 0x06004F97 RID: 20375 RVA: 0x001AD128 File Offset: 0x001AB328
+		
 		private Thing RandomMedicine(TechLevel techLevel)
 		{
 			ThingDef thingDef;
@@ -134,7 +134,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F98 RID: 20376 RVA: 0x001AD210 File Offset: 0x001AB410
+		
 		private Thing RandomDrugs(TechLevel techLevel)
 		{
 			ThingDef thingDef;
@@ -150,7 +150,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F99 RID: 20377 RVA: 0x001AD270 File Offset: 0x001AB470
+		
 		private Thing RandomResources(TechLevel techLevel)
 		{
 			ThingDef thingDef = BaseGenUtility.RandomCheapWallStuff(techLevel, false);
@@ -160,7 +160,7 @@ namespace RimWorld
 			return thing;
 		}
 
-		// Token: 0x06004F9A RID: 20378 RVA: 0x001AD2A9 File Offset: 0x001AB4A9
+		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
@@ -215,7 +215,7 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04002C99 RID: 11417
+		
 		private static Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>[] GoodsWeights = new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>[]
 		{
 			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Meals, 1f),
@@ -225,20 +225,20 @@ namespace RimWorld
 			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Resources, 0.234f)
 		};
 
-		// Token: 0x02001C25 RID: 7205
+		
 		private enum GoodsType
 		{
-			// Token: 0x04006AC7 RID: 27335
+			
 			None,
-			// Token: 0x04006AC8 RID: 27336
+			
 			Meals,
-			// Token: 0x04006AC9 RID: 27337
+			
 			RawFood,
-			// Token: 0x04006ACA RID: 27338
+			
 			Medicine,
-			// Token: 0x04006ACB RID: 27339
+			
 			Drugs,
-			// Token: 0x04006ACC RID: 27340
+			
 			Resources
 		}
 	}

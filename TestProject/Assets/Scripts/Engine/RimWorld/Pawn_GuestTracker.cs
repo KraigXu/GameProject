@@ -4,10 +4,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000B7F RID: 2943
+	
 	public class Pawn_GuestTracker : IExposable
 	{
-		// Token: 0x17000C08 RID: 3080
+		
 		// (get) Token: 0x060044EE RID: 17646 RVA: 0x001743D0 File Offset: 0x001725D0
 		public Faction HostFaction
 		{
@@ -17,7 +17,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C09 RID: 3081
+		
 		// (get) Token: 0x060044EF RID: 17647 RVA: 0x001743D8 File Offset: 0x001725D8
 		public bool CanBeBroughtFood
 		{
@@ -27,7 +27,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0A RID: 3082
+		
 		// (get) Token: 0x060044F0 RID: 17648 RVA: 0x00174403 File Offset: 0x00172603
 		public bool IsPrisoner
 		{
@@ -37,7 +37,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0B RID: 3083
+		
 		// (get) Token: 0x060044F1 RID: 17649 RVA: 0x0017440B File Offset: 0x0017260B
 		public bool ScheduledForInteraction
 		{
@@ -47,7 +47,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0C RID: 3084
+		
 		// (get) Token: 0x060044F2 RID: 17650 RVA: 0x00174444 File Offset: 0x00172644
 		// (set) Token: 0x060044F3 RID: 17651 RVA: 0x0017444C File Offset: 0x0017264C
 		public bool Released
@@ -67,7 +67,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0D RID: 3085
+		
 		// (get) Token: 0x060044F4 RID: 17652 RVA: 0x0017446C File Offset: 0x0017266C
 		public bool PrisonerIsSecure
 		{
@@ -100,7 +100,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0E RID: 3086
+		
 		// (get) Token: 0x060044F5 RID: 17653 RVA: 0x001744EC File Offset: 0x001726EC
 		public bool ShouldWaitInsteadOfEscaping
 		{
@@ -115,7 +115,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x17000C0F RID: 3087
+		
 		// (get) Token: 0x060044F6 RID: 17654 RVA: 0x00174535 File Offset: 0x00172735
 		public float Resistance
 		{
@@ -125,18 +125,18 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044F7 RID: 17655 RVA: 0x0017453D File Offset: 0x0017273D
+		
 		public Pawn_GuestTracker()
 		{
 		}
 
-		// Token: 0x060044F8 RID: 17656 RVA: 0x0017456D File Offset: 0x0017276D
+		
 		public Pawn_GuestTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		// Token: 0x060044F9 RID: 17657 RVA: 0x001745A4 File Offset: 0x001727A4
+		
 		public void GuestTrackerTick()
 		{
 			if (this.pawn.IsHashIntervalTick(2500))
@@ -149,7 +149,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044FA RID: 17658 RVA: 0x001745F4 File Offset: 0x001727F4
+		
 		public void ExposeData()
 		{
 			Scribe_References.Look<Faction>(ref this.hostFactionInt, "hostFaction", false);
@@ -175,7 +175,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044FB RID: 17659 RVA: 0x0017477C File Offset: 0x0017297C
+		
 		public void ClearLastRecruiterData()
 		{
 			this.lastRecruiterName = null;
@@ -187,7 +187,7 @@ namespace RimWorld
 			this.lastRecruiterFinalChance = 0f;
 		}
 
-		// Token: 0x060044FC RID: 17660 RVA: 0x001747CC File Offset: 0x001729CC
+		
 		public void SetLastRecruiterData(Pawn recruiter, float resistanceReduce)
 		{
 			this.lastRecruiterName = recruiter.LabelShort;
@@ -199,7 +199,7 @@ namespace RimWorld
 			this.lastRecruiterFinalChance = this.pawn.RecruitChanceFinalByPawn(recruiter);
 		}
 
-		// Token: 0x060044FD RID: 17661 RVA: 0x00174854 File Offset: 0x00172A54
+		
 		public void SetGuestStatus(Faction newHost, bool prisoner = false)
 		{
 			if (newHost != null)
@@ -291,7 +291,7 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044FE RID: 17662 RVA: 0x00174B84 File Offset: 0x00172D84
+		
 		public void CapturedBy(Faction by, Pawn byPawn = null)
 		{
 			Faction factionOrExtraHomeFaction = this.pawn.FactionOrExtraHomeFaction;
@@ -311,13 +311,13 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060044FF RID: 17663 RVA: 0x00174BEE File Offset: 0x00172DEE
+		
 		public void WaitInsteadOfEscapingForDefaultTicks()
 		{
 			this.WaitInsteadOfEscapingFor(25000);
 		}
 
-		// Token: 0x06004500 RID: 17664 RVA: 0x00174BFB File Offset: 0x00172DFB
+		
 		public void WaitInsteadOfEscapingFor(int ticks)
 		{
 			if (!this.IsPrisoner)
@@ -328,7 +328,7 @@ namespace RimWorld
 			this.spotToWaitInsteadOfEscaping = IntVec3.Invalid;
 		}
 
-		// Token: 0x06004501 RID: 17665 RVA: 0x00174C24 File Offset: 0x00172E24
+		
 		internal void Notify_PawnUndowned()
 		{
 			if (this.pawn.RaceProps.Humanlike && (this.HostFaction == Faction.OfPlayer || (this.pawn.IsWildMan() && this.pawn.InBed() && this.pawn.CurrentBed().Faction == Faction.OfPlayer)) && !this.IsPrisoner && this.pawn.SpawnedOrAnyParentSpawned)
@@ -363,73 +363,73 @@ namespace RimWorld
 			this.getRescuedThoughtOnUndownedBecauseOfPlayer = false;
 		}
 
-		// Token: 0x04002759 RID: 10073
+		
 		private Pawn pawn;
 
-		// Token: 0x0400275A RID: 10074
+		
 		public PrisonerInteractionModeDef interactionMode = PrisonerInteractionModeDefOf.NoInteraction;
 
-		// Token: 0x0400275B RID: 10075
+		
 		private Faction hostFactionInt;
 
-		// Token: 0x0400275C RID: 10076
+		
 		public bool isPrisonerInt;
 
-		// Token: 0x0400275D RID: 10077
+		
 		public string lastRecruiterName;
 
-		// Token: 0x0400275E RID: 10078
+		
 		public int lastRecruiterOpinion;
 
-		// Token: 0x0400275F RID: 10079
+		
 		public float lastRecruiterOpinionChanceFactor;
 
-		// Token: 0x04002760 RID: 10080
+		
 		public float lastRecruiterNegotiationAbilityFactor;
 
-		// Token: 0x04002761 RID: 10081
+		
 		public bool hasOpinionOfLastRecruiter;
 
-		// Token: 0x04002762 RID: 10082
+		
 		public float lastRecruiterResistanceReduce;
 
-		// Token: 0x04002763 RID: 10083
+		
 		public float lastRecruiterFinalChance;
 
-		// Token: 0x04002764 RID: 10084
+		
 		private bool releasedInt;
 
-		// Token: 0x04002765 RID: 10085
+		
 		private int ticksWhenAllowedToEscapeAgain;
 
-		// Token: 0x04002766 RID: 10086
+		
 		public IntVec3 spotToWaitInsteadOfEscaping = IntVec3.Invalid;
 
-		// Token: 0x04002767 RID: 10087
+		
 		public int lastPrisonBreakTicks = -1;
 
-		// Token: 0x04002768 RID: 10088
+		
 		public bool everParticipatedInPrisonBreak;
 
-		// Token: 0x04002769 RID: 10089
+		
 		public float resistance = -1f;
 
-		// Token: 0x0400276A RID: 10090
+		
 		public bool getRescuedThoughtOnUndownedBecauseOfPlayer;
 
-		// Token: 0x0400276B RID: 10091
+		
 		private const int DefaultWaitInsteadOfEscapingTicks = 25000;
 
-		// Token: 0x0400276C RID: 10092
+		
 		public const int MinInteractionInterval = 10000;
 
-		// Token: 0x0400276D RID: 10093
+		
 		public const int MaxInteractionsPerDay = 2;
 
-		// Token: 0x0400276E RID: 10094
+		
 		private const int CheckInitiatePrisonBreakIntervalTicks = 2500;
 
-		// Token: 0x0400276F RID: 10095
+		
 		private static readonly SimpleCurve StartingResistancePerRecruitDifficultyCurve = new SimpleCurve
 		{
 			{
@@ -450,7 +450,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002770 RID: 10096
+		
 		private static readonly SimpleCurve StartingResistanceFactorFromPopulationIntentCurve = new SimpleCurve
 		{
 			{
@@ -471,7 +471,7 @@ namespace RimWorld
 			}
 		};
 
-		// Token: 0x04002771 RID: 10097
+		
 		private static readonly FloatRange StartingResistanceRandomFactorRange = new FloatRange(0.8f, 1.2f);
 	}
 }

@@ -4,10 +4,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	// Token: 0x02000778 RID: 1912
+	
 	public class LordJob_StageThenAttack : LordJob
 	{
-		// Token: 0x1700090A RID: 2314
+		
 		// (get) Token: 0x060031F2 RID: 12786 RVA: 0x0001028D File Offset: 0x0000E48D
 		public override bool GuiltyOnDowned
 		{
@@ -17,12 +17,12 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x060031F3 RID: 12787 RVA: 0x000F4066 File Offset: 0x000F2266
+		
 		public LordJob_StageThenAttack()
 		{
 		}
 
-		// Token: 0x060031F4 RID: 12788 RVA: 0x00116426 File Offset: 0x00114626
+		
 		public LordJob_StageThenAttack(Faction faction, IntVec3 stageLoc, int raidSeed)
 		{
 			this.faction = faction;
@@ -30,7 +30,7 @@ namespace RimWorld
 			this.raidSeed = raidSeed;
 		}
 
-		// Token: 0x060031F5 RID: 12789 RVA: 0x00116444 File Offset: 0x00114644
+		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
@@ -48,7 +48,7 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		// Token: 0x060031F6 RID: 12790 RVA: 0x0011656C File Offset: 0x0011476C
+		
 		public override void ExposeData()
 		{
 			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
@@ -56,13 +56,13 @@ namespace RimWorld
 			Scribe_Values.Look<int>(ref this.raidSeed, "raidSeed", 0, false);
 		}
 
-		// Token: 0x04001B38 RID: 6968
+		
 		private Faction faction;
 
-		// Token: 0x04001B39 RID: 6969
+		
 		private IntVec3 stageLoc;
 
-		// Token: 0x04001B3A RID: 6970
+		
 		private int raidSeed;
 	}
 }

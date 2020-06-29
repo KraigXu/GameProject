@@ -4,10 +4,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000732 RID: 1842
+	
 	public class WorkGiver_Warden_Chat : WorkGiver_Warden
 	{
-		// Token: 0x06003064 RID: 12388 RVA: 0x0010F6E8 File Offset: 0x0010D8E8
+		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (!base.ShouldTakeCareOfPrisoner(pawn, t))

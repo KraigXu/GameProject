@@ -7,23 +7,23 @@ using Verse;
 
 namespace RimWorld.QuestGen
 {
-	// Token: 0x0200112E RID: 4398
+	
 	public class QuestNode_GetMonumentRequiredResourcesString : QuestNode
 	{
-		// Token: 0x060066D0 RID: 26320 RVA: 0x0023F878 File Offset: 0x0023DA78
+		
 		protected override bool TestRunInt(Slate slate)
 		{
 			this.DoWork(slate);
 			return true;
 		}
 
-		// Token: 0x060066D1 RID: 26321 RVA: 0x0023F882 File Offset: 0x0023DA82
+		
 		protected override void RunInt()
 		{
 			this.DoWork(QuestGen.slate);
 		}
 
-		// Token: 0x060066D2 RID: 26322 RVA: 0x0023F890 File Offset: 0x0023DA90
+		
 		private void DoWork(Slate slate)
 		{
 			MonumentMarker value = this.monumentMarker.GetValue(slate);
@@ -157,7 +157,7 @@ namespace RimWorld.QuestGen
 			}
 		}
 
-		// Token: 0x060066D3 RID: 26323 RVA: 0x0023FEF4 File Offset: 0x0023E0F4
+		
 		private int FindStuffsIndexFor(BuildableDef buildable, List<Pair<List<StuffCategoryDef>, int>> anyOf)
 		{
 			for (int i = 0; i < anyOf.Count; i++)
@@ -170,7 +170,7 @@ namespace RimWorld.QuestGen
 			return -1;
 		}
 
-		// Token: 0x060066D4 RID: 26324 RVA: 0x0023FF34 File Offset: 0x0023E134
+		
 		private float GetCheapestStuffMarketValue(List<StuffCategoryDef> categories, int count)
 		{
 			if (!categories.Any<StuffCategoryDef>())
@@ -193,7 +193,7 @@ namespace RimWorld.QuestGen
 			return num;
 		}
 
-		// Token: 0x060066D5 RID: 26325 RVA: 0x0023FFCC File Offset: 0x0023E1CC
+		
 		private float GetCheapestThingMarketValue(List<List<Pair<ThingDef, int>>> costs)
 		{
 			if (!costs.Any<List<Pair<ThingDef, int>>>())
@@ -216,15 +216,15 @@ namespace RimWorld.QuestGen
 			return num;
 		}
 
-		// Token: 0x04003EED RID: 16109
+		
 		[NoTranslate]
 		public SlateRef<string> storeAs;
 
-		// Token: 0x04003EEE RID: 16110
+		
 		[NoTranslate]
 		public SlateRef<string> storeMarketValueAs;
 
-		// Token: 0x04003EEF RID: 16111
+		
 		public SlateRef<MonumentMarker> monumentMarker;
 	}
 }

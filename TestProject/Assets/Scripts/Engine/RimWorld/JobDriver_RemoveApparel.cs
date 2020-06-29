@@ -5,10 +5,10 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	// Token: 0x02000695 RID: 1685
+	
 	public class JobDriver_RemoveApparel : JobDriver
 	{
-		// Token: 0x17000894 RID: 2196
+		
 		// (get) Token: 0x06002DD5 RID: 11733 RVA: 0x001020F4 File Offset: 0x001002F4
 		private Apparel Apparel
 		{
@@ -18,27 +18,27 @@ namespace RimWorld
 			}
 		}
 
-		// Token: 0x06002DD6 RID: 11734 RVA: 0x0010211A File Offset: 0x0010031A
+		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			Scribe_Values.Look<int>(ref this.duration, "duration", 0, false);
 		}
 
-		// Token: 0x06002DD7 RID: 11735 RVA: 0x0001028D File Offset: 0x0000E48D
+		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		// Token: 0x06002DD8 RID: 11736 RVA: 0x00102134 File Offset: 0x00100334
+		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
 			this.duration = (int)(this.Apparel.GetStatValue(StatDefOf.EquipDelay, true) * 60f);
 		}
 
-		// Token: 0x06002DD9 RID: 11737 RVA: 0x0010215A File Offset: 0x0010035A
+		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -86,10 +86,10 @@ namespace RimWorld
 			yield break;
 		}
 
-		// Token: 0x04001A41 RID: 6721
+		
 		private int duration;
 
-		// Token: 0x04001A42 RID: 6722
+		
 		private const TargetIndex ApparelInd = TargetIndex.A;
 	}
 }
