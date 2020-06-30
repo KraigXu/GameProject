@@ -18,10 +18,10 @@ namespace RimWorld.QuestGenNew
 		protected override void RunInt()
 		{
 			Slate slate = QuestGen.slate;
-			if ((this.outSignals.GetValue(slate) != null && this.outSignals.GetValue(slate).Count<string>() != 0) + this.node == null)
-			{
-				return;
-			}
+			//if ((this.outSignals.GetValue(slate) != null && this.outSignals.GetValue(slate).Count<string>() != 0) + this.node == null)
+			//{
+			//	return;
+			//}
 			QuestPart_PassActivable questPart_PassActivable = new QuestPart_PassActivable();
 			QuestGen.quest.AddPart(questPart_PassActivable);
 			questPart_PassActivable.inSignalEnable = (QuestGenUtility.HardcodedSignalWithQuestID(this.inSignalEnable.GetValue(slate)) ?? slate.Get<string>("inSignal", null, false));

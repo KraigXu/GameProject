@@ -63,7 +63,8 @@ namespace RimWorld
 			{
 				return Twelfth.Undefined;
 			}
-			return (twelfth + 1) % Twelfth.Undefined;
+			//return (twelfth + 1) % Twelfth.Undefined;
+			return Twelfth.Undefined;
 		}
 
 		

@@ -101,11 +101,11 @@ namespace RimWorld
 			}
 			for (int i = this.landingAreas.Count - 1; i >= 0; i--)
 			{
-				List<CompShipLandingBeacon>.Enumerator enumerator2 = this.landingAreas[i].beacons.GetEnumerator();
+				List<CompShipLandingBeacon>.Enumerator enumerator4 = this.landingAreas[i].beacons.GetEnumerator();
 				{
-					while (enumerator2.MoveNext())
+					while (enumerator4.MoveNext())
 					{
-						if (!enumerator2.Current.TryAddArea(this.landingAreas[i]))
+						if (!enumerator4.Current.TryAddArea(this.landingAreas[i]))
 						{
 							this.RemoveArea(this.landingAreas[i]);
 							break;

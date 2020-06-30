@@ -245,12 +245,12 @@ namespace Verse
 				{
 					for (int i = 0; i < iterations; i++)
 					{
-						IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
-						if (localDef.pointsScaleable)
-						{
-							parms = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain).GenerateParms(localDef.category, parms.target);
-						}
-						localDef.Worker.TryExecute(parms);
+						//IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
+						//if (localDef.pointsScaleable)
+						//{
+						//	parms = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain).GenerateParms(localDef.category, parms.target);
+						//}
+						//localDef.Worker.TryExecute(parms);
 					}
 				}));
 			}

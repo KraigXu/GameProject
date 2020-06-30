@@ -99,7 +99,7 @@ namespace RimWorld
 							{
 								TutorSystem.Notify_Event("AddBill-" + recipe.LabelCap.Resolve());
 							}
-						}, recipe.ProducedThingDef, MenuOptionPriority.Default, null, null, 29f, (Rect rect) => Widgets.InfoCardButton(rect.x + 5f, rect.y + (rect.height - 24f) / 2f, recipe), null));
+						}, recipe.ProducedThingDef, MenuOptionPriority.Default, null, null, 29f, (Rect rect9) => Widgets.InfoCardButton(rect9.x + 5f, rect9.y + (rect9.height - 24f) / 2f, recipe), null));
 					}
 				}
 				if (!list.Any<FloatMenuOption>())

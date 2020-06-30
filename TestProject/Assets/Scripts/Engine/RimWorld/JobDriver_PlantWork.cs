@@ -47,7 +47,8 @@ namespace RimWorld
 		{
 			this.Init();
 			yield return Toils_JobTransforms.MoveCurrentTargetIntoQueue(TargetIndex.A);
-			Toil initExtractTargetFromQueue = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A, (this.RequiredDesignation != null) ? ((Thing t) => this.Map.designationManager.DesignationOn(t, this.RequiredDesignation) != null) : null);
+			//Toil initExtractTargetFromQueue = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A, (this.RequiredDesignation != null) ? ((Thing t) => this.Map.designationManager.DesignationOn(t, this.RequiredDesignation) != null) : null);
+			Toil initExtractTargetFromQueue = default;
 			yield return initExtractTargetFromQueue;
 			yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(TargetIndex.A);
 			yield return Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.A, true);

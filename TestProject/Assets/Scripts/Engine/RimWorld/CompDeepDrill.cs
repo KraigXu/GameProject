@@ -98,7 +98,7 @@ namespace RimWorld
 					IntVec3 c = intVec + GenRadial.RadialPattern[i];
 					if (c.InBounds(this.parent.Map))
 					{
-						ThingWithComps firstThingWithComp = c.GetFirstThingWithComp(this.parent.Map);
+						ThingWithComps firstThingWithComp = c.GetFirstThingWithComp<ThingComp>(this.parent.Map);
 						if (firstThingWithComp != null && !firstThingWithComp.GetComp<CompDeepDrill>().ValuableResourcesPresent())
 						{
 							firstThingWithComp.SetForbidden(true, true);

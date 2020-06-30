@@ -135,7 +135,20 @@ namespace Verse
 			return null;
 		}
 
-		
+		public static Thing GetFirstThingMap(this IntVec3 c, Map map, ThingDef def)
+		{
+			List<Thing> thingList = c.GetThingList(map);
+			for (int i = 0; i < thingList.Count; i++)
+			{
+				if (thingList[i].def == def)
+				{
+					return thingList[i];
+				}
+			}
+			return null;
+		}
+
+
 		public static ThingWithComps GetFirstThingWithComp<TComp>(this IntVec3 c, Map map) where TComp : ThingComp
 		{
 			List<Thing> thingList = c.GetThingList(map);

@@ -131,7 +131,7 @@ namespace Verse
 			}
 			if (typeof(T) == typeof(Texture2D))
 			{
-				return (LoadedContentItem<T>)new LoadedContentItem<Texture2D>(file, BaseContent.BadTex, null);
+			//	return (LoadedContentItem<T>)new LoadedContentItem<Texture2D>(file, BaseContent.BadTex, null);
 			}
 			return null;
 		}

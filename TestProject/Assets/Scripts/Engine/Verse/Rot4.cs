@@ -28,7 +28,7 @@ namespace Verse
 			}
 			set
 			{
-				this.rotInt = value % 4;
+				this.rotInt = (byte)(value % 4);
 			}
 		}
 

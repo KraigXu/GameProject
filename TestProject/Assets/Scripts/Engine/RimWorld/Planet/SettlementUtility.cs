@@ -77,7 +77,7 @@ namespace RimWorld.Planet
 					{
 						letterText += "\n\n";
 					}
-					letterText += "RelationsWith".Translate(settlement.Faction.Name.ApplyTag(settlement.Faction)) + ": " + -50.ToStringWithSign();
+					letterText += "RelationsWith".Translate(settlement.Faction.Name.ApplyTag(settlement.Faction)) + ": " + (-50).ToStringWithSign();
 				}
 				settlement.Faction.TryAppendRelationKindChangedInfo(ref letterText, playerRelationKind, settlement.Faction.PlayerRelationKind, null);
 			}

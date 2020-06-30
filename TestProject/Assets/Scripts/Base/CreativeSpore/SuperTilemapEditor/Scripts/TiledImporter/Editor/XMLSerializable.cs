@@ -19,7 +19,8 @@ namespace CreativeSpore.TiledImporter
         {
             string sXml = Serialize<T>(obj_);
 
-            StreamWriter textWriter = new StreamWriter(sFilePath_, false) )
+            StreamWriter textWriter = new StreamWriter(sFilePath_, false);
+
             {
                 textWriter.Write(sXml);
             }
@@ -29,7 +30,7 @@ namespace CreativeSpore.TiledImporter
         {
             string sXml;
 
-            StreamReader textReader = new StreamReader(sFilePath_))
+            StreamReader textReader = new StreamReader(sFilePath_);
             {
                 sXml = textReader.ReadToEnd();
             }

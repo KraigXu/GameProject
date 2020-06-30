@@ -23,23 +23,24 @@ namespace RimWorld
 		public override string Label(Room r = null)
 		{
 			bool flag = !this.labelKey.NullOrEmpty();
-			string text = flag ? this.labelKey.Translate() : this.thingDef.label;
-			if (r != null)
-			{
-				return string.Concat(new object[]
-				{
-					text,
-					" ",
-					this.Count(r),
-					"/",
-					this.count
-				});
-			}
-			if (!flag)
-			{
-				return GenLabel.ThingLabel(this.thingDef, null, this.count);
-			}
-			return text + " x" + this.count;
+			//string text = flag ? this.labelKey.Translate() : this.thingDef.label;
+			//if (r != null)
+			//{
+			//	return string.Concat(new object[]
+			//	{
+			//		text,
+			//		" ",
+			//		this.Count(r),
+			//		"/",
+			//		this.count
+			//	});
+			//}
+			//if (!flag)
+			//{
+			//	return GenLabel.ThingLabel(this.thingDef, null, this.count);
+			//}
+			//return text + " x" + this.count;
+			return "";
 		}
 
 		

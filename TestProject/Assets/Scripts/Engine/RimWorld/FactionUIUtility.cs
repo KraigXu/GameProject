@@ -90,7 +90,8 @@ namespace RimWorld
 							taggedString += "CurrentGoodwillTip_Hostile".Translate(0.ToString("F0"));
 							break;
 						case FactionRelationKind.Neutral:
-							taggedString += "CurrentGoodwillTip_Neutral".Translate(-75.ToString("F0"), 75.ToString("F0"));
+								int v = -75;
+							taggedString += "CurrentGoodwillTip_Neutral".Translate(v.ToString("F0"), 75.ToString("F0"));
 							break;
 						case FactionRelationKind.Ally:
 							taggedString += "CurrentGoodwillTip_Ally".Translate(0.ToString("F0"));

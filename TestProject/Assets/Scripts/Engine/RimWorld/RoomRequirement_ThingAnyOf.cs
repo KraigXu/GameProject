@@ -10,7 +10,8 @@ namespace RimWorld
 		
 		public override string Label(Room r = null)
 		{
-			return ((!this.labelKey.NullOrEmpty()) ? this.labelKey.Translate() : this.things[0].label) + ((r != null) ? " 0/1" : "");
+			//return ((!this.labelKey.NullOrEmpty()) ? this.labelKey.Translate() : this.things[0].label) + ((r != null) ? " 0/1" : "");
+			return "";
 		}
 
 		

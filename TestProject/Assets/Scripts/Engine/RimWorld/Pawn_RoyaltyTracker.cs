@@ -454,50 +454,50 @@ namespace RimWorld
 		
 		public void IssueDecree(bool causedByMentalBreak, string mentalBreakReason = null)
 		{
-			Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_ = new Pawn_RoyaltyTracker.c__DisplayClass43_0();
-			if (!ModLister.RoyaltyInstalled)
-			{
-				Log.ErrorOnce("Decrees are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 281653, false);
-				return;
-			}
-			Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_2 = c__DisplayClass43_;
-			IIncidentTarget mapHeld = this.pawn.MapHeld;
-			c__DisplayClass43_2.target = (mapHeld ?? Find.World);
-			QuestScriptDef questScriptDef;
-			if (this.PossibleDecreeQuests.TryRandomElementByWeight((QuestScriptDef x) => NaturalRandomQuestChooser.GetNaturalDecreeSelectionWeight(x, c__DisplayClass43_.target.StoryState), out questScriptDef))
-			{
-				this.lastDecreeTicks = Find.TickManager.TicksGame;
-				Slate slate = new Slate();
-				slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(c__DisplayClass43_.target), false);
-				slate.Set<Pawn>("asker", this.pawn, false);
-				Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questScriptDef, slate);
-				c__DisplayClass43_.target.StoryState.RecordDecreeFired(questScriptDef);
-				string str;
-				if (causedByMentalBreak)
-				{
-					str = "WildDecree".Translate() + ": " + this.pawn.LabelShortCap;
-				}
-				else
-				{
-					str = "LetterLabelRandomDecree".Translate(this.pawn);
-				}
-				string text;
-				if (causedByMentalBreak)
-				{
-					text = "LetterDecreeMentalBreak".Translate(this.pawn);
-				}
-				else
-				{
-					text = "LetterRandomDecree".Translate(this.pawn);
-				}
-				if (mentalBreakReason != null)
-				{
-					text = text + "\n\n" + mentalBreakReason;
-				}
-				text += "\n\n" + "LetterDecree_Quest".Translate(quest.name);
-				ChoiceLetter let = LetterMaker.MakeLetter(str, text, IncidentDefOf.GiveQuest_Random.letterDef, LookTargets.Invalid, null, quest, null);
-				Find.LetterStack.ReceiveLetter(let, null);
-			}
+			//Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_ = new Pawn_RoyaltyTracker.c__DisplayClass43_0();
+			//if (!ModLister.RoyaltyInstalled)
+			//{
+			//	Log.ErrorOnce("Decrees are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 281653, false);
+			//	return;
+			//}
+			//Pawn_RoyaltyTracker.c__DisplayClass43_0 c__DisplayClass43_2 = c__DisplayClass43_;
+			//IIncidentTarget mapHeld = this.pawn.MapHeld;
+			//c__DisplayClass43_2.target = (mapHeld ?? Find.World);
+			//QuestScriptDef questScriptDef;
+			//if (this.PossibleDecreeQuests.TryRandomElementByWeight((QuestScriptDef x) => NaturalRandomQuestChooser.GetNaturalDecreeSelectionWeight(x, c__DisplayClass43_.target.StoryState), out questScriptDef))
+			//{
+			//	this.lastDecreeTicks = Find.TickManager.TicksGame;
+			//	Slate slate = new Slate();
+			//	slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(c__DisplayClass43_.target), false);
+			//	slate.Set<Pawn>("asker", this.pawn, false);
+			//	Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questScriptDef, slate);
+			//	c__DisplayClass43_.target.StoryState.RecordDecreeFired(questScriptDef);
+			//	string str;
+			//	if (causedByMentalBreak)
+			//	{
+			//		str = "WildDecree".Translate() + ": " + this.pawn.LabelShortCap;
+			//	}
+			//	else
+			//	{
+			//		str = "LetterLabelRandomDecree".Translate(this.pawn);
+			//	}
+			//	string text;
+			//	if (causedByMentalBreak)
+			//	{
+			//		text = "LetterDecreeMentalBreak".Translate(this.pawn);
+			//	}
+			//	else
+			//	{
+			//		text = "LetterRandomDecree".Translate(this.pawn);
+			//	}
+			//	if (mentalBreakReason != null)
+			//	{
+			//		text = text + "\n\n" + mentalBreakReason;
+			//	}
+			//	text += "\n\n" + "LetterDecree_Quest".Translate(quest.name);
+			//	ChoiceLetter let = LetterMaker.MakeLetter(str, text, IncidentDefOf.GiveQuest_Random.letterDef, LookTargets.Invalid, null, quest, null);
+			//	Find.LetterStack.ReceiveLetter(let, null);
+			//}
 		}
 
 		

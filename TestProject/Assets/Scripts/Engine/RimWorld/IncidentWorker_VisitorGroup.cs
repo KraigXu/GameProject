@@ -35,8 +35,8 @@ namespace RimWorld
 			TaggedString baseLetterText;
 			if (list.Count == 1)
 			{
-				TaggedString value = flag ? ("\n\n" + "SingleVisitorArrivesTraderInfo".Translate(list[0].Named("PAWN")).AdjustedFor(list[0], "PAWN", true)) : "";
-				TaggedString value2 = (pawn != null) ? ("\n\n" + "SingleVisitorArrivesLeaderInfo".Translate(list[0].Named("PAWN")).AdjustedFor(list[0], "PAWN", true)) : "";
+				TaggedString value = flag ?  ("\n\n" + "SingleVisitorArrivesTraderInfo".Translate(list[0].Named("PAWN")).AdjustedFor(list[0], "PAWN", true)) : TaggedString.Empty;
+				TaggedString value2 = (pawn != null) ? ("\n\n" + "SingleVisitorArrivesLeaderInfo".Translate(list[0].Named("PAWN")).AdjustedFor(list[0], "PAWN", true)) : TaggedString.Empty;
 				baseLetterLabel = "LetterLabelSingleVisitorArrives".Translate();
 				baseLetterText = "SingleVisitorArrives".Translate(list[0].story.Title, parms.faction.NameColored, list[0].Name.ToStringFull, value, value2, list[0].Named("PAWN")).AdjustedFor(list[0], "PAWN", true);
 			}

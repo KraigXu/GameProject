@@ -168,7 +168,7 @@ namespace RimWorld
 			stateGraph.AddTransition(transition5, false);
 			Transition transition6 = new Transition(this.leave, lordToil_End, false, true);
 			transition6.AddTrigger(new Trigger_Memo("ReadyToExitMap"));
-			transition6.AddPreAction(new TransitionAction_Custom(new Action(this.SendCaravan)));
+			//transition6.AddPreAction(new TransitionAction_Custom(new Action(this.SendCaravan)));
 			stateGraph.AddTransition(transition6, false);
 			Transition transition7 = this.PauseTransition(this.gatherAnimals, this.gatherAnimals_pause);
 			stateGraph.AddTransition(transition7, false);

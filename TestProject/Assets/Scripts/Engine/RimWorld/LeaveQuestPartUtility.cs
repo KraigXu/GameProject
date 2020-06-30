@@ -24,7 +24,7 @@ namespace RimWorld
 			{
 				Rand.PushState(quest.id ^ 960512692);
 				Faction faction;
-				if (pawn.HasExtraHomeFaction(quest) && pawn.GetExtraHomeFaction(quest) != Faction.OfPlayer)
+				if (pawn.HasExtraHomeQuest(quest) && pawn.GetExtraHomeFaction(quest) != Faction.OfPlayer)
 				{
 					faction = pawn.GetExtraHomeFaction(quest);
 				}

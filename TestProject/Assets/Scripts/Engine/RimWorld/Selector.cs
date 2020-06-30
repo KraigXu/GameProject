@@ -354,14 +354,14 @@ namespace RimWorld
 			List<Thing> boxThings = ThingSelectionUtility.MultiSelectableThingsInScreenRectDistinct(this.dragBox.ScreenRect).ToList<Thing>();
 			Func<Predicate<Thing>, bool> func = delegate(Predicate<Thing> predicate)
 			{
-				IEnumerable<Thing> boxThings = default;
+				IEnumerable<Thing> boxThings1 = default;
 
 				Func<Thing, bool> predicate2;
 				if ((predicate2=default ) == null)
 				{
 					predicate2 = ( ((Thing t) => predicate(t)));
 				}
-				foreach (Thing obj2 in boxThings.Where(predicate2))
+				foreach (Thing obj2 in boxThings1.Where(predicate2))
 				{
 					this.Select(obj2, true, true);
 					selectedSomething = true;

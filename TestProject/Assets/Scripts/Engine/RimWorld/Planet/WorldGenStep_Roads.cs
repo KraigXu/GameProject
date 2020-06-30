@@ -80,40 +80,41 @@ namespace RimWorld.Planet
 		
 		private List<WorldGenStep_Roads.Link> GenerateProspectiveLinks(List<int> indexToTile)
 		{
-			WorldGenStep_Roads.c__DisplayClass14_0 c__DisplayClass14_ = new WorldGenStep_Roads.c__DisplayClass14_0();
-			c__DisplayClass14_.tileToIndexLookup = new Dictionary<int, int>();
-			for (int i = 0; i < indexToTile.Count; i++)
-			{
-				c__DisplayClass14_.tileToIndexLookup[indexToTile[i]] = i;
-			}
-			c__DisplayClass14_.linkProspective = new List<WorldGenStep_Roads.Link>();
-			List<int> list = new List<int>();
-			int srcIndex;
-			int srcIndex2;
-			for (srcIndex = 0; srcIndex < indexToTile.Count; srcIndex = srcIndex2)
-			{
-				int srcTile = indexToTile[srcIndex];
-				list.Clear();
-				list.Add(srcTile);
-				int found = 0;
-				Find.WorldPathFinder.FloodPathsWithCost(list, (int src, int dst) => Caravan_PathFollower.CostToMove(3300, src, dst, null, true, null, null), null, delegate(int tile, float distance)
-				{
-					if (tile != srcTile && c__DisplayClass14_.tileToIndexLookup.ContainsKey(tile))
-					{
-						found++;
-						c__DisplayClass14_.linkProspective.Add(new WorldGenStep_Roads.Link
-						{
-							distance = distance,
-							indexA = srcIndex,
-							indexB = c__DisplayClass14_.tileToIndexLookup[tile]
-						});
-					}
-					return found >= 8;
-				});
-				srcIndex2 = srcIndex + 1;
-			}
-			c__DisplayClass14_.linkProspective.Sort((WorldGenStep_Roads.Link lhs, WorldGenStep_Roads.Link rhs) => lhs.distance.CompareTo(rhs.distance));
-			return c__DisplayClass14_.linkProspective;
+			//WorldGenStep_Roads.c__DisplayClass14_0 c__DisplayClass14_ = new WorldGenStep_Roads.c__DisplayClass14_0();
+			//c__DisplayClass14_.tileToIndexLookup = new Dictionary<int, int>();
+			//for (int i = 0; i < indexToTile.Count; i++)
+			//{
+			//	c__DisplayClass14_.tileToIndexLookup[indexToTile[i]] = i;
+			//}
+			//c__DisplayClass14_.linkProspective = new List<WorldGenStep_Roads.Link>();
+			//List<int> list = new List<int>();
+			//int srcIndex;
+			//int srcIndex2;
+			//for (srcIndex = 0; srcIndex < indexToTile.Count; srcIndex = srcIndex2)
+			//{
+			//	int srcTile = indexToTile[srcIndex];
+			//	list.Clear();
+			//	list.Add(srcTile);
+			//	int found = 0;
+			//	Find.WorldPathFinder.FloodPathsWithCost(list, (int src, int dst) => Caravan_PathFollower.CostToMove(3300, src, dst, null, true, null, null), null, delegate(int tile, float distance)
+			//	{
+			//		if (tile != srcTile && c__DisplayClass14_.tileToIndexLookup.ContainsKey(tile))
+			//		{
+			//			found++;
+			//			c__DisplayClass14_.linkProspective.Add(new WorldGenStep_Roads.Link
+			//			{
+			//				distance = distance,
+			//				indexA = srcIndex,
+			//				indexB = c__DisplayClass14_.tileToIndexLookup[tile]
+			//			});
+			//		}
+			//		return found >= 8;
+			//	});
+			//	srcIndex2 = srcIndex + 1;
+			//}
+			//c__DisplayClass14_.linkProspective.Sort((WorldGenStep_Roads.Link lhs, WorldGenStep_Roads.Link rhs) => lhs.distance.CompareTo(rhs.distance));
+			//return c__DisplayClass14_.linkProspective;
+			return default;
 		}
 
 		

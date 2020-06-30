@@ -44,7 +44,8 @@ namespace RimWorld
 		{
 			get
 			{
-				return this.Grave ?? this.Corpse;
+				//return this.Grave ?? this.Corpse;
+				return this.Grave;
 			}
 		}
 

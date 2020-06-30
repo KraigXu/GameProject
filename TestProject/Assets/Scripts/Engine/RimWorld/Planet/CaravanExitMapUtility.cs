@@ -223,33 +223,34 @@ namespace RimWorld.Planet
 		
 		public static int RandomBestExitTileFrom(Map map)
 		{
-			CaravanExitMapUtility.c__DisplayClass10_0 c__DisplayClass10_ = new CaravanExitMapUtility.c__DisplayClass10_0();
-			Tile tileInfo = map.TileInfo;
-			c__DisplayClass10_.options = CaravanExitMapUtility.AvailableExitTilesAt(map);
-			if (!c__DisplayClass10_.options.Any<int>())
-			{
-				return -1;
-			}
-			c__DisplayClass10_.roads = tileInfo.Roads;
-			if (c__DisplayClass10_.roads == null)
-			{
-				return c__DisplayClass10_.options.RandomElement<int>();
-			}
-			int bestRoadIndex = -1;
-			for (int i = 0; i < c__DisplayClass10_.roads.Count; i++)
-			{
-				if (c__DisplayClass10_.options.Contains(c__DisplayClass10_.roads[i].neighbor) && (bestRoadIndex == -1 || c__DisplayClass10_.roads[i].road.priority > c__DisplayClass10_.roads[bestRoadIndex].road.priority))
-				{
-					bestRoadIndex = i;
-				}
-			}
-			if (bestRoadIndex == -1)
-			{
-				return c__DisplayClass10_.options.RandomElement<int>();
-			}
-			return (from rl in c__DisplayClass10_.roads
-			where c__DisplayClass10_.options.Contains(rl.neighbor) && rl.road == c__DisplayClass10_.roads[bestRoadIndex].road
-			select rl).RandomElement<Tile.RoadLink>().neighbor;
+			//CaravanExitMapUtility.c__DisplayClass10_0 c__DisplayClass10_ = new CaravanExitMapUtility.c__DisplayClass10_0();
+			//Tile tileInfo = map.TileInfo;
+			//c__DisplayClass10_.options = CaravanExitMapUtility.AvailableExitTilesAt(map);
+			//if (!c__DisplayClass10_.options.Any<int>())
+			//{
+			//	return -1;
+			//}
+			//c__DisplayClass10_.roads = tileInfo.Roads;
+			//if (c__DisplayClass10_.roads == null)
+			//{
+			//	return c__DisplayClass10_.options.RandomElement<int>();
+			//}
+			//int bestRoadIndex = -1;
+			//for (int i = 0; i < c__DisplayClass10_.roads.Count; i++)
+			//{
+			//	if (c__DisplayClass10_.options.Contains(c__DisplayClass10_.roads[i].neighbor) && (bestRoadIndex == -1 || c__DisplayClass10_.roads[i].road.priority > c__DisplayClass10_.roads[bestRoadIndex].road.priority))
+			//	{
+			//		bestRoadIndex = i;
+			//	}
+			//}
+			//if (bestRoadIndex == -1)
+			//{
+			//	return c__DisplayClass10_.options.RandomElement<int>();
+			//}
+			//return (from rl in c__DisplayClass10_.roads
+			//where c__DisplayClass10_.options.Contains(rl.neighbor) && rl.road == c__DisplayClass10_.roads[bestRoadIndex].road
+			//select rl).RandomElement<Tile.RoadLink>().neighbor;
+			return 0;
 		}
 
 		

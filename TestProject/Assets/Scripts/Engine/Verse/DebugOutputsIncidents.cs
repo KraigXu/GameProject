@@ -293,43 +293,42 @@ namespace Verse
 										}
 										return "";
 									}));
-									list4.AddRange((from x in DefDatabase<ThingDef>.AllDefs
-									where x.IsWeapon && !x.weaponTags.NullOrEmpty<string>() && weaponsCount.Any((Dictionary<ThingDef, int> wc) => wc.ContainsKey(x))
-									orderby x.IsMeleeWeapon descending, x.techLevel, x.BaseMarketValue
-									select x).Select(delegate(ThingDef x)
-									{
-										return new TableDataGetter<int>(x.label.Shorten(), delegate(int y)
-										{
-											IEnumerable<Dictionary<ThingDef, int>> weaponsCount;
-											//if (y == 20)
-											//{
-											//	string str = " ";
-											//	Func<Dictionary<ThingDef, int>, int> selector= delegate (Dictionary<ThingDef, int> z)
-											//	{
-											//		if (!z.ContainsKey(x))
-											//		{
-											//			return 0;
-											//		}
-											//		return z[x];
-											//	};
+									//list4.AddRange((from x in DefDatabase<ThingDef>.AllDefs
+									//where x.IsWeapon && !x.weaponTags.NullOrEmpty<string>() && weaponsCount.Any((Dictionary<ThingDef, int> wc) => wc.ContainsKey(x))
+									//orderby x.IsMeleeWeapon descending, x.techLevel, x.BaseMarketValue
+									//select x).Select(delegate(ThingDef x)
+									//{
+         //                               return new TableDataGetter<int>(x.label.Shorten(), delegate (int y)
+         //                               {
+         //                                   IEnumerable<Dictionary<ThingDef, int>> weaponsCount = default;
+         //                                   if (y == 20)
+         //                                   {
+         //                                       string str = " ";
+         //                                       Func<Dictionary<ThingDef, int>, int> selector = delegate (Dictionary<ThingDef, int> z)
+         //                                        {
+         //                                            if (!z.ContainsKey(x))
+         //                                            {
+         //                                                return 0;
+         //                                            }
+         //                                            return z[x];
+         //                                        };
 
-											//	return str + ((float)weaponsCount.Sum(selector) / 20f).ToString("0.#");
-											//}
-											//if (!weaponsCount[y].ContainsKey(x))
-											//{
-											//	return "";
-											//}
-											//object[] array = new object[5];
-											//array[0] = " ";
-											//array[1] = weaponsCount[y][x];
-											//array[2] = " (";
-											//array[3] = ((float)weaponsCount[y][x] / (float)weaponsCount[y].Sum((KeyValuePair<ThingDef, int> z) => z.Value)).ToStringPercent("F0");
-											//array[4] = ")";
-											//return string.Concat(array);
-											return "";
-										});
-									}));
-									DebugTables.MakeTablesDialog<int>(Enumerable.Range(0, 21), list4.ToArray());
+         //                                       return str + ((float)weaponsCount.Sum(selector) / 20f).ToString("0.#");
+         //                                   }
+         //                                   if (!weaponsCount[y].ContainsKey(x))
+         //                                   {
+         //                                       return "";
+         //                                   }
+         //                                   object[] array = new object[5];
+         //                                   //array[0] = " ";
+         //                                   //array[1] = weaponsCount[y][x];
+         //                                   //array[2] = " (";
+         //                                   //array[3] = ((float)weaponsCount[y][x] / (float)weaponsCount[y].Sum((KeyValuePair<ThingDef, int> z) => z.Value)).ToStringPercent("F0");
+         //                                   //array[4] = ")";
+         //                                   return string.Concat(array);
+         //                               });
+         //                           }));
+									//DebugTables.MakeTablesDialog<int>(Enumerable.Range(0, 21), list4.ToArray());
 								}));
 							}
 							Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));

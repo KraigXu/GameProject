@@ -28,11 +28,11 @@ namespace RimWorld
 		public override void Init()
 		{
 			base.Init();
-			this.Data.spectateRect = CellRect.CenteredOn(this.spot, 0);
-			Rot4 rotation = this.spot.GetFirstThing(this.organizer.MapHeld).Rotation;
-			SpectateRectSide asSpectateSide = rotation.Opposite.AsSpectateSide;
-			this.Data.spectateRectAllowedSides = (SpectateRectSide.All & ~asSpectateSide);
-			this.Data.spectateRectPreferredSide = rotation.AsSpectateSide;
+			//this.Data.spectateRect = CellRect.CenteredOn(this.spot, 0);
+			//Rot4 rotation = this.spot.GetFirstThing(this.organizer.MapHeld).Rotation;
+			//SpectateRectSide asSpectateSide = rotation.Opposite.AsSpectateSide;
+			//this.Data.spectateRectAllowedSides = (SpectateRectSide.All & ~asSpectateSide);
+			//this.Data.spectateRectPreferredSide = rotation.AsSpectateSide;
 		}
 
 		
@@ -53,7 +53,7 @@ namespace RimWorld
 				Pawn pawn = this.lord.ownedPawns[i];
 				if (pawn == this.organizer)
 				{
-					Building_Throne firstThing = this.spot.GetFirstThing(base.Map);
+					Building_Throne firstThing = this.spot.GetFirstThing<Building_Throne>(base.Map);
 					pawn.mindState.duty = new PawnDuty(DutyDefOf.GiveSpeech, this.spot, firstThing, -1f);
 					pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
 				}

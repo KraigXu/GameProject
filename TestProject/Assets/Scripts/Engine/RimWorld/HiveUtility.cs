@@ -24,7 +24,7 @@ namespace RimWorld
 			for (int i = 0; i < num; i++)
 			{
 				IntVec3 c = thing.Position + GenRadial.RadialPattern[i];
-				if (c.InBounds(thing.Map) && c.GetFirstThing(thing.Map) != null)
+				if (c.InBounds(thing.Map) && c.GetFirstThing<Thing>(thing.Map) != null)
 				{
 					return true;
 				}

@@ -31,36 +31,36 @@ namespace RimWorld.BaseGen
 
 		public void AttemptToPlace(ThingDef thingDef, CellRect rect, Rot4 rotation, Faction faction)
 		{
-			Map map = BaseGenCore.globalSettings.map;
-			Thing thing;
-			IntVec3 loc = rect.Cells.InRandomOrder(null).Where(delegate(IntVec3 cell)
-			{
-				if (GenConstruct.CanPlaceBlueprintAt(thingDef, cell, rotation, map, false, null, null, null).Accepted)
-				{
-					IEnumerable<IntVec3> adjacentCellsCardinal = GenAdj.OccupiedRect(cell, rotation, thingDef.Size).AdjacentCellsCardinal;
-					Func<IntVec3, bool> predicate = (delegate (IntVec3 edgeCell)
-					{
-						if (edgeCell.InBounds(map))
-						{
-							return edgeCell.GetThingList(map).Any((Thing thing) => thing.def == ThingDefOf.Ship_Beam);
-						}
-						return false;
-					});
-					return adjacentCellsCardinal.Any(predicate);
-				}
-				return false;
-			}).FirstOrFallback(IntVec3.Invalid);
-			if (loc.IsValid)
-			{
-				thing = ThingMaker.MakeThing(thingDef, null);
-				thing.SetFaction(faction, null);
-				CompHibernatable compHibernatable = thing.TryGetComp<CompHibernatable>();
-				if (compHibernatable != null)
-				{
-					compHibernatable.State = HibernatableStateDefOf.Hibernating;
-				}
-				GenSpawn.Spawn(thing, loc, BaseGenCore.globalSettings.map, rotation, WipeMode.Vanish, false);
-			}
+			//Map map = BaseGenCore.globalSettings.map;
+			//Thing thing;
+			//IntVec3 loc = rect.Cells.InRandomOrder(null).Where(delegate(IntVec3 cell)
+			//{
+			//	if (GenConstruct.CanPlaceBlueprintAt(thingDef, cell, rotation, map, false, null, null, null).Accepted)
+			//	{
+			//		IEnumerable<IntVec3> adjacentCellsCardinal = GenAdj.OccupiedRect(cell, rotation, thingDef.Size).AdjacentCellsCardinal;
+			//		Func<IntVec3, bool> predicate = (delegate (IntVec3 edgeCell)
+			//		{
+			//			if (edgeCell.InBounds(map))
+			//			{
+			//				return edgeCell.GetThingList(map).Any((Thing thing) => thing.def == ThingDefOf.Ship_Beam);
+			//			}
+			//			return false;
+			//		});
+			//		return adjacentCellsCardinal.Any(predicate);
+			//	}
+			//	return false;
+			//}).FirstOrFallback(IntVec3.Invalid);
+			//if (loc.IsValid)
+			//{
+			//	thing = ThingMaker.MakeThing(thingDef, null);
+			//	thing.SetFaction(faction, null);
+			//	CompHibernatable compHibernatable = thing.TryGetComp<CompHibernatable>();
+			//	if (compHibernatable != null)
+			//	{
+			//		compHibernatable.State = HibernatableStateDefOf.Hibernating;
+			//	}
+			//	GenSpawn.Spawn(thing, loc, BaseGenCore.globalSettings.map, rotation, WipeMode.Vanish, false);
+			//}
 		}
 	}
 }

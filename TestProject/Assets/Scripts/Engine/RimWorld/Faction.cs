@@ -521,7 +521,8 @@ namespace RimWorld
 			}
 			if (newKind == FactionRelationKind.Hostile)
 			{
-				text += "LetterRelationsChange_Hostile".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), -75.ToStringWithSign(), 0.ToStringWithSign());
+				int v = -75;
+				text += "LetterRelationsChange_Hostile".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), v.ToStringWithSign(), 0.ToStringWithSign());
 				if (!reason.NullOrEmpty())
 				{
 					text += "\n\n" + "FinalStraw".Translate(reason.CapitalizeFirst());
@@ -541,7 +542,7 @@ namespace RimWorld
 			{
 				if (previousKind == FactionRelationKind.Hostile)
 				{
-					text += "LetterRelationsChange_NeutralFromHostile".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), 0.ToStringWithSign(), -75.ToStringWithSign(), 75.ToStringWithSign());
+					text += "LetterRelationsChange_NeutralFromHostile".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), 0.ToStringWithSign(), (-75).ToStringWithSign(), 75.ToStringWithSign());
 					if (!reason.NullOrEmpty())
 					{
 						text += "\n\n" + "LastFactionRelationsEvent".Translate() + ": " + reason.CapitalizeFirst();
@@ -550,7 +551,7 @@ namespace RimWorld
 				}
 				else
 				{
-					text += "LetterRelationsChange_NeutralFromAlly".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), 0.ToStringWithSign(), -75.ToStringWithSign(), 75.ToStringWithSign());
+					text += "LetterRelationsChange_NeutralFromAlly".Translate(this.NameColored, this.PlayerGoodwill.ToStringWithSign(), 0.ToStringWithSign(), (-75).ToStringWithSign(), 75.ToStringWithSign());
 					if (!reason.NullOrEmpty())
 					{
 						text += "\n\n" + "Reason".Translate() + ": " + reason.CapitalizeFirst();
@@ -1109,10 +1110,10 @@ namespace RimWorld
 		{
 			if (!this.HostileTo(Faction.OfPlayer))
 			{
-				RoyalTitleDef minTitleToUse = ThingRequiringRoyalPermissionUtility.GetMinTitleToUse(implantOrWeapon, this, violationSourceLevel);
-				string arg = (minTitleToUse == null) ? "None".Translate() : minTitleToUse.GetLabelCapFor(pawn);
-				this.TryAffectGoodwillWith(pawn.Faction, -4, true, true, "GoodwillChangedReason_UsedForbiddenThing".Translate(pawn.Named("PAWN"), violationSourceName.Named("CULPRIT")), new GlobalTargetInfo?(pawn));
-				Find.LetterStack.ReceiveLetter("LetterLawViolationDetectedLabel".Translate(pawn.Named("PAWN")).CapitalizeFirst(), "LetterLawViolationDetectedForbiddenThingUse".Translate(arg.Named("TITLE"), pawn.Named("PAWN"), violationSourceName.Named("CULPRIT"), this.Named("FACTION"), 4.ToString().Named("GOODWILL"), detectionChance.ToStringPercent().Named("CHANCE")), LetterDefOf.NegativeEvent, pawn, null, null, null, null);
+				//RoyalTitleDef minTitleToUse = ThingRequiringRoyalPermissionUtility.GetMinTitleToUse(implantOrWeapon, this, violationSourceLevel);
+				//string arg = (minTitleToUse == null) ? "None".Translate() : minTitleToUse.GetLabelCapFor(pawn);
+				//this.TryAffectGoodwillWith(pawn.Faction, -4, true, true, "GoodwillChangedReason_UsedForbiddenThing".Translate(pawn.Named("PAWN"), violationSourceName.Named("CULPRIT")), new GlobalTargetInfo?(pawn));
+				//Find.LetterStack.ReceiveLetter("LetterLawViolationDetectedLabel".Translate(pawn.Named("PAWN")).CapitalizeFirst(), "LetterLawViolationDetectedForbiddenThingUse".Translate(arg.Named("TITLE"), pawn.Named("PAWN"), violationSourceName.Named("CULPRIT"), this.Named("FACTION"), 4.ToString().Named("GOODWILL"), detectionChance.ToStringPercent().Named("CHANCE")), LetterDefOf.NegativeEvent, pawn, null, null, null, null);
 			}
 		}
 
