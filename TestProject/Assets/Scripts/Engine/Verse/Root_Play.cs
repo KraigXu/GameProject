@@ -9,7 +9,9 @@ namespace Verse
 	
 	public class Root_Play : Root
 	{
-		
+
+		public MusicManagerPlay musicManagerPlay;
+
 		public override void Start()
 		{
 			Log.ResetMessageCount();
@@ -93,7 +95,5 @@ namespace Verse
 			Find.Scenario.PreMapGenerate();
 		}
 
-		
-		public MusicManagerPlay musicManagerPlay;
 	}
 }

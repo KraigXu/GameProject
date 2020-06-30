@@ -7,8 +7,27 @@ namespace Verse
 	
 	public static class Current
 	{
-		
-		
+
+		private static ProgramState programStateInt;
+
+
+		private static Root rootInt;
+
+
+		private static Root_Entry rootEntryInt;
+
+
+		private static Root_Play rootPlayInt;
+
+
+		private static Camera cameraInt;
+
+		private static CameraDriver cameraDriverInt;
+		//private static ColorCorrectionCurves colorCorrectionCurvesInt;
+		private static SubcameraDriver subcameraDriverInt;
+		private static Game gameInt;
+		private static World creatingWorldInt;
+
 		public static Root Root
 		{
 			get
@@ -143,39 +162,11 @@ namespace Verse
 				Current.rootPlayInt = GameObject.Find("GameRoot").GetComponent<Root_Play>();
 				Current.rootInt = Current.rootPlayInt;
 				Current.cameraDriverInt = Current.cameraInt.GetComponent<CameraDriver>();
-			//	Current.colorCorrectionCurvesInt = Current.cameraInt.GetComponent<ColorCorrectionCurves>();
+				//Current.colorCorrectionCurvesInt = Current.cameraInt.GetComponent<ColorCorrectionCurves>();
 				Current.subcameraDriverInt = GameObject.Find("Subcameras").GetComponent<SubcameraDriver>();
 			}
 		}
 
-		
-		private static ProgramState programStateInt;
 
-		
-		private static Root rootInt;
-
-		
-		private static Root_Entry rootEntryInt;
-
-		
-		private static Root_Play rootPlayInt;
-
-		
-		private static Camera cameraInt;
-
-		
-		private static CameraDriver cameraDriverInt;
-
-		
-		//private static ColorCorrectionCurves colorCorrectionCurvesInt;
-
-		
-		private static SubcameraDriver subcameraDriverInt;
-
-		
-		private static Game gameInt;
-
-		
-		private static World creatingWorldInt;
 	}
 }

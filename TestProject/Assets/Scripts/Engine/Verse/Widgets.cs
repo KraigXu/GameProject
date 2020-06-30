@@ -15,7 +15,276 @@ namespace Verse
 	[StaticConstructorOnStartup]
 	public static class Widgets
 	{
-		
+
+		public static Stack<bool> mouseOverScrollViewStack = new Stack<bool>();
+
+
+		public static readonly GUIStyle EmptyStyle = new GUIStyle();
+
+
+		[TweakValue("Input", 0f, 100f)]
+		private static float DragStartDistanceSquared = 20f;
+
+
+		private static readonly Color InactiveColor = new Color(0.37f, 0.37f, 0.37f, 0.8f);
+
+
+		private static readonly Texture2D DefaultBarBgTex = BaseContent.BlackTex;
+
+
+		private static readonly Texture2D BarFullTexHor = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.8f, 0.85f));
+
+
+		public static readonly Texture2D CheckboxOnTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckOn", true);
+
+
+		public static readonly Texture2D CheckboxOffTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckOff", true);
+
+
+		public static readonly Texture2D CheckboxPartialTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckPartial", true);
+
+
+		public const float CheckboxSize = 24f;
+
+
+		public const float RadioButtonSize = 24f;
+
+
+		private static readonly Texture2D RadioButOnTex = ContentFinder<Texture2D>.Get("UI/Widgets/RadioButOn", true);
+
+
+		private static readonly Texture2D RadioButOffTex = ContentFinder<Texture2D>.Get("UI/Widgets/RadioButOff", true);
+
+
+		private static readonly Texture2D FillArrowTexRight = ContentFinder<Texture2D>.Get("UI/Widgets/FillChangeArrowRight", true);
+
+
+		private static readonly Texture2D FillArrowTexLeft = ContentFinder<Texture2D>.Get("UI/Widgets/FillChangeArrowLeft", true);
+
+
+		private static readonly Texture2D PlaceholderIconTex = ContentFinder<Texture2D>.Get("UI/Icons/MenuOptionNoIcon", true);
+
+
+		private const int FillableBarBorderWidth = 3;
+
+
+		private const int MaxFillChangeArrowHeight = 16;
+
+
+		private const int FillChangeArrowWidth = 8;
+
+
+		public const float CloseButtonSize = 18f;
+
+
+		public const float CloseButtonMargin = 4f;
+
+
+		public const float BackButtonWidth = 120f;
+
+
+		public const float BackButtonHeight = 40f;
+
+
+		public const float BackButtonMargin = 16f;
+
+
+		private static readonly Texture2D ShadowAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/DropShadow", true);
+
+
+		private static readonly Texture2D ButtonBGAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBG", true);
+
+
+		private static readonly Texture2D ButtonBGAtlasMouseover = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBGMouseover", true);
+
+
+		private static readonly Texture2D ButtonBGAtlasClick = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBGClick", true);
+
+
+		private static readonly Texture2D FloatRangeSliderTex = ContentFinder<Texture2D>.Get("UI/Widgets/RangeSlider", true);
+
+
+		public static readonly Texture2D LightHighlight = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.04f));
+
+
+		private static readonly Rect DefaultTexCoords = new Rect(0f, 0f, 1f, 1f);
+
+
+		private static readonly Rect LinkedTexCoords = new Rect(0f, 0.5f, 0.25f, 0.25f);
+
+
+		[TweakValue("Input", 0f, 100f)]
+		private static int IntEntryButtonWidth = 40;
+
+
+		private static Texture2D LineTexAA = null;
+
+
+		private static readonly Rect LineRect = new Rect(0f, 0f, 1f, 1f);
+
+
+		private static readonly Material LineMat = null;
+
+
+		private static readonly Texture2D AltTexture = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.05f));
+
+
+		public static readonly Color NormalOptionColor = new Color(0.8f, 0.85f, 1f);
+
+
+		public static readonly Color MouseoverOptionColor = Color.yellow;
+
+
+		private static Dictionary<string, float> LabelCache = new Dictionary<string, float>();
+
+
+		private const float TileSize = 64f;
+
+
+		public static readonly Color SeparatorLabelColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+
+
+		private static readonly Color SeparatorLineColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+
+
+		private const float SeparatorLabelHeight = 20f;
+
+
+		public const float ListSeparatorHeight = 25f;
+
+
+		private static bool checkboxPainting = false;
+
+
+		private static bool checkboxPaintingState = false;
+
+
+		public static readonly Texture2D ButtonSubtleAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonSubtleAtlas", true);
+
+
+		private static readonly Texture2D ButtonBarTex = SolidColorMaterials.NewSolidColorTexture(new ColorInt(78, 109, 129, 130).ToColor);
+
+
+		public const float ButtonSubtleDefaultMarginPct = 0.15f;
+
+
+		private static int buttonInvisibleDraggable_activeControl = 0;
+
+
+		private static bool buttonInvisibleDraggable_dragged = false;
+
+
+		private static Vector3 buttonInvisibleDraggable_mouseStart = Vector3.zero;
+
+
+		public const float RangeControlIdealHeight = 31f;
+
+
+		public const float RangeControlCompactHeight = 28f;
+
+
+		private const float RangeSliderSize = 16f;
+
+
+		private static readonly Color RangeControlTextColor = new Color(0.6f, 0.6f, 0.6f);
+
+
+		private static int draggingId = 0;
+
+
+		private static Widgets.RangeEnd curDragEnd = Widgets.RangeEnd.None;
+
+
+		private static float lastDragSliderSoundTime = -1f;
+
+
+		private static float FillableBarChangeRateDisplayRatio = 1E+08f;
+
+
+		public static int MaxFillableBarChangeRate = 3;
+
+
+		private static readonly Color WindowBGBorderColor = new ColorInt(97, 108, 122).ToColor;
+
+
+		public static readonly Color WindowBGFillColor = new ColorInt(21, 25, 29).ToColor;
+
+
+		private static readonly Color MenuSectionBGFillColor = new ColorInt(42, 43, 44).ToColor;
+
+
+		private static readonly Color MenuSectionBGBorderColor = new ColorInt(135, 135, 135).ToColor;
+
+
+		private static readonly Color TutorWindowBGFillColor = new ColorInt(133, 85, 44).ToColor;
+
+
+		private static readonly Color TutorWindowBGBorderColor = new ColorInt(176, 139, 61).ToColor;
+
+
+		private static readonly Color OptionUnselectedBGFillColor = new Color(0.21f, 0.21f, 0.21f);
+
+
+		private static readonly Color OptionUnselectedBGBorderColor = Widgets.OptionUnselectedBGFillColor * 1.8f;
+
+
+		private static readonly Color OptionSelectedBGFillColor = new Color(0.32f, 0.28f, 0.21f);
+
+
+		private static readonly Color OptionSelectedBGBorderColor = Widgets.OptionSelectedBGFillColor * 1.8f;
+
+
+		public const float InfoCardButtonSize = 24f;
+
+
+		private static bool dropdownPainting = false;
+
+
+		private static object dropdownPainting_Payload = null;
+
+
+		private static Type dropdownPainting_Type = null;
+
+
+		private static string dropdownPainting_Text = "";
+
+
+		private static Texture2D dropdownPainting_Icon = null;
+
+
+		public enum DraggableResult
+		{
+
+			Idle,
+
+			Pressed,
+
+			Dragged,
+
+			DraggedThenPressed
+		}
+
+
+		private enum RangeEnd : byte
+		{
+
+			None,
+
+			Min,
+
+			Max
+		}
+
+
+		public struct DropdownMenuElement<Payload>
+		{
+
+			public FloatMenuOption option;
+
+
+			public Payload payload;
+		}
+
 		static Widgets()
 		{
 			Color color = new Color(1f, 1f, 1f, 0f);
@@ -2418,273 +2687,5 @@ namespace Verse
 		}
 
 		
-		public static Stack<bool> mouseOverScrollViewStack = new Stack<bool>();
-
-		
-		public static readonly GUIStyle EmptyStyle = new GUIStyle();
-
-		
-		[TweakValue("Input", 0f, 100f)]
-		private static float DragStartDistanceSquared = 20f;
-
-		
-		private static readonly Color InactiveColor = new Color(0.37f, 0.37f, 0.37f, 0.8f);
-
-		
-		private static readonly Texture2D DefaultBarBgTex = BaseContent.BlackTex;
-
-		
-		private static readonly Texture2D BarFullTexHor = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.8f, 0.85f));
-
-		
-		public static readonly Texture2D CheckboxOnTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckOn", true);
-
-		
-		public static readonly Texture2D CheckboxOffTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckOff", true);
-
-		
-		public static readonly Texture2D CheckboxPartialTex = ContentFinder<Texture2D>.Get("UI/Widgets/CheckPartial", true);
-
-		
-		public const float CheckboxSize = 24f;
-
-		
-		public const float RadioButtonSize = 24f;
-
-		
-		private static readonly Texture2D RadioButOnTex = ContentFinder<Texture2D>.Get("UI/Widgets/RadioButOn", true);
-
-		
-		private static readonly Texture2D RadioButOffTex = ContentFinder<Texture2D>.Get("UI/Widgets/RadioButOff", true);
-
-		
-		private static readonly Texture2D FillArrowTexRight = ContentFinder<Texture2D>.Get("UI/Widgets/FillChangeArrowRight", true);
-
-		
-		private static readonly Texture2D FillArrowTexLeft = ContentFinder<Texture2D>.Get("UI/Widgets/FillChangeArrowLeft", true);
-
-		
-		private static readonly Texture2D PlaceholderIconTex = ContentFinder<Texture2D>.Get("UI/Icons/MenuOptionNoIcon", true);
-
-		
-		private const int FillableBarBorderWidth = 3;
-
-		
-		private const int MaxFillChangeArrowHeight = 16;
-
-		
-		private const int FillChangeArrowWidth = 8;
-
-		
-		public const float CloseButtonSize = 18f;
-
-		
-		public const float CloseButtonMargin = 4f;
-
-		
-		public const float BackButtonWidth = 120f;
-
-		
-		public const float BackButtonHeight = 40f;
-
-		
-		public const float BackButtonMargin = 16f;
-
-		
-		private static readonly Texture2D ShadowAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/DropShadow", true);
-
-		
-		private static readonly Texture2D ButtonBGAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBG", true);
-
-		
-		private static readonly Texture2D ButtonBGAtlasMouseover = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBGMouseover", true);
-
-		
-		private static readonly Texture2D ButtonBGAtlasClick = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonBGClick", true);
-
-		
-		private static readonly Texture2D FloatRangeSliderTex = ContentFinder<Texture2D>.Get("UI/Widgets/RangeSlider", true);
-
-		
-		public static readonly Texture2D LightHighlight = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.04f));
-
-		
-		private static readonly Rect DefaultTexCoords = new Rect(0f, 0f, 1f, 1f);
-
-		
-		private static readonly Rect LinkedTexCoords = new Rect(0f, 0.5f, 0.25f, 0.25f);
-
-		
-		[TweakValue("Input", 0f, 100f)]
-		private static int IntEntryButtonWidth = 40;
-
-		
-		private static Texture2D LineTexAA = null;
-
-		
-		private static readonly Rect LineRect = new Rect(0f, 0f, 1f, 1f);
-
-		
-		private static readonly Material LineMat = null;
-
-		
-		private static readonly Texture2D AltTexture = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.05f));
-
-		
-		public static readonly Color NormalOptionColor = new Color(0.8f, 0.85f, 1f);
-
-		
-		public static readonly Color MouseoverOptionColor = Color.yellow;
-
-		
-		private static Dictionary<string, float> LabelCache = new Dictionary<string, float>();
-
-		
-		private const float TileSize = 64f;
-
-		
-		public static readonly Color SeparatorLabelColor = new Color(0.8f, 0.8f, 0.8f, 1f);
-
-		
-		private static readonly Color SeparatorLineColor = new Color(0.3f, 0.3f, 0.3f, 1f);
-
-		
-		private const float SeparatorLabelHeight = 20f;
-
-		
-		public const float ListSeparatorHeight = 25f;
-
-		
-		private static bool checkboxPainting = false;
-
-		
-		private static bool checkboxPaintingState = false;
-
-		
-		public static readonly Texture2D ButtonSubtleAtlas = ContentFinder<Texture2D>.Get("UI/Widgets/ButtonSubtleAtlas", true);
-
-		
-		private static readonly Texture2D ButtonBarTex = SolidColorMaterials.NewSolidColorTexture(new ColorInt(78, 109, 129, 130).ToColor);
-
-		
-		public const float ButtonSubtleDefaultMarginPct = 0.15f;
-
-		
-		private static int buttonInvisibleDraggable_activeControl = 0;
-
-		
-		private static bool buttonInvisibleDraggable_dragged = false;
-
-		
-		private static Vector3 buttonInvisibleDraggable_mouseStart = Vector3.zero;
-
-		
-		public const float RangeControlIdealHeight = 31f;
-
-		
-		public const float RangeControlCompactHeight = 28f;
-
-		
-		private const float RangeSliderSize = 16f;
-
-		
-		private static readonly Color RangeControlTextColor = new Color(0.6f, 0.6f, 0.6f);
-
-		
-		private static int draggingId = 0;
-
-		
-		private static Widgets.RangeEnd curDragEnd = Widgets.RangeEnd.None;
-
-		
-		private static float lastDragSliderSoundTime = -1f;
-
-		
-		private static float FillableBarChangeRateDisplayRatio = 1E+08f;
-
-		
-		public static int MaxFillableBarChangeRate = 3;
-
-		
-		private static readonly Color WindowBGBorderColor = new ColorInt(97, 108, 122).ToColor;
-
-		
-		public static readonly Color WindowBGFillColor = new ColorInt(21, 25, 29).ToColor;
-
-		
-		private static readonly Color MenuSectionBGFillColor = new ColorInt(42, 43, 44).ToColor;
-
-		
-		private static readonly Color MenuSectionBGBorderColor = new ColorInt(135, 135, 135).ToColor;
-
-		
-		private static readonly Color TutorWindowBGFillColor = new ColorInt(133, 85, 44).ToColor;
-
-		
-		private static readonly Color TutorWindowBGBorderColor = new ColorInt(176, 139, 61).ToColor;
-
-		
-		private static readonly Color OptionUnselectedBGFillColor = new Color(0.21f, 0.21f, 0.21f);
-
-		
-		private static readonly Color OptionUnselectedBGBorderColor = Widgets.OptionUnselectedBGFillColor * 1.8f;
-
-		
-		private static readonly Color OptionSelectedBGFillColor = new Color(0.32f, 0.28f, 0.21f);
-
-		
-		private static readonly Color OptionSelectedBGBorderColor = Widgets.OptionSelectedBGFillColor * 1.8f;
-
-		
-		public const float InfoCardButtonSize = 24f;
-
-		
-		private static bool dropdownPainting = false;
-
-		
-		private static object dropdownPainting_Payload = null;
-
-		
-		private static Type dropdownPainting_Type = null;
-
-		
-		private static string dropdownPainting_Text = "";
-
-		
-		private static Texture2D dropdownPainting_Icon = null;
-
-		
-		public enum DraggableResult
-		{
-			
-			Idle,
-			
-			Pressed,
-			
-			Dragged,
-			
-			DraggedThenPressed
-		}
-
-		
-		private enum RangeEnd : byte
-		{
-			
-			None,
-			
-			Min,
-			
-			Max
-		}
-
-		
-		public struct DropdownMenuElement<Payload>
-		{
-			
-			public FloatMenuOption option;
-
-			
-			public Payload payload;
-		}
 	}
 }

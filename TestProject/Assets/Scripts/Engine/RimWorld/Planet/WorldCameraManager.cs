@@ -6,8 +6,41 @@ namespace RimWorld.Planet
 	
 	public static class WorldCameraManager
 	{
-		
-		
+		private static Camera worldCameraInt;
+
+
+		private static Camera worldSkyboxCameraInt;
+
+
+		private static WorldCameraDriver worldCameraDriverInt;
+
+
+		public static readonly string WorldLayerName = "World";
+
+
+		public static int WorldLayerMask = LayerMask.GetMask(new string[]
+		{
+			WorldCameraManager.WorldLayerName
+		});
+
+
+		public static int WorldLayer = LayerMask.NameToLayer(WorldCameraManager.WorldLayerName);
+
+
+		public static readonly string WorldSkyboxLayerName = "WorldSkybox";
+
+
+		public static int WorldSkyboxLayerMask = LayerMask.GetMask(new string[]
+		{
+			WorldCameraManager.WorldSkyboxLayerName
+		});
+
+
+		public static int WorldSkyboxLayer = LayerMask.NameToLayer(WorldCameraManager.WorldSkyboxLayerName);
+
+
+		private static readonly Color SkyColor = new Color(0.0627451f, 0.09019608f, 0.117647059f);
+
 		public static Camera WorldCamera
 		{
 			get
@@ -15,8 +48,6 @@ namespace RimWorld.Planet
 				return WorldCameraManager.worldCameraInt;
 			}
 		}
-
-		
 		
 		public static Camera WorldSkyboxCamera
 		{
@@ -92,39 +123,6 @@ namespace RimWorld.Planet
 		}
 
 		
-		private static Camera worldCameraInt;
 
-		
-		private static Camera worldSkyboxCameraInt;
-
-		
-		private static WorldCameraDriver worldCameraDriverInt;
-
-		
-		public static readonly string WorldLayerName = "World";
-
-		
-		public static int WorldLayerMask = LayerMask.GetMask(new string[]
-		{
-			WorldCameraManager.WorldLayerName
-		});
-
-		
-		public static int WorldLayer = LayerMask.NameToLayer(WorldCameraManager.WorldLayerName);
-
-		
-		public static readonly string WorldSkyboxLayerName = "WorldSkybox";
-
-		
-		public static int WorldSkyboxLayerMask = LayerMask.GetMask(new string[]
-		{
-			WorldCameraManager.WorldSkyboxLayerName
-		});
-
-		
-		public static int WorldSkyboxLayer = LayerMask.NameToLayer(WorldCameraManager.WorldSkyboxLayerName);
-
-		
-		private static readonly Color SkyColor = new Color(0.0627451f, 0.09019608f, 0.117647059f);
 	}
 }

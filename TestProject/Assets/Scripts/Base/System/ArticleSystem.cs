@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using AntiquityWorld.StrategyManager;
-
 using Newtonsoft.Json;
 using Unity.Entities;
 using UnityEngine;
@@ -24,7 +23,7 @@ namespace GameSystem
         protected override void OnCreate()
         {
             base.OnCreate();
-            _articleArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(ArticleItem));
+           // _articleArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(ArticleItem));
         }
         protected override void OnUpdate()
         {

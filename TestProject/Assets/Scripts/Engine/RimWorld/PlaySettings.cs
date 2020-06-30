@@ -7,7 +7,69 @@ namespace RimWorld
 	
 	public sealed class PlaySettings : IExposable
 	{
-		
+
+		public bool showLearningHelper = true;
+
+
+		public bool showZones = true;
+
+
+		public bool showBeauty;
+
+
+		public bool showRoomStats;
+
+
+		public bool showColonistBar = true;
+
+
+		public bool showRoofOverlay;
+
+
+		public bool showFertilityOverlay;
+
+
+		public bool showTerrainAffordanceOverlay;
+
+
+		public bool autoHomeArea = true;
+
+
+		public bool autoRebuild;
+
+
+		public bool lockNorthUp = true;
+
+
+		public bool usePlanetDayNightSystem = true;
+
+
+		public bool showExpandingIcons = true;
+
+
+		public bool showWorldFeatures = true;
+
+
+		public bool useWorkPriorities;
+
+
+		public MedicalCareCategory defaultCareForColonyHumanlike = MedicalCareCategory.Best;
+
+
+		public MedicalCareCategory defaultCareForColonyAnimal = MedicalCareCategory.HerbalOrWorse;
+
+
+		public MedicalCareCategory defaultCareForColonyPrisoner = MedicalCareCategory.HerbalOrWorse;
+
+
+		public MedicalCareCategory defaultCareForNeutralFaction = MedicalCareCategory.HerbalOrWorse;
+
+
+		public MedicalCareCategory defaultCareForNeutralAnimal = MedicalCareCategory.HerbalOrWorse;
+
+
+		public MedicalCareCategory defaultCareForHostileFaction = MedicalCareCategory.HerbalOrWorse;
+
 		public void ExposeData()
 		{
 			Scribe_Values.Look<bool>(ref this.showLearningHelper, "showLearningHelper", false, false);
@@ -97,67 +159,6 @@ namespace RimWorld
 			}
 		}
 
-		
-		public bool showLearningHelper = true;
 
-		
-		public bool showZones = true;
-
-		
-		public bool showBeauty;
-
-		
-		public bool showRoomStats;
-
-		
-		public bool showColonistBar = true;
-
-		
-		public bool showRoofOverlay;
-
-		
-		public bool showFertilityOverlay;
-
-		
-		public bool showTerrainAffordanceOverlay;
-
-		
-		public bool autoHomeArea = true;
-
-		
-		public bool autoRebuild;
-
-		
-		public bool lockNorthUp = true;
-
-		
-		public bool usePlanetDayNightSystem = true;
-
-		
-		public bool showExpandingIcons = true;
-
-		
-		public bool showWorldFeatures = true;
-
-		
-		public bool useWorkPriorities;
-
-		
-		public MedicalCareCategory defaultCareForColonyHumanlike = MedicalCareCategory.Best;
-
-		
-		public MedicalCareCategory defaultCareForColonyAnimal = MedicalCareCategory.HerbalOrWorse;
-
-		
-		public MedicalCareCategory defaultCareForColonyPrisoner = MedicalCareCategory.HerbalOrWorse;
-
-		
-		public MedicalCareCategory defaultCareForNeutralFaction = MedicalCareCategory.HerbalOrWorse;
-
-		
-		public MedicalCareCategory defaultCareForNeutralAnimal = MedicalCareCategory.HerbalOrWorse;
-
-		
-		public MedicalCareCategory defaultCareForHostileFaction = MedicalCareCategory.HerbalOrWorse;
 	}
 }

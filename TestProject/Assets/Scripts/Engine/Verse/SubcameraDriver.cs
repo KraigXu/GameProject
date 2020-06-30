@@ -6,7 +6,8 @@ namespace Verse
 	
 	public class SubcameraDriver : MonoBehaviour
 	{
-		
+		private Camera[] subcameras;
+
 		public void Init()
 		{
 			if (this.subcameras != null)
@@ -96,6 +97,6 @@ namespace Verse
 		}
 
 		
-		private Camera[] subcameras;
+		
 	}
 }

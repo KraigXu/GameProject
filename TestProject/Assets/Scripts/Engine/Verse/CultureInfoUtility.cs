@@ -7,7 +7,8 @@ namespace Verse
 	
 	public static class CultureInfoUtility
 	{
-		
+		private const string EnglishCulture = "en-US";
+
 		public static void EnsureEnglish()
 		{
 			if (Thread.CurrentThread.CurrentCulture.Name != "en-US")
@@ -15,8 +16,6 @@ namespace Verse
 				Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 			}
 		}
-
 		
-		private const string EnglishCulture = "en-US";
 	}
 }

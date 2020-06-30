@@ -7,8 +7,24 @@ namespace Verse
 	
 	public static class Log
 	{
-		
-		
+
+		private static LogMessageQueue messageQueue = new LogMessageQueue();
+
+
+		private static HashSet<int> usedKeys = new HashSet<int>();
+
+
+		public static bool openOnMessage = false;
+
+
+		private static bool currentlyLoggingError;
+
+
+		private static int messageCount;
+
+
+		private const int StopLoggingAtMessageCount = 1000;
+
 		public static IEnumerable<LogMessage> Messages
 		{
 			get
@@ -144,22 +160,6 @@ namespace Verse
 			}
 		}
 
-		
-		private static LogMessageQueue messageQueue = new LogMessageQueue();
 
-		
-		private static HashSet<int> usedKeys = new HashSet<int>();
-
-		
-		public static bool openOnMessage = false;
-
-		
-		private static bool currentlyLoggingError;
-
-		
-		private static int messageCount;
-
-		
-		private const int StopLoggingAtMessageCount = 1000;
 	}
 }

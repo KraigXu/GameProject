@@ -9,7 +9,19 @@ namespace Verse
 	
 	public abstract class UIRoot
 	{
-		
+		public WindowStack windows = new WindowStack();
+
+
+		protected DebugWindowsOpener debugWindowOpener = new DebugWindowsOpener();
+
+
+		public ScreenshotModeHandler screenshotMode = new ScreenshotModeHandler();
+
+
+		private ShortcutKeys shortcutKeys = new ShortcutKeys();
+
+
+		public FeedbackFloaters feedbackFloaters = new FeedbackFloaters();
 		public virtual void Init()
 		{
 		}
@@ -66,18 +78,6 @@ namespace Verse
 		}
 
 		
-		public WindowStack windows = new WindowStack();
 
-		
-		protected DebugWindowsOpener debugWindowOpener = new DebugWindowsOpener();
-
-		
-		public ScreenshotModeHandler screenshotMode = new ScreenshotModeHandler();
-
-		
-		private ShortcutKeys shortcutKeys = new ShortcutKeys();
-
-		
-		public FeedbackFloaters feedbackFloaters = new FeedbackFloaters();
 	}
 }

@@ -30,26 +30,26 @@ public class ZigguratSystem : ComponentSystem
     protected override void OnUpdate()
     {
 
-        if (_zigguratTitleWindow == null)
-        {
-            if (UICenterMasterManager.Instance.GetGameWindow(WindowID.ZigguratTitleWindow) == null)
-            {
-                _zigguratTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.ZigguratTitleWindow).GetComponent<ZigguratTitleWindow>();
-            }
-            else
-            {
-                _zigguratTitleWindow = (ZigguratTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.ZigguratTitleWindow);
-            }
-        }
+        //if (_zigguratTitleWindow == null)
+        //{
+        //    if (UICenterMasterManager.Instance.GetGameWindow(WindowID.ZigguratTitleWindow) == null)
+        //    {
+        //        _zigguratTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.ZigguratTitleWindow).GetComponent<ZigguratTitleWindow>();
+        //    }
+        //    else
+        //    {
+        //        _zigguratTitleWindow = (ZigguratTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.ZigguratTitleWindow);
+        //    }
+        //}
 
-        for (int i = 0; i < _data.Length; i++)
-        {
-            //var livingArea = _data.LivingAreas[i];
-            //var ziggurat = _data.Ziggurats[i];
-            //var hexcell = _data.HexCells[i];
+        //for (int i = 0; i < _data.Length; i++)
+        //{
+        //    //var livingArea = _data.LivingAreas[i];
+        //    //var ziggurat = _data.Ziggurats[i];
+        //    //var hexcell = _data.HexCells[i];
 
-            //_zigguratTitleWindow.Change(_data.LivingAreas[i], _data.Ziggurats[i], _data.HexCells[i]);
-        }
+        //    //_zigguratTitleWindow.Change(_data.LivingAreas[i], _data.Ziggurats[i], _data.HexCells[i]);
+        //}
 
     }
 

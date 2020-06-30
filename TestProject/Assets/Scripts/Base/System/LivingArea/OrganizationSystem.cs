@@ -30,22 +30,22 @@ namespace GameSystem
         protected override void OnUpdate()
         {
 
-            if (_organizationTitleWindow == null)
-            {
-                if (UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow) == null)
-                {
-                    _organizationTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.OrganizationTitleWindow).GetComponent<OrganizationTitleWindow>();
-                }
-                else
-                {
-                    _organizationTitleWindow = (OrganizationTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow);
-                }
-            }
+            //if (_organizationTitleWindow == null)
+            //{
+            //    if (UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow) == null)
+            //    {
+            //        _organizationTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.OrganizationTitleWindow).GetComponent<OrganizationTitleWindow>();
+            //    }
+            //    else
+            //    {
+            //        _organizationTitleWindow = (OrganizationTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.OrganizationTitleWindow);
+            //    }
+            //}
 
-            for (int i = 0; i < _data.Length; i++)
-            {
-                //_organizationTitleWindow.Change(_data.LivingAreas[i],_data.FactionPropertys[i],_data.HexCells[i]);
-            }
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //    //_organizationTitleWindow.Change(_data.LivingAreas[i],_data.FactionPropertys[i],_data.HexCells[i]);
+            //}
 
 
         }

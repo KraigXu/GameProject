@@ -43,22 +43,22 @@ namespace GameSystem
 
         protected override void OnUpdate()
         {
-            if (CityTitleWindow == null)
-            {
-                if (UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow) == null)
-                {
-                    CityTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.CityTitleWindow).GetComponent<CityTitleWindow>();
-                }
-                else
-                {
-                    CityTitleWindow = (CityTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow);
-                }
-            }
+            //if (CityTitleWindow == null)
+            //{
+            //    if (UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow) == null)
+            //    {
+            //        CityTitleWindow = UICenterMasterManager.Instance.ShowWindow(WindowID.CityTitleWindow).GetComponent<CityTitleWindow>();
+            //    }
+            //    else
+            //    {
+            //        CityTitleWindow = (CityTitleWindow)UICenterMasterManager.Instance.GetGameWindow(WindowID.CityTitleWindow);
+            //    }
+            //}
 
-            for (int i = 0; i < _data.Length; i++)
-            {
-               // CityTitleWindow.Change(_data.City[i], _data.HexCells[i]);
-            }
+            //for (int i = 0; i < _data.Length; i++)
+            //{
+            //   // CityTitleWindow.Change(_data.City[i], _data.HexCells[i]);
+            //}
 
         }
         /// <summary>

@@ -104,9 +104,9 @@ public sealed class Define
     public static void Initialize()
     {
         //数据库实例建立
-        Debug.Log("数据库实例建立");
-        SQLService.GetInstance("TD.db");
-        Debug.Log("场景进入");
+        Debug.Log("数据库实例建立暂时取消");
+        //SQLService.GetInstance("TD.db");
+        //Debug.Log("场景进入");
 
     }
 

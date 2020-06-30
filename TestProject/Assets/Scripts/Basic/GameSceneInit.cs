@@ -70,25 +70,25 @@ namespace GameSystem
         public static void InitializeWithScene()
         {
 
-            DistrictArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(District));
-            LivingAreaArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
-            TechniquesArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Techniques));
-            RelationArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Relation));
+            //DistrictArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(District));
+            //LivingAreaArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Position), typeof(Rotation), typeof(LivingArea));
+            //TechniquesArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Techniques));
+            //RelationArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Relation));
            
-            EventInfotype = SystemManager.ActiveManager.CreateArchetype(typeof(EventInfo));
-            BiologicalSocialArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(BiologicalSocial));
-            AncientTombArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Position), typeof(Rotation));
-            ArticleArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(ArticleItem));
-            FactionArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Faction));
+            //EventInfotype = SystemManager.ActiveManager.CreateArchetype(typeof(EventInfo));
+            //BiologicalSocialArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(BiologicalSocial));
+            //AncientTombArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Position), typeof(Rotation));
+            //ArticleArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(ArticleItem));
+            //FactionArchetype = SystemManager.ActiveManager.CreateArchetype(typeof(Faction));
 
 
-            BiologicalSystem.SetupComponentData(SystemManager.ActiveManager);
-            FamilySystem.SetupComponentData(SystemManager.ActiveManager);
-            TeamSystem.SetupComponentData(SystemManager.ActiveManager);
-            CurOpeningInfo= new OpeningInfo();
-            CurOpeningInfo.TestValue();
+            //BiologicalSystem.SetupComponentData(SystemManager.ActiveManager);
+            //FamilySystem.SetupComponentData(SystemManager.ActiveManager);
+            //TeamSystem.SetupComponentData(SystemManager.ActiveManager);
+            //CurOpeningInfo= new OpeningInfo();
+            //CurOpeningInfo.TestValue();
 
-            Debuger.EnableLog = true;
+            //Debuger.EnableLog = true;
         }
 
         //private static MeshInstanceRenderer GetLookFromPrototype(string protoName)
