@@ -19,6 +19,7 @@ namespace Verse
 		public static string TextFromResourceFile(string filePath)
 		{
 			TextAsset textAsset = Resources.Load("Text/" + filePath) as TextAsset;
+			
 			if (textAsset == null)
 			{
 				Log.Message("Found no text asset in resources at " + filePath, false);
@@ -49,8 +50,6 @@ namespace Verse
 			{
 				yield return text2;
 			}
-			IEnumerator<string> enumerator = null;
-			yield break;
 			yield break;
 		}
 

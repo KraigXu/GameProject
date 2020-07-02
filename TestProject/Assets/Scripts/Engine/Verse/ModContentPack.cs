@@ -158,19 +158,19 @@ namespace Verse
 		
 		public ModContentHolder<T> GetContentHolder<T>() where T : class
 		{
-			//if (typeof(T) == typeof(Texture2D))
-			//{
-			//	return (ModContentHolder<T>)this.textures;
-			//}
-			//if (typeof(T) == typeof(AudioClip))
-			//{
-			//	return (ModContentHolder<T>)this.audioClips;
-			//}
-			//if (typeof(T) == typeof(string))
-			//{
-			//	return (ModContentHolder<T>)this.strings;
-			//}
-			Log.Error("Mod lacks manager for asset type " + this.strings, false);
+            //if (typeof(T) == typeof(Texture2D))
+            //{
+            //    return (ModContentHolder<T>)this.textures;
+            //}
+            //if (typeof(T) == typeof(AudioClip))
+            //{
+            //    return (ModContentHolder<T>)this.audioClips;
+            //}
+            //if (typeof(T) == typeof(string))
+            //{
+            //    return (ModContentHolder<T>)this.strings;
+            //}
+            Log.Error("Mod lacks manager for asset type " + this.strings, false);
 			return null;
 		}
 

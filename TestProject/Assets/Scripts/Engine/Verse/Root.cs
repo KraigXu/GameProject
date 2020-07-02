@@ -163,6 +163,7 @@ namespace Verse
 			}
 			catch (Exception arg)
 			{
+				
 				Log.Error("Root level exception in OnGUI(): " + arg, false);
 			}
 		}

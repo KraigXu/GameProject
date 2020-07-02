@@ -31,6 +31,7 @@ namespace RimWorld
 			{
 				if (this.cachedBG == null)
 				{
+					Debug.Log(this.backgroundPath);
 					this.cachedBG = ContentFinder<Texture2D>.Get(this.backgroundPath, true);
 				}
 				return this.cachedBG;

@@ -8,11 +8,9 @@ public class TestP : MonoBehaviour
 
     private void Awake()
     {
-        Current.Game = new Game();
-        Current.Game.InitData = new GameInitData();
+      //  Current.Game = new Game();
+      //  Current.Game.InitData = new GameInitData();
     //    Current.Game.Scenario = ScenarioDefOf.Tutorial.scenario;
-
-
     }
 
     private void Update()

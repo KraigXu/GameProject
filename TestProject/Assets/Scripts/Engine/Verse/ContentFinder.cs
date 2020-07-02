@@ -31,6 +31,11 @@ namespace Verse
 			if (typeof(T) == typeof(Texture2D))
 			{
 				t = (T)((object)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + itemPath));
+                if (t == null)
+                {
+					t= (T)((object)Resources.Load<Texture2D>("Textures/UI/Cursors/CursorCustom"));
+
+				}
 			}
 			if (typeof(T) == typeof(AudioClip))
 			{
@@ -101,17 +106,16 @@ namespace Verse
 				{
 					yield return t;
 				}
-				IEnumerator<T> enumerator2 = null;
 			}
-			IEnumerator<ModContentPack> enumerator = null;
+
 			T[] array = null;
 			if (typeof(T) == typeof(Texture2D))
 			{
-				//array = (T[])Resources.LoadAll<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + folderPath);
+				array = (T[])Convert.ChangeType(Resources.LoadAll<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + folderPath), typeof(T[]));
 			}
 			if (typeof(T) == typeof(AudioClip))
 			{
-				//array = (T[])Resources.LoadAll<AudioClip>(GenFilePaths.ContentPath<AudioClip>() + folderPath);
+				array = (T[])Convert.ChangeType(Resources.LoadAll<AudioClip>(GenFilePaths.ContentPath<AudioClip>() + folderPath), typeof(T[]));
 			}
 			if (array != null)
 			{
@@ -119,7 +123,6 @@ namespace Verse
 				{
 					yield return t2;
 				}
-				T[] array2 = null;
 			}
 			List<ModContentPack> mods = LoadedModManager.RunningModsListForReading;
 			int num;
@@ -166,7 +169,6 @@ namespace Verse
 				}
 				num = j;
 			}
-			yield break;
 			yield break;
 		}
 	}

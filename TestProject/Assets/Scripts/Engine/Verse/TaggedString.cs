@@ -5,8 +5,10 @@ namespace Verse
 	
 	public struct TaggedString
 	{
-		
-		
+		private string rawText;
+		private static TaggedString empty;
+
+
 		public string RawText
 		{
 			get
@@ -154,11 +156,5 @@ namespace Verse
 		{
 			return this.RawText;
 		}
-
-		
-		private string rawText;
-
-		
-		private static TaggedString empty;
 	}
 }

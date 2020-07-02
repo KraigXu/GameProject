@@ -11,8 +11,109 @@ namespace Verse
 	
 	public class LoadedLanguage
 	{
-		
-		
+		public override string ToString()
+		{
+			return this.info.friendlyNameEnglish;
+		}
+
+
+		public string folderName;
+
+
+		public LanguageInfo info;
+
+
+		private LanguageWorker workerInt;
+
+
+		private LanguageWordInfo wordInfo = new LanguageWordInfo();
+
+
+		private bool dataIsLoaded;
+
+
+		public List<string> loadErrors = new List<string>();
+
+
+		public List<string> backstoriesLoadErrors = new List<string>();
+
+
+		public bool anyKeyedReplacementsXmlParseError;
+
+
+		public string lastKeyedReplacementsXmlParseErrorInFile;
+
+
+		public bool anyDefInjectionsXmlParseError;
+
+
+		public string lastDefInjectionsXmlParseErrorInFile;
+
+
+		public bool anyError;
+
+
+		private string legacyFolderName;
+
+
+		private Dictionary<ModContentPack, HashSet<string>> tmpAlreadyLoadedFiles = new Dictionary<ModContentPack, HashSet<string>>();
+
+
+		public Texture2D icon = BaseContent.BadTex;
+
+
+		public Dictionary<string, LoadedLanguage.KeyedReplacement> keyedReplacements = new Dictionary<string, LoadedLanguage.KeyedReplacement>();
+
+
+		public List<DefInjectionPackage> defInjections = new List<DefInjectionPackage>();
+
+
+		public Dictionary<string, List<string>> stringFiles = new Dictionary<string, List<string>>();
+
+
+		public const string OldKeyedTranslationsFolderName = "CodeLinked";
+
+
+		public const string KeyedTranslationsFolderName = "Keyed";
+
+
+		public const string OldDefInjectionsFolderName = "DefLinked";
+
+
+		public const string DefInjectionsFolderName = "DefInjected";
+
+
+		public const string LanguagesFolderName = "Languages";
+
+
+		public const string PlaceholderText = "TODO";
+
+
+		private bool infoIsRealMetadata;
+
+
+		public class KeyedReplacement
+		{
+
+			public string key;
+
+
+			public string value;
+
+
+			public string fileSource;
+
+
+			public int fileSourceLine;
+
+
+			public string fileSourceFullPath;
+
+
+			public bool isPlaceholder;
+		}
+
+
 		public string DisplayName
 		{
 			get
@@ -571,106 +672,6 @@ namespace Verse
 		}
 
 		
-		public override string ToString()
-		{
-			return this.info.friendlyNameEnglish;
-		}
 
-		
-		public string folderName;
-
-		
-		public LanguageInfo info;
-
-		
-		private LanguageWorker workerInt;
-
-		
-		private LanguageWordInfo wordInfo = new LanguageWordInfo();
-
-		
-		private bool dataIsLoaded;
-
-		
-		public List<string> loadErrors = new List<string>();
-
-		
-		public List<string> backstoriesLoadErrors = new List<string>();
-
-		
-		public bool anyKeyedReplacementsXmlParseError;
-
-		
-		public string lastKeyedReplacementsXmlParseErrorInFile;
-
-		
-		public bool anyDefInjectionsXmlParseError;
-
-		
-		public string lastDefInjectionsXmlParseErrorInFile;
-
-		
-		public bool anyError;
-
-		
-		private string legacyFolderName;
-
-		
-		private Dictionary<ModContentPack, HashSet<string>> tmpAlreadyLoadedFiles = new Dictionary<ModContentPack, HashSet<string>>();
-
-		
-		public Texture2D icon = BaseContent.BadTex;
-
-		
-		public Dictionary<string, LoadedLanguage.KeyedReplacement> keyedReplacements = new Dictionary<string, LoadedLanguage.KeyedReplacement>();
-
-		
-		public List<DefInjectionPackage> defInjections = new List<DefInjectionPackage>();
-
-		
-		public Dictionary<string, List<string>> stringFiles = new Dictionary<string, List<string>>();
-
-		
-		public const string OldKeyedTranslationsFolderName = "CodeLinked";
-
-		
-		public const string KeyedTranslationsFolderName = "Keyed";
-
-		
-		public const string OldDefInjectionsFolderName = "DefLinked";
-
-		
-		public const string DefInjectionsFolderName = "DefInjected";
-
-		
-		public const string LanguagesFolderName = "Languages";
-
-		
-		public const string PlaceholderText = "TODO";
-
-		
-		private bool infoIsRealMetadata;
-
-		
-		public class KeyedReplacement
-		{
-			
-			public string key;
-
-			
-			public string value;
-
-			
-			public string fileSource;
-
-			
-			public int fileSourceLine;
-
-			
-			public string fileSourceFullPath;
-
-			
-			public bool isPlaceholder;
-		}
 	}
 }

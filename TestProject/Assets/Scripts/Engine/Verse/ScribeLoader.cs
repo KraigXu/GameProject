@@ -7,7 +7,12 @@ namespace Verse
 	
 	public class ScribeLoader
 	{
-		
+		public CrossRefHandler crossRefs = new CrossRefHandler();
+		public PostLoadIniter initer = new PostLoadIniter();
+		public IExposable curParent;
+		public XmlNode curXmlParent;
+		public string curPathRelToParent;
+
 		public void InitLoading(string filePath)
 		{
 			if (Scribe.mode != LoadSaveMode.Inactive)
@@ -177,18 +182,6 @@ namespace Verse
 		}
 
 		
-		public CrossRefHandler crossRefs = new CrossRefHandler();
 
-		
-		public PostLoadIniter initer = new PostLoadIniter();
-
-		
-		public IExposable curParent;
-
-		
-		public XmlNode curXmlParent;
-
-		
-		public string curPathRelToParent;
 	}
 }

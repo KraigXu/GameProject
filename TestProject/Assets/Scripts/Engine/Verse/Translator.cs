@@ -21,11 +21,11 @@ namespace Verse
 			{
 				return result;
 			}
-			//if (backupKey.TryTranslate(out result))
-			//{
-			//	return result;
-			//}
-			return key.Translate();
+            if (backupKey.TryTranslate(out result))
+            {
+                return result;
+            }
+            return key.Translate();
 		}
 
 		
@@ -50,7 +50,28 @@ namespace Verse
 			return false;
 		}
 
-		
+		public static bool TryTranslate(this TaggedString key, out TaggedString result)
+		{
+			if (key.NullOrEmpty())
+			{
+				result = key;
+				return false;
+			}
+			if (LanguageDatabase.activeLanguage == null)
+			{
+				Log.Error("No active language! Cannot translate from key " + key + ".", false);
+				result = key;
+				return true;
+			}
+			if (LanguageDatabase.activeLanguage.TryGetTextFromKey(key, out result))
+			{
+				return true;
+			}
+			result = key;
+			return false;
+		}
+
+
 		public static string TranslateSimple(this string key)
 		{
 			return key.Translate();

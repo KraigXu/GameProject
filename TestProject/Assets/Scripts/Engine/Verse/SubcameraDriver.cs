@@ -86,7 +86,7 @@ namespace Verse
 			}
 		}
 
-		
+
 		public Camera GetSubcamera(SubcameraDef def)
 		{
 			if (this.subcameras == null || def == null || this.subcameras.Length <= (int)def.index)

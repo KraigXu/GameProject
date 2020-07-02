@@ -8,7 +8,8 @@ namespace Verse
 	
 	public abstract class Graphic_Collection : Graphic
 	{
-		
+		protected Graphic[] subGraphics;
+
 		public override void Init(GraphicRequest req)
 		{
 			this.data = req.graphicData;
@@ -46,6 +47,6 @@ namespace Verse
 		}
 
 		
-		protected Graphic[] subGraphics;
+		
 	}
 }

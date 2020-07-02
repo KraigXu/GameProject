@@ -273,17 +273,19 @@ namespace Verse
 			}
 		}
 
-		
+		private static void RunEventFromAnotherThread()
+        {
+			LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
+		}
+
+
 		private static void UpdateCurrentAsynchronousEvent()
 		{
 			if (LongEventHandler.eventThread == null)
 			{
-				//LongEventHandler.eventThread = new Thread(delegate
-				//{
-				//	LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
-				//});
-				//LongEventHandler.eventThread.Start();
-				return;
+                LongEventHandler.eventThread = new Thread(RunEventFromAnotherThread);
+                LongEventHandler.eventThread.Start();
+                return;
 			}
 			if (!LongEventHandler.eventThread.IsAlive)
 			{
