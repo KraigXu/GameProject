@@ -7,7 +7,10 @@ namespace RimWorld
 	
 	public static class DefOfHelper
 	{
-		
+		private static bool bindingNow;
+		private static bool earlyTry = true;
+
+
 		public static void RebindAllDefOfs(bool earlyTryMode)
 		{
 			DefOfHelper.earlyTry = earlyTryMode;
@@ -86,9 +89,6 @@ namespace RimWorld
 		}
 
 		
-		private static bool bindingNow;
 
-		
-		private static bool earlyTry = true;
 	}
 }

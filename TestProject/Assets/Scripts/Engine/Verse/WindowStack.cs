@@ -9,8 +9,32 @@ namespace Verse
 	
 	public class WindowStack
 	{
-		
-		
+		public Window currentlyDrawnWindow;
+		private List<Window> windows = new List<Window>();
+
+		private List<int> immediateWindowsRequests = new List<int>();
+		private bool updateInternalWindowsOrderLater;
+		private Window focusedWindow;
+
+		private static int uniqueWindowID;
+
+		private bool gameStartDialogOpen;
+
+		private float timeGameStartDialogClosed = -1f;
+
+		private IntVec2 prevResolution = new IntVec2(UI.screenWidth, UI.screenHeight);
+
+		private List<Window> windowStackOnGUITmpList = new List<Window>();
+
+
+		private List<Window> updateImmediateWindowsListTmpList = new List<Window>();
+
+
+		private List<Window> removeWindowsOfTypeTmpList = new List<Window>();
+
+
+		private List<Window> closeWindowsTmpList = new List<Window>();
+
 		public int Count
 		{
 			get
@@ -626,42 +650,6 @@ namespace Verse
 		}
 
 		
-		public Window currentlyDrawnWindow;
 
-		
-		private List<Window> windows = new List<Window>();
-
-		
-		private List<int> immediateWindowsRequests = new List<int>();
-
-		
-		private bool updateInternalWindowsOrderLater;
-
-		
-		private Window focusedWindow;
-
-		
-		private static int uniqueWindowID;
-
-		
-		private bool gameStartDialogOpen;
-
-		
-		private float timeGameStartDialogClosed = -1f;
-
-		
-		private IntVec2 prevResolution = new IntVec2(UI.screenWidth, UI.screenHeight);
-
-		
-		private List<Window> windowStackOnGUITmpList = new List<Window>();
-
-		
-		private List<Window> updateImmediateWindowsListTmpList = new List<Window>();
-
-		
-		private List<Window> removeWindowsOfTypeTmpList = new List<Window>();
-
-		
-		private List<Window> closeWindowsTmpList = new List<Window>();
 	}
 }

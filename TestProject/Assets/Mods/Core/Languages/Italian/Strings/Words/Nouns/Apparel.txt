@@ -1,0 +1,11 @@
+﻿armatura ad energia
+bombetta
+camicia
+cintura
+cravatta
+giacca
+mutanda
+paglietta
+scarpa
+tuba
+tuta spaziale

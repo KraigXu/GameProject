@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace GameSystem.Skill
 {
-    [CreateAssetMenu(menuName = "GameSystem/Skill/Trigger/PlaySoundTrigger")]
     public class PlaySoundTrigger : SkillTrigger
     {
         public AudioData Data;

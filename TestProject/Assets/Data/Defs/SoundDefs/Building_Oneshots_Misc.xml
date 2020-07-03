@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Defs>
+
+  <SoundDef>
+    <defName>CryptosleepCasket_Eject</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Misc/CryptosleepCasket/CryptosleepCasketEject</clipPath>
+          </li>
+        </grains>
+        <volumeRange>40~40</volumeRange>
+        <distRange>10~70</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+  
+  <SoundDef>
+    <defName>CryptosleepCasket_Accept</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Misc/CryptosleepCasket/CryptosleepCasketAccept</clipPath>
+          </li>
+        </grains>
+        <volumeRange>40~40</volumeRange>
+        <distRange>10~70</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>Hive_Spawn</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Misc/Hive/Spawn</clipPath>
+          </li>
+        </grains>
+        <volumeRange>40~40</volumeRange>
+        <distRange>10~100</distRange>
+        <pitchRange>0.5~0.9</pitchRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>MechanoidsWakeUp</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>Misc/MechanoidsWakeUp</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>40~40</volumeRange>
+        <distRange>10~80</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+</Defs>

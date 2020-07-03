@@ -10,7 +10,11 @@ namespace Verse
 	
 	public class ModLoadFolders
 	{
-		
+		private Dictionary<string, List<LoadFolder>> foldersForVersion = new Dictionary<string, List<LoadFolder>>();
+		public const string defaultVersionName = "default";
+
+
+
 		public List<LoadFolder> FoldersForVersion(string version)
 		{
 			if (this.foldersForVersion.ContainsKey(version))
@@ -138,9 +142,6 @@ namespace Verse
 		}
 
 		
-		private Dictionary<string, List<LoadFolder>> foldersForVersion = new Dictionary<string, List<LoadFolder>>();
 
-		
-		public const string defaultVersionName = "default";
 	}
 }

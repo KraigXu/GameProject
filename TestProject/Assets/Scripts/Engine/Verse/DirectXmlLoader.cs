@@ -125,7 +125,7 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Exception loading file at " + filePath + ". Loading defaults instead. Exception was: " + ex.ToString(), false);
+				Log.Error("Exception loading file at " + filePath + ". Loading defaults instead. Exception was: " + ex.ToString()+". Type is  "+typeof(T) , false);
 				result = Activator.CreateInstance<T>();
 			}
 			return result;

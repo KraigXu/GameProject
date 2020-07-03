@@ -18,8 +18,6 @@ namespace Verse
 				return LoadedModManager.runningMods;
 			}
 		}
-
-		
 		
 		public static IEnumerable<ModContentPack> RunningMods
 		{

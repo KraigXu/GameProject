@@ -6,8 +6,16 @@ namespace Verse
 	
 	public class LoadFolder : IEquatable<LoadFolder>
 	{
-		
-		
+		public string folderName;
+		public List<string> requiredPackageIds;
+		public List<string> disallowedPackageIds;
+		private readonly int hashCodeCached;
+
+		public override int GetHashCode()
+		{
+			return this.hashCodeCached;
+		}
+
 		public bool ShouldLoad
 		{
 			get
@@ -41,21 +49,9 @@ namespace Verse
 		}
 
 		
-		public override int GetHashCode()
-		{
-			return this.hashCodeCached;
-		}
+
 
 		
-		public string folderName;
 
-		
-		public List<string> requiredPackageIds;
-
-		
-		public List<string> disallowedPackageIds;
-
-		
-		private readonly int hashCodeCached;
 	}
 }

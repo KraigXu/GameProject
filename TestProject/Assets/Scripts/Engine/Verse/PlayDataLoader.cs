@@ -12,8 +12,9 @@ namespace Verse
 	
 	public static class PlayDataLoader
 	{
-		
-		
+
+
+		private static bool loadedInt;
 		public static bool Loaded
 		{
 			get
@@ -415,7 +416,6 @@ namespace Verse
 			PlayDataLoader.loadedInt = false;
 		}
 
-		
-		private static bool loadedInt;
+
 	}
 }

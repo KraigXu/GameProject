@@ -11,8 +11,30 @@ namespace Verse
 	
 	public static class ModsConfig
 	{
-		
-		
+		private static ModsConfig.ModsConfigData data;
+
+
+		private static bool royaltyActive;
+
+
+		private static HashSet<string> activeModsHashSet = new HashSet<string>();
+
+
+		private static List<ModMetaData> activeModsInLoadOrderCached = new List<ModMetaData>();
+
+
+		private static bool activeModsInLoadOrderCachedDirty;
+
+
+		private class ModsConfigData
+		{
+
+			[LoadAlias("buildNumber")]
+			public string version;
+			public List<string> activeMods = new List<string>();
+			public List<string> knownExpansions = new List<string>();
+		}
+
 		public static IEnumerable<ModMetaData> ActiveModsInLoadOrder
 		{
 			get
@@ -415,32 +437,6 @@ namespace Verse
 		}
 
 		
-		private static ModsConfig.ModsConfigData data;
 
-		
-		private static bool royaltyActive;
-
-		
-		private static HashSet<string> activeModsHashSet = new HashSet<string>();
-
-		
-		private static List<ModMetaData> activeModsInLoadOrderCached = new List<ModMetaData>();
-
-		
-		private static bool activeModsInLoadOrderCachedDirty;
-
-		
-		private class ModsConfigData
-		{
-			
-			[LoadAlias("buildNumber")]
-			public string version;
-
-			
-			public List<string> activeMods = new List<string>();
-
-			
-			public List<string> knownExpansions = new List<string>();
-		}
 	}
 }

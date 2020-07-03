@@ -7,7 +7,13 @@ namespace Verse
 	
 	public static class DeepProfiler
 	{
-		
+
+		public static volatile bool enabled = true;
+
+		private static Dictionary<int, ThreadLocalDeepProfiler> deepProfilers = new Dictionary<int, ThreadLocalDeepProfiler>();
+
+		private static readonly object DeepProfilersLock = new object();
+
 		public static ThreadLocalDeepProfiler Get()
 		{
 			object deepProfilersLock = DeepProfiler.DeepProfilersLock;
@@ -39,7 +45,6 @@ namespace Verse
 			}
 			DeepProfiler.Get().Start(label);
 		}
-
 		
 		public static void End()
 		{
@@ -49,14 +54,5 @@ namespace Verse
 			}
 			DeepProfiler.Get().End();
 		}
-
-		
-		public static volatile bool enabled = true;
-
-		
-		private static Dictionary<int, ThreadLocalDeepProfiler> deepProfilers = new Dictionary<int, ThreadLocalDeepProfiler>();
-
-		
-		private static readonly object DeepProfilersLock = new object();
 	}
 }

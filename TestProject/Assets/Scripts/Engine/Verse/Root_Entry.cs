@@ -7,7 +7,8 @@ namespace Verse
 	
 	public class Root_Entry : Root
 	{
-		
+		public MusicManagerEntry musicManagerEntry;
+
 		public override void Start()
 		{
 			base.Start();
@@ -55,6 +56,6 @@ namespace Verse
 		}
 
 		
-		public MusicManagerEntry musicManagerEntry;
+		
 	}
 }
