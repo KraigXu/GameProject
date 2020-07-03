@@ -21,7 +21,6 @@ public static class SignalCenter
     //Data
 
     public static DataLoad GameDataLoadOver =new DataLoad();
-
     ////SystemData
     //public static BiologicalEntityData BiologicalDataChange=new BiologicalEntityData();
 

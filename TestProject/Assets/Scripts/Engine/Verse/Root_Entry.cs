@@ -4,7 +4,6 @@ using RimWorld;
 
 namespace Verse
 {
-	
 	public class Root_Entry : Root
 	{
 		public MusicManagerEntry musicManagerEntry;
@@ -54,8 +53,5 @@ namespace Verse
 				Log.Error("Root level exception in Update(): " + arg, false);
 			}
 		}
-
-		
-		
 	}
 }

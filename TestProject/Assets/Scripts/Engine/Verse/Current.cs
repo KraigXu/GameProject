@@ -76,19 +76,19 @@ namespace Verse
 			}
 		}
 
-		
-		
-		//public static ColorCorrectionCurves ColorCorrectionCurves
-		//{
-		//	get
-		//	{
-		//		return Current.colorCorrectionCurvesInt;
-		//	}
-		//}
 
-		
-		
-		public static SubcameraDriver SubcameraDriver
+
+        //public static ColorCorrectionCurves ColorCorrectionCurves
+        //{
+        //    get
+        //    {
+        //        return Current.colorCorrectionCurvesInt;
+        //    }
+        //}
+
+
+
+        public static SubcameraDriver SubcameraDriver
 		{
 			get
 			{

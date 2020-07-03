@@ -12,8 +12,68 @@ namespace Verse
 	
 	public static class LongEventHandler
 	{
-		
-		
+		private static Queue<QueuedLongEvent> eventQueue = new Queue<QueuedLongEvent>();
+
+		private static QueuedLongEvent currentEvent = null;
+
+		private static Thread eventThread = null;
+
+		private static AsyncOperation levelLoadOp = null;
+
+		private static List<Action> toExecuteWhenFinished = new List<Action>();
+
+		private static bool executingToExecuteWhenFinished = false;
+
+		private static readonly object CurrentEventTextLock = new object();
+
+		private static readonly Vector2 StatusRectSize = new Vector2(240f, 75f);
+
+
+		private class QueuedLongEvent
+		{
+			public bool UseAnimatedDots
+			{
+				get
+				{
+					return this.doAsynchronously || this.eventActionEnumerator != null;
+				}
+			}
+			public bool ShouldWaitUntilDisplayed
+			{
+				get
+				{
+					return !this.alreadyDisplayed && this.UseStandardWindow && !this.eventText.NullOrEmpty();
+				}
+			}
+			public bool UseStandardWindow
+			{
+				get
+				{
+					return this.canEverUseStandardWindow && !this.doAsynchronously && this.eventActionEnumerator == null;
+				}
+			}
+
+			public Action eventAction;
+
+			public IEnumerator eventActionEnumerator;
+
+			public string levelToLoad;
+
+			public string eventTextKey = "";
+
+			public string eventText = "";
+
+			public bool doAsynchronously;
+
+			public Action<Exception> exceptionHandler;
+
+			public bool alreadyDisplayed;
+
+			public bool canEverUseStandardWindow = true;
+
+			public bool showExtraUIInfo = true;
+		}
+
 		public static bool ShouldWaitForEvent
 		{
 			get
@@ -22,7 +82,6 @@ namespace Verse
 			}
 		}
 
-		
 		
 		public static bool AnyEventNowOrWaiting
 		{
@@ -103,7 +162,6 @@ namespace Verse
 			LongEventHandler.eventQueue.Clear();
 		}
 
-		
 		public static void LongEventsOnGUI()
 		{
 			if (LongEventHandler.currentEvent == null)
@@ -278,7 +336,6 @@ namespace Verse
 			LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
 		}
 
-
 		private static void UpdateCurrentAsynchronousEvent()
 		{
 			if (LongEventHandler.eventThread == null)
@@ -315,7 +372,6 @@ namespace Verse
 			}
 		}
 
-		
 		private static void UpdateCurrentSynchronousEvent(out bool sceneChanged)
 		{
 			sceneChanged = false;
@@ -458,91 +514,6 @@ namespace Verse
 		}
 
 		
-		private static Queue<LongEventHandler.QueuedLongEvent> eventQueue = new Queue<LongEventHandler.QueuedLongEvent>();
-
 		
-		private static LongEventHandler.QueuedLongEvent currentEvent = null;
-
-		
-		private static Thread eventThread = null;
-
-		
-		private static AsyncOperation levelLoadOp = null;
-
-		
-		private static List<Action> toExecuteWhenFinished = new List<Action>();
-
-		
-		private static bool executingToExecuteWhenFinished = false;
-
-		
-		private static readonly object CurrentEventTextLock = new object();
-
-		
-		private static readonly Vector2 StatusRectSize = new Vector2(240f, 75f);
-
-		
-		private class QueuedLongEvent
-		{
-			
-			
-			public bool UseAnimatedDots
-			{
-				get
-				{
-					return this.doAsynchronously || this.eventActionEnumerator != null;
-				}
-			}
-
-			
-			
-			public bool ShouldWaitUntilDisplayed
-			{
-				get
-				{
-					return !this.alreadyDisplayed && this.UseStandardWindow && !this.eventText.NullOrEmpty();
-				}
-			}
-
-			
-			
-			public bool UseStandardWindow
-			{
-				get
-				{
-					return this.canEverUseStandardWindow && !this.doAsynchronously && this.eventActionEnumerator == null;
-				}
-			}
-
-			
-			public Action eventAction;
-
-			
-			public IEnumerator eventActionEnumerator;
-
-			
-			public string levelToLoad;
-
-			
-			public string eventTextKey = "";
-
-			
-			public string eventText = "";
-
-			
-			public bool doAsynchronously;
-
-			
-			public Action<Exception> exceptionHandler;
-
-			
-			public bool alreadyDisplayed;
-
-			
-			public bool canEverUseStandardWindow = true;
-
-			
-			public bool showExtraUIInfo = true;
-		}
 	}
 }

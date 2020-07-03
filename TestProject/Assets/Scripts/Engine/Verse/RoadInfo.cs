@@ -6,7 +6,9 @@ namespace Verse
 	
 	public class RoadInfo : MapComponent
 	{
-		
+
+		public List<IntVec3> roadEdgeTiles = new List<IntVec3>();
+
 		public RoadInfo(Map map) : base(map)
 		{
 		}
@@ -19,6 +21,6 @@ namespace Verse
 		}
 
 		
-		public List<IntVec3> roadEdgeTiles = new List<IntVec3>();
+		
 	}
 }

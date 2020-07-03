@@ -7,8 +7,10 @@ namespace Verse
 	
 	public static class GenScene
 	{
-		
-		
+
+		public const string EntrySceneName = "Entry";
+		public const string PlaySceneName = "Play";
+
 		public static bool InEntryScene
 		{
 			get
@@ -17,8 +19,6 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public static bool InPlayScene
 		{
 			get
@@ -27,7 +27,6 @@ namespace Verse
 			}
 		}
 
-		
 		public static void GoToMainMenu()
 		{
 			LongEventHandler.ClearQueuedEvents();
@@ -39,9 +38,6 @@ namespace Verse
 		}
 
 		
-		public const string EntrySceneName = "Entry";
 
-		
-		public const string PlaySceneName = "Play";
 	}
 }

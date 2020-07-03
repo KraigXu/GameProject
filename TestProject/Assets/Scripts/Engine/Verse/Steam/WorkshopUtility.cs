@@ -16,13 +16,11 @@ namespace Verse.Steam
 			return ("WorkshopInteractStage_" + stage.ToString()).Translate();
 		}
 
-		
 		public static string GetLabel(this EItemUpdateStatus status)
 		{
 			return ("EItemUpdateStatus_" + status.ToString()).Translate();
 		}
 
-		
 		public static string GetLabel(this EResult result)
 		{
 			return result.ToString().Substring(9);

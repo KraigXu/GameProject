@@ -5,7 +5,14 @@ namespace Verse.Noise
 	
 	public class Cache : ModuleBase
 	{
-		
+
+		private double m_value;
+		private bool m_cached;
+		private double m_x;
+		private double m_y;
+		private double m_z;
+
+
 		public Cache() : base(1)
 		{
 		}
@@ -45,18 +52,6 @@ namespace Verse.Noise
 		}
 
 		
-		private double m_value;
 
-		
-		private bool m_cached;
-
-		
-		private double m_x;
-
-		
-		private double m_y;
-
-		
-		private double m_z;
 	}
 }

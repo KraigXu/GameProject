@@ -19,7 +19,6 @@ namespace Verse.Profile
 			});
 		}
 
-		
 		public static void ClearAllMapsAndWorld()
 		{
 			if (Current.Game != null && Current.Game.Maps != null)

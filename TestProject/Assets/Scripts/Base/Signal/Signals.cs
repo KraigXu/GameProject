@@ -7,10 +7,7 @@ using Unity.Entities;
 
 namespace Signals
 {
-
     public class NoneParameter : Signal { }
-
-
     public class DataLoad : Signal<DataLoadEcs> { }
     public class MouseSignal : Signal<MouseInput> { }
 

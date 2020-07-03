@@ -9,8 +9,112 @@ namespace Verse
 	
 	public class CameraDriver : MonoBehaviour
 	{
-		
-		
+
+		public CameraShaker shaker = new CameraShaker();
+
+
+		private Camera cachedCamera;
+
+
+		private GameObject reverbDummy;
+
+
+		public CameraMapConfig config = new CameraMapConfig_Normal();
+
+
+		private Vector3 velocity;
+
+
+		private Vector3 rootPos;
+
+
+		private float rootSize;
+
+
+		private float desiredSize;
+
+
+		private Vector2 desiredDolly = Vector2.zero;
+
+
+		private Vector2 desiredDollyRaw = Vector2.zero;
+
+
+		private List<CameraDriver.DragTimeStamp> dragTimeStamps = new List<CameraDriver.DragTimeStamp>();
+
+
+		private bool mouseCoveredByUI;
+
+
+		private float mouseTouchingScreenBottomEdgeStartTime = -1f;
+
+
+		private float fixedTimeStepBuffer;
+
+
+		private static int lastViewRectGetFrame = -1;
+
+
+		private static CellRect lastViewRect;
+
+
+		public const float MaxDeltaTime = 0.1f;
+
+
+		private const float ScreenDollyEdgeWidth = 20f;
+
+
+		private const float ScreenDollyEdgeWidth_BottomFullscreen = 6f;
+
+
+		private const float MinDurationForMouseToTouchScreenBottomEdgeToDolly = 0.28f;
+
+
+		private const float DragTimeStampExpireSeconds = 0.05f;
+
+
+		private const float VelocityFromMouseDragInitialFactor = 0.75f;
+
+
+		private const float MapEdgeClampMarginCells = -2f;
+
+
+		public const float StartingSize = 24f;
+
+
+		private const float MaxSize = 60f;
+
+
+		private const float ZoomTightness = 0.4f;
+
+
+		private const float ZoomScaleFromAltDenominator = 35f;
+
+
+		private const float PageKeyZoomRate = 4f;
+
+
+		private const float ScrollWheelZoomRate = 0.35f;
+
+
+		public const float MinAltitude = 15f;
+
+
+		private const float MaxAltitude = 65f;
+
+
+		private const float ReverbDummyAltitude = 65f;
+
+
+		public struct DragTimeStamp
+		{
+
+			public Vector2 posDelta;
+
+
+			public float time;
+		}
+
 		private Camera MyCamera
 		{
 			get
@@ -463,109 +567,6 @@ namespace Verse
 		}
 
 		
-		public CameraShaker shaker = new CameraShaker();
-
-		
-		private Camera cachedCamera;
-
-		
-		private GameObject reverbDummy;
-
-		
-		public CameraMapConfig config = new CameraMapConfig_Normal();
-
-		
-		private Vector3 velocity;
-
-		
-		private Vector3 rootPos;
-
-		
-		private float rootSize;
-
-		
-		private float desiredSize;
-
-		
-		private Vector2 desiredDolly = Vector2.zero;
-
-		
-		private Vector2 desiredDollyRaw = Vector2.zero;
-
-		
-		private List<CameraDriver.DragTimeStamp> dragTimeStamps = new List<CameraDriver.DragTimeStamp>();
-
-		
-		private bool mouseCoveredByUI;
-
-		
-		private float mouseTouchingScreenBottomEdgeStartTime = -1f;
-
-		
-		private float fixedTimeStepBuffer;
-
-		
-		private static int lastViewRectGetFrame = -1;
-
-		
-		private static CellRect lastViewRect;
-
-		
-		public const float MaxDeltaTime = 0.1f;
-
-		
-		private const float ScreenDollyEdgeWidth = 20f;
-
-		
-		private const float ScreenDollyEdgeWidth_BottomFullscreen = 6f;
-
-		
-		private const float MinDurationForMouseToTouchScreenBottomEdgeToDolly = 0.28f;
-
-		
-		private const float DragTimeStampExpireSeconds = 0.05f;
-
-		
-		private const float VelocityFromMouseDragInitialFactor = 0.75f;
-
-		
-		private const float MapEdgeClampMarginCells = -2f;
-
-		
-		public const float StartingSize = 24f;
-
-		
-		private const float MaxSize = 60f;
-
-		
-		private const float ZoomTightness = 0.4f;
-
-		
-		private const float ZoomScaleFromAltDenominator = 35f;
-
-		
-		private const float PageKeyZoomRate = 4f;
-
-		
-		private const float ScrollWheelZoomRate = 0.35f;
-
-		
-		public const float MinAltitude = 15f;
-
-		
-		private const float MaxAltitude = 65f;
-
-		
-		private const float ReverbDummyAltitude = 65f;
-
-		
-		public struct DragTimeStamp
-		{
-			
-			public Vector2 posDelta;
-
-			
-			public float time;
-		}
+	
 	}
 }

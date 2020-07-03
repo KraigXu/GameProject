@@ -9,8 +9,6 @@ namespace Verse
 	
 	public sealed class Room
 	{
-		
-		
 		public Map Map
 		{
 			get
@@ -23,8 +21,6 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public RegionType RegionType
 		{
 			get
