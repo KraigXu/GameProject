@@ -1,0 +1,98 @@
+<Defs>
+
+  <SoundDef>
+    <defName>ShuttleIdle_Ambience</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <muteWhenPaused>True</muteWhenPaused>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Misc/Shuttle/Shuttle_Idle_Ambience_Loop_01a</clipPath>
+          </li>
+        </grains>
+        <volumeRange>10</volumeRange>
+        <distRange>10~30</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>SunBlocker_Ambience</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <muteWhenPaused>True</muteWhenPaused>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Buildings/Exotic/SunBlocker_Ambience_01a</clipPath>
+          </li>
+        </grains>
+        <volumeRange>45</volumeRange>
+        <distRange>15~30</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>GasSpewer_Ambience</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <muteWhenPaused>True</muteWhenPaused>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Buildings/Exotic/GasSpewer_Ambience_Loop</clipPath>
+          </li>
+        </grains>
+        <volumeRange>40</volumeRange>
+        <distRange>15~30</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>WeatherAffecter_Ambience</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <muteWhenPaused>True</muteWhenPaused>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Buildings/Exotic/WeatherAffecter_Ambience_Loop_01a</clipPath>
+          </li>
+        </grains>
+        <volumeRange>45</volumeRange>
+        <distRange>15~30</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>EMIDynamo_Ambience</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <muteWhenPaused>True</muteWhenPaused>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Buildings/Exotic/EMIDynamo_Ambience_Loop_01a</clipPath>
+          </li>
+        </grains>
+        <volumeRange>40</volumeRange>
+        <distRange>15~30</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+</Defs>

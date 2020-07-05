@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ============================= Permits from royal titles ============================= -->
+
+  <RoyalTitlePermitDef>
+    <defName>TradeSettlement</defName>
+    <label>trade with settlements</label>
+  </RoyalTitlePermitDef>
+  
+  <RoyalTitlePermitDef>
+    <defName>TradeOrbital</defName>
+    <label>trade with orbital traders</label>
+  </RoyalTitlePermitDef>
+  
+  <RoyalTitlePermitDef>
+    <defName>TradeCaravan</defName>
+    <label>trade with caravans</label>
+  </RoyalTitlePermitDef>
+
+  <RoyalTitlePermitDef>
+    <defName>CallMilitaryAidSmall</defName>
+    <label>call trooper squad</label>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <royalAid>
+      <favorCost>4</favorCost>
+      <pawnKindDef>Empire_Fighter_Trooper</pawnKindDef>
+      <pawnCount>4</pawnCount>
+      <targetingRange>40</targetingRange>
+    </royalAid>
+    <cooldownDays>45</cooldownDays>
+  </RoyalTitlePermitDef>
+
+  <RoyalTitlePermitDef>
+    <defName>CallMilitaryAidLarge</defName>
+    <label>call janissary squad</label>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <royalAid>
+      <favorCost>6</favorCost>
+      <pawnKindDef>Empire_Fighter_Janissary</pawnKindDef>
+      <pawnCount>4</pawnCount>
+      <targetingRange>40</targetingRange>
+    </royalAid>
+    <cooldownDays>45</cooldownDays>
+  </RoyalTitlePermitDef>
+
+  <RoyalTitlePermitDef>
+    <defName>CallMilitaryAidGrand</defName>
+    <label>call cataphract squad</label>
+    <workerClass>RoyalTitlePermitWorker_CallAid</workerClass>
+    <royalAid>
+      <favorCost>8</favorCost>
+      <pawnKindDef>Empire_Fighter_Cataphract</pawnKindDef>
+      <pawnCount>4</pawnCount>
+      <targetingRange>40</targetingRange>
+    </royalAid>
+    <cooldownDays>45</cooldownDays>
+  </RoyalTitlePermitDef>
+
+</Defs>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <IncidentDef ParentName="GiveQuestBase">
+    <defName>GiveQuest_EndGame_RoyalAscent</defName>
+    <label>royal ascent</label>
+    <questScriptDef>EndGame_RoyalAscent</questScriptDef>
+    <baseChance>0</baseChance> <!-- given by a special storyteller comp -->
+  </IncidentDef>
+
+  <IncidentDef ParentName="GiveQuestBase">
+    <defName>GiveQuest_Intro_Wimp</defName>
+    <label>imperial wimp</label>
+    <questScriptDef>Intro_Wimp</questScriptDef>
+    <baseChance>0</baseChance> <!-- given by a special storyteller comp -->
+  </IncidentDef>
+
+  <IncidentDef ParentName="GiveQuestBase">
+    <defName>GiveQuest_Intro_Deserter</defName>
+    <label>imperial deserter</label>
+    <questScriptDef>Intro_Deserter</questScriptDef>
+    <baseChance>0</baseChance> <!-- given by a special storyteller comp -->
+  </IncidentDef>
+
+</Defs>

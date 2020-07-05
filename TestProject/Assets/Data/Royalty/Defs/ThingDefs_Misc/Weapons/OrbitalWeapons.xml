@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="OrbitalWeaponBase">
+    <defName>OrbitalTargeterMechCluster</defName>
+    <label>orbital mech cluster targeter</label>
+    <description>An ancient military targeting device. It signals an orbital platform to drop a mechanoid combat cluster at the targeted point. The cluster may include any mixture of mechanoids and mech defense structures.
+\nThough they may have once had some allegiance to the ancient army that created this unit, any mechs dropped now will indiscriminately attack any human they see - including the one that summoned them.
+\nThe unit only contains one usage code, so it can only be used once.</description>
+    <verbs>
+      <li>
+        <verbClass>Verb_MechCluster</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <warmupTime>3</warmupTime>
+        <ai_AvoidFriendlyFireRadius>23</ai_AvoidFriendlyFireRadius>
+        <ai_IsBuildingDestroyer>true</ai_IsBuildingDestroyer>
+        <range>44.9</range>
+        <burstShotCount>1</burstShotCount>
+        <soundAiming>OrbitalTargeter_Aiming</soundAiming>
+        <soundCast>OrbitalTargeter_Fire</soundCast>
+        <onlyManualCast>true</onlyManualCast>
+        <targetParams>
+          <canTargetLocations>true</canTargetLocations>
+        </targetParams>
+      </li>
+    </verbs>
+  </ThingDef>
+
+</Defs>

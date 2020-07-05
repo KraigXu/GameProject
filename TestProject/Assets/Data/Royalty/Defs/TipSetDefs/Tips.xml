@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <TipSetDef>
+    <defName>RoyaltyTips</defName>
+    <tips>
+      <!-- Nobles -->
+      <li TKey="TitleMilitaryAid">Some royal titles allow the holder to call for military aid. This can save you in a tough moment.</li>
+      <li TKey="NoblesDemandPrivileges">Nobles from the Empire will demand all the privileges of their title. Your own titled colonists will be more flexible, unless they are greedy or jealous.</li>
+      <li TKey="RoyalArmor">Royal powered armor and eltex apparel will also satisfy the apparel requirements of royal titles.</li>
+      <li TKey="TitleInheritance">If a royal title holder dies, their title goes to their chosen heir.</li>
+      <li TKey="ChangeHeir">You can change the heir of a royal title holder through the comms console. However, this requires completing a ritual.</li>
+
+      <!-- Implants -->
+      <li TKey="FreePsychicAmplifier">The Empire bestows a free psylink neuroformer upon anyone who earns the title required to use it.</li>
+      <li TKey="IllegalImplantUse">The Empire restricts usage of certain implants to those with specific royal titles. Using them illegally may lead to diplomatic consequences with the Empire.</li>
+      <li TKey="InstallingPsychicAmplifier">Gaining a new level of psylink grants knowledge of one psycast.</li>
+
+      <!-- Psycasts -->
+      <li TKey="PsycastAdvantage">Psycasts can give you significant advantage in combat.</li>
+      <li TKey="PsycastFactionRelations">Performing a psycast on an ally will harm faction relations - but only if the psycast has negative effects.</li>
+      <li TKey="PsycastInvisibility">The invisibility psycast's effect doesn't wear off when you attack.</li>
+      <li TKey="PsychicEntropyLimit">Going over your neural heat limit can save you in a desperate situation - but the psychic breakdown can last a while.</li>
+      <li TKey="PsycastSensitivity">Creatures with higher psychic sensitivity are affected more by psycasts.</li>
+      <li TKey="EltexGear">Dressing your psycasters in eltex gear will increase their neural heat limit and dissipation rate.</li>
+
+      <!-- Mech clusters -->
+      <li TKey="MechClusterPowercell">When fighting a mech cluster, try shooting their power cells. They explode, dealing heavy damage to surrounding creatures and structures.</li>
+      <li TKey="MechClusterDormant">Some mech clusters remain dormant until disturbed. Use that time to prepare your attack.</li>
+      
+      <!-- Misc -->
+      <li TKey="RoyalTributeCollector">The Imperial royal tribute collector arrives twice per year, and accepts prisoners and gold in exchange for royal favor.</li>
+
+      <!-- Added misc -->
+      <li TKey="MechClusterDormantTrigger">You can safely walk right past a dormant mech cluster, as long as you don't attack it or trigger a proximity activator.</li>
+      <li TKey="SkipPsycastsMultiuse">The skip psycast works on self, allies, enemies, and even items. The tactical possibilities are endless.</li>
+
+    </tips>
+  </TipSetDef>
+
+</Defs>
