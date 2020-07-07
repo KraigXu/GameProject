@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using Boo.Lang;
 using RimWorld.QuestGenNew;
 
 namespace Verse
@@ -128,16 +127,16 @@ namespace Verse
 				}
 				if (Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
 				{
-					//List<T> list = DirectXmlToObject.ListFromXml<T>(xmlRoot);
-					//int num = 0;
-					//foreach (T t2 in list)
-					//{
-					//	int num2 = (int)((object)t2);
-					//	num |= num2;
-					//}
-					//return (T)((object)num);
-				}
-				if (typeof(T).HasGenericDefinition(typeof(List)))
+                    List<T> list = DirectXmlToObject.ListFromXml<T>(xmlRoot);
+                    int num = 0;
+                    foreach (T t2 in list)
+                    {
+                        int num2 = (int)((object)t2);
+                        num |= num2;
+                    }
+                    return (T)((object)num);
+                }
+				if (typeof(T).HasGenericDefinition(typeof(List<>)))
 				{
 					Func<XmlNode, object> func = null;
 					if (!DirectXmlToObject.listFromXmlMethods.TryGetValue(typeof(T), out func))
@@ -175,11 +174,11 @@ namespace Verse
 					if (typeof(T).IsGenericType)
 					{
 						Type genericTypeDefinition = typeof(T).GetGenericTypeDefinition();
-						//if (genericTypeDefinition == typeof(List) || genericTypeDefinition == typeof(HashSet) || genericTypeDefinition == typeof(Dictionary<, >))
-						//{
-						//	return Activator.CreateInstance<T>();
-						//}
-					}
+                        if (genericTypeDefinition == typeof(List<>) || genericTypeDefinition == typeof(HashSet<>) || genericTypeDefinition == typeof(Dictionary<,>))
+                        {
+                            return Activator.CreateInstance<T>();
+                        }
+                    }
 				}
 				xmlRoot = XmlInheritance.GetResolvedNodeFor(xmlRoot);
 				Type type2 = DirectXmlToObject.ClassTypeOf<T>(xmlRoot);
@@ -426,9 +425,9 @@ namespace Verse
 		}
 
 		
-		private static System.Collections.Generic.List<T> ListFromXml<T>(XmlNode listRootNode)
+		private static List<T> ListFromXml<T>(XmlNode listRootNode)
 		{
-			System.Collections.Generic.List<T> list = new System.Collections.Generic.List<T>();
+			List<T> list = new List<T>();
 			try
 			{
 				bool flag = typeof(Def).IsAssignableFrom(typeof(T));

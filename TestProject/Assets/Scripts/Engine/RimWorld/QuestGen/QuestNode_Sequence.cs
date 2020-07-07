@@ -6,7 +6,7 @@ namespace RimWorld.QuestGenNew
 	
 	public class QuestNode_Sequence : QuestNode
 	{
-		
+		public List<QuestNode> nodes = new List<QuestNode>();
 		protected override void RunInt()
 		{
 			for (int i = 0; i < this.nodes.Count; i++)
@@ -29,6 +29,6 @@ namespace RimWorld.QuestGenNew
 		}
 
 		
-		public List<QuestNode> nodes = new List<QuestNode>();
+		
 	}
 }

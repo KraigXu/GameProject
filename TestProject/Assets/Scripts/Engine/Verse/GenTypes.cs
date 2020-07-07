@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace Verse
 {
@@ -23,10 +24,7 @@ namespace Verse
 						yield return mod.assemblies.loadedAssemblies[i];
 						num = i;
 					}
-					//mod = null;
 				}
-				IEnumerator<ModContentPack> enumerator = null;
-				yield break;
 				yield break;
 			}
 		}
@@ -157,227 +155,133 @@ namespace Verse
 		
 		private static Type GetTypeInAnyAssemblyRaw(string typeName)
 		{
-			//uint num = <PrivateImplementationDetails>.ComputeStringHash(typeName);
-			uint num = 0;
-			if (num <= 2299065237u)
+			if (typeName == "byte?")
 			{
-				if (num <= 1092586446u)
-				{
-					if (num <= 431052896u)
-					{
-						if (num != 296283782u)
-						{
-							if (num != 398550328u)
-							{
-								if (num == 431052896u)
-								{
-									if (typeName == "byte?")
-									{
-										return typeof(byte?);
-									}
-								}
-							}
-							else if (typeName == "string")
-							{
-								return typeof(string);
-							}
-						}
-						else if (typeName == "char?")
-						{
-							return typeof(char?);
-						}
-					}
-					else if (num != 513669818u)
-					{
-						if (num != 520654156u)
-						{
-							if (num == 1092586446u)
-							{
-								if (typeName == "float?")
-								{
-									return typeof(float?);
-								}
-							}
-						}
-						else if (typeName == "decimal")
-						{
-							return typeof(decimal);
-						}
-					}
-					else if (typeName == "uint?")
-					{
-						return typeof(uint?);
-					}
-				}
-				else if (num <= 1454009365u)
-				{
-					if (num != 1189328644u)
-					{
-						if (num != 1299622921u)
-						{
-							if (num == 1454009365u)
-							{
-								if (typeName == "sbyte?")
-								{
-									return typeof(sbyte?);
-								}
-							}
-						}
-						else if (typeName == "decimal?")
-						{
-							return typeof(decimal?);
-						}
-					}
-					else if (typeName == "long?")
-					{
-						return typeof(long?);
-					}
-				}
-				else if (num <= 1630192034u)
-				{
-					if (num != 1603400371u)
-					{
-						if (num == 1630192034u)
-						{
-							if (typeName == "ushort")
-							{
-								return typeof(ushort);
-							}
-						}
-					}
-					else if (typeName == "int?")
-					{
-						return typeof(int?);
-					}
-				}
-				else if (num != 1683620383u)
-				{
-					if (num == 2299065237u)
-					{
-						if (typeName == "double?")
-						{
-							return typeof(double?);
-						}
-					}
-				}
-				else if (typeName == "byte")
-				{
-					return typeof(byte);
-				}
+				return typeof(byte?);
 			}
-			else if (num <= 2823553821u)
+
+			if (typeName == "string")
 			{
-				if (num <= 2515107422u)
-				{
-					if (num != 2471414311u)
-					{
-						if (num != 2508976771u)
-						{
-							if (num == 2515107422u)
-							{
-								if (typeName == "int")
-								{
-									return typeof(int);
-								}
-							}
-						}
-						else if (typeName == "ulong?")
-						{
-							return typeof(ulong?);
-						}
-					}
-					else if (typeName == "ushort?")
-					{
-						return typeof(ushort?);
-					}
-				}
-				else if (num <= 2699759368u)
-				{
-					if (num != 2667225454u)
-					{
-						if (num == 2699759368u)
-						{
-							if (typeName == "double")
-							{
-								return typeof(double);
-							}
-						}
-					}
-					else if (typeName == "ulong")
-					{
-						return typeof(ulong);
-					}
-				}
-				else if (num != 2797886853u)
-				{
-					if (num == 2823553821u)
-					{
-						if (typeName == "char")
-						{
-							return typeof(char);
-						}
-					}
-				}
-				else if (typeName == "float")
-				{
-					return typeof(float);
-				}
+				return typeof(string);
 			}
-			else if (num <= 3286667814u)
+
+			if (typeName == "char?")
 			{
-				if (num != 3122818005u)
-				{
-					if (num != 3270303571u)
-					{
-						if (num == 3286667814u)
-						{
-							if (typeName == "bool?")
-							{
-								return typeof(bool?);
-							}
-						}
-					}
-					else if (typeName == "long")
-					{
-						return typeof(long);
-					}
-				}
-				else if (typeName == "short")
-				{
-					return typeof(short);
-				}
+				return typeof(char?);
 			}
-			else if (num <= 3415750305u)
+
+			if (typeName == "float?")
 			{
-				if (num != 3365180733u)
-				{
-					if (num == 3415750305u)
-					{
-						if (typeName == "uint")
-						{
-							return typeof(uint);
-						}
-					}
-				}
-				else if (typeName == "bool")
-				{
-					return typeof(bool);
-				}
+				return typeof(float?);
 			}
-			else if (num != 3996115294u)
+
+			if (typeName == "decimal")
 			{
-				if (num == 4088464520u)
-				{
-					if (typeName == "sbyte")
-					{
-						return typeof(sbyte);
-					}
-				}
+				return typeof(decimal);
 			}
-			else if (typeName == "short?")
+
+			if (typeName == "uint?")
+			{
+				return typeof(uint?);
+			}
+
+			if (typeName == "sbyte?")
+			{
+				return typeof(sbyte?);
+			}
+
+			if (typeName == "decimal?")
+			{
+				return typeof(decimal?);
+			}
+
+			if (typeName == "long?")
+			{
+				return typeof(long?);
+			}
+
+			if (typeName == "ushort")
+			{
+				return typeof(ushort);
+			}
+
+			if (typeName == "int?")
+			{
+				return typeof(int?);
+			}
+			if (typeName == "double?")
+			{
+				return typeof(double?);
+			}
+
+			if (typeName == "byte")
+			{
+				return typeof(byte);
+			}
+			if (typeName == "int")
+			{
+				return typeof(int);
+			}
+			if (typeName == "ulong?")
+			{
+				return typeof(ulong?);
+			}
+			if (typeName == "ushort?")
+			{
+				return typeof(ushort?);
+			}
+			if (typeName == "double")
+			{
+				return typeof(double);
+			}
+
+			if (typeName == "ulong")
+			{
+				return typeof(ulong);
+			}
+			if (typeName == "char")
+			{
+				return typeof(char);
+			}
+			if (typeName == "float")
+			{
+				return typeof(float);
+			}
+			if (typeName == "bool?")
+			{
+				return typeof(bool?);
+			}
+
+			if (typeName == "long")
+			{
+				return typeof(long);
+			}
+
+			if (typeName == "short")
+			{
+				return typeof(short);
+			}
+
+			if (typeName == "uint")
+			{
+				return typeof(uint);
+			}
+
+			if (typeName == "bool")
+			{
+				return typeof(bool);
+			}
+
+			if (typeName == "sbyte")
+			{
+				return typeof(sbyte);
+			}
+
+			if (typeName == "short?")
 			{
 				return typeof(short?);
 			}
+		
 			foreach (Assembly assembly in GenTypes.AllActiveAssemblies)
 			{
 				Type type = assembly.GetType(typeName, false, true);

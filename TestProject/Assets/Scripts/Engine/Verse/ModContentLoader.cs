@@ -4,6 +4,7 @@ using System.IO;
 using RimWorld.IO;
 using RuntimeAudioClipLoader;
 using UnityEngine;
+using Manager;
 
 namespace Verse
 {
@@ -93,6 +94,7 @@ namespace Verse
 						Stream stream = file.CreateReadStream();
 						try
 						{
+							
 							//t = (T)((object)Manager.Load(stream, ModContentLoader<T>.GetFormat(file.Name), file.Name, doStream, true, true));
 						}
 						catch (Exception)
@@ -131,7 +133,7 @@ namespace Verse
 			}
 			if (typeof(T) == typeof(Texture2D))
 			{
-			//	return (LoadedContentItem<T>)new LoadedContentItem<Texture2D>(file, BaseContent.BadTex, null);
+				return (LoadedContentItem<T>)Convert.ChangeType(new LoadedContentItem<Texture2D>(file, BaseContent.BadTex, null),typeof(T));
 			}
 			return null;
 		}

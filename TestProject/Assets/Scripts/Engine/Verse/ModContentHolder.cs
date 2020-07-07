@@ -109,5 +109,7 @@ namespace Verse
 
 		
 		public List<IDisposable> extraDisposables = new List<IDisposable>();
-	}
+
+
+    }
 }

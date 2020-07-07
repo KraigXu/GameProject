@@ -117,16 +117,19 @@ namespace RimWorld
 			for (int m = 0; m < num3; m++)
 			{
 				IntVec2 intVec3 = new IntVec2(Rand.RangeInclusive(0, length - 1), Rand.RangeInclusive(0, length2 - 1));
-				//foreach (IntVec3 intVec4 in GenRadial.RadialPatternInRadius((float)Mathf.Max(Mathf.RoundToInt((float)(Mathf.Max(length, length2) / 2) * num9), 1)))
-				//{
-				//	intVec4.x += intVec3.x;
-				//	intVec4.z += intVec3.z;
-				//	if (intVec4.x >= 0 && intVec4.x < length && intVec4.z >= 0 && intVec4.z < length2)
-				//	{
-				//		grid[intVec4.x, intVec4.z] = true;
-				//	}
-				//}
-			}
+
+				//IEnumerable<IntVec3> i1 = GenRadial.RadialPatternInRadius((float)Mathf.Max(Mathf.RoundToInt((float)(Mathf.Max(length, length2) / 2) * num9), 1))
+
+				//foreach (IntVec3 intVec4 in i1)
+    //            {
+    //                //intVec4.x += intVec3.x;
+    //                //intVec4.z += intVec3.z;
+    //                //if (intVec4.x >= 0 && intVec4.x < length && intVec4.z >= 0 && intVec4.z < length2)
+    //                //{
+    //                //    grid[intVec4.x, intVec4.z] = true;
+    //                //}
+    //            }
+            }
 			for (int n = 0; n < num6; n++)
 			{
 				float num11 = Rand.Range(0.7f, 1f);

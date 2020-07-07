@@ -12,8 +12,65 @@ namespace Verse
 	
 	public class ModContentPack
 	{
-		
-		
+
+
+		private DirectoryInfo rootDirInt;
+
+
+		public int loadOrder;
+
+
+		private string nameInt;
+
+
+		private string packageIdInt;
+
+
+		private string packageIdPlayerFacingInt;
+
+
+		private ModContentHolder<AudioClip> audioClips;
+
+
+		private ModContentHolder<Texture2D> textures;
+
+
+		private ModContentHolder<string> strings;
+
+
+		public ModAssetBundlesHandler assetBundles;
+
+
+		public ModAssemblyHandler assemblies;
+
+
+		private List<PatchOperation> patches;
+
+
+		private List<Def> defs = new List<Def>();
+
+
+		private List<List<string>> allAssetNamesInBundleCached;
+
+
+		public List<string> foldersToLoadDescendingOrder;
+
+
+		private bool loadedAnyPatches;
+
+
+		public static readonly string LudeonPackageIdAuthor = "ludeon";
+
+
+		public static readonly string CoreModPackageId = "ludeon.rimworld";
+
+
+		public static readonly string RoyaltyModPackageId = "ludeon.rimworld.royalty";
+
+
+		public static readonly string CommonFolderName = "Common";
+
+
 		public string RootDir
 		{
 			get
@@ -158,18 +215,18 @@ namespace Verse
 		
 		public ModContentHolder<T> GetContentHolder<T>() where T : class
 		{
-            //if (typeof(T) == typeof(Texture2D))
-            //{
-            //    return (ModContentHolder<T>)this.textures;
-            //}
-            //if (typeof(T) == typeof(AudioClip))
-            //{
-            //    return (ModContentHolder<T>)this.audioClips;
-            //}
-            //if (typeof(T) == typeof(string))
-            //{
-            //    return (ModContentHolder<T>)this.strings;
-            //}
+            if (typeof(T) == typeof(Texture2D))
+            {
+				return (ModContentHolder<T>)Convert.ChangeType(this.textures, typeof(T));
+			}
+            if (typeof(T) == typeof(AudioClip))
+            {
+				return (ModContentHolder<T>)Convert.ChangeType(this.audioClips, typeof(T));
+            }
+            if (typeof(T) == typeof(string))
+            {
+				return (ModContentHolder<T>)Convert.ChangeType(this.strings, typeof(T));
+            }
             Log.Error("Mod lacks manager for asset type " + this.strings, false);
 			return null;
 		}
@@ -241,7 +298,6 @@ namespace Verse
 			List<LoadableXmlAsset>.Enumerator enumerator = default(List<LoadableXmlAsset>.Enumerator);
 			DeepProfiler.End();
 			yield break;
-			yield break;
 		}
 
 		
@@ -252,41 +308,43 @@ namespace Verse
 			if (((modWithIdentifier != null) ? modWithIdentifier.loadFolders : null) != null && modWithIdentifier.loadFolders.DefinedVersions().Count > 0)
 			{
 				List<LoadFolder> list = modWithIdentifier.LoadFoldersForVersion(VersionControl.CurrentVersionStringWithoutBuild);
-				//if (list != null && list.Count > 0)
-				//{
-				//	this.<InitLoadFolders>g__AddFolders|45_0(list);
-				//	return;
-				//}
-				//List<LoadFolder> list2 = modWithIdentifier.LoadFoldersForVersion("default");
-				//if (list2 != null)
-				//{
-				//	this.<InitLoadFolders>g__AddFolders|45_0(list2);
-				//	return;
-				//}
-				int num = VersionControl.CurrentVersion.Major;
+                if (list != null && list.Count > 0)
+                {
+
+					//this.< InitLoadFolders > AddFolders | 45_0(list);
+                    return;
+                }
+                List<LoadFolder> list2 = modWithIdentifier.LoadFoldersForVersion("default");
+                if (list2 != null)
+                {
+                  // this.< InitLoadFolders > g__AddFolders | 45_0(list2);
+                    return;
+                }
+                int num = VersionControl.CurrentVersion.Major;
 				int num2 = VersionControl.CurrentVersion.Minor;
-				//List<LoadFolder> list3;
-				//do
-				//{
-				//	if (num2 == 0)
-				//	{
-				//		num--;
-				//		num2 = 9;
-				//	}
-				//	else
-				//	{
-				//		num2--;
-				//	}
-				//	if (num < 1)
-				//	{
-				//		goto IL_D1;
-				//	}
-				//	list3 = modWithIdentifier.LoadFoldersForVersion(num + "." + num2);
-				//}
-				////while (list3 == null);
-				////this.<InitLoadFolders>g__AddFolders|45_0(list3);
-				////return;
-				//IL_D1:
+                List<LoadFolder> list3;
+                do
+                {
+                    if (num2 == 0)
+                    {
+                        num--;
+                        num2 = 9;
+                    }
+                    else
+                    {
+                        num2--;
+                    }
+                    if (num < 1)
+                    {
+                        goto IL_D1;
+                    }
+                    list3 = modWithIdentifier.LoadFoldersForVersion(num + "." + num2);
+                }
+                while (list3 == null);
+				
+              //  this.< InitLoadFolders > g__AddFolders | 45_0(list3);
+                return;
+				IL_D1:
 				Version version = new Version(0, 0);
 				List<string> list4 = modWithIdentifier.loadFolders.DefinedVersions();
 				for (int i = 0; i < list4.Count; i++)
@@ -299,6 +357,7 @@ namespace Verse
 				}
 				if (version.Major > 0)
 				{
+					
 					//this.<InitLoadFolders>g__AddFolders|45_0(modWithIdentifier.LoadFoldersForVersion(version.ToString()));
 					return;
 				}
@@ -501,61 +560,6 @@ namespace Verse
 			return this.PackageIdPlayerFacing;
 		}
 
-		
-		private DirectoryInfo rootDirInt;
-
-		
-		public int loadOrder;
-
-		
-		private string nameInt;
-
-		
-		private string packageIdInt;
-
-		
-		private string packageIdPlayerFacingInt;
-
-		
-		private ModContentHolder<AudioClip> audioClips;
-
-		
-		private ModContentHolder<Texture2D> textures;
-
-		
-		private ModContentHolder<string> strings;
-
-		
-		public ModAssetBundlesHandler assetBundles;
-
-		
-		public ModAssemblyHandler assemblies;
-
-		
-		private List<PatchOperation> patches;
-
-		
-		private List<Def> defs = new List<Def>();
-
-		
-		private List<List<string>> allAssetNamesInBundleCached;
-
-		
-		public List<string> foldersToLoadDescendingOrder;
-
-		
-		private bool loadedAnyPatches;
-
-		
-		public static readonly string LudeonPackageIdAuthor = "ludeon";
-
-		
-		public static readonly string CoreModPackageId = "ludeon.rimworld";
-
-		
-		public static readonly string RoyaltyModPackageId = "ludeon.rimworld.royalty";
-
-		
-		public static readonly string CommonFolderName = "Common";
+	
 	}
 }

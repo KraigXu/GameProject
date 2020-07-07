@@ -107,7 +107,9 @@ namespace Verse
 			T result;
 			try
 			{
+				Debug.Log(typeof(T));
 				XmlDocument xmlDocument = new XmlDocument();
+
 				xmlDocument.LoadXml(xmlContent);
 				T t = DirectXmlToObject.ObjectFromXml<T>(xmlDocument.DocumentElement, false);
 				if (resolveCrossRefs)
