@@ -7,7 +7,7 @@ using RimWorld.Planet;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public static class QuestGenUtility

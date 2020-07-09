@@ -157,7 +157,8 @@ namespace Verse
 						{
 							text = text + " (wanter=" + debugWanterInfo.ToStringSafe<object>() + ")";
 						}
-						Log.Error(text, false);
+						//t = (T)((object)GenDefDatabase.GetDefSilentFail(typeof(T), defName, true));
+						//Log.Error(text, false);
 					}
 					result = default(T);
 				}
@@ -197,12 +198,12 @@ namespace Verse
 				{
 					if (wantedRef.TryResolve(failReportMode))
 					{
-						//object resolvedRefsLock = resolvedRefsLock;
-						//lock (resolvedRefsLock)
-						//{
-						//	resolvedRefs.Add(wantedRef);
-						//}
-					}
+                        object localresolvedRefsLock = resolvedRefsLock;
+                        lock (localresolvedRefsLock)
+                        {
+                            resolvedRefs.Add(wantedRef);
+                        }
+                    }
 				}, -1);
 				foreach (DirectXmlCrossRefLoader.WantedRef wantedRef2 in resolvedRefs)
 				{

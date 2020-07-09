@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_AnySignal : QuestNode

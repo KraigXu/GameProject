@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_IsTrue : QuestNode

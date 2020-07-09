@@ -11,35 +11,15 @@ namespace Verse
 	{
 
 		public CameraShaker shaker = new CameraShaker();
-
-
 		private Camera cachedCamera;
-
-
 		private GameObject reverbDummy;
-
-
 		public CameraMapConfig config = new CameraMapConfig_Normal();
-
-
 		private Vector3 velocity;
-
-
 		private Vector3 rootPos;
-
-
 		private float rootSize;
-
-
 		private float desiredSize;
-
-
 		private Vector2 desiredDolly = Vector2.zero;
-
-
 		private Vector2 desiredDollyRaw = Vector2.zero;
-
-
 		private List<CameraDriver.DragTimeStamp> dragTimeStamps = new List<CameraDriver.DragTimeStamp>();
 
 

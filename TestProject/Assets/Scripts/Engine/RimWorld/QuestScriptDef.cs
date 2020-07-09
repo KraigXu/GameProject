@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using Verse;
 using Verse.Grammar;
 
@@ -44,16 +44,16 @@ namespace RimWorld
 		{
 			if (this.questDescriptionRules != null)
 			{
-				QuestGen.AddQuestDescriptionRules(this.questDescriptionRules);
+                QuestGen.QuestGen.AddQuestDescriptionRules(this.questDescriptionRules);
 			}
 			if (this.questNameRules != null)
 			{
-				QuestGen.AddQuestNameRules(this.questNameRules);
+                QuestGen.QuestGen.AddQuestNameRules(this.questNameRules);
 			}
 			if (this.questDescriptionAndNameRules != null)
 			{
-				QuestGen.AddQuestDescriptionRules(this.questDescriptionAndNameRules);
-				QuestGen.AddQuestNameRules(this.questDescriptionAndNameRules);
+                QuestGen.QuestGen.AddQuestDescriptionRules(this.questDescriptionAndNameRules);
+                QuestGen.QuestGen.AddQuestNameRules(this.questDescriptionAndNameRules);
 			}
 			this.root.Run();
 		}

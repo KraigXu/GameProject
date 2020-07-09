@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 
 namespace Verse
 {
@@ -384,6 +384,7 @@ namespace Verse
 			Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(xmlAttribute.Value, typeof(T).Namespace);
 			if (typeInAnyAssembly == null)
 			{
+				typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(xmlAttribute.Value, typeof(T).Namespace);
 				Log.Error("Could not find type named " + xmlAttribute.Value + " from node " + xmlRoot.OuterXml, false);
 				return typeof(T);
 			}

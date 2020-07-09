@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public enum TextRulesTarget

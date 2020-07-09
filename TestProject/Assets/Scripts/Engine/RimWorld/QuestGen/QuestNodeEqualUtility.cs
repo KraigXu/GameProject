@@ -1,7 +1,7 @@
 ﻿using System;
 using Verse;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public static class QuestNodeEqualUtility

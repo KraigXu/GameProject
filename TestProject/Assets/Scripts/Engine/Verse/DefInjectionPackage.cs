@@ -290,7 +290,7 @@ namespace Verse
 					keyValuePair.Value.suggestedPath = suggestedPath;
 				}
 			}
-			GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), this.defType, "ClearCachedData");
+			GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), this.defType, "ClearCachedData");
 		}
 
 		
@@ -346,7 +346,7 @@ namespace Verse
 				{
 					'.'
 				}).ToList<string>();
-				object obj = GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), defType, "GetNamedSilentFail", new object[]
+				object obj = GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), defType, "GetNamedSilentFail", new object[]
 				{
 					list2[0]
 				});

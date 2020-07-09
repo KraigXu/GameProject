@@ -39,7 +39,7 @@ namespace Verse
 					Type type = enumerator.Current;
 					DebugMenuOption item = new DebugMenuOption(type.Name, DebugMenuOptionMode.Action, delegate
 					{
-						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
+						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
 						int num = 0;
 						StringBuilder stringBuilder = new StringBuilder();
 						foreach (Def def in source.Cast<Def>())
@@ -71,7 +71,7 @@ namespace Verse
 			orderby def.Name
 			select def)
 			{
-				IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
+				IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
 				stringBuilder.AppendLine("--    " + type.ToString());
 				foreach (Def def2 in source.Cast<Def>().OrderBy((Def def) => def.defName))
 				{
@@ -104,7 +104,7 @@ namespace Verse
 					Type type = enumerator.Current;
 					DebugMenuOption item = new DebugMenuOption(type.Name, DebugMenuOptionMode.Action, delegate
 					{
-						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase), type, "AllDefs");
+						IEnumerable source = (IEnumerable)GenGeneric.GetStaticPropertyOnGenericType(typeof(DefDatabase<>), type, "AllDefs");
 						int num = 0;
 						StringBuilder stringBuilder = new StringBuilder();
 						foreach (Def def in source.Cast<Def>())

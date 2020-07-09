@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 
 namespace Verse.Grammar
 {

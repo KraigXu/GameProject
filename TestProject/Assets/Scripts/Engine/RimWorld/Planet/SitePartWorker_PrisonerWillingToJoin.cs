@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using Verse;
 using Verse.Grammar;
 

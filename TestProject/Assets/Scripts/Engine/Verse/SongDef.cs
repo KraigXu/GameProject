@@ -8,7 +8,27 @@ namespace Verse
 	
 	public class SongDef : Def
 	{
-		
+		[NoTranslate]
+		public string clipPath;
+
+
+		public float volume = 1f;
+
+
+		public bool playOnMap = true;
+
+
+		public float commonality = 1f;
+
+
+		public bool tense;
+
+		public TimeOfDay allowedTimeOfDay = TimeOfDay.Any;
+		public List<Season> allowedSeasons;
+		public RoyalTitleDef minRoyalTitle;
+		[Unsaved(false)]
+		public AudioClip clip;
+
 		public override void PostLoad()
 		{
 			base.PostLoad();
@@ -34,32 +54,6 @@ namespace Verse
 		}
 
 		
-		[NoTranslate]
-		public string clipPath;
 
-		
-		public float volume = 1f;
-
-		
-		public bool playOnMap = true;
-
-		
-		public float commonality = 1f;
-
-		
-		public bool tense;
-
-		
-		public TimeOfDay allowedTimeOfDay = TimeOfDay.Any;
-
-		
-		public List<Season> allowedSeasons;
-
-		
-		public RoyalTitleDef minRoyalTitle;
-
-		
-		[Unsaved(false)]
-		public AudioClip clip;
 	}
 }

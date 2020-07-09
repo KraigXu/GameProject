@@ -4,10 +4,10 @@
   <activeMods>
     <li>ludeon.rimworld</li>
     <li>ludeon.rimworld.royalty</li>
+    <li>anonymous189.languages</li>
   </activeMods>
   <knownExpansions>
-    <li>anonymous189.defs</li>
-    <li>anonymous189.languages</li>
     <li>ludeon.rimworld.royalty</li>
+    <li>anonymous189.languages</li>
   </knownExpansions>
 </ModsConfigData>

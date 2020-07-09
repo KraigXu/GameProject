@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld.Planet;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using UnityEngine;
 using Verse;
 using Verse.AI.Group;
@@ -25,7 +25,7 @@ namespace RimWorld
 		
 		public static Quest GenerateQuestAndMakeAvailable(QuestScriptDef root, Slate vars)
 		{
-			Quest quest = QuestGen.Generate(root, vars);
+            Quest quest = QuestGen.QuestGen.Generate(root, vars);
 			Find.QuestManager.Add(quest);
 			return quest;
 		}
@@ -259,7 +259,7 @@ namespace RimWorld
 		
 		public static bool IsReservedByQuestOrQuestBeingGenerated(Pawn pawn)
 		{
-			return Find.QuestManager.IsReservedByAnyQuest(pawn) || (QuestGen.quest != null && QuestGen.quest.QuestReserves(pawn)) || QuestGen.WasGeneratedForQuestBeingGenerated(pawn);
+			return Find.QuestManager.IsReservedByAnyQuest(pawn) || (QuestGen.QuestGen.quest != null && QuestGen.QuestGen.quest.QuestReserves(pawn)) || QuestGen.QuestGen.WasGeneratedForQuestBeingGenerated(pawn);
 		}
 
 		

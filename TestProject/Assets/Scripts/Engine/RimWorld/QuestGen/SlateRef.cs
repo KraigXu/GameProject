@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Verse;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public struct SlateRef<T> : ISlateRef, IEquatable<SlateRef<T>>

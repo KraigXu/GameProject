@@ -14,7 +14,7 @@ namespace Verse
 			try
 			{
 				Current.Game = null;
-				this.musicManagerEntry = new MusicManagerEntry();
+			//	this.musicManagerEntry = new MusicManagerEntry();
 				FileInfo fileInfo = Root.checkedAutostartSaveFile ? null : SaveGameFilesUtility.GetAutostartSaveFile();
 				Root.checkedAutostartSaveFile = true;
 				if (fileInfo != null)
@@ -36,22 +36,23 @@ namespace Verse
 			{
 				return;
 			}
-			try
-			{
-				this.musicManagerEntry.MusicManagerEntryUpdate();
+			//try
+			//{
+				//this.musicManagerEntry.MusicManagerEntryUpdate();
 				if (Find.World != null)
 				{
 					Find.World.WorldUpdate();
 				}
 				if (Current.Game != null)
 				{
+					
 					Current.Game.UpdateEntry();
 				}
-			}
-			catch (Exception arg)
-			{
-				Log.Error("Root level exception in Update(): " + arg, false);
-			}
+			//}
+			//catch (Exception arg)
+			//{
+			//	Log.Error("Root level exception in Update(): " + arg, false);
+			//}
 		}
 	}
 }

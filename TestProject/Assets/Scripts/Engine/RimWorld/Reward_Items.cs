@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RimWorld.Planet;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using Verse;
 using Verse.Grammar;
 
@@ -139,13 +139,13 @@ namespace RimWorld
 		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
-			Slate slate = QuestGen.slate;
+            Slate slate = QuestGen.QuestGen.slate;
 			for (int i = 0; i < this.items.Count; i++)
 			{
 				Pawn pawn = this.items[i] as Pawn;
 				if (pawn != null)
 				{
-					QuestGen.AddToGeneratedPawns(pawn);
+                    QuestGen.QuestGen.AddToGeneratedPawns(pawn);
 					if (!pawn.IsWorldPawn())
 					{
 						Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Decide);
@@ -166,14 +166,14 @@ namespace RimWorld
 				dropPods.inSignal = slate.Get<string>("inSignal", null, false);
 				if (!customLetterLabel.NullOrEmpty() || customLetterLabelRules != null)
 				{
-					QuestGen.AddTextRequest("root", delegate(string x)
+                    QuestGen.QuestGen.AddTextRequest("root", delegate(string x)
 					{
 						dropPods.customLetterLabel = x;
 					}, QuestGenUtility.MergeRules(customLetterLabelRules, customLetterLabel, "root"));
 				}
 				if (!customLetterText.NullOrEmpty() || customLetterTextRules != null)
 				{
-					QuestGen.AddTextRequest("root", delegate(string x)
+                    QuestGen.QuestGen.AddTextRequest("root", delegate(string x)
 					{
 						dropPods.customLetterText = x;
 					}, QuestGenUtility.MergeRules(customLetterTextRules, customLetterText, "root"));

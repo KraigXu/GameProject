@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestTextRequest

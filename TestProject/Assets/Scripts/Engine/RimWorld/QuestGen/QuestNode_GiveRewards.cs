@@ -5,7 +5,7 @@ using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_GiveRewards : QuestNode

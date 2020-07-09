@@ -1,0 +1,622 @@
+Mono path[0] = 'E:/SteamLibrary/steamapps/common/RimWorld/RimWorldWin64_Data/Managed'
+Mono config path = 'E:/SteamLibrary/steamapps/common/RimWorld/MonoBleedingEdge/etc'
+Initialize engine version: 2019.2.17f1 (8e603399ca02)
+[XR] Discovering subsystems at path E:/SteamLibrary/steamapps/common/RimWorld/RimWorldWin64_Data/UnitySubsystems
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1070 Ti (ID=0x1b82)
+    Vendor:   
+    VRAM:     8079 MB
+    Driver:   26.21.14.4575
+Begin MonoManager ReloadAssembly
+- Completed reload, in  1.261 seconds
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 10.915500 ms
+RimWorld 1.1.2654 rev672
+Mod HugsLib: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod HugsLib is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod HugsLib is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod JecsTools: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod JecsTools is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod JecsTools is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0005图片菜单 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0009无法逾越地形: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0009无法逾越地形 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0009无法逾越地形 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0011门锁Locks: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0011门锁Locks is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0011门锁Locks is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0012稳定品质: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0012稳定品质 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0012稳定品质 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0013富商 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0017详细伤害: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0017详细伤害 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0017详细伤害 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0018商队交易点: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0018商队交易点 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0018商队交易点 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0020四倍速度: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0020四倍速度 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0020四倍速度 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0021详细工作台: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0021详细工作台 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0021详细工作台 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0023电力陷阱: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0023电力陷阱 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0023电力陷阱 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0032派系增强: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0032派系增强 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0032派系增强 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0035地图定制: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0035地图定制 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0035地图定制 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0036综合搬运: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0036综合搬运 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0036综合搬运 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0037钓鱼: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0037钓鱼 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0037钓鱼 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0038随机地图: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0038随机地图 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0038随机地图 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0039囚犯赎金: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0039囚犯赎金 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0039囚犯赎金 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0040囚犯劳工 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0055围栏和地板: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0055围栏和地板 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0055围栏和地板 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0065RT武器: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0065RT武器 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0065RT武器 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0067更多实用特性: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0067更多实用特性 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0067更多实用特性 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0068派系选项: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0068派系选项 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0068派系选项 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0069简易修理工作台 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0070恐龙动物: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0070恐龙动物 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0070恐龙动物 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0072ED子弹防护: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0072ED子弹防护 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0072ED子弹防护 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0073ED激光钻机: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0073ED激光钻机 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0073ED激光钻机 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0075冰箱: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0075冰箱 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0075冰箱 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0076屠宰尸体获得器官: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0076屠宰尸体获得器官 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0076屠宰尸体获得器官 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0077深矿识别器: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0077深矿识别器 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0077深矿识别器 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0078动物仿生体 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0079生育学校 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0080边缘宜家 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0084妖怪村(Yokai Village): targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0084妖怪村(Yokai Village) is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0084妖怪村(Yokai Village) is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0086仿生体和手术: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0086仿生体和手术 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0086仿生体和手术 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0089女仆进阶体型和服装: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0089女仆进阶体型和服装 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0089女仆进阶体型和服装 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0090女仆发型: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0090女仆发型 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0090女仆发型 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0091女仆造型: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0091女仆造型 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0091女仆造型 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0092天轴集团核心 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0093天轴集团安保 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0094天轴集团天敌 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0095天轴集团亡灵天灾: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0095天轴集团亡灵天灾 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0095天轴集团亡灵天灾 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0096天轴集团叙述者 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0109星球大战-光剑: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0109星球大战-光剑 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0109星球大战-光剑 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0110星球大战-原力: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0110星球大战-原力 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0110星球大战-原力 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0111星球大战-阵营 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0140工业传送带: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0140工业传送带 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0140工业传送带 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0143黑客!（0027冲突） is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0144克苏鲁宇宙恐怖: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0144克苏鲁宇宙恐怖 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 0144克苏鲁宇宙恐怖 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod  is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod Core is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod Mod Manager is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod RimHUD: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod RimHUD is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod RimHUD is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod RT's Weapon Pack [1.0] is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 商人更多物品++: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 商人更多物品++ is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 商人更多物品++ is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 地形改造: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 地形改造 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 地形改造 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 房间温度: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 房间温度 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 房间温度 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 更多加农炮: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 更多加农炮 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 更多加农炮 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 机械族扩展: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 机械族扩展 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 机械族扩展 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 殖民地领袖: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 殖民地领袖 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 殖民地领袖 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 疯狂技能: targetVersion field is obsolete, use supportedVersions instead.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 疯狂技能 is missing supported versions list in About.xml! (example: <supportedVersions><li>1.0</li></supportedVersions>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 疯狂技能 is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Mod 自由机器人android is missing packageId in About.xml! (example: <packageId>AuthorName.ModName.Specific</packageId>)
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+
+Translation data for language Simplified Chinese has 188 errors. Generate translation report for more info.
+ 
+(Filename: C:\buildslave\unity\build\Runtime/Export/Debug/Debug.bindings.h Line: 35)
+

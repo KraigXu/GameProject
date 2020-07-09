@@ -25,6 +25,7 @@ namespace Verse
 			{
 				ShaderDatabase.lookup = new Dictionary<string, Shader>();
 			}
+			Debug.Log(shaderPath);
 			if (!ShaderDatabase.lookup.ContainsKey(shaderPath))
 			{
 				ShaderDatabase.lookup[shaderPath] = (Shader)Resources.Load("Materials/" + shaderPath, typeof(Shader));

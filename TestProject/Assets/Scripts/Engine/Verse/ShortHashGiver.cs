@@ -14,7 +14,7 @@ namespace Verse
 			List<Def> list = new List<Def>();
 			foreach (Type type in GenDefDatabase.AllDefTypesWithDatabases())
 			{
-				IEnumerable enumerable = (IEnumerable)typeof(DefDatabase).MakeGenericType(new Type[]
+				IEnumerable enumerable = (IEnumerable)typeof(DefDatabase<>).MakeGenericType(new Type[]
 				{
 					type
 				}).GetProperty("AllDefs").GetGetMethod().Invoke(null, null);

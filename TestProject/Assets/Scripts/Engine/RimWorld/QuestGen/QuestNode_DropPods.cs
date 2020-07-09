@@ -4,7 +4,7 @@ using System.Linq;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_DropPods : QuestNode

@@ -1,0 +1,1772 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preset>
+	<version>5</version>
+	<mods>Harmony, Core, Royalty, HugsLib_zh, HugsLib, RimHUD, [T] MoreFloors, Better Pawn Control, A Dog Said... Animal Prosthetics, RPG Style Inventory, Won hair_women , Vanilla Furniture Expanded - Farming, Vanilla Furniture Expanded - Art, Won hair_men, Vanilla Furniture Expanded - Production, Vanilla Furniture Expanded - Security, Vanilla Furniture Expanded - Medical Module, Vanilla Furniture Expanded, Concrete Walls, Wall Light, Simple sidearms, Cheaper Components, Humanoid_Alien_Races_2.0_zh, Humanoid Alien Races 2.0, RimCities_zh, RimCities - Citadel Update, EdB Prepare Carefully_zh, Rich Traders, RunAndGun, Stack XXL, RT Fuse, Tilled Soil, P-Music, Hardworking animals 1.1, RaidCaller召唤袭击[1.0/1.1], Glitter Tech, RT Solar Flare Shield, RT Power Switch, Rimsenal_zh_pack, Rimsenal - Storyteller pack, Rimsenal - Rimhair, Rimsenal - Core, Rimsenal - Security pack, Rimsenal - Feral Faction Pack, Rimsenal - Federation Faction Pack, Rimsenal - Enhanced Vanilla Pack, Xeva's Rimhair, Smoked meat, Expanded Prosthetics and Organ Engineering, PowerSwitch, JecsTools, JecsTools_zh, 艺术扩展 VE Art Chinese Pack, Relations Tab, Medical Tab, Colony Manager, Follow Me, Fluffy Breakdowns, Pharmacist, Search and Destroy, Go_Explore!_Zh, Go Explore!, Area Unlocker, Master of Crafting, Master of Cooking, Stuffed Floors, Thrumbo Extension, Quarry 1.1, [KV] RimFridge - 1.1, More Trade Ships, Interaction Bubbles, Realistic Rooms, Misc. Robots, Misc. Training, Misc. MapGen FactionBase, Misc. Bees'n'Honey, Misc. Robots++, Level Up!, Harvest Organs Post Mortem, [SS]Lovely Hair Style, Polarisbloc - Core LAB, Polarisbloc - Mechenemy, Polarisbloc - Storyteller incidents pack, Pick Up And Haul, Custom Mote Maker, RareTraits, Empire, 九尾の狐, Allow Tool, Storyteller hair 1.1, RimWorld - Witcher Monster Hunt, 邊緣世界-獵魔人 中文漢化補丁, RuntimeGC(unofficial), Terraform Rimworld, Easy Speedup, Color Coded Mood Bar, Children_school_and_learning_zh, Children, school and learning, VGP Xtra Trees and Flowers, VGP Three Sisters Plants, VGP Vegetable Garden, VGP Garden Medicine, VGP Garden Gourmet, VGP Garden Tools, VGP More Veggies, VGP Garden Drinks, VGP Garden Fabrics, VGP Garden Resources, VGP Garden Canning, Set_Up_Camp_zh, [SYR] Set Up Camp, WorldEdit_zh, WorldEdit, 更多技能相关, Transport Cargo Pod, Raids For Me, RT's Weapon Pack [1.0-1.1], [sd] advanced powergeneration, [FGO]Fate Grand Order - Styles Apparel Pack, Star Wars - Fully Functional Lightsabers 和 Star Wars - The Force</mods>
+	<pawns>
+		<li>
+			<id>0bea074d-6bb5-4341-940e-211a3747fd87</id>
+			<type>Colonist</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<childhood>GameFanatic86</childhood>
+			<adulthood>BehaviourResearch74</adulthood>
+			<traits>
+				<li>
+					<def>UR04sbs</def>
+				</li>
+				<li>
+					<def>SSR07rjhy</def>
+				</li>
+				<li>
+					<def>SSR03zzjy</def>
+				</li>
+				<li>
+					<def>Nerves</def>
+					<degree>2</degree>
+				</li>
+				<li>
+					<def>PJ_GrayTrait</def>
+					<degree>3</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(1.000, 0.937, 0.758, 1.000)</skinColor>
+			<melanin>0.309827</melanin>
+			<bodyType>Male</bodyType>
+			<hairDef>Short08</hairDef>
+			<hairColor>RGBA(1.000, 0.000, 0.217, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Male/Male_Narrow_Pointy</headGraphicPath>
+			<firstName>James</firstName>
+			<nickName>James</nickName>
+			<lastName>Howlett</lastName>
+			<biologicalAge>20</biologicalAge>
+			<chronologicalAge>23</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>7</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>7</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>7</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>8</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>2</value>
+					<passion>Major</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(1.000, 0.937, 0.758, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(1.000, 0.937, 0.758, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.757, 0.573, 0.333, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Pointy</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.937, 0.758, 1.000)</first>
+							<second>RGBA(1.000, 0.937, 0.758, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.000, 0.217, 1.000)</first>
+							<second>RGBA(0.757, 0.573, 0.333, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>8ed5fd4e-d088-4bbe-9ebe-48944a567478</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>VatgrownSoldier8</childhood>
+			<adulthood>DeepSpaceMiner3</adulthood>
+			<traits>
+				<li>
+					<def>Transhumanist</def>
+				</li>
+				<li>
+					<def>R01qztp</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.508, 0.356, 0.188, 1.000)</skinColor>
+			<melanin>0.3209169</melanin>
+			<bodyType>Female</bodyType>
+			<hairDef>TS</hairDef>
+			<hairColor>RGBA(0.300, 0.200, 0.100, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Narrow_Normal</headGraphicPath>
+			<firstName>Zoya</firstName>
+			<nickName>Philly</nickName>
+			<lastName>Howlett</lastName>
+			<biologicalAge>43</biologicalAge>
+			<chronologicalAge>1190</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>4</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>4</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>2</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>4</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>5</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>2</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>5</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>TopClothingLayer</layer>
+					<apparel>Apparel_Parka</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries>
+				<li>
+					<hediffDef>Stab</hediffDef>
+					<bodyPart>Shoulder</bodyPart>
+					<severity>6</severity>
+					<painFactor>3</painFactor>
+				</li>
+			</injuries>
+			<compFields>
+				<skinColorAlien>RGBA(0.508, 0.356, 0.188, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.508, 0.356, 0.188, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.300, 0.200, 0.100, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Normal</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.508, 0.356, 0.188, 1.000)</first>
+							<second>RGBA(0.508, 0.356, 0.188, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.300, 0.200, 0.100, 1.000)</first>
+							<second>RGBA(0.300, 0.200, 0.100, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>cac70674-e344-4e93-a4f8-b7257037efdd</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>MedicalAssistant12</childhood>
+			<adulthood>Counselor26</adulthood>
+			<traits>
+				<li>
+					<def>Wimp</def>
+				</li>
+				<li>
+					<def>SR06sqzw</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.504, 0.353, 0.186, 1.000)</skinColor>
+			<melanin>0.3057975</melanin>
+			<bodyType>Thin</bodyType>
+			<hairDef>AHSdva</hairDef>
+			<hairColor>RGBA(0.200, 0.200, 0.200, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Average_Pointy</headGraphicPath>
+			<firstName>Kiriko</firstName>
+			<nickName>Deleon</nickName>
+			<lastName>Deleon</lastName>
+			<biologicalAge>30</biologicalAge>
+			<chronologicalAge>425</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>0</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>2</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>0</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>2</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(0.504, 0.353, 0.186, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.504, 0.353, 0.186, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.200, 0.200, 0.200, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Pointy</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.504, 0.353, 0.186, 1.000)</first>
+							<second>RGBA(0.504, 0.353, 0.186, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.200, 0.200, 0.200, 1.000)</first>
+							<second>RGBA(0.200, 0.200, 0.200, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>62d094c0-828f-4f81-82bb-ce9c40dce368</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<childhood>VatgrownSoldier8</childhood>
+			<adulthood>Castaway57</adulthood>
+			<traits>
+				<li>
+					<def>Nerves</def>
+					<degree>-2</degree>
+				</li>
+				<li>
+					<def>PsychicSensitivity</def>
+					<degree>-2</degree>
+				</li>
+				<li>
+					<def>CreepyBreathing</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(1.000, 0.937, 0.756, 1.000)</skinColor>
+			<melanin>0.4640257</melanin>
+			<bodyType>Hulk</bodyType>
+			<hairDef>Short08</hairDef>
+			<hairColor>RGBA(0.518, 0.325, 0.184, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Male/Male_Average_Wide</headGraphicPath>
+			<firstName>Roger</firstName>
+			<nickName>Roger</nickName>
+			<lastName>Kaine</lastName>
+			<biologicalAge>21</biologicalAge>
+			<chronologicalAge>96</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>4</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>3</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>3</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(1.000, 0.937, 0.756, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(1.000, 0.937, 0.756, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.518, 0.325, 0.184, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Wide</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.937, 0.756, 1.000)</first>
+							<second>RGBA(1.000, 0.937, 0.756, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.518, 0.325, 0.184, 1.000)</first>
+							<second>RGBA(0.518, 0.325, 0.184, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>27cadb29-7a57-41f2-b64c-7389bd480e85</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>MusicalKid86</childhood>
+			<adulthood>CharityWorker36</adulthood>
+			<traits>
+				<li>
+					<def>NightOwl</def>
+				</li>
+				<li>
+					<def>NaturalMood</def>
+					<degree>-2</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(1.000, 0.937, 0.763, 1.000)</skinColor>
+			<melanin>0.4318203</melanin>
+			<bodyType>Thin</bodyType>
+			<hairDef>Mop</hairDef>
+			<hairColor>RGBA(0.310, 0.280, 0.260, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Narrow_Wide</headGraphicPath>
+			<firstName>Vladlena</firstName>
+			<nickName>Hancock</nickName>
+			<lastName>Hancock</lastName>
+			<biologicalAge>20</biologicalAge>
+			<chronologicalAge>95</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>3</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>2</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>3</value>
+					<passion>Major</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_BasicShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(1.000, 0.937, 0.763, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(1.000, 0.937, 0.763, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.310, 0.280, 0.260, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Wide</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.937, 0.763, 1.000)</first>
+							<second>RGBA(1.000, 0.937, 0.763, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.310, 0.280, 0.260, 1.000)</first>
+							<second>RGBA(0.310, 0.280, 0.260, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>f7bd5c44-0e99-4f03-8f01-99b1995558cc</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>MusicalKid86</childhood>
+			<adulthood>MedievalSailor97</adulthood>
+			<traits>
+				<li>
+					<def>Ascetic</def>
+				</li>
+				<li>
+					<def>D06ss</def>
+				</li>
+				<li>
+					<def>SR08sytn</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(1.000, 0.937, 0.826, 1.000)</skinColor>
+			<melanin>0.8529255</melanin>
+			<bodyType>Female</bodyType>
+			<hairDef>WonL11</hairDef>
+			<hairColor>RGBA(0.250, 0.200, 0.150, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female_Average_Wide</headGraphicPath>
+			<firstName>James</firstName>
+			<nickName>Flan</nickName>
+			<lastName>Flannery</lastName>
+			<biologicalAge>34</biologicalAge>
+			<chronologicalAge>126</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>TopClothingLayer</layer>
+					<apparel>Apparel_Parka</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(1.000, 0.937, 0.826, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(1.000, 0.937, 0.826, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.250, 0.200, 0.150, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Wide</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.937, 0.826, 1.000)</first>
+							<second>RGBA(1.000, 0.937, 0.826, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.250, 0.200, 0.150, 1.000)</first>
+							<second>RGBA(0.250, 0.200, 0.150, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>809b894c-e05e-4b24-ae71-908a76648dc9</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<childhood>MedicalAssistant12</childhood>
+			<adulthood>Castaway57</adulthood>
+			<traits>
+				<li>
+					<def>DrugDesire</def>
+					<degree>-1</degree>
+				</li>
+				<li>
+					<def>Neurotic</def>
+					<degree>1</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.614, 0.428, 0.233, 1.000)</skinColor>
+			<melanin>0.4507723</melanin>
+			<bodyType>Hulk</bodyType>
+			<hairDef>Short08</hairDef>
+			<hairColor>RGBA(0.683, 0.683, 0.683, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Male/Male_Average_Wide</headGraphicPath>
+			<firstName>Ernesto</firstName>
+			<nickName>Russo</nickName>
+			<lastName>Russo</lastName>
+			<biologicalAge>49</biologicalAge>
+			<chronologicalAge>57</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>5</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>4</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>6</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>5</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_BasicShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries>
+				<li>
+					<hediffDef>Gunshot</hediffDef>
+					<bodyPart>Leg</bodyPart>
+					<bodyPartIndex>1</bodyPartIndex>
+					<severity>5</severity>
+					<painFactor>6</painFactor>
+				</li>
+			</injuries>
+			<compFields>
+				<skinColorAlien>RGBA(0.614, 0.428, 0.233, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.614, 0.428, 0.233, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.683, 0.683, 0.683, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Wide</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.614, 0.428, 0.233, 1.000)</first>
+							<second>RGBA(0.614, 0.428, 0.233, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.683, 0.683, 0.683, 1.000)</first>
+							<second>RGBA(0.683, 0.683, 0.683, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>f0c6c0cb-bb6f-404f-83c9-e86077fa764a</id>
+			<type>World</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>WreckageExplorer93</childhood>
+			<adulthood>SpaceTactician28</adulthood>
+			<traits>
+				<li>
+					<def>R04yzz</def>
+				</li>
+				<li>
+					<def>Beauty</def>
+					<degree>2</degree>
+				</li>
+				<li>
+					<def>ShootingAccuracy</def>
+					<degree>1</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.517, 0.361, 0.191, 1.000)</skinColor>
+			<melanin>0.4130682</melanin>
+			<bodyType>Thin</bodyType>
+			<hairDef>SM</hairDef>
+			<hairColor>RGBA(0.891, 0.312, 0.651, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Narrow_Wide</headGraphicPath>
+			<firstName>Penelope</firstName>
+			<nickName>Torres</nickName>
+			<lastName>Torres</lastName>
+			<biologicalAge>39</biologicalAge>
+			<chronologicalAge>628</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>2</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries>
+				<li>
+					<hediffDef>Stab</hediffDef>
+					<bodyPart>Torso</bodyPart>
+					<severity>5</severity>
+					<painFactor>1</painFactor>
+				</li>
+			</injuries>
+			<compFields>
+				<skinColorAlien>RGBA(0.517, 0.361, 0.191, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.517, 0.361, 0.191, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.891, 0.312, 0.651, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Wide</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.517, 0.361, 0.191, 1.000)</first>
+							<second>RGBA(0.517, 0.361, 0.191, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.891, 0.312, 0.651, 1.000)</first>
+							<second>RGBA(0.891, 0.312, 0.651, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>8dea98ab-3254-4f26-8627-26b3347e147d</id>
+			<type>Colonist</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>ApprenticeOracle83</childhood>
+			<adulthood>HouseServant86</adulthood>
+			<traits>
+				<li>
+					<def>ShootingAccuracy</def>
+					<degree>-1</degree>
+				</li>
+				<li>
+					<def>UR02txzr</def>
+				</li>
+				<li>
+					<def>SSR05xrl</def>
+				</li>
+				<li>
+					<def>NaturalMood</def>
+					<degree>2</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.972, 0.933, 0.859, 1.000)</skinColor>
+			<melanin>0.7539065</melanin>
+			<bodyType>Female</bodyType>
+			<hairDef>AHSlam</hairDef>
+			<hairColor>RGBA(0.958, 0.340, 0.738, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Narrow_Normal</headGraphicPath>
+			<firstName>Leila</firstName>
+			<nickName>Parks</nickName>
+			<lastName>Clark</lastName>
+			<biologicalAge>23</biologicalAge>
+			<chronologicalAge>23</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>7</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>0</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>4</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>6</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>4</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>2</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_BasicShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(0.972, 0.933, 0.859, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.972, 0.933, 0.859, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.353, 0.227, 0.125, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Normal</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.972, 0.933, 0.859, 1.000)</first>
+							<second>RGBA(0.972, 0.933, 0.859, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.958, 0.340, 0.738, 1.000)</first>
+							<second>RGBA(0.353, 0.227, 0.125, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>edde82c1-f625-4819-963f-89d9c73ebe60</id>
+			<type>Colonist</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>PlayerColony</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>ChildProdigy76</childhood>
+			<adulthood>RoyalCook18</adulthood>
+			<traits>
+				<li>
+					<def>NaturalMood</def>
+					<degree>1</degree>
+				</li>
+				<li>
+					<def>Kind</def>
+				</li>
+				<li>
+					<def>Industriousness</def>
+					<degree>2</degree>
+				</li>
+				<li>
+					<def>QuickSleeper</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(1.000, 0.937, 0.767, 1.000)</skinColor>
+			<melanin>0.4309935</melanin>
+			<bodyType>Female</bodyType>
+			<hairDef>AHSlem</hairDef>
+			<hairColor>RGBA(0.252, 0.539, 0.971, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Average_Normal</headGraphicPath>
+			<firstName>Linda</firstName>
+			<nickName>McMillion</nickName>
+			<lastName>McMillan</lastName>
+			<biologicalAge>20</biologicalAge>
+			<chronologicalAge>20</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>9</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>11</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>2</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>10</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Synthread</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries />
+			<compFields>
+				<skinColorAlien>RGBA(1.000, 0.937, 0.767, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(1.000, 0.937, 0.767, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.300, 0.200, 0.100, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Normal</crownType>
+				<addonVariants />
+				<colorChannels>
+					<keys>
+						<li>base</li>
+						<li>skin</li>
+						<li>hair</li>
+					</keys>
+					<values>
+						<li>
+							<first>RGBA(1.000, 1.000, 1.000, 1.000)</first>
+							<second>RGBA(1.000, 1.000, 1.000, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(1.000, 0.937, 0.767, 1.000)</first>
+							<second>RGBA(1.000, 0.937, 0.767, 1.000)</second>
+						</li>
+						<li>
+							<first>RGBA(0.252, 0.539, 0.971, 1.000)</first>
+							<second>RGBA(0.300, 0.200, 0.100, 1.000)</second>
+						</li>
+					</values>
+				</colorChannels>
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>415e8762-6d42-40a4-a763-8af24d784dc4</id>
+			<type>Hidden</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>OutlanderRough</originalFactionDef>
+			<childhood>FrightenedChild43</childhood>
+			<adulthood>MachineCollector55</adulthood>
+			<traits>
+				<li>
+					<def>Neurotic</def>
+					<degree>1</degree>
+				</li>
+				<li>
+					<def>Masochist</def>
+				</li>
+				<li>
+					<def>Asexual</def>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.973, 0.933, 0.858, 1.000)</skinColor>
+			<melanin>0.4007465</melanin>
+			<bodyType>Male</bodyType>
+			<hairDef>Perm01</hairDef>
+			<hairColor>RGBA(0.929, 0.792, 0.612, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Male_Narrow_Pointy</headGraphicPath>
+			<firstName>John</firstName>
+			<nickName>John</nickName>
+			<lastName>Hancock</lastName>
+			<biologicalAge>42</biologicalAge>
+			<chronologicalAge>124</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>3</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>4</value>
+					<passion>Major</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>0</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>Leather_Plain</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_CollarShirt</apparel>
+					<stuff>Cloth</stuff>
+					<color>RGBA(0.635, 0.616, 0.596, 1.000)</color>
+				</li>
+				<li>
+					<layer>TopClothingLayer</layer>
+					<apparel>Apparel_Parka</apparel>
+					<stuff>Leather_Bear</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries>
+				<li>
+					<hediffDef>Bite</hediffDef>
+					<bodyPart>Torso</bodyPart>
+					<severity>6</severity>
+					<painFactor>1</painFactor>
+				</li>
+			</injuries>
+			<compFields>
+				<skinColorAlien>RGBA(0.973, 0.933, 0.858, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.973, 0.933, 0.858, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.929, 0.792, 0.612, 1.000)</hairColorSecondAlien>
+				<crownType>Narrow_Pointy</crownType>
+				<addonVariants IsNull="True" />
+				<colorChannels IsNull="True" />
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+		<li>
+			<id>756d4f28-9dce-4f72-bf92-8127ebd2e514</id>
+			<type>Hidden</type>
+			<faction IsNull="True" />
+			<pawnKindDef>Colonist</pawnKindDef>
+			<originalFactionDef>Feral</originalFactionDef>
+			<gender>Female</gender>
+			<childhood>ChildSpy47</childhood>
+			<adulthood>Blacksmith72</adulthood>
+			<traits>
+				<li>
+					<def>Kind</def>
+				</li>
+				<li>
+					<def>R06nr</def>
+				</li>
+				<li>
+					<def>PsychicSensitivity</def>
+					<degree>2</degree>
+				</li>
+			</traits>
+			<traitNames />
+			<traitDegrees />
+			<skinColor>RGBA(0.953, 0.930, 0.875, 1.000)</skinColor>
+			<melanin>0.4507723</melanin>
+			<bodyType>Female</bodyType>
+			<hairDef>Penguin</hairDef>
+			<hairColor>RGBA(0.353, 0.227, 0.125, 1.000)</hairColor>
+			<headGraphicPath>Things/Pawn/Humanlike/Heads/Female_Average_Pointy</headGraphicPath>
+			<firstName>Elena</firstName>
+			<nickName>Elena</nickName>
+			<lastName>Russo</lastName>
+			<biologicalAge>28</biologicalAge>
+			<chronologicalAge>120</chronologicalAge>
+			<skills>
+				<li>
+					<name>Shooting</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Melee</name>
+					<value>2</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Construction</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Mining</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Cooking</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Plants</name>
+					<value>4</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Animals</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Crafting</name>
+					<value>1</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Artistic</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Medicine</name>
+					<value>3</value>
+					<passion>None</passion>
+				</li>
+				<li>
+					<name>Social</name>
+					<value>5</value>
+					<passion>Minor</passion>
+				</li>
+				<li>
+					<name>Intellectual</name>
+					<value>1</value>
+					<passion>None</passion>
+				</li>
+			</skills>
+			<apparel>
+				<li>
+					<layer>Pants</layer>
+					<apparel>Apparel_Pants</apparel>
+					<stuff>HempCloth</stuff>
+				</li>
+				<li>
+					<layer>BottomClothingLayer</layer>
+					<apparel>Apparel_BasicShirt</apparel>
+					<stuff>Flaxcloth</stuff>
+				</li>
+			</apparel>
+			<implants />
+			<injuries>
+				<li>
+					<hediffDef>Stab</hediffDef>
+					<bodyPart>Leg</bodyPart>
+					<severity>3</severity>
+					<painFactor>0</painFactor>
+				</li>
+			</injuries>
+			<compFields>
+				<skinColorAlien>RGBA(0.953, 0.930, 0.875, 1.000)</skinColorAlien>
+				<skinColorSecondAlien>RGBA(0.953, 0.930, 0.875, 1.000)</skinColorSecondAlien>
+				<hairColorSecondAlien>RGBA(0.353, 0.227, 0.125, 1.000)</hairColorSecondAlien>
+				<crownType>Average_Pointy</crownType>
+				<addonVariants IsNull="True" />
+				<colorChannels IsNull="True" />
+			</compFields>
+			<savedComps>
+				<li>AlienRace.AlienPartGenerator+AlienComp</li>
+			</savedComps>
+		</li>
+	</pawns>
+	<parentChildGroups>
+		<li>
+			<parents>
+				<li>8ed5fd4e-d088-4bbe-9ebe-48944a567478</li>
+			</parents>
+			<children>
+				<li>0bea074d-6bb5-4341-940e-211a3747fd87</li>
+			</children>
+		</li>
+		<li>
+			<parents>
+				<li>415e8762-6d42-40a4-a763-8af24d784dc4</li>
+				<li>756d4f28-9dce-4f72-bf92-8127ebd2e514</li>
+			</parents>
+			<children>
+				<li>27cadb29-7a57-41f2-b64c-7389bd480e85</li>
+				<li>809b894c-e05e-4b24-ae71-908a76648dc9</li>
+			</children>
+		</li>
+	</parentChildGroups>
+	<relationships>
+		<li>
+			<source>0bea074d-6bb5-4341-940e-211a3747fd87</source>
+			<target>cac70674-e344-4e93-a4f8-b7257037efdd</target>
+			<relation>ExLover</relation>
+		</li>
+		<li>
+			<source>62d094c0-828f-4f81-82bb-ce9c40dce368</source>
+			<target>27cadb29-7a57-41f2-b64c-7389bd480e85</target>
+			<relation>Lover</relation>
+		</li>
+		<li>
+			<source>809b894c-e05e-4b24-ae71-908a76648dc9</source>
+			<target>f0c6c0cb-bb6f-404f-83c9-e86077fa764a</target>
+			<relation>Lover</relation>
+		</li>
+	</relationships>
+	<equipment>
+		<li>
+			<def>MeleeWeapon_LongSword</def>
+			<stuffDef>Titanium</stuffDef>
+			<count>1</count>
+		</li>
+		<li>
+			<def>Vanya_HellSong</def>
+			<count>1</count>
+		</li>
+		<li>
+			<def>Apparel_PolarisShieldBelt_II</def>
+			<count>3</count>
+		</li>
+		<li>
+			<def>Apparel_FlakVest</def>
+			<count>3</count>
+		</li>
+		<li>
+			<def>Apparel_FlakPants</def>
+			<count>3</count>
+		</li>
+	</equipment>
+</preset>

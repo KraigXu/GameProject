@@ -7,8 +7,9 @@ namespace RimWorld
 	
 	public class MusicManagerEntry
 	{
-		
-		
+		private AudioSource audioSource;
+		private const string SourceGameObjectName = "MusicAudioSourceDummy";
+
 		private float CurVolume
 		{
 			get
@@ -69,9 +70,6 @@ namespace RimWorld
 		}
 
 		
-		private AudioSource audioSource;
 
-		
-		private const string SourceGameObjectName = "MusicAudioSourceDummy";
 	}
 }

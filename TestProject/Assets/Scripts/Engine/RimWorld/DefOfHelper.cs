@@ -72,6 +72,7 @@ namespace RimWorld
 			if (!DefOfHelper.bindingNow)
 			{
 				string text;
+				
 				if (DirectXmlToObject.currentlyInstantiatingObjectOfType.Any<Type>())
 				{
 					text = "DirectXmlToObject is currently instantiating an object of type " + DirectXmlToObject.currentlyInstantiatingObjectOfType.Peek();

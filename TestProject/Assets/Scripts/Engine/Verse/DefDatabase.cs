@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace Verse
 {
-	public static class DefDatabase
-    {
-
-    }
-
-
 	public static class DefDatabase<T> where T : Def
 	{
 		

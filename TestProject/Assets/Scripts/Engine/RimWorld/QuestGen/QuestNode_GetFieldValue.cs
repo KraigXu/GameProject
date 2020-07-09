@@ -2,7 +2,7 @@
 using System.Reflection;
 using Verse;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_GetFieldValue : QuestNode

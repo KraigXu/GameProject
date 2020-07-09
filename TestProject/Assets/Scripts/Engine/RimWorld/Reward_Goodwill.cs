@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
@@ -49,10 +49,10 @@ namespace RimWorld
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
 			yield return new QuestPart_FactionGoodwillChange
-			{
+            {
 				change = this.amount,
 				faction = this.faction,
-				inSignal = QuestGen.slate.Get<string>("inSignal", null, false)
+				inSignal = QuestGen.QuestGen.slate.Get<string>("inSignal", null, false)
 			};
 			yield break;
 		}

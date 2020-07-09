@@ -4,7 +4,7 @@ using RimWorld.SketchGen;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.QuestGenNew
+namespace RimWorld.QuestGen
 {
 	
 	public class QuestNode_GetMonumentSketch : QuestNode

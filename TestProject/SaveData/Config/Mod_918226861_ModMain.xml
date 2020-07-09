@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsBlock>
+	<ModSettings Class="ProjectJedi.Settings">
+		<forceXPDelayFactor>1</forceXPDelayFactor>
+	</ModSettings>
+</SettingsBlock>

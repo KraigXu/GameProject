@@ -4,7 +4,7 @@ using System.Linq;
 using RimWorld;
 using RimWorld.BaseGen;
 using RimWorld.IO;
-using RimWorld.QuestGenNew;
+using RimWorld.QuestGen;
 using Verse.AI;
 
 namespace Verse
@@ -117,7 +117,7 @@ namespace Verse
 			{
 				foreach (Type genericParam in typeof(Def).AllSubclasses())
 				{
-					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam, "AddAllInMods");
+					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "AddAllInMods");
 				}
 			}
 			finally
@@ -267,7 +267,7 @@ namespace Verse
 					{
 						if (!(type == typeof(ThingDef)) && !(type == typeof(ThingCategoryDef)) && !(type == typeof(RecipeDef)))
 						{
-							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), type, "ResolveAllReferences", new object[]
+							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), type, "ResolveAllReferences", new object[]
 							{
 								true,
 								false
@@ -320,7 +320,7 @@ namespace Verse
 				{
 					foreach (Type genericParam2 in typeof(Def).AllSubclasses())
 					{
-						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam2, "ErrorCheckAllDefs");
+						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam2, "ErrorCheckAllDefs");
 					}
 				}
 				finally
@@ -407,7 +407,7 @@ namespace Verse
 			LoadedModManager.ClearDestroy();
 			foreach (Type genericParam in typeof(Def).AllSubclasses())
 			{
-				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase), genericParam, "Clear");
+				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "Clear");
 			}
 			ThingCategoryNodeDatabase.Clear();
 			BackstoryDatabase.Clear();

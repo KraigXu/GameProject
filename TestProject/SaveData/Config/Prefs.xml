@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PrefsData>
-  <volumeGame>0.8</volumeGame>
-  <volumeMusic>0.4</volumeMusic>
+  <volumeGame>1</volumeGame>
+  <volumeMusic>1</volumeMusic>
   <volumeAmbient>1</volumeAmbient>
   <screenWidth>1920</screenWidth>
   <screenHeight>1080</screenHeight>
@@ -12,21 +12,21 @@
   <plantWindSway>True</plantWindSway>
   <showRealtimeClock>False</showRealtimeClock>
   <animalNameMode>None</animalNameMode>
-  <extremeDifficultyUnlocked>False</extremeDifficultyUnlocked>
-  <adaptiveTrainingEnabled>True</adaptiveTrainingEnabled>
+  <extremeDifficultyUnlocked>True</extremeDifficultyUnlocked>
+  <adaptiveTrainingEnabled>False</adaptiveTrainingEnabled>
   <preferredNames />
-  <resourceReadoutCategorized>False</resourceReadoutCategorized>
-  <runInBackground>False</runInBackground>
+  <resourceReadoutCategorized>True</resourceReadoutCategorized>
+  <runInBackground>True</runInBackground>
   <edgeScreenScroll>True</edgeScreenScroll>
   <temperatureMode>Celsius</temperatureMode>
   <autosaveIntervalDays>1</autosaveIntervalDays>
   <testMapSizes>False</testMapSizes>
   <maxNumberOfPlayerSettlements>1</maxNumberOfPlayerSettlements>
   <pauseOnLoad>False</pauseOnLoad>
-  <automaticPauseMode>MajorThreat</automaticPauseMode>
+  <automaticPauseMode>Never</automaticPauseMode>
   <mapDragSensitivity>1.3</mapDragSensitivity>
   <devMode>False</devMode>
-  <langFolderName>unknown</langFolderName>
+  <langFolderName>ChineseSimplified (简体中文)</langFolderName>
   <logVerbose>False</logVerbose>
   <pauseOnError>False</pauseOnError>
   <resetModsConfigOnCrash>True</resetModsConfigOnCrash>
