@@ -610,7 +610,7 @@ namespace Verse
 		}
 
 		
-		public override void Notify_SignalReceived(Signal signal)
+		public override void Notify_SignalReceived(RimWorld.Signal signal)
 		{
 			base.Notify_SignalReceived(signal);
 			if (this.comps != null)

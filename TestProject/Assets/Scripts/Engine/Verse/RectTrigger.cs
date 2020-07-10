@@ -67,7 +67,7 @@ public class RectTrigger : Thing
 
 	public void ActivatedBy(Pawn p)
 	{
-		Find.SignalManager.SendSignal(new Signal(signalTag, p.Named("SUBJECT")));
+		Find.SignalManager.SendSignal(new RimWorld.Signal(signalTag, p.Named("SUBJECT")));
 		if (!base.Destroyed)
 		{
 			Destroy();

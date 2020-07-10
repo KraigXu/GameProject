@@ -261,7 +261,7 @@ public static class DebugOutputsGeneral
 					 select x).ToList();
 		Dictionary<Tool, float> selWeight = tools.ToDictionary(x => x.Tool, x => x.Tool.VerbsProperties.Average((VerbProperties y) => y.AdjustedMeleeSelectionWeight(x.Tool, null, null, null, x.Parent is ThingDef && ((ThingDef)x.Parent).category == ThingCategory.Pawn)));
 		Dictionary<Def, float> selWeightSumInGroup = tools.Select(x => x.Parent).Distinct().ToDictionary((Def x) => x, (Def x) => tools.Where(y => y.Parent == x).Sum(y => selWeight[y.Tool]));
-		DebugTables.MakeTablesDialog(tools.Select((x, int index) => index), new TableDataGetter<int>("label", (int x) => tools[x].Tool.label), new TableDataGetter<int>("source", (int x) => tools[x].Parent.defName), new TableDataGetter<int>("power", (int x) => tools[x].Tool.power.ToString("0.##")), new TableDataGetter<int>("AP", delegate (int x)
+		DebugTables.MakeTablesDialog(tools.Select((x, index) => index), new TableDataGetter<int>("label", (int x) => tools[x].Tool.label), new TableDataGetter<int>("source", (int x) => tools[x].Parent.defName), new TableDataGetter<int>("power", (int x) => tools[x].Tool.power.ToString("0.##")), new TableDataGetter<int>("AP", delegate (int x)
 		{
 			float num = tools[x].Tool.armorPenetration;
 			if (num < 0f)

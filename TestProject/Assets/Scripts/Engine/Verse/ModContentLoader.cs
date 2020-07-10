@@ -104,7 +104,7 @@ public static class ModContentLoader<T> where T : class
 					Stream stream = file.CreateReadStream();
 					try
 					{
-						val = (T)(object)Manager.Load(stream, GetFormat(file.Name), file.Name, doStream);
+						val = (T)(object)RuntimeAudioClipLoader.Manager.Load(stream, GetFormat(file.Name), file.Name, doStream);
 					}
 					catch (Exception)
 					{

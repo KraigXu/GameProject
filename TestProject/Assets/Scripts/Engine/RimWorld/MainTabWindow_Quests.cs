@@ -1021,7 +1021,7 @@ public class MainTabWindow_Quests : MainTabWindow
 			Rect rect2 = new Rect(innerRect.x + rect.width + 4f, curY, 117f, 25f);
 			if (Widgets.ButtonText(rect2, "Send signal"))
 			{
-				Find.SignalManager.SendSignal(new Signal(debugSendSignalTextField));
+				Find.SignalManager.SendSignal(new RimWorld.Signal(debugSendSignalTextField));
 				debugSendSignalTextField = "";
 			}
 			if (Widgets.ButtonText(new Rect(rect2.xMax + 4f, curY, 165f, 25f), "Send defined signal..."))
@@ -1034,7 +1034,7 @@ public class MainTabWindow_Quests : MainTabWindow
 					string signalLocal = item;
 					list.Add(new FloatMenuOption(signalLocal, delegate
 					{
-						Find.SignalManager.SendSignal(new Signal(signalLocal));
+						Find.SignalManager.SendSignal(new RimWorld.Signal(signalLocal));
 						debugSendSignalTextField = "";
 					}));
 				}

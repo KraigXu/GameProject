@@ -436,7 +436,7 @@ public static class FloatMenuMakerMap
 		foreach (LocalTargetInfo item13 in GenUI.TargetsAt(clickPos, TargetingParameters.ForStrip(pawn), thingsOnly: true))
 		{
 			LocalTargetInfo stripTarg = item13;
-			FloatMenuOption item5 = pawn.CanReach(stripTarg, PathEndMode.ClosestTouch, Danger.Deadly) ? ((stripTarg.Pawn == null || !stripTarg.Pawn.HasExtraHomeFaction()) ? FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("Strip".Translate(stripTarg.Thing.LabelCap, stripTarg.Thing), delegate
+			FloatMenuOption item5 = pawn.CanReach(stripTarg, PathEndMode.ClosestTouch, Danger.Deadly) ? ((stripTarg.Pawn == null || !stripTarg.Pawn.HasExtraHomeFaction(null)) ? FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("Strip".Translate(stripTarg.Thing.LabelCap, stripTarg.Thing), delegate
 			{
 				stripTarg.Thing.SetForbidden(value: false, warnOnFail: false);
 				pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.Strip, stripTarg));

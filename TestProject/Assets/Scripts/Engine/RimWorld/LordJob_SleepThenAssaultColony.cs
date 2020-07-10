@@ -41,8 +41,11 @@ namespace RimWorld
 			transition.AddTrigger(new Trigger_Custom((TriggerSignal signal) => signal.type == TriggerSignalType.DormancyWakeup));
 			transition.AddPreAction(new TransitionAction_Message("MessageSleepingPawnsWokenUp".Translate(this.faction.def.pawnsPlural).CapitalizeFirst(), MessageTypeDefOf.ThreatBig, null, 1f));
 			transition.AddPostAction(new TransitionAction_WakeAll());
-			transition.AddPostAction(new TransitionAction_Custom(delegate
-			{
+			transition.AddPostAction(new TransitionAction_Custom(CallFunction));
+			stateGraph.AddTransition(transition, false);
+
+			void CallFunction()
+            {
 				Vector3 vector = Vector3.zero;
 				for (int i = 0; i < this.lord.ownedPawns.Count; i++)
 				{
@@ -50,8 +53,8 @@ namespace RimWorld
 				}
 				vector /= (float)this.lord.ownedPawns.Count;
 				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(vector.ToIntVec3(), base.Map, false));
-			}));
-			stateGraph.AddTransition(transition, false);
+			}
+
 			return stateGraph;
 		}
 

@@ -343,13 +343,13 @@ public static class InspectPaneUtility
 	public static InspectTabBase OpenTab(Type inspectTabType)
 	{
 		MainTabWindow_Inspect mainTabWindow_Inspect = (MainTabWindow_Inspect)MainButtonDefOf.Inspect.TabWindow;
-		t = null;
+		InspectTabBase t = null;
 		if (mainTabWindow_Inspect.CurTabs != null)
 		{
 			IList list = mainTabWindow_Inspect.CurTabs as IList;
 			if (list != null)
 			{
-				for (int i = 0; i < list.Count && !Find((InspectTabBase)list[i]); i++)
+				for (int i = 0; i < list.Count && !FindFunction((InspectTabBase)list[i]); i++)
 				{
 				}
 			}
@@ -357,7 +357,7 @@ public static class InspectPaneUtility
 			{
 				using (IEnumerator<InspectTabBase> enumerator = mainTabWindow_Inspect.CurTabs.GetEnumerator())
 				{
-					while (enumerator.MoveNext() && !Find(enumerator.Current))
+					while (enumerator.MoveNext() && !FindFunction(enumerator.Current))
 					{
 					}
 				}
@@ -374,15 +374,18 @@ public static class InspectPaneUtility
 				ToggleTab(t, mainTabWindow_Inspect);
 			}
 		}
-		return t;
-		bool Find(InspectTabBase t)
+
+		bool FindFunction(InspectTabBase inspect)
 		{
-			if (inspectTabType.IsAssignableFrom(t.GetType()))
+			if (inspectTabType.IsAssignableFrom(inspect.GetType()))
 			{
 				return true;
 			}
 			return false;
 		}
+
+		return t;
+		
 	}
 
 	private static void InterfaceToggleTab(InspectTabBase tab, IInspectPane pane)

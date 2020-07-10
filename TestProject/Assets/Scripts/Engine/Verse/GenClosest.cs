@@ -181,7 +181,7 @@ public static class GenClosest
 			return null;
 		}
 		float closestDistSquared = 2.14748365E+09f;
-		t = null;
+		Thing t = null;
 		float bestPrio = float.MinValue;
 		float maxDistanceSquared = maxDistance * maxDistance;
 		IList<Thing> list;
@@ -224,17 +224,17 @@ public static class GenClosest
 			}
 		}
 		return t;
-		void Process(Thing t)
+		void Process(Thing thing)
 		{
-			if (t.Spawned)
+			if (thing.Spawned)
 			{
-				float num = (center - t.Position).LengthHorizontalSquared;
-				if (!(num > maxDistanceSquared) && (priorityGetter != null || num < closestDistSquared) && (validator == null || validator(t)))
+				float num = (center - thing.Position).LengthHorizontalSquared;
+				if (!(num > maxDistanceSquared) && (priorityGetter != null || num < closestDistSquared) && (validator == null || validator(thing)))
 				{
 					float num2 = 0f;
 					if (priorityGetter != null)
 					{
-						num2 = priorityGetter(t);
+						num2 = priorityGetter(thing);
 						if (num2 < bestPrio || (num2 == bestPrio && num >= closestDistSquared))
 						{
 							return;
@@ -255,7 +255,7 @@ public static class GenClosest
 		}
 		int debug_changeCount = 0;
 		int debug_scanCount = 0;
-		t = null;
+		Thing t = null;
 		float bestPrio = float.MinValue;
 		float maxDistanceSquared = maxDistance * maxDistance;
 		float closestDistSquared = 2.14748365E+09f;
@@ -291,18 +291,18 @@ public static class GenClosest
 			}
 		}
 		return t;
-		void Process(Thing t)
+		void Process(Thing thing)
 		{
-			if (t.Spawned)
+			if (thing.Spawned)
 			{
 				debug_scanCount++;
-				float num = (center - t.Position).LengthHorizontalSquared;
-				if (!(num > maxDistanceSquared) && (priorityGetter != null || num < closestDistSquared) && map.reachability.CanReach(center, t, peMode, traverseParams) && (validator == null || validator(t)))
+				float num = (center - thing.Position).LengthHorizontalSquared;
+				if (!(num > maxDistanceSquared) && (priorityGetter != null || num < closestDistSquared) && map.reachability.CanReach(center, thing, peMode, traverseParams) && (validator == null || validator(thing)))
 				{
 					float num2 = 0f;
 					if (priorityGetter != null)
 					{
-						num2 = priorityGetter(t);
+						num2 = priorityGetter(thing);
 						if (num2 < bestPrio || (num2 == bestPrio && num >= closestDistSquared))
 						{
 							return;

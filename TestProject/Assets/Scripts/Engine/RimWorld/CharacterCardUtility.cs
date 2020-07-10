@@ -671,7 +671,9 @@ public static class CharacterCardUtility
 		GUI.EndGroup();
 		RoyalTitleDef FirstTitleWithPermit(RoyalTitlePermitDef permitDef)
 		{
-			return title.faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.First((RoyalTitleDef t) => t.permits != null && t.permits.Contains(permitDef));
+			Log.Message(">>:title.faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.First((RoyalTitleDef t) => t.permits != null && t.permits.Contains(permitDef));");
+			//return title.faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.First((RoyalTitleDef t) => t.permits != null && t.permits.Contains(permitDef));
+			return default;
 		}
 	}
 

@@ -28,7 +28,7 @@ public class TriggerUnfogged : Thing
 
 	public void Activated()
 	{
-		Find.SignalManager.SendSignal(new Signal(signalTag));
+		Find.SignalManager.SendSignal(new RimWorld.Signal(signalTag));
 		if (!base.Destroyed)
 		{
 			Destroy();

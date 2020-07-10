@@ -6,6 +6,12 @@ using Verse;
 
 public static class SiteMaker
 {
+	public static Site MakeSiteNormal(SitePartDef sitePart, int tile, Faction faction, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
+	{
+		Log.Message(">>:MakeSiteNormal");
+		return MakeSite((sitePart != null) ? Gen.YieldSingle(sitePart) : null, tile, faction, ifHostileThenMustRemainHostile, threatPoints);
+	}
+
 	public static Site MakeSite(SitePartDef sitePart, int tile, Faction faction, bool ifHostileThenMustRemainHostile = true, float? threatPoints = null)
 	{
 		return MakeSite((sitePart != null) ? Gen.YieldSingle(sitePart) : null, tile, faction, ifHostileThenMustRemainHostile, threatPoints);

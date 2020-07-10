@@ -58,19 +58,24 @@ namespace RimWorld
 			transition.AddTrigger(new Trigger_TickCondition(new Func<bool>(this.ShouldBeCalledOff), 1));
 			transition.AddTrigger(new Trigger_PawnKilled());
 			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, this.organizer));
-			transition.AddPreAction(new TransitionAction_Custom(delegate
-			{
-				this.ApplyOutcome((float)this.lord.ticksInToil / speechDuration);
-			}));
+			transition.AddPreAction(new TransitionAction_Custom(CallApplyOutcome1));
 			stateGraph.AddTransition(transition, false);
 			this.timeoutTrigger = new Trigger_TicksPassedAfterConditionMet((int)speechDuration, () => GatheringsUtility.InGatheringArea(this.organizer.Position, this.spot, this.organizer.Map), 60);
 			Transition transition2 = new Transition(lordToil, lordToil_End, false, true);
 			transition2.AddTrigger(this.timeoutTrigger);
-			transition2.AddPreAction(new TransitionAction_Custom(delegate
-			{
-				this.ApplyOutcome(1f);
-			}));
+			transition2.AddPreAction(new TransitionAction_Custom(CallApplyOutcome2));
 			stateGraph.AddTransition(transition2, false);
+
+			void CallApplyOutcome1()
+            {
+				this.ApplyOutcome((float)this.lord.ticksInToil / speechDuration);
+			}
+
+			void CallApplyOutcome2()
+            {
+				this.ApplyOutcome(1f);
+			}
+
 			return stateGraph;
 		}
 

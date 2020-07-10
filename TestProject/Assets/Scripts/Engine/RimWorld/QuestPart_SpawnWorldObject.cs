@@ -114,7 +114,7 @@ namespace RimWorld
 			int tile;
 			if (TileFinder.TryFindNewSiteTile(out tile, 7, 27, false, true, -1))
 			{
-				this.worldObject = SiteMaker.MakeSite(null, tile, null, true, null);
+				this.worldObject = SiteMaker.MakeSiteNormal(null, tile, null, true, null);
 			}
 		}
 

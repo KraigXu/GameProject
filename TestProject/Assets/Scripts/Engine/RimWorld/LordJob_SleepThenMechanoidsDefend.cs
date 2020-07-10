@@ -51,11 +51,14 @@ namespace RimWorld
 			transition.AddTrigger(new Trigger_OnHumanlikeHarmAnyThing(this.things));
 			transition.AddPreAction(new TransitionAction_Message("MessageSleepingPawnsWokenUp".Translate(this.faction.def.pawnsPlural).CapitalizeFirst(), MessageTypeDefOf.ThreatBig, null, 1f));
 			transition.AddPostAction(new TransitionAction_WakeAll());
-			transition.AddPostAction(new TransitionAction_Custom(delegate
-			{
+			transition.AddPostAction(new TransitionAction_Custom(CallFunction));
+
+			void CallFunction()
+            {
 				Find.SignalManager.SendSignal(new Signal("CompCanBeDormant.WakeUp", this.things.First<Thing>().Named("SUBJECT"), Faction.OfMechanoids.Named("FACTION")));
 				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(this.defSpot, base.Map, false));
-			}));
+			}
+
 			stateGraph.AddTransition(transition, false);
 			return stateGraph;
 		}

@@ -208,7 +208,7 @@ public static class QuestUtility
 		{
 			for (int i = 0; i < questTags.Count; i++)
 			{
-				Find.SignalManager.SendSignal(new Signal(questTags[i] + "." + signalPart, args));
+				Find.SignalManager.SendSignal(new RimWorld.Signal(questTags[i] + "." + signalPart, args));
 			}
 		}
 	}
@@ -326,7 +326,7 @@ public static class QuestUtility
 
 	public static bool IsQuestLodger(this Pawn p)
 	{
-		return p.HasExtraHomeFaction();
+		return p.HasExtraHomeFaction(null);
 	}
 
 	public static bool IsQuestHelper(this Pawn p)
@@ -377,7 +377,7 @@ public static class QuestUtility
 		return false;
 	}
 
-	public static bool HasExtraHomeFaction(this Pawn p, Quest forQuest = null)
+	public static bool HasExtraHomeQuest(this Pawn p, Quest forQuest = null)
 	{
 		return p.GetExtraHomeFaction(forQuest) != null;
 	}

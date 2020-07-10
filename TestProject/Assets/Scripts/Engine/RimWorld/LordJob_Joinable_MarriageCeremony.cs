@@ -60,10 +60,7 @@ namespace RimWorld
 			Transition transition2 = new Transition(lordToil_MarriageCeremony, lordToil_Party2, false, true);
 			transition2.AddTrigger(new Trigger_TickCondition(() => this.firstPawn.relations.DirectRelationExists(PawnRelationDefOf.Spouse, this.secondPawn), 1));
 			transition2.AddPreAction(new TransitionAction_Message("MessageNewlyMarried".Translate(this.firstPawn.LabelShort, this.secondPawn.LabelShort, this.firstPawn.Named("PAWN1"), this.secondPawn.Named("PAWN2")), MessageTypeDefOf.PositiveEvent, new TargetInfo(this.spot, base.Map, false), null, 1f));
-			transition2.AddPreAction(new TransitionAction_Custom(delegate
-			{
-				this.AddAttendedWeddingThoughts();
-			}));
+			transition2.AddPreAction(new TransitionAction_Custom(CallAddAttendedWeddingThoughts));
 			stateGraph.AddTransition(transition2, false);
 			Transition transition3 = new Transition(lordToil_Party2, lordToil_End, false, true);
 			transition3.AddTrigger(new Trigger_TickCondition(() => this.ShouldAfterPartyBeCalledOff(), 1));
@@ -88,7 +85,13 @@ namespace RimWorld
 			return stateGraph;
 		}
 
-		
+		private void CallAddAttendedWeddingThoughts()
+        {
+			this.AddAttendedWeddingThoughts();
+		}
+
+
+
 		private bool AreFiancesInPartyArea()
 		{
 			return this.lord.ownedPawns.Contains(this.firstPawn) && this.lord.ownedPawns.Contains(this.secondPawn) && this.firstPawn.Map == base.Map && GatheringsUtility.InGatheringArea(this.firstPawn.Position, this.spot, base.Map) && this.secondPawn.Map == base.Map && GatheringsUtility.InGatheringArea(this.secondPawn.Position, this.spot, base.Map);

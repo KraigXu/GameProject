@@ -104,21 +104,21 @@ namespace RimWorld
 			transition.AddTrigger(new Trigger_TickCondition(() => this.ShouldBeCalledOff(), 1));
 			transition.AddTrigger(new Trigger_PawnKilled());
 			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, this.organizer));
-			transition.AddPreAction(new TransitionAction_Custom(delegate
-			{
-				this.ApplyOutcome((LordToil_Party)party);
-			}));
+			transition.AddPreAction(new TransitionAction_Custom(CallApplyOutcome));
 			transition.AddPreAction(new TransitionAction_Message(this.gatheringDef.calledOffMessage, MessageTypeDefOf.NegativeEvent, new TargetInfo(this.spot, base.Map, false), null, 1f));
 			stateGraph.AddTransition(transition, false);
 			this.timeoutTrigger = this.GetTimeoutTrigger();
 			Transition transition2 = new Transition(party, lordToil_End, false, true);
 			transition2.AddTrigger(this.timeoutTrigger);
-			transition2.AddPreAction(new TransitionAction_Custom(delegate
-			{
-				this.ApplyOutcome((LordToil_Party)party);
-			}));
+			transition2.AddPreAction(new TransitionAction_Custom(CallApplyOutcome));
 			transition2.AddPreAction(new TransitionAction_Message(this.gatheringDef.finishedMessage, MessageTypeDefOf.SituationResolved, new TargetInfo(this.spot, base.Map, false), null, 1f));
 			stateGraph.AddTransition(transition2, false);
+
+			void CallApplyOutcome()
+            {
+				this.ApplyOutcome((LordToil_Party)party);
+			}
+
 			return stateGraph;
 		}
 

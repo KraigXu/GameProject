@@ -34,7 +34,7 @@ public class SkyManager
 		if (map == Find.CurrentMap)
 		{
 			MatBases.LightOverlay.color = curSky.colors.sky;
-			Find.CameraColor.saturation = curSky.colors.saturation;
+		//	Find.CameraColor.saturation = curSky.colors.saturation;
 			Color sky = curSky.colors.sky;
 			sky.a = 1f;
 			sky *= FogOfWarBaseColor;
