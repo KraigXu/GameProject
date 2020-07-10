@@ -17,6 +17,7 @@ namespace RimWorld
 		
 		public override void UIRootOnGUI()
 		{
+			Debug.Log(">>>" );
 			base.UIRootOnGUI();
 			Find.GameInfo.GameInfoOnGUI();
 			Find.World.UI.WorldInterfaceOnGUI();

@@ -85,7 +85,6 @@ namespace Verse
 			{
 				return;
 			}
-			Debug.LogError(text);
 			if (!Log.currentlyLoggingError)
 			{
 				Log.currentlyLoggingError = true;

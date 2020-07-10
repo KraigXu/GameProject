@@ -362,6 +362,7 @@ public class Dialog_FormCaravan : Window
 
 	public override void DoWindowContents(Rect inRect)
 	{
+		Debug.Log(">>>"+ inRect);
 		Rect rect = new Rect(0f, 0f, inRect.width, 35f);
 		Text.Font = GameFont.Medium;
 		Text.Anchor = TextAnchor.MiddleCenter;
