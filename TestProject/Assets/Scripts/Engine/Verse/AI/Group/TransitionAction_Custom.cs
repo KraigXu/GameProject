@@ -1,39 +1,31 @@
 ﻿using System;
+using Verse.AI.Group;
 
-namespace Verse.AI.Group
+public class TransitionAction_Custom : TransitionAction
 {
-	
-	public class TransitionAction_Custom : TransitionAction
+	public Action action;
+
+	public Action<Transition> actionWithArg;
+
+	public TransitionAction_Custom(Action action)
 	{
-		
-		//public TransitionAction_Custom(Action action)
-		//{
-		//	this.action = action;
-		//}
+		this.action = action;
+	}
 
-		
-		public TransitionAction_Custom(Action<Transition> actionWithArg)
+	public TransitionAction_Custom(Action<Transition> actionWithArg)
+	{
+		this.actionWithArg = actionWithArg;
+	}
+
+	public override void DoAction(Transition trans)
+	{
+		if (actionWithArg != null)
 		{
-			this.actionWithArg = actionWithArg;
+			actionWithArg(trans);
 		}
-
-		
-		public override void DoAction(Transition trans)
+		if (action != null)
 		{
-			if (this.actionWithArg != null)
-			{
-				this.actionWithArg(trans);
-			}
-			if (this.action != null)
-			{
-				this.action();
-			}
+			action();
 		}
-
-		
-		public Action action;
-
-		
-		public Action<Transition> actionWithArg;
 	}
 }

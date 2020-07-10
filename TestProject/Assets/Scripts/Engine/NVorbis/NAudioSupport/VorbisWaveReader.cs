@@ -1,263 +1,137 @@
-﻿using System;
+﻿using NAudio.Wave;
+using NVorbis;
+using System;
 using System.IO;
-using NAudio.Wave;
 
-namespace NVorbis.NAudioSupport
+internal class VorbisWaveReader : WaveStream, IDisposable, ISampleProvider, IWaveProvider
 {
-	
-	internal class VorbisWaveReader : WaveStream, IDisposable, ISampleProvider, IWaveProvider
+	private VorbisReader _reader;
+
+	private WaveFormat _waveFormat;
+
+	[ThreadStatic]
+	private static float[] _conversionBuffer;
+
+	public override WaveFormat WaveFormat => _waveFormat;
+
+	public override long Length => (long)(_reader.TotalTime.TotalSeconds * (double)_waveFormat.SampleRate * (double)_waveFormat.Channels * 4.0);
+
+	public override long Position
 	{
-		
-		//public VorbisWaveReader(string fileName)
-		//{
-		//	this._reader = new VorbisReader(fileName);
-		//	this._waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(this._reader.SampleRate, this._reader.Channels);
-		//}
+		get
+		{
+			return (long)(_reader.DecodedTime.TotalMilliseconds * (double)_reader.SampleRate * (double)_reader.Channels * 4.0);
+		}
+		set
+		{
+			if (value < 0 || value > Length)
+			{
+				throw new ArgumentOutOfRangeException("value");
+			}
+			_reader.DecodedTime = TimeSpan.FromSeconds((double)value / (double)_reader.SampleRate / (double)_reader.Channels / 4.0);
+		}
+	}
 
-		
-		//public VorbisWaveReader(Stream sourceStream)
-		//{
-		//	this._reader = new VorbisReader(sourceStream, false);
-		//	this._waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(this._reader.SampleRate, this._reader.Channels);
-		//}
+	public bool IsParameterChange => _reader.IsParameterChange;
 
-		
-		//protected override void Dispose(bool disposing)
-		//{
-		//	if (disposing && this._reader != null)
-		//	{
-		//		this._reader.Dispose();
-		//		this._reader = null;
-		//	}
-		//	base.Dispose(disposing);
-		//}
+	public int StreamCount => _reader.StreamCount;
 
-		
-		//
-		//public override WaveFormat WaveFormat
-		//{
-		//	get
-		//	{
-		//		return this._waveFormat;
-		//	}
-		//}
+	public int? NextStreamIndex
+	{
+		get;
+		set;
+	}
 
-		
-		//
-		//public override long Length
-		//{
-		//	get
-		//	{
-		//		return (long)(this._reader.TotalTime.TotalSeconds * (double)this._waveFormat.SampleRate * (double)this._waveFormat.Channels * 4.0);
-		//	}
-		//}
+	public int CurrentStream
+	{
+		get
+		{
+			return _reader.StreamIndex;
+		}
+		set
+		{
+			if (!_reader.SwitchStreams(value))
+			{
+				throw new NVorbis.InvalidDataException("The selected stream is not a valid Vorbis stream!");
+			}
+			if (NextStreamIndex.HasValue && value == NextStreamIndex.Value)
+			{
+				NextStreamIndex = null;
+			}
+		}
+	}
 
-		
-		//
-		//
-		//public override long Position
-		//{
-		//	get
-		//	{
-		//		return (long)(this._reader.DecodedTime.TotalMilliseconds * (double)this._reader.SampleRate * (double)this._reader.Channels * 4.0);
-		//	}
-		//	set
-		//	{
-		//		if (value < 0L || value > this.Length)
-		//		{
-		//			throw new ArgumentOutOfRangeException("value");
-		//		}
-		//		this._reader.DecodedTime = TimeSpan.FromSeconds((double)value / (double)this._reader.SampleRate / (double)this._reader.Channels / 4.0);
-		//	}
-		//}
+	public int UpperBitrate => _reader.UpperBitrate;
 
-		
-		//public override int Read(byte[] buffer, int offset, int count)
-		//{
-		//	count /= 4;
-		//	count -= count % this._reader.Channels;
-		//	float[] array;
-		//	if ((array = VorbisWaveReader._conversionBuffer) == null)
-		//	{
-		//		array = (VorbisWaveReader._conversionBuffer = new float[count]);
-		//	}
-		//	float[] array2 = array;
-		//	if (array2.Length < count)
-		//	{
-		//		array2 = (VorbisWaveReader._conversionBuffer = new float[count]);
-		//	}
-		//	int num = this.Read(array2, 0, count) * 4;
-		//	Buffer.BlockCopy(array2, 0, buffer, offset, num);
-		//	return num;
-		//}
+	public int NominalBitrate => _reader.NominalBitrate;
 
-		
-		//public int Read(float[] buffer, int offset, int count)
-		//{
-		//	return this._reader.ReadSamples(buffer, offset, count);
-		//}
+	public int LowerBitrate => _reader.LowerBitrate;
 
-		
-		//
-		//public bool IsParameterChange
-		//{
-		//	get
-		//	{
-		//		return this._reader.IsParameterChange;
-		//	}
-		//}
+	public string Vendor => _reader.Vendor;
 
-		
-		//public void ClearParameterChange()
-		//{
-		//	this._reader.ClearParameterChange();
-		//}
+	public string[] Comments => _reader.Comments;
 
-		
-		//
-		//public int StreamCount
-		//{
-		//	get
-		//	{
-		//		return this._reader.StreamCount;
-		//	}
-		//}
+	public long ContainerOverheadBits => _reader.ContainerOverheadBits;
 
-		
-		//
-		//
-		//public int? NextStreamIndex { get; set; }
+	public IVorbisStreamStatus[] Stats => _reader.Stats;
 
-		
-		//public bool GetNextStreamIndex()
-		//{
-		//	if (this.NextStreamIndex == null)
-		//	{
-		//		int streamCount = this._reader.StreamCount;
-		//		if (this._reader.FindNextStream())
-		//		{
-		//			this.NextStreamIndex = new int?(streamCount);
-		//			return true;
-		//		}
-		//	}
-		//	return false;
-		//}
+	public VorbisWaveReader(string fileName)
+	{
+		_reader = new VorbisReader(fileName);
+		_waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(_reader.SampleRate, _reader.Channels);
+	}
 
-		
-		//
-		//
-		//public int CurrentStream
-		//{
-		//	get
-		//	{
-		//		return this._reader.StreamIndex;
-		//	}
-		//	set
-		//	{
-		//		if (!this._reader.SwitchStreams(value))
-		//		{
-		//			throw new InvalidDataException("The selected stream is not a valid Vorbis stream!");
-		//		}
-		//		if (this.NextStreamIndex != null && value == this.NextStreamIndex.Value)
-		//		{
-		//			this.NextStreamIndex = null;
-		//		}
-		//	}
-		//}
+	public VorbisWaveReader(Stream sourceStream)
+	{
+		_reader = new VorbisReader(sourceStream, closeStreamOnDispose: false);
+		_waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(_reader.SampleRate, _reader.Channels);
+	}
 
-		
-		//
-		//public int UpperBitrate
-		//{
-		//	get
-		//	{
-		//		return this._reader.UpperBitrate;
-		//	}
-		//}
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing && _reader != null)
+		{
+			_reader.Dispose();
+			_reader = null;
+		}
+		base.Dispose(disposing);
+	}
 
-		
-		//
-		//public int NominalBitrate
-		//{
-		//	get
-		//	{
-		//		return this._reader.NominalBitrate;
-		//	}
-		//}
+	public override int Read(byte[] buffer, int offset, int count)
+	{
+		count /= 4;
+		count -= count % _reader.Channels;
+		float[] array = _conversionBuffer ?? (_conversionBuffer = new float[count]);
+		if (array.Length < count)
+		{
+			array = (_conversionBuffer = new float[count]);
+		}
+		int num = Read(array, 0, count) * 4;
+		Buffer.BlockCopy(array, 0, buffer, offset, num);
+		return num;
+	}
 
-		
-		//
-		//public int LowerBitrate
-		//{
-		//	get
-		//	{
-		//		return this._reader.LowerBitrate;
-		//	}
-		//}
+	public int Read(float[] buffer, int offset, int count)
+	{
+		return _reader.ReadSamples(buffer, offset, count);
+	}
 
-		
-		//
-		//public string Vendor
-		//{
-		//	get
-		//	{
-		//		return this._reader.Vendor;
-		//	}
-		//}
+	public void ClearParameterChange()
+	{
+		_reader.ClearParameterChange();
+	}
 
-		
-		//
-		//public string[] Comments
-		//{
-		//	get
-		//	{
-		//		return this._reader.Comments;
-		//	}
-		//}
-
-		
-		//
-		//public long ContainerOverheadBits
-		//{
-		//	get
-		//	{
-		//		return this._reader.ContainerOverheadBits;
-		//	}
-		//}
-
-		
-		//public IVorbisStreamStatus[] Stats
-		//{
-		//	get
-		//	{
-		//		return this._reader.Stats;
-		//	}
-		//}
-
-		
-	//	private VorbisReader _reader;
-
-		
-		private WaveFormat _waveFormat;
-
-		
-		[ThreadStatic]
-		private static float[] _conversionBuffer;
-
-        public override WaveFormat WaveFormat => throw new NotImplementedException();
-
-        public override long Length => throw new NotImplementedException();
-
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int Read(float[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
-    }
+	public bool GetNextStreamIndex()
+	{
+		if (!NextStreamIndex.HasValue)
+		{
+			int streamCount = _reader.StreamCount;
+			if (_reader.FindNextStream())
+			{
+				NextStreamIndex = streamCount;
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -1,17 +1,13 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-namespace RimWorld
+public static class TwelfthUtility
 {
-	
-	public static class TwelfthUtility
+	public static Quadrum GetQuadrum(this Twelfth twelfth)
 	{
-		
-		public static Quadrum GetQuadrum(this Twelfth twelfth)
+		switch (twelfth)
 		{
-			switch (twelfth)
-			{
 			case Twelfth.First:
 				return Quadrum.Aprimay;
 			case Twelfth.Second:
@@ -38,110 +34,99 @@ namespace RimWorld
 				return Quadrum.Decembary;
 			default:
 				return Quadrum.Undefined;
-			}
 		}
+	}
 
-		
-		public static Twelfth PreviousTwelfth(this Twelfth twelfth)
+	public static Twelfth PreviousTwelfth(this Twelfth twelfth)
+	{
+		if (twelfth == Twelfth.Undefined)
 		{
-			if (twelfth == Twelfth.Undefined)
-			{
-				return Twelfth.Undefined;
-			}
-			int num = (int)(twelfth - Twelfth.Second);
-			if (num == -1)
-			{
-				num = 11;
-			}
-			return (Twelfth)num;
-		}
-
-		
-		public static Twelfth NextTwelfth(this Twelfth twelfth)
-		{
-			if (twelfth == Twelfth.Undefined)
-			{
-				return Twelfth.Undefined;
-			}
-			//return (twelfth + 1) % Twelfth.Undefined;
 			return Twelfth.Undefined;
 		}
-
-		
-		public static float GetMiddleYearPct(this Twelfth twelfth)
+		int num = (int)(twelfth - 1);
+		if (num == -1)
 		{
-			return ((float)twelfth + 0.5f) / 12f;
+			num = 11;
 		}
+		return (Twelfth)num;
+	}
 
-		
-		public static float GetBeginningYearPct(this Twelfth twelfth)
+	public static Twelfth NextTwelfth(this Twelfth twelfth)
+	{
+		if (twelfth == Twelfth.Undefined)
 		{
-			return (float)twelfth / 12f;
+			return Twelfth.Undefined;
 		}
+		return (Twelfth)((int)(twelfth + 1) % 12);
+	}
 
-		
-		public static Twelfth FindStartingWarmTwelfth(int tile)
-		{
-			Twelfth twelfth = GenTemperature.EarliestTwelfthInAverageTemperatureRange(tile, 16f, 9999f);
-			if (twelfth == Twelfth.Undefined)
-			{
-				twelfth = Season.Summer.GetFirstTwelfth(Find.WorldGrid.LongLatOf(tile).y);
-			}
-			return twelfth;
-		}
+	public static float GetMiddleYearPct(this Twelfth twelfth)
+	{
+		return ((float)(int)twelfth + 0.5f) / 12f;
+	}
 
-		
-		public static Twelfth GetLeftMostTwelfth(List<Twelfth> twelfths, Twelfth rootTwelfth)
-		{
-			if (twelfths.Count >= 12)
-			{
-				return Twelfth.Undefined;
-			}
-			Twelfth result;
-			do
-			{
-				result = rootTwelfth;
-				rootTwelfth = TwelfthUtility.TwelfthBefore(rootTwelfth);
-			}
-			while (twelfths.Contains(rootTwelfth));
-			return result;
-		}
+	public static float GetBeginningYearPct(this Twelfth twelfth)
+	{
+		return (float)(int)twelfth / 12f;
+	}
 
-		
-		public static Twelfth GetRightMostTwelfth(List<Twelfth> twelfths, Twelfth rootTwelfth)
+	public static Twelfth FindStartingWarmTwelfth(int tile)
+	{
+		Twelfth twelfth = GenTemperature.EarliestTwelfthInAverageTemperatureRange(tile, 16f, 9999f);
+		if (twelfth == Twelfth.Undefined)
 		{
-			if (twelfths.Count >= 12)
-			{
-				return Twelfth.Undefined;
-			}
-			Twelfth m;
-			do
-			{
-				m = rootTwelfth;
-				rootTwelfth = TwelfthUtility.TwelfthAfter(rootTwelfth);
-			}
-			while (twelfths.Contains(rootTwelfth));
-			return TwelfthUtility.TwelfthAfter(m);
+			twelfth = Season.Summer.GetFirstTwelfth(Find.WorldGrid.LongLatOf(tile).y);
 		}
+		return twelfth;
+	}
 
-		
-		public static Twelfth TwelfthBefore(Twelfth m)
+	public static Twelfth GetLeftMostTwelfth(List<Twelfth> twelfths, Twelfth rootTwelfth)
+	{
+		if (twelfths.Count >= 12)
 		{
-			if (m == Twelfth.First)
-			{
-				return Twelfth.Twelfth;
-			}
-			return (Twelfth)(m - Twelfth.Second);
+			return Twelfth.Undefined;
 		}
+		Twelfth result;
+		do
+		{
+			result = rootTwelfth;
+			rootTwelfth = TwelfthBefore(rootTwelfth);
+		}
+		while (twelfths.Contains(rootTwelfth));
+		return result;
+	}
 
-		
-		public static Twelfth TwelfthAfter(Twelfth m)
+	public static Twelfth GetRightMostTwelfth(List<Twelfth> twelfths, Twelfth rootTwelfth)
+	{
+		if (twelfths.Count >= 12)
 		{
-			if (m == Twelfth.Twelfth)
-			{
-				return Twelfth.First;
-			}
-			return m + 1;
+			return Twelfth.Undefined;
 		}
+		Twelfth m;
+		do
+		{
+			m = rootTwelfth;
+			rootTwelfth = TwelfthAfter(rootTwelfth);
+		}
+		while (twelfths.Contains(rootTwelfth));
+		return TwelfthAfter(m);
+	}
+
+	public static Twelfth TwelfthBefore(Twelfth m)
+	{
+		if (m == Twelfth.First)
+		{
+			return Twelfth.Twelfth;
+		}
+		return m - 1;
+	}
+
+	public static Twelfth TwelfthAfter(Twelfth m)
+	{
+		if (m == Twelfth.Twelfth)
+		{
+			return Twelfth.First;
+		}
+		return m + 1;
 	}
 }

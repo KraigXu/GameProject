@@ -1,112 +1,107 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
-using RimWorld;
+using Verse;
+using Verse.AI;
 
-namespace Verse.AI
+public class JobDriver_HaulToCell : JobDriver
 {
-	
-	public class JobDriver_HaulToCell : JobDriver
+	private bool forbiddenInitially;
+
+	private const TargetIndex HaulableInd = TargetIndex.A;
+
+	private const TargetIndex StoreCellInd = TargetIndex.B;
+
+	public override void ExposeData()
 	{
-		
-		public override void ExposeData()
+		base.ExposeData();
+		Scribe_Values.Look(ref forbiddenInitially, "forbiddenInitially", defaultValue: false);
+	}
+
+	public override string GetReport()
+	{
+		IntVec3 cell = job.targetB.Cell;
+		Thing thing = null;
+		if (pawn.CurJob == job && pawn.carryTracker.CarriedThing != null)
 		{
-			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.forbiddenInitially, "forbiddenInitially", false, false);
+			thing = pawn.carryTracker.CarriedThing;
 		}
-
-		
-		public override string GetReport()
+		else if (base.TargetThingA != null && base.TargetThingA.Spawned)
 		{
-			IntVec3 cell = this.job.targetB.Cell;
-			Thing thing = null;
-			if (this.pawn.CurJob == this.job && this.pawn.carryTracker.CarriedThing != null)
-			{
-				thing = this.pawn.carryTracker.CarriedThing;
-			}
-			else if (base.TargetThingA != null && base.TargetThingA.Spawned)
-			{
-				thing = base.TargetThingA;
-			}
-			if (thing == null)
-			{
-				return "ReportHaulingUnknown".Translate();
-			}
-			string text = null;
-			SlotGroup slotGroup = cell.GetSlotGroup(base.Map);
-			if (slotGroup != null)
-			{
-				text = slotGroup.parent.SlotYielderLabel();
-			}
-			if (text != null)
-			{
-				return "ReportHaulingTo".Translate(thing.Label, text.Named("DESTINATION"), thing.Named("THING"));
-			}
-			return "ReportHauling".Translate(thing.Label, thing);
+			thing = base.TargetThingA;
 		}
-
-		
-		public override bool TryMakePreToilReservations(bool errorOnFailed)
+		if (thing == null)
 		{
-			return this.pawn.Reserve(this.job.GetTarget(TargetIndex.B), this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.job.GetTarget(TargetIndex.A), this.job, 1, -1, null, errorOnFailed);
+			return "ReportHaulingUnknown".Translate();
 		}
-
-		
-		public override void Notify_Starting()
+		string text = null;
+		SlotGroup slotGroup = cell.GetSlotGroup(base.Map);
+		if (slotGroup != null)
 		{
-			base.Notify_Starting();
-			if (base.TargetThingA != null)
-			{
-				this.forbiddenInitially = base.TargetThingA.IsForbidden(this.pawn);
-				return;
-			}
-			this.forbiddenInitially = false;
+			text = slotGroup.parent.SlotYielderLabel();
 		}
-
-		
-		protected override IEnumerable<Toil> MakeNewToils()
+		if (text != null)
 		{
-			this.FailOnDestroyedOrNull(TargetIndex.A);
-			this.FailOnBurningImmobile(TargetIndex.B);
-			if (!this.forbiddenInitially)
-			{
-				this.FailOnForbidden(TargetIndex.A);
-			}
-			Toil reserveTargetA = Toils_Reserve.Reserve(TargetIndex.A, 1, -1, null);
-			yield return reserveTargetA;
-			Toil toilGoto = null;
-			//toilGoto = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnSomeonePhysicallyInteracting(TargetIndex.A).FailOn(delegate
-			//{
-			//	Pawn actor = toilGoto.actor;
-			//	Job curJob = actor.jobs.curJob;
-			//	if (curJob.haulMode == HaulMode.ToCellStorage)
-			//	{
-			//		Thing thing = curJob.GetTarget(TargetIndex.A).Thing;
-			//		if (!actor.jobs.curJob.GetTarget(TargetIndex.B).Cell.IsValidStorageFor(this.Map, thing))
-			//		{
-			//			return true;
-			//		}
-			//	}
-			//	return false;
-			//});
-			yield return toilGoto;
-			yield return Toils_Haul.StartCarryThing(TargetIndex.A, false, true, false);
-			if (this.job.haulOpportunisticDuplicates)
-			{
-				yield return Toils_Haul.CheckForGetOpportunityDuplicate(reserveTargetA, TargetIndex.A, TargetIndex.B, false, null);
-			}
-			Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B);
-			yield return carryToCell;
-			yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true, false);
-			yield break;
+			return "ReportHaulingTo".Translate(thing.Label, text.Named("DESTINATION"), thing.Named("THING"));
 		}
+		return "ReportHauling".Translate(thing.Label, thing);
+	}
 
-		
-		private bool forbiddenInitially;
+	public override bool TryMakePreToilReservations(bool errorOnFailed)
+	{
+		if (pawn.Reserve(job.GetTarget(TargetIndex.B), job, 1, -1, null, errorOnFailed))
+		{
+			return pawn.Reserve(job.GetTarget(TargetIndex.A), job, 1, -1, null, errorOnFailed);
+		}
+		return false;
+	}
 
-		
-		private const TargetIndex HaulableInd = TargetIndex.A;
+	public override void Notify_Starting()
+	{
+		base.Notify_Starting();
+		if (base.TargetThingA != null)
+		{
+			forbiddenInitially = base.TargetThingA.IsForbidden(pawn);
+		}
+		else
+		{
+			forbiddenInitially = false;
+		}
+	}
 
-		
-		private const TargetIndex StoreCellInd = TargetIndex.B;
+	protected override IEnumerable<Toil> MakeNewToils()
+	{
+		this.FailOnDestroyedOrNull(TargetIndex.A);
+		this.FailOnBurningImmobile(TargetIndex.B);
+		if (!forbiddenInitially)
+		{
+			this.FailOnForbidden(TargetIndex.A);
+		}
+		Toil reserveTargetA = Toils_Reserve.Reserve(TargetIndex.A);
+		yield return reserveTargetA;
+		Toil toilGoto = null;
+		toilGoto = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnSomeonePhysicallyInteracting(TargetIndex.A).FailOn((Func<bool>)delegate
+		{
+			Pawn actor = toilGoto.actor;
+			Job curJob = actor.jobs.curJob;
+			if (curJob.haulMode == HaulMode.ToCellStorage)
+			{
+				Thing thing = curJob.GetTarget(TargetIndex.A).Thing;
+				if (!actor.jobs.curJob.GetTarget(TargetIndex.B).Cell.IsValidStorageFor(base.Map, thing))
+				{
+					return true;
+				}
+			}
+			return false;
+		});
+		yield return toilGoto;
+		yield return Toils_Haul.StartCarryThing(TargetIndex.A, putRemainderInQueue: false, subtractNumTakenFromJobCount: true);
+		if (job.haulOpportunisticDuplicates)
+		{
+			yield return Toils_Haul.CheckForGetOpportunityDuplicate(reserveTargetA, TargetIndex.A, TargetIndex.B);
+		}
+		Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B);
+		yield return carryToCell;
+		yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, storageMode: true);
 	}
 }

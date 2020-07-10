@@ -1,73 +1,54 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace RimWorld
+public class Alert_RoyalNoAcceptableFood : Alert
 {
-	
-	public class Alert_RoyalNoAcceptableFood : Alert
-	{
-		
-		public Alert_RoyalNoAcceptableFood()
-		{
-			this.defaultLabel = "RoyalNoAcceptableFood".Translate();
-			this.defaultExplanation = "RoyalNoAcceptableFoodDesc".Translate();
-		}
+	private List<Pawn> targetsResult = new List<Pawn>();
 
-		
-		
-		public List<Pawn> Targets
+	public List<Pawn> Targets
+	{
+		get
 		{
-			get
+			targetsResult.Clear();
+			List<Map> maps = Find.Maps;
+			for (int i = 0; i < maps.Count; i++)
 			{
-				this.targetsResult.Clear();
-				List<Map> maps = Find.Maps;
-				for (int i = 0; i < maps.Count; i++)
+				foreach (Pawn freeColonist in maps[i].mapPawns.FreeColonists)
 				{
-					foreach (Pawn pawn in maps[i].mapPawns.FreeColonists)
+					if (freeColonist.Spawned && (freeColonist.story == null || !freeColonist.story.traits.HasTrait(TraitDefOf.Ascetic)))
 					{
-						if (pawn.Spawned && (pawn.story == null || !pawn.story.traits.HasTrait(TraitDefOf.Ascetic)))
+						RoyalTitle royalTitle = freeColonist.royalty?.MostSeniorTitle;
+						if (royalTitle != null && royalTitle.conceited && royalTitle.def.foodRequirement.Defined && !FoodUtility.TryFindBestFoodSourceFor(freeColonist, freeColonist, desperate: false, out Thing _, out ThingDef _, canRefillDispenser: true, canUseInventory: true, allowForbidden: false, allowCorpse: false, allowSociallyImproper: false, allowHarvest: false, forceScanWholeMap: false, ignoreReservations: true, FoodPreferability.DesperateOnly))
 						{
-							Pawn_RoyaltyTracker royalty = pawn.royalty;
-							RoyalTitle royalTitle = (royalty != null) ? royalty.MostSeniorTitle : null;
-							Thing thing;
-							ThingDef thingDef;
-							if (royalTitle != null && royalTitle.conceited && royalTitle.def.foodRequirement.Defined && !FoodUtility.TryFindBestFoodSourceFor(pawn, pawn, false, out thing, out thingDef, true, true, false, false, false, false, false, true, FoodPreferability.DesperateOnly))
-							{
-								this.targetsResult.Add(pawn);
-							}
+							targetsResult.Add(freeColonist);
 						}
 					}
 				}
-				return this.targetsResult;
 			}
+			return targetsResult;
 		}
+	}
 
-		
-		public override AlertReport GetReport()
+	public Alert_RoyalNoAcceptableFood()
+	{
+		defaultLabel = "RoyalNoAcceptableFood".Translate();
+		defaultExplanation = "RoyalNoAcceptableFoodDesc".Translate();
+	}
+
+	public override AlertReport GetReport()
+	{
+		return AlertReport.CulpritsAre(Targets);
+	}
+
+	public override TaggedString GetExplanation()
+	{
+		return defaultExplanation + "\n" + Targets.Select(delegate (Pawn t)
 		{
-			return AlertReport.CulpritsAre(this.Targets);
-		}
-
-		
-		public override TaggedString GetExplanation()
-		{
-			return this.defaultExplanation + "\n" + this.Targets.Select(delegate(Pawn t)
-			{
-				RoyalTitle mostSeniorTitle = t.royalty.MostSeniorTitle;
-				string[] array = new string[5];
-				array[0] = t.LabelShort;
-				array[1] = " (";
-				array[2] = mostSeniorTitle.def.GetLabelFor(t.gender);
-				array[3] = "):\n";
-				//array[4] = (from m in mostSeniorTitle.def.SatisfyingMeals(false)
-				//select m.LabelCap).ToLineList("- ", false);
-				return string.Concat(array);
-			}).ToLineList("\n", false);
-		}
-
-		
-		private List<Pawn> targetsResult = new List<Pawn>();
+			RoyalTitle mostSeniorTitle = t.royalty.MostSeniorTitle;
+			return t.LabelShort + " (" + mostSeniorTitle.def.GetLabelFor(t.gender) + "):\n" + mostSeniorTitle.def.SatisfyingMeals(includeDrugs: false).Select((Func<ThingDef, string>)((ThingDef m) => m.LabelCap)).ToLineList("- ");
+		}).ToLineList("\n");
 	}
 }

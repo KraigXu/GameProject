@@ -1,244 +1,200 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using Verse;
 
-namespace Verse
+public static class TKeySystem
 {
-    
-    public static class TKeySystem
-    {
-        
-        public static void Clear()
-        {
-            TKeySystem.keys.Clear();
-            TKeySystem.tKeyToNormalizedTranslationKey.Clear();
-            TKeySystem.translationKeyToTKey.Clear();
-            TKeySystem.loadErrors.Clear();
-            TKeySystem.treatAsList.Clear();
-        }
+	private struct TKeyRef
+	{
+		public string defName;
 
-        
-        public static void Parse(XmlDocument document)
-        {
-            foreach (object obj in document.ChildNodes[0].ChildNodes)
-            {
-                TKeySystem.ParseDefNode((XmlNode)obj);
-            }
-        }
+		public string defTypeName;
 
-        
-        public static void MarkTreatAsList(XmlNode node)
-        {
-            TKeySystem.treatAsList.Add(node);
-        }
+		public XmlNode defRootNode;
 
-        
-        public static void BuildMappings()
-        {
-            Dictionary<string, string> tmpTranslationKeyToTKey = new Dictionary<string, string>();
-            foreach (TKeySystem.TKeyRef tkeyRef in TKeySystem.keys)
-            {
-                string normalizedTranslationKey = TKeySystem.GetNormalizedTranslationKey(tkeyRef);
-                string text;
-                if (TKeySystem.tKeyToNormalizedTranslationKey.TryGetValue(tkeyRef.tKeyPath, out text))
-                {
-                    TKeySystem.loadErrors.Add(string.Concat(new string[]
-                    {
-                        "Duplicate TKey: ",
-                        tkeyRef.tKeyPath,
-                        " -> NEW=",
-                        normalizedTranslationKey,
-                        " | OLD",
-                        text,
-                        " - Ignoring old"
-                    }));
-                }
-                else
-                {
-                    TKeySystem.tKeyToNormalizedTranslationKey.Add(tkeyRef.tKeyPath, normalizedTranslationKey);
-                    tmpTranslationKeyToTKey.Add(normalizedTranslationKey, tkeyRef.tKeyPath);
-                }
-            }
+		public XmlNode node;
 
-            foreach (string typeName in (from k in TKeySystem.keys
-                                         select k.defTypeName).Distinct<string>())
-            {
-                Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(typeName, null);
-                DefInjectionUtility.PossibleDefInjectionTraverser action = delegate (string suggestedPath, string normalizedPath, bool isCollection, string currentValue, IEnumerable<string> currentValueCollection, bool translationAllowed, bool fullListTranslationAllowed, FieldInfo fieldInfo, Def def)
-                 {
-                     string text2;
-                     string value;
-                     if (translationAllowed && !TKeySystem.TryGetNormalizedPath(suggestedPath, out text2) && TKeySystem.TrySuggestTKeyPath(normalizedPath, out value, tmpTranslationKeyToTKey))
-                     {
-                         tmpTranslationKeyToTKey.Add(suggestedPath, value);
-                     }
-                 };
-                DefInjectionUtility.ForEachPossibleDefInjection(typeInAnyAssembly, action, null);
-            }
-            foreach (KeyValuePair<string, string> keyValuePair in tmpTranslationKeyToTKey)
-            {
-                TKeySystem.translationKeyToTKey.Add(keyValuePair.Key, keyValuePair.Value);
-            }
-        }
+		public string tKey;
 
-        
-        public static bool TryGetNormalizedPath(string tKeyPath, out string normalizedPath)
-        {
-            return TKeySystem.TryFindShortestReplacementPath(tKeyPath, delegate (string path, out string result)
-            {
-                return TKeySystem.tKeyToNormalizedTranslationKey.TryGetValue(path, out result);
-            }, out normalizedPath);
-        }
+		public string tKeyPath;
+	}
 
-        
-        private static bool TryFindShortestReplacementPath(string path, TKeySystem.PathMatcher matcher, out string result)
-        {
-            if (matcher(path, out result))
-            {
-                return true;
-            }
-            int num = 100;
-            int num2 = path.Length - 1;
-            for (; ; )
-            {
-                if (num2 > 0 && path[num2] != '.')
-                {
-                    num2--;
-                }
-                else
-                {
-                    if (path[num2] == '.')
-                    {
-                        string path2 = path.Substring(0, num2);
-                        if (matcher(path2, out result))
-                        {
-                            break;
-                        }
-                    }
-                    num2--;
-                    num--;
-                    if (num2 <= 0 || num <= 0)
-                    {
-                        goto IL_6D;
-                    }
-                }
-            }
-            result += path.Substring(num2);
-            return true;
-        IL_6D:
-            result = null;
-            return false;
-        }
+	private struct PossibleDefInjection
+	{
+		public string normalizedPath;
 
-        
-        public static bool TrySuggestTKeyPath(string translationPath, out string tKeyPath, Dictionary<string, string> lookup = null)
-        {
-            if (lookup == null)
-            {
-                lookup = TKeySystem.translationKeyToTKey;
-            }
-            return TKeySystem.TryFindShortestReplacementPath(translationPath, delegate (string path, out string result)
-            {
-                return lookup.TryGetValue(path, out result);
-            }, out tKeyPath);
-        }
+		public string path;
+	}
 
-        
-        private static string GetNormalizedTranslationKey(TKeySystem.TKeyRef tKeyRef)
-        {
-            string text = "";
-            XmlNode currentNode;
-            for (currentNode = tKeyRef.node; currentNode != tKeyRef.defRootNode; currentNode = currentNode.ParentNode)
-            {
-                if (currentNode.Name == "li" || TKeySystem.treatAsList.Contains(currentNode.ParentNode))
-                {
-                    text = "." + currentNode.ParentNode.ChildNodes.Cast<XmlNode>().FirstIndexOf((XmlNode n) => n == currentNode) + text;
-                }
-                else
-                {
-                    text = "." + currentNode.Name + text;
-                }
-            }
-            return tKeyRef.defName + text;
-        }
+	private delegate bool PathMatcher(string path, out string match);
 
-        private static void ParseDefNode(XmlNode node)
-        {
-            string text = (from XmlNode n in node.ChildNodes
-                           where n.Name == "defName"
-                           select n.InnerText).FirstOrDefault<string>();
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return;
-            }
+	private static List<TKeyRef> keys = new List<TKeyRef>();
 
+	public static List<string> loadErrors = new List<string>();
 
-            //TKeySystem. c__DisplayClass17_0  c__DisplayClass17_;
+	private static Dictionary<string, string> tKeyToNormalizedTranslationKey = new Dictionary<string, string>();
 
-            // c__DisplayClass17_.tKeyRefTemplate = default(TKeySystem.TKeyRef);
+	private static Dictionary<string, string> translationKeyToTKey = new Dictionary<string, string>();
 
-            // c__DisplayClass17_.tKeyRefTemplate.defName = text;
+	private static HashSet<XmlNode> treatAsList = new HashSet<XmlNode>();
 
-            // c__DisplayClass17_.tKeyRefTemplate.defTypeName = node.Name;
+	public const string AttributeName = "TKey";
 
-            // c__DisplayClass17_.tKeyRefTemplate.defRootNode = node;
-            //TKeySystem.< ParseDefNode > g__CrawlNodesRecursive | 17_3(node, ref  c__DisplayClass17_);
-        }
+	public static void Clear()
+	{
+		keys.Clear();
+		tKeyToNormalizedTranslationKey.Clear();
+		translationKeyToTKey.Clear();
+		loadErrors.Clear();
+		treatAsList.Clear();
+	}
 
+	public static void Parse(XmlDocument document)
+	{
+		foreach (XmlNode childNode in document.ChildNodes[0].ChildNodes)
+		{
+			ParseDefNode(childNode);
+		}
+	}
 
-        private static List<TKeySystem.TKeyRef> keys = new List<TKeySystem.TKeyRef>();
+	public static void MarkTreatAsList(XmlNode node)
+	{
+		treatAsList.Add(node);
+	}
 
-        
-        public static List<string> loadErrors = new List<string>();
+	public static void BuildMappings()
+	{
+		Dictionary<string, string> tmpTranslationKeyToTKey = new Dictionary<string, string>();
+		foreach (TKeyRef key in keys)
+		{
+			string normalizedTranslationKey = GetNormalizedTranslationKey(key);
+			if (tKeyToNormalizedTranslationKey.TryGetValue(key.tKeyPath, out string value))
+			{
+				loadErrors.Add("Duplicate TKey: " + key.tKeyPath + " -> NEW=" + normalizedTranslationKey + " | OLD" + value + " - Ignoring old");
+			}
+			else
+			{
+				tKeyToNormalizedTranslationKey.Add(key.tKeyPath, normalizedTranslationKey);
+				tmpTranslationKeyToTKey.Add(normalizedTranslationKey, key.tKeyPath);
+			}
+		}
+		foreach (string item in keys.Select((TKeyRef k) => k.defTypeName).Distinct())
+		{
+			DefInjectionUtility.ForEachPossibleDefInjection(GenTypes.GetTypeInAnyAssembly(item), delegate (string suggestedPath, string normalizedPath, bool isCollection, string currentValue, IEnumerable<string> currentValueCollection, bool translationAllowed, bool fullListTranslationAllowed, FieldInfo fieldInfo, Def def)
+			{
+				if (translationAllowed && !TryGetNormalizedPath(suggestedPath, out string _) && TrySuggestTKeyPath(normalizedPath, out string tKeyPath, tmpTranslationKeyToTKey))
+				{
+					tmpTranslationKeyToTKey.Add(suggestedPath, tKeyPath);
+				}
+			});
+		}
+		foreach (KeyValuePair<string, string> item2 in tmpTranslationKeyToTKey)
+		{
+			translationKeyToTKey.Add(item2.Key, item2.Value);
+		}
+	}
 
-        
-        private static Dictionary<string, string> tKeyToNormalizedTranslationKey = new Dictionary<string, string>();
+	public static bool TryGetNormalizedPath(string tKeyPath, out string normalizedPath)
+	{
+		return TryFindShortestReplacementPath(tKeyPath, delegate (string path, out string result)
+		{
+			return tKeyToNormalizedTranslationKey.TryGetValue(path, out result);
+		}, out normalizedPath);
+	}
 
-        
-        private static Dictionary<string, string> translationKeyToTKey = new Dictionary<string, string>();
+	private static bool TryFindShortestReplacementPath(string path, PathMatcher matcher, out string result)
+	{
+		if (matcher(path, out result))
+		{
+			return true;
+		}
+		int num = 100;
+		int num2 = path.Length - 1;
+		while (true)
+		{
+			if (num2 > 0 && path[num2] != '.')
+			{
+				num2--;
+				continue;
+			}
+			if (path[num2] == '.')
+			{
+				string path2 = path.Substring(0, num2);
+				if (matcher(path2, out result))
+				{
+					result += path.Substring(num2);
+					return true;
+				}
+			}
+			num2--;
+			num--;
+			if (num2 <= 0 || num <= 0)
+			{
+				break;
+			}
+		}
+		result = null;
+		return false;
+	}
 
-        
-        private static HashSet<XmlNode> treatAsList = new HashSet<XmlNode>();
+	public static bool TrySuggestTKeyPath(string translationPath, out string tKeyPath, Dictionary<string, string> lookup = null)
+	{
+		if (lookup == null)
+		{
+			lookup = translationKeyToTKey;
+		}
+		return TryFindShortestReplacementPath(translationPath, delegate (string path, out string result)
+		{
+			return lookup.TryGetValue(path, out result);
+		}, out tKeyPath);
+	}
 
-        
-        public const string AttributeName = "TKey";
+	private static string GetNormalizedTranslationKey(TKeyRef tKeyRef)
+	{
+		string text = "";
+		XmlNode currentNode;
+		for (currentNode = tKeyRef.node; currentNode != tKeyRef.defRootNode; currentNode = currentNode.ParentNode)
+		{
+			text = ((!(currentNode.Name == "li") && !treatAsList.Contains(currentNode.ParentNode)) ? ("." + currentNode.Name + text) : ("." + currentNode.ParentNode.ChildNodes.Cast<XmlNode>().FirstIndexOf((XmlNode n) => n == currentNode) + text));
+		}
+		return tKeyRef.defName + text;
+	}
 
-        
-        private struct TKeyRef
-        {
-            
-            public string defName;
-
-            
-            public string defTypeName;
-
-            
-            public XmlNode defRootNode;
-
-            
-            public XmlNode node;
-
-            
-            public string tKey;
-
-            
-            public string tKeyPath;
-        }
-
-        
-        private struct PossibleDefInjection
-        {
-            
-            public string normalizedPath;
-
-            
-            public string path;
-        }
-
-        
-        
-        private delegate bool PathMatcher(string path, out string match);
-    }
+	private static void ParseDefNode(XmlNode node)
+	{
+		string text = (from XmlNode n in node.ChildNodes
+					   where n.Name == "defName"
+					   select n.InnerText).FirstOrDefault();
+		TKeyRef tKeyRefTemplate;
+		if (!string.IsNullOrWhiteSpace(text))
+		{
+			tKeyRefTemplate = default(TKeyRef);
+			tKeyRefTemplate.defName = text;
+			tKeyRefTemplate.defTypeName = node.Name;
+			tKeyRefTemplate.defRootNode = node;
+			CrawlNodesRecursive(node);
+		}
+		void CrawlNodesRecursive(XmlNode n)
+		{
+			ProcessNode(n);
+			foreach (XmlNode childNode in n.ChildNodes)
+			{
+				CrawlNodesRecursive(childNode);
+			}
+		}
+		void ProcessNode(XmlNode n)
+		{
+			XmlAttribute xmlAttribute;
+			if (n.Attributes != null && (xmlAttribute = n.Attributes["TKey"]) != null)
+			{
+				TKeyRef item = tKeyRefTemplate;
+				item.tKey = xmlAttribute.Value;
+				item.node = n;
+				item.tKeyPath = item.defName + "." + item.tKey;
+				keys.Add(item);
+			}
+		}
+	}
 }

@@ -112,17 +112,16 @@ namespace RimWorld
 			this.sent = true;
 		}
 
-		
-		//public override void Notify_SignalReceived(Signal signal)
-		//{
-		//	Thing thing;
-		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
-		//	{
-		//		this.sent = true;
-		//	}
-		//}
 
-		
+		public override void Notify_SignalReceived(Signal signal)
+		{
+			if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= 40f)
+			{
+				sent = true;
+			}
+		}
+
+
 		public override string CompInspectStringExtra()
 		{
 			if (!this.Enabled)

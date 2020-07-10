@@ -9,34 +9,43 @@ namespace RimWorld
 	
 	public class Alert_AwaitingMedicalOperation : Alert
 	{
-		
-		
+
+		private List<Pawn> awaitingMedicalOperationResult = new List<Pawn>();
+
 		private List<Pawn> AwaitingMedicalOperation
 		{
 			get
 			{
-				this.awaitingMedicalOperationResult.Clear();
+				awaitingMedicalOperationResult.Clear();
 				List<Pawn> list = PawnsFinder.AllMaps_SpawnedPawnsInFaction(Faction.OfPlayer);
 				for (int i = 0; i < list.Count; i++)
 				{
-					//if (Alert_AwaitingMedicalOperation.<get_AwaitingMedicalOperation>g__IsAwaiting|3_0(list[i]))
-					//{
-					//	this.awaitingMedicalOperationResult.Add(list[i]);
-					//}
+					if (IsAwaiting(list[i]))
+					{
+						awaitingMedicalOperationResult.Add(list[i]);
+					}
 				}
 				List<Pawn> allMaps_PrisonersOfColonySpawned = PawnsFinder.AllMaps_PrisonersOfColonySpawned;
 				for (int j = 0; j < allMaps_PrisonersOfColonySpawned.Count; j++)
 				{
-					//if (Alert_AwaitingMedicalOperation.<get_AwaitingMedicalOperation>g__IsAwaiting|3_0(allMaps_PrisonersOfColonySpawned[j]))
-					//{
-					//	this.awaitingMedicalOperationResult.Add(allMaps_PrisonersOfColonySpawned[j]);
-					//}
+					if (IsAwaiting(allMaps_PrisonersOfColonySpawned[j]))
+					{
+						awaitingMedicalOperationResult.Add(allMaps_PrisonersOfColonySpawned[j]);
+					}
 				}
-				return this.awaitingMedicalOperationResult;
+				return awaitingMedicalOperationResult;
+				bool IsAwaiting(Pawn p)
+				{
+					if (HealthAIUtility.ShouldHaveSurgeryDoneNow(p))
+					{
+						return p.InBed();
+					}
+					return false;
+				}
 			}
 		}
 
-		
+
 		public override string GetLabel()
 		{
 			return "PatientsAwaitingMedicalOperation".Translate(this.AwaitingMedicalOperation.Count<Pawn>().ToStringCached());
@@ -60,6 +69,6 @@ namespace RimWorld
 		}
 
 		
-		private List<Pawn> awaitingMedicalOperationResult = new List<Pawn>();
+		
 	}
 }

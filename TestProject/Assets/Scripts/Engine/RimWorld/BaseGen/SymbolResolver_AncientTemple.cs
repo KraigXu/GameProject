@@ -1,95 +1,76 @@
-﻿using System;
-using System.Linq;
+﻿using RimWorld;
+using RimWorld.BaseGen;
 using RimWorld.SketchGen;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld.BaseGen
+public class SymbolResolver_AncientTemple : SymbolResolver
 {
-	
-	public class SymbolResolver_AncientTemple : SymbolResolver
-	{
-		
-		public override void Resolve(ResolveParams rp)
-		{
-			Map map = BaseGenCore.globalSettings.map;
-			CellRect cellRect = CellRect.Empty;
-			ResolveParams resolveParams = default;
-			//resolveParams.sketch = new Sketch();
-			//resolveParams.monumentOpen = new bool?(false);
-			//resolveParams.monumentSize = new IntVec2?(new IntVec2(rp.rect.Width, rp.rect.Height));
-			//resolveParams.allowMonumentDoors = new bool?(false);
-			//resolveParams.allowWood = new bool?(false);
-			//resolveParams.allowFlammableWalls = new bool?(false);
-			if (rp.allowedMonumentThings != null)
-			{
-				resolveParams.allowedMonumentThings = rp.allowedMonumentThings;
-			}
-			else
-			{
-				resolveParams.allowedMonumentThings = new ThingFilter();
-				resolveParams.allowedMonumentThings.SetAllowAll(null, true);
-			}
-			resolveParams.allowedMonumentThings.SetAllow(ThingDefOf.Drape, false);
-			//Sketch sketch = SketchGen.Generate(SketchResolverDefOf.Monument, resolveParams);\
-			Sketch sketch = default;
-			sketch.Spawn(map, rp.rect.CenterCell, null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, true, true, null, false, true, null, null);
-			CellRect rect = SketchGenUtility.FindBiggestRect(sketch, delegate(IntVec3 x)
-			{
-				if (sketch.TerrainAt(x) != null)
-				{
-					return !sketch.ThingsAt(x).Any((SketchThing y) => y.def == ThingDefOf.Wall);
-				}
-				return false;
-			}).MovedBy(rp.rect.CenterCell);
-			for (int i = 0; i < sketch.Things.Count; i++)
-			{
-				if (sketch.Things[i].def == ThingDefOf.Wall)
-				{
-					IntVec3 intVec = sketch.Things[i].pos + rp.rect.CenterCell;
-					if (cellRect.IsEmpty)
-					{
-						cellRect = CellRect.SingleCell(intVec);
-					}
-					else
-					{
-						cellRect = CellRect.FromLimits(Mathf.Min(cellRect.minX, intVec.x), Mathf.Min(cellRect.minZ, intVec.z), Mathf.Max(cellRect.maxX, intVec.x), Mathf.Max(cellRect.maxZ, intVec.z));
-					}
-				}
-			}
-			if (!rect.IsEmpty)
-			{
-				ResolveParams resolveParams2 = rp;
-				resolveParams2.rect = rect;
-				if (rp.allowedMonumentThings != null)
-				{
-					resolveParams2.allowedMonumentThings = rp.allowedMonumentThings;
-				}
-				else
-				{
-					resolveParams2.allowedMonumentThings = new ThingFilter();
-					resolveParams2.allowedMonumentThings.SetAllowAll(null, true);
-				}
-				if (ModsConfig.RoyaltyActive)
-				{
-					resolveParams2.allowedMonumentThings.SetAllow(ThingDefOf.Drape, false);
-				}
-				BaseGenCore.symbolStack.Push("interior_ancientTemple", resolveParams2, null);
-			}
-			if (rp.makeWarningLetter != null && rp.makeWarningLetter.Value)
-			{
-				int nextSignalTagID = Find.UniqueIDsManager.GetNextSignalTagID();
-				string signalTag = "ancientTempleApproached-" + nextSignalTagID;
-				SignalAction_Letter signalAction_Letter = (SignalAction_Letter)ThingMaker.MakeThing(ThingDefOf.SignalAction_Letter, null);
-				signalAction_Letter.signalTag = signalTag;
-				signalAction_Letter.letter = LetterMaker.MakeLetter("LetterLabelAncientShrineWarning".Translate(), "AncientShrineWarning".Translate(), LetterDefOf.ThreatBig, new TargetInfo(cellRect.CenterCell, map, false), null, null, null);
-				GenSpawn.Spawn(signalAction_Letter, cellRect.CenterCell, map, WipeMode.Vanish);
-				RectTrigger rectTrigger = (RectTrigger)ThingMaker.MakeThing(ThingDefOf.RectTrigger, null);
-				rectTrigger.signalTag = signalTag;
-				rectTrigger.Rect = cellRect.ExpandedBy(1).ClipInsideMap(map);
-				rectTrigger.destroyIfUnfogged = true;
-				GenSpawn.Spawn(rectTrigger, cellRect.CenterCell, map, WipeMode.Vanish);
-			}
-		}
-	}
+    public override void Resolve(RimWorld.BaseGen.ResolveParams rp)
+    {
+        Map map = RimWorld.BaseGen.BaseGenCore.globalSettings.map;
+        CellRect cellRect = CellRect.Empty;
+        RimWorld.SketchGen.ResolveParams parms = default(RimWorld.SketchGen.ResolveParams);
+        parms.sketch = new Sketch();
+        parms.monumentOpen = false;
+        parms.monumentSize = new IntVec2(rp.rect.Width, rp.rect.Height);
+        parms.allowMonumentDoors = false;
+        parms.allowWood = false;
+        parms.allowFlammableWalls = false;
+        if (rp.allowedMonumentThings != null)
+        {
+            parms.allowedMonumentThings = rp.allowedMonumentThings;
+        }
+        else
+        {
+            parms.allowedMonumentThings = new ThingFilter();
+            parms.allowedMonumentThings.SetAllowAll(null, includeNonStorable: true);
+        }
+        parms.allowedMonumentThings.SetAllow(ThingDefOf.Drape, allow: false);
+        Sketch sketch = SketchGenCore.Generate(SketchResolverDefOf.Monument, parms);
+        sketch.Spawn(map, rp.rect.CenterCell, null, Sketch.SpawnPosType.Unchanged, Sketch.SpawnMode.Normal, wipeIfCollides: true, clearEdificeWhereFloor: true, null, dormant: false, buildRoofsInstantly: true);
+        CellRect rect = SketchGenUtility.FindBiggestRect(sketch, (IntVec3 x) => sketch.TerrainAt(x) != null && !sketch.ThingsAt(x).Any((SketchThing y) => y.def == ThingDefOf.Wall)).MovedBy(rp.rect.CenterCell);
+        for (int i = 0; i < sketch.Things.Count; i++)
+        {
+            if (sketch.Things[i].def == ThingDefOf.Wall)
+            {
+                IntVec3 c = sketch.Things[i].pos + rp.rect.CenterCell;
+                cellRect = ((!cellRect.IsEmpty) ? CellRect.FromLimits(Mathf.Min(cellRect.minX, c.x), Mathf.Min(cellRect.minZ, c.z), Mathf.Max(cellRect.maxX, c.x), Mathf.Max(cellRect.maxZ, c.z)) : CellRect.SingleCell(c));
+            }
+        }
+        if (!rect.IsEmpty)
+        {
+            RimWorld.BaseGen.ResolveParams resolveParams = rp;
+            resolveParams.rect = rect;
+            if (rp.allowedMonumentThings != null)
+            {
+                resolveParams.allowedMonumentThings = rp.allowedMonumentThings;
+            }
+            else
+            {
+                resolveParams.allowedMonumentThings = new ThingFilter();
+                resolveParams.allowedMonumentThings.SetAllowAll(null, includeNonStorable: true);
+            }
+            if (ModsConfig.RoyaltyActive)
+            {
+                resolveParams.allowedMonumentThings.SetAllow(ThingDefOf.Drape, allow: false);
+            }
+            BaseGenCore.symbolStack.Push("interior_ancientTemple", resolveParams);
+        }
+        if (rp.makeWarningLetter.HasValue && rp.makeWarningLetter.Value)
+        {
+            int nextSignalTagID = Find.UniqueIDsManager.GetNextSignalTagID();
+            string signalTag = "ancientTempleApproached-" + nextSignalTagID;
+            SignalAction_Letter obj = (SignalAction_Letter)ThingMaker.MakeThing(ThingDefOf.SignalAction_Letter);
+            obj.signalTag = signalTag;
+            obj.letter = LetterMaker.MakeLetter("LetterLabelAncientShrineWarning".Translate(), "AncientShrineWarning".Translate(), LetterDefOf.ThreatBig, new TargetInfo(cellRect.CenterCell, map));
+            GenSpawn.Spawn(obj, cellRect.CenterCell, map);
+            RectTrigger obj2 = (RectTrigger)ThingMaker.MakeThing(ThingDefOf.RectTrigger);
+            obj2.signalTag = signalTag;
+            obj2.Rect = cellRect.ExpandedBy(1).ClipInsideMap(map);
+            obj2.destroyIfUnfogged = true;
+            GenSpawn.Spawn(obj2, cellRect.CenterCell, map);
+        }
+    }
 }

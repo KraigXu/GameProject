@@ -1,597 +1,471 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
+using Verse;
 
-namespace Verse
+public class ResearchProjectDef : Def
 {
-	
-	public class ResearchProjectDef : Def
+	public float baseCost = 100f;
+
+	public List<ResearchProjectDef> prerequisites;
+
+	public List<ResearchProjectDef> hiddenPrerequisites;
+
+	public TechLevel techLevel;
+
+	public List<ResearchProjectDef> requiredByThis;
+
+	private List<ResearchMod> researchMods;
+
+	public ThingDef requiredResearchBuilding;
+
+	public List<ThingDef> requiredResearchFacilities;
+
+	public List<ResearchProjectTagDef> tags;
+
+	public ResearchTabDef tab;
+
+	public float researchViewX = 1f;
+
+	public float researchViewY = 1f;
+
+	[MustTranslate]
+	public string discoveredLetterTitle;
+
+	[MustTranslate]
+	public string discoveredLetterText;
+
+	public int discoveredLetterMinDifficulty;
+
+	public bool unlockExtremeDifficulty;
+
+	public int techprintCount;
+
+	public float techprintCommonality = 1f;
+
+	public float techprintMarketValue = 1000f;
+
+	public List<string> heldByFactionCategoryTags;
+
+	[Unsaved(false)]
+	private float x = 1f;
+
+	[Unsaved(false)]
+	private float y = 1f;
+
+	[Unsaved(false)]
+	private bool positionModified;
+
+	[Unsaved(false)]
+	private ThingDef cachedTechprint;
+
+	[Unsaved(false)]
+	private List<Def> cachedUnlockedDefs;
+
+	[Unsaved(false)]
+	private List<Dialog_InfoCard.Hyperlink> cachedHyperlinks;
+
+	public const TechLevel MaxEffectiveTechLevel = TechLevel.Industrial;
+
+	private const float ResearchCostFactorPerTechLevelDiff = 0.5f;
+
+	public float ResearchViewX => x;
+
+	public float ResearchViewY => y;
+
+	public float CostApparent => baseCost * CostFactor(Faction.OfPlayer.def.techLevel);
+
+	public float ProgressReal => Find.ResearchManager.GetProgress(this);
+
+	public float ProgressApparent => ProgressReal * CostFactor(Faction.OfPlayer.def.techLevel);
+
+	public float ProgressPercent => Find.ResearchManager.GetProgress(this) / baseCost;
+
+	public bool IsFinished => ProgressReal >= baseCost;
+
+	public bool CanStartNow
 	{
-		
-		
-		public float ResearchViewX
+		get
 		{
-			get
+			if (!IsFinished && PrerequisitesCompleted && TechprintRequirementMet)
 			{
-				return this.x;
-			}
-		}
-
-		
-		
-		public float ResearchViewY
-		{
-			get
-			{
-				return this.y;
-			}
-		}
-
-		
-		
-		public float CostApparent
-		{
-			get
-			{
-				return this.baseCost * this.CostFactor(Faction.OfPlayer.def.techLevel);
-			}
-		}
-
-		
-		
-		public float ProgressReal
-		{
-			get
-			{
-				return Find.ResearchManager.GetProgress(this);
-			}
-		}
-
-		
-		
-		public float ProgressApparent
-		{
-			get
-			{
-				return this.ProgressReal * this.CostFactor(Faction.OfPlayer.def.techLevel);
-			}
-		}
-
-		
-		
-		public float ProgressPercent
-		{
-			get
-			{
-				return Find.ResearchManager.GetProgress(this) / this.baseCost;
-			}
-		}
-
-		
-		
-		public bool IsFinished
-		{
-			get
-			{
-				return this.ProgressReal >= this.baseCost;
-			}
-		}
-
-		
-		
-		public bool CanStartNow
-		{
-			get
-			{
-				return !this.IsFinished && this.PrerequisitesCompleted && this.TechprintRequirementMet && (this.requiredResearchBuilding == null || this.PlayerHasAnyAppropriateResearchBench);
-			}
-		}
-
-		
-		
-		public bool PrerequisitesCompleted
-		{
-			get
-			{
-				if (this.prerequisites != null)
+				if (requiredResearchBuilding != null)
 				{
-					for (int i = 0; i < this.prerequisites.Count; i++)
-					{
-						if (!this.prerequisites[i].IsFinished)
-						{
-							return false;
-						}
-					}
-				}
-				if (this.hiddenPrerequisites != null)
-				{
-					for (int j = 0; j < this.hiddenPrerequisites.Count; j++)
-					{
-						if (!this.hiddenPrerequisites[j].IsFinished)
-						{
-							return false;
-						}
-					}
+					return PlayerHasAnyAppropriateResearchBench;
 				}
 				return true;
 			}
+			return false;
 		}
+	}
 
-		
-		
-		public int TechprintsApplied
+	public bool PrerequisitesCompleted
+	{
+		get
 		{
-			get
+			if (prerequisites != null)
 			{
-				return Find.ResearchManager.GetTechprints(this);
-			}
-		}
-
-		
-		
-		public bool TechprintRequirementMet
-		{
-			get
-			{
-				return this.techprintCount <= 0 || Find.ResearchManager.GetTechprints(this) >= this.techprintCount;
-			}
-		}
-
-		
-		
-		public ThingDef Techprint
-		{
-			get
-			{
-				if (this.techprintCount <= 0)
+				for (int i = 0; i < prerequisites.Count; i++)
 				{
-					return null;
-				}
-				if (this.cachedTechprint == null)
-				{
-					this.cachedTechprint = DefDatabase<ThingDef>.AllDefs.FirstOrDefault(delegate(ThingDef x)
+					if (!prerequisites[i].IsFinished)
 					{
-						CompProperties_Techprint compProperties = x.GetCompProperties<CompProperties_Techprint>();
-						return compProperties != null && compProperties.project == this;
-					});
-					if (this.cachedTechprint == null)
-					{
-						Log.ErrorOnce("Could not find techprint for research project " + this, (int)this.shortHash ^ 873231450, false);
+						return false;
 					}
 				}
-				return this.cachedTechprint;
 			}
-		}
-
-		
-		
-		public List<Def> UnlockedDefs
-		{
-			get
+			if (hiddenPrerequisites != null)
 			{
-				if (this.cachedUnlockedDefs == null)
+				for (int j = 0; j < hiddenPrerequisites.Count; j++)
 				{
-					//this.cachedUnlockedDefs = (from x in (from x in DefDatabase<RecipeDef>.AllDefs
-					//where x.researchPrerequisite == this || (x.researchPrerequisites != null && x.researchPrerequisites.Contains(this))
-					//select x).SelectMany((RecipeDef x) => from y in x.products
-					//select y.thingDef)
-					//orderby x.label
-					//select x).Concat(from x in DefDatabase<ThingDef>.AllDefs
-					//where x.researchPrerequisites != null && x.researchPrerequisites.Contains(this)
-					//orderby x.label
-					//select x).Concat(from x in DefDatabase<ThingDef>.AllDefs
-					//where x.plant != null && x.plant.sowResearchPrerequisites != null && x.plant.sowResearchPrerequisites.Contains(this)
-					//orderby x.label
-					//select x).Concat(from x in DefDatabase<TerrainDef>.AllDefs
-					//where x.researchPrerequisites != null && x.researchPrerequisites.Contains(this)
-					//orderby x.label
-					//select x).Distinct<Def>().ToList<Def>();
-				}
-				return this.cachedUnlockedDefs;
-			}
-		}
-
-		
-		
-		public List<Dialog_InfoCard.Hyperlink> InfoCardHyperlinks
-		{
-			get
-			{
-				if (this.cachedHyperlinks == null)
-				{
-					this.cachedHyperlinks = new List<Dialog_InfoCard.Hyperlink>();
-					List<Def> unlockedDefs = this.UnlockedDefs;
-					if (unlockedDefs != null)
+					if (!hiddenPrerequisites[j].IsFinished)
 					{
-						for (int i = 0; i < unlockedDefs.Count; i++)
-						{
-							this.cachedHyperlinks.Add(new Dialog_InfoCard.Hyperlink(unlockedDefs[i], -1));
-						}
+						return false;
 					}
 				}
-				return this.cachedHyperlinks;
 			}
+			return true;
 		}
+	}
 
-		
-		
-		private bool PlayerHasAnyAppropriateResearchBench
+	public int TechprintsApplied => Find.ResearchManager.GetTechprints(this);
+
+	public bool TechprintRequirementMet
+	{
+		get
 		{
-			get
-			{
-				List<Map> maps = Find.Maps;
-				for (int i = 0; i < maps.Count; i++)
-				{
-					List<Building> allBuildingsColonist = maps[i].listerBuildings.allBuildingsColonist;
-					for (int j = 0; j < allBuildingsColonist.Count; j++)
-					{
-						Building_ResearchBench building_ResearchBench = allBuildingsColonist[j] as Building_ResearchBench;
-						if (building_ResearchBench != null && this.CanBeResearchedAt(building_ResearchBench, true))
-						{
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-		}
-
-		
-		public override void ResolveReferences()
-		{
-			if (this.tab == null)
-			{
-				this.tab = ResearchTabDefOf.Main;
-			}
-		}
-
-		
-		public override IEnumerable<string> ConfigErrors()
-		{
-
-			IEnumerator<string> enumerator = null;
-			if (this.techLevel == TechLevel.Undefined)
-			{
-				yield return "techLevel is Undefined";
-			}
-			if (this.ResearchViewX < 0f || this.ResearchViewY < 0f)
-			{
-				yield return "researchViewX and/or researchViewY not set";
-			}
-			if (this.techprintCount == 0 && !this.heldByFactionCategoryTags.NullOrEmpty<string>())
-			{
-				yield return "requires no techprints but has heldByFactionCategoryTags.";
-			}
-			if (this.techprintCount > 0 && this.heldByFactionCategoryTags.NullOrEmpty<string>())
-			{
-				yield return "requires techprints but has no heldByFactionCategoryTags.";
-			}
-			List<ResearchProjectDef> rpDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
-			int num;
-			for (int i = 0; i < rpDefs.Count; i = num + 1)
-			{
-				if (rpDefs[i] != this && rpDefs[i].tab == this.tab && rpDefs[i].ResearchViewX == this.ResearchViewX && rpDefs[i].ResearchViewY == this.ResearchViewY)
-				{
-					yield return string.Concat(new object[]
-					{
-						"same research view coords and tab as ",
-						rpDefs[i],
-						": ",
-						this.ResearchViewX,
-						", ",
-						this.ResearchViewY,
-						"(",
-						this.tab,
-						")"
-					});
-				}
-				num = i;
-			}
-			if (!ModLister.RoyaltyInstalled && this.techprintCount > 0)
-			{
-				yield return "defines techprintCount, but techprints are a Royalty-specific game system and only work with Royalty installed.";
-			}
-			yield break;
-			yield break;
-		}
-
-		
-		public override void PostLoad()
-		{
-			base.PostLoad();
-			if (!ModLister.RoyaltyInstalled)
-			{
-				this.techprintCount = 0;
-			}
-		}
-
-		
-		public float CostFactor(TechLevel researcherTechLevel)
-		{
-			TechLevel techLevel = (TechLevel)Mathf.Min((int)this.techLevel, 4);
-			if (researcherTechLevel >= techLevel)
-			{
-				return 1f;
-			}
-			int num = (int)(techLevel - researcherTechLevel);
-			return 1f + (float)num * 0.5f;
-		}
-
-		
-		public bool HasTag(ResearchProjectTagDef tag)
-		{
-			return this.tags != null && this.tags.Contains(tag);
-		}
-
-		
-		public bool CanBeResearchedAt(Building_ResearchBench bench, bool ignoreResearchBenchPowerStatus)
-		{
-			if (this.requiredResearchBuilding != null && bench.def != this.requiredResearchBuilding)
+			if (techprintCount > 0 && Find.ResearchManager.GetTechprints(this) < techprintCount)
 			{
 				return false;
 			}
-			if (!ignoreResearchBenchPowerStatus)
+			return true;
+		}
+	}
+
+	public ThingDef Techprint
+	{
+		get
+		{
+			if (techprintCount <= 0)
 			{
-				CompPowerTrader comp = bench.GetComp<CompPowerTrader>();
-				if (comp != null && !comp.PowerOn)
+				return null;
+			}
+			if (cachedTechprint == null)
+			{
+				cachedTechprint = DefDatabase<ThingDef>.AllDefs.FirstOrDefault(delegate (ThingDef x)
+				{
+					CompProperties_Techprint compProperties = x.GetCompProperties<CompProperties_Techprint>();
+					return compProperties != null && compProperties.project == this;
+				});
+				if (cachedTechprint == null)
+				{
+					Log.ErrorOnce("Could not find techprint for research project " + this, shortHash ^ 0x340C745A);
+				}
+			}
+			return cachedTechprint;
+		}
+	}
+
+	public List<Def> UnlockedDefs
+	{
+		get
+		{
+			if (cachedUnlockedDefs == null)
+			{
+				cachedUnlockedDefs = (from x in DefDatabase<RecipeDef>.AllDefs.Where((RecipeDef x) => x.researchPrerequisite == this || (x.researchPrerequisites != null && x.researchPrerequisites.Contains(this))).SelectMany((RecipeDef x) => ((IEnumerable<ThingDefCountClass>)x.products).Select((Func<ThingDefCountClass, Def>)((ThingDefCountClass y) => y.thingDef)))
+									  orderby x.label
+									  select x).Concat(from x in DefDatabase<ThingDef>.AllDefs
+													   where x.researchPrerequisites != null && x.researchPrerequisites.Contains(this)
+													   orderby x.label
+													   select x).Concat(from x in DefDatabase<ThingDef>.AllDefs
+																		where x.plant != null && x.plant.sowResearchPrerequisites != null && x.plant.sowResearchPrerequisites.Contains(this)
+																		orderby x.label
+																		select x).Concat(from x in DefDatabase<TerrainDef>.AllDefs
+																						 where x.researchPrerequisites != null && x.researchPrerequisites.Contains(this)
+																						 orderby x.label
+																						 select x)
+					.Distinct()
+					.ToList();
+			}
+			return cachedUnlockedDefs;
+		}
+	}
+
+	public List<Dialog_InfoCard.Hyperlink> InfoCardHyperlinks
+	{
+		get
+		{
+			if (cachedHyperlinks == null)
+			{
+				cachedHyperlinks = new List<Dialog_InfoCard.Hyperlink>();
+				List<Def> unlockedDefs = UnlockedDefs;
+				if (unlockedDefs != null)
+				{
+					for (int i = 0; i < unlockedDefs.Count; i++)
+					{
+						cachedHyperlinks.Add(new Dialog_InfoCard.Hyperlink(unlockedDefs[i]));
+					}
+				}
+			}
+			return cachedHyperlinks;
+		}
+	}
+
+	private bool PlayerHasAnyAppropriateResearchBench
+	{
+		get
+		{
+			List<Map> maps = Find.Maps;
+			for (int i = 0; i < maps.Count; i++)
+			{
+				List<Building> allBuildingsColonist = maps[i].listerBuildings.allBuildingsColonist;
+				for (int j = 0; j < allBuildingsColonist.Count; j++)
+				{
+					Building_ResearchBench building_ResearchBench = allBuildingsColonist[j] as Building_ResearchBench;
+					if (building_ResearchBench != null && CanBeResearchedAt(building_ResearchBench, ignoreResearchBenchPowerStatus: true))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
+
+	public override void ResolveReferences()
+	{
+		if (tab == null)
+		{
+			tab = ResearchTabDefOf.Main;
+		}
+	}
+
+	public override IEnumerable<string> ConfigErrors()
+	{
+		foreach (string item in base.ConfigErrors())
+		{
+			yield return item;
+		}
+		if (techLevel == TechLevel.Undefined)
+		{
+			yield return "techLevel is Undefined";
+		}
+		if (ResearchViewX < 0f || ResearchViewY < 0f)
+		{
+			yield return "researchViewX and/or researchViewY not set";
+		}
+		if (techprintCount == 0 && !heldByFactionCategoryTags.NullOrEmpty())
+		{
+			yield return "requires no techprints but has heldByFactionCategoryTags.";
+		}
+		if (techprintCount > 0 && heldByFactionCategoryTags.NullOrEmpty())
+		{
+			yield return "requires techprints but has no heldByFactionCategoryTags.";
+		}
+		List<ResearchProjectDef> rpDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
+		for (int i = 0; i < rpDefs.Count; i++)
+		{
+			if (rpDefs[i] != this && rpDefs[i].tab == tab && rpDefs[i].ResearchViewX == ResearchViewX && rpDefs[i].ResearchViewY == ResearchViewY)
+			{
+				yield return "same research view coords and tab as " + rpDefs[i] + ": " + ResearchViewX + ", " + ResearchViewY + "(" + tab + ")";
+			}
+		}
+		if (!ModLister.RoyaltyInstalled && techprintCount > 0)
+		{
+			yield return "defines techprintCount, but techprints are a Royalty-specific game system and only work with Royalty installed.";
+		}
+	}
+
+	public override void PostLoad()
+	{
+		base.PostLoad();
+		if (!ModLister.RoyaltyInstalled)
+		{
+			techprintCount = 0;
+		}
+	}
+
+	public float CostFactor(TechLevel researcherTechLevel)
+	{
+		TechLevel techLevel = (TechLevel)Mathf.Min((int)this.techLevel, 4);
+		if ((int)researcherTechLevel >= (int)techLevel)
+		{
+			return 1f;
+		}
+		int num = techLevel - researcherTechLevel;
+		return 1f + (float)num * 0.5f;
+	}
+
+	public bool HasTag(ResearchProjectTagDef tag)
+	{
+		if (tags == null)
+		{
+			return false;
+		}
+		return tags.Contains(tag);
+	}
+
+	public bool CanBeResearchedAt(Building_ResearchBench bench, bool ignoreResearchBenchPowerStatus)
+	{
+		if (requiredResearchBuilding != null && bench.def != requiredResearchBuilding)
+		{
+			return false;
+		}
+		if (!ignoreResearchBenchPowerStatus)
+		{
+			CompPowerTrader comp = bench.GetComp<CompPowerTrader>();
+			if (comp != null && !comp.PowerOn)
+			{
+				return false;
+			}
+		}
+		if (!requiredResearchFacilities.NullOrEmpty())
+		{
+			CompAffectedByFacilities affectedByFacilities = bench.TryGetComp<CompAffectedByFacilities>();
+			if (affectedByFacilities == null)
+			{
+				return false;
+			}
+			List<Thing> linkedFacilitiesListForReading = affectedByFacilities.LinkedFacilitiesListForReading;
+			int i;
+			for (i = 0; i < requiredResearchFacilities.Count; i++)
+			{
+				if (linkedFacilitiesListForReading.Find((Thing x) => x.def == requiredResearchFacilities[i] && affectedByFacilities.IsFacilityActive(x)) == null)
 				{
 					return false;
 				}
 			}
-			//if (!this.requiredResearchFacilities.NullOrEmpty<ThingDef>())
-			//{
-			//	ResearchProjectDef.c__DisplayClass63_0 c__DisplayClass63_ = new ResearchProjectDef.c__DisplayClass63_0();
-			//	c__DisplayClass63_.4__this = this;
-			//	c__DisplayClass63_.affectedByFacilities = bench.TryGetComp<CompAffectedByFacilities>();
-			//	if (c__DisplayClass63_.affectedByFacilities == null)
-			//	{
-			//		return false;
-			//	}
-			//	List<Thing> linkedFacilitiesListForReading = c__DisplayClass63_.affectedByFacilities.LinkedFacilitiesListForReading;
-			//	int j;
-			//	int i;
-			//	for (i = 0; i < this.requiredResearchFacilities.Count; i = j + 1)
-			//	{
-			//		if (linkedFacilitiesListForReading.Find((Thing x) => x.def == c__DisplayClass63_.4__this.requiredResearchFacilities[i] && c__DisplayClass63_.affectedByFacilities.IsFacilityActive(x)) == null)
-			//		{
-			//			return false;
-			//		}
-			//		j = i;
-			//	}
-			//}
-			return true;
 		}
+		return true;
+	}
 
-
-		public void ReapplyAllMods()
+	public void ReapplyAllMods()
+	{
+		if (researchMods != null)
 		{
-			if (this.researchMods != null)
+			for (int i = 0; i < researchMods.Count; i++)
 			{
-				for (int i = 0; i < this.researchMods.Count; i++)
+				try
 				{
-					try
-					{
-						this.researchMods[i].Apply();
-					}
-					catch (Exception ex)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Exception applying research mod for project ",
-							this,
-							": ",
-							ex.ToString()
-						}), false);
-					}
+					researchMods[i].Apply();
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Exception applying research mod for project " + this + ": " + ex.ToString());
 				}
 			}
 		}
+	}
 
-		public static ResearchProjectDef Named(string defName)
+	public static ResearchProjectDef Named(string defName)
+	{
+		return DefDatabase<ResearchProjectDef>.GetNamed(defName);
+	}
+
+	public static void GenerateNonOverlappingCoordinates()
+	{
+		foreach (ResearchProjectDef item in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
 		{
-			return DefDatabase<ResearchProjectDef>.GetNamed(defName, true);
+			item.x = item.researchViewX;
+			item.y = item.researchViewY;
 		}
-		public static void GenerateNonOverlappingCoordinates()
+		int num = 0;
+		do
 		{
-			foreach (ResearchProjectDef researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
+			bool flag = false;
+			foreach (ResearchProjectDef item2 in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
 			{
-				researchProjectDef.x = researchProjectDef.researchViewX;
-				researchProjectDef.y = researchProjectDef.researchViewY;
-			}
-			int num = 0;
-			do
-			{
-				bool flag = false;
-				foreach (ResearchProjectDef researchProjectDef2 in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
+				foreach (ResearchProjectDef item3 in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
 				{
-					foreach (ResearchProjectDef researchProjectDef3 in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
+					if (item2 != item3 && item2.tab == item3.tab)
 					{
-						if (researchProjectDef2 != researchProjectDef3 && researchProjectDef2.tab == researchProjectDef3.tab)
+						bool num2 = Mathf.Abs(item2.x - item3.x) < 0.5f;
+						bool flag2 = Mathf.Abs(item2.y - item3.y) < 0.25f;
+						if (num2 & flag2)
 						{
-							bool flag2 = Mathf.Abs(researchProjectDef2.x - researchProjectDef3.x) < 0.5f;
-							bool flag3 = Mathf.Abs(researchProjectDef2.y - researchProjectDef3.y) < 0.25f;
-							if (flag2 && flag3)
+							flag = true;
+							if (item2.x <= item3.x)
 							{
-								flag = true;
-								if (researchProjectDef2.x <= researchProjectDef3.x)
-								{
-									researchProjectDef2.x -= 0.1f;
-									researchProjectDef3.x += 0.1f;
-								}
-								else
-								{
-									researchProjectDef2.x += 0.1f;
-									researchProjectDef3.x -= 0.1f;
-								}
-								if (researchProjectDef2.y <= researchProjectDef3.y)
-								{
-									researchProjectDef2.y -= 0.1f;
-									researchProjectDef3.y += 0.1f;
-								}
-								else
-								{
-									researchProjectDef2.y += 0.1f;
-									researchProjectDef3.y -= 0.1f;
-								}
-								researchProjectDef2.x += 0.001f;
-								researchProjectDef2.y += 0.001f;
-								researchProjectDef3.x -= 0.001f;
-								researchProjectDef3.y -= 0.001f;
-								ResearchProjectDef.ClampInCoordinateLimits(researchProjectDef2);
-								ResearchProjectDef.ClampInCoordinateLimits(researchProjectDef3);
+								item2.x -= 0.1f;
+								item3.x += 0.1f;
 							}
+							else
+							{
+								item2.x += 0.1f;
+								item3.x -= 0.1f;
+							}
+							if (item2.y <= item3.y)
+							{
+								item2.y -= 0.1f;
+								item3.y += 0.1f;
+							}
+							else
+							{
+								item2.y += 0.1f;
+								item3.y -= 0.1f;
+							}
+							item2.x += 0.001f;
+							item2.y += 0.001f;
+							item3.x -= 0.001f;
+							item3.y -= 0.001f;
+							ClampInCoordinateLimits(item2);
+							ClampInCoordinateLimits(item3);
 						}
 					}
 				}
-				if (!flag)
-				{
-					return;
-				}
-				num++;
 			}
-			while (num <= 200);
-			Log.Error("Couldn't relax research project coordinates apart after " + 200 + " passes.", false);
-		}
-
-		
-		private static void ClampInCoordinateLimits(ResearchProjectDef rp)
-		{
-			if (rp.x < 0f)
-			{
-				rp.x = 0f;
-			}
-			if (rp.y < 0f)
-			{
-				rp.y = 0f;
-			}
-			if (rp.y > 6.5f)
-			{
-				rp.y = 6.5f;
-			}
-		}
-
-		
-		public void Debug_ApplyPositionDelta(Vector2 delta)
-		{
-			bool flag = Mathf.Abs(delta.x) > 0.01f;
-			bool flag2 = Mathf.Abs(delta.y) > 0.01f;
 			if (flag)
 			{
-				this.x += delta.x;
+				num++;
+				continue;
 			}
-			if (flag2)
-			{
-				this.y += delta.y;
-			}
-			this.positionModified = true;
+			return;
 		}
+		while (num <= 200);
+		Log.Error("Couldn't relax research project coordinates apart after " + 200 + " passes.");
+	}
 
-		
-		public void Debug_SnapPositionData()
+	private static void ClampInCoordinateLimits(ResearchProjectDef rp)
+	{
+		if (rp.x < 0f)
 		{
-			this.x = Mathf.Round(this.x * 1f) / 1f;
-			this.y = Mathf.Round(this.y * 20f) / 20f;
-			ResearchProjectDef.ClampInCoordinateLimits(this);
+			rp.x = 0f;
 		}
-
-		
-		public bool Debug_IsPositionModified()
+		if (rp.y < 0f)
 		{
-			return this.positionModified;
+			rp.y = 0f;
 		}
+		if (rp.y > 6.5f)
+		{
+			rp.y = 6.5f;
+		}
+	}
 
-		
-		public float baseCost = 100f;
+	public void Debug_ApplyPositionDelta(Vector2 delta)
+	{
+		bool num = Mathf.Abs(delta.x) > 0.01f;
+		bool flag = Mathf.Abs(delta.y) > 0.01f;
+		if (num)
+		{
+			x += delta.x;
+		}
+		if (flag)
+		{
+			y += delta.y;
+		}
+		positionModified = true;
+	}
 
-		
-		public List<ResearchProjectDef> prerequisites;
+	public void Debug_SnapPositionData()
+	{
+		x = Mathf.Round(x * 1f) / 1f;
+		y = Mathf.Round(y * 20f) / 20f;
+		ClampInCoordinateLimits(this);
+	}
 
-		
-		public List<ResearchProjectDef> hiddenPrerequisites;
-
-		
-		public TechLevel techLevel;
-
-		
-		public List<ResearchProjectDef> requiredByThis;
-
-		
-		private List<ResearchMod> researchMods;
-
-		
-		public ThingDef requiredResearchBuilding;
-
-		
-		public List<ThingDef> requiredResearchFacilities;
-
-		
-		public List<ResearchProjectTagDef> tags;
-
-		
-		public ResearchTabDef tab;
-
-		
-		public float researchViewX = 1f;
-
-		
-		public float researchViewY = 1f;
-
-		
-		[MustTranslate]
-		public string discoveredLetterTitle;
-
-		
-		[MustTranslate]
-		public string discoveredLetterText;
-
-		
-		public int discoveredLetterMinDifficulty;
-
-		
-		public bool unlockExtremeDifficulty;
-
-		
-		public int techprintCount;
-
-		
-		public float techprintCommonality = 1f;
-
-		
-		public float techprintMarketValue = 1000f;
-
-		
-		public List<string> heldByFactionCategoryTags;
-
-		
-		[Unsaved(false)]
-		private float x = 1f;
-
-		
-		[Unsaved(false)]
-		private float y = 1f;
-
-		
-		[Unsaved(false)]
-		private bool positionModified;
-
-		
-		[Unsaved(false)]
-		private ThingDef cachedTechprint;
-
-		
-		[Unsaved(false)]
-		private List<Def> cachedUnlockedDefs;
-
-		
-		[Unsaved(false)]
-		private List<Dialog_InfoCard.Hyperlink> cachedHyperlinks;
-
-		
-		public const TechLevel MaxEffectiveTechLevel = TechLevel.Industrial;
-
-		
-		private const float ResearchCostFactorPerTechLevelDiff = 0.5f;
+	public bool Debug_IsPositionModified()
+	{
+		return positionModified;
 	}
 }

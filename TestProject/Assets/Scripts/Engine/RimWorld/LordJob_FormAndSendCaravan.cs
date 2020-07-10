@@ -1,350 +1,281 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI.Group;
 
-namespace RimWorld
+public class LordJob_FormAndSendCaravan : LordJob
 {
-	
-	public class LordJob_FormAndSendCaravan : LordJob
+	public List<TransferableOneWay> transferables;
+
+	public List<Pawn> downedPawns;
+
+	private IntVec3 meetingPoint;
+
+	private IntVec3 exitSpot;
+
+	private int startingTile;
+
+	private int destinationTile;
+
+	private bool caravanSent;
+
+	private LordToil gatherAnimals;
+
+	private LordToil gatherAnimals_pause;
+
+	private LordToil gatherItems;
+
+	private LordToil gatherItems_pause;
+
+	private LordToil gatherSlaves;
+
+	private LordToil gatherSlaves_pause;
+
+	private LordToil gatherDownedPawns;
+
+	private LordToil gatherDownedPawns_pause;
+
+	private LordToil leave;
+
+	private LordToil leave_pause;
+
+	public const float CustomWakeThreshold = 0.5f;
+
+	public bool GatheringItemsNow => lord.CurLordToil == gatherItems;
+
+	public override bool AllowStartNewGatherings => false;
+
+	public override bool NeverInRestraints => true;
+
+	public override bool AddFleeToil => false;
+
+	public string Status
 	{
-		
-		
-		public bool GatheringItemsNow
+		get
 		{
-			get
+			LordToil curLordToil = lord.CurLordToil;
+			if (curLordToil == gatherAnimals)
 			{
-				return this.lord.CurLordToil == this.gatherItems;
+				return "FormingCaravanStatus_GatheringAnimals".Translate();
+			}
+			if (curLordToil == gatherAnimals_pause)
+			{
+				return "FormingCaravanStatus_GatheringAnimals_Pause".Translate();
+			}
+			if (curLordToil == gatherItems)
+			{
+				return "FormingCaravanStatus_GatheringItems".Translate();
+			}
+			if (curLordToil == gatherItems_pause)
+			{
+				return "FormingCaravanStatus_GatheringItems_Pause".Translate();
+			}
+			if (curLordToil == gatherSlaves)
+			{
+				return "FormingCaravanStatus_GatheringSlaves".Translate();
+			}
+			if (curLordToil == gatherSlaves_pause)
+			{
+				return "FormingCaravanStatus_GatheringSlaves_Pause".Translate();
+			}
+			if (curLordToil == gatherDownedPawns)
+			{
+				return "FormingCaravanStatus_GatheringDownedPawns".Translate();
+			}
+			if (curLordToil == gatherDownedPawns_pause)
+			{
+				return "FormingCaravanStatus_GatheringDownedPawns_Pause".Translate();
+			}
+			if (curLordToil == leave)
+			{
+				return "FormingCaravanStatus_Leaving".Translate();
+			}
+			if (curLordToil == leave_pause)
+			{
+				return "FormingCaravanStatus_Leaving_Pause".Translate();
+			}
+			return "FormingCaravanStatus_Waiting".Translate();
+		}
+	}
+
+	public LordJob_FormAndSendCaravan()
+	{
+	}
+
+	public LordJob_FormAndSendCaravan(List<TransferableOneWay> transferables, List<Pawn> downedPawns, IntVec3 meetingPoint, IntVec3 exitSpot, int startingTile, int destinationTile)
+	{
+		this.transferables = transferables;
+		this.downedPawns = downedPawns;
+		this.meetingPoint = meetingPoint;
+		this.exitSpot = exitSpot;
+		this.startingTile = startingTile;
+		this.destinationTile = destinationTile;
+	}
+
+	public override StateGraph CreateGraph()
+	{
+		StateGraph stateGraph = new StateGraph();
+		gatherAnimals = new LordToil_PrepareCaravan_GatherAnimals(meetingPoint);
+		stateGraph.AddToil(gatherAnimals);
+		gatherAnimals_pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(gatherAnimals_pause);
+		gatherItems = new LordToil_PrepareCaravan_GatherItems(meetingPoint);
+		stateGraph.AddToil(gatherItems);
+		gatherItems_pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(gatherItems_pause);
+		gatherSlaves = new LordToil_PrepareCaravan_GatherSlaves(meetingPoint);
+		stateGraph.AddToil(gatherSlaves);
+		gatherSlaves_pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(gatherSlaves_pause);
+		gatherDownedPawns = new LordToil_PrepareCaravan_GatherDownedPawns(meetingPoint, exitSpot);
+		stateGraph.AddToil(gatherDownedPawns);
+		gatherDownedPawns_pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(gatherDownedPawns_pause);
+		LordToil_PrepareCaravan_Wait lordToil_PrepareCaravan_Wait = new LordToil_PrepareCaravan_Wait(meetingPoint);
+		stateGraph.AddToil(lordToil_PrepareCaravan_Wait);
+		LordToil_PrepareCaravan_Pause lordToil_PrepareCaravan_Pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(lordToil_PrepareCaravan_Pause);
+		leave = new LordToil_PrepareCaravan_Leave(exitSpot);
+		stateGraph.AddToil(leave);
+		leave_pause = new LordToil_PrepareCaravan_Pause();
+		stateGraph.AddToil(leave_pause);
+		LordToil_End lordToil_End = new LordToil_End();
+		stateGraph.AddToil(lordToil_End);
+		Transition transition = new Transition(gatherAnimals, gatherItems);
+		transition.AddTrigger(new Trigger_Memo("AllAnimalsGathered"));
+		stateGraph.AddTransition(transition);
+		Transition transition2 = new Transition(gatherItems, gatherSlaves);
+		transition2.AddTrigger(new Trigger_Memo("AllItemsGathered"));
+		transition2.AddPostAction(new TransitionAction_EndAllJobs());
+		stateGraph.AddTransition(transition2);
+		Transition transition3 = new Transition(gatherSlaves, gatherDownedPawns);
+		transition3.AddTrigger(new Trigger_Memo("AllSlavesGathered"));
+		transition3.AddPostAction(new TransitionAction_EndAllJobs());
+		stateGraph.AddTransition(transition3);
+		Transition transition4 = new Transition(gatherDownedPawns, lordToil_PrepareCaravan_Wait);
+		transition4.AddTrigger(new Trigger_Memo("AllDownedPawnsGathered"));
+		transition4.AddPostAction(new TransitionAction_EndAllJobs());
+		stateGraph.AddTransition(transition4);
+		Transition transition5 = new Transition(lordToil_PrepareCaravan_Wait, leave);
+		transition5.AddTrigger(new Trigger_NoPawnsVeryTiredAndSleeping());
+		transition5.AddPostAction(new TransitionAction_WakeAll());
+		stateGraph.AddTransition(transition5);
+		Transition transition6 = new Transition(leave, lordToil_End);
+		transition6.AddTrigger(new Trigger_Memo("ReadyToExitMap"));
+		transition6.AddPreAction(new TransitionAction_Custom(SendCaravan));
+		stateGraph.AddTransition(transition6);
+		Transition transition7 = PauseTransition(gatherAnimals, gatherAnimals_pause);
+		stateGraph.AddTransition(transition7);
+		Transition transition8 = UnpauseTransition(gatherAnimals_pause, gatherAnimals);
+		stateGraph.AddTransition(transition8);
+		Transition transition9 = PauseTransition(gatherItems, gatherItems_pause);
+		stateGraph.AddTransition(transition9);
+		Transition transition10 = UnpauseTransition(gatherItems_pause, gatherItems);
+		stateGraph.AddTransition(transition10);
+		Transition transition11 = PauseTransition(gatherSlaves, gatherSlaves_pause);
+		stateGraph.AddTransition(transition11);
+		Transition transition12 = UnpauseTransition(gatherSlaves_pause, gatherSlaves);
+		stateGraph.AddTransition(transition12);
+		Transition transition13 = PauseTransition(gatherDownedPawns, gatherDownedPawns_pause);
+		stateGraph.AddTransition(transition13);
+		Transition transition14 = UnpauseTransition(gatherDownedPawns_pause, gatherDownedPawns);
+		stateGraph.AddTransition(transition14);
+		Transition transition15 = PauseTransition(leave, leave_pause);
+		stateGraph.AddTransition(transition15);
+		Transition transition16 = UnpauseTransition(leave_pause, leave);
+		stateGraph.AddTransition(transition16);
+		Transition transition17 = PauseTransition(lordToil_PrepareCaravan_Wait, lordToil_PrepareCaravan_Pause);
+		stateGraph.AddTransition(transition17);
+		Transition transition18 = UnpauseTransition(lordToil_PrepareCaravan_Pause, lordToil_PrepareCaravan_Wait);
+		stateGraph.AddTransition(transition18);
+		return stateGraph;
+	}
+
+	public override void LordJobTick()
+	{
+		base.LordJobTick();
+		for (int num = downedPawns.Count - 1; num >= 0; num--)
+		{
+			if (downedPawns[num].Destroyed)
+			{
+				downedPawns.RemoveAt(num);
+			}
+			else if (!downedPawns[num].Downed)
+			{
+				lord.AddPawn(downedPawns[num]);
+				downedPawns.RemoveAt(num);
 			}
 		}
+	}
 
-		
-		
-		public override bool AllowStartNewGatherings
+	public override string GetReport(Pawn pawn)
+	{
+		return "LordReportFormingCaravan".Translate();
+	}
+
+	private Transition PauseTransition(LordToil from, LordToil to)
+	{
+		Transition transition = new Transition(from, to);
+		transition.AddPreAction(new TransitionAction_Message("MessageCaravanFormationPaused".Translate(), MessageTypeDefOf.NegativeEvent, () => lord.ownedPawns.FirstOrDefault((Pawn x) => x.InMentalState)));
+		transition.AddTrigger(new Trigger_MentalState());
+		transition.AddPostAction(new TransitionAction_EndAllJobs());
+		return transition;
+	}
+
+	private Transition UnpauseTransition(LordToil from, LordToil to)
+	{
+		Transition transition = new Transition(from, to);
+		transition.AddPreAction(new TransitionAction_Message("MessageCaravanFormationUnpaused".Translate(), MessageTypeDefOf.SilentInput));
+		transition.AddTrigger(new Trigger_NoMentalState());
+		transition.AddPostAction(new TransitionAction_EndAllJobs());
+		return transition;
+	}
+
+	public override void ExposeData()
+	{
+		Scribe_Collections.Look(ref transferables, "transferables", LookMode.Deep);
+		Scribe_Collections.Look(ref downedPawns, "downedPawns", LookMode.Reference);
+		Scribe_Values.Look(ref meetingPoint, "meetingPoint");
+		Scribe_Values.Look(ref exitSpot, "exitSpot");
+		Scribe_Values.Look(ref startingTile, "startingTile", 0);
+		Scribe_Values.Look(ref destinationTile, "destinationTile", 0);
+		if (Scribe.mode == LoadSaveMode.PostLoadInit)
 		{
-			get
+			downedPawns.RemoveAll((Pawn x) => x.DestroyedOrNull());
+		}
+	}
+
+	private void SendCaravan()
+	{
+		caravanSent = true;
+		CaravanFormingUtility.FormAndCreateCaravan(lord.ownedPawns.Concat(downedPawns.Where((Pawn x) => JobGiver_PrepareCaravan_GatherDownedPawns.IsDownedPawnNearExitPoint(x, exitSpot))), lord.faction, base.Map.Tile, startingTile, destinationTile);
+	}
+
+	public override void Notify_PawnAdded(Pawn p)
+	{
+		base.Notify_PawnAdded(p);
+		ReachabilityUtility.ClearCacheFor(p);
+	}
+
+	public override void Notify_PawnLost(Pawn p, PawnLostCondition condition)
+	{
+		base.Notify_PawnLost(p, condition);
+		ReachabilityUtility.ClearCacheFor(p);
+		if (!caravanSent)
+		{
+			if (condition == PawnLostCondition.IncappedOrKilled && p.Downed)
 			{
-				return false;
+				downedPawns.Add(p);
 			}
+			CaravanFormingUtility.RemovePawnFromCaravan(p, lord, removeFromDowned: false);
 		}
+	}
 
-		
-		
-		public override bool NeverInRestraints
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		
-		
-		public override bool AddFleeToil
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		
-		
-		public string Status
-		{
-			get
-			{
-				LordToil curLordToil = this.lord.CurLordToil;
-				if (curLordToil == this.gatherAnimals)
-				{
-					return "FormingCaravanStatus_GatheringAnimals".Translate();
-				}
-				if (curLordToil == this.gatherAnimals_pause)
-				{
-					return "FormingCaravanStatus_GatheringAnimals_Pause".Translate();
-				}
-				if (curLordToil == this.gatherItems)
-				{
-					return "FormingCaravanStatus_GatheringItems".Translate();
-				}
-				if (curLordToil == this.gatherItems_pause)
-				{
-					return "FormingCaravanStatus_GatheringItems_Pause".Translate();
-				}
-				if (curLordToil == this.gatherSlaves)
-				{
-					return "FormingCaravanStatus_GatheringSlaves".Translate();
-				}
-				if (curLordToil == this.gatherSlaves_pause)
-				{
-					return "FormingCaravanStatus_GatheringSlaves_Pause".Translate();
-				}
-				if (curLordToil == this.gatherDownedPawns)
-				{
-					return "FormingCaravanStatus_GatheringDownedPawns".Translate();
-				}
-				if (curLordToil == this.gatherDownedPawns_pause)
-				{
-					return "FormingCaravanStatus_GatheringDownedPawns_Pause".Translate();
-				}
-				if (curLordToil == this.leave)
-				{
-					return "FormingCaravanStatus_Leaving".Translate();
-				}
-				if (curLordToil == this.leave_pause)
-				{
-					return "FormingCaravanStatus_Leaving_Pause".Translate();
-				}
-				return "FormingCaravanStatus_Waiting".Translate();
-			}
-		}
-
-		
-		public LordJob_FormAndSendCaravan()
-		{
-		}
-
-		
-		public LordJob_FormAndSendCaravan(List<TransferableOneWay> transferables, List<Pawn> downedPawns, IntVec3 meetingPoint, IntVec3 exitSpot, int startingTile, int destinationTile)
-		{
-			this.transferables = transferables;
-			this.downedPawns = downedPawns;
-			this.meetingPoint = meetingPoint;
-			this.exitSpot = exitSpot;
-			this.startingTile = startingTile;
-			this.destinationTile = destinationTile;
-		}
-
-		
-		public override StateGraph CreateGraph()
-		{
-			StateGraph stateGraph = new StateGraph();
-			this.gatherAnimals = new LordToil_PrepareCaravan_GatherAnimals(this.meetingPoint);
-			stateGraph.AddToil(this.gatherAnimals);
-			this.gatherAnimals_pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(this.gatherAnimals_pause);
-			this.gatherItems = new LordToil_PrepareCaravan_GatherItems(this.meetingPoint);
-			stateGraph.AddToil(this.gatherItems);
-			this.gatherItems_pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(this.gatherItems_pause);
-			this.gatherSlaves = new LordToil_PrepareCaravan_GatherSlaves(this.meetingPoint);
-			stateGraph.AddToil(this.gatherSlaves);
-			this.gatherSlaves_pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(this.gatherSlaves_pause);
-			this.gatherDownedPawns = new LordToil_PrepareCaravan_GatherDownedPawns(this.meetingPoint, this.exitSpot);
-			stateGraph.AddToil(this.gatherDownedPawns);
-			this.gatherDownedPawns_pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(this.gatherDownedPawns_pause);
-			LordToil_PrepareCaravan_Wait lordToil_PrepareCaravan_Wait = new LordToil_PrepareCaravan_Wait(this.meetingPoint);
-			stateGraph.AddToil(lordToil_PrepareCaravan_Wait);
-			LordToil_PrepareCaravan_Pause lordToil_PrepareCaravan_Pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(lordToil_PrepareCaravan_Pause);
-			this.leave = new LordToil_PrepareCaravan_Leave(this.exitSpot);
-			stateGraph.AddToil(this.leave);
-			this.leave_pause = new LordToil_PrepareCaravan_Pause();
-			stateGraph.AddToil(this.leave_pause);
-			LordToil_End lordToil_End = new LordToil_End();
-			stateGraph.AddToil(lordToil_End);
-			Transition transition = new Transition(this.gatherAnimals, this.gatherItems, false, true);
-			transition.AddTrigger(new Trigger_Memo("AllAnimalsGathered"));
-			stateGraph.AddTransition(transition, false);
-			Transition transition2 = new Transition(this.gatherItems, this.gatherSlaves, false, true);
-			transition2.AddTrigger(new Trigger_Memo("AllItemsGathered"));
-			transition2.AddPostAction(new TransitionAction_EndAllJobs());
-			stateGraph.AddTransition(transition2, false);
-			Transition transition3 = new Transition(this.gatherSlaves, this.gatherDownedPawns, false, true);
-			transition3.AddTrigger(new Trigger_Memo("AllSlavesGathered"));
-			transition3.AddPostAction(new TransitionAction_EndAllJobs());
-			stateGraph.AddTransition(transition3, false);
-			Transition transition4 = new Transition(this.gatherDownedPawns, lordToil_PrepareCaravan_Wait, false, true);
-			transition4.AddTrigger(new Trigger_Memo("AllDownedPawnsGathered"));
-			transition4.AddPostAction(new TransitionAction_EndAllJobs());
-			stateGraph.AddTransition(transition4, false);
-			Transition transition5 = new Transition(lordToil_PrepareCaravan_Wait, this.leave, false, true);
-			transition5.AddTrigger(new Trigger_NoPawnsVeryTiredAndSleeping(0f));
-			transition5.AddPostAction(new TransitionAction_WakeAll());
-			stateGraph.AddTransition(transition5, false);
-			Transition transition6 = new Transition(this.leave, lordToil_End, false, true);
-			transition6.AddTrigger(new Trigger_Memo("ReadyToExitMap"));
-			//transition6.AddPreAction(new TransitionAction_Custom(new Action(this.SendCaravan)));
-			stateGraph.AddTransition(transition6, false);
-			Transition transition7 = this.PauseTransition(this.gatherAnimals, this.gatherAnimals_pause);
-			stateGraph.AddTransition(transition7, false);
-			Transition transition8 = this.UnpauseTransition(this.gatherAnimals_pause, this.gatherAnimals);
-			stateGraph.AddTransition(transition8, false);
-			Transition transition9 = this.PauseTransition(this.gatherItems, this.gatherItems_pause);
-			stateGraph.AddTransition(transition9, false);
-			Transition transition10 = this.UnpauseTransition(this.gatherItems_pause, this.gatherItems);
-			stateGraph.AddTransition(transition10, false);
-			Transition transition11 = this.PauseTransition(this.gatherSlaves, this.gatherSlaves_pause);
-			stateGraph.AddTransition(transition11, false);
-			Transition transition12 = this.UnpauseTransition(this.gatherSlaves_pause, this.gatherSlaves);
-			stateGraph.AddTransition(transition12, false);
-			Transition transition13 = this.PauseTransition(this.gatherDownedPawns, this.gatherDownedPawns_pause);
-			stateGraph.AddTransition(transition13, false);
-			Transition transition14 = this.UnpauseTransition(this.gatherDownedPawns_pause, this.gatherDownedPawns);
-			stateGraph.AddTransition(transition14, false);
-			Transition transition15 = this.PauseTransition(this.leave, this.leave_pause);
-			stateGraph.AddTransition(transition15, false);
-			Transition transition16 = this.UnpauseTransition(this.leave_pause, this.leave);
-			stateGraph.AddTransition(transition16, false);
-			Transition transition17 = this.PauseTransition(lordToil_PrepareCaravan_Wait, lordToil_PrepareCaravan_Pause);
-			stateGraph.AddTransition(transition17, false);
-			Transition transition18 = this.UnpauseTransition(lordToil_PrepareCaravan_Pause, lordToil_PrepareCaravan_Wait);
-			stateGraph.AddTransition(transition18, false);
-			return stateGraph;
-		}
-
-		
-		public override void LordJobTick()
-		{
-			base.LordJobTick();
-			for (int i = this.downedPawns.Count - 1; i >= 0; i--)
-			{
-				if (this.downedPawns[i].Destroyed)
-				{
-					this.downedPawns.RemoveAt(i);
-				}
-				else if (!this.downedPawns[i].Downed)
-				{
-					this.lord.AddPawn(this.downedPawns[i]);
-					this.downedPawns.RemoveAt(i);
-				}
-			}
-		}
-
-		
-		public override string GetReport(Pawn pawn)
-		{
-			return "LordReportFormingCaravan".Translate();
-		}
-
-		
-		private Transition PauseTransition(LordToil from, LordToil to)
-		{
-			Transition transition = new Transition(from, to, false, true);
-			transition.AddPreAction(new TransitionAction_Message("MessageCaravanFormationPaused".Translate(), MessageTypeDefOf.NegativeEvent, () => this.lord.ownedPawns.FirstOrDefault((Pawn x) => x.InMentalState), null, 1f));
-			transition.AddTrigger(new Trigger_MentalState());
-			transition.AddPostAction(new TransitionAction_EndAllJobs());
-			return transition;
-		}
-
-		
-		private Transition UnpauseTransition(LordToil from, LordToil to)
-		{
-			Transition transition = new Transition(from, to, false, true);
-			transition.AddPreAction(new TransitionAction_Message("MessageCaravanFormationUnpaused".Translate(), MessageTypeDefOf.SilentInput, null, 1f));
-			transition.AddTrigger(new Trigger_NoMentalState());
-			transition.AddPostAction(new TransitionAction_EndAllJobs());
-			return transition;
-		}
-
-		
-		public override void ExposeData()
-		{
-			Scribe_Collections.Look<TransferableOneWay>(ref this.transferables, "transferables", LookMode.Deep, Array.Empty<object>());
-			Scribe_Collections.Look<Pawn>(ref this.downedPawns, "downedPawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<IntVec3>(ref this.meetingPoint, "meetingPoint", default(IntVec3), false);
-			Scribe_Values.Look<IntVec3>(ref this.exitSpot, "exitSpot", default(IntVec3), false);
-			Scribe_Values.Look<int>(ref this.startingTile, "startingTile", 0, false);
-			Scribe_Values.Look<int>(ref this.destinationTile, "destinationTile", 0, false);
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
-			{
-				this.downedPawns.RemoveAll((Pawn x) => x.DestroyedOrNull());
-			}
-		}
-
-		
-		private void SendCaravan()
-		{
-			this.caravanSent = true;
-			CaravanFormingUtility.FormAndCreateCaravan(this.lord.ownedPawns.Concat(from x in this.downedPawns
-			where JobGiver_PrepareCaravan_GatherDownedPawns.IsDownedPawnNearExitPoint(x, this.exitSpot)
-			select x), this.lord.faction, base.Map.Tile, this.startingTile, this.destinationTile);
-		}
-
-		
-		public override void Notify_PawnAdded(Pawn p)
-		{
-			base.Notify_PawnAdded(p);
-			ReachabilityUtility.ClearCacheFor(p);
-		}
-
-		
-		public override void Notify_PawnLost(Pawn p, PawnLostCondition condition)
-		{
-			base.Notify_PawnLost(p, condition);
-			ReachabilityUtility.ClearCacheFor(p);
-			if (!this.caravanSent)
-			{
-				if (condition == PawnLostCondition.IncappedOrKilled && p.Downed)
-				{
-					this.downedPawns.Add(p);
-				}
-				CaravanFormingUtility.RemovePawnFromCaravan(p, this.lord, false);
-			}
-		}
-
-		
-		public override bool CanOpenAnyDoor(Pawn p)
-		{
-			return true;
-		}
-
-		
-		public List<TransferableOneWay> transferables;
-
-		
-		public List<Pawn> downedPawns;
-
-		
-		private IntVec3 meetingPoint;
-
-		
-		private IntVec3 exitSpot;
-
-		
-		private int startingTile;
-
-		
-		private int destinationTile;
-
-		
-		private bool caravanSent;
-
-		
-		private LordToil gatherAnimals;
-
-		
-		private LordToil gatherAnimals_pause;
-
-		
-		private LordToil gatherItems;
-
-		
-		private LordToil gatherItems_pause;
-
-		
-		private LordToil gatherSlaves;
-
-		
-		private LordToil gatherSlaves_pause;
-
-		
-		private LordToil gatherDownedPawns;
-
-		
-		private LordToil gatherDownedPawns_pause;
-
-		
-		private LordToil leave;
-
-		
-		private LordToil leave_pause;
-
-		
-		public const float CustomWakeThreshold = 0.5f;
+	public override bool CanOpenAnyDoor(Pawn p)
+	{
+		return true;
 	}
 }

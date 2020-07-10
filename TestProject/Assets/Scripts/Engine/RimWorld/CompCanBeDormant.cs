@@ -179,23 +179,15 @@ namespace RimWorld
 				MoteMaker.ThrowMetaIcon(this.parent.Position, this.parent.Map, ThingDefOf.Mote_SleepZ);
 			}
 		}
+		public override void Notify_SignalReceived(Signal signal)
+		{
+			if (!string.IsNullOrEmpty(wakeUpSignalTag) && !Awake && (signal.tag == wakeUpSignalTag || (wakeUpSignalTags != null && wakeUpSignalTags.Contains(signal.tag))) && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= Props.maxDistAwakenByOther && (!signal.args.TryGetArg("FACTION", out Faction arg2) || arg2 == null || arg2 == parent.Faction) && (Props.canWakeUpFogged || !parent.Fogged()) && !WaitingToWakeUp)
+			{
+				WakeUpWithDelay();
+			}
+		}
 
-		
-		//public override void Notify_SignalReceived(Signal signal)
-		//{
-		//	if (string.IsNullOrEmpty(this.wakeUpSignalTag) || this.Awake)
-		//	{
-		//		return;
-		//	}
-		//	Thing thing;
-		//	Faction faction;
-		//	if ((signal.tag == this.wakeUpSignalTag || (this.wakeUpSignalTags != null && this.wakeUpSignalTags.Contains(signal.tag))) && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= this.Props.maxDistAwakenByOther && (!signal.args.TryGetArg<Faction>("FACTION", out faction) || faction == null || faction == this.parent.Faction) && (this.Props.canWakeUpFogged || !this.parent.Fogged()) && !this.WaitingToWakeUp)
-		//	{
-		//		this.WakeUpWithDelay();
-		//	}
-		//}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();

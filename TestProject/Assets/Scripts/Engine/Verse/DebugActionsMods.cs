@@ -2,47 +2,57 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
+using Verse;
 
-namespace Verse
+public class DebugActionsMods
 {
-	
-	public class DebugActionsMods
+	[DebugAction("Mods", null, allowedGameStates = AllowedGameStates.Entry)]
+	private static void LoadedFilesForMod()
 	{
-		
-		[DebugAction("Mods", null, allowedGameStates = AllowedGameStates.Entry)]
-		private static void LoadedFilesForMod()
+		List<DebugMenuOption> list = new List<DebugMenuOption>();
+		foreach (ModContentPack item in LoadedModManager.RunningModsListForReading)
 		{
-			//List<DebugMenuOption> list = new List<DebugMenuOption>();
-			//List<ModContentPack>.Enumerator enumerator = LoadedModManager.RunningModsListForReading.GetEnumerator();
-			//{
-			//	while (enumerator.MoveNext())
-			//	{
-			//		DebugActionsMods.c__DisplayClass0_0 c__DisplayClass0_ = new DebugActionsMods.c__DisplayClass0_0();
-			//		c__DisplayClass0_.mod = enumerator.Current;
-			//		list.Add(new DebugMenuOption(c__DisplayClass0_.mod.Name, DebugMenuOptionMode.Action, delegate
-			//		{
-			//			ModMetaData metaData = ModLister.GetModWithIdentifier(c__DisplayClass0_.mod.PackageId, false);
-			//			if (metaData.loadFolders != null && metaData.loadFolders.DefinedVersions().Count != 0)
-			//			{
-			//				Find.WindowStack.Add(new Dialog_DebugOptionListLister(from ver in metaData.loadFolders.DefinedVersions()
-			//				select new DebugMenuOption(ver, DebugMenuOptionMode.Action, delegate
-			//				{
-			//					DebugActionsMods.c__DisplayClass0_0 cs$8__locals = c__DisplayClass0_;
-			//					IEnumerable<LoadFolder> source = metaData.loadFolders.FoldersForVersion(ver);
-			//					Func<LoadFolder, string> selector;
-			//					if ((selector = c__DisplayClass0_.9__13) == null)
-			//					{
-			//						selector = (c__DisplayClass0_.9__13 = ((LoadFolder f) => Path.Combine(c__DisplayClass0_.mod.RootDir, f.folderName)));
-			//					}
-			//					cs$8__locals.<LoadedFilesForMod>g__ShowTable|1(source.Select(selector).Reverse<string>().ToList<string>());
-			//				})));
-			//				return;
-			//			}
-			//			c__DisplayClass0_.<LoadedFilesForMod>g__ShowTable|1(null);
-			//		}));
-			//	}
-			//}
-			//Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+			ModContentPack mod = item;
+			list.Add(new DebugMenuOption(mod.Name, DebugMenuOptionMode.Action, delegate
+			{
+				ModMetaData metaData = ModLister.GetModWithIdentifier(mod.PackageId);
+				if (metaData.loadFolders != null && metaData.loadFolders.DefinedVersions().Count != 0)
+				{
+					Find.WindowStack.Add(new Dialog_DebugOptionListLister(from ver in metaData.loadFolders.DefinedVersions()
+																		  select new DebugMenuOption(ver, DebugMenuOptionMode.Action, delegate
+																		  {
+																			  ShowTable((from f in metaData.loadFolders.FoldersForVersion(ver)
+																						 select Path.Combine(mod.RootDir, f.folderName)).Reverse().ToList());
+																		  })));
+				}
+				else
+				{
+					ShowTable(null);
+				}
+			}));
+			void ShowTable(List<string> loadFolders)
+			{
+				List<Pair<string, string>> list2 = new List<Pair<string, string>>();
+				list2.AddRange(from f in DirectXmlLoader.XmlAssetsInModFolder(mod, "Defs/", loadFolders)
+							   select new Pair<string, string>(f.FullFilePath, "-"));
+				list2.AddRange(from f in DirectXmlLoader.XmlAssetsInModFolder(mod, "Patches/", loadFolders)
+							   select new Pair<string, string>(f.FullFilePath, "-"));
+				list2.AddRange(from f in ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<Texture2D>(), ModContentLoader<Texture2D>.IsAcceptableExtension, loadFolders)
+							   select new Pair<string, string>(f.Value.FullName, f.Key));
+				list2.AddRange(from f in ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<AudioClip>(), ModContentLoader<AudioClip>.IsAcceptableExtension, loadFolders)
+							   select new Pair<string, string>(f.Value.FullName, f.Key));
+				list2.AddRange(from f in ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<string>(), ModContentLoader<string>.IsAcceptableExtension, loadFolders)
+							   select new Pair<string, string>(f.Value.FullName, f.Key));
+				list2.AddRange(from f in ModContentPack.GetAllFilesForModPreserveOrder(mod, "Assemblies/", (string e) => e.ToLower() == ".dll", loadFolders)
+							   select new Pair<string, string>(f.Item2.FullName, f.Item1));
+				DebugTables.MakeTablesDialog(list2, new List<TableDataGetter<Pair<string, string>>>
+				{
+					new TableDataGetter<Pair<string, string>>("full path", (Pair<string, string> f) => f.First),
+					new TableDataGetter<Pair<string, string>>("internal path", (Pair<string, string> f) => f.Second)
+				}.ToArray());
+			}
 		}
+		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 	}
 }

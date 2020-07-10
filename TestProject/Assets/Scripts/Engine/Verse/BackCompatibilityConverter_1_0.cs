@@ -1,408 +1,356 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using RimWorld;
-using RimWorld.Planet;
 using UnityEngine;
+using Verse;
 using Verse.AI.Group;
 
-namespace Verse
+public class BackCompatibilityConverter_1_0 : BackCompatibilityConverter
 {
-	
-	public class BackCompatibilityConverter_1_0 : BackCompatibilityConverter
+	private struct UpgradedCrashedShipPart
 	{
-		
-		public override bool AppliesToVersion(int majorVer, int minorVer)
-		{
-			return majorVer <= 1 && (majorVer == 0 || minorVer == 0);
-		}
+		public string originalDefName;
 
-		
-		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
+		public Thing thing;
+	}
+
+	private static List<XmlNode> oldCrashedShipParts = new List<XmlNode>();
+
+	private static List<UpgradedCrashedShipPart> upgradedCrashedShipParts = new List<UpgradedCrashedShipPart>();
+
+	public override bool AppliesToVersion(int majorVer, int minorVer)
+	{
+		if (majorVer <= 1)
 		{
-			if (defType == typeof(ThingDef))
+			if (majorVer != 0)
 			{
-				if (defName == "CrashedPoisonShipPart" || defName == "CrashedPsychicEmanatorShipPart")
+				return minorVer == 0;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
+	{
+		if (defType == typeof(ThingDef))
+		{
+			if (defName == "CrashedPoisonShipPart" || defName == "CrashedPsychicEmanatorShipPart")
+			{
+				return "MechCapsule";
+			}
+			if (defName == "PoisonSpreader")
+			{
+				return "Defoliator";
+			}
+			if (defName == "PoisonSpreaderShipPart")
+			{
+				return "DefoliatorShipPart";
+			}
+			if (defName == "MechSerumNeurotrainer")
+			{
+				XmlNode xmlNode = node?.ParentNode;
+				if (xmlNode != null && xmlNode.HasChildNodes)
 				{
-					return "MechCapsule";
-				}
-				if (defName == "PoisonSpreader")
-				{
-					return "Defoliator";
-				}
-				if (defName == "PoisonSpreaderShipPart")
-				{
-					return "DefoliatorShipPart";
-				}
-				if (defName == "MechSerumNeurotrainer")
-				{
-					XmlNode xmlNode = (node != null) ? node.ParentNode : null;
-					if (xmlNode != null && xmlNode.HasChildNodes)
+					foreach (XmlNode childNode in xmlNode.ChildNodes)
 					{
-						foreach (object obj in xmlNode.ChildNodes)
+						if (childNode.Name == "skill")
 						{
-							XmlNode xmlNode2 = (XmlNode)obj;
-							if (xmlNode2.Name == "skill")
-							{
-								return NeurotrainerDefGenerator.NeurotrainerDefPrefix + "_" + xmlNode2.InnerText;
-							}
+							return NeurotrainerDefGenerator.NeurotrainerDefPrefix + "_" + childNode.InnerText;
 						}
 					}
-					ThingDef thingDef = (from def in DefDatabase<ThingDef>.AllDefsListForReading
-					where def.thingCategories != null && def.thingCategories.Contains(ThingCategoryDefOf.Neurotrainers)
-					select def).RandomElementWithFallback(null);
-					if (thingDef == null)
-					{
-						return null;
-					}
-					return thingDef.defName;
 				}
+				return DefDatabase<ThingDef>.AllDefsListForReading.Where((ThingDef def) => def.thingCategories != null && def.thingCategories.Contains(ThingCategoryDefOf.Neurotrainers)).RandomElementWithFallback()?.defName;
 			}
-			else if ((defType == typeof(QuestScriptDef) || defType == typeof(TaleDef)) && defName == "JourneyOffer")
-			{
-				return "EndGame_ShipEscape";
-			}
-			return null;
 		}
-
-		
-		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
+		else if ((defType == typeof(QuestScriptDef) || defType == typeof(TaleDef)) && defName == "JourneyOffer")
 		{
-			if (baseType == typeof(Thing))
-			{
-				if (providedClassName == "Building_CrashedShipPart" && node["def"] != null)
-				{
-					BackCompatibilityConverter_1_0.oldCrashedShipParts.Add(node);
-					return ThingDefOf.MechCapsule.thingClass;
-				}
-			}
-			else if (baseType == typeof(LordJob) && providedClassName == "LordJob_MechanoidsDefendShip")
-			{
-				XmlElement xmlElement = node["shipPart"];
-				if (xmlElement != null)
-				{
-					xmlElement.InnerText = xmlElement.InnerText.Replace("Thing_CrashedPsychicEmanatorShipPart", "Thing_MechCapsule").Replace("Thing_CrashedPoisonShipPart", "Thing_MechCapsule");
-				}
-				return typeof(LordJob_MechanoidsDefend);
-			}
-			return null;
+			return "EndGame_ShipEscape";
 		}
+		return null;
+	}
 
-		
-		public override int GetBackCompatibleBodyPartIndex(BodyDef body, int index)
+	public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
+	{
+		if (baseType == typeof(Thing))
 		{
-			if (body != BodyDefOf.MechanicalCentipede)
+			if (providedClassName == "Building_CrashedShipPart" && node["def"] != null)
 			{
-				return index;
+				oldCrashedShipParts.Add(node);
+				return ThingDefOf.MechCapsule.thingClass;
 			}
+		}
+		else if (baseType == typeof(LordJob) && providedClassName == "LordJob_MechanoidsDefendShip")
+		{
+			XmlElement xmlElement = node["shipPart"];
+			if (xmlElement != null)
+			{
+				xmlElement.InnerText = xmlElement.InnerText.Replace("Thing_CrashedPsychicEmanatorShipPart", "Thing_MechCapsule").Replace("Thing_CrashedPoisonShipPart", "Thing_MechCapsule");
+			}
+			return typeof(LordJob_MechanoidsDefend);
+		}
+		return null;
+	}
+
+	public override int GetBackCompatibleBodyPartIndex(BodyDef body, int index)
+	{
+		if (body == BodyDefOf.MechanicalCentipede)
+		{
 			switch (index)
 			{
-			case 9:
-				return 10;
-			case 10:
-				return 12;
-			case 11:
-				return 14;
-			case 12:
-				return 15;
-			case 13:
-				return 9;
-			case 14:
-				return 11;
-			case 15:
-				return 13;
-			default:
-				return index;
+				case 9:
+					return 10;
+				case 10:
+					return 12;
+				case 11:
+					return 14;
+				case 12:
+					return 15;
+				case 13:
+					return 9;
+				case 14:
+					return 11;
+				case 15:
+					return 13;
+				default:
+					return index;
 			}
 		}
+		return index;
+	}
 
-		
-		public override void PostExposeData(object obj)
+	public override void PostExposeData(object obj)
+	{
+		if (Scribe.mode == LoadSaveMode.LoadingVars)
 		{
-			if (Scribe.mode == LoadSaveMode.LoadingVars)
+			Game game = obj as Game;
+			if (game != null && game.questManager == null)
 			{
-				Game game = obj as Game;
-				if (game != null && game.questManager == null)
-				{
-					game.questManager = new QuestManager();
-				}
-				Zone zone = obj as Zone;
-				if (zone != null && zone.ID == -1)
-				{
-					zone.ID = Find.UniqueIDsManager.GetNextZoneID();
-				}
+				game.questManager = new QuestManager();
 			}
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			Zone zone = obj as Zone;
+			if (zone != null && zone.ID == -1)
 			{
-				Pawn pawn = obj as Pawn;
-				if (pawn != null && pawn.royalty == null)
+				zone.ID = Find.UniqueIDsManager.GetNextZoneID();
+			}
+		}
+		if (Scribe.mode != LoadSaveMode.PostLoadInit)
+		{
+			return;
+		}
+		Pawn pawn = obj as Pawn;
+		if (pawn != null && pawn.royalty == null)
+		{
+			pawn.royalty = new Pawn_RoyaltyTracker(pawn);
+		}
+		Pawn_NativeVerbs pawn_NativeVerbs = obj as Pawn_NativeVerbs;
+		if (pawn_NativeVerbs != null && pawn_NativeVerbs.verbTracker == null)
+		{
+			pawn_NativeVerbs.verbTracker = new VerbTracker(pawn_NativeVerbs);
+		}
+		Thing thing = obj as Thing;
+		if (thing != null)
+		{
+			if (thing.def.defName == "Sandbags" && thing.Stuff == null)
+			{
+				thing.SetStuffDirect(ThingDefOf.Cloth);
+			}
+			if (thing.def == ThingDefOf.MechCapsule)
+			{
+				foreach (XmlNode oldCrashedShipPart in oldCrashedShipParts)
 				{
-					pawn.royalty = new Pawn_RoyaltyTracker(pawn);
-				}
-				Pawn_NativeVerbs pawn_NativeVerbs = obj as Pawn_NativeVerbs;
-				if (pawn_NativeVerbs != null && pawn_NativeVerbs.verbTracker == null)
-				{
-					pawn_NativeVerbs.verbTracker = new VerbTracker(pawn_NativeVerbs);
-				}
-				Thing thing = obj as Thing;
-				if (thing != null)
-				{
-					if (thing.def.defName == "Sandbags" && thing.Stuff == null)
+					XmlElement xmlElement = oldCrashedShipPart["def"];
+					XmlElement xmlElement2 = oldCrashedShipPart["id"];
+					if (xmlElement != null && xmlElement2 != null && Thing.IDNumberFromThingID(xmlElement2.InnerText) == thing.thingIDNumber)
 					{
-						thing.SetStuffDirect(ThingDefOf.Cloth);
-					}
-					if (thing.def == ThingDefOf.MechCapsule)
-					{
-						foreach (XmlNode xmlNode in BackCompatibilityConverter_1_0.oldCrashedShipParts)
+						upgradedCrashedShipParts.Add(new UpgradedCrashedShipPart
 						{
-							XmlElement xmlElement = xmlNode["def"];
-							XmlElement xmlElement2 = xmlNode["id"];
-							if (xmlElement != null && xmlElement2 != null && Thing.IDNumberFromThingID(xmlElement2.InnerText) == thing.thingIDNumber)
-							{
-								BackCompatibilityConverter_1_0.upgradedCrashedShipParts.Add(new BackCompatibilityConverter_1_0.UpgradedCrashedShipPart
-								{
-									originalDefName = xmlElement.InnerText,
-									thing = thing
-								});
-							}
-						}
+							originalDefName = xmlElement.InnerText,
+							thing = thing
+						});
 					}
-				}
-				StoryWatcher storyWatcher = obj as StoryWatcher;
-				if (storyWatcher != null)
-				{
-					if (storyWatcher.watcherAdaptation == null)
-					{
-						storyWatcher.watcherAdaptation = new StoryWatcher_Adaptation();
-					}
-					if (storyWatcher.watcherPopAdaptation == null)
-					{
-						storyWatcher.watcherPopAdaptation = new StoryWatcher_PopAdaptation();
-					}
-				}
-				FoodRestrictionDatabase foodRestrictionDatabase = obj as FoodRestrictionDatabase;
-				if (foodRestrictionDatabase != null && VersionControl.BuildFromVersionString(ScribeMetaHeaderUtility.loadedGameVersion) < 2057)
-				{
-					List<FoodRestriction> allFoodRestrictions = foodRestrictionDatabase.AllFoodRestrictions;
-					for (int i = 0; i < allFoodRestrictions.Count; i++)
-					{
-						allFoodRestrictions[i].filter.SetAllow(ThingCategoryDefOf.CorpsesHumanlike, true, null, null);
-						allFoodRestrictions[i].filter.SetAllow(ThingCategoryDefOf.CorpsesAnimal, true, null, null);
-					}
-				}
-				SitePart sitePart = obj as SitePart;
-				if (sitePart != null)
-				{
-					sitePart.hidden = sitePart.def.defaultHidden;
 				}
 			}
 		}
-
-		
-		public static Quest MakeAndAddWorldObjectQuest(WorldObject destination, string description)
+		StoryWatcher storyWatcher = obj as StoryWatcher;
+		if (storyWatcher != null)
 		{
-			Quest quest = Quest.MakeRaw();
-			quest.SetInitiallyAccepted();
-			QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown, null).worldObject = destination;
-			quest.description = description;
-			Find.QuestManager.Add(quest);
-			return quest;
-		}
-
-		
-		public static Quest MakeAndAddTradeRequestQuest(WorldObject destination, string description, TradeRequestComp tradeRequest)
-		{
-			Quest quest = Quest.MakeRaw();
-			quest.SetInitiallyAccepted();
-			string text = "Quest" + quest.id + ".TradeRequestSite";
-			QuestUtility.AddQuestTag(ref destination.questTags, text);
-			QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown, null).worldObject = destination;
-			QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, text + ".TradeRequestFulfilled", QuestEndOutcome.Success, null);
-			if (destination.rewards != null)
+			if (storyWatcher.watcherAdaptation == null)
 			{
-				QuestPart_GiveToCaravan questPart_GiveToCaravan = new QuestPart_GiveToCaravan
-				{
-					inSignal = text + ".TradeRequestFulfilled",
-					Things = destination.rewards
-				};
-				foreach (Thing thing in questPart_GiveToCaravan.Things)
-				{
-					thing.holdingOwner = null;
-				}
-				quest.AddPart(questPart_GiveToCaravan);
+				storyWatcher.watcherAdaptation = new StoryWatcher_Adaptation();
 			}
-			quest.description = description;
-			Find.QuestManager.Add(quest);
-			return quest;
+			if (storyWatcher.watcherPopAdaptation == null)
+			{
+				storyWatcher.watcherPopAdaptation = new StoryWatcher_PopAdaptation();
+			}
 		}
-
-		
-		public override void PreLoadSavegame(string loadingVersion)
+		FoodRestrictionDatabase foodRestrictionDatabase = obj as FoodRestrictionDatabase;
+		if (foodRestrictionDatabase != null && VersionControl.BuildFromVersionString(ScribeMetaHeaderUtility.loadedGameVersion) < 2057)
 		{
-			BackCompatibilityConverter_1_0.oldCrashedShipParts.Clear();
-			BackCompatibilityConverter_1_0.upgradedCrashedShipParts.Clear();
+			List<FoodRestriction> allFoodRestrictions = foodRestrictionDatabase.AllFoodRestrictions;
+			for (int i = 0; i < allFoodRestrictions.Count; i++)
+			{
+				allFoodRestrictions[i].filter.SetAllow(ThingCategoryDefOf.CorpsesHumanlike, allow: true);
+				allFoodRestrictions[i].filter.SetAllow(ThingCategoryDefOf.CorpsesAnimal, allow: true);
+			}
 		}
-
-		
-		public override void PostLoadSavegame(string loadingVersion)
+		SitePart sitePart = obj as SitePart;
+		if (sitePart != null)
 		{
-			//BackCompatibilityConverter_1_0.c__DisplayClass11_0 c__DisplayClass11_ = new BackCompatibilityConverter_1_0.c__DisplayClass11_0();
-			//BackCompatibilityConverter_1_0.oldCrashedShipParts.Clear();
-			//foreach (BackCompatibilityConverter_1_0.UpgradedCrashedShipPart upgradedCrashedShipPart in BackCompatibilityConverter_1_0.upgradedCrashedShipParts)
-			//{
-			//	Thing thing = upgradedCrashedShipPart.thing;
-			//	IntVec3 intVec = IntVec3.Invalid;
-			//	Map map;
-			//	if (thing.Spawned)
-			//	{
-			//		intVec = thing.Position;
-			//		map = thing.Map;
-			//	}
-			//	else
-			//	{
-			//		Skyfaller skyfaller = thing.ParentHolder as Skyfaller;
-			//		if (skyfaller == null)
-			//		{
-			//			thing.Destroy(DestroyMode.Vanish);
-			//		}
-			//		intVec = skyfaller.Position;
-			//		map = skyfaller.Map;
-			//	}
-			//	if (!(intVec == IntVec3.Invalid))
-			//	{
-			//		intVec = new IntVec3(intVec.x - Mathf.CeilToInt((float)thing.def.size.x / 2f), intVec.y, intVec.z);
-			//		Thing item = null;
-			//		if (upgradedCrashedShipPart.originalDefName == "CrashedPoisonShipPart" || upgradedCrashedShipPart.originalDefName == "PoisonSpreaderShipPart")
-			//		{
-			//			item = ThingMaker.MakeThing(ThingDefOf.DefoliatorShipPart, null);
-			//		}
-			//		else if (upgradedCrashedShipPart.originalDefName == "CrashedPsychicEmanatorShipPart")
-			//		{
-			//			item = ThingMaker.MakeThing(ThingDefOf.PsychicDronerShipPart, null);
-			//		}
-			//		ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
-			//		activeDropPodInfo.innerContainer.TryAdd(item, 1, true);
-			//		activeDropPodInfo.openDelay = 60;
-			//		activeDropPodInfo.leaveSlag = false;
-			//		activeDropPodInfo.despawnPodBeforeSpawningThing = true;
-			//		activeDropPodInfo.spawnWipeMode = new WipeMode?(WipeMode.Vanish);
-			//		DropPodUtility.MakeDropPodAt(intVec, map, activeDropPodInfo);
-			//	}
-			//}
-			//BackCompatibilityConverter_1_0.upgradedCrashedShipParts.Clear();
-			//c__DisplayClass11_.sites = Find.WorldObjects.Sites;
-			//int k;
-			//int j;
-			//for (k = 0; k < c__DisplayClass11_.sites.Count; k = j + 1)
-			//{
-			//	if (!Find.QuestManager.QuestsListForReading.Any((Quest x) => x.QuestLookTargets.Contains(c__DisplayClass11_.sites[k])))
-			//	{
-			//		Quest quest = Quest.MakeRaw();
-			//		QuestUtility.GenerateBackCompatibilityNameFor(quest);
-			//		quest.SetInitiallyAccepted();
-			//		quest.appearanceTick = c__DisplayClass11_.sites[k].creationGameTicks;
-			//		TimeoutComp component = c__DisplayClass11_.sites[k].GetComponent<TimeoutComp>();
-			//		if (component != null && component.Active && !c__DisplayClass11_.sites[k].HasMap)
-			//		{
-			//			QuestPartUtility.MakeAndAddQuestTimeoutDelay(quest, component.TicksLeft, c__DisplayClass11_.sites[k]);
-			//			component.StopTimeout();
-			//		}
-			//		QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown, null).worldObject = c__DisplayClass11_.sites[k];
-			//		ChoiceLetter choiceLetter = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(c__DisplayClass11_.sites[k]));
-			//		if (choiceLetter != null)
-			//		{
-			//			quest.description = choiceLetter.text;
-			//		}
-			//		Find.QuestManager.Add(quest);
-			//	}
-			//	j = k;
-			//}
-			//c__DisplayClass11_.worldObjects = Find.WorldObjects.AllWorldObjects;
-			//int l;
-
-			//for (l = 0; l < c__DisplayClass11_.worldObjects.Count; l = j + 1)
-			//{
-			//	if (c__DisplayClass11_.worldObjects[l].def == WorldObjectDefOf.EscapeShip && !Find.QuestManager.QuestsListForReading.Any(delegate(Quest x)
-			//	{
-			//		List<QuestPart> partsListForReading = x.PartsListForReading;
-			//		Predicate<QuestPart> predicate;
-			//		if ((predicate=default ) == null)
-			//		{
-			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[l]));
-			//		}
-			//		return partsListForReading.Any(predicate);
-			//	}))
-			//	{
-			//		BackCompatibilityConverter_1_0.MakeAndAddWorldObjectQuest(c__DisplayClass11_.worldObjects[l], null);
-			//	}
-			//	j = l;
-			//}
-			//int m;
-
-			//for (m = 0; m < c__DisplayClass11_.worldObjects.Count; m = j + 1)
-			//{
-			//	if (c__DisplayClass11_.worldObjects[m] is PeaceTalks && !Find.QuestManager.QuestsListForReading.Any(delegate(Quest x)
-			//	{
-			//		List<QuestPart> partsListForReading = x.PartsListForReading;
-			//		Predicate<QuestPart> predicate;
-			//		if ((predicate=default ) == null)
-			//		{
-			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[m]));
-			//		}
-			//		return partsListForReading.Any(predicate);
-			//	}))
-			//	{
-			//		Quest quest2 = BackCompatibilityConverter_1_0.MakeAndAddWorldObjectQuest(c__DisplayClass11_.worldObjects[m], null);
-			//		ChoiceLetter choiceLetter2 = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(c__DisplayClass11_.worldObjects[m]));
-			//		if (choiceLetter2 != null)
-			//		{
-			//			quest2.description = choiceLetter2.text;
-			//		}
-			//	}
-			//	j = m;
-			//}
-			//int i;
-
-			//for (i = 0; i < c__DisplayClass11_.worldObjects.Count; i = j + 1)
-			//{
-			//	TradeRequestComp component2 = c__DisplayClass11_.worldObjects[i].GetComponent<TradeRequestComp>();
-			//	if (component2 != null && component2.ActiveRequest && !Find.QuestManager.QuestsListForReading.Any(delegate(Quest x)
-			//	{
-			//		List<QuestPart> partsListForReading = x.PartsListForReading;
-			//		Predicate<QuestPart> predicate;
-			//		if ((predicate=default ) == null)
-			//		{
-			//			predicate = ( ((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == c__DisplayClass11_.worldObjects[i]));
-			//		}
-			//		return partsListForReading.Any(predicate);
-			//	}))
-			//	{
-			//		Quest quest3 = BackCompatibilityConverter_1_0.MakeAndAddTradeRequestQuest(c__DisplayClass11_.worldObjects[i], null, component2);
-			//		ChoiceLetter choiceLetter3 = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(c__DisplayClass11_.worldObjects[i]));
-			//		if (choiceLetter3 != null)
-			//		{
-			//			quest3.description = choiceLetter3.text;
-			//		}
-			//	}
-			//	j = i;
-			//}
+			sitePart.hidden = sitePart.def.defaultHidden;
 		}
+	}
 
-		
-		private static List<XmlNode> oldCrashedShipParts = new List<XmlNode>();
+	public static Quest MakeAndAddWorldObjectQuest(WorldObject destination, string description)
+	{
+		Quest quest = Quest.MakeRaw();
+		quest.SetInitiallyAccepted();
+		QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown).worldObject = destination;
+		quest.description = description;
+		Find.QuestManager.Add(quest);
+		return quest;
+	}
 
-		
-		private static List<BackCompatibilityConverter_1_0.UpgradedCrashedShipPart> upgradedCrashedShipParts = new List<BackCompatibilityConverter_1_0.UpgradedCrashedShipPart>();
-
-		
-		private struct UpgradedCrashedShipPart
+	public static Quest MakeAndAddTradeRequestQuest(WorldObject destination, string description, TradeRequestComp tradeRequest)
+	{
+		Quest quest = Quest.MakeRaw();
+		quest.SetInitiallyAccepted();
+		string text = "Quest" + quest.id + ".TradeRequestSite";
+		QuestUtility.AddQuestTag(ref destination.questTags, text);
+		QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown).worldObject = destination;
+		QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, text + ".TradeRequestFulfilled", QuestEndOutcome.Success);
+		if (destination.rewards != null)
 		{
-			
-			public string originalDefName;
+			QuestPart_GiveToCaravan questPart_GiveToCaravan = new QuestPart_GiveToCaravan
+			{
+				inSignal = text + ".TradeRequestFulfilled",
+				Things = destination.rewards
+			};
+			foreach (Thing thing in questPart_GiveToCaravan.Things)
+			{
+				thing.holdingOwner = null;
+			}
+			quest.AddPart(questPart_GiveToCaravan);
+		}
+		quest.description = description;
+		Find.QuestManager.Add(quest);
+		return quest;
+	}
 
-			
-			public Thing thing;
+	public override void PreLoadSavegame(string loadingVersion)
+	{
+		oldCrashedShipParts.Clear();
+		upgradedCrashedShipParts.Clear();
+	}
+
+	public override void PostLoadSavegame(string loadingVersion)
+	{
+		oldCrashedShipParts.Clear();
+		foreach (UpgradedCrashedShipPart upgradedCrashedShipPart in upgradedCrashedShipParts)
+		{
+			Thing thing = upgradedCrashedShipPart.thing;
+			IntVec3 invalid = IntVec3.Invalid;
+			Map map = null;
+			if (thing.Spawned)
+			{
+				invalid = thing.Position;
+				map = thing.Map;
+			}
+			else
+			{
+				Skyfaller obj = thing.ParentHolder as Skyfaller;
+				if (obj == null)
+				{
+					thing.Destroy();
+				}
+				invalid = obj.Position;
+				map = obj.Map;
+			}
+			if (!(invalid == IntVec3.Invalid))
+			{
+				invalid = new IntVec3(invalid.x - Mathf.CeilToInt((float)thing.def.size.x / 2f), invalid.y, invalid.z);
+				Thing item = null;
+				if (upgradedCrashedShipPart.originalDefName == "CrashedPoisonShipPart" || upgradedCrashedShipPart.originalDefName == "PoisonSpreaderShipPart")
+				{
+					item = ThingMaker.MakeThing(ThingDefOf.DefoliatorShipPart);
+				}
+				else if (upgradedCrashedShipPart.originalDefName == "CrashedPsychicEmanatorShipPart")
+				{
+					item = ThingMaker.MakeThing(ThingDefOf.PsychicDronerShipPart);
+				}
+				ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+				activeDropPodInfo.innerContainer.TryAdd(item, 1);
+				activeDropPodInfo.openDelay = 60;
+				activeDropPodInfo.leaveSlag = false;
+				activeDropPodInfo.despawnPodBeforeSpawningThing = true;
+				activeDropPodInfo.spawnWipeMode = WipeMode.Vanish;
+				DropPodUtility.MakeDropPodAt(invalid, map, activeDropPodInfo);
+			}
+		}
+		upgradedCrashedShipParts.Clear();
+		List<Site> sites = Find.WorldObjects.Sites;
+		int l;
+		for (l = 0; l < sites.Count; l++)
+		{
+			if (!Find.QuestManager.QuestsListForReading.Any((Quest x) => x.QuestLookTargets.Contains(sites[l])))
+			{
+				Quest quest = Quest.MakeRaw();
+				QuestUtility.GenerateBackCompatibilityNameFor(quest);
+				quest.SetInitiallyAccepted();
+				quest.appearanceTick = sites[l].creationGameTicks;
+				TimeoutComp component = sites[l].GetComponent<TimeoutComp>();
+				if (component != null && component.Active && !sites[l].HasMap)
+				{
+					QuestPartUtility.MakeAndAddQuestTimeoutDelay(quest, component.TicksLeft, sites[l]);
+					component.StopTimeout();
+				}
+				QuestPartUtility.MakeAndAddEndCondition<QuestPart_NoWorldObject>(quest, quest.InitiateSignal, QuestEndOutcome.Unknown).worldObject = sites[l];
+				ChoiceLetter choiceLetter = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(sites[l]));
+				if (choiceLetter != null)
+				{
+					quest.description = choiceLetter.text;
+				}
+				Find.QuestManager.Add(quest);
+			}
+		}
+		List<WorldObject> worldObjects = Find.WorldObjects.AllWorldObjects;
+		int k;
+		for (k = 0; k < worldObjects.Count; k++)
+		{
+			if (worldObjects[k].def == WorldObjectDefOf.EscapeShip && !Find.QuestManager.QuestsListForReading.Any((Quest x) => x.PartsListForReading.Any((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == worldObjects[k])))
+			{
+				MakeAndAddWorldObjectQuest(worldObjects[k], null);
+			}
+		}
+		int j;
+		for (j = 0; j < worldObjects.Count; j++)
+		{
+			if (worldObjects[j] is PeaceTalks && !Find.QuestManager.QuestsListForReading.Any((Quest x) => x.PartsListForReading.Any((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == worldObjects[j])))
+			{
+				Quest quest2 = MakeAndAddWorldObjectQuest(worldObjects[j], null);
+				ChoiceLetter choiceLetter2 = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(worldObjects[j]));
+				if (choiceLetter2 != null)
+				{
+					quest2.description = choiceLetter2.text;
+				}
+			}
+		}
+		int i;
+		for (i = 0; i < worldObjects.Count; i++)
+		{
+			TradeRequestComp component2 = worldObjects[i].GetComponent<TradeRequestComp>();
+			if (component2 != null && component2.ActiveRequest && !Find.QuestManager.QuestsListForReading.Any((Quest x) => x.PartsListForReading.Any((QuestPart y) => y is QuestPart_NoWorldObject && ((QuestPart_NoWorldObject)y).worldObject == worldObjects[i])))
+			{
+				Quest quest3 = MakeAndAddTradeRequestQuest(worldObjects[i], null, component2);
+				ChoiceLetter choiceLetter3 = Find.Archive.ArchivablesListForReading.OfType<ChoiceLetter>().FirstOrDefault((ChoiceLetter x) => x.lookTargets != null && x.lookTargets.targets.Contains(worldObjects[i]));
+				if (choiceLetter3 != null)
+				{
+					quest3.description = choiceLetter3.text;
+				}
+			}
 		}
 	}
 }

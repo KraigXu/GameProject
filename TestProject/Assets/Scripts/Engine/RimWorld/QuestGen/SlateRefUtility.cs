@@ -1,105 +1,98 @@
-﻿using System;
+﻿using RimWorld.QuestGen;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Verse;
 using Verse.Grammar;
 
-namespace RimWorld.QuestGen
+public static class SlateRefUtility
 {
-	
-	public static class SlateRefUtility
+	public static bool CheckSingleVariableSyntax(string str, Slate slate, out object obj, out bool exists)
 	{
-		
-		public static bool CheckSingleVariableSyntax(string str, Slate slate, out object obj, out bool exists)
+		if (str.NullOrEmpty())
 		{
-			if (str.NullOrEmpty())
-			{
-				obj = null;
-				exists = false;
-				return false;
-			}
-			if (str[0] != '$')
-			{
-				obj = null;
-				exists = false;
-				return false;
-			}
-			for (int i = 1; i < str.Length; i++)
-			{
-				if (!char.IsLetterOrDigit(str[i]) && str[i] != '_' && str[i] != '/')
-				{
-					obj = null;
-					exists = false;
-					return false;
-				}
-			}
-			if (slate != null)
-			{
-				exists = slate.TryGet<object>(str.Substring(1), out obj, false);
-			}
-			else
-			{
-				exists = false;
-				obj = null;
-			}
-			return true;
+			obj = null;
+			exists = false;
+			return false;
 		}
+		if (str[0] != '$')
+		{
+			obj = null;
+			exists = false;
+			return false;
+		}
+		for (int i = 1; i < str.Length; i++)
+		{
+			if (!char.IsLetterOrDigit(str[i]) && str[i] != '_' && str[i] != '/')
+			{
+				obj = null;
+				exists = false;
+				return false;
+			}
+		}
+		if (slate != null)
+		{
+			exists = slate.TryGet(str.Substring(1), out obj);
+		}
+		else
+		{
+			exists = false;
+			obj = null;
+		}
+		return true;
+	}
 
-		
-		public static bool MustTranslate(string slateRef, FieldInfo fi)
+	public static bool MustTranslate(string slateRef, FieldInfo fi)
+	{
+		if (slateRef.NullOrEmpty())
 		{
-			if (slateRef.NullOrEmpty())
+			return false;
+		}
+		if (slateRef.Trim().Length == 0)
+		{
+			return false;
+		}
+		if (CheckSingleVariableSyntax(slateRef, null, out object _, out bool _))
+		{
+			return false;
+		}
+		bool flag = false;
+		for (int i = 0; i < slateRef.Length; i++)
+		{
+			if (char.IsLetter(slateRef[i]))
 			{
-				return false;
+				flag = true;
+				break;
 			}
-			if (slateRef.Trim().Length == 0)
+		}
+		if (!flag)
+		{
+			return false;
+		}
+		if (slateRef.Length >= 3 && slateRef[0] == '$' && slateRef[1] == '(' && slateRef[slateRef.Length - 1] == ')')
+		{
+			return false;
+		}
+		if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef<>))
+		{
+			Type type = fi.DeclaringType.GetGenericArguments()[0];
+			if (type.IsGenericType)
 			{
-				return false;
-			}
-			object obj;
-			bool flag;
-			if (SlateRefUtility.CheckSingleVariableSyntax(slateRef, null, out obj, out flag))
-			{
-				return false;
-			}
-			bool flag2 = false;
-			for (int i = 0; i < slateRef.Length; i++)
-			{
-				if (char.IsLetter(slateRef[i]))
+				Type genericTypeDefinition = type.GetGenericTypeDefinition();
+				if (genericTypeDefinition == typeof(IEnumerable<>) || genericTypeDefinition == typeof(IList<>) || genericTypeDefinition == typeof(List<>))
 				{
-					flag2 = true;
-					break;
+					type = type.GetGenericArguments()[0];
 				}
 			}
-			if (!flag2)
+			if (type != typeof(string) && type != typeof(object) && type != typeof(RulePack))
 			{
 				return false;
 			}
-			if (slateRef.Length >= 3 && slateRef[0] == '$' && slateRef[1] == '(' && slateRef[slateRef.Length - 1] == ')')
+			if (type == typeof(object) && (!slateRef.Contains(" ") || (ConvertHelper.IsXml(slateRef) && !slateRef.Contains("<rulesStrings>"))))
 			{
 				return false;
 			}
-			//if (fi.DeclaringType.IsGenericType && fi.DeclaringType.GetGenericTypeDefinition() == typeof(SlateRef))
-			//{
-			//	Type type = fi.DeclaringType.GetGenericArguments()[0];
-			//	if (type.IsGenericType)
-			//	{
-			//		Type genericTypeDefinition = type.GetGenericTypeDefinition();
-			//		//if (genericTypeDefinition == typeof(IEnumerable) || genericTypeDefinition == typeof(IList) || genericTypeDefinition == typeof(List))
-			//		//{
-			//		//	type = type.GetGenericArguments()[0];
-			//		//}
-			//	}
-			//	if (type != typeof(string) && type != typeof(object) && type != typeof(RulePack))
-			//	{
-			//		return false;
-			//	}
-			//	if (type == typeof(object) && (!slateRef.Contains(" ") || (ConvertHelper.IsXml(slateRef) && !slateRef.Contains("<rulesStrings>"))))
-			//	{
-			//		return false;
-			//	}
-			//}
-			return true;
 		}
+		return true;
 	}
 }

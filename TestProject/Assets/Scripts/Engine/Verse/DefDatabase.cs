@@ -2,161 +2,121 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Verse;
 
-namespace Verse
+public static class DefDatabase<T> where T : Def
 {
-	public static class DefDatabase<T> where T : Def
+	private static List<T> defsList = new List<T>();
+
+	private static Dictionary<string, T> defsByName = new Dictionary<string, T>();
+
+	public static IEnumerable<T> AllDefs => defsList;
+
+	public static List<T> AllDefsListForReading => defsList;
+
+	public static int DefCount => defsList.Count;
+
+	public static void AddAllInMods()
 	{
-		
-		
-		public static IEnumerable<T> AllDefs
+		HashSet<string> hashSet = new HashSet<string>();
+		foreach (ModContentPack item in LoadedModManager.RunningMods.OrderBy((ModContentPack m) => m.OverwritePriority).ThenBy((ModContentPack x) => LoadedModManager.RunningModsListForReading.IndexOf(x)))
 		{
-			get
+			hashSet.Clear();
+			foreach (T item2 in GenDefDatabase.DefsToGoInDatabase<T>(item))
 			{
-				return DefDatabase<T>.defsList;
-			}
-		}
-
-		
-		
-		public static List<T> AllDefsListForReading
-		{
-			get
-			{
-				return DefDatabase<T>.defsList;
-			}
-		}
-
-		
-		
-		public static int DefCount
-		{
-			get
-			{
-				return DefDatabase<T>.defsList.Count;
-			}
-		}
-
-		
-		public static void AddAllInMods()
-		{
-			HashSet<string> hashSet = new HashSet<string>();
-			foreach (ModContentPack modContentPack in (from m in LoadedModManager.RunningMods
-			orderby m.OverwritePriority
-			select m).ThenBy((ModContentPack x) => LoadedModManager.RunningModsListForReading.IndexOf(x)))
-			{
-				hashSet.Clear();
-				foreach (T t in GenDefDatabase.DefsToGoInDatabase<T>(modContentPack))
+				if (!hashSet.Add(item2.defName))
 				{
-					if (!hashSet.Add(t.defName))
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Mod ",
-							modContentPack,
-							" has multiple ",
-							typeof(T),
-							"s named ",
-							t.defName,
-							". Skipping."
-						}), false);
-					}
-					else
-					{
-						//DefDatabase<T>.<AddAllInMods>g__AddDef|8_0(t, modContentPack.ToString());
-					}
+					Log.Error("Mod " + item + " has multiple " + typeof(T) + "s named " + item2.defName + ". Skipping.");
+				}
+				else
+				{
+					AddDef(item2, item.ToString());
 				}
 			}
-			foreach (T def in LoadedModManager.PatchedDefsForReading.OfType<T>())
-			{
-				//DefDatabase<T>.<AddAllInMods>g__AddDef|8_0(def, "Patches");
-			}
 		}
-
-		
-		public static void Add(IEnumerable<T> defs)
+		foreach (T item3 in LoadedModManager.PatchedDefsForReading.OfType<T>())
 		{
-			foreach (T def in defs)
-			{
-				DefDatabase<T>.Add(def);
-			}
+			AddDef(item3, "Patches");
 		}
-
-		
-		public static void Add(T def)
+		void AddDef(T def, string sourceName)
 		{
-			while (DefDatabase<T>.defsByName.ContainsKey(def.defName))
+			if (def.defName == "UnnamedDef")
 			{
-				Log.Error(string.Concat(new object[]
+				string text = "Unnamed" + typeof(T).Name + Rand.Range(1, 100000).ToString() + "A";
+				Log.Error(typeof(T).Name + " in " + sourceName + " with label " + def.label + " lacks a defName. Giving name " + text);
+				def.defName = text;
+			}
+			if (defsByName.TryGetValue(def.defName, out T value))
+			{
+				Remove(value);
+			}
+			Add(def);
+		}
+	}
+
+	public static void Add(IEnumerable<T> defs)
+	{
+		foreach (T def in defs)
+		{
+			Add(def);
+		}
+	}
+
+	public static void Add(T def)
+	{
+		while (defsByName.ContainsKey(def.defName))
+		{
+			Log.Error("Adding duplicate " + typeof(T) + " name: " + def.defName);
+			def.defName += Mathf.RoundToInt(Rand.Value * 1000f);
+		}
+		defsList.Add(def);
+		defsByName.Add(def.defName, def);
+		if (defsList.Count > 65535)
+		{
+			Log.Error("Too many " + typeof(T) + "; over " + ushort.MaxValue);
+		}
+		def.index = (ushort)(defsList.Count - 1);
+	}
+
+	private static void Remove(T def)
+	{
+		defsByName.Remove(def.defName);
+		defsList.Remove(def);
+		SetIndices();
+	}
+
+	public static void Clear()
+	{
+		defsList.Clear();
+		defsByName.Clear();
+	}
+
+	public static void ClearCachedData()
+	{
+		for (int i = 0; i < defsList.Count; i++)
+		{
+			defsList[i].ClearCachedData();
+		}
+	}
+
+	public static void ResolveAllReferences(bool onlyExactlyMyType = true, bool parallel = false)
+	{
+		DeepProfiler.Start("SetIndices");
+		try
+		{
+			SetIndices();
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+		DeepProfiler.Start("ResolveAllReferences " + typeof(T).FullName);
+		try
+		{
+			Action<T> action = delegate (T def)
+			{
+				if (!onlyExactlyMyType || !(def.GetType() != typeof(T)))
 				{
-					"Adding duplicate ",
-					typeof(T),
-					" name: ",
-					def.defName
-				}), false);
-				T t = def;
-				t.defName += Mathf.RoundToInt(Rand.Value * 1000f);
-			}
-			DefDatabase<T>.defsList.Add(def);
-			DefDatabase<T>.defsByName.Add(def.defName, def);
-			if (DefDatabase<T>.defsList.Count > 65535)
-			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Too many ",
-					typeof(T),
-					"; over ",
-					ushort.MaxValue
-				}), false);
-			}
-			def.index = (ushort)(DefDatabase<T>.defsList.Count - 1);
-		}
-
-		
-		private static void Remove(T def)
-		{
-			DefDatabase<T>.defsByName.Remove(def.defName);
-			DefDatabase<T>.defsList.Remove(def);
-			DefDatabase<T>.SetIndices();
-		}
-
-		
-		public static void Clear()
-		{
-			DefDatabase<T>.defsList.Clear();
-			DefDatabase<T>.defsByName.Clear();
-		}
-
-		
-		public static void ClearCachedData()
-		{
-			for (int i = 0; i < DefDatabase<T>.defsList.Count; i++)
-			{
-				DefDatabase<T>.defsList[i].ClearCachedData();
-			}
-		}
-
-		
-		public static void ResolveAllReferences(bool onlyExactlyMyType = true, bool parallel = false)
-		{
-			DeepProfiler.Start("SetIndices");
-			try
-			{
-				DefDatabase<T>.SetIndices();
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-			DeepProfiler.Start("ResolveAllReferences " + typeof(T).FullName);
-			try
-			{
-				Action<T> action = delegate(T def)
-				{
-					if (onlyExactlyMyType && def.GetType() != typeof(T))
-					{
-						return;
-					}
 					DeepProfiler.Start("Resolver call");
 					try
 					{
@@ -164,151 +124,107 @@ namespace Verse
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error while resolving references for def ",
-							def,
-							": ",
-							ex
-						}), false);
+						Log.Error("Error while resolving references for def " + def + ": " + ex);
 					}
 					finally
 					{
 						DeepProfiler.End();
 					}
-				};
-				if (parallel)
-				{
-					GenThreading.ParallelForEach<T>(DefDatabase<T>.defsList, action, -1);
 				}
-				else
-				{
-					for (int i = 0; i < DefDatabase<T>.defsList.Count; i++)
-					{
-						action(DefDatabase<T>.defsList[i]);
-					}
-				}
-			}
-			finally
+			};
+			if (parallel)
 			{
-				DeepProfiler.End();
-			}
-			DeepProfiler.Start("SetIndices");
-			try
-			{
-				DefDatabase<T>.SetIndices();
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-		}
-
-		
-		private static void SetIndices()
-		{
-			for (int i = 0; i < DefDatabase<T>.defsList.Count; i++)
-			{
-				DefDatabase<T>.defsList[i].index = (ushort)i;
-			}
-		}
-
-		
-		public static void ErrorCheckAllDefs()
-		{
-			foreach (T t in DefDatabase<T>.AllDefs)
-			{
-				try
-				{
-					if (!t.ignoreConfigErrors)
-					{
-						foreach (string text in t.ConfigErrors())
-						{
-							Log.Error(string.Concat(new object[]
-							{
-								"Config error in ",
-								t,
-								": ",
-								text
-							}), false);
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Exception in ConfigErrors() of ",
-						t.defName,
-						": ",
-						ex
-					}), false);
-				}
-			}
-		}
-
-		
-		public static T GetNamed(string defName, bool errorOnFail = true)
-		{
-			if (errorOnFail)
-			{
-				T result;
-				if (DefDatabase<T>.defsByName.TryGetValue(defName, out result))
-				{
-					return result;
-				}
-				Log.Error(string.Concat(new object[]
-				{
-					"Failed to find ",
-					typeof(T),
-					" named ",
-					defName,
-					". There are ",
-					DefDatabase<T>.defsList.Count,
-					" defs of this type loaded."
-				}), false);
-				return default(T);
+				GenThreading.ParallelForEach(defsList, action);
 			}
 			else
 			{
-				T result2;
-				if (DefDatabase<T>.defsByName.TryGetValue(defName, out result2))
+				for (int i = 0; i < defsList.Count; i++)
 				{
-					return result2;
+					action(defsList[i]);
 				}
-				return default(T);
 			}
 		}
-
-		
-		public static T GetNamedSilentFail(string defName)
+		finally
 		{
-			return DefDatabase<T>.GetNamed(defName, false);
+			DeepProfiler.End();
 		}
-
-		
-		public static T GetByShortHash(ushort shortHash)
+		DeepProfiler.Start("SetIndices");
+		try
 		{
-			for (int i = 0; i < DefDatabase<T>.defsList.Count; i++)
+			SetIndices();
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
+
+	private static void SetIndices()
+	{
+		for (int i = 0; i < defsList.Count; i++)
+		{
+			defsList[i].index = (ushort)i;
+		}
+	}
+
+	public static void ErrorCheckAllDefs()
+	{
+		foreach (T allDef in AllDefs)
+		{
+			try
 			{
-				if (DefDatabase<T>.defsList[i].shortHash == shortHash)
+				if (!allDef.ignoreConfigErrors)
 				{
-					return DefDatabase<T>.defsList[i];
+					foreach (string item in allDef.ConfigErrors())
+					{
+						Log.Error("Config error in " + allDef + ": " + item);
+					}
 				}
 			}
-			return default(T);
+			catch (Exception ex)
+			{
+				Log.Error("Exception in ConfigErrors() of " + allDef.defName + ": " + ex);
+			}
 		}
+	}
 
-		
-		public static T GetRandom()
+	public static T GetNamed(string defName, bool errorOnFail = true)
+	{
+		if (errorOnFail)
 		{
-			return DefDatabase<T>.defsList.RandomElement<T>();
+			if (defsByName.TryGetValue(defName, out T value))
+			{
+				return value;
+			}
+			Log.Error("Failed to find " + typeof(T) + " named " + defName + ". There are " + defsList.Count + " defs of this type loaded.");
+			return null;
 		}
+		if (defsByName.TryGetValue(defName, out T value2))
+		{
+			return value2;
+		}
+		return null;
+	}
 
-		
-		private static List<T> defsList = new List<T>();
+	public static T GetNamedSilentFail(string defName)
+	{
+		return GetNamed(defName, errorOnFail: false);
+	}
 
-		
-		private static Dictionary<string, T> defsByName = new Dictionary<string, T>();
+	public static T GetByShortHash(ushort shortHash)
+	{
+		for (int i = 0; i < defsList.Count; i++)
+		{
+			if (defsList[i].shortHash == shortHash)
+			{
+				return defsList[i];
+			}
+		}
+		return null;
+	}
+
+	public static T GetRandom()
+	{
+		return defsList.RandomElement();
 	}
 }

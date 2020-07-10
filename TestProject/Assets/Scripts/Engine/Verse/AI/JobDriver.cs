@@ -1,731 +1,559 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
-using RimWorld;
 using UnityEngine;
+using Verse;
+using Verse.AI;
 
-namespace Verse.AI
+public abstract class JobDriver : IExposable, IJobEndable
 {
-	
-	public abstract class JobDriver : IExposable, IJobEndable
+	public Pawn pawn;
+
+	public Job job;
+
+	private List<Toil> toils = new List<Toil>();
+
+	public List<Func<JobCondition>> globalFailConditions = new List<Func<JobCondition>>();
+
+	public List<Action> globalFinishActions = new List<Action>();
+
+	public bool ended;
+
+	private int curToilIndex = -1;
+
+	private ToilCompleteMode curToilCompleteMode;
+
+	public int ticksLeftThisToil = 99999;
+
+	private bool wantBeginNextToil;
+
+	protected int startTick = -1;
+
+	public TargetIndex rotateToFace = TargetIndex.A;
+
+	private int nextToilIndex = -1;
+
+	public bool asleep;
+
+	public float uninstallWorkLeft;
+
+	public bool collideWithPawns;
+
+	public Pawn locomotionUrgencySameAs;
+
+	public int debugTicksSpentThisToil;
+
+	protected Toil CurToil
 	{
-		
-		
-		protected Toil CurToil
+		get
 		{
-			get
+			if (curToilIndex < 0 || job == null || pawn.CurJob != job)
 			{
-				if (this.curToilIndex < 0 || this.job == null || this.pawn.CurJob != this.job)
-				{
-					return null;
-				}
-				if (this.curToilIndex >= this.toils.Count)
-				{
-					Log.Error(string.Concat(new object[]
-					{
-						this.pawn,
-						" with job ",
-						this.pawn.CurJob,
-						" tried to get CurToil with curToilIndex=",
-						this.curToilIndex,
-						" but only has ",
-						this.toils.Count,
-						" toils."
-					}), false);
-					return null;
-				}
-				return this.toils[this.curToilIndex];
+				return null;
 			}
-		}
-
-		
-		
-		protected bool HaveCurToil
-		{
-			get
+			if (curToilIndex >= toils.Count)
 			{
-				return this.curToilIndex >= 0 && this.curToilIndex < this.toils.Count && this.job != null && this.pawn.CurJob == this.job;
+				Log.Error(pawn + " with job " + pawn.CurJob + " tried to get CurToil with curToilIndex=" + curToilIndex + " but only has " + toils.Count + " toils.");
+				return null;
 			}
+			return toils[curToilIndex];
 		}
+	}
 
-		
-		
-		private bool CanStartNextToilInBusyStance
+	protected bool HaveCurToil
+	{
+		get
 		{
-			get
+			if (curToilIndex >= 0 && curToilIndex < toils.Count && job != null)
 			{
-				int num = this.curToilIndex + 1;
-				return num < this.toils.Count && this.toils[num].atomicWithPrevious;
+				return pawn.CurJob == job;
 			}
-		}
-
-		
-		
-		public int CurToilIndex
-		{
-			get
-			{
-				return this.curToilIndex;
-			}
-		}
-
-		
-		
-		public bool OnLastToil
-		{
-			get
-			{
-				return this.CurToilIndex == this.toils.Count - 1;
-			}
-		}
-
-		
-		
-		public SkillDef ActiveSkill
-		{
-			get
-			{
-				if (!this.HaveCurToil || this.CurToil.activeSkill == null)
-				{
-					return null;
-				}
-				return this.CurToil.activeSkill();
-			}
-		}
-
-		
-		
-		public bool HandlingFacing
-		{
-			get
-			{
-				return this.CurToil != null && this.CurToil.handlingFacing;
-			}
-		}
-
-		
-		
-		protected LocalTargetInfo TargetA
-		{
-			get
-			{
-				return this.job.targetA;
-			}
-		}
-
-		
-		
-		protected LocalTargetInfo TargetB
-		{
-			get
-			{
-				return this.job.targetB;
-			}
-		}
-
-		
-		
-		protected LocalTargetInfo TargetC
-		{
-			get
-			{
-				return this.job.targetC;
-			}
-		}
-
-		
-		
-		
-		protected Thing TargetThingA
-		{
-			get
-			{
-				return this.job.targetA.Thing;
-			}
-			set
-			{
-				this.job.targetA = value;
-			}
-		}
-
-		
-		
-		
-		protected Thing TargetThingB
-		{
-			get
-			{
-				return this.job.targetB.Thing;
-			}
-			set
-			{
-				this.job.targetB = value;
-			}
-		}
-
-		
-		
-		protected IntVec3 TargetLocA
-		{
-			get
-			{
-				return this.job.targetA.Cell;
-			}
-		}
-
-		
-		
-		protected Map Map
-		{
-			get
-			{
-				return this.pawn.Map;
-			}
-		}
-
-		
-		public virtual string GetReport()
-		{
-			return this.ReportStringProcessed(this.job.def.reportString);
-		}
-
-		
-		protected virtual string ReportStringProcessed(string str)
-		{
-			LocalTargetInfo a = this.job.targetA.IsValid ? this.job.targetA : this.job.targetQueueA.FirstValid();
-			LocalTargetInfo b = this.job.targetB.IsValid ? this.job.targetB : this.job.targetQueueB.FirstValid();
-			LocalTargetInfo targetC = this.job.targetC;
-			return JobUtility.GetResolvedJobReport(str, a, b, targetC);
-		}
-
-		
-		public abstract bool TryMakePreToilReservations(bool errorOnFailed);
-
-		
-		protected abstract IEnumerable<Toil> MakeNewToils();
-
-		
-		public virtual void SetInitialPosture()
-		{
-			this.pawn.jobs.posture = PawnPosture.Standing;
-		}
-
-		
-		public virtual void ExposeData()
-		{
-			Scribe_Values.Look<bool>(ref this.ended, "ended", false, false);
-			Scribe_Values.Look<int>(ref this.curToilIndex, "curToilIndex", 0, true);
-			Scribe_Values.Look<int>(ref this.ticksLeftThisToil, "ticksLeftThisToil", 0, false);
-			Scribe_Values.Look<bool>(ref this.wantBeginNextToil, "wantBeginNextToil", false, false);
-			Scribe_Values.Look<ToilCompleteMode>(ref this.curToilCompleteMode, "curToilCompleteMode", ToilCompleteMode.Undefined, false);
-			Scribe_Values.Look<int>(ref this.startTick, "startTick", 0, false);
-			Scribe_Values.Look<TargetIndex>(ref this.rotateToFace, "rotateToFace", TargetIndex.A, false);
-			Scribe_Values.Look<bool>(ref this.asleep, "asleep", false, false);
-			Scribe_Values.Look<float>(ref this.uninstallWorkLeft, "uninstallWorkLeft", 0f, false);
-			Scribe_Values.Look<int>(ref this.nextToilIndex, "nextToilIndex", -1, false);
-			Scribe_Values.Look<bool>(ref this.collideWithPawns, "collideWithPawns", false, false);
-			Scribe_References.Look<Pawn>(ref this.locomotionUrgencySameAs, "locomotionUrgencySameAs", false);
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
-			{
-				this.SetupToils();
-			}
-		}
-
-		
-		public void Cleanup(JobCondition condition)
-		{
-			for (int i = 0; i < this.globalFinishActions.Count; i++)
-			{
-				try
-				{
-					this.globalFinishActions[i]();
-				}
-				catch (Exception ex)
-				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Pawn ",
-						this.pawn.ToStringSafe<Pawn>(),
-						" threw exception while executing a global finish action (",
-						i,
-						"), jobDriver=",
-						this.ToStringSafe<JobDriver>(),
-						", job=",
-						this.job.ToStringSafe<Job>(),
-						": ",
-						ex
-					}), false);
-				}
-			}
-			if (this.curToilIndex >= 0 && this.curToilIndex < this.toils.Count)
-			{
-				this.toils[this.curToilIndex].Cleanup(this.curToilIndex, this);
-			}
-		}
-
-		
-		public virtual bool CanBeginNowWhileLyingDown()
-		{
 			return false;
 		}
+	}
 
-		
-		internal void SetupToils()
+	private bool CanStartNextToilInBusyStance
+	{
+		get
+		{
+			int num = curToilIndex + 1;
+			if (num >= toils.Count)
+			{
+				return false;
+			}
+			return toils[num].atomicWithPrevious;
+		}
+	}
+
+	public int CurToilIndex => curToilIndex;
+
+	public bool OnLastToil => CurToilIndex == toils.Count - 1;
+
+	public SkillDef ActiveSkill
+	{
+		get
+		{
+			if (!HaveCurToil || CurToil.activeSkill == null)
+			{
+				return null;
+			}
+			return CurToil.activeSkill();
+		}
+	}
+
+	public bool HandlingFacing
+	{
+		get
+		{
+			if (CurToil != null)
+			{
+				return CurToil.handlingFacing;
+			}
+			return false;
+		}
+	}
+
+	protected LocalTargetInfo TargetA => job.targetA;
+
+	protected LocalTargetInfo TargetB => job.targetB;
+
+	protected LocalTargetInfo TargetC => job.targetC;
+
+	protected Thing TargetThingA
+	{
+		get
+		{
+			return job.targetA.Thing;
+		}
+		set
+		{
+			job.targetA = value;
+		}
+	}
+
+	protected Thing TargetThingB
+	{
+		get
+		{
+			return job.targetB.Thing;
+		}
+		set
+		{
+			job.targetB = value;
+		}
+	}
+
+	protected IntVec3 TargetLocA => job.targetA.Cell;
+
+	protected Map Map => pawn.Map;
+
+	public virtual string GetReport()
+	{
+		return ReportStringProcessed(job.def.reportString);
+	}
+
+	protected virtual string ReportStringProcessed(string str)
+	{
+		LocalTargetInfo a = job.targetA.IsValid ? job.targetA : job.targetQueueA.FirstValid();
+		LocalTargetInfo b = job.targetB.IsValid ? job.targetB : job.targetQueueB.FirstValid();
+		LocalTargetInfo targetC = job.targetC;
+		return JobUtility.GetResolvedJobReport(str, a, b, targetC);
+	}
+
+	public abstract bool TryMakePreToilReservations(bool errorOnFailed);
+
+	protected abstract IEnumerable<Toil> MakeNewToils();
+
+	public virtual void SetInitialPosture()
+	{
+		pawn.jobs.posture = PawnPosture.Standing;
+	}
+
+	public virtual void ExposeData()
+	{
+		Scribe_Values.Look(ref ended, "ended", defaultValue: false);
+		Scribe_Values.Look(ref curToilIndex, "curToilIndex", 0, forceSave: true);
+		Scribe_Values.Look(ref ticksLeftThisToil, "ticksLeftThisToil", 0);
+		Scribe_Values.Look(ref wantBeginNextToil, "wantBeginNextToil", defaultValue: false);
+		Scribe_Values.Look(ref curToilCompleteMode, "curToilCompleteMode", ToilCompleteMode.Undefined);
+		Scribe_Values.Look(ref startTick, "startTick", 0);
+		Scribe_Values.Look(ref rotateToFace, "rotateToFace", TargetIndex.A);
+		Scribe_Values.Look(ref asleep, "asleep", defaultValue: false);
+		Scribe_Values.Look(ref uninstallWorkLeft, "uninstallWorkLeft", 0f);
+		Scribe_Values.Look(ref nextToilIndex, "nextToilIndex", -1);
+		Scribe_Values.Look(ref collideWithPawns, "collideWithPawns", defaultValue: false);
+		Scribe_References.Look(ref locomotionUrgencySameAs, "locomotionUrgencySameAs");
+		if (Scribe.mode == LoadSaveMode.PostLoadInit)
+		{
+			SetupToils();
+		}
+	}
+
+	public void Cleanup(JobCondition condition)
+	{
+		for (int i = 0; i < globalFinishActions.Count; i++)
 		{
 			try
 			{
-				this.toils.Clear();
-				foreach (Toil toil in this.MakeNewToils())
-				{
-					if (toil.defaultCompleteMode == ToilCompleteMode.Undefined)
-					{
-						Log.Error("Toil has undefined complete mode.", false);
-						toil.defaultCompleteMode = ToilCompleteMode.Instant;
-					}
-					toil.actor = this.pawn;
-					this.toils.Add(toil);
-				}
+				globalFinishActions[i]();
 			}
-			catch (Exception exception)
+			catch (Exception ex)
 			{
-				JobUtility.TryStartErrorRecoverJob(this.pawn, "Exception in SetupToils for pawn " + this.pawn.ToStringSafe<Pawn>(), exception, this);
+				Log.Error("Pawn " + pawn.ToStringSafe() + " threw exception while executing a global finish action (" + i + "), jobDriver=" + this.ToStringSafe() + ", job=" + job.ToStringSafe() + ": " + ex);
 			}
 		}
-
-		
-		public void DriverTick()
+		if (curToilIndex >= 0 && curToilIndex < toils.Count)
 		{
-			try
+			toils[curToilIndex].Cleanup(curToilIndex, this);
+		}
+	}
+
+	public virtual bool CanBeginNowWhileLyingDown()
+	{
+		return false;
+	}
+
+	internal void SetupToils()
+	{
+		try
+		{
+			toils.Clear();
+			foreach (Toil item in MakeNewToils())
 			{
-				this.ticksLeftThisToil--;
-				this.debugTicksSpentThisToil++;
-				if (this.CurToil == null)
+				if (item.defaultCompleteMode == ToilCompleteMode.Undefined)
 				{
-					if (!this.pawn.stances.FullBodyBusy || this.CanStartNextToilInBusyStance)
-					{
-						this.ReadyForNextToil();
-					}
+					Log.Error("Toil has undefined complete mode.");
+					item.defaultCompleteMode = ToilCompleteMode.Instant;
 				}
-				else if (!this.CheckCurrentToilEndOrFail())
-				{
-					if (this.curToilCompleteMode == ToilCompleteMode.Delay)
-					{
-						if (this.ticksLeftThisToil <= 0)
-						{
-							this.ReadyForNextToil();
-							return;
-						}
-					}
-					else if (this.curToilCompleteMode == ToilCompleteMode.FinishedBusy && !this.pawn.stances.FullBodyBusy)
-					{
-						this.ReadyForNextToil();
-						return;
-					}
-					if (this.wantBeginNextToil)
-					{
-						this.TryActuallyStartNextToil();
-					}
-					else if (this.curToilCompleteMode == ToilCompleteMode.Instant && this.debugTicksSpentThisToil > 300)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							this.pawn,
-							" had to be broken from frozen state. He was doing job ",
-							this.job,
-							", toilindex=",
-							this.curToilIndex
-						}), false);
-						this.ReadyForNextToil();
-					}
-					else
-					{
-						//JobDriver.c__DisplayClass57_0 c__DisplayClass57_;
-						//c__DisplayClass57_.startingJob = this.pawn.CurJob;
-						//c__DisplayClass57_.startingJobId = c__DisplayClass57_.startingJob.loadID;
-						//if (this.CurToil.preTickActions != null)
-						//{
-						//	Toil curToil = this.CurToil;
-						//	for (int i = 0; i < curToil.preTickActions.Count; i++)
-						//	{
-						//		curToil.preTickActions[i]();
-						//		if (this.<DriverTick>g__JobChanged|57_0(ref c__DisplayClass57_))
-						//		{
-						//			return;
-						//		}
-						//		if (this.CurToil != curToil || this.wantBeginNextToil)
-						//		{
-						//			return;
-						//		}
-						//	}
-						//}
-						//if (this.CurToil.tickAction != null)
-						//{
-						//	this.CurToil.tickAction();
-						//	if (this.<DriverTick>g__JobChanged|57_0(ref c__DisplayClass57_))
-						//	{
-						//		return;
-						//	}
-						//}
-						//if (this.job.mote != null)
-						//{
-						//	this.job.mote.Maintain();
-						//}
-					}
-				}
-			}
-			catch (Exception exception)
-			{
-				JobUtility.TryStartErrorRecoverJob(this.pawn, "Exception in JobDriver tick for pawn " + this.pawn.ToStringSafe<Pawn>(), exception, this);
+				item.actor = pawn;
+				toils.Add(item);
 			}
 		}
-
-		
-		public void ReadyForNextToil()
+		catch (Exception exception)
 		{
-			this.wantBeginNextToil = true;
-			this.TryActuallyStartNextToil();
+			JobUtility.TryStartErrorRecoverJob(pawn, "Exception in SetupToils for pawn " + pawn.ToStringSafe(), exception, this);
 		}
+	}
 
-		
-		private void TryActuallyStartNextToil()
+	public void DriverTick()
+	{
+		try
 		{
-			if (!this.pawn.Spawned)
+			ticksLeftThisToil--;
+			debugTicksSpentThisToil++;
+			if (CurToil == null)
 			{
-				return;
+				if (!pawn.stances.FullBodyBusy || CanStartNextToilInBusyStance)
+				{
+					ReadyForNextToil();
+				}
 			}
-			if (this.pawn.stances.FullBodyBusy && !this.CanStartNextToilInBusyStance)
+			else if (!CheckCurrentToilEndOrFail())
 			{
-				return;
+				if (curToilCompleteMode == ToilCompleteMode.Delay)
+				{
+					if (ticksLeftThisToil > 0)
+					{
+						goto IL_0099;
+					}
+					ReadyForNextToil();
+				}
+				else
+				{
+					if (curToilCompleteMode != ToilCompleteMode.FinishedBusy || pawn.stances.FullBodyBusy)
+					{
+						goto IL_0099;
+					}
+					ReadyForNextToil();
+				}
 			}
-			if (this.job == null || this.pawn.CurJob != this.job)
+			goto end_IL_0000;
+		IL_01b8:
+			if (job.mote != null)
 			{
-				return;
+				job.mote.Maintain();
 			}
-			if (this.HaveCurToil)
+			goto end_IL_0000;
+		IL_0099:
+			Job startingJob;
+			int startingJobId;
+			if (wantBeginNextToil)
 			{
-				this.CurToil.Cleanup(this.curToilIndex, this);
+				TryActuallyStartNextToil();
 			}
-			if (this.nextToilIndex >= 0)
+			else if (curToilCompleteMode == ToilCompleteMode.Instant && debugTicksSpentThisToil > 300)
 			{
-				this.curToilIndex = this.nextToilIndex;
-				this.nextToilIndex = -1;
+				Log.Error(pawn + " had to be broken from frozen state. He was doing job " + job + ", toilindex=" + curToilIndex);
+				ReadyForNextToil();
 			}
 			else
 			{
-				this.curToilIndex++;
-			}
-			this.wantBeginNextToil = false;
-			if (!this.HaveCurToil)
-			{
-				if (this.pawn.stances != null && this.pawn.stances.curStance.StanceBusy)
+				startingJob = pawn.CurJob;
+				startingJobId = startingJob.loadID;
+				if (CurToil.preTickActions != null)
 				{
-					Log.ErrorOnce(this.pawn.ToStringSafe<Pawn>() + " ended job " + this.job.ToStringSafe<Job>() + " due to running out of toils during a busy stance.", 6453432, false);
-				}
-				this.EndJobWith(JobCondition.Succeeded);
-				return;
-			}
-			this.debugTicksSpentThisToil = 0;
-			this.ticksLeftThisToil = this.CurToil.defaultDuration;
-			this.curToilCompleteMode = this.CurToil.defaultCompleteMode;
-			if (!this.CheckCurrentToilEndOrFail())
-			{
-				Toil curToil = this.CurToil;
-				if (this.CurToil.preInitActions != null)
-				{
-					for (int i = 0; i < this.CurToil.preInitActions.Count; i++)
+					Toil curToil = CurToil;
+					for (int i = 0; i < curToil.preTickActions.Count; i++)
 					{
-						try
+						curToil.preTickActions[i]();
+						if (JobChanged() || CurToil != curToil || wantBeginNextToil)
 						{
-							this.CurToil.preInitActions[i]();
-						}
-						catch (Exception exception)
-						{
-							JobUtility.TryStartErrorRecoverJob(this.pawn, string.Concat(new object[]
-							{
-								"JobDriver threw exception in preInitActions[",
-								i,
-								"] for pawn ",
-								this.pawn.ToStringSafe<Pawn>()
-							}), exception, this);
-							return;
-						}
-						if (this.CurToil != curToil)
-						{
-							break;
-						}
-					}
-				}
-				if (this.CurToil == curToil)
-				{
-					if (this.CurToil.initAction != null)
-					{
-						try
-						{
-							this.CurToil.initAction();
-						}
-						catch (Exception exception2)
-						{
-							JobUtility.TryStartErrorRecoverJob(this.pawn, "JobDriver threw exception in initAction for pawn " + this.pawn.ToStringSafe<Pawn>(), exception2, this);
 							return;
 						}
 					}
-					if (!this.ended && this.curToilCompleteMode == ToilCompleteMode.Instant && this.CurToil == curToil)
-					{
-						this.ReadyForNextToil();
-					}
+				}
+				if (CurToil.tickAction == null)
+				{
+					goto IL_01b8;
+				}
+				CurToil.tickAction();
+				if (!JobChanged())
+				{
+					goto IL_01b8;
+				}
+			}
+		end_IL_0000:
+			bool JobChanged()
+			{
+				if (pawn.CurJob == startingJob)
+				{
+					return pawn.CurJob.loadID != startingJobId;
+				}
+				return true;
+			}
+		}
+		catch (Exception exception)
+		{
+			JobUtility.TryStartErrorRecoverJob(pawn, "Exception in JobDriver tick for pawn " + pawn.ToStringSafe(), exception, this);
+		}
+	}
+
+	public void ReadyForNextToil()
+	{
+		wantBeginNextToil = true;
+		TryActuallyStartNextToil();
+	}
+
+	private void TryActuallyStartNextToil()
+	{
+		if (!pawn.Spawned || (pawn.stances.FullBodyBusy && !CanStartNextToilInBusyStance) || job == null || pawn.CurJob != job)
+		{
+			return;
+		}
+		if (HaveCurToil)
+		{
+			CurToil.Cleanup(curToilIndex, this);
+		}
+		if (nextToilIndex >= 0)
+		{
+			curToilIndex = nextToilIndex;
+			nextToilIndex = -1;
+		}
+		else
+		{
+			curToilIndex++;
+		}
+		wantBeginNextToil = false;
+		if (!HaveCurToil)
+		{
+			if (pawn.stances != null && pawn.stances.curStance.StanceBusy)
+			{
+				Log.ErrorOnce(pawn.ToStringSafe() + " ended job " + job.ToStringSafe() + " due to running out of toils during a busy stance.", 6453432);
+			}
+			EndJobWith(JobCondition.Succeeded);
+			return;
+		}
+		debugTicksSpentThisToil = 0;
+		ticksLeftThisToil = CurToil.defaultDuration;
+		curToilCompleteMode = CurToil.defaultCompleteMode;
+		if (CheckCurrentToilEndOrFail())
+		{
+			return;
+		}
+		Toil curToil = CurToil;
+		if (CurToil.preInitActions != null)
+		{
+			for (int i = 0; i < CurToil.preInitActions.Count; i++)
+			{
+				try
+				{
+					CurToil.preInitActions[i]();
+				}
+				catch (Exception exception)
+				{
+					JobUtility.TryStartErrorRecoverJob(pawn, "JobDriver threw exception in preInitActions[" + i + "] for pawn " + pawn.ToStringSafe(), exception, this);
+					return;
+				}
+				if (CurToil != curToil)
+				{
+					break;
 				}
 			}
 		}
-
-		
-		public void EndJobWith(JobCondition condition)
+		if (CurToil == curToil)
 		{
-			if (!this.pawn.Destroyed && this.job != null && this.pawn.CurJob == this.job)
+			if (CurToil.initAction != null)
 			{
-				this.pawn.jobs.EndCurrentJob(condition, true, true);
+				try
+				{
+					CurToil.initAction();
+				}
+				catch (Exception exception2)
+				{
+					JobUtility.TryStartErrorRecoverJob(pawn, "JobDriver threw exception in initAction for pawn " + pawn.ToStringSafe(), exception2, this);
+					return;
+				}
+			}
+			if (!ended && curToilCompleteMode == ToilCompleteMode.Instant && CurToil == curToil)
+			{
+				ReadyForNextToil();
 			}
 		}
+	}
 
-		
-		public virtual object[] TaleParameters()
+	public void EndJobWith(JobCondition condition)
+	{
+		if (!pawn.Destroyed && job != null && pawn.CurJob == job)
 		{
-			return new object[]
-			{
-				this.pawn
-			};
+			pawn.jobs.EndCurrentJob(condition);
 		}
+	}
 
-		
-		private bool CheckCurrentToilEndOrFail()
+	public virtual object[] TaleParameters()
+	{
+		return new object[1]
 		{
-			bool result;
-			try
+			pawn
+		};
+	}
+
+	private bool CheckCurrentToilEndOrFail()
+	{
+		try
+		{
+			Toil curToil = CurToil;
+			if (globalFailConditions != null)
 			{
-				Toil curToil = this.CurToil;
-				if (this.globalFailConditions != null)
+				for (int i = 0; i < globalFailConditions.Count; i++)
 				{
-					for (int i = 0; i < this.globalFailConditions.Count; i++)
+					JobCondition jobCondition = globalFailConditions[i]();
+					if (jobCondition != JobCondition.Ongoing)
 					{
-						JobCondition jobCondition = this.globalFailConditions[i]();
-						if (jobCondition != JobCondition.Ongoing)
+						if (pawn.jobs.debugLog)
 						{
-							if (this.pawn.jobs.debugLog)
-							{
-								this.pawn.jobs.DebugLogEvent(string.Concat(new object[]
-								{
-									base.GetType().Name,
-									" ends current job ",
-									this.job.ToStringSafe<Job>(),
-									" because of globalFailConditions[",
-									i,
-									"]"
-								}));
-							}
-							this.EndJobWith(jobCondition);
-							return true;
+							pawn.jobs.DebugLogEvent(GetType().Name + " ends current job " + job.ToStringSafe() + " because of globalFailConditions[" + i + "]");
 						}
+						EndJobWith(jobCondition);
+						return true;
 					}
 				}
-				if (curToil != null && curToil.endConditions != null)
+			}
+			if (curToil != null && curToil.endConditions != null)
+			{
+				for (int j = 0; j < curToil.endConditions.Count; j++)
 				{
-					for (int j = 0; j < curToil.endConditions.Count; j++)
+					JobCondition jobCondition2 = curToil.endConditions[j]();
+					if (jobCondition2 != JobCondition.Ongoing)
 					{
-						JobCondition jobCondition2 = curToil.endConditions[j]();
-						if (jobCondition2 != JobCondition.Ongoing)
+						if (pawn.jobs.debugLog)
 						{
-							if (this.pawn.jobs.debugLog)
-							{
-								this.pawn.jobs.DebugLogEvent(string.Concat(new object[]
-								{
-									base.GetType().Name,
-									" ends current job ",
-									this.job.ToStringSafe<Job>(),
-									" because of toils[",
-									this.curToilIndex,
-									"].endConditions[",
-									j,
-									"]"
-								}));
-							}
-							this.EndJobWith(jobCondition2);
-							return true;
+							pawn.jobs.DebugLogEvent(GetType().Name + " ends current job " + job.ToStringSafe() + " because of toils[" + curToilIndex + "].endConditions[" + j + "]");
 						}
+						EndJobWith(jobCondition2);
+						return true;
 					}
 				}
-				result = false;
 			}
-			catch (Exception exception)
-			{
-				JobUtility.TryStartErrorRecoverJob(this.pawn, "Exception in CheckCurrentToilEndOrFail for pawn " + this.pawn.ToStringSafe<Pawn>(), exception, this);
-				result = true;
-			}
-			return result;
-		}
-
-		
-		private void SetNextToil(Toil to)
-		{
-			if (to != null && !this.toils.Contains(to))
-			{
-				Log.Warning(string.Concat(new string[]
-				{
-					"SetNextToil with non-existent toil (",
-					to.ToStringSafe<Toil>(),
-					"). pawn=",
-					this.pawn.ToStringSafe<Pawn>(),
-					", job=",
-					this.pawn.CurJob.ToStringSafe<Job>()
-				}), false);
-			}
-			this.nextToilIndex = this.toils.IndexOf(to);
-		}
-
-		
-		public void JumpToToil(Toil to)
-		{
-			if (to == null)
-			{
-				Log.Warning("JumpToToil with null toil. pawn=" + this.pawn.ToStringSafe<Pawn>() + ", job=" + this.pawn.CurJob.ToStringSafe<Job>(), false);
-			}
-			this.SetNextToil(to);
-			this.ReadyForNextToil();
-		}
-
-		
-		public virtual void Notify_Starting()
-		{
-			this.startTick = Find.TickManager.TicksGame;
-		}
-
-		
-		public virtual void Notify_PatherArrived()
-		{
-			if (this.curToilCompleteMode == ToilCompleteMode.PatherArrival)
-			{
-				this.ReadyForNextToil();
-			}
-		}
-
-		
-		public virtual void Notify_PatherFailed()
-		{
-			this.EndJobWith(JobCondition.ErroredPather);
-		}
-
-		
-		public virtual void Notify_StanceChanged()
-		{
-		}
-
-		
-		public virtual void Notify_DamageTaken(DamageInfo dinfo)
-		{
-		}
-
-		
-		public Pawn GetActor()
-		{
-			return this.pawn;
-		}
-
-		
-		public void AddEndCondition(Func<JobCondition> newEndCondition)
-		{
-			this.globalFailConditions.Add(newEndCondition);
-		}
-
-		
-		public void AddFailCondition(Func<bool> newFailCondition)
-		{
-			this.globalFailConditions.Add(delegate
-			{
-				if (newFailCondition())
-				{
-					return JobCondition.Incompletable;
-				}
-				return JobCondition.Ongoing;
-			});
-		}
-
-		
-		public void AddFinishAction(Action newAct)
-		{
-			this.globalFinishActions.Add(newAct);
-		}
-
-		
-		public virtual bool ModifyCarriedThingDrawPos(ref Vector3 drawPos, ref bool behind, ref bool flip)
-		{
 			return false;
 		}
-
-		
-		public virtual RandomSocialMode DesiredSocialMode()
+		catch (Exception exception)
 		{
-			if (this.CurToil != null)
-			{
-				return this.CurToil.socialMode;
-			}
-			return RandomSocialMode.Normal;
-		}
-
-		
-		public virtual bool IsContinuation(Job j)
-		{
+			JobUtility.TryStartErrorRecoverJob(pawn, "Exception in CheckCurrentToilEndOrFail for pawn " + pawn.ToStringSafe(), exception, this);
 			return true;
 		}
+	}
 
-		
-		public Pawn pawn;
+	private void SetNextToil(Toil to)
+	{
+		if (to != null && !toils.Contains(to))
+		{
+			Log.Warning("SetNextToil with non-existent toil (" + to.ToStringSafe() + "). pawn=" + pawn.ToStringSafe() + ", job=" + pawn.CurJob.ToStringSafe());
+		}
+		nextToilIndex = toils.IndexOf(to);
+	}
 
-		
-		public Job job;
+	public void JumpToToil(Toil to)
+	{
+		if (to == null)
+		{
+			Log.Warning("JumpToToil with null toil. pawn=" + pawn.ToStringSafe() + ", job=" + pawn.CurJob.ToStringSafe());
+		}
+		SetNextToil(to);
+		ReadyForNextToil();
+	}
 
-		
-		private List<Toil> toils = new List<Toil>();
+	public virtual void Notify_Starting()
+	{
+		startTick = Find.TickManager.TicksGame;
+	}
 
-		
-		public List<Func<JobCondition>> globalFailConditions = new List<Func<JobCondition>>();
+	public virtual void Notify_PatherArrived()
+	{
+		if (curToilCompleteMode == ToilCompleteMode.PatherArrival)
+		{
+			ReadyForNextToil();
+		}
+	}
 
-		
-		public List<Action> globalFinishActions = new List<Action>();
+	public virtual void Notify_PatherFailed()
+	{
+		EndJobWith(JobCondition.ErroredPather);
+	}
 
-		
-		public bool ended;
+	public virtual void Notify_StanceChanged()
+	{
+	}
 
-		
-		private int curToilIndex = -1;
+	public virtual void Notify_DamageTaken(DamageInfo dinfo)
+	{
+	}
 
-		
-		private ToilCompleteMode curToilCompleteMode;
+	public Pawn GetActor()
+	{
+		return pawn;
+	}
 
-		
-		public int ticksLeftThisToil = 99999;
+	public void AddEndCondition(Func<JobCondition> newEndCondition)
+	{
+		globalFailConditions.Add(newEndCondition);
+	}
 
-		
-		private bool wantBeginNextToil;
+	public void AddFailCondition(Func<bool> newFailCondition)
+	{
+		globalFailConditions.Add(() => (!newFailCondition()) ? JobCondition.Ongoing : JobCondition.Incompletable);
+	}
 
-		
-		protected int startTick = -1;
+	public void AddFinishAction(Action newAct)
+	{
+		globalFinishActions.Add(newAct);
+	}
 
-		
-		public TargetIndex rotateToFace = TargetIndex.A;
+	public virtual bool ModifyCarriedThingDrawPos(ref Vector3 drawPos, ref bool behind, ref bool flip)
+	{
+		return false;
+	}
 
-		
-		private int nextToilIndex = -1;
+	public virtual RandomSocialMode DesiredSocialMode()
+	{
+		if (CurToil != null)
+		{
+			return CurToil.socialMode;
+		}
+		return RandomSocialMode.Normal;
+	}
 
-		
-		public bool asleep;
-
-		
-		public float uninstallWorkLeft;
-
-		
-		public bool collideWithPawns;
-
-		
-		public Pawn locomotionUrgencySameAs;
-
-		
-		public int debugTicksSpentThisToil;
+	public virtual bool IsContinuation(Job j)
+	{
+		return true;
 	}
 }

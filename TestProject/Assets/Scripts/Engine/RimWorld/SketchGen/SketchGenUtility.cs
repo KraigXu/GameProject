@@ -1,197 +1,209 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace RimWorld.SketchGen
+public static class SketchGenUtility
 {
-	
-	public static class SketchGenUtility
+	private static HashSet<IntVec3> tmpProcessed = new HashSet<IntVec3>();
+
+	public static bool IsStuffAllowed(ThingDef stuff, bool allowWood, Map useOnlyStonesAvailableOnMap, bool allowFlammableWalls, ThingDef stuffFor)
 	{
-		
-		public static bool IsStuffAllowed(ThingDef stuff, bool allowWood, Map useOnlyStonesAvailableOnMap, bool allowFlammableWalls, ThingDef stuffFor)
+		if (!allowWood && stuff == ThingDefOf.WoodLog)
 		{
-			return (allowWood || stuff != ThingDefOf.WoodLog) && (allowFlammableWalls || stuffFor != ThingDefOf.Wall || StatDefOf.Flammability.Worker.GetValueAbstract(stuffFor, stuff) <= 0f) && (useOnlyStonesAvailableOnMap == null || stuff.stuffProps.SourceNaturalRock == null || !stuff.stuffProps.SourceNaturalRock.IsNonResourceNaturalRock || Find.World.NaturalRockTypesIn(useOnlyStonesAvailableOnMap.Tile).Contains(stuff.stuffProps.SourceNaturalRock));
+			return false;
 		}
-
-		
-		[Obsolete("Only used for mod compatibility")]
-		public static bool IsFloorAllowed(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer)
+		if (!allowFlammableWalls && stuffFor == ThingDefOf.Wall && StatDefOf.Flammability.Worker.GetValueAbstract(stuffFor, stuff) > 0f)
 		{
-			return SketchGenUtility.IsFloorAllowed_NewTmp(floor, allowWoodenFloor, allowConcrete, useOnlyStonesAvailableOnMap, onlyBuildableByPlayer, true);
+			return false;
 		}
-
-		
-		public static bool IsFloorAllowed_NewTmp(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer, bool onlyStoneFloor)
+		if (useOnlyStonesAvailableOnMap != null && stuff.stuffProps.SourceNaturalRock != null && stuff.stuffProps.SourceNaturalRock.IsNonResourceNaturalRock && !Find.World.NaturalRockTypesIn(useOnlyStonesAvailableOnMap.Tile).Contains(stuff.stuffProps.SourceNaturalRock))
 		{
-			if (!allowWoodenFloor && floor == TerrainDefOf.WoodPlankFloor)
+			return false;
+		}
+		return true;
+	}
+
+	[Obsolete("Only used for mod compatibility")]
+	public static bool IsFloorAllowed(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer)
+	{
+		return IsFloorAllowed_NewTmp(floor, allowWoodenFloor, allowConcrete, useOnlyStonesAvailableOnMap, onlyBuildableByPlayer, onlyStoneFloor: true);
+	}
+
+	public static bool IsFloorAllowed_NewTmp(TerrainDef floor, bool allowWoodenFloor, bool allowConcrete, Map useOnlyStonesAvailableOnMap, bool onlyBuildableByPlayer, bool onlyStoneFloor)
+	{
+		if (!allowWoodenFloor && floor == TerrainDefOf.WoodPlankFloor)
+		{
+			return false;
+		}
+		if (!allowConcrete && floor == TerrainDefOf.Concrete)
+		{
+			return false;
+		}
+		if (onlyStoneFloor)
+		{
+			List<ThingDefCountClass> list = floor.CostListAdjusted(null);
+			for (int i = 0; i < list.Count; i++)
 			{
-				return false;
-			}
-			if (!allowConcrete && floor == TerrainDefOf.Concrete)
-			{
-				return false;
-			}
-			if (onlyStoneFloor)
-			{
-				List<ThingDefCountClass> list = floor.CostListAdjusted(null, true);
-				for (int i = 0; i < list.Count; i++)
-				{
-					if (list[i].thingDef.stuffProps != null && !list[i].thingDef.stuffProps.categories.Contains(StuffCategoryDefOf.Stony))
-					{
-						return false;
-					}
-				}
-			}
-			if (useOnlyStonesAvailableOnMap != null)
-			{
-				bool flag = false;
-				bool flag2 = true;
-				List<ThingDefCountClass> list2 = floor.CostListAdjusted(null, true);
-				for (int j = 0; j < list2.Count; j++)
-				{
-					if (list2[j].thingDef.stuffProps != null && list2[j].thingDef.stuffProps.SourceNaturalRock != null && list2[j].thingDef.stuffProps.SourceNaturalRock.IsNonResourceNaturalRock)
-					{
-						flag = true;
-						flag2 = (flag2 && Find.World.NaturalRockTypesIn(useOnlyStonesAvailableOnMap.Tile).Contains(list2[j].thingDef.stuffProps.SourceNaturalRock));
-					}
-				}
-				if (flag && !flag2)
+				if (list[i].thingDef.stuffProps != null && !list[i].thingDef.stuffProps.categories.Contains(StuffCategoryDefOf.Stony))
 				{
 					return false;
 				}
 			}
-			return !onlyBuildableByPlayer || SketchGenUtility.PlayerCanBuildNow(floor);
 		}
-
-		
-		public static CellRect FindBiggestRectAt(IntVec3 c, CellRect outerRect, Sketch sketch, HashSet<IntVec3> processed, Predicate<IntVec3> canTraverse)
+		if (useOnlyStonesAvailableOnMap != null)
 		{
-			if (processed.Contains(c) || !canTraverse(c))
+			bool flag = false;
+			bool flag2 = true;
+			List<ThingDefCountClass> list2 = floor.CostListAdjusted(null);
+			for (int j = 0; j < list2.Count; j++)
 			{
-				return CellRect.Empty;
-			}
-			CellRect cellRect = CellRect.SingleCell(c);
-			bool flag;
-			do
-			{
-				flag = false;
-				if (cellRect.maxX < outerRect.maxX)
+				if (list2[j].thingDef.stuffProps != null && list2[j].thingDef.stuffProps.SourceNaturalRock != null && list2[j].thingDef.stuffProps.SourceNaturalRock.IsNonResourceNaturalRock)
 				{
-					bool flag2 = false;
-					foreach (IntVec3 intVec in cellRect.GetEdgeCells(Rot4.East))
-					{
-						//intVec.x++;
-						if (processed.Contains(intVec) || !canTraverse(intVec))
-						{
-							flag2 = true;
-							break;
-						}
-					}
-					if (!flag2)
-					{
-						cellRect.maxX++;
-						flag = true;
-					}
-				}
-				if (cellRect.minX > outerRect.minX)
-				{
-					bool flag3 = false;
-					foreach (IntVec3 intVec2 in cellRect.GetEdgeCells(Rot4.West))
-					{
-					//	intVec2.x--;
-						if (processed.Contains(intVec2) || !canTraverse(intVec2))
-						{
-							flag3 = true;
-							break;
-						}
-					}
-					if (!flag3)
-					{
-						cellRect.minX--;
-						flag = true;
-					}
-				}
-				if (cellRect.maxZ < outerRect.maxZ)
-				{
-					bool flag4 = false;
-					foreach (IntVec3 intVec3 in cellRect.GetEdgeCells(Rot4.North))
-					{
-					//	intVec3.z++;
-						if (processed.Contains(intVec3) || !canTraverse(intVec3))
-						{
-							flag4 = true;
-							break;
-						}
-					}
-					if (!flag4)
-					{
-						cellRect.maxZ++;
-						flag = true;
-					}
-				}
-				if (cellRect.minZ > outerRect.minZ)
-				{
-					bool flag5 = false;
-					foreach (IntVec3 intVec4 in cellRect.GetEdgeCells(Rot4.South))
-					{
-						//intVec4.z--;
-						if (processed.Contains(intVec4) || !canTraverse(intVec4))
-						{
-							flag5 = true;
-							break;
-						}
-					}
-					if (!flag5)
-					{
-						cellRect.minZ--;
-						flag = true;
-					}
+					flag = true;
+					flag2 = (flag2 && Find.World.NaturalRockTypesIn(useOnlyStonesAvailableOnMap.Tile).Contains(list2[j].thingDef.stuffProps.SourceNaturalRock));
 				}
 			}
-			while (flag);
-			foreach (IntVec3 item in cellRect)
+			if (flag && !flag2)
 			{
-				processed.Add(item);
+				return false;
 			}
-			return cellRect;
 		}
-
-		
-		public static CellRect FindBiggestRect(Sketch sketch, Predicate<IntVec3> canTraverse)
+		if (onlyBuildableByPlayer && !PlayerCanBuildNow(floor))
 		{
-			CellRect result;
-			try
+			return false;
+		}
+		return true;
+	}
+
+	public static CellRect FindBiggestRectAt(IntVec3 c, CellRect outerRect, Sketch sketch, HashSet<IntVec3> processed, Predicate<IntVec3> canTraverse)
+	{
+		if (processed.Contains(c) || !canTraverse(c))
+		{
+			return CellRect.Empty;
+		}
+		CellRect result = CellRect.SingleCell(c);
+		bool flag;
+		do
+		{
+			flag = false;
+			if (result.maxX < outerRect.maxX)
 			{
-				CellRect cellRect = CellRect.Empty;
-				for (int i = 0; i < 3; i++)
+				bool flag2 = false;
+				foreach (IntVec3 edgeCell in result.GetEdgeCells(Rot4.East))
 				{
-					SketchGenUtility.tmpProcessed.Clear();
-					foreach (IntVec3 c in sketch.OccupiedRect.InRandomOrder(null))
+					IntVec3 current = edgeCell;
+					current.x++;
+					if (processed.Contains(current) || !canTraverse(current))
 					{
-						CellRect cellRect2 = SketchGenUtility.FindBiggestRectAt(c, sketch.OccupiedRect, sketch, SketchGenUtility.tmpProcessed, canTraverse);
-						if (cellRect2.Area > cellRect.Area)
-						{
-							cellRect = cellRect2;
-						}
+						flag2 = true;
+						break;
 					}
 				}
-				result = cellRect;
+				if (!flag2)
+				{
+					result.maxX++;
+					flag = true;
+				}
 			}
-			finally
+			if (result.minX > outerRect.minX)
 			{
-				SketchGenUtility.tmpProcessed.Clear();
+				bool flag3 = false;
+				foreach (IntVec3 edgeCell2 in result.GetEdgeCells(Rot4.West))
+				{
+					IntVec3 current2 = edgeCell2;
+					current2.x--;
+					if (processed.Contains(current2) || !canTraverse(current2))
+					{
+						flag3 = true;
+						break;
+					}
+				}
+				if (!flag3)
+				{
+					result.minX--;
+					flag = true;
+				}
+			}
+			if (result.maxZ < outerRect.maxZ)
+			{
+				bool flag4 = false;
+				foreach (IntVec3 edgeCell3 in result.GetEdgeCells(Rot4.North))
+				{
+					IntVec3 current3 = edgeCell3;
+					current3.z++;
+					if (processed.Contains(current3) || !canTraverse(current3))
+					{
+						flag4 = true;
+						break;
+					}
+				}
+				if (!flag4)
+				{
+					result.maxZ++;
+					flag = true;
+				}
+			}
+			if (result.minZ > outerRect.minZ)
+			{
+				bool flag5 = false;
+				foreach (IntVec3 edgeCell4 in result.GetEdgeCells(Rot4.South))
+				{
+					IntVec3 current4 = edgeCell4;
+					current4.z--;
+					if (processed.Contains(current4) || !canTraverse(current4))
+					{
+						flag5 = true;
+						break;
+					}
+				}
+				if (!flag5)
+				{
+					result.minZ--;
+					flag = true;
+				}
+			}
+		}
+		while (flag);
+		foreach (IntVec3 item in result)
+		{
+			processed.Add(item);
+		}
+		return result;
+	}
+
+	public static CellRect FindBiggestRect(Sketch sketch, Predicate<IntVec3> canTraverse)
+	{
+		try
+		{
+			CellRect result = CellRect.Empty;
+			for (int i = 0; i < 3; i++)
+			{
+				tmpProcessed.Clear();
+				foreach (IntVec3 item in sketch.OccupiedRect.InRandomOrder())
+				{
+					CellRect cellRect = FindBiggestRectAt(item, sketch.OccupiedRect, sketch, tmpProcessed, canTraverse);
+					if (cellRect.Area > result.Area)
+					{
+						result = cellRect;
+					}
+				}
 			}
 			return result;
 		}
-
-		
-		public static bool PlayerCanBuildNow(BuildableDef buildable)
+		finally
 		{
-			return buildable.BuildableByPlayer && buildable.IsResearchFinished;
+			tmpProcessed.Clear();
 		}
+	}
 
-		
-		private static HashSet<IntVec3> tmpProcessed = new HashSet<IntVec3>();
+	public static bool PlayerCanBuildNow(BuildableDef buildable)
+	{
+		if (buildable.BuildableByPlayer)
+		{
+			return buildable.IsResearchFinished;
+		}
+		return false;
 	}
 }

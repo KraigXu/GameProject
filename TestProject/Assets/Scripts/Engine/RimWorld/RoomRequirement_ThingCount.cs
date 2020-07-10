@@ -1,65 +1,46 @@
-﻿using System;
+﻿// RimWorld.RoomRequirement_ThingCount
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-namespace RimWorld
+public class RoomRequirement_ThingCount : RoomRequirement_Thing
 {
-	
-	public class RoomRequirement_ThingCount : RoomRequirement_Thing
+	public int count;
+
+	public override bool Met(Room r, Pawn p = null)
 	{
-		
-		public override bool Met(Room r, Pawn p = null)
+		return Count(r) >= count;
+	}
+
+	public int Count(Room r)
+	{
+		return r.ThingCount(thingDef);
+	}
+
+	public override string Label(Room r = null)
+	{
+		bool flag = !labelKey.NullOrEmpty();
+		string text = flag ? ((string)labelKey.Translate()) : thingDef.label;
+		if (r != null)
 		{
-			return this.Count(r) >= this.count;
+			return text + " " + Count(r) + "/" + count;
 		}
-
-		
-		public int Count(Room r)
+		if (!flag)
 		{
-			return r.ThingCount(this.thingDef);
+			return GenLabel.ThingLabel(thingDef, null, count);
 		}
+		return text + " x" + count;
+	}
 
-		
-		public override string Label(Room r = null)
+	public override IEnumerable<string> ConfigErrors()
+	{
+		foreach (string item in base.ConfigErrors())
 		{
-			bool flag = !this.labelKey.NullOrEmpty();
-			//string text = flag ? this.labelKey.Translate() : this.thingDef.label;
-			//if (r != null)
-			//{
-			//	return string.Concat(new object[]
-			//	{
-			//		text,
-			//		" ",
-			//		this.Count(r),
-			//		"/",
-			//		this.count
-			//	});
-			//}
-			//if (!flag)
-			//{
-			//	return GenLabel.ThingLabel(this.thingDef, null, this.count);
-			//}
-			//return text + " x" + this.count;
-			return "";
+			yield return item;
 		}
-
-		
-		public override IEnumerable<string> ConfigErrors()
+		if (count <= 0)
 		{
-
-			{
-				
-			}
-			IEnumerator<string> enumerator = null;
-			if (this.count <= 0)
-			{
-				yield return "count must be larger than 0";
-			}
-			yield break;
-			yield break;
+			yield return "count must be larger than 0";
 		}
-
-		
-		public int count;
 	}
 }

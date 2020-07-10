@@ -2,485 +2,367 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
+using Verse;
 
-namespace Verse
+public static class DirectXmlCrossRefLoader
 {
-	
-	public static class DirectXmlCrossRefLoader
+	private abstract class WantedRef
 	{
-		
-		
-		public static bool LoadingInProgress
+		public object wanter;
+
+		public abstract bool TryResolve(FailMode failReportMode);
+
+		public virtual void Apply()
+		{
+		}
+	}
+
+	private class WantedRefForObject : WantedRef
+	{
+		public FieldInfo fi;
+
+		public string defName;
+
+		public Def resolvedDef;
+
+		public string mayRequireMod;
+
+		public Type overrideFieldType;
+
+		private bool BadCrossRefAllowed
 		{
 			get
 			{
-				return DirectXmlCrossRefLoader.wantedRefs.Count > 0;
-			}
-		}
-
-		
-		public static void RegisterObjectWantsCrossRef(object wanter, FieldInfo fi, string targetDefName, string mayRequireMod = null, Type assumeFieldType = null)
-		{
-			DeepProfiler.Start("RegisterObjectWantsCrossRef (object, FieldInfo, string)");
-			try
-			{
-				DirectXmlCrossRefLoader.WantedRefForObject item = new DirectXmlCrossRefLoader.WantedRefForObject(wanter, fi, targetDefName, mayRequireMod, assumeFieldType);
-				DirectXmlCrossRefLoader.wantedRefs.Add(item);
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-		}
-
-		
-		public static void RegisterObjectWantsCrossRef(object wanter, string fieldName, string targetDefName, string mayRequireMod = null, Type overrideFieldType = null)
-		{
-			DeepProfiler.Start("RegisterObjectWantsCrossRef (object,string,string)");
-			try
-			{
-				DirectXmlCrossRefLoader.WantedRefForObject item = new DirectXmlCrossRefLoader.WantedRefForObject(wanter, wanter.GetType().GetField(fieldName), targetDefName, mayRequireMod, overrideFieldType);
-				DirectXmlCrossRefLoader.wantedRefs.Add(item);
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-		}
-
-		
-		public static void RegisterObjectWantsCrossRef(object wanter, string fieldName, XmlNode parentNode, string mayRequireMod = null, Type overrideFieldType = null)
-		{
-			DeepProfiler.Start("RegisterObjectWantsCrossRef (object,string,XmlNode)");
-			try
-			{
-				string text = mayRequireMod;
-				if (mayRequireMod == null)
+				if (!mayRequireMod.NullOrEmpty() && !ModsConfig.IsActive(mayRequireMod))
 				{
-					XmlAttributeCollection attributes = parentNode.Attributes;
-					if (attributes == null)
-					{
-						text = null;
-					}
-					else
-					{
-						XmlAttribute xmlAttribute = attributes["MayRequire"];
-						text = ((xmlAttribute != null) ? xmlAttribute.Value.ToLower() : null);
-					}
+					return true;
 				}
-				string mayRequireMod2 = text;
-				DirectXmlCrossRefLoader.WantedRefForObject item = new DirectXmlCrossRefLoader.WantedRefForObject(wanter, wanter.GetType().GetField(fieldName), parentNode.Name, mayRequireMod2, overrideFieldType);
-				DirectXmlCrossRefLoader.wantedRefs.Add(item);
-			}
-			finally
-			{
-				DeepProfiler.End();
+				return false;
 			}
 		}
 
-		
-		public static void RegisterListWantsCrossRef<T>(List<T> wanterList, string targetDefName, object debugWanterInfo = null, string mayRequireMod = null)
+		public WantedRefForObject(object wanter, FieldInfo fi, string targetDefName, string mayRequireMod = null, Type overrideFieldType = null)
 		{
-			DeepProfiler.Start("RegisterListWantsCrossRef");
-			try
+			base.wanter = wanter;
+			this.fi = fi;
+			defName = targetDefName;
+			this.mayRequireMod = mayRequireMod;
+			this.overrideFieldType = overrideFieldType;
+		}
+
+		public override bool TryResolve(FailMode failReportMode)
+		{
+			if (fi == null)
 			{
-				DirectXmlCrossRefLoader.WantedRef wantedRef;
-				DirectXmlCrossRefLoader.WantedRefForList<T> wantedRefForList;
-				if (!DirectXmlCrossRefLoader.wantedListDictRefs.TryGetValue(wanterList, out wantedRef))
+				Log.Error("Trying to resolve null field for def named " + defName.ToStringSafe());
+				return false;
+			}
+			Type type = overrideFieldType ?? fi.FieldType;
+			resolvedDef = GenDefDatabase.GetDefSilentFail(type, defName);
+			if (resolvedDef == null)
+			{
+				if (failReportMode == FailMode.LogErrors && !BadCrossRefAllowed)
 				{
-					wantedRefForList = new DirectXmlCrossRefLoader.WantedRefForList<T>(wanterList, debugWanterInfo);
-					DirectXmlCrossRefLoader.wantedListDictRefs.Add(wanterList, wantedRefForList);
-					DirectXmlCrossRefLoader.wantedRefs.Add(wantedRefForList);
+					Log.Error("Could not resolve cross-reference: No " + type + " named " + defName.ToStringSafe() + " found to give to " + wanter.GetType() + " " + wanter.ToStringSafe());
+				}
+				return false;
+			}
+			SoundDef soundDef = resolvedDef as SoundDef;
+			if (soundDef != null && soundDef.isUndefined)
+			{
+				Log.Warning("Could not resolve cross-reference: No " + type + " named " + defName.ToStringSafe() + " found to give to " + wanter.GetType() + " " + wanter.ToStringSafe() + " (using undefined sound instead)");
+			}
+			fi.SetValue(wanter, resolvedDef);
+			return true;
+		}
+	}
+
+	private class WantedRefForList<T> : WantedRef
+	{
+		private List<string> defNames = new List<string>();
+
+		private List<string> mayRequireMods;
+
+		private object debugWanterInfo;
+
+		public WantedRefForList(object wanter, object debugWanterInfo)
+		{
+			base.wanter = wanter;
+			this.debugWanterInfo = debugWanterInfo;
+		}
+
+		public void AddWantedListEntry(string newTargetDefName, string mayRequireMod = null)
+		{
+			if (!mayRequireMod.NullOrEmpty() && mayRequireMods == null)
+			{
+				mayRequireMods = new List<string>();
+				for (int i = 0; i < defNames.Count; i++)
+				{
+					mayRequireMods.Add(null);
+				}
+			}
+			defNames.Add(newTargetDefName);
+			if (mayRequireMods != null)
+			{
+				mayRequireMods.Add(mayRequireMod);
+			}
+		}
+
+		public override bool TryResolve(FailMode failReportMode)
+		{
+			bool flag = false;
+			for (int i = 0; i < defNames.Count; i++)
+			{
+				bool flag2 = mayRequireMods != null && i < mayRequireMods.Count && !mayRequireMods[i].NullOrEmpty() && !ModsConfig.IsActive(mayRequireMods[i]);
+				T val = TryResolveDef<T>(defNames[i], (!flag2) ? failReportMode : FailMode.Silent, debugWanterInfo);
+				if (val != null)
+				{
+					((List<T>)wanter).Add(val);
+					defNames.RemoveAt(i);
+					if (mayRequireMods != null && i < mayRequireMods.Count)
+					{
+						mayRequireMods.RemoveAt(i);
+					}
+					i--;
 				}
 				else
 				{
-					wantedRefForList = (DirectXmlCrossRefLoader.WantedRefForList<T>)wantedRef;
+					flag = true;
 				}
-				wantedRefForList.AddWantedListEntry(targetDefName, mayRequireMod);
 			}
-			finally
-			{
-				DeepProfiler.End();
-			}
+			return !flag;
+		}
+	}
+
+	private class WantedRefForDictionary<K, V> : WantedRef
+	{
+		private List<XmlNode> wantedDictRefs = new List<XmlNode>();
+
+		private object debugWanterInfo;
+
+		private List<Pair<object, object>> makingData = new List<Pair<object, object>>();
+
+		public WantedRefForDictionary(object wanter, object debugWanterInfo)
+		{
+			base.wanter = wanter;
+			this.debugWanterInfo = debugWanterInfo;
 		}
 
-		
-		public static void RegisterDictionaryWantsCrossRef<K, V>(Dictionary<K, V> wanterDict, XmlNode entryNode, object debugWanterInfo = null)
+		public void AddWantedDictEntry(XmlNode entryNode)
 		{
-			DeepProfiler.Start("RegisterDictionaryWantsCrossRef");
-			try
-			{
-				DirectXmlCrossRefLoader.WantedRef wantedRef;
-				DirectXmlCrossRefLoader.WantedRefForDictionary<K, V> wantedRefForDictionary;
-				if (!DirectXmlCrossRefLoader.wantedListDictRefs.TryGetValue(wanterDict, out wantedRef))
-				{
-					wantedRefForDictionary = new DirectXmlCrossRefLoader.WantedRefForDictionary<K, V>(wanterDict, debugWanterInfo);
-					DirectXmlCrossRefLoader.wantedRefs.Add(wantedRefForDictionary);
-					DirectXmlCrossRefLoader.wantedListDictRefs.Add(wanterDict, wantedRefForDictionary);
-				}
-				else
-				{
-					wantedRefForDictionary = (DirectXmlCrossRefLoader.WantedRefForDictionary<K, V>)wantedRef;
-				}
-				wantedRefForDictionary.AddWantedDictEntry(entryNode);
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
+			wantedDictRefs.Add(entryNode);
 		}
 
-		
-		public static T TryResolveDef<T>(string defName, FailMode failReportMode, object debugWanterInfo = null)
+		public override bool TryResolve(FailMode failReportMode)
 		{
-			DeepProfiler.Start("TryResolveDef");
-			T result;
-			try
+			failReportMode = FailMode.LogErrors;
+			bool flag = typeof(Def).IsAssignableFrom(typeof(K));
+			bool flag2 = typeof(Def).IsAssignableFrom(typeof(V));
+			foreach (XmlNode wantedDictRef in wantedDictRefs)
 			{
-				T t = (T)((object)GenDefDatabase.GetDefSilentFail(typeof(T), defName, true));
-				if (t != null)
-				{
-					result = t;
-				}
-				else
-				{
-					if (failReportMode == FailMode.LogErrors)
-					{
-						string text = string.Concat(new object[]
-						{
-							"Could not resolve cross-reference to ",
-							typeof(T),
-							" named ",
-							defName
-						});
-						if (debugWanterInfo != null)
-						{
-							text = text + " (wanter=" + debugWanterInfo.ToStringSafe<object>() + ")";
-						}
-						//t = (T)((object)GenDefDatabase.GetDefSilentFail(typeof(T), defName, true));
-						//Log.Error(text, false);
-					}
-					result = default(T);
-				}
+				XmlNode xmlNode = wantedDictRef["key"];
+				XmlNode xmlNode2 = wantedDictRef["value"];
+				object first = (!flag) ? xmlNode : ((object)TryResolveDef<K>(xmlNode.InnerText, failReportMode, debugWanterInfo));
+				object second = (!flag2) ? xmlNode2 : ((object)TryResolveDef<V>(xmlNode2.InnerText, failReportMode, debugWanterInfo));
+				makingData.Add(new Pair<object, object>(first, second));
 			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-			return result;
+			return true;
 		}
 
-		
-		public static void Clear()
+		public override void Apply()
 		{
-			DeepProfiler.Start("Clear");
-			try
+			Dictionary<K, V> dictionary = (Dictionary<K, V>)wanter;
+			dictionary.Clear();
+			foreach (Pair<object, object> makingDatum in makingData)
 			{
-				DirectXmlCrossRefLoader.wantedRefs.Clear();
-				DirectXmlCrossRefLoader.wantedListDictRefs.Clear();
-			}
-			finally
-			{
-				DeepProfiler.End();
+				try
+				{
+					object obj = makingDatum.First;
+					object obj2 = makingDatum.Second;
+					if (obj is XmlNode)
+					{
+						obj = DirectXmlToObject.ObjectFromXml<K>(obj as XmlNode, doPostLoad: true);
+					}
+					if (obj2 is XmlNode)
+					{
+						obj2 = DirectXmlToObject.ObjectFromXml<V>(obj2 as XmlNode, doPostLoad: true);
+					}
+					dictionary.Add((K)obj, (V)obj2);
+				}
+				catch
+				{
+					Log.Error("Failed to load key/value pair: " + makingDatum.First + ", " + makingDatum.Second);
+				}
 			}
 		}
+	}
 
-		
-		public static void ResolveAllWantedCrossReferences(FailMode failReportMode)
+	private static List<WantedRef> wantedRefs = new List<WantedRef>();
+
+	private static Dictionary<object, WantedRef> wantedListDictRefs = new Dictionary<object, WantedRef>();
+
+	public static bool LoadingInProgress => wantedRefs.Count > 0;
+
+	public static void RegisterObjectWantsCrossRef(object wanter, FieldInfo fi, string targetDefName, string mayRequireMod = null, Type assumeFieldType = null)
+	{
+		DeepProfiler.Start("RegisterObjectWantsCrossRef (object, FieldInfo, string)");
+		try
 		{
-			DeepProfiler.Start("ResolveAllWantedCrossReferences");
-			try
-			{
-				HashSet<DirectXmlCrossRefLoader.WantedRef> resolvedRefs = new HashSet<DirectXmlCrossRefLoader.WantedRef>();
-				object resolvedRefsLock = new object();
-				DeepProfiler.enabled = false;
-				GenThreading.ParallelForEach<DirectXmlCrossRefLoader.WantedRef>(DirectXmlCrossRefLoader.wantedRefs, delegate(DirectXmlCrossRefLoader.WantedRef wantedRef)
-				{
-					if (wantedRef.TryResolve(failReportMode))
-					{
-                        object localresolvedRefsLock = resolvedRefsLock;
-                        lock (localresolvedRefsLock)
-                        {
-                            resolvedRefs.Add(wantedRef);
-                        }
-                    }
-				}, -1);
-				foreach (DirectXmlCrossRefLoader.WantedRef wantedRef2 in resolvedRefs)
-				{
-					wantedRef2.Apply();
-				}
-				DirectXmlCrossRefLoader.wantedRefs.RemoveAll((DirectXmlCrossRefLoader.WantedRef x) => resolvedRefs.Contains(x));
-				DeepProfiler.enabled = true;
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
+			WantedRefForObject item = new WantedRefForObject(wanter, fi, targetDefName, mayRequireMod, assumeFieldType);
+			wantedRefs.Add(item);
 		}
-
-		
-		private static List<DirectXmlCrossRefLoader.WantedRef> wantedRefs = new List<DirectXmlCrossRefLoader.WantedRef>();
-
-		
-		private static Dictionary<object, DirectXmlCrossRefLoader.WantedRef> wantedListDictRefs = new Dictionary<object, DirectXmlCrossRefLoader.WantedRef>();
-
-		
-		private abstract class WantedRef
+		finally
 		{
-			
-			public abstract bool TryResolve(FailMode failReportMode);
-
-			
-			public virtual void Apply()
-			{
-			}
-
-			
-			public object wanter;
+			DeepProfiler.End();
 		}
+	}
 
-		
-		private class WantedRefForObject : DirectXmlCrossRefLoader.WantedRef
+	public static void RegisterObjectWantsCrossRef(object wanter, string fieldName, string targetDefName, string mayRequireMod = null, Type overrideFieldType = null)
+	{
+		DeepProfiler.Start("RegisterObjectWantsCrossRef (object,string,string)");
+		try
 		{
-			
-			
-			private bool BadCrossRefAllowed
-			{
-				get
-				{
-					return !this.mayRequireMod.NullOrEmpty() && !ModsConfig.IsActive(this.mayRequireMod);
-				}
-			}
-
-			
-			public WantedRefForObject(object wanter, FieldInfo fi, string targetDefName, string mayRequireMod = null, Type overrideFieldType = null)
-			{
-				this.wanter = wanter;
-				this.fi = fi;
-				this.defName = targetDefName;
-				this.mayRequireMod = mayRequireMod;
-				this.overrideFieldType = overrideFieldType;
-			}
-
-			
-			public override bool TryResolve(FailMode failReportMode)
-			{
-				if (this.fi == null)
-				{
-					Log.Error("Trying to resolve null field for def named " + this.defName.ToStringSafe<string>(), false);
-					return false;
-				}
-				Type type = this.overrideFieldType ?? this.fi.FieldType;
-				this.resolvedDef = GenDefDatabase.GetDefSilentFail(type, this.defName, true);
-				if (this.resolvedDef == null)
-				{
-					if (failReportMode == FailMode.LogErrors && !this.BadCrossRefAllowed)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not resolve cross-reference: No ",
-							type,
-							" named ",
-							this.defName.ToStringSafe<string>(),
-							" found to give to ",
-							this.wanter.GetType(),
-							" ",
-							this.wanter.ToStringSafe<object>()
-						}), false);
-					}
-					return false;
-				}
-				SoundDef soundDef = this.resolvedDef as SoundDef;
-				if (soundDef != null && soundDef.isUndefined)
-				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"Could not resolve cross-reference: No ",
-						type,
-						" named ",
-						this.defName.ToStringSafe<string>(),
-						" found to give to ",
-						this.wanter.GetType(),
-						" ",
-						this.wanter.ToStringSafe<object>(),
-						" (using undefined sound instead)"
-					}), false);
-				}
-				this.fi.SetValue(this.wanter, this.resolvedDef);
-				return true;
-			}
-
-			
-			public FieldInfo fi;
-
-			
-			public string defName;
-
-			
-			public Def resolvedDef;
-
-			
-			public string mayRequireMod;
-
-			
-			public Type overrideFieldType;
+			WantedRefForObject item = new WantedRefForObject(wanter, wanter.GetType().GetField(fieldName), targetDefName, mayRequireMod, overrideFieldType);
+			wantedRefs.Add(item);
 		}
-
-		
-		private class WantedRefForList<T> : DirectXmlCrossRefLoader.WantedRef
+		finally
 		{
-			
-			public WantedRefForList(object wanter, object debugWanterInfo)
-			{
-				this.wanter = wanter;
-				this.debugWanterInfo = debugWanterInfo;
-			}
-
-			
-			public void AddWantedListEntry(string newTargetDefName, string mayRequireMod = null)
-			{
-				if (!mayRequireMod.NullOrEmpty() && this.mayRequireMods == null)
-				{
-					this.mayRequireMods = new List<string>();
-					for (int i = 0; i < this.defNames.Count; i++)
-					{
-						this.mayRequireMods.Add(null);
-					}
-				}
-				this.defNames.Add(newTargetDefName);
-				if (this.mayRequireMods != null)
-				{
-					this.mayRequireMods.Add(mayRequireMod);
-				}
-			}
-
-			
-			public override bool TryResolve(FailMode failReportMode)
-			{
-				bool flag = false;
-				for (int i = 0; i < this.defNames.Count; i++)
-				{
-					bool flag2 = this.mayRequireMods != null && i < this.mayRequireMods.Count && !this.mayRequireMods[i].NullOrEmpty() && !ModsConfig.IsActive(this.mayRequireMods[i]);
-					T t = DirectXmlCrossRefLoader.TryResolveDef<T>(this.defNames[i], flag2 ? FailMode.Silent : failReportMode, this.debugWanterInfo);
-					if (t != null)
-					{
-						((List<T>)this.wanter).Add(t);
-						this.defNames.RemoveAt(i);
-						if (this.mayRequireMods != null && i < this.mayRequireMods.Count)
-						{
-							this.mayRequireMods.RemoveAt(i);
-						}
-						i--;
-					}
-					else
-					{
-						flag = true;
-					}
-				}
-				return !flag;
-			}
-
-			
-			private List<string> defNames = new List<string>();
-
-			
-			private List<string> mayRequireMods;
-
-			
-			private object debugWanterInfo;
+			DeepProfiler.End();
 		}
+	}
 
-		
-		private class WantedRefForDictionary<K, V> : DirectXmlCrossRefLoader.WantedRef
+	public static void RegisterObjectWantsCrossRef(object wanter, string fieldName, XmlNode parentNode, string mayRequireMod = null, Type overrideFieldType = null)
+	{
+		DeepProfiler.Start("RegisterObjectWantsCrossRef (object,string,XmlNode)");
+		try
 		{
-			
-			public WantedRefForDictionary(object wanter, object debugWanterInfo)
-			{
-				this.wanter = wanter;
-				this.debugWanterInfo = debugWanterInfo;
-			}
+			string mayRequireMod2 = mayRequireMod ?? parentNode.Attributes?["MayRequire"]?.Value.ToLower();
+			WantedRefForObject item = new WantedRefForObject(wanter, wanter.GetType().GetField(fieldName), parentNode.Name, mayRequireMod2, overrideFieldType);
+			wantedRefs.Add(item);
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
 
-			
-			public void AddWantedDictEntry(XmlNode entryNode)
+	public static void RegisterListWantsCrossRef<T>(List<T> wanterList, string targetDefName, object debugWanterInfo = null, string mayRequireMod = null)
+	{
+		DeepProfiler.Start("RegisterListWantsCrossRef");
+		try
+		{
+			WantedRefForList<T> wantedRefForList = null;
+			if (!wantedListDictRefs.TryGetValue(wanterList, out WantedRef value))
 			{
-				this.wantedDictRefs.Add(entryNode);
+				wantedRefForList = new WantedRefForList<T>(wanterList, debugWanterInfo);
+				wantedListDictRefs.Add(wanterList, wantedRefForList);
+				wantedRefs.Add(wantedRefForList);
 			}
-
-			
-			public override bool TryResolve(FailMode failReportMode)
+			else
 			{
-				failReportMode = FailMode.LogErrors;
-				bool flag = typeof(Def).IsAssignableFrom(typeof(K));
-				bool flag2 = typeof(Def).IsAssignableFrom(typeof(V));
-				foreach (XmlNode xmlNode in this.wantedDictRefs)
+				wantedRefForList = (WantedRefForList<T>)value;
+			}
+			wantedRefForList.AddWantedListEntry(targetDefName, mayRequireMod);
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
+
+	public static void RegisterDictionaryWantsCrossRef<K, V>(Dictionary<K, V> wanterDict, XmlNode entryNode, object debugWanterInfo = null)
+	{
+		DeepProfiler.Start("RegisterDictionaryWantsCrossRef");
+		try
+		{
+			WantedRefForDictionary<K, V> wantedRefForDictionary = null;
+			if (!wantedListDictRefs.TryGetValue(wanterDict, out WantedRef value))
+			{
+				wantedRefForDictionary = new WantedRefForDictionary<K, V>(wanterDict, debugWanterInfo);
+				wantedRefs.Add(wantedRefForDictionary);
+				wantedListDictRefs.Add(wanterDict, wantedRefForDictionary);
+			}
+			else
+			{
+				wantedRefForDictionary = (WantedRefForDictionary<K, V>)value;
+			}
+			wantedRefForDictionary.AddWantedDictEntry(entryNode);
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
+
+	public static T TryResolveDef<T>(string defName, FailMode failReportMode, object debugWanterInfo = null)
+	{
+		DeepProfiler.Start("TryResolveDef");
+		try
+		{
+			T val = (T)(object)GenDefDatabase.GetDefSilentFail(typeof(T), defName);
+			if (val != null)
+			{
+				return val;
+			}
+			if (failReportMode == FailMode.LogErrors)
+			{
+				string text = "Could not resolve cross-reference to " + typeof(T) + " named " + defName;
+				if (debugWanterInfo != null)
 				{
-					XmlNode xmlNode2 = xmlNode["key"];
-					XmlNode xmlNode3 = xmlNode["value"];
-					object first;
-					if (flag)
-					{
-						first = DirectXmlCrossRefLoader.TryResolveDef<K>(xmlNode2.InnerText, failReportMode, this.debugWanterInfo);
-					}
-					else
-					{
-						first = xmlNode2;
-					}
-					object second;
-					if (flag2)
-					{
-						second = DirectXmlCrossRefLoader.TryResolveDef<V>(xmlNode3.InnerText, failReportMode, this.debugWanterInfo);
-					}
-					else
-					{
-						second = xmlNode3;
-					}
-					this.makingData.Add(new Pair<object, object>(first, second));
+					text = text + " (wanter=" + debugWanterInfo.ToStringSafe() + ")";
 				}
-				return true;
+				Log.Error(text);
 			}
+			return default(T);
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
 
-			
-			public override void Apply()
+	public static void Clear()
+	{
+		DeepProfiler.Start("Clear");
+		try
+		{
+			wantedRefs.Clear();
+			wantedListDictRefs.Clear();
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
+
+	public static void ResolveAllWantedCrossReferences(FailMode failReportMode)
+	{
+		DeepProfiler.Start("ResolveAllWantedCrossReferences");
+		try
+		{
+			HashSet<WantedRef> resolvedRefs = new HashSet<WantedRef>();
+			object resolvedRefsLock = new object();
+			DeepProfiler.enabled = false;
+			GenThreading.ParallelForEach(wantedRefs, delegate (WantedRef wantedRef)
 			{
-				Dictionary<K, V> dictionary = (Dictionary<K, V>)this.wanter;
-				dictionary.Clear();
-				foreach (Pair<object, object> pair in this.makingData)
+				if (wantedRef.TryResolve(failReportMode))
 				{
-					try
+					lock (resolvedRefsLock)
 					{
-						object obj = pair.First;
-						object obj2 = pair.Second;
-						if (obj is XmlNode)
-						{
-							obj = DirectXmlToObject.ObjectFromXml<K>(obj as XmlNode, true);
-						}
-						if (obj2 is XmlNode)
-						{
-							obj2 = DirectXmlToObject.ObjectFromXml<V>(obj2 as XmlNode, true);
-						}
-						dictionary.Add((K)((object)obj), (V)((object)obj2));
-					}
-					catch
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Failed to load key/value pair: ",
-							pair.First,
-							", ",
-							pair.Second
-						}), false);
+						resolvedRefs.Add(wantedRef);
 					}
 				}
+			});
+			foreach (WantedRef item in resolvedRefs)
+			{
+				item.Apply();
 			}
-
-			
-			private List<XmlNode> wantedDictRefs = new List<XmlNode>();
-
-			
-			private object debugWanterInfo;
-
-			
-			private List<Pair<object, object>> makingData = new List<Pair<object, object>>();
+			wantedRefs.RemoveAll((WantedRef x) => resolvedRefs.Contains(x));
+			DeepProfiler.enabled = true;
+		}
+		finally
+		{
+			DeepProfiler.End();
 		}
 	}
 }

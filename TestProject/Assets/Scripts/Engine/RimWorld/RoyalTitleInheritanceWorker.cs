@@ -1,48 +1,68 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace RimWorld
+public class RoyalTitleInheritanceWorker
 {
-	
-	public class RoyalTitleInheritanceWorker
+	private static List<Pawn> tmpPawns = new List<Pawn>();
+
+	public Pawn FindHeir(Faction faction, Pawn pawn, RoyalTitleDef title)
 	{
-		
-		public Pawn FindHeir(Faction faction, Pawn pawn, RoyalTitleDef title)
+		List<Pawn> relatedPawns = new List<Pawn>();
+		foreach (Pawn relatedPawn in pawn.relations.RelatedPawns)
 		{
-			//RoyalTitleInheritanceWorker.c__DisplayClass1_0 c__DisplayClass1_ = new RoyalTitleInheritanceWorker.c__DisplayClass1_0();
-			//c__DisplayClass1_.faction = faction;
-			//c__DisplayClass1_.pawn = pawn;
-			//c__DisplayClass1_.relatedPawns = new List<Pawn>();
-			//foreach (Pawn pawn2 in c__DisplayClass1_.pawn.relations.RelatedPawns)
-			//{
-			//	if (!pawn2.Dead)
-			//	{
-			//		c__DisplayClass1_.relatedPawns.Add(pawn2);
-			//	}
-			//}
-			//Pawn pawn3 = c__DisplayClass1_.<FindHeir>g__GetClosestFamilyPawn|0(false);
-			//if (pawn3 != null)
-			//{
-			//	return pawn3;
-			//}
-			//Pawn pawn4 = (from p in PawnsFinder.AllMapsAndWorld_Alive
-			//where p != c__DisplayClass1_.pawn && p.Faction == c__DisplayClass1_.pawn.Faction && p.RaceProps.Humanlike
-			//select p).MaxByWithFallback((Pawn p) => c__DisplayClass1_.pawn.relations.OpinionOf(p), null);
-			//if (pawn4 != null)
-			//{
-			//	return pawn4;
-			//}
-			//pawn3 = c__DisplayClass1_.<FindHeir>g__GetClosestFamilyPawn|0(true);
-			//if (pawn3 != null)
-			//{
-			//	return pawn3;
-			//}
+			if (!relatedPawn.Dead)
+			{
+				relatedPawns.Add(relatedPawn);
+			}
+		}
+		Pawn pawn2 = GetClosestFamilyPawn(ignoreFaction: false);
+		if (pawn2 != null)
+		{
+			return pawn2;
+		}
+		Pawn pawn3 = PawnsFinder.AllMapsAndWorld_Alive.Where((Pawn p) => p != pawn && p.Faction == pawn.Faction && p.RaceProps.Humanlike).MaxByWithFallback((Pawn p) => pawn.relations.OpinionOf(p));
+		if (pawn3 != null)
+		{
+			return pawn3;
+		}
+		pawn2 = GetClosestFamilyPawn(ignoreFaction: true);
+		if (pawn2 != null)
+		{
+			return pawn2;
+		}
+		return null;
+		Pawn GetClosestFamilyPawn(bool ignoreFaction)
+		{
+			foreach (PawnRelationDef royalTitleInheritanceRelation in faction.def.royalTitleInheritanceRelations)
+			{
+				try
+				{
+					foreach (Pawn item in relatedPawns)
+					{
+						if (royalTitleInheritanceRelation.Worker.InRelation(pawn, item) && (ignoreFaction || item.Faction == pawn.Faction))
+						{
+							tmpPawns.Add(item);
+						}
+					}
+					if (tmpPawns.Count != 0)
+					{
+						tmpPawns.Sort((Pawn p1, Pawn p2) => p2.ageTracker.AgeBiologicalYears.CompareTo(p1.ageTracker.AgeBiologicalYears));
+						Pawn pawn4 = tmpPawns.Where((Pawn p) => p.royalty != null && p.royalty.GetCurrentTitle(faction) == null).FirstOrDefault();
+						if (pawn4 != null)
+						{
+							return pawn4;
+						}
+						return tmpPawns[0];
+					}
+				}
+				finally
+				{
+					tmpPawns.Clear();
+				}
+			}
 			return null;
 		}
-
-		
-		private static List<Pawn> tmpPawns = new List<Pawn>();
 	}
 }

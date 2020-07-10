@@ -109,17 +109,17 @@ namespace RimWorld
 			}
 		}
 
-		
-		//public override void Notify_SignalReceived(Signal signal)
-		//{
-		//	if (string.IsNullOrEmpty(this.Props.wakeUpSignalTag))
-		//	{
-		//		return;
-		//	}
-		//	this.sentSignal = true;
-		//}
 
-		
+		public override void Notify_SignalReceived(Signal signal)
+		{
+			if (!string.IsNullOrEmpty(Props.wakeUpSignalTag))
+			{
+				sentSignal = true;
+			}
+		}
+
+
+
 		public override void PostExposeData()
 		{
 			base.PostExposeData();

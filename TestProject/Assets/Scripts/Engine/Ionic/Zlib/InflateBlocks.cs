@@ -197,8 +197,8 @@ namespace Ionic.Zlib
 					goto IL_7D1;
 				case InflateBlocks.InflateBlockMode.BTREE:
 					goto IL_7D1;
-				//case InflateBlocks.InflateBlockMode.DTREE:
-				//	goto IL_8C4;
+				case InflateBlocks.InflateBlockMode.DTREE:
+					goto IL_8C4;
 				case InflateBlocks.InflateBlockMode.CODES:
 					goto IL_CC9;
 				case InflateBlocks.InflateBlockMode.DRY:

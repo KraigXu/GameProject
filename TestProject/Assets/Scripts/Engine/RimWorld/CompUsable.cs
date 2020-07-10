@@ -73,43 +73,36 @@ namespace RimWorld
 		
 		public virtual void TryStartUseJob(Pawn pawn, LocalTargetInfo extraTarget)
 		{
-			//CompUsable.c__DisplayClass4_0 c__DisplayClass4_ = new CompUsable.c__DisplayClass4_0();
-			//c__DisplayClass4_.extraTarget = extraTarget;
-			//c__DisplayClass4_.4__this = this;
-			//c__DisplayClass4_.pawn = pawn;
-			//if (!c__DisplayClass4_.pawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
-			//{
-			//	return;
-			//}
-			//string text;
-			//if (!this.CanBeUsedBy(c__DisplayClass4_.pawn, out text))
-			//{
-			//	return;
-			//}
-			//StringBuilder stringBuilder = new StringBuilder();
-			//foreach (CompUseEffect compUseEffect in this.parent.GetComps<CompUseEffect>())
-			//{
-			//	TaggedString taggedString = compUseEffect.ConfirmMessage(c__DisplayClass4_.pawn);
-			//	if (!taggedString.NullOrEmpty())
-			//	{
-			//		if (stringBuilder.Length != 0)
-			//		{
-			//			stringBuilder.AppendLine();
-			//		}
-			//		stringBuilder.AppendTagged(taggedString);
-			//	}
-			//}
-			//string str = stringBuilder.ToString();
-			//if (str.NullOrEmpty())
-			//{
-			//	c__DisplayClass4_.<TryStartUseJob>g__StartJob|0();
-			//	return;
-			//}
-			//Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(str, delegate
-			//{
-			//	Job job = c__DisplayClass4_.extraTarget.IsValid ? JobMaker.MakeJob(c__DisplayClass4_.4__this.Props.useJob, c__DisplayClass4_.4__this.parent, c__DisplayClass4_.extraTarget) : JobMaker.MakeJob(c__DisplayClass4_.4__this.Props.useJob, c__DisplayClass4_.4__this.parent);
-			//	c__DisplayClass4_.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-			//}, false, null));
+			if (pawn.CanReserveAndReach(parent, PathEndMode.Touch, Danger.Deadly) && CanBeUsedBy(pawn, out string _))
+			{
+				StringBuilder stringBuilder = new StringBuilder();
+				foreach (CompUseEffect comp in parent.GetComps<CompUseEffect>())
+				{
+					TaggedString taggedString = comp.ConfirmMessage(pawn);
+					if (!taggedString.NullOrEmpty())
+					{
+						if (stringBuilder.Length != 0)
+						{
+							stringBuilder.AppendLine();
+						}
+						stringBuilder.AppendTagged(taggedString);
+					}
+				}
+				string str = stringBuilder.ToString();
+				if (str.NullOrEmpty())
+				{
+					StartJob();
+				}
+				else
+				{
+					Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(str, StartJob));
+				}
+			}
+			void StartJob()
+			{
+				Job job = extraTarget.IsValid ? JobMaker.MakeJob(Props.useJob, parent, extraTarget) : JobMaker.MakeJob(Props.useJob, parent);
+				pawn.jobs.TryTakeOrderedJob(job);
+			}
 		}
 
 		

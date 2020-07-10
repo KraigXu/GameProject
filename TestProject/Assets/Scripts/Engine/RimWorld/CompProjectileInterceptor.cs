@@ -399,19 +399,23 @@ namespace RimWorld
 		
 		private void BreakShield(DamageInfo dinfo)
 		{
-			if (this.Active)
+			float fTheta;
+			if (Active)
 			{
-				SoundDefOf.EnergyShield_Broken.PlayOneShot(new TargetInfo(this.parent));
-				int num = Mathf.CeilToInt(this.Props.radius * 2f);
-				//CompProjectileInterceptor.c__DisplayClass41_0 c__DisplayClass41_;
-				//c__DisplayClass41_.fTheta = 6.28318548f / (float)num;
-				//for (int i = 0; i < num; i++)
-				//{
-				//	MoteMaker.MakeConnectingLine(this.<BreakShield>g__PosAtIndex|41_0(i, ref c__DisplayClass41_), this.<BreakShield>g__PosAtIndex|41_0((i + 1) % num, ref c__DisplayClass41_), ThingDefOf.Mote_LineEMP, this.parent.Map, 1.5f);
-				//}
+				SoundDefOf.EnergyShield_Broken.PlayOneShot(new TargetInfo(parent));
+				int num = Mathf.CeilToInt(Props.radius * 2f);
+				fTheta = (float)Math.PI * 2f / (float)num;
+				for (int i = 0; i < num; i++)
+				{
+					MoteMaker.MakeConnectingLine(PosAtIndex(i), PosAtIndex((i + 1) % num), ThingDefOf.Mote_LineEMP, parent.Map, 1.5f);
+				}
 			}
-			dinfo.SetAmount((float)this.Props.disarmedByEmpForTicks / 30f);
-			this.stunner.Notify_DamageApplied(dinfo, true);
+			dinfo.SetAmount((float)Props.disarmedByEmpForTicks / 30f);
+			stunner.Notify_DamageApplied(dinfo, affectedByEMP: true);
+			Vector3 PosAtIndex(int index)
+			{
+				return new Vector3(Props.radius * Mathf.Cos(fTheta * (float)index) + (float)parent.Position.x, 0f, Props.radius * Mathf.Sin(fTheta * (float)index) + (float)parent.Position.z);
+			}
 		}
 
 		

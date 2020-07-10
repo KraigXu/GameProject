@@ -1,287 +1,299 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
-namespace RimWorld
+public class JobGiver_Work : ThinkNode
 {
-	
-	public class JobGiver_Work : ThinkNode
+	public bool emergency;
+
+	public override ThinkNode DeepCopy(bool resolve = true)
 	{
-		
-		public override ThinkNode DeepCopy(bool resolve = true)
-		{
-			JobGiver_Work jobGiver_Work = (JobGiver_Work)base.DeepCopy(resolve);
-			jobGiver_Work.emergency = this.emergency;
-			return jobGiver_Work;
-		}
+		JobGiver_Work obj = (JobGiver_Work)base.DeepCopy(resolve);
+		obj.emergency = emergency;
+		return obj;
+	}
 
-		
-		public override float GetPriority(Pawn pawn)
+	public override float GetPriority(Pawn pawn)
+	{
+		if (pawn.workSettings == null || !pawn.workSettings.EverWork)
 		{
-			if (pawn.workSettings == null || !pawn.workSettings.EverWork)
-			{
-				return 0f;
-			}
-			TimeAssignmentDef timeAssignmentDef = (pawn.timetable == null) ? TimeAssignmentDefOf.Anything : pawn.timetable.CurrentAssignment;
-			if (timeAssignmentDef == TimeAssignmentDefOf.Anything)
-			{
-				return 5.5f;
-			}
-			if (timeAssignmentDef == TimeAssignmentDefOf.Work)
-			{
-				return 9f;
-			}
-			if (timeAssignmentDef == TimeAssignmentDefOf.Sleep)
-			{
-				return 3f;
-			}
-			if (timeAssignmentDef == TimeAssignmentDefOf.Joy)
-			{
-				return 2f;
-			}
-			if (timeAssignmentDef == TimeAssignmentDefOf.Meditate)
-			{
-				return 2f;
-			}
-			throw new NotImplementedException();
+			return 0f;
 		}
-
-		
-		public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
+		TimeAssignmentDef timeAssignmentDef = (pawn.timetable == null) ? TimeAssignmentDefOf.Anything : pawn.timetable.CurrentAssignment;
+		if (timeAssignmentDef == TimeAssignmentDefOf.Anything)
 		{
-			//JobGiver_Work.c__DisplayClass3_0 c__DisplayClass3_ = new JobGiver_Work.c__DisplayClass3_0();
-			//c__DisplayClass3_.pawn = pawn;
-			//if (this.emergency && c__DisplayClass3_.pawn.mindState.priorityWork.IsPrioritized)
-			//{
-			//	List<WorkGiverDef> workGiversByPriority = c__DisplayClass3_.pawn.mindState.priorityWork.WorkGiver.workType.workGiversByPriority;
-			//	for (int i = 0; i < workGiversByPriority.Count; i++)
-			//	{
-			//		WorkGiver worker = workGiversByPriority[i].Worker;
-			//		if (this.WorkGiversRelated(c__DisplayClass3_.pawn.mindState.priorityWork.WorkGiver, worker.def))
-			//		{
-			//			Job job = this.GiverTryGiveJobPrioritized(c__DisplayClass3_.pawn, worker, c__DisplayClass3_.pawn.mindState.priorityWork.Cell);
-			//			if (job != null)
-			//			{
-			//				job.playerForced = true;
-			//				return new ThinkResult(job, this, new JobTag?(workGiversByPriority[i].tagToGive), false);
-			//			}
-			//		}
-			//	}
-			//	c__DisplayClass3_.pawn.mindState.priorityWork.Clear();
-			//}
-			//List<WorkGiver> list = (!this.emergency) ? c__DisplayClass3_.pawn.workSettings.WorkGiversInOrderNormal : c__DisplayClass3_.pawn.workSettings.WorkGiversInOrderEmergency;
-			//int num = -999;
-			//c__DisplayClass3_.bestTargetOfLastPriority = TargetInfo.Invalid;
-			//c__DisplayClass3_.scannerWhoProvidedTarget = null;
-			//for (int j = 0; j < list.Count; j++)
-			//{
-			//	WorkGiver workGiver = list[j];
-			//	if (workGiver.def.priorityInType != num && c__DisplayClass3_.bestTargetOfLastPriority.IsValid)
-			//	{
-			//		break;
-			//	}
-			//	if (this.PawnCanUseWorkGiver(c__DisplayClass3_.pawn, workGiver))
-			//	{
-			//		try
-			//		{
-			//			JobGiver_Work.c__DisplayClass3_1 c__DisplayClass3_2 = new JobGiver_Work.c__DisplayClass3_1();
-			//			c__DisplayClass3_2.CS$8__locals1 = c__DisplayClass3_;
-			//			Job job2 = workGiver.NonScanJob(c__DisplayClass3_2.CS$8__locals1.pawn);
-			//			if (job2 != null)
-			//			{
-			//				return new ThinkResult(job2, this, new JobTag?(list[j].def.tagToGive), false);
-			//			}
-			//			c__DisplayClass3_2.scanner = (workGiver as WorkGiver_Scanner);
-			//			if (c__DisplayClass3_2.scanner != null)
-			//			{
-			//				if (c__DisplayClass3_2.scanner.def.scanThings)
-			//				{
-			//					Predicate<Thing> validator = (Thing t) => !t.IsForbidden(c__DisplayClass3_2.CS$8__locals1.pawn) && c__DisplayClass3_2.scanner.HasJobOnThing(c__DisplayClass3_2.CS$8__locals1.pawn, t, false);
-			//					IEnumerable<Thing> enumerable = c__DisplayClass3_2.scanner.PotentialWorkThingsGlobal(c__DisplayClass3_2.CS$8__locals1.pawn);
-			//					Thing thing;
-			//					if (c__DisplayClass3_2.scanner.Prioritized)
-			//					{
-			//						IEnumerable<Thing> enumerable2 = enumerable;
-			//						if (enumerable2 == null)
-			//						{
-			//							enumerable2 = c__DisplayClass3_2.CS$8__locals1.pawn.Map.listerThings.ThingsMatching(c__DisplayClass3_2.scanner.PotentialWorkThingRequest);
-			//						}
-			//						if (c__DisplayClass3_2.scanner.AllowUnreachable)
-			//						{
-			//							thing = GenClosest.ClosestThing_Global(c__DisplayClass3_2.CS$8__locals1.pawn.Position, enumerable2, 99999f, validator, (Thing x) => c__DisplayClass3_2.scanner.GetPriority(c__DisplayClass3_2.CS$8__locals1.pawn, x));
-			//						}
-			//						else
-			//						{
-			//							thing = GenClosest.ClosestThing_Global_Reachable(c__DisplayClass3_2.CS$8__locals1.pawn.Position, c__DisplayClass3_2.CS$8__locals1.pawn.Map, enumerable2, c__DisplayClass3_2.scanner.PathEndMode, TraverseParms.For(c__DisplayClass3_2.CS$8__locals1.pawn, c__DisplayClass3_2.scanner.MaxPathDanger(c__DisplayClass3_2.CS$8__locals1.pawn), TraverseMode.ByPawn, false), 9999f, validator, (Thing x) => c__DisplayClass3_2.scanner.GetPriority(c__DisplayClass3_2.CS$8__locals1.pawn, x));
-			//						}
-			//					}
-			//					else if (c__DisplayClass3_2.scanner.AllowUnreachable)
-			//					{
-			//						IEnumerable<Thing> enumerable3 = enumerable;
-			//						if (enumerable3 == null)
-			//						{
-			//							enumerable3 = c__DisplayClass3_2.CS$8__locals1.pawn.Map.listerThings.ThingsMatching(c__DisplayClass3_2.scanner.PotentialWorkThingRequest);
-			//						}
-			//						thing = GenClosest.ClosestThing_Global(c__DisplayClass3_2.CS$8__locals1.pawn.Position, enumerable3, 99999f, validator, null);
-			//					}
-			//					else
-			//					{
-			//						thing = GenClosest.ClosestThingReachable(c__DisplayClass3_2.CS$8__locals1.pawn.Position, c__DisplayClass3_2.CS$8__locals1.pawn.Map, c__DisplayClass3_2.scanner.PotentialWorkThingRequest, c__DisplayClass3_2.scanner.PathEndMode, TraverseParms.For(c__DisplayClass3_2.CS$8__locals1.pawn, c__DisplayClass3_2.scanner.MaxPathDanger(c__DisplayClass3_2.CS$8__locals1.pawn), TraverseMode.ByPawn, false), 9999f, validator, enumerable, 0, c__DisplayClass3_2.scanner.MaxRegionsToScanBeforeGlobalSearch, enumerable != null, RegionType.Set_Passable, false);
-			//					}
-			//					if (thing != null)
-			//					{
-			//						c__DisplayClass3_2.CS$8__locals1.bestTargetOfLastPriority = thing;
-			//						c__DisplayClass3_2.CS$8__locals1.scannerWhoProvidedTarget = c__DisplayClass3_2.scanner;
-			//					}
-			//				}
-			//				if (c__DisplayClass3_2.scanner.def.scanCells)
-			//				{
-			//					JobGiver_Work.c__DisplayClass3_2 c__DisplayClass3_3;
-			//					c__DisplayClass3_3.pawnPosition = c__DisplayClass3_2.CS$8__locals1.pawn.Position;
-			//					c__DisplayClass3_3.closestDistSquared = 99999f;
-			//					c__DisplayClass3_3.bestPriority = float.MinValue;
-			//					c__DisplayClass3_3.prioritized = c__DisplayClass3_2.scanner.Prioritized;
-			//					c__DisplayClass3_3.allowUnreachable = c__DisplayClass3_2.scanner.AllowUnreachable;
-			//					c__DisplayClass3_3.maxPathDanger = c__DisplayClass3_2.scanner.MaxPathDanger(c__DisplayClass3_2.CS$8__locals1.pawn);
-			//					IEnumerable<IntVec3> enumerable4 = c__DisplayClass3_2.scanner.PotentialWorkCellsGlobal(c__DisplayClass3_2.CS$8__locals1.pawn);
-			//					IList<IntVec3> list2;
-			//					if ((list2 = (enumerable4 as IList<IntVec3>)) != null)
-			//					{
-			//						for (int k = 0; k < list2.Count; k++)
-			//						{
-			//							c__DisplayClass3_2.<TryIssueJobPackage>g__ProcessCell|3(list2[k], ref c__DisplayClass3_3);
-			//						}
-			//					}
-			//					else
-			//					{
-			//						foreach (IntVec3 c in enumerable4)
-			//						{
-			//							c__DisplayClass3_2.<TryIssueJobPackage>g__ProcessCell|3(c, ref c__DisplayClass3_3);
-			//						}
-			//					}
-			//				}
-			//			}
-			//		}
-			//		catch (Exception ex)
-			//		{
-			//			Log.Error(string.Concat(new object[]
-			//			{
-			//				c__DisplayClass3_.pawn,
-			//				" threw exception in WorkGiver ",
-			//				workGiver.def.defName,
-			//				": ",
-			//				ex.ToString()
-			//			}), false);
-			//		}
-			//		finally
-			//		{
-			//		}
-			//		if (c__DisplayClass3_.bestTargetOfLastPriority.IsValid)
-			//		{
-			//			Job job3;
-			//			if (c__DisplayClass3_.bestTargetOfLastPriority.HasThing)
-			//			{
-			//				job3 = c__DisplayClass3_.scannerWhoProvidedTarget.JobOnThing(c__DisplayClass3_.pawn, c__DisplayClass3_.bestTargetOfLastPriority.Thing, false);
-			//			}
-			//			else
-			//			{
-			//				job3 = c__DisplayClass3_.scannerWhoProvidedTarget.JobOnCell(c__DisplayClass3_.pawn, c__DisplayClass3_.bestTargetOfLastPriority.Cell, false);
-			//			}
-			//			if (job3 != null)
-			//			{
-			//				job3.workGiverDef = c__DisplayClass3_.scannerWhoProvidedTarget.def;
-			//				return new ThinkResult(job3, this, new JobTag?(list[j].def.tagToGive), false);
-			//			}
-			//			Log.ErrorOnce(string.Concat(new object[]
-			//			{
-			//				c__DisplayClass3_.scannerWhoProvidedTarget,
-			//				" provided target ",
-			//				c__DisplayClass3_.bestTargetOfLastPriority,
-			//				" but yielded no actual job for pawn ",
-			//				c__DisplayClass3_.pawn,
-			//				". The CanGiveJob and JobOnX methods may not be synchronized."
-			//			}), 6112651, false);
-			//		}
-			//		num = workGiver.def.priorityInType;
-			//	}
-			//}
-			return ThinkResult.NoJob;
+			return 5.5f;
 		}
-
-		
-		private bool PawnCanUseWorkGiver(Pawn pawn, WorkGiver giver)
+		if (timeAssignmentDef == TimeAssignmentDefOf.Work)
 		{
-			return (giver.def.nonColonistsCanDo || pawn.IsColonist) && !pawn.WorkTagIsDisabled(giver.def.workTags) && !giver.ShouldSkip(pawn, false) && giver.MissingRequiredCapacity(pawn) == null;
+			return 9f;
 		}
-
-		
-		private bool WorkGiversRelated(WorkGiverDef current, WorkGiverDef next)
+		if (timeAssignmentDef == TimeAssignmentDefOf.Sleep)
 		{
-			return next != WorkGiverDefOf.Repair || current == WorkGiverDefOf.Repair;
+			return 3f;
 		}
-
-		
-		private Job GiverTryGiveJobPrioritized(Pawn pawn, WorkGiver giver, IntVec3 cell)
+		if (timeAssignmentDef == TimeAssignmentDefOf.Joy)
 		{
-			if (!this.PawnCanUseWorkGiver(pawn, giver))
+			return 2f;
+		}
+		if (timeAssignmentDef == TimeAssignmentDefOf.Meditate)
+		{
+			return 2f;
+		}
+		throw new NotImplementedException();
+	}
+
+	public override ThinkResult TryIssueJobPackage(Pawn pawn, JobIssueParams jobParams)
+	{
+		if (emergency && pawn.mindState.priorityWork.IsPrioritized)
+		{
+			List<WorkGiverDef> workGiversByPriority = pawn.mindState.priorityWork.WorkGiver.workType.workGiversByPriority;
+			for (int i = 0; i < workGiversByPriority.Count; i++)
 			{
-				return null;
+				WorkGiver worker = workGiversByPriority[i].Worker;
+				if (WorkGiversRelated(pawn.mindState.priorityWork.WorkGiver, worker.def))
+				{
+					Job job = GiverTryGiveJobPrioritized(pawn, worker, pawn.mindState.priorityWork.Cell);
+					if (job != null)
+					{
+						job.playerForced = true;
+						return new ThinkResult(job, this, workGiversByPriority[i].tagToGive);
+					}
+				}
+			}
+			pawn.mindState.priorityWork.Clear();
+		}
+		List<WorkGiver> list = (!emergency) ? pawn.workSettings.WorkGiversInOrderNormal : pawn.workSettings.WorkGiversInOrderEmergency;
+		int num = -999;
+		TargetInfo bestTargetOfLastPriority = TargetInfo.Invalid;
+		WorkGiver_Scanner scannerWhoProvidedTarget = null;
+		WorkGiver_Scanner scanner;
+		IntVec3 pawnPosition;
+		bool prioritized;
+		bool allowUnreachable;
+		Danger maxPathDanger;
+		for (int j = 0; j < list.Count; j++)
+		{
+			WorkGiver workGiver = list[j];
+			if (workGiver.def.priorityInType != num && bestTargetOfLastPriority.IsValid)
+			{
+				break;
+			}
+			if (!PawnCanUseWorkGiver(pawn, workGiver))
+			{
+				continue;
 			}
 			try
 			{
-				Job job = giver.NonScanJob(pawn);
-				if (job != null)
+				Job job2 = workGiver.NonScanJob(pawn);
+				if (job2 != null)
 				{
-					return job;
+					return new ThinkResult(job2, this, list[j].def.tagToGive);
 				}
-				WorkGiver_Scanner scanner = giver as WorkGiver_Scanner;
+				scanner = (workGiver as WorkGiver_Scanner);
+				float closestDistSquared;
+				float bestPriority;
 				if (scanner != null)
 				{
-					if (giver.def.scanThings)
+					if (scanner.def.scanThings)
 					{
-						Predicate<Thing> predicate = (Thing t) => !t.IsForbidden(pawn) && scanner.HasJobOnThing(pawn, t, false);
-						List<Thing> thingList = cell.GetThingList(pawn.Map);
-						for (int i = 0; i < thingList.Count; i++)
+						Predicate<Thing> validator = (Thing t) => !t.IsForbidden(pawn) && scanner.HasJobOnThing(pawn, t);
+						IEnumerable<Thing> enumerable = scanner.PotentialWorkThingsGlobal(pawn);
+						Thing thing;
+						if (scanner.Prioritized)
 						{
-							Thing thing = thingList[i];
-							if (scanner.PotentialWorkThingRequest.Accepts(thing) && predicate(thing))
+							IEnumerable<Thing> enumerable2 = enumerable;
+							if (enumerable2 == null)
 							{
-								Job job2 = scanner.JobOnThing(pawn, thing, false);
-								if (job2 != null)
-								{
-									job2.workGiverDef = giver.def;
-								}
-								return job2;
+								enumerable2 = pawn.Map.listerThings.ThingsMatching(scanner.PotentialWorkThingRequest);
+							}
+							thing = ((!scanner.AllowUnreachable) ? GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, enumerable2, scanner.PathEndMode, TraverseParms.For(pawn, scanner.MaxPathDanger(pawn)), 9999f, validator, (Thing x) => scanner.GetPriority(pawn, x)) : GenClosest.ClosestThing_Global(pawn.Position, enumerable2, 99999f, validator, (Thing x) => scanner.GetPriority(pawn, x)));
+						}
+						else if (scanner.AllowUnreachable)
+						{
+							IEnumerable<Thing> enumerable3 = enumerable;
+							if (enumerable3 == null)
+							{
+								enumerable3 = pawn.Map.listerThings.ThingsMatching(scanner.PotentialWorkThingRequest);
+							}
+							thing = GenClosest.ClosestThing_Global(pawn.Position, enumerable3, 99999f, validator);
+						}
+						else
+						{
+							thing = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, scanner.PotentialWorkThingRequest, scanner.PathEndMode, TraverseParms.For(pawn, scanner.MaxPathDanger(pawn)), 9999f, validator, enumerable, 0, scanner.MaxRegionsToScanBeforeGlobalSearch, enumerable != null);
+						}
+						if (thing != null)
+						{
+							bestTargetOfLastPriority = thing;
+							scannerWhoProvidedTarget = scanner;
+						}
+					}
+					if (scanner.def.scanCells)
+					{
+						pawnPosition = pawn.Position;
+						closestDistSquared = 99999f;
+						bestPriority = float.MinValue;
+						prioritized = scanner.Prioritized;
+						allowUnreachable = scanner.AllowUnreachable;
+						maxPathDanger = scanner.MaxPathDanger(pawn);
+						IEnumerable<IntVec3> enumerable4 = scanner.PotentialWorkCellsGlobal(pawn);
+						IList<IntVec3> list2;
+						if ((list2 = (enumerable4 as IList<IntVec3>)) != null)
+						{
+							for (int k = 0; k < list2.Count; k++)
+							{
+								ProcessCell(list2[k]);
+							}
+						}
+						else
+						{
+							foreach (IntVec3 item in enumerable4)
+							{
+								ProcessCell(item);
 							}
 						}
 					}
-					if (giver.def.scanCells && !cell.IsForbidden(pawn) && scanner.HasJobOnCell(pawn, cell, false))
+				}
+				void ProcessCell(IntVec3 c)
+				{
+					bool flag = false;
+					float num2 = (c - pawnPosition).LengthHorizontalSquared;
+					float num3 = 0f;
+					if (prioritized)
 					{
-						Job job3 = scanner.JobOnCell(pawn, cell, false);
-						if (job3 != null)
+						if (!c.IsForbidden(pawn) && scanner.HasJobOnCell(pawn, c))
 						{
-							job3.workGiverDef = giver.def;
+							if (!allowUnreachable && !pawn.CanReach(c, scanner.PathEndMode, maxPathDanger))
+							{
+								return;
+							}
+							num3 = scanner.GetPriority(pawn, c);
+							if (num3 > bestPriority || (num3 == bestPriority && num2 < closestDistSquared))
+							{
+								flag = true;
+							}
 						}
-						return job3;
+					}
+					else if (num2 < closestDistSquared && !c.IsForbidden(pawn) && scanner.HasJobOnCell(pawn, c))
+					{
+						if (!allowUnreachable && !pawn.CanReach(c, scanner.PathEndMode, maxPathDanger))
+						{
+							return;
+						}
+						flag = true;
+					}
+					if (flag)
+					{
+						bestTargetOfLastPriority = new TargetInfo(c, pawn.Map);
+						scannerWhoProvidedTarget = scanner;
+						closestDistSquared = num2;
+						bestPriority = num3;
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					pawn,
-					" threw exception in GiverTryGiveJobTargeted on WorkGiver ",
-					giver.def.defName,
-					": ",
-					ex.ToString()
-				}), false);
+				Log.Error(pawn + " threw exception in WorkGiver " + workGiver.def.defName + ": " + ex.ToString());
 			}
+			finally
+			{
+			}
+			if (bestTargetOfLastPriority.IsValid)
+			{
+				Job job3 = (!bestTargetOfLastPriority.HasThing) ? scannerWhoProvidedTarget.JobOnCell(pawn, bestTargetOfLastPriority.Cell) : scannerWhoProvidedTarget.JobOnThing(pawn, bestTargetOfLastPriority.Thing);
+				if (job3 != null)
+				{
+					job3.workGiverDef = scannerWhoProvidedTarget.def;
+					return new ThinkResult(job3, this, list[j].def.tagToGive);
+				}
+				Log.ErrorOnce(scannerWhoProvidedTarget + " provided target " + bestTargetOfLastPriority + " but yielded no actual job for pawn " + pawn + ". The CanGiveJob and JobOnX methods may not be synchronized.", 6112651);
+			}
+			num = workGiver.def.priorityInType;
+		}
+		return ThinkResult.NoJob;
+	}
+
+	private bool PawnCanUseWorkGiver(Pawn pawn, WorkGiver giver)
+	{
+		if (!giver.def.nonColonistsCanDo && !pawn.IsColonist)
+		{
+			return false;
+		}
+		if (pawn.WorkTagIsDisabled(giver.def.workTags))
+		{
+			return false;
+		}
+		if (giver.ShouldSkip(pawn))
+		{
+			return false;
+		}
+		if (giver.MissingRequiredCapacity(pawn) != null)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	private bool WorkGiversRelated(WorkGiverDef current, WorkGiverDef next)
+	{
+		if (next == WorkGiverDefOf.Repair)
+		{
+			return current == WorkGiverDefOf.Repair;
+		}
+		return true;
+	}
+
+	private Job GiverTryGiveJobPrioritized(Pawn pawn, WorkGiver giver, IntVec3 cell)
+	{
+		if (!PawnCanUseWorkGiver(pawn, giver))
+		{
 			return null;
 		}
-
-		
-		public bool emergency;
+		try
+		{
+			Job job = giver.NonScanJob(pawn);
+			if (job != null)
+			{
+				return job;
+			}
+			WorkGiver_Scanner scanner = giver as WorkGiver_Scanner;
+			if (scanner != null)
+			{
+				if (giver.def.scanThings)
+				{
+					Predicate<Thing> predicate = (Thing t) => !t.IsForbidden(pawn) && scanner.HasJobOnThing(pawn, t);
+					List<Thing> thingList = cell.GetThingList(pawn.Map);
+					for (int i = 0; i < thingList.Count; i++)
+					{
+						Thing thing = thingList[i];
+						if (scanner.PotentialWorkThingRequest.Accepts(thing) && predicate(thing))
+						{
+							Job job2 = scanner.JobOnThing(pawn, thing);
+							if (job2 != null)
+							{
+								job2.workGiverDef = giver.def;
+							}
+							return job2;
+						}
+					}
+				}
+				if (giver.def.scanCells && !cell.IsForbidden(pawn) && scanner.HasJobOnCell(pawn, cell))
+				{
+					Job job3 = scanner.JobOnCell(pawn, cell);
+					if (job3 != null)
+					{
+						job3.workGiverDef = giver.def;
+					}
+					return job3;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			Log.Error(pawn + " threw exception in GiverTryGiveJobTargeted on WorkGiver " + giver.def.defName + ": " + ex.ToString());
+		}
+		return null;
 	}
 }

@@ -1,53 +1,41 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-namespace RimWorld
+public class RoomRequirement_Thing : RoomRequirement
 {
-	
-	public class RoomRequirement_Thing : RoomRequirement
+	public ThingDef thingDef;
+
+	public override bool Met(Room r, Pawn p = null)
 	{
-		
-		public override bool Met(Room r, Pawn p = null)
-		{
-			return r.ContainsThing(this.thingDef);
-		}
+		return r.ContainsThing(thingDef);
+	}
 
-		
-		public override bool SameOrSubsetOf(RoomRequirement other)
+	public override bool SameOrSubsetOf(RoomRequirement other)
+	{
+		if (!base.SameOrSubsetOf(other))
 		{
-			if (!base.SameOrSubsetOf(other))
-			{
-				return false;
-			}
-			RoomRequirement_Thing roomRequirement_Thing = (RoomRequirement_Thing)other;
-			return this.thingDef == roomRequirement_Thing.thingDef;
+			return false;
 		}
+		RoomRequirement_Thing roomRequirement_Thing = (RoomRequirement_Thing)other;
+		return thingDef == roomRequirement_Thing.thingDef;
+	}
 
-		
-		public override string Label(Room r = null)
+	public override string Label(Room r = null)
+	{
+		return ((!labelKey.NullOrEmpty()) ? ((string)labelKey.Translate()) : thingDef.label) + ((r != null) ? " 0/1" : "");
+	}
+
+	public override IEnumerable<string> ConfigErrors()
+	{
+		if (thingDef == null)
 		{
-			//return ((!this.labelKey.NullOrEmpty()) ? this.labelKey.Translate() : this.thingDef.label) + ((r != null) ? " 0/1" : "");
-			return "";
+			yield return "thingDef is null";
 		}
+	}
 
-		
-		public override IEnumerable<string> ConfigErrors()
-		{
-			if (this.thingDef == null)
-			{
-				yield return "thingDef is null";
-			}
-			yield break;
-		}
-
-		
-		public override bool PlayerHasResearched()
-		{
-			return this.thingDef.IsResearchFinished;
-		}
-
-		
-		public ThingDef thingDef;
+	public override bool PlayerHasResearched()
+	{
+		return thingDef.IsResearchFinished;
 	}
 }

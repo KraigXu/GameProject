@@ -1,217 +1,175 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using RimWorld;
+using Verse;
 
-namespace Verse
+public class Def : Editable
 {
-	
-	public class Def : Editable
+	[Description("The name of this Def. It is used as an identifier by the game code.")]
+	[NoTranslate]
+	public string defName = "UnnamedDef";
+
+	[Description("A human-readable label used to identify this in game.")]
+	[DefaultValue(null)]
+	[MustTranslate]
+	public string label;
+
+	[Description("A human-readable description given when the Def is inspected by players.")]
+	[DefaultValue(null)]
+	[MustTranslate]
+	public string description;
+
+	[XmlInheritanceAllowDuplicateNodes]
+	public List<DefHyperlink> descriptionHyperlinks;
+
+	[Description("Disables config error checking. Intended for mod use. (Be careful!)")]
+	[DefaultValue(false)]
+	[MustTranslate]
+	public bool ignoreConfigErrors;
+
+	[Description("Mod-specific data. Not used by core game code.")]
+	[DefaultValue(null)]
+	public List<DefModExtension> modExtensions;
+
+	[Unsaved(false)]
+	public ushort shortHash;
+
+	[Unsaved(false)]
+	public ushort index = ushort.MaxValue;
+
+	[Unsaved(false)]
+	public ModContentPack modContentPack;
+
+	[Unsaved(false)]
+	public string fileName;
+
+	[Unsaved(false)]
+	private TaggedString cachedLabelCap = null;
+
+	[Unsaved(false)]
+	public bool generated;
+
+	[Unsaved(false)]
+	public ushort debugRandomId = (ushort)Rand.RangeInclusive(0, 65535);
+
+	public const string DefaultDefName = "UnnamedDef";
+
+	private static Regex AllowedDefnamesRegex = new Regex("^[a-zA-Z0-9\\-_]*$");
+
+	public TaggedString LabelCap
 	{
-		
-		
-		public TaggedString LabelCap
+		get
 		{
-			get
+			if (label.NullOrEmpty())
 			{
-				if (this.label.NullOrEmpty())
+				return null;
+			}
+			if (cachedLabelCap.NullOrEmpty())
+			{
+				cachedLabelCap = label.CapitalizeFirst();
+			}
+			return cachedLabelCap;
+		}
+	}
+
+	public virtual IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
+	{
+		yield break;
+	}
+
+	public override IEnumerable<string> ConfigErrors()
+	{
+		if (defName == "UnnamedDef")
+		{
+			yield return GetType() + " lacks defName. Label=" + label;
+		}
+		if (defName == "null")
+		{
+			yield return "defName cannot be the string 'null'.";
+		}
+		if (!AllowedDefnamesRegex.IsMatch(defName))
+		{
+			yield return "defName " + defName + " should only contain letters, numbers, underscores, or dashes.";
+		}
+		if (modExtensions != null)
+		{
+			int j = 0;
+			while (j < modExtensions.Count)
+			{
+				foreach (string item in modExtensions[j].ConfigErrors())
 				{
-					return null;
+					yield return item;
 				}
-				if (this.cachedLabelCap.NullOrEmpty())
-				{
-					this.cachedLabelCap = this.label.CapitalizeFirst();
-				}
-				return this.cachedLabelCap;
+				int num = j + 1;
+				j = num;
 			}
 		}
-
-		
-		public virtual IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
+		if (description != null)
+		{
+			if (description == "")
+			{
+				yield return "empty description";
+			}
+			if (char.IsWhiteSpace(description[0]))
+			{
+				yield return "description has leading whitespace";
+			}
+			if (char.IsWhiteSpace(description[description.Length - 1]))
+			{
+				yield return "description has trailing whitespace";
+			}
+		}
+		if (descriptionHyperlinks == null || descriptionHyperlinks.Count <= 0)
 		{
 			yield break;
 		}
-
-		
-		public override IEnumerable<string> ConfigErrors()
+		if (descriptionHyperlinks.RemoveAll((DefHyperlink x) => x.def == null) != 0)
 		{
-			if (this.defName == "UnnamedDef")
-			{
-				yield return base.GetType() + " lacks defName. Label=" + this.label;
-			}
-			if (this.defName == "null")
-			{
-				yield return "defName cannot be the string 'null'.";
-			}
-			if (!Def.AllowedDefnamesRegex.IsMatch(this.defName))
-			{
-				yield return "defName " + this.defName + " should only contain letters, numbers, underscores, or dashes.";
-			}
-			if (this.modExtensions != null)
-			{
-				int num;
-				for (int i = 0; i < this.modExtensions.Count; i = num)
-				{
-					foreach (string text in this.modExtensions[i].ConfigErrors())
-					{
-						
-					}
-					IEnumerator<string> enumerator = null;
-					num = i + 1;
-				}
-			}
-			if (this.description != null)
-			{
-				if (this.description == "")
-				{
-					yield return "empty description";
-				}
-				if (char.IsWhiteSpace(this.description[0]))
-				{
-					yield return "description has leading whitespace";
-				}
-				if (char.IsWhiteSpace(this.description[this.description.Length - 1]))
-				{
-					yield return "description has trailing whitespace";
-				}
-			}
-			if (this.descriptionHyperlinks != null && this.descriptionHyperlinks.Count > 0)
-			{
-				if (this.descriptionHyperlinks.RemoveAll((DefHyperlink x) => x.def == null) != 0)
-				{
-					Log.Warning("Some descriptionHyperlinks in " + this.defName + " had null def.", false);
-				}
-
-				//Def.c__DisplayClass19_0 c__DisplayClass19_ = new Def.c__DisplayClass19_0();
-				//c__DisplayClass19_.4__this = this;
-				//c__DisplayClass19_.i = this.descriptionHyperlinks.Count - 1;
-				//while (c__DisplayClass19_.i > 0)
-				//{
-				//	if (this.descriptionHyperlinks.FirstIndexOf((DefHyperlink h) => h.def == c__DisplayClass19_.4__this.descriptionHyperlinks[c__DisplayClass19_.i].def) < c__DisplayClass19_.i)
-				//	{
-				//		yield return string.Concat(new string[]
-				//		{
-				//			"Hyperlink to ",
-				//			this.descriptionHyperlinks[c__DisplayClass19_.i].def.defName,
-				//			" more than once on ",
-				//			this.defName,
-				//			" description"
-				//		});
-				//	}
-				//	int num = c__DisplayClass19_.i;
-				//	c__DisplayClass19_.i = num - 1;
-				//}
-				//c__DisplayClass19_ = null;
-			}
-			yield break;
-			yield break;
+			Log.Warning("Some descriptionHyperlinks in " + defName + " had null def.");
 		}
-
-		
-		public virtual void ClearCachedData()
+		int i;
+		for (i = descriptionHyperlinks.Count - 1; i > 0; i--)
 		{
-			this.cachedLabelCap = null;
-		}
-
-		
-		public override string ToString()
-		{
-			return this.defName;
-		}
-
-		
-		public override int GetHashCode()
-		{
-			return this.defName.GetHashCode();
-		}
-
-		
-		public T GetModExtension<T>() where T : DefModExtension
-		{
-			if (this.modExtensions == null)
+			if (descriptionHyperlinks.FirstIndexOf((DefHyperlink h) => h.def == descriptionHyperlinks[i].def) < i)
 			{
-				return default(T);
+				yield return "Hyperlink to " + descriptionHyperlinks[i].def.defName + " more than once on " + defName + " description";
 			}
-			for (int i = 0; i < this.modExtensions.Count; i++)
-			{
-				if (this.modExtensions[i] is T)
-				{
-					return this.modExtensions[i] as T;
-				}
-			}
-			return default(T);
 		}
+	}
 
-		
-		public bool HasModExtension<T>() where T : DefModExtension
+	public virtual void ClearCachedData()
+	{
+		cachedLabelCap = null;
+	}
+
+	public override string ToString()
+	{
+		return defName;
+	}
+
+	public override int GetHashCode()
+	{
+		return defName.GetHashCode();
+	}
+
+	public T GetModExtension<T>() where T : DefModExtension
+	{
+		if (modExtensions == null)
 		{
-			return this.GetModExtension<T>() != null;
+			return null;
 		}
+		for (int i = 0; i < modExtensions.Count; i++)
+		{
+			if (modExtensions[i] is T)
+			{
+				return modExtensions[i] as T;
+			}
+		}
+		return null;
+	}
 
-		
-		[Description("The name of this Def. It is used as an identifier by the game code.")]
-		[NoTranslate]
-		public string defName = "UnnamedDef";
-
-		
-		[Description("A human-readable label used to identify this in game.")]
-		[DefaultValue(null)]
-		[MustTranslate]
-		public string label;
-
-		
-		[Description("A human-readable description given when the Def is inspected by players.")]
-		[DefaultValue(null)]
-		[MustTranslate]
-		public string description;
-
-		
-		[XmlInheritanceAllowDuplicateNodes]
-		public List<DefHyperlink> descriptionHyperlinks;
-
-		
-		[Description("Disables config error checking. Intended for mod use. (Be careful!)")]
-		[DefaultValue(false)]
-		[MustTranslate]
-		public bool ignoreConfigErrors;
-
-		
-		[Description("Mod-specific data. Not used by core game code.")]
-		[DefaultValue(null)]
-		public List<DefModExtension> modExtensions;
-
-		
-		[Unsaved(false)]
-		public ushort shortHash;
-
-		
-		[Unsaved(false)]
-		public ushort index = ushort.MaxValue;
-
-		
-		[Unsaved(false)]
-		public ModContentPack modContentPack;
-
-		
-		[Unsaved(false)]
-		public string fileName;
-
-		
-		[Unsaved(false)]
-		private TaggedString cachedLabelCap = null;
-
-		
-		[Unsaved(false)]
-		public bool generated;
-
-		
-		[Unsaved(false)]
-		public ushort debugRandomId = (ushort)Rand.RangeInclusive(0, 65535);
-
-		
-		public const string DefaultDefName = "UnnamedDef";
-
-		
-		private static Regex AllowedDefnamesRegex = new Regex("^[a-zA-Z0-9\\-_]*$");
+	public bool HasModExtension<T>() where T : DefModExtension
+	{
+		return GetModExtension<T>() != null;
 	}
 }

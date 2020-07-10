@@ -86,18 +86,16 @@ namespace RimWorld
 			{
 				return true;
 			}
-			//IEnumerable<BodyPartRecord> notMissingParts = p.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
-			//c__DisplayClass3_.groups = apparel.apparel.bodyPartGroups;
-			//int i;
-			//int i2;
-			//for (i = 0; i < c__DisplayClass3_.groups.Count; i = i2 + 1)
-			//{
-			//	if (notMissingParts.Any((BodyPartRecord x) => x.IsInGroup(c__DisplayClass3_.groups[i])))
-			//	{
-			//		return true;
-			//	}
-			//	i2 = i;
-			//}
+			IEnumerable<BodyPartRecord> notMissingParts = p.health.hediffSet.GetNotMissingParts();
+			List<BodyPartGroupDef> groups = apparel.apparel.bodyPartGroups;
+			int i;
+			for (i = 0; i < groups.Count; i++)
+			{
+				if (notMissingParts.Any((BodyPartRecord x) => x.IsInGroup(groups[i])))
+				{
+					return true;
+				}
+			}
 			return false;
 		}
 

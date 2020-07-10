@@ -1,506 +1,415 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld
+public class Designator_Build : Designator_Place
 {
-	
-	public class Designator_Build : Designator_Place
+	protected BuildableDef entDef;
+
+	private ThingDef stuffDef;
+
+	private bool writeStuff;
+
+	private static readonly Vector2 DragPriceDrawOffset = new Vector2(19f, 17f);
+
+	private const float DragPriceDrawNumberX = 29f;
+
+	public override BuildableDef PlacingDef => entDef;
+
+	public override string Label
 	{
-		
-		
-		public override BuildableDef PlacingDef
+		get
 		{
-			get
-			{
-				return this.entDef;
-			}
-		}
-
-		
-		
-		public override string Label
-		{
-			get
-			{
-				ThingDef thingDef = this.entDef as ThingDef;
-				if (thingDef != null && this.writeStuff)
-				{
-					return GenLabel.ThingLabel(thingDef, this.stuffDef, 1);
-				}
-				if (thingDef != null && thingDef.MadeFromStuff)
-				{
-					return this.entDef.label + "...";
-				}
-				return this.entDef.label;
-			}
-		}
-
-		
-		
-		public override string Desc
-		{
-			get
-			{
-				return this.entDef.description;
-			}
-		}
-
-		
-		
-		public override Color IconDrawColor
-		{
-			get
-			{
-				if (this.stuffDef != null)
-				{
-					return this.entDef.GetColorForStuff(this.stuffDef);
-				}
-				return this.entDef.uiIconColor;
-			}
-		}
-
-		
-		
-		public override bool Visible
-		{
-			get
-			{
-				if (DebugSettings.godMode)
-				{
-					return true;
-				}
-				if (this.entDef.minTechLevelToBuild != TechLevel.Undefined && Faction.OfPlayer.def.techLevel < this.entDef.minTechLevelToBuild)
-				{
-					return false;
-				}
-				if (this.entDef.maxTechLevelToBuild != TechLevel.Undefined && Faction.OfPlayer.def.techLevel > this.entDef.maxTechLevelToBuild)
-				{
-					return false;
-				}
-				if (!this.entDef.IsResearchFinished)
-				{
-					return false;
-				}
-				if (this.entDef.PlaceWorkers != null)
-				{
-					List<PlaceWorker>.Enumerator enumerator = this.entDef.PlaceWorkers.GetEnumerator();
-					{
-						while (enumerator.MoveNext())
-						{
-							if (!enumerator.Current.IsBuildDesignatorVisible(this.entDef))
-							{
-								return false;
-							}
-						}
-					}
-				}
-				if (this.entDef.buildingPrerequisites != null)
-				{
-					for (int i = 0; i < this.entDef.buildingPrerequisites.Count; i++)
-					{
-						if (!base.Map.listerBuildings.ColonistsHaveBuilding(this.entDef.buildingPrerequisites[i]))
-						{
-							return false;
-						}
-					}
-				}
-				return true;
-			}
-		}
-
-		
-		
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return this.entDef.placingDraggableDimensions;
-			}
-		}
-
-		
-		
-		public override bool DragDrawMeasurements
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		
-		
-		public override float PanelReadoutTitleExtraRightMargin
-		{
-			get
-			{
-				return 20f;
-			}
-		}
-
-		
-		
-		public override string HighlightTag
-		{
-			get
-			{
-				if (this.cachedHighlightTag == null && this.tutorTag != null)
-				{
-					this.cachedHighlightTag = "Designator-Build-" + this.tutorTag;
-				}
-				return this.cachedHighlightTag;
-			}
-		}
-
-		
-		public Designator_Build(BuildableDef entDef)
-		{
-			this.entDef = entDef;
-			this.icon = entDef.uiIcon;
-			this.iconAngle = entDef.uiIconAngle;
-			this.iconOffset = entDef.uiIconOffset;
-			this.hotKey = entDef.designationHotKey;
-			this.tutorTag = entDef.defName;
-			this.order = 20f;
 			ThingDef thingDef = entDef as ThingDef;
-			if (thingDef != null)
+			if (thingDef != null && writeStuff)
 			{
-				this.iconProportions = thingDef.graphicData.drawSize.RotatedBy(thingDef.defaultPlacingRot);
-				this.iconDrawScale = GenUI.IconDrawScale(thingDef);
+				return GenLabel.ThingLabel(thingDef, stuffDef);
 			}
-			else
-			{
-				this.iconProportions = new Vector2(1f, 1f);
-				this.iconDrawScale = 1f;
-			}
-			if (entDef is TerrainDef)
-			{
-				this.iconTexCoords = Widgets.CroppedTerrainTextureRect(this.icon);
-			}
-			this.ResetStuffToDefault();
-		}
-
-		
-		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
-		{
-			GizmoResult result = base.GizmoOnGUI(topLeft, maxWidth);
-			ThingDef thingDef = this.entDef as ThingDef;
 			if (thingDef != null && thingDef.MadeFromStuff)
 			{
-				Designator_Dropdown.DrawExtraOptionsIcon(topLeft, this.GetWidth(maxWidth));
+				return entDef.label + "...";
 			}
-			return result;
+			return entDef.label;
 		}
+	}
 
-		
-		protected override void DrawIcon(Rect rect, Material buttonMat = null)
-		{
-			Widgets.DefIcon(rect, this.PlacingDef, this.stuffDef, 0.85f, false);
-		}
+	public override string Desc => entDef.description;
 
-		
-		public Texture2D ResolvedIcon()
+	public override Color IconDrawColor
+	{
+		get
 		{
-			Graphic_Appearances graphic_Appearances;
-			if (this.stuffDef != null && (graphic_Appearances = (this.entDef.graphic as Graphic_Appearances)) != null)
+			if (stuffDef != null)
 			{
-				return (Texture2D)graphic_Appearances.SubGraphicFor(this.stuffDef).MatAt(this.entDef.defaultPlacingRot, null).mainTexture;
+				return entDef.GetColorForStuff(stuffDef);
 			}
-			return this.icon;
+			return entDef.uiIconColor;
 		}
+	}
 
-		
-		public void ResetStuffToDefault()
+	public override bool Visible
+	{
+		get
 		{
-			ThingDef thingDef = this.entDef as ThingDef;
-			if (thingDef != null && thingDef.MadeFromStuff)
+			if (DebugSettings.godMode)
 			{
-				this.stuffDef = GenStuff.DefaultStuffFor(thingDef);
+				return true;
 			}
-		}
-
-		
-		public override void DrawMouseAttachments()
-		{
-			base.DrawMouseAttachments();
-			if (!ArchitectCategoryTab.InfoRect.Contains(UI.MousePositionOnUIInverted))
+			if (entDef.minTechLevelToBuild != 0 && (int)Faction.OfPlayer.def.techLevel < (int)entDef.minTechLevelToBuild)
 			{
-				DesignationDragger dragger = Find.DesignatorManager.Dragger;
-				int num;
-				if (dragger.Dragging)
+				return false;
+			}
+			if (entDef.maxTechLevelToBuild != 0 && (int)Faction.OfPlayer.def.techLevel > (int)entDef.maxTechLevelToBuild)
+			{
+				return false;
+			}
+			if (!entDef.IsResearchFinished)
+			{
+				return false;
+			}
+			if (entDef.PlaceWorkers != null)
+			{
+				foreach (PlaceWorker placeWorker in entDef.PlaceWorkers)
 				{
-					num = dragger.DragCells.Count<IntVec3>();
-				}
-				else
-				{
-					num = 1;
-				}
-				float num2 = 0f;
-				Vector2 vector = Event.current.mousePosition + Designator_Build.DragPriceDrawOffset;
-				List<ThingDefCountClass> list = this.entDef.CostListAdjusted(this.stuffDef, true);
-				for (int i = 0; i < list.Count; i++)
-				{
-					ThingDefCountClass thingDefCountClass = list[i];
-					float y = vector.y + num2;
-					Widgets.ThingIcon(new Rect(vector.x, y, 27f, 27f), thingDefCountClass.thingDef, null, 1f);
-					Rect rect = new Rect(vector.x + 29f, y, 999f, 29f);
-					int num3 = num * thingDefCountClass.count;
-					string text = num3.ToString();
-					if (base.Map.resourceCounter.GetCount(thingDefCountClass.thingDef) < num3)
+					if (!placeWorker.IsBuildDesignatorVisible(entDef))
 					{
-						GUI.color = Color.red;
-						text += " (" + "NotEnoughStoredLower".Translate() + ")";
+						return false;
 					}
-					Text.Font = GameFont.Small;
-					Text.Anchor = TextAnchor.MiddleLeft;
-					Widgets.Label(rect, text);
-					Text.Anchor = TextAnchor.UpperLeft;
-					GUI.color = Color.white;
-					num2 += 29f;
 				}
 			}
-		}
-
-		
-		public override void ProcessInput(Event ev)
-		{
-			if (!base.CheckCanInteract())
+			if (entDef.buildingPrerequisites != null)
 			{
-				return;
-			}
-			ThingDef thingDef = this.entDef as ThingDef;
-			if (thingDef == null || !thingDef.MadeFromStuff)
-			{
-				base.ProcessInput(ev);
-				return;
-			}
-			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (ThingDef thingDef2 in base.Map.resourceCounter.AllCountedAmounts.Keys)
-			{
-				if (thingDef2.IsStuff && thingDef2.stuffProps.CanMake(thingDef) && (DebugSettings.godMode || base.Map.listerThings.ThingsOfDef(thingDef2).Count > 0))
+				for (int i = 0; i < entDef.buildingPrerequisites.Count; i++)
 				{
-					ThingDef localStuffDef = thingDef2;
-					list.Add(new FloatMenuOption(GenLabel.ThingLabel(this.entDef, localStuffDef, 1).CapitalizeFirst(), delegate
+					if (!base.Map.listerBuildings.ColonistsHaveBuilding(entDef.buildingPrerequisites[i]))
 					{
-						//this.n__0(ev);
-						Find.DesignatorManager.Select(this);
-						this.stuffDef = localStuffDef;
-						this.writeStuff = true;
-					}, thingDef2, MenuOptionPriority.Default, null, null, 0f, null, null)
-					{
-						tutorTag = "SelectStuff-" + thingDef.defName + "-" + localStuffDef.defName
-					});
+						return false;
+					}
 				}
 			}
-			if (list.Count == 0)
-			{
-				Messages.Message("NoStuffsToBuildWith".Translate(), MessageTypeDefOf.RejectInput, false);
-				return;
-			}
-			FloatMenu floatMenu = new FloatMenu(list);
-			floatMenu.vanishIfMouseDistant = true;
-			floatMenu.onCloseCallback = delegate
-			{
-				this.writeStuff = true;
-			};
-			Find.WindowStack.Add(floatMenu);
-			Find.DesignatorManager.Select(this);
+			return true;
 		}
+	}
 
-		
-		public override AcceptanceReport CanDesignateCell(IntVec3 c)
+	public override int DraggableDimensions => entDef.placingDraggableDimensions;
+
+	public override bool DragDrawMeasurements => true;
+
+	public override float PanelReadoutTitleExtraRightMargin => 20f;
+
+	public override string HighlightTag
+	{
+		get
 		{
-			return GenConstruct.CanPlaceBlueprintAt(this.entDef, c, this.placingRot, base.Map, DebugSettings.godMode, null, null, this.stuffDef);
+			if (cachedHighlightTag == null && tutorTag != null)
+			{
+				cachedHighlightTag = "Designator-Build-" + tutorTag;
+			}
+			return cachedHighlightTag;
 		}
+	}
 
-		
-		public override void DesignateSingleCell(IntVec3 c)
+	public Designator_Build(BuildableDef entDef)
+	{
+		this.entDef = entDef;
+		icon = entDef.uiIcon;
+		iconAngle = entDef.uiIconAngle;
+		iconOffset = entDef.uiIconOffset;
+		hotKey = entDef.designationHotKey;
+		tutorTag = entDef.defName;
+		order = 20f;
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef != null)
 		{
-			if (TutorSystem.TutorialMode && !TutorSystem.AllowAction(new EventPack(base.TutorTagDesignate, c)))
-			{
-				return;
-			}
-			if (DebugSettings.godMode || this.entDef.GetStatValueAbstract(StatDefOf.WorkToBuild, this.stuffDef) == 0f)
-			{
-				if (this.entDef is TerrainDef)
-				{
-					base.Map.terrainGrid.SetTerrain(c, (TerrainDef)this.entDef);
-				}
-				else
-				{
-					Thing thing = ThingMaker.MakeThing((ThingDef)this.entDef, this.stuffDef);
-					thing.SetFactionDirect(Faction.OfPlayer);
-					GenSpawn.Spawn(thing, c, base.Map, this.placingRot, WipeMode.Vanish, false);
-				}
-			}
-			else
-			{
-				GenSpawn.WipeExistingThings(c, this.placingRot, this.entDef.blueprintDef, base.Map, DestroyMode.Deconstruct);
-				GenConstruct.PlaceBlueprintForBuild(this.entDef, c, base.Map, this.placingRot, Faction.OfPlayer, this.stuffDef);
-			}
-			MoteMaker.ThrowMetaPuffs(GenAdj.OccupiedRect(c, this.placingRot, this.entDef.Size), base.Map);
-			ThingDef thingDef = this.entDef as ThingDef;
-			if (thingDef != null && thingDef.IsOrbitalTradeBeacon)
-			{
-				PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.BuildOrbitalTradeBeacon, KnowledgeAmount.Total);
-			}
-			if (TutorSystem.TutorialMode)
-			{
-				TutorSystem.Notify_Event(new EventPack(base.TutorTagDesignate, c));
-			}
-			if (this.entDef.PlaceWorkers != null)
-			{
-				for (int i = 0; i < this.entDef.PlaceWorkers.Count; i++)
-				{
-					this.entDef.PlaceWorkers[i].PostPlace(base.Map, this.entDef, c, this.placingRot);
-				}
-			}
+			iconProportions = thingDef.graphicData.drawSize.RotatedBy(thingDef.defaultPlacingRot);
+			iconDrawScale = GenUI.IconDrawScale(thingDef);
 		}
-
-		
-		public override void SelectedUpdate()
+		else
 		{
-			base.SelectedUpdate();
-			BuildDesignatorUtility.TryDrawPowerGridAndAnticipatedConnection(this.entDef, this.placingRot);
+			iconProportions = new Vector2(1f, 1f);
+			iconDrawScale = 1f;
 		}
-
-		
-		public override void DrawPanelReadout(ref float curY, float width)
+		if (entDef is TerrainDef)
 		{
-			if (this.entDef.costStuffCount <= 0 && this.stuffDef != null)
+			iconTexCoords = Widgets.CroppedTerrainTextureRect(icon);
+		}
+		ResetStuffToDefault();
+	}
+
+	public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
+	{
+		GizmoResult result = base.GizmoOnGUI(topLeft, maxWidth);
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef != null && thingDef.MadeFromStuff)
+		{
+			Designator_Dropdown.DrawExtraOptionsIcon(topLeft, GetWidth(maxWidth));
+		}
+		return result;
+	}
+
+	protected override void DrawIcon(Rect rect, Material buttonMat = null)
+	{
+		Widgets.DefIcon(rect, PlacingDef, stuffDef, 0.85f);
+	}
+
+	public Texture2D ResolvedIcon()
+	{
+		Graphic_Appearances graphic_Appearances;
+		if (stuffDef != null && (graphic_Appearances = (entDef.graphic as Graphic_Appearances)) != null)
+		{
+			return (Texture2D)graphic_Appearances.SubGraphicFor(stuffDef).MatAt(entDef.defaultPlacingRot).mainTexture;
+		}
+		return icon;
+	}
+
+	public void ResetStuffToDefault()
+	{
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef != null && thingDef.MadeFromStuff)
+		{
+			stuffDef = GenStuff.DefaultStuffFor(thingDef);
+		}
+	}
+
+	public override void DrawMouseAttachments()
+	{
+		base.DrawMouseAttachments();
+		if (ArchitectCategoryTab.InfoRect.Contains(UI.MousePositionOnUIInverted))
+		{
+			return;
+		}
+		DesignationDragger dragger = Find.DesignatorManager.Dragger;
+		int num = (!dragger.Dragging) ? 1 : dragger.DragCells.Count();
+		float num2 = 0f;
+		Vector2 vector = Event.current.mousePosition + DragPriceDrawOffset;
+		List<ThingDefCountClass> list = entDef.CostListAdjusted(stuffDef);
+		for (int i = 0; i < list.Count; i++)
+		{
+			ThingDefCountClass thingDefCountClass = list[i];
+			float y = vector.y + num2;
+			Widgets.ThingIcon(new Rect(vector.x, y, 27f, 27f), thingDefCountClass.thingDef);
+			Rect rect = new Rect(vector.x + 29f, y, 999f, 29f);
+			int num3 = num * thingDefCountClass.count;
+			string text = num3.ToString();
+			if (base.Map.resourceCounter.GetCount(thingDefCountClass.thingDef) < num3)
 			{
-				this.stuffDef = null;
-			}
-			ThingDef thingDef = this.entDef as ThingDef;
-			if (thingDef != null)
-			{
-				Widgets.InfoCardButton(width - 24f - 2f, 6f, thingDef, this.stuffDef);
-			}
-			else
-			{
-				Widgets.InfoCardButton(width - 24f - 2f, 6f, this.entDef);
+				GUI.color = Color.red;
+				text += " (" + "NotEnoughStoredLower".Translate() + ")";
 			}
 			Text.Font = GameFont.Small;
-			List<ThingDefCountClass> list = this.entDef.CostListAdjusted(this.stuffDef, false);
-			for (int i = 0; i < list.Count; i++)
-			{
-				ThingDefCountClass thingDefCountClass = list[i];
-				Color color = GUI.color;
-				Widgets.ThingIcon(new Rect(0f, curY, 20f, 20f), thingDefCountClass.thingDef, null, 1f);
-				GUI.color = color;
-				if (thingDefCountClass.thingDef != null && thingDefCountClass.thingDef.resourceReadoutPriority != ResourceCountPriority.Uncounted && base.Map.resourceCounter.GetCount(thingDefCountClass.thingDef) < thingDefCountClass.count)
-				{
-					GUI.color = Color.red;
-				}
-				Widgets.Label(new Rect(26f, curY + 2f, 50f, 100f), thingDefCountClass.count.ToString());
-				GUI.color = Color.white;
-				string text;
-				if (thingDefCountClass.thingDef == null)
-				{
-					text = "(" + "UnchosenStuff".Translate() + ")";
-				}
-				else
-				{
-					text = thingDefCountClass.thingDef.LabelCap;
-				}
-				float width2 = width - 60f;
-				float num = Text.CalcHeight(text, width2) - 5f;
-				Widgets.Label(new Rect(60f, curY + 2f, width2, num + 5f), text);
-				curY += num;
-			}
-			if (this.entDef.constructionSkillPrerequisite > 0)
-			{
-				this.DrawSkillRequirement(SkillDefOf.Construction, this.entDef.constructionSkillPrerequisite, width, ref curY);
-			}
-			if (this.entDef.artisticSkillPrerequisite > 0)
-			{
-				this.DrawSkillRequirement(SkillDefOf.Artistic, this.entDef.artisticSkillPrerequisite, width, ref curY);
-			}
-			bool flag = false;
-			foreach (Pawn pawn in Find.CurrentMap.mapPawns.FreeColonists)
-			{
-				if (pawn.skills.GetSkill(SkillDefOf.Construction).Level >= this.entDef.constructionSkillPrerequisite && pawn.skills.GetSkill(SkillDefOf.Artistic).Level >= this.entDef.artisticSkillPrerequisite)
-				{
-					flag = true;
-					break;
-				}
-			}
-			if (!flag)
-			{
-				TaggedString taggedString = "NoColonistWithAllSkillsForConstructing".Translate(Faction.OfPlayer.def.pawnsPlural);
-				Rect rect = new Rect(0f, curY + 2f, width, Text.CalcHeight(taggedString, width));
-				GUI.color = Color.red;
-				Widgets.Label(rect, taggedString);
-				GUI.color = Color.white;
-				curY += rect.height;
-			}
-			curY += 4f;
+			Text.Anchor = TextAnchor.MiddleLeft;
+			Widgets.Label(rect, text);
+			Text.Anchor = TextAnchor.UpperLeft;
+			GUI.color = Color.white;
+			num2 += 29f;
 		}
+	}
 
-		
-		private bool AnyColonistWithSkill(int skill, SkillDef skillDef, bool careIfDisabled)
+	public override void ProcessInput(Event ev)
+	{
+		if (!CheckCanInteract())
 		{
-			foreach (Pawn pawn in Find.CurrentMap.mapPawns.FreeColonists)
-			{
-				if (pawn.skills.GetSkill(skillDef).Level >= skill && (!careIfDisabled || pawn.workSettings.WorkIsActive(WorkTypeDefOf.Construction)))
-				{
-					return true;
-				}
-			}
-			return false;
+			return;
 		}
-
-		
-		private void DrawSkillRequirement(SkillDef skillDef, int requirement, float width, ref float curY)
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef == null || !thingDef.MadeFromStuff)
 		{
-			Rect rect = new Rect(0f, curY + 2f, width, 24f);
-			if (!this.AnyColonistWithSkill(requirement, skillDef, false))
+			base.ProcessInput(ev);
+			return;
+		}
+		List<FloatMenuOption> list = new List<FloatMenuOption>();
+		foreach (ThingDef key in base.Map.resourceCounter.AllCountedAmounts.Keys)
+		{
+			if (key.IsStuff && key.stuffProps.CanMake(thingDef) && (DebugSettings.godMode || base.Map.listerThings.ThingsOfDef(key).Count > 0))
 			{
-				GUI.color = Color.red;
-				TooltipHandler.TipRegionByKey(rect, "NoColonistWithSkillTip", Faction.OfPlayer.def.pawnsPlural);
+				ThingDef localStuffDef = key;
+				FloatMenuOption floatMenuOption = new FloatMenuOption(GenLabel.ThingLabel(entDef, localStuffDef).CapitalizeFirst(), delegate
+				{
+					base.ProcessInput(ev);
+					Find.DesignatorManager.Select(this);
+					stuffDef = localStuffDef;
+					writeStuff = true;
+				}, key);
+				floatMenuOption.tutorTag = "SelectStuff-" + thingDef.defName + "-" + localStuffDef.defName;
+				list.Add(floatMenuOption);
 			}
-			else if (!this.AnyColonistWithSkill(requirement, skillDef, true))
+		}
+		if (list.Count == 0)
+		{
+			Messages.Message("NoStuffsToBuildWith".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+			return;
+		}
+		FloatMenu floatMenu = new FloatMenu(list);
+		floatMenu.vanishIfMouseDistant = true;
+		floatMenu.onCloseCallback = delegate
+		{
+			writeStuff = true;
+		};
+		Find.WindowStack.Add(floatMenu);
+		Find.DesignatorManager.Select(this);
+	}
+
+	public override AcceptanceReport CanDesignateCell(IntVec3 c)
+	{
+		return GenConstruct.CanPlaceBlueprintAt(entDef, c, placingRot, base.Map, DebugSettings.godMode, null, null, stuffDef);
+	}
+
+	public override void DesignateSingleCell(IntVec3 c)
+	{
+		if (TutorSystem.TutorialMode && !TutorSystem.AllowAction(new EventPack(base.TutorTagDesignate, c)))
+		{
+			return;
+		}
+		if (DebugSettings.godMode || entDef.GetStatValueAbstract(StatDefOf.WorkToBuild, stuffDef) == 0f)
+		{
+			if (entDef is TerrainDef)
 			{
-				GUI.color = Color.yellow;
-				TooltipHandler.TipRegionByKey(rect, "AllColonistsWithSkillHaveDisabledConstructingTip", Faction.OfPlayer.def.pawnsPlural, WorkTypeDefOf.Construction.gerundLabel);
+				base.Map.terrainGrid.SetTerrain(c, (TerrainDef)entDef);
 			}
 			else
 			{
-				GUI.color = new Color(0.72f, 0.87f, 0.72f);
+				Thing thing = ThingMaker.MakeThing((ThingDef)entDef, stuffDef);
+				thing.SetFactionDirect(Faction.OfPlayer);
+				GenSpawn.Spawn(thing, c, base.Map, placingRot);
 			}
-			Widgets.Label(rect, string.Format("{0}: {1}", "SkillNeededForConstructing".Translate(skillDef.LabelCap), requirement));
+		}
+		else
+		{
+			GenSpawn.WipeExistingThings(c, placingRot, entDef.blueprintDef, base.Map, DestroyMode.Deconstruct);
+			GenConstruct.PlaceBlueprintForBuild(entDef, c, base.Map, placingRot, Faction.OfPlayer, stuffDef);
+		}
+		MoteMaker.ThrowMetaPuffs(GenAdj.OccupiedRect(c, placingRot, entDef.Size), base.Map);
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef != null && thingDef.IsOrbitalTradeBeacon)
+		{
+			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.BuildOrbitalTradeBeacon, KnowledgeAmount.Total);
+		}
+		if (TutorSystem.TutorialMode)
+		{
+			TutorSystem.Notify_Event(new EventPack(base.TutorTagDesignate, c));
+		}
+		if (entDef.PlaceWorkers != null)
+		{
+			for (int i = 0; i < entDef.PlaceWorkers.Count; i++)
+			{
+				entDef.PlaceWorkers[i].PostPlace(base.Map, entDef, c, placingRot);
+			}
+		}
+	}
+
+	public override void SelectedUpdate()
+	{
+		base.SelectedUpdate();
+		BuildDesignatorUtility.TryDrawPowerGridAndAnticipatedConnection(entDef, placingRot);
+	}
+
+	public override void DrawPanelReadout(ref float curY, float width)
+	{
+		if (entDef.costStuffCount <= 0 && stuffDef != null)
+		{
+			stuffDef = null;
+		}
+		ThingDef thingDef = entDef as ThingDef;
+		if (thingDef != null)
+		{
+			Widgets.InfoCardButton(width - 24f - 2f, 6f, thingDef, stuffDef);
+		}
+		else
+		{
+			Widgets.InfoCardButton(width - 24f - 2f, 6f, entDef);
+		}
+		Text.Font = GameFont.Small;
+		List<ThingDefCountClass> list = entDef.CostListAdjusted(stuffDef, errorOnNullStuff: false);
+		for (int i = 0; i < list.Count; i++)
+		{
+			ThingDefCountClass thingDefCountClass = list[i];
+			Color color = GUI.color;
+			Widgets.ThingIcon(new Rect(0f, curY, 20f, 20f), thingDefCountClass.thingDef);
+			GUI.color = color;
+			if (thingDefCountClass.thingDef != null && thingDefCountClass.thingDef.resourceReadoutPriority != 0 && base.Map.resourceCounter.GetCount(thingDefCountClass.thingDef) < thingDefCountClass.count)
+			{
+				GUI.color = Color.red;
+			}
+			Widgets.Label(new Rect(26f, curY + 2f, 50f, 100f), thingDefCountClass.count.ToString());
 			GUI.color = Color.white;
-			curY += 18f;
+			string text = (thingDefCountClass.thingDef != null) ? ((string)thingDefCountClass.thingDef.LabelCap) : ((string)("(" + "UnchosenStuff".Translate() + ")"));
+			float width2 = width - 60f;
+			float num = Text.CalcHeight(text, width2) - 5f;
+			Widgets.Label(new Rect(60f, curY + 2f, width2, num + 5f), text);
+			curY += num;
 		}
-
-		
-		public void SetStuffDef(ThingDef stuffDef)
+		if (entDef.constructionSkillPrerequisite > 0)
 		{
-			this.stuffDef = stuffDef;
+			DrawSkillRequirement(SkillDefOf.Construction, entDef.constructionSkillPrerequisite, width, ref curY);
 		}
-
-		
-		public override void RenderHighlight(List<IntVec3> dragCells)
+		if (entDef.artisticSkillPrerequisite > 0)
 		{
-			DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
+			DrawSkillRequirement(SkillDefOf.Artistic, entDef.artisticSkillPrerequisite, width, ref curY);
 		}
+		bool flag = false;
+		foreach (Pawn freeColonist in Find.CurrentMap.mapPawns.FreeColonists)
+		{
+			if (freeColonist.skills.GetSkill(SkillDefOf.Construction).Level >= entDef.constructionSkillPrerequisite && freeColonist.skills.GetSkill(SkillDefOf.Artistic).Level >= entDef.artisticSkillPrerequisite)
+			{
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+		{
+			TaggedString taggedString = "NoColonistWithAllSkillsForConstructing".Translate(Faction.OfPlayer.def.pawnsPlural);
+			Rect rect = new Rect(0f, curY + 2f, width, Text.CalcHeight(taggedString, width));
+			GUI.color = Color.red;
+			Widgets.Label(rect, taggedString);
+			GUI.color = Color.white;
+			curY += rect.height;
+		}
+		curY += 4f;
+	}
 
-		
-		protected BuildableDef entDef;
+	private bool AnyColonistWithSkill(int skill, SkillDef skillDef, bool careIfDisabled)
+	{
+		foreach (Pawn freeColonist in Find.CurrentMap.mapPawns.FreeColonists)
+		{
+			if (freeColonist.skills.GetSkill(skillDef).Level >= skill && (!careIfDisabled || freeColonist.workSettings.WorkIsActive(WorkTypeDefOf.Construction)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-		
-		private ThingDef stuffDef;
+	private void DrawSkillRequirement(SkillDef skillDef, int requirement, float width, ref float curY)
+	{
+		Rect rect = new Rect(0f, curY + 2f, width, 24f);
+		if (!AnyColonistWithSkill(requirement, skillDef, careIfDisabled: false))
+		{
+			GUI.color = Color.red;
+			TooltipHandler.TipRegionByKey(rect, "NoColonistWithSkillTip", Faction.OfPlayer.def.pawnsPlural);
+		}
+		else if (!AnyColonistWithSkill(requirement, skillDef, careIfDisabled: true))
+		{
+			GUI.color = Color.yellow;
+			TooltipHandler.TipRegionByKey(rect, "AllColonistsWithSkillHaveDisabledConstructingTip", Faction.OfPlayer.def.pawnsPlural, WorkTypeDefOf.Construction.gerundLabel);
+		}
+		else
+		{
+			GUI.color = new Color(0.72f, 0.87f, 0.72f);
+		}
+		Widgets.Label(rect, string.Format("{0}: {1}", "SkillNeededForConstructing".Translate(skillDef.LabelCap), requirement));
+		GUI.color = Color.white;
+		curY += 18f;
+	}
 
-		
-		private bool writeStuff;
+	public void SetStuffDef(ThingDef stuffDef)
+	{
+		this.stuffDef = stuffDef;
+	}
 
-		
-		private static readonly Vector2 DragPriceDrawOffset = new Vector2(19f, 17f);
-
-		
-		private const float DragPriceDrawNumberX = 29f;
+	public override void RenderHighlight(List<IntVec3> dragCells)
+	{
+		DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
 	}
 }

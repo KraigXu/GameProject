@@ -159,7 +159,7 @@ namespace RimWorld
 					RoyalTitleDef currentTitle = pawn.royalty.GetCurrentTitle(first);
 					if (minTitleForImplant != null && (currentTitle == null || currentTitle.seniority < minTitleForImplant.seniority) && this.DetectionChance > 0f)
 					{
-						//return this.cachedTooltip + "\n\n" + "PsycastIsIllegal".Translate(pawn.Named("PAWN"), minTitleForImplant.GetLabelCapFor(pawn).Named("TITLE")).Colorize(ColoredText.WarningColor);
+						return cachedTooltip + "\n\n" + ColoredText.Colorize("PsycastIsIllegal".Translate(pawn.Named("PAWN"), minTitleForImplant.GetLabelCapFor(pawn).Named("TITLE")), ColoredText.WarningColor);
 					}
 				}
 			}
@@ -235,7 +235,6 @@ namespace RimWorld
 						}
 					}
 				}
-				//List<StatModifier>.Enumerator enumerator2 = default(List<StatModifier>.Enumerator);
 			}
 			int num;
 			for (int i = 0; i < this.comps.Count; i = num + 1)

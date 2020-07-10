@@ -1,726 +1,286 @@
-﻿using System;
-using System.Collections.Generic;
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
+//using UnityStandardAssets.ImageEffects;
+using Verse;
 using Verse.Sound;
 
-namespace Verse
+public static class Find
 {
-	
-	public static class Find
+	public static Root Root => Current.Root;
+
+	public static SoundRoot SoundRoot => Current.Root.soundRoot;
+
+	public static UIRoot UIRoot
 	{
-		
-		
-		public static Root Root
+		get
 		{
-			get
+			if (!(Current.Root != null))
 			{
-				return Current.Root;
-			}
-		}
-
-		
-		
-		public static SoundRoot SoundRoot
-		{
-			get
-			{
-				return Current.Root.soundRoot;
-			}
-		}
-
-		
-		
-		public static UIRoot UIRoot
-		{
-			get
-			{
-				if (!(Current.Root != null))
-				{
-					return null;
-				}
-				return Current.Root.uiRoot;
-			}
-		}
-
-		
-		
-		public static MusicManagerEntry MusicManagerEntry
-		{
-			get
-			{
-				return ((Root_Entry)Current.Root).musicManagerEntry;
-			}
-		}
-
-		
-		
-		public static MusicManagerPlay MusicManagerPlay
-		{
-			get
-			{
-				return ((Root_Play)Current.Root).musicManagerPlay;
-			}
-		}
-
-		
-		
-		public static LanguageWorker ActiveLanguageWorker
-		{
-			get
-			{
-				return LanguageDatabase.activeLanguage.Worker;
-			}
-		}
-
-		
-		
-		public static Camera Camera
-		{
-			get
-			{
-				return Current.Camera;
-			}
-		}
-
-		
-		
-		public static CameraDriver CameraDriver
-		{
-			get
-			{
-				return Current.CameraDriver;
-			}
-		}
-
-		
-		
-		//public static ColorCorrectionCurves CameraColor
-		//{
-		//	get
-		//	{
-		//		return Current.ColorCorrectionCurves;
-		//	}
-		//}
-
-		
-		
-		public static Camera PortraitCamera
-		{
-			get
-			{
-				return PortraitCameraManager.PortraitCamera;
-			}
-		}
-
-		
-		
-		public static PortraitRenderer PortraitRenderer
-		{
-			get
-			{
-				return PortraitCameraManager.PortraitRenderer;
-			}
-		}
-
-		
-		
-		public static Camera WorldCamera
-		{
-			get
-			{
-				return WorldCameraManager.WorldCamera;
-			}
-		}
-
-
-		public static WorldCameraDriver WorldCameraDriver
-		{
-			get
-			{
-				return WorldCameraManager.WorldCameraDriver;
-			}
-		}
-
-
-		public static WindowStack WindowStack
-		{
-			get
-			{
-				if (Find.UIRoot == null)
-				{
-					return null;
-				}
-				return Find.UIRoot.windows;
-			}
-		}
-
-
-		public static ScreenshotModeHandler ScreenshotModeHandler
-		{
-			get
-			{
-				return Find.UIRoot.screenshotMode;
-			}
-		}
-
-
-		public static MainButtonsRoot MainButtonsRoot
-		{
-			get
-			{
-				return ((UIRoot_Play)Find.UIRoot).mainButtonsRoot;
-			}
-		}
-
-
-		public static MainTabsRoot MainTabsRoot
-		{
-			get
-			{
-				return Find.MainButtonsRoot.tabs;
-			}
-		}
-
-
-		public static MapInterface MapUI
-		{
-			get
-			{
-				return ((UIRoot_Play)Find.UIRoot).mapUI;
-			}
-		}
-
-		public static Selector Selector
-		{
-			get
-			{
-				return Find.MapUI.selector;
-			}
-		}
-
-		public static Targeter Targeter
-		{
-			get
-			{
-				return Find.MapUI.targeter;
-			}
-		}
-
-	
-		public static ColonistBar ColonistBar
-		{
-			get
-			{
-				return Find.MapUI.colonistBar;
-			}
-		}
-
-		
-		
-		public static DesignatorManager DesignatorManager
-		{
-			get
-			{
-				return Find.MapUI.designatorManager;
-			}
-		}
-
-		
-		
-		public static ReverseDesignatorDatabase ReverseDesignatorDatabase
-		{
-			get
-			{
-				return Find.MapUI.reverseDesignatorDatabase;
-			}
-		}
-
-
-		public static GameInitData GameInitData
-		{
-			get
-			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.InitData;
-			}
-		}
-
-		public static GameInfo GameInfo
-		{
-			get
-			{
-				return Current.Game.Info;
-			}
-		}
-
-		public static Scenario Scenario
-		{
-			get
-			{
-				if (Current.Game != null && Current.Game.Scenario != null)
-				{
-					return Current.Game.Scenario;
-				}
-				if (ScenarioMaker.GeneratingScenario != null)
-				{
-					return ScenarioMaker.GeneratingScenario;
-				}
-				if (Find.UIRoot != null)
-				{
-					Page_ScenarioEditor page_ScenarioEditor = Find.WindowStack.WindowOfType<Page_ScenarioEditor>();
-					if (page_ScenarioEditor != null)
-					{
-						return page_ScenarioEditor.EditingScenario;
-					}
-				}
 				return null;
 			}
+			return Current.Root.uiRoot;
 		}
+	}
 
-		
-		
-		public static World World
+	public static MusicManagerEntry MusicManagerEntry => ((Root_Entry)Current.Root).musicManagerEntry;
+
+	public static MusicManagerPlay MusicManagerPlay => ((Root_Play)Current.Root).musicManagerPlay;
+
+	public static LanguageWorker ActiveLanguageWorker => LanguageDatabase.activeLanguage.Worker;
+
+	public static Camera Camera => Current.Camera;
+
+	public static CameraDriver CameraDriver => Current.CameraDriver;
+
+	//public static ColorCorrectionCurves CameraColor => Current.ColorCorrectionCurves;
+
+	public static Camera PortraitCamera => PortraitCameraManager.PortraitCamera;
+
+	public static PortraitRenderer PortraitRenderer => PortraitCameraManager.PortraitRenderer;
+
+	public static Camera WorldCamera => WorldCameraManager.WorldCamera;
+
+	public static WorldCameraDriver WorldCameraDriver => WorldCameraManager.WorldCameraDriver;
+
+	public static WindowStack WindowStack
+	{
+		get
 		{
-			get
+			if (UIRoot == null)
 			{
-				if (Current.Game == null || Current.Game.World == null)
+				return null;
+			}
+			return UIRoot.windows;
+		}
+	}
+
+	public static ScreenshotModeHandler ScreenshotModeHandler => UIRoot.screenshotMode;
+
+	public static MainButtonsRoot MainButtonsRoot => ((UIRoot_Play)UIRoot).mainButtonsRoot;
+
+	public static MainTabsRoot MainTabsRoot => MainButtonsRoot.tabs;
+
+	public static MapInterface MapUI => ((UIRoot_Play)UIRoot).mapUI;
+
+	public static Selector Selector => MapUI.selector;
+
+	public static Targeter Targeter => MapUI.targeter;
+
+	public static ColonistBar ColonistBar => MapUI.colonistBar;
+
+	public static DesignatorManager DesignatorManager => MapUI.designatorManager;
+
+	public static ReverseDesignatorDatabase ReverseDesignatorDatabase => MapUI.reverseDesignatorDatabase;
+
+	public static GameInitData GameInitData
+	{
+		get
+		{
+			if (Current.Game == null)
+			{
+				return null;
+			}
+			return Current.Game.InitData;
+		}
+	}
+
+	public static GameInfo GameInfo => Current.Game.Info;
+
+	public static Scenario Scenario
+	{
+		get
+		{
+			if (Current.Game != null && Current.Game.Scenario != null)
+			{
+				return Current.Game.Scenario;
+			}
+			if (ScenarioMaker.GeneratingScenario != null)
+			{
+				return ScenarioMaker.GeneratingScenario;
+			}
+			if (UIRoot != null)
+			{
+				Page_ScenarioEditor page_ScenarioEditor = WindowStack.WindowOfType<Page_ScenarioEditor>();
+				if (page_ScenarioEditor != null)
 				{
-					return Current.CreatingWorld;
+					return page_ScenarioEditor.EditingScenario;
 				}
-				return Current.Game.World;
 			}
+			return null;
 		}
+	}
 
-		
-		
-		public static List<Map> Maps
+	public static World World
+	{
+		get
 		{
-			get
+			if (Current.Game == null || Current.Game.World == null)
 			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.Maps;
+				return Current.CreatingWorld;
 			}
+			return Current.Game.World;
 		}
+	}
 
-		
-		
-		public static Map CurrentMap
+	public static List<Map> Maps
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.CurrentMap;
+				return null;
 			}
+			return Current.Game.Maps;
 		}
+	}
 
-		
-		
-		public static Map AnyPlayerHomeMap
+	public static Map CurrentMap
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				return Current.Game.AnyPlayerHomeMap;
+				return null;
 			}
+			return Current.Game.CurrentMap;
 		}
+	}
 
-		
-		
-		public static Map RandomPlayerHomeMap
+	public static Map AnyPlayerHomeMap => Current.Game.AnyPlayerHomeMap;
+
+	public static Map RandomPlayerHomeMap => Current.Game.RandomPlayerHomeMap;
+
+	public static StoryWatcher StoryWatcher => Current.Game.storyWatcher;
+
+	public static ResearchManager ResearchManager => Current.Game.researchManager;
+
+	public static Storyteller Storyteller
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				return Current.Game.RandomPlayerHomeMap;
+				return null;
 			}
+			return Current.Game.storyteller;
 		}
+	}
 
-		
-		
-		public static StoryWatcher StoryWatcher
+	public static GameEnder GameEnder => Current.Game.gameEnder;
+
+	public static LetterStack LetterStack => Current.Game.letterStack;
+
+	public static Archive Archive
+	{
+		get
 		{
-			get
+			if (History == null)
 			{
-				return Current.Game.storyWatcher;
+				return null;
 			}
+			return History.archive;
 		}
+	}
 
-		
-		
-		public static ResearchManager ResearchManager
+	public static PlaySettings PlaySettings => Current.Game.playSettings;
+
+	public static History History
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				return Current.Game.researchManager;
+				return null;
 			}
+			return Current.Game.history;
 		}
+	}
 
-		
-		
-		public static Storyteller Storyteller
+	public static TaleManager TaleManager => Current.Game.taleManager;
+
+	public static PlayLog PlayLog => Current.Game.playLog;
+
+	public static BattleLog BattleLog => Current.Game.battleLog;
+
+	public static TickManager TickManager => Current.Game.tickManager;
+
+	public static Tutor Tutor
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.storyteller;
+				return null;
 			}
+			return Current.Game.tutor;
 		}
+	}
 
-		
-		
-		public static GameEnder GameEnder
+	public static TutorialState TutorialState => Current.Game.tutor.tutorialState;
+
+	public static ActiveLessonHandler ActiveLesson
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				return Current.Game.gameEnder;
+				return null;
 			}
+			return Current.Game.tutor.activeLesson;
 		}
+	}
 
-		
-		
-		public static LetterStack LetterStack
+	public static Autosaver Autosaver => Current.Game.autosaver;
+
+	public static DateNotifier DateNotifier => Current.Game.dateNotifier;
+
+	public static SignalManager SignalManager => Current.Game.signalManager;
+
+	public static UniqueIDsManager UniqueIDsManager
+	{
+		get
 		{
-			get
+			if (Current.Game == null)
 			{
-				return Current.Game.letterStack;
+				return null;
 			}
+			return Current.Game.uniqueIDsManager;
 		}
+	}
 
-		
-		
-		public static Archive Archive
-		{
-			get
-			{
-				if (Find.History == null)
-				{
-					return null;
-				}
-				return Find.History.archive;
-			}
-		}
+	public static QuestManager QuestManager => Current.Game.questManager;
 
-		
-		
-		public static PlaySettings PlaySettings
-		{
-			get
-			{
-				return Current.Game.playSettings;
-			}
-		}
+	public static FactionManager FactionManager => World.factionManager;
 
-		
-		
-		public static History History
-		{
-			get
-			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.history;
-			}
-		}
+	public static WorldPawns WorldPawns => World.worldPawns;
 
-		
-		
-		public static TaleManager TaleManager
-		{
-			get
-			{
-				return Current.Game.taleManager;
-			}
-		}
+	public static WorldObjectsHolder WorldObjects => World.worldObjects;
 
-		
-		
-		public static PlayLog PlayLog
-		{
-			get
-			{
-				return Current.Game.playLog;
-			}
-		}
+	public static WorldGrid WorldGrid => World.grid;
 
-		
-		
-		public static BattleLog BattleLog
-		{
-			get
-			{
-				return Current.Game.battleLog;
-			}
-		}
+	public static WorldDebugDrawer WorldDebugDrawer => World.debugDrawer;
 
-		
-		
-		public static TickManager TickManager
-		{
-			get
-			{
-				return Current.Game.tickManager;
-			}
-		}
+	public static WorldPathGrid WorldPathGrid => World.pathGrid;
 
-		
-		
-		public static Tutor Tutor
-		{
-			get
-			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.tutor;
-			}
-		}
+	public static WorldDynamicDrawManager WorldDynamicDrawManager => World.dynamicDrawManager;
 
-		
-		
-		public static TutorialState TutorialState
-		{
-			get
-			{
-				return Current.Game.tutor.tutorialState;
-			}
-		}
+	public static WorldPathFinder WorldPathFinder => World.pathFinder;
 
-		
-		
-		public static ActiveLessonHandler ActiveLesson
-		{
-			get
-			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.tutor.activeLesson;
-			}
-		}
+	public static WorldPathPool WorldPathPool => World.pathPool;
 
-		
-		
-		public static Autosaver Autosaver
-		{
-			get
-			{
-				return Current.Game.autosaver;
-			}
-		}
+	public static WorldReachability WorldReachability => World.reachability;
 
-		
-		
-		public static DateNotifier DateNotifier
-		{
-			get
-			{
-				return Current.Game.dateNotifier;
-			}
-		}
+	public static WorldFloodFiller WorldFloodFiller => World.floodFiller;
 
-		
-		
-		public static SignalManager SignalManager
-		{
-			get
-			{
-				return Current.Game.signalManager;
-			}
-		}
+	public static WorldFeatures WorldFeatures => World.features;
 
-		
-		
-		public static UniqueIDsManager UniqueIDsManager
-		{
-			get
-			{
-				if (Current.Game == null)
-				{
-					return null;
-				}
-				return Current.Game.uniqueIDsManager;
-			}
-		}
+	public static WorldInterface WorldInterface => World.UI;
 
-		
-		
-		public static QuestManager QuestManager
-		{
-			get
-			{
-				return Current.Game.questManager;
-			}
-		}
+	public static WorldSelector WorldSelector => WorldInterface.selector;
 
-		
-		
-		public static FactionManager FactionManager
-		{
-			get
-			{
-				return Find.World.factionManager;
-			}
-		}
+	public static WorldTargeter WorldTargeter => WorldInterface.targeter;
 
-		
-		
-		public static WorldPawns WorldPawns
-		{
-			get
-			{
-				return Find.World.worldPawns;
-			}
-		}
-
-		
-		
-		public static WorldObjectsHolder WorldObjects
-		{
-			get
-			{
-				return Find.World.worldObjects;
-			}
-		}
-
-		
-		
-		public static WorldGrid WorldGrid
-		{
-			get
-			{
-				return Find.World.grid;
-			}
-		}
-
-		
-		
-		public static WorldDebugDrawer WorldDebugDrawer
-		{
-			get
-			{
-				return Find.World.debugDrawer;
-			}
-		}
-
-		
-		
-		public static WorldPathGrid WorldPathGrid
-		{
-			get
-			{
-				return Find.World.pathGrid;
-			}
-		}
-
-		
-		
-		public static WorldDynamicDrawManager WorldDynamicDrawManager
-		{
-			get
-			{
-				return Find.World.dynamicDrawManager;
-			}
-		}
-
-		
-		
-		public static WorldPathFinder WorldPathFinder
-		{
-			get
-			{
-				return Find.World.pathFinder;
-			}
-		}
-
-		
-		
-		public static WorldPathPool WorldPathPool
-		{
-			get
-			{
-				return Find.World.pathPool;
-			}
-		}
-
-		
-		
-		public static WorldReachability WorldReachability
-		{
-			get
-			{
-				return Find.World.reachability;
-			}
-		}
-
-		
-		
-		public static WorldFloodFiller WorldFloodFiller
-		{
-			get
-			{
-				return Find.World.floodFiller;
-			}
-		}
-
-		
-		
-		public static WorldFeatures WorldFeatures
-		{
-			get
-			{
-				return Find.World.features;
-			}
-		}
-		public static WorldInterface WorldInterface
-		{
-			get
-			{
-				return Find.World.UI;
-			}
-		}
-
-		public static WorldSelector WorldSelector
-		{
-			get
-			{
-				return Find.WorldInterface.selector;
-			}
-		}
-
-		
-		
-		public static WorldTargeter WorldTargeter
-		{
-			get
-			{
-				return Find.WorldInterface.targeter;
-			}
-		}
-
-
-		public static WorldRoutePlanner WorldRoutePlanner
-		{
-			get
-			{
-				return Find.WorldInterface.routePlanner;
-			}
-		}
-
-    }
+	public static WorldRoutePlanner WorldRoutePlanner => WorldInterface.routePlanner;
 }

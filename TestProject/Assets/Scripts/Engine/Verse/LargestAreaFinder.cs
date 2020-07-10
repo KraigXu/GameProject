@@ -1,106 +1,111 @@
 ﻿using System;
 using System.Collections.Generic;
+using Verse;
 
-namespace Verse
+public static class LargestAreaFinder
 {
+	private static BoolGrid visited;
 
-	public static class LargestAreaFinder
+	private static List<IntVec3> randomOrderWorkingList = new List<IntVec3>();
+
+	private static HashSet<IntVec3> tmpProcessed = new HashSet<IntVec3>();
+
+	public static CellRect FindLargestRect(Map map, Predicate<IntVec3> predicate, int breakEarlyOn = -1)
 	{
-
-		public static CellRect FindLargestRect(Map map, Predicate<IntVec3> predicate, int breakEarlyOn = -1)
+		if (visited == null)
 		{
-			//LargestAreaFinder.c__DisplayClass3_0 c__DisplayClass3_;
-			//c__DisplayClass3_.breakEarlyOn = breakEarlyOn;
-			//if (LargestAreaFinder.visited == null)
-			//{
-			//	LargestAreaFinder.visited = new BoolGrid(map);
-			//}
-			//LargestAreaFinder.visited.ClearAndResizeTo(map);
-			//Rand.PushState(map.uniqueID ^ 484111219);
-			//c__DisplayClass3_.largestRect = CellRect.Empty;
-			//for (int i = 0; i < 3; i++)
-			//{
-			//	LargestAreaFinder.tmpProcessed.Clear();
-			//	foreach (IntVec3 c in map.cellsInRandomOrder.GetAll().InRandomOrder(LargestAreaFinder.randomOrderWorkingList))
-			//	{
-			//		CellRect largestRect = LargestAreaFinder.FindLargestRectAt(c, map, LargestAreaFinder.tmpProcessed, predicate);
-			//		if (largestRect.Area > c__DisplayClass3_.largestRect.Area)
-			//		{
-			//			c__DisplayClass3_.largestRect = largestRect;
-			//			if (LargestAreaFinder.<FindLargestRect>g__ShouldBreakEarly|3_0(ref c__DisplayClass3_))
-			//			{
-			//				break;
-			//			}
-			//		}
-			//	}
-			//	if (LargestAreaFinder.<FindLargestRect>g__ShouldBreakEarly|3_0(ref c__DisplayClass3_))
-			//	{
-			//		break;
-			//	}
-			//}
-			//Rand.PopState();
-			//return c__DisplayClass3_.largestRect;
-			return new CellRect();
+			visited = new BoolGrid(map);
 		}
-
-		
-		private static CellRect FindLargestRectAt(IntVec3 c, Map map, HashSet<IntVec3> processed, Predicate<IntVec3> predicate)
+		visited.ClearAndResizeTo(map);
+		Rand.PushState(map.uniqueID ^ 0x1CDAF373);
+		CellRect largestRect = CellRect.Empty;
+		for (int i = 0; i < 3; i++)
 		{
-			//LargestAreaFinder.c__DisplayClass4_0 c__DisplayClass4_;
-			//c__DisplayClass4_.processed = processed;
-			//c__DisplayClass4_.predicate = predicate;
-			//if (c__DisplayClass4_.processed.Contains(c) || !c__DisplayClass4_.predicate(c))
-			//{
-			//	return CellRect.Empty;
-			//}
-			//c__DisplayClass4_.rect = CellRect.SingleCell(c);
-			//bool flag;
-			//do
-			//{
-			//	flag = false;
-			//	if (c__DisplayClass4_.rect.Width <= c__DisplayClass4_.rect.Height)
-			//	{
-			//		if (c__DisplayClass4_.rect.maxX + 1 < map.Size.x && LargestAreaFinder.<FindLargestRectAt>g__CanExpand|4_0(Rot4.East, ref c__DisplayClass4_))
-			//		{
-			//			c__DisplayClass4_.rect.maxX = c__DisplayClass4_.rect.maxX + 1;
-			//			flag = true;
-			//		}
-			//		if (c__DisplayClass4_.rect.minX > 0 && LargestAreaFinder.<FindLargestRectAt>g__CanExpand|4_0(Rot4.West, ref c__DisplayClass4_))
-			//		{
-			//			c__DisplayClass4_.rect.minX = c__DisplayClass4_.rect.minX - 1;
-			//			flag = true;
-			//		}
-			//	}
-			//	if (c__DisplayClass4_.rect.Height <= c__DisplayClass4_.rect.Width)
-			//	{
-			//		if (c__DisplayClass4_.rect.maxZ + 1 < map.Size.z && LargestAreaFinder.<FindLargestRectAt>g__CanExpand|4_0(Rot4.North, ref c__DisplayClass4_))
-			//		{
-			//			c__DisplayClass4_.rect.maxZ = c__DisplayClass4_.rect.maxZ + 1;
-			//			flag = true;
-			//		}
-			//		if (c__DisplayClass4_.rect.minZ > 0 && LargestAreaFinder.<FindLargestRectAt>g__CanExpand|4_0(Rot4.South, ref c__DisplayClass4_))
-			//		{
-			//			c__DisplayClass4_.rect.minZ = c__DisplayClass4_.rect.minZ - 1;
-			//			flag = true;
-			//		}
-			//	}
-			//}
-			//while (flag);
-			//foreach (IntVec3 item in c__DisplayClass4_.rect)
-			//{
-			//	c__DisplayClass4_.processed.Add(item);
-			//}
-			//return c__DisplayClass4_.rect;
-			return new CellRect();
+			tmpProcessed.Clear();
+			foreach (IntVec3 item in map.cellsInRandomOrder.GetAll().InRandomOrder(randomOrderWorkingList))
+			{
+				CellRect cellRect = FindLargestRectAt(item, map, tmpProcessed, predicate);
+				if (cellRect.Area > largestRect.Area)
+				{
+					largestRect = cellRect;
+					if (ShouldBreakEarly())
+					{
+						break;
+					}
+				}
+			}
+			if (ShouldBreakEarly())
+			{
+				break;
+			}
 		}
+		Rand.PopState();
+		return largestRect;
+		bool ShouldBreakEarly()
+		{
+			if (breakEarlyOn >= 0 && largestRect.Width >= breakEarlyOn)
+			{
+				return largestRect.Height >= breakEarlyOn;
+			}
+			return false;
+		}
+	}
 
-		
-		private static BoolGrid visited;
-
-		
-		private static List<IntVec3> randomOrderWorkingList = new List<IntVec3>();
-
-		
-		private static HashSet<IntVec3> tmpProcessed = new HashSet<IntVec3>();
+	private static CellRect FindLargestRectAt(IntVec3 c, Map map, HashSet<IntVec3> processed, Predicate<IntVec3> predicate)
+	{
+		if (processed.Contains(c) || !predicate(c))
+		{
+			return CellRect.Empty;
+		}
+		CellRect rect = CellRect.SingleCell(c);
+		bool flag;
+		do
+		{
+			flag = false;
+			if (rect.Width <= rect.Height)
+			{
+				if (rect.maxX + 1 < map.Size.x && CanExpand(Rot4.East))
+				{
+					rect.maxX++;
+					flag = true;
+				}
+				if (rect.minX > 0 && CanExpand(Rot4.West))
+				{
+					rect.minX--;
+					flag = true;
+				}
+			}
+			if (rect.Height <= rect.Width)
+			{
+				if (rect.maxZ + 1 < map.Size.z && CanExpand(Rot4.North))
+				{
+					rect.maxZ++;
+					flag = true;
+				}
+				if (rect.minZ > 0 && CanExpand(Rot4.South))
+				{
+					rect.minZ--;
+					flag = true;
+				}
+			}
+		}
+		while (flag);
+		foreach (IntVec3 item in rect)
+		{
+			processed.Add(item);
+		}
+		return rect;
+		bool CanExpand(Rot4 dir)
+		{
+			foreach (IntVec3 edgeCell in rect.GetEdgeCells(dir))
+			{
+				IntVec3 intVec = edgeCell + dir.FacingCell;
+				if (processed.Contains(intVec) || !predicate(intVec))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 }

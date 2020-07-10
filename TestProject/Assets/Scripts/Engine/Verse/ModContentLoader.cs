@@ -1,225 +1,195 @@
-﻿using System;
+﻿using RimWorld.IO;
+using RuntimeAudioClipLoader;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using RimWorld.IO;
-using RuntimeAudioClipLoader;
 using UnityEngine;
-using Manager;
+using Verse;
 
-namespace Verse
+public static class ModContentLoader<T> where T : class
 {
-	
-	public static class ModContentLoader<T> where T : class
+	private static string[] AcceptableExtensionsAudio = new string[7]
 	{
-		
-		public static bool IsAcceptableExtension(string extension)
-		{
-			string[] array;
-			if (typeof(T) == typeof(AudioClip))
-			{
-				array = ModContentLoader<T>.AcceptableExtensionsAudio;
-			}
-			else if (typeof(T) == typeof(Texture2D))
-			{
-				array = ModContentLoader<T>.AcceptableExtensionsTexture;
-			}
-			else
-			{
-				if (!(typeof(T) == typeof(string)))
-				{
-					Log.Error("Unknown content type " + typeof(T), false);
-					return false;
-				}
-				array = ModContentLoader<T>.AcceptableExtensionsString;
-			}
-			foreach (string b in array)
-			{
-				if (extension.ToLower() == b)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
+		".wav",
+		".mp3",
+		".ogg",
+		".xm",
+		".it",
+		".mod",
+		".s3m"
+	};
 
-		
-		public static IEnumerable<Pair<string, LoadedContentItem<T>>> LoadAllForMod(ModContentPack mod)
-		{
-			DeepProfiler.Start(string.Concat(new object[]
-			{
-				"Loading assets of type ",
-				typeof(T),
-				" for mod ",
-				mod
-			}));
-			Dictionary<string, FileInfo> allFilesForMod = ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<T>(), new Func<string, bool>(ModContentLoader<T>.IsAcceptableExtension), null);
-			foreach (KeyValuePair<string, FileInfo> keyValuePair in allFilesForMod)
-			{
-				//LoadedContentItem<T> loadedContentItem = ModContentLoader<T>.LoadItem(keyValuePair.Value);
-				//if (loadedContentItem != null)
-				//{
-				//	yield return new Pair<string, LoadedContentItem<T>>(keyValuePair.Key, loadedContentItem);
-				//}
-			}
-			Dictionary<string, FileInfo>.Enumerator enumerator = default(Dictionary<string, FileInfo>.Enumerator);
-			DeepProfiler.End();
-			yield break;
-			yield break;
-		}
+	private static string[] AcceptableExtensionsTexture = new string[4]
+	{
+		".png",
+		".jpg",
+		".jpeg",
+		".psd"
+	};
 
-		
-		public static LoadedContentItem<T> LoadItem(VirtualFile file)
+	private static string[] AcceptableExtensionsString = new string[1]
+	{
+		".txt"
+	};
+
+	public static bool IsAcceptableExtension(string extension)
+	{
+		string[] array;
+		if (typeof(T) == typeof(AudioClip))
 		{
-			try
+			array = AcceptableExtensionsAudio;
+		}
+		else if (typeof(T) == typeof(Texture2D))
+		{
+			array = AcceptableExtensionsTexture;
+		}
+		else
+		{
+			if (!(typeof(T) == typeof(string)))
 			{
-				if (typeof(T) == typeof(string))
-				{
-					return new LoadedContentItem<T>(file, (T)((object)file.ReadAllText()), null);
-				}
-				if (typeof(T) == typeof(Texture2D))
-				{
-					return new LoadedContentItem<T>(file, (T)((object)ModContentLoader<T>.LoadTexture(file)), null);
-				}
-				if (typeof(T) == typeof(AudioClip))
-				{
-					if (Prefs.LogVerbose)
-					{
-						DeepProfiler.Start("Loading file " + file);
-					}
-					IDisposable extraDisposable = null;
-					T t=default;
-					try
-					{
-						bool doStream = ModContentLoader<T>.ShouldStreamAudioClipFromFile(file);
-						Stream stream = file.CreateReadStream();
-						try
-						{
-							
-							//t = (T)((object)Manager.Load(stream, ModContentLoader<T>.GetFormat(file.Name), file.Name, doStream, true, true));
-						}
-						catch (Exception)
-						{
-							stream.Dispose();
-							throw;
-						}
-						extraDisposable = stream;
-					}
-					finally
-					{
-						if (Prefs.LogVerbose)
-						{
-							DeepProfiler.End();
-						}
-					}
-					UnityEngine.Object @object = t as UnityEngine.Object;
-					if (@object != null)
-					{
-						@object.name = Path.GetFileNameWithoutExtension(file.Name);
-					}
-					return new LoadedContentItem<T>(file, t, extraDisposable);
-				}
+				Log.Error("Unknown content type " + typeof(T));
+				return false;
 			}
-			catch (Exception ex)
+			array = AcceptableExtensionsString;
+		}
+		string[] array2 = array;
+		foreach (string b in array2)
+		{
+			if (extension.ToLower() == b)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception loading ",
-					typeof(T),
-					" from file.\nabsFilePath: ",
-					file.FullPath,
-					"\nException: ",
-					ex.ToString()
-				}), false);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static IEnumerable<Pair<string, LoadedContentItem<T>>> LoadAllForMod(ModContentPack mod)
+	{
+		DeepProfiler.Start("Loading assets of type " + typeof(T) + " for mod " + mod);
+		Dictionary<string, FileInfo> allFilesForMod = ModContentPack.GetAllFilesForMod(mod, GenFilePaths.ContentPath<T>(), IsAcceptableExtension);
+		foreach (KeyValuePair<string, FileInfo> item in allFilesForMod)
+		{
+			LoadedContentItem<T> loadedContentItem = LoadItem((FilesystemFile)item.Value);
+			if (loadedContentItem != null)
+			{
+				yield return new Pair<string, LoadedContentItem<T>>(item.Key, loadedContentItem);
+			}
+		}
+		DeepProfiler.End();
+	}
+
+	public static LoadedContentItem<T> LoadItem(VirtualFile file)
+	{
+		try
+		{
+			if (typeof(T) == typeof(string))
+			{
+				return new LoadedContentItem<T>(file, (T)(object)file.ReadAllText());
 			}
 			if (typeof(T) == typeof(Texture2D))
 			{
-				return (LoadedContentItem<T>)Convert.ChangeType(new LoadedContentItem<Texture2D>(file, BaseContent.BadTex, null),typeof(T));
+				return new LoadedContentItem<T>(file, (T)(object)LoadTexture(file));
 			}
-			return null;
-		}
-
-		
-		private static AudioFormat GetFormat(string filename)
-		{
-			string extension = Path.GetExtension(filename);
-			if (extension == ".ogg")
+			if (typeof(T) == typeof(AudioClip))
 			{
+				if (Prefs.LogVerbose)
+				{
+					DeepProfiler.Start("Loading file " + file);
+				}
+				IDisposable extraDisposable = null;
+				T val;
+				try
+				{
+					bool doStream = ShouldStreamAudioClipFromFile(file);
+					Stream stream = file.CreateReadStream();
+					try
+					{
+						val = (T)(object)Manager.Load(stream, GetFormat(file.Name), file.Name, doStream);
+					}
+					catch (Exception)
+					{
+						stream.Dispose();
+						throw;
+					}
+					extraDisposable = stream;
+				}
+				finally
+				{
+					if (Prefs.LogVerbose)
+					{
+						DeepProfiler.End();
+					}
+				}
+				UnityEngine.Object @object = val as UnityEngine.Object;
+				if (@object != null)
+				{
+					@object.name = Path.GetFileNameWithoutExtension(file.Name);
+				}
+				return new LoadedContentItem<T>(file, val, extraDisposable);
+			}
+		}
+		catch (Exception ex2)
+		{
+			Log.Error("Exception loading " + typeof(T) + " from file.\nabsFilePath: " + file.FullPath + "\nException: " + ex2.ToString());
+		}
+		if (typeof(T) == typeof(Texture2D))
+		{
+			return (LoadedContentItem<T>)(object)new LoadedContentItem<Texture2D>(file, BaseContent.BadTex);
+		}
+		return null;
+	}
+
+	private static AudioFormat GetFormat(string filename)
+	{
+		switch (Path.GetExtension(filename))
+		{
+			case ".ogg":
 				return AudioFormat.ogg;
-			}
-			if (extension == ".mp3")
-			{
+			case ".mp3":
 				return AudioFormat.mp3;
-			}
-			if (extension == ".aiff" || extension == ".aif" || extension == ".aifc")
-			{
+			case ".aiff":
+			case ".aif":
+			case ".aifc":
 				return AudioFormat.aiff;
-			}
-			if (!(extension == ".wav"))
-			{
+			case ".wav":
+				return AudioFormat.wav;
+			default:
 				return AudioFormat.unknown;
-			}
-			return AudioFormat.wav;
 		}
+	}
 
-		
-		private static AudioType GetAudioTypeFromURI(string uri)
+	private static AudioType GetAudioTypeFromURI(string uri)
+	{
+		if (uri.EndsWith(".ogg"))
 		{
-			if (uri.EndsWith(".ogg"))
-			{
-				return AudioType.OGGVORBIS;
-			}
-			return AudioType.WAV;
+			return AudioType.OGGVORBIS;
 		}
+		return AudioType.WAV;
+	}
 
-		
-		private static bool ShouldStreamAudioClipFromFile(VirtualFile file)
+	private static bool ShouldStreamAudioClipFromFile(VirtualFile file)
+	{
+		if (!(file is FilesystemFile) || !file.Exists)
 		{
-			return file is FilesystemFile && file.Exists && file.Length > 307200L;
+			return false;
 		}
+		return file.Length > 307200;
+	}
 
-		
-		private static Texture2D LoadTexture(VirtualFile file)
+	private static Texture2D LoadTexture(VirtualFile file)
+	{
+		Texture2D texture2D = null;
+		if (file.Exists)
 		{
-			Texture2D texture2D = null;
-			if (file.Exists)
-			{
-				byte[] data = file.ReadAllBytes();
-				texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, true);
-				texture2D.LoadImage(data);
-				texture2D.Compress(true);
-				texture2D.name = Path.GetFileNameWithoutExtension(file.Name);
-				texture2D.filterMode = FilterMode.Bilinear;
-				texture2D.anisoLevel = 2;
-				texture2D.Apply(true, true);
-			}
-			return texture2D;
+			byte[] data = file.ReadAllBytes();
+			texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: true);
+			texture2D.LoadImage(data);
+			texture2D.Compress(highQuality: true);
+			texture2D.name = Path.GetFileNameWithoutExtension(file.Name);
+			texture2D.filterMode = FilterMode.Bilinear;
+			texture2D.anisoLevel = 2;
+			texture2D.Apply(updateMipmaps: true, makeNoLongerReadable: true);
 		}
-
-		
-		private static string[] AcceptableExtensionsAudio = new string[]
-		{
-			".wav",
-			".mp3",
-			".ogg",
-			".xm",
-			".it",
-			".mod",
-			".s3m"
-		};
-
-		
-		private static string[] AcceptableExtensionsTexture = new string[]
-		{
-			".png",
-			".jpg",
-			".jpeg",
-			".psd"
-		};
-
-		
-		private static string[] AcceptableExtensionsString = new string[]
-		{
-			".txt"
-		};
+		return texture2D;
 	}
 }

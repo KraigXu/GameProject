@@ -172,55 +172,52 @@ namespace RimWorld
 			}
 		}
 
-		
+
 		public void DrawInfoPane()
 		{
-			//Alert.c__DisplayClass33_0 c__DisplayClass33_ = new Alert.c__DisplayClass33_0();
-			//if (Event.current.type != EventType.Repaint)
-			//{
-			//	return;
-			//}
-			//this.Recalculate();
-			//if (!this.Active)
-			//{
-			//	return;
-			//}
-			//c__DisplayClass33_.expString = this.GetExplanation();
-			//if (c__DisplayClass33_.expString.NullOrEmpty())
-			//{
-			//	return;
-			//}
-			//Text.Font = GameFont.Small;
-			//Text.Anchor = TextAnchor.UpperLeft;
-			//if (this.GetReport().AnyCulpritValid)
-			//{
-			//	c__DisplayClass33_.expString += "\n\n(" + "ClickToJumpToProblem".Translate() + ")";
-			//}
-			//float num = Text.CalcHeight(c__DisplayClass33_.expString, 310f);
-			//num += 20f;
-			//c__DisplayClass33_.infoRect = new Rect((float)UI.screenWidth - 154f - 330f - 8f, Mathf.Max(Mathf.Min(Event.current.mousePosition.y, (float)UI.screenHeight - num), 0f), 330f, num);
-			//if (c__DisplayClass33_.infoRect.yMax > (float)UI.screenHeight)
-			//{
-			//	Alert.c__DisplayClass33_0 c__DisplayClass33_2 = c__DisplayClass33_;
-			//	c__DisplayClass33_2.infoRect.y = c__DisplayClass33_2.infoRect.y - ((float)UI.screenHeight - c__DisplayClass33_.infoRect.yMax);
-			//}
-			//if (c__DisplayClass33_.infoRect.y < 0f)
-			//{
-			//	c__DisplayClass33_.infoRect.y = 0f;
-			//}
-			//Find.WindowStack.ImmediateWindow(138956, c__DisplayClass33_.infoRect, WindowLayer.GameUI, delegate
-			//{
-			//	Text.Font = GameFont.Small;
-			//	Rect rect = c__DisplayClass33_.infoRect.AtZero();
-			//	Widgets.DrawWindowBackground(rect);
-			//	Rect position = rect.ContractedBy(10f);
-			//	GUI.BeginGroup(position);
-			//	Widgets.Label(new Rect(0f, 0f, position.width, position.height), c__DisplayClass33_.expString);
-			//	GUI.EndGroup();
-			//}, false, false, 1f);
+			if (Event.current.type != EventType.Repaint)
+			{
+				return;
+			}
+			Recalculate();
+			if (!Active)
+			{
+				return;
+			}
+			TaggedString expString = GetExplanation();
+			if (!expString.NullOrEmpty())
+			{
+				Text.Font = GameFont.Small;
+				Text.Anchor = TextAnchor.UpperLeft;
+				if (GetReport().AnyCulpritValid)
+				{
+					expString += "\n\n(" + "ClickToJumpToProblem".Translate() + ")";
+				}
+				float num = Text.CalcHeight(expString, 310f);
+				num += 20f;
+				Rect infoRect = new Rect((float)UI.screenWidth - 154f - 330f - 8f, Mathf.Max(Mathf.Min(Event.current.mousePosition.y, (float)UI.screenHeight - num), 0f), 330f, num);
+				if (infoRect.yMax > (float)UI.screenHeight)
+				{
+					infoRect.y -= (float)UI.screenHeight - infoRect.yMax;
+				}
+				if (infoRect.y < 0f)
+				{
+					infoRect.y = 0f;
+				}
+				Find.WindowStack.ImmediateWindow(138956, infoRect, WindowLayer.GameUI, delegate
+				{
+					Text.Font = GameFont.Small;
+					Rect rect = infoRect.AtZero();
+					Widgets.DrawWindowBackground(rect);
+					Rect position = rect.ContractedBy(10f);
+					GUI.BeginGroup(position);
+					Widgets.Label(new Rect(0f, 0f, position.width, position.height), expString);
+					GUI.EndGroup();
+				}, doBackground: false);
+			}
 		}
 
-		
+
 		protected AlertPriority defaultPriority;
 
 		

@@ -1,80 +1,66 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-namespace RimWorld
+public class RoomRequirement_ThingAnyOf : RoomRequirement
 {
-	
-	public class RoomRequirement_ThingAnyOf : RoomRequirement
-	{
-		
-		public override string Label(Room r = null)
-		{
-			//return ((!this.labelKey.NullOrEmpty()) ? this.labelKey.Translate() : this.things[0].label) + ((r != null) ? " 0/1" : "");
-			return "";
-		}
+	public List<ThingDef> things;
 
-		
-		public override bool Met(Room r, Pawn p = null)
+	public override string Label(Room r = null)
+	{
+		return ((!labelKey.NullOrEmpty()) ? ((string)labelKey.Translate()) : things[0].label) + ((r != null) ? " 0/1" : "");
+	}
+
+	public override bool Met(Room r, Pawn p = null)
+	{
+		foreach (ThingDef thing in things)
 		{
-			foreach (ThingDef def in this.things)
+			if (r.ContainsThing(thing))
 			{
-				if (r.ContainsThing(def))
-				{
-					return true;
-				}
+				return true;
 			}
+		}
+		return false;
+	}
+
+	public override bool SameOrSubsetOf(RoomRequirement other)
+	{
+		if (!base.SameOrSubsetOf(other))
+		{
 			return false;
 		}
-
-		
-		public override bool SameOrSubsetOf(RoomRequirement other)
+		RoomRequirement_ThingAnyOf roomRequirement_ThingAnyOf = (RoomRequirement_ThingAnyOf)other;
+		foreach (ThingDef thing in things)
 		{
-			if (!base.SameOrSubsetOf(other))
+			if (!roomRequirement_ThingAnyOf.things.Contains(thing))
 			{
 				return false;
 			}
-			RoomRequirement_ThingAnyOf roomRequirement_ThingAnyOf = (RoomRequirement_ThingAnyOf)other;
-			foreach (ThingDef item in this.things)
-			{
-				if (!roomRequirement_ThingAnyOf.things.Contains(item))
-				{
-					return false;
-				}
-			}
-			return true;
 		}
+		return true;
+	}
 
-		
-		public override IEnumerable<string> ConfigErrors()
+	public override IEnumerable<string> ConfigErrors()
+	{
+		foreach (string item in base.ConfigErrors())
 		{
-
-			{
-				
-			}
-			IEnumerator<string> enumerator = null;
-			if (this.things.NullOrEmpty<ThingDef>())
-			{
-				yield return "things are null or empty";
-			}
-			yield break;
-			yield break;
+			yield return item;
 		}
-
-		
-		public override bool PlayerHasResearched()
+		if (things.NullOrEmpty())
 		{
-			for (int i = 0; i < this.things.Count; i++)
-			{
-				if (this.things[i].IsResearchFinished)
-				{
-					return true;
-				}
-			}
-			return false;
+			yield return "things are null or empty";
 		}
+	}
 
-		
-		public List<ThingDef> things;
+	public override bool PlayerHasResearched()
+	{
+		for (int i = 0; i < things.Count; i++)
+		{
+			if (things[i].IsResearchFinished)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

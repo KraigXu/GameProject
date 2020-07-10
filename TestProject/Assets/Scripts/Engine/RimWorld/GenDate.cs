@@ -162,21 +162,19 @@ namespace RimWorld
 			return 5500 + Mathf.FloorToInt((float)num / 3600000f);
 		}
 
-		
+
 		public static int DayOfSeason(long absTicks, float longitude)
 		{
-			//return (GenDate.DayOfYear(absTicks, longitude) - (int)(SeasonUtility.FirstSeason.GetFirstTwelfth(0f) * RimWorld.Twelfth.Sixth)) % 15;
-			return 0;
+			return (DayOfYear(absTicks, longitude) - (int)SeasonUtility.FirstSeason.GetFirstTwelfth(0f) * 5) % 15;
 		}
 
-		
+
 		public static int DayOfQuadrum(long absTicks, float longitude)
 		{
-			//return (GenDate.DayOfYear(absTicks, longitude) - (int)(QuadrumUtility.FirstQuadrum.GetFirstTwelfth() * RimWorld.Twelfth.Sixth)) % 15;
-			return 0;
+			return (DayOfYear(absTicks, longitude) - (int)QuadrumUtility.FirstQuadrum.GetFirstTwelfth() * 5) % 15;
 		}
 
-		
+
 		public static int DayTick(long absTicks, float longitude)
 		{
 			return (int)GenMath.PositiveMod(absTicks + GenDate.LocalTicksOffsetFromLongitude(longitude), 60000L);

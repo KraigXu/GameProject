@@ -1,97 +1,85 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
-using RimWorld;
+using Verse;
 
-namespace Verse
+public class RectTrigger : Thing
 {
-	
-	public class RectTrigger : Thing
+	private CellRect rect;
+
+	public bool destroyIfUnfogged;
+
+	public bool activateOnExplosion;
+
+	public string signalTag;
+
+	public CellRect Rect
 	{
-		
-		
-		
-		public CellRect Rect
+		get
 		{
-			get
+			return rect;
+		}
+		set
+		{
+			rect = value;
+			if (base.Spawned)
 			{
-				return this.rect;
-			}
-			set
-			{
-				this.rect = value;
-				if (base.Spawned)
-				{
-					this.rect.ClipInsideMap(base.Map);
-				}
+				rect.ClipInsideMap(base.Map);
 			}
 		}
+	}
 
-		
-		public override void SpawnSetup(Map map, bool respawningAfterLoad)
+	public override void SpawnSetup(Map map, bool respawningAfterLoad)
+	{
+		base.SpawnSetup(map, respawningAfterLoad);
+		rect.ClipInsideMap(base.Map);
+	}
+
+	public override void Tick()
+	{
+		if (destroyIfUnfogged && !rect.CenterCell.Fogged(base.Map))
 		{
-			base.SpawnSetup(map, respawningAfterLoad);
-			this.rect.ClipInsideMap(base.Map);
+			Destroy();
 		}
-
-		
-		public override void Tick()
+		else
 		{
-			if (this.destroyIfUnfogged && !this.rect.CenterCell.Fogged(base.Map))
+			if (!this.IsHashIntervalTick(60))
 			{
-				this.Destroy(DestroyMode.Vanish);
 				return;
 			}
-			if (this.IsHashIntervalTick(60))
+			Map map = base.Map;
+			for (int i = rect.minZ; i <= rect.maxZ; i++)
 			{
-				Map map = base.Map;
-				for (int i = this.rect.minZ; i <= this.rect.maxZ; i++)
+				for (int j = rect.minX; j <= rect.maxX; j++)
 				{
-					for (int j = this.rect.minX; j <= this.rect.maxX; j++)
+					List<Thing> thingList = new IntVec3(j, 0, i).GetThingList(map);
+					for (int k = 0; k < thingList.Count; k++)
 					{
-						List<Thing> thingList = new IntVec3(j, 0, i).GetThingList(map);
-						for (int k = 0; k < thingList.Count; k++)
+						if (thingList[k].def.category == ThingCategory.Pawn && thingList[k].def.race.intelligence == Intelligence.Humanlike && thingList[k].Faction == Faction.OfPlayer)
 						{
-							if (thingList[k].def.category == ThingCategory.Pawn && thingList[k].def.race.intelligence == Intelligence.Humanlike && thingList[k].Faction == Faction.OfPlayer)
-							{
-								this.ActivatedBy((Pawn)thingList[k]);
-								return;
-							}
+							ActivatedBy((Pawn)thingList[k]);
+							return;
 						}
 					}
 				}
 			}
 		}
+	}
 
-		
-		public void ActivatedBy(Pawn p)
+	public void ActivatedBy(Pawn p)
+	{
+		Find.SignalManager.SendSignal(new Signal(signalTag, p.Named("SUBJECT")));
+		if (!base.Destroyed)
 		{
-			//Find.SignalManager.SendSignal(new Signal(this.signalTag, p.Named("SUBJECT")));
-			if (!base.Destroyed)
-			{
-				this.Destroy(DestroyMode.Vanish);
-			}
+			Destroy();
 		}
+	}
 
-		
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			Scribe_Values.Look<CellRect>(ref this.rect, "rect", default(CellRect), false);
-			Scribe_Values.Look<bool>(ref this.destroyIfUnfogged, "destroyIfUnfogged", false, false);
-			Scribe_Values.Look<bool>(ref this.activateOnExplosion, "activateOnExplosion", false, false);
-			Scribe_Values.Look<string>(ref this.signalTag, "signalTag", null, false);
-		}
-
-		
-		private CellRect rect;
-
-		
-		public bool destroyIfUnfogged;
-
-		
-		public bool activateOnExplosion;
-
-		
-		public string signalTag;
+	public override void ExposeData()
+	{
+		base.ExposeData();
+		Scribe_Values.Look(ref rect, "rect");
+		Scribe_Values.Look(ref destroyIfUnfogged, "destroyIfUnfogged", defaultValue: false);
+		Scribe_Values.Look(ref activateOnExplosion, "activateOnExplosion", defaultValue: false);
+		Scribe_Values.Look(ref signalTag, "signalTag");
 	}
 }

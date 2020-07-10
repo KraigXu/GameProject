@@ -1,172 +1,101 @@
-﻿using System;
-using RimWorld.Planet;
+﻿using RimWorld.Planet;
 using UnityEngine;
+//using UnityStandardAssets.ImageEffects;
+using Verse;
 
-namespace Verse
+public static class Current
 {
-	
-	public static class Current
+	private static ProgramState programStateInt;
+
+	private static Root rootInt;
+
+	private static Root_Entry rootEntryInt;
+
+	private static Root_Play rootPlayInt;
+
+	private static Camera cameraInt;
+
+	private static CameraDriver cameraDriverInt;
+
+//	private static ColorCorrectionCurves colorCorrectionCurvesInt;
+
+	private static SubcameraDriver subcameraDriverInt;
+
+	private static Game gameInt;
+
+	private static World creatingWorldInt;
+
+	public static Root Root => rootInt;
+
+	public static Root_Entry Root_Entry => rootEntryInt;
+
+	public static Root_Play Root_Play => rootPlayInt;
+
+	public static Camera Camera => cameraInt;
+
+	public static CameraDriver CameraDriver => cameraDriverInt;
+
+	//public static ColorCorrectionCurves ColorCorrectionCurves => colorCorrectionCurvesInt;
+
+	public static SubcameraDriver SubcameraDriver => subcameraDriverInt;
+
+	public static Game Game
 	{
-
-		private static ProgramState programStateInt;
-
-
-		private static Root rootInt;
-
-
-		private static Root_Entry rootEntryInt;
-
-
-		private static Root_Play rootPlayInt;
-
-
-		private static Camera cameraInt;
-
-		private static CameraDriver cameraDriverInt;
-		//private static ColorCorrectionCurves colorCorrectionCurvesInt;
-		private static SubcameraDriver subcameraDriverInt;
-		private static Game gameInt;
-		private static World creatingWorldInt;
-
-		public static Root Root
+		get
 		{
-			get
-			{
-				return Current.rootInt;
-			}
+			return gameInt;
 		}
-
-		
-		
-		public static Root_Entry Root_Entry
+		set
 		{
-			get
-			{
-				return Current.rootEntryInt;
-			}
+			gameInt = value;
 		}
+	}
 
-		
-		
-		public static Root_Play Root_Play
+	public static World CreatingWorld
+	{
+		get
 		{
-			get
-			{
-				return Current.rootPlayInt;
-			}
+			return creatingWorldInt;
 		}
-
-		
-		
-		public static Camera Camera
+		set
 		{
-			get
-			{
-				return Current.cameraInt;
-			}
+			creatingWorldInt = value;
 		}
+	}
 
-		
-		
-		public static CameraDriver CameraDriver
+	public static ProgramState ProgramState
+	{
+		get
 		{
-			get
-			{
-				return Current.cameraDriverInt;
-			}
+			return programStateInt;
 		}
-
-
-
-        //public static ColorCorrectionCurves ColorCorrectionCurves
-        //{
-        //    get
-        //    {
-        //        return Current.colorCorrectionCurvesInt;
-        //    }
-        //}
-
-
-
-        public static SubcameraDriver SubcameraDriver
+		set
 		{
-			get
-			{
-				return Current.subcameraDriverInt;
-			}
+			programStateInt = value;
 		}
+	}
 
-		
-		
-		
-		public static Game Game
+	public static void Notify_LoadedSceneChanged()
+	{
+		cameraInt = GameObject.Find("Camera").GetComponent<Camera>();
+		if (GenScene.InEntryScene)
 		{
-			get
-			{
-				return Current.gameInt;
-			}
-			set
-			{
-				Current.gameInt = value;
-			}
+			ProgramState = ProgramState.Entry;
+			rootEntryInt = GameObject.Find("GameRoot").GetComponent<Root_Entry>();
+			rootPlayInt = null;
+			rootInt = rootEntryInt;
+			cameraDriverInt = null;
+			//colorCorrectionCurvesInt = null;
 		}
-
-		
-		
-		
-		public static World CreatingWorld
+		else if (GenScene.InPlayScene)
 		{
-			get
-			{
-				return Current.creatingWorldInt;
-			}
-			set
-			{
-				Current.creatingWorldInt = value;
-			}
+			ProgramState = ProgramState.MapInitializing;
+			rootEntryInt = null;
+			rootPlayInt = GameObject.Find("GameRoot").GetComponent<Root_Play>();
+			rootInt = rootPlayInt;
+			cameraDriverInt = cameraInt.GetComponent<CameraDriver>();
+			//colorCorrectionCurvesInt = cameraInt.GetComponent<ColorCorrectionCurves>();
+			subcameraDriverInt = GameObject.Find("Subcameras").GetComponent<SubcameraDriver>();
 		}
-
-		
-		
-		
-		public static ProgramState ProgramState
-		{
-			get
-			{
-				return Current.programStateInt;
-			}
-			set
-			{
-				Current.programStateInt = value;
-			}
-		}
-
-		
-		public static void Notify_LoadedSceneChanged()
-		{
-			Current.cameraInt = GameObject.Find("Camera").GetComponent<Camera>();
-			if (GenScene.InEntryScene)
-			{
-				Current.ProgramState = ProgramState.Entry;
-				Current.rootEntryInt = GameObject.Find("GameRoot").GetComponent<Root_Entry>();
-				Current.rootPlayInt = null;
-				Current.rootInt = Current.rootEntryInt;
-				Current.cameraDriverInt = null;
-				//Current.colorCorrectionCurvesInt = null;
-				return;
-			}
-			if (GenScene.InPlayScene)
-			{
-				Current.ProgramState = ProgramState.MapInitializing;
-				Current.rootEntryInt = null;
-				Current.rootPlayInt = GameObject.Find("GameRoot").GetComponent<Root_Play>();
-				Current.rootInt = Current.rootPlayInt;
-				Current.cameraDriverInt = Current.cameraInt.GetComponent<CameraDriver>();
-				//Current.colorCorrectionCurvesInt = Current.cameraInt.GetComponent<ColorCorrectionCurves>();
-				Current.subcameraDriverInt = GameObject.Find("Subcameras").GetComponent<SubcameraDriver>();
-			}
-		}
-
-
 	}
 }

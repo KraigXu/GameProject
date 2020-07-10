@@ -93,17 +93,16 @@ namespace RimWorld
 			return "SendSignalOnCountdownCompTime".Translate(this.ticksLeft.ToStringTicksToPeriod(true, false, true, true));
 		}
 
-		
+
 		//public override void Notify_SignalReceived(Signal signal)
 		//{
-		//	Thing thing;
-		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg<Thing>("SUBJECT", out thing) && thing != this.parent && thing != null && thing.Map == this.parent.Map && this.parent.Position.DistanceTo(thing.Position) <= 40f)
+		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= 40f)
 		//	{
-		//		this.ticksLeft = 0;
+		//		ticksLeft = 0;
 		//	}
 		//}
 
-		
+
 		public override void PostExposeData()
 		{
 			base.PostExposeData();

@@ -1,22 +1,16 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
-using RimWorld.Planet;
+using Verse;
 
-namespace Verse
+public static class DebugActionsIncidents
 {
-	
-	public static class DebugActionsIncidents
+	[DebugActionYielder]
+	private static IEnumerable<Dialog_DebugActionsMenu.DebugActionOption> IncidentsYielder()
 	{
-		
-		[DebugActionYielder]
-		private static IEnumerable<Dialog_DebugActionsMenu.DebugActionOption> IncidentsYielder()
+		if (Current.ProgramState == ProgramState.Playing)
 		{
-			if (Current.ProgramState != ProgramState.Playing)
-			{
-				yield break;
-			}
 			IIncidentTarget target = WorldRendererUtility.WorldRenderedNow ? (Find.WorldSelector.SingleSelectedObject as IIncidentTarget) : null;
 			if (target == null)
 			{
@@ -24,304 +18,270 @@ namespace Verse
 			}
 			if (target != null)
 			{
-				yield return DebugActionsIncidents.GetIncidentDebugAction(target);
-				yield return DebugActionsIncidents.GetIncidents10DebugAction(target);
-				yield return DebugActionsIncidents.GetIncidentWithPointsDebugAction(target);
+				yield return GetIncidentDebugAction(target);
+				yield return GetIncidents10DebugAction(target);
+				yield return GetIncidentWithPointsDebugAction(target);
 			}
 			if (WorldRendererUtility.WorldRenderedNow)
 			{
-				yield return DebugActionsIncidents.GetIncidentDebugAction(Find.World);
-				yield return DebugActionsIncidents.GetIncidentWithPointsDebugAction(Find.World);
+				yield return GetIncidentDebugAction(Find.World);
+				yield return GetIncidentWithPointsDebugAction(Find.World);
 			}
-			yield break;
 		}
+	}
 
-		
-		[DebugAction("Incidents", "Execute raid with points...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
-		private static void ExecuteRaidWithPoints()
+	[DebugAction("Incidents", "Execute raid with points...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	private static void ExecuteRaidWithPoints()
+	{
+		List<FloatMenuOption> list = new List<FloatMenuOption>();
+		foreach (float item in DebugActionsUtility.PointsOptions(extended: true))
 		{
-			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (float localP2 in DebugActionsUtility.PointsOptions(true))
+			float localP = item;
+			list.Add(new FloatMenuOption(localP.ToString() + " points", delegate
 			{
-				float localP = localP2;
-				list.Add(new FloatMenuOption(localP.ToString() + " points", delegate
+				IncidentParms parms = new IncidentParms
 				{
-					IncidentParms incidentParms = new IncidentParms();
-					incidentParms.target = Find.CurrentMap;
-					incidentParms.points = localP;
-					IncidentDefOf.RaidEnemy.Worker.TryExecute(incidentParms);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null));
-			}
-			Find.WindowStack.Add(new FloatMenu(list));
+					target = Find.CurrentMap,
+					points = localP
+				};
+				IncidentDefOf.RaidEnemy.Worker.TryExecute(parms);
+			}));
 		}
+		Find.WindowStack.Add(new FloatMenu(list));
+	}
 
-		
-		[DebugAction("Incidents", "Execute raid with faction...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
-		private static void ExecuteRaidWithFaction()
+	[DebugAction("Incidents", "Execute raid with faction...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	private static void ExecuteRaidWithFaction()
+	{
+		StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
+		IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
+		List<DebugMenuOption> list = new List<DebugMenuOption>();
+		foreach (Faction allFaction in Find.FactionManager.AllFactions)
 		{
-			StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
-			IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
-			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			
-			
-			foreach (Faction localFac2 in Find.FactionManager.AllFactions)
+			Faction localFac = allFaction;
+			float localPoints = default(float);
+			list.Add(new DebugMenuOption(localFac.Name + " (" + localFac.def.defName + ")", DebugMenuOptionMode.Action, delegate
 			{
-				Faction localFac = localFac2;
-				list.Add(new DebugMenuOption(localFac.Name + " (" + localFac.def.defName + ")", DebugMenuOptionMode.Action, delegate
+				parms.faction = localFac;
+				List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+				foreach (float item in DebugActionsUtility.PointsOptions(extended: true))
 				{
-					parms.faction = localFac;
-					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-					foreach (float num in DebugActionsUtility.PointsOptions(true))
+					localPoints = item;
+					list2.Add(new DebugMenuOption(item + " points", DebugMenuOptionMode.Action, delegate
 					{
-						float localPoints = num;
-						list2.Add(new DebugMenuOption(num + " points", DebugMenuOptionMode.Action, delegate
-						{
-							parms.points = localPoints;
-							IEnumerable<RaidStrategyDef> allDefs = DefDatabase<RaidStrategyDef>.AllDefs;
-							Func<RaidStrategyDef, bool> predicate = ((RaidStrategyDef s) => s.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat));
-
-							List<RaidStrategyDef> source = allDefs.Where(predicate).ToList<RaidStrategyDef>();
-							Log.Message("Available strategies: " + string.Join(", ", (from s in source
-							select s.defName).ToArray<string>()), false);
-							parms.raidStrategy = source.RandomElement<RaidStrategyDef>();
-							Log.Message("Strategy: " + parms.raidStrategy.defName, false);
-							IEnumerable<PawnsArrivalModeDef> allDefs2 = DefDatabase<PawnsArrivalModeDef>.AllDefs;
-							Func<PawnsArrivalModeDef, bool> predicate2 = ((PawnsArrivalModeDef a) => a.Worker.CanUseWith(parms) && parms.raidStrategy.arriveModes.Contains(a));
-
-							List<PawnsArrivalModeDef> source2 = allDefs2.Where(predicate2).ToList<PawnsArrivalModeDef>();
-							Log.Message("Available arrival modes: " + string.Join(", ", (from s in source2
-							select s.defName).ToArray<string>()), false);
-							parms.raidArrivalMode = source2.RandomElement<PawnsArrivalModeDef>();
-							Log.Message("Arrival mode: " + parms.raidArrivalMode.defName, false);
-							DebugActionsIncidents.DoRaid(parms);
-						}));
-					}
-					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-				}));
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+						parms.points = localPoints;
+						List<RaidStrategyDef> source = DefDatabase<RaidStrategyDef>.AllDefs.Where((RaidStrategyDef s) => s.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat)).ToList();
+						Log.Message("Available strategies: " + string.Join(", ", source.Select((RaidStrategyDef s) => s.defName).ToArray()));
+						parms.raidStrategy = source.RandomElement();
+						Log.Message("Strategy: " + parms.raidStrategy.defName);
+						List<PawnsArrivalModeDef> source2 = DefDatabase<PawnsArrivalModeDef>.AllDefs.Where((PawnsArrivalModeDef a) => a.Worker.CanUseWith(parms) && parms.raidStrategy.arriveModes.Contains(a)).ToList();
+						Log.Message("Available arrival modes: " + string.Join(", ", source2.Select((PawnsArrivalModeDef s) => s.defName).ToArray()));
+						parms.raidArrivalMode = source2.RandomElement();
+						Log.Message("Arrival mode: " + parms.raidArrivalMode.defName);
+						DoRaid(parms);
+					}));
+				}
+				Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			}));
 		}
+		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+	}
 
-		
-		[DebugAction("Incidents", "Execute raid with specifics...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
-		private static void ExecuteRaidWithSpecifics()
+	[DebugAction("Incidents", "Execute raid with specifics...", allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	private static void ExecuteRaidWithSpecifics()
+	{
+		StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
+		IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
+		List<DebugMenuOption> list = new List<DebugMenuOption>();
+		foreach (Faction allFaction in Find.FactionManager.AllFactions)
 		{
-			StorytellerComp storytellerComp = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain);
-			IncidentParms parms = storytellerComp.GenerateParms(IncidentCategoryDefOf.ThreatBig, Find.CurrentMap);
-			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (Faction localFac2 in Find.FactionManager.AllFactions)
+			Faction localFac = allFaction;
+			float localPoints = default(float);
+			RaidStrategyDef localStrat = default(RaidStrategyDef);
+			PawnsArrivalModeDef localArrival = default(PawnsArrivalModeDef);
+			list.Add(new DebugMenuOption(localFac.Name + " (" + localFac.def.defName + ")", DebugMenuOptionMode.Action, delegate
 			{
-				Faction localFac = localFac2;
-				list.Add(new DebugMenuOption(localFac.Name + " (" + localFac.def.defName + ")", DebugMenuOptionMode.Action, delegate
+				parms.faction = localFac;
+				List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+				foreach (float item in DebugActionsUtility.PointsOptions(extended: true))
 				{
-					parms.faction = localFac;
-					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-					foreach (float num in DebugActionsUtility.PointsOptions(true))
+					localPoints = item;
+					list2.Add(new DebugMenuOption(item + " points", DebugMenuOptionMode.Action, delegate
 					{
-						float localPoints = num;
-						list2.Add(new DebugMenuOption(num + " points", DebugMenuOptionMode.Action, delegate
+						parms.points = localPoints;
+						List<DebugMenuOption> list3 = new List<DebugMenuOption>();
+						foreach (RaidStrategyDef allDef in DefDatabase<RaidStrategyDef>.AllDefs)
 						{
-							parms.points = localPoints;
-							List<DebugMenuOption> list3 = new List<DebugMenuOption>();
-							foreach (RaidStrategyDef localStrat2 in DefDatabase<RaidStrategyDef>.AllDefs)
+							localStrat = allDef;
+							string text = localStrat.defName;
+							if (!localStrat.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat))
 							{
-								RaidStrategyDef localStrat = localStrat2;
-								string text = localStrat.defName;
-								if (!localStrat.Worker.CanUseWith(parms, PawnGroupKindDefOf.Combat))
-								{
-									text += " [NO]";
-								}
-								list3.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
-								{
-									parms.raidStrategy = localStrat;
-									List<DebugMenuOption> list4 = new List<DebugMenuOption>();
-									List<DebugMenuOption> list5 = list4;
-									string label = "-Random-";
-									DebugMenuOptionMode mode = DebugMenuOptionMode.Action;
-									Action method = delegate
-									{
-										DebugActionsIncidents.DoRaid(parms);
-									};
-	
-									list5.Add(new DebugMenuOption(label, mode, method));
-									foreach (PawnsArrivalModeDef localArrival2 in DefDatabase<PawnsArrivalModeDef>.AllDefs)
-									{
-										PawnsArrivalModeDef localArrival = localArrival2;
-										string text2 = localArrival.defName;
-										if (!localArrival.Worker.CanUseWith(parms) || !localStrat.arriveModes.Contains(localArrival))
-										{
-											text2 += " [NO]";
-										}
-										list4.Add(new DebugMenuOption(text2, DebugMenuOptionMode.Action, delegate
-										{
-											parms.raidArrivalMode = localArrival;
-											DebugActionsIncidents.DoRaid(parms);
-										}));
-									}
-									Find.WindowStack.Add(new Dialog_DebugOptionListLister(list4));
-								}));
+								text += " [NO]";
 							}
-							Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
-						}));
-					}
-					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-				}));
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
-		}
-
-		
-		private static string GetIncidentTargetLabel(IIncidentTarget target)
-		{
-			if (target == null)
-			{
-				return "null target";
-			}
-			if (target is Map)
-			{
-				return "Map";
-			}
-			if (target is World)
-			{
-				return "World";
-			}
-			if (target is Caravan)
-			{
-				return ((Caravan)target).LabelCap;
-			}
-			return target.ToString();
-		}
-
-		
-		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentDebugAction(IIncidentTarget target)
-		{
-			return new Dialog_DebugActionsMenu.DebugActionOption
-			{
-				action = delegate
-				{
-					DebugActionsIncidents.DoIncidentDebugAction(target, 1);
-				},
-				actionType = DebugActionType.Action,
-				category = "Incidents",
-				label = "Do incident (" + DebugActionsIncidents.GetIncidentTargetLabel(target) + ")..."
-			};
-		}
-
-		
-		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidents10DebugAction(IIncidentTarget target)
-		{
-			return new Dialog_DebugActionsMenu.DebugActionOption
-			{
-				action = delegate
-				{
-					DebugActionsIncidents.DoIncidentDebugAction(target, 10);
-				},
-				actionType = DebugActionType.Action,
-				category = "Incidents",
-				label = "Do incident x10 (" + DebugActionsIncidents.GetIncidentTargetLabel(target) + ")..."
-			};
-		}
-
-		
-		private static void DoIncidentDebugAction(IIncidentTarget target, int iterations = 1)
-		{
-			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			IEnumerable<IncidentDef> allDefs = DefDatabase<IncidentDef>.AllDefs;
-			
-			Func<IncidentDef, bool> predicate = ((IncidentDef d) => d.TargetAllowed(target));
-
-			foreach (IncidentDef localDef2 in from d in allDefs.Where(predicate)
-			orderby d.defName
-			select d)
-			{
-				IncidentDef localDef = localDef2;
-				string text = localDef.defName;
-				IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
-				if (!localDef.Worker.CanFireNow(parms, false))
-				{
-					text += " [NO]";
+							list3.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
+							{
+								parms.raidStrategy = localStrat;
+								List<DebugMenuOption> list4 = new List<DebugMenuOption>
+								{
+									new DebugMenuOption("-Random-", DebugMenuOptionMode.Action, delegate
+									{
+										DoRaid(parms);
+									})
+								};
+								foreach (PawnsArrivalModeDef allDef2 in DefDatabase<PawnsArrivalModeDef>.AllDefs)
+								{
+									localArrival = allDef2;
+									string text2 = localArrival.defName;
+									if (!localArrival.Worker.CanUseWith(parms) || !localStrat.arriveModes.Contains(localArrival))
+									{
+										text2 += " [NO]";
+									}
+									list4.Add(new DebugMenuOption(text2, DebugMenuOptionMode.Action, delegate
+									{
+										parms.raidArrivalMode = localArrival;
+										DoRaid(parms);
+									}));
+								}
+								Find.WindowStack.Add(new Dialog_DebugOptionListLister(list4));
+							}));
+						}
+						Find.WindowStack.Add(new Dialog_DebugOptionListLister(list3));
+					}));
 				}
-				list.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
-				{
-					for (int i = 0; i < iterations; i++)
-					{
-						//IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
-						//if (localDef.pointsScaleable)
-						//{
-						//	parms = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain).GenerateParms(localDef.category, parms.target);
-						//}
-						//localDef.Worker.TryExecute(parms);
-					}
-				}));
+				Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			}));
+		}
+		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+	}
+
+	private static string GetIncidentTargetLabel(IIncidentTarget target)
+	{
+		if (target == null)
+		{
+			return "null target";
+		}
+		if (target is Map)
+		{
+			return "Map";
+		}
+		if (target is World)
+		{
+			return "World";
+		}
+		if (target is Caravan)
+		{
+			return ((Caravan)target).LabelCap;
+		}
+		return target.ToString();
+	}
+
+	private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentDebugAction(IIncidentTarget target)
+	{
+		Dialog_DebugActionsMenu.DebugActionOption result = default(Dialog_DebugActionsMenu.DebugActionOption);
+		result.action = delegate
+		{
+			DoIncidentDebugAction(target);
+		};
+		result.actionType = DebugActionType.Action;
+		result.category = "Incidents";
+		result.label = "Do incident (" + GetIncidentTargetLabel(target) + ")...";
+		return result;
+	}
+
+	private static Dialog_DebugActionsMenu.DebugActionOption GetIncidents10DebugAction(IIncidentTarget target)
+	{
+		Dialog_DebugActionsMenu.DebugActionOption result = default(Dialog_DebugActionsMenu.DebugActionOption);
+		result.action = delegate
+		{
+			DoIncidentDebugAction(target, 10);
+		};
+		result.actionType = DebugActionType.Action;
+		result.category = "Incidents";
+		result.label = "Do incident x10 (" + GetIncidentTargetLabel(target) + ")...";
+		return result;
+	}
+
+	private static void DoIncidentDebugAction(IIncidentTarget target, int iterations = 1)
+	{
+		List<DebugMenuOption> list = new List<DebugMenuOption>();
+		foreach (IncidentDef item in from d in DefDatabase<IncidentDef>.AllDefs
+									 where d.TargetAllowed(target)
+									 orderby d.defName
+									 select d)
+		{
+			IncidentDef localDef = item;
+			string text = localDef.defName;
+			IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
+			if (!localDef.Worker.CanFireNow(parms))
+			{
+				text += " [NO]";
 			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
-		}
-
-		
-		private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentWithPointsDebugAction(IIncidentTarget target)
-		{
-			return new Dialog_DebugActionsMenu.DebugActionOption
+			list.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
 			{
-				action = delegate
+				for (int i = 0; i < iterations; i++)
 				{
-					DebugActionsIncidents.DoIncidentWithPointsAction(target);
-				},
-				actionType = DebugActionType.Action,
-				category = "Incidents",
-				label = "Do incident w/ points (" + DebugActionsIncidents.GetIncidentTargetLabel(target) + ")..."
-			};
-		}
-
-		
-		private static void DoIncidentWithPointsAction(IIncidentTarget target)
-		{
-			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			IEnumerable<IncidentDef> allDefs = DefDatabase<IncidentDef>.AllDefs;
-			
-			Func<IncidentDef, bool> predicate = ((IncidentDef d) => d.TargetAllowed(target) && d.pointsScaleable);
-
-			foreach (IncidentDef localDef2 in from d in allDefs.Where(predicate)
-			orderby d.defName
-			select d)
-			{
-				IncidentDef localDef = localDef2;
-				string text = localDef.defName;
-				IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
-				if (!localDef.Worker.CanFireNow(parms, false))
-				{
-					text += " [NO]";
+					IncidentParms parms2 = StorytellerUtility.DefaultParmsNow(localDef.category, target);
+					if (localDef.pointsScaleable)
+					{
+						parms2 = Find.Storyteller.storytellerComps.First((StorytellerComp x) => x is StorytellerComp_OnOffCycle || x is StorytellerComp_RandomMain).GenerateParms(localDef.category, parms.target);
+					}
+					localDef.Worker.TryExecute(parms2);
 				}
-				list.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
-				{
-					List<DebugMenuOption> list2 = new List<DebugMenuOption>();
-					foreach (float num in DebugActionsUtility.PointsOptions(true))
-					{
-						float localPoints = num;
-						list2.Add(new DebugMenuOption(num + " points", DebugMenuOptionMode.Action, delegate
-						{
-							parms.points = localPoints;
-							localDef.Worker.TryExecute(parms);
-						}));
-					}
-					Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
-				}));
-			}
-			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+			}));
 		}
+		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+	}
 
-		
-		private static void DoRaid(IncidentParms parms)
+	private static Dialog_DebugActionsMenu.DebugActionOption GetIncidentWithPointsDebugAction(IIncidentTarget target)
+	{
+		Dialog_DebugActionsMenu.DebugActionOption result = default(Dialog_DebugActionsMenu.DebugActionOption);
+		result.action = delegate
 		{
-			IncidentDef incidentDef;
-			if (parms.faction.HostileTo(Faction.OfPlayer))
+			DoIncidentWithPointsAction(target);
+		};
+		result.actionType = DebugActionType.Action;
+		result.category = "Incidents";
+		result.label = "Do incident w/ points (" + GetIncidentTargetLabel(target) + ")...";
+		return result;
+	}
+
+	private static void DoIncidentWithPointsAction(IIncidentTarget target)
+	{
+		List<DebugMenuOption> list = new List<DebugMenuOption>();
+		foreach (IncidentDef item in from d in DefDatabase<IncidentDef>.AllDefs
+									 where d.TargetAllowed(target) && d.pointsScaleable
+									 orderby d.defName
+									 select d)
+		{
+			IncidentDef localDef = item;
+			string text = localDef.defName;
+			IncidentParms parms = StorytellerUtility.DefaultParmsNow(localDef.category, target);
+			if (!localDef.Worker.CanFireNow(parms))
 			{
-				incidentDef = IncidentDefOf.RaidEnemy;
+				text += " [NO]";
 			}
-			else
+			float localPoints = default(float);
+			list.Add(new DebugMenuOption(text, DebugMenuOptionMode.Action, delegate
 			{
-				incidentDef = IncidentDefOf.RaidFriendly;
-			}
-			incidentDef.Worker.TryExecute(parms);
+				List<DebugMenuOption> list2 = new List<DebugMenuOption>();
+				foreach (float item2 in DebugActionsUtility.PointsOptions(extended: true))
+				{
+					localPoints = item2;
+					list2.Add(new DebugMenuOption(item2 + " points", DebugMenuOptionMode.Action, delegate
+					{
+						parms.points = localPoints;
+						localDef.Worker.TryExecute(parms);
+					}));
+				}
+				Find.WindowStack.Add(new Dialog_DebugOptionListLister(list2));
+			}));
 		}
+		Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+	}
+
+	private static void DoRaid(IncidentParms parms)
+	{
+		IncidentDef incidentDef = (!parms.faction.HostileTo(Faction.OfPlayer)) ? IncidentDefOf.RaidFriendly : IncidentDefOf.RaidEnemy;
+		incidentDef.Worker.TryExecute(parms);
 	}
 }

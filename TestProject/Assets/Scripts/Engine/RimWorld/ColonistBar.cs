@@ -96,73 +96,74 @@ namespace RimWorld
 		
 		public void ColonistBarOnGUI()
 		{
-			if (!this.Visible)
+			if (!Visible)
 			{
 				return;
 			}
 			if (Event.current.type != EventType.Layout)
 			{
-				List<ColonistBar.Entry> entries = this.Entries;
+				List<Entry> entries = Entries;
 				int num = -1;
-				bool showGroupFrames = this.ShowGroupFrames;
+				bool showGroupFrames = ShowGroupFrames;
 				int reorderableGroup = -1;
-				for (int i = 0; i < this.cachedDrawLocs.Count; i++)
+				for (int i = 0; i < cachedDrawLocs.Count; i++)
 				{
-					Rect rect = new Rect(this.cachedDrawLocs[i].x, this.cachedDrawLocs[i].y, this.Size.x, this.Size.y);
-					ColonistBar.Entry entry = entries[i];
+					Rect rect = new Rect(cachedDrawLocs[i].x, cachedDrawLocs[i].y, Size.x, Size.y);
+					Entry entry = entries[i];
 					bool flag = num != entry.group;
 					num = entry.group;
 					if (flag)
 					{
-						reorderableGroup = ReorderableWidget.NewGroup(entry.reorderAction, ReorderableDirection.Horizontal, this.SpaceBetweenColonistsHorizontal, entry.extraDraggedItemOnGUI);
+						reorderableGroup = ReorderableWidget.NewGroup(entry.reorderAction, ReorderableDirection.Horizontal, SpaceBetweenColonistsHorizontal, entry.extraDraggedItemOnGUI);
 					}
 					bool reordering;
 					if (entry.pawn != null)
 					{
-						this.drawer.HandleClicks(rect, entry.pawn, reorderableGroup, out reordering);
+						drawer.HandleClicks(rect, entry.pawn, reorderableGroup, out reordering);
 					}
 					else
 					{
 						reordering = false;
 					}
-					if (Event.current.type == EventType.Repaint)
+					if (Event.current.type != EventType.Repaint)
 					{
-						if (flag && showGroupFrames)
+						continue;
+					}
+					if (flag && showGroupFrames)
+					{
+						drawer.DrawGroupFrame(entry.group);
+					}
+					if (entry.pawn != null)
+					{
+						drawer.DrawColonist(rect, entry.pawn, entry.map, colonistsToHighlight.Contains(entry.pawn), reordering);
+						if (entry.pawn.HasExtraHomeFaction(null))
 						{
-							this.drawer.DrawGroupFrame(entry.group);
-						}
-						if (entry.pawn != null)
-						{
-							this.drawer.DrawColonist(rect, entry.pawn, entry.map, this.colonistsToHighlight.Contains(entry.pawn), reordering);
-							//if (entry.pawn.HasExtraHomeFaction(null))
-							//{
-							//	Faction extraHomeFaction = entry.pawn.GetExtraHomeFaction(null);
-							//	GUI.color = extraHomeFaction.Color;
-							//	float num2 = rect.width * 0.5f;
-							//	GUI.DrawTexture(new Rect(rect.xMax - num2 - 2f, rect.yMax - num2 - 2f, num2, num2), extraHomeFaction.def.FactionIcon);
-							//	GUI.color = Color.white;
-							//}
+							Faction extraHomeFaction = entry.pawn.GetExtraHomeFaction();
+							GUI.color = extraHomeFaction.Color;
+							float num2 = rect.width * 0.5f;
+							GUI.DrawTexture(new Rect(rect.xMax - num2 - 2f, rect.yMax - num2 - 2f, num2, num2), extraHomeFaction.def.FactionIcon);
+							GUI.color = Color.white;
 						}
 					}
 				}
 				num = -1;
 				if (showGroupFrames)
 				{
-					for (int j = 0; j < this.cachedDrawLocs.Count; j++)
+					for (int j = 0; j < cachedDrawLocs.Count; j++)
 					{
-						ColonistBar.Entry entry2 = entries[j];
-						bool flag2 = num != entry2.group;
+						Entry entry2 = entries[j];
+						bool num3 = num != entry2.group;
 						num = entry2.group;
-						if (flag2)
+						if (num3)
 						{
-							this.drawer.HandleGroupFrameClicks(entry2.group);
+							drawer.HandleGroupFrameClicks(entry2.group);
 						}
 					}
 				}
 			}
 			if (Event.current.type == EventType.Repaint)
 			{
-				this.colonistsToHighlight.Clear();
+				colonistsToHighlight.Clear();
 			}
 		}
 

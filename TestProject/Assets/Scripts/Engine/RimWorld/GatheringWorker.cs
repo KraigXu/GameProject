@@ -1,76 +1,66 @@
-﻿using System;
+﻿using RimWorld;
 using Verse;
 using Verse.AI.Group;
 
-namespace RimWorld
+public abstract class GatheringWorker
 {
-	
-	public abstract class GatheringWorker
+	public GatheringDef def;
+
+	public virtual bool CanExecute(Map map, Pawn organizer = null)
 	{
-		
-		public virtual bool CanExecute(Map map, Pawn organizer = null)
+		if (organizer == null)
 		{
-			if (organizer == null)
-			{
-				organizer = this.FindOrganizer(map);
-			}
-			IntVec3 intVec;
-			return organizer != null && this.TryFindGatherSpot(organizer, out intVec) && GatheringsUtility.PawnCanStartOrContinueGathering(organizer);
+			organizer = FindOrganizer(map);
 		}
-
-		
-		public virtual bool TryExecute(Map map, Pawn organizer = null)
+		if (organizer == null)
 		{
-			if (organizer == null)
-			{
-				organizer = this.FindOrganizer(map);
-			}
-			if (organizer == null)
-			{
-				return false;
-			}
-			IntVec3 spot;
-			if (!this.TryFindGatherSpot(organizer, out spot))
-			{
-				return false;
-			}
-			LordJob lordJob = this.CreateLordJob(spot, organizer);
-			Faction faction = organizer.Faction;
-			LordJob lordJob2 = lordJob;
-			Map map2 = organizer.Map;
-			//object startingPawns;
-			//if (!lordJob.OrganizerIsStartingPawn)
-			//{
-			//	startingPawns = null;
-			//}
-			//else
-			//{
-			//	(startingPawns = new Pawn[1])[0] = organizer;
-			//}
-			//LordMaker.MakeNewLord(faction, lordJob2, map2, startingPawns);
-			this.SendLetter(spot, organizer);
-			return true;
+			return false;
 		}
-
-		
-		protected virtual void SendLetter(IntVec3 spot, Pawn organizer)
+		if (!TryFindGatherSpot(organizer, out IntVec3 _))
 		{
-			Find.LetterStack.ReceiveLetter(this.def.letterTitle, this.def.letterText.Formatted(organizer.Named("ORGANIZER")), LetterDefOf.PositiveEvent, new TargetInfo(spot, organizer.Map, false), null, null, null, null);
+			return false;
 		}
-
-		
-		protected virtual Pawn FindOrganizer(Map map)
+		if (!GatheringsUtility.PawnCanStartOrContinueGathering(organizer))
 		{
-			return GatheringsUtility.FindRandomGatheringOrganizer(Faction.OfPlayer, map, this.def);
+			return false;
 		}
-
-		
-		protected abstract bool TryFindGatherSpot(Pawn organizer, out IntVec3 spot);
-
-		
-		protected abstract LordJob CreateLordJob(IntVec3 spot, Pawn organizer);
-
-		
-		public GatheringDef def;
+		return true;
 	}
+
+	public virtual bool TryExecute(Map map, Pawn organizer = null)
+	{
+		if (organizer == null)
+		{
+			organizer = FindOrganizer(map);
+		}
+		if (organizer == null)
+		{
+			return false;
+		}
+		if (!TryFindGatherSpot(organizer, out IntVec3 spot))
+		{
+			return false;
+		}
+		LordJob lordJob = CreateLordJob(spot, organizer);
+		LordMaker.MakeNewLord(organizer.Faction, lordJob, organizer.Map, (!lordJob.OrganizerIsStartingPawn) ? null : new Pawn[1]
+		{
+			organizer
+		});
+		SendLetter(spot, organizer);
+		return true;
+	}
+
+	protected virtual void SendLetter(IntVec3 spot, Pawn organizer)
+	{
+		Find.LetterStack.ReceiveLetter(def.letterTitle, def.letterText.Formatted(organizer.Named("ORGANIZER")), LetterDefOf.PositiveEvent, new TargetInfo(spot, organizer.Map));
+	}
+
+	protected virtual Pawn FindOrganizer(Map map)
+	{
+		return GatheringsUtility.FindRandomGatheringOrganizer(Faction.OfPlayer, map, def);
+	}
+
+	protected abstract bool TryFindGatherSpot(Pawn organizer, out IntVec3 spot);
+
+	protected abstract LordJob CreateLordJob(IntVec3 spot, Pawn organizer);
 }

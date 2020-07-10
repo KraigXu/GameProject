@@ -1,489 +1,440 @@
-﻿using System;
-using System.Collections;
+﻿using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Xml;
-using RimWorld.Planet;
+using Verse;
 
-namespace Verse
+public static class Scribe_Collections
 {
+	public static void Look<T>(ref List<T> list, string label, LookMode lookMode = LookMode.Undefined, params object[] ctorArgs)
+	{
+		Look(ref list, saveDestroyedThings: false, label, lookMode, ctorArgs);
+	}
 
-    public static class Scribe_Collections
-    {
+	public static void Look<T>(ref List<T> list, bool saveDestroyedThings, string label, LookMode lookMode = LookMode.Undefined, params object[] ctorArgs)
+	{
+		if (lookMode == LookMode.Undefined && !Scribe_Universal.TryResolveLookMode(typeof(T), out lookMode))
+		{
+			Log.Error("LookList call with a list of " + typeof(T) + " must have lookMode set explicitly.");
+		}
+		else if (Scribe.EnterNode(label))
+		{
+			try
+			{
+				if (Scribe.mode == LoadSaveMode.Saving)
+				{
+					if (list == null)
+					{
+						Scribe.saver.WriteAttribute("IsNull", "True");
+					}
+					else
+					{
+						foreach (T item8 in list)
+						{
+							switch (lookMode)
+							{
+								case LookMode.Value:
+									{
+										T value5 = item8;
+										Scribe_Values.Look(ref value5, "li", default(T), forceSave: true);
+										break;
+									}
+								case LookMode.LocalTargetInfo:
+									{
+										LocalTargetInfo value4 = (LocalTargetInfo)(object)item8;
+										Scribe_TargetInfo.Look(ref value4, saveDestroyedThings, "li");
+										break;
+									}
+								case LookMode.TargetInfo:
+									{
+										TargetInfo value3 = (TargetInfo)(object)item8;
+										Scribe_TargetInfo.Look(ref value3, saveDestroyedThings, "li");
+										break;
+									}
+								case LookMode.GlobalTargetInfo:
+									{
+										GlobalTargetInfo value2 = (GlobalTargetInfo)(object)item8;
+										Scribe_TargetInfo.Look(ref value2, saveDestroyedThings, "li");
+										break;
+									}
+								case LookMode.Def:
+									{
+										Def value = (Def)(object)item8;
+										Scribe_Defs.Look(ref value, "li");
+										break;
+									}
+								case LookMode.BodyPart:
+									{
+										BodyPartRecord part = (BodyPartRecord)(object)item8;
+										Scribe_BodyParts.Look(ref part, "li");
+										break;
+									}
+								case LookMode.Deep:
+									{
+										T target = item8;
+										Scribe_Deep.Look(ref target, saveDestroyedThings, "li", ctorArgs);
+										break;
+									}
+								case LookMode.Reference:
+									{
+										ILoadReferenceable refee = (ILoadReferenceable)(object)item8;
+										Scribe_References.Look(ref refee, "li", saveDestroyedThings);
+										break;
+									}
+							}
+						}
+					}
+				}
+				else if (Scribe.mode == LoadSaveMode.LoadingVars)
+				{
+					XmlNode curXmlParent = Scribe.loader.curXmlParent;
+					XmlAttribute xmlAttribute = curXmlParent.Attributes["IsNull"];
+					if (xmlAttribute != null && xmlAttribute.Value.ToLower() == "true")
+					{
+						if (lookMode == LookMode.Reference)
+						{
+							Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(null, null);
+						}
+						list = null;
+					}
+					else
+					{
+						switch (lookMode)
+						{
+							case LookMode.Value:
+								list = new List<T>(curXmlParent.ChildNodes.Count);
+								foreach (XmlNode childNode in curXmlParent.ChildNodes)
+								{
+									T item = ScribeExtractor.ValueFromNode(childNode, default(T));
+									list.Add(item);
+								}
+								break;
+							case LookMode.Deep:
+								list = new List<T>(curXmlParent.ChildNodes.Count);
+								foreach (XmlNode childNode2 in curXmlParent.ChildNodes)
+								{
+									T item7 = ScribeExtractor.SaveableFromNode<T>(childNode2, ctorArgs);
+									list.Add(item7);
+								}
+								break;
+							case LookMode.Def:
+								list = new List<T>(curXmlParent.ChildNodes.Count);
+								foreach (XmlNode childNode3 in curXmlParent.ChildNodes)
+								{
+									T item6 = ScribeExtractor.DefFromNodeUnsafe<T>(childNode3);
+									list.Add(item6);
+								}
+								break;
+							case LookMode.BodyPart:
+								{
+									list = new List<T>(curXmlParent.ChildNodes.Count);
+									int num4 = 0;
+									foreach (XmlNode childNode4 in curXmlParent.ChildNodes)
+									{
+										T item5 = (T)(object)ScribeExtractor.BodyPartFromNode(childNode4, num4.ToString(), null);
+										list.Add(item5);
+										num4++;
+									}
+									break;
+								}
+							case LookMode.LocalTargetInfo:
+								{
+									list = new List<T>(curXmlParent.ChildNodes.Count);
+									int num3 = 0;
+									foreach (XmlNode childNode5 in curXmlParent.ChildNodes)
+									{
+										T item4 = (T)(object)ScribeExtractor.LocalTargetInfoFromNode(childNode5, num3.ToString(), LocalTargetInfo.Invalid);
+										list.Add(item4);
+										num3++;
+									}
+									break;
+								}
+							case LookMode.TargetInfo:
+								{
+									list = new List<T>(curXmlParent.ChildNodes.Count);
+									int num2 = 0;
+									foreach (XmlNode childNode6 in curXmlParent.ChildNodes)
+									{
+										T item3 = (T)(object)ScribeExtractor.TargetInfoFromNode(childNode6, num2.ToString(), TargetInfo.Invalid);
+										list.Add(item3);
+										num2++;
+									}
+									break;
+								}
+							case LookMode.GlobalTargetInfo:
+								{
+									list = new List<T>(curXmlParent.ChildNodes.Count);
+									int num = 0;
+									foreach (XmlNode childNode7 in curXmlParent.ChildNodes)
+									{
+										T item2 = (T)(object)ScribeExtractor.GlobalTargetInfoFromNode(childNode7, num.ToString(), GlobalTargetInfo.Invalid);
+										list.Add(item2);
+										num++;
+									}
+									break;
+								}
+							case LookMode.Reference:
+								{
+									List<string> list2 = new List<string>(curXmlParent.ChildNodes.Count);
+									foreach (XmlNode childNode8 in curXmlParent.ChildNodes)
+									{
+										list2.Add(childNode8.InnerText);
+									}
+									Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(list2, "");
+									break;
+								}
+						}
+					}
+				}
+				else if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
+				{
+					switch (lookMode)
+					{
+						case LookMode.Reference:
+							list = Scribe.loader.crossRefs.TakeResolvedRefList<T>("");
+							break;
+						case LookMode.LocalTargetInfo:
+							if (list != null)
+							{
+								for (int j = 0; j < list.Count; j++)
+								{
+									list[j] = (T)(object)ScribeExtractor.ResolveLocalTargetInfo((LocalTargetInfo)(object)list[j], j.ToString());
+								}
+							}
+							break;
+						case LookMode.TargetInfo:
+							if (list != null)
+							{
+								for (int k = 0; k < list.Count; k++)
+								{
+									list[k] = (T)(object)ScribeExtractor.ResolveTargetInfo((TargetInfo)(object)list[k], k.ToString());
+								}
+							}
+							break;
+						case LookMode.GlobalTargetInfo:
+							if (list != null)
+							{
+								for (int i = 0; i < list.Count; i++)
+								{
+									list[i] = (T)(object)ScribeExtractor.ResolveGlobalTargetInfo((GlobalTargetInfo)(object)list[i], i.ToString());
+								}
+							}
+							break;
+					}
+				}
+			}
+			finally
+			{
+				Scribe.ExitNode();
+			}
+		}
+		else if (Scribe.mode == LoadSaveMode.LoadingVars)
+		{
+			if (lookMode == LookMode.Reference)
+			{
+				Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(null, label);
+			}
+			list = null;
+		}
+	}
 
-        public static void Look<T>(ref List<T> list, string label, LookMode lookMode = LookMode.Undefined, params object[] ctorArgs)
-        {
-            Scribe_Collections.Look<T>(ref list, false, label, lookMode, ctorArgs);
-        }
+	public static void Look<K, V>(ref Dictionary<K, V> dict, string label, LookMode keyLookMode = LookMode.Undefined, LookMode valueLookMode = LookMode.Undefined)
+	{
+		if (Scribe.mode == LoadSaveMode.LoadingVars)
+		{
+			bool num = keyLookMode == LookMode.Reference;
+			bool flag = valueLookMode == LookMode.Reference;
+			if (num != flag)
+			{
+				Log.Error("You need to provide working lists for the keys and values in order to be able to load such dictionary. label=" + label);
+			}
+		}
+		List<K> keysWorkingList = null;
+		List<V> valuesWorkingList = null;
+		Look(ref dict, label, keyLookMode, valueLookMode, ref keysWorkingList, ref valuesWorkingList);
+	}
 
+	public static void Look<K, V>(ref Dictionary<K, V> dict, string label, LookMode keyLookMode, LookMode valueLookMode, ref List<K> keysWorkingList, ref List<V> valuesWorkingList)
+	{
+		if (Scribe.EnterNode(label))
+		{
+			try
+			{
+				if (Scribe.mode == LoadSaveMode.Saving && dict == null)
+				{
+					Scribe.saver.WriteAttribute("IsNull", "True");
+				}
+				else
+				{
+					if (Scribe.mode == LoadSaveMode.LoadingVars)
+					{
+						XmlAttribute xmlAttribute = Scribe.loader.curXmlParent.Attributes["IsNull"];
+						if (xmlAttribute != null && xmlAttribute.Value.ToLower() == "true")
+						{
+							dict = null;
+						}
+						else
+						{
+							dict = new Dictionary<K, V>();
+						}
+					}
+					if (Scribe.mode == LoadSaveMode.Saving || Scribe.mode == LoadSaveMode.LoadingVars)
+					{
+						keysWorkingList = new List<K>();
+						valuesWorkingList = new List<V>();
+						if (Scribe.mode == LoadSaveMode.Saving && dict != null)
+						{
+							foreach (KeyValuePair<K, V> item in dict)
+							{
+								keysWorkingList.Add(item.Key);
+								valuesWorkingList.Add(item.Value);
+							}
+						}
+					}
+					if (Scribe.mode == LoadSaveMode.Saving || dict != null)
+					{
+						Look(ref keysWorkingList, "keys", keyLookMode);
+						Look(ref valuesWorkingList, "values", valueLookMode);
+					}
+					if (Scribe.mode == LoadSaveMode.Saving)
+					{
+						if (keysWorkingList != null)
+						{
+							keysWorkingList.Clear();
+							keysWorkingList = null;
+						}
+						if (valuesWorkingList != null)
+						{
+							valuesWorkingList.Clear();
+							valuesWorkingList = null;
+						}
+					}
+					bool flag = keyLookMode == LookMode.Reference || valueLookMode == LookMode.Reference;
+					if (((flag && Scribe.mode == LoadSaveMode.ResolvingCrossRefs) || (!flag && Scribe.mode == LoadSaveMode.LoadingVars)) && dict != null)
+					{
+						if (keysWorkingList == null)
+						{
+							Log.Error("Cannot fill dictionary because there are no keys. label=" + label);
+						}
+						else if (valuesWorkingList == null)
+						{
+							Log.Error("Cannot fill dictionary because there are no values. label=" + label);
+						}
+						else
+						{
+							if (keysWorkingList.Count != valuesWorkingList.Count)
+							{
+								Log.Error("Keys count does not match the values count while loading a dictionary (maybe keys and values were resolved during different passes?). Some elements will be skipped. keys=" + keysWorkingList.Count + ", values=" + valuesWorkingList.Count + ", label=" + label);
+							}
+							int num = Math.Min(keysWorkingList.Count, valuesWorkingList.Count);
+							for (int i = 0; i < num; i++)
+							{
+								if (keysWorkingList[i] == null)
+								{
+									Log.Error("Null key while loading dictionary of " + typeof(K) + " and " + typeof(V) + ". label=" + label);
+								}
+								else
+								{
+									try
+									{
+										dict.Add(keysWorkingList[i], valuesWorkingList[i]);
+									}
+									catch (OutOfMemoryException)
+									{
+										throw;
+									}
+									catch (Exception ex2)
+									{
+										Log.Error("Exception in LookDictionary(label=" + label + "): " + ex2);
+									}
+								}
+							}
+						}
+					}
+					if (Scribe.mode == LoadSaveMode.PostLoadInit)
+					{
+						if (keysWorkingList != null)
+						{
+							keysWorkingList.Clear();
+							keysWorkingList = null;
+						}
+						if (valuesWorkingList != null)
+						{
+							valuesWorkingList.Clear();
+							valuesWorkingList = null;
+						}
+					}
+				}
+			}
+			finally
+			{
+				Scribe.ExitNode();
+			}
+		}
+		else if (Scribe.mode == LoadSaveMode.LoadingVars)
+		{
+			dict = null;
+		}
+	}
 
-        public static void Look<T>(ref List<T> list, bool saveDestroyedThings, string label, LookMode lookMode = LookMode.Undefined, params object[] ctorArgs)
-        {
-            if (lookMode == LookMode.Undefined && !Scribe_Universal.TryResolveLookMode(typeof(T), out lookMode, false, false))
-            {
-                Log.Error("LookList call with a list of " + typeof(T) + " must have lookMode set explicitly.", false);
-                return;
-            }
-            if (Scribe.EnterNode(label))
-            {
-                try
-                {
-                    if (Scribe.mode == LoadSaveMode.Saving)
-                    {
-                        if (list == null)
-                        {
-                            Scribe.saver.WriteAttribute("IsNull", "True");
-                            return;
-                        }
-                        List<T>.Enumerator enumerator = list.GetEnumerator();
-                        {
-                            while (enumerator.MoveNext())
-                            {
-                                T t = enumerator.Current;
-                                if (lookMode == LookMode.Value)
-                                {
-                                    T t2 = t;
-                                    Scribe_Values.Look<T>(ref t2, "li", default(T), true);
-                                }
-                                else if (lookMode == LookMode.LocalTargetInfo)
-                                {
-                                    LocalTargetInfo localTargetInfo = (LocalTargetInfo)((object)t);
-                                    Scribe_TargetInfo.Look(ref localTargetInfo, saveDestroyedThings, "li");
-                                }
-                                else if (lookMode == LookMode.TargetInfo)
-                                {
-                                    TargetInfo targetInfo = (TargetInfo)((object)t);
-                                    Scribe_TargetInfo.Look(ref targetInfo, saveDestroyedThings, "li");
-                                }
-                                else if (lookMode == LookMode.GlobalTargetInfo)
-                                {
-                                    GlobalTargetInfo globalTargetInfo = (GlobalTargetInfo)((object)t);
-                                    Scribe_TargetInfo.Look(ref globalTargetInfo, saveDestroyedThings, "li");
-                                }
-                                else if (lookMode == LookMode.Def)
-                                {
-                                    Def def = (Def)((object)t);
-                                    Scribe_Defs.Look<Def>(ref def, "li");
-                                }
-                                else if (lookMode == LookMode.BodyPart)
-                                {
-                                    BodyPartRecord bodyPartRecord = (BodyPartRecord)((object)t);
-                                    Scribe_BodyParts.Look(ref bodyPartRecord, "li", null);
-                                }
-                                else if (lookMode == LookMode.Deep)
-                                {
-                                    T t3 = t;
-                                    Scribe_Deep.Look<T>(ref t3, saveDestroyedThings, "li", ctorArgs);
-                                }
-                                else if (lookMode == LookMode.Reference)
-                                {
-                                    ILoadReferenceable loadReferenceable = (ILoadReferenceable)((object)t);
-                                    Scribe_References.Look<ILoadReferenceable>(ref loadReferenceable, "li", saveDestroyedThings);
-                                }
-                            }
-                            return;
-                        }
-                    }
-                    if (Scribe.mode == LoadSaveMode.LoadingVars)
-                    {
-                        XmlNode curXmlParent = Scribe.loader.curXmlParent;
-                        XmlAttribute xmlAttribute = curXmlParent.Attributes["IsNull"];
-                        if (xmlAttribute != null && xmlAttribute.Value.ToLower() == "true")
-                        {
-                            if (lookMode == LookMode.Reference)
-                            {
-                                Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(null, null);
-                            }
-                            list = null;
-                        }
-                        else
-                        {
-                            if (lookMode == LookMode.Value)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                {
-                                    while (enumerator2.MoveNext())
-                                    {
-                                        object obj = enumerator2.Current;
-                                        T item = ScribeExtractor.ValueFromNode<T>((XmlNode)obj, default(T));
-                                        list.Add(item);
-                                    }
-                                    return;
-                                }
-                            }
-                            if (lookMode == LookMode.Deep)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                {
-                                    while (enumerator2.MoveNext())
-                                    {
-                                        object obj2 = enumerator2.Current;
-                                        T item2 = ScribeExtractor.SaveableFromNode<T>((XmlNode)obj2, ctorArgs);
-                                        list.Add(item2);
-                                    }
-                                    return;
-                                }
-                            }
-                            if (lookMode == LookMode.Def)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                {
-                                    while (enumerator2.MoveNext())
-                                    {
-                                        object obj3 = enumerator2.Current;
-                                        T item3 = ScribeExtractor.DefFromNodeUnsafe<T>((XmlNode)obj3);
-                                        list.Add(item3);
-                                    }
-                                    return;
-                                }
-                            }
-                            if (lookMode == LookMode.BodyPart)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                int num = 0;
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
+	public static void Look<T>(ref HashSet<T> valueHashSet, string label, LookMode lookMode = LookMode.Undefined)
+	{
+		Look(ref valueHashSet, saveDestroyedThings: false, label, lookMode);
+	}
 
-                                while (enumerator2.MoveNext())
-                                {
-                                    object obj4 = enumerator2.Current;
-                                    T item4 = (T)((object)ScribeExtractor.BodyPartFromNode((XmlNode)obj4, num.ToString(), null));
-                                    list.Add(item4);
-                                    num++;
-                                }
+	public static void Look<T>(ref HashSet<T> valueHashSet, bool saveDestroyedThings, string label, LookMode lookMode = LookMode.Undefined)
+	{
+		List<T> list = null;
+		if (Scribe.mode == LoadSaveMode.Saving && valueHashSet != null)
+		{
+			list = new List<T>();
+			foreach (T item in valueHashSet)
+			{
+				list.Add(item);
+			}
+		}
+		Look(ref list, saveDestroyedThings, label, lookMode);
+		if ((lookMode != LookMode.Reference || Scribe.mode != LoadSaveMode.ResolvingCrossRefs) && (lookMode == LookMode.Reference || Scribe.mode != LoadSaveMode.LoadingVars))
+		{
+			return;
+		}
+		if (list == null)
+		{
+			valueHashSet = null;
+			return;
+		}
+		valueHashSet = new HashSet<T>();
+		for (int i = 0; i < list.Count; i++)
+		{
+			valueHashSet.Add(list[i]);
+		}
+	}
 
-                            }
-                            if (lookMode == LookMode.LocalTargetInfo)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                int num2 = 0;
-                                //IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                //{
-                                //	while (enumerator2.MoveNext())
-                                //	{
-                                //		object obj5 = enumerator2.Current;
-                                //		T item5 = (T)((object)ScribeExtractor.LocalTargetInfoFromNode((XmlNode)obj5, num2.ToString(), LocalTargetInfo.Invalid));
-                                //		list.Add(item5);
-                                //		num2++;
-                                //	}
-                                //	return;
-                                //}
-                            }
-                            if (lookMode == LookMode.TargetInfo)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                int num3 = 0;
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                {
-                                    while (enumerator2.MoveNext())
-                                    {
-                                        object obj6 = enumerator2.Current;
-                                        T item6 = (T)((object)ScribeExtractor.TargetInfoFromNode((XmlNode)obj6, num3.ToString(), TargetInfo.Invalid));
-                                        list.Add(item6);
-                                        num3++;
-                                    }
-                                    return;
-                                }
-                            }
-                            if (lookMode == LookMode.GlobalTargetInfo)
-                            {
-                                list = new List<T>(curXmlParent.ChildNodes.Count);
-                                int num4 = 0;
-                                IEnumerator enumerator2 = curXmlParent.ChildNodes.GetEnumerator();
-                                while (enumerator2.MoveNext())
-                                {
-                                    object obj7 = enumerator2.Current;
-                                    T item7 = (T)((object)ScribeExtractor.GlobalTargetInfoFromNode((XmlNode)obj7, num4.ToString(), GlobalTargetInfo.Invalid));
-                                    list.Add(item7);
-                                    num4++;
-                                }
-                            }
-                            if (lookMode == LookMode.Reference)
-                            {
-                                List<string> list2 = new List<string>(curXmlParent.ChildNodes.Count);
-                                foreach (object obj8 in curXmlParent.ChildNodes)
-                                {
-                                    XmlNode xmlNode = (XmlNode)obj8;
-                                    list2.Add(xmlNode.InnerText);
-                                }
-                                Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(list2, "");
-                            }
-                        }
-                    }
-                    else if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
-                    {
-                        if (lookMode == LookMode.Reference)
-                        {
-                            list = Scribe.loader.crossRefs.TakeResolvedRefList<T>("");
-                        }
-                        else if (lookMode == LookMode.LocalTargetInfo)
-                        {
-                            if (list != null)
-                            {
-                                for (int i = 0; i < list.Count; i++)
-                                {
-                                    list[i] = (T)((object)ScribeExtractor.ResolveLocalTargetInfo((LocalTargetInfo)((object)list[i]), i.ToString()));
-                                }
-                            }
-                        }
-                        else if (lookMode == LookMode.TargetInfo)
-                        {
-                            if (list != null)
-                            {
-                                for (int j = 0; j < list.Count; j++)
-                                {
-                                    list[j] = (T)((object)ScribeExtractor.ResolveTargetInfo((TargetInfo)((object)list[j]), j.ToString()));
-                                }
-                            }
-                        }
-                        else if (lookMode == LookMode.GlobalTargetInfo && list != null)
-                        {
-                            for (int k = 0; k < list.Count; k++)
-                            {
-                                list[k] = (T)((object)ScribeExtractor.ResolveGlobalTargetInfo((GlobalTargetInfo)((object)list[k]), k.ToString()));
-                            }
-                        }
-                    }
-                    return;
-                }
-                finally
-                {
-                    Scribe.ExitNode();
-                }
-            }
-            if (Scribe.mode == LoadSaveMode.LoadingVars)
-            {
-                if (lookMode == LookMode.Reference)
-                {
-                    Scribe.loader.crossRefs.loadIDs.RegisterLoadIDListReadFromXml(null, label);
-                }
-                list = null;
-            }
-        }
-
-
-        public static void Look<K, V>(ref Dictionary<K, V> dict, string label, LookMode keyLookMode = LookMode.Undefined, LookMode valueLookMode = LookMode.Undefined)
-        {
-            if (Scribe.mode == LoadSaveMode.LoadingVars)
-            {
-                bool flag = keyLookMode == LookMode.Reference;
-                bool flag2 = valueLookMode == LookMode.Reference;
-                if (flag != flag2)
-                {
-                    Log.Error("You need to provide working lists for the keys and values in order to be able to load such dictionary. label=" + label, false);
-                }
-            }
-            List<K> list = null;
-            List<V> list2 = null;
-            Scribe_Collections.Look<K, V>(ref dict, label, keyLookMode, valueLookMode, ref list, ref list2);
-        }
-
-
-        public static void Look<K, V>(ref Dictionary<K, V> dict, string label, LookMode keyLookMode, LookMode valueLookMode, ref List<K> keysWorkingList, ref List<V> valuesWorkingList)
-        {
-            if (Scribe.EnterNode(label))
-            {
-                try
-                {
-                    if (Scribe.mode == LoadSaveMode.Saving && dict == null)
-                    {
-                        Scribe.saver.WriteAttribute("IsNull", "True");
-                        return;
-                    }
-                    if (Scribe.mode == LoadSaveMode.LoadingVars)
-                    {
-                        XmlAttribute xmlAttribute = Scribe.loader.curXmlParent.Attributes["IsNull"];
-                        if (xmlAttribute != null && xmlAttribute.Value.ToLower() == "true")
-                        {
-                            dict = null;
-                        }
-                        else
-                        {
-                            dict = new Dictionary<K, V>();
-                        }
-                    }
-                    if (Scribe.mode == LoadSaveMode.Saving || Scribe.mode == LoadSaveMode.LoadingVars)
-                    {
-                        keysWorkingList = new List<K>();
-                        valuesWorkingList = new List<V>();
-                        if (Scribe.mode == LoadSaveMode.Saving && dict != null)
-                        {
-                            foreach (KeyValuePair<K, V> keyValuePair in dict)
-                            {
-                                keysWorkingList.Add(keyValuePair.Key);
-                                valuesWorkingList.Add(keyValuePair.Value);
-                            }
-                        }
-                    }
-                    if (Scribe.mode == LoadSaveMode.Saving || dict != null)
-                    {
-                        Scribe_Collections.Look<K>(ref keysWorkingList, "keys", keyLookMode, Array.Empty<object>());
-                        Scribe_Collections.Look<V>(ref valuesWorkingList, "values", valueLookMode, Array.Empty<object>());
-                    }
-                    if (Scribe.mode == LoadSaveMode.Saving)
-                    {
-                        if (keysWorkingList != null)
-                        {
-                            keysWorkingList.Clear();
-                            keysWorkingList = null;
-                        }
-                        if (valuesWorkingList != null)
-                        {
-                            valuesWorkingList.Clear();
-                            valuesWorkingList = null;
-                        }
-                    }
-                    bool flag = keyLookMode == LookMode.Reference || valueLookMode == LookMode.Reference;
-                    if (((flag && Scribe.mode == LoadSaveMode.ResolvingCrossRefs) || (!flag && Scribe.mode == LoadSaveMode.LoadingVars)) && dict != null)
-                    {
-                        if (keysWorkingList == null)
-                        {
-                            Log.Error("Cannot fill dictionary because there are no keys. label=" + label, false);
-                        }
-                        else if (valuesWorkingList == null)
-                        {
-                            Log.Error("Cannot fill dictionary because there are no values. label=" + label, false);
-                        }
-                        else
-                        {
-                            if (keysWorkingList.Count != valuesWorkingList.Count)
-                            {
-                                Log.Error(string.Concat(new object[]
-                                {
-                                    "Keys count does not match the values count while loading a dictionary (maybe keys and values were resolved during different passes?). Some elements will be skipped. keys=",
-                                    keysWorkingList.Count,
-                                    ", values=",
-                                    valuesWorkingList.Count,
-                                    ", label=",
-                                    label
-                                }), false);
-                            }
-                            int num = Math.Min(keysWorkingList.Count, valuesWorkingList.Count);
-                            for (int i = 0; i < num; i++)
-                            {
-                                if (keysWorkingList[i] == null)
-                                {
-                                    Log.Error(string.Concat(new object[]
-                                    {
-                                        "Null key while loading dictionary of ",
-                                        typeof(K),
-                                        " and ",
-                                        typeof(V),
-                                        ". label=",
-                                        label
-                                    }), false);
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        dict.Add(keysWorkingList[i], valuesWorkingList[i]);
-                                    }
-                                    catch (OutOfMemoryException)
-                                    {
-                                        throw;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Log.Error(string.Concat(new object[]
-                                        {
-                                            "Exception in LookDictionary(label=",
-                                            label,
-                                            "): ",
-                                            ex
-                                        }), false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (Scribe.mode == LoadSaveMode.PostLoadInit)
-                    {
-                        if (keysWorkingList != null)
-                        {
-                            keysWorkingList.Clear();
-                            keysWorkingList = null;
-                        }
-                        if (valuesWorkingList != null)
-                        {
-                            valuesWorkingList.Clear();
-                            valuesWorkingList = null;
-                        }
-                    }
-                    return;
-                }
-                finally
-                {
-                    Scribe.ExitNode();
-                }
-            }
-            if (Scribe.mode == LoadSaveMode.LoadingVars)
-            {
-                dict = null;
-            }
-        }
-
-
-        public static void Look<T>(ref HashSet<T> valueHashSet, string label, LookMode lookMode = LookMode.Undefined)
-        {
-            Scribe_Collections.Look<T>(ref valueHashSet, false, label, lookMode);
-        }
-
-
-        public static void Look<T>(ref HashSet<T> valueHashSet, bool saveDestroyedThings, string label, LookMode lookMode = LookMode.Undefined)
-        {
-            List<T> list = null;
-            if (Scribe.mode == LoadSaveMode.Saving && valueHashSet != null)
-            {
-                list = new List<T>();
-                foreach (T item in valueHashSet)
-                {
-                    list.Add(item);
-                }
-            }
-            Scribe_Collections.Look<T>(ref list, saveDestroyedThings, label, lookMode, Array.Empty<object>());
-            if ((lookMode == LookMode.Reference && Scribe.mode == LoadSaveMode.ResolvingCrossRefs) || (lookMode != LookMode.Reference && Scribe.mode == LoadSaveMode.LoadingVars))
-            {
-                if (list == null)
-                {
-                    valueHashSet = null;
-                    return;
-                }
-                valueHashSet = new HashSet<T>();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    valueHashSet.Add(list[i]);
-                }
-            }
-        }
-
-
-        public static void Look<T>(ref Stack<T> valueStack, string label, LookMode lookMode = LookMode.Undefined)
-        {
-            List<T> list = null;
-            if (Scribe.mode == LoadSaveMode.Saving && valueStack != null)
-            {
-                list = new List<T>();
-                foreach (T item in valueStack)
-                {
-                    list.Add(item);
-                }
-            }
-            Scribe_Collections.Look<T>(ref list, label, lookMode, Array.Empty<object>());
-            if ((lookMode == LookMode.Reference && Scribe.mode == LoadSaveMode.ResolvingCrossRefs) || (lookMode != LookMode.Reference && Scribe.mode == LoadSaveMode.LoadingVars))
-            {
-                if (list == null)
-                {
-                    valueStack = null;
-                    return;
-                }
-                valueStack = new Stack<T>();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    valueStack.Push(list[i]);
-                }
-            }
-        }
-    }
+	public static void Look<T>(ref Stack<T> valueStack, string label, LookMode lookMode = LookMode.Undefined)
+	{
+		List<T> list = null;
+		if (Scribe.mode == LoadSaveMode.Saving && valueStack != null)
+		{
+			list = new List<T>();
+			foreach (T item in valueStack)
+			{
+				list.Add(item);
+			}
+		}
+		Look(ref list, label, lookMode);
+		if ((lookMode != LookMode.Reference || Scribe.mode != LoadSaveMode.ResolvingCrossRefs) && (lookMode == LookMode.Reference || Scribe.mode != LoadSaveMode.LoadingVars))
+		{
+			return;
+		}
+		if (list == null)
+		{
+			valueStack = null;
+			return;
+		}
+		valueStack = new Stack<T>();
+		for (int i = 0; i < list.Count; i++)
+		{
+			valueStack.Push(list[i]);
+		}
+	}
 }

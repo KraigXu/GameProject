@@ -1,464 +1,430 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.QuestGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.QuestGen;
 using Verse;
 using Verse.AI;
 
-namespace RimWorld
+public static class FactionDialogMaker
 {
-	
-	public static class FactionDialogMaker
+	public static DiaNode FactionDialogFor(Pawn negotiator, Faction faction)
 	{
-		
-		public static DiaNode FactionDialogFor(Pawn negotiator, Faction faction)
+		Map map = negotiator.Map;
+		Pawn pawn;
+		string value;
+		if (faction.leader != null)
 		{
-			//FactionDialogMaker.c__DisplayClass0_0 c__DisplayClass0_;
-			//c__DisplayClass0_.negotiator = negotiator;
-			//Map map = c__DisplayClass0_.negotiator.Map;
-			//Pawn pawn;
-			//string value;
-			//if (faction.leader != null)
-			//{
-			//	pawn = faction.leader;
-			//	value = faction.leader.Name.ToStringFull.Colorize(ColoredText.NameColor);
-			//}
-			//else
-			//{
-			//	Log.Error("Faction " + faction + " has no leader.", false);
-			//	pawn = c__DisplayClass0_.negotiator;
-			//	value = faction.Name;
-			//}
-			//if (faction.PlayerRelationKind == FactionRelationKind.Hostile)
-			//{
-			//	string key;
-			//	if (!faction.def.permanentEnemy && "FactionGreetingHostileAppreciative".CanTranslate())
-			//	{
-			//		key = "FactionGreetingHostileAppreciative";
-			//	}
-			//	else
-			//	{
-			//		key = "FactionGreetingHostile";
-			//	}
-			//	c__DisplayClass0_.root = new DiaNode(key.Translate(value).AdjustedFor(pawn, "PAWN", true));
-			//}
-			//else if (faction.PlayerRelationKind == FactionRelationKind.Neutral)
-			//{
-			//	c__DisplayClass0_.root = new DiaNode("FactionGreetingWary".Translate(value, c__DisplayClass0_.negotiator.LabelShort, c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
-			//}
-			//else
-			//{
-			//	c__DisplayClass0_.root = new DiaNode("FactionGreetingWarm".Translate(value, c__DisplayClass0_.negotiator.LabelShort, c__DisplayClass0_.negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn, "PAWN", true));
-			//}
-			//if (map != null && map.IsPlayerHome)
-			//{
-			//	FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestTraderOption(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
-			//	FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestMilitaryAidOption(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
-			//	Pawn_RoyaltyTracker royalty = c__DisplayClass0_.negotiator.royalty;
-			//	if (royalty != null && royalty.HasAnyTitleIn(faction))
-			//	{
-			//		foreach (RoyalTitle royalTitle in royalty.AllTitlesInEffectForReading)
-			//		{
-			//			if (royalTitle.def.permits != null)
-			//			{
-			//				foreach (RoyalTitlePermitDef royalTitlePermitDef in royalTitle.def.permits)
-			//				{
-			//					IEnumerable<DiaOption> factionCommDialogOptions = royalTitlePermitDef.Worker.GetFactionCommDialogOptions(map, c__DisplayClass0_.negotiator, faction);
-			//					if (factionCommDialogOptions != null)
-			//					{
-			//						foreach (DiaOption opt in factionCommDialogOptions)
-			//						{
-			//							FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt, true, ref c__DisplayClass0_);
-			//						}
-			//					}
-			//				}
-			//			}
-			//		}
-			//		if (royalty.GetCurrentTitle(faction).canBeInherited && !c__DisplayClass0_.negotiator.IsQuestLodger())
-			//		{
-			//			FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestRoyalHeirChangeOption(map, faction, pawn, c__DisplayClass0_.negotiator), false, ref c__DisplayClass0_);
-			//		}
-			//	}
-			//	if (DefDatabase<ResearchProjectDef>.AllDefsListForReading.Any((ResearchProjectDef rp) => rp.HasTag(ResearchProjectTagDefOf.ShipRelated) && rp.IsFinished))
-			//	{
-			//		FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(FactionDialogMaker.RequestAICoreQuest(map, faction, c__DisplayClass0_.negotiator), true, ref c__DisplayClass0_);
-			//	}
-			//}
-			//if (Prefs.DevMode)
-			//{
-			//	foreach (DiaOption opt2 in FactionDialogMaker.DebugOptions(faction, c__DisplayClass0_.negotiator))
-			//	{
-			//		FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(opt2, false, ref c__DisplayClass0_);
-			//	}
-			//}
-			//FactionDialogMaker.<FactionDialogFor>g__AddAndDecorateOption|0_0(new DiaOption("(" + "Disconnect".Translate() + ")")
-			//{
-			//	resolveTree = true
-			//}, false, ref c__DisplayClass0_);
-			//return c__DisplayClass0_.root;
-			return default;
+			pawn = faction.leader;
+			value = faction.leader.Name.ToStringFull.Colorize(ColoredText.NameColor);
 		}
-
-		
-		private static IEnumerable<DiaOption> DebugOptions(Faction faction, Pawn negotiator)
+		else
 		{
-			yield return new DiaOption("(Debug) Goodwill +10")
-			{
-				action = delegate
-				{
-					faction.TryAffectGoodwillWith(Faction.OfPlayer, 10, false, true, null, null);
-				},
-				linkLateBind = (() => FactionDialogMaker.FactionDialogFor(negotiator, faction))
-			};
-			yield return new DiaOption("(Debug) Goodwill -10")
-			{
-				action = delegate
-				{
-					faction.TryAffectGoodwillWith(Faction.OfPlayer, -10, false, true, null, null);
-				},
-				linkLateBind = (() => FactionDialogMaker.FactionDialogFor(negotiator, faction))
-			};
-			yield break;
+			Log.Error("Faction " + faction + " has no leader.");
+			pawn = negotiator;
+			value = faction.Name;
 		}
-
-		
-		private static int AmountSendableSilver(Map map)
+		DiaNode root;
+		if (faction.PlayerRelationKind == FactionRelationKind.Hostile)
 		{
-			return (from t in TradeUtility.AllLaunchableThingsForTrade(map, null)
-			where t.def == ThingDefOf.Silver
-			select t).Sum((Thing t) => t.stackCount);
+			string key = (faction.def.permanentEnemy || !"FactionGreetingHostileAppreciative".CanTranslate()) ? "FactionGreetingHostile" : "FactionGreetingHostileAppreciative";
+			root = new DiaNode(key.Translate(value).AdjustedFor(pawn));
 		}
-
-		
-		private static DiaOption RequestAICoreQuest(Map map, Faction faction, Pawn negotiator)
+		else if (faction.PlayerRelationKind == FactionRelationKind.Neutral)
 		{
-			TaggedString taggedString = "RequestAICoreInformation".Translate(ThingDefOf.AIPersonaCore.label, 1500.ToString());
-			if (faction.PlayerGoodwill < 40)
+			root = new DiaNode("FactionGreetingWary".Translate(value, negotiator.LabelShort, negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn));
+		}
+		else
+		{
+			root = new DiaNode("FactionGreetingWarm".Translate(value, negotiator.LabelShort, negotiator.Named("NEGOTIATOR"), pawn.Named("LEADER")).AdjustedFor(pawn));
+		}
+		if (map != null && map.IsPlayerHome)
+		{
+			AddAndDecorateOption(RequestTraderOption(map, faction, negotiator), needsSocial: true);
+			AddAndDecorateOption(RequestMilitaryAidOption(map, faction, negotiator), needsSocial: true);
+			Pawn_RoyaltyTracker royalty = negotiator.royalty;
+			if (royalty != null && royalty.HasAnyTitleIn(faction))
 			{
-				DiaOption diaOption = new DiaOption(taggedString);
-				diaOption.Disable("NeedGoodwill".Translate(40.ToString("F0")));
-				return diaOption;
-			}
-			bool flag = PlayerItemAccessibilityUtility.ItemStashHas(ThingDefOf.AIPersonaCore);
-			Slate slate = new Slate();
-			slate.Set<float>("points", StorytellerUtility.DefaultThreatPointsNow(Find.World), false);
-			slate.Set<Pawn>("asker", faction.leader, false);
-			slate.Set<ThingDef>("itemStashSingleThing", ThingDefOf.AIPersonaCore, false);
-			bool flag2 = QuestScriptDefOf.OpportunitySite_ItemStash.CanRun(slate);
-			if (flag || !flag2)
-			{
-				DiaOption diaOption2 = new DiaOption(taggedString);
-				diaOption2.Disable("NoKnownAICore".Translate(1500));
-				return diaOption2;
-			}
-			if (FactionDialogMaker.AmountSendableSilver(map) < 1500)
-			{
-				DiaOption diaOption3 = new DiaOption(taggedString);
-				diaOption3.Disable("NeedSilverLaunchable".Translate(1500));
-				return diaOption3;
-			}
-			return new DiaOption(taggedString)
-			{
-				action = delegate
+				foreach (RoyalTitle item in royalty.AllTitlesInEffectForReading)
 				{
-					QuestUtility.SendLetterQuestAvailable(QuestUtility.GenerateQuestAndMakeAvailable(QuestScriptDefOf.OpportunitySite_ItemStash, slate));
-					TradeUtility.LaunchThingsOfType(ThingDefOf.Silver, 1500, map, null);
-					Current.Game.GetComponent<GameComponent_OnetimeNotification>().sendAICoreRequestReminder = false;
-				},
-				link = new DiaNode("RequestAICoreInformationResult".Translate(faction.leader).CapitalizeFirst())
-				{
-					options = 
+					if (item.def.permits != null)
 					{
-						FactionDialogMaker.OKToRoot(faction, negotiator)
+						foreach (RoyalTitlePermitDef permit in item.def.permits)
+						{
+							IEnumerable<DiaOption> factionCommDialogOptions = permit.Worker.GetFactionCommDialogOptions(map, negotiator, faction);
+							if (factionCommDialogOptions != null)
+							{
+								foreach (DiaOption item2 in factionCommDialogOptions)
+								{
+									AddAndDecorateOption(item2, needsSocial: true);
+								}
+							}
+						}
 					}
 				}
-			};
-		}
-
-		
-		private static DiaOption RequestTraderOption(Map map, Faction faction, Pawn negotiator)
-		{
-			TaggedString taggedString = "RequestTrader".Translate(15);
-			if (faction.PlayerRelationKind != FactionRelationKind.Ally)
-			{
-				DiaOption diaOption = new DiaOption(taggedString);
-				diaOption.Disable("MustBeAlly".Translate());
-				return diaOption;
-			}
-			if (!faction.def.allowedArrivalTemperatureRange.ExpandedBy(-4f).Includes(map.mapTemperature.SeasonalTemp))
-			{
-				DiaOption diaOption2 = new DiaOption(taggedString);
-				diaOption2.Disable("BadTemperature".Translate());
-				return diaOption2;
-			}
-			int num = faction.lastTraderRequestTick + 240000 - Find.TickManager.TicksGame;
-			if (num > 0)
-			{
-				DiaOption diaOption3 = new DiaOption(taggedString);
-				diaOption3.Disable("WaitTime".Translate(num.ToStringTicksToPeriod(true, false, true, true)));
-				return diaOption3;
-			}
-			DiaOption diaOption4 = new DiaOption(taggedString);
-			DiaNode diaNode = new DiaNode("TraderSent".Translate(faction.leader).CapitalizeFirst());
-			diaNode.options.Add(FactionDialogMaker.OKToRoot(faction, negotiator));
-			DiaNode diaNode2 = new DiaNode("ChooseTraderKind".Translate(faction.leader));
-			foreach (TraderKindDef localTk2 in from x in faction.def.caravanTraderKinds
-			where x.requestable
-			select x)
-			{
-				TraderKindDef localTk = localTk2;
-				DiaOption diaOption5 = new DiaOption(localTk.LabelCap);
-				if (localTk.TitleRequiredToTrade != null && (negotiator.royalty == null || localTk.TitleRequiredToTrade.seniority > negotiator.GetCurrentTitleSeniorityIn(faction)))
+				if (royalty.GetCurrentTitle(faction).canBeInherited && !negotiator.IsQuestLodger())
 				{
-					DiaNode diaNode3 = new DiaNode("TradeCaravanRequestDeniedDueTitle".Translate(negotiator.Named("NEGOTIATOR"), localTk.TitleRequiredToTrade.GetLabelCapFor(negotiator).Named("TITLE"), faction.Named("FACTION")));
-					DiaOption diaOption6 = new DiaOption("GoBack".Translate());
-					diaNode3.options.Add(diaOption6);
-					diaOption5.link = diaNode3;
-					diaOption6.link = diaNode2;
+					AddAndDecorateOption(RequestRoyalHeirChangeOption(map, faction, pawn, negotiator), needsSocial: false);
 				}
-				else
-				{
-					diaOption5.action = delegate
-					{
-						IncidentParms incidentParms = new IncidentParms();
-						incidentParms.target = map;
-						incidentParms.faction = faction;
-						incidentParms.traderKind = localTk;
-						incidentParms.forced = true;
-						Find.Storyteller.incidentQueue.Add(IncidentDefOf.TraderCaravanArrival, Find.TickManager.TicksGame + 120000, incidentParms, 240000);
-						faction.lastTraderRequestTick = Find.TickManager.TicksGame;
-						faction.TryAffectGoodwillWith(Faction.OfPlayer, -15, false, true, "GoodwillChangedReason_RequestedTrader".Translate(), null);
-					};
-					diaOption5.link = diaNode;
-				}
-				diaNode2.options.Add(diaOption5);
 			}
-			DiaOption diaOption7 = new DiaOption("GoBack".Translate());
-			diaOption7.linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator);
-			diaNode2.options.Add(diaOption7);
-			diaOption4.link = diaNode2;
-			return diaOption4;
+			if (DefDatabase<ResearchProjectDef>.AllDefsListForReading.Any((ResearchProjectDef rp) => rp.HasTag(ResearchProjectTagDefOf.ShipRelated) && rp.IsFinished))
+			{
+				AddAndDecorateOption(RequestAICoreQuest(map, faction, negotiator), needsSocial: true);
+			}
 		}
-
-		
-		private static DiaOption RequestMilitaryAidOption(Map map, Faction faction, Pawn negotiator)
+		if (Prefs.DevMode)
 		{
-			string text = "RequestMilitaryAid".Translate(25);
-			if (faction.PlayerRelationKind != FactionRelationKind.Ally)
+			foreach (DiaOption item3 in DebugOptions(faction, negotiator))
 			{
-				DiaOption diaOption = new DiaOption(text);
-				diaOption.Disable("MustBeAlly".Translate());
-				return diaOption;
+				AddAndDecorateOption(item3, needsSocial: false);
 			}
-			if (!faction.def.allowedArrivalTemperatureRange.ExpandedBy(-4f).Includes(map.mapTemperature.SeasonalTemp))
+		}
+		AddAndDecorateOption(new DiaOption("(" + "Disconnect".Translate() + ")")
+		{
+			resolveTree = true
+		}, needsSocial: false);
+		return root;
+		void AddAndDecorateOption(DiaOption opt, bool needsSocial)
+		{
+			if (needsSocial && negotiator.skills.GetSkill(SkillDefOf.Social).TotallyDisabled)
 			{
-				DiaOption diaOption2 = new DiaOption(text);
-				diaOption2.Disable("BadTemperature".Translate());
-				return diaOption2;
+				opt.Disable("WorkTypeDisablesOption".Translate(SkillDefOf.Social.label));
 			}
-			int num = faction.lastMilitaryAidRequestTick + 60000 - Find.TickManager.TicksGame;
-			if (num > 0)
+			root.options.Add(opt);
+		}
+	}
+
+	private static IEnumerable<DiaOption> DebugOptions(Faction faction, Pawn negotiator)
+	{
+		DiaOption diaOption = new DiaOption("(Debug) Goodwill +10");
+		diaOption.action = delegate
+		{
+			faction.TryAffectGoodwillWith(Faction.OfPlayer, 10, canSendMessage: false);
+		};
+		diaOption.linkLateBind = (() => FactionDialogFor(negotiator, faction));
+		yield return diaOption;
+		DiaOption diaOption2 = new DiaOption("(Debug) Goodwill -10");
+		diaOption2.action = delegate
+		{
+			faction.TryAffectGoodwillWith(Faction.OfPlayer, -10, canSendMessage: false);
+		};
+		diaOption2.linkLateBind = (() => FactionDialogFor(negotiator, faction));
+		yield return diaOption2;
+	}
+
+	private static int AmountSendableSilver(Map map)
+	{
+		return (from t in TradeUtility.AllLaunchableThingsForTrade(map)
+				where t.def == ThingDefOf.Silver
+				select t).Sum((Thing t) => t.stackCount);
+	}
+
+	private static DiaOption RequestAICoreQuest(Map map, Faction faction, Pawn negotiator)
+	{
+		TaggedString taggedString = "RequestAICoreInformation".Translate(ThingDefOf.AIPersonaCore.label, 1500.ToString());
+		if (faction.PlayerGoodwill < 40)
+		{
+			DiaOption diaOption = new DiaOption(taggedString);
+			diaOption.Disable("NeedGoodwill".Translate(40.ToString("F0")));
+			return diaOption;
+		}
+		bool num = PlayerItemAccessibilityUtility.ItemStashHas(ThingDefOf.AIPersonaCore);
+		Slate slate = new Slate();
+		slate.Set("points", StorytellerUtility.DefaultThreatPointsNow(Find.World));
+		slate.Set("asker", faction.leader);
+		slate.Set("itemStashSingleThing", ThingDefOf.AIPersonaCore);
+		bool flag = QuestScriptDefOf.OpportunitySite_ItemStash.CanRun(slate);
+		if (num || !flag)
+		{
+			DiaOption diaOption2 = new DiaOption(taggedString);
+			diaOption2.Disable("NoKnownAICore".Translate(1500));
+			return diaOption2;
+		}
+		if (AmountSendableSilver(map) < 1500)
+		{
+			DiaOption diaOption3 = new DiaOption(taggedString);
+			diaOption3.Disable("NeedSilverLaunchable".Translate(1500));
+			return diaOption3;
+		}
+		return new DiaOption(taggedString)
+		{
+			action = delegate
 			{
-				DiaOption diaOption3 = new DiaOption(text);
-				diaOption3.Disable("WaitTime".Translate(num.ToStringTicksToPeriod(true, false, true, true)));
-				return diaOption3;
+				QuestUtility.SendLetterQuestAvailable(QuestUtility.GenerateQuestAndMakeAvailable(QuestScriptDefOf.OpportunitySite_ItemStash, slate));
+				TradeUtility.LaunchThingsOfType(ThingDefOf.Silver, 1500, map, null);
+				Current.Game.GetComponent<GameComponent_OnetimeNotification>().sendAICoreRequestReminder = false;
+			},
+			link = new DiaNode("RequestAICoreInformationResult".Translate(faction.leader).CapitalizeFirst())
+			{
+				options =
+				{
+					OKToRoot(faction, negotiator)
+				}
 			}
-			if (NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, faction))
+		};
+	}
+
+	private static DiaOption RequestTraderOption(Map map, Faction faction, Pawn negotiator)
+	{
+		TaggedString taggedString = "RequestTrader".Translate(15);
+		if (faction.PlayerRelationKind != FactionRelationKind.Ally)
+		{
+			DiaOption diaOption = new DiaOption(taggedString);
+			diaOption.Disable("MustBeAlly".Translate());
+			return diaOption;
+		}
+		if (!faction.def.allowedArrivalTemperatureRange.ExpandedBy(-4f).Includes(map.mapTemperature.SeasonalTemp))
+		{
+			DiaOption diaOption2 = new DiaOption(taggedString);
+			diaOption2.Disable("BadTemperature".Translate());
+			return diaOption2;
+		}
+		int num = faction.lastTraderRequestTick + 240000 - Find.TickManager.TicksGame;
+		if (num > 0)
+		{
+			DiaOption diaOption3 = new DiaOption(taggedString);
+			diaOption3.Disable("WaitTime".Translate(num.ToStringTicksToPeriod()));
+			return diaOption3;
+		}
+		DiaOption diaOption4 = new DiaOption(taggedString);
+		DiaNode diaNode = new DiaNode("TraderSent".Translate(faction.leader).CapitalizeFirst());
+		diaNode.options.Add(OKToRoot(faction, negotiator));
+		DiaNode diaNode2 = new DiaNode("ChooseTraderKind".Translate(faction.leader));
+		foreach (TraderKindDef item in faction.def.caravanTraderKinds.Where((TraderKindDef x) => x.requestable))
+		{
+			TraderKindDef localTk = item;
+			DiaOption diaOption5 = new DiaOption(localTk.LabelCap);
+			if (localTk.TitleRequiredToTrade != null && (negotiator.royalty == null || localTk.TitleRequiredToTrade.seniority > negotiator.GetCurrentTitleSeniorityIn(faction)))
 			{
-				DiaOption diaOption4 = new DiaOption(text);
-				diaOption4.Disable("HostileVisitorsPresent".Translate());
-				return diaOption4;
-			}
-			DiaOption diaOption5 = new DiaOption(text);
-			if (faction.def.techLevel < TechLevel.Industrial)
-			{
-				diaOption5.link = FactionDialogMaker.CantMakeItInTime(faction, negotiator);
+				DiaNode diaNode3 = new DiaNode("TradeCaravanRequestDeniedDueTitle".Translate(negotiator.Named("NEGOTIATOR"), localTk.TitleRequiredToTrade.GetLabelCapFor(negotiator).Named("TITLE"), faction.Named("FACTION")));
+				DiaOption diaOption6 = new DiaOption("GoBack".Translate());
+				diaNode3.options.Add(diaOption6);
+				diaOption5.link = diaNode3;
+				diaOption6.link = diaNode2;
 			}
 			else
 			{
-				IEnumerable<Faction> source = (from x in map.attackTargetsCache.TargetsHostileToColony
-				where GenHostility.IsActiveThreatToPlayer(x)
-				select ((Thing)x).Faction into x
-				where x != null && !x.HostileTo(faction)
-				select x).Distinct<Faction>();
-				if (source.Any<Faction>())
+				diaOption5.action = delegate
 				{
-					DiaNode diaNode = new DiaNode("MilitaryAidConfirmMutualEnemy".Translate(faction.Name, (from fa in source
-					select fa.Name).ToCommaList(true)));
-					DiaOption diaOption6 = new DiaOption("CallConfirm".Translate());
-					diaOption6.action = delegate
+					IncidentParms parms = new IncidentParms
 					{
-						FactionDialogMaker.CallForAid(map, faction);
+						target = map,
+						faction = faction,
+						traderKind = localTk,
+						forced = true
 					};
-					diaOption6.link = FactionDialogMaker.FightersSent(faction, negotiator);
-					DiaOption diaOption7 = new DiaOption("CallCancel".Translate());
-					diaOption7.linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator);
-					diaNode.options.Add(diaOption6);
-					diaNode.options.Add(diaOption7);
-					diaOption5.link = diaNode;
-				}
-				else
+					Find.Storyteller.incidentQueue.Add(IncidentDefOf.TraderCaravanArrival, Find.TickManager.TicksGame + 120000, parms, 240000);
+					faction.lastTraderRequestTick = Find.TickManager.TicksGame;
+					faction.TryAffectGoodwillWith(Faction.OfPlayer, -15, canSendMessage: false, canSendHostilityLetter: true, "GoodwillChangedReason_RequestedTrader".Translate());
+				};
+				diaOption5.link = diaNode;
+			}
+			diaNode2.options.Add(diaOption5);
+		}
+		DiaOption diaOption7 = new DiaOption("GoBack".Translate());
+		diaOption7.linkLateBind = ResetToRoot(faction, negotiator);
+		diaNode2.options.Add(diaOption7);
+		diaOption4.link = diaNode2;
+		return diaOption4;
+	}
+
+	private static DiaOption RequestMilitaryAidOption(Map map, Faction faction, Pawn negotiator)
+	{
+		string text = "RequestMilitaryAid".Translate(25);
+		if (faction.PlayerRelationKind != FactionRelationKind.Ally)
+		{
+			DiaOption diaOption = new DiaOption(text);
+			diaOption.Disable("MustBeAlly".Translate());
+			return diaOption;
+		}
+		if (!faction.def.allowedArrivalTemperatureRange.ExpandedBy(-4f).Includes(map.mapTemperature.SeasonalTemp))
+		{
+			DiaOption diaOption2 = new DiaOption(text);
+			diaOption2.Disable("BadTemperature".Translate());
+			return diaOption2;
+		}
+		int num = faction.lastMilitaryAidRequestTick + 60000 - Find.TickManager.TicksGame;
+		if (num > 0)
+		{
+			DiaOption diaOption3 = new DiaOption(text);
+			diaOption3.Disable("WaitTime".Translate(num.ToStringTicksToPeriod()));
+			return diaOption3;
+		}
+		if (NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, faction))
+		{
+			DiaOption diaOption4 = new DiaOption(text);
+			diaOption4.Disable("HostileVisitorsPresent".Translate());
+			return diaOption4;
+		}
+		DiaOption diaOption5 = new DiaOption(text);
+		if ((int)faction.def.techLevel < 4)
+		{
+			diaOption5.link = CantMakeItInTime(faction, negotiator);
+		}
+		else
+		{
+			IEnumerable<Faction> source = (from x in map.attackTargetsCache.TargetsHostileToColony
+										   where GenHostility.IsActiveThreatToPlayer(x)
+										   select ((Thing)x).Faction into x
+										   where x != null && !x.HostileTo(faction)
+										   select x).Distinct();
+			if (source.Any())
+			{
+				DiaNode diaNode = new DiaNode("MilitaryAidConfirmMutualEnemy".Translate(faction.Name, source.Select((Faction fa) => fa.Name).ToCommaList(useAnd: true)));
+				DiaOption diaOption6 = new DiaOption("CallConfirm".Translate());
+				diaOption6.action = delegate
 				{
-					diaOption5.action = delegate
+					CallForAid(map, faction);
+				};
+				diaOption6.link = FightersSent(faction, negotiator);
+				DiaOption diaOption7 = new DiaOption("CallCancel".Translate());
+				diaOption7.linkLateBind = ResetToRoot(faction, negotiator);
+				diaNode.options.Add(diaOption6);
+				diaNode.options.Add(diaOption7);
+				diaOption5.link = diaNode;
+			}
+			else
+			{
+				diaOption5.action = delegate
+				{
+					CallForAid(map, faction);
+				};
+				diaOption5.link = FightersSent(faction, negotiator);
+			}
+		}
+		return diaOption5;
+	}
+
+	private static DiaOption RequestRoyalHeirChangeOption(Map map, Faction faction, Pawn factionRepresentative, Pawn negotiator)
+	{
+		RoyalTitleDef currentTitle = negotiator.royalty.GetCurrentTitle(faction);
+		Pawn heir = negotiator.royalty.GetHeir(faction);
+		DiaOption diaOption = new DiaOption((heir != null) ? "RequestChangeRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE"), heir.Named("HEIR")) : "RequestSetRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE")));
+		bool num = Find.QuestManager.QuestsListForReading.Any((Quest q) => q.root == QuestScriptDefOf.ChangeRoyalHeir && q.State == QuestState.Ongoing && q.PartsListForReading.Any(delegate (QuestPart p)
+		{
+			QuestPart_ChangeHeir questPart_ChangeHeir = p as QuestPart_ChangeHeir;
+			return questPart_ChangeHeir != null && !questPart_ChangeHeir.done && questPart_ChangeHeir.holder == negotiator;
+		}));
+		diaOption.link = RoyalHeirChangeCandidates(faction, factionRepresentative, negotiator);
+		if (num)
+		{
+			diaOption.Disable("RequestChangeRoyalHeirAlreadyInProgress".Translate(negotiator.Named("PAWN")));
+		}
+		return diaOption;
+	}
+
+	public static DiaNode RoyalHeirChangeCandidates(Faction faction, Pawn factionRepresentative, Pawn negotiator)
+	{
+		DiaNode diaNode = new DiaNode("ChooseHeir".Translate(negotiator.Named("HOLDER")));
+		RoyalTitleDef title = negotiator.royalty.GetCurrentTitle(faction);
+		Pawn heir2 = negotiator.royalty.GetHeir(faction);
+		foreach (Pawn item in PawnsFinder.AllMaps_FreeColonistsAndPrisonersSpawned)
+		{
+			DiaOption diaOption = new DiaOption(item.Name.ToStringFull);
+			if (item != negotiator && item != heir2)
+			{
+				if (item.royalty != null)
+				{
+					RoyalTitleDef currentTitle = item.royalty.GetCurrentTitle(faction);
+					if (currentTitle != null && currentTitle.seniority >= title.seniority)
 					{
-						FactionDialogMaker.CallForAid(map, faction);
+						continue;
+					}
+				}
+				if (!item.IsQuestLodger())
+				{
+					Pawn heir = item;
+					Action confirmedAct = delegate
+					{
+						QuestScriptDef changeRoyalHeir = QuestScriptDefOf.ChangeRoyalHeir;
+						Slate slate = new Slate();
+						slate.Set("points", title.changeHeirQuestPoints);
+						slate.Set("asker", factionRepresentative);
+						slate.Set("titleHolder", negotiator);
+						slate.Set("titleHeir", heir);
+						slate.Set("titlePreviousHeir", negotiator.royalty.GetHeir(faction));
+						QuestUtility.SendLetterQuestAvailable(QuestUtility.GenerateQuestAndMakeAvailable(changeRoyalHeir, slate));
 					};
-					diaOption5.link = FactionDialogMaker.FightersSent(faction, negotiator);
+					diaOption.link = RoyalHeirChangeConfirm(faction, negotiator, heir2, confirmedAct);
+					diaNode.options.Add(diaOption);
 				}
 			}
-			return diaOption5;
 		}
+		DiaOption diaOption2 = new DiaOption("GoBack".Translate());
+		diaOption2.linkLateBind = ResetToRoot(faction, negotiator);
+		diaNode.options.Add(diaOption2);
+		return diaNode;
+	}
 
-		
-		private static DiaOption RequestRoyalHeirChangeOption(Map map, Faction faction, Pawn factionRepresentative, Pawn negotiator)
+	public static DiaNode RoyalHeirChangeConfirm(Faction faction, Pawn negotiator, Pawn currentHeir, Action confirmedAct)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.Append("MakeHeirConfirm".Translate(faction, negotiator.Named("HOLDER")));
+		if (currentHeir != null)
 		{
-			//RoyalTitleDef currentTitle = negotiator.royalty.GetCurrentTitle(faction);
-			//Pawn heir = negotiator.royalty.GetHeir(faction);
-			//DiaOption diaOption = new DiaOption((heir != null) ? "RequestChangeRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE"), heir.Named("HEIR")) : "RequestSetRoyalHeir".Translate(negotiator.Named("HOLDER"), currentTitle.GetLabelCapFor(negotiator).Named("TITLE")));
-
-			//bool flag = Find.QuestManager.QuestsListForReading.Any(delegate(Quest q)
-			//{
-			//	if (q.root == QuestScriptDefOf.ChangeRoyalHeir && q.State == QuestState.Ongoing)
-			//	{
-			//		List<QuestPart> partsListForReading = q.PartsListForReading;
-			//		Predicate<QuestPart> predicate;
-			//		if ((predicate=default ) == null)
-			//		{
-			//			predicate = ( delegate(QuestPart p)
-			//			{
-			//				QuestPart_ChangeHeir questPart_ChangeHeir = p as QuestPart_ChangeHeir;
-			//				return questPart_ChangeHeir != null && !questPart_ChangeHeir.done && questPart_ChangeHeir.holder == negotiator;
-			//			});
-			//		}
-			//		return partsListForReading.Any(predicate);
-			//	}
-			//	return false;
-			//});
-			//diaOption.link = FactionDialogMaker.RoyalHeirChangeCandidates(faction, factionRepresentative, negotiator);
-			//if (flag)
-			//{
-			//	diaOption.Disable("RequestChangeRoyalHeirAlreadyInProgress".Translate(negotiator.Named("PAWN")));
-			//}
-			//return diaOption;
-			return default;
+			stringBuilder.Append(" " + "MakeHeirPreviousHeirWarning".Translate(negotiator.Named("HOLDER"), currentHeir.Named("HEIR")));
 		}
-
-		
-		public static DiaNode RoyalHeirChangeCandidates(Faction faction, Pawn factionRepresentative, Pawn negotiator)
+		stringBuilder.Append(" " + "AreYouSure".Translate());
+		DiaNode diaNode = new DiaNode(stringBuilder.ToString());
+		DiaOption item = new DiaOption("Confirm".Translate())
 		{
-			DiaNode diaNode = new DiaNode("ChooseHeir".Translate(negotiator.Named("HOLDER")));
-			RoyalTitleDef title = negotiator.royalty.GetCurrentTitle(faction);
-			Pawn heir2 = negotiator.royalty.GetHeir(faction);
-			foreach (Pawn pawn in PawnsFinder.AllMaps_FreeColonistsAndPrisonersSpawned)
+			action = confirmedAct,
+			linkLateBind = ResetToRoot(faction, negotiator)
+		};
+		diaNode.options.Add(item);
+		DiaOption item2 = new DiaOption("GoBack".Translate())
+		{
+			linkLateBind = ResetToRoot(faction, negotiator)
+		};
+		diaNode.options.Add(item2);
+		return diaNode;
+	}
+
+	public static DiaNode CantMakeItInTime(Faction faction, Pawn negotiator)
+	{
+		return new DiaNode("CantSendMilitaryAidInTime".Translate(faction.leader).CapitalizeFirst())
+		{
+			options =
 			{
-				DiaOption diaOption = new DiaOption(pawn.Name.ToStringFull);
-				if (pawn != negotiator && pawn != heir2)
-				{
-					if (pawn.royalty != null)
-					{
-						RoyalTitleDef currentTitle = pawn.royalty.GetCurrentTitle(faction);
-						if (currentTitle != null && currentTitle.seniority >= title.seniority)
-						{
-							continue;
-						}
-					}
-					if (!pawn.IsQuestLodger())
-					{
-						Pawn heir = pawn;
-						Action confirmedAct = delegate
-						{
-							QuestScriptDef changeRoyalHeir = QuestScriptDefOf.ChangeRoyalHeir;
-							Slate slate = new Slate();
-							slate.Set<int>("points", title.changeHeirQuestPoints, false);
-							slate.Set<Pawn>("asker", factionRepresentative, false);
-							slate.Set<Pawn>("titleHolder", negotiator, false);
-							slate.Set<Pawn>("titleHeir", heir, false);
-							slate.Set<Pawn>("titlePreviousHeir", negotiator.royalty.GetHeir(faction), false);
-							QuestUtility.SendLetterQuestAvailable(QuestUtility.GenerateQuestAndMakeAvailable(changeRoyalHeir, slate));
-						};
-						diaOption.link = FactionDialogMaker.RoyalHeirChangeConfirm(faction, negotiator, heir2, confirmedAct);
-						diaNode.options.Add(diaOption);
-					}
-				}
+				OKToRoot(faction, negotiator)
 			}
-			DiaOption diaOption2 = new DiaOption("GoBack".Translate());
-			diaOption2.linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator);
-			diaNode.options.Add(diaOption2);
-			return diaNode;
-		}
+		};
+	}
 
-		
-		public static DiaNode RoyalHeirChangeConfirm(Faction faction, Pawn negotiator, Pawn currentHeir, Action confirmedAct)
+	public static DiaNode FightersSent(Faction faction, Pawn negotiator)
+	{
+		return new DiaNode("MilitaryAidSent".Translate(faction.leader).CapitalizeFirst())
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append("MakeHeirConfirm".Translate(faction, negotiator.Named("HOLDER")));
-			if (currentHeir != null)
+			options =
 			{
-				stringBuilder.Append(" " + "MakeHeirPreviousHeirWarning".Translate(negotiator.Named("HOLDER"), currentHeir.Named("HEIR")));
+				OKToRoot(faction, negotiator)
 			}
-			stringBuilder.Append(" " + "AreYouSure".Translate());
-			DiaNode diaNode = new DiaNode(stringBuilder.ToString());
-			DiaOption diaOption = new DiaOption("Confirm".Translate());
-			diaOption.action = confirmedAct;
-			diaOption.linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator);
-			diaNode.options.Add(diaOption);
-			DiaOption diaOption2 = new DiaOption("GoBack".Translate());
-			diaOption2.linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator);
-			diaNode.options.Add(diaOption2);
-			return diaNode;
-		}
+		};
+	}
 
-		
-		public static DiaNode CantMakeItInTime(Faction faction, Pawn negotiator)
-		{
-			return new DiaNode("CantSendMilitaryAidInTime".Translate(faction.leader).CapitalizeFirst())
-			{
-				options = 
-				{
-					FactionDialogMaker.OKToRoot(faction, negotiator)
-				}
-			};
-		}
+	private static void CallForAid(Map map, Faction faction)
+	{
+		faction.TryAffectGoodwillWith(Faction.OfPlayer, -25, canSendMessage: false, canSendHostilityLetter: true, "GoodwillChangedReason_RequestedMilitaryAid".Translate());
+		IncidentParms incidentParms = new IncidentParms();
+		incidentParms.target = map;
+		incidentParms.faction = faction;
+		incidentParms.raidArrivalModeForQuickMilitaryAid = true;
+		incidentParms.points = DiplomacyTuning.RequestedMilitaryAidPointsRange.RandomInRange;
+		faction.lastMilitaryAidRequestTick = Find.TickManager.TicksGame;
+		IncidentDefOf.RaidFriendly.Worker.TryExecute(incidentParms);
+	}
 
-		
-		public static DiaNode FightersSent(Faction faction, Pawn negotiator)
+	private static DiaOption OKToRoot(Faction faction, Pawn negotiator)
+	{
+		return new DiaOption("OK".Translate())
 		{
-			return new DiaNode("MilitaryAidSent".Translate(faction.leader).CapitalizeFirst())
-			{
-				options = 
-				{
-					FactionDialogMaker.OKToRoot(faction, negotiator)
-				}
-			};
-		}
+			linkLateBind = ResetToRoot(faction, negotiator)
+		};
+	}
 
-		
-		private static void CallForAid(Map map, Faction faction)
-		{
-			faction.TryAffectGoodwillWith(Faction.OfPlayer, -25, false, true, "GoodwillChangedReason_RequestedMilitaryAid".Translate(), null);
-			IncidentParms incidentParms = new IncidentParms();
-			incidentParms.target = map;
-			incidentParms.faction = faction;
-			incidentParms.raidArrivalModeForQuickMilitaryAid = true;
-			incidentParms.points = DiplomacyTuning.RequestedMilitaryAidPointsRange.RandomInRange;
-			faction.lastMilitaryAidRequestTick = Find.TickManager.TicksGame;
-			IncidentDefOf.RaidFriendly.Worker.TryExecute(incidentParms);
-		}
-
-		
-		private static DiaOption OKToRoot(Faction faction, Pawn negotiator)
-		{
-			return new DiaOption("OK".Translate())
-			{
-				linkLateBind = FactionDialogMaker.ResetToRoot(faction, negotiator)
-			};
-		}
-
-		
-		public static Func<DiaNode> ResetToRoot(Faction faction, Pawn negotiator)
-		{
-			return () => FactionDialogMaker.FactionDialogFor(negotiator, faction);
-		}
+	public static Func<DiaNode> ResetToRoot(Faction faction, Pawn negotiator)
+	{
+		return () => FactionDialogFor(negotiator, faction);
 	}
 }

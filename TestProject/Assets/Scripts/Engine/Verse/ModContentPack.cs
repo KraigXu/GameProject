@@ -1,565 +1,471 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml;
-using RimWorld;
 using UnityEngine;
+using Verse;
 
-namespace Verse
+public class ModContentPack
 {
-	
-	public class ModContentPack
+	private DirectoryInfo rootDirInt;
+
+	public int loadOrder;
+
+	private string nameInt;
+
+	private string packageIdInt;
+
+	private string packageIdPlayerFacingInt;
+
+	private ModContentHolder<AudioClip> audioClips;
+
+	private ModContentHolder<Texture2D> textures;
+
+	private ModContentHolder<string> strings;
+
+	public ModAssetBundlesHandler assetBundles;
+
+	public ModAssemblyHandler assemblies;
+
+	private List<PatchOperation> patches;
+
+	private List<Def> defs = new List<Def>();
+
+	private List<List<string>> allAssetNamesInBundleCached;
+
+	public List<string> foldersToLoadDescendingOrder;
+
+	private bool loadedAnyPatches;
+
+	public static readonly string LudeonPackageIdAuthor = "ludeon";
+
+	public static readonly string CoreModPackageId = "ludeon.rimworld";
+
+	public static readonly string RoyaltyModPackageId = "ludeon.rimworld.royalty";
+
+	public static readonly string CommonFolderName = "Common";
+
+	public string RootDir => rootDirInt.FullName;
+
+	public string PackageId => packageIdInt;
+
+	public string PackageIdPlayerFacing => packageIdPlayerFacingInt;
+
+	public string FolderName => rootDirInt.Name;
+
+	public string Name => nameInt;
+
+	public int OverwritePriority
 	{
-
-
-		private DirectoryInfo rootDirInt;
-
-
-		public int loadOrder;
-
-
-		private string nameInt;
-
-
-		private string packageIdInt;
-
-
-		private string packageIdPlayerFacingInt;
-
-
-		private ModContentHolder<AudioClip> audioClips;
-
-
-		private ModContentHolder<Texture2D> textures;
-
-
-		private ModContentHolder<string> strings;
-
-
-		public ModAssetBundlesHandler assetBundles;
-
-
-		public ModAssemblyHandler assemblies;
-
-
-		private List<PatchOperation> patches;
-
-
-		private List<Def> defs = new List<Def>();
-
-
-		private List<List<string>> allAssetNamesInBundleCached;
-
-
-		public List<string> foldersToLoadDescendingOrder;
-
-
-		private bool loadedAnyPatches;
-
-
-		public static readonly string LudeonPackageIdAuthor = "ludeon";
-
-
-		public static readonly string CoreModPackageId = "ludeon.rimworld";
-
-
-		public static readonly string RoyaltyModPackageId = "ludeon.rimworld.royalty";
-
-
-		public static readonly string CommonFolderName = "Common";
-
-
-		public string RootDir
+		get
 		{
-			get
+			if (!IsCoreMod)
 			{
-				return this.rootDirInt.FullName;
+				return 1;
+			}
+			return 0;
+		}
+	}
+
+	public bool IsCoreMod => PackageId == CoreModPackageId;
+
+	public IEnumerable<Def> AllDefs => defs;
+
+	public IEnumerable<PatchOperation> Patches
+	{
+		get
+		{
+			if (patches == null)
+			{
+				LoadPatches();
+			}
+			return patches;
+		}
+	}
+
+	public IEnumerable<string> AllAssetNamesInBundle(int index)
+	{
+		if (allAssetNamesInBundleCached == null)
+		{
+			allAssetNamesInBundleCached = new List<List<string>>();
+			foreach (AssetBundle loadedAssetBundle in assetBundles.loadedAssetBundles)
+			{
+				allAssetNamesInBundleCached.Add(new List<string>(loadedAssetBundle.GetAllAssetNames()));
 			}
 		}
+		return allAssetNamesInBundleCached[index];
+	}
 
-		
-		
-		public string PackageId
+	[Obsolete("Only need this overload to not break mod compatibility.")]
+	public ModContentPack(DirectoryInfo directory, string packageId, int loadOrder, string name)
+		: this(directory, packageId, packageId, loadOrder, name)
+	{
+	}
+
+	public ModContentPack(DirectoryInfo directory, string packageId, string packageIdPlayerFacing, int loadOrder, string name)
+	{
+		rootDirInt = directory;
+		this.loadOrder = loadOrder;
+		nameInt = name;
+		packageIdInt = packageId.ToLower();
+		packageIdPlayerFacingInt = packageIdPlayerFacing;
+		audioClips = new ModContentHolder<AudioClip>(this);
+		textures = new ModContentHolder<Texture2D>(this);
+		strings = new ModContentHolder<string>(this);
+		assetBundles = new ModAssetBundlesHandler(this);
+		assemblies = new ModAssemblyHandler(this);
+		InitLoadFolders();
+	}
+
+	public void ClearDestroy()
+	{
+		audioClips.ClearDestroy();
+		textures.ClearDestroy();
+		assetBundles.ClearDestroy();
+		allAssetNamesInBundleCached = null;
+	}
+
+	public ModContentHolder<T> GetContentHolder<T>() where T : class
+	{
+		if (typeof(T) == typeof(Texture2D))
 		{
-			get
-			{
-				return this.packageIdInt;
-			}
+			return (ModContentHolder<T>)(object)textures;
 		}
-
-		
-		
-		public string PackageIdPlayerFacing
+		if (typeof(T) == typeof(AudioClip))
 		{
-			get
-			{
-				return this.packageIdPlayerFacingInt;
-			}
+			return (ModContentHolder<T>)(object)audioClips;
 		}
-
-		
-		
-		public string FolderName
+		if (typeof(T) == typeof(string))
 		{
-			get
-			{
-				return this.rootDirInt.Name;
-			}
+			return (ModContentHolder<T>)(object)strings;
 		}
+		Log.Error("Mod lacks manager for asset type " + strings);
+		return null;
+	}
 
-		
-		
-		public string Name
+	private void ReloadContentInt()
+	{
+		DeepProfiler.Start("Reload audio clips");
+		try
 		{
-			get
-			{
-				return this.nameInt;
-			}
+			audioClips.ReloadAll();
 		}
-
-		
-		
-		public int OverwritePriority
+		finally
 		{
-			get
-			{
-				if (!this.IsCoreMod)
-				{
-					return 1;
-				}
-				return 0;
-			}
-		}
-
-		
-		
-		public bool IsCoreMod
-		{
-			get
-			{
-				return this.PackageId == ModContentPack.CoreModPackageId;
-			}
-		}
-
-		
-		
-		public IEnumerable<Def> AllDefs
-		{
-			get
-			{
-				return this.defs;
-			}
-		}
-
-		
-		
-		public IEnumerable<PatchOperation> Patches
-		{
-			get
-			{
-				if (this.patches == null)
-				{
-					this.LoadPatches();
-				}
-				return this.patches;
-			}
-		}
-
-		
-		public IEnumerable<string> AllAssetNamesInBundle(int index)
-		{
-			if (this.allAssetNamesInBundleCached == null)
-			{
-				this.allAssetNamesInBundleCached = new List<List<string>>();
-				foreach (AssetBundle assetBundle in this.assetBundles.loadedAssetBundles)
-				{
-					this.allAssetNamesInBundleCached.Add(new List<string>(assetBundle.GetAllAssetNames()));
-				}
-			}
-			return this.allAssetNamesInBundleCached[index];
-		}
-
-		
-		[Obsolete("Only need this overload to not break mod compatibility.")]
-		public ModContentPack(DirectoryInfo directory, string packageId, int loadOrder, string name) : this(directory, packageId, packageId, loadOrder, name)
-		{
-		}
-
-		
-		public ModContentPack(DirectoryInfo directory, string packageId, string packageIdPlayerFacing, int loadOrder, string name)
-		{
-			this.rootDirInt = directory;
-			this.loadOrder = loadOrder;
-			this.nameInt = name;
-			this.packageIdInt = packageId.ToLower();
-			this.packageIdPlayerFacingInt = packageIdPlayerFacing;
-			this.audioClips = new ModContentHolder<AudioClip>(this);
-			this.textures = new ModContentHolder<Texture2D>(this);
-			this.strings = new ModContentHolder<string>(this);
-			this.assetBundles = new ModAssetBundlesHandler(this);
-			this.assemblies = new ModAssemblyHandler(this);
-			this.InitLoadFolders();
-		}
-
-		
-		public void ClearDestroy()
-		{
-			this.audioClips.ClearDestroy();
-			this.textures.ClearDestroy();
-			this.assetBundles.ClearDestroy();
-			this.allAssetNamesInBundleCached = null;
-		}
-
-		
-		public ModContentHolder<T> GetContentHolder<T>() where T : class
-		{
-            if (typeof(T) == typeof(Texture2D))
-            {
-				return (ModContentHolder<T>)Convert.ChangeType(this.textures, typeof(T));
-			}
-            if (typeof(T) == typeof(AudioClip))
-            {
-				return (ModContentHolder<T>)Convert.ChangeType(this.audioClips, typeof(T));
-            }
-            if (typeof(T) == typeof(string))
-            {
-				return (ModContentHolder<T>)Convert.ChangeType(this.strings, typeof(T));
-            }
-            Log.Error("Mod lacks manager for asset type " + this.strings, false);
-			return null;
-		}
-
-		
-		private void ReloadContentInt()
-		{
-			DeepProfiler.Start("Reload audio clips");
-			try
-			{
-				this.audioClips.ReloadAll();
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-			DeepProfiler.Start("Reload textures");
-			try
-			{
-				this.textures.ReloadAll();
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-			DeepProfiler.Start("Reload strings");
-			try
-			{
-				this.strings.ReloadAll();
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-			DeepProfiler.Start("Reload asset bundles");
-			try
-			{
-				this.assetBundles.ReloadAll();
-				this.allAssetNamesInBundleCached = null;
-			}
-			finally
-			{
-				DeepProfiler.End();
-			}
-		}
-
-		
-		public void ReloadContent()
-		{
-			LongEventHandler.ExecuteWhenFinished(new Action(this.ReloadContentInt));
-			this.assemblies.ReloadAll();
-		}
-
-		
-		public IEnumerable<LoadableXmlAsset> LoadDefs()
-		{
-			if (this.defs.Count != 0)
-			{
-				Log.ErrorOnce("LoadDefs called with already existing def packages", 39029405, false);
-			}
-			DeepProfiler.Start("Load Assets");
-			List<LoadableXmlAsset> list = DirectXmlLoader.XmlAssetsInModFolder(this, "Defs/", null).ToList<LoadableXmlAsset>();
 			DeepProfiler.End();
-			DeepProfiler.Start("Parse Assets");
-			foreach (LoadableXmlAsset loadableXmlAsset in list)
-			{
-				yield return loadableXmlAsset;
-			}
-			List<LoadableXmlAsset>.Enumerator enumerator = default(List<LoadableXmlAsset>.Enumerator);
-			DeepProfiler.End();
-			yield break;
 		}
-
-		
-		private void InitLoadFolders()
+		DeepProfiler.Start("Reload textures");
+		try
 		{
-			this.foldersToLoadDescendingOrder = new List<string>();
-			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.PackageId, false);
-			if (((modWithIdentifier != null) ? modWithIdentifier.loadFolders : null) != null && modWithIdentifier.loadFolders.DefinedVersions().Count > 0)
-			{
-				List<LoadFolder> list = modWithIdentifier.LoadFoldersForVersion(VersionControl.CurrentVersionStringWithoutBuild);
-                if (list != null && list.Count > 0)
-                {
+			textures.ReloadAll();
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+		DeepProfiler.Start("Reload strings");
+		try
+		{
+			strings.ReloadAll();
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+		DeepProfiler.Start("Reload asset bundles");
+		try
+		{
+			assetBundles.ReloadAll();
+			allAssetNamesInBundleCached = null;
+		}
+		finally
+		{
+			DeepProfiler.End();
+		}
+	}
 
-					//this.< InitLoadFolders > AddFolders | 45_0(list);
-                    return;
-                }
-                List<LoadFolder> list2 = modWithIdentifier.LoadFoldersForVersion("default");
-                if (list2 != null)
-                {
-                  // this.< InitLoadFolders > g__AddFolders | 45_0(list2);
-                    return;
-                }
-                int num = VersionControl.CurrentVersion.Major;
-				int num2 = VersionControl.CurrentVersion.Minor;
-                List<LoadFolder> list3;
-                do
-                {
-                    if (num2 == 0)
-                    {
-                        num--;
-                        num2 = 9;
-                    }
-                    else
-                    {
-                        num2--;
-                    }
-                    if (num < 1)
-                    {
-                        goto IL_D1;
-                    }
-                    list3 = modWithIdentifier.LoadFoldersForVersion(num + "." + num2);
-                }
-                while (list3 == null);
-				
-              //  this.< InitLoadFolders > g__AddFolders | 45_0(list3);
-                return;
-				IL_D1:
-				Version version = new Version(0, 0);
-				List<string> list4 = modWithIdentifier.loadFolders.DefinedVersions();
-				for (int i = 0; i < list4.Count; i++)
+	public void ReloadContent()
+	{
+		LongEventHandler.ExecuteWhenFinished(ReloadContentInt);
+		assemblies.ReloadAll();
+	}
+
+	public IEnumerable<LoadableXmlAsset> LoadDefs()
+	{
+		if (defs.Count != 0)
+		{
+			Log.ErrorOnce("LoadDefs called with already existing def packages", 39029405);
+		}
+		DeepProfiler.Start("Load Assets");
+		List<LoadableXmlAsset> list = DirectXmlLoader.XmlAssetsInModFolder(this, "Defs/").ToList();
+		DeepProfiler.End();
+		DeepProfiler.Start("Parse Assets");
+		foreach (LoadableXmlAsset item in list)
+		{
+			yield return item;
+		}
+		DeepProfiler.End();
+	}
+
+	private void InitLoadFolders()
+	{
+		foldersToLoadDescendingOrder = new List<string>();
+		ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(PackageId);
+		if (modWithIdentifier?.loadFolders != null && modWithIdentifier.loadFolders.DefinedVersions().Count > 0)
+		{
+			List<LoadFolder> list = modWithIdentifier.LoadFoldersForVersion(VersionControl.CurrentVersionStringWithoutBuild);
+			if (list != null && list.Count > 0)
+			{
+				AddFolders(list);
+				return;
+			}
+			List<LoadFolder> list2 = modWithIdentifier.LoadFoldersForVersion("default");
+			if (list2 != null)
+			{
+				AddFolders(list2);
+				return;
+			}
+			int num = VersionControl.CurrentVersion.Major;
+			int num2 = VersionControl.CurrentVersion.Minor;
+			while (true)
+			{
+				if (num2 == 0)
 				{
-					Version version2;
-					if (VersionControl.TryParseVersionString(list4[i], out version2) && version2 > version)
-					{
-						version = version2;
-					}
+					num--;
+					num2 = 9;
 				}
-				if (version.Major > 0)
+				else
 				{
-					
-					//this.<InitLoadFolders>g__AddFolders|45_0(modWithIdentifier.LoadFoldersForVersion(version.ToString()));
+					num2--;
+				}
+				if (num < 1)
+				{
+					break;
+				}
+				List<LoadFolder> list3 = modWithIdentifier.LoadFoldersForVersion(num + "." + num2);
+				if (list3 != null)
+				{
+					AddFolders(list3);
 					return;
 				}
 			}
-			if (this.foldersToLoadDescendingOrder.Count == 0)
+			Version version = new Version(0, 0);
+			List<string> list4 = modWithIdentifier.loadFolders.DefinedVersions();
+			for (int i = 0; i < list4.Count; i++)
 			{
-				string text = Path.Combine(this.RootDir, VersionControl.CurrentVersionStringWithoutBuild);
-				if (Directory.Exists(text))
+				if (VersionControl.TryParseVersionString(list4[i], out Version version2) && version2 > version)
 				{
-					this.foldersToLoadDescendingOrder.Add(text);
-				}
-				else
-				{
-					Version version3 = new Version(0, 0);
-					DirectoryInfo[] directories = this.rootDirInt.GetDirectories();
-					for (int j = 0; j < directories.Length; j++)
-					{
-						Version version4;
-						if (VersionControl.TryParseVersionString(directories[j].Name, out version4) && version4 > version3)
-						{
-							version3 = version4;
-						}
-					}
-					if (version3.Major > 0)
-					{
-						this.foldersToLoadDescendingOrder.Add(Path.Combine(this.RootDir, version3.ToString()));
-					}
-				}
-				string text2 = Path.Combine(this.RootDir, ModContentPack.CommonFolderName);
-				if (Directory.Exists(text2))
-				{
-					this.foldersToLoadDescendingOrder.Add(text2);
-				}
-				this.foldersToLoadDescendingOrder.Add(this.RootDir);
-			}
-		}
-
-		
-		private void LoadPatches()
-		{
-			DeepProfiler.Start("Loading all patches");
-			this.patches = new List<PatchOperation>();
-			this.loadedAnyPatches = false;
-			List<LoadableXmlAsset> list = DirectXmlLoader.XmlAssetsInModFolder(this, "Patches/", null).ToList<LoadableXmlAsset>();
-			for (int i = 0; i < list.Count; i++)
-			{
-				XmlElement documentElement = list[i].xmlDoc.DocumentElement;
-				if (documentElement.Name != "Patch")
-				{
-					Log.Error(string.Format("Unexpected document element in patch XML; got {0}, expected 'Patch'", documentElement.Name), false);
-				}
-				else
-				{
-					foreach (object obj in documentElement.ChildNodes)
-					{
-						XmlNode xmlNode = (XmlNode)obj;
-						if (xmlNode.NodeType == XmlNodeType.Element)
-						{
-							if (xmlNode.Name != "Operation")
-							{
-								Log.Error(string.Format("Unexpected element in patch XML; got {0}, expected 'Operation'", xmlNode.Name), false);
-							}
-							else
-							{
-								PatchOperation patchOperation = DirectXmlToObject.ObjectFromXml<PatchOperation>(xmlNode, false);
-								patchOperation.sourceFile = list[i].FullFilePath;
-								this.patches.Add(patchOperation);
-								this.loadedAnyPatches = true;
-							}
-						}
-					}
+					version = version2;
 				}
 			}
-			DeepProfiler.End();
-		}
-
-		
-		public static Dictionary<string, FileInfo> GetAllFilesForMod(ModContentPack mod, string contentPath, Func<string, bool> validateExtension = null, List<string> foldersToLoadDebug = null)
-		{
-			List<string> list = foldersToLoadDebug ?? mod.foldersToLoadDescendingOrder;
-			Dictionary<string, FileInfo> dictionary = new Dictionary<string, FileInfo>();
-			for (int i = 0; i < list.Count; i++)
+			if (version.Major > 0)
 			{
-				string text = list[i];
-				DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(text, contentPath));
-				if (directoryInfo.Exists)
+				AddFolders(modWithIdentifier.LoadFoldersForVersion(version.ToString()));
+				return;
+			}
+		}
+		if (foldersToLoadDescendingOrder.Count != 0)
+		{
+			return;
+		}
+		string text = Path.Combine(RootDir, VersionControl.CurrentVersionStringWithoutBuild);
+		if (Directory.Exists(text))
+		{
+			foldersToLoadDescendingOrder.Add(text);
+		}
+		else
+		{
+			Version version3 = new Version(0, 0);
+			DirectoryInfo[] directories = rootDirInt.GetDirectories();
+			for (int j = 0; j < directories.Length; j++)
+			{
+				if (VersionControl.TryParseVersionString(directories[j].Name, out Version version4) && version4 > version3)
 				{
-					foreach (FileInfo fileInfo in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+					version3 = version4;
+				}
+			}
+			if (version3.Major > 0)
+			{
+				foldersToLoadDescendingOrder.Add(Path.Combine(RootDir, version3.ToString()));
+			}
+		}
+		string text2 = Path.Combine(RootDir, CommonFolderName);
+		if (Directory.Exists(text2))
+		{
+			foldersToLoadDescendingOrder.Add(text2);
+		}
+		foldersToLoadDescendingOrder.Add(RootDir);
+		void AddFolders(List<LoadFolder> folders)
+		{
+			for (int num3 = folders.Count - 1; num3 >= 0; num3--)
+			{
+				if (folders[num3].ShouldLoad)
+				{
+					foldersToLoadDescendingOrder.Add(Path.Combine(RootDir, folders[num3].folderName));
+				}
+			}
+		}
+	}
+
+	private void LoadPatches()
+	{
+		DeepProfiler.Start("Loading all patches");
+		patches = new List<PatchOperation>();
+		loadedAnyPatches = false;
+		List<LoadableXmlAsset> list = DirectXmlLoader.XmlAssetsInModFolder(this, "Patches/").ToList();
+		for (int i = 0; i < list.Count; i++)
+		{
+			XmlElement documentElement = list[i].xmlDoc.DocumentElement;
+			if (documentElement.Name != "Patch")
+			{
+				Log.Error($"Unexpected document element in patch XML; got {documentElement.Name}, expected 'Patch'");
+			}
+			else
+			{
+				foreach (XmlNode childNode in documentElement.ChildNodes)
+				{
+					if (childNode.NodeType == XmlNodeType.Element)
 					{
-						if (validateExtension == null || validateExtension(fileInfo.Extension))
+						if (childNode.Name != "Operation")
 						{
-							string key = fileInfo.FullName.Substring(text.Length + 1);
-							if (!dictionary.ContainsKey(key))
-							{
-								dictionary.Add(key, fileInfo);
-							}
+							Log.Error($"Unexpected element in patch XML; got {childNode.Name}, expected 'Operation'");
+						}
+						else
+						{
+							PatchOperation patchOperation = DirectXmlToObject.ObjectFromXml<PatchOperation>(childNode, doPostLoad: false);
+							patchOperation.sourceFile = list[i].FullFilePath;
+							patches.Add(patchOperation);
+							loadedAnyPatches = true;
 						}
 					}
 				}
 			}
-			return dictionary;
 		}
+		DeepProfiler.End();
+	}
 
-		
-		public static List<Tuple<string, FileInfo>> GetAllFilesForModPreserveOrder(ModContentPack mod, string contentPath, Func<string, bool> validateExtension = null, List<string> foldersToLoadDebug = null)
+	public static Dictionary<string, FileInfo> GetAllFilesForMod(ModContentPack mod, string contentPath, Func<string, bool> validateExtension = null, List<string> foldersToLoadDebug = null)
+	{
+		List<string> list = foldersToLoadDebug ?? mod.foldersToLoadDescendingOrder;
+		Dictionary<string, FileInfo> dictionary = new Dictionary<string, FileInfo>();
+		for (int i = 0; i < list.Count; i++)
 		{
-			List<string> list = foldersToLoadDebug ?? mod.foldersToLoadDescendingOrder;
-			List<Tuple<string, FileInfo>> list2 = new List<Tuple<string, FileInfo>>();
-			for (int i = list.Count - 1; i >= 0; i--)
+			string text = list[i];
+			DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(text, contentPath));
+			if (!directoryInfo.Exists)
 			{
-				string text = list[i];
-				DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(text, contentPath));
-				if (directoryInfo.Exists)
+				continue;
+			}
+			FileInfo[] files = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
+			foreach (FileInfo fileInfo in files)
+			{
+				if (validateExtension == null || validateExtension(fileInfo.Extension))
 				{
-					foreach (FileInfo fileInfo in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+					string key = fileInfo.FullName.Substring(text.Length + 1);
+					if (!dictionary.ContainsKey(key))
 					{
-						if (validateExtension == null || validateExtension(fileInfo.Extension))
-						{
-							string item = fileInfo.FullName.Substring(text.Length + 1);
-							list2.Add(new Tuple<string, FileInfo>(item, fileInfo));
-						}
+						dictionary.Add(key, fileInfo);
 					}
 				}
 			}
-			HashSet<string> hashSet = new HashSet<string>();
-			for (int k = list2.Count - 1; k >= 0; k--)
-			{
-				Tuple<string, FileInfo> tuple = list2[k];
-				if (!hashSet.Contains(tuple.Item1))
-				{
-					hashSet.Add(tuple.Item1);
-				}
-				else
-				{
-					list2.RemoveAt(k);
-				}
-			}
-			return list2;
 		}
+		return dictionary;
+	}
 
-		
-		public bool AnyContentLoaded()
+	public static List<Tuple<string, FileInfo>> GetAllFilesForModPreserveOrder(ModContentPack mod, string contentPath, Func<string, bool> validateExtension = null, List<string> foldersToLoadDebug = null)
+	{
+		List<string> list = foldersToLoadDebug ?? mod.foldersToLoadDescendingOrder;
+		List<Tuple<string, FileInfo>> list2 = new List<Tuple<string, FileInfo>>();
+		for (int num = list.Count - 1; num >= 0; num--)
 		{
-			if (this.textures.contentList != null && this.textures.contentList.Count != 0)
+			string text = list[num];
+			DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(text, contentPath));
+			if (directoryInfo.Exists)
 			{
-				return true;
-			}
-			if (this.audioClips.contentList != null && this.audioClips.contentList.Count != 0)
-			{
-				return true;
-			}
-			if (this.strings.contentList != null && this.strings.contentList.Count != 0)
-			{
-				return true;
-			}
-			if (!this.assemblies.loadedAssemblies.NullOrEmpty<Assembly>())
-			{
-				return true;
-			}
-			if (!this.assetBundles.loadedAssetBundles.NullOrEmpty<AssetBundle>())
-			{
-				return true;
-			}
-			if (this.loadedAnyPatches)
-			{
-				return true;
-			}
-			if (this.AllDefs.Any<Def>())
-			{
-				return true;
-			}
-			foreach (string path in this.foldersToLoadDescendingOrder)
-			{
-				string path2 = Path.Combine(path, "Languages");
-				if (Directory.Exists(path2) && Directory.EnumerateFiles(path2, "*", SearchOption.AllDirectories).Any<string>())
+				FileInfo[] files = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
+				foreach (FileInfo fileInfo in files)
 				{
-					return true;
+					if (validateExtension == null || validateExtension(fileInfo.Extension))
+					{
+						string item = fileInfo.FullName.Substring(text.Length + 1);
+						list2.Add(new Tuple<string, FileInfo>(item, fileInfo));
+					}
 				}
 			}
-			return false;
 		}
-
-		
-		public void ClearPatchesCache()
+		HashSet<string> hashSet = new HashSet<string>();
+		for (int num2 = list2.Count - 1; num2 >= 0; num2--)
 		{
-			this.patches = null;
+			Tuple<string, FileInfo> tuple = list2[num2];
+			if (!hashSet.Contains(tuple.Item1))
+			{
+				hashSet.Add(tuple.Item1);
+			}
+			else
+			{
+				list2.RemoveAt(num2);
+			}
 		}
+		return list2;
+	}
 
-		
-		public void AddDef(Def def, string source = "Unknown")
+	public bool AnyContentLoaded()
+	{
+		if (textures.contentList != null && textures.contentList.Count != 0)
 		{
-			def.modContentPack = this;
-			def.fileName = source;
-			this.defs.Add(def);
+			return true;
 		}
-
-		
-		public override string ToString()
+		if (audioClips.contentList != null && audioClips.contentList.Count != 0)
 		{
-			return this.PackageIdPlayerFacing;
+			return true;
 		}
+		if (strings.contentList != null && strings.contentList.Count != 0)
+		{
+			return true;
+		}
+		if (!assemblies.loadedAssemblies.NullOrEmpty())
+		{
+			return true;
+		}
+		if (!assetBundles.loadedAssetBundles.NullOrEmpty())
+		{
+			return true;
+		}
+		if (loadedAnyPatches)
+		{
+			return true;
+		}
+		if (AllDefs.Any())
+		{
+			return true;
+		}
+		foreach (string item in foldersToLoadDescendingOrder)
+		{
+			string path = Path.Combine(item, "Languages");
+			if (Directory.Exists(path) && Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories).Any())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-	
+	public void ClearPatchesCache()
+	{
+		patches = null;
+	}
+
+	public void AddDef(Def def, string source = "Unknown")
+	{
+		def.modContentPack = this;
+		def.fileName = source;
+		defs.Add(def);
+	}
+
+	public override string ToString()
+	{
+		return PackageIdPlayerFacing;
 	}
 }
