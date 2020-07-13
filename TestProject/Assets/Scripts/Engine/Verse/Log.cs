@@ -81,6 +81,7 @@ namespace Verse
 		
 		public static void Error(string text, bool ignoreStopLoggingLimit = false)
 		{
+            Debug.LogError(">>"+text);
 			if (!ignoreStopLoggingLimit && Log.ReachedMaxMessagesLimit)
 			{
 				return;

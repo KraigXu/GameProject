@@ -27,7 +27,7 @@ namespace Verse
 					return t;
 				}
 			}
-			Debug.Log(GenFilePaths.ContentPath<Texture2D>() + itemPath);
+			//Debug.Log(GenFilePaths.ContentPath<Texture2D>() + itemPath);
 			if (typeof(T) == typeof(Texture2D))
 			{
 				t = (T)((object)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + itemPath));

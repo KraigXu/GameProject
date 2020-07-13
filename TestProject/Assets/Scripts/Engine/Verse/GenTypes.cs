@@ -319,6 +319,8 @@ namespace Verse
 		public static bool IsCustomType(Type type)
 		{
 			string @namespace = type.Namespace;
+           // Debug.Log("IsCustomType >>"+@namespace);
+            //return true;
 			return !@namespace.StartsWith("System") && !@namespace.StartsWith("UnityEngine") && !@namespace.StartsWith("Steamworks");
 		}
 
