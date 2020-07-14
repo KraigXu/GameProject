@@ -3,67 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
-
-public class QuestNode_SetItemStashContents : QuestNode
+namespace RimWorld.QuestGen
 {
-	public class ThingCategoryCount
+	public class QuestNode_SetItemStashContents : QuestNode
 	{
-		public ThingCategoryDef category;
-
-		public IntRange amount;
-
-		public bool allowDuplicates = true;
-	}
-
-	public SlateRef<IEnumerable<ThingDef>> items;
-
-	public SlateRef<List<ThingCategoryCount>> categories;
-
-	private static List<ThingDef> tmpItems = new List<ThingDef>();
-
-	protected override bool TestRunInt(Slate slate)
-	{
-		return true;
-	}
-
-	protected override void RunInt()
-	{
-		Slate slate = QuestGen.slate;
-		slate.Set("itemStashThings", GetContents(slate));
-	}
-
-	private IEnumerable<ThingDef> GetContents(Slate slate)
-	{
-		IEnumerable<ThingDef> value = items.GetValue(slate);
-		if (value != null)
+		public class ThingCategoryCount
 		{
-			foreach (ThingDef item in value)
-			{
-				yield return item;
-			}
+			public ThingCategoryDef category;
+
+			public IntRange amount;
+
+			public bool allowDuplicates = true;
 		}
-		List<ThingCategoryCount> value2 = categories.GetValue(slate);
-		if (value2 != null)
+
+		public SlateRef<IEnumerable<ThingDef>> items;
+
+		public SlateRef<List<ThingCategoryCount>> categories;
+
+		private static List<ThingDef> tmpItems = new List<ThingDef>();
+
+		protected override bool TestRunInt(Slate slate)
 		{
-			foreach (ThingCategoryCount c in value2)
+			return true;
+		}
+
+		protected override void RunInt()
+		{
+			Slate slate = QuestGen.slate;
+			slate.Set("itemStashThings", GetContents(slate));
+		}
+
+		private IEnumerable<ThingDef> GetContents(Slate slate)
+		{
+			IEnumerable<ThingDef> value = items.GetValue(slate);
+			if (value != null)
 			{
-				try
+				foreach (ThingDef item in value)
 				{
-					int amt = Mathf.Max(c.amount.RandomInRange, 1);
-					for (int i = 0; i < amt; i++)
+					yield return item;
+				}
+			}
+			List<ThingCategoryCount> value2 = categories.GetValue(slate);
+			if (value2 != null)
+			{
+				foreach (ThingCategoryCount c in value2)
+				{
+					try
 					{
-						if (DefDatabase<ThingDef>.AllDefs.Where((ThingDef x) => x.thingCategories != null && x.thingCategories.Contains(c.category) && (c.allowDuplicates || !tmpItems.Contains(x))).TryRandomElement(out ThingDef result))
+						int amt = Mathf.Max(c.amount.RandomInRange, 1);
+						for (int i = 0; i < amt; i++)
 						{
-							tmpItems.Add(result);
-							yield return result;
+							if (DefDatabase<ThingDef>.AllDefs.Where((ThingDef x) => x.thingCategories != null && x.thingCategories.Contains(c.category) && (c.allowDuplicates || !tmpItems.Contains(x))).TryRandomElement(out ThingDef result))
+							{
+								tmpItems.Add(result);
+								yield return result;
+							}
 						}
 					}
-				}
-				finally
-				{
-					tmpItems.Clear();
+					finally
+					{
+						tmpItems.Clear();
+					}
 				}
 			}
 		}
 	}
+
 }

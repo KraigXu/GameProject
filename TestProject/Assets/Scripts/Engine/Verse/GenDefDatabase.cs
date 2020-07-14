@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Verse
@@ -21,14 +22,22 @@ namespace Verse
 		
 		public static Def GetDefSilentFail(Type type, string targetDefName, bool specialCaseForSoundDefs = true)
 		{
+
+			Def v = null;
+
 			if (specialCaseForSoundDefs && type == typeof(SoundDef))
 			{
-				return SoundDef.Named(targetDefName);
+				v= SoundDef.Named(targetDefName);
 			}
-			return (Def)GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), type, "GetNamedSilentFail", new object[]
+
+
+			v= (Def)GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), type, "GetNamedSilentFail", new object[]
 			{
 				targetDefName
 			});
+
+
+			return v;
 		}
 
 		
