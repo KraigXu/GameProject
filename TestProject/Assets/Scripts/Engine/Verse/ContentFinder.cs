@@ -40,6 +40,13 @@ namespace Verse
 			if (typeof(T) == typeof(AudioClip))
 			{
 				t = (T)((object)Resources.Load<AudioClip>(GenFilePaths.ContentPath<AudioClip>() + itemPath));
+                if (t == null)
+                {
+					t = (T)((object)Resources.Load<AudioClip>(GenFilePaths.ContentPath<AudioClip>()+ "defaultSounds"));
+					
+
+
+				}
 			}
 			if (t != null)
 			{
