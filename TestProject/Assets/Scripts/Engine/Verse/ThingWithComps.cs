@@ -1,707 +1,631 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld;
 using UnityEngine;
+using Verse;
 
 namespace Verse
 {
-	
-	public class ThingWithComps : Thing
-	{
-		
-		
-		public List<ThingComp> AllComps
-		{
-			get
-			{
-				if (this.comps == null)
-				{
-					return ThingWithComps.EmptyCompsList;
-				}
-				return this.comps;
-			}
-		}
 
-		
-		
-		
-		public override Color DrawColor
-		{
-			get
-			{
-				CompColorable comp = this.GetComp<CompColorable>();
-				if (comp != null && comp.Active)
-				{
-					return comp.Color;
-				}
-				return base.DrawColor;
-			}
-			set
-			{
-				this.SetColor(value, true);
-			}
-		}
+    public class ThingWithComps : Thing
+    {
+        private List<ThingComp> comps;
 
-		
-		
-		public override string LabelNoCount
-		{
-			get
-			{
-				string text = base.LabelNoCount;
-				if (this.comps != null)
-				{
-					int i = 0;
-					int count = this.comps.Count;
-					while (i < count)
-					{
-						text = this.comps[i].TransformLabel(text);
-						i++;
-					}
-				}
-				return text;
-			}
-		}
+        private static readonly List<ThingComp> EmptyCompsList = new List<ThingComp>();
 
-		
-		
-		public override string DescriptionFlavor
-		{
-			get
-			{
-				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append(base.DescriptionFlavor);
-				if (this.comps != null)
-				{
-					for (int i = 0; i < this.comps.Count; i++)
-					{
-						string descriptionPart = this.comps[i].GetDescriptionPart();
-						if (!descriptionPart.NullOrEmpty())
-						{
-							if (stringBuilder.Length > 0)
-							{
-								stringBuilder.AppendLine();
-								stringBuilder.AppendLine();
-							}
-							stringBuilder.Append(descriptionPart);
-						}
-					}
-				}
-				return stringBuilder.ToString();
-			}
-		}
+        public List<ThingComp> AllComps
+        {
+            get
+            {
+                if (comps == null)
+                {
+                    return EmptyCompsList;
+                }
+                return comps;
+            }
+        }
 
-		
-		public override void PostMake()
-		{
-			base.PostMake();
-			this.InitializeComps();
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostPostMake();
-				}
-			}
-		}
+        public override Color DrawColor
+        {
+            get
+            {
+                CompColorable comp = GetComp<CompColorable>();
+                if (comp != null && comp.Active)
+                {
+                    return comp.Color;
+                }
+                return base.DrawColor;
+            }
+            set
+            {
+                this.SetColor(value);
+            }
+        }
 
-		
-		public T GetComp<T>() where T : ThingComp
-		{
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					T t = this.comps[i] as T;
-					if (t != null)
-					{
-						return t;
-					}
-					i++;
-				}
-			}
-			return default(T);
-		}
+        public override string LabelNoCount
+        {
+            get
+            {
+                string text = base.LabelNoCount;
+                if (comps != null)
+                {
+                    int i = 0;
+                    for (int count = comps.Count; i < count; i++)
+                    {
+                        text = comps[i].TransformLabel(text);
+                    }
+                }
+                return text;
+            }
+        }
 
-		
-		public IEnumerable<T> GetComps<T>() where T : ThingComp
-		{
-			if (this.comps != null)
-			{
-				int num;
-				for (int i = 0; i < this.comps.Count; i = num + 1)
-				{
-					T t = this.comps[i] as T;
-					if (t != null)
-					{
-						yield return t;
-					}
-					num = i;
-				}
-			}
-			yield break;
-		}
+        public override string DescriptionFlavor
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append(base.DescriptionFlavor);
+                if (comps != null)
+                {
+                    for (int i = 0; i < comps.Count; i++)
+                    {
+                        string descriptionPart = comps[i].GetDescriptionPart();
+                        if (!descriptionPart.NullOrEmpty())
+                        {
+                            if (stringBuilder.Length > 0)
+                            {
+                                stringBuilder.AppendLine();
+                                stringBuilder.AppendLine();
+                            }
+                            stringBuilder.Append(descriptionPart);
+                        }
+                    }
+                }
+                return stringBuilder.ToString();
+            }
+        }
 
-		
-		public ThingComp GetCompByDef(CompProperties def)
-		{
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					if (this.comps[i].props == def)
-					{
-						return this.comps[i];
-					}
-					i++;
-				}
-			}
-			return null;
-		}
+        public override void PostMake()
+        {
+            base.PostMake();
+            InitializeComps();
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostPostMake();
+                }
+            }
+        }
 
-		
-		public void InitializeComps()
-		{
-			if (this.def.comps.Any<CompProperties>())
-			{
-				this.comps = new List<ThingComp>();
-				for (int i = 0; i < this.def.comps.Count; i++)
-				{
-					ThingComp thingComp = null;
-					try
-					{
-						thingComp = (ThingComp)Activator.CreateInstance(this.def.comps[i].compClass);
-						thingComp.parent = this;
-						this.comps.Add(thingComp);
-						thingComp.Initialize(this.def.comps[i]);
-					}
-					catch (Exception arg)
-					{
-						Log.Error("Could not instantiate or initialize a ThingComp: " + arg, false);
-						this.comps.Remove(thingComp);
-					}
-				}
-			}
-		}
+        public T GetComp<T>() where T : ThingComp
+        {
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    T val = comps[i] as T;
+                    if (val != null)
+                    {
+                        return val;
+                    }
+                }
+            }
+            return null;
+        }
 
-		
-		public override string GetCustomLabelNoCount(bool includeHp = true)
-		{
-			string text = base.GetCustomLabelNoCount(includeHp);
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					text = this.comps[i].TransformLabel(text);
-					i++;
-				}
-			}
-			return text;
-		}
+        public IEnumerable<T> GetComps<T>() where T : ThingComp
+        {
+            if (comps == null)
+            {
+                yield break;
+            }
+            for (int i = 0; i < comps.Count; i++)
+            {
+                T val = comps[i] as T;
+                if (val != null)
+                {
+                    yield return val;
+                }
+            }
+        }
 
-		
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			if (Scribe.mode == LoadSaveMode.LoadingVars)
-			{
-				this.InitializeComps();
-			}
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostExposeData();
-				}
-			}
-		}
+        public ThingComp GetCompByDef(CompProperties def)
+        {
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    if (comps[i].props == def)
+                    {
+                        return comps[i];
+                    }
+                }
+            }
+            return null;
+        }
 
-		
-		public void BroadcastCompSignal(string signal)
-		{
-			this.ReceiveCompSignal(signal);
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					this.comps[i].ReceiveCompSignal(signal);
-					i++;
-				}
-			}
-		}
+        public void InitializeComps()
+        {
+            if (def.comps.Any())
+            {
+                comps = new List<ThingComp>();
+                for (int i = 0; i < def.comps.Count; i++)
+                {
+                    ThingComp thingComp = null;
+                    try
+                    {
+                        thingComp = (ThingComp)Activator.CreateInstance(def.comps[i].compClass);
+                        thingComp.parent = this;
+                        comps.Add(thingComp);
+                        thingComp.Initialize(def.comps[i]);
+                    }
+                    catch (Exception arg)
+                    {
+                        Log.Error("Could not instantiate or initialize a ThingComp: " + arg);
+                        comps.Remove(thingComp);
+                    }
+                }
+            }
+        }
 
-		
-		protected virtual void ReceiveCompSignal(string signal)
-		{
-		}
+        public override string GetCustomLabelNoCount(bool includeHp = true)
+        {
+            string text = base.GetCustomLabelNoCount(includeHp);
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    text = comps[i].TransformLabel(text);
+                }
+            }
+            return text;
+        }
 
-		
-		public override void SpawnSetup(Map map, bool respawningAfterLoad)
-		{
-			base.SpawnSetup(map, respawningAfterLoad);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostSpawnSetup(respawningAfterLoad);
-				}
-			}
-		}
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                InitializeComps();
+            }
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostExposeData();
+                }
+            }
+        }
 
-		
-		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
-		{
-			Map map = base.Map;
-			base.DeSpawn(mode);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostDeSpawn(map);
-				}
-			}
-		}
+        public void BroadcastCompSignal(string signal)
+        {
+            ReceiveCompSignal(signal);
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    comps[i].ReceiveCompSignal(signal);
+                }
+            }
+        }
 
-		
-		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
-		{
-			Map map = base.Map;
-			base.Destroy(mode);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostDestroy(mode, map);
-				}
-			}
-		}
+        protected virtual void ReceiveCompSignal(string signal)
+        {
+        }
 
-		
-		public override void Tick()
-		{
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					this.comps[i].CompTick();
-					i++;
-				}
-			}
-		}
+        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        {
+            base.SpawnSetup(map, respawningAfterLoad);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostSpawnSetup(respawningAfterLoad);
+                }
+            }
+        }
 
-		
-		public override void TickRare()
-		{
-			if (this.comps != null)
-			{
-				int i = 0;
-				int count = this.comps.Count;
-				while (i < count)
-				{
-					this.comps[i].CompTickRare();
-					i++;
-				}
-			}
-		}
+        public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
+        {
+            Map map = base.Map;
+            base.DeSpawn(mode);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostDeSpawn(map);
+                }
+            }
+        }
 
-		
-		public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
-		{
-			base.PreApplyDamage(ref dinfo, out absorbed);
-			if (absorbed)
-			{
-				return;
-			}
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostPreApplyDamage(dinfo, out absorbed);
-					if (absorbed)
-					{
-						return;
-					}
-				}
-			}
-		}
+        public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+        {
+            Map map = base.Map;
+            base.Destroy(mode);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostDestroy(mode, map);
+                }
+            }
+        }
 
-		
-		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
-		{
-			base.PostApplyDamage(dinfo, totalDamageDealt);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostPostApplyDamage(dinfo, totalDamageDealt);
-				}
-			}
-		}
+        public override void Tick()
+        {
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    comps[i].CompTick();
+                }
+            }
+        }
 
-		
-		public override void Draw()
-		{
-			base.Draw();
-			this.Comps_PostDraw();
-		}
+        public override void TickRare()
+        {
+            if (comps != null)
+            {
+                int i = 0;
+                for (int count = comps.Count; i < count; i++)
+                {
+                    comps[i].CompTickRare();
+                }
+            }
+        }
 
-		
-		protected void Comps_PostDraw()
-		{
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostDraw();
-				}
-			}
-		}
+        public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
+        {
+            base.PreApplyDamage(ref dinfo, out absorbed);
+            if (absorbed || comps == null)
+            {
+                return;
+            }
+            for (int i = 0; i < comps.Count; i++)
+            {
+                comps[i].PostPreApplyDamage(dinfo, out absorbed);
+                if (absorbed)
+                {
+                    break;
+                }
+            }
+        }
 
-		
-		public override void DrawExtraSelectionOverlays()
-		{
-			base.DrawExtraSelectionOverlays();
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostDrawExtraSelectionOverlays();
-				}
-			}
-		}
+        public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+        {
+            base.PostApplyDamage(dinfo, totalDamageDealt);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostPostApplyDamage(dinfo, totalDamageDealt);
+                }
+            }
+        }
 
-		
-		public override void Print(SectionLayer layer)
-		{
-			base.Print(layer);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostPrintOnto(layer);
-				}
-			}
-		}
+        public override void Draw()
+        {
+            base.Draw();
+            Comps_PostDraw();
+        }
 
-		
-		public virtual void PrintForPowerGrid(SectionLayer layer)
-		{
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].CompPrintForPowerGrid(layer);
-				}
-			}
-		}
+        protected void Comps_PostDraw()
+        {
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostDraw();
+                }
+            }
+        }
 
-		
-		public override IEnumerable<Gizmo> GetGizmos()
-		{
-			if (this.comps != null)
-			{
-				int num;
-				for (int i = 0; i < this.comps.Count; i = num + 1)
-				{
-					foreach (Gizmo gizmo in this.comps[i].CompGetGizmosExtra())
-					{
-						yield return gizmo;
-					}
-					IEnumerator<Gizmo> enumerator = null;
-					num = i;
-				}
-			}
-			yield break;
-			yield break;
-		}
+        public override void DrawExtraSelectionOverlays()
+        {
+            base.DrawExtraSelectionOverlays();
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostDrawExtraSelectionOverlays();
+                }
+            }
+        }
 
-		
-		public override bool TryAbsorbStack(Thing other, bool respectStackLimit)
-		{
-			if (!this.CanStackWith(other))
-			{
-				return false;
-			}
-			int count = ThingUtility.TryAbsorbStackNumToTake(this, other, respectStackLimit);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PreAbsorbStack(other, count);
-				}
-			}
-			return base.TryAbsorbStack(other, respectStackLimit);
-		}
+        public override void Print(SectionLayer layer)
+        {
+            base.Print(layer);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostPrintOnto(layer);
+                }
+            }
+        }
 
-		
-		public override Thing SplitOff(int count)
-		{
-			Thing thing = base.SplitOff(count);
-			if (thing != null && this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostSplitOff(thing);
-				}
-			}
-			return thing;
-		}
+        public virtual void PrintForPowerGrid(SectionLayer layer)
+        {
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].CompPrintForPowerGrid(layer);
+                }
+            }
+        }
 
-		
-		public override bool CanStackWith(Thing other)
-		{
-			if (!base.CanStackWith(other))
-			{
-				return false;
-			}
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					if (!this.comps[i].AllowStackWith(other))
-					{
-						return false;
-					}
-				}
-			}
-			return true;
-		}
+        public override IEnumerable<Gizmo> GetGizmos()
+        {
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    foreach (Gizmo item in comps[i].CompGetGizmosExtra())
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
 
-		
-		public override string GetInspectString()
-		{
-			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append(base.GetInspectString());
-			string text = this.InspectStringPartsFromComps();
-			if (!text.NullOrEmpty())
-			{
-				if (stringBuilder.Length > 0)
-				{
-					stringBuilder.AppendLine();
-				}
-				stringBuilder.Append(text);
-			}
-			return stringBuilder.ToString();
-		}
+        public override bool TryAbsorbStack(Thing other, bool respectStackLimit)
+        {
+            if (!CanStackWith(other))
+            {
+                return false;
+            }
+            int count = ThingUtility.TryAbsorbStackNumToTake(this, other, respectStackLimit);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PreAbsorbStack(other, count);
+                }
+            }
+            return base.TryAbsorbStack(other, respectStackLimit);
+        }
 
-		
-		protected string InspectStringPartsFromComps()
-		{
-			if (this.comps == null)
-			{
-				return null;
-			}
-			StringBuilder stringBuilder = new StringBuilder();
-			for (int i = 0; i < this.comps.Count; i++)
-			{
-				string text = this.comps[i].CompInspectStringExtra();
-				if (!text.NullOrEmpty())
-				{
-					if (Prefs.DevMode && char.IsWhiteSpace(text[text.Length - 1]))
-					{
-						Log.ErrorOnce(this.comps[i].GetType() + " CompInspectStringExtra ended with whitespace: " + text, 25612, false);
-						text = text.TrimEndNewlines();
-					}
-					if (stringBuilder.Length != 0)
-					{
-						stringBuilder.AppendLine();
-					}
-					stringBuilder.Append(text);
-				}
-			}
-			return stringBuilder.ToString();
-		}
+        public override Thing SplitOff(int count)
+        {
+            Thing thing = base.SplitOff(count);
+            if (thing != null && comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostSplitOff(thing);
+                }
+            }
+            return thing;
+        }
 
-		
-		public override void DrawGUIOverlay()
-		{
-			base.DrawGUIOverlay();
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].DrawGUIOverlay();
-				}
-			}
-		}
+        public override bool CanStackWith(Thing other)
+        {
+            if (!base.CanStackWith(other))
+            {
+                return false;
+            }
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    if (!comps[i].AllowStackWith(other))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
-		
-		public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
-		{
-			IEnumerator<FloatMenuOption> enumerator = null;
-			if (this.comps != null)
-			{
-				int num;
-				for (int i = 0; i < this.comps.Count; i = num + 1)
-				{
-					foreach (FloatMenuOption floatMenuOption2 in this.comps[i].CompFloatMenuOptions(selPawn))
-					{
-						yield return floatMenuOption2;
-					}
-					enumerator = null;
-					num = i;
-				}
-			}
-			yield break;
-			yield break;
-		}
+        public override string GetInspectString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(base.GetInspectString());
+            string text = InspectStringPartsFromComps();
+            if (!text.NullOrEmpty())
+            {
+                if (stringBuilder.Length > 0)
+                {
+                    stringBuilder.AppendLine();
+                }
+                stringBuilder.Append(text);
+            }
+            return stringBuilder.ToString();
+        }
 
-		
-		public override void PreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
-		{
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PrePreTraded(action, playerNegotiator, trader);
-				}
-			}
-			base.PreTraded(action, playerNegotiator, trader);
-		}
+        protected string InspectStringPartsFromComps()
+        {
+            if (comps == null)
+            {
+                return null;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < comps.Count; i++)
+            {
+                string text = comps[i].CompInspectStringExtra();
+                if (!text.NullOrEmpty())
+                {
+                    if (Prefs.DevMode && char.IsWhiteSpace(text[text.Length - 1]))
+                    {
+                        Log.ErrorOnce(comps[i].GetType() + " CompInspectStringExtra ended with whitespace: " + text, 25612);
+                        text = text.TrimEndNewlines();
+                    }
+                    if (stringBuilder.Length != 0)
+                    {
+                        stringBuilder.AppendLine();
+                    }
+                    stringBuilder.Append(text);
+                }
+            }
+            return stringBuilder.ToString();
+        }
 
-		
-		public override void PostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
-		{
-			base.PostGeneratedForTrader(trader, forTile, forFaction);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostPostGeneratedForTrader(trader, forTile, forFaction);
-				}
-			}
-		}
+        public override void DrawGUIOverlay()
+        {
+            base.DrawGUIOverlay();
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].DrawGUIOverlay();
+                }
+            }
+        }
 
-		
-		protected override void PrePostIngested(Pawn ingester)
-		{
-			base.PrePostIngested(ingester);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PrePostIngested(ingester);
-				}
-			}
-		}
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
+        {
+            foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(selPawn))
+            {
+                yield return floatMenuOption;
+            }
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    foreach (FloatMenuOption item in comps[i].CompFloatMenuOptions(selPawn))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
 
-		
-		protected override void PostIngested(Pawn ingester)
-		{
-			base.PostIngested(ingester);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].PostIngested(ingester);
-				}
-			}
-		}
+        public override void PreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
+        {
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PrePreTraded(action, playerNegotiator, trader);
+                }
+            }
+            base.PreTraded(action, playerNegotiator, trader);
+        }
 
-		
-		public override void Notify_SignalReceived(RimWorld.Signal signal)
-		{
-			base.Notify_SignalReceived(signal);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].Notify_SignalReceived(signal);
-				}
-			}
-		}
+        public override void PostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
+        {
+            base.PostGeneratedForTrader(trader, forTile, forFaction);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostPostGeneratedForTrader(trader, forTile, forFaction);
+                }
+            }
+        }
 
-		
-		public override void Notify_LordDestroyed()
-		{
-			base.Notify_LordDestroyed();
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].Notify_LordDestroyed();
-				}
-			}
-		}
+        protected override void PrePostIngested(Pawn ingester)
+        {
+            base.PrePostIngested(ingester);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PrePostIngested(ingester);
+                }
+            }
+        }
 
-		
-		public override void Notify_Equipped(Pawn pawn)
-		{
-			base.Notify_Equipped(pawn);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].Notify_Equipped(pawn);
-				}
-			}
-		}
+        protected override void PostIngested(Pawn ingester)
+        {
+            base.PostIngested(ingester);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].PostIngested(ingester);
+                }
+            }
+        }
 
-		
-		public override void Notify_UsedWeapon(Pawn pawn)
-		{
-			base.Notify_UsedWeapon(pawn);
-			if (this.comps != null)
-			{
-				for (int i = 0; i < this.comps.Count; i++)
-				{
-					this.comps[i].Notify_UsedWeapon(pawn);
-				}
-			}
-		}
+        public override void Notify_SignalReceived(Signal signal)
+        {
+            base.Notify_SignalReceived(signal);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].Notify_SignalReceived(signal);
+                }
+            }
+        }
 
-		
-		public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
-		{
+        public override void Notify_LordDestroyed()
+        {
+            base.Notify_LordDestroyed();
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].Notify_LordDestroyed();
+                }
+            }
+        }
 
-			IEnumerator<StatDrawEntry> enumerator = null;
-			if (this.comps != null)
-			{
-				int num;
-				for (int i = 0; i < this.comps.Count; i = num + 1)
-				{
-					IEnumerable<StatDrawEntry> enumerable = this.comps[i].SpecialDisplayStats();
-					if (enumerable != null)
-					{
-						foreach (StatDrawEntry statDrawEntry2 in enumerable)
-						{
-							yield return statDrawEntry2;
-						}
-						enumerator = null;
-					}
-					num = i;
-				}
-			}
-			yield break;
-			yield break;
-		}
+        public override void Notify_Equipped(Pawn pawn)
+        {
+            base.Notify_Equipped(pawn);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].Notify_Equipped(pawn);
+                }
+            }
+        }
 
-		
-		public override void Notify_Explosion(Explosion explosion)
-		{
-			base.Notify_Explosion(explosion);
-			CompWakeUpDormant comp = this.GetComp<CompWakeUpDormant>();
-			if (comp != null && (explosion.Position - base.Position).LengthHorizontal <= explosion.radius)
-			{
-				comp.Activate(true, false);
-			}
-		}
+        public override void Notify_UsedWeapon(Pawn pawn)
+        {
+            base.Notify_UsedWeapon(pawn);
+            if (comps != null)
+            {
+                for (int i = 0; i < comps.Count; i++)
+                {
+                    comps[i].Notify_UsedWeapon(pawn);
+                }
+            }
+        }
 
-		
-		private List<ThingComp> comps;
+        public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
+        {
+            foreach (StatDrawEntry item in base.SpecialDisplayStats())
+            {
+                yield return item;
+            }
+            if (comps == null)
+            {
+                yield break;
+            }
+            for (int i = 0; i < comps.Count; i++)
+            {
+                IEnumerable<StatDrawEntry> enumerable = comps[i].SpecialDisplayStats();
+                if (enumerable != null)
+                {
+                    foreach (StatDrawEntry item2 in enumerable)
+                    {
+                        yield return item2;
+                    }
+                }
+            }
+        }
 
-		
-		private static readonly List<ThingComp> EmptyCompsList = new List<ThingComp>();
-	}
+        public override void Notify_Explosion(Explosion explosion)
+        {
+            base.Notify_Explosion(explosion);
+            CompWakeUpDormant comp = GetComp<CompWakeUpDormant>();
+            if (comp != null && (explosion.Position - base.Position).LengthHorizontal <= explosion.radius)
+            {
+                comp.Activate();
+            }
+        }
+    }
+
 }

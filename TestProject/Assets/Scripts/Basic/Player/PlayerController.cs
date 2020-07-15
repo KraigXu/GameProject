@@ -33,14 +33,14 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _instance = this;
-        SignalCenter.GameDataLoadOver.AddListener(PlayerInit);
+        //SignalCenter.GameDataLoadOver.AddListener(PlayerInit);
 
     }
 	void Start () {
 		
-        SignalCenter.MouseOnMove.AddListener(PlayerOnMouseMove);
-	    SignalCenter.MouseOnRightUp.AddListener(PlayerOnRightClick);
-        SignalCenter.MouseOnLeftUp.AddListener(PlayerOnLeftClick);
+       // SignalCenter.MouseOnMove.AddListener(PlayerOnMouseMove);
+	   // SignalCenter.MouseOnRightUp.AddListener(PlayerOnRightClick);
+       // SignalCenter.MouseOnLeftUp.AddListener(PlayerOnLeftClick);
 
 	}
 
@@ -239,8 +239,8 @@ public class PlayerController : MonoBehaviour
 
     void OnDestroy()
     {
-        SignalCenter.MouseOnMove.RemoveListener(PlayerOnMouseMove);
-        SignalCenter.MouseOnMove.RemoveListener(PlayerOnLeftClick);
+       // SignalCenter.MouseOnMove.RemoveListener(PlayerOnMouseMove);
+       // SignalCenter.MouseOnMove.RemoveListener(PlayerOnLeftClick);
     }
 
     private void PlayerOnMouseMove(MouseInput input)

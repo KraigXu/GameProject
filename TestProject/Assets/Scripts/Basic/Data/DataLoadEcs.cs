@@ -234,7 +234,7 @@ public class DataLoadEcs : MonoBehaviour
         IsOver = true;
         Progress = 100;
 
-        SignalCenter.GameDataLoadOver.Dispatch(this);
+        //SignalCenter.GameDataLoadOver.Dispatch(this);
 
     }
 

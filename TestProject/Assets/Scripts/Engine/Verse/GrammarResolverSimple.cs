@@ -186,12 +186,14 @@ namespace Verse
 
         private static bool TryResolveSymbol(object obj, string subSymbol, string symbolArgs, out TaggedString resolvedStr, string fullStringForReference)
         {
-            Log.Message(obj as string);
+            //Log.Message(obj as string);
 
-            resolvedStr = new TaggedString("XXX");
+          //  resolvedStr = new TaggedString("XXX");
 
-            return true;
+            //return true;
             Pawn pawn = obj as Pawn;
+            
+            
             switch (subSymbol)
             {
                 case "":

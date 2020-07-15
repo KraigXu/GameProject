@@ -43,13 +43,13 @@ public class MouseInput : MonoBehaviour
         if (Input.mousePosition.x > Screen.width || Input.mousePosition.x <= 0 || Input.mousePosition.y > Screen.height || Input.mousePosition.y <= 0)
         {
             IsCrossUi = true;
-            SignalCenter.MouseOnLeaveView.Dispatch(this);
+           // SignalCenter.MouseOnLeaveView.Dispatch(this);
             return;
         }
         else
         {
             IsCrossUi = false;
-            SignalCenter.MouseOnEnterView.Dispatch(this);
+           // SignalCenter.MouseOnEnterView.Dispatch(this);
            
         }
 
@@ -67,7 +67,7 @@ public class MouseInput : MonoBehaviour
             touchObject = null;
         }
 
-        SignalCenter.MouseOnMove.Dispatch(this);
+       // SignalCenter.MouseOnMove.Dispatch(this);
 
 
         //鼠标左键按下时
@@ -75,7 +75,7 @@ public class MouseInput : MonoBehaviour
         {
             mouseButton = 0;
             Cursor.visible = true;
-            SignalCenter.MouseOnLeftDown.Dispatch(this);
+           // SignalCenter.MouseOnLeftDown.Dispatch(this);
             //Debug.Log("左键按下");
             return;
         }
@@ -85,7 +85,7 @@ public class MouseInput : MonoBehaviour
         {
             Cursor.visible = true;
             mouseButton = 0;
-            SignalCenter.MouseOnLeftUp.Dispatch(this);
+          //  SignalCenter.MouseOnLeftUp.Dispatch(this);
             //Debug.Log("左键弹起");
             return;
         }
@@ -115,7 +115,7 @@ public class MouseInput : MonoBehaviour
                     deltaPan = Input.mousePosition - lastMousePosition;
                 }
                 lastMousePosition = Input.mousePosition;
-                SignalCenter.MouseOnRight.Dispatch(this);
+              //  SignalCenter.MouseOnRight.Dispatch(this);
             }
             else
             {
@@ -131,7 +131,7 @@ public class MouseInput : MonoBehaviour
             holding = false;
             if (holdTime < 0.15f)
             {
-                SignalCenter.MouseOnRightUp.Dispatch(this);
+              //  SignalCenter.MouseOnRightUp.Dispatch(this);
             }
             holdTime = 0f;
             lastMousePosition = Vector3.zero;
@@ -141,19 +141,19 @@ public class MouseInput : MonoBehaviour
         if (Input.GetMouseButtonDown(2))
         {
             mouseButton = 2;
-            SignalCenter.MouseOnMiddleDown.Dispatch(this);
+           // SignalCenter.MouseOnMiddleDown.Dispatch(this);
         }
 
         if (Input.GetMouseButtonUp(2))
         {
             mouseButton = 2;
-            SignalCenter.MouseOnMiddleUp.Dispatch(this);
+           // SignalCenter.MouseOnMiddleUp.Dispatch(this);
         }
 
         if (Input.GetMouseButton(2))
         {
             mouseButton = 2;
-            SignalCenter.MouseOnMiddle.Dispatch(this);
+           // SignalCenter.MouseOnMiddle.Dispatch(this);
         }
 
         //移动
@@ -175,7 +175,7 @@ public class MouseInput : MonoBehaviour
         {
             mouseButton = -1;
             this.deltaScale = value * 500;
-            SignalCenter.MouseOnScrollWheel.Dispatch(this);
+           // SignalCenter.MouseOnScrollWheel.Dispatch(this);
             return;
         }
 

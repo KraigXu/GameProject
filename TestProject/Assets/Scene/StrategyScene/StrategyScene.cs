@@ -29,7 +29,7 @@ public class StrategyScene : MonoBehaviour
     {
         _instance = this;
 
-        SignalCenter.GameDataLoadOver.AddListener(UiInit);
+      //  SignalCenter.GameDataLoadOver.AddListener(UiInit);
     }
 
     void Start()
@@ -39,7 +39,7 @@ public class StrategyScene : MonoBehaviour
 
     void OnDestroy()
     {
-        SignalCenter.GameDataLoadOver.RemoveListener(UiInit);
+      //  SignalCenter.GameDataLoadOver.RemoveListener(UiInit);
     }
 
     private void UiInit(DataLoadEcs ecs)
